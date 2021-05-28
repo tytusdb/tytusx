@@ -1,0 +1,4 @@
+//Para la creacion de un proyecto en react
+npx create-react-app myapp
+cd myapp
+npm start   //para ejecutar el proyecto localhost:3000
