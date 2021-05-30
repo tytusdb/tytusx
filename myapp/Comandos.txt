@@ -1,4 +1,44 @@
-//Para la creacion de un proyecto en react
+/*******   Para la creacion de un proyecto en react   *****/
 npx create-react-app myapp
 cd myapp
 npm start   //para ejecutar el proyecto localhost:3000
+
+
+/*******   Para el deployment con github pages   *******/
+npm install --save-dev gh-pages
+//pegar en package.json:
+"homepage":"https://yourusername.github.io/repository-name" 
+"scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    }
+
+//en terminal ejecutar:
+npm run build
+npm run deploy
+
+//en github seccion pages seleccionar:
+Source: gh-pages branch   /(root)
+
+/********** Para correr el programa para edicion *********************/
+tsc --init
+//en el archivo tsconfig colocar el siguiente codigo (configurar rutas en outDir, include)
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": false,
+    "outDir": "./src/code",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "code/**/*.ts"
+  ]
+}
+
+tsc -w //en la carpeta del front
+npm start //en la carpeta del front
+
+
