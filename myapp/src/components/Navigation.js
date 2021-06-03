@@ -33,7 +33,8 @@ function Navigation(){
                 <button type="submit" className="btn btn-primary" onClick={setText}>Compilar</button>
                 </div>
                 <div className="MiniColumn">
-                <button type="button" className="btn btn-primary">Reportes</button>
+                    <button type="button" className="btn btn-primary">Reportes</button>
+                    <input type="text" id="nombreArchivo"></input>
                 </div>
                 <div className="MiniColumn">
                 <button type="button" className="btn btn-primary">Limpiar</button>
@@ -63,8 +64,7 @@ function Navigation(){
                 Organización de Lenguajes y Compiladores 2<br/>
                 Escuela de Vacaciones Junio 2021<br/>                
                 </p>
-                </font>
-                
+                </font>   
             </div>
             </footer>
 
