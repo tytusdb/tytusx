@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<bookstore>
+  <book>
+    <title lang="en">Harry Potter</title>
+    <price>29.99</price>
+  </book>
+  <book>
+    <title lang="en">Learning XML</title>
+    <price>39.95</price>
+  </book>
+</bookstore>
+
+{
+  tipo: "/",
+  texto: "",
+  atributos: [],
+  hijos: [
+    {
+      tipo: "bookstore",
+      texto: "",
+      atributos: [],
+      hijos: [
+        {
+          tipo: "book",
+          texto: "",
+          atributos: [],
+          hijos: [
+            {
+              tipo:"title",
+              texto: "Harry Potter",
+              atributos:[
+                {
+                  nombre:"lang",
+                  valor:"en"
+                }
+              ],
+              hijos:[]
+            },
+            {
+              tipo:"price",
+              texto:"29.99",
+              atributos:[],
+              hijos:[]
+            }
+          ]
+        },
+        {
+          tipo: "book",
+          atributos: [],
+          hijos: []
+        }
+      ]
+    }
+  ]
+}
