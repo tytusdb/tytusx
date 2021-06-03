@@ -1,5 +1,3 @@
-var fs = require('fs')
-
 class Objeto {
     tipo = ''
     texto = ''
@@ -29,19 +27,8 @@ class Atributo {
     }
 }
 
-function getContentByFile(path){
-    var retorno = ''
-
-    try {
-        retorno = fs.readFileSync(path, 'utf8')
-    } catch (err) {
-        console.error(err)
-    }
-
-    return retorno
-}
-
-exports.getContentByFile = getContentByFile
-exports.Objeto = Objeto
-exports.Atributo = Atributo
+const _Objeto = Objeto
+export { _Objeto as Objeto }
+const _Atributo = Atributo
+export { _Atributo as Atributo }
 

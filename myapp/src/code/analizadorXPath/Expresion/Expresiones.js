@@ -12,7 +12,9 @@ class Literal
     {
         return this
     }
-}exports.Literal = Literal
+}
+
+exports.Literal = Literal
 
 exports.PathExp = class PathExp 
 {

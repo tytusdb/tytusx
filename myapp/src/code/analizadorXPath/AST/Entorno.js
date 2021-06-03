@@ -6,9 +6,10 @@ const Tipo = {
     "NODO"    : "nodo",
     "ERROR"   : "error"
 }
-exports.Tipo = Tipo
+const _Tipo = Tipo
+export { _Tipo as Tipo }
 
-exports.TipoPath = {
+export const TipoPath = {
     "ABS" : "absoluto",
     "REL" : "relativo"
 }
@@ -128,44 +129,44 @@ var XML2= {
     ]
   }
 
-exports.Comando = class Comando
+export class Comando
 {
-    constructor(Instrucciones)
-    {
-        this.Instrucciones = Instrucciones
-    }
+  constructor(Instrucciones)
+  {
+    this.Instrucciones = Instrucciones
+  }
 
-    Ejecutar(XML)
-    {
-        var Salida = ""
-        var retornos=[]
-        for (const iterator of this.Instrucciones) {
-            retornos.push(iterator.getValor(XML))
-        }
-        for (const retorno of retornos) {
-            if(retorno.tipo == Tipo.NODO)
-            {
-                if(retorno.valor instanceof Array)
-                {
-                    for (const nodo of retorno.valor) {
-                        Salida += ConvertiraXML(nodo,0) + "\n"
-                    }
-                }
-                else{
-                    Salida += ConvertiraXML(retorno.valor,0) + "\n"
-                }
-            }
-            else if(retorno.tipo==Tipo.ERROR)
-            {
-                Salida += "No se encontro esta consulta" + "\n"
-            }
-            else
-            {
-                Salida += retornos.valor + "\n"
-            }
-        }
-        return Salida;
+  Ejecutar(XML)
+  {
+    var Salida = ""
+    var retornos=[]
+    for (const iterator of this.Instrucciones) {
+      retornos.push(iterator.getValor(XML))
     }
+    for (const retorno of retornos) {
+      if(retorno.tipo == Tipo.NODO)
+      {
+        if(retorno.valor instanceof Array)
+        {
+          for (const nodo of retorno.valor) {
+            Salida += ConvertiraXML(nodo,0) + "\n"
+          }
+        }
+        else{
+          Salida += ConvertiraXML(retorno.valor,0) + "\n"
+        }
+      }
+      else if(retorno.tipo==Tipo.ERROR)
+      {
+        Salida += "No se encontro esta consulta" + "\n"
+      }
+      else
+      {
+        Salida += retornos.valor + "\n"
+      }
+    }
+    return Salida;
+  }
 }
 
 function ConvertiraXML(nodos,iteracion)
