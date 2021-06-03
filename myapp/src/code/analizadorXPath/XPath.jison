@@ -77,7 +77,7 @@
 %%
 
 XPath 
-  : Expr  { $$=new Comando($1);$$.ejecutar(); }
+  : Expr  { $$=new Comando($1);return $$ }
 ;
 
 Expr 

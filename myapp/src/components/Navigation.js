@@ -7,14 +7,15 @@ function Navigation(){
         let text = document.getElementById("InputTextarea").value;
         console.log("El texto es: \n"+text);
     }*/
+    var XML;
 
     function setText(){
         console.log("setText Button clicked");
         let text = document.getElementById("InputTextarea").value;
 
-        var parser = require('../code/grammar');
-        var respuesta = parser.parse(text);
-
+        var parser = require('../code/analizadorXPath/Xpath');
+        var funcion = parser.parse(text);
+        respuesta=funcion.Ejecutar(XML);
         document.getElementById("OutputTextarea").innerHTML = respuesta;
     }
 

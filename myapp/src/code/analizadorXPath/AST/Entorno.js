@@ -12,7 +12,7 @@ exports.TipoPath = {
     "ABS" : "absoluto",
     "REL" : "relativo"
 }
-
+/*
 var XML= {
     tipo: "/",
     texto: "",
@@ -126,7 +126,7 @@ var XML= {
         ]
       }
     ]
-  }
+  }*/
 
 exports.Comando = class Comando
 {
@@ -135,7 +135,7 @@ exports.Comando = class Comando
         this.Instrucciones = Instrucciones
     }
 
-    Ejecutar()
+    Ejecutar(XML)
     {
         var Salida = ""
         var retornos=[]
@@ -164,7 +164,7 @@ exports.Comando = class Comando
                 Salida += retornos.valor + "\n"
             }
         }
-        console.log(Salida);
+        return Salida;
     }
 }
 
