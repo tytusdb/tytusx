@@ -72,12 +72,12 @@
   }
 */
 var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[2,5,10],$V3=[1,13],$V4=[1,15],$V5=[1,22],$V6=[1,21],$V7=[1,23],$V8=[1,27],$V9=[1,28],$Va=[10,11,21,22],$Vb=[2,10,11,21,22],$Vc=[11,12];
-var parser = {trace: function trace() { },
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[2,5,10],$V3=[1,13],$V4=[1,15],$V5=[1,22],$V6=[1,24],$V7=[1,21],$V8=[1,23],$V9=[1,28],$Va=[1,29],$Vb=[10,11,17,21,22],$Vc=[2,10,11,17,21,22],$Vd=[11,12];
+var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"ini":3,"LISTA_PRINCIPAL":4,"EOF":5,"LISTA":6,"ABRE":7,"CIERRA":8,"LISTA_DATOS":9,"menorque":10,"identificador":11,"mayorque":12,"ETIQUETAS":13,"diagonal":14,"ETIQUETA":15,"igual":16,"cadena":17,"DATO":18,"PARRAFOS":19,"PARRAFO":20,"entero":21,"decimal":22,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",10:"menorque",11:"identificador",12:"mayorque",14:"diagonal",16:"igual",17:"cadena",21:"entero",22:"decimal"},
-productions_: [0,[3,2],[4,2],[4,1],[6,3],[6,3],[6,1],[7,3],[7,4],[8,4],[13,2],[13,1],[15,3],[9,2],[9,1],[18,3],[19,2],[19,1],[20,1],[20,1],[20,1]],
+productions_: [0,[3,2],[4,2],[4,1],[6,3],[6,3],[6,1],[7,3],[7,4],[8,4],[13,2],[13,1],[15,3],[9,2],[9,1],[18,3],[19,2],[19,1],[20,1],[20,1],[20,1],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,26 +86,11 @@ switch (yystate) {
 case 6:
  console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
 break;
-case 7:
-
-		console.log('ABRE: ' + $$[$0-1]);
-	
-break;
-case 8:
-
-		console.log('ABRE ETIQUETA: ' + $$[$0-2]);
-	
-break;
-case 9:
-
-		console.log('CIERRA: ' + $$[$0-1]);
-	
-break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:4,10:$V1},{1:[3]},{2:$V0,5:[1,7],6:8,7:4,10:$V1},o($V2,[2,3]),{2:$V0,4:9,6:3,7:12,9:10,10:$V1,18:11},o($V2,[2,6]),{11:$V3},{1:[2,1]},o($V2,[2,2]),{2:$V0,6:8,7:4,8:14,10:$V4},{7:18,8:16,10:$V4,18:17},{10:[2,14]},{2:$V0,4:9,6:3,7:12,9:10,10:$V1,11:$V5,18:11,19:19,20:20,21:$V6,22:$V7},{11:$V8,12:[1,24],13:25,15:26},o($V2,[2,4]),{11:$V3,14:$V9},o($V2,[2,5]),{10:[2,13]},{11:$V5,19:19,20:20,21:$V6,22:$V7},{8:29,10:[1,31],11:$V5,20:30,21:$V6,22:$V7},o($Va,[2,17]),o($Va,[2,18]),o($Va,[2,19]),o($Va,[2,20]),o($Vb,[2,7]),{11:$V8,12:[1,32],15:33},o($Vc,[2,11]),{16:[1,34]},{11:[1,35]},{10:[2,15]},o($Va,[2,16]),{14:$V9},o($Vb,[2,8]),o($Vc,[2,10]),{17:[1,36]},{12:[1,37]},o($Vc,[2,12]),o($V2,[2,9])],
-defaultActions: {7:[2,1],11:[2,14],17:[2,13],29:[2,15]},
-parseError: function parseError(str, hash) {
+table: [{2:$V0,3:1,4:2,6:3,7:4,10:$V1},{1:[3]},{2:$V0,5:[1,7],6:8,7:4,10:$V1},o($V2,[2,3]),{2:$V0,4:9,6:3,7:12,9:10,10:$V1,18:11},o($V2,[2,6]),{11:$V3},{1:[2,1]},o($V2,[2,2]),{2:$V0,6:8,7:4,8:14,10:$V4},{7:18,8:16,10:$V4,18:17},{10:[2,14]},{2:$V0,4:9,6:3,7:12,9:10,10:$V1,11:$V5,17:$V6,18:11,19:19,20:20,21:$V7,22:$V8},{11:$V9,12:[1,25],13:26,15:27},o($V2,[2,4]),{11:$V3,14:$Va},o($V2,[2,5]),{10:[2,13]},{11:$V5,17:$V6,19:19,20:20,21:$V7,22:$V8},{8:30,10:[1,32],11:$V5,17:$V6,20:31,21:$V7,22:$V8},o($Vb,[2,17]),o($Vb,[2,18]),o($Vb,[2,19]),o($Vb,[2,20]),o($Vb,[2,21]),o($Vc,[2,7]),{11:$V9,12:[1,33],15:34},o($Vd,[2,11]),{16:[1,35]},{11:[1,36]},{10:[2,15]},o($Vb,[2,16]),{14:$Va},o($Vc,[2,8]),o($Vd,[2,10]),{17:[1,37]},{12:[1,38]},o($Vd,[2,12]),o($V2,[2,9])],
+defaultActions: {7:[2,1],11:[2,14],17:[2,13],30:[2,15]},
+parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
     } else {
@@ -114,7 +99,7 @@ parseError: function parseError(str, hash) {
         throw error;
     }
 },
-parse: function parse(input) {
+parse: function parse (input) {
     var self = this,
         stack = [0],
         tstack = [], // token stack
@@ -494,7 +479,7 @@ showPosition:function () {
     },
 
 // test the lexed token: return FALSE when not a match, otherwise return token
-test_match:function (match, indexed_rule) {
+test_match:function(match, indexed_rule) {
         var token,
             lines,
             backup;
@@ -624,7 +609,7 @@ next:function () {
     },
 
 // return next match that has a token
-lex:function lex() {
+lex:function lex () {
         var r = this.next();
         if (r) {
             return r;
@@ -634,12 +619,12 @@ lex:function lex() {
     },
 
 // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
-begin:function begin(condition) {
+begin:function begin (condition) {
         this.conditionStack.push(condition);
     },
 
 // pop the previously active lexer condition state off the condition stack
-popState:function popState() {
+popState:function popState () {
         var n = this.conditionStack.length - 1;
         if (n > 0) {
             return this.conditionStack.pop();
@@ -649,7 +634,7 @@ popState:function popState() {
     },
 
 // produce the lexer rule set which is active for the currently active lexer condition state
-_currentRules:function _currentRules() {
+_currentRules:function _currentRules () {
         if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
             return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
         } else {
@@ -658,7 +643,7 @@ _currentRules:function _currentRules() {
     },
 
 // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
-topState:function topState(n) {
+topState:function topState (n) {
         n = this.conditionStack.length - 1 - Math.abs(n || 0);
         if (n >= 0) {
             return this.conditionStack[n];
@@ -668,7 +653,7 @@ topState:function topState(n) {
     },
 
 // alias for begin(condition)
-pushState:function pushState(condition) {
+pushState:function pushState (condition) {
         this.begin(condition);
     },
 
@@ -724,7 +709,7 @@ if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
 exports.parser = gramatica;
 exports.Parser = gramatica.Parser;
 exports.parse = function () { return gramatica.parse.apply(gramatica, arguments); };
-exports.main = function commonjsMain(args) {
+exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
