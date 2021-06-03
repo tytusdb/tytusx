@@ -7,16 +7,33 @@ function Navigation(){
         let text = document.getElementById("InputTextarea").value;
         console.log("El texto es: \n"+text);
     }*/
+    var XML;
 
     function setText(){
         console.log("setText Button clicked");
         let text = document.getElementById("InputTextarea").value;
 
-        var parser = require('../code/grammar');
-        var respuesta = parser.parse(text);
-
+        var parser = require('../code/analizadorXPath/Xpath');
+        var funcion = parser.parse(text);
+        respuesta=funcion.Ejecutar(XML);
         document.getElementById("OutputTextarea").innerHTML = respuesta;
     }
+
+    function inicio(){
+        document.getElementById('files').addEventListener('change', cargar, false);
+    }
+    
+    function cargar(ev) {
+        var arch=new FileReader();
+        arch.addEventListener('load',leer,false);
+        arch.readAsText(ev.target.files[0]);
+    }
+    
+    function leer(ev) {
+        document.getElementById('XMLTextarea').value=ev.target.result;
+    }
+  
+
 
     return(
         //tag principal
@@ -29,16 +46,24 @@ function Navigation(){
             <p></p>
 
             <div className="row">
+                <div className="column-open">
+                
+                <input type="file" id="files" onClick={inicio}/>
+                <output id="list"></output>
+                
+                </div>
+            </div>
+
+            <p> </p>
+
+            <div className="row">
                 <div className="MiniColumn">
                 <button type="submit" className="btn btn-primary" onClick={setText}>Compilar</button>
                 </div>
                 <div className="MiniColumn">
-                <button type="button" className="btn btn-primary">Reportes</button>
+                    <button type="button" className="btn btn-primary">Reportes</button>
+                    <input type="text" id="nombreArchivo"></input>
                 </div>
-                <div className="MiniColumn">
-                <button type="button" className="btn btn-primary">Limpiar</button>
-                </div>
-                
             </div>
 
             <div className="row">
@@ -50,6 +75,13 @@ function Navigation(){
                 </div>
             </div>
 
+            <div className="row">
+                <label className="labelClass">Archivo XML</label>
+                <div className="column">
+                    <textarea className="Text" placeholder="Bienvenido" id="XMLTextarea" ></textarea>
+                </div>
+            </div>
+
             <p></p>
             <p></p>
             <p></p>
@@ -58,13 +90,12 @@ function Navigation(){
             <div className="text-center p-3 text-light ">
                 <font size="3">
                 <p>
-                Viany Paola Juárez Hernández <br/>
-                201700659<br/>
+                Grupo 17 <br/>
+                Jorge Ambrocio - Marcelo Marroquín - Viany Juárez<br/>
                 Organización de Lenguajes y Compiladores 2<br/>
                 Escuela de Vacaciones Junio 2021<br/>                
                 </p>
-                </font>
-                
+                </font>   
             </div>
             </footer>
 
