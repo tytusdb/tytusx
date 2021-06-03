@@ -6,6 +6,7 @@ class Objeto {
     atributos = []
     hijos = []
     
+    
     constructor(tipo, atributos, hijos){
         this.tipo = tipo.replace('<','')
         this.atributos = atributos

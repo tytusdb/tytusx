@@ -128,7 +128,7 @@ function RecursivaAtributo(Entorno,nombre)
 {
     var datos = [];
     for (const iterator of Entorno.hijos) {
-        datos = RecursivaCamino(hijos)
+        datos = RecursivaCamino(iterator)
     }
     for (const iterator of Entorno.atributos) {
         if(iterator.nombre == this.nombre || this.nombre=="*")
@@ -176,7 +176,7 @@ function RecursivaCamino(Entorno,nombre)
 {
     var datos = [];
     for (const iterator of Entorno.hijos) {
-        datos = RecursivaCamino(hijos)
+        datos = RecursivaCamino(iterator)
     }
     if(Entorno.tipo==nombre)
     {

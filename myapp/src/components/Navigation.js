@@ -1,5 +1,6 @@
 import logo from '../logo.svg';
 
+
 function Navigation(){
 
     /*function getText ()  {
@@ -7,7 +8,12 @@ function Navigation(){
         let text = document.getElementById("InputTextarea").value;
         console.log("El texto es: \n"+text);
     }*/
-    var XML;
+    var XML = {
+        tipo : '',
+        texto : '',
+        atributos : [],
+        hijos : []
+    }
 
     function setText(){
         console.log("setText Button clicked");
@@ -15,8 +21,8 @@ function Navigation(){
 
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
-        respuesta=funcion.Ejecutar(XML);
-        document.getElementById("OutputTextarea").innerHTML = respuesta;
+        var respuesta=funcion.Ejecutar(XML);
+        document.getElementById("OutputTextarea").innerHTML = respuesta; 
     }
 
     function inicio(){
@@ -31,6 +37,9 @@ function Navigation(){
     
     function leer(ev) {
         document.getElementById('XMLTextarea').value=ev.target.result;
+        var analizadorXML = require('../code/analizadorXML/analizadorXML')
+        var resultado = analizadorXML.Ejecutar(ev.target.result)
+        XML = resultado
     }
   
 
@@ -62,7 +71,6 @@ function Navigation(){
                 </div>
                 <div className="MiniColumn">
                     <button type="button" className="btn btn-primary">Reportes</button>
-                    <input type="text" id="nombreArchivo"></input>
                 </div>
             </div>
 

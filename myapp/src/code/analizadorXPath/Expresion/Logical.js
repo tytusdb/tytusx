@@ -11,8 +11,8 @@ class ExpOr
     
     getValor()
     {
-        valIzq = this.izquierdo.getValor();
-        valDer = this.derecho.getValor();
+        var valIzq = this.izquierdo.getValor();
+        var valDer = this.derecho.getValor();
 
         if(valIzq.tipo == Entorno.Tipo.ERROR || valDer.tipo==Entorno.Tipo.ERROR){
             return new Literal(Entorno.Tipo.ERROR,"@Error@");
@@ -31,8 +31,8 @@ class ExpAnd
 
     getValor()
     {
-        valIzq = this.izquierdo.getValor();
-        valDer = this.derecho.getValor();
+        var valIzq = this.izquierdo.getValor();
+        var valDer = this.derecho.getValor();
 
         if(valIzq.tipo == Entorno.Tipo.ERROR || valDer.tipo==Entorno.Tipo.ERROR){
             return new Literal(Entorno.Tipo.ERROR,"@Error@");

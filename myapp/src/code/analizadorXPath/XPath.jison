@@ -183,8 +183,8 @@ SimpleMapExpr
 PathExpr    
   : BARRA RelativePathExpr              { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2) }
 	| DOBLEBARRA RelativePathExpr         { $2[0].tipo=TipoPath.REL;$$=new PathExp($2) }
-	| RelativePathExpr                    { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2) }
-	| BARRA                               { $2[0].tipo=TipoPath.ABS;$$=new PathExp([]) }
+	| RelativePathExpr                    { $1[0].tipo=TipoPath.ABS;$$=new PathExp($1) }
+	| BARRA                               { $$=new PathExp([]) }
 ;
 
 RelativePathExpr  

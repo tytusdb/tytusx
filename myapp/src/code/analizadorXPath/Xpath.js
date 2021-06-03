@@ -104,17 +104,14 @@ break;
 case 13:
  this.$ = new ExpAnd($$[$0-2],$$[$0]) 
 break;
-case 47:
+case 47: case 49:
  $$[$0][0].tipo=TipoPath.ABS;this.$=new PathExp($$[$0]) 
 break;
 case 48:
  $$[$0][0].tipo=TipoPath.REL;this.$=new PathExp($$[$0]) 
 break;
-case 49:
- $$[$01][0].tipo=TipoPath.ABS;this.$=new PathExp($$[$01]) 
-break;
 case 50:
- $$[$01][0].tipo=TipoPath.ABS;this.$=new PathExp([]) 
+ this.$=new PathExp([]) 
 break;
 case 51:
  this.$ = []; this.$.push(new PathExpElement($$[$0],null)); 
