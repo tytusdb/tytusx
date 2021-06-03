@@ -58,4 +58,14 @@
   background-color: #A9A9A9;
 }
 
+.column-open{
+  float: left;
+  margin-left: 50px;
+  width: 20%;
+}
+
+.labelClass{
+  float: left;
+}
+
 
