@@ -1,119 +1,8 @@
 
 %{
-  var XML= {
-    tipo: "/",
-    texto: "",
-    atributos: [],
-    hijos: [
-      {
-        tipo: "biblioteca",
-        texto: "",
-        atributos: [],
-        hijos: [
-          {
-            tipo: "libro",
-            texto: "",
-            atributos: [],
-            hijos: [
-              {
-                tipo:"titulo",
-                texto: "La vida está en otra parte",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"autor",
-                texto: "Milan Kundera",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"fechaPublicacion",
-                texto:"",
-                atributos:[
-                    {
-                        nombre:"año",
-                        valor:"1973"
-                    }
-                ],
-                hijos:[]
-              }
-            ]
-          },
-          {
-            tipo: "libro",
-            texto: "",
-            atributos: [],
-            hijos: [
-              {
-                tipo:"titulo",
-                texto: "Pantaleón y las visitadoras",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"autor",
-                texto: "Mario Vargas Llosa",
-                atributos:[
-                    {
-                        nombre:"fechaNacimiento",
-                        valor:"28/03/1936"
-                    }
-                ],
-                hijos:[]
-              },
-              {
-                tipo:"fechaPublicacion",
-                texto:"",
-                atributos:[
-                    {
-                        nombre:"año",
-                        valor:"1973"
-                    }
-                ],
-                hijos:[]
-              }
-            ]
-          },
-          {
-            tipo: "libro",
-            texto: "",
-            atributos: [],
-            hijos: [
-              {
-                tipo:"titulo",
-                texto: "Conversación en la catedral",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"autor",
-                texto: "Mario Vargas Llosa",
-                atributos:[
-                    {
-                        nombre:"fechaNacimiento",
-                        valor:"28/03/1936"
-                    }
-                ],
-                hijos:[]
-              },
-              {
-                tipo:"fechaPublicacion",
-                texto:"",
-                atributos:[
-                    {
-                        nombre:"año",
-                        valor:"1969"
-                    }
-                ],
-                hijos:[]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+  const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
+  const {ExpOr,ExpAnd} = require("./Expresion/Logical");
+  const {PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
 %}
 
 /* Definición Léxica */
@@ -188,16 +77,16 @@
 %%
 
 XPath 
-  : Expr  {}
+  : Expr  { $$=new Comando($1);$$.ejecutar(); }
 ;
 
 Expr 
-  : ExprSingle            {}
-	| Expr COMA ExprSingle  {}
+  : ExprSingle            { $$=[];$$.push($1) }
+	| Expr COMA ExprSingle  { $$=$1;$$.push($3) }
 ; 
 
 ExprSingle  
-  : OrExpr  {}
+  : OrExpr  { $$=$1 }
 	| ForExpr {}
 ;
 
@@ -215,17 +104,17 @@ SimpleForBinding
 ;
 
 OrExpr      
-  : AndExpr                 {}
-	| OrExpr ROR AndExpr      {}
+  : AndExpr                 { $$ = $1 }
+	| OrExpr ROR AndExpr      { $$ = new ExpOr($1,$3) }
 ;
 
 AndExpr     
-  : ComparisonExpr                {}
-	| AndExpr RAND ComparisonExpr   {}
+  : ComparisonExpr                { $$ = $1 }
+	| AndExpr RAND ComparisonExpr   { $$ = new ExpAnd($1,$3) }
 ;
 
 ComparisonExpr    
-  : StringConcatExpr                              {}
+  : StringConcatExpr                              { $$=$1 }
 	| StringConcatExpr ValueComp StringConcatExpr   {}
 	| StringConcatExpr GeneralComp StringConcatExpr {}
 ;
@@ -251,24 +140,24 @@ GeneralComp
 
 
 StringConcatExpr  
-  : RangeExpr                         {}
+  : RangeExpr                         { $$=$1 }
 	| StringConcatExpr OR_EXP RangeExpr {}
 ;
 
 RangeExpr   
-  : AdditiveExpr                    {}
+  : AdditiveExpr                    { $$=$1 }
 	| AdditiveExpr RTO AdditiveExpr   {}
 ;
 
 AdditiveExpr      
-  : MultiplicativeExpr                    {}
+  : MultiplicativeExpr                    { $$=$1 }
 	| AdditiveExpr MAS MultiplicativeExpr   {}
 	| AdditiveExpr MENOS MultiplicativeExpr {}
 ;
 
 //Aca se intercambio UnoinExpr por Unary Expresion cambiar en el futuro
 MultiplicativeExpr      
-  : UnaryExpr                         {}
+  : UnaryExpr                         { $$=$1 }
 	| MultiplicativeExpr POR UnaryExpr  {}
 	| MultiplicativeExpr DIV UnaryExpr  {}
 	| MultiplicativeExpr IDIV UnaryExpr {}
@@ -276,142 +165,143 @@ MultiplicativeExpr
 ;
 
 UnaryExpr   
-  : ValueExpr                         {}
+  : ValueExpr                         { $$=$1 }
 	| MAS UnaryExpr                     {}
 	| MENOS UnaryExpr                   {}
 ;
 
 ValueExpr   
-  : SimpleMapExpr                     {}
+  : SimpleMapExpr                     { $$=$1 }
 ;
 
 SimpleMapExpr     
-  : PathExpr                            {}
+  : PathExpr                            { $$=$1 }
 	| SimpleLetClause ADMIRACION PathExpr {}
 ;
 
+ //  /emplyee/name//id
 PathExpr    
-  : BARRA RelativePathExpr              {}
-	| DOBLEBARRA RelativePathExpr         {}
-	| RelativePathExpr                    {}
-	| BARRA                               {}
+  : BARRA RelativePathExpr              { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2) }
+	| DOBLEBARRA RelativePathExpr         { $2[0].tipo=TipoPath.REL;$$=new PathExp($2) }
+	| RelativePathExpr                    { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2) }
+	| BARRA                               { $2[0].tipo=TipoPath.ABS;$$=new PathExp([]) }
 ;
 
 RelativePathExpr  
-  : StepExpr                              {}
-	| RelativePathExpr BARRA StepExpr       {}
-	| RelativePathExpr DOBLEBARRA StepExpr  {}
+  : StepExpr                              { $$ = []; $$.push(new PathExpElement($1,null)); }
+	| RelativePathExpr BARRA StepExpr       { $$ = $1; $$.push(new PathExpElement($3,TipoPath.ABS))}
+	| RelativePathExpr DOBLEBARRA StepExpr  { $$ = $1; $$.push(new PathExpElement($3,TipoPath.REL)) }
 ;
 
 StepExpr    
-  : PostfixExpr {}
-	| AxisStep    {}
+  : PostfixExpr { $$=$1 }
+	| AxisStep    { $$=$1 }
 ;
 
 AxisStep    
-  : ReverseStep               {}
-	| ForwardStep               {}
-	| ReverseStep PredicateList {}
-	| ForwardStep PredicateList {}
+  : ReverseStep               { $$=new AxisStepExp($1,[]) }
+	| ForwardStep               { $$=new AxisStepExp($1,[]) }
+	| ReverseStep PredicateList { $$=new AxisStepExp($1,[]) }
+	| ForwardStep PredicateList { $$=new AxisStepExp($1,[]) }
 ;
 
 PredicateList     
-  : Predicate                 {}
-	| PredicateList Predicate   {}
+  : Predicate                 { $$=[];$$.push($1) }
+	| PredicateList Predicate   { $$=$1;$$.push($2) }
 ;
 
 //Faltan las formas no abreviadas
 ForwardStep 
-  : AbbrevForwardStep {}
+  : AbbrevForwardStep { $$=$1 }
 ;
 
 AbbrevForwardStep 
-  : ARROBA NameTest {}
-	| NameTest        {}
+  : ARROBA NameTest { $$=new Atributo($2) }
+	| NameTest        { $$=new Camino($1) }
 ;
 
 //KindText no implementado todavia
 NodeTest    
-  : NameTest    {}
+  : NameTest    { $$=$1 }
   //| KindTest
 ;
 
 NameTest    
-  : NOMBRE    {}
-	| Wildcard  {}
+  : NOMBRE    { $$=$1 }
+	| Wildcard  { $$=$1 }
 ;
 
 //
 Wildcard    
-  : ASTERISCO {}
+  : ASTERISCO { $$=$1 }
 ;
 
 //Faltan las formas no abrevidas
 ReverseStep 
-  :  AbbrevReverseStep  {}
+  :  AbbrevReverseStep  { $$=$1 }
 ;
 
 AbbrevReverseStep 
-  : DOBLEPUNTO  {}
+  : DOBLEPUNTO  { $$=new CaminoInverso($1) }
 ;
 
 PostfixExpr   
-  : PrimaryExpr               {}
-	| PrimaryExpr PostfixExprL  {}
+  : PrimaryExpr               { $$=$1 }
+	| PrimaryExpr PostfixExprL  { $$=$1 }
 ;
 
 //Falta crear los demas metodos de argumentos para las primaryEXpr
 PostfixExprL      
-  : Predicate                 {}
+  : Predicate                 { $$=$1 }
   //| ArgumentList
   //| Lookup
-	| StepExprL Predicate       {}
-  //| StepExprL ArgumentList
-  //| StepExprL Lookup
+	  | PostfixExprL Predicate       { $$=$1+$2 }
+  //| PostfixExprL ArgumentList
+  //| PostfixExprL Lookup
 ;
 
 Predicate   
-  : CORA Expr CORB            {}
+  : CORA Expr CORB            { $$=$1 }
 ;
 
 PrimaryExpr 
-  : Literal                   {}
-	| VarRef                    {}
-	| FunctionCall              {}
-	| ContextItemExpr           {}
-	| ParenthesizedExpr         {}
+  : Literal                   { $$=$1 }
+	| VarRef                    { $$=$1 }
+	| FunctionCall              { $$=$1 }
+	| ContextItemExpr           { $$=$1 }
+	| ParenthesizedExpr         { $$=$1 }
 ;
 
 Literal     
-  : INTEGER                   {}
-	| DECIMAL                   {}
-	| CADENA                    {}
+  : INTEGER                   { $$=$1 }
+	| DECIMAL                   { $$=$1 }
+	| CADENA                    { $$=$1 }
 ;
 
 VarRef      
-  : DOLAR NOMBRE              {}
+  : DOLAR NOMBRE              { $$=$1+$2 }
 ;
 
 FunctionCall      
-  : NOMBRE PARENTESISA PARENTESISC              {}
-	| NOMBRE PARENTESISA ArgumentList PARENTESISC {}
+  : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }
+	| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
 ;
 
 ArgumentList      
-  : Argument                      {}
-	| ArgumentList COMA Argument    {}
+  : Argument                      { $$=$1 }
+	| ArgumentList COMA Argument    { $$=$1+$2+$3 }
 ;
 
 Argument    
-  : ExprSingle      {}
-	| INTERROGACIONC  {}
+  : ExprSingle      { $$=$1 }
+	| INTERROGACIONC  { $$=$1 }
 ;
 
 ContextItemExpr   
-  : PUNTO  {}
+  : PUNTO  { $$=$1 }
 ;
 
 ParenthesizedExpr 
-  : PARENTESISA PARENTESISC       {}
-	| PARENTESISA Expr PARENTESISC  {}
+  : PARENTESISA PARENTESISC       { $$=$1+$2 }
+	| PARENTESISA Expr PARENTESISC  { $$=$1+$3 }
 ;
