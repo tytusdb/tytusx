@@ -37,8 +37,9 @@
 
 .Text{
   height: 350px;
-  width: 520px;
+  width: 100%;
   margin-top: 10px;
+  font-size: 15pt;
 }
 
 

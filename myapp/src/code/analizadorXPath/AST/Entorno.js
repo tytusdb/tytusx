@@ -13,7 +13,7 @@ exports.TipoPath = {
     "REL" : "relativo"
 }
 
-var XML= {
+var XML2= {
     tipo: "/",
     texto: "",
     atributos: [],
@@ -135,7 +135,7 @@ exports.Comando = class Comando
         this.Instrucciones = Instrucciones
     }
 
-    Ejecutar()
+    Ejecutar(XML)
     {
         var Salida = ""
         var retornos=[]

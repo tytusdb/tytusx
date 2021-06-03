@@ -14,4 +14,9 @@
     <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
     <fechaPublicacion año="1969"/>
   </libro>
+  <registro>
+    <titulo>Soy un titulo</titulo>
+    <autor fechaNacimiento="28/03/1936">Jodge Ambdocio</autor>
+    <fechaPublicacion año="1969"/>
+  </registro>
 </biblioteca>

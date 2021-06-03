@@ -54,39 +54,39 @@ function Navigation(){
             <p></p>
             <p></p>
 
-            <div className="row">
-                <div className="column-open">
-                
-                <input type="file" id="files" onClick={inicio}/>
-                <output id="list"></output>
-                
+            <div className="container">
+                <div className="row">
+                    <div className="col-4">
+                        <div className="custom-file">
+                            <input className="custom-file-input" type="file" id="files" onClick={inicio}/>
+                        </div>
+                    </div>
+                    <div className="col-4">
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={setText}>Compilar</button>
+                    </div>
+                    <div className="col-4">
+                        <button type="button" className="btn btn-primary btn-lg">Reportes</button>
+                    </div>
                 </div>
             </div>
 
-            <p> </p>
-
-            <div className="row">
-                <div className="MiniColumn">
-                <button type="submit" className="btn btn-primary" onClick={setText}>Compilar</button>
-                </div>
-                <div className="MiniColumn">
-                    <button type="button" className="btn btn-primary">Reportes</button>
-                </div>
-            </div>
-
-            <div className="row">
-                <div className="column">
-                    <textarea className="Text" placeholder="Bienvenido" id="InputTextarea" ></textarea>
-                </div>
-                <div className="column">
-                    <textarea className="Text" placeholder="Bienvenido" id="OutputTextarea" ></textarea>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-6 block">
+                        <textarea className="Text" placeholder="Bienvenido" id="InputTextarea" ></textarea>
+                    </div>
+                    <div className="col-6 block">
+                        <textarea className="Text" placeholder="Bienvenido" id="OutputTextarea" ></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div className="row">
-                <label className="labelClass">Archivo XML</label>
-                <div className="column">
-                    <textarea className="Text" placeholder="Bienvenido" id="XMLTextarea" ></textarea>
+            <div className="container">
+                <div className="row">
+                    <label className="labelClass">Archivo XML</label>
+                    <div className="text-center">
+                        <textarea className="Text" placeholder="Bienvenido" id="XMLTextarea" ></textarea>
+                    </div>
                 </div>
             </div>
 

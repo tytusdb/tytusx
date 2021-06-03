@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$=new Comando($$[$0]);this.$.Ejecutar() 
+ this.$=new Comando($$[$0]);return this.$ 
 break;
 case 2: case 60:
  this.$=[];this.$.push($$[$0]) 
