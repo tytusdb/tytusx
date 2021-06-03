@@ -1,3 +1,3 @@
 var analizador = require("./Xpath")
 
-analizador.parse(`/biblioteca`);
+analizador.parse(`//autor`);

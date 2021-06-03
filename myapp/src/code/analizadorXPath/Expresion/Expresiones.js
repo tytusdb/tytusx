@@ -175,12 +175,12 @@ exports.Camino = class Camino
 function RecursivaCamino(Entorno,nombre) 
 {
     var datos = [];
-    for (const iterator of Entorno.hijos) {
-        datos = RecursivaCamino(iterator)
-    }
     if(Entorno.tipo==nombre)
     {
         datos.push(Entorno)
+    }
+    for (const iterator of Entorno.hijos) {
+        datos = datos.concat(RecursivaCamino(iterator,nombre))
     }
     return datos
 }
