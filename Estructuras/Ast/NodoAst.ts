@@ -1,10 +1,10 @@
 import { Ast } from "./Ast";
-export class NodeAst
+export abstract class NodoAst
 {
-    public columna:Number;
-    public fila:Number;
+    
+    public constructor(public linea:number, public columna:number){}
 
-    Interpretar(/*arbol: Ast*/) : any;
+    public abstract Interpretar(/* arbol:Ast */):void;
 
     //Graph(/**/) : any;
 }

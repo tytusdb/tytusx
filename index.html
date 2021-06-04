@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>PROYECTO 1 - XQUERY & XPATH</title>
+
+    <style type="text/css" media="screen">
+        html {
+            scroll-behavior: smooth;
+            /*Comenta esta línea (o dale el valor 'auto' a scroll behavior ) para probar la diferencia con y sin scroll suavizado*/
+        }
+
+        /* Tam de editor */
+        .editor {
+            margin-top: 5px;
+            width: 100%;
+            height: 300px;
+        }
+    </style>
+
+</head>
+
+<body data-spy="scroll" data-offset="1"
+    style="background-color: #333; color: #fff;  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, .5);  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5); display: flex;">
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <button type="button" class="btn btn-outline-primary" id="traducir" onclick="InterpretarCodigo()">XML</button>
+            <button type="button" class="btn btn-outline-success" id="ejecutar" onclick="">Ejecutar</button>
+            <button type="button" class="btn btn-outline-warning" id="tablesimbol"
+                onclick="tabla_simbolos();location.href='#tbts';">Tabla de Simbolo</button>
+            <button type="button" class="btn btn-outline-warning" id="reporteast"
+                onclick="location.href='#areagraph';graficarAST();">AST</button>
+
+            <!-- PESTAÑA LEXICO -->
+
+            <div class="btn-group" role="group">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Errores Lexicos
+                    </button>
+                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
+                        <button type="button" class="btn btn-outline-danger" id="rplexicoT"
+                            onclick="erroreslexicos_traduccion();location.href='#tberror';">Traduccion</button>
+                        <button type="button" class="btn btn-outline-danger" id="rplexicoE"
+                            onclick="erroreslexicos_ejecucion();location.href='#tberror';">Ejecucion</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA SINTACTICO -->
+
+            <div class="btn-group" role="group">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop2" type="button" class="btn btn-outline-danger dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Errores Sintacticos
+                    </button>
+                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                        <button type="button" class="btn btn-outline-danger" id="rpsintacticoT"
+                            onclick="erroressintacticos_traduccion();location.href='#tberror';">Traduccion</button>
+                        <button type="button" class="btn btn-outline-danger" id="rpsintacticoE"
+                            onclick="erroressintacticos_ejecucion();location.href='#tberror';">Ejecucion</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PESTAÑA SEMANTICO -->
+
+            <div class="btn-group" role="group">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop3" type="button" class="btn btn-outline-danger dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Errores Semanticos
+                    </button>
+                    <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop3">
+                        <button type="button" class="btn btn-outline-danger" id="rpsemanticoE"
+                            onclick="erroressemanticos_ejecucion();location.href='#tberror';">Ejecucion</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <!-- Editor de Entrada -->
+            <div id="editorentrada" class=" editor col-md-6"></div>
+
+            <!-- Editor de Salida -->
+            <div id="editorsalida" class=" editor col-md-6"></div>
+
+        </div>
+
+        <!-- CONSOLA  -->
+
+        <div>CONSOLA
+            <!--<div id="consola" class="editor col-md-12"></div>-->
+            <textarea id="consola" cols="30" rows="12" readonly class="text col-md-12 btn-secondary"></textarea>
+        </div>
+
+        <!-- TABLA DE ERRORES  -->
+        <br />
+        <br />
+        <div class="d-flex justify-content-center">
+            <h1>TABLA DE ERRORES</h1>
+
+        </div>
+        <hr color="#fff">
+        <table class="table table-dark" id="tberror">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Lexema</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Linea</th>
+                    <th scope="col">Columna</th>
+                </tr>
+            </thead>
+
+            <tbody id="contlextraduccion">
+                <!-- Contenedor de valores de la lista -->
+            </tbody>
+
+        </table>
+
+        <!-- AST  -->
+        <br />
+        <br />
+        <hr color="#fff">
+        <div class="d-flex justify-content-center" id="areagraph">
+            <h1>AST</h1>
+        </div>
+        <hr color="#fff">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="dist/viz/viz-lite.js"></script>
+        <script src="https://github.com/magjac/d3-graphviz/releases/download/v0.1.2/d3-graphviz.min.js"></script>
+        <div id="graph" style="text-align: center;"></div>
+
+
+
+
+        <!-- TABLA DE SIMBOLOS -->
+        <br />
+        <br />
+        <div class="d-flex justify-content-center">
+            <h1>TABLA DE SIMBOLOS</h1>
+
+        </div>
+        <hr color="#fff">
+        <table class="table table-dark" id="tbts">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Ambito</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Fila</th>
+                    <th scope="col">Columna</th>
+                </tr>
+            </thead>
+
+            <tbody id="contts">
+                <!-- Contenedor de valores de la lista -->
+            </tbody>
+
+        </table>
+    </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"
+        integrity="sha512-GZ1RIgZaSc8rnco/8CXfRdCpDxRCphenIiZ2ztLy3XQfCbQUSCuk8IudvNHxkRA3oUg6q0qejgN/qqyG1duv5Q=="
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js"
+        integrity="sha512-8qx1DL/2Wsrrij2TWX5UzvEaYOFVndR7BogdpOyF4ocMfnfkw28qt8ULkXD9Tef0bLvh3TpnSAljDC7uyniEuQ=="
+        crossorigin="anonymous"></script>
+
+    <!-- Importaciones -->
+
+    <script src="Gramatica/gramatica.js"></script>
+    <script src="dist/index.js"></script>
+
+    <!-- Fin Importaciones -->
+</body>
+
+</html>
