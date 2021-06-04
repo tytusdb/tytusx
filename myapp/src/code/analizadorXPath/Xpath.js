@@ -649,105 +649,105 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:return "DOBLEBARRA"
+case 0:return "DECIMAL"
 break;
-case 1:return "BARRA"
+case 1:return "INTEGER"
 break;
-case 2:return "ASTERISCO"
+case 2:return "CADENA"
 break;
-case 3:return "ARROBA"
+case 3:return "NOMBRE"
 break;
-case 4:return "CORA"
+case 4:return "DOBLEBARRA"
 break;
-case 5:return "CORB"
+case 5:return "BARRA"
 break;
-case 6:return "MAS"
+case 6:return "ASTERISCO"
 break;
-case 7:return "MENOS"
+case 7:return "ARROBA"
 break;
-case 8:return "POR"
+case 8:return "CORA"
 break;
-case 9:return "DIV"
+case 9:return "CORB"
 break;
-case 10:return "IDIV"
+case 10:return "MAS"
 break;
-case 11:return "MOD"
+case 11:return "MENOS"
 break;
-case 12:return "MAYORIG"
+case 12:return "POR"
 break;
-case 13:return "MENORIG"
+case 13:return "DIV"
 break;
-case 14:return "DIFERENTE"
+case 14:return "IDIV"
 break;
-case 15:return "MENOR"
+case 15:return "MOD"
 break;
-case 16:return "MAYOR"
+case 16:return "MAYORIG"
 break;
-case 17:return "IGUAL"
+case 17:return "MENORIG"
 break;
-case 18:return "OR_EXP"
+case 18:return "DIFERENTE"
 break;
-case 19:return "PIPE"
+case 19:return "MENOR"
 break;
-case 20:return "COMA"
+case 20:return "MAYOR"
 break;
-case 21:return "DOLAR"
+case 21:return "IGUAL"
 break;
-case 22:return "ADMIRACION"
+case 22:return "OR_EXP"
 break;
-case 23:return "ARROBA"
+case 23:return "PIPE"
 break;
-case 24:return "DOBLEPUNTO"
+case 24:return "COMA"
 break;
-case 25:return "PARENTESISA"
+case 25:return "DOLAR"
 break;
-case 26:return "PARENTESISC"
+case 26:return "ADMIRACION"
 break;
-case 27:return "INTERROGACIONC"
+case 27:return "ARROBA"
 break;
-case 28:return "PUNTO"
+case 28:return "DOBLEPUNTO"
 break;
-case 29:return "ROR"
+case 29:return "PARENTESISA"
 break;
-case 30:return "RAND"
+case 30:return "PARENTESISC"
 break;
-case 31:return "RRETURN"
+case 31:return "INTERROGACIONC"
 break;
-case 32:return "RFOR"
+case 32:return "PUNTO"
 break;
-case 33:return "RIN"
+case 33:return "ROR"
 break;
-case 34:return "RTO"
+case 34:return "RAND"
 break;
-case 35:return "EQ"
+case 35:return "RRETURN"
 break;
-case 36:return "NE"
+case 36:return "RFOR"
 break;
-case 37:return "LT"
+case 37:return "RIN"
 break;
-case 38:return "LE"
+case 38:return "RTO"
 break;
-case 39:return "GT"
+case 39:return "EQ"
 break;
-case 40:return "GE"
+case 40:return "NE"
 break;
-case 41:
+case 41:return "LT"
 break;
-case 42:
+case 42:return "LE"
 break;
-case 43:return "CADENA"
+case 43:return "GT"
 break;
-case 44:return "NOMBRE"
+case 44:return "GE"
 break;
-case 45:return "INTEGER"
+case 45:
 break;
-case 46:return "DECIMAL"
+case 46:
 break;
 case 47: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
 break;
 }
 },
-rules: [/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\*)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:idiv\b)/i,/^(?:mod\b)/i,/^(?:>=)/i,/^(?:<=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\|\|)/i,/^(?:\|)/i,/^(?:,)/i,/^(?:\$)/i,/^(?:!)/i,/^(?:@)/i,/^(?:\.\.)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\?)/i,/^(?:\.)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:return\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:to\b)/i,/^(?:eq\b)/i,/^(?:ne\b)/i,/^(?:lt\b)/i,/^(?:le\b)/i,/^(?:gt\b)/i,/^(?:ge\b)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:("[^"]*")|('[^']*'))/i,/^(?:([a-zA-ZñÑ_-]|\.)([a-zA-ZñÑ0-9_-]|\.)*)/i,/^(?:[0-9]+)/i,/^(?:(\.[0-9]+)|([0-9]+\.[0-9]+))/i,/^(?:.)/i],
+rules: [/^(?:(\.[0-9]+)|([0-9]+\.[0-9]+))/i,/^(?:[0-9]+)/i,/^(?:("[^"]*")|('[^']*'))/i,/^(?:([a-zA-ZñÑ_])([a-zA-ZñÑ0-9_-]|\.)*)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\*)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:idiv\b)/i,/^(?:mod\b)/i,/^(?:>=)/i,/^(?:<=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\|\|)/i,/^(?:\|)/i,/^(?:,)/i,/^(?:\$)/i,/^(?:!)/i,/^(?:@)/i,/^(?:\.\.)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\?)/i,/^(?:\.)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:return\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:to\b)/i,/^(?:eq\b)/i,/^(?:ne\b)/i,/^(?:lt\b)/i,/^(?:le\b)/i,/^(?:gt\b)/i,/^(?:ge\b)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:.)/i],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
 });
 return lexer;

@@ -12,6 +12,12 @@
 
 %%
 
+
+("."[0-9]+)|([0-9]+"."[0-9]+) 				    return "DECIMAL"
+[0-9]+      								              return "INTEGER"
+('"'[^"]*'"')|("'"[^']*"'")         		  return "CADENA"
+([a-zA-ZñÑ_])([a-zA-ZñÑ0-9_-]|".")* 	    return "NOMBRE"
+
 "//" return "DOBLEBARRA"
 "/"         return "BARRA"
 "*"         return "ASTERISCO"
@@ -59,10 +65,6 @@
 [ \r\t]+{}
 \n{}
 
-('"'[^"]*'"')|("'"[^']*"'")          return "CADENA"
-([a-zA-ZñÑ_-]|".")([a-zA-ZñÑ0-9_-]|".")* return "NOMBRE"
-[0-9]+      return "INTEGER"
-("."[0-9]+)|([0-9]+"."[0-9]+) return "DECIMAL"
 
 .	{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 
@@ -115,7 +117,7 @@ ValueComp
 ;
 
 GeneralComp       
-  : IGUAL     {}
+  	: IGUAL     {}
 	| DIFERENTE {}
 	| MENOR     {}
 	| MENORIG   {}
@@ -193,7 +195,7 @@ AxisStep
 
 PredicateList     
   : Predicate                 { $$=[];$$.push($1) }
-	| PredicateList Predicate   { $$=$1;$$.push($2) }
+  | PredicateList Predicate   { $$=$1;$$.push($2) }
 ;
 
 //Faltan las formas no abreviadas
@@ -203,7 +205,7 @@ ForwardStep
 
 AbbrevForwardStep 
   : ARROBA NameTest { $$=new Atributo($2) }
-	| NameTest        { $$=new Camino($1) }
+  | NameTest        { $$=new Camino($1) }
 ;
 
 //KindText no implementado todavia
