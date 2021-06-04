@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<biblioteca>
+<biblio_teca>
   <libro>
     <titulo>La vida está en otra parte</titulo>
     <autor>Milan Kundera</autor>
@@ -15,9 +15,9 @@
     <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
     <fechaPublicacion año="1969"/>
   </libro>
-  <registro>
+  <regis-tro>
     <titulo>Soy un titulo</titulo>
     <autor fechaNacimiento="28/03/1936">Jodge Ambdocio</autor>
     <fechaPublicacion año="1969"/>
-  </registro>
-</biblioteca>
+  </regis-tro>
+</biblio_teca>
