@@ -1,13 +1,11 @@
 //Enum de tipos
-const Tipo = {
+export const Tipo = {
     "INTEGER" : "integer",
     "DECIMAL" : "decimal",
     "STRING"  : "string",
     "NODO"    : "nodo",
     "ERROR"   : "error"
 }
-const _Tipo = Tipo
-export { _Tipo as Tipo }
 
 export const TipoPath = {
     "ABS" : "absoluto",

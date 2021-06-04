@@ -177,7 +177,7 @@ exports.Camino = class Camino
 function RecursivaCamino(Entorno,nombre) 
 {
     var datos = [];
-    if(Entorno.tipo==nombre)
+    if(Entorno.tipo==nombre || nombre=="*")
     {
         datos.push(Entorno)
     }

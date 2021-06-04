@@ -125,7 +125,7 @@ ValueComp
 	| LT  {}
 	| LE  {}
 	| GT  {}
-	| GE  {}
+	| GE  {}  
 ;
 
 GeneralComp       
