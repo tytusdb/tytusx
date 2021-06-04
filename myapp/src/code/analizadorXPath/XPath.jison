@@ -3,6 +3,7 @@
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {ExpOr,ExpAnd} = require("./Expresion/Logical");
   const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
+  const {Igual, Diferente, Menor, MenorIgual, Mayor, MayorIgual} = require('./Expresion/Comparison')
 %}
 
 /* Definición Léxica */
@@ -36,7 +37,6 @@
 "<"         return "MENOR"
 ">"         return "MAYOR"
 "="         return "IGUAL"
-"||"        return "OR_EXP"
 "|"         return "PIPE"
 ","         return "COMA"
 "$"         return "DOLAR"
@@ -103,26 +103,29 @@ AndExpr
 
 ComparisonExpr    
   : StringConcatExpr                              { $$=$1 }
-	| StringConcatExpr ValueComp StringConcatExpr   {}
-	| StringConcatExpr GeneralComp StringConcatExpr {}
+  | StringConcatExpr GeneralComp StringConcatExpr { $$=$2; $$.izquierdo = $1; $$.derecho = $3;} 
+//| StringConcatExpr ValueComp StringConcatExpr   {} 
+// falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
 ;
 
-ValueComp         
-    : EQ  {}
-	| NE  {}
+/*
+ValueComp    // palabras reservadas     
+    : EQ  {}  // 5 EQ 5
+	| NE  {}  
 	| LT  {}
 	| LE  {}
 	| GT  {}
 	| GE  {}  
 ;
+*/
 
-GeneralComp       
-  	: IGUAL     {}
-	| DIFERENTE {}
-	| MENOR     {}
-	| MENORIG   {}
-	| MAYOR     {}
-	| MAYORIG   {}
+GeneralComp       // signo
+  	: IGUAL     { $$ = new Igual() 		} // 5 = 5 | nodo = nodo
+	| DIFERENTE { $$ = new Diferente() 	}
+	| MENOR     { $$ = new Menor() 		}
+	| MENORIG   { $$ = new MenorIgual() }
+	| MAYOR     { $$ = new Mayor() 		}
+	| MAYORIG   { $$ = new MayorIgual() }
 ;
 
 
