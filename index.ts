@@ -3,7 +3,7 @@
 //import { Entorno } from "./AST/Entorno";
 //import {  } from "./Interfaces/Instruccion";
 
-//const gramatica = require('./Gramatica/gramatica');
+const gramatica = require('./Gramatica/gramatica');
 //const estructuras1 = require('./Estructuras/Ast/NodoAst');
 //const estructuras2 = require('./Estructuras/Ast/Ast');
 
@@ -54,5 +54,4 @@ ejecutarCodigo(`
   <price>29.99</price>
 </book>
 </bookstore>
-`);
-*/
+`);*/

@@ -17,6 +17,8 @@
 ">"					return 'mayorque';
 "/"					return 'diagonal';
 "="					return 'igual';
+"("					return 'para';
+")"					return 'parc';
 
 
 /* Espacios en blanco */
@@ -35,47 +37,55 @@
 .					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 /lex
 
-
+/* imports */
+%{            
+    const {Objeto} = require("../Estructuras/Expresiones/Objeto");
+    const {Atributo} = require("../Estructuras/Expresiones/Atributo");
+%}
 
 /* Asociación de operadores y precedencia */
 
-%left 'MAS' 'MENOS'
-%left 'POR' 'DIVIDIDO'
-%left UMENOS
+//%left 'or'
+//%left 'and'
+%left 'menorque' 'menorigual' 'mayorque' 'mayorigual' 'equal' 'nequal'
+//%left 'plus' 'minus'
+//%left 'times' 'div' 'mod'
+//%left 'pow'
+//%left 'not'
+//%left UMINUS
+%left 'para' 'parc'
 
 %start ini
 
 %% /* Definición de la gramática */
 
 ini
-	: LISTA_PRINCIPAL EOF
+	: LISTA_PRINCIPAL EOF { $$ = $1; return $$; }
 ;
 
-LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA
-   				| LISTA
+LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { $1.push($2); $$ = $1;}
+   				| LISTA                     { $$ = [$1]; }
  ;
 
-LISTA : ABRE LISTA_PRINCIPAL CIERRA
-	  | ABRE LISTA_DATOS  CIERRA
-	  | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
-;
 
-ABRE : menorque identificador mayorque 
-	 | menorque identificador ETIQUETAS mayorque ;
+LISTA:menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
+    | menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal identificador mayorque { $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[]); }
+    | menorque identificador LATRIBUTOS diagonal mayorque      { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[]); }
+    | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); };
 
-CIERRA : menorque diagonal identificador mayorque;
+LATRIBUTOS: ATRIBUTOS        { $$ = $1; }
+           |                 { $$ = []; };
 
-ETIQUETAS : ETIQUETAS ETIQUETA
-		  | ETIQUETA;
-		  
-ETIQUETA : identificador igual cadena;
+ATRIBUTOS : ATRIBUTOS ATRIBUTO   { $1.push($2); $$ = $1;}
+          | ATRIBUTO             { $$ = [$1]; } ;
 
-LISTA_DATOS : LISTA_DATOS  DATO
-            | DATO;
+ATRIBUTO :  identificador igual cadena { $$ = new Atributo($1, $3, @1.first_line, @1.first_column); };
 
-DATO :  ABRE PARRAFOS CIERRA;
 
-PARRAFOS : PARRAFOS PARRAFO 
-		| PARRAFO;
+OBJETOS: OBJETOS LISTA       { $1.push($2); $$ = $1;}
+	   | LISTA                { $$ = [$1]; } ;
 
-PARRAFO : entero | identificador | decimal | cadena;
+PARRAFO : PARRAFO identificador { $1=$1 + ' ' +$2 ; $$ = $1;}
+		| identificador           { $$ = [$1]; } ;
+
+
