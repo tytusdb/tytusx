@@ -1,3 +1,4 @@
 var analizador = require("./Xpath")
 
-analizador.parse(`//autor`);
+retorno = analizador.parse(`"hola"`);
+console.log(retorno.Ejecutar());

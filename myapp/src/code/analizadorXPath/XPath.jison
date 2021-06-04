@@ -2,7 +2,7 @@
 %{
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {ExpOr,ExpAnd} = require("./Expresion/Logical");
-  const {PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
+  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
 %}
 
 /* Definición Léxica */
@@ -82,30 +82,16 @@ XPath
 
 Expr 
   : ExprSingle            { $$=[];$$.push($1) }
-	| Expr COMA ExprSingle  { $$=$1;$$.push($3) }
+  | Expr COMA ExprSingle  { $$=$1;$$.push($3) }
 ; 
 
 ExprSingle  
   : OrExpr  { $$=$1 }
-	| ForExpr {}
-;
-
-ForExpr 
-  : SimpleForClause RRETURN ExprSingle  {}
-;
-
-SimpleForClause   
-  : RFOR SimpleForBinding {}
-	| SimpleForClause COMA SimpleForBinding {}
-;
-
-SimpleForBinding  
-  : DOLAR NOMBRE RIN ExprSingle {}
 ;
 
 OrExpr      
   : AndExpr                 { $$ = $1 }
-	| OrExpr ROR AndExpr      { $$ = new ExpOr($1,$3) }
+  | OrExpr ROR AndExpr      { $$ = new ExpOr($1,$3) }
 ;
 
 AndExpr     
@@ -120,7 +106,7 @@ ComparisonExpr
 ;
 
 ValueComp         
-  : EQ  {}
+    : EQ  {}
 	| NE  {}
 	| LT  {}
 	| LE  {}
@@ -246,16 +232,16 @@ AbbrevReverseStep
 ;
 
 PostfixExpr   
-  : PrimaryExpr               { $$=$1 }
+    : PrimaryExpr               { $$=$1 }
 	| PrimaryExpr PostfixExprL  { $$=$1 }
 ;
 
 //Falta crear los demas metodos de argumentos para las primaryEXpr
 PostfixExprL      
-  : Predicate                 { $$=$1 }
+    : Predicate                 { $$=$1 }
   //| ArgumentList
   //| Lookup
-	  | PostfixExprL Predicate       { $$=$1+$2 }
+	| PostfixExprL Predicate       { $$=$1+$2 }
   //| PostfixExprL ArgumentList
   //| PostfixExprL Lookup
 ;
@@ -265,22 +251,18 @@ Predicate
 ;
 
 PrimaryExpr 
-  : Literal                   { $$=$1 }
-	| VarRef                    { $$=$1 }
+  	: Literal                   { $$=$1 }
 	| FunctionCall              { $$=$1 }
 	| ContextItemExpr           { $$=$1 }
 	| ParenthesizedExpr         { $$=$1 }
 ;
 
 Literal     
-  : INTEGER                   { $$=$1 }
-	| DECIMAL                   { $$=$1 }
-	| CADENA                    { $$=$1 }
+    : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1) }
+	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1) }
+	| CADENA                    { $$=new Literal(Tipo.STRING,$1) }
 ;
 
-VarRef      
-  : DOLAR NOMBRE              { $$=$1+$2 }
-;
 
 FunctionCall      
   : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }
@@ -304,4 +286,4 @@ ContextItemExpr
 ParenthesizedExpr 
   : PARENTESISA PARENTESISC       { $$=$1+$2 }
 	| PARENTESISA Expr PARENTESISC  { $$=$1+$3 }
-;
+;	

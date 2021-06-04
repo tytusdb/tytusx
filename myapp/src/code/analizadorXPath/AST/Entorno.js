@@ -1,18 +1,21 @@
+
 //Enum de tipos
-export const Tipo = {
+const Tipo = {
     "INTEGER" : "integer",
     "DECIMAL" : "decimal",
     "STRING"  : "string",
     "NODO"    : "nodo",
     "ERROR"   : "error"
 }
+exports.Tipo=Tipo
 
-export const TipoPath = {
+const TipoPath = {
     "ABS" : "absoluto",
     "REL" : "relativo"
 }
+exports.TipoPath=TipoPath
 
-var XML2= {
+var XML= {
     tipo: "/",
     texto: "",
     atributos: [],
@@ -125,34 +128,26 @@ var XML2= {
         ]
       }
     ]
-  }
+}
 
-export class Comando
+class Comando
 {
   constructor(Instrucciones)
   {
     this.Instrucciones = Instrucciones
   }
 
-  Ejecutar(XML)
+  Ejecutar()
   {
     var Salida = ""
     var retornos=[]
     for (const iterator of this.Instrucciones) {
-      retornos.push(iterator.getValor(XML))
+      retornos = retornos.concat(iterator.getValor(XML))
     }
     for (const retorno of retornos) {
       if(retorno.tipo == Tipo.NODO)
       {
-        if(retorno.valor instanceof Array)
-        {
-          for (const nodo of retorno.valor) {
-            Salida += ConvertiraXML(nodo,0) + "\n"
-          }
-        }
-        else{
-          Salida += ConvertiraXML(retorno.valor,0) + "\n"
-        }
+        Salida += ConvertiraXML(retorno.entorno,0) + "\n"
       }
       else if(retorno.tipo==Tipo.ERROR)
       {
@@ -160,12 +155,13 @@ export class Comando
       }
       else
       {
-        Salida += retornos.valor + "\n"
+        Salida += retorno.valor + "\n"
       }
     }
     return Salida;
   }
 }
+exports.Comando=Comando
 
 function ConvertiraXML(nodos,iteracion)
 {
