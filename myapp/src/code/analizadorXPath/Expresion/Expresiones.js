@@ -1,7 +1,7 @@
 const { Tipo,TipoPath } = require("../AST/Entorno")
 
 //Literales para el uso de datos y tipos
-class Literal
+export class Literal
 {
     constructor(tipo,valor){
         this.tipo=tipo
@@ -14,9 +14,8 @@ class Literal
     }
 }
 
-exports.Literal = Literal
 
-exports.PathExp = class PathExp 
+export class PathExp 
 {
     constructor(caminos) 
     {
@@ -58,7 +57,7 @@ exports.PathExp = class PathExp
 }
 
 //Clase para los tipos nodes
-exports.PathExpElement = class PathExpElement
+export class PathExpElement
 {
     constructor(siguiente,tipo)
     {
@@ -72,7 +71,7 @@ exports.PathExpElement = class PathExpElement
     }
 }
 
-exports.AxisStepExp = class AxisStepExp
+export class AxisStepExp
 {
     constructor(valor,predicado)
     {
@@ -93,7 +92,7 @@ exports.AxisStepExp = class AxisStepExp
     }
 }
 
-exports.Atributo = class Atributo
+export class Atributo
 {
     constructor(nombre)
     {
@@ -141,7 +140,7 @@ function RecursivaAtributo(Entorno,nombre)
     return Entorno
 }
 
-exports.Camino = class Camino
+export class Camino
 {
     constructor(nombre)
     {
@@ -187,7 +186,7 @@ function RecursivaCamino(Entorno,nombre)
     return datos
 }
 
-exports.CaminoInverso = class CaminoInverso
+export class CaminoInverso
 {  
     constructor(nombre)
     {
