@@ -623,38 +623,40 @@ case 0:
 break;
 case 1:
 break;
-case 2:this.begin("Etiquetai"); return 12
+case 2:return 'ID'
 break;
-case 3:
+case 3:this.begin("Etiquetai"); return 12
 break;
 case 4:
 break;
-case 5: return 19
+case 5:
 break;
-case 6: return 20
+case 6: return 19
 break;
-case 7: return 21
+case 7: return 20
 break;
-case 8: this.popState(); return 13
+case 8: return 21
 break;
-case 9: this.popState(); return 17
+case 9: this.popState(); return 13
 break;
-case 10: this.begin("Etiquetac"); return 15
+case 10: this.popState(); return 17
 break;
-case 11:
+case 11: this.begin("Etiquetac"); return 15
 break;
 case 12:
 break;
-case 13: this.popState(); return 16
+case 13:
 break;
-case 14:return 5;
+case 14: this.popState(); return 16
 break;
-case 15: return 9 
+case 15:return 5;
+break;
+case 16: return 9 
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ][A-ZÑa-zñ0-9]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ][A-ZÑa-zñ0-9]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:>)/i,/^(?:$)/i,/^(?:[^<]*)/i],
-conditions: {"Etiquetac":{"rules":[11,12,13],"inclusive":false},"Etiquetai":{"rules":[3,4,5,6,7,8,9],"inclusive":false},"INITIAL":{"rules":[0,1,2,10,14,15],"inclusive":true}}
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ_-][A-ZÑa-zñ0-9_-]*)/i,/^(?:<{ID})/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:{ID})/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/{ID})/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:>)/i,/^(?:$)/i,/^(?:[^<]*)/i],
+conditions: {"Etiquetac":{"rules":[12,13,14],"inclusive":false},"Etiquetai":{"rules":[4,5,6,7,8,9,10],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,11,15,16],"inclusive":true}}
 });
 return lexer;
 })();

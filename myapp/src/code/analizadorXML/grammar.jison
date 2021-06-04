@@ -22,19 +22,21 @@
 [ \r\t]+  			{}
 \n                  {}
 
-"<"[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*				{this.begin("Etiquetai"); return 'InicioEtiquetaI'}
+
+[A-ZÑa-zñ_-][A-ZÑa-zñ0-9_-]* return 'ID'
+"<"{ID}				{this.begin("Etiquetai"); return 'InicioEtiquetaI'}
 
 <Etiquetai>[ \r\t]+  {}
 <Etiquetai>\n        {}
 
-<Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* 	{ return 'AtributoEtiqueta'}
+<Etiquetai>{ID} 	{ return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
 <Etiquetai>\"[^\n\"]*\"				{ return 'ValorAtributo'}
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
 
-"</"[A-ZÑa-zñ][A-ZÑa-zñ0-9]*  			{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
+"</"{ID}  			{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
 <Etiquetac>[ \r\t]+  {}
 <Etiquetac>\n        {}
 <Etiquetac>">"						{ this.popState(); return 'CierreEtiquetaC'}
