@@ -1,6 +1,6 @@
 %{
 	var helpers = require('./helpers')
-	
+	var atributosRaiz = []
 	function objetoCorrecto (inicio, fin){
 		inicio = inicio.replace('<','')
 		fin = fin.replace('</','')
@@ -16,34 +16,45 @@
 %options case-insensitive
 %x Etiquetai
 %x Etiquetac
-
+%x EtiquetaConf
 %%
 /* Espacios en blanco */
 [ \r\t]+  			{}
 \n                  {}
 
 
-[A-ZÑa-zñ_-][A-ZÑa-zñ0-9_-]* return 'ID'
-"<"{ID}				{this.begin("Etiquetai"); return 'InicioEtiquetaI'}
+"<"[A-ZÑa-zñ][A-ZÑa-zñ0-9]*			{this.begin("Etiquetai"); return 'InicioEtiquetaI'}
 
 <Etiquetai>[ \r\t]+  {}
 <Etiquetai>\n        {}
 
-<Etiquetai>{ID} 	{ return 'AtributoEtiqueta'}
+<Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9]* { return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
 <Etiquetai>\"[^\n\"]*\"				{ return 'ValorAtributo'}
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
 
-"</"{ID}  			{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
-<Etiquetac>[ \r\t]+  {}
-<Etiquetac>\n        {}
+"</"[A-ZÑa-zñ][A-ZÑa-zñ0-9]*  		{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
+<Etiquetac>[ \r\t]+  				{}
+<Etiquetac>\n        				{}
 <Etiquetac>">"						{ this.popState(); return 'CierreEtiquetaC'}
 
-<<EOF>>                 return 'EOF';
 
-[^<]*                       { return 'Texto' }
+"<?"[A-ZÑa-zñ][A-ZÑa-zñ0-9]*       	{ this.begin("EtiquetaConf"); return 'InicioEtiquetaConf'}
+
+<EtiquetaConf>[A-ZÑa-zñ][A-ZÑa-zñ0-9]* 	{ return 'AtributoConf'}
+<EtiquetaConf>"="             			{ return 'IgualAtributoConf'}
+<EtiquetaConf>\"[^\n\"]*\"        		{ return 'ValorAtributoConf'}
+
+<EtiquetaConf>[ \r\t]+  				{}
+<EtiquetaConf>"?>"            			{ this.popState(); return 'CierreEtiquetaConf'}
+
+
+<<EOF>>                 			return 'EOF';
+
+[^<]*                       		{ return 'Texto' }
+
 /lex
 
 /* Asociación de operadores y precedencia */
@@ -55,6 +66,7 @@
 
 ini
 	: LISTA_OBJETO EOF 									{ $$ = new helpers.Objeto("/",[],$1); return $$; }
+	| ETIQUETACONFIGURACION LISTA_OBJETO EOF			{ $$ = new helpers.Objeto("/",$1,$2); return $$; }
 ;
 
 LISTA_OBJETO
@@ -76,6 +88,21 @@ OBJETODOBLE
 			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, [], $2) : null;
 		}
 ;
+
+ETIQUETACONFIGURACION
+  : InicioEtiquetaConf LISTA_ATRIBUTOSCONF CierreEtiquetaConf 	{ $$ = $2; }
+  | InicioEtiquetaConf CierreEtiquetaConf           			{ $$ = []; }
+;
+
+LISTA_ATRIBUTOSCONF
+  : LISTA_ATRIBUTOSCONF ATRIBUTOCONF       	{ $$ = $1; $$.push($2); }
+  | ATRIBUTOCONF                			{ $$ = []; $$.push($1); }
+;
+
+ATRIBUTOCONF
+  : AtributoConf IgualAtributoConf ValorAtributoConf  { $$ = new helpers.Atributo($1,$3); }
+;
+
 
 ETIQUETAABRE
 	: InicioEtiquetaI CierreEtiquetaI					{ $$ = {tipo:$1, atributos:[]};}

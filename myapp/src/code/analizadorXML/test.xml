@@ -1,56 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<bookstore>
-  <book>
-    <title lang="en">Harry Potter</title>
-    <price>29.99</price>
-  </book>
-  <book>
-    <title lang="en">Learning XML</title>
-    <price>39.95</price>
-  </book>
-</bookstore>
-
-{
-  tipo: "/",
-  texto: "",
-  atributos: [],
-  hijos: [
-    {
-      tipo: "bookstore",
-      texto: "",
-      atributos: [],
-      hijos: [
-        {
-          tipo: "book",
-          texto: "",
-          atributos: [],
-          hijos: [
-            {
-              tipo:"title",
-              texto: "Harry Potter",
-              atributos:[
-                {
-                  nombre:"lang",
-                  valor:"en"
-                }
-              ],
-              hijos:[]
-            },
-            {
-              tipo:"price",
-              texto:"29.99",
-              atributos:[],
-              hijos:[]
-            }
-          ]
-        },
-        {
-          tipo: "book",
-          atributos: [],
-          hijos: []
-        }
-      ]
-    }
-  ]
-}
+<biblioteca>
+  <libro>
+    <titulo>La vida está en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
+  <registro>
+    <titulo>Soy un titulo</titulo>
+    <autor fechaNacimiento="28/03/1936">Jodge Ambdocio</autor>
+    <fechaPublicacion año="1969"/>
+  </registro>
+</biblioteca>
