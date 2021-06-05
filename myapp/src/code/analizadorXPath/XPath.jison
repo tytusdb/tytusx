@@ -2,7 +2,8 @@
 %{
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {ExpOr,ExpAnd} = require("./Expresion/Logical");
-  const {PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
+  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
+  const {Igual, Diferente, Menor, MenorIgual, Mayor, MayorIgual} = require('./Expresion/Comparison')
 %}
 
 /* Definición Léxica */
@@ -11,6 +12,12 @@
       %options case-insensitive
 
 %%
+
+
+("."[0-9]+)|([0-9]+"."[0-9]+) 				    return "DECIMAL"
+[0-9]+      								              return "INTEGER"
+('"'[^"]*'"')|("'"[^']*"'")         		  return "CADENA"
+([a-zA-ZñÑ_])([a-zA-ZñÑ0-9_-]|".")* 	    return "NOMBRE"
 
 "//" return "DOBLEBARRA"
 "/"         return "BARRA"
@@ -30,7 +37,6 @@
 "<"         return "MENOR"
 ">"         return "MAYOR"
 "="         return "IGUAL"
-"||"        return "OR_EXP"
 "|"         return "PIPE"
 ","         return "COMA"
 "$"         return "DOLAR"
@@ -59,10 +65,6 @@
 [ \r\t]+{}
 \n{}
 
-('"'[^"]*'"')|("'"[^']*"'")          return "CADENA"
-([a-zA-ZñÑ_-]|".")([a-zA-ZñÑ0-9_-]|".")* return "NOMBRE"
-[0-9]+      return "INTEGER"
-("."[0-9]+)|([0-9]+"."[0-9]+) return "DECIMAL"
 
 .	{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 
@@ -82,30 +84,16 @@ XPath
 
 Expr 
   : ExprSingle            { $$=[];$$.push($1) }
-	| Expr COMA ExprSingle  { $$=$1;$$.push($3) }
+  | Expr COMA ExprSingle  { $$=$1;$$.push($3) }
 ; 
 
 ExprSingle  
   : OrExpr  { $$=$1 }
-	| ForExpr {}
-;
-
-ForExpr 
-  : SimpleForClause RRETURN ExprSingle  {}
-;
-
-SimpleForClause   
-  : RFOR SimpleForBinding {}
-	| SimpleForClause COMA SimpleForBinding {}
-;
-
-SimpleForBinding  
-  : DOLAR NOMBRE RIN ExprSingle {}
 ;
 
 OrExpr      
   : AndExpr                 { $$ = $1 }
-	| OrExpr ROR AndExpr      { $$ = new ExpOr($1,$3) }
+  | OrExpr ROR AndExpr      { $$ = new ExpOr($1,$3) }
 ;
 
 AndExpr     
@@ -115,26 +103,29 @@ AndExpr
 
 ComparisonExpr    
   : StringConcatExpr                              { $$=$1 }
-	| StringConcatExpr ValueComp StringConcatExpr   {}
-	| StringConcatExpr GeneralComp StringConcatExpr {}
+  | StringConcatExpr GeneralComp StringConcatExpr { $$=$2; $$.izquierdo = $1; $$.derecho = $3;} 
+//| StringConcatExpr ValueComp StringConcatExpr   {} 
+// falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
 ;
 
-ValueComp         
-  : EQ  {}
-	| NE  {}
+/*
+ValueComp    // palabras reservadas     
+    : EQ  {}  // 5 EQ 5
+	| NE  {}  
 	| LT  {}
 	| LE  {}
 	| GT  {}
 	| GE  {}  
 ;
+*/
 
-GeneralComp       
-  : IGUAL     {}
-	| DIFERENTE {}
-	| MENOR     {}
-	| MENORIG   {}
-	| MAYOR     {}
-	| MAYORIG   {}
+GeneralComp       // signo
+  	: IGUAL     { $$ = new Igual() 		} // 5 = 5 | nodo = nodo
+	| DIFERENTE { $$ = new Diferente() 	}
+	| MENOR     { $$ = new Menor() 		}
+	| MENORIG   { $$ = new MenorIgual() }
+	| MAYOR     { $$ = new Mayor() 		}
+	| MAYORIG   { $$ = new MayorIgual() }
 ;
 
 
@@ -207,7 +198,7 @@ AxisStep
 
 PredicateList     
   : Predicate                 { $$=[];$$.push($1) }
-	| PredicateList Predicate   { $$=$1;$$.push($2) }
+  | PredicateList Predicate   { $$=$1;$$.push($2) }
 ;
 
 //Faltan las formas no abreviadas
@@ -217,7 +208,7 @@ ForwardStep
 
 AbbrevForwardStep 
   : ARROBA NameTest { $$=new Atributo($2) }
-	| NameTest        { $$=new Camino($1) }
+  | NameTest        { $$=new Camino($1) }
 ;
 
 //KindText no implementado todavia
@@ -246,16 +237,16 @@ AbbrevReverseStep
 ;
 
 PostfixExpr   
-  : PrimaryExpr               { $$=$1 }
+    : PrimaryExpr               { $$=$1 }
 	| PrimaryExpr PostfixExprL  { $$=$1 }
 ;
 
 //Falta crear los demas metodos de argumentos para las primaryEXpr
 PostfixExprL      
-  : Predicate                 { $$=$1 }
+    : Predicate                 { $$=$1 }
   //| ArgumentList
   //| Lookup
-	  | PostfixExprL Predicate       { $$=$1+$2 }
+	| PostfixExprL Predicate       { $$=$1+$2 }
   //| PostfixExprL ArgumentList
   //| PostfixExprL Lookup
 ;
@@ -265,22 +256,18 @@ Predicate
 ;
 
 PrimaryExpr 
-  : Literal                   { $$=$1 }
-	| VarRef                    { $$=$1 }
+  	: Literal                   { $$=$1 }
 	| FunctionCall              { $$=$1 }
 	| ContextItemExpr           { $$=$1 }
 	| ParenthesizedExpr         { $$=$1 }
 ;
 
 Literal     
-  : INTEGER                   { $$=$1 }
-	| DECIMAL                   { $$=$1 }
-	| CADENA                    { $$=$1 }
+    : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1) }
+	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1) }
+	| CADENA                    { $$=new Literal(Tipo.STRING,$1) }
 ;
 
-VarRef      
-  : DOLAR NOMBRE              { $$=$1+$2 }
-;
 
 FunctionCall      
   : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }
@@ -304,4 +291,4 @@ ContextItemExpr
 ParenthesizedExpr 
   : PARENTESISA PARENTESISC       { $$=$1+$2 }
 	| PARENTESISA Expr PARENTESISC  { $$=$1+$3 }
-;
+;	

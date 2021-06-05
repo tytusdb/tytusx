@@ -1,7 +1,7 @@
 const { Tipo,TipoPath } = require("../AST/Entorno")
 
 //Literales para el uso de datos y tipos
-export class Literal
+class Literal
 {
     constructor(tipo,valor){
         this.tipo=tipo
@@ -13,9 +13,26 @@ export class Literal
         return this
     }
 }
+exports.Literal = Literal
 
+class Nodo
+{
+    constructor(tipo,entorno,pila,valor)
+    {
+        this.tipo=tipo
+        this.entorno=entorno
+        this.valor=valor
+        this.pila=pila
+    }
 
-export class PathExp 
+    getValor()
+    {
+
+    }
+}
+exports.Nodo = Nodo
+
+class PathExp 
 {
     constructor(caminos) 
     {
@@ -24,40 +41,34 @@ export class PathExp
 
     getValor(Entorno)
     {
-        var temp = []
         var Retornos = []
-        var TipoRetorno = Tipo.ERROR
-        temp.push(Entorno)
+        Retornos.push(new Nodo(Tipo.NODO,Entorno,[],""))
         for (const iterator of this.caminos) {
-            Retornos = [];
-            for (const iterator2 of temp) {
-                var ret = iterator.getValor(iterator2)
-                Retornos = Retornos.concat(ret.valor)
+            var temp=Retornos
+            Retornos = []
+            for (const Retorno of temp) {
+                var ret = iterator.getValor(Retorno.pila,Retorno.entorno)
+                Retornos = Retornos.concat(ret)
                 if(ret.tipo == Tipo.ERROR)
                 {
                     return new Literal(Tipo.ERROR,'@Error@')
-                }
-                TipoRetorno=ret.tipo   
+                }   
             }
-            temp = Retornos
         }
-        if(Retornos.length>1)
+        if(Retornos.length>0)
         {
-            return new Literal(Tipo.NODO,Retornos)
-        }
-        else if(Retornos.length>0)
-        {
-            return new Literal(TipoRetorno,Retornos[0])
+            return Retornos
         }
         else
         {
-            return new Literal(Tipo.ERROR,'@Error@')
+            return new Literal(Tipo.ERROR,'@Error@',[])
         }
     }
 }
+exports.PathExp=PathExp
 
 //Clase para los tipos nodes
-export class PathExpElement
+class PathExpElement
 {
     constructor(siguiente,tipo)
     {
@@ -65,13 +76,14 @@ export class PathExpElement
         this.tipo = tipo
     }
 
-    getValor(Entorno)
+    getValor(pila,Entorno)
     {
-        return this.siguiente.getValor(Entorno,this.tipo)
+        return this.siguiente.getValor(pila,Entorno,this.tipo)
     }
 }
+exports.PathExpElement=PathExpElement
 
-export class AxisStepExp
+class AxisStepExp
 {
     constructor(valor,predicado)
     {
@@ -79,122 +91,125 @@ export class AxisStepExp
         this.predicado=predicado
     }
 
-    getValor(Entorno,tipo)
+    getValor(pila,Entorno,tipo)
     {
+        var retorno = this.valor.getValor(pila,Entorno,tipo)
         if(this.predicado.lenght > 0)
         {
 
         }
-        else
-        {
-            return this.valor.getValor(Entorno,tipo)
-        }
+        return retorno
     }
 }
+exports.AxisStepExp=AxisStepExp
 
-export class Atributo
+class Atributo
 {
     constructor(nombre)
     {
         this.nombre=nombre
     }
 
-    getValor(Entorno,tipo)
+    getValor(pila,Entorno,tipo)
     {
-        var retorno = new Literal(Tipo.ERROR,'@Error@');
-        var datos = []
+        var retorno = []
         if(tipo==TipoPath.ABS)
         {
+            var nuevaPila = Object.assign([],pila)
+            nuevaPila.push(Entorno)
             for (const iterator of Entorno.atributos) {
-                if(iterator.nombre == this.nombre || this.nombre=="*")
+                if(iterator.nombre == this.nombre || this.nombre=="*" )
                 {
-                    datos.push(Entorno)
+                    retorno.push(new Nodo(Tipo.NODO,Entorno,nuevaPila,iterator.valor))
                 }
             }
         }
         else
         {
-            datos = RecursivaAtributo(Entorno,this.nombre)
-        }
-        //No existia el hijo
-        if(datos.length>0)
-        {
-            retorno = new Literal(Tipo.NODO,datos);
+            retorno = RecursivaAtributo(pila,Entorno,this.nombre)
         }
         return retorno
     }
 }
+exports.Atributo=Atributo
 
-function RecursivaAtributo(Entorno,nombre) 
+function RecursivaAtributo(pila,Entorno,nombre) 
 {
-    var datos = [];
-    for (const iterator of Entorno.hijos) {
-        datos = RecursivaCamino(iterator)
-    }
+    var retorno = []
+    var nuevaPila = Object.assign([],pila)
+    nuevaPila.push(Entorno)
     for (const iterator of Entorno.atributos) {
-        if(iterator.nombre == this.nombre || this.nombre=="*")
+        if(iterator.nombre == nombre || nombre=="*")
         {
-            datos.push(iterator)
+            retorno.push(new Nodo(Tipo.NODO,Entorno,nuevaPila,iterator.valor))  
         }
     }
-    return Entorno
+    for (const iterator of Entorno.hijos) {
+        var temp = RecursivaAtributo(nuevaPila,iterator,nombre)
+        retorno = retorno.concat(temp)
+    }
+    return retorno
 }
 
-export class Camino
+class Camino
 {
     constructor(nombre)
     {
         this.nombre=nombre
     }
 
-    getValor(Entorno,tipo)
+    getValor(pila,Entorno,tipo)
     {
-        var retorno = new Literal(Tipo.ERROR,'@Error@');
-        var datos = []
+        var retorno = []
         if(tipo==TipoPath.ABS)
         {
             for (const iterator of Entorno.hijos) {
-                if(iterator.tipo == this.nombre || this.nombre=="*")
+                if(iterator.tipo == this.nombre || this.nombre=="*" )
                 {
-                    datos.push(iterator)
+                    var nuevaPila = Object.assign([],pila)
+                    nuevaPila.push(Entorno)
+                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto))
                 }
             }
         }
         else
         {
-            datos = RecursivaCamino(Entorno,this.nombre)
-        }
-        //No existia el hijo
-        if(datos.length>0)
-        {
-            retorno = new Literal(Tipo.NODO,datos);
+            retorno = RecursivaCamino(pila,Entorno,this.nombre)
         }
         return retorno
     }
 }
+exports.Camino=Camino
 
-function RecursivaCamino(Entorno,nombre) 
+function RecursivaCamino(pila,Entorno,nombre) 
 {
-    var datos = [];
-    if(Entorno.tipo==nombre || nombre=="*")
+    var retorno = [];
+    if(Entorno.tipo==nombre ||  (nombre=="*" && Entorno.tipo!="/"))
     {
-        datos.push(Entorno)
+        retorno.push(new Nodo(Tipo.NODO,Entorno,pila,Entorno.texto))
     }
     for (const iterator of Entorno.hijos) {
-        datos = datos.concat(RecursivaCamino(iterator,nombre))
+        var nuevaPila = Object.assign([],pila)
+        nuevaPila.push(Entorno)
+        var temp = RecursivaCamino(nuevaPila,iterator,nombre)
+        retorno = retorno.concat(temp)
     }
-    return datos
+    return retorno
 }
 
-export class CaminoInverso
+class CaminoInverso
 {  
     constructor(nombre)
     {
         this.nombre=nombre
     }
 
-    getValor()
+    getValor(Pila,Entorno,tipo)
     {
-        
+        var Retorno = []
+        var temp = Pila.pop()
+        Retorno.push(new Nodo(Tipo.NODO,temp,Pila,Entorno.texto))
+        return Retorno
     }
 }
+exports.CaminoInverso=CaminoInverso
