@@ -4,7 +4,8 @@ enum Tipo {
     DOUBLE,
     BOOL,
     VOID,
-    STRUCT,
+    OBJETO,
+    ATRIBUTO,
     NULL,
     ARRAY
 }
@@ -26,6 +27,13 @@ class NodoTablaSimbolo
         this.tipo = tipo;
         this.linea = linea;
         this.columna = columna;
+    }
+
+    getTipo(ent: TablaSimbolos, arbol: AST): Tipo {
+        return this.tipo;
+    }
+    getValorImplicito(ent: TablaSimbolos, arbol: AST) {
+        return this.valor;
     }
 
     /*FASE 2

@@ -1,17 +1,4 @@
-//import { Ast } from "./Estructuras/Ast/Ast";
-//import { Ast } from "./Estructuras/Ast/NodoAst";
-//import { Entorno } from "./AST/Entorno";
-//import {  } from "./Interfaces/Instruccion";
 
-//const gramatica = require('./Gramatica/gramatica');
-//const estructuras1 = require('./Estructuras/Ast/NodoAst');
-//const estructuras2 = require('./Estructuras/Ast/Ast');
-//const analizador = require('./Analizador/Expresiones/Atributo');
-//const objeto = require('./Analizador/Expresiones/Objeto');
-
-
-//import { Atributo } from "./Analizador/Expresiones/Atributo";
-//import { Atributo } from "./Analizador/Expresiones/Atributo";
 
 //Editor Entrada Y Salida
 const editorentrada = ace.edit("editorentrada");
@@ -38,16 +25,38 @@ function ejecutarCodigo(/*entrada: string*/) {
   //gramatica.parse(entrada);
 }
 
+
+
 let erroreslexicos:ListaErrores;
 let erroressintacticos:ListaErrores;
+let listaObjetos;
 
 function InterpretarCodigo() {
   var entrada = editorentrada.getValue();
   erroreslexicos = new ListaErrores();
   erroressintacticos = new ListaErrores();
-  var salida = gramatica.parse(entrada);
+  listaObjetos = gramatica.parse(entrada);
+  const tsGlobal:TablaSimbolos = new TablaSimbolos(null);
+
+  //objeto guarda entono de mas objetos
+  listaObjetos.forEach((objeto:Objeto) => {
+    const tsObjeto:TablaSimbolos = new TablaSimbolos(null);
+    if(objeto.listaAtributos.length>0){
+      objeto.listaAtributos.forEach((atributo:Atributo) =>{
+        const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(atributo.identificador, atributo.valor, Tipo.ATRIBUTO, atributo.linea, atributo.columna);
+        tsObjeto.agregar(simbolo.indentificador, simbolo);
+      });      
+    }//fin if
+    objeto.entorno = tsObjeto;
+    const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(objeto.identificador, objeto, Tipo.OBJETO, objeto.linea, objeto.columna);
+    tsGlobal.agregar(simbolo.indentificador, simbolo);
+
+  });
+
+
   try {
-    //editorsalida.setValue(salida);
+    //editorsalida.setValue(listaObjetos);
+    console.log(tsGlobal);
     console.log(erroreslexicos);
     console.log(erroressintacticos)
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
@@ -102,6 +111,10 @@ function MostrarErroresSintacticosXML()
   } catch (error) {
     
   }
+}
+
+function GraficarXML(){
+  
 }
 /*
 ejecutarCodigo(`

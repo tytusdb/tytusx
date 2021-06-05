@@ -9,4 +9,13 @@ class Atributo{
         this.linea = linea;
         this.columna = columna;
     }
+
+
+    graph(atributo:Atributo, str:[]) : number{
+        
+        
+        return 0;
+    }
+
+    
 }

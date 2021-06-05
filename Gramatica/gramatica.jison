@@ -1,6 +1,3 @@
-/**
- * Ejemplo mi primer proyecto con Jison utilizando Nodejs en Ubuntu
- */
 
 /* Definición Léxica */
 %lex
@@ -89,7 +86,7 @@ OBJETOS: OBJETOS LISTA       { $1.push($2); $$ = $1;}
 	   | LISTA                { $$ = [$1]; } ;
 
 PARRAFO : PARRAFO VALORES { $1=$1 + ' ' +$2 ; $$ = $1;}
-		| VALORES           { $$ = [$1]; } ;
+		| VALORES           { $$ = $1; } ;
 
 VALORES : identificador { $$ = $1; }
         | decimal { $$ = $1; }

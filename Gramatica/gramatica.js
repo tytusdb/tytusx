@@ -89,7 +89,7 @@ break;
 case 2: case 10: case 13:
  $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
 break;
-case 3: case 11: case 14: case 16:
+case 3: case 11: case 14:
  this.$ = [$$[$0]]; 
 break;
 case 4:
@@ -108,7 +108,7 @@ case 7:
         erroressintacticos.setError(errores);
     
 break;
-case 8: case 17: case 18: case 19:
+case 8: case 16: case 17: case 18: case 19:
  this.$ = $$[$0]; 
 break;
 case 9:

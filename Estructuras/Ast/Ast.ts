@@ -1,9 +1,11 @@
-class Ast{
+class AST{
 
-    public Instrucciones:Array<NodoAst>;
+    public Instrucciones:Array<Instruccion>;
 
-    constructor(Instrucciones:Array<NodoAst>)    
+    constructor(Instrucciones:Array<Instruccion>)    
     {
         this.Instrucciones = Instrucciones;
     }
 }
+
+
