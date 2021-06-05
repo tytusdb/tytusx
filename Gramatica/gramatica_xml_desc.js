@@ -71,13 +71,13 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,4],$V2=[2,5,7],$V3=[1,8],$V4=[2,7],$V5=[10,12],$V6=[1,12],$V7=[8,10,12],$V8=[1,21],$V9=[1,22],$Va=[1,23],$Vb=[7,8,19,20];
+var gramatica_xml_desc = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[2,3],$V2=[1,4],$V3=[1,8],$V4=[2,5,7],$V5=[2,7],$V6=[10,12],$V7=[1,12],$V8=[8,10,12],$V9=[1,21],$Va=[1,22],$Vb=[1,23],$Vc=[7,8,19,20];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"ini":3,"LISTA_PRINCIPAL":4,"EOF":5,"LISTA":6,"menorque":7,"identificador":8,"LATRIBUTOS":9,"mayorque":10,"OBJETOS":11,"diagonal":12,"PARRAFO":13,"ATRIBUTOS":14,"ATRIBUTO":15,"igual":16,"cadena":17,"VALORES":18,"decimal":19,"entero":20,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",7:"menorque",8:"identificador",10:"mayorque",12:"diagonal",16:"igual",17:"cadena",19:"decimal",20:"entero"},
-productions_: [0,[3,2],[4,2],[4,1],[6,9],[6,9],[6,5],[6,1],[9,1],[9,0],[14,2],[14,1],[15,3],[11,2],[11,1],[13,2],[13,1],[18,1],[18,1],[18,1]],
+productions_: [0,[3,2],[4,2],[4,0],[6,9],[6,9],[6,5],[6,1],[9,1],[9,0],[14,2],[14,1],[15,3],[11,2],[11,1],[13,2],[13,1],[18,1],[18,1],[18,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,11 +86,8 @@ switch (yystate) {
 case 1:
  this.$ = $$[$0-1]; console.log(this.$); return this.$; 
 break;
-case 2: case 10: case 13:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
-break;
-case 3: case 11: case 14: case 16:
- this.$ = [$$[$0]]; 
+case 3: case 9:
+ this.$ = []; 
 break;
 case 4:
  this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
@@ -111,8 +108,11 @@ break;
 case 8: case 17: case 18: case 19:
  this.$ = $$[$0]; 
 break;
-case 9:
- this.$ = []; 
+case 10: case 13:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+break;
+case 11: case 14: case 16:
+ this.$ = [$$[$0]]; 
 break;
 case 12:
  this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
@@ -122,8 +122,8 @@ case 15:
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:$V1},{1:[3]},{2:$V0,5:[1,6],6:7,7:$V1},o($V2,[2,3]),{8:$V3},o($V2,$V4),{1:[2,1]},o($V2,[2,2]),o($V5,[2,9],{9:9,14:10,15:11,8:$V6}),{10:[1,13],12:[1,14]},o($V5,[2,8],{15:15,8:$V6}),o($V7,[2,11]),{16:[1,16]},{2:$V0,6:19,7:$V1,8:$V8,11:17,13:18,18:20,19:$V9,20:$Va},{10:[1,24]},o($V7,[2,10]),{17:[1,25]},{2:$V0,6:27,7:[1,26]},{7:[1,28],8:$V8,18:29,19:$V9,20:$Va},o($V4,[2,14]),o($Vb,[2,16]),o($Vb,[2,17]),o($Vb,[2,18]),o($Vb,[2,19]),o($V2,[2,6]),o($V7,[2,12]),{8:$V3,12:[1,30]},o($V4,[2,13]),{12:[1,31]},o($Vb,[2,15]),{8:[1,32]},{8:[1,33]},{10:[1,34]},{10:[1,35]},o($V2,[2,4]),o($V2,[2,5])],
-defaultActions: {6:[2,1]},
+table: [{2:$V0,3:1,4:2,5:$V1,6:3,7:$V2},{1:[3]},{5:[1,6]},{2:$V0,4:7,5:$V1,6:3,7:$V2},{8:$V3},o($V4,$V5),{1:[2,1]},{5:[2,2]},o($V6,[2,9],{9:9,14:10,15:11,8:$V7}),{10:[1,13],12:[1,14]},o($V6,[2,8],{15:15,8:$V7}),o($V8,[2,11]),{16:[1,16]},{2:$V0,6:19,7:$V2,8:$V9,11:17,13:18,18:20,19:$Va,20:$Vb},{10:[1,24]},o($V8,[2,10]),{17:[1,25]},{2:$V0,6:27,7:[1,26]},{7:[1,28],8:$V9,18:29,19:$Va,20:$Vb},o($V5,[2,14]),o($Vc,[2,16]),o($Vc,[2,17]),o($Vc,[2,18]),o($Vc,[2,19]),o($V4,[2,6]),o($V8,[2,12]),{8:$V3,12:[1,30]},o($V5,[2,13]),{12:[1,31]},o($Vc,[2,15]),{8:[1,32]},{8:[1,33]},{10:[1,34]},{10:[1,35]},o($V4,[2,4]),o($V4,[2,5])],
+defaultActions: {6:[2,1],7:[2,2]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -747,9 +747,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramatica;
-exports.Parser = gramatica.Parser;
-exports.parse = function () { return gramatica.parse.apply(gramatica, arguments); };
+exports.parser = gramatica_xml_desc;
+exports.Parser = gramatica_xml_desc.Parser;
+exports.parse = function () { return gramatica_xml_desc.parse.apply(gramatica_xml_desc, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');

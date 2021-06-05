@@ -1,17 +1,9 @@
-/**
- * Ejemplo mi primer proyecto con Jison utilizando Nodejs en Ubuntu
- */
 
 /* Definición Léxica */
 %lex
 %options case-insensitive
 
-
-
 %%
-
-
-
 
 "<"					return 'menorque';
 ">"					return 'mayorque';
@@ -19,7 +11,6 @@
 "="					return 'igual';
 "("					return 'para';
 ")"					return 'parc';
-
 
 /* Espacios en blanco */
 [ \r\t]+			{}
@@ -62,9 +53,12 @@ ini
 	: LISTA_PRINCIPAL EOF { $$ = $1; console.log($$); return $$; }
 ;
 
-LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { $1.push($2); $$ = $1;}
-   				| LISTA                     { $$ = [$1]; }
- ;
+//LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { $1.push($2); $$ = $1;}
+//   				| LISTA                     { $$ = [$1]; }
+// ;
+
+LISTA_PRINCIPAL : LISTA LISTA_PRINCIPAL
+                | { $$ = []; };
 
 
 LISTA:menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
@@ -82,14 +76,21 @@ LATRIBUTOS: ATRIBUTOS        { $$ = $1; }
 ATRIBUTOS : ATRIBUTOS ATRIBUTO   { $1.push($2); $$ = $1;}
           | ATRIBUTO             { $$ = [$1]; } ;
 
+//ATRIBUTOS : ATRIBUTO ATRIBUTOS   { $1.push($2); $$ = $1; }
+//          | { $$ = []; };
+
 ATRIBUTO :  identificador igual cadena { $$ = new Atributo($1, $3, @1.first_line, @1.first_column); };
 
 
 OBJETOS: OBJETOS LISTA       { $1.push($2); $$ = $1;}
 	   | LISTA                { $$ = [$1]; } ;
+//OBJETOS : LISTA OBJETOS       { $1.push($2); $$ = $1;}
+//        | { $$ = []; };
 
 PARRAFO : PARRAFO VALORES { $1=$1 + ' ' +$2 ; $$ = $1;}
 		| VALORES           { $$ = [$1]; } ;
+//PARRAFO : VALORES PARRAFO { $1=$1 + ' ' +$2 ; $$ = $1;}
+//        | { $$ = []; };
 
 VALORES : identificador { $$ = $1; }
         | decimal { $$ = $1; }

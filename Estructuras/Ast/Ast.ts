@@ -1,6 +1,4 @@
-import { NodoAst } from "./NodoAst";
-
-export class Ast{
+class Ast{
 
     public Instrucciones:Array<NodoAst>;
 

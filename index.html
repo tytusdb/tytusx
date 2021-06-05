@@ -52,7 +52,7 @@
                     <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                         <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
                         <button type="button" class="btn btn-outline-danger" id="rplexicoT"
-                            onclick="erroreslexicos_traduccion();location.href='#tberror';">Traduccion</button>
+                            onclick="MostrarErroresLexicosXML();location.href='#tberror';">XML</button>
                         <button type="button" class="btn btn-outline-danger" id="rplexicoE"
                             onclick="erroreslexicos_ejecucion();location.href='#tberror';">Ejecucion</button>
                     </div>
@@ -69,7 +69,7 @@
                     </button>
                     <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop2">
                         <button type="button" class="btn btn-outline-danger" id="rpsintacticoT"
-                            onclick="erroressintacticos_traduccion();location.href='#tberror';">Traduccion</button>
+                            onclick="MostrarErroresSintacticosXML();location.href='#tberror';">XML</button>
                         <button type="button" class="btn btn-outline-danger" id="rpsintacticoE"
                             onclick="erroressintacticos_ejecucion();location.href='#tberror';">Ejecucion</button>
                     </div>
@@ -124,6 +124,7 @@
                     <th scope="col">Lexema</th>
                     <th scope="col">Descripcion</th>
                     <th scope="col">Tipo</th>
+                    <th scope="col">Lenguaje</th>
                     <th scope="col">Linea</th>
                     <th scope="col">Columna</th>
                 </tr>
@@ -200,6 +201,10 @@
         crossorigin="anonymous"></script>
 
     <!-- Importaciones -->
+    <script src="dist/Estructuras/Ast/NodoAst.js"></script>
+    <script src="dist/Estructuras/Ast/Ast.js"></script>
+    <script src="dist/Estructuras/Error/NodoError.js"></script>
+    <script src="dist/Estructuras/Error/ListaError.js"></script>
     <script src="dist/Analizador/Expresiones/Atributo.js"></script>
     <script src="dist/Analizador/Expresiones/Objeto.js"></script>
     <script src="Gramatica/gramatica.js"></script>
