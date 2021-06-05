@@ -17,6 +17,7 @@
 %x Etiquetai
 %x Etiquetac
 %x EtiquetaConf
+%x EtiquetaComentario
 %%
 /* Espacios en blanco */
 [ \r\t]+  			{}
@@ -24,6 +25,12 @@
 
 
 "<"[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*			{this.begin("Etiquetai"); return 'InicioEtiquetaI'}
+
+"<!--"                				{this.begin("EtiquetaComentario"); }
+<EtiquetaComentario>[ \r\t]+  {}
+<EtiquetaComentario>\n        {}
+<EtiquetaComentario>"-->"     {this.popState(); }
+<EtiquetaComentario>[^"-->"]+ {} 
 
 <Etiquetai>[ \r\t]+  {}
 <Etiquetai>\n        {}
@@ -82,10 +89,10 @@ OBJETO
 
 OBJETODOBLE
 	: ETIQUETAABRE ETIQUETACIERRE						{
-			$$ = objetoCorrecto($1.tipo, $2) ? new helpers.Objeto($1.tipo, [], []) : null;
+			$$ = objetoCorrecto($1.tipo, $2) ? new helpers.Objeto($1.tipo, $1.atributos, []) : null;
 		}
 	| ETIQUETAABRE LISTA_OBJETO ETIQUETACIERRE 			{ 
-			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, [], $2) : null;
+			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, $1.atributos, $2) : null;
 		}
 ;
 

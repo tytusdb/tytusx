@@ -103,12 +103,12 @@ case 7:
 break;
 case 8:
 
-			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0]) ? new helpers.Objeto($$[$0-1].tipo, [], []) : null;
+			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0]) ? new helpers.Objeto($$[$0-1].tipo, $$[$0-1].atributos, []) : null;
 		
 break;
 case 9:
  
-			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, [], $$[$0-1]) : null;
+			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, $$[$0-2].atributos, $$[$0-1]) : null;
 		
 break;
 case 10:
@@ -643,48 +643,58 @@ case 1:
 break;
 case 2:this.begin("Etiquetai"); return 20
 break;
-case 3:
+case 3:this.begin("EtiquetaComentario"); 
 break;
 case 4:
 break;
-case 5: return 27
+case 5:
 break;
-case 6: return 28
+case 6:this.popState(); 
 break;
-case 7: return 29
+case 7:
 break;
-case 8: this.popState(); return 21
+case 8:
 break;
-case 9: this.popState(); return 25
+case 9:
 break;
-case 10: this.begin("Etiquetac"); return 23
+case 10: return 27
 break;
-case 11:
+case 11: return 28
 break;
-case 12:
+case 12: return 29
 break;
-case 13: this.popState(); return 24
+case 13: this.popState(); return 21
 break;
-case 14: this.begin("EtiquetaConf"); return 13
+case 14: this.popState(); return 25
 break;
-case 15: return 17
+case 15: this.begin("Etiquetac"); return 23
 break;
-case 16: return 18
+case 16:
 break;
-case 17: return 19
+case 17:
 break;
-case 18:
+case 18: this.popState(); return 24
 break;
-case 19: this.popState(); return 15
+case 19: this.begin("EtiquetaConf"); return 13
 break;
-case 20:return 5;
+case 20: return 17
 break;
-case 21: return 10 
+case 21: return 18
+break;
+case 22: return 19
+break;
+case 23:
+break;
+case 24: this.popState(); return 15
+break;
+case 25:return 5;
+break;
+case 26: return 10 
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]*)/i],
-conditions: {"EtiquetaConf":{"rules":[15,16,17,18,19],"inclusive":false},"Etiquetac":{"rules":[11,12,13],"inclusive":false},"Etiquetai":{"rules":[3,4,5,6,7,8,9],"inclusive":false},"INITIAL":{"rules":[0,1,2,10,14,20,21],"inclusive":true}}
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]*)/i],
+conditions: {"EtiquetaComentario":{"rules":[4,5,6,7],"inclusive":false},"EtiquetaConf":{"rules":[20,21,22,23,24],"inclusive":false},"Etiquetac":{"rules":[16,17,18],"inclusive":false},"Etiquetai":{"rules":[8,9,10,11,12,13,14],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,15,19,25,26],"inclusive":true}}
 });
 return lexer;
 })();
