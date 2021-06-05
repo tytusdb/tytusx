@@ -37,11 +37,7 @@
 .					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 /lex
 
-/* imports */
-%{            
-    const {Objeto} = require("../Estructuras/Expresiones/Objeto");
-    const {Atributo} = require("../Estructuras/Expresiones/Atributo");
-%}
+
 
 /* Asociación de operadores y precedencia */
 
