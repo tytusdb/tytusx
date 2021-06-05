@@ -6,11 +6,6 @@ import { toPlainObject } from 'lodash';
 
 class Navigation extends React.Component{
 
-    /* getText ()  {
-        console.log("getText Button clicked");
-        let text = document.getElementById("InputTextarea").value;
-        console.log("El texto es: \n"+text);
-    }*/
     constructor(props){
         super(props);
 

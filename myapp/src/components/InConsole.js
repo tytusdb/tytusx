@@ -1,16 +1,21 @@
 import './InConsole.css';
 import logo from '../logo.svg';
 import { Link } from 'react-router-dom'
-import  Graph  from 'vis-react-core'
-import { Component } from 'react';
+import  Graph  from 'vis-react'
+import React, { Component } from 'react';
 
 
-function InConsole(){
+class InConsole extends React.Component{
 
-    const datos = this.props.datos;
-    //const datos = document.querySelector(this.props.location.datos);
+    constructor(props){
+        super(props);
+        this.datos = this.props.location.datos;
+        console.log(this.datos);
+    }
 
-    var options = {
+    
+
+    options = {
         layout: {
             hierarchical: true
         },
@@ -20,39 +25,44 @@ function InConsole(){
         interaction: { hoverEdges: true }
     };
      
-    var events = {
+    events = {
         select: function(event) {
             var { nodes, edges } = event;
         }
     };
 
-    return(
-        <header className="App-header">
+    render(){
+        return(
+            <header className="App-header">
+    
+                <img src={logo} className="App-logo" alt="logo" />
+                    Organización de Lenguajes y Compiladores 2
+                <p></p>
 
-            <img src={logo} className="App-logo" alt="logo" />
-                Organización de Lenguajes y Compiladores 2 
+                <div className="col-2 block">
+                    <div className ="row">
+                        <Link to= {{ pathname: "/mywebsite", datos:this.datos }}>
+                            <button type="button" className="btn btn-primary btn-lg">Atrás</button>
+                        </Link>
+                    </div>
+                </div>
+                
+                <div className = "container-fluid">
+                    <Graph
+                        graph={this.datos}
+                        options={this.options}
+                        events={this.events}
+                        //style={style}
+                        getNetwork={this.getNetwork}
+                        getEdges={this.getEdges}
+                        getNodes={this.getNodes}
+                        vis={vis => (this.vis = vis)}
+                    />
+                </div>
+
+                <p></p>
             <p></p>
-            
-
-            <div className="container">
-                <Link to={"/mywebsite"}>
-                    <button type="button" className="btn btn-primary btn-lg">Back</button>
-                </Link>
-            </div>
-
-            <div className = "container-fluid">
-                <Graph
-                    graph={datos}
-                    options={options}
-                    events={events}
-                    //style={style}
-                    getNetwork={this.getNetwork}
-                    getEdges={this.getEdges}
-                    getNodes={this.getNodes}
-                    vis={vis => (this.vis = vis)}
-                />
-            </div>
-            
+            <p></p>
 
             <footer className="bg-dark text-center text-lg-start">
             <div className="text-center p-3 text-light ">
@@ -66,9 +76,10 @@ function InConsole(){
                 </font>   
             </div>
             </footer>
-
-        </header>
-    );
+            </header>
+        );
+    }
+    
 }
 
 export default InConsole;
