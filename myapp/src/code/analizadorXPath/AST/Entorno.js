@@ -1,6 +1,6 @@
 
 //Enum de tipos
-const Tipo = {
+export const Tipo = {
     "INTEGER" : 0,
     "DECIMAL" : 1,
     "STRING"  : 2,
@@ -8,9 +8,9 @@ const Tipo = {
     "BOOLEAN" : 4,
     "ATRIB"   : 5,
     "ERROR"   : 6
-}
-exports.Tipo = Tipo
-const Colision = 
+} 
+
+export const Colision = 
   [
     [true , true , false, false, false, true , false],
     [true , true , false, false, false, true , false],
@@ -21,13 +21,11 @@ const Colision =
     [false, false, false, false, false, false, false]
   ]
 
-exports.Colision =  Colision
-
-const TipoPath = {
+export const TipoPath = {
     "ABS" : "absoluto",
     "REL" : "relativo"
 }
-exports.TipoPath = TipoPath
+
 var XML= {
     tipo: "/",
     texto: "",
@@ -143,7 +141,7 @@ var XML= {
     ]
 }
 
-class Comando
+export class Comando
 {
   constructor(Instrucciones)
   {
@@ -174,7 +172,6 @@ class Comando
     return Salida;
   }
 }
-exports.Comando = Comando
 
 function ConvertiraXML(nodos,iteracion)
 {

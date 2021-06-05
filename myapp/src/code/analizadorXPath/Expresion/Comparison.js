@@ -1,7 +1,7 @@
 var {Tipo, Colision} = require("../AST/Entorno");
 const { Literal } = require("./Expresiones");
 
-class Igual {
+export class Igual {
 
     constructor (izquierdo,derecho){
         this.izquierdo = izquierdo;
@@ -38,7 +38,7 @@ function comparison(izq, op, der) {
     
 }
 
-class Diferente {
+export class Diferente {
     constructor (izquierdo,derecho){
         this.izquierdo = izquierdo;
         this.derecho = derecho;
@@ -59,7 +59,7 @@ class Diferente {
     }
 }
 
-class Menor {
+export class Menor {
     constructor (izquierdo,derecho){
         this.izquierdo = izquierdo;
         this.derecho = derecho;
@@ -80,7 +80,7 @@ class Menor {
     }
 }
 
-class MenorIgual {
+export class MenorIgual {
     constructor (izquierdo,derecho){
         this.izquierdo = izquierdo;
         this.derecho = derecho;
@@ -101,7 +101,7 @@ class MenorIgual {
     }
 }
 
-class Mayor {
+export class Mayor {
     constructor (izquierdo,derecho){
         this.izquierdo = izquierdo;
         this.derecho = derecho;
@@ -122,7 +122,7 @@ class Mayor {
     }
 }
 
-class MayorIgual {
+export class MayorIgual {
     constructor (izquierdo,derecho){
         this.izquierdo = izquierdo;
         this.derecho = derecho;
@@ -142,13 +142,6 @@ class MayorIgual {
         return retorno
     }
 }
-
-exports.Igual = Igual
-exports.Diferente = Diferente
-exports.Menor = Menor
-exports.MenorIgual = MenorIgual
-exports.Mayor = Mayor
-exports.MayorIgual = MayorIgual
 
 /*
     /biblioteca/libro[titulo > 5]

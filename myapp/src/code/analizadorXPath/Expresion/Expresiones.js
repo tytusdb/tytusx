@@ -1,7 +1,7 @@
 const { Tipo,TipoPath } = require("../AST/Entorno")
 
 //Literales para el uso de datos y tipos
-class Literal
+export class Literal
 {
     constructor(tipo,valor){
         this.tipo=tipo
@@ -13,9 +13,8 @@ class Literal
         return this
     }
 }
-exports.Literal = Literal
 
-class Nodo
+export class Nodo
 {
     constructor(tipo,entorno,pila,valor)
     {
@@ -30,9 +29,8 @@ class Nodo
 
     }
 }
-exports.Nodo = Nodo
 
-class PathExp 
+export class PathExp 
 {
     constructor(caminos) 
     {
@@ -65,10 +63,9 @@ class PathExp
         }
     }
 }
-exports.PathExp=PathExp
 
 //Clase para los tipos nodes
-class PathExpElement
+export class PathExpElement
 {
     constructor(siguiente,tipo)
     {
@@ -81,9 +78,8 @@ class PathExpElement
         return this.siguiente.getValor(pila,Entorno,this.tipo)
     }
 }
-exports.PathExpElement=PathExpElement
 
-class AxisStepExp
+export class AxisStepExp
 {
     constructor(valor,predicado)
     {
@@ -101,9 +97,8 @@ class AxisStepExp
         return retorno
     }
 }
-exports.AxisStepExp=AxisStepExp
 
-class Atributo
+export class Atributo
 {
     constructor(nombre)
     {
@@ -120,7 +115,7 @@ class Atributo
             for (const iterator of Entorno.atributos) {
                 if(iterator.nombre == this.nombre || this.nombre=="*" )
                 {
-                    retorno.push(new Nodo(Tipo.NODO,Entorno,nuevaPila,iterator.valor))
+                    retorno.push(new Nodo(Tipo.ATRIB,Entorno,nuevaPila,iterator.valor))
                 }
             }
         }
@@ -131,7 +126,6 @@ class Atributo
         return retorno
     }
 }
-exports.Atributo=Atributo
 
 function RecursivaAtributo(pila,Entorno,nombre) 
 {
@@ -141,7 +135,7 @@ function RecursivaAtributo(pila,Entorno,nombre)
     for (const iterator of Entorno.atributos) {
         if(iterator.nombre == nombre || nombre=="*")
         {
-            retorno.push(new Nodo(Tipo.NODO,Entorno,nuevaPila,iterator.valor))  
+            retorno.push(new Nodo(Tipo.ATRIB,Entorno,nuevaPila,iterator.valor))  
         }
     }
     for (const iterator of Entorno.hijos) {
@@ -151,7 +145,7 @@ function RecursivaAtributo(pila,Entorno,nombre)
     return retorno
 }
 
-class Camino
+export class Camino
 {
     constructor(nombre)
     {
@@ -179,7 +173,6 @@ class Camino
         return retorno
     }
 }
-exports.Camino=Camino
 
 function RecursivaCamino(pila,Entorno,nombre) 
 {
@@ -197,7 +190,7 @@ function RecursivaCamino(pila,Entorno,nombre)
     return retorno
 }
 
-class CaminoInverso
+export class CaminoInverso
 {  
     constructor(nombre)
     {
@@ -212,4 +205,3 @@ class CaminoInverso
         return Retorno
     }
 }
-exports.CaminoInverso=CaminoInverso

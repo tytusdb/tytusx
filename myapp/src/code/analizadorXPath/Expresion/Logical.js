@@ -1,7 +1,7 @@
 var Entorno = require("../AST/Entorno")
 const { Literal } = require("./Expresiones")
 //Funcion para el Or entre booleanos
-class ExpOr
+export class ExpOr
 {
     constructor(izquierdo,derecho)
     {
@@ -20,9 +20,8 @@ class ExpOr
         return valIzq.valor || valDer.valor
     }
 }
-exports.ExpOr=ExpOr
 
-class ExpAnd 
+export class ExpAnd 
 {
     constructor(izquierdo,derecho)
     {
@@ -41,4 +40,3 @@ class ExpAnd
         return valIzq.valor && valDer.valor
     }
 }
-exports.ExpAnd=ExpAnd
