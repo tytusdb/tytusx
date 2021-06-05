@@ -1,15 +1,13 @@
 import './App.css';
 
 //Componentes
-//import InConsole from './components/InConsole'
-import Navigation from './components/Navigation';
-//import Navigation from './components/Navigation'
+import Routes from './Routes';
 
 function App() {
   return (
     <div className="App">
 
-      <Navigation />
+      <Routes />
 
     </div>
   );

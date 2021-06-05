@@ -72,12 +72,12 @@
   }
 */
 var grammar = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,8],$V2=[5,9,12,15],$V3=[1,13],$V4=[1,18],$V5=[9,12,15],$V6=[13,17,19];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,10],$V2=[5,10,20,23],$V3=[1,17],$V4=[1,20],$V5=[1,25],$V6=[10,20],$V7=[15,17],$V8=[10,20,23],$V9=[21,25,27];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"LISTA_OBJETO":4,"EOF":5,"OBJETO":6,"OBJETODOBLE":7,"OBJETOSIMPLE":8,"Texto":9,"ETIQUETAABRE":10,"ETIQUETACIERRE":11,"InicioEtiquetaI":12,"CierreEtiquetaI":13,"LISTA_ATRIBUTOS":14,"InicioEtiquetaC":15,"CierreEtiquetaC":16,"FinEtiquetaI":17,"ATRIBUTO":18,"AtributoEtiqueta":19,"IgualAtributo":20,"ValorAtributo":21,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",9:"Texto",12:"InicioEtiquetaI",13:"CierreEtiquetaI",15:"InicioEtiquetaC",16:"CierreEtiquetaC",17:"FinEtiquetaI",19:"AtributoEtiqueta",20:"IgualAtributo",21:"ValorAtributo"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[6,1],[7,2],[7,3],[10,2],[10,3],[11,2],[8,2],[8,3],[14,2],[14,1],[18,3]],
+symbols_: {"error":2,"ini":3,"LISTA_OBJETO":4,"EOF":5,"ETIQUETACONFIGURACION":6,"OBJETO":7,"OBJETODOBLE":8,"OBJETOSIMPLE":9,"Texto":10,"ETIQUETAABRE":11,"ETIQUETACIERRE":12,"InicioEtiquetaConf":13,"LISTA_ATRIBUTOSCONF":14,"CierreEtiquetaConf":15,"ATRIBUTOCONF":16,"AtributoConf":17,"IgualAtributoConf":18,"ValorAtributoConf":19,"InicioEtiquetaI":20,"CierreEtiquetaI":21,"LISTA_ATRIBUTOS":22,"InicioEtiquetaC":23,"CierreEtiquetaC":24,"FinEtiquetaI":25,"ATRIBUTO":26,"AtributoEtiqueta":27,"IgualAtributo":28,"ValorAtributo":29,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",10:"Texto",13:"InicioEtiquetaConf",15:"CierreEtiquetaConf",17:"AtributoConf",18:"IgualAtributoConf",19:"ValorAtributoConf",20:"InicioEtiquetaI",21:"CierreEtiquetaI",23:"InicioEtiquetaC",24:"CierreEtiquetaC",25:"FinEtiquetaI",27:"AtributoEtiqueta",28:"IgualAtributo",29:"ValorAtributo"},
+productions_: [0,[3,2],[3,3],[4,2],[4,1],[7,1],[7,1],[7,1],[8,2],[8,3],[6,3],[6,2],[14,2],[14,1],[16,3],[11,2],[11,3],[12,2],[9,2],[9,3],[22,2],[22,1],[26,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -87,55 +87,73 @@ case 1:
  this.$ = new helpers.Objeto("/",[],$$[$0-1]); return this.$; 
 break;
 case 2:
- this.$ = $$[$0-1]; this.$.push($$[$0].texto);
+ this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1]); return this.$; 
 break;
 case 3:
+ this.$ = $$[$0-1]; this.$.push($$[$0].texto);
+break;
+case 4:
  this.$ = $$[$0].esTexto ? $$[$0].texto: new Array($$[$0].texto); 
 break;
-case 4: case 5:
+case 5: case 6:
  this.$ = { texto:$$[$0], esTexto:false}; 
 break;
-case 6:
+case 7:
  this.$ = { texto:$$[$0], esTexto:true}; 
 break;
-case 7:
+case 8:
 
 			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0]) ? new helpers.Objeto($$[$0-1].tipo, [], []) : null;
 		
 break;
-case 8:
+case 9:
  
 			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, [], $$[$0-1]) : null;
 		
 break;
-case 9:
- this.$ = {tipo:$$[$0-1], atributos:[]};
-break;
 case 10:
- this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]};
+ this.$ = $$[$0-1]; 
 break;
 case 11:
- this.$ = $$[$0-1];
+ this.$ = []; 
 break;
 case 12:
- this.$ = new helpers.Objeto($$[$0-1],[],[]);
+ this.$ = $$[$0-1]; this.$.push($$[$0]); 
 break;
 case 13:
- this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[]);
+ this.$ = []; this.$.push($$[$0]); 
 break;
 case 14:
- this.$ = $$[$0-1]; this.$.push($$[$0]);
+ this.$ = new helpers.Atributo($$[$0-2],$$[$0]); 
 break;
 case 15:
- this.$ = []; this.$.push($$[$0]);
+ this.$ = {tipo:$$[$0-1], atributos:[]};
 break;
 case 16:
+ this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]};
+break;
+case 17:
+ this.$ = $$[$0-1];
+break;
+case 18:
+ this.$ = new helpers.Objeto($$[$0-1],[],[]);
+break;
+case 19:
+ this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[]);
+break;
+case 20:
+ this.$ = $$[$0-1]; this.$.push($$[$0]);
+break;
+case 21:
+ this.$ = []; this.$.push($$[$0]);
+break;
+case 22:
 this.$ = new helpers.Atributo($$[$0-2],$$[$0]);
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:5,9:$V0,10:7,12:$V1},{1:[3]},{5:[1,9],6:10,7:4,8:5,9:$V0,10:7,12:$V1},o($V2,[2,3]),o($V2,[2,4]),o($V2,[2,5]),o($V2,[2,6]),{4:12,6:3,7:4,8:5,9:$V0,10:7,11:11,12:$V1,15:$V3},{13:[1,16],14:15,17:[1,14],18:17,19:$V4},{1:[2,1]},o($V2,[2,2]),o($V2,[2,7]),{6:10,7:4,8:5,9:$V0,10:7,11:19,12:$V1,15:$V3},{16:[1,20]},o($V2,[2,12]),{13:[1,22],17:[1,21],18:23,19:$V4},o($V5,[2,9]),o($V6,[2,15]),{20:[1,24]},o($V2,[2,8]),o($V2,[2,11]),o($V2,[2,13]),o($V5,[2,10]),o($V6,[2,14]),{21:[1,25]},o($V6,[2,16])],
-defaultActions: {9:[2,1]},
+table: [{3:1,4:2,6:3,7:4,8:6,9:7,10:$V0,11:9,13:[1,5],20:$V1},{1:[3]},{5:[1,11],7:12,8:6,9:7,10:$V0,11:9,20:$V1},{4:13,7:4,8:6,9:7,10:$V0,11:9,20:$V1},o($V2,[2,4]),{14:14,15:[1,15],16:16,17:$V3},o($V2,[2,5]),o($V2,[2,6]),o($V2,[2,7]),{4:19,7:4,8:6,9:7,10:$V0,11:9,12:18,20:$V1,23:$V4},{21:[1,23],22:22,25:[1,21],26:24,27:$V5},{1:[2,1]},o($V2,[2,3]),{5:[1,26],7:12,8:6,9:7,10:$V0,11:9,20:$V1},{15:[1,27],16:28,17:$V3},o($V6,[2,11]),o($V7,[2,13]),{18:[1,29]},o($V2,[2,8]),{7:12,8:6,9:7,10:$V0,11:9,12:30,20:$V1,23:$V4},{24:[1,31]},o($V2,[2,18]),{21:[1,33],25:[1,32],26:34,27:$V5},o($V8,[2,15]),o($V9,[2,21]),{28:[1,35]},{1:[2,2]},o($V6,[2,10]),o($V7,[2,12]),{19:[1,36]},o($V2,[2,9]),o($V2,[2,17]),o($V2,[2,19]),o($V8,[2,16]),o($V9,[2,20]),{29:[1,37]},o($V7,[2,14]),o($V9,[2,22])],
+defaultActions: {11:[2,1],26:[2,2]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -284,7 +302,7 @@ parse: function parse(input) {
 }};
 
 	var helpers = require('./helpers')
-	
+	var atributosRaiz = []
 	function objetoCorrecto (inicio, fin){
 		inicio = inicio.replace('<','')
 		fin = fin.replace('</','')
@@ -623,40 +641,50 @@ case 0:
 break;
 case 1:
 break;
-case 2:return 'ID'
+case 2:this.begin("Etiquetai"); return 20
 break;
-case 3:this.begin("Etiquetai"); return 12
+case 3:
 break;
 case 4:
 break;
-case 5:
+case 5: return 27
 break;
-case 6: return 19
+case 6: return 28
 break;
-case 7: return 20
+case 7: return 29
 break;
-case 8: return 21
+case 8: this.popState(); return 21
 break;
-case 9: this.popState(); return 13
+case 9: this.popState(); return 25
 break;
-case 10: this.popState(); return 17
+case 10: this.begin("Etiquetac"); return 23
 break;
-case 11: this.begin("Etiquetac"); return 15
+case 11:
 break;
 case 12:
 break;
-case 13:
+case 13: this.popState(); return 24
 break;
-case 14: this.popState(); return 16
+case 14: this.begin("EtiquetaConf"); return 13
 break;
-case 15:return 5;
+case 15: return 17
 break;
-case 16: return 9 
+case 16: return 18
+break;
+case 17: return 19
+break;
+case 18:
+break;
+case 19: this.popState(); return 15
+break;
+case 20:return 5;
+break;
+case 21: return 10 
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ_-][A-ZÑa-zñ0-9_-]*)/i,/^(?:<{ID})/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:{ID})/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/{ID})/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:>)/i,/^(?:$)/i,/^(?:[^<]*)/i],
-conditions: {"Etiquetac":{"rules":[12,13,14],"inclusive":false},"Etiquetai":{"rules":[4,5,6,7,8,9,10],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,11,15,16],"inclusive":true}}
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]*)/i],
+conditions: {"EtiquetaConf":{"rules":[15,16,17,18,19],"inclusive":false},"Etiquetac":{"rules":[11,12,13],"inclusive":false},"Etiquetai":{"rules":[3,4,5,6,7,8,9],"inclusive":false},"INITIAL":{"rules":[0,1,2,10,14,20,21],"inclusive":true}}
 });
 return lexer;
 })();

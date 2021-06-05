@@ -1,71 +1,156 @@
 import logo from '../logo.svg';
+import { Link } from 'react-router-dom'
+import React from 'react';
+import { toPlainObject } from 'lodash';
 
 
-function Navigation(){
+class Navigation extends React.Component{
 
-    /*function getText ()  {
+    /* getText ()  {
         console.log("getText Button clicked");
         let text = document.getElementById("InputTextarea").value;
         console.log("El texto es: \n"+text);
     }*/
-    var XML = {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            OutputTextarea: "",
+            XMLTextarea: "",
+            InputTextarea: ""
+        }
+        
+        this.fileInput = React.createRef();
+        this.handleSubmit = this.handleSubmit.bind(this);
+
+    }
+
+    
+
+    datos = {
+        nodes: [
+            { id: 1, label: 'Node 1' },
+            { id: 2, label: 'Node 2' },
+            { id: 3, label: 'Node 3' },
+            { id: 4, label: 'Node 4' },
+            { id: 5, label: 'Node 5' }
+        ],
+        edges: [
+            { from: 1, to: 2 },
+            { from: 1, to: 3 },
+            { from: 2, to: 4 },
+            { from: 2, to: 5 }
+        ]
+    }
+
+    XML = {
         tipo : '',
         texto : '',
         atributos : [],
         hijos : []
     }
 
-    function setText(){
+    setText(){
         console.log("setText Button clicked");
-        let text = document.getElementById("InputTextarea").value;
-
+        let text = this.state.InputTextarea;
+        alert(text);
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
-        var respuesta=funcion.Ejecutar(XML);
-        document.getElementById("OutputTextarea").innerHTML = respuesta; 
+        var respuesta=funcion.Ejecutar(this.XML);
+        this.setState({OutputTextarea: respuesta});         
     }
 
-    function inicio(){
-        document.getElementById('files').addEventListener('change', cargar, false);
-    }
     
-    function cargar(ev) {
-        var arch=new FileReader();
-        arch.addEventListener('load',leer,false);
-        arch.readAsText(ev.target.files[0]);
+    actualizar(){
+        var x = document.getElementById('XMLTextarea').value;
+        var analizadorXML = require('../code/analizadorXML/analizadorXML');
+        var resultado = analizadorXML.Ejecutar(x);
+        this.XML = resultado
     }
-    
-    function leer(ev) {
-        document.getElementById('XMLTextarea').value=ev.target.result;
+
+    refresh(){
+        document.getElementById('XMLTextarea').addEventListener('focus', () => this.actualizar(), false);
+    }
+
+    handleOnChange = e => {
+        this.setState({
+            InputTextarea: e.target.value
+        })
+    } 
+
+    handleXML = e => {
+        this.setState({
+            XMLTextarea: e.target.value
+        })
+    }
+
+    fileReader;
+
+    handleSubmit = (event) => {
+
+        this.fileReader = new FileReader();
+        this.fileReader.onloadend =  this.handleFileReader;
+        this.fileReader.readAsText(event.target.files[0]);
+    }
+
+    handleFileReader = (e) => {
+        const content = this.fileReader.result;
+        console.log(content);
+        this.setState({XMLTextarea: content});
+
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
-        var resultado = analizadorXML.Ejecutar(ev.target.result)
-        XML = resultado
+        var resultado = analizadorXML.Ejecutar(content)
+        this.XML = resultado
+
+    } 
+
+    handleFocus = (e) =>{
+        var analizadorXML = require('../code/analizadorXML/analizadorXML')
+        var resultado = analizadorXML.Ejecutar(e.target.value)
+        this.XML = resultado
     }
-  
 
 
-    return(
-        //tag principal
-        <header className="App-header">
+    render(){
+        return(
+            //tag principal
+            <header className="App-header">
 
             <img src={logo} className="App-logo" alt="logo" />
                 Organización de Lenguajes y Compiladores 2
             <p></p>
-            <p></p>
-            <p></p>
+            
 
             <div className="container">
                 <div className="row">
                     <div className="col-4">
                         <div className="custom-file">
-                            <input className="custom-file-input" type="file" id="files" onClick={inicio}/>
+                            <input className="custom-file-input" type="file" ref={this.fileInput} onChange={this.handleSubmit}/>
                         </div>
                     </div>
-                    <div className="col-4">
-                        <button type="submit" className="btn btn-primary btn-lg" onClick={setText}>Compilar</button>
+                </div>
+            </div>
+
+            <div className="container">
+                <div className="row">
+                    <p></p>
+                    <p></p>
+                </div>
+            </div>
+
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={() => this.setText() }>Compilar</button>
                     </div>
-                    <div className="col-4">
-                        <button type="button" className="btn btn-primary btn-lg">Reportes</button>
+                    <div className="col">
+                        <button type="button" className="btn btn-primary btn-lg" onClick={this.actualizar}>Actualizar</button>
+                    </div>
+                    <div className="col">
+                        <Link to= {{ pathname: "/mywebsite/reporte", datos:this.datos }}>
+                            <button type="button" className="btn btn-primary btn-lg">Reportes</button>
+                        </Link>
+                        
                     </div>
                 </div>
             </div>
@@ -73,19 +158,21 @@ function Navigation(){
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-6 block">
-                        <textarea className="Text" placeholder="Bienvenido" id="InputTextarea" ></textarea>
+                        <label className="labelClass">Xml Input</label>
+                        <textarea className="Text" placeholder="Bienvenido" defaultValue={this.state.XMLTextarea} onChange={this.handleXML} onBlur={this.handleFocus} />
                     </div>
                     <div className="col-6 block">
-                        <textarea className="Text" placeholder="Bienvenido" id="OutputTextarea" ></textarea>
+                        <label className="labelClass">Xpath Input</label>
+                        <textarea className="Text" placeholder="Bienvenido" /*form*/ onChange={this.handleOnChange}></textarea>
                     </div>
                 </div>
             </div>
 
             <div className="container">
                 <div className="row">
-                    <label className="labelClass">Archivo XML</label>
+                    <label className="labelClass">Output</label>
                     <div className="text-center">
-                        <textarea className="Text" placeholder="Bienvenido" id="XMLTextarea" ></textarea>
+                        <textarea className="Text" placeholder="Bienvenido" defaultValue={this.state.OutputTextarea} />
                     </div>
                 </div>
             </div>
@@ -107,12 +194,10 @@ function Navigation(){
             </div>
             </footer>
 
-            
-            
-            
         </header>
+        );
+    }
         
-    );
 }
 
 
