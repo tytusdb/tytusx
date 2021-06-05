@@ -53,7 +53,7 @@ class Navigation extends React.Component{
     setText(){
         console.log("setText Button clicked");
         let text = this.state.InputTextarea;
-        alert(text);
+        if(text=="") return
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
         var respuesta=funcion.Ejecutar(this.XML);
@@ -97,7 +97,7 @@ class Navigation extends React.Component{
         const content = this.fileReader.result;
         console.log(content);
         this.setState({XMLTextarea: content});
-
+        if(content=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
         var resultado = analizadorXML.Ejecutar(content)
         this.XML = resultado
@@ -105,7 +105,9 @@ class Navigation extends React.Component{
     } 
 
     handleFocus = (e) =>{
+        if(e.target.value=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
+       
         var resultado = analizadorXML.Ejecutar(e.target.value)
         this.XML = resultado
     }

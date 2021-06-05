@@ -8,7 +8,8 @@ export class Igual {
         this.derecho = derecho;
     }
 
-    getValor(Objetos){
+    getValor(Objetos)
+    {
         var retorno = []
         
         for (var obj of Objetos ){

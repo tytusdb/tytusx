@@ -26,121 +26,6 @@ export const TipoPath = {
     "REL" : "relativo"
 }
 
-var XML= {
-    tipo: "/",
-    texto: "",
-    atributos: [],
-    hijos: [
-      {
-        tipo: "biblioteca",
-        texto: "",
-        atributos: [],
-        hijos: [
-          {
-            tipo: "libro",
-            texto: "",
-            atributos: [],
-            hijos: [
-              {
-                tipo:"titulo",
-                texto: "La vida está en otra parte",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"autor",
-                texto: "Milan Kundera",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"fechaPublicacion",
-                texto:"",
-                atributos:[
-                    {
-                        nombre:"año",
-                        valor:"1973"
-                    }
-                ],
-                hijos:[]
-              }
-            ]
-          },
-          {
-            tipo: "libro",
-            texto: "",
-            atributos: [],
-            hijos: [
-              {
-                tipo:"titulo",
-                texto: "Pantaleón y las visitadoras",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"autor",
-                texto: "Mario Vargas Llosa",
-                atributos:[
-                    {
-                        nombre:"fechaNacimiento",
-                        valor:"28/03/1936"
-                    }
-                ],
-                hijos:[]
-              },
-              {
-                tipo:"fechaPublicacion",
-                texto:"",
-                atributos:[
-                    {
-                        nombre:"año",
-                        valor:"1973"
-                    }
-                ],
-                hijos:[]
-              }
-            ]
-          },
-          {
-            tipo: "libro",
-            texto: "",
-            atributos: [],
-            hijos: [
-              {
-                tipo:"titulo",
-                texto: "Conversación en la catedral",
-                atributos:[],
-                hijos:[]
-              },
-              {
-                tipo:"autor",
-                texto: "Mario Vargas Llosa",
-                atributos:[
-                    {
-                        nombre:"fechaNacimiento",
-                        valor:"28/03/1936"
-                    }
-                ],
-                hijos:[]
-              },
-              {
-                tipo:"fechaPublicacion",
-                texto:"",
-                atributos:[
-                    {
-                        nombre:"año",
-                        valor:"1969"
-                    }
-                ],
-                hijos:[]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-}
-
 export class Comando
 {
   constructor(Instrucciones)
@@ -148,7 +33,7 @@ export class Comando
     this.Instrucciones = Instrucciones
   }
 
-  Ejecutar()
+  Ejecutar(XML)
   {
     var Salida = ""
     var retornos=[]

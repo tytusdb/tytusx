@@ -192,8 +192,8 @@ StepExpr
 AxisStep    
   : ReverseStep               { $$=new AxisStepExp($1,[]) }
 	| ForwardStep               { $$=new AxisStepExp($1,[]) }
-	| ReverseStep PredicateList { $$=new AxisStepExp($1,[]) }
-	| ForwardStep PredicateList { $$=new AxisStepExp($1,[]) }
+	| ReverseStep PredicateList { $$=new AxisStepExp($1,$2) }
+	| ForwardStep PredicateList { $$=new AxisStepExp($1,$2) }
 ;
 
 PredicateList     
@@ -252,7 +252,7 @@ PostfixExprL
 ;
 
 Predicate   
-  : CORA Expr CORB            { $$=$1 }
+  : CORA ExprSingle CORB            { $$=$2 }
 ;
 
 PrimaryExpr 

@@ -49,7 +49,7 @@ export class PathExp
                 Retornos = Retornos.concat(ret)
                 if(ret.tipo == Tipo.ERROR)
                 {
-                    return new Literal(Tipo.ERROR,'@Error@')
+                    return [new Literal(Tipo.ERROR,'@Error@')]
                 }   
             }
         }
@@ -59,7 +59,7 @@ export class PathExp
         }
         else
         {
-            return new Literal(Tipo.ERROR,'@Error@',[])
+            return [new Literal(Tipo.ERROR,'@Error@',[])]
         }
     }
 }
@@ -90,9 +90,11 @@ export class AxisStepExp
     getValor(pila,Entorno,tipo)
     {
         var retorno = this.valor.getValor(pila,Entorno,tipo)
-        if(this.predicado.lenght > 0)
+        if(this.predicado.length > 0)
         {
-
+            for (const iterator of this.predicado) {
+                retorno=iterator.getValor(retorno)
+            }
         }
         return retorno
     }
