@@ -4,7 +4,10 @@ echo compilando archivo jison...
 jison AnalyzerXML.jison
 echo ----------------------------------------
 
+echo traspilando archivos TypeScript
+tsc
+echo ----------------------------------------
+
 echo moviendo archivo
-cp AnalyzerXML.js ../../dist/
-mv AnalyzerXML.js ../../
+mv AnalyzerXML.js ../../dist/
 echo ----------------------------------------

@@ -75,7 +75,7 @@ var AnalyzerXML = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[5,8],$V2=[1,15],$V3=[1,18],$V4=[1,19],$V5=[1,20],$V6=[1,17],$V7=[10,11,12,14,15,23,26],$V8=[2,19],$V9=[1,33],$Va=[10,11,14,15,23,26];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"XML_STRUCTURE":4,"EOF":5,"PROLOG":6,"ELEMENTS":7,"less_than":8,"question_mark":9,"xml":10,"version":11,"assign":12,"value":13,"encoding":14,"greater_than":15,"TEXTTAG":16,"ELEMENT":17,"OPENING_TAG":18,"CLOSING_TAG":19,"VOID_TAG":20,"IDENTIFIER":21,"ATTRIBS":22,"slash":23,"ATTRIB":24,"textTag":25,"identifier":26,"$accept":0,"$end":1},
+symbols_: {"error":2,"START":3,"XML_STRUCTURE":4,"EOF":5,"PROLOG":6,"NODES":7,"less_than":8,"question_mark":9,"xml":10,"version":11,"assign":12,"value":13,"encoding":14,"greater_than":15,"TEXTTAG":16,"NODE":17,"OPENING_TAG":18,"CLOSING_TAG":19,"VOID_TAG":20,"IDENTIFIER":21,"ATTRIBS":22,"slash":23,"ATTRIB":24,"textTag":25,"identifier":26,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",8:"less_than",9:"question_mark",10:"xml",11:"version",12:"assign",13:"value",14:"encoding",15:"greater_than",23:"slash",25:"textTag",26:"identifier"},
 productions_: [0,[3,2],[4,2],[6,12],[6,12],[7,2],[7,1],[17,3],[17,2],[17,1],[18,4],[18,5],[19,5],[20,5],[20,6],[22,2],[22,1],[24,3],[16,1],[16,0],[21,1],[21,1],[21,1],[21,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
@@ -83,8 +83,47 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 3: case 4:
-console.log('holi');
+case 1:
+console.log($$[$0-1]);
+break;
+case 2: case 18: case 20: case 21: case 22: case 23:
+this.$ = $$[$0];
+break;
+case 5: case 15:
+$$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+break;
+case 6: case 16:
+this.$ = [$$[$0]];
+break;
+case 7:
+this.$ = new Nodo($$[$0-2][0], $$[$0-2][2], $$[$0-1],   $$[$0-2][1], _$[$0-2].first_line, (_$[$0-2].first_column + 1));
+break;
+case 8:
+this.$ = new Nodo($$[$0-1][0], $$[$0-1][2], [],   $$[$0-1][1], _$[$0-1].first_line, (_$[$0-1].first_column + 1));
+break;
+case 9:
+this.$ = new Nodo($$[$0][0], $$[$0][2], [],   $$[$0][1], _$[$0].first_line, (_$[$0].first_column + 1));
+break;
+case 10:
+this.$=[$$[$0-2],$$[$0],[]];
+break;
+case 11:
+this.$=[$$[$0-3],$$[$0],$$[$0-2]];
+break;
+case 12:
+this.$ = $$[$0-2];
+break;
+case 13:
+this.$=[$$[$0-3], $$[$0], []];
+break;
+case 14:
+this.$=[$$[$0-4], $$[$0], $$[$0-3]];
+break;
+case 17:
+this.$ = new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line, (_$[$0-2].first_column + 1));
+break;
+case 19:
+this.$ = null;
 break;
 }
 },
@@ -570,38 +609,40 @@ case 1:this.begin('textTag'); return 15;
 break;
 case 2:this.begin('INITIAL');return 8;
 break;
-case 3:return 25;
+case 3://ignorar
 break;
-case 4:return 5;
+case 4:return 25;
 break;
-case 5:return 8;
+case 5:return 5;
 break;
-case 6:return 10;
+case 6:return 8;
 break;
-case 7:return 11
+case 7:return 10;
 break;
-case 8:return 14
+case 8:return 11
 break;
-case 9:return 8;
+case 9:return 14
 break;
-case 10:return 9;
+case 10:return 8;
 break;
-case 11:return 12;
+case 11:return 9;
 break;
-case 12:return 23
+case 12:return 12;
 break;
-case 13:return 13
+case 13:return 23
 break;
-case 14:return 26
+case 14:return 13
 break;
-case 15: return 5; 
+case 15:return 26
 break;
-case 16: console.log('Error lexico en: ' + yy_.yytext + ', linea: ' + yy_.yylloc.first_line + ', columna: ' + (yy_.yylloc.first_column + 1)); 
+case 16: return 5; 
+break;
+case 17: console.log('Error lexico en: ' + yy_.yytext + ', linea: ' + yy_.yylloc.first_line + ', columna: ' + (yy_.yylloc.first_column + 1)); 
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:>)/,/^(?:<)/,/^(?:[^<]+)/,/^(?:$)/,/^(?:<)/,/^(?:xml\b)/,/^(?:version\b)/,/^(?:encoding\b)/,/^(?:<)/,/^(?:\?)/,/^(?:=)/,/^(?:\/)/,/^(?:(["][^"\""]+["])|(['][^']+[']))/,/^(?:\w+)/,/^(?:$)/,/^(?:.)/],
-conditions: {"textTag":{"rules":[2,3,4],"inclusive":false},"INITIAL":{"rules":[0,1,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:>)/,/^(?:<)/,/^(?:\s+)/,/^(?:[^<]+)/,/^(?:$)/,/^(?:<)/,/^(?:xml\b)/,/^(?:version\b)/,/^(?:encoding\b)/,/^(?:<)/,/^(?:\?)/,/^(?:=)/,/^(?:\/)/,/^(?:(["][^"\""]+["])|(['][^']+[']))/,/^(?:\w+)/,/^(?:$)/,/^(?:.)/],
+conditions: {"textTag":{"rules":[2,3,4,5],"inclusive":false},"INITIAL":{"rules":[0,1,6,7,8,9,10,11,12,13,14,15,16,17],"inclusive":true}}
 });
 return lexer;
 })();

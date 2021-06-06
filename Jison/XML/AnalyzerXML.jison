@@ -3,9 +3,10 @@
 
 %x textTag
 %%
-\s+                         //Ignorar espacios
+\s+                             //Ignorar espacios
 ">"                             {this.begin('textTag'); return 'greater_than';}
 <textTag>"<"                    {this.begin('INITIAL');return 'less_than';}
+<textTag>\s+                    //ignorar
 <textTag>[^<]+                  {return 'textTag';}
 <textTag><<EOF>>                {return 'EOF';}
 
@@ -36,60 +37,60 @@
 %%
 
 START
-    : XML_STRUCTURE EOF
+    : XML_STRUCTURE EOF     {console.log($1);}
 ;
 
 XML_STRUCTURE
-    : PROLOG ELEMENTS
+    : PROLOG NODES      {$$ = $2;}
 ;
 
 PROLOG
-    : less_than question_mark xml version assign value encoding assign value question_mark greater_than TEXTTAG {console.log('holi');}
-    | less_than question_mark xml encoding assign value version assign value question_mark greater_than TEXTTAG {console.log('holi');}
+    : less_than question_mark xml version assign value encoding assign value question_mark greater_than TEXTTAG
+    | less_than question_mark xml encoding assign value version assign value question_mark greater_than TEXTTAG
 ;
 
-ELEMENTS
-    : ELEMENTS ELEMENT
-    | ELEMENT
+NODES
+    : NODES NODE        {$1.push($2); $$ = $1;}
+    | NODE              {$$ = [$1];}
 ;
 
-ELEMENT
-    : OPENING_TAG ELEMENTS CLOSING_TAG
-    | OPENING_TAG CLOSING_TAG
-    | VOID_TAG
+NODE
+    : OPENING_TAG NODES CLOSING_TAG         {$$ = new Nodo($1[0], $1[2], $2,   $1[1], @1.first_line, (@1.first_column + 1));}
+    | OPENING_TAG CLOSING_TAG               {$$ = new Nodo($1[0], $1[2], [],   $1[1], @1.first_line, (@1.first_column + 1));}
+    | VOID_TAG                              {$$ = new Nodo($1[0], $1[2], [],   $1[1], @1.first_line, (@1.first_column + 1));}
 ;
 
 OPENING_TAG
-    : less_than IDENTIFIER greater_than TEXTTAG
-    | less_than IDENTIFIER ATTRIBS greater_than TEXTTAG
+    : less_than IDENTIFIER greater_than TEXTTAG             {$$=[$2,$4,[]];}
+    | less_than IDENTIFIER ATTRIBS greater_than TEXTTAG     {$$=[$2,$5,$3];}
 ;
 
 CLOSING_TAG
-    : less_than slash IDENTIFIER greater_than TEXTTAG
+    : less_than slash IDENTIFIER greater_than TEXTTAG       {$$ = $3;}
 ;
 
 VOID_TAG
-    : less_than IDENTIFIER slash greater_than TEXTTAG
-    | less_than IDENTIFIER ATTRIBS slash greater_than TEXTTAG
+    : less_than IDENTIFIER slash greater_than TEXTTAG               {$$=[$2, $5, []];}
+    | less_than IDENTIFIER ATTRIBS slash greater_than TEXTTAG       {$$=[$2, $6, $3];}
 ;
 
 ATTRIBS
-    : ATTRIBS ATTRIB
-    | ATTRIB
+    : ATTRIBS ATTRIB            {$1.push($2); $$ = $1;}
+    | ATTRIB                    {$$ = [$1];}
 ;
 
 ATTRIB
-    : IDENTIFIER assign value
+    : IDENTIFIER assign value           {$$ = new Atributo($1,$3,@1.first_line, (@1.first_column + 1));}
 ;
 
 TEXTTAG
-    : textTag
-    |
+    : textTag       {$$ = $1;}
+    |               {$$ = null;}
 ;
 
 IDENTIFIER
-    : identifier
-    | xml
-    | version
-    | encoding
+    : identifier        {$$ = $1;}
+    | xml               {$$ = $1;}
+    | version           {$$ = $1;}
+    | encoding          {$$ = $1;}
 ;
