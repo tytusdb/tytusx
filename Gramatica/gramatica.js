@@ -84,22 +84,42 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = $$[$0-1]; console.log(this.$); return this.$; 
+ 
+        this.$ = $$[$0-1]; //console.log(this.$); 
+        rg_xml.setValor('inicio -> LISTA_PRINCIPAL;\n');
+        return this.$; 
+    
 break;
-case 2: case 10: case 13:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+case 2:
+ 
+                    rg_xml.setValor('LISTA_PRINCIPAL -> LISTA_PRINCIPAL LISTA;\n');
+                    $$[$0-1].push($$[$0]); 
+                    this.$ = $$[$0-1];
+                
 break;
-case 3: case 11: case 14:
- this.$ = [$$[$0]]; 
+case 3:
+ 
+                    rg_xml.setValor('LISTA_PRINCIPAL -> LISTA;\n');
+                    this.$ = [$$[$0]]; 
+                
 break;
 case 4:
- this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
+ 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
+            this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],$$[$0-1]); 
+        
 break;
 case 5:
- this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[]); 
+ 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
+            this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],$$[$0-1]); 
+        
 break;
 case 6:
- this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[]); 
+ 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS] />;\n');
+            this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],$$[$0-3]); 
+        
 break;
 case 7:
  
@@ -108,17 +128,76 @@ case 7:
         erroressintacticos.setError(errores);
     
 break;
-case 8: case 16: case 17: case 18: case 19:
- this.$ = $$[$0]; 
+case 8:
+ 
+                rg_xml.setValor('LATRIBUTOS -> ATRIBUTOS;\n');
+                this.$ = $$[$0]; 
 break;
 case 9:
- this.$ = []; 
+ 
+               rg_xml.setValor('LATRIBUTOS -> EPSILON;\n');
+               this.$ = []; 
+               
+break;
+case 10:
+ 
+                rg_xml.setValor('ATRIBUTOS -> ATRIBUTOS ATRIBUTO;\n');
+                $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+            
+break;
+case 11:
+ 
+                rg_xml.setValor('ATRIBUTOS -> ATRIBUTO;\n');
+                this.$ = [$$[$0]]; 
+            
 break;
 case 12:
- this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+ 
+                rg_xml.setValor('ATRIBUTO -> ID = CADENA;\n');
+                this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+            
+break;
+case 13:
+ 
+            rg_xml.setValor('OBJETOS -> OBJETOS LISTA;\n');
+            $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+        
+break;
+case 14:
+ 
+            rg_xml.setValor('OBJETOS -> LISTA;\n');
+            this.$ = [$$[$0]]; 
+        
 break;
 case 15:
- $$[$0-1]=$$[$0-1] + ' ' +$$[$0] ; this.$ = $$[$0-1];
+ 
+            rg_xml.setValor('PARRAFO -> PARRAFO VALORES;\n');
+            $$[$0-1]=$$[$0-1] + ' ' +$$[$0] ; this.$ = $$[$0-1];
+        
+break;
+case 16:
+ 
+            rg_xml.setValor('PARRAFO -> VALORES;\n');
+            this.$ = $$[$0]; 
+        
+break;
+case 17:
+ 
+            rg_xml.setValor('VALORES -> ID;\n');
+            this.$ = $$[$0]; 
+        
+break;
+case 18:
+ 
+            rg_xml.setValor('VALORES -> DECIMAL;\n');
+            this.$ = $$[$0]; 
+        
+break;
+case 19:
+ 
+            rg_xml.setValor('VALORES -> ENTERO;\n');
+            this.$ = $$[$0]; 
+        
 break;
 }
 },

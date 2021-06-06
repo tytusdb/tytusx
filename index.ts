@@ -31,10 +31,14 @@ let erroreslexicos:ListaErrores;
 let erroressintacticos:ListaErrores;
 let listaObjetos;
 
+//Reporte Gramatical
+let rg_xml:ReporteGramatical_XML;
+
 function InterpretarCodigo() {
   var entrada = editorentrada.getValue();
   erroreslexicos = new ListaErrores();
   erroressintacticos = new ListaErrores();
+  rg_xml = new ReporteGramatical_XML();
   listaObjetos = gramatica.parse(entrada);
   const tsGlobal:TablaSimbolos = new TablaSimbolos(null);
 
@@ -113,17 +117,26 @@ function MostrarErroresSintacticosXML()
   }
 }
 
-function GraficarXML(){
+function GraficarXMLASC(){
+  let grafica = new Graficar();
+  d3.select("#graph").graphviz()
+                     .renderDot(`${grafica.graficarXML()}`);
+}
+
+function GraficarXMLDESC(){
+  let grafica = new Graficar();
+  d3.select("#graph").graphviz()
+                     .renderDot(`${grafica.graficarXML()}`);
+}
+
+//Reporte Gramatical
+
+function RG_XML_ASC()
+{
+  document.getElementById('reportegr').innerHTML = rg_xml.getReporte();
+}
+
+function RG_XML_DESC()
+{
   
 }
-/*
-ejecutarCodigo(`
-<bookstore>
-<book>
-  <title lang = "en">Harry d</title>
-  <author>Rowling</author>
-  <year>2005</year>
-  <price>29.99</price>
-</book>
-</bookstore>
-`);*/
