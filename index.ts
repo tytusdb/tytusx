@@ -36,22 +36,25 @@ function InterpretarCodigo() {
   erroreslexicos = new ListaErrores();
   erroressintacticos = new ListaErrores();
   listaObjetos = gramatica.parse(entrada);
-  const tsGlobal:TablaSimbolos = new TablaSimbolos(null);
-
+  const tsGlobal:TablaSimbolos = new TablaSimbolos(null,"global");
+  
+  
   //objeto guarda entono de mas objetos
-  listaObjetos.forEach((objeto:Objeto) => {
-    const tsObjeto:TablaSimbolos = new TablaSimbolos(null);
-    if(objeto.listaAtributos.length>0){
-      objeto.listaAtributos.forEach((atributo:Atributo) =>{
-        const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(atributo.identificador, atributo.valor, Tipo.ATRIBUTO, atributo.linea, atributo.columna);
-        tsObjeto.agregar(simbolo.indentificador, simbolo);
-      });      
-    }//fin if
-    objeto.entorno = tsObjeto;
-    const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(objeto.identificador, objeto, Tipo.OBJETO, objeto.linea, objeto.columna);
-    tsGlobal.agregar(simbolo.indentificador, simbolo);
+    listaObjetos.forEach((objeto:Objeto) => {
+        const tsObjeto:TablaSimbolos = new TablaSimbolos(null,objeto.identificador);
+        if(objeto.listaAtributos.length>0){
+          objeto.listaAtributos.forEach((atributo:Atributo) =>{
+            const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(atributo.identificador, atributo.valor, Tipo.ATRIBUTO, objeto.identificador, atributo.linea, atributo.columna);
+            tsObjeto.agregar(simbolo);
+          });      
+        }//fin if
+        objeto.entorno = tsObjeto;
+        const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(objeto.identificador, objeto, Tipo.OBJETO, objeto.identificador, objeto.linea, objeto.columna);
+        tsGlobal.agregar(simbolo);
+    
+      });
 
-  });
+    let cadena:string = "";
 
 
   try {
@@ -64,6 +67,39 @@ function InterpretarCodigo() {
     editorsalida.setValue("");
     document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XML\n";
   }
+}
+
+function RecorrerTDS(ts:TablaSimbolos, cadena:string){
+  
+  let p:number = 0;
+    ts.tabla.forEach((nodoActual:NodoTablaSimbolo)=>{
+      p = p + 1;
+     /* cadena += "<tr>\n<th scope=\"row\">" + p + "</th>\n" +
+          "<td scope=\"row\">" + nodoActual.identificador + "</td>\n" +
+          "<td>" + nodoActual.tipo + "</td>\n" +
+          "<td>" + nodoActual. + "</td>\n" +
+          "<td>" + nodoActual.valor + "</td>\n" +
+          "</tr>\n";*/
+
+    
+    });
+      p = p + 1;
+  //objeto guarda entono de mas objetos
+  objetoActual.listaObjetos.forEach((objeto:Objeto) => {
+    const tsObjeto:TablaSimbolos = new TablaSimbolos(null);
+    if(objeto.listaAtributos.length>0){
+      objeto.listaAtributos.forEach((atributo:Atributo) =>{
+        const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(atributo.identificador, atributo.valor, Tipo.ATRIBUTO, atributo.linea, atributo.columna);
+        
+        tsObjeto.agregar(simbolo);
+      });      
+    }//fin if
+
+    objeto.entorno = tsObjeto;// identificador -- valor -- tipo -- linea -- columna
+    const simbolo:NodoTablaSimbolo = new NodoTablaSimbolo(objeto.identificador, objeto, Tipo.OBJETO, objeto.linea, objeto.columna);
+    ts.agregar(simbolo);
+
+  });
 }
 
 //Errores Lexicos del lenguaje XML
@@ -114,7 +150,7 @@ function MostrarErroresSintacticosXML()
 }
 
 function GraficarXML(){
-  
+
 }
 /*
 ejecutarCodigo(`

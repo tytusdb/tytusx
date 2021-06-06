@@ -17,18 +17,23 @@ class NodoTablaSimbolo
     indentificador: string;
     valor: any;
     tipo: Tipo;
+    entorno:string;
     linea: number;
     columna: number;
 
-    constructor(indentificador:string, valor:any, tipo:Tipo, linea:number, columna:number)
+    constructor(indentificador:string, valor:any, tipo:Tipo, entorno:string, linea:number, columna:number)
     {
         this.indentificador = indentificador;
         this.valor = valor;
         this.tipo = tipo;
+        this.entorno = entorno;
         this.linea = linea;
         this.columna = columna;
     }
 
+    setEntorno(entorno:string){
+        this.entorno = entorno;
+    }
     getTipo(ent: TablaSimbolos, arbol: AST): Tipo {
         return this.tipo;
     }

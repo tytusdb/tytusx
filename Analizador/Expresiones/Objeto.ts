@@ -6,6 +6,7 @@ class Objeto{
     listaAtributos:Array<Atributo>;
     listaObjetos: Array<Objeto>;
     entorno: TablaSimbolos;
+    tipo:Tipo;
     linea: number;
     columna: number;
 
@@ -14,6 +15,7 @@ class Objeto{
         this.identificador = id;
         this.texto = texto;
         this.entorno = new TablaSimbolos(null);
+        this.tipo=Tipo.OBJETO;
         this.listaAtributos = listaAtributos;
         this.listaObjetos = listaO;
         this.linea = linea;
