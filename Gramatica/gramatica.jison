@@ -56,40 +56,95 @@
 %% /* Definición de la gramática */
 
 ini
-	: LISTA_PRINCIPAL EOF { $$ = $1; console.log($$); return $$; }
+	: LISTA_PRINCIPAL EOF { 
+        $$ = $1; //console.log($$); 
+        rg_xml.setValor('inicio -> LISTA_PRINCIPAL;\n');
+        return $$; 
+    }
 ;
 
-LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { $1.push($2); $$ = $1;}
-   				| LISTA                     { $$ = [$1]; }
+LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { 
+                    rg_xml.setValor('LISTA_PRINCIPAL -> LISTA_PRINCIPAL LISTA;\n');
+                    $1.push($2); 
+                    $$ = $1;
+                }
+   				| LISTA                     { 
+                    rg_xml.setValor('LISTA_PRINCIPAL -> LISTA;\n');
+                    $$ = [$1]; 
+                }
  ;
 
 
-LISTA:menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
-    | menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal identificador mayorque { $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[]); }
-    | menorque identificador LATRIBUTOS diagonal mayorque      { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[]); }
+LISTA:menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
+            $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5,$8); 
+        }
+    | menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal identificador mayorque { 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
+            $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[],$8); 
+        }
+    | menorque identificador LATRIBUTOS diagonal mayorque      { 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS] />;\n');
+            $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2); 
+        }
     | error { 
         /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);*/
         let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
         erroressintacticos.setError(errores);
     };
 
-LATRIBUTOS: ATRIBUTOS        { $$ = $1; }
-           |                 { $$ = []; };
+LATRIBUTOS: ATRIBUTOS        { 
+                rg_xml.setValor('LATRIBUTOS -> ATRIBUTOS;\n');
+                $$ = $1; }
+           |                 { 
+               rg_xml.setValor('LATRIBUTOS -> EPSILON;\n');
+               $$ = []; 
+               };
 
-ATRIBUTOS : ATRIBUTOS ATRIBUTO   { $1.push($2); $$ = $1;}
-          | ATRIBUTO             { $$ = [$1]; } ;
+ATRIBUTOS : ATRIBUTOS ATRIBUTO   { 
+                rg_xml.setValor('ATRIBUTOS -> ATRIBUTOS ATRIBUTO;\n');
+                $1.push($2); $$ = $1;
+            }
+          | ATRIBUTO             { 
+                rg_xml.setValor('ATRIBUTOS -> ATRIBUTO;\n');
+                $$ = [$1]; 
+            };
 
-ATRIBUTO :  identificador igual cadena { $$ = new Atributo($1, $3, @1.first_line, @1.first_column); };
+ATRIBUTO :  identificador igual cadena { 
+                rg_xml.setValor('ATRIBUTO -> ID = CADENA;\n');
+                $$ = new Atributo($1, $3, @1.first_line, @1.first_column); 
+            };
 
 
-OBJETOS: OBJETOS LISTA       { $1.push($2); $$ = $1;}
-	   | LISTA                { $$ = [$1]; } ;
+OBJETOS: OBJETOS LISTA       { 
+            rg_xml.setValor('OBJETOS -> OBJETOS LISTA;\n');
+            $1.push($2); $$ = $1;
+        }
+	   | LISTA                { 
+            rg_xml.setValor('OBJETOS -> LISTA;\n');
+            $$ = [$1]; 
+        } ;
 
-PARRAFO : PARRAFO VALORES { $1=$1 + ' ' +$2 ; $$ = $1;}
-		| VALORES           { $$ = $1; } ;
+PARRAFO : PARRAFO VALORES { 
+            rg_xml.setValor('PARRAFO -> PARRAFO VALORES;\n');
+            $1=$1 + ' ' +$2 ; $$ = $1;
+        }
+		| VALORES           { 
+            rg_xml.setValor('PARRAFO -> VALORES;\n');
+            $$ = $1; 
+        } ;
 
-VALORES : identificador { $$ = $1; }
-        | decimal { $$ = $1; }
-        | entero { $$ = $1; };
+VALORES : identificador { 
+            rg_xml.setValor('VALORES -> ID;\n');
+            $$ = $1; 
+        }
+        | decimal { 
+            rg_xml.setValor('VALORES -> DECIMAL;\n');
+            $$ = $1; 
+        }
+        | entero { 
+            rg_xml.setValor('VALORES -> ENTERO;\n');
+            $$ = $1; 
+        };
 
 

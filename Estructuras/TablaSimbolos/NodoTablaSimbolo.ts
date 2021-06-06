@@ -9,6 +9,8 @@ enum Tipo {
     NULL,
     ARRAY
 }
+
+
 class NodoTablaSimbolo
 {
     /*
@@ -34,6 +36,11 @@ class NodoTablaSimbolo
     setEntorno(entorno:string){
         this.entorno = entorno;
     }
+
+    setValor(valor:any){
+        this.valor = valor;
+    }
+
     getTipo(ent: TablaSimbolos, arbol: AST): Tipo {
         return this.tipo;
     }

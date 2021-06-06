@@ -1,4 +1,3 @@
-import { stringify } from "querystring";
 
 class Graficar{
     contador:number;
@@ -14,17 +13,18 @@ class Graficar{
         {
         rankdir=TB; 
         node[shape = box, style = filled, color = white];
-        node${NUMID}[label="AST"];
+        node${NUMID}[label="AST XML"];
         `;    
 
         let str = [];
         str.push(encabezado);
 
         let numaux = 0;
-        
+        let g = new Graficar();
+        g.incrementarContador();
         for(let aux of listaObjetos)
         {
-            numaux = aux.graph(this,str, this.contador);
+            numaux = aux.graph(aux,str, g);
             str.push(`
             node${NUMID} -> node${numaux};
             `);
@@ -38,5 +38,7 @@ class Graficar{
         return this.contador ++;
     }
     
-    
+    getContador():number{
+        return this.contador;
+    }
 }
