@@ -661,7 +661,7 @@ case 10: return 27
 break;
 case 11: return 28
 break;
-case 12: return 29
+case 12: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 29
 break;
 case 13: this.popState(); return 21
 break;
@@ -681,7 +681,7 @@ case 20: return 17
 break;
 case 21: return 18
 break;
-case 22: return 19
+case 22: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 19
 break;
 case 23:
 break;

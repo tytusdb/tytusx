@@ -37,7 +37,7 @@
 
 <Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* { return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
-<Etiquetai>\"[^\n\"]*\"				{ return 'ValorAtributo'}
+<Etiquetai>\"[^\n\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
@@ -52,7 +52,7 @@
 
 <EtiquetaConf>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* 	{ return 'AtributoConf'}
 <EtiquetaConf>"="             			{ return 'IgualAtributoConf'}
-<EtiquetaConf>\"[^\n\"]*\"        		{ return 'ValorAtributoConf'}
+<EtiquetaConf>\"[^\n\"]*\"        		{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributoConf'}
 
 <EtiquetaConf>[ \r\t]+  				{}
 <EtiquetaConf>"?>"            			{ this.popState(); return 'CierreEtiquetaConf'}
