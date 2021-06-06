@@ -1,2 +1,2 @@
-# tytusX
-JavaScript Native XML Database with query languages XPath and XQuery
+# TytusX
+Open Source Native XML Database with Query Languages XPath and XQuery in JavaScript
