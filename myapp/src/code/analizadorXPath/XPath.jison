@@ -2,8 +2,9 @@
 %{
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {ExpOr,ExpAnd} = require("./Expresion/Logical");
-  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,Atributo,Camino,CaminoInverso} = require("./Expresion/Expresiones");
-  const {Igual, Diferente, Menor, MenorIgual, Mayor, MayorIgual} = require('./Expresion/Comparison')
+  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,CaminoInverso} = require("./Expresion/Expresiones");
+  const { ComparisonExp } = require('./Expresion/Comparison')
+  const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling } = require('./Expresion/axes')
 %}
 
 /* Definición Léxica */
@@ -13,10 +14,30 @@
 
 %%
 
+"or"  return "ROR"
+"and" return "RAND"
+"return" return "RRETURN"
+"for" return "RFOR"
+"in"  return "RIN"
+"to"  return "RTO"
+"eq"  return "EQ"
+"ne"  return "NE"
+"lt"  return "LT"
+"le"  return "LE"
+"gt"  return "GT"
+"ge"  return "GE"
+"child" return "RCHILD"
+"descendant-or-self" return "RDESSELF"
+"descendant" return "RDESCENDANT"
+"attribute" return "RATTRIBUTE"
+"self" return "RSELF"
+"following-sibling" return "RFOLLOWSIBLING"
+"following" return "RFOLLOW"
+"namespace" return "RNAMESPACE"
 
 ("."[0-9]+)|([0-9]+"."[0-9]+) 				    return "DECIMAL"
 [0-9]+      								              return "INTEGER"
-('"'[^"]*'"')|("'"[^']*"'")         		  return "CADENA"
+('"'[^"]*'"')|("'"[^']*"'")         		  { yytext = yytext.substr(1,yyleng-2); return "CADENA" }
 ([a-zA-ZñÑ_])([a-zA-ZñÑ0-9_-]|".")* 	    return "NOMBRE"
 
 "//" return "DOBLEBARRA"
@@ -47,19 +68,8 @@
 ")"         return "PARENTESISC"
 "?"         return "INTERROGACIONC"
 "."         return "PUNTO"
-
-"or"  return "ROR"
-"and" return "RAND"
-"return" return "RRETURN"
-"for" return "RFOR"
-"in"  return "RIN"
-"to"  return "RTO"
-"eq"  return "EQ"
-"ne"  return "NE"
-"lt"  return "LT"
-"le"  return "LE"
-"gt"  return "GT"
-"ge"  return "GE"
+"::"        return "DOBLEDOSPUNTOS"
+":"         return "DOSPUNTOS"
 
 /* Espacios en blanco */
 [ \r\t]+{}
@@ -103,7 +113,7 @@ AndExpr
 
 ComparisonExpr    
   : StringConcatExpr                              { $$=$1 }
-  | StringConcatExpr GeneralComp StringConcatExpr { $$=$2; $$.izquierdo = $1; $$.derecho = $3;} 
+  | StringConcatExpr GeneralComp StringConcatExpr { $$ = new ComparisonExp($1,$2,$3) } 
 //| StringConcatExpr ValueComp StringConcatExpr   {} 
 // falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
 ;
@@ -120,12 +130,12 @@ ValueComp    // palabras reservadas
 */
 
 GeneralComp       // signo
-  	: IGUAL     { $$ = new Igual() 		} // 5 = 5 | nodo = nodo
-	| DIFERENTE { $$ = new Diferente() 	}
-	| MENOR     { $$ = new Menor() 		}
-	| MENORIG   { $$ = new MenorIgual() }
-	| MAYOR     { $$ = new Mayor() 		}
-	| MAYORIG   { $$ = new MayorIgual() }
+  : IGUAL     { $$ = $1 } // 5 = 5 | nodo = nodo
+	| DIFERENTE { $$ = $1 }
+	| MENOR     { $$ = $1	}
+	| MENORIG   { $$ = $1 }
+	| MAYOR     { $$ = $1	}
+	| MAYORIG   { $$ = $1 }
 ;
 
 
@@ -174,14 +184,14 @@ SimpleMapExpr
 PathExpr    
   : BARRA RelativePathExpr              { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2) }
 	| DOBLEBARRA RelativePathExpr         { $2[0].tipo=TipoPath.REL;$$=new PathExp($2) }
-	| RelativePathExpr                    { $1[0].tipo=TipoPath.ABS;$$=new PathExp($1) }
+	| RelativePathExpr                    { $$=new PathExp($1) }
 	| BARRA                               { $$=new PathExp([]) }
 ;
 
 RelativePathExpr  
-  : StepExpr                              { $$ = []; $$.push(new PathExpElement($1,null)); }
-	| RelativePathExpr BARRA StepExpr       { $$ = $1; $$.push(new PathExpElement($3,TipoPath.ABS))}
-	| RelativePathExpr DOBLEBARRA StepExpr  { $$ = $1; $$.push(new PathExpElement($3,TipoPath.REL)) }
+  : StepExpr                              { $$ = []; $$.push($1); }
+	| RelativePathExpr BARRA StepExpr       { $$ = $1; $3.tipo=TipoPath.ABS; $$.push($3) }
+	| RelativePathExpr DOBLEBARRA StepExpr  { $$ = $1; $3.tipo=TipoPath.REL; $$.push($3) }
 ;
 
 StepExpr    
@@ -190,10 +200,10 @@ StepExpr
 ;
 
 AxisStep    
-  : ReverseStep               { $$=new AxisStepExp($1,[]) }
-	| ForwardStep               { $$=new AxisStepExp($1,[]) }
-	| ReverseStep PredicateList { $$=new AxisStepExp($1,$2) }
-	| ForwardStep PredicateList { $$=new AxisStepExp($1,$2) }
+  : ReverseStep               { $$=$1 }
+	| ForwardStep               { $$=$1 }
+	| ReverseStep PredicateList { $$=$1; $$.predicado=$2 }
+	| ForwardStep PredicateList { $$=$1; $$.predicado=$2 }
 ;
 
 PredicateList     
@@ -203,12 +213,24 @@ PredicateList
 
 //Faltan las formas no abreviadas
 ForwardStep 
-  : AbbrevForwardStep { $$=$1 }
+  : AbbrevForwardStep    { $$=$1 }
+  | ForwardAxis NameTest { $$=$1; $$.nombre=$2 }
 ;
 
 AbbrevForwardStep 
   : ARROBA NameTest { $$=new Atributo($2) }
   | NameTest        { $$=new Camino($1) }
+;
+
+ForwardAxis
+  : RCHILD DOBLEDOSPUNTOS         { $$=new Child() }
+  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant() }
+  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute() }
+  | RSELF DOBLEDOSPUNTOS          { $$=new Self() }
+  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf() }
+  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling() }
+  | RFOLLOW DOBLEDOSPUNTOS        {}
+  | RNAMESPACE DOBLEDOSPUNTOS     {}
 ;
 
 //KindText no implementado todavia
@@ -256,7 +278,7 @@ Predicate
 ;
 
 PrimaryExpr 
-  	: Literal                   { $$=$1 }
+  : Literal                   { $$=$1 }
 	| FunctionCall              { $$=$1 }
 	| ContextItemExpr           { $$=$1 }
 	| ParenthesizedExpr         { $$=$1 }

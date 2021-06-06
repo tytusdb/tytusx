@@ -7,8 +7,11 @@ export const Tipo = {
     "NODO"    : 3,
     "BOOLEAN" : 4,
     "ATRIB"   : 5,
-    "ERROR"   : 6
+    "ERROR"   : 6,
+    "SIBLING" : 7
 } 
+
+export var Siblings = []
 
 export const Colision = 
   [
@@ -41,7 +44,7 @@ export class Comando
       retornos = retornos.concat(iterator.getValor(XML))
     }
     for (const retorno of retornos) {
-      if(retorno.tipo == Tipo.NODO)
+      if(retorno.tipo == Tipo.NODO || retorno.tipo == Tipo.ATRIB)
       {
         Salida += ConvertiraXML(retorno.entorno,0) + "\n"
       }
