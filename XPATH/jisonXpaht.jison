@@ -194,18 +194,28 @@
 
 
 "(" { 
-    console.log('Detecto PARENTESIS_ABIERTO'); 
-     return 'PARENTESIS_ABIERTO'; 
+    console.log('Detecto parentesis_abierto'); 
+     return 'parentesis_abierto'; 
     }
 
 ")" { 
-    console.log('Detecto PARENTESIS_CERRADO'); 
-     return 'PARENTESIS_CERRADO'; 
+    console.log('Detecto parentesis_cerrado'); 
+     return 'parentesis_cerrado'; 
+    }
+
+"[" { 
+    console.log('Detecto corchete_abierto');
+    return 'corchete_abierto'; 
+    }
+
+"]" { 
+    console.log('Detecto corchete_cerrado');
+     return 'corchete_cerrado'; 
     }
 
 ":" { 
-    console.log('Detecto DOS_PUNTOS'); 
-     return 'DOS_PUNTOS'; 
+    console.log('Detecto dos_puntos'); 
+     return 'dos_puntos'; 
     }
 
 
@@ -214,8 +224,8 @@
 
 
 [1-9][0-9]*("."0*[1-9]*0*)?\b { 
-    console.log('Detecto DIGITO'); 
-     return 'DIGITO'; 
+    console.log('Detecto digito'); 
+     return 'digito'; 
     }
 
 \w+  { 
@@ -223,26 +233,122 @@
      return 'identificador'; 
     }
 
-<<EOF>>   return 'EOF';
+"&&"[^\n]* {
+    console.log('Salto linea '+yytext);
+}
+
+"\""[^"\""]*"\"" {
+    console.log('string '+yytext);
+    return 'string';
+}
+
+<<EOF>>   return 'eof';
 
 .					{     
-    errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column]);
+    //errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column]);
+    console.log('error lexico '+yytext);
     }
 /lex
 %{
-
+//metodos o atributos 
 %}
+
+%left 'suma' 'resta'
+%left 'multiplicacion' 'division' 'mod'
+
+%left 'igual' 'diferente' 'menor' 'menor_igual' 'mayor' 'mayor_igual'
+%left 'or' 'and'
 
 %start INIT
 
 %%
-INIT : OPCIONES_XPATH EOF {
-    console.log('exito con analisis');
-}
+
+INIT : CARLOS2 eof {
+    console.log('\n\nexito al analizar');
+};
+
+CARLOS2 : CARLOS operador_o CARLOS2 | CARLOS;
+
+CARLOS : RELATIVA | EXPRESIONES_RUTA;
+
+EXPRESIONES_RUTA : EXPRESIONES_RUTA EXPRESION_RUTA | EXPRESION_RUTA;
+
+EXPRESION_RUTA : RELATIVA DIAGONALES ACCESORES
+    | RELATIVA DIAGONALES PUNTOS    
+    ;
+
+RELATIVA : 
+    | identificador PREDICADO
+    ;
+
+DIAGONALES : diagonal diagonal 
+    | diagonal
+    ;
+
+PUNTOS : punto
+    | punto punto
+    ;    
+
+ACCESORES : ID PREDICADO
+    | ATRIBUTO PREDICADO
+    ;
+
+ATRIBUTO : arroba identificador
+    ;
+
+ID : identificador
+    | EJE
+    ;
+
+EJE : EJES dos_puntos dos_puntos identificador
+    ;
+
+EJES : ancestor
+    | ancestor-or-self
+    | attribute
+    | childz
+    | descendant
+    | descendant-or-self
+    | following
+    | following-sibling
+    | namespace
+    | parent
+    | preceding
+    | preceding-sibling
+    | self
+    ;
+
+PREDICADO : | corchete_abierto OPCIONES_PREDICADO corchete_cerrado
 ;
 
-OPCIONES_XPATH : OPCION_XPATH OPCIONES_XPATH | OPCION_XPATH
+OPCIONES_PREDICADO : OPERACIONES | EJE;
+
+OPERACIONES : OPERACIONES igual OPERACIONES
+    | OPERACIONES diferente OPERACIONES
+    | OPERACIONES menor OPERACIONES
+    | OPERACIONES menor_igual OPERACIONES
+    | OPERACIONES mayor OPERACIONES
+    | OPERACIONES mayor_igual OPERACIONES
+    | OPERACIONES or OPERACIONES
+    | OPERACIONES and OPERACIONES
+    | OPERACIONES suma OPERACIONES
+    | OPERACIONES resta OPERACIONES
+    | OPERACIONES multiplicacion OPERACIONES
+    | OPERACIONES division OPERACIONES
+    | OPERACIONES mod OPERACIONES
+    | parentesis_abierto OPERACIONES parentesis_cerrado
+    | TIPOS
 ;
 
-OPCION_XPATH : diagonal identificador 
-    | diagonal diagonal identificador;
+/*
+No se si sirva de esta manera de accesores igual a operaciones, 
+como en accesores siguie de predicado se puede hacer otr predicado 
+o no venir nada.
+[id|@atributo = string] | [id|@atributo[id|@atributo]=string]
+*/
+
+TIPOS : string
+    | digito
+    | ATRIBUTO
+    | identificador
+;

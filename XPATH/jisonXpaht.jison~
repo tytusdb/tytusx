@@ -194,18 +194,28 @@
 
 
 "(" { 
-    console.log('Detecto PARENTESIS_ABIERTO'); 
-     return 'PARENTESIS_ABIERTO'; 
+    console.log('Detecto parentesis_abierto'); 
+     return 'parentesis_abierto'; 
     }
 
 ")" { 
-    console.log('Detecto PARENTESIS_CERRADO'); 
-     return 'PARENTESIS_CERRADO'; 
+    console.log('Detecto parentesis_cerrado'); 
+     return 'parentesis_cerrado'; 
+    }
+
+"[" { 
+    console.log('Detecto corchete_abierto');
+    return 'corchete_abierto'; 
+    }
+
+"]" { 
+    console.log('Detecto corchete_cerrado');
+     return 'corchete_cerrado'; 
     }
 
 ":" { 
-    console.log('Detecto DOS_PUNTOS'); 
-     return 'DOS_PUNTOS'; 
+    console.log('Detecto dos_puntos'); 
+     return 'dos_puntos'; 
     }
 
 
@@ -214,8 +224,8 @@
 
 
 [1-9][0-9]*("."0*[1-9]*0*)?\b { 
-    console.log('Detecto DIGITO'); 
-     return 'DIGITO'; 
+    console.log('Detecto digito'); 
+     return 'digito'; 
     }
 
 \w+  { 
@@ -223,10 +233,15 @@
      return 'identificador'; 
     }
 
-<<EOF>>   return 'EOF';
+"--".+ {
+
+}
+
+<<EOF>>   return 'eof';
 
 .					{     
-    errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column]);
+    //errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column]);
+    console.log('error lexico '+yytext);
     }
 /lex
 %{
@@ -236,13 +251,31 @@
 %start INIT
 
 %%
-INIT : OPCIONES_XPATH EOF {
-    console.log('exito con analisis');
-}
-;
+INIT : S1 eof;
 
-OPCIONES_XPATH : OPCION_XPATH OPCIONES_XPATH | OPCION_XPATH
-;
+S1 : S1 S2 | S2;
 
-OPCION_XPATH : diagonal identificador 
-    | diagonal diagonal identificador;
+S2 : diagonal diagonal S3
+    | diagonal S3
+    | corchete_abierto S1 corchete_cerrado
+    ;
+
+S3 : identificador
+    | arroba identificador
+    | S4 dos_puntos identificador
+    ;
+
+S4 : ancestor
+    ancestor-or-self
+    attribute
+    child
+    descendant
+    descendant-or-self
+    following
+    following-sibling
+    namespace
+    parent
+    preceding
+    preceding-sibling
+    self
+    ;

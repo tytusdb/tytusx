@@ -72,12 +72,12 @@
   }
 */
 var jisonXpaht = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[5,7,16],$V1=[2,10],$V2=[1,6],$V3=[5,7],$V4=[1,11],$V5=[2,35],$V6=[1,15],$V7=[5,7,14,16],$V8=[1,24],$V9=[1,26],$Va=[1,27],$Vb=[1,28],$Vc=[1,29],$Vd=[1,30],$Ve=[1,31],$Vf=[1,32],$Vg=[1,33],$Vh=[1,34],$Vi=[1,35],$Vj=[1,36],$Vk=[1,37],$Vl=[1,38],$Vm=[14,17,20,24,25,26,27,28,29,30,31,32,33,34,35,36],$Vn=[1,48],$Vo=[1,43],$Vp=[1,45],$Vq=[1,46],$Vr=[5,7,14,16,37],$Vs=[1,55],$Vt=[1,56],$Vu=[1,57],$Vv=[1,58],$Vw=[1,59],$Vx=[1,60],$Vy=[1,61],$Vz=[1,62],$VA=[1,63],$VB=[1,64],$VC=[1,65],$VD=[1,66],$VE=[1,67],$VF=[39,41,42,43,44,45,46,47,48,49,50,51,52,53,55],$VG=[39,41,42,43,44,45,46,49,50,51,52,53,55],$VH=[39,49,50,55],$VI=[39,49,50,51,52,53,55];
 var parser = {trace: function trace() { },
 yy: {},
-symbols_: {"error":2,"INIT":3,"OPCIONES_XPATH":4,"EOF":5,"OPCION_XPATH":6,"diagonal":7,"identificador":8,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"diagonal",8:"identificador"},
-productions_: [0,[3,2],[4,2],[6,2],[6,3]],
+symbols_: {"error":2,"INIT":3,"CARLOS2":4,"eof":5,"CARLOS":6,"operador_o":7,"RELATIVA":8,"EXPRESIONES_RUTA":9,"EXPRESION_RUTA":10,"DIAGONALES":11,"ACCESORES":12,"PUNTOS":13,"identificador":14,"PREDICADO":15,"diagonal":16,"punto":17,"ID":18,"ATRIBUTO":19,"arroba":20,"EJE":21,"EJES":22,"dos_puntos":23,"ancestor":24,"ancestor-or-self":25,"attribute":26,"childz":27,"descendant":28,"descendant-or-self":29,"following":30,"following-sibling":31,"namespace":32,"parent":33,"preceding":34,"preceding-sibling":35,"self":36,"corchete_abierto":37,"OPCIONES_PREDICADO":38,"corchete_cerrado":39,"OPERACIONES":40,"igual":41,"diferente":42,"menor":43,"menor_igual":44,"mayor":45,"mayor_igual":46,"or":47,"and":48,"suma":49,"resta":50,"multiplicacion":51,"division":52,"mod":53,"parentesis_abierto":54,"parentesis_cerrado":55,"TIPOS":56,"string":57,"digito":58,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"eof",7:"operador_o",14:"identificador",16:"diagonal",17:"punto",20:"arroba",23:"dos_puntos",24:"ancestor",25:"ancestor-or-self",26:"attribute",27:"childz",28:"descendant",29:"descendant-or-self",30:"following",31:"following-sibling",32:"namespace",33:"parent",34:"preceding",35:"preceding-sibling",36:"self",37:"corchete_abierto",39:"corchete_cerrado",41:"igual",42:"diferente",43:"menor",44:"menor_igual",45:"mayor",46:"mayor_igual",47:"or",48:"and",49:"suma",50:"resta",51:"multiplicacion",52:"division",53:"mod",54:"parentesis_abierto",55:"parentesis_cerrado",57:"string",58:"digito"},
+productions_: [0,[3,2],[4,3],[4,1],[6,1],[6,1],[9,2],[9,1],[10,3],[10,3],[8,0],[8,2],[11,2],[11,1],[13,1],[13,2],[12,2],[12,2],[19,2],[18,1],[18,1],[21,4],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[22,1],[15,0],[15,3],[38,1],[38,1],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,3],[40,1],[56,1],[56,1],[56,1],[56,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -85,13 +85,13 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-    console.log('exito con analisis');
+    console.log('\n\nexito al analizar');
 
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:$V0},{1:[3]},{5:[1,5]},{4:6,6:3,7:$V0},{7:[1,8],8:[1,7]},{1:[2,1]},{5:[2,2]},{7:[2,3]},{8:[1,9]},{7:[2,4]}],
-defaultActions: {5:[2,1],6:[2,2],7:[2,3],9:[2,4]},
+table: [o($V0,$V1,{3:1,4:2,6:3,8:4,9:5,10:7,14:$V2}),{1:[3]},{5:[1,8]},{5:[2,3],7:[1,9]},o($V3,[2,4],{11:10,16:$V4}),o($V3,[2,5],{10:12,8:13,14:$V2,16:$V1}),o($V0,$V5,{15:14,37:$V6}),o($V7,[2,7]),{1:[2,1]},o($V0,$V1,{6:3,8:4,9:5,10:7,4:16,14:$V2}),{12:17,13:18,14:[1,22],17:[1,21],18:19,19:20,20:$V8,21:23,22:25,24:$V9,25:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,33:$Vi,34:$Vj,35:$Vk,36:$Vl},o($Vm,[2,13],{16:[1,39]}),o($V7,[2,6]),{11:10,16:$V4},o($V0,[2,11]),{14:$Vn,19:47,20:$V8,21:42,22:25,24:$V9,25:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,33:$Vi,34:$Vj,35:$Vk,36:$Vl,38:40,40:41,54:$Vo,56:44,57:$Vp,58:$Vq},{5:[2,2]},o($V7,[2,8]),o($V7,[2,9]),o($V7,$V5,{15:49,37:$V6}),o($V7,$V5,{15:50,37:$V6}),o($V7,[2,14],{17:[1,51]}),o($Vr,[2,19]),o($Vr,[2,20]),{14:[1,52]},{23:[1,53]},{23:[2,22]},{23:[2,23]},{23:[2,24]},{23:[2,25]},{23:[2,26]},{23:[2,27]},{23:[2,28]},{23:[2,29]},{23:[2,30]},{23:[2,31]},{23:[2,32]},{23:[2,33]},{23:[2,34]},o($Vm,[2,12]),{39:[1,54]},{39:[2,37],41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC,52:$VD,53:$VE},{39:[2,38]},{14:$Vn,19:47,20:$V8,40:68,54:$Vo,56:44,57:$Vp,58:$Vq},o($VF,[2,53]),o($VF,[2,54]),o($VF,[2,55]),o($VF,[2,56]),o($VF,[2,57]),o($V7,[2,16]),o($V7,[2,17]),o($V7,[2,15]),o([5,7,14,16,37,39,41,42,43,44,45,46,47,48,49,50,51,52,53,55],[2,18]),{23:[1,69]},o($V7,[2,36]),{14:$Vn,19:47,20:$V8,40:70,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:71,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:72,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:73,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:74,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:75,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:76,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:77,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:78,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:79,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:80,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:81,54:$Vo,56:44,57:$Vp,58:$Vq},{14:$Vn,19:47,20:$V8,40:82,54:$Vo,56:44,57:$Vp,58:$Vq},{41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC,52:$VD,53:$VE,55:[1,83]},{14:[1,84]},o($VG,[2,39],{47:$Vy,48:$Vz}),o($VG,[2,40],{47:$Vy,48:$Vz}),o($VG,[2,41],{47:$Vy,48:$Vz}),o($VG,[2,42],{47:$Vy,48:$Vz}),o($VG,[2,43],{47:$Vy,48:$Vz}),o($VG,[2,44],{47:$Vy,48:$Vz}),o($VF,[2,45]),o($VF,[2,46]),o($VH,[2,47],{41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,51:$VC,52:$VD,53:$VE}),o($VH,[2,48],{41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,51:$VC,52:$VD,53:$VE}),o($VI,[2,49],{41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz}),o($VI,[2,50],{41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz}),o($VI,[2,51],{41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz}),o($VF,[2,52]),o([5,7,14,16,37,39],[2,21])],
+defaultActions: {8:[2,1],16:[2,2],26:[2,22],27:[2,23],28:[2,24],29:[2,25],30:[2,26],31:[2,27],32:[2,28],33:[2,29],34:[2,30],35:[2,31],36:[2,32],37:[2,33],38:[2,34],42:[2,38]},
 parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -239,7 +239,7 @@ parse: function parse(input) {
     return true;
 }};
 
-
+//metodos o atributos 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -572,17 +572,17 @@ case 0:/*espacio en blanco*/
 break;
 case 1:
     console.log('Detecto diagonal'); 
-     return 7; 
+     return 16; 
 
 break;
 case 2:
     console.log('Detecto punto');
-     return 'punto'; 
+     return 17; 
 
 break;
 case 3:
     console.log('Detecto arroba');
-     return 'arroba'; 
+     return 20; 
 
 break;
 case 4:
@@ -612,12 +612,12 @@ case 8:
 break;
 case 9:
     console.log('Detecto ancestor-or-self');
-     return 'ancestor-or-self'; 
+     return 25; 
 
 break;
 case 10:
     console.log('Detecto attribute');
-     return 'attribute'; 
+     return 26; 
 
 break;
 case 11:
@@ -627,155 +627,175 @@ case 11:
 break;
 case 12:
     console.log('Detecto descendant');
-     return 'descendant'; 
+     return 28; 
 
 break;
 case 13:
     console.log('Detecto descendant-or-self');
-     return 'descendant-or-self'; 
+     return 29; 
 
 break;
 case 14:
     console.log('Detecto following');
-     return 'following'; 
+     return 30; 
 
 break;
 case 15:
     console.log('Detecto following-sibling');
-     return 'following-sibling'; 
+     return 31; 
 
 break;
 case 16:
     console.log('Detecto namespace');
-     return 'namespace'; 
+     return 32; 
 
 break;
 case 17:
     console.log('Detecto parent');
-     return 'parent'; 
+     return 33; 
 
 break;
 case 18:
     console.log('Detecto preceding');
-     return 'preceding'; 
+     return 34; 
 
 break;
 case 19:
     console.log('Detecto preceding-sibling');
-     return 'preceding-sibling'; 
+     return 35; 
 
 break;
 case 20:
     console.log('Detecto self');
-     return 'self';
+     return 36;
 
 break;
 case 21:
     console.log('Detecto operador_o');
-    return 'operador_o';
+    return 7;
 
 break;
 case 22:
     console.log('Detecto suma');
-    return 'suma';
+    return 49;
 
 break;
 case 23:
     console.log('Detecto resta');
-    return 'resta';
+    return 50;
 
 break;
 case 24:
     console.log('Detecto multiplicacion');
-    return 'multiplicacion';
+    return 51;
 
 break;
 case 25:
     console.log('Detecto division');
-    return 'division';
+    return 52;
 
 break;
 case 26:
     console.log('Detecto igual');
-    return 'igual';
+    return 41;
 
 break;
 case 27:
     console.log('Detecto diferente');
-    return 'diferente';
+    return 42;
 
 break;
 case 28:
     console.log('Detecto menor');
-    return 'menor';
+    return 43;
 
 break;
 case 29:
     console.log('Detecto menor_igual');
-    return 'menor_igual';
+    return 44;
 
 break;
 case 30:
     console.log('Detecto mayor');
-    return 'mayor';
+    return 45;
 
 break;
 case 31:
     console.log('Detecto mayor_igual');
-    return 'mayor_igual';
+    return 46;
 
 break;
 case 32:
     console.log('Detecto or');
-    return 'or';
+    return 47;
 
 break;
 case 33:
     console.log('Detecto and');
-    return 'and';
+    return 48;
 
 break;
 case 34:
     // equivalente a %
     console.log('Detecto mod');
-    return 'mod';
+    return 53;
 
 break;
 case 35: 
-    console.log('Detecto PARENTESIS_ABIERTO'); 
-     return 'PARENTESIS_ABIERTO'; 
+    console.log('Detecto parentesis_abierto'); 
+     return 54; 
     
 break;
 case 36: 
-    console.log('Detecto PARENTESIS_CERRADO'); 
-     return 'PARENTESIS_CERRADO'; 
+    console.log('Detecto parentesis_cerrado'); 
+     return 55; 
     
 break;
 case 37: 
-    console.log('Detecto DOS_PUNTOS'); 
-     return 'DOS_PUNTOS'; 
+    console.log('Detecto corchete_abierto');
+    return 37; 
     
 break;
 case 38: 
-    console.log('Detecto DIGITO'); 
-     return 'DIGITO'; 
+    console.log('Detecto corchete_cerrado');
+     return 39; 
     
 break;
 case 39: 
-    console.log('Detecto identificador'); 
-     return 8; 
+    console.log('Detecto dos_puntos'); 
+     return 23; 
     
 break;
-case 40:return 5;
+case 40: 
+    console.log('Detecto digito'); 
+     return 58; 
+    
 break;
-case 41:     
-    errores.push(['Lexico','dato: '+yy_.yytext,'Linea '+yy_.yylloc.first_line,'columna '+yy_.yylloc.first_column]);
+case 41: 
+    console.log('Detecto identificador'); 
+     return 14; 
+    
+break;
+case 42:
+    console.log('Salto linea '+yy_.yytext);
+
+break;
+case 43:
+    console.log('string '+yy_.yytext);
+    return 57;
+
+break;
+case 44:return 5;
+break;
+case 45:     
+    //errores.push(['Lexico','dato: '+yy_.yytext,'Linea '+yy_.yylloc.first_line,'columna '+yy_.yylloc.first_column]);
+    console.log('error lexico '+yy_.yytext);
     
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:\/)/,/^(?:\.)/,/^(?:@)/,/^(?:node\b)/,/^(?:text\b)/,/^(?:last\b)/,/^(?:position\b)/,/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:namespace\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:\|)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:div\b)/,/^(?:=)/,/^(?:!=)/,/^(?:<)/,/^(?:<=)/,/^(?:>)/,/^(?:>)/,/^(?:or\b)/,/^(?:and\b)/,/^(?:mod\b)/,/^(?:\()/,/^(?:\))/,/^(?::)/,/^(?:[1-9][0-9]*(\.0*[1-9]*0*)?\b)/,/^(?:[a-zA-Z]([a-zA-Z]|[1-9])*\b)/,/^(?:$)/,/^(?:.)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:\/)/,/^(?:\.)/,/^(?:@)/,/^(?:node\b)/,/^(?:text\b)/,/^(?:last\b)/,/^(?:position\b)/,/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:namespace\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:\|)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:div\b)/,/^(?:=)/,/^(?:!=)/,/^(?:<)/,/^(?:<=)/,/^(?:>)/,/^(?:>)/,/^(?:or\b)/,/^(?:and\b)/,/^(?:mod\b)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?::)/,/^(?:[1-9][0-9]*(\.0*[1-9]*0*)?\b)/,/^(?:\w+)/,/^(?:&&[^\n]*)/,/^(?:"[^"\""]*")/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45],"inclusive":true}}
 });
 return lexer;
 })();
