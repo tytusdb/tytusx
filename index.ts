@@ -55,12 +55,7 @@ function InterpretarCodigo() {
     for(let aux of listaObjetos){
         aux.agregarTDS(tsGlobal,aux);
     }
-    
-    //console.log(tds_xml_persistente);
-    //editorsalida.setValue(listaObjetos);
-    //console.log(tsGlobal);
-    //console.log(erroreslexicos);
-    //console.log(erroressintacticos);
+
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
   } catch (error) {
     editorsalida.setValue("");
@@ -68,6 +63,10 @@ function InterpretarCodigo() {
   }
 }
 
+function interpretarCodigoXMLdesc(){
+  var entrada = editorentrada.getValue();
+  listaObjetos = gramatica_xml_desc.parse(entrada);
+}
 function MostrarTDS_XML(){
   try{
     graficat_tds_xml = [];
