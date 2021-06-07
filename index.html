@@ -34,6 +34,28 @@
     <div class="container-fluid">
 
         <div class="row">
+            <!-- PESTAÑA ARCHIVO -->
+
+            <div class="btn-group" role="group">
+                <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ARCHIVO
+                </button>
+                <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <button type="button" class="btn btn-outline-danger" id="abrirr"
+                        onclick="MostrarErroresLexicosXML();location.href='#tberror';">Abrir</button>
+                    <button type="button" class="btn btn-outline-danger" id="guardarr"
+                        onclick="erroreslexicos_ejecucion();location.href='#tberror';">Guardar</button>
+                    <button type="button" class="btn btn-outline-danger" id="cambios"
+                        onclick="erroreslexicos_ejecucion();location.href='#tberror';">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-outline-primary" id="traducir" onclick="interpretarxpath()">XPATH</button>
+
+
             <button type="button" class="btn btn-outline-primary" id="traducir"
                 onclick="interpretarCodigoXMLdesc()">XML</button>
             <button type="button" class="btn btn-outline-success" id="ejecutar" onclick="">Ejecutar</button>
@@ -285,6 +307,7 @@
     <script src="dist/Estructuras/TablaSimbolos/NodoTablaSimbolo.js"></script>
     <script src="Gramatica/gramatica_xml_desc.js"></script>
     <script src="Gramatica/gramatica.js"></script>
+    <script src="Gramatica/gramatica_xpath.js"></script>
     <script src="dist/index.js"></script>
 
     <!-- Fin Importaciones -->
