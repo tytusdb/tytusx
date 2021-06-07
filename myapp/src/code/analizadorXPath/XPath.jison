@@ -2,9 +2,10 @@
 %{
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {ExpOr,ExpAnd} = require("./Expresion/Logical");
-  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp,CaminoInverso} = require("./Expresion/Expresiones");
+  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
-  const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling } = require('./Expresion/axes')
+  const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
+  const { CaminoInverso,Parent } = require('./Expresion/axes')
 %}
 
 /* Definición Léxica */
@@ -34,6 +35,11 @@
 "following-sibling" return "RFOLLOWSIBLING"
 "following" return "RFOLLOW"
 "namespace" return "RNAMESPACE"
+"parent" return "RPARENT"
+"ancestor-or-self" return "RANCESTORORSELF"
+"ancestor" return "RANCESTOR"
+"preceding-sibling" return "RPRECEDSIBLING"
+"preceding" return "RPRECED"
 
 ("."[0-9]+)|([0-9]+"."[0-9]+) 				    return "DECIMAL"
 [0-9]+      								              return "INTEGER"
@@ -189,7 +195,7 @@ PathExpr
 ;
 
 RelativePathExpr  
-  : StepExpr                              { $$ = []; $$.push($1); }
+  : StepExpr                              { $$ = []; $$.push($1) }
 	| RelativePathExpr BARRA StepExpr       { $$ = $1; $3.tipo=TipoPath.ABS; $$.push($3) }
 	| RelativePathExpr DOBLEBARRA StepExpr  { $$ = $1; $3.tipo=TipoPath.REL; $$.push($3) }
 ;
@@ -218,18 +224,18 @@ ForwardStep
 ;
 
 AbbrevForwardStep 
-  : ARROBA NameTest { $$=new Atributo($2) }
-  | NameTest        { $$=new Camino($1) }
+  : ARROBA NameTest { $$=new Atributo($2,[],TipoPath.ABS) }
+  | NameTest        { $$=new Camino($1,[],TipoPath.ABS) }
 ;
 
 ForwardAxis
-  : RCHILD DOBLEDOSPUNTOS         { $$=new Child() }
-  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant() }
-  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute() }
-  | RSELF DOBLEDOSPUNTOS          { $$=new Self() }
-  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf() }
-  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling() }
-  | RFOLLOW DOBLEDOSPUNTOS        {}
+  : RCHILD DOBLEDOSPUNTOS         { $$=new Child(null,[],TipoPath.ABS) }
+  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant(null,[],TipoPath.ABS) }
+  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute(null,[],TipoPath.ABS) }
+  | RSELF DOBLEDOSPUNTOS          { $$=new Self(null,[],TipoPath.ABS) }
+  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf(null,[],TipoPath.ABS) }
+  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling(null,[],TipoPath.ABS) }
+  | RFOLLOW DOBLEDOSPUNTOS        { $$=new Follow(null,[],TipoPath.ABS) }
   | RNAMESPACE DOBLEDOSPUNTOS     {}
 ;
 
@@ -251,15 +257,24 @@ Wildcard
 
 //Faltan las formas no abrevidas
 ReverseStep 
-  :  AbbrevReverseStep  { $$=$1 }
+  :  AbbrevReverseStep    { $$=$1 }
+  |  ReverseAxis NameTest { $$=$1  }
 ;
 
 AbbrevReverseStep 
-  : DOBLEPUNTO  { $$=new CaminoInverso($1) }
+  : DOBLEPUNTO  { $$=new CaminoInverso("*",[],TipoPath.ABS) }
+;
+
+ReverseAxis
+  : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS) }
+  | RANCESTOR DOBLEDOSPUNTOS          {}
+  | RPRECEDSIBLING DOBLEDOSPUNTOS     {}
+  | RPRECED DOBLEDOSPUNTOS            {}
+  | RANCESTORORSELF DOBLEDOSPUNTOS    {}
 ;
 
 PostfixExpr   
-    : PrimaryExpr               { $$=$1 }
+  : PrimaryExpr               { $$=$1 }
 	| PrimaryExpr PostfixExprL  { $$=$1 }
 ;
 
@@ -268,7 +283,7 @@ PostfixExprL
     : Predicate                 { $$=$1 }
   //| ArgumentList
   //| Lookup
-	| PostfixExprL Predicate       { $$=$1+$2 }
+	  | PostfixExprL Predicate       { $$=$1+$2 }
   //| PostfixExprL ArgumentList
   //| PostfixExprL Lookup
 ;
@@ -285,7 +300,7 @@ PrimaryExpr
 ;
 
 Literal     
-    : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1) }
+  : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1) }
 	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1) }
 	| CADENA                    { $$=new Literal(Tipo.STRING,$1) }
 ;
