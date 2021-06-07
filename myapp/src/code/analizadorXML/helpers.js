@@ -15,6 +15,10 @@ class Objeto {
             this.texto = hijos
         }
     }
+
+    setTipo(tipo){
+        this.tipo = tipo.replace('</','')
+    }
 }
 
 class Atributo {
@@ -27,8 +31,12 @@ class Atributo {
     }
 }
 
+/*
 const _Objeto = Objeto
 export { _Objeto as Objeto }
 const _Atributo = Atributo
 export { _Atributo as Atributo }
+*/
 
+exports.Objeto = Objeto
+exports.Atributo = Atributo
