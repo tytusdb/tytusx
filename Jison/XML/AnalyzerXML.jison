@@ -5,11 +5,15 @@
 %%
 \s+                             //Ignorar espacios
 ">"                             {this.begin('textTag'); return 'greater_than';}
-<textTag>"<"                    {this.begin('INITIAL');return 'less_than';}
+<textTag>"<"                    {this.begin('INITIAL'); return 'less_than';}
 <textTag>\s+                    //ignorar
-<textTag>[^<]+                  {return 'textTag';}
+<textTag>"&lt;"                 {return "lt";}
+<textTag>"&gt;"                 {return "gt";}
+<textTag>"&amp;"                {return "amp";}
+<textTag>"&apos;"               {return "apos";}
+<textTag>"&quot;"               {return "quot";}
+<textTag>[^<&]+                 {return 'textTag';}
 <textTag><<EOF>>                {return 'EOF';}
-
 
 "<"                             {return 'less_than';}
 
@@ -23,7 +27,7 @@
 "="                             {return 'assign';}
 "/"                             {return 'slash'}
 
-(["][^"\""]+["])|(['][^']+['])    {return 'value'}
+(["][^"\""]+["])|(['][^']+['])  {return 'value'}
 \w+                             {return 'identifier'}
 
 <<EOF>>                         { return 'EOF'; }
@@ -84,8 +88,22 @@ ATTRIB
 ;
 
 TEXTTAG
-    : textTag       {$$ = $1;}
-    |               {$$ = null;}
+    : TEXT_TAG_CHARS        {$$ = $1;}
+    |                       {$$ = null;}
+;
+
+TEXT_TAG_CHARS
+    : TEXT_TAG_CHARS TEXT_TAG_CHAR      {$$ = $1 + $2;}
+    | TEXT_TAG_CHAR {$$ = $1;}
+;
+
+TEXT_TAG_CHAR
+    : lt           {$$ = "<";}
+    | gt           {$$ = ">";}
+    | amp          {$$ = "&";}
+    | apos         {$$ = "'";}
+    | quot         {$$ = "\"";}
+    | textTag      {$$ = $1;}
 ;
 
 IDENTIFIER
