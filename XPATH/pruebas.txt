@@ -42,3 +42,37 @@
 
 |/bookstore/book/title/..[@category="web"]
 
+|/bookstore/book/title[ancestor::book[title="Learning XML"]]
+
+|bookstore/book/title/parent::book[@category="web"]
+
+|./child::eshta[marta="juan"][pedro="juan"]
+
+|/bookstore/book[@category="web"][child::title[.="Learning XML"]]
+
+
+|//book/descendant::author[.="James"]
+
+|//book[descendant::author]
+
+|//book/author[.]
+
+|//book/author[author=("J")]
+
+|bookstore/book/title/.
+
+|bookstore/book/*
+
+|//@*
+
+|//@year[.=1969]/../../autor
+
+|../fechaPublicacion/@year
+
+|//titulo[../fechaPublicacion/@year=//@year[../../titulo="La vida está en otra parte"]]
+
+|//libro[autor=//libro[titulo="Pantaleón y las visitadoras"]/autor]/titulo
+
+|//autor[../fechaPublicacion/@year=1969]
+
+|//libro[autor=//libro[titulo="Pantaleón y las visitadoras"]/autor/textl]/titulo

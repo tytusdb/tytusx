@@ -29,7 +29,7 @@
 }
 
 "text" {
-    console.log('Detecto node');
+    console.log('Detecto text');
      return 'text'; 
 }
 
@@ -272,7 +272,7 @@ CONSULTAS_XPATH
 CONSULTA_XPATH
     : RELATIVA
     | EXPRESIONES_RUTA
-    | punto EXPRESIONES_RUTA
+    | PUNTOS EXPRESIONES_RUTA
 ;
 
 EXPRESIONES_RUTA
@@ -282,34 +282,39 @@ EXPRESIONES_RUTA
 
 EXPRESION_RUTA
     : RELATIVA DIAGONALES ACCESORES
-    | RELATIVA DIAGONALES PUNTOS PREDICADO
+    | RELATIVA DIAGONALES PUNTOS OPCIONAL_PREDICADO
 ;
 
 RELATIVA :
-    | identificador PREDICADO
-    ;
+    | identificador OPCIONAL_PREDICADO
+;
 
-DIAGONALES : diagonal diagonal
+DIAGONALES
+    : diagonal diagonal
     | diagonal
-    ;
+;
 
 PUNTOS : punto
     | punto punto
-    ;
+;
 
-ACCESORES : ID PREDICADO
-    | ATRIBUTO PREDICADO
-    ;
+ACCESORES
+    : ID OPCIONAL_PREDICADO
+    | ATRIBUTO OPCIONAL_PREDICADO
+    | multiplicacion
+;
 
-ATRIBUTO : arroba identificador
-    ;
+ATRIBUTO
+    : arroba identificador
+    | arroba multiplicacion
+;
 
 ID : identificador
     | EJE
-    ;
+;
 
 EJE : EJES dos_puntos dos_puntos identificador
-    ;
+;
 
 EJES : ancestor
     | ancestor-or-self
@@ -323,9 +328,15 @@ EJES : ancestor
     | preceding
     | preceding-sibling
     | self
-    ;
+;
 
-PREDICADO : | corchete_abierto FILTRO corchete_cerrado
+OPCIONAL_PREDICADO : | PREDICADOS
+;
+
+PREDICADOS : PREDICADOS PREDICADO | PREDICADO
+;
+
+PREDICADO : corchete_abierto FILTRO corchete_cerrado
 ;
 
 FILTRO
@@ -337,7 +348,7 @@ FILTRO
     | EXPR menor_igual EXPR
     | FILTRO and FILTRO
     | FILTRO or FILTRO
-    | EJE
+    | EJE OPCIONAL_PREDICADO
     | EXPR
 ;
 
@@ -351,15 +362,9 @@ EXPR
     | TIPOS
 ;
 
-/*
-No se si sirva de esta manera de accesores igual a operaciones, 
-como en accesores siguie de predicado se puede hacer otr predicado 
-o no venir nada.
-[id|@atributo = string] | [id|@atributo[id|@atributo]=string]
-*/
-
 TIPOS : string
     | digito
     | ATRIBUTO
-    | identificador
+    | PUNTOS
+    | CONSULTA_XPATH
 ;
