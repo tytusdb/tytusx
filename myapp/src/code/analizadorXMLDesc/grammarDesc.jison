@@ -102,7 +102,7 @@ OBJETOGENERAL
 ;
 
 SUB_OBJETOGENERAL
-    : LISTA_ATRIBUTOS CIERRE_ETIQUETAINICIO                   { $$=$2; $$.Objeto.atributos=$1;  }
+    : LISTA_ATRIBUTOS CIERRE_ETIQUETAINICIO                   { $$=$2; $$.atributos=$1;  }
     | CIERRE_ETIQUETAINICIO                                   { $$=$1; }
 ;
 

@@ -108,7 +108,7 @@ case 8:
  $$[$0].linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo)? $$[$0]:null 
 break;
 case 9:
- this.$=$$[$0]; this.$.Objeto.atributos=$$[$0-1];  
+ this.$=$$[$0]; this.$.atributos=$$[$0-1];  
 break;
 case 10:
  this.$=$$[$0]; 

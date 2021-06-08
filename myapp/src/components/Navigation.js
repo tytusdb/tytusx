@@ -12,38 +12,37 @@ class Navigation extends React.Component{
         this.state = {
             OutputTextarea: "",
             XMLTextarea: "",
-            InputTextarea: ""
+            InputTextarea: "",
+            XML: {
+                tipo : '',
+                texto : '',
+                atributos : [],
+                hijos : []
+            },
+            datos: {
+                nodes: [
+                    { id: 1, label: 'Node 1' },
+                    { id: 2, label: 'Node 2' },
+                    { id: 3, label: 'Node 3' },
+                    { id: 4, label: 'Node 4' },
+                    { id: 5, label: 'Node 5' }
+                ],
+                edges: [
+                    { from: 1, to: 2 },
+                    { from: 1, to: 3 },
+                    { from: 2, to: 4 },
+                    { from: 2, to: 5 }
+                ]
+            }
         }
         
+        
+
         this.fileInput = React.createRef();
         this.handleSubmit = this.handleSubmit.bind(this);
 
     }
 
-    
-
-    datos = {
-        nodes: [
-            { id: 1, label: 'Node 1' },
-            { id: 2, label: 'Node 2' },
-            { id: 3, label: 'Node 3' },
-            { id: 4, label: 'Node 4' },
-            { id: 5, label: 'Node 5' }
-        ],
-        edges: [
-            { from: 1, to: 2 },
-            { from: 1, to: 3 },
-            { from: 2, to: 4 },
-            { from: 2, to: 5 }
-        ]
-    }
-
-    XML = {
-        tipo : '',
-        texto : '',
-        atributos : [],
-        hijos : []
-    }
 
     setText(){
         console.log("setText Button clicked");
@@ -51,16 +50,23 @@ class Navigation extends React.Component{
         if(text=="") return
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
-        var respuesta=funcion.Ejecutar(this.XML);
+        var respuesta=funcion.Ejecutar(this.state.XML);
         this.setState({OutputTextarea: respuesta});         
+    }
+
+    xmlDesc(){
+        var x = this.state.XMLTextarea;
+        var analizadorXMLDesc = require('../code/analizadorXMLDesc/analizadorXMLDesc');
+        var resultado = analizadorXMLDesc.Ejecutar(x);
+        this.setState({XML:resultado})
     }
 
     
     actualizar(){
-        var x = document.getElementById('XMLTextarea').value;
+        var x = this.state.XMLTextarea;
         var analizadorXML = require('../code/analizadorXML/analizadorXML');
         var resultado = analizadorXML.Ejecutar(x);
-        this.XML = resultado
+        this.setState({XML:resultado})
     }
 
     refresh(){
@@ -95,7 +101,7 @@ class Navigation extends React.Component{
         if(content=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
         var resultado = analizadorXML.Ejecutar(content)
-        this.XML = resultado
+        this.setState({XML:resultado})
 
     } 
 
@@ -104,7 +110,7 @@ class Navigation extends React.Component{
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
        
         var resultado = analizadorXML.Ejecutar(e.target.value)
-        this.XML = resultado
+        this.setState({XML:resultado})
     }
 
 
@@ -138,16 +144,23 @@ class Navigation extends React.Component{
             <div className="container">
                 <div className="row">
                     <div className="col">
-                        <button type="submit" className="btn btn-primary btn-lg" onClick={() => this.setText() }>Compilar</button>
+                        <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.xmlDesc() }>XML Desc</button>
                     </div>
                     <div className="col">
-                        <button type="button" className="btn btn-primary btn-lg" onClick={this.actualizar}>Actualizar</button>
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Compilar</button>
                     </div>
                     <div className="col">
-                        <Link to= {{ pathname: "/mywebsite/reporte", datos:this.datos }}>
+                        <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }>Actualizar</button>
+                    </div>
+                    <div className="col">
+                        <Link to= {{ pathname: "/mywebsite/reporte", datos:this.state.datos }}>
                             <button type="button" className="btn btn-primary btn-lg">Reportes</button>
-                        </Link>
-                        
+                        </Link>                        
+                    </div>
+                    <div className="col">
+                        <Link to= {{ pathname: "/mywebsite/reporteTabla", XML:this.state.XML }}>
+                            <button type="button" className="btn btn-primary btn-lg">Tabla Simbolos</button>
+                        </Link>                        
                     </div>
                 </div>
             </div>
