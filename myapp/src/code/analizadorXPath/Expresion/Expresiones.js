@@ -23,7 +23,7 @@ export class Literal extends NodoExp
 
     getValor()
     {
-        return this
+        return [this]
     }
 }
 
@@ -100,21 +100,5 @@ export class AxisStepExp
             }
         }
         return retorno
-    }
-}
-
-export class CaminoInverso
-{  
-    constructor(nombre)
-    {
-        this.nombre=nombre
-    }
-
-    getValor(Pila,Entorno,tipo)
-    {
-        var Retorno = []
-        var temp = Pila.pop()
-        Retorno.push(new Nodo(Tipo.NODO,temp,Pila,Entorno.texto))
-        return Retorno
     }
 }
