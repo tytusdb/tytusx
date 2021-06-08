@@ -72,12 +72,12 @@
   }
 */
 var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,4],$V2=[2,5,7],$V3=[1,8],$V4=[1,9],$V5=[14,18],$V6=[1,14],$V7=[14,15,18],$V8=[1,25],$V9=[1,26],$Va=[1,27],$Vb=[2,7],$Vc=[7,15,23,24];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,4],$V2=[2,5,7],$V3=[1,8],$V4=[1,9],$V5=[15,19],$V6=[1,14],$V7=[15,16,19],$V8=[1,25],$V9=[1,26],$Va=[1,27],$Vb=[2,7],$Vc=[7,16,24,25];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"LISTA_PRINCIPAL":4,"EOF":5,"LISTA":6,"menorque":7,"interroga":8,"token_xml":9,"token_version":10,"igual":11,"cadena":12,"token_encoding":13,"mayorque":14,"identificador":15,"LATRIBUTOS":16,"OBJETOS":17,"diagonal":18,"PARRAFO":19,"ATRIBUTOS":20,"ATRIBUTO":21,"VALORES":22,"decimal":23,"entero":24,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"menorque",8:"interroga",9:"token_xml",10:"token_version",11:"igual",12:"cadena",13:"token_encoding",14:"mayorque",15:"identificador",18:"diagonal",23:"decimal",24:"entero"},
-productions_: [0,[3,2],[4,2],[4,1],[6,11],[6,9],[6,9],[6,5],[6,1],[16,1],[16,0],[20,2],[20,1],[21,3],[17,2],[17,1],[19,2],[19,1],[22,1],[22,1],[22,1]],
+symbols_: {"error":2,"ini":3,"LISTA_PRINCIPAL":4,"EOF":5,"LISTA":6,"menorque":7,"?":8,"xml":9,"version":10,"igual":11,"cadena":12,"encoding":13,"interroga":14,"mayorque":15,"identificador":16,"LATRIBUTOS":17,"OBJETOS":18,"diagonal":19,"PARRAFO":20,"ATRIBUTOS":21,"ATRIBUTO":22,"VALORES":23,"decimal":24,"entero":25,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"menorque",8:"?",9:"xml",10:"version",11:"igual",12:"cadena",13:"encoding",14:"interroga",15:"mayorque",16:"identificador",19:"diagonal",24:"decimal",25:"entero"},
+productions_: [0,[3,2],[4,2],[4,1],[6,11],[6,9],[6,9],[6,5],[6,1],[17,1],[17,0],[21,2],[21,1],[22,3],[18,2],[18,1],[20,2],[20,1],[23,1],[23,1],[23,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -113,19 +113,19 @@ break;
 case 5:
  
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
-            this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],$$[$0-1],true); 
+            this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],$$[$0-1], true); 
         
 break;
 case 6:
  
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
-            this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],$$[$0-1],true); 
+            this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],$$[$0-1], true); 
         
 break;
 case 7:
  
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS] />;\n');
-            this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],$$[$0-3],false); 
+            this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],$$[$0-3], false); 
         
 break;
 case 8:
@@ -208,7 +208,7 @@ case 20:
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:$V1},{1:[3]},{2:$V0,5:[1,6],6:7,7:$V1},o($V2,[2,3]),{8:$V3,15:$V4},o($V2,[2,8]),{1:[2,1]},o($V2,[2,2]),{9:[1,10]},o($V5,[2,10],{16:11,20:12,21:13,15:$V6}),{10:[1,15]},{14:[1,16],18:[1,17]},o($V5,[2,9],{21:18,15:$V6}),o($V7,[2,12]),{11:[1,19]},{11:[1,20]},{2:$V0,6:23,7:$V1,15:$V8,17:21,19:22,22:24,23:$V9,24:$Va},{14:[1,28]},o($V7,[2,11]),{12:[1,29]},{12:[1,30]},{2:$V0,6:32,7:[1,31]},{7:[1,33],15:$V8,22:34,23:$V9,24:$Va},o($Vb,[2,15]),o($Vc,[2,17]),o($Vc,[2,18]),o($Vc,[2,19]),o($Vc,[2,20]),o($V2,$Vb),o($V7,[2,13]),{13:[1,35]},{8:$V3,15:$V4,18:[1,36]},o($Vb,[2,14]),{18:[1,37]},o($Vc,[2,16]),{11:[1,38]},{15:[1,39]},{15:[1,40]},{12:[1,41]},{14:[1,42]},{14:[1,43]},{8:[1,44]},o($V2,[2,5]),o($V2,[2,6]),{14:[1,45]},o($V2,[2,4])],
+table: [{2:$V0,3:1,4:2,6:3,7:$V1},{1:[3]},{2:$V0,5:[1,6],6:7,7:$V1},o($V2,[2,3]),{8:$V3,16:$V4},o($V2,[2,8]),{1:[2,1]},o($V2,[2,2]),{9:[1,10]},o($V5,[2,10],{17:11,21:12,22:13,16:$V6}),{10:[1,15]},{15:[1,16],19:[1,17]},o($V5,[2,9],{22:18,16:$V6}),o($V7,[2,12]),{11:[1,19]},{11:[1,20]},{2:$V0,6:23,7:$V1,16:$V8,18:21,20:22,23:24,24:$V9,25:$Va},{15:[1,28]},o($V7,[2,11]),{12:[1,29]},{12:[1,30]},{2:$V0,6:32,7:[1,31]},{7:[1,33],16:$V8,23:34,24:$V9,25:$Va},o($Vb,[2,15]),o($Vc,[2,17]),o($Vc,[2,18]),o($Vc,[2,19]),o($Vc,[2,20]),o($V2,$Vb),o($V7,[2,13]),{13:[1,35]},{8:$V3,16:$V4,19:[1,36]},o($Vb,[2,14]),{19:[1,37]},o($Vc,[2,16]),{11:[1,38]},{16:[1,39]},{16:[1,40]},{12:[1,41]},{15:[1,42]},{15:[1,43]},{14:[1,44]},o($V2,[2,5]),o($V2,[2,6]),{15:[1,45]},o($V2,[2,4])],
 defaultActions: {6:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -787,9 +787,9 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:return 7;
 break;
-case 1:return 14;
+case 1:return 15;
 break;
-case 2:return 18;
+case 2:return 19;
 break;
 case 3:return 11;
 break;
@@ -797,37 +797,29 @@ case 4:return 'para';
 break;
 case 5:return 'parc';
 break;
-case 6:return 8; 
+case 6:
 break;
-case 7:return 9;
+case 7:
 break;
-case 8:return 10;
+case 8:return 24;
 break;
-case 9:return 13;
+case 9:return 25;
 break;
-case 10:
+case 10: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 12; 
 break;
-case 11:
+case 11:return 16;
 break;
-case 12:return 23;
+case 12:return 5;
 break;
-case 13:return 24;
-break;
-case 14: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 12; 
-break;
-case 15:return 15;
-break;
-case 16:return 5;
-break;
-case 17: //console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+case 13: //console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                         let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
                         erroreslexicos.setError(errores);
                     
 break;
 }
 },
-rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],"inclusive":true}}
+rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
 });
 return lexer;
 })();

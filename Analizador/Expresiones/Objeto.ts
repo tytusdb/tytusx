@@ -83,13 +83,7 @@ class Objeto{
         }
 
         if(objeto.texto != ""){       
-            if(this.identificador == this.identificador_cierre){
-                ts.setSimbolo(objeto.identificador, objeto.texto, objeto.tipo, objeto.identificador, this.tipoEtiqueta);
-            }else{
-                let errores = new NodoError('', 'La etiqueta que abre no coincide con etiqueta de cierre', 'Semantico', 'XML', this.linea, this.columna);
-                erroressintacticos.setError(errores);
-            }     
-            
+                ts.setSimbolo(objeto.identificador, objeto.texto, objeto.tipo, objeto.identificador, this.tipoEtiqueta);                
         }
                         
         for(let i:number = 0; i < objeto.listaObjetos.length; i++){

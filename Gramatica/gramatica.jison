@@ -1,4 +1,3 @@
-
 /* Definición Léxica */
 %lex
 %options case-insensitive
@@ -16,10 +15,7 @@
 "="					return 'igual';
 "("					return 'para';
 ")"					return 'parc';
-"?"                 return 'interroga'; 
-"xml"               return 'token_xml';
-"version"           return 'token_version';
-"encoding"          return 'token_encoding';
+
 
 
 
@@ -80,23 +76,22 @@ LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     {
  ;
 
 
-LISTA:
-     menorque interroga token_xml token_version igual cadena token_encoding igual cadena interroga mayorque{
+LISTA: menorque '?' 'xml' 'version' igual cadena 'encoding' igual cadena interroga mayorque{
             rg_xml.setValor('LISTA -> <?xml version="CADENA" encoding="CADENA"?>;\n');
             codificacion = $8;
             codificacionversion = $5;
      }
-    |menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { 
+    | menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { 
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
-            $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5,$8,true); 
+            $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5,$8, true); 
         }
     | menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal identificador mayorque { 
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
-            $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[],$8,true); 
+            $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[],$8, true); 
         }
     | menorque identificador LATRIBUTOS diagonal mayorque      { 
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS] />;\n');
-            $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2,false); 
+            $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2, false); 
         }
     | error { 
         /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);*/
@@ -157,5 +152,3 @@ VALORES : identificador {
             rg_xml.setValor('VALORES -> ENTERO;\n');
             $$ = $1; 
         };
-
-

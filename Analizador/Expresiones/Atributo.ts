@@ -27,8 +27,8 @@ class Atributo{
     }
 
     
-    agregarTDS(entorno:TablaSimbolos, atributo:Atributo,entornoactual:string, tipoEtiqueta:boolean){
-        entorno.setSimbolo(atributo.identificador, atributo.valor, atributo.tipo, entornoactual,tipoEtiqueta);
+    agregarTDS(entorno:TablaSimbolos, atributo:Atributo,entornoactual:string, tetiqueta:boolean){
+        entorno.setSimbolo(atributo.identificador, atributo.valor, atributo.tipo, entornoactual, tetiqueta);
     }
 
     graficarTDS(str:[],atibuto:Atributo, entornoactual:string){
