@@ -1,11 +1,24 @@
-class Objeto {
+class nodo {
+    constructor(linea,columna)
+    {
+        this.linea=linea
+        this.columna=columna
+    }
+}
+
+
+
+
+
+class Objeto extends nodo {
     tipo = ''
     texto = ''
     atributos = []
     hijos = []
     
     
-    constructor(tipo, atributos, hijos){
+    constructor(tipo, atributos, hijos, linea, columna){
+        super(linea,columna)
         this.tipo = tipo.replace('<','')
         this.atributos = atributos
         
@@ -21,11 +34,12 @@ class Objeto {
     }
 }
 
-class Atributo {
+class Atributo extends nodo {
     nombre =''
     valor = ''
 
-    constructor(nombre, valor){
+    constructor(nombre, valor, linea, columna){
+        super(linea,columna)
         this.nombre = nombre
         this.valor = valor
     }

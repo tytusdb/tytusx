@@ -72,8 +72,8 @@
 %% /* Definición de la gramática */
 
 ini
-	: LISTA_OBJETO EOF 									{ $$ = new helpers.Objeto("/",[],$1); return $$; }
-	| ETIQUETACONFIGURACION LISTA_OBJETO EOF			{ $$ = new helpers.Objeto("/",$1,$2); return $$; }
+	: LISTA_OBJETO EOF 									{ $$ = new helpers.Objeto("/",[],$1,this._$.first_line, this._$.first_column); return $$; }
+	| ETIQUETACONFIGURACION LISTA_OBJETO EOF			{ $$ = new helpers.Objeto("/",$1,$2,this._$.first_line, this._$.first_column); return $$; }
 ;
 
 LISTA_OBJETO
@@ -89,10 +89,10 @@ OBJETO
 
 OBJETODOBLE
 	: ETIQUETAABRE ETIQUETACIERRE						{
-			$$ = objetoCorrecto($1.tipo, $2) ? new helpers.Objeto($1.tipo, $1.atributos, []) : null;
+			$$ = objetoCorrecto($1.tipo, $2) ? new helpers.Objeto($1.tipo, $1.atributos, [], this._$.first_line, this._$.first_column) : null;
 		}
 	| ETIQUETAABRE LISTA_OBJETO ETIQUETACIERRE 			{ 
-			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, $1.atributos, $2) : null;
+			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, $1.atributos, $2, this._$.first_line, this._$.first_column) : null;
 		}
 ;
 
@@ -107,7 +107,7 @@ LISTA_ATRIBUTOSCONF
 ;
 
 ATRIBUTOCONF
-  : AtributoConf IgualAtributoConf ValorAtributoConf  { $$ = new helpers.Atributo($1,$3); }
+  : AtributoConf IgualAtributoConf ValorAtributoConf  { $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); }
 ;
 
 
@@ -121,8 +121,8 @@ ETIQUETACIERRE
 ;
 
 OBJETOSIMPLE
-	: InicioEtiquetaI FinEtiquetaI						{ $$ = new helpers.Objeto($1,[],[]);}
-	| InicioEtiquetaI LISTA_ATRIBUTOS FinEtiquetaI		{ $$ = new helpers.Objeto($1,$2,[]);}
+	: InicioEtiquetaI FinEtiquetaI						{ $$ = new helpers.Objeto($1,[],[],this._$.first_line, this._$.first_column);}
+	| InicioEtiquetaI LISTA_ATRIBUTOS FinEtiquetaI		{ $$ = new helpers.Objeto($1,$2,[],this._$.first_line, this._$.first_column);}
 ;
 
 LISTA_ATRIBUTOS
@@ -131,7 +131,7 @@ LISTA_ATRIBUTOS
 ;
 
 ATRIBUTO
-	: AtributoEtiqueta IgualAtributo ValorAtributo		{$$ = new helpers.Atributo($1,$3);}
+	: AtributoEtiqueta IgualAtributo ValorAtributo		{$$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column);}
 ;
 
 

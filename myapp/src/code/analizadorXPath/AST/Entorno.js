@@ -35,6 +35,18 @@ export const ColisionTipo =
   [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
 ]
 
+export const ColisionLogical = 
+[
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.BOOLEAN, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,    Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+]
+
+
 
 
 export const TipoPath = {

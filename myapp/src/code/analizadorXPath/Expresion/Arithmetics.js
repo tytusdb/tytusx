@@ -1,8 +1,7 @@
-import { Colision, ColisionTipo, Tipo } from "../AST/Entorno";
-var {Tipo, Colision} = require("../AST/Entorno");
+const { Colision, ColisionTipo } = require('../AST/Entorno')
 const { Literal } = require("./Expresiones");
 
-class Arithmetic {
+export class Arithmetic {
 
     constructor (izquierdo,op,derecho){
         this.op=op
@@ -19,7 +18,6 @@ class Arithmetic {
 
             // plano cartesiano entre valores izq y valores 
             for (var izq of valIzq){
-                var salir = false
                 for (var der of valDer){
                     var newValor = operar(izq, this.op, der)
                     if (newValor){
@@ -34,33 +32,33 @@ class Arithmetic {
             }
         }
         return retorno
-    }
+    } 
+}
 
-    operar(izq, op, der){
-        retorno = false
-        // validar tipos
-        if (Colision[izq.tipo][der.tipo]){
-            switch(op){
-                case "+":
-                    retorno =  izq.valor + der.valor
-                    break;
-                case "-":
-                    retorno = izq.valor - der.valor
-                    break;
-                case "*":
-                    retorno = izq.valor * der.valor
-                    break;
-                case "div":
-                    retorno = izq.valor / der.valor
-                    break;
-                case "mod":
-                    retorno = izq.valor % der.valor
-                    break;
-                case "idiv":
-                    retorno = Math.trunc(izq.valor / der.valor)
-                    break;
-            }   
-        }
-        return retorno
+function operar(izq, op, der){
+    var retorno = false
+    // validar tipos
+    if (Colision[izq.tipo][der.tipo]){
+        switch(op){
+            case "+":
+                retorno =  izq.valor + der.valor
+                break;
+            case "-":
+                retorno = izq.valor - der.valor
+                break;
+            case "*":
+                retorno = izq.valor * der.valor
+                break;
+            case "div":
+                retorno = izq.valor / der.valor
+                break;
+            case "mod":
+                retorno = izq.valor % der.valor
+                break;
+            case "idiv":
+                retorno = Math.trunc(izq.valor / der.valor)
+                break;
+        }   
     }
+    return retorno
 }
