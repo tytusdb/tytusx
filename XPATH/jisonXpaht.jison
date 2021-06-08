@@ -302,18 +302,33 @@ ACCESORES
     : ID OPCIONAL_PREDICADO
     | ATRIBUTO OPCIONAL_PREDICADO
     | multiplicacion
+    | NODE
+    | TEXT
+;
+
+TEXT : text parentesis_abierto parentesis_cerrado
+;
+
+NODE : node parentesis_abierto parentesis_cerrado
 ;
 
 ATRIBUTO
     : arroba identificador
     | arroba multiplicacion
+    | arroba NODE
 ;
 
 ID : identificador
     | EJE
 ;
 
-EJE : EJES dos_puntos dos_puntos identificador
+EJE : EJES dos_puntos dos_puntos ACCESORES_EJE
+;
+
+ACCESORES_EJE : identificador
+    | NODE
+    | TEXT
+    | multiplicacion
 ;
 
 EJES : ancestor
@@ -367,4 +382,7 @@ TIPOS : string
     | ATRIBUTO
     | PUNTOS
     | CONSULTA_XPATH
+    | last parentesis_abierto parentesis_cerrado
+    | position parentesis_abierto parentesis_cerrado
+    | TEXT
 ;

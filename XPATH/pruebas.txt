@@ -76,3 +76,17 @@
 |//autor[../fechaPublicacion/@year=1969]
 
 |//libro[autor=//libro[titulo="Pantaleón y las visitadoras"]/autor/textl]/titulo
+
+|/bookstore//node()
+
+|/bookstore/book/title/@node()
+
+|/bookstore/book[position()<3]
+
+|/bookstore/book[last()-1]
+
+|bookstore/book/child::*/child::price
+
+|bookstore/book/child::node()/child::price
+
+| /bookstore/book/title/self::title[.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.][.][.][.][.][.][.]/self::title[.]/../.
