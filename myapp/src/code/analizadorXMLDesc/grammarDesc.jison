@@ -102,13 +102,13 @@ OBJETOGENERAL
 ;
 
 SUB_OBJETOGENERAL
-    : LISTA_ATRIBUTOS CIERRE_ETIQUETAINICIO                   { $$=$2; $$.Objeto.atributos=$1;  }
+    : LISTA_ATRIBUTOS CIERRE_ETIQUETAINICIO                   { $$=$2; $$.atributos=$1;  }
     | CIERRE_ETIQUETAINICIO                                   { $$=$1; }
 ;
 
 CIERRE_ETIQUETAINICIO
   : CierreEtiquetaI LISTA_OBJETO_Epsilon ETIQUETACIERRE       { $$ = new helpers.Objeto("", [], $2); $$.setTipo($3); }
-  | FinEtiquetaI                                              { $$ = new helpers.Objeto("",[], $2) }
+  | FinEtiquetaI                                              { $$ = new helpers.Objeto("",[], []) }
 ;
 
 ETIQUETACIERRE

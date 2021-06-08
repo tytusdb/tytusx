@@ -108,7 +108,7 @@ case 8:
  this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo)? $$[$0]:null 
 break;
 case 9:
- this.$=$$[$0]; this.$.Objeto.atributos=$$[$0-1];  
+ this.$=$$[$0]; this.$.atributos=$$[$0-1];  
 break;
 case 10:
  this.$=$$[$0]; 
@@ -117,7 +117,7 @@ case 11:
  this.$ = new helpers.Objeto("", [], $$[$0-1]); this.$.setTipo($$[$0]); 
 break;
 case 12:
- this.$ = new helpers.Objeto("",[], $$[$01]) 
+ this.$ = new helpers.Objeto("",[], []) 
 break;
 case 13:
  this.$ = $$[$0-1]; 
