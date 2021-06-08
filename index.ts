@@ -37,6 +37,9 @@ let contador_tds:number=1;
 //Reporte Gramatical
 let rg_xml:ReporteGramatical_XML;
 
+//variable para almacenar encoding de salida
+let codificacion:string;
+
 function InterpretarCodigo() {
   tds_xml_persistente=[];
   var entrada = editorentrada.getValue();

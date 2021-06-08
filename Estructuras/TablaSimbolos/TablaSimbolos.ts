@@ -1,9 +1,10 @@
-function Simbolo(identificador:string, valor:any, tipo:Tipo, entorno:string){
+function Simbolo(identificador:string, valor:any, tipo:Tipo, entorno:string, tipoEtiqueta:boolean){
 	return{
 		identificador: identificador,
         valor:valor,
         tipo:tipo,
-        entorno:entorno
+        entorno:entorno,
+        tipoEtiqueta:tipoEtiqueta
 	}
 }
 
@@ -34,8 +35,8 @@ class TablaSimbolos
         
     }
 
-    setSimbolo(identificador:string, valor:any, tipo:Tipo, alcance:string){
-		const NuevoSimbolo = Simbolo(identificador, valor, tipo, alcance);
+    setSimbolo(identificador:string, valor:any, tipo:Tipo, alcance:string, tipoEtiqueta:boolean){
+		const NuevoSimbolo = Simbolo(identificador, valor, tipo, alcance, tipoEtiqueta);
 		this.simbolos.push(NuevoSimbolo);
     }
     

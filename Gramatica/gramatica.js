@@ -72,12 +72,12 @@
   }
 */
 var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,4],$V2=[2,5,7],$V3=[1,8],$V4=[2,7],$V5=[10,12],$V6=[1,12],$V7=[8,10,12],$V8=[1,21],$V9=[1,22],$Va=[1,23],$Vb=[7,8,19,20];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,4],$V2=[2,5,7],$V3=[1,8],$V4=[1,9],$V5=[14,18],$V6=[1,14],$V7=[14,15,18],$V8=[1,25],$V9=[1,26],$Va=[1,27],$Vb=[2,7],$Vc=[7,15,23,24];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"LISTA_PRINCIPAL":4,"EOF":5,"LISTA":6,"menorque":7,"identificador":8,"LATRIBUTOS":9,"mayorque":10,"OBJETOS":11,"diagonal":12,"PARRAFO":13,"ATRIBUTOS":14,"ATRIBUTO":15,"igual":16,"cadena":17,"VALORES":18,"decimal":19,"entero":20,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"menorque",8:"identificador",10:"mayorque",12:"diagonal",16:"igual",17:"cadena",19:"decimal",20:"entero"},
-productions_: [0,[3,2],[4,2],[4,1],[6,9],[6,9],[6,5],[6,1],[9,1],[9,0],[14,2],[14,1],[15,3],[11,2],[11,1],[13,2],[13,1],[18,1],[18,1],[18,1]],
+symbols_: {"error":2,"ini":3,"LISTA_PRINCIPAL":4,"EOF":5,"LISTA":6,"menorque":7,"interroga":8,"token_xml":9,"token_version":10,"igual":11,"cadena":12,"token_encoding":13,"mayorque":14,"identificador":15,"LATRIBUTOS":16,"OBJETOS":17,"diagonal":18,"PARRAFO":19,"ATRIBUTOS":20,"ATRIBUTO":21,"VALORES":22,"decimal":23,"entero":24,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"menorque",8:"interroga",9:"token_xml",10:"token_version",11:"igual",12:"cadena",13:"token_encoding",14:"mayorque",15:"identificador",18:"diagonal",23:"decimal",24:"entero"},
+productions_: [0,[3,2],[4,2],[4,1],[6,11],[6,9],[6,9],[6,5],[6,1],[16,1],[16,0],[20,2],[20,1],[21,3],[17,2],[17,1],[19,2],[19,1],[22,1],[22,1],[22,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -104,96 +104,103 @@ case 3:
                 
 break;
 case 4:
- 
-            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
-            this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],$$[$0-1]); 
-        
+
+            rg_xml.setValor('LISTA -> <?xml version="CADENA" encoding="CADENA"?>;\n');
+            codificacion = $$[$0-3];
+            codificacionversion = $$[$0-6];
+     
 break;
 case 5:
  
-            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
-            this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],$$[$0-1]); 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
+            this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],$$[$0-1],true); 
         
 break;
 case 6:
  
-            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS] />;\n');
-            this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],$$[$0-3]); 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
+            this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],$$[$0-1],true); 
         
 break;
 case 7:
+ 
+            rg_xml.setValor('LISTA -> <ID [LATRIBUTOS] />;\n');
+            this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],$$[$0-3],false); 
+        
+break;
+case 8:
  
         /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);*/
         let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
         erroressintacticos.setError(errores);
     
 break;
-case 8:
+case 9:
  
                 rg_xml.setValor('LATRIBUTOS -> ATRIBUTOS;\n');
                 this.$ = $$[$0]; 
 break;
-case 9:
+case 10:
  
                rg_xml.setValor('LATRIBUTOS -> EPSILON;\n');
                this.$ = []; 
                
 break;
-case 10:
+case 11:
  
                 rg_xml.setValor('ATRIBUTOS -> ATRIBUTOS ATRIBUTO;\n');
                 $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
             
 break;
-case 11:
+case 12:
  
                 rg_xml.setValor('ATRIBUTOS -> ATRIBUTO;\n');
                 this.$ = [$$[$0]]; 
             
 break;
-case 12:
+case 13:
  
                 rg_xml.setValor('ATRIBUTO -> ID = CADENA;\n');
                 this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
             
 break;
-case 13:
+case 14:
  
             rg_xml.setValor('OBJETOS -> OBJETOS LISTA;\n');
             $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
         
 break;
-case 14:
+case 15:
  
             rg_xml.setValor('OBJETOS -> LISTA;\n');
             this.$ = [$$[$0]]; 
         
 break;
-case 15:
+case 16:
  
             rg_xml.setValor('PARRAFO -> PARRAFO VALORES;\n');
             $$[$0-1]=$$[$0-1] + ' ' +$$[$0] ; this.$ = $$[$0-1];
         
 break;
-case 16:
+case 17:
  
             rg_xml.setValor('PARRAFO -> VALORES;\n');
             this.$ = $$[$0]; 
         
 break;
-case 17:
+case 18:
  
             rg_xml.setValor('VALORES -> ID;\n');
             this.$ = $$[$0]; 
         
 break;
-case 18:
+case 19:
  
             rg_xml.setValor('VALORES -> DECIMAL;\n');
             this.$ = $$[$0]; 
         
 break;
-case 19:
+case 20:
  
             rg_xml.setValor('VALORES -> ENTERO;\n');
             this.$ = $$[$0]; 
@@ -201,7 +208,7 @@ case 19:
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:$V1},{1:[3]},{2:$V0,5:[1,6],6:7,7:$V1},o($V2,[2,3]),{8:$V3},o($V2,$V4),{1:[2,1]},o($V2,[2,2]),o($V5,[2,9],{9:9,14:10,15:11,8:$V6}),{10:[1,13],12:[1,14]},o($V5,[2,8],{15:15,8:$V6}),o($V7,[2,11]),{16:[1,16]},{2:$V0,6:19,7:$V1,8:$V8,11:17,13:18,18:20,19:$V9,20:$Va},{10:[1,24]},o($V7,[2,10]),{17:[1,25]},{2:$V0,6:27,7:[1,26]},{7:[1,28],8:$V8,18:29,19:$V9,20:$Va},o($V4,[2,14]),o($Vb,[2,16]),o($Vb,[2,17]),o($Vb,[2,18]),o($Vb,[2,19]),o($V2,[2,6]),o($V7,[2,12]),{8:$V3,12:[1,30]},o($V4,[2,13]),{12:[1,31]},o($Vb,[2,15]),{8:[1,32]},{8:[1,33]},{10:[1,34]},{10:[1,35]},o($V2,[2,4]),o($V2,[2,5])],
+table: [{2:$V0,3:1,4:2,6:3,7:$V1},{1:[3]},{2:$V0,5:[1,6],6:7,7:$V1},o($V2,[2,3]),{8:$V3,15:$V4},o($V2,[2,8]),{1:[2,1]},o($V2,[2,2]),{9:[1,10]},o($V5,[2,10],{16:11,20:12,21:13,15:$V6}),{10:[1,15]},{14:[1,16],18:[1,17]},o($V5,[2,9],{21:18,15:$V6}),o($V7,[2,12]),{11:[1,19]},{11:[1,20]},{2:$V0,6:23,7:$V1,15:$V8,17:21,19:22,22:24,23:$V9,24:$Va},{14:[1,28]},o($V7,[2,11]),{12:[1,29]},{12:[1,30]},{2:$V0,6:32,7:[1,31]},{7:[1,33],15:$V8,22:34,23:$V9,24:$Va},o($Vb,[2,15]),o($Vc,[2,17]),o($Vc,[2,18]),o($Vc,[2,19]),o($Vc,[2,20]),o($V2,$Vb),o($V7,[2,13]),{13:[1,35]},{8:$V3,15:$V4,18:[1,36]},o($Vb,[2,14]),{18:[1,37]},o($Vc,[2,16]),{11:[1,38]},{15:[1,39]},{15:[1,40]},{12:[1,41]},{14:[1,42]},{14:[1,43]},{8:[1,44]},o($V2,[2,5]),o($V2,[2,6]),{14:[1,45]},o($V2,[2,4])],
 defaultActions: {6:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -780,39 +787,47 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:return 7;
 break;
-case 1:return 10;
+case 1:return 14;
 break;
-case 2:return 12;
+case 2:return 18;
 break;
-case 3:return 16;
+case 3:return 11;
 break;
 case 4:return 'para';
 break;
 case 5:return 'parc';
 break;
-case 6:
+case 6:return 8; 
 break;
-case 7:
+case 7:return 9;
 break;
-case 8:return 19;
+case 8:return 10;
 break;
-case 9:return 20;
+case 9:return 13;
 break;
-case 10: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 17; 
+case 10:
 break;
-case 11:return 8;
+case 11:
 break;
-case 12:return 5;
+case 12:return 23;
 break;
-case 13: //console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+case 13:return 24;
+break;
+case 14: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 12; 
+break;
+case 15:return 15;
+break;
+case 16:return 5;
+break;
+case 17: //console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                         let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
                         erroreslexicos.setError(errores);
                     
 break;
 }
 },
-rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
+rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],"inclusive":true}}
 });
 return lexer;
 })();

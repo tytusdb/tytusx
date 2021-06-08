@@ -6,13 +6,14 @@ class Objeto{
     texto:string;
     listaAtributos:Array<Atributo>;
     listaObjetos: Array<Objeto>;
+    tipoEtiqueta: boolean;// true doble - false  simple 
    // entorno: TablaSimbolos;
     tipo:Tipo;
     linea: number;
     columna: number;
 
 
-    constructor(id:string, texto:string, linea:number, columna:number, listaAtributos:Array<Atributo>, listaO:Array<Objeto>, identificador_cierre:string){
+    constructor(id:string, texto:string, linea:number, columna:number, listaAtributos:Array<Atributo>, listaO:Array<Objeto>, identificador_cierre:string, tipoE:boolean){
         this.identificador = id;
         this.identificador_cierre = identificador_cierre;
         this.texto = texto;
@@ -22,6 +23,7 @@ class Objeto{
         this.listaObjetos = listaO;
         this.linea = linea;
         this.columna = columna;
+        this.tipoEtiqueta = tipoE;
     }
 
 
@@ -76,12 +78,18 @@ class Objeto{
         {
             let atributo = new Atributo('','',0,0);            
             for(let i:number = 0; i < objeto.listaAtributos.length; i++){                
-                 atributo.agregarTDS(ts, objeto.listaAtributos[i], objeto.identificador);                
+                 atributo.agregarTDS(ts, objeto.listaAtributos[i], objeto.identificador, this.tipoEtiqueta);                
             } 
         }
 
-        if(objeto.texto != ""){            
-            ts.setSimbolo(objeto.identificador, objeto.texto, objeto.tipo, objeto.identificador);
+        if(objeto.texto != ""){       
+            if(this.identificador == this.identificador_cierre){
+                ts.setSimbolo(objeto.identificador, objeto.texto, objeto.tipo, objeto.identificador, this.tipoEtiqueta);
+            }else{
+                let errores = new NodoError('', 'La etiqueta que abre no coincide con etiqueta de cierre', 'Semantico', 'XML', this.linea, this.columna);
+                erroressintacticos.setError(errores);
+            }     
+            
         }
                         
         for(let i:number = 0; i < objeto.listaObjetos.length; i++){
@@ -114,3 +122,4 @@ class Objeto{
         }
     }
 } 
+
