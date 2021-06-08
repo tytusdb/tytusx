@@ -1,6 +1,5 @@
-import { concat } from "lodash"
 import { Tipo, TipoPath, Siblings } from "../AST/Entorno"
-import { Literal, Nodo } from "./Expresiones"
+import { Nodo } from "./Expresiones"
 
 export class Axes 
 {
@@ -40,14 +39,15 @@ export class Descendant extends Axes
 
   getValor(nodos)
   {
+    var descendiente
     if(this.tipo==TipoPath.ABS)
     {
-      var descendiente = new Camino(this.nombre,[],TipoPath.REL).getValor(nodos)
+      descendiente = new Camino(this.nombre,[],TipoPath.REL).getValor(nodos)
       descendiente = Predicado(this.predicado,descendiente)
     }
     else
     {
-      var descendiente = new Camino(this.nombre,this.predicado,TipoPath.REL).getValor(nodos)
+      descendiente = new Camino(this.nombre,this.predicado,TipoPath.REL).getValor(nodos)
     }
     return descendiente
   }
@@ -141,30 +141,48 @@ export class FollowSibling extends Axes
     super(nombre,predicado,tipo)
   }
 
-  getValor(nodos)
+  getValor(nodos,nivel)
   {
-    var retornos = new Map()
-    for (let i = 0; i < nodos.length; i++) {
-      var nuevaPila = Object.assign([],nodos[i].pila)
-      var EntornoActual = nuevaPila.pop()
-      var posibles = (new Camino("*",[],this.tipo)).getValor([new Nodo(Tipo.NODO,EntornoActual,nuevaPila,"")])
-      var Insertar=false
-      for (const posible of posibles) {
-        if(Insertar && posible.entorno.tipo==this.nombre) retornos.set(posible.entorno,posible)
-        if(nodos[i].entorno==posible.entorno)
+    if(!nivel) nivel = 0
+    var retornos = new  Map()
+    for (const nodo of nodos) {
+      var retorno = []
+      var nuevaPila = Object.assign([],nodo.pila)
+      var entorno = nuevaPila.pop()
+      var Padre = [new Nodo(Tipo.NODO,entorno,nuevaPila,"")]
+      var hermanos = new Camino(this.nombre,[],TipoPath.ABS).getValor(Padre)
+      var indice=-1;
+      for (const [i,v] of hermanos.entries()) {
+        if(v.entorno == nodo.entorno)
+        { 
+          indice=i
+        }
+        if(indice!=-1 && i>indice-nivel && v.entorno.tipo==this.nombre)
         {
-          Insertar=true
+          retorno.push(v)
         }
       }
+      retorno = Predicado(this.predicado,retorno)
+      if(this.tipo==TipoPath.REL){
+        var subretorno = []
+        for (const hijo of nodo.entorno.hijos) { 
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          subretorno = subretorno.concat(new FollowSibling(this.nombre,this.predicado,this.tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,"")],1))
+        }
+        retorno = retorno.concat(subretorno)
+      }
+      for (const iterator of retorno) {
+        retornos.set(iterator.entorno,iterator)
+      }
     }
-    var tempRetorno=[]
-    for (const [clave,valor] of retornos) {
-      tempRetorno.push(valor)
+    var realretorno=[]
+    for (const valor of retornos.values()) {
+      realretorno.push(valor)
     }
-    return tempRetorno
+    return realretorno
   }
 }
-
 
 export class Follow extends Axes
 {
@@ -176,24 +194,56 @@ export class Follow extends Axes
   getValor(nodos)
   {
     var retornos = new Map()
-    for (let i = 0; i < nodos.length; i++) {
-      var nuevaPila = Object.assign([],nodos[i].pila)
+    for (const nodo of nodos) {
+      var retorno = []
+      var nuevaPila = Object.assign([],nodo.pila)
       var EntornoActual = nuevaPila.pop()
-      var posibles = (new Camino("*",[],this.tipo)).getValor([new Nodo(Tipo.NODO,EntornoActual,nuevaPila,"")])
-      var Insertar=false
-      for (const posible of posibles) {
-        if(Insertar && posible.entorno.tipo==this.nombre) retornos.set(posible.entorno,posible)
-        if(nodos[i].entorno==posible.entorno)
+      var posibles = (new Camino("*",[],TipoPath.ABS)).getValor([new Nodo(Tipo.NODO,EntornoActual,nuevaPila,"")])
+      var indice = -1
+      for (let index = 0; index < posibles.length; index++) {
+        if(posibles[index].entorno == nodo.entorno)
         {
-          Insertar=true
+          indice = index
+        }
+        if(indice!=-1 && index > indice)
+        {
+          if (posibles[index].entorno.tipo==this.nombre) retorno.push(posibles[index])
+          var nuevaPila2 = (Object.assign([],posibles.pila)).push(posibles[index].entorno)
+          var descendientes = (new Camino("*",[],TipoPath.REL)).getValor([new Nodo(Tipo.NODO,posibles[index].entorno,nuevaPila2,"")])
+          for (const descendiente of descendientes) {
+            if (descendiente.entorno.tipo==this.nombre) retorno.push(descendiente)
+          }
+        }
+      }
+      retorno = Predicado(this.predicado,retorno)
+      for (const v of retorno) {
+        retornos.set(v.entorno,v)
+      }
+      if(this.tipo==TipoPath.REL)
+      {
+        var retorno = []
+        var nuevaPila = Object.assign([],nodo.pila)
+        var EntornoActual = nuevaPila.pop()
+        var posibles = (new Camino("*",[],TipoPath.REL)).getValor([new Nodo(Tipo.NODO,EntornoActual,nuevaPila,"")])
+        var indice = -1
+        for (let index = 0; index < posibles.length; index++) {
+          if(posibles[index].entorno == nodo.entorno)
+          {
+            indice = index
+          }
+          if (indice!=-1 && index > indice && posibles[index].entorno.tipo==this.nombre) retorno.push(posibles[index])
+        }
+        retorno = Predicado(this.predicado,retorno)
+        for (const v of retorno) {
+          retornos.set(v.entorno,v)
         }
       }
     }
-    var tempRetorno=[]
-    for (const [clave,valor] of retornos) {
-      tempRetorno.push(valor)
+    var temp = []
+    for (const val of retornos.values()) {
+      temp.push(val)
     }
-    return tempRetorno
+    return temp
   }
 }
 
@@ -291,20 +341,6 @@ function RecursivaAtributo(nodos,nombre,predicado)
     retornos = retornos.concat(retorno,retornohijos)
   }
   return retornos
-   /* var retorno = []
-    var nuevaPila = Object.assign([],pila)
-    nuevaPila.push(Entorno)
-    for (const iterator of Entorno.atributos) {
-        if(iterator.nombre == nombre || nombre=="*")
-        {
-            retorno.push(new Nodo(Tipo.ATRIB,Entorno,nuevaPila,iterator.valor))  
-        }
-    }
-    for (const iterator of Entorno.hijos) {
-        var temp = RecursivaAtributo(nuevaPila,iterator,nombre)
-        retorno = retorno.concat(temp)
-    }
-    return retorno*/
 }
 
 function RecursivaCamino(nodos,nombre,predicado) 
@@ -314,16 +350,24 @@ function RecursivaCamino(nodos,nombre,predicado)
   {
     var hijos=[]
     var subretorno = []
-    for (const iterator of nodo.entorno.hijos) {
+    for (const [index,iterator] of nodo.entorno.hijos.entries()) {
       var nuevaPila = Object.assign([],nodo.pila)
       nuevaPila.push(nodo.entorno)
       var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto)
-      hijos.push(hijo)
-      if(iterator.tipo==nombre || nombre=="*") subretorno.push(hijo)
+      hijos.push(RecursivaCamino([hijo],nombre,predicado))
+      if(iterator.tipo==nombre || nombre=="*") subretorno.push({id:index,nodo:hijo})
     } 
-    var retornoTemp = RecursivaCamino(hijos,nombre,predicado)
     subretorno = Predicado(predicado,subretorno)
-    retorno = retorno.concat(subretorno,retornoTemp)
+    var index = 0
+    for (const [indexHijo,hijo] of hijos.entries()) {
+      if(subretorno[index] && subretorno[index].id==indexHijo)
+      {
+        retorno.push(subretorno[index].nodo)
+        index++
+      }
+      retorno = retorno.concat(hijo)
+    }
+    //retorno = retorno.concat(subretorno,retornoTemp)
   }
   return retorno
 }
@@ -359,7 +403,6 @@ function Predicado(predicado,retorno)
   return retorno
 }
 
-
 export class CaminoInverso extends Axes
 {  
   constructor(nombre,predicado,tipo)
@@ -374,7 +417,10 @@ export class CaminoInverso extends Axes
       var nuevaPila = Object.assign([],nodo.pila)
       var temp = nuevaPila.pop()
       var nuevoNodo = new Nodo(Tipo.NODO,temp,nuevaPila,temp.texto) 
-      mapa.set(temp,nuevoNodo)
+      var convertido = Predicado(this.predicado,[nuevoNodo])
+      for (const iterator of convertido) {
+        mapa.set(temp,iterator) 
+      }
       if(this.tipo==TipoPath.REL)
       {
         var temps = (new Camino(this.nombre,[],this.tipo)).getValor([nuevoNodo])
@@ -400,8 +446,138 @@ export class Parent extends Axes
 
   getValor(nodos)
   {
-    var padre = new CaminoInverso(this.nombre,[],this.tipo)
+    var padre = new CaminoInverso(this.nombre,this.predicado,this.tipo)
     var retorno = padre.getValor(nodos)
     return retorno
+  }
+}
+
+export class Ancestor extends Axes
+{
+  constructor(nombre,predicado,tipo)
+  {
+    super(nombre,predicado,tipo)
+  }
+
+  getValor(nodos)
+  {
+    var mapa = new Map()
+    for (const nodo of nodos) {
+      var submapa = new Map()
+      var hijos = []
+      if(this.tipo==TipoPath.REL)
+      {
+        var subhijos = []
+        for (const hijo of nodo.entorno.hijos) {     
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          subhijos.push(new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto))
+        }
+        hijos = hijos.concat((new Ancestor(this.nombre,this.predicado,this.tipo)).getValor(subhijos))
+      }
+      var nuevaPila = (Object.assign([],nodo.pila))
+      while  (nuevaPila.length>0) {
+        var entorno = nuevaPila.pop()
+        if(entorno.tipo==this.nombre) submapa.set(entorno,new Nodo(Tipo.NODO,entorno,nuevaPila,entorno.texto))
+        nuevaPila = (Object.assign([],nuevaPila))
+      }
+      var temp = []
+      for (const valor of submapa.values()) {
+        temp.push(valor)
+      }
+      temp = Predicado(this.predicado,temp)
+      for (const v of temp) {
+        mapa.set(v.entorno,v)
+      }
+      for (const v of hijos) {
+        mapa.set(v.entorno,v)
+      }
+    }
+    var temp = []
+    for (const valor of mapa.values()) {
+      temp.push(valor)
+    }
+    return temp
+  }
+}
+
+export class PrecedingSibling extends Axes
+{
+  constructor(nombre,predicado,tipo)
+  {
+    super(nombre,predicado,tipo)
+  }
+
+  getValor(nodos,nivel)
+  {
+    if(!nivel) nivel = 0
+    var retornos = new  Map()
+    for (const nodo of nodos) {
+      var retorno = []
+      var nuevaPila = Object.assign([],nodo.pila)
+      var entorno = nuevaPila.pop()
+      var Padre = [new Nodo(Tipo.NODO,entorno,nuevaPila,"")]
+      var hermanos = new Camino(this.nombre,[],TipoPath.ABS).getValor(Padre)
+      var indice=-1;
+      for (const [i,v] of hermanos.entries()) {
+        if(v.entorno == nodo.entorno)
+        { 
+          indice=i
+        }
+        if(indice==-1)
+        {
+          retorno.push(v)
+        }
+      }
+      retorno = Predicado(this.predicado,retorno)
+      if(this.tipo==TipoPath.REL){
+        var subretorno = []
+        for (const hijo of nodo.entorno.hijos) { 
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          subretorno = subretorno.concat(new PrecedingSibling(this.nombre,this.predicado,this.tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,"")],1))
+        }
+        retorno = retorno.concat(subretorno)
+      }
+      for (const iterator of retorno) {
+        retornos.set(iterator.entorno,iterator)
+      }
+    }
+    var realretorno=[]
+    for (const valor of retornos.values()) {
+      realretorno.push(valor)
+    }
+    return realretorno
+  }
+}
+
+export class AncestorSelf extends Axes
+{
+  constructor(nombre,predicado,tipo)
+  {
+    super(nombre,predicado,tipo)
+  }
+
+  getValor(nodos)
+  {
+    var retornos = []
+    for (const nodo of nodos) {
+      var retorno = new Map()
+      if(nodo.entorno.tipo==this.nombre)
+      {
+        retorno.set(nodo.entorno,nodo)
+      }
+      var ancestros = new Ancestor(this.nombre,[],this.tipo).getValor([nodo])
+      for (const ancestro of ancestros) {
+        retorno.set(ancestro.entorno,ancestro)
+      }
+      var temp = []
+      for (const valor of retorno.values()) {
+        temp.push(valor)
+      }
+      temp = Predicado(this.predicado,temp)
+      retornos = retornos.concat(temp.reverse())
+    }
+    return retornos
   }
 }

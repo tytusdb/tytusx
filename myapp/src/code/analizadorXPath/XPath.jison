@@ -5,7 +5,7 @@
   const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
-  const { CaminoInverso,Parent } = require('./Expresion/axes')
+  const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
 %}
 
 /* Definición Léxica */
@@ -100,7 +100,7 @@ XPath
 
 Expr 
   : ExprSingle            { $$=[];$$.push($1) }
-  | Expr COMA ExprSingle  { $$=$1;$$.push($3) }
+  | Expr PIPE ExprSingle  { $$=$1;$$.push($3) }
 ; 
 
 ExprSingle  
@@ -258,7 +258,7 @@ Wildcard
 //Faltan las formas no abrevidas
 ReverseStep 
   :  AbbrevReverseStep    { $$=$1 }
-  |  ReverseAxis NameTest { $$=$1  }
+  |  ReverseAxis NameTest { $$=$1; $$.nombre=$2  }
 ;
 
 AbbrevReverseStep 
@@ -267,10 +267,10 @@ AbbrevReverseStep
 
 ReverseAxis
   : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS) }
-  | RANCESTOR DOBLEDOSPUNTOS          {}
-  | RPRECEDSIBLING DOBLEDOSPUNTOS     {}
-  | RPRECED DOBLEDOSPUNTOS            {}
-  | RANCESTORORSELF DOBLEDOSPUNTOS    {}
+  | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS) }
+  | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS) }
+  | RPRECED DOBLEDOSPUNTOS            { }
+  | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS)}
 ;
 
 PostfixExpr   

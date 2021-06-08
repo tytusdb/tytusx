@@ -1,4 +1,4 @@
-const { Tipo,TipoPath, Siblings } = require("../AST/Entorno")
+const { Tipo } = require("../AST/Entorno")
 
 //Literales para el uso de datos y tipos
 export class NodoExp
