@@ -24,6 +24,19 @@ export const Colision =
     [false, false, false, false, false, false, false]
   ]
 
+export const ColisionTipo = 
+[
+  [Tipo.INTEGER, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
+  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.DECIMAL, Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.DECIMAL, Tipo.DECIMAL, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+  [Tipo.ERROR,   Tipo.ERROR,   Tipo.ERROR, Tipo.ERROR, Tipo.ERROR, Tipo.ERROR  , Tipo.ERROR],
+]
+
+
+
 export const TipoPath = {
     "ABS" : "absoluto",
     "REL" : "relativo"
