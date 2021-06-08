@@ -30,7 +30,7 @@
 
 "text" {
     console.log('Detecto node');
-     return 'node'; 
+     return 'text'; 
 }
 
 "last" {
@@ -50,8 +50,8 @@
 
 
 "ancestor" {
-    console.log('Detecto POSITION');
-     return 'POSITION'; 
+    console.log('Detecto ancestor');
+     return 'ancestor'; 
 }
 
 "ancestor-or-self" {
@@ -87,11 +87,6 @@
 "following-sibling" {
     console.log('Detecto following-sibling');
      return 'following-sibling'; 
-}
-
-"namespace" {
-    console.log('Detecto namespace');
-     return 'namespace'; 
 }
 
 "parent" {
@@ -223,7 +218,7 @@
 //------------------------------------------------------EXPRESIONES------------------------------------------------------
 
 
-[1-9][0-9]*("."0*[1-9]*0*)?\b { 
+(0|[1-9][0-9]*)(\.(0|[0-9]*[1-9](0)?))? { 
     console.log('Detecto digito'); 
      return 'digito'; 
     }
@@ -263,31 +258,44 @@
 
 %%
 
-INIT : CARLOS2 eof {
+INIT
+    : CONSULTAS_XPATH eof {
     console.log('\n\nexito al analizar');
-};
+    }
+;
 
-CARLOS2 : CARLOS operador_o CARLOS2 | CARLOS;
+CONSULTAS_XPATH
+    : CONSULTAS_XPATH operador_o CONSULTA_XPATH
+    | CONSULTA_XPATH
+;
 
-CARLOS : RELATIVA | EXPRESIONES_RUTA;
+CONSULTA_XPATH
+    : RELATIVA
+    | EXPRESIONES_RUTA
+    | punto EXPRESIONES_RUTA
+;
 
-EXPRESIONES_RUTA : EXPRESIONES_RUTA EXPRESION_RUTA | EXPRESION_RUTA;
+EXPRESIONES_RUTA
+    : EXPRESIONES_RUTA EXPRESION_RUTA
+    | EXPRESION_RUTA
+;
 
-EXPRESION_RUTA : RELATIVA DIAGONALES ACCESORES
-    | RELATIVA DIAGONALES PUNTOS    
-    ;
+EXPRESION_RUTA
+    : RELATIVA DIAGONALES ACCESORES
+    | RELATIVA DIAGONALES PUNTOS PREDICADO
+;
 
-RELATIVA : 
+RELATIVA :
     | identificador PREDICADO
     ;
 
-DIAGONALES : diagonal diagonal 
+DIAGONALES : diagonal diagonal
     | diagonal
     ;
 
 PUNTOS : punto
     | punto punto
-    ;    
+    ;
 
 ACCESORES : ID PREDICADO
     | ATRIBUTO PREDICADO
@@ -306,37 +314,40 @@ EJE : EJES dos_puntos dos_puntos identificador
 EJES : ancestor
     | ancestor-or-self
     | attribute
-    | childz
+    | child
     | descendant
     | descendant-or-self
     | following
     | following-sibling
-    | namespace
     | parent
     | preceding
     | preceding-sibling
     | self
     ;
 
-PREDICADO : | corchete_abierto OPCIONES_PREDICADO corchete_cerrado
+PREDICADO : | corchete_abierto FILTRO corchete_cerrado
 ;
 
-OPCIONES_PREDICADO : OPERACIONES | EJE;
+FILTRO
+    : EXPR igual EXPR
+    | EXPR diferente EXPR
+    | EXPR mayor EXPR
+    | EXPR menor EXPR
+    | EXPR mayor_igual EXPR
+    | EXPR menor_igual EXPR
+    | FILTRO and FILTRO
+    | FILTRO or FILTRO
+    | EJE
+    | EXPR
+;
 
-OPERACIONES : OPERACIONES igual OPERACIONES
-    | OPERACIONES diferente OPERACIONES
-    | OPERACIONES menor OPERACIONES
-    | OPERACIONES menor_igual OPERACIONES
-    | OPERACIONES mayor OPERACIONES
-    | OPERACIONES mayor_igual OPERACIONES
-    | OPERACIONES or OPERACIONES
-    | OPERACIONES and OPERACIONES
-    | OPERACIONES suma OPERACIONES
-    | OPERACIONES resta OPERACIONES
-    | OPERACIONES multiplicacion OPERACIONES
-    | OPERACIONES division OPERACIONES
-    | OPERACIONES mod OPERACIONES
-    | parentesis_abierto OPERACIONES parentesis_cerrado
+EXPR
+    : EXPR suma EXPR
+    | EXPR resta EXPR
+    | EXPR multiplicacion EXPR
+    | EXPR division EXPR
+    | EXPR mod EXPR
+    | parentesis_abierto EXPR parentesis_cerrado
     | TIPOS
 ;
 

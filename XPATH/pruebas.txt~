@@ -1,5 +1,0 @@
-/libreria/area1/libros/libro[child::existencias<11]
-
---libreria/area1/libros/libro/autor[@sexo="macho"]
-
---//@sexo
