@@ -14,23 +14,21 @@ export class Logical
     {
         var retorno = []
 
-        for (var obj of Objetos){
+        for (var obj of Objetos ){
             var valIzq = this.izquierdo.getValor(obj.entorno)
             var valDer = this.derecho.getValor(obj.entorno)
 
-            // plano cartesiano entre valores izq y valores 
-            for (var izq of valIzq){
+            for (var izq of valIzq) {
+                var salir = false
                 for (var der of valDer){
-                    var newValor = operar(izq, this.op, der)
-                    if (newValor){
-                        retorno.push(
-                            new Literal(
-                                ColisionLogical[izq.tipo][der.tipo],
-                                newValor
-                            )
-                        )
+
+                    if (operar(izq,this.op,der)){
+                        retorno.push(obj)
+                        salir = true
+                        break
                     }
                 }
+                if (salir) break
             }
         }
         return retorno
