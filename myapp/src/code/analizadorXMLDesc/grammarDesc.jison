@@ -79,8 +79,8 @@
 %% /* Definición de la gramática */
 
 ini
-	: LISTA_OBJETO EOF 									                  { $$ = new helpers.Objeto("/",[],$1); return $$; }
-  | ETIQUETACONFIGURACION LISTA_OBJETO EOF		          { $$ = new helpers.Objeto("/",$1,$2); return $$; }
+	: LISTA_OBJETO EOF 									                  { $$ = new helpers.Objeto("/",[],$1,this._$.first_line, this._$.first_column); return $$; }
+  | ETIQUETACONFIGURACION LISTA_OBJETO EOF		          { $$ = new helpers.Objeto("/",$1,$2,this._$.first_line, this._$.first_column); return $$; }
 ;
 
 LISTA_OBJETO
@@ -98,7 +98,7 @@ OBJETO
 ;
 
 OBJETOGENERAL
-  : InicioEtiquetaI SUB_OBJETOGENERAL                         { $$ = objetoCorrecto($1, $2.tipo)? $2:null }
+  : InicioEtiquetaI SUB_OBJETOGENERAL                         { $2.linea=this._$.first_line; $2.columna=this._$.first_column; $$ = objetoCorrecto($1, $2.tipo)? $2:null }
 ;
 
 SUB_OBJETOGENERAL
@@ -107,8 +107,8 @@ SUB_OBJETOGENERAL
 ;
 
 CIERRE_ETIQUETAINICIO
-  : CierreEtiquetaI LISTA_OBJETO_Epsilon ETIQUETACIERRE       { $$ = new helpers.Objeto("", [], $2); $$.setTipo($3); }
-  | FinEtiquetaI                                              { $$ = new helpers.Objeto("",[], $2) }
+  : CierreEtiquetaI LISTA_OBJETO_Epsilon ETIQUETACIERRE       { $$ = new helpers.Objeto("", [], $2,0,0); $$.setTipo($3); }
+  | FinEtiquetaI                                              { $$ = new helpers.Objeto("",[], $2,0,0) }
 ;
 
 ETIQUETACIERRE
@@ -139,7 +139,7 @@ SUB_LISTA_ATRIBUTOSCONF
 ;
 
 ATRIBUTOCONF
-  : AtributoConf IgualAtributoConf ValorAtributoConf    { $$ = new helpers.Atributo($1,$3); }
+  : AtributoConf IgualAtributoConf ValorAtributoConf    { $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); }
 ;
 
 LISTA_ATRIBUTOS
@@ -152,7 +152,7 @@ SUB_LISTA_ATRIBUTOS
 ;
 
 ATRIBUTO
-	: AtributoEtiqueta IgualAtributo ValorAtributo		    { $$ = new helpers.Atributo($1,$3); }
+	: AtributoEtiqueta IgualAtributo ValorAtributo		    { $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); }
 ;
 
 

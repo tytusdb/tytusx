@@ -84,10 +84,10 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = new helpers.Objeto("/",[],$$[$0-1]); return this.$; 
+ this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column); return this.$; 
 break;
 case 2:
- this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1]); return this.$; 
+ this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); return this.$; 
 break;
 case 3:
  if ($$[$0-1].esTexto) { this.$ = $$[$0-1].texto } else { this.$=$$[$0]; this.$.push($$[$0-1].texto); this.$.reverse(); } 
@@ -105,7 +105,7 @@ case 7:
  this.$ = { texto:$$[$0], esTexto:true}; 
 break;
 case 8:
- this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo)? $$[$0]:null 
+ $$[$0].linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo)? $$[$0]:null 
 break;
 case 9:
  this.$=$$[$0]; this.$.Objeto.atributos=$$[$0-1];  
@@ -114,10 +114,10 @@ case 10:
  this.$=$$[$0]; 
 break;
 case 11:
- this.$ = new helpers.Objeto("", [], $$[$0-1]); this.$.setTipo($$[$0]); 
+ this.$ = new helpers.Objeto("", [], $$[$0-1],0,0); this.$.setTipo($$[$0]); 
 break;
 case 12:
- this.$ = new helpers.Objeto("",[], $$[$01]) 
+ this.$ = new helpers.Objeto("",[], $$[$01],0,0) 
 break;
 case 13:
  this.$ = $$[$0-1]; 
@@ -132,7 +132,7 @@ case 19: case 20:
  this.$=$$[$0]; this.$.push($$[$0-1]); 
 break;
 case 22: case 26:
- this.$ = new helpers.Atributo($$[$0-2],$$[$0]); 
+ this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
 break;
 case 23: case 24:
  this.$ = $$[$0]; this.$.push($$[$0-1]); 

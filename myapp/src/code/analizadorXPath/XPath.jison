@@ -1,7 +1,8 @@
 
 %{
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
-  const {ExpOr,ExpAnd} = require("./Expresion/Logical");
+  const {Logical} = require("./Expresion/Logical");
+  const {Arithmetic} = require("./Expresion/Arithmetics")
   const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
@@ -109,12 +110,12 @@ ExprSingle
 
 OrExpr      
   : AndExpr                 { $$ = $1 }
-  | OrExpr ROR AndExpr      { $$ = new ExpOr($1,$3) }
+  | OrExpr ROR AndExpr      { $$ = new Logical($1,$2,$3) }
 ;
 
 AndExpr     
   : ComparisonExpr                { $$ = $1 }
-	| AndExpr RAND ComparisonExpr   { $$ = new ExpAnd($1,$3) }
+	| AndExpr RAND ComparisonExpr   { $$ = new Logical($1,$2,$3) }
 ;
 
 ComparisonExpr    
@@ -147,28 +148,23 @@ GeneralComp       // signo
 
 
 StringConcatExpr  
-  : RangeExpr                         { $$=$1 }
-	| StringConcatExpr OR_EXP RangeExpr {}
-;
-
-RangeExpr   
-  : AdditiveExpr                    { $$=$1 }
-	| AdditiveExpr RTO AdditiveExpr   {}
+  : AdditiveExpr                         { $$=$1 }
+	| StringConcatExpr OR_EXP AdditiveExpr { }
 ;
 
 AdditiveExpr      
   : MultiplicativeExpr                    { $$=$1 }
-	| AdditiveExpr MAS MultiplicativeExpr   {}
-	| AdditiveExpr MENOS MultiplicativeExpr {}
+	| AdditiveExpr MAS MultiplicativeExpr   { $$= new Arithmetic($1,$2,$3) }
+	| AdditiveExpr MENOS MultiplicativeExpr { $$= new Arithmetic($1,$2,$3) }
 ;
 
 //Aca se intercambio UnoinExpr por Unary Expresion cambiar en el futuro
 MultiplicativeExpr      
   : UnaryExpr                         { $$=$1 }
-	| MultiplicativeExpr POR UnaryExpr  {}
-	| MultiplicativeExpr DIV UnaryExpr  {}
-	| MultiplicativeExpr IDIV UnaryExpr {}
-	| MultiplicativeExpr MOD UnaryExpr  {}
+	| MultiplicativeExpr POR UnaryExpr  { $$= new Arithmetic($1,$2,$3) }
+	| MultiplicativeExpr DIV UnaryExpr  { $$= new Arithmetic($1,$2,$3) }
+	| MultiplicativeExpr IDIV UnaryExpr { $$= new Arithmetic($1,$2,$3) }
+	| MultiplicativeExpr MOD UnaryExpr  { $$= new Arithmetic($1,$2,$3) }
 ;
 
 UnaryExpr   

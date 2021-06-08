@@ -84,10 +84,10 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = new helpers.Objeto("/",[],$$[$0-1]); return this.$; 
+ this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column); return this.$; 
 break;
 case 2:
- this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1]); return this.$; 
+ this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); return this.$; 
 break;
 case 3:
  this.$ = $$[$0-1]; this.$.push($$[$0].texto);
@@ -103,12 +103,12 @@ case 7:
 break;
 case 8:
 
-			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0]) ? new helpers.Objeto($$[$0-1].tipo, $$[$0-1].atributos, []) : null;
+			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0]) ? new helpers.Objeto($$[$0-1].tipo, $$[$0-1].atributos, [], this._$.first_line, this._$.first_column) : null;
 		
 break;
 case 9:
  
-			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, $$[$0-2].atributos, $$[$0-1]) : null;
+			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, $$[$0-2].atributos, $$[$0-1], this._$.first_line, this._$.first_column) : null;
 		
 break;
 case 10:
@@ -124,7 +124,7 @@ case 13:
  this.$ = []; this.$.push($$[$0]); 
 break;
 case 14:
- this.$ = new helpers.Atributo($$[$0-2],$$[$0]); 
+ this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
 break;
 case 15:
  this.$ = {tipo:$$[$0-1], atributos:[]};
@@ -136,10 +136,10 @@ case 17:
  this.$ = $$[$0-1];
 break;
 case 18:
- this.$ = new helpers.Objeto($$[$0-1],[],[]);
+ this.$ = new helpers.Objeto($$[$0-1],[],[],this._$.first_line, this._$.first_column);
 break;
 case 19:
- this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[]);
+ this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[],this._$.first_line, this._$.first_column);
 break;
 case 20:
  this.$ = $$[$0-1]; this.$.push($$[$0]);
@@ -148,7 +148,7 @@ case 21:
  this.$ = []; this.$.push($$[$0]);
 break;
 case 22:
-this.$ = new helpers.Atributo($$[$0-2],$$[$0]);
+this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column);
 break;
 }
 },
