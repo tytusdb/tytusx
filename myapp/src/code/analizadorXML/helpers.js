@@ -17,11 +17,11 @@ class Objeto extends nodo {
     hijos = []
     
     
-    constructor(tipo, atributos, hijos, linea, columna){
+    constructor(tipo, atributos, hijos, linea, columna, texto = ''){
         super(linea,columna)
         this.tipo = tipo.replace('<','')
         this.atributos = atributos
-        
+        this.texto = texto
         if (hijos instanceof Array){
             this.hijos = hijos
         }else{
