@@ -41,7 +41,7 @@
 %%
 
 START
-    : XML_STRUCTURE EOF     {console.log($1);}
+    : XML_STRUCTURE EOF     {console.log($1); return $1;}
 ;
 
 XML_STRUCTURE
@@ -59,9 +59,9 @@ NODES
 ;
 
 NODE
-    : OPENING_TAG NODES CLOSING_TAG         {$$ = new Nodo($1[0], $1[2], $2,   $1[1], @1.first_line, (@1.first_column + 1));}
-    | OPENING_TAG CLOSING_TAG               {$$ = new Nodo($1[0], $1[2], [],   $1[1], @1.first_line, (@1.first_column + 1));}
-    | VOID_TAG                              {$$ = new Nodo($1[0], $1[2], [],   $1[1], @1.first_line, (@1.first_column + 1));}
+    : OPENING_TAG NODES CLOSING_TAG         {$$ = new Nodo($1[0], $1[2], $2, Type.DOUBLE_TAG,  $1[1], @1.first_line, (@1.first_column + 1));}
+    | OPENING_TAG CLOSING_TAG               {$$ = new Nodo($1[0], $1[2], [], Type.DOUBLE_TAG,  $1[1], @1.first_line, (@1.first_column + 1));}
+    | EMPTY_TAG                             {$$ = new Nodo($1[0], $1[2], [], Type.EMPTY,       $1[1], @1.first_line, (@1.first_column + 1));}
 ;
 
 OPENING_TAG
@@ -73,7 +73,7 @@ CLOSING_TAG
     : less_than slash IDENTIFIER greater_than TEXTTAG       {$$ = $3;}
 ;
 
-VOID_TAG
+EMPTY_TAG
     : less_than IDENTIFIER slash greater_than TEXTTAG               {$$=[$2, $5, []];}
     | less_than IDENTIFIER ATTRIBS slash greater_than TEXTTAG       {$$=[$2, $6, $3];}
 ;
