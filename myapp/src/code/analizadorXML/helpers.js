@@ -35,7 +35,7 @@ class Objeto extends nodo {
 
     getTextoRelativo(){
         // recorrer insertar el valor actual
-        retorno = []
+        var retorno = []
         if (this.texto != '') retorno.push(this.texto)
 
         // recorrer hijos

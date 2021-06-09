@@ -78,3 +78,15 @@ function GenerarNodosHijos(padre)
   }
   return hijos;
 }
+
+//CALLFUNCTION
+
+export class CallFunction extends PostFix 
+{
+  constructor(predicado,tipo)
+  {
+    super(predicado,tipo)
+  }
+
+  
+}

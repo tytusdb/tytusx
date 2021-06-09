@@ -338,19 +338,19 @@ Literal
 
 
 FunctionCall      
-  : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }
-	| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
+  : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }  //NODE() TEXT() POSITION() LAST() FIST()
+	//| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
 ;
 
-ArgumentList      
-  : Argument                      { $$=$1 }
-	| ArgumentList COMA Argument    { $$=$1+$2+$3 }
-;
+// ArgumentList      
+//   : Argument                      { $$=$1 }
+// 	| ArgumentList COMA Argument    { $$=$1+$2+$3 }
+// ;
 
-Argument    
-  : ExprSingle      { $$=$1 }
-	| INTERROGACIONC  { $$=$1 }
-;
+// Argument    
+//   : ExprSingle      { $$=$1 }
+// 	| INTERROGACIONC  { $$=$1 }
+// ;
 
 ContextItemExpr   
   : PUNTO  { $$=new ContextItemExpr([],TipoPath.ABS); generarHijos($1); }
