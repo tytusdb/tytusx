@@ -4,7 +4,7 @@ var obj = new helpers.Objeto(
     '/',[],
     [
         new helpers.Objeto(
-            'listaComida',[],
+            'comidas',[],
             [
                 new helpers.Objeto(
                     'comida',[],
