@@ -78,3 +78,62 @@ function GenerarNodosHijos(padre)
   }
   return hijos;
 }
+
+
+// GET LAST
+export class Last extends PostFix {
+
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(Objetos)
+  {
+    var retorno = []
+    var lastHijo
+
+    // recorrer todos los ojetos para concatener el texto
+    var obj = !Objetos[0] ? Objetos[0] : {tipo:Tipo.ERROR}
+    var tipoEtiqueta = obj.tipo
+    
+    if (tipoEtiqueta == Tipo.NODO){
+      // el array tiene al menos una posición y es de tipo nodo
+      // recorrer el array
+      for (var objeto of Objetos) {
+        if (this.tipo == TipoPath.REL){
+          // si es relativo, recorrer todos los hijos
+          if (objeto.tipo == Tipo.NODO){
+            var retornoObjeto = this.getLastRelativo(objeto.entorno)
+            retorno = retorno.concat(retornoObjeto)
+            lastHijo = objeto
+          }
+        }
+      }
+    }
+    
+    if (lastHijo){
+      retorno.push(lastHijo)
+    }
+
+    return retorno
+  }
+
+  getLastRelativo (objeto, tipo){
+    // recorre todos los hijos de objeto
+    var retorno  = []
+    var lastHijo  
+
+    // recorrer todos los hijos y seleccionar el último
+    for (var hijo of objeto.hijos) {
+      if (hijo.tipo == tipo){
+        lastHijo = hijo
+        var retornoHijo = this.getLastRelativo(hijo)
+        retorno = retorno.concat(retornoHijo)
+      }
+    }
+
+    // insertar el último hijo
+    if (lastHijo)
+      retorno.push(new Nodo(Tipo.NODO,lastHijo, [], lastHijo.valor))
+  }
+}
