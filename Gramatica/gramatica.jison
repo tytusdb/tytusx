@@ -21,7 +21,10 @@
 "&amp"              return 'amp';
 "&apos"             return 'apos';
 "&quot"             return 'quot';
-
+"?"                 return 'interroga';    
+"xml"               return 'tck_xml';
+"version"               return 'tck_version';
+"encoding"               return 'tck_encoding';
 
 /* Espacios en blanco */
 [ \r\t]+			{}
@@ -55,7 +58,7 @@
 
 //%left 'or'
 //%left 'and'
-%left 'menorque' 'menorigual' 'mayorque' 'mayorigual' 'equal' 'nequal'
+//%left 'menorque' 'menorigual' 'mayorque' 'mayorigual' 'equal' 'nequal'
 //%left 'plus' 'minus'
 //%left 'times' 'div' 'mod'
 //%left 'pow'
@@ -87,7 +90,7 @@ LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     {
  ;
 
 
-LISTA: menorque '?' 'xml' 'version' igual cadena 'encoding' igual cadena interroga mayorque{
+LISTA: menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque{
             rg_xml.setValor('LISTA -> <?xml version="CADENA" encoding="CADENA"?>;\n');
             codificacion = $8;
             codificacionversion = $5;
