@@ -28,9 +28,9 @@
 "xml"                           {return 'xml';}
 "version"                       {return 'version';}
 "encoding"                      {return 'encoding';}
-"UTF-8"                         {return 'utf';}
-"ASCII"                         {return 'ascii';}
-"ISO-8859-1"                    {return 'iso'}
+"\"UTF-8\""                         {return 'utf';}
+"\"ASCII\""                         {return 'ascii';}
+"\"ISO-8859-1\""                    {return 'iso'}
 
 
 "<"                             {return 'less_than';}
@@ -97,12 +97,12 @@ ATTRIBS
 ;
 
 ATTRIB
-    : IDENTIFIER assign value           {$$ = new Atributo($1,$3.replaceAll('\"', ""),@1.first_line, (@1.first_column + 1));}
+    : IDENTIFIER assign value           {$$ = new Atributo($1,$3.replaceAll('\"', ""), Type.ATRIBUTO, @1.first_line, (@1.first_column + 1));}
 ;
 
 TEXTTAG
     : TEXT_TAG_CHARS        {$$ = $1;}
-    |                       {$$ = null;}
+    |                       {$$ = "-";}
 ;
 
 TEXT_TAG_CHARS

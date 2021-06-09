@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <body>
@@ -26,9 +27,7 @@
                             aria-haspopup="true" aria-expanded="false">CST</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#">CST Ascendente XML</a>
-                            <a class="dropdown-item" href="#">CST Ascendente XPATH</a>
                             <a class="dropdown-item" href="#">CST Descendente XML</a>
-                            <a class="dropdown-item" href="#">CST Descendente XPATH</a>
                         </div>
                     </li>
                     </li>
@@ -37,9 +36,7 @@
                             aria-haspopup="true" aria-expanded="false">Reportes gramaticales</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#">Reporte gramatical Ascendente XML</a>
-                            <a class="dropdown-item" href="#">Reporte gramatical Ascendente XPATH</a>
                             <a class="dropdown-item" href="#">Reporte gramatical Descendente XML</a>
-                            <a class="dropdown-item" href="#">Reporte gramatical Descendente XPATH</a>
                         </div>
                     </li>
                     </li>
@@ -49,7 +46,7 @@
     </div>
     <div class="py-4 mb-4"></div>
 
-    <div class="container-fluid">
+    <div class="container-fluid mb-5 pb-5">
 
         <div class="row">
             <div class="col-4">
@@ -106,7 +103,7 @@
             <div class="col-2"></div>
             <div class="col-8">
                 <div class="collapse" id="collapseTable">
-                    <div style="height: 250px; width: 100%; overflow-y: scroll;">
+                    <div class="table-responsive">
                         <table class="table table-bordered table-dark">
                             <thead id="tableHead" class="thead-light">
                             </thead>
@@ -182,13 +179,13 @@
             }
         }
     </script>
-    <script src="./Entorno/Entorno.js"></script>
-    <script src="./Entorno/Simbolo.js"></script>
-    <script src="./Entorno/Type.js"></script>
-    <script src="./Nodo/Nodo.js"></script>
-    <script src="./Nodo/Atributo.js"></script>
-    <script src="./AnalyzerXML.js"></script>
-    <script src="./Main.js"></script>
+    <script src="./js/Entorno/Entorno.js"></script>
+    <script src="./js/Entorno/Simbolo.js"></script>
+    <script src="./js/Entorno/Type.js"></script>
+    <script src="./js/Nodo/Nodo.js"></script>
+    <script src="./js/Nodo/Atributo.js"></script>
+    <script src="./js/AnalyzerXML.js"></script>
+    <script src="./js/Main.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">

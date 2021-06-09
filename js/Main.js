@@ -10,19 +10,19 @@ function analizar() {
     setSymbolTableBody(entornoGlobal);
 }
 function addSimbolosToEntorno(anterior, nodos, ambito) {
-    nodos.forEach((n) => {
-        if (n.getType() != Type.COMMENT) {
+    nodos.forEach((nodo) => {
+        if (nodo.getType() != Type.COMMENT) {
             let entornoNode = new Entorno(anterior);
-            let simbolo = new Simbolo(n.getNombre(), n.getTexto(), n.getType(), ambito, n.getLinea(), n.getColumna());
-            n.getAtributos().forEach((attr) => {
-                let simboloAttr = new Simbolo(attr.getNombre(), attr.getValor(), Type.ATRIBUTO, n.getNombre(), attr.getLinea(), attr.getColumna());
-                entornoNode.add(simboloAttr);
+            nodo.getAtributos().forEach((attr) => {
+                attr.setAmbito(ambito);
+                entornoNode.add(attr);
             });
-            if (n.getNodos().length > 0) {
-                addSimbolosToEntorno(entornoNode, n.getNodos(), n.getNombre());
+            if (nodo.getNodos().length > 0) {
+                addSimbolosToEntorno(entornoNode, nodo.getNodos(), nodo.getNombre());
             }
-            simbolo.setEntorno(entornoNode);
-            anterior.add(simbolo);
+            nodo.setAmbito(ambito);
+            nodo.setEntorno(entornoNode);
+            anterior.add(nodo);
         }
     });
 }
@@ -50,15 +50,18 @@ function setSymbolTableBody(entorno) {
 function symbolstToTable(content, entorno) {
     entorno.getTable().forEach((s) => {
         content.push("<tr>");
-        content.push("\t<td>" + s.getId() + "</td>");
-        content.push("\t<td>" + s.getImplicityValue() + "</td>");
+        content.push("\t<td>" + s.getNombre() + "</td>");
+        content.push("\t<td>" + s.getValorImplicito() + "</td>");
         content.push("\t<td>" + s.getType() + "</td>");
         content.push("\t<td>" + s.getAmbito() + "</td>");
         content.push("\t<td>" + s.getLinea() + "</td>");
         content.push("\t<td>" + s.getColumna() + "</td>");
         content.push("</tr>");
-        if (s.getEntorno() != null) {
-            symbolstToTable(content, s.getEntorno());
+        if (s.getType() == Type.DOUBLE_TAG) {
+            let nodo = s;
+            if (nodo.getEntorno() != null) {
+                symbolstToTable(content, nodo.getEntorno());
+            }
         }
     });
 }
