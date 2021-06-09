@@ -1,5 +1,6 @@
 /* Definición Léxica */
 %lex
+%x COMMENTMULTILINE
 %options case-insensitive
 
 
@@ -30,9 +31,16 @@
 \".*?\"|\'.*?\'|\`.*?\`			{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 ([a-zA-Z])[a-zA-Z0-9_]*	return 'identificador';
 
+
+/* Estado Comentarios */
+"!--"                        { this.pushState("COMMENTMULTILINE"); }
+<COMMENTMULTILINE>"-->"      { this.popState(); }
+<COMMENTMULTILINE><<EOF>>   { this.popState(); }
+<COMMENTMULTILINE>[^]       { /* Ignore anything */ }
+
 <<EOF>>				return 'EOF';
 
-.					{ //console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
                         let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
                         erroreslexicos.setError(errores);
                     }
@@ -94,7 +102,7 @@ LISTA: menorque '?' 'xml' 'version' igual cadena 'encoding' igual cadena interro
             $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2, false); 
         }
     | error { 
-        /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);*/
+        console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
         let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
         erroressintacticos.setError(errores);
     };

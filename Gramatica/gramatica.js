@@ -130,7 +130,7 @@ case 7:
 break;
 case 8:
  
-        /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);*/
+        console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
         let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
         erroressintacticos.setError(errores);
     
@@ -809,17 +809,25 @@ case 10: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 12;
 break;
 case 11:return 16;
 break;
-case 12:return 5;
+case 12: this.pushState("COMMENTMULTILINE"); 
 break;
-case 13: //console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+case 13: this.popState(); 
+break;
+case 14: this.popState(); 
+break;
+case 15: /* Ignore anything */ 
+break;
+case 16:return 5;
+break;
+case 17: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                         let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
                         erroreslexicos.setError(errores);
                     
 break;
 }
 },
-rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
+rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:!--)/i,/^(?:-->)/i,/^(?:$)/i,/^(?:[^])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"COMMENTMULTILINE":{"rules":[13,14,15],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,16,17],"inclusive":true}}
 });
 return lexer;
 })();
