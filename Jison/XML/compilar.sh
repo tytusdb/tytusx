@@ -9,5 +9,5 @@ tsc
 echo ----------------------------------------
 
 echo moviendo archivo
-mv AnalyzerXML.js ../../dist/
+mv AnalyzerXML.js ../../
 echo ----------------------------------------
