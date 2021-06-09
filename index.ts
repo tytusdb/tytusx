@@ -40,9 +40,9 @@ let rg_xml:ReporteGramatical_XML;
 //variable para almacenar encoding de salida
 let codificacion:string;
 
-function InterpretarCodigo() {
+function InterpretarCodigo(entrada:string) {
   tds_xml_persistente=[];
-  var entrada = editorentrada.getValue();
+  //var entrada = editorentrada.getValue();
   erroreslexicos = new ListaErrores();
   erroressintacticos = new ListaErrores();
   rg_xml = new ReporteGramatical_XML();

@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+    <!-- Create a simple CodeMirror instance -->
+    <link rel= "stylesheet" href="lib/codemirror.css">
+    <script src="lib/codemirror.js"></script>
+
     <title>PROYECTO 1 - XQUERY & XPATH</title>
 
     <style type="text/css" media="screen">
@@ -24,6 +28,8 @@
             width: 100%;
             height: 300px;
         }
+
+        .CodeMirror{ border: 1px solid #eee; height: 300px; width: 50%;}
     </style>
 
 </head>
@@ -57,7 +63,7 @@
 
 
             <button type="button" class="btn btn-outline-primary" id="traducir"
-                onclick="InterpretarCodigo()">XML</button>
+                onclick="ejecutarXML_asc()">XML</button>
             <button type="button" class="btn btn-outline-success" id="ejecutar" onclick="">Ejecutar</button>
             <!-- PESTAÑA tabla de simbolos -->
             <div class="btn-group" role="group">
@@ -173,11 +179,16 @@
         </div>
 
         <div class="row">
-            <!-- Editor de Entrada -->
-            <div id="editorentrada" class=" editor col-md-6"></div>
+            <!-- Editor de Entrada 
+            <div id="editorentrada" class=" editor col-md-6"></div>-->
 
-            <!-- Editor de Salida -->
-            <div id="editorsalida" class=" editor col-md-6"></div>
+            <textarea id="editorentrada" name="editorentrada" rows="4" cols="100" ></textarea>
+
+            <!-- Editor de Salida 
+            <div id="editorsalida" class=" editor col-md-6"></div>-->
+
+            <textarea id="editorsalida" name="editorsalida" rows="4" cols="100" ></textarea>
+
 
         </div>
 
@@ -292,6 +303,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js"
         integrity="sha512-8qx1DL/2Wsrrij2TWX5UzvEaYOFVndR7BogdpOyF4ocMfnfkw28qt8ULkXD9Tef0bLvh3TpnSAljDC7uyniEuQ=="
         crossorigin="anonymous"></script>
+
+
+        <script>
+            var editor = CodeMirror.fromTextArea(editorentrada, {
+              lineNumbers: true,
+              mode:  "htmlmixed",
+              htmlMode:true  
+            });
+
+            var editorSalida = CodeMirror.fromTextArea(editorsalida, {
+              lineNumbers: true,
+              mode:  "htmlmixed"
+
+            });
+
+            function ejecutarXML_asc(){
+                var texto = editor.getDoc().getValue();
+                InterpretarCodigo(texto);
+            }
+          </script>
 
     <!-- Importaciones -->
     <script src="dist/Estructuras/Ast/NodoAst.js"></script>
