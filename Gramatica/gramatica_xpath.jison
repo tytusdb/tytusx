@@ -13,7 +13,7 @@
 
 
 
-
+"//"				return 'doblediagonal';
 "/"					return 'diagonal';
 "("					return 'para';
 ")"					return 'parc';
@@ -35,8 +35,28 @@
 "and"			    return 'and';
 "or"				return 'or';
 "mod"				return 'mod';
+".."                return 'doblepunto';
 "."                 return 'punto';
 "@"                 return 'arroba';
+"node()"            return 'nodo';
+"text()"            return 'texto';
+"last()"            return 'siguiente';
+"position()"        return 'posicion';
+
+"ancestor"          return 'ancestros';
+"ancestor-or-self"  return 'ancestroself';
+"attribute"         return 'atributos';
+"child"             return 'hijos';
+"descendant"        return 'descendiente';
+"descendant-or-self" return 'descendienteself';
+"following"          return 'siguientes';
+"following-sibling"  return 'siguientehermano';
+"namespace"          return 'espacionombres';
+"parent"             return 'padre';
+"preceding"          return 'anterior';
+"preceding-sibling"  return 'hemanoanterior';
+"self"               return 'mismo';
+
 
 
 
@@ -87,42 +107,87 @@ LISTARUTAS: RUTA union LISTARUTAS               { $$ = $1+'|'+ $3;}
             | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
 
-RUTA: diagonal RUTA1                            { $$ = $1+''+ $2;}
-    | ESATRIBUTO identificador MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3+''+$4;};
+RUTA: diagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4;}
+    |doblediagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4;}
+    |DATO MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3;};
+/*
+RUTA1:diagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4+''+$5;}
+    | DATO MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3+''+$4;};
+*/
 
-RUTA1:diagonal ESATRIBUTO identificador MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4+''+$5;}
-    |ESATRIBUTO identificador MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3+''+$4;};
+RUTA2: diagonal  DATO MOSTRAR RUTA2     { $$ = $1+''+ $2+''+$3+''+$4;}
+        |doblediagonal DATO MOSTRAR RUTA2     { $$ = $1+''+ $2+''+$3+''+$4;}
+        |                                        {$$='';}    ;
 
-RUTA2: diagonal ESATRIBUTO identificador MOSTRAR RUTA2     { $$ = $1+''+ $2+''+$3+''+$4+''+$5;}
-     |                                          {$$='';}    ;
+DATO: identificador         { $$ = $1;}
+    |multiplicacion         { $$ = $1;}
+    |arroba TODOATRIBUTO   { $$ = $1+''+$2;}
+    |punto                  { $$ = $1;}
+    |doblepunto             { $$ = $1;}
+    |siguiente              {  $$=$1;}
+    |texto                  {  $$=$1;}
+    |nodo                   {  $$=$1;}
+    |posicion               {  $$=$1;}
+    | RESERVADAS dospuntos DATO1 { $$ = $1+'::'+$3;};
 
+RESERVADAS: ancestros            {  $$=$1;}
+        |ancestroself            {  $$=$1;}
+        |atributos               {  $$=$1;}
+        |hijos                   {  $$=$1;}
+        |descendiente            {  $$=$1;}
+        |descendienteself        {  $$=$1;}
+        |siguientes              {  $$=$1;}
+        |siguientehermano        {  $$=$1;}
+        |espacionombres          {  $$=$1;}
+        |padre                   {  $$=$1;}
+        |anterior                {  $$=$1;}
+        |hemanoanterior          {  $$=$1;}
+        |mismo                   {  $$=$1;};
+
+DATO1: identificador         { $$ = $1;}
+    |multiplicacion         { $$ = $1;}
+    |arroba TODOATRIBUTO   { $$ = $1+''+$2;}
+    |siguiente              {  $$=$1;}
+    |texto                  {  $$=$1;}
+    |nodo                   {  $$=$1;};
+
+TODOATRIBUTO: multiplicacion {  $$=$1;}
+            | identificador  {  $$=$1;};
+
+/*
 ESATRIBUTO: arroba {$$=$1;}
-        |   {$$='';};
+        |   {$$='';};*/
 
 
-MOSTRAR: corabre OPEOCOND corcierra { $$ = $1+' '+ $2+' '+$3;}
+MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { $$ = $1+' '+ $2+' '+$3+' '+$4;}
         |                           { $$ = '';};
 
 OPEOCOND: CONDICION                 { $$ = $1;};
 
-CONDICION:CONDICION or CONDICION                  { $$ = $1+'or'+$3;}
-        | CONDICION and CONDICION                 { $$ = $1+'and'+$3;}
+CONDICION:CONDICION or CONDICION                  { $$ = $1+' or '+$3;}
+        | CONDICION and CONDICION                 { $$ = $1+' and '+$3;}
         | CONDICION igual CONDICION             { $$ = $1+'='+$3;}
         | CONDICION mayorigualque CONDICION     { $$ = $1+'>='+$3;}
         | CONDICION menorigualque CONDICION     { $$ = $1+'<='+$3;}
         | CONDICION menorque CONDICION          { $$ = $1+'<'+$3;}
         | CONDICION mayorque CONDICION          { $$ = $1+'>'+$3;}
         | CONDICION distinto CONDICION          { $$ = $1+'!='+$3;}
-        | CONDICION dospuntos CONDICION          { $$ = $1+'!='+$3;}
         | CONDICION suma  CONDICION        { $$ = $1+'+'+$3;}
         | CONDICION resta CONDICION       { $$ = $1+'-'+$3;}
         |  CONDICION multiplicacion CONDICION               { $$ = $1+'*'+$3;}
         |   CONDICION division CONDICION                     { $$ = $1+'div'+$3;}
+        | para CONDICION parc                           { $$ ='('+$2+')'; }
         |   entero                           { $$ = $1; }
         |   decimal                          { $$ = $1; }
         |   cadena                           { $$ = $1; }
-        |   identificador                    { $$ = $1; }
-        |   arroba identificador             { $$ = $1+''+$2;};
+        //|   identificador                    { $$ = $1; }
+        //|   punto                            {  $$=$1;}
+        //|   doblepunto                       {  $$=$1;}
+        //|   arroba identificador             { $$ = $1+''+$2;}
+        //|   siguiente                            {  $$=$1;}
+        //|   texto                            {  $$=$1;}
+        |   RUTA                            {  $$=$1;};
+        //|   nodo                            {  $$=$1;};
 
   /*      
 CONDICION: CONDICION1 or CONDICION                  { $$ = $1+'or'+$3;}
