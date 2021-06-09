@@ -121,3 +121,34 @@ function ConvertiraXML(nodos,iteracion)
     }
     return XML
 }
+
+export function Predicado(predicado,retorno)
+{
+  if(predicado.length > 0)
+  {
+    for (const iterator of predicado) {
+      var posibles=iterator.getValor(retorno)
+      if(posibles[0].tipo!=undefined)
+      {
+        switch(posibles[0].tipo)
+        {
+          case Tipo.NODO:
+            retorno=posibles
+            break
+          case Tipo.INTEGER:
+          case Tipo.DECIMAL:
+            var temp=[]
+            for (const posible of posibles) {
+              if(retorno[posible.valor-1])
+              {
+                temp.push(retorno[posible.valor-1])
+              }
+            }
+            retorno = temp
+            break
+        }
+      }
+    } 
+  }
+  return retorno
+}

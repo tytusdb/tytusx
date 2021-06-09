@@ -1,4 +1,4 @@
-import { Tipo, TipoPath, Siblings } from "../AST/Entorno"
+import { Tipo, TipoPath, Siblings, Predicado } from "../AST/Entorno"
 import { Nodo } from "./Expresiones"
 
 export class Axes 
@@ -368,37 +368,6 @@ function RecursivaCamino(nodos,nombre,predicado)
       retorno = retorno.concat(hijo)
     }
     //retorno = retorno.concat(subretorno,retornoTemp)
-  }
-  return retorno
-}
-
-function Predicado(predicado,retorno)
-{
-  if(predicado.length > 0)
-  {
-    for (const iterator of predicado) {
-      var posibles=iterator.getValor(retorno)
-      if(posibles[0].tipo!=undefined)
-      {
-        switch(posibles[0].tipo)
-        {
-          case Tipo.NODO:
-            retorno=posibles
-            break
-          case Tipo.INTEGER:
-          case Tipo.DECIMAL:
-            var temp=[]
-            for (const posible of posibles) {
-              if(retorno[posible.valor-1])
-              {
-                temp.push(retorno[posible.valor-1])
-              }
-            }
-            retorno = temp
-            break
-        }
-      }
-    } 
   }
   return retorno
 }

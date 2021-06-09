@@ -7,6 +7,7 @@
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
   const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
+  const { ContextItemExpr } = require('./Expresion/postfix')
 
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
@@ -305,18 +306,18 @@ ReverseAxis
 
 PostfixExpr   
   : PrimaryExpr               { $$=$1; generarPadre(1); generarHijos("PrimaryExpr") }
-	| PrimaryExpr PostfixExprL  { $$=$1; generarPadre(2); generarPadre(1); generarHijos("PrimaryExpr","PostfixExprL") }
+	| PrimaryExpr PredicateList { $$=$1; $$.predicado = $2; generarPadre(2); generarPadre(1); generarHijos("PrimaryExpr","PostfixExprL") }
 ;
 
 //Falta crear los demas metodos de argumentos para las primaryEXpr
-PostfixExprL      
-    : Predicate                 { $$=$1; generarPadre(1); generarHijos("Predicate") }
-  //| ArgumentList
-  //| Lookup
-	  | PostfixExprL Predicate       { $$=$1+$2; generarPadre(2); generarPadre(1); generarHijos("PostfixExprL","Predicate") }
-  //| PostfixExprL ArgumentList
-  //| PostfixExprL Lookup
-;
+// PostfixExprL      
+//     : Predicate                 { $$=$1; generarPadre(1); generarHijos("Predicate") }
+//   //| ArgumentList
+//   //| Lookup
+// 	  | PostfixExprL        { $$=$1+$2; generarPadre(2); generarPadre(1); generarHijos("PostfixExprL","Predicate") }
+//   //| PostfixExprL ArgumentList
+//   //| PostfixExprL Lookup
+// ;
 
 Predicate   
   : CORA ExprSingle CORB            { $$=$2; generarPadre(2); generarHijos($1,"ExprSingle",$3) }
@@ -324,8 +325,8 @@ Predicate
 
 PrimaryExpr 
   : Literal                   { $$=$1; generarPadre(1); generarHijos("Literal") }
-	| FunctionCall              { $$=$1; }
-	| ContextItemExpr           { $$=$1; }
+	| FunctionCall              { $$=$1; generarPadre(1); generarHijos("FunctionCall")}
+	| ContextItemExpr           { $$=$1; generarPadre(1); generarHijos("ContextItemExpr")}
 	| ParenthesizedExpr         { $$=$1; generarPadre(1); generarHijos("ParenthesizedExpr") }
 ;
 
@@ -352,7 +353,7 @@ Argument
 ;
 
 ContextItemExpr   
-  : PUNTO  { $$=$1; generarHijos($1) }
+  : PUNTO  { $$=new ContextItemExpr([],TipoPath.ABS); generarHijos($1); }
 ;
 
 ParenthesizedExpr 
