@@ -2,6 +2,8 @@
 %lex
 
 %x textTag
+%x comment
+
 %%
 \s+                             //Ignorar espacios
 ">"                             {this.begin('textTag'); return 'greater_than';}
@@ -15,20 +17,29 @@
 <textTag>[^<&]+                 {return 'textTag';}
 <textTag><<EOF>>                {return 'EOF';}
 
+"!"                             {this.begin('comment'); return 'exclamation_mark';}
+<comment>">"                    {this.begin('INITIAL'); return 'greater_than';}
+<comment>\s+                    /*Ignorar*/
+<comment>"--"                   {return 'doble_guion';}
+<comment>[^-]+                  {return 'textComment';}
+
 "<"                             {return 'less_than';}
 
-"xml"                           {return 'xml';}"asdasdasd\"asd"
-"version"                       {return 'version'}
-"encoding"                      {return 'encoding'}
+"xml"                           {return 'xml';}
+"version"                       {return 'version';}
+"encoding"                      {return 'encoding';}
+"UTF-8"                         {return 'utf';}
+"ASCII"                         {return 'ascii';}
+"ISO-8859-1"                    {return 'iso'}
 
 
 "<"                             {return 'less_than';}
 "?"                             {return 'question_mark';}
 "="                             {return 'assign';}
-"/"                             {return 'slash'}
+"/"                             {return 'slash';}
 
-(["][^"\""]+["])|(['][^']+['])  {return 'value'}
-\w+                             {return 'identifier'}
+(["][^"\""]+["])|(['][^']+['])  {return 'value';}
+\w+                             {return 'identifier';}
 
 <<EOF>>                         { return 'EOF'; }
 .                               { console.log('Error lexico en: ' + yytext + ', linea: ' + yylloc.first_line + ', columna: ' + (yylloc.first_column + 1)); }
@@ -41,16 +52,17 @@
 %%
 
 START
-    : XML_STRUCTURE EOF     {console.log($1); return $1;}
+    : XML_STRUCTURE EOF     {return $1;}
 ;
 
 XML_STRUCTURE
-    : PROLOG NODES      {$$ = $2;}
+    : PROLOG NODES              {$$ = $2;}
+    | COMMENT PROLOG NODES      {$$ = $3;}
 ;
 
 PROLOG
-    : less_than question_mark xml version assign value encoding assign value question_mark greater_than TEXTTAG
-    | less_than question_mark xml encoding assign value version assign value question_mark greater_than TEXTTAG
+    : less_than question_mark xml version assign value encoding assign TYPE_ENCODING question_mark greater_than TEXTTAG
+    | less_than question_mark xml encoding assign TYPE_ENCODING version assign value question_mark greater_than TEXTTAG
 ;
 
 NODES
@@ -62,6 +74,7 @@ NODE
     : OPENING_TAG NODES CLOSING_TAG         {$$ = new Nodo($1[0], $1[2], $2, Type.DOUBLE_TAG,  $1[1], @1.first_line, (@1.first_column + 1));}
     | OPENING_TAG CLOSING_TAG               {$$ = new Nodo($1[0], $1[2], [], Type.DOUBLE_TAG,  $1[1], @1.first_line, (@1.first_column + 1));}
     | EMPTY_TAG                             {$$ = new Nodo($1[0], $1[2], [], Type.EMPTY,       $1[1], @1.first_line, (@1.first_column + 1));}
+    | COMMENT                               {$$ = new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0);}
 ;
 
 OPENING_TAG
@@ -111,4 +124,14 @@ IDENTIFIER
     | xml               {$$ = $1;}
     | version           {$$ = $1;}
     | encoding          {$$ = $1;}
+;
+
+COMMENT
+    : less_than exclamation_mark doble_guion textComment doble_guion greater_than
+;
+
+TYPE_ENCODING
+    : utf       {$$ = $1;}
+    | iso       {$$ = $1;}
+    | ascii     {$$ = $1;}
 ;
