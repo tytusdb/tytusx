@@ -56,9 +56,12 @@ export const TipoPath = {
 
 export class Comando
 {
-  constructor(Instrucciones)
+  constructor(Instrucciones,Nodos,Edges,graphviz)
   {
     this.Instrucciones = Instrucciones
+    this.Nodos=Nodos
+    this.Edges=Edges
+    this.graphviz=graphviz
   }
 
   Ejecutar(XML)

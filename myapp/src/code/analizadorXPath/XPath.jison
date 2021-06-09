@@ -7,6 +7,40 @@
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
   const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
+
+  // Datos { id:contador,label:'Nombre' }
+  var pilaHijos = []
+  var GrahpvizNodo = ""
+  var pilaNodos= []
+  // DAtos { from:idActual, to: idHijos }
+  var PilaEdges= []
+  var GrahpvizEdges = ""
+  var contador = 0
+  //Genera los padres en funcion de los ultimos datos en la pila de Hijos
+  function generarPadre (posicion)
+  {
+    posicion--
+    var Edges = pilaHijos.pop()  
+    for(const temp of Edges)
+    {
+      PilaEdges.push({from:contador+posicion, to:temp.id})
+      GrahpvizEdges += `${contador+posicion} -> ${temp.id}\n`
+    }
+  }
+  //Funcion que recive X parametros 
+  function generarHijos()
+  {
+    var Hijos=[]
+    for(var i=0;i < arguments.length; i++)
+    {
+      var hijo = {id:contador,label:arguments[i]}
+      Hijos.push(hijo)
+      pilaNodos.push(hijo)
+      GrahpvizNodo += `${contador}[label="${arguments[i]}"]\n`
+      contador++
+    }
+    pilaHijos.push(Hijos)
+  }
 %}
 
 /* Definición Léxica */
@@ -96,31 +130,31 @@
 %%
 
 XPath 
-  : Expr  { $$=new Comando($1);return $$ }
+  : Expr  { generarPadre(1);generarHijos("Expr");$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
 ;
 
 Expr 
-  : ExprSingle            { $$=[];$$.push($1) }
-  | Expr PIPE ExprSingle  { $$=$1;$$.push($3) }
+  : ExprSingle            { $$=[];$$.push($1); generarPadre(1);generarHijos("ExprSingle") }
+  | Expr PIPE ExprSingle  { $$=$1;$$.push($3); generarPadre(3);generarPadre(1);generarHijos("Expr",$2,"ExprSingle") }
 ; 
 
 ExprSingle  
-  : OrExpr  { $$=$1 }
+  : OrExpr  { $$=$1; generarPadre(1);generarHijos("OrExpr") }
 ;
 
 OrExpr      
-  : AndExpr                 { $$ = $1 }
-  | OrExpr ROR AndExpr      { $$ = new Logical($1,$2,$3) }
+  : AndExpr                 { $$ = $1; generarPadre(1);generarHijos("AndExpr")  }
+  | OrExpr ROR AndExpr      { $$ = new Logical($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("OrExpr",$2,"AndExpr") }
 ;
 
 AndExpr     
-  : ComparisonExpr                { $$ = $1 }
-	| AndExpr RAND ComparisonExpr   { $$ = new Logical($1,$2,$3) }
+  : ComparisonExpr                { $$ = $1; generarPadre(1);generarHijos("ComparisonExpr") }
+	| AndExpr RAND ComparisonExpr   { $$ = new Logical($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("AndExpr",$2,"ComparisonExpr") }
 ;
 
 ComparisonExpr    
-  : StringConcatExpr                              { $$=$1 }
-  | StringConcatExpr GeneralComp StringConcatExpr { $$ = new ComparisonExp($1,$2,$3) } 
+  : StringConcatExpr                              { $$=$1; generarPadre(1);generarHijos("StringConcatExpr") }
+  | StringConcatExpr GeneralComp StringConcatExpr { $$ = new ComparisonExp($1,$2,$3); generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr") } 
 //| StringConcatExpr ValueComp StringConcatExpr   {} 
 // falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
 ;
@@ -137,168 +171,168 @@ ValueComp    // palabras reservadas
 */
 
 GeneralComp       // signo
-  : IGUAL     { $$ = $1 } // 5 = 5 | nodo = nodo
-	| DIFERENTE { $$ = $1 }
-	| MENOR     { $$ = $1	}
-	| MENORIG   { $$ = $1 }
-	| MAYOR     { $$ = $1	}
-	| MAYORIG   { $$ = $1 }
+  : IGUAL     { $$ = $1; generarHijos($1) } // 5 = 5 | nodo = nodo
+	| DIFERENTE { $$ = $1; generarHijos($1) }
+	| MENOR     { $$ = $1; generarHijos($1)	}
+	| MENORIG   { $$ = $1; generarHijos($1) }
+	| MAYOR     { $$ = $1; generarHijos($1)	}
+	| MAYORIG   { $$ = $1; generarHijos($1) }
 ;
 
 
 
 StringConcatExpr  
-  : AdditiveExpr                         { $$=$1 }
+  : AdditiveExpr                         { $$=$1; generarPadre(1);generarHijos("AdditiveExpr") }
 	| StringConcatExpr OR_EXP AdditiveExpr { }
 ;
 
 AdditiveExpr      
-  : MultiplicativeExpr                    { $$=$1 }
-	| AdditiveExpr MAS MultiplicativeExpr   { $$= new Arithmetic($1,$2,$3) }
-	| AdditiveExpr MENOS MultiplicativeExpr { $$= new Arithmetic($1,$2,$3) }
+  : MultiplicativeExpr                    { $$=$1; generarPadre(1);generarHijos("MultiplicativeExpr") }
+	| AdditiveExpr MAS MultiplicativeExpr   { $$= new Arithmetic($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("AdditiveExpr",$2,"MultiplicativeExpr") }
+	| AdditiveExpr MENOS MultiplicativeExpr { $$= new Arithmetic($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("AdditiveExpr",$2,"MultiplicativeExpr")  }
 ;
 
 //Aca se intercambio UnoinExpr por Unary Expresion cambiar en el futuro
 MultiplicativeExpr      
-  : UnaryExpr                         { $$=$1 }
-	| MultiplicativeExpr POR UnaryExpr  { $$= new Arithmetic($1,$2,$3) }
-	| MultiplicativeExpr DIV UnaryExpr  { $$= new Arithmetic($1,$2,$3) }
-	| MultiplicativeExpr IDIV UnaryExpr { $$= new Arithmetic($1,$2,$3) }
-	| MultiplicativeExpr MOD UnaryExpr  { $$= new Arithmetic($1,$2,$3) }
+  : UnaryExpr                         { $$=$1; generarPadre(1);generarHijos("UnaryExpr") }
+	| MultiplicativeExpr POR UnaryExpr  { $$= new Arithmetic($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("MultiplicativeExpr",$2,"UnaryExpr")  }
+	| MultiplicativeExpr DIV UnaryExpr  { $$= new Arithmetic($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("MultiplicativeExpr",$2,"UnaryExpr") }
+	| MultiplicativeExpr IDIV UnaryExpr { $$= new Arithmetic($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("MultiplicativeExpr",$2,"UnaryExpr") }
+	| MultiplicativeExpr MOD UnaryExpr  { $$= new Arithmetic($1,$2,$3); generarPadre(3);generarPadre(1);generarHijos("MultiplicativeExpr",$2,"UnaryExpr") }
 ;
 
 UnaryExpr   
-  : ValueExpr                         { $$=$1 }
-	| MAS UnaryExpr                     {}
-	| MENOS UnaryExpr                   {}
+  : PathExpr                         { $$=$1; generarPadre(1);generarHijos("PathExpr") }
+	| MAS PathExpr                     {}
+	| MENOS PathExpr                   {}
 ;
 
-ValueExpr   
-  : SimpleMapExpr                     { $$=$1 }
-;
+// ValueExpr   
+//   : SimpleMapExpr                     { $$=$1 }
+// ;
 
-SimpleMapExpr     
-  : PathExpr                            { $$=$1 }
-	| SimpleLetClause ADMIRACION PathExpr {}
-;
+// SimpleMapExpr     
+//   : PathExpr                            { $$=$1 }
+// 	| SimpleLetClause ADMIRACION PathExpr {}
+// ;
 
  //  /emplyee/name//id
 PathExpr    
-  : BARRA RelativePathExpr              { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2) }
-	| DOBLEBARRA RelativePathExpr         { $2[0].tipo=TipoPath.REL;$$=new PathExp($2) }
-	| RelativePathExpr                    { $$=new PathExp($1) }
-	| BARRA                               { $$=new PathExp([]) }
+  : BARRA RelativePathExpr              { $2[0].tipo=TipoPath.ABS;$$=new PathExp($2); generarPadre(2);generarHijos($1,"RelativePathExpr") }
+	| DOBLEBARRA RelativePathExpr         { $2[0].tipo=TipoPath.REL;$$=new PathExp($2); generarPadre(2);generarHijos($1,"RelativePathExpr") }
+	| RelativePathExpr                    { $$=new PathExp($1); generarPadre(1);generarHijos("RelativePathExpr") }
+	| BARRA                               { $$=new PathExp([]); generarHijos($1) }
 ;
 
 RelativePathExpr  
-  : StepExpr                              { $$ = []; $$.push($1) }
-	| RelativePathExpr BARRA StepExpr       { $$ = $1; $3.tipo=TipoPath.ABS; $$.push($3) }
-	| RelativePathExpr DOBLEBARRA StepExpr  { $$ = $1; $3.tipo=TipoPath.REL; $$.push($3) }
+  : StepExpr                              { $$ = []; $$.push($1); generarPadre(1);generarHijos("StepExpr")  }
+	| RelativePathExpr BARRA StepExpr       { $$ = $1; $3.tipo=TipoPath.ABS; $$.push($3); generarPadre(3);generarPadre(1);generarHijos("RelativePathExpr",$2,"StepExpr") }
+	| RelativePathExpr DOBLEBARRA StepExpr  { $$ = $1; $3.tipo=TipoPath.REL; $$.push($3); generarPadre(3);generarPadre(1);generarHijos("RelativePathExpr",$2,"StepExpr") }
 ;
 
 StepExpr    
-  : PostfixExpr { $$=$1 }
-	| AxisStep    { $$=$1 }
+  : PostfixExpr { $$=$1; generarPadre(1); generarHijos("PostfixExpr") }
+	| AxisStep    { $$=$1; generarPadre(1); generarHijos("AxisStep") }
 ;
 
 AxisStep    
-  : ReverseStep               { $$=$1 }
-	| ForwardStep               { $$=$1 }
-	| ReverseStep PredicateList { $$=$1; $$.predicado=$2 }
-	| ForwardStep PredicateList { $$=$1; $$.predicado=$2 }
+  : ReverseStep               { $$=$1; generarPadre(1);generarHijos("ReverseStep") }
+	| ForwardStep               { $$=$1; generarPadre(1);generarHijos("ForwardStep") }
+	| ReverseStep PredicateList { $$=$1; $$.predicado=$2; generarPadre(2);generarPadre(1);generarHijos("ReverseStep","PredicateList") }
+	| ForwardStep PredicateList { $$=$1; $$.predicado=$2; generarPadre(2);generarPadre(1);generarHijos("ForwardStep","PredicateList") }
 ;
 
 PredicateList     
-  : Predicate                 { $$=[];$$.push($1) }
-  | PredicateList Predicate   { $$=$1;$$.push($2) }
+  : Predicate                 { $$=[];$$.push($1); generarPadre(1);generarHijos("Predicate") }
+  | PredicateList Predicate   { $$=$1;$$.push($2); generarPadre(2);generarPadre(1);generarHijos("PredicateList","Predicate") }
 ;
 
 //Faltan las formas no abreviadas
 ForwardStep 
-  : AbbrevForwardStep    { $$=$1 }
-  | ForwardAxis NameTest { $$=$1; $$.nombre=$2 }
+  : AbbrevForwardStep    { $$=$1; generarPadre(1); generarHijos("AbbrevForwardStep") }
+  | ForwardAxis NameTest { $$=$1; $$.nombre=$2; generarPadre(2);generarPadre(1); generarHijos("ForwardAxis","NameTest") }
 ;
 
 AbbrevForwardStep 
-  : ARROBA NameTest { $$=new Atributo($2,[],TipoPath.ABS) }
-  | NameTest        { $$=new Camino($1,[],TipoPath.ABS) }
+  : ARROBA NameTest { $$=new Atributo($2,[],TipoPath.ABS); generarPadre(2);generarHijos($1,"NameTest") }
+  | NameTest        { $$=new Camino($1,[],TipoPath.ABS); generarPadre(1);generarHijos("NameTest") }
 ;
 
 ForwardAxis
-  : RCHILD DOBLEDOSPUNTOS         { $$=new Child(null,[],TipoPath.ABS) }
-  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant(null,[],TipoPath.ABS) }
-  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute(null,[],TipoPath.ABS) }
-  | RSELF DOBLEDOSPUNTOS          { $$=new Self(null,[],TipoPath.ABS) }
-  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf(null,[],TipoPath.ABS) }
-  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling(null,[],TipoPath.ABS) }
-  | RFOLLOW DOBLEDOSPUNTOS        { $$=new Follow(null,[],TipoPath.ABS) }
+  : RCHILD DOBLEDOSPUNTOS         { $$=new Child(null,[],TipoPath.ABS); generarHijos($1,$2) }
+  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant(null,[],TipoPath.ABS); generarHijos($1,$2) }
+  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute(null,[],TipoPath.ABS); generarHijos($1,$2) }
+  | RSELF DOBLEDOSPUNTOS          { $$=new Self(null,[],TipoPath.ABS); generarHijos($1,$2) }
+  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf(null,[],TipoPath.ABS); generarHijos($1,$2) }
+  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling(null,[],TipoPath.ABS); generarHijos($1,$2) }
+  | RFOLLOW DOBLEDOSPUNTOS        { $$=new Follow(null,[],TipoPath.ABS); generarHijos($1,$2)  }
   | RNAMESPACE DOBLEDOSPUNTOS     {}
 ;
 
 //KindText no implementado todavia
 NodeTest    
-  : NameTest    { $$=$1 }
+  : NameTest    { $$=$1; generarPadre(1); generarHijos("NameTest") }
   //| KindTest
 ;
 
 NameTest    
-  : NOMBRE    { $$=$1 }
-	| Wildcard  { $$=$1 }
+  : NOMBRE    { $$=$1; generarHijos($1) }
+	| Wildcard  { $$=$1; generarHijos($1) }
 ;
 
 //
 Wildcard    
-  : ASTERISCO { $$=$1 }
+  : ASTERISCO { $$=$1; generarHijos($1) }
 ;
 
 //Faltan las formas no abrevidas
 ReverseStep 
-  :  AbbrevReverseStep    { $$=$1 }
-  |  ReverseAxis NameTest { $$=$1; $$.nombre=$2  }
+  :  AbbrevReverseStep    { $$=$1; generarPadre(1);generarHijos("AbbrevReverseStep") }
+  |  ReverseAxis NameTest { $$=$1; $$.nombre=$2; generarPadre(2);generarPadre(1);generarHijos("ReverseAxis","NameTest")  }
 ;
 
 AbbrevReverseStep 
-  : DOBLEPUNTO  { $$=new CaminoInverso("*",[],TipoPath.ABS) }
+  : DOBLEPUNTO  { $$=new CaminoInverso("*",[],TipoPath.ABS); generarHijos($1) }
 ;
 
 ReverseAxis
-  : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS) }
-  | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS) }
-  | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS) }
+  : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS); generarHijos($1,$2) }
+  | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS); generarHijos($1,$2) }
+  | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS); generarHijos($1,$2) }
   | RPRECED DOBLEDOSPUNTOS            { }
-  | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS)}
+  | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS); generarHijos($1,$2) }
 ;
 
 PostfixExpr   
-  : PrimaryExpr               { $$=$1 }
-	| PrimaryExpr PostfixExprL  { $$=$1 }
+  : PrimaryExpr               { $$=$1; generarPadre(1); generarHijos("PrimaryExpr") }
+	| PrimaryExpr PostfixExprL  { $$=$1; generarPadre(2); generarPadre(1); generarHijos("PrimaryExpr","PostfixExprL") }
 ;
 
 //Falta crear los demas metodos de argumentos para las primaryEXpr
 PostfixExprL      
-    : Predicate                 { $$=$1 }
+    : Predicate                 { $$=$1; generarPadre(1); generarHijos("Predicate") }
   //| ArgumentList
   //| Lookup
-	  | PostfixExprL Predicate       { $$=$1+$2 }
+	  | PostfixExprL Predicate       { $$=$1+$2; generarPadre(2); generarPadre(1); generarHijos("PostfixExprL","Predicate") }
   //| PostfixExprL ArgumentList
   //| PostfixExprL Lookup
 ;
 
 Predicate   
-  : CORA ExprSingle CORB            { $$=$2 }
+  : CORA ExprSingle CORB            { $$=$2; generarPadre(2); generarHijos($1,"ExprSingle",$3) }
 ;
 
 PrimaryExpr 
-  : Literal                   { $$=$1 }
-	| FunctionCall              { $$=$1 }
-	| ContextItemExpr           { $$=$1 }
-	| ParenthesizedExpr         { $$=$1 }
+  : Literal                   { $$=$1; generarPadre(1); generarHijos("Literal") }
+	| FunctionCall              { $$=$1; }
+	| ContextItemExpr           { $$=$1; }
+	| ParenthesizedExpr         { $$=$1; generarPadre(1); generarHijos("ParenthesizedExpr") }
 ;
 
 Literal     
-  : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1) }
-	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1) }
-	| CADENA                    { $$=new Literal(Tipo.STRING,$1) }
+  : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1); generarHijos($1) }
+	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1); generarHijos($1) }
+	| CADENA                    { $$=new Literal(Tipo.STRING,$1);  generarHijos($1) }
 ;
 
 
@@ -318,10 +352,10 @@ Argument
 ;
 
 ContextItemExpr   
-  : PUNTO  { $$=$1 }
+  : PUNTO  { $$=$1; generarHijos($1) }
 ;
 
 ParenthesizedExpr 
-  : PARENTESISA PARENTESISC       { $$=$1+$2 }
-	| PARENTESISA Expr PARENTESISC  { $$=$1+$3 }
+  : PARENTESISA PARENTESISC       { $$=$1+$2; generarHijos($1,$2) }
+	| PARENTESISA Expr PARENTESISC  { $$=$1+$3; generarHijos($1,$2,$3) }
 ;	

@@ -72,75 +72,101 @@
   }
 */
 var grammarDesc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,8],$V2=[5,19],$V3=[2,5],$V4=[1,17],$V5=[5,10,11,19],$V6=[1,22],$V7=[1,23],$V8=[1,24],$V9=[10,11],$Va=[2,21],$Vb=[15,18],$Vc=[2,25];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[6,20],$V3=[2,6],$V4=[1,18],$V5=[6,11,12,20],$V6=[1,23],$V7=[1,24],$V8=[1,25],$V9=[11,12],$Va=[2,22],$Vb=[16,19],$Vc=[2,26];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"LISTA_OBJETO":4,"EOF":5,"ETIQUETACONFIGURACION":6,"OBJETO":7,"SUB_LISTA_OBJETO":8,"OBJETOGENERAL":9,"Texto":10,"InicioEtiquetaI":11,"SUB_OBJETOGENERAL":12,"LISTA_ATRIBUTOS":13,"CIERRE_ETIQUETAINICIO":14,"CierreEtiquetaI":15,"LISTA_OBJETO_Epsilon":16,"ETIQUETACIERRE":17,"FinEtiquetaI":18,"InicioEtiquetaC":19,"CierreEtiquetaC":20,"InicioEtiquetaConf":21,"SUB_ETIQUETACONFIG":22,"LISTA_ATRIBUTOSCONF":23,"CierreEtiquetaConf":24,"ATRIBUTOCONF":25,"SUB_LISTA_ATRIBUTOSCONF":26,"AtributoConf":27,"IgualAtributoConf":28,"ValorAtributoConf":29,"ATRIBUTO":30,"SUB_LISTA_ATRIBUTOS":31,"AtributoEtiqueta":32,"IgualAtributo":33,"ValorAtributo":34,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",10:"Texto",11:"InicioEtiquetaI",15:"CierreEtiquetaI",18:"FinEtiquetaI",19:"InicioEtiquetaC",20:"CierreEtiquetaC",21:"InicioEtiquetaConf",24:"CierreEtiquetaConf",27:"AtributoConf",28:"IgualAtributoConf",29:"ValorAtributoConf",32:"AtributoEtiqueta",33:"IgualAtributo",34:"ValorAtributo"},
-productions_: [0,[3,2],[3,3],[4,2],[8,2],[8,0],[7,1],[7,1],[9,2],[12,2],[12,1],[14,3],[14,1],[17,2],[16,1],[16,0],[6,2],[22,2],[22,1],[23,2],[26,2],[26,0],[25,3],[13,2],[31,2],[31,0],[30,3]],
+symbols_: {"error":2,"ini":3,"CUERPO":4,"LISTA_OBJETO":5,"EOF":6,"ETIQUETACONFIGURACION":7,"OBJETO":8,"SUB_LISTA_OBJETO":9,"OBJETOGENERAL":10,"Texto":11,"InicioEtiquetaI":12,"SUB_OBJETOGENERAL":13,"LISTA_ATRIBUTOS":14,"CIERRE_ETIQUETAINICIO":15,"CierreEtiquetaI":16,"LISTA_OBJETO_Epsilon":17,"ETIQUETACIERRE":18,"FinEtiquetaI":19,"InicioEtiquetaC":20,"CierreEtiquetaC":21,"InicioEtiquetaConf":22,"SUB_ETIQUETACONFIG":23,"LISTA_ATRIBUTOSCONF":24,"CierreEtiquetaConf":25,"ATRIBUTOCONF":26,"SUB_LISTA_ATRIBUTOSCONF":27,"AtributoConf":28,"IgualAtributoConf":29,"ValorAtributoConf":30,"ATRIBUTO":31,"SUB_LISTA_ATRIBUTOS":32,"AtributoEtiqueta":33,"IgualAtributo":34,"ValorAtributo":35,"$accept":0,"$end":1},
+terminals_: {2:"error",6:"EOF",11:"Texto",12:"InicioEtiquetaI",16:"CierreEtiquetaI",19:"FinEtiquetaI",20:"InicioEtiquetaC",21:"CierreEtiquetaC",22:"InicioEtiquetaConf",25:"CierreEtiquetaConf",28:"AtributoConf",29:"IgualAtributoConf",30:"ValorAtributoConf",33:"AtributoEtiqueta",34:"IgualAtributo",35:"ValorAtributo"},
+productions_: [0,[3,1],[4,2],[4,3],[5,2],[9,2],[9,0],[8,1],[8,1],[10,2],[13,2],[13,1],[15,3],[15,1],[18,2],[17,1],[17,0],[7,2],[23,2],[23,1],[24,2],[27,2],[27,0],[26,3],[14,2],[32,2],[32,0],[31,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column); return this.$; 
+this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("INICIO"); return {datos:$$[$0],nodes:grafo.pilaNodos,edges:grafo.PilaEdges}
 break;
 case 2:
- this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); return this.$; 
+ 
+    this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column);  
+    grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO")
+    
 break;
 case 3:
- if ($$[$0-1].esTexto) { this.$ = $$[$0-1].texto } else { this.$=$$[$0]; this.$.push($$[$0-1].texto); this.$.reverse(); } 
+ this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); 
+    grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
+  
 break;
 case 4:
- if ($$[$0-1].esTexto) { this.$ = $$[$0-1].texto } else { this.$=$$[$0]; this.$.push($$[$0-1].texto); }  
+ if ($$[$0-1].esTexto) { this.$ = $$[$0-1].texto } else { this.$=$$[$0]; this.$.push($$[$0-1].texto); this.$.reverse(); } grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("OBJETO","SUB_LISTA_OBJETO") 
 break;
 case 5:
- this.$ = new Array(); 
+ if ($$[$0-1].esTexto) { this.$ = $$[$0-1].texto } else { this.$=$$[$0]; this.$.push($$[$0-1].texto); } grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("OBJETO","SUB_LISTA_OBJETO") 
 break;
 case 6:
- this.$ = { texto:$$[$0], esTexto:false}; 
+ this.$ = new Array(); grafo.generarHijos("Ɛ") 
 break;
 case 7:
- this.$ = { texto:$$[$0], esTexto:true}; 
+ this.$ = { texto:$$[$0], esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETOGENERAL")
 break;
 case 8:
- $$[$0].linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo)? $$[$0]:null 
+ this.$ = { texto:$$[$0], esTexto:true}; grafo.generarHijos("Texto")
 break;
 case 9:
- this.$=$$[$0]; this.$.atributos=$$[$0-1];  
+ $$[$0].linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo)? $$[$0]:null; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_OBJETOGENERAL") 
 break;
 case 10:
- this.$=$$[$0]; 
+ this.$=$$[$0]; this.$.atributos=$$[$0-1]; grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOS","CIERRE_ETIQUETAINICIO")
 break;
 case 11:
- this.$ = new helpers.Objeto("", [], $$[$0-1],0,0); this.$.setTipo($$[$0]); 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("CIERRE_ETIQUETAINICIO")
 break;
 case 12:
- this.$ = new helpers.Objeto("",[], $$[$01],0,0) 
+ this.$ = new helpers.Objeto("", [], $$[$0-1],0,0); this.$.setTipo($$[$0]); grafo.generarPadre(3);grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_OBJETO_Epsilon","ETIQUETACIERRE") 
 break;
 case 13:
- this.$ = $$[$0-1]; 
+ this.$ = new helpers.Objeto("",[], [],0,0); grafo.generarHijos($$[$0])
 break;
-case 14: case 16: case 17:
- this.$ = $$[$0]; 
+case 14:
+ this.$ = $$[$0-1]; grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
-case 15: case 18: case 21: case 25:
- this.$ = []; 
+case 15:
+ this.$ = $$[$0]; grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO")
 break;
-case 19: case 20:
- this.$=$$[$0]; this.$.push($$[$0-1]); 
+case 16:
+ this.$ = []; grafo.generarHijos("Ɛ") 
+break;
+case 17:
+ this.$ = $$[$0]; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_ETIQUETACONFIG")
+break;
+case 18:
+ this.$ = $$[$0]; grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOSCONF",$$[$0]) 
+break;
+case 19:
+ this.$ = []; grafo.generarHijos($$[$0]) 
+break;
+case 20:
+ this.$=$$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","SUB_LISTA_ATRIBUTOSCONF") 
+break;
+case 21:
+ this.$=$$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","SUB_LISTA_ATRIBUTOSCONF")  
 break;
 case 22: case 26:
- this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
+ this.$ = []; grafo.generarHijos("Ɛ")
 break;
-case 23: case 24:
- this.$ = $$[$0]; this.$.push($$[$0-1]); 
+case 23:
+ this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]) 
+break;
+case 24: case 25:
+ this.$ = $$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO","SUB_LISTA_ATRIBUTOS") 
+break;
+case 27:
+ this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0])
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,9:6,10:$V0,11:$V1,21:[1,5]},{1:[3]},{5:[1,9]},{4:10,7:4,9:6,10:$V0,11:$V1},o($V2,$V3,{9:6,8:11,7:12,10:$V0,11:$V1}),{22:13,23:14,24:[1,15],25:16,27:$V4},o($V5,[2,6]),o($V5,[2,7]),{12:18,13:19,14:20,15:$V6,18:$V7,30:21,32:$V8},{1:[2,1]},{5:[1,25]},o($V2,[2,3]),o($V2,$V3,{9:6,7:12,8:26,10:$V0,11:$V1}),o($V9,[2,16]),{24:[1,27]},o($V9,[2,18]),{24:$Va,25:29,26:28,27:$V4},{28:[1,30]},o($V5,[2,8]),{14:31,15:$V6,18:$V7},o($V5,[2,10]),o($Vb,$Vc,{31:32,30:33,32:$V8}),{4:35,7:4,9:6,10:$V0,11:$V1,16:34,19:[2,15]},o($V5,[2,12]),{33:[1,36]},{1:[2,2]},o($V2,[2,4]),o($V9,[2,17]),{24:[2,19]},{24:$Va,25:29,26:37,27:$V4},{29:[1,38]},o($V5,[2,9]),o($Vb,[2,23]),o($Vb,$Vc,{30:33,31:39,32:$V8}),{17:40,19:[1,41]},{19:[2,14]},{34:[1,42]},{24:[2,20]},o([24,27],[2,22]),o($Vb,[2,24]),o($V5,[2,11]),{20:[1,43]},o([15,18,32],[2,26]),o($V5,[2,13])],
-defaultActions: {9:[2,1],25:[2,2],28:[2,19],35:[2,14],37:[2,20]},
+table: [{3:1,4:2,5:3,7:4,8:5,10:7,11:$V0,12:$V1,22:[1,6]},{1:[3]},{1:[2,1]},{6:[1,10]},{5:11,8:5,10:7,11:$V0,12:$V1},o($V2,$V3,{10:7,9:12,8:13,11:$V0,12:$V1}),{23:14,24:15,25:[1,16],26:17,28:$V4},o($V5,[2,7]),o($V5,[2,8]),{13:19,14:20,15:21,16:$V6,19:$V7,31:22,33:$V8},{1:[2,2]},{6:[1,26]},o($V2,[2,4]),o($V2,$V3,{10:7,8:13,9:27,11:$V0,12:$V1}),o($V9,[2,17]),{25:[1,28]},o($V9,[2,19]),{25:$Va,26:30,27:29,28:$V4},{29:[1,31]},o($V5,[2,9]),{15:32,16:$V6,19:$V7},o($V5,[2,11]),o($Vb,$Vc,{32:33,31:34,33:$V8}),{5:36,8:5,10:7,11:$V0,12:$V1,17:35,20:[2,16]},o($V5,[2,13]),{34:[1,37]},{1:[2,3]},o($V2,[2,5]),o($V9,[2,18]),{25:[2,20]},{25:$Va,26:30,27:38,28:$V4},{30:[1,39]},o($V5,[2,10]),o($Vb,[2,24]),o($Vb,$Vc,{31:34,32:40,33:$V8}),{18:41,20:[1,42]},{20:[2,15]},{35:[1,43]},{25:[2,21]},o([25,28],[2,23]),o($Vb,[2,25]),o($V5,[2,12]),{21:[1,44]},o([16,19,33],[2,27]),o($V5,[2,14])],
+defaultActions: {2:[2,1],10:[2,2],26:[2,3],29:[2,20],36:[2,15],38:[2,21]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -289,6 +315,8 @@ parse: function parse(input) {
 }};
 
 	var helpers = require('../analizadorXML/helpers')
+  const {grafoCST} = require('./CSTXMLDESC')
+  var grafo = new grafoCST; 
 	var atributosRaiz = []
 	function objetoCorrecto (inicio, fin){
 		inicio = inicio.replace('<','')
@@ -301,8 +329,7 @@ parse: function parse(input) {
     }
 		return undefined;
 	}
-  var ETI_ABRE_TIPO = "";
-  var INI_ETI_I = "";
+
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -636,7 +663,7 @@ case 0:
 break;
 case 1:
 break;
-case 2:this.begin("Etiquetai"); return 11
+case 2:this.begin("Etiquetai"); return 12
 break;
 case 3:this.begin("EtiquetaComentario"); 
 break;
@@ -652,39 +679,39 @@ case 8:
 break;
 case 9:
 break;
-case 10: return 32
+case 10: return 33
 break;
-case 11: return 33
+case 11: return 34
 break;
-case 12: return 34
+case 12: return 35
 break;
-case 13: this.popState(); return 15
+case 13: this.popState(); return 16
 break;
-case 14: this.popState(); return 18
+case 14: this.popState(); return 19
 break;
-case 15: this.begin("Etiquetac"); return 19
+case 15: this.begin("Etiquetac"); return 20
 break;
 case 16:
 break;
 case 17:
 break;
-case 18: this.popState(); return 20
+case 18: this.popState(); return 21
 break;
-case 19: this.begin("EtiquetaConf"); return 21
+case 19: this.begin("EtiquetaConf"); return 22
 break;
-case 20: return 27
+case 20: return 28
 break;
-case 21: return 28
+case 21: return 29
 break;
-case 22: return 29
+case 22: return 30
 break;
 case 23:
 break;
-case 24: this.popState(); return 24
+case 24: this.popState(); return 25
 break;
-case 25:return 5;
+case 25:return 6;
 break;
-case 26: return 10 
+case 26: return 11 
 break;
 }
 },

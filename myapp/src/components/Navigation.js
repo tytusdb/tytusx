@@ -19,7 +19,7 @@ class Navigation extends React.Component{
                 atributos : [],
                 hijos : []
             },
-            datos: {
+            datosCST: {
                 nodes: [
                     { id: 1, label: 'Node 1' },
                     { id: 2, label: 'Node 2' },
@@ -33,7 +33,23 @@ class Navigation extends React.Component{
                     { from: 2, to: 4 },
                     { from: 2, to: 5 }
                 ]
-            }
+            },
+            datosCSTXML: {
+                nodes: [
+                    { id: 1, label: 'Node 1' },
+                    { id: 2, label: 'Node 2' },
+                    { id: 3, label: 'Node 3' },
+                    { id: 4, label: 'Node 4' },
+                    { id: 5, label: 'Node 5' }
+                ],
+                edges: [
+                    { from: 1, to: 2 },
+                    { from: 1, to: 3 },
+                    { from: 2, to: 4 },
+                    { from: 2, to: 5 }
+                ]
+            },
+            graphvizCST:""
         }
         
         
@@ -51,14 +67,18 @@ class Navigation extends React.Component{
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
         var respuesta=funcion.Ejecutar(this.state.XML);
-        this.setState({OutputTextarea: respuesta});         
+        this.setState({OutputTextarea: respuesta});  
+        var datos = {nodes:funcion.Nodos,edges:funcion.Edges}   
+        this.setState({datosCST:datos}) 
+        this.setState({graphvizCST:funcion.graphviz})
     }
 
     xmlDesc(){
         var x = this.state.XMLTextarea;
         var analizadorXMLDesc = require('../code/analizadorXMLDesc/analizadorXMLDesc');
         var resultado = analizadorXMLDesc.Ejecutar(x);
-        this.setState({XML:resultado})
+        this.setState({XML:resultado.datos})
+        this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
 
     
@@ -66,7 +86,8 @@ class Navigation extends React.Component{
         var x = this.state.XMLTextarea;
         var analizadorXML = require('../code/analizadorXML/analizadorXML');
         var resultado = analizadorXML.Ejecutar(x);
-        this.setState({XML:resultado})
+        this.setState({XML:resultado.datos})
+        this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
 
     refresh(){
@@ -101,8 +122,8 @@ class Navigation extends React.Component{
         if(content=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
         var resultado = analizadorXML.Ejecutar(content)
-        this.setState({XML:resultado})
-
+        this.setState({XML:resultado.datos})
+        this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     } 
 
     handleFocus = (e) =>{
@@ -110,7 +131,8 @@ class Navigation extends React.Component{
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
        
         var resultado = analizadorXML.Ejecutar(e.target.value)
-        this.setState({XML:resultado})
+        this.setState({XML:resultado.datos})
+        this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
 
 
@@ -153,7 +175,7 @@ class Navigation extends React.Component{
                         <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }>Actualizar</button>
                     </div>
                     <div className="col">
-                        <Link to= {{ pathname: "/mywebsite/reporte", datos:this.state.datos }}>
+                        <Link to= {{ pathname: "/mywebsite/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML ,graphviz:this.state.graphvizCST }}>
                             <button type="button" className="btn btn-primary btn-lg">Reportes</button>
                         </Link>                        
                     </div>

@@ -29,8 +29,8 @@ class TablaSimbolos extends React.Component{
         tipo: "Cadena",
         valor: entActual,
         ambito: entActual,
-        fila: 0,
-        columna: 0
+        fila: ent.linea,
+        columna: ent.columna
         });
         
         //Valor de las etiquetas
@@ -39,8 +39,8 @@ class TablaSimbolos extends React.Component{
             tipo: "Cadena",
             valor: ent.texto,
             ambito: entActual,
-            fila: 0,
-            columna: 0
+            fila: ent.linea,
+            columna: ent.columna
             });
         }
         
@@ -52,8 +52,8 @@ class TablaSimbolos extends React.Component{
                 tipo: "Atributo",
                 valor: atributo.valor,
                 ambito: entActual,
-                fila: 0,
-                columna: 0
+                fila: atributo.linea,
+                columna: atributo.columna
             });   
         }
 
@@ -65,8 +65,8 @@ class TablaSimbolos extends React.Component{
                 tipo: "Etiqueta",
                 valor: "Object",
                 ambito: entActual,
-                fila: 0,
-                columna: 0
+                fila: hijo.linea,
+                columna: hijo.columna
             });  
             
             this.readSimbols(hijo);

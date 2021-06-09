@@ -9,11 +9,13 @@ class InConsole extends React.Component{
 
     constructor(props){
         super(props);
-        this.datos = this.props.location.datos;
-        console.log(this.datos);
+        this.datos = {nodes:[],edges:[]} 
+        this.datos = this.props.location.datosCST;
+        this.datosXML = this.props.location.datosCSTXML;
+        this.graphviz = ""
+        this.graphvizCST=this.props.location.graphviz;
+        console.log(this.props.location);
     }
-
-    
 
     options = {
         layout: {
@@ -49,7 +51,7 @@ class InConsole extends React.Component{
                 
                 <div className = "container-fluid">
                     <Graph
-                        graph={this.datos}
+                        graph={this.datosXML}
                         options={this.options}
                         events={this.events}
                         //style={style}
