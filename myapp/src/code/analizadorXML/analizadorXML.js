@@ -4,7 +4,7 @@ var helpers = require('./helpers')
 function Ejecutar(contenido){
     //console.log(contenido)
     var resultado = parser.parse(contenido)
-    //console.log(JSON.stringify(resultado))
+    console.log(JSON.stringify(resultado.datos))
     return resultado
 }
 
