@@ -32,6 +32,20 @@ class Objeto extends nodo {
     setTipo(tipo){
         this.tipo = tipo.replace('</','')
     }
+
+    getTextoRelativo(){
+        // recorrer insertar el valor actual
+        retorno = []
+        if (this.texto != '') retorno.push(this.texto)
+
+        // recorrer hijos
+        for (var hijo of this.hijos){
+            var retornoHijo = hijo.getTextoRelativo()
+            retorno = retorno.concat(retornoHijo)
+        }
+
+        return retorno
+    }
 }
 
 class Atributo extends nodo {

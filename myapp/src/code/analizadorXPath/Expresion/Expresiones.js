@@ -31,9 +31,9 @@ export class Nodo extends NodoExp
 {
     constructor(tipo,entorno,pila,valor)
     {
-        super(tipo,valor)
-        this.entorno=entorno
-        this.pila=pila
+        super(tipo,valor) // Tipo es NODO; valor es TEXTO
+        this.entorno=entorno // Atributos e Hijos de Etiqueta
+        this.pila=pila // Anteriores
     }
 
     getValor()
