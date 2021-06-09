@@ -16,8 +16,11 @@
 "="					return 'igual';
 "("					return 'para';
 ")"					return 'parc';
-
-
+"&lt"               return 'lg';
+"&gt"               return 'gt';
+"&amp"              return 'amp';
+"&apos"             return 'apos';
+"&quot"             return 'quot';
 
 
 /* Espacios en blanco */
@@ -33,8 +36,8 @@
 
 
 /* Estado Comentarios */
-"!--"                        { this.pushState("COMMENTMULTILINE"); }
-<COMMENTMULTILINE>"-->"      { this.popState(); }
+"<!--"                      { this.pushState("COMMENTMULTILINE"); }
+<COMMENTMULTILINE>"-->"     { this.popState(); }
 <COMMENTMULTILINE><<EOF>>   { this.popState(); }
 <COMMENTMULTILINE>[^]       { /* Ignore anything */ }
 
@@ -159,4 +162,19 @@ VALORES : identificador {
         | entero { 
             rg_xml.setValor('VALORES -> ENTERO;\n');
             $$ = $1; 
+        }
+        | lg {
+            $$ = '<';
+        }
+        | gt {
+            $$ = '>';
+        }
+        | amp {
+            $$ = '&';
+        }
+        | apos {
+            $$ = '\'';
+        }
+        | quot {
+            $$ = '\"';
         };
