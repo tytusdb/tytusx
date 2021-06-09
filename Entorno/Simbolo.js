@@ -7,6 +7,9 @@ class Simbolo {
         this.linea = linea;
         this.columna = columna;
     }
+    getId() {
+        return this.identificador;
+    }
     getType() {
         return this.type;
     }
@@ -21,5 +24,11 @@ class Simbolo {
     }
     setEntorno(entorno) {
         this.entorno = entorno;
+    }
+    getLinea() {
+        return this.linea;
+    }
+    getColumna() {
+        return this.columna;
     }
 }

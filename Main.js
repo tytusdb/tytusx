@@ -6,6 +6,8 @@ function analizar() {
     let entornoGlobal = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
     consola.value = entornoGlobal.getTable().toString();
+    setSymbolTableHead();
+    setSymbolTableBody(entornoGlobal);
 }
 function addSimbolosToEntorno(anterior, nodos, ambito) {
     nodos.forEach((n) => {
@@ -20,5 +22,41 @@ function addSimbolosToEntorno(anterior, nodos, ambito) {
         }
         simbolo.setEntorno(entornoNode);
         anterior.add(simbolo);
+    });
+}
+function setSymbolTableHead() {
+    let tableHead = document.querySelector('#tableHead');
+    tableHead.innerHTML = '';
+    let content = new Array();
+    content.push("<tr>");
+    content.push("\t<th>" + "Identificador" + "</th>");
+    content.push("\t<th>" + "Valor" + "</th>");
+    content.push("\t<th>" + "Tipo" + "</th>");
+    content.push("\t<th>" + "Ambito" + "</th>");
+    content.push("\t<th>" + "Linea" + "</th>");
+    content.push("\t<th>" + "Columna" + "</th>");
+    content.push("</tr>");
+    tableHead.innerHTML = content.join("");
+}
+function setSymbolTableBody(entorno) {
+    let tableBody = document.querySelector('#tableBody');
+    tableBody.innerHTML = "";
+    let content = new Array();
+    symbolstToTable(content, entorno);
+    tableBody.innerHTML = content.join("");
+}
+function symbolstToTable(content, entorno) {
+    entorno.getTable().forEach((s) => {
+        content.push("<tr>");
+        content.push("\t<td>" + s.getId() + "</td>");
+        content.push("\t<td>" + s.getImplicityValue() + "</td>");
+        content.push("\t<td>" + s.getType() + "</td>");
+        content.push("\t<td>" + s.getAmbito() + "</td>");
+        content.push("\t<td>" + s.getLinea() + "</td>");
+        content.push("\t<td>" + s.getColumna() + "</td>");
+        content.push("</tr>");
+        if (s.getEntorno() != null) {
+            symbolstToTable(content, s.getEntorno());
+        }
     });
 }

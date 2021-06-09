@@ -84,7 +84,7 @@ ATTRIBS
 ;
 
 ATTRIB
-    : IDENTIFIER assign value           {$$ = new Atributo($1,$3,@1.first_line, (@1.first_column + 1));}
+    : IDENTIFIER assign value           {$$ = new Atributo($1,$3.replaceAll('\"', ""),@1.first_line, (@1.first_column + 1));}
 ;
 
 TEXTTAG
