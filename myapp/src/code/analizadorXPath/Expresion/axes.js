@@ -304,10 +304,10 @@ export class Camino extends Axes
                     var nuevaPila = Object.assign([],nodo.pila)
                     nuevaPila.push(nodo.entorno)
                     retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion,posicion))
+                    posicion++
                 }
             }
             retorno = Predicado(this.predicado,retorno)
-            posicion++
         }
         else
         {

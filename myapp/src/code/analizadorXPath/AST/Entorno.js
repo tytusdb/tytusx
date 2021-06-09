@@ -142,10 +142,12 @@ export function Predicado(predicado,retorno)
           case Tipo.INTEGER:
           case Tipo.DECIMAL:
             var temp=[]
+            var posicion=0;
             for (const posible of posibles) {
               if(retorno[posible.valor-1])
               {
                 temp.push(retorno[posible.valor-1])
+                posicion++;
               }
             }
             retorno = temp
@@ -155,4 +157,9 @@ export function Predicado(predicado,retorno)
     } 
   }
   return retorno
+}
+
+function concatenarNodos(principal,secundario)
+{
+  
 }
