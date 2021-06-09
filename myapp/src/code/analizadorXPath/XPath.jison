@@ -153,8 +153,8 @@ AndExpr
 ;
 
 ComparisonExpr    
-  : StringConcatExpr                              { $$=$1; generarPadre(1);generarHijos("StringConcatExpr") }
-  | StringConcatExpr GeneralComp StringConcatExpr { $$ = new ComparisonExp($1,$2,$3); generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr") } 
+  : AdditiveExpr                              { $$=$1; generarPadre(1);generarHijos("StringConcatExpr") }
+  | AdditiveExpr GeneralComp AdditiveExpr { $$ = new ComparisonExp($1,$2,$3); generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr") } 
 //| StringConcatExpr ValueComp StringConcatExpr   {} 
 // falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
 ;
@@ -181,10 +181,10 @@ GeneralComp       // signo
 
 
 
-StringConcatExpr  
-  : AdditiveExpr                         { $$=$1; generarPadre(1);generarHijos("AdditiveExpr") }
-	| StringConcatExpr OR_EXP AdditiveExpr { }
-;
+// StringConcatExpr  
+//   : AdditiveExpr                         { $$=$1; generarPadre(1);generarHijos("AdditiveExpr") }
+// 	| StringConcatExpr OR_EXP AdditiveExpr { }
+// ;
 
 AdditiveExpr      
   : MultiplicativeExpr                    { $$=$1; generarPadre(1);generarHijos("MultiplicativeExpr") }

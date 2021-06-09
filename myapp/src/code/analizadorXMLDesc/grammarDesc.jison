@@ -62,7 +62,7 @@
 <EtiquetaConf>"="             			{ return 'IgualAtributoConf'}
 <EtiquetaConf>\"[^\n\"]*\"        		{ return 'ValorAtributoConf'}
 
-<EtiquetaConf>[ \r\t]+  				{}
+<EtiquetaConf>[ \r\t]+  				    {}
 <EtiquetaConf>"?>"            			{ this.popState(); return 'CierreEtiquetaConf'}
 
 
