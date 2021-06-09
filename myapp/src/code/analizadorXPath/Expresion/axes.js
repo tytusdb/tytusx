@@ -184,6 +184,7 @@ export class FollowSibling extends Axes
   }
 }
 
+
 export class Follow extends Axes
 {
   constructor(nombre,predicado,tipo)
@@ -294,6 +295,7 @@ export class Camino extends Axes
       for (const nodo of nodos) 
       {
         var retorno = []
+        var posicion = 0;
         if(this.tipo==TipoPath.ABS)
         {
             for (const iterator of nodo.entorno.hijos) {
@@ -301,10 +303,11 @@ export class Camino extends Axes
                 {
                     var nuevaPila = Object.assign([],nodo.pila)
                     nuevaPila.push(nodo.entorno)
-                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto))
+                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion,posicion))
                 }
             }
             retorno = Predicado(this.predicado,retorno)
+            posicion++
         }
         else
         {
@@ -355,14 +358,14 @@ function RecursivaCamino(nodos,nombre,predicado)
       nuevaPila.push(nodo.entorno)
       var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto)
       hijos.push(RecursivaCamino([hijo],nombre,predicado))
-      if(iterator.tipo==nombre || nombre=="*") subretorno.push({id:index,nodo:hijo})
+      if(iterator.tipo==nombre || nombre=="*") { hijo.posicion=index; subretorno.push(hijo);  }
     } 
     subretorno = Predicado(predicado,subretorno)
     var index = 0
     for (const [indexHijo,hijo] of hijos.entries()) {
-      if(subretorno[index] && subretorno[index].id==indexHijo)
+      if(subretorno[index] && subretorno[index].posicion==indexHijo)
       {
-        retorno.push(subretorno[index].nodo)
+        retorno.push(subretorno[index])
         index++
       }
       retorno = retorno.concat(hijo)

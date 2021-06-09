@@ -29,11 +29,17 @@ export class Literal extends NodoExp
 
 export class Nodo extends NodoExp
 {
-    constructor(tipo,entorno,pila,valor)
+    constructor(tipo,entorno,pila,valor,posicion=-1)
     {
         super(tipo,valor) // Tipo es NODO; valor es TEXTO
         this.entorno=entorno // Atributos e Hijos de Etiqueta
         this.pila=pila // Anteriores
+        this.posicion=posicion
+    }
+
+    setPosicion(posicion)
+    {
+        this.posicion=posicion
     }
 
     getValor()

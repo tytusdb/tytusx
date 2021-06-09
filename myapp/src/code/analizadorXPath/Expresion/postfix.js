@@ -1,6 +1,6 @@
 import { concat, pad } from "lodash"
 import { Tipo, TipoPath, Predicado } from "../AST/Entorno"
-import { Nodo } from "./Expresiones"
+import { Nodo,Literal } from "./Expresiones"
 
 
 class PostFix
@@ -30,7 +30,7 @@ export class Texto extends PostFix {
         // concatenar el texto de los hijos
         if (this.tipo == TipoPath.ABS){
           // no concatenar vacíos
-          if (obj.valor != '') retorno.push(obj.valor)
+          if (obj.valor != '') retorno.push(new Literal(Tipo.STRING,obj.valor))
         } else {
           // obtiene el texto de manera recursiva
           retorno = obj.entorno.getTextoRelativo()
@@ -83,10 +83,24 @@ function GenerarNodosHijos(padre)
 
 export class CallFunction extends PostFix 
 {
-  constructor(predicado,tipo)
+  constructor(predicado,tipo,nombre)
   {
     super(predicado,tipo)
+    this.nombre=nombre
   }
 
-  
+  getValor(nodos)
+  {
+    var retorno = []
+    switch(this.nombre)
+    {
+      case 'text':
+        retorno = new Texto(this.predicado,this.tipo).getValor(nodos)
+        break;
+      default:
+        //Retorno un error semantico
+        break;
+    }
+    return retorno
+  }
 }

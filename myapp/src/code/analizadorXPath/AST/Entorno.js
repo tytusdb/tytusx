@@ -127,7 +127,11 @@ export function Predicado(predicado,retorno)
   if(predicado.length > 0)
   {
     for (const iterator of predicado) {
-      var posibles=iterator.getValor(retorno)
+      var posibles = iterator.getValor(retorno)
+      if(posibles.length==0)
+      {
+        return []
+      }
       if(posibles[0].tipo!=undefined)
       {
         switch(posibles[0].tipo)

@@ -7,7 +7,7 @@
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
   const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
-  const { ContextItemExpr } = require('./Expresion/postfix')
+  const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
 
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
@@ -338,7 +338,7 @@ Literal
 
 
 FunctionCall      
-  : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }  //NODE() TEXT() POSITION() LAST() FIST()
+  : NOMBRE PARENTESISA PARENTESISC              { $$ = new CallFunction([],TipoPath.ABS,$1); generarHijos($1,$2,$3)  }  //NODE() TEXT() POSITION() LAST() FIST()
 	//| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
 ;
 
