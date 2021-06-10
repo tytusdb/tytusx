@@ -1,15 +1,13 @@
 /* Definición Léxica */
 %lex
-%x COMMENTMULTILINE
+//%x COMMENTMULTILINE
+//%x ETIQUETA_ABRE
+//%x ETIQUETA_CIERRA
 %options case-insensitive
-
-
 
 %%
 \s+											// se ignoran espacios en blanco
 [<][!][^-]*[-]+([^<!][^-]*[-]+)*[>]			// comentario multiple líneas
-
-
 
 "<"					return 'menorque';
 ">"					return 'mayorque';
@@ -45,9 +43,10 @@
 //<COMMENTMULTILINE><<EOF>>   { this.popState(); }
 //<COMMENTMULTILINE>[^]       { /* Ignore anything */ }
 
+
 <<EOF>>				return 'EOF';
 
-.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+.					{ //console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
                         let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
                         erroreslexicos.setError(errores);
                     }
@@ -65,19 +64,26 @@
 //%left 'pow'
 //%left 'not'
 //%left UMINUS
-%left 'para' 'parc'
+//%right 'interroga'
+//%left 'para' 'parc'
 
 %start ini
 
 %% /* Definición de la gramática */
 
 ini
-	: LISTA_PRINCIPAL EOF { 
-        $$ = $1; //console.log($$); 
-        rg_xml.setValor('inicio -> LISTA_PRINCIPAL;\n');
+	: EXML LISTA_PRINCIPAL EOF { 
+        $$ = $2; //console.log($$); 
+        rg_xml.setValor('inicio -> EXML LISTA_PRINCIPAL;\n');
         return $$; 
     }
 ;
+
+EXML : menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque{
+            rg_xml.setValor('EXML -> <?xml version="CADENA" encoding="CADENA"?>;\n');
+            codificacion = $9;
+            codificacionversion = $6;
+     };
 
 LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { 
                     rg_xml.setValor('LISTA_PRINCIPAL -> LISTA_PRINCIPAL LISTA;\n');
@@ -91,12 +97,13 @@ LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     {
  ;
 
 
-LISTA: menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque{
+LISTA: /*menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque{
             rg_xml.setValor('LISTA -> <?xml version="CADENA" encoding="CADENA"?>;\n');
-            codificacion = $8;
-            codificacionversion = $5;
+            codificacion = $9;
+            codificacionversion = $6;
+            $$ = [];
      }
-    | menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { 
+    |*/ menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { 
             rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
             $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5,$8, true); 
         }
@@ -109,7 +116,7 @@ LISTA: menorque  interroga tck_xml tck_version igual cadena tck_encoding igual c
             $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2, false); 
         }
     | error { 
-        console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
+        //console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
         let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
         erroressintacticos.setError(errores);
     };
@@ -168,17 +175,22 @@ VALORES : identificador {
             $$ = $1; 
         }
         | lg {
+            rg_xml.setValor('VALORES -> LG;\n');
             $$ = '<';
         }
         | gt {
+            rg_xml.setValor('VALORES -> GT;\n');
             $$ = '>';
         }
         | amp {
+            rg_xml.setValor('VALORES -> AMP;\n');
             $$ = '&';
         }
         | apos {
+            rg_xml.setValor('VALORES -> APOS;\n');
             $$ = '\'';
         }
         | quot {
+            rg_xml.setValor('VALORES -> QUOT;\n');
             $$ = '\"';
         };

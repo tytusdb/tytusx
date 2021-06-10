@@ -1,6 +1,7 @@
 
 
 //Editor Entrada Y Salida
+/*
 const editorentrada = ace.edit("editorentrada");
 editorentrada.setTheme("ace/theme/monokai");
 editorentrada.session.setMode("ace/mode/xml");
@@ -21,6 +22,7 @@ editorsalida.setOptions({
 });
 editorsalida.session.setUseSoftTabs(true);
 
+*/
 function ejecutarCodigo(/*entrada: string*/) {
   //gramatica.parse(entrada);
 }
@@ -58,17 +60,21 @@ function InterpretarCodigo(entrada:string) {
     for(let aux of listaObjetos){
         aux.agregarTDS(tsGlobal,aux);
     }
-
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
   } catch (error) {
-    editorsalida.setValue("");
+    //editorsalida.setValue("");
+    console.log(error);
     document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XML\n";
   }
 }
 
-function interpretarCodigoXMLdesc(){
-  var entrada = editorentrada.getValue();
-  listaObjetos = gramatica_xml_desc.parse(entrada);
+function interpretarCodigoXMLdesc(entrada:string){
+  try {
+    gramatica_xml_desc.parse(entrada);
+    
+  } catch (error) {
+    console.log(error);
+  }
 }
 function MostrarTDS_XML(){
   try{

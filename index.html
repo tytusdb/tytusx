@@ -64,11 +64,30 @@
 
         <button type="button" class="btn btn-outline-primary" id="traducir" onclick="interpretarxpath()">XPATH</button>
 
+        <!-- PESTAÑA tabla de simbolos -->
+        <div class="btn-group" role="group">
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop6" type="button" class="btn btn-outline-primary dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ANALIZADOR
+                </button>
+                <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop6">
+                    <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
+                    <button type="button" class="btn btn-outline-primary" id="analizarxmlasc"
+                        onclick="ejecutarXML_asc();">XML ASC</button>
+                    <button type="button" class="btn btn-outline-primary" id="analizarxmldesc"
+                        onclick="ejecutarXML_DESC();">XML DESC</button>
+                </div>
+            </div>
+        </div>
 
+        <!-- 
             <button type="button" class="btn btn-outline-primary" id="traducir"
-                onclick="ejecutarXML_asc()">XML</button>
+                onclick="ejecutarXML_asc()">XML ASC</button>
+            <button type="button" class="btn btn-outline-primary" id="traducir"
+                onclick="ejecutarXML_DESC()">XML DESC</button>
             <button type="button" class="btn btn-outline-success" id="ejecutar" onclick="">Ejecutar</button>
-            <!-- PESTAÑA tabla de simbolos -->
+          -->  <!-- PESTAÑA tabla de simbolos -->
             <div class="btn-group" role="group">
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop4" type="button" class="btn btn-outline-warning dropdown-toggle"
@@ -77,8 +96,8 @@
                     </button>
                     <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop4">
                         <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
-                        <button type="button" class="btn btn-outline-warning" id="reporteast1"
-                            onclick="location.href='#areagraph';MostrarTDS_XML();">XML</button>
+                        <button type="button" class="btn btn-outline-warning" id="reportetdsxml1"
+                            onclick="location.href='#tbts';MostrarTDS_XML();">XML</button>
                         <button type="button" class="btn btn-outline-warning" id="reporteast2"
                             onclick="location.href='#areagraph';GraficarXMLASC();">ASC XML</button>
                     </div>
@@ -312,7 +331,9 @@
             var editor = CodeMirror.fromTextArea(editorentrada, {
               lineNumbers: true,
               mode:  "htmlmixed",
-              htmlMode:true  
+              htmlMode:true,
+              matchClosing:true,
+              alignCDATA:true
             });
 
             var editorSalida = CodeMirror.fromTextArea(editorsalida, {
@@ -324,6 +345,12 @@
             function ejecutarXML_asc(){
                 var texto = editor.getDoc().getValue();
                 InterpretarCodigo(texto);
+            }
+
+            function ejecutarXML_DESC()
+            {
+                var texto = editorSalida.getDoc().getValue();
+                interpretarCodigoXMLdesc(texto);
             }
           </script>
 

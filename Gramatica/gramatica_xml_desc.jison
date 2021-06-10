@@ -1,9 +1,12 @@
-
 /* Definición Léxica */
 %lex
+%x COMMENTMULTILINE
 %options case-insensitive
 
+
+
 %%
+
 
 "<"					return 'menorque';
 ">"					return 'mayorque';
@@ -11,6 +14,15 @@
 "="					return 'igual';
 "("					return 'para';
 ")"					return 'parc';
+"&lt"               return 'lg';
+"&gt"               return 'gt';
+"&amp"              return 'amp';
+"&apos"             return 'apos';
+"&quot"             return 'quot';
+"?"                 return 'interroga';    
+"xml"               return 'tck_xml';
+"version"               return 'tck_version';
+"encoding"               return 'tck_encoding';
 
 /* Espacios en blanco */
 [ \r\t]+			{}
@@ -23,10 +35,17 @@
 \".*?\"|\'.*?\'|\`.*?\`			{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 ([a-zA-Z])[a-zA-Z0-9_]*	return 'identificador';
 
+
+/* Estado Comentarios */
+"!--"                      { this.pushState("COMMENTMULTILINE"); }
+<COMMENTMULTILINE>"-->"     { this.popState(); }
+<COMMENTMULTILINE><<EOF>>   { this.popState(); }
+<COMMENTMULTILINE>[^]       { /* Ignore anything */ }
+
 <<EOF>>				return 'EOF';
 
 .					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                       // let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
+                        //let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
                         //erroreslexicos.setError(errores);
                     }
 /lex
@@ -37,64 +56,71 @@
 
 //%left 'or'
 //%left 'and'
-%left 'menorque' 'mayorque'  //'equal' 'nequal'
+%left 'menorque' 'mayorque'
 //%left 'plus' 'minus'
 //%left 'times' 'div' 'mod'
 //%left 'pow'
 //%left 'not'
 //%left UMINUS
-%left 'para' 'parc'
+//%right 'interroga'
+//%left 'para' 'parc'
 
 %start ini
 
 %% /* Definición de la gramática */
 
 ini
-	: LISTA_PRINCIPAL EOF { $$ = $1; console.log($$);  return $$; }
+	: EXML LISTA_PRINCIPAL EOF { 
+        //$$ = $2;
+        console.log('Fin de Analisis');
+        //rg_xml.setValor('inicio -> EXML LISTA_PRINCIPAL;\n');
+        //return $$; 
+    }
 ;
 
-//LISTA_PRINCIPAL : LISTA_PRINCIPAL LISTA     { $1.push($2); $$ = $1;}
-//   				| LISTA                     { $$ = [$1]; }
-// ;
+EXML : menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque{};
 
 LISTA_PRINCIPAL : LISTA LISTA_PRINCIPAL
-                | { $$ = []; };
+|;
 
+LISTA:ETIQUETA_ABRE
+    | VALORES
+    | ETIQUETA_CIERRA
+    | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); };
 
-LISTA:menorque identificador LATRIBUTOS mayorque OBJETOS menorque diagonal identificador mayorque { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
-    | menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal identificador mayorque { $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[]); }
-    | menorque identificador LATRIBUTOS diagonal mayorque      { $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[]); }
-    |
-    | error { 
-        console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
-        //let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
-        //erroressintacticos.setError(errores);
-    };
+ETIQUETA_ABRE : menorque identificador LATRIBUTOS mayorque
+              | menorque identificador LATRIBUTOS diagonal mayorque ;
 
-LATRIBUTOS: ATRIBUTOS        { $$ = $1; };
-          // |                 { $$ = []; };
+ETIQUETA_CIERRA : menorque diagonal identificador mayorque;
 
-//ATRIBUTOS : ATRIBUTOS ATRIBUTO   { $1.push($2); $$ = $1;}
-//          | ATRIBUTO             { $$ = [$1]; } ;
+LATRIBUTOS : ATRIBUTO LATRIBUTOS
+|;
+ATRIBUTO :  identificador igual cadena { };
 
-ATRIBUTOS : ATRIBUTO ATRIBUTOS   { $2.push($1); $$ = $2; };
-//          | { $$ = []; };
-
-ATRIBUTO :  identificador igual cadena { $$ = new Atributo($1, $3, @1.first_line, @1.first_column); };
-
-
-//OBJETOS: OBJETOS LISTA       { $1.push($2); $$ = $1;}
-//	   | LISTA                { $$ = [$1]; } ;
-OBJETOS : LISTA OBJETOS       { $2.push($1); $$ = $2;};
-       // | { $$ = []; };
-
-//PARRAFO : PARRAFO VALORES { $1=$1 + ' ' +$2 ; $$ = $1;}
-//		| VALORES           { $$ = [$1]; } ;
-PARRAFO : VALORES PARRAFO { $2=$2 + ' ' +$1 ; $$ = $2;};
-//        | { $$ = []; };
-
-VALORES : identificador { $$ = $1; }
-        | decimal { $$ = $1; }
-        | entero { $$ = $1; };
-
-
+VALORES : identificador { 
+            //rg_xml.setValor('VALORES -> ID;\n');
+            $$ = $1; 
+        }
+        | decimal { 
+            //rg_xml.setValor('VALORES -> DECIMAL;\n');
+            $$ = $1; 
+        }
+        | entero { 
+            //rg_xml.setValor('VALORES -> ENTERO;\n');
+            $$ = $1; 
+        }
+        | lg {
+            $$ = '<';
+        }
+        | gt {
+            $$ = '>';
+        }
+        | amp {
+            $$ = '&';
+        }
+        | apos {
+            $$ = '\'';
+        }
+        | quot {
+            $$ = '\"';
+        };
