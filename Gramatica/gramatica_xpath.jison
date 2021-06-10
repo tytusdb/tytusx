@@ -84,10 +84,11 @@
 /* Asociación de operadores y precedencia */
 
 %left 'para' 'parc'
-%left 'or' 'and'
+%left 'or' 
+%left 'and'
 %left 'menorque' 'menorigualque' 'mayorque' 'mayorigualque' 'distinto' 'igual' 'dospuntos'
-%left 'multiplicacion' 'division'
 %left 'suma' 'resta' 
+%left 'multiplicacion' 'division' 'mod'
 //%left 'plus' 'minus'
 //%left 'times' 'div' 'mod'
 //%left 'pow'
@@ -164,22 +165,23 @@ MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { $$ = $1+' '+ $2+' '+$3+' '+$4;}
 
 OPEOCOND: CONDICION                 { $$ = $1;};
 
-CONDICION:CONDICION or CONDICION                  { $$ = $1+' or '+$3;}
-        | CONDICION and CONDICION                 { $$ = $1+' and '+$3;}
-        | CONDICION igual CONDICION             { $$ = $1+'='+$3;}
-        | CONDICION mayorigualque CONDICION     { $$ = $1+'>='+$3;}
-        | CONDICION menorigualque CONDICION     { $$ = $1+'<='+$3;}
-        | CONDICION menorque CONDICION          { $$ = $1+'<'+$3;}
-        | CONDICION mayorque CONDICION          { $$ = $1+'>'+$3;}
-        | CONDICION distinto CONDICION          { $$ = $1+'!='+$3;}
-        | CONDICION suma  CONDICION        { $$ = $1+'+'+$3;}
-        | CONDICION resta CONDICION       { $$ = $1+'-'+$3;}
-        |  CONDICION multiplicacion CONDICION               { $$ = $1+'*'+$3;}
-        |   CONDICION division CONDICION                     { $$ = $1+'div'+$3;}
-        | para CONDICION parc                           { $$ ='('+$2+')'; }
-        |   entero                           { $$ = $1; }
-        |   decimal                          { $$ = $1; }
-        |   cadena                           { $$ = $1; }
+CONDICION:CONDICION or CONDICION                {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_OR, this._$.first_line, this._$.first_column);}
+        | CONDICION and CONDICION               {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_AND, this._$.first_line, this._$.first_column);}
+        | CONDICION igual CONDICION             {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION mayorigualque CONDICION     {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MAYOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION menorigualque CONDICION     {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MENOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION menorque CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MENOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION mayorque CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MAYOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION distinto CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_NO_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION suma  CONDICION             {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_SUMA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION resta CONDICION             {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_RESTA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION multiplicacion CONDICION    {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MULTIPLICACION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION division CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_DIVISION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION mod CONDICION               {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MODULAR, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | para CONDICION parc                   {$$ = $2; }
+        |   entero                              {$$ = nodoDato($1, TIPO_PRIMITIVO.ENTERO);}
+        |   decimal                             {$$ = nodoDato($1, TIPO_PRIMITIVO.DECIMAL);}
+        |   cadena                              {$$ = nodoDato($1, TIPO_PRIMITIVO.CADENA);}
         //|   identificador                    { $$ = $1; }
         //|   punto                            {  $$=$1;}
         //|   doblepunto                       {  $$=$1;}
