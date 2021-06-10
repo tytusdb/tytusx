@@ -17,11 +17,11 @@ class Objeto extends nodo {
     hijos = []
     
     
-    constructor(tipo, atributos, hijos, linea, columna){
+    constructor(tipo, atributos, hijos, linea, columna, texto = ''){
         super(linea,columna)
         this.tipo = tipo.replace('<','')
         this.atributos = atributos
-        
+        this.texto = texto
         if (hijos instanceof Array){
             this.hijos = hijos
         }else{
@@ -31,6 +31,20 @@ class Objeto extends nodo {
 
     setTipo(tipo){
         this.tipo = tipo.replace('</','')
+    }
+
+    getTextoRelativo(){
+        // recorrer insertar el valor actual
+        var retorno = []
+        if (this.texto != '') retorno.push(this.texto)
+
+        // recorrer hijos
+        for (var hijo of this.hijos){
+            var retornoHijo = hijo.getTextoRelativo()
+            retorno = retorno.concat(retornoHijo)
+        }
+
+        return retorno
     }
 }
 
