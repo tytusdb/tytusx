@@ -1,0 +1,10 @@
+thead tr th{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table-responsive {
+    height:400px;
+    overflow-y:scroll;
+}
