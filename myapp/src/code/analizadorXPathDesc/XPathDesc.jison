@@ -217,7 +217,7 @@ UnaryExpr
 PathExpr
     : BARRA SUB_BARRA                                   { $$ = $2; generarPadre(2); generarHijos($1, "SUB_BARRA"); }
     | DOBLEBARRA RelativePathExpr                       { $2[0].tipo=TipoPath.REL;$$=new PathExp($2); generarPadre(2); generarHijos($1, "RelativePathExpr");}
-    | RelativePathExpr                                  { $$=new PathExp($1); generarHijos("RelativePathExpr"); }
+    | RelativePathExpr                                  { $$=new PathExp($1); generarPadre(1); generarHijos("RelativePathExpr"); }
 ;
 
 SUB_BARRA
@@ -234,7 +234,7 @@ P_RelativePathExpr
                         generarPadre(3); generarPadre(2); generarHijos($1, "StepExpr", "P_RelativePathExpr"); }
     | DOBLEBARRA StepExpr P_RelativePathExpr            { $$ = $3; $2.tipo = TipoPath.REL; $$.push($2); 
                         generarPadre(3); generarPadre(2); generarHijos($1, "StepExpr", "P_RelativePathExpr"); }
-    |                                                   { $$ = []; }
+    |                                                   { $$ = []; generarHijos("ε"); }
 ;
 
 StepExpr    
