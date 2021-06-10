@@ -30,7 +30,7 @@ export class Texto extends PostFix {
         // concatenar el texto de los hijos
         if (this.tipo == TipoPath.ABS){
           // no concatenar vacíos
-          if (obj.valor != '') retorno.push(obj.valor)
+          if (obj.valor != '') retorno.push(new Literal(Tipo.STRING,obj.valor))
         } else {
           // obtiene el texto de manera recursiva
           retorno = obj.entorno.getTextoRelativo()
@@ -66,6 +66,29 @@ export class ContextItemExpr extends PostFix
     retornos = concat(retorno,retornos)
     return retornos
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    var NodosActuales = []
+    var nodoTipo = {id:contador.num,label:this.tipo==TipoPath.ABS ? "/" : "//"}
+    NodosActuales.push(nodoTipo);ListaNodes.push(nodoTipo);contador.num++
+    var nodoNombre = {id:contador.num,label:"."}
+    NodosActuales.push(nodoNombre);ListaNodes.push(nodoNombre);contador.num++
+    for (const predicado of this.predicado) 
+    {
+      var nodoCorcheteA = {id:contador.num,label:"["}
+      NodosActuales.push(nodoCorcheteA);ListaNodes.push(nodoCorcheteA);contador.num++
+      var nodoActual= {id:contador.num,label:"Path"}
+      NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+      var nodos = predicado.Graficar(ListaNodes,ListaEdges,contador)
+      for (const nodo of nodos) {
+        ListaEdges.push({from:nodoActual.id,to:nodo.id})
+      }
+      var nodoCorcheteC = {id:contador.num,label:"]"}
+      NodosActuales.push(nodoCorcheteC);ListaNodes.push(nodoCorcheteC);contador.num++
+    }
+    return NodosActuales
+  }
 }
 
 function GenerarNodosHijos(padre)
@@ -79,7 +102,55 @@ function GenerarNodosHijos(padre)
   return hijos;
 }
 
+//CALLFUNCTION
+export class CallFunction extends PostFix 
+{
+  constructor(predicado,tipo,nombre)
+  {
+    super(predicado,tipo)
+    this.nombre=nombre
+  }
 
+  getValor(nodos)
+  {
+    var retorno = []
+    switch(this.nombre)
+    {
+      case 'text':
+        retorno = new Texto(this.predicado,this.tipo).getValor(nodos)
+        break;
+      case 'last':
+        retorno = new Last(this.predicado,this.tipo).getValor(nodos)
+      default:
+        //Retorno un error semantico
+        break;
+    }
+    return retorno
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    var NodosActuales = []
+    var nodoTipo = {id:contador.num,label:this.tipo==TipoPath.ABS ? "/" : "//"}
+    NodosActuales.push(nodoTipo);ListaNodes.push(nodoTipo);contador.num++
+    var nodoNombre = {id:contador.num,label:this.nombre+"("+")"}
+    NodosActuales.push(nodoNombre);ListaNodes.push(nodoNombre);contador.num++
+    for (const predicado of this.predicado) 
+    {
+      var nodoCorcheteA = {id:contador.num,label:"["}
+      NodosActuales.push(nodoCorcheteA);ListaNodes.push(nodoCorcheteA);contador.num++
+      var nodoActual= {id:contador.num,label:"Path"}
+      NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+      var nodos = predicado.Graficar(ListaNodes,ListaEdges,contador)
+      for (const nodo of nodos) {
+        ListaEdges.push({from:nodoActual.id,to:nodo.id})
+      }
+      var nodoCorcheteC = {id:contador.num,label:"]"}
+      NodosActuales.push(nodoCorcheteC);ListaNodes.push(nodoCorcheteC);contador.num++
+    }
+    return NodosActuales
+  }
+}
 // GET LAST
 export class Last extends PostFix {
 

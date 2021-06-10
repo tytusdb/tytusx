@@ -12,6 +12,7 @@ class InConsole extends React.Component{
         this.datos = {nodes:[],edges:[]} 
         this.datos = this.props.location.datosCST;
         this.datosXML = this.props.location.datosCSTXML;
+        this.datosAST = this.props.location.datosAST
         this.graphviz = ""
         this.graphvizCST=this.props.location.graphviz;
         console.log(this.props.location);
@@ -51,7 +52,7 @@ class InConsole extends React.Component{
                 
                 <div className = "container-fluid">
                     <Graph
-                        graph={this.datosXML}
+                        graph={this.datosAST}
                         options={this.options}
                         events={this.events}
                         //style={style}
@@ -61,7 +62,6 @@ class InConsole extends React.Component{
                         vis={vis => (this.vis = vis)}
                     />
                 </div>
-
                 <p></p>
             <p></p>
             <p></p>

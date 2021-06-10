@@ -32,6 +32,22 @@ export class ComparisonExp {
         }
         return retorno
     }
+
+    Graficar(ListaNodes,ListaEdges,contador)
+    {
+        var NodosActuales = []
+        var nodoActual = {id:contador.num,label:this.op}
+        NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+        var nodos = this.izquierdo.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        nodos=this.derecho.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        return NodosActuales
+    }
 }
 
 function comparison(izq, op, der) {

@@ -1,3 +1,24 @@
+%{
+    class SUMA
+    {
+        constructor(izq,der)
+        {
+            this.izq=izq
+            this.der=der
+        }
+
+    }
+
+    class POR
+    {
+        constructor(izq,der)
+        {
+            this.izq=izq
+            this.der=der
+        }
+    }
+%}
+
 %lex
 
       %options case-insensitive
@@ -8,6 +29,8 @@
 "+"         return "MAS"
 "-"         return "MENOS"
 "*"         return "POR"
+"("         return "PARA"
+")"         return "PARB"
 
 .	{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 
@@ -20,30 +43,28 @@
 %%
 
 ini
-    :E  { console.log($1); }
+    :E  { console.log(JSON.stringify($1,2)); /* Inicio */ }
 ;
 
 E
-    : T EP { $$ = $2; }
+    : T EP { if($2==null){$$=$1;}else{$$=new SUMA($1,$2);}  /* Entrada Suma */ } //Entrada Suma
 ;
 
 EP
-    : MAS T EP  { $$ = $0 + $2; }
-    |           { $$ = $0 }
+    : MAS T EP  { if($3==null){$$=$2;}else{$$=new SUMA($2,$3);}/* Suma Recursiva */ } // Suma Recursiva
+    |            { $$ = null    /* Epsilon Suma */ } 
 ;
 
 T 
-    : F TP  { $$ = $2; }
+    : F TP  { if($2==null){$$=$1;}else{$$=new POR($1,$2);}  /* Entrada Multiplicacion */ }
 ;
 
 TP
-    : POR F TP   { $$ = $0 * $2; }
-    |            { $$ = $0; }
+    : POR F TP   {  if($3==null){$$=$1;}else{$$=new POR($2,$3);}  /* Por Recursiva */ }
+    |            { $$ = null;  /* Epsilon Por */ } //Epsilon *
 ;
 
 F
-    : INTEGER   { $$ = Number($1); }
+    : INTEGER   { $$ = Number($1); /* Numero */  }
+    | PARA E PARB { $$ = $2 /* Parentesis */ }
 ;
-
-
-

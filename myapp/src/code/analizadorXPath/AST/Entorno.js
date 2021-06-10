@@ -47,8 +47,6 @@ export const ColisionLogical =
 ]
 
 
-
-
 export const TipoPath = {
     "ABS" : "absoluto",
     "REL" : "relativo"
@@ -86,6 +84,30 @@ export class Comando
       }
     }
     return Salida;
+  }
+
+  Graficar()
+  {
+    var ListaNodes = []
+    var ListaEdges = []
+    var contador = {num:0}
+    
+    var nodoActual = {id:contador.num,label:"XPath"}
+    contador.num++
+    ListaNodes.push(nodoActual)
+    for(var i = 0; i < this.Instrucciones.length; i++)
+    {
+      var nodos = this.Instrucciones[0].Graficar(ListaNodes,ListaEdges,contador)
+      if(i!=0)
+      {
+        ListaNodes.push({id:contador.num,label:"|"})
+        contador.num++
+      }
+      for (const nodo of nodos) {
+        ListaEdges.push({from:nodoActual.id,to:nodo.id})
+      }
+    }
+    return {nodes:ListaNodes,edges:ListaEdges}
   }
 }
 
@@ -127,7 +149,11 @@ export function Predicado(predicado,retorno)
   if(predicado.length > 0)
   {
     for (const iterator of predicado) {
-      var posibles=iterator.getValor(retorno)
+      var posibles = iterator.getValor(retorno)
+      if(posibles.length==0)
+      {
+        return []
+      }
       if(posibles[0].tipo!=undefined)
       {
         switch(posibles[0].tipo)
@@ -138,10 +164,12 @@ export function Predicado(predicado,retorno)
           case Tipo.INTEGER:
           case Tipo.DECIMAL:
             var temp=[]
+            var posicion=0;
             for (const posible of posibles) {
               if(retorno[posible.valor-1])
               {
                 temp.push(retorno[posible.valor-1])
+                posicion++;
               }
             }
             retorno = temp
@@ -151,4 +179,15 @@ export function Predicado(predicado,retorno)
     } 
   }
   return retorno
+}
+
+export function concatenarNodos(principales,secundarios)
+{
+  var posicion = principales.length>0 ? principales[principales.length-1].posicion : 1
+  for (const secundario of secundarios) {
+    secundario.setPosicion(posicion)
+    principales.push(secundario)
+    posicion++;
+  }
+  return principales
 }

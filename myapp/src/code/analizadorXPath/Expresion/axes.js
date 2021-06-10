@@ -1,4 +1,4 @@
-import { Tipo, TipoPath, Siblings, Predicado } from "../AST/Entorno"
+import { Tipo, TipoPath, concatenarNodos, Predicado } from "../AST/Entorno"
 import { Nodo } from "./Expresiones"
 
 export class Axes 
@@ -14,6 +14,29 @@ export class Axes
   {
 
   }
+
+  GraficarAxis(ListaNodes,ListaEdges,contador,Axis="")
+  {
+    var NodosActuales = []
+    var nodoTipo = {id:contador.num,label:this.tipo==TipoPath.ABS ? "/" : "//"}
+    NodosActuales.push(nodoTipo);ListaNodes.push(nodoTipo);contador.num++
+    var nodoNombre = {id:contador.num,label:Axis+this.nombre}
+    NodosActuales.push(nodoNombre);ListaNodes.push(nodoNombre);contador.num++
+    for (const predicado of this.predicado) 
+    {
+      var nodoCorcheteA = {id:contador.num,label:"["}
+      NodosActuales.push(nodoCorcheteA);ListaNodes.push(nodoCorcheteA);contador.num++
+      var nodoActual= {id:contador.num,label:"Path"}
+      NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+      var nodos = predicado.Graficar(ListaNodes,ListaEdges,contador)
+      for (const nodo of nodos) {
+        ListaEdges.push({from:nodoActual.id,to:nodo.id})
+      }
+      var nodoCorcheteC = {id:contador.num,label:"]"}
+      NodosActuales.push(nodoCorcheteC);ListaNodes.push(nodoCorcheteC);contador.num++
+    }
+    return NodosActuales
+  }
 }
 
 export class Child extends Axes
@@ -27,6 +50,11 @@ export class Child extends Axes
   {
     var hijo = new Camino(this.nombre,this.predicado,this.tipo)
     return hijo.getValor(nodos)
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"child::")
   }
 }
 
@@ -51,6 +79,11 @@ export class Descendant extends Axes
     }
     return descendiente
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"descendant::")
+  }
 }
 
 export class Attribute extends Axes
@@ -64,6 +97,11 @@ export class Attribute extends Axes
   {
     var atributo = new Atributo(this.nombre,this.predicado,this.tipo)
     return atributo.getValor(nodos)
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"attribute::")
   }
 }
 
@@ -99,6 +137,11 @@ export class Self extends Axes
     }
     return retornos
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"self::")
+  }
 }
 
 export class DescSelf extends Axes
@@ -131,6 +174,11 @@ export class DescSelf extends Axes
       retornos=retornos.concat(retorno)
     }
     return retornos
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"descendant-or-self::")
   }
 }
 
@@ -181,6 +229,11 @@ export class FollowSibling extends Axes
       realretorno.push(valor)
     }
     return realretorno
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"following-sibling::")
   }
 }
 
@@ -245,6 +298,11 @@ export class Follow extends Axes
     }
     return temp
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"following::")
+  }
 }
 
 export class Atributo extends Axes
@@ -279,6 +337,11 @@ export class Atributo extends Axes
     }
     return retornos
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"@")
+  }
 }
 
 export class Camino extends Axes
@@ -286,6 +349,8 @@ export class Camino extends Axes
   constructor(nombre,predicado,tipo)
   {
     super(nombre,predicado,tipo)
+
+
   }
 
   getValor(nodos)
@@ -294,6 +359,7 @@ export class Camino extends Axes
       for (const nodo of nodos) 
       {
         var retorno = []
+        var posicion = 0;
         if(this.tipo==TipoPath.ABS)
         {
             for (const iterator of nodo.entorno.hijos) {
@@ -301,7 +367,8 @@ export class Camino extends Axes
                 {
                     var nuevaPila = Object.assign([],nodo.pila)
                     nuevaPila.push(nodo.entorno)
-                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto))
+                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion,posicion))
+                    posicion++
                 }
             }
             retorno = Predicado(this.predicado,retorno)
@@ -310,10 +377,16 @@ export class Camino extends Axes
         {
           retorno = RecursivaCamino(nodos,this.nombre,this.predicado)
         }
-        retornos = retornos.concat(retorno)
+        retornos = concatenarNodos(retornos,retorno)
       }
       return retornos
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"")
+  }
+
 }
 
 function RecursivaAtributo(nodos,nombre,predicado) 
@@ -355,14 +428,14 @@ function RecursivaCamino(nodos,nombre,predicado)
       nuevaPila.push(nodo.entorno)
       var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto)
       hijos.push(RecursivaCamino([hijo],nombre,predicado))
-      if(iterator.tipo==nombre || nombre=="*") subretorno.push({id:index,nodo:hijo})
+      if(iterator.tipo==nombre || nombre=="*") { hijo.posicion=index; subretorno.push(hijo);  }
     } 
     subretorno = Predicado(predicado,subretorno)
     var index = 0
     for (const [indexHijo,hijo] of hijos.entries()) {
-      if(subretorno[index] && subretorno[index].id==indexHijo)
+      if(subretorno[index] && subretorno[index].posicion==indexHijo)
       {
-        retorno.push(subretorno[index].nodo)
+        retorno.push(subretorno[index])
         index++
       }
       retorno = retorno.concat(hijo)
@@ -404,6 +477,11 @@ export class CaminoInverso extends Axes
     }
     return tempRetorno
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"")
+  }
 }
 
 export class Parent extends Axes
@@ -418,6 +496,11 @@ export class Parent extends Axes
     var padre = new CaminoInverso(this.nombre,this.predicado,this.tipo)
     var retorno = padre.getValor(nodos)
     return retorno
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"parent::")
   }
 }
 
@@ -467,6 +550,11 @@ export class Ancestor extends Axes
       temp.push(valor)
     }
     return temp
+  }
+  
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"ancestor::")
   }
 }
 
@@ -518,6 +606,11 @@ export class PrecedingSibling extends Axes
     }
     return realretorno
   }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"preceding-sibling::")
+  }
 }
 
 export class AncestorSelf extends Axes
@@ -548,5 +641,10 @@ export class AncestorSelf extends Axes
       retornos = retornos.concat(temp.reverse())
     }
     return retornos
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"ancestor-or-sibling::")
   }
 }

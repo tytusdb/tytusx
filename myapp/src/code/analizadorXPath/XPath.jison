@@ -3,11 +3,11 @@
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {Logical} = require("./Expresion/Logical");
   const {Arithmetic} = require("./Expresion/Arithmetics")
-  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp} = require("./Expresion/Expresiones");
+  const {Literal,PathExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
   const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
-  const { ContextItemExpr } = require('./Expresion/postfix')
+  const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
 
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
@@ -204,8 +204,8 @@ MultiplicativeExpr
 
 UnaryExpr   
   : PathExpr                         { $$=$1; generarPadre(1);generarHijos("PathExpr") }
-	| MAS PathExpr                     {}
-	| MENOS PathExpr                   {}
+	| MAS UnaryExpr                    {}
+	| MENOS UnaryExpr                  {}
 ;
 
 // ValueExpr   
@@ -338,19 +338,19 @@ Literal
 
 
 FunctionCall      
-  : NOMBRE PARENTESISA PARENTESISC              { $$=$1+$2+$3 }
-	| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
+  : NOMBRE PARENTESISA PARENTESISC              { $$ = new CallFunction([],TipoPath.ABS,$1); generarHijos($1,$2,$3)  }  //NODE() TEXT() POSITION() LAST() FIST()
+	//| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
 ;
 
-ArgumentList      
-  : Argument                      { $$=$1 }
-	| ArgumentList COMA Argument    { $$=$1+$2+$3 }
-;
+// ArgumentList      
+//   : Argument                      { $$=$1 }
+// 	| ArgumentList COMA Argument    { $$=$1+$2+$3 }
+// ;
 
-Argument    
-  : ExprSingle      { $$=$1 }
-	| INTERROGACIONC  { $$=$1 }
-;
+// Argument    
+//   : ExprSingle      { $$=$1 }
+// 	| INTERROGACIONC  { $$=$1 }
+// ;
 
 ContextItemExpr   
   : PUNTO  { $$=new ContextItemExpr([],TipoPath.ABS); generarHijos($1); }
