@@ -152,7 +152,7 @@ case 35:
  $$[$0][0].tipo=TipoPath.REL;this.$=new PathExp($$[$0]); generarPadre(2); generarHijos($$[$0-1], "RelativePathExpr");
 break;
 case 36:
- this.$=new PathExp($$[$0]); generarHijos("RelativePathExpr"); 
+ this.$=new PathExp($$[$0]); generarPadre(1); generarHijos("RelativePathExpr"); 
 break;
 case 37:
  $$[$0][0].tipo=TipoPath.ABS;this.$=new PathExp($$[$0]); generarPadre(1); generarHijos("RelativePathExpr"); 
@@ -171,8 +171,8 @@ case 41:
  this.$ = $$[$0]; $$[$0-1].tipo = TipoPath.REL; this.$.push($$[$0-1]); 
                         generarPadre(3); generarPadre(2); generarHijos($$[$0-2], "StepExpr", "P_RelativePathExpr"); 
 break;
-case 42:
- this.$ = []; 
+case 42: case 48:
+ this.$ = []; generarHijos("ε"); 
 break;
 case 43:
  this.$ = $$[$0]; generarPadre(1); generarHijos("PostfixExpr"); 
@@ -188,9 +188,6 @@ case 46:
 break;
 case 47:
  this.$ = $$[$0]; generarPadre(1); generarHijos("PredicateList");
-break;
-case 48:
- this.$ = []; generarHijos("ε"); 
 break;
 case 49:
  this.$ = $$[$0]; this.$.push($$[$0-1]); this.$.reverse(); generarPadre(2); generarPadre(1); generarHijos("Predicate", "P_PredicateList"); 
