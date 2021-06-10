@@ -149,30 +149,30 @@ ExprSingle
 ;
 
 OrExpr
-    : AndExpr {  } P_OrExpr                             { $$ = $2;  }
+    : AndExpr P_OrExpr                                  { if($2==null){$$=$1;}else{$$=new Logical($1,"or",$2);} }
 ;
 
 P_OrExpr
-    : ROR AndExpr P_OrExpr                              { $$ = new Logical($0,$1,$2); }
-    |                                                   { $$ = $0; }
+    : ROR AndExpr P_OrExpr                              { if($3==null){$$=$2;}else{$$=new Logical($2,"or",$3);} }
+    |                                                   { $$ = null; }
 ;
 
 AndExpr
-    : ComparisonExpr P_AndExpr                          {  }
+    : ComparisonExpr P_AndExpr                          { if($2==null){$$=$1;}else{$$=new Logical($1,"and",$2);} }
 ;
 
 P_AndExpr
-    : RAND /*and*/ ComparisonExpr P_AndExpr             {  }
-    |                                                   {  }
+    : RAND /*and*/ ComparisonExpr P_AndExpr             { if($3==null){$$=$2;}else{$$=new Logical($2,"and",$3);} }
+    |                                                   { $$ = null }
 ;
 
 ComparisonExpr
-    : AdditiveExpr SUB_AdditiveExpr                     {  }
+    : AdditiveExpr SUB_AdditiveExpr                     { if($3==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
 ;
 
 SUB_AdditiveExpr
-    : GeneralComp AdditiveExpr                          {  }
-    |                                                   {  }
+    : GeneralComp AdditiveExpr                          { $$ = new ComparisonExp(null,$2,$3); }
+    |                                                   { $$ = null; }
 ;
 
 GeneralComp       
@@ -185,31 +185,31 @@ GeneralComp
 ;
 
 AdditiveExpr
-    : MultiplicativeExpr P_AdditiveExpr                 {  }
+    : MultiplicativeExpr P_AdditiveExpr                 { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
 ;
 
 P_AdditiveExpr
-    : MAS MultiplicativeExpr P_AdditiveExpr             {  }
-    | MENOS MultiplicativeExpr P_AdditiveExpr           {  }
-    |                                                   {  }
+    : MAS MultiplicativeExpr P_AdditiveExpr             { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
+    | MENOS MultiplicativeExpr P_AdditiveExpr           { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2;} }
+    |                                                   { $$ = null; }
 ;
 
 MultiplicativeExpr
-    : UnaryExpr P_MultiplicativeExpr                    { $$ = $1; }
+    : UnaryExpr P_MultiplicativeExpr                    { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
 ;
 
 P_MultiplicativeExpr
-    : POR /* * */ UnaryExpr P_MultiplicativeExpr        { $$= new Arithmetic($3,$2,$1); }
-    | DIV /* div */ UnaryExpr P_MultiplicativeExpr      { $$= new Arithmetic($3,$2,$1); }
-    | IDIV /* idiv */ UnaryExpr P_MultiplicativeExpr    { $$= new Arithmetic($3,$2,$1); }
-    | MOD /* mod */ UnaryExpr P_MultiplicativeExpr      { $$= new Arithmetic($3,$2,$1); }
-    |                                                   { $$ = $1; }
+    : POR /* * */ UnaryExpr P_MultiplicativeExpr        { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
+    | DIV /* div */ UnaryExpr P_MultiplicativeExpr      { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
+    | IDIV /* idiv */ UnaryExpr P_MultiplicativeExpr    { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
+    | MOD /* mod */ UnaryExpr P_MultiplicativeExpr      { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
+    |                                                   { $$ = null; }
 ;
 
 UnaryExpr   
     : PathExpr                                          { $$ = $1; }
-	  | MAS /*+*/ PathExpr                                {  }
-	  | MENOS /*-*/ PathExpr                              {  }
+	  | MAS /*+*/ UnaryExpr                               {  }
+	  | MENOS /*-*/ UnaryExpr                             {  }
 ;
 
 PathExpr
@@ -224,13 +224,13 @@ SUB_BARRA
 ;
 
 RelativePathExpr
-    : StepExpr P_RelativePathExpr                       { $$ = $2; }
+    : StepExpr P_RelativePathExpr                       { $2.push($1); $$ = $2; }
 ;
 
 P_RelativePathExpr
     : BARRA StepExpr P_RelativePathExpr                 { $$ = $3; $2.tipo = TipoPath.ABS; $$.push($2); }
     | DOBLEBARRA StepExpr P_RelativePathExpr            { $$ = $3; $2.tipo = TipoPath.REL; $$.push($2);}
-    |                                                   { $$ = []; $$ = $1; }
+    |                                                   { $$ = []; }
 ;
 
 StepExpr    
@@ -239,19 +239,15 @@ StepExpr
 ;
 
 AxisStep
-    : ForwardStep SUB_ForwardStep                       { $$ = $1; $$.predicado = $2; }
-    | ReverseStep SUB_ReverseStep                       { $$ = $1; $$.predicado = $2; }
+    : ForwardStep SUB_PredicateList                       { $$ = $1; $$.predicado = $2; }
+    | ReverseStep SUB_PredicateList                       { $$ = $1; $$.predicado = $2; }
 ;
 
-SUB_ForwardStep
-    : PredicateList                                     { $$ = ""; }
-    |                                                   { $$ = $1; }
-;
-
-SUB_ReverseStep
+SUB_PredicateList
     : PredicateList                                     { $$ = $1; }
-    |                                                   { $$ = ""; }
+    |                                                   { $$ = []; }
 ;
+
 
 PredicateList
     : Predicate P_PredicateList                         { $$ = $2; $$.push($1); }
@@ -314,13 +310,9 @@ ReverseAxis
 ;
 
 PostfixExpr   
-  : PrimaryExpr SUB_PrimaryExpr             { $$ = $1; $$.predicado = $2; }
+  : PrimaryExpr SUB_PredicateList            { $$ = $1; $$.predicado = $2; }
 ;
 
-SUB_PrimaryExpr
-    : PredicateList                         { $$ = $1; }
-    |                                       { $$ = ""; }
-;
 
 Predicate   
   : CORA ExprSingle CORB                    { $$ = $2; }
