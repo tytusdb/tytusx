@@ -810,67 +810,63 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:return 7;
+case 0:// se ignoran espacios en blanco
 break;
-case 1:return 14;
+case 1:// comentario multiple líneas
 break;
-case 2:return 18;
+case 2:return 7;
 break;
-case 3:return 11;
+case 3:return 14;
 break;
-case 4:return 'para';
+case 4:return 18;
 break;
-case 5:return 'parc';
+case 5:return 11;
 break;
-case 6:return 25;
+case 6:return 'para';
 break;
-case 7:return 26;
+case 7:return 'parc';
 break;
-case 8:return 27;
+case 8:return 25;
 break;
-case 9:return 28;
+case 9:return 26;
 break;
-case 10:return 29;
+case 10:return 27;
 break;
-case 11:return 8;    
+case 11:return 28;
 break;
-case 12:return 9;
+case 12:return 29;
 break;
-case 13:return 10;
+case 13:return 8;    
 break;
-case 14:return 13;
+case 14:return 9;
 break;
-case 15:
+case 15:return 10;
 break;
-case 16:
+case 16:return 13;
 break;
-case 17:return 23;
+case 17:
 break;
-case 18:return 24;
+case 18:
 break;
-case 19: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 12; 
+case 19:return 23;
 break;
-case 20:return 15;
+case 20:return 24;
 break;
-case 21: this.pushState("COMMENTMULTILINE"); 
+case 21: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 12; 
 break;
-case 22: this.popState(); 
+case 22:return 15;
 break;
-case 23: this.popState(); 
+case 23:return 5;
 break;
-case 24: /* Ignore anything */ 
-break;
-case 25:return 5;
-break;
-case 26: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+case 24: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                         let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
                         erroreslexicos.setError(errores);
                     
 break;
 }
 },
-rules: [/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:&lt\b)/i,/^(?:&gt\b)/i,/^(?:&amp\b)/i,/^(?:&apos\b)/i,/^(?:&quot\b)/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:$)/i,/^(?:[^])/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"COMMENTMULTILINE":{"rules":[22,23,24],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,25,26],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:[<][!][^-]*[-]+([^<!][^-]*[-]+)*[>])/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:&lt\b)/i,/^(?:&gt\b)/i,/^(?:&amp\b)/i,/^(?:&apos\b)/i,/^(?:&quot\b)/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:".*?"|'.*?'|`.*?`)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"COMMENTMULTILINE":{"rules":[],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],"inclusive":true}}
 });
 return lexer;
 })();

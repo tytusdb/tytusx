@@ -6,7 +6,8 @@
 
 
 %%
-
+\s+											// se ignoran espacios en blanco
+[<][!][^-]*[-]+([^<!][^-]*[-]+)*[>]			// comentario multiple líneas
 
 
 
@@ -39,10 +40,10 @@
 
 
 /* Estado Comentarios */
-"<!--"                      { this.pushState("COMMENTMULTILINE"); }
-<COMMENTMULTILINE>"-->"     { this.popState(); }
-<COMMENTMULTILINE><<EOF>>   { this.popState(); }
-<COMMENTMULTILINE>[^]       { /* Ignore anything */ }
+//"<!--"                      { this.pushState("COMMENTMULTILINE"); }
+//<COMMENTMULTILINE>"-->"     { this.popState(); }
+//<COMMENTMULTILINE><<EOF>>   { this.popState(); }
+//<COMMENTMULTILINE>[^]       { /* Ignore anything */ }
 
 <<EOF>>				return 'EOF';
 
