@@ -79,7 +79,7 @@ class Navigation extends React.Component{
         console.log("setText Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
-        var parser = require('../code/analizadorXPath/Xpath');
+        var parser = require('../code/analizadorXPath/XPathDesc');
         var funcion = parser.parse(text);
         var respuesta=funcion.Ejecutar(this.state.XML);
         var AST = funcion.Graficar();
