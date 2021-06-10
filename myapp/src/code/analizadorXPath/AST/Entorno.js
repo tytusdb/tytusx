@@ -164,7 +164,7 @@ export function Predicado(predicado,retorno)
           case Tipo.INTEGER:
           case Tipo.DECIMAL:
             var temp=[]
-            var posicion=0;
+            var posicion=1;
             for (const posible of posibles) {
               if(retorno[posible.valor-1])
               {
@@ -190,4 +190,18 @@ export function concatenarNodos(principales,secundarios)
     posicion++;
   }
   return principales
+}
+
+export function concatenarNodosOrden(principales,secundarios)
+{
+  var nuevoRetorno = []
+  var iSec = 0
+  for (const principal of principales) {
+    for (; iSec < secundarios.length; iSec++) {
+      if(principal.posicion > secundarios[iSec].posicion)
+      {
+        nuevoRetorno.push(secundarios[iSec])
+      }
+    }
+  }
 }

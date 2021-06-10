@@ -39,6 +39,146 @@ export class Axes
   }
 }
 
+export class Camino extends Axes
+{
+  constructor(nombre,predicado,tipo)
+  {
+    super(nombre,predicado,tipo)
+
+
+  }
+
+  getValor(nodos)
+  {
+      var retornos = []
+      for (const nodo of nodos) 
+      {
+        var retorno = []
+        var posicion = 1;
+        if(this.tipo==TipoPath.ABS)
+        {
+            for (const iterator of nodo.entorno.hijos) {
+                if(iterator.tipo == this.nombre || this.nombre=="*" )
+                {
+                    var nuevaPila = Object.assign([],nodo.pila)
+                    nuevaPila.push(nodo.entorno)
+                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion,posicion))
+                    posicion++
+                }
+            }
+            retorno = Predicado(this.predicado,retorno)
+        }
+        else
+        {
+          retorno = RecursivaCamino(nodos,this.nombre,this.predicado,1,1)
+        }
+        retornos = concatenarNodos(retornos,retorno)
+      }
+      return retornos
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"")
+  }
+
+}
+
+function RecursivaCamino(nodos,nombre,predicado,actual,suma) 
+{
+  var retorno = []
+  for (const nodo of nodos) 
+  {
+    var hijos=[]
+    var subretorno = []
+    var posicion = actual;
+    for (const iterator of nodo.entorno.hijos) {
+      var nuevaPila = Object.assign([],nodo.pila)
+      nuevaPila.push(nodo.entorno)
+      var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion)
+      hijos.push(RecursivaCamino([hijo],nombre,predicado,posicion,suma/10))
+      if(iterator.tipo==nombre || nombre=="*") { subretorno.push(hijo); posicion+=suma  }
+    } 
+    subretorno = Predicado(predicado,subretorno)
+    for (const [indexHijo,hijo] of hijos.entries()) {
+      if(subretorno[index] && subretorno[index].posicion==indexHijo)
+      {
+        retorno.push(subretorno[index])
+        index++
+      }
+      retorno = retorno.concat(hijo)
+    }
+    //retorno = retorno.concat(subretorno,retornoTemp)
+  }
+  return retorno
+}
+
+export class Atributo extends Axes
+{
+  constructor(nombre,predicado,tipo)
+  {
+    super(nombre,predicado,tipo)
+  }
+  getValor(nodos)
+  {
+    var retornos = []
+    for (const nodo of nodos) 
+    {
+      var retorno = []
+      if(this.tipo==TipoPath.ABS)
+      {
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          for (const iterator of nodo.entorno.atributos) {
+              if(iterator.nombre == this.nombre || this.nombre=="*" )
+              {
+                  retorno.push(new Nodo(Tipo.ATRIB,nodo.entorno,nuevaPila,iterator.valor))
+              }
+          }
+          retorno = Predicado(this.predicado,retorno)
+      }
+      else
+      {
+          retorno = RecursivaAtributo(nodos,this.nombre,this.predicado)
+      }
+      retornos = retornos.concat(retorno)
+    }
+    return retornos
+  }
+
+  Graficar(ListaNodes,ListaEdges,contador)
+  {
+    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"@")
+  }
+}
+
+function RecursivaAtributo(nodos,nombre,predicado) 
+{
+  var retornos=[]
+  for (const nodo of nodos) 
+  {
+    var retorno = []
+    var hijos = []
+    for (const atributo of nodo.entorno.atributos) {
+      if(atributo.nombre == nombre || nombre=="*") {
+        var nuevoNodo = Object.assign({},nodo)
+        nuevoNodo.tipo=Tipo.ATRIB
+        retorno.push(nuevoNodo)
+      }
+    }
+    for (const iterator of nodo.entorno.hijos) {
+      var nuevaPila = Object.assign([],nodo.pila)
+      nuevaPila.push(nodo.entorno)
+      var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto)
+      hijos.push(hijo)
+    }
+    var retornohijos = RecursivaAtributo(hijos,nombre,predicado)
+    retorno = Predicado(predicado,retorno)
+    retornos = retornos.concat(retorno,retornohijos)
+  }
+  return retornos
+}
+
 export class Child extends Axes
 {
   constructor(nombre,predicado,tipo)
@@ -303,146 +443,6 @@ export class Follow extends Axes
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"following::")
   }
-}
-
-export class Atributo extends Axes
-{
-  constructor(nombre,predicado,tipo)
-  {
-    super(nombre,predicado,tipo)
-  }
-  getValor(nodos)
-  {
-    var retornos = []
-    for (const nodo of nodos) 
-    {
-      var retorno = []
-      if(this.tipo==TipoPath.ABS)
-      {
-          var nuevaPila = Object.assign([],nodo.pila)
-          nuevaPila.push(nodo.entorno)
-          for (const iterator of nodo.entorno.atributos) {
-              if(iterator.nombre == this.nombre || this.nombre=="*" )
-              {
-                  retorno.push(new Nodo(Tipo.ATRIB,nodo.entorno,nuevaPila,iterator.valor))
-              }
-          }
-          retorno = Predicado(this.predicado,retorno)
-      }
-      else
-      {
-          retorno = RecursivaAtributo(nodos,this.nombre,this.predicado)
-      }
-      retornos = retornos.concat(retorno)
-    }
-    return retornos
-  }
-
-  Graficar(ListaNodes,ListaEdges,contador)
-  {
-    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"@")
-  }
-}
-
-export class Camino extends Axes
-{
-  constructor(nombre,predicado,tipo)
-  {
-    super(nombre,predicado,tipo)
-
-
-  }
-
-  getValor(nodos)
-  {
-      var retornos = []
-      for (const nodo of nodos) 
-      {
-        var retorno = []
-        var posicion = 0;
-        if(this.tipo==TipoPath.ABS)
-        {
-            for (const iterator of nodo.entorno.hijos) {
-                if(iterator.tipo == this.nombre || this.nombre=="*" )
-                {
-                    var nuevaPila = Object.assign([],nodo.pila)
-                    nuevaPila.push(nodo.entorno)
-                    retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion,posicion))
-                    posicion++
-                }
-            }
-            retorno = Predicado(this.predicado,retorno)
-        }
-        else
-        {
-          retorno = RecursivaCamino(nodos,this.nombre,this.predicado)
-        }
-        retornos = concatenarNodos(retornos,retorno)
-      }
-      return retornos
-  }
-
-  Graficar(ListaNodes,ListaEdges,contador)
-  {
-    return this.GraficarAxis(ListaNodes,ListaEdges,contador,"")
-  }
-
-}
-
-function RecursivaAtributo(nodos,nombre,predicado) 
-{
-  var retornos=[]
-  for (const nodo of nodos) 
-  {
-    var retorno = []
-    var hijos = []
-    for (const atributo of nodo.entorno.atributos) {
-      if(atributo.nombre == nombre || nombre=="*") {
-        var nuevoNodo = Object.assign({},nodo)
-        nuevoNodo.tipo=Tipo.ATRIB
-        retorno.push(nuevoNodo)
-      }
-    }
-    for (const iterator of nodo.entorno.hijos) {
-      var nuevaPila = Object.assign([],nodo.pila)
-      nuevaPila.push(nodo.entorno)
-      var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto)
-      hijos.push(hijo)
-    }
-    var retornohijos = RecursivaAtributo(hijos,nombre,predicado)
-    retorno = Predicado(predicado,retorno)
-    retornos = retornos.concat(retorno,retornohijos)
-  }
-  return retornos
-}
-
-function RecursivaCamino(nodos,nombre,predicado) 
-{
-  var retorno = []
-  for (const nodo of nodos) 
-  {
-    var hijos=[]
-    var subretorno = []
-    for (const [index,iterator] of nodo.entorno.hijos.entries()) {
-      var nuevaPila = Object.assign([],nodo.pila)
-      nuevaPila.push(nodo.entorno)
-      var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto)
-      hijos.push(RecursivaCamino([hijo],nombre,predicado))
-      if(iterator.tipo==nombre || nombre=="*") { hijo.posicion=index; subretorno.push(hijo);  }
-    } 
-    subretorno = Predicado(predicado,subretorno)
-    var index = 0
-    for (const [indexHijo,hijo] of hijos.entries()) {
-      if(subretorno[index] && subretorno[index].posicion==indexHijo)
-      {
-        retorno.push(subretorno[index])
-        index++
-      }
-      retorno = retorno.concat(hijo)
-    }
-    //retorno = retorno.concat(subretorno,retornoTemp)
-  }
-  return retorno
 }
 
 export class CaminoInverso extends Axes
