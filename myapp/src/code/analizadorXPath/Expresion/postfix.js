@@ -1,6 +1,6 @@
 import { concat, pad } from "lodash"
 import { Tipo, TipoPath, Predicado } from "../AST/Entorno"
-import { Nodo,Literal } from "./Expresiones"
+import { Literal, Nodo } from "./Expresiones"
 
 
 class PostFix
@@ -161,6 +161,7 @@ export class Last extends PostFix {
   getValor(Objetos)
   {
     var retorno = []
+    /*
     var lastHijo
 
     // recorrer todos los ojetos para concatener el texto
@@ -185,10 +186,13 @@ export class Last extends PostFix {
     if (lastHijo){
       retorno.push(lastHijo)
     }
-
+    */
+    var lastIndex = !Objetos[0] ? 0 : Objetos.length 
+    retorno.push(new Literal(Tipo.INTEGER, lastIndex))
     return retorno
   }
 
+  /*
   getLastRelativo (objeto, tipo){
     // recorre todos los hijos de objeto
     var retorno  = []
@@ -207,4 +211,5 @@ export class Last extends PostFix {
     if (lastHijo)
       retorno.push(new Nodo(Tipo.NODO,lastHijo, [], lastHijo.valor))
   }
+  */
 }
