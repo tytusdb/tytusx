@@ -100,6 +100,7 @@ function RecursivaCamino(nodos,nombre,predicado,actual,suma)
       if(iterator.tipo==nombre || nombre=="*") { subretorno.push(hijo); posicion+=suma  }
     } 
     subretorno = Predicado(predicado,subretorno)
+    var index = 0
     for (const [indexHijo,hijo] of hijos.entries()) {
       if(subretorno[index] && subretorno[index].posicion==indexHijo)
       {

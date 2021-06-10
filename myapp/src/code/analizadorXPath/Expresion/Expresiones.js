@@ -65,8 +65,7 @@ export class PathExp
 
     getValor(Entorno)
     {
-        var Retornos = []
-        Retornos.push(new Nodo(Tipo.NODO,Entorno,[],""))
+        var Retornos = Entorno
         for (const iterator of this.caminos) {
             Retornos = iterator.getValor(Retornos)
         }

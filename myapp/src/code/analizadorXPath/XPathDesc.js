@@ -84,9 +84,9 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$=new Comando($$[$0],pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return this.$ 
+ $$[$0].reverse();this.$=new Comando($$[$0],pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return this.$ 
 break;
-case 2: case 3: case 49: case 50:
+case 2: case 3: case 50:
  this.$ = $$[$0]; this.$.push($$[$0-1]); 
 break;
 case 4: case 42: case 48: case 51:
@@ -135,7 +135,7 @@ case 38:
  this.$=new PathExp([]); 
 break;
 case 39:
- $$[$0].push($$[$0-1]); this.$ = $$[$0]; 
+ $$[$0].push($$[$0-1]); $$[$0].reverse();  this.$ = $$[$0]; 
 break;
 case 40:
  this.$ = $$[$0]; $$[$0-1].tipo = TipoPath.ABS; this.$.push($$[$0-1]); 
@@ -145,6 +145,9 @@ case 41:
 break;
 case 45: case 46: case 76:
  this.$ = $$[$0-1]; this.$.predicado = $$[$0]; 
+break;
+case 49:
+ this.$ = $$[$0]; this.$.push($$[$0-1]); this.$.reverse(); 
 break;
 case 52: case 68:
  this.$=$$[$0]; 

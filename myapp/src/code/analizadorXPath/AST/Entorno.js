@@ -67,7 +67,8 @@ export class Comando
     var Salida = ""
     var retornos=[]
     for (const iterator of this.Instrucciones) {
-      retornos = retornos.concat(iterator.getValor(XML))
+      var {Nodo} = require('../Expresion/Expresiones')
+      retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
     }
     for (const retorno of retornos) {
       if(retorno.tipo == Tipo.NODO || retorno.tipo == Tipo.ATRIB)

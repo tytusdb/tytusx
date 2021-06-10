@@ -132,7 +132,7 @@
 %%
 
 XPath 
-    : Expr                                              { $$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
+    : Expr                                              { $1.reverse();$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
 ;
 
 Expr
@@ -224,7 +224,7 @@ SUB_BARRA
 ;
 
 RelativePathExpr
-    : StepExpr P_RelativePathExpr                       { $2.push($1); $$ = $2; }
+    : StepExpr P_RelativePathExpr                       { $2.push($1); $2.reverse();  $$ = $2; }
 ;
 
 P_RelativePathExpr
@@ -250,7 +250,7 @@ SUB_PredicateList
 
 
 PredicateList
-    : Predicate P_PredicateList                         { $$ = $2; $$.push($1); }
+    : Predicate P_PredicateList                         { $$ = $2; $$.push($1); $$.reverse(); }
 ;
 
 P_PredicateList

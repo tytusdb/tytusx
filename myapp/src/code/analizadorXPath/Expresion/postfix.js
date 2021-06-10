@@ -187,14 +187,14 @@ export class Last extends PostFix {
       retorno.push(lastHijo)
     }
     */
-    var lastIndex = !Objetos[0] ? 0 : Objetos.length 
+    var lastIndex = Objetos.length 
     retorno.push(new Literal(Tipo.INTEGER, lastIndex))
     return retorno
   }
 
   /*
   getLastRelativo (objeto, tipo){
-    // recorre todos los hijos de objeto
+    // recorre todos los hijos de objeto  
     var retorno  = []
     var lastHijo  
 
