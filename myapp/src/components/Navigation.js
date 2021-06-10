@@ -79,6 +79,21 @@ class Navigation extends React.Component{
         console.log("setText Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
+        var parser = require('../code/analizadorXPath/Xpath');
+        var funcion = parser.parse(text);
+        var respuesta=funcion.Ejecutar(this.state.XML);
+        var AST = funcion.Graficar();
+        this.setState({AST:AST})
+        this.setState({OutputTextarea: respuesta});  
+        var datos = {nodes:funcion.Nodos,edges:funcion.Edges}   
+        this.setState({datosCST:datos}) 
+        this.setState({graphvizCST:funcion.graphviz})
+    }
+
+    setTextDesc(){
+        console.log("setTextDesc Button clicked");
+        let text = this.state.InputTextarea;
+        if(text=="") return
         var parser = require('../code/analizadorXPath/XPathDesc');
         var funcion = parser.parse(text);
         var respuesta=funcion.Ejecutar(this.state.XML);
@@ -186,7 +201,10 @@ class Navigation extends React.Component{
                         <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.xmlDesc() }>XML Desc</button>
                     </div>
                     <div className="col">
-                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Compilar</button>
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Compilar ASC</button>
+                    </div>
+                    <div className="col">
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setTextDesc() }>Compilar DESC</button>
                     </div>
                     <div className="col">
                         <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }>Actualizar</button>

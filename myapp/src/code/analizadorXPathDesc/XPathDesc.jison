@@ -136,208 +136,213 @@ XPath
 ;
 
 Expr
-    : ExprSingle P_Expr                                 { $$ = $2; $$.push($1); }
+    : ExprSingle P_Expr                                 { $$ = $2; $$.push($1); generarPadre(2); generarPadre(1); generarHijos("ExprSingle", "P_Expr"); }
 ;
 
 P_Expr
-    : PIPE ExprSingle P_Expr                            { $$ = $3; $$.push($2); }
-    |                                                   { $$ = []; }
+    : PIPE ExprSingle P_Expr                            { $$ = $3; $$.push($2); generarPadre(3); generarPadre(2); generarHijos($1,"ExprSingle","P_Expr"); }
+    |                                                   { $$ = []; generarHijos("ε");}
 ;
 
 ExprSingle  
-  : OrExpr                                              { $$ = $1; }
+  : OrExpr                                              { $$ = $1; generarPadre(1); generarHijos("OrExpr");}
 ;
 
 OrExpr
-    : AndExpr P_OrExpr                                  { if($2==null){$$=$1;}else{$$=new Logical($1,"or",$2);} }
+    : AndExpr P_OrExpr                                  { if($2==null){$$=$1;}else{$$=new Logical($1,"or",$2);};
+                                        generarPadre(2); generarPadre(1); generarHijos("AndExpr", "P_OrExpr"); }
 ;
 
 P_OrExpr
-    : ROR AndExpr P_OrExpr                              { if($3==null){$$=$2;}else{$$=new Logical($2,"or",$3);} }
-    |                                                   { $$ = null; }
+    : ROR AndExpr P_OrExpr                              { if($3==null){$$=$2;}else{$$=new Logical($2,"or",$3);};
+                                        generarPadre(3); generarPadre(2); generarHijos($1, "AndExpr", "P_OrExpr"); }
+    |                                                   { $$ = null; generarHijos("ε"); }
 ;
 
 AndExpr
-    : ComparisonExpr P_AndExpr                          { if($2==null){$$=$1;}else{$$=new Logical($1,"and",$2);} }
+    : ComparisonExpr P_AndExpr                          { if($2==null){$$=$1;}else{$$=new Logical($1,"and",$2);}; generarPadre(2); generarPadre(1); generarHijos("ComparisonExpr", "P_AndExpr"); }
 ;
 
 P_AndExpr
-    : RAND /*and*/ ComparisonExpr P_AndExpr             { if($3==null){$$=$2;}else{$$=new Logical($2,"and",$3);} }
-    |                                                   { $$ = null }
+    : RAND /*and*/ ComparisonExpr P_AndExpr             { if($3==null){$$=$2;}else{$$=new Logical($2,"and",$3);}; generarPadre(3); generarPadre(2); generarHijos($1, "ComparisonExpr", "P_AndExpr"); }
+    |                                                   { $$ = null; generarHijos("ε"); }
 ;
 
 ComparisonExpr
-    : AdditiveExpr SUB_AdditiveExpr                     { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
+    : AdditiveExpr SUB_AdditiveExpr                     { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} generarPadre(2); generarPadre(1); generarHijos("AdditiveExpr","SUB_AdditiveExpr"); }
 ;
 
 SUB_AdditiveExpr
-    : GeneralComp AdditiveExpr                          { $$ = new ComparisonExp(null,$1,$2); }
-    |                                                   { $$ = null; }
+    : GeneralComp AdditiveExpr                          { $$ = new ComparisonExp(null,$1,$2); generarPadre(2); generarPadre(1); generarHijos("GeneralComp","AdditiveExpr"); }
+    |                                                   { $$ = null; generarHijos("ε"); }
 ;
 
 GeneralComp       
-    : IGUAL       /*"="*/                               { $$ = $1; }
-	  | DIFERENTE   /*"!="*/                              { $$ = $1; }
-	  | MENOR       /*"<"*/                               { $$ = $1; }
-	  | MENORIG     /*"<="*/                              { $$ = $1; }
-	  | MAYOR       /*">"*/                               { $$ = $1; }
-	  | MAYORIG     /*">="*/                              { $$ = $1; }
+    : IGUAL       /*"="*/                               { $$ = $1; generarHijos($1); } 
+	  | DIFERENTE   /*"!="*/                              { $$ = $1; generarHijos($1); }
+	  | MENOR       /*"<"*/                               { $$ = $1; generarHijos($1); }
+	  | MENORIG     /*"<="*/                              { $$ = $1; generarHijos($1); }
+	  | MAYOR       /*">"*/                               { $$ = $1; generarHijos($1); }
+	  | MAYORIG     /*">="*/                              { $$ = $1; generarHijos($1); }
 ;
 
 AdditiveExpr
-    : MultiplicativeExpr P_AdditiveExpr                 { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
+    : MultiplicativeExpr P_AdditiveExpr                 { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;}; generarPadre(2);generarPadre(1); generarHijos("MultiplicativeExpr", "P_AdditiveExpr"); }
 ;
 
 P_AdditiveExpr
-    : MAS MultiplicativeExpr P_AdditiveExpr             { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
-    | MENOS MultiplicativeExpr P_AdditiveExpr           { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2;} }
-    |                                                   { $$ = null; }
+    : MAS MultiplicativeExpr P_AdditiveExpr             { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2;} generarPadre(3);generarPadre(2); generarHijos($1, "MultiplicativeExpr", "P_AdditiveExpr"); }
+    | MENOS MultiplicativeExpr P_AdditiveExpr           { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2;} generarPadre(3);generarPadre(2); generarHijos($1, "MultiplicativeExpr", "P_AdditiveExpr");}
+    |                                                   { $$ = null; generarHijos("ε"); }
 ;
 
 MultiplicativeExpr
-    : UnaryExpr P_MultiplicativeExpr                    { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
+    : UnaryExpr P_MultiplicativeExpr                    { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;}; generarPadre(2);generarPadre(1); generarHijos("UnaryExpr", "P_MultiplicativeExpr"); }
 ;
 
 P_MultiplicativeExpr
-    : POR /* * */ UnaryExpr P_MultiplicativeExpr        { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
-    | DIV /* div */ UnaryExpr P_MultiplicativeExpr      { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
-    | IDIV /* idiv */ UnaryExpr P_MultiplicativeExpr    { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
-    | MOD /* mod */ UnaryExpr P_MultiplicativeExpr      { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; } }
-    |                                                   { $$ = null; }
+    : POR /* * */ UnaryExpr P_MultiplicativeExpr        { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; }; generarPadre(3);generarPadre(2); generarHijos($1, "UnaryExpr", "P_MultiplicativeExpr"); }
+    | DIV /* div */ UnaryExpr P_MultiplicativeExpr      { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; }; generarPadre(3);generarPadre(2); generarHijos($1, "UnaryExpr", "P_MultiplicativeExpr"); }
+    | IDIV /* idiv */ UnaryExpr P_MultiplicativeExpr    { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; }; generarPadre(3);generarPadre(2); generarHijos($1, "UnaryExpr", "P_MultiplicativeExpr"); }
+    | MOD /* mod */ UnaryExpr P_MultiplicativeExpr      { if($3==null){$$=new Arithmetic(null,$1,$2);}else{$$ = $3; $$.izq = $2; }; generarPadre(3);generarPadre(2); generarHijos($1, "UnaryExpr", "P_MultiplicativeExpr"); }
+    |                                                   { $$ = null; generarHijos("ε"); }
 ;
 
 UnaryExpr   
-    : PathExpr                                          { $$ = $1; }
+    : PathExpr                                          { $$ = $1; generarPadre(1); generarHijos("PathExpr"); }
 	  | MAS /*+*/ UnaryExpr                               {  }
 	  | MENOS /*-*/ UnaryExpr                             {  }
 ;
 
 PathExpr
-    : BARRA SUB_BARRA                                   { $$ = $2; }
-    | DOBLEBARRA RelativePathExpr                       { $2[0].tipo=TipoPath.REL;$$=new PathExp($2); }
-    | RelativePathExpr                                  { $$=new PathExp($1); }
+    : BARRA SUB_BARRA                                   { $$ = $2; generarPadre(2); generarHijos($1, "SUB_BARRA"); }
+    | DOBLEBARRA RelativePathExpr                       { $2[0].tipo=TipoPath.REL;$$=new PathExp($2); generarPadre(2); generarHijos($1, "RelativePathExpr");}
+    | RelativePathExpr                                  { $$=new PathExp($1); generarHijos("RelativePathExpr"); }
 ;
 
 SUB_BARRA
-    : RelativePathExpr                                  { $1[0].tipo=TipoPath.ABS;$$=new PathExp($1); }
-    |                                                   { $$=new PathExp([]); }
+    : RelativePathExpr                                  { $1[0].tipo=TipoPath.ABS;$$=new PathExp($1); generarPadre(1); generarHijos("RelativePathExpr"); }
+    |                                                   { $$=new PathExp([]); generarHijos("ε"); }
 ;
 
 RelativePathExpr
-    : StepExpr P_RelativePathExpr                       { $2.push($1); $2.reverse();  $$ = $2; }
+    : StepExpr P_RelativePathExpr                       { $2.push($1); $2.reverse();  $$ = $2; generarPadre(2); generarPadre(1); generarHijos("StepExpr", "P_RelativePathExpr"); }
 ;
 
 P_RelativePathExpr
-    : BARRA StepExpr P_RelativePathExpr                 { $$ = $3; $2.tipo = TipoPath.ABS; $$.push($2); }
-    | DOBLEBARRA StepExpr P_RelativePathExpr            { $$ = $3; $2.tipo = TipoPath.REL; $$.push($2);}
+    : BARRA StepExpr P_RelativePathExpr                 { $$ = $3; $2.tipo = TipoPath.ABS; $$.push($2); 
+                        generarPadre(3); generarPadre(2); generarHijos($1, "StepExpr", "P_RelativePathExpr"); }
+    | DOBLEBARRA StepExpr P_RelativePathExpr            { $$ = $3; $2.tipo = TipoPath.REL; $$.push($2); 
+                        generarPadre(3); generarPadre(2); generarHijos($1, "StepExpr", "P_RelativePathExpr"); }
     |                                                   { $$ = []; }
 ;
 
 StepExpr    
-    : PostfixExpr                                       { $$ = $1; }
-    | AxisStep                                          { $$ = $1; }
+    : PostfixExpr                                       { $$ = $1; generarPadre(1); generarHijos("PostfixExpr"); }
+    | AxisStep                                          { $$ = $1; generarPadre(1); generarHijos("AxisStep"); }
 ;
 
 AxisStep
-    : ForwardStep SUB_PredicateList                       { $$ = $1; $$.predicado = $2; }
-    | ReverseStep SUB_PredicateList                       { $$ = $1; $$.predicado = $2; }
+    : ForwardStep SUB_PredicateList                       { $$ = $1; $$.predicado = $2; generarPadre(2); generarPadre(1); generarHijos("ForwardStep", "SUB_PredicateList"); }
+    | ReverseStep SUB_PredicateList                       { $$ = $1; $$.predicado = $2; generarPadre(2); generarPadre(1); generarHijos("ReverseStep", "SUB_PredicateList");}
 ;
 
 SUB_PredicateList
-    : PredicateList                                     { $$ = $1; }
-    |                                                   { $$ = []; }
+    : PredicateList                                     { $$ = $1; generarPadre(1); generarHijos("PredicateList");}
+    |                                                   { $$ = []; generarHijos("ε"); }
 ;
 
 
 PredicateList
-    : Predicate P_PredicateList                         { $$ = $2; $$.push($1); $$.reverse(); }
+    : Predicate P_PredicateList                         { $$ = $2; $$.push($1); $$.reverse(); generarPadre(2); generarPadre(1); generarHijos("Predicate", "P_PredicateList"); }
 ;
 
 P_PredicateList
-    : Predicate P_PredicateList                         { $$ = $2; $$.push($1); }
-    |                                                   { $$ = []; }
+    : Predicate P_PredicateList                         { $$ = $2; $$.push($1); generarPadre(2); generarPadre(1); generarHijos("Predicate", "P_PredicateList"); }
+    |                                                   { $$ = []; generarHijos("ε");}
 ;
 
 ForwardStep 
-  : AbbrevForwardStep    { $$=$1; }
-  | ForwardAxis NameTest { $$=$1; $$.nombre=$2; }
+  : AbbrevForwardStep    { $$=$1; generarPadre(1); generarHijos("AbbrevForwardStep"); }
+  | ForwardAxis NameTest { $$=$1; $$.nombre=$2; generarPadre(2); generarPadre(1); generarHijos("ForwardAxis", "NameTest"); }
 ;
 
 AbbrevForwardStep 
-  : ARROBA NameTest { $$=new Atributo($2,[],TipoPath.ABS); }
-  | NameTest        { $$=new Camino($1,[],TipoPath.ABS); }
+  : ARROBA NameTest { $$=new Atributo($2,[],TipoPath.ABS); generarPadre(2); generarHijos($1, "NameTest"); }
+  | NameTest        { $$=new Camino($1,[],TipoPath.ABS); generarPadre(1); generarHijos("NameTest"); }
 ;
 
 ForwardAxis
-  : RCHILD DOBLEDOSPUNTOS         { $$=new Child(null,[],TipoPath.ABS); }
-  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant(null,[],TipoPath.ABS); }
-  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute(null,[],TipoPath.ABS); }
-  | RSELF DOBLEDOSPUNTOS          { $$=new Self(null,[],TipoPath.ABS); }
-  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf(null,[],TipoPath.ABS); }
-  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling(null,[],TipoPath.ABS); }
-  | RFOLLOW DOBLEDOSPUNTOS        { $$=new Follow(null,[],TipoPath.ABS); }
+  : RCHILD DOBLEDOSPUNTOS         { $$=new Child(null,[],TipoPath.ABS); generarHijos($1,$2); }
+  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant(null,[],TipoPath.ABS); generarHijos($1,$2); }
+  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute(null,[],TipoPath.ABS); generarHijos($1,$2); }
+  | RSELF DOBLEDOSPUNTOS          { $$=new Self(null,[],TipoPath.ABS); generarHijos($1,$2); }
+  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf(null,[],TipoPath.ABS); generarHijos($1,$2); }
+  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling(null,[],TipoPath.ABS); generarHijos($1,$2); }
+  | RFOLLOW DOBLEDOSPUNTOS        { $$=new Follow(null,[],TipoPath.ABS); generarHijos($1,$2); }
   | RNAMESPACE DOBLEDOSPUNTOS     {  }
 ;
 
 NodeTest    
-  : NameTest                                { $$ = $1; }
+  : NameTest                                { $$ = $1; generarPadre(1); generarHijos("NameTest"); }
 ;
 
 NameTest    
-    : NOMBRE                                { $$ = $1; }
-	| Wildcard                                { $$ = $1; }
+    : NOMBRE                                 { $$ = $1; generarHijos($1); }
+	|  Wildcard                                { $$ = $1; generarPadre(1); generarHijos("Wildcard"); }
 ;
 
 Wildcard    
-  : ASTERISCO                               { $$ = $1; }
+  : ASTERISCO                               { $$ = $1; generarHijos($1); }
 ;
 
 ReverseStep 
-  :  AbbrevReverseStep                      { $$=$1; }
-  |  ReverseAxis NameTest                   { $$=$1; $$.nombre=$2;  }
+  :  AbbrevReverseStep                      { $$=$1; generarPadre(1); generarHijos("AbbrevReverseStep"); }
+  |  ReverseAxis NameTest                   { $$=$1; $$.nombre=$2; generarPadre(2);generarPadre(1);generarHijos("ReverseAxis","NameTest") }
 ;
 
 AbbrevReverseStep 
-  : DOBLEPUNTO                              { $$=new CaminoInverso("*",[],TipoPath.ABS); }
+  : DOBLEPUNTO                              { $$=new CaminoInverso("*",[],TipoPath.ABS); generarHijos($1); }
 ;
 
 ReverseAxis
-  : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS); }
-  | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS); }
-  | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS); }
+  : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS); generarHijos($1,$2); }
+  | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS); generarHijos($1,$2); }
+  | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS); generarHijos($1,$2); }
   | RPRECED DOBLEDOSPUNTOS            {  }
-  | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS); }
+  | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS); generarHijos($1,$2); }
 ;
 
 PostfixExpr   
-  : PrimaryExpr SUB_PredicateList            { $$ = $1; $$.predicado = $2; }
+  : PrimaryExpr SUB_PredicateList            { $$ = $1; $$.predicado = $2; 
+        generarPadre(1); generarPadre(2); generarHijos("PrimaryExpr","SUB_PredicateList");}
 ;
 
 
 Predicate   
-  : CORA ExprSingle CORB                    { $$ = $2; }
+  : CORA ExprSingle CORB                    { $$ = $2; generarPadre(2); generarHijos($1,"ExprSingle",$3);}
 ;
 
 PrimaryExpr 
-  : Literal                                 { $$ = $1; }
-	| FunctionCall                            { $$ = $1; }
-	| ContextItemExpr                         { $$ = $1; }
-	| ParenthesizedExpr                       { $$ = $1; }
+  : Literal                                 { $$ = $1; generarHijos("Literal");}
+	| FunctionCall                            { $$ = $1; generarHijos("FunctionCall");}
+	| ContextItemExpr                         { $$ = $1; generarHijos("ContextItemExpr");}
+	| ParenthesizedExpr                       { $$ = $1; generarHijos("ParenthesizedExpr");}
 ;
 
 Literal     
-  : INTEGER                                 { $$=new Literal(Tipo.INTEGER,$1); }
-	| DECIMAL                                 { $$=new Literal(Tipo.DECIMAL,$1); }
-	| CADENA                                  { $$=new Literal(Tipo.STRING,$1); }
+  : INTEGER                                 { $$=new Literal(Tipo.INTEGER,$1); generarHijos($1); }
+	| DECIMAL                                 { $$=new Literal(Tipo.DECIMAL,$1); generarHijos($1); }
+	| CADENA                                  { $$=new Literal(Tipo.STRING,$1); generarHijos($1); }
 ;
 
 FunctionCall
-    : NOMBRE PARENTESISA PARENTESISC        { $$ = new CallFunction([],TipoPath.ABS,$1); }
+    : NOMBRE PARENTESISA PARENTESISC        { $$ = new CallFunction([],TipoPath.ABS,$1); generarHijos($1,$2,$3)}
 ;
 
 
 ContextItemExpr   
-    : PUNTO                                 { $$=new ContextItemExpr([],TipoPath.ABS); }
+    : PUNTO                                 { $$=new ContextItemExpr([],TipoPath.ABS); generarHijos($1); }
 ;
 
 
