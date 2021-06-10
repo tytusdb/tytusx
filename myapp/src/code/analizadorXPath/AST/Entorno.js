@@ -201,8 +201,17 @@ export function concatenarNodosOrden(principales,secundarios)
     for (; iSec < secundarios.length; iSec++) {
       if(principal.posicion > secundarios[iSec].posicion)
       {
-        nuevoRetorno.push(secundarios[iSec])
+        nuevoRetorno.push(secundarios[iSec]) 
+      }
+      else
+      {
+        break
       }
     }
+    nuevoRetorno.push(principal)
   }
+  for (; iSec < secundarios.length; iSec++) {
+    nuevoRetorno.push(secundarios[iSec]) 
+  }
+  return nuevoRetorno
 }

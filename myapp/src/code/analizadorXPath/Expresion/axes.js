@@ -1,4 +1,4 @@
-import { Tipo, TipoPath, concatenarNodos, Predicado } from "../AST/Entorno"
+import { Tipo, TipoPath, concatenarNodos, concatenarNodosOrden , Predicado } from "../AST/Entorno"
 import { Nodo } from "./Expresiones"
 
 export class Axes 
@@ -76,12 +76,10 @@ export class Camino extends Axes
       }
       return retornos
   }
-
   Graficar(ListaNodes,ListaEdges,contador)
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"")
   }
-
 }
 
 function RecursivaCamino(nodos,nombre,predicado,actual,suma) 
@@ -89,26 +87,26 @@ function RecursivaCamino(nodos,nombre,predicado,actual,suma)
   var retorno = []
   for (const nodo of nodos) 
   {
-    var hijos=[]
     var subretorno = []
     var posicion = actual;
     for (const iterator of nodo.entorno.hijos) {
       var nuevaPila = Object.assign([],nodo.pila)
       nuevaPila.push(nodo.entorno)
       var hijo = new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion)
-      hijos.push(RecursivaCamino([hijo],nombre,predicado,posicion,suma/10))
+      retorno = concatenarNodosOrden(retorno,RecursivaCamino([hijo],nombre,predicado,posicion+(suma/10),suma/10))
       if(iterator.tipo==nombre || nombre=="*") { subretorno.push(hijo); posicion+=suma  }
     } 
     subretorno = Predicado(predicado,subretorno)
-    var index = 0
-    for (const [indexHijo,hijo] of hijos.entries()) {
-      if(subretorno[index] && subretorno[index].posicion==indexHijo)
-      {
-        retorno.push(subretorno[index])
-        index++
-      }
-      retorno = retorno.concat(hijo)
-    }
+    retorno = concatenarNodosOrden(retorno,subretorno)
+    // var index = 0
+    // for (const [indexHijo,hijo] of hijos.entries()) {
+    //   if(subretorno[index] && subretorno[index].posicion==indexHijo)
+    //   {
+    //     retorno.push(subretorno[index])
+    //     index++
+    //   }
+    //   retorno = retorno.concat(hijo)
+    // }
     //retorno = retorno.concat(subretorno,retornoTemp)
   }
   return retorno
@@ -126,6 +124,7 @@ export class Atributo extends Axes
     for (const nodo of nodos) 
     {
       var retorno = []
+      var posicion = 1;
       if(this.tipo==TipoPath.ABS)
       {
           var nuevaPila = Object.assign([],nodo.pila)
@@ -133,7 +132,8 @@ export class Atributo extends Axes
           for (const iterator of nodo.entorno.atributos) {
               if(iterator.nombre == this.nombre || this.nombre=="*" )
               {
-                  retorno.push(new Nodo(Tipo.ATRIB,nodo.entorno,nuevaPila,iterator.valor))
+                  retorno.push(new Nodo(Tipo.ATRIB,nodo.entorno,nuevaPila,iterator.valor,posicion))
+                  posicion++
               }
           }
           retorno = Predicado(this.predicado,retorno)
@@ -160,11 +160,14 @@ function RecursivaAtributo(nodos,nombre,predicado)
   {
     var retorno = []
     var hijos = []
+    var posicion=1;
     for (const atributo of nodo.entorno.atributos) {
-      if(atributo.nombre == nombre || nombre=="*") {
+      if((atributo.nombre == nombre || nombre=="*") && nodo.entorno.tipo!="/") {
         var nuevoNodo = Object.assign({},nodo)
         nuevoNodo.tipo=Tipo.ATRIB
+        nuevoNodo.posicion=posicion
         retorno.push(nuevoNodo)
+        posicion++
       }
     }
     for (const iterator of nodo.entorno.hijos) {
@@ -208,17 +211,22 @@ export class Descendant extends Axes
 
   getValor(nodos)
   {
-    var descendiente
-    if(this.tipo==TipoPath.ABS)
-    {
-      descendiente = new Camino(this.nombre,[],TipoPath.REL).getValor(nodos)
-      descendiente = Predicado(this.predicado,descendiente)
+    var retornos = []
+    for (const nodo of nodos) { 
+      var descendientes = []
+      descendientes = new Camino(this.nombre,[],TipoPath.REL).getValor(nodos)
+      descendientes = Predicado(this.predicado,descendientes)
+      if(this.tipo==TipoPath.REL)
+      {
+        for (const hijo of nodo.entorno.hijos) {     
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          descendientes = descendientes.concat(new Descendant(this.nombre,this.predicado,this.Tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto)])) 
+        }
+      }
+      retornos = retornos.concat(descendientes)
     }
-    else
-    {
-      descendiente = new Camino(this.nombre,this.predicado,TipoPath.REL).getValor(nodos)
-    }
-    return descendiente
+    return retornos
   }
 
   Graficar(ListaNodes,ListaEdges,contador)
@@ -258,21 +266,18 @@ export class Self extends Axes
     var retornos=[]
     for (const nodo of nodos) {
       var retorno = []
+      var posicion = 1;
       if(nodo.entorno.tipo==this.nombre || this.nombre=="*")
       {
+        nodo.posicion=posicion;
         retorno.push(nodo)
         retorno = Predicado(this.predicado,retorno)
+        posicion++
       }
       if(this.tipo==TipoPath.REL)
       {
-        var hijos=[]
-        for (const iterator of nodo.entorno.hijos) {
-          var nuevaPila = Object.assign([],nodo.pila)
-          nuevaPila.push(nodo.entorno)
-          hijos.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto))
-        } 
-        var hijo = new Self(this.nombre,this.predicado,this.tipo).getValor(hijos)
-        retorno = retorno.concat(hijo)
+        var hijos=new Camino(this.nombre,this.predicado,this.tipo).getValor([nodo])
+        retorno = retorno.concat(hijos)
       }
       retornos = retornos.concat(retorno)
     }
@@ -301,18 +306,18 @@ export class DescSelf extends Axes
       {
         retorno.push(nodo) 
       }
-      if(this.tipo==TipoPath.ABS)
+      retorno = retorno.concat(new Camino(this.nombre,[],TipoPath.REL).getValor([nodo]))
+      retorno = Predicado(this.predicado,retorno)
+      retornos = retornos.concat(retorno)
+      if(this.tipo==TipoPath.REL)
       {
-        var descendiente = new Camino(this.nombre,[],TipoPath.REL).getValor([nodo])
-        retorno = retorno.concat(descendiente)
-        retorno = Predicado(this.predicado,retorno)
+        for (const hijo of nodo.entorno.hijos) {     
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          retorno = retorno.concat(new DescSelf(this.nombre,this.predicado,this.Tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto)])) 
+        }
+        retornos = retornos.concat(retorno)
       }
-      else
-      {
-        var descendiente = new Camino(this.nombre,this.predicado,TipoPath.REL).getValor([nodo])
-        retorno = retorno.concat(descendiente)
-      }
-      retornos=retornos.concat(retorno)
     }
     return retornos
   }
@@ -459,16 +464,20 @@ export class CaminoInverso extends Axes
     for (const nodo of nodos) {
       var nuevaPila = Object.assign([],nodo.pila)
       var temp = nuevaPila.pop()
-      var nuevoNodo = new Nodo(Tipo.NODO,temp,nuevaPila,temp.texto) 
+      var nuevoNodo = new Nodo(Tipo.NODO,temp,nuevaPila,temp.texto,1) 
       var convertido = Predicado(this.predicado,[nuevoNodo])
       for (const iterator of convertido) {
         mapa.set(temp,iterator) 
       }
       if(this.tipo==TipoPath.REL)
       {
-        var temps = (new Camino(this.nombre,[],this.tipo)).getValor([nuevoNodo])
-        for (const temp of temps) {
-          mapa.set(temp.entorno,temp)
+        for (const hijo of nodo.entorno.hijos) {     
+          var nuevaPila = Object.assign([],nodo.pila)
+          nuevaPila.push(nodo.entorno)
+          var retorno = new CaminoInverso(this.nombre,this.predicado,this.Tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto)]) 
+          for (const iterator of retorno) {
+            mapa.set(iterator.entorno,iterator) 
+          }
         }
       }
     }
@@ -514,43 +523,36 @@ export class Ancestor extends Axes
 
   getValor(nodos)
   {
-    var mapa = new Map()
+    var retornos = new Map()
     for (const nodo of nodos) {
-      var submapa = new Map()
-      var hijos = []
+      var nuevaPila = (Object.assign([],nodo.pila))
+      var ancestros=[]
+      while  (nuevaPila.length>0) {
+        var entorno = nuevaPila.pop()
+        if(entorno.tipo==this.nombre) ancestros.psuh(new Nodo(Tipo.NODO,entorno,nuevaPila,entorno.texto))
+        nuevaPila = (Object.assign([],nuevaPila))
+      }
+      ancestros = Predicado(this.predicado,ancestros)
+      for (const ancestro of ancestros) {
+        retornos.set(ancestro.entorno,ancestro)
+      }
       if(this.tipo==TipoPath.REL)
       {
-        var subhijos = []
         for (const hijo of nodo.entorno.hijos) {     
           var nuevaPila = Object.assign([],nodo.pila)
           nuevaPila.push(nodo.entorno)
-          subhijos.push(new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto))
+          var retorno = new Ancestor(this.nombre,this.predicado,this.Tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto)]) 
+          for (const iterator of retorno) {
+            mapa.set(iterator.entorno,iterator) 
+          }
         }
-        hijos = hijos.concat((new Ancestor(this.nombre,this.predicado,this.tipo)).getValor(subhijos))
-      }
-      var nuevaPila = (Object.assign([],nodo.pila))
-      while  (nuevaPila.length>0) {
-        var entorno = nuevaPila.pop()
-        if(entorno.tipo==this.nombre) submapa.set(entorno,new Nodo(Tipo.NODO,entorno,nuevaPila,entorno.texto))
-        nuevaPila = (Object.assign([],nuevaPila))
-      }
-      var temp = []
-      for (const valor of submapa.values()) {
-        temp.push(valor)
-      }
-      temp = Predicado(this.predicado,temp)
-      for (const v of temp) {
-        mapa.set(v.entorno,v)
-      }
-      for (const v of hijos) {
-        mapa.set(v.entorno,v)
       }
     }
-    var temp = []
-    for (const valor of mapa.values()) {
-      temp.push(valor)
+    var retornoReal = []
+    for (const valor of retornos.values()) {
+      retornoReal.push(valor)
     }
-    return temp
+    return retornoReal
   }
   
   Graficar(ListaNodes,ListaEdges,contador)
@@ -630,7 +632,7 @@ export class AncestorSelf extends Axes
       {
         retorno.set(nodo.entorno,nodo)
       }
-      var ancestros = new Ancestor(this.nombre,[],this.tipo).getValor([nodo])
+      var ancestros = new Ancestor(this.nombre,[],this.ABS).getValor([nodo])
       for (const ancestro of ancestros) {
         retorno.set(ancestro.entorno,ancestro)
       }
