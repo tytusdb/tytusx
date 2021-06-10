@@ -1,5 +1,5 @@
-var parser = require('./Prueba')
+var parser = require('./XPathDesc')
 
     //console.log(contenido)
-    parser.parse(`1+2+3+4+5+6`);
+    parser.parse(``);
 

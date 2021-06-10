@@ -1,13 +1,13 @@
 %{
   
-  const {Tipo,TipoPath,Comando} = require("../analizadorXPath/AST/Entorno");
-  const {Logical} = require("../analizadorXPath/Expresion/Logical");
-  const {Arithmetic} = require("../analizadorXPath/Expresion/Arithmetics")
-  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp} = require("../analizadorXPath/Expresion/Expresiones");
-  const { ComparisonExp } = require('../analizadorXPath/Expresion/Comparison')
-  const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('../analizadorXPath/Expresion/axes')
-  const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('../analizadorXPath/Expresion/axes')
-  const { ContextItemExpr } = require('../analizadorXPath/Expresion/postfix')
+  const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
+  const {Logical} = require("./Expresion/Logical");
+  const {Arithmetic} = require("./Expresion/Arithmetics")
+  const {Literal,PathExp} = require("./Expresion/Expresiones");
+  const { ComparisonExp } = require('./Expresion/Comparison')
+  const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
+  const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
+  const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
   
 
   // Datos { id:contador,label:'Nombre' }
@@ -132,7 +132,7 @@
 %%
 
 XPath 
-    : Expr                                              { $$ = $1; }
+    : Expr                                              { $$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
 ;
 
 Expr
@@ -140,7 +140,7 @@ Expr
 ;
 
 P_Expr
-    : PIPE /*|*/ ExprSingle P_Expr                      { $$ = $3; $$,push($2); }
+    : PIPE ExprSingle P_Expr                            { $$ = $3; $$.push($2); }
     |                                                   { $$ = []; }
 ;
 
@@ -167,11 +167,11 @@ P_AndExpr
 ;
 
 ComparisonExpr
-    : AdditiveExpr SUB_AdditiveExpr                     { if($3==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
+    : AdditiveExpr SUB_AdditiveExpr                     { if($2==null){$$=$1;}else{$$=$2; $$.izq = $1;} }
 ;
 
 SUB_AdditiveExpr
-    : GeneralComp AdditiveExpr                          { $$ = new ComparisonExp(null,$2,$3); }
+    : GeneralComp AdditiveExpr                          { $$ = new ComparisonExp(null,$1,$2); }
     |                                                   { $$ = null; }
 ;
 
@@ -327,44 +327,19 @@ PrimaryExpr
 
 Literal     
   : INTEGER                                 { $$=new Literal(Tipo.INTEGER,$1); }
-	| DECIMAL                                 { $$=new Literal(Tipo.DECIMAL,$1);) }
+	| DECIMAL                                 { $$=new Literal(Tipo.DECIMAL,$1); }
 	| CADENA                                  { $$=new Literal(Tipo.STRING,$1); }
 ;
 
 FunctionCall
-    : NOMBRE PARENTESISA SUB_FunctionCall   { $$ = $1+$2+$3; }
+    : NOMBRE PARENTESISA PARENTESISC        { $$ = new CallFunction([],TipoPath.ABS,$1); }
 ;
 
-SUB_FunctionCall
-    : PARENTESISC                           { $$ = $1; }
-    | ArgumentList PARENTESISC              { $$ = $1+$2; }
-;
-
-ArgumentList
-    : Argument P_ArgumentList               { $$ = $1 + $2; }
-;
-
-P_ArgumentList
-    : COMA Argument P_ArgumentList          { $$ = $1+$2+$3 }
-    |                                       {  }
-;
-
-Argument    
-    : ExprSingle                            { $$ = $1; }
-	  | INTERROGACIONC                        { $$ = $1; }
-;
 
 ContextItemExpr   
     : PUNTO                                 { $$=new ContextItemExpr([],TipoPath.ABS); }
 ;
 
-ParenthesizedExpr 
-    : PARENTESISA SUB_ParenthesizedExpr     { $$ = $1+$2;  }
-;
 
-SUB_ParenthesizedExpr
-    : PARENTESISC                           { $$ = $1; }
-    | Expr PARENTESISC                      { $$ = $3; }
-;
 
 
