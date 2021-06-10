@@ -1,5 +1,6 @@
 const { Tipo } = require("../AST/Entorno")
 
+
 //Literales para el uso de datos y tipos
 export class NodoExp
 {
@@ -24,6 +25,14 @@ export class Literal extends NodoExp
     getValor()
     {
         return [this]
+    }
+
+    Graficar(ListaNodes,ListaEdges,contador)
+    {
+        var NodosActuales = []
+        var nodoActual = {id:contador.num,label:this.valor}
+        NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+        return NodosActuales
     }
 }
 
@@ -71,40 +80,19 @@ export class PathExp
             return [new Literal(Tipo.ERROR,'@Error@',[])]
         }
     }
-}
 
-//Clase para los tipos nodes
-export class PathExpElement
-{
-    constructor(siguiente,tipo)
-    {
-        this.siguiente = siguiente
-        this.tipo = tipo
-    }
-
-    getValor(pila,Entorno)
-    {
-        return this.siguiente.getValor(pila,Entorno,this.tipo)
-    }
-}
-
-export class AxisStepExp
-{
-    constructor(valor,predicado)
-    {
-        this.valor=valor
-        this.predicado=predicado
-    }
-
-    getValor(pila,Entorno,tipo)
-    {
-        var retorno = this.valor.getValor(pila,Entorno,tipo)
-        if(this.predicado.length > 0)
+    Graficar(ListaNodes,ListaEdges,contador)
+    {   
+        var NodosActuales = []
+        for(var i=0; i < this.caminos.length; i++)
         {
-            for (const iterator of this.predicado) {
-                retorno=iterator.getValor(retorno)
+            var nodoActual = {id:contador.num,label:"RelativePath"}
+            NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+            var nodos = this.caminos[i].Graficar(ListaNodes,ListaEdges,contador)
+            for (const nodo of nodos) {
+              ListaEdges.push({from:nodoActual.id,to:nodo.id})
             }
         }
-        return retorno
+        return NodosActuales
     }
 }

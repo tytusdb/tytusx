@@ -3,7 +3,7 @@
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {Logical} = require("./Expresion/Logical");
   const {Arithmetic} = require("./Expresion/Arithmetics")
-  const {Literal,PathExp,AbsoluthePath,RelativePath,PathExpElement,AxisStepExp} = require("./Expresion/Expresiones");
+  const {Literal,PathExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
   const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
