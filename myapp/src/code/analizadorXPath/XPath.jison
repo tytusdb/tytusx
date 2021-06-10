@@ -204,8 +204,8 @@ MultiplicativeExpr
 
 UnaryExpr   
   : PathExpr                         { $$=$1; generarPadre(1);generarHijos("PathExpr") }
-	| MAS PathExpr                     {}
-	| MENOS PathExpr                   {}
+	| MAS UnaryExpr                    {}
+	| MENOS UnaryExpr                  {}
 ;
 
 // ValueExpr   
