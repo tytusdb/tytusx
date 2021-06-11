@@ -1,5 +1,6 @@
 import { concat, pad } from "lodash"
 import { Tipo, TipoPath, Predicado } from "../AST/Entorno"
+import { Camino } from "./axes"
 import { Literal, Nodo } from "./Expresiones"
 
 
@@ -120,7 +121,14 @@ export class CallFunction extends PostFix
         retorno = new Texto(this.predicado,this.tipo).getValor(nodos)
         break;
       case 'last':
-        retorno = new Last(this.predicado,this.tipo).getValor(nodos)
+        retorno = new Last(this.predicado,this.tipo).getValor(nodos)  
+        break;    
+      case 'node':
+        retorno = new Node(this.predicado,this.tipo).getValor(nodos)
+        break;
+      case 'position':
+        retorno = new Position(this.predicado,this.tipo).getValor(nodos)
+        break;
       default:
         //Retorno un error semantico
         break;
@@ -152,7 +160,8 @@ export class CallFunction extends PostFix
   }
 }
 // GET LAST
-export class Last extends PostFix {
+export class Last extends PostFix 
+{
 
   constructor (predicado, tipo) {
     super(predicado, tipo)
@@ -212,4 +221,36 @@ export class Last extends PostFix {
       retorno.push(new Nodo(Tipo.NODO,lastHijo, [], lastHijo.valor))
   }
   */
+}
+
+export class Position extends PostFix 
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    var posiciones = []
+    for (const nodo of nodos) {
+      posiciones.push(new Literal(Tipo.INTEGER,nodo.posicion))
+    }
+    return posiciones
+  }
+}
+
+export class Node extends PostFix
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    var posiciones = []
+    for (const nodo of nodos) {
+      posiciones = concat(new Camino("*",[],this.tipo).getValor([nodo]))
+    }
+    return posiciones
+  }
 }

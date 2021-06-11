@@ -54,12 +54,13 @@ export const TipoPath = {
 
 export class Comando
 {
-  constructor(Instrucciones,Nodos,Edges,graphviz)
+  constructor(Instrucciones,Nodos,Edges,graphviz,errores)
   {
     this.Instrucciones = Instrucciones
     this.Nodos=Nodos
     this.Edges=Edges
     this.graphviz=graphviz
+    this.errores = errores
   }
 
   Ejecutar(XML)
@@ -201,8 +202,17 @@ export function concatenarNodosOrden(principales,secundarios)
     for (; iSec < secundarios.length; iSec++) {
       if(principal.posicion > secundarios[iSec].posicion)
       {
-        nuevoRetorno.push(secundarios[iSec])
+        nuevoRetorno.push(secundarios[iSec]) 
+      }
+      else
+      {
+        break
       }
     }
+    nuevoRetorno.push(principal)
   }
+  for (; iSec < secundarios.length; iSec++) {
+    nuevoRetorno.push(secundarios[iSec]) 
+  }
+  return nuevoRetorno
 }

@@ -6,7 +6,7 @@
   const {Literal,PathExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
-  const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf } = require('./Expresion/axes')
+  const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf,Preceding } = require('./Expresion/axes')
   const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
 
   // Datos { id:contador,label:'Nombre' }
@@ -42,6 +42,8 @@
     }
     pilaHijos.push(Hijos)
   }
+
+  var ListaErrores = []
 %}
 
 /* Definición Léxica */
@@ -118,7 +120,7 @@
 \n{}
 
 
-.	{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
 
 /lex
 
@@ -131,12 +133,29 @@
 %%
 
 XPath 
-  : Expr  { generarPadre(1);generarHijos("Expr");$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
+  : Expr  { generarPadre(1);generarHijos("Expr");$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges,ListaErrores);return $$ }
+  | error 
+    {  
+      ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
+      return new Comando([],[],[],"",ListaErrores)
+    }
 ;
 
 Expr 
   : ExprSingle            { $$=[];$$.push($1); generarPadre(1);generarHijos("ExprSingle") }
   | Expr PIPE ExprSingle  { $$=$1;$$.push($3); generarPadre(3);generarPadre(1);generarHijos("Expr",$2,"ExprSingle") }
+  | Expr PIPE error       
+    { 
+      $$=$1;generarPadre(1);
+      ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
+      generarHijos("Expt",$2,"error") 
+    }
+  | error PIPE ExprSingle    
+  { 
+    $$=[];$$.push($3); generarPadre(3);generarHijos("error",$2,"ExprSingle") 
+    ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
+    generarPadre(1); generarHijos("error",$2) 
+  }
 ; 
 
 ExprSingle  
@@ -300,7 +319,7 @@ ReverseAxis
   : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS); generarHijos($1,$2) }
   | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS); generarHijos($1,$2) }
   | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS); generarHijos($1,$2) }
-  | RPRECED DOBLEDOSPUNTOS            { }
+  | RPRECED DOBLEDOSPUNTOS            { $$=new Preceding(null,[],Tipo.ABS); generarHijos($1,$2)}
   | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS); generarHijos($1,$2) }
 ;
 
