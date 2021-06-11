@@ -19,7 +19,7 @@
     }
 	}
   // Codificación global
-  var tipoCodificacion = "UTF-8"
+  var tipoCodificacion = "utf8"
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
   var GrahpvizNodo = ""

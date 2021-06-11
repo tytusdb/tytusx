@@ -4,8 +4,8 @@ var helpers = require('./helpers')
 function Ejecutar(contenido){
     // primer pasada
     var resultado = parser.parse(contenido)
-    var tipoCodificacion = parser.tipoCodificacion
-    contenido = helpers.CambiarCodificacion(contenido, tipoCodificacion)
+    //var tipoCodificacion = parser.tipoCodificacion
+    //contenido = helpers.CambiarCodificacion(contenido, tipoCodificacion)
     
 
     // segunda pasada
