@@ -215,6 +215,11 @@ class Navigation extends React.Component{
                         </Link>                        
                     </div>
                     <div className="col">
+                        <Link to= {{ pathname: "/mywebsite/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
+                            <button type="button" className="btn btn-primary btn-lg">Errores</button>
+                        </Link>                        
+                    </div>
+                    <div className="col">
                         <Link to= {{ pathname: "/mywebsite/reporteTabla", XML:this.state.XML }}>
                             <button type="button" className="btn btn-primary btn-lg">Tabla Simbolos</button>
                         </Link>                        
