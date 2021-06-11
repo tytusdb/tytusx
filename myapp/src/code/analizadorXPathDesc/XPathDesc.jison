@@ -132,7 +132,7 @@
 %%
 
 XPath 
-    : Expr                                              { $1.reverse();$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
+    : Expr                                              { generarPadre(1);generarHijos("Expr");$1.reverse();$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
 ;
 
 Expr
@@ -309,7 +309,7 @@ ReverseAxis
   : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],Tipo.ABS); generarHijos($1,$2); }
   | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],Tipo.ABS); generarHijos($1,$2); }
   | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],Tipo.ABS); generarHijos($1,$2); }
-  | RPRECED DOBLEDOSPUNTOS            {  }
+  | RPRECED DOBLEDOSPUNTOS            { $$=new Preceding(null,[],Tipo.ABS); generarHijos($1,$2)}
   | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],Tipo,Tipo.ABS); generarHijos($1,$2); }
 ;
 

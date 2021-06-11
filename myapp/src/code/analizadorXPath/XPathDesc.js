@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- $$[$0].reverse();this.$=new Comando($$[$0],pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return this.$ 
+ generarPadre(1);generarHijos("Expr");$$[$0].reverse();this.$=new Comando($$[$0],pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return this.$ 
 break;
 case 2:
  this.$ = $$[$0]; this.$.push($$[$0-1]); generarPadre(2); generarPadre(1); generarHijos("ExprSingle", "P_Expr"); 

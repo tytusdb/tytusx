@@ -139,6 +139,7 @@ OBJETODOBLE
 			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, $1.atributos, $2, this._$.first_line, this._$.first_column) : null;
 			generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
 		}
+  | error ETIQUETACIERRE                  { }
 ;
 
 ETIQUETACONFIGURACION
