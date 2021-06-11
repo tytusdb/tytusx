@@ -98,7 +98,7 @@ class Navigation extends React.Component{
         console.log("setTextDesc Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
-        var parser = require('../code/analizadorXPath/XPathDesc');
+        var parser = require('../code/analizadorXPath/XpathDesc');
         var funcion = parser.parse(text);
         if(funcion.errores.length > 0)
         {
@@ -122,11 +122,12 @@ class Navigation extends React.Component{
         if(resultado.errores.length>0)
         {
             alert("Errores en el analisis del XML")
+            console.log(resultado.errores);
         }
         console.log(resultado)
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
-        this.setState({Mistakes: resultado.Mistakes})
+        this.setState({Mistakes: resultado.errores})
     }
 
     

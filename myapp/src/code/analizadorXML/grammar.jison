@@ -133,12 +133,30 @@
 
 %% /* Definición de la gramática */
 
-ini : 
-	CUERPO	{$$=$1; generarPadre(1); generarHijos("INICIO");  return {datos:$$,edges:PilaEdges,nodes:pilaNodos,errores:ListaErrores}}
+ini 
+  : CUERPO	
+  {
+    $$=$1; generarPadre(1); generarHijos("INICIO");
+    var retornoErrores = Object.assign([], ListaErrores);
+    ListaErrores = [];
+    var Nodes = Object.assign([], pilaNodos);
+    pilaNodos = [];
+    var Edges = Object.assign([], PilaEdges);
+    PilaEdges = [];
+    pilaHijos = [];
+    contador = 0;
+    return {datos:$$,edges:Edges,nodes:Nodes,errores:retornoErrores}
+  }
   | error 
     {
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      pilaNodos = [];
+      PilaEdges = [];
+      pilaHijos = [];
+      contador = 0;
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
-      return {datos:[],edges:[],nodes:[],errores:ListaErrores}
+       return {datos:[],edges:[],nodes:[],errores:retornoErrores}
     }
 ;
 

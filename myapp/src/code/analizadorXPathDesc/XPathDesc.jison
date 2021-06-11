@@ -134,11 +134,35 @@
 %%
 
 XPath 
-    : Expr                                              { generarPadre(1);generarHijos("Expr");$1.reverse();$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges,ListaErrores);return $$ }
+    : Expr
+    {
+      generarPadre(1);generarHijos("Expr");
+      $1.reverse();
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      var Nodes = Object.assign([], pilaNodos);
+      pilaNodos = [];
+      var Edges = Object.assign([], PilaEdges);
+      PilaEdges = [];
+      pilaHijos = [];
+      contador = 0;
+      $$=new Comando($1,Nodes,Edges,GrahpvizNodo+GrahpvizEdges,retornoErrores);
+      GrahpvizEdges = "";
+      GrahpvizNodo = "";
+      return $$ 
+   }
     | error                                              
     {  
       ListaErrores.push({Error:"Error irrecuperable :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
-      return new Comando([],[],[],"",ListaErrores)
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      pilaNodos = [];
+      PilaEdges = [];
+      pilaHijos = [];
+      contador = 0;
+      GrahpvizNodo = "";
+      GrahpvizEdges = "";
+      return new Comando([],[],[],"",retornoErrores)
     }
 ;
 

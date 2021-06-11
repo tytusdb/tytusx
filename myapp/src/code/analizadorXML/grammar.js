@@ -84,12 +84,29 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=$$[$0]; generarPadre(1); generarHijos("INICIO");  return {datos:this.$,edges:PilaEdges,nodes:pilaNodos,errores:ListaErrores}
+
+    this.$=$$[$0]; generarPadre(1); generarHijos("INICIO");
+    var retornoErrores = Object.assign([], ListaErrores);
+    ListaErrores = [];
+    var Nodes = Object.assign([], pilaNodos);
+    pilaNodos = [];
+    var Edges = Object.assign([], PilaEdges);
+    PilaEdges = [];
+    pilaHijos = [];
+    contador = 0;
+    return {datos:this.$,edges:Edges,nodes:Nodes,errores:retornoErrores}
+  
 break;
 case 2:
 
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      pilaNodos = [];
+      PilaEdges = [];
+      pilaHijos = [];
+      contador = 0;
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
-      return {datos:[],edges:[],nodes:[],errores:ListaErrores}
+       return {datos:[],edges:[],nodes:[],errores:retornoErrores}
     
 break;
 case 3:

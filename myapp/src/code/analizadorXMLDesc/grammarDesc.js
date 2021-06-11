@@ -84,11 +84,22 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("INICIO"); return {datos:$$[$0],nodes:grafo.pilaNodos,edges:grafo.PilaEdges,errores:ListaErrores}
+
+    this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("INICIO");
+    var retornoErrores = Object.assign([], ListaErrores);
+    ListaErrores = [];
+    var retornoGrafo = Object.assign({}, grafo);
+    grafo = new grafoCST();
+    return {datos:$$[$0],nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,errores:retornoErrores}
+  
 break;
 case 2:
 
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      var retornoGrafo = Object.assign({}, grafo);
+      grafo = new grafoCST();
       return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     
 break;
