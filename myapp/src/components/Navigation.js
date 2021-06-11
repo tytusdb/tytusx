@@ -81,6 +81,11 @@ class Navigation extends React.Component{
         if(text=="") return
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
+        if(funcion.errores.length > 0)
+        {
+            alert("Se detectaron errores en la entrada :( Xpath")
+            console.log(funcion.errores)
+        }
         var respuesta=funcion.Ejecutar(this.state.XML);
         var AST = funcion.Graficar();
         this.setState({AST:AST})
@@ -94,8 +99,13 @@ class Navigation extends React.Component{
         console.log("setTextDesc Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
-        var parser = require('../code/analizadorXPath/XPathDesc');
+        var parser = require('../code/analizadorXPath/XpathDesc');
         var funcion = parser.parse(text);
+        if(funcion.errores.length > 0)
+        {
+            alert("Se detectaron errores en la entrada :( Xpath")
+            console.log(funcion.errores)
+        }
         var respuesta=funcion.Ejecutar(this.state.XML);
         var AST = funcion.Graficar();
         this.setState({AST:AST})
@@ -161,8 +171,8 @@ class Navigation extends React.Component{
     handleFocus = (e) =>{
         if(e.target.value=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
-       
-        var resultado = analizadorXML.Ejecutar(e.target.value)
+        var resultado = analizadorXML.Ejecutar(e.target.value)        
+        console.log(resultado)
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }

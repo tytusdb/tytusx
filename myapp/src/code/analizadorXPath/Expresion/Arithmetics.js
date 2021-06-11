@@ -13,8 +13,8 @@ export class Arithmetic {
         var retorno = []
 
         for (var obj of Objetos){
-            var valIzq = this.izquierdo.getValor(obj.entorno)
-            var valDer = this.derecho.getValor(obj.entorno)
+            var valIzq = this.izquierdo.getValor([obj])
+            var valDer = this.derecho.getValor([obj])
 
             // plano cartesiano entre valores izq y valores 
             for (var izq of valIzq){

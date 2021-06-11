@@ -68,6 +68,12 @@
 
 <<EOF>>                 			return 'EOF';
 
+"&lt;"                        { yytext = yytext.replace("&lt;","<") }
+"&gt;"                        {}
+"&amp;"                       {}
+"&apos;"                      {}
+"&quot;"                      {}
+
 [^<]*                       		{ return 'Texto' }
 
 /lex

@@ -14,8 +14,8 @@ export class ComparisonExp {
         var retorno = []
         
         for (var obj of Objetos ){
-            var valIzq = this.izquierdo.getValor(obj.entorno)
-            var valDer = this.derecho.getValor(obj.entorno)
+            var valIzq = this.izquierdo.getValor([obj])
+            var valDer = this.derecho.getValor([obj])
 
             for (var izq of valIzq) {
                 var salir = false
