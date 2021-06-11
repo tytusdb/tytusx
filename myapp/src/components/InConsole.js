@@ -12,6 +12,7 @@ class InConsole extends React.Component{
         this.datos = {nodes:[],edges:[]} 
         this.datos = this.props.location.datosCST;
         this.datosXML = this.props.location.datosCSTXML;
+        this.datosAST = this.props.location.datosAST
         this.graphviz = ""
         this.graphvizCST=this.props.location.graphviz;
         console.log(this.props.location);
@@ -49,6 +50,26 @@ class InConsole extends React.Component{
                     </div>
                 </div>
                 
+                <label>Árbol XPath CST</label>
+                <div className = "container-fluid">
+                    <Graph
+                        graph={this.datos}
+                        options={this.options}
+                        events={this.events}
+                        //style={style}
+                        getNetwork={this.getNetwork}
+                        getEdges={this.getEdges}
+                        getNodes={this.getNodes}
+                        vis={vis => (this.vis = vis)}
+                    />
+                </div>
+
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+
+                <label>Árbol XML CST</label>
                 <div className = "container-fluid">
                     <Graph
                         graph={this.datosXML}
@@ -63,8 +84,28 @@ class InConsole extends React.Component{
                 </div>
 
                 <p></p>
-            <p></p>
-            <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+
+                <label>Árbol XPath AST</label>
+                <div className = "container-fluid">
+                    <Graph
+                        graph={this.datosAST}
+                        options={this.options}
+                        events={this.events}
+                        //style={style}
+                        getNetwork={this.getNetwork}
+                        getEdges={this.getEdges}
+                        getNodes={this.getNodes}
+                        vis={vis => (this.vis = vis)}
+                    />
+                </div>
+
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
 
             <footer className="bg-dark text-center text-lg-start">
             <div className="text-center p-3 text-light ">

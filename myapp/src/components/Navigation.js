@@ -49,6 +49,21 @@ class Navigation extends React.Component{
                     { from: 2, to: 5 }
                 ]
             },
+            AST:{
+                nodes: [
+                    { id: 1, label: 'Node 1' },
+                    { id: 2, label: 'Node 2' },
+                    { id: 3, label: 'Node 3' },
+                    { id: 4, label: 'Node 4' },
+                    { id: 5, label: 'Node 5' }
+                ],
+                edges: [
+                    { from: 1, to: 2 },
+                    { from: 1, to: 3 },
+                    { from: 2, to: 4 },
+                    { from: 2, to: 5 }
+                ]
+            },
             graphvizCST:""
         }
         
@@ -66,7 +81,34 @@ class Navigation extends React.Component{
         if(text=="") return
         var parser = require('../code/analizadorXPath/Xpath');
         var funcion = parser.parse(text);
+        if(funcion.errores.length > 0)
+        {
+            alert("Se detectaron errores en la entrada :( Xpath")
+            console.log(funcion.errores)
+        }
         var respuesta=funcion.Ejecutar(this.state.XML);
+        var AST = funcion.Graficar();
+        this.setState({AST:AST})
+        this.setState({OutputTextarea: respuesta});  
+        var datos = {nodes:funcion.Nodos,edges:funcion.Edges}   
+        this.setState({datosCST:datos}) 
+        this.setState({graphvizCST:funcion.graphviz})
+    }
+
+    setTextDesc(){
+        console.log("setTextDesc Button clicked");
+        let text = this.state.InputTextarea;
+        if(text=="") return
+        var parser = require('../code/analizadorXPath/XpathDesc');
+        var funcion = parser.parse(text);
+        if(funcion.errores.length > 0)
+        {
+            alert("Se detectaron errores en la entrada :( Xpath")
+            console.log(funcion.errores)
+        }
+        var respuesta=funcion.Ejecutar(this.state.XML);
+        var AST = funcion.Graficar();
+        this.setState({AST:AST})
         this.setState({OutputTextarea: respuesta});  
         var datos = {nodes:funcion.Nodos,edges:funcion.Edges}   
         this.setState({datosCST:datos}) 
@@ -129,8 +171,8 @@ class Navigation extends React.Component{
     handleFocus = (e) =>{
         if(e.target.value=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
-       
-        var resultado = analizadorXML.Ejecutar(e.target.value)
+        var resultado = analizadorXML.Ejecutar(e.target.value)        
+        console.log(resultado)
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
@@ -169,13 +211,16 @@ class Navigation extends React.Component{
                         <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.xmlDesc() }>XML Desc</button>
                     </div>
                     <div className="col">
-                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Compilar</button>
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Compilar ASC</button>
+                    </div>
+                    <div className="col">
+                        <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setTextDesc() }>Compilar DESC</button>
                     </div>
                     <div className="col">
                         <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }>Actualizar</button>
                     </div>
                     <div className="col">
-                        <Link to= {{ pathname: "/mywebsite/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML ,graphviz:this.state.graphvizCST }}>
+                        <Link to= {{ pathname: "/mywebsite/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
                             <button type="button" className="btn btn-primary btn-lg">Reportes</button>
                         </Link>                        
                     </div>
