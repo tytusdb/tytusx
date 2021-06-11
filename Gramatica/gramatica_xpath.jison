@@ -100,88 +100,121 @@
 %% /* Definición de la gramática */
 
 ini
-	: LISTARUTAS EOF { $$ = $1; console.log($$); return $$; }
+	: LISTARUTAS EOF { $$ = $1;  
+        rg_path.setValor('inicio -> EXML LISTARUTAS;\n');
+        return $$; }
 ;
 
-LISTARUTAS: RUTA union LISTARUTAS               { $$ = $1+'|'+ $3;}
-            |RUTA                               { $$ = $1;}
+LISTARUTAS: RUTA union LISTARUTAS               { 
+        rg_path.setValor('LISTARUTAS -> RUTA LISTARUTAS;\n');
+}
+            |RUTA{
+                rg_path.setValor('LISTARUTAS -> RUTA ;\n');
+                $$ = $1;}
             | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
 
-RUTA: diagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4;}
-    |doblediagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4;}
-    |DATO MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3;};
+RUTA: diagonal  DATO MOSTRAR RUTA2      { 
+        rg_path.setValor('RUTA -> / DATO MOSTRAR RUTA2;\n');
+}
+    |doblediagonal  DATO MOSTRAR RUTA2      { 
+        rg_path.setValor('RUTA -> // DATO MOSTRAR RUTA2;\n');
+    }
+    |DATO MOSTRAR RUTA2               { 
+        rg_path.setValor('RUTA -> DATO MOSTRAR RUTA2;\n');
+    };
 /*
 RUTA1:diagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4+''+$5;}
     | DATO MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3+''+$4;};
 */
 
-RUTA2: diagonal  DATO MOSTRAR RUTA2     { $$ = $1+''+ $2+''+$3+''+$4;}
-        |doblediagonal DATO MOSTRAR RUTA2     { $$ = $1+''+ $2+''+$3+''+$4;}
-        |                                        {$$='';}    ;
+RUTA2: diagonal  DATO MOSTRAR RUTA2     { 
+        rg_path.setValor('RUTA2 -> / DATO MOSTRAR RUTA2;\n');
+}
+        |doblediagonal DATO MOSTRAR RUTA2     { 
+                rg_path.setValor('RUTA2 -> // DATO MOSTRAR RUTA2;\n');
+        }
+        | {rg_path.setValor('RUTA2 -> epsilon;\n');}    ;
 
-DATO: identificador         { $$ = $1;}
-    |multiplicacion         { $$ = $1;}
-    |arroba TODOATRIBUTO   { $$ = $1+''+$2;}
-    |punto                  { $$ = $1;}
-    |doblepunto             { $$ = $1;}
-    |siguiente              {  $$=$1;}
-    |texto                  {  $$=$1;}
-    |nodo                   {  $$=$1;}
-    |posicion               {  $$=$1;}
-    | RESERVADAS dospuntos DATO1 { $$ = $1+'::'+$3;};
+DATO: identificador         { rg_path.setValor('DATO -> identificador;\n'); $$ = $1;}
+    |multiplicacion         { rg_path.setValor('DATO -> multiplicacion;\n'); $$ = $1;}
+    |arroba TODOATRIBUTO    { rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); $$ = $1+''+$2;}
+    |punto                  { rg_path.setValor('DATO -> punto;\n'); $$ = $1;}
+    |doblepunto             { rg_path.setValor('DATO -> doblepunto;\n'); $$ = $1;}
+    |siguiente              { rg_path.setValor('DATO -> siguiente;\n'); $$=$1;}
+    |texto                  { rg_path.setValor('DATO -> texto;\n'); $$=$1;}
+    |nodo                   { rg_path.setValor('DATO -> nodo;\n'); $$=$1;}
+    |posicion               { rg_path.setValor('DATO -> posicion;\n'); $$=$1;}
+    | RESERVADAS dospuntos DATO1 { rg_path.setValor('DATO -> RESERVADS :: DATO1 ;\n'); };
 
-RESERVADAS: ancestros            {  $$=$1;}
-        |ancestroself            {  $$=$1;}
-        |atributos               {  $$=$1;}
-        |hijos                   {  $$=$1;}
-        |descendiente            {  $$=$1;}
-        |descendienteself        {  $$=$1;}
-        |siguientes              {  $$=$1;}
-        |siguientehermano        {  $$=$1;}
-        |espacionombres          {  $$=$1;}
-        |padre                   {  $$=$1;}
-        |anterior                {  $$=$1;}
-        |hemanoanterior          {  $$=$1;}
-        |mismo                   {  $$=$1;};
+RESERVADAS: ancestros            {  rg_path.setValor('RESERVADAS -> ancestros;\n'); $$=$1;}
+        |ancestroself            {  rg_path.setValor('RESERVADAS -> ancestroself;\n'); $$=$1;}
+        |atributos               {  rg_path.setValor('RESERVADAS -> atributos;\n'); $$=$1;}
+        |hijos                   {  rg_path.setValor('RESERVADAS -> hijos;\n'); $$=$1;}
+        |descendiente            {  rg_path.setValor('RESERVADAS -> descendiente;\n'); $$=$1;}
+        |descendienteself        {  rg_path.setValor('RESERVADAS -> descendienteself;\n'); $$=$1;}
+        |siguientes              {  rg_path.setValor('RESERVADAS -> siguientes;\n'); $$=$1;}
+        |siguientehermano        {  rg_path.setValor('RESERVADAS -> siguientehermano;\n'); $$=$1;}
+        |espacionombres          {  rg_path.setValor('RESERVADAS -> espacionombres;\n'); $$=$1;}
+        |padre                   {  rg_path.setValor('RESERVADAS -> padre;\n'); $$=$1;}
+        |anterior                {  rg_path.setValor('RESERVADAS -> anterior;\n'); $$=$1;}
+        |hemanoanterior          {  rg_path.setValor('RESERVADAS -> hemanoanterior;\n'); $$=$1;}
+        |mismo                   {  rg_path.setValor('RESERVADAS -> mismo;\n'); $$=$1;};
 
-DATO1: identificador         { $$ = $1;}
-    |multiplicacion         { $$ = $1;}
-    |arroba TODOATRIBUTO   { $$ = $1+''+$2;}
-    |siguiente              {  $$=$1;}
-    |texto                  {  $$=$1;}
-    |nodo                   {  $$=$1;};
+DATO1: identificador         { rg_path.setValor('DATO1 -> identificador;\n');$$ = $1;}
+    |multiplicacion         { rg_path.setValor('DATO1 -> multiplicacion;\n'); $$ = $1;}
+    |arroba TODOATRIBUTO   { rg_path.setValor('DATO1 -> @ TODOATRIBUTO;\n'); $$ = $1+''+$2;}
+    |siguiente              {  rg_path.setValor('DATO1 -> siguiente;\n'); $$=$1;}
+    |texto                  {  rg_path.setValor('DATO1 -> texto;\n'); $$=$1;}
+    |nodo                   {  rg_path.setValor('DATO1 -> nodo;\n'); $$=$1;};
 
-TODOATRIBUTO: multiplicacion {  $$=$1;}
-            | identificador  {  $$=$1;};
+TODOATRIBUTO: multiplicacion {  rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); $$=$1;}
+            | identificador  {  rg_path.setValor('TODOATRIBUTO -> identificador;\n'); $$=$1;};
 
 /*
 ESATRIBUTO: arroba {$$=$1;}
         |   {$$='';};*/
 
 
-MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { $$ = $1+' '+ $2+' '+$3+' '+$4;}
-        |                           { $$ = '';};
+MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');}
+        |                           { rg_path.setValor('MOSTRAR -> epsilon;\n'); $$ = '';};
 
-OPEOCOND: CONDICION                 { $$ = $1;};
+OPEOCOND: CONDICION                 { rg_path.setValor('OPEOCOND -> identificador;\n'); $$ = $1;};
 
-CONDICION:CONDICION or CONDICION                {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_OR, this._$.first_line, this._$.first_column);}
-        | CONDICION and CONDICION               {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_AND, this._$.first_line, this._$.first_column);}
-        | CONDICION igual CONDICION             {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
-        | CONDICION mayorigualque CONDICION     {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MAYOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
-        | CONDICION menorigualque CONDICION     {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MENOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
-        | CONDICION menorque CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MENOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
-        | CONDICION mayorque CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MAYOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
-        | CONDICION distinto CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_NO_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
-        | CONDICION suma  CONDICION             {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_SUMA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
-        | CONDICION resta CONDICION             {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_RESTA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
-        | CONDICION multiplicacion CONDICION    {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MULTIPLICACION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
-        | CONDICION division CONDICION          {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_DIVISION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
-        | CONDICION mod CONDICION               {$$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MODULAR, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
-        | para CONDICION parc                   {$$ = $2; }
-        |   entero                              {$$ = nodoDato($1, TIPO_PRIMITIVO.ENTERO);}
-        |   decimal                             {$$ = nodoDato($1, TIPO_PRIMITIVO.DECIMAL);}
-        |   cadena                              {$$ = nodoDato($1, TIPO_PRIMITIVO.CADENA);}
+CONDICION:CONDICION or CONDICION                {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION and CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_OR, this._$.first_line, this._$.first_column);}
+        | CONDICION and CONDICION               {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION or CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_AND, this._$.first_line, this._$.first_column);}
+        | CONDICION igual CONDICION             {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION = CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION mayorigualque CONDICION     {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION >= CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MAYOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION menorigualque CONDICION     {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION <= CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MENOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION menorque CONDICION          {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION < CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MENOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION mayorque CONDICION          {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION > CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MAYOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION distinto CONDICION          {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION != CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_NO_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);}
+        | CONDICION suma  CONDICION             {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION + CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_SUMA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION resta CONDICION             {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION - CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_RESTA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION multiplicacion CONDICION    {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION * CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MULTIPLICACION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION division CONDICION          {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION / CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_DIVISION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | CONDICION mod CONDICION               {rg_path.setValor('OPEOCCONDICIONOND -> CONDICION % CONDICION;\n');
+                                                        $$ = nodoOperacionBinaria($1,$3,TIPO_OPERACION.OP_MODULAR, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);}
+        | para CONDICION parc                   {rg_path.setValor('OPEOCCONDICIONOND -> ( CONDICION ) ;\n');
+                                                        $$ = $2; }
+        |   entero                              {rg_path.setValor('OPEOCCONDICIONOND ->  entero;\n');
+                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.ENTERO);}
+        |   decimal                             {rg_path.setValor('OPEOCCONDICIONOND ->  decimal;\n');
+                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.DECIMAL);}
+        |   cadena                              {rg_path.setValor('OPEOCCONDICIONOND ->  cadena;\n');
+                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.CADENA);}
         //|   identificador                    { $$ = $1; }
         //|   punto                            {  $$=$1;}
         //|   doblepunto                       {  $$=$1;}

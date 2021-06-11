@@ -38,9 +38,14 @@ let contador_tds:number=1;
 
 //Reporte Gramatical
 let rg_xml:ReporteGramatical_XML;
+let rg_path:ReporteGramatical_XPATH;
 
 //variable para almacenar encoding de salida
 let codificacion:string;
+
+function InterpretarCodigoXPATH(entrada:string){
+  rg_path = new ReporteGramatical_XPATH();
+}
 
 function InterpretarCodigo(entrada:string) {
   tds_xml_persistente=[];

@@ -84,91 +84,223 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = $$[$0-1]; console.log(this.$); return this.$; 
+ this.$ = $$[$0-1];  
+        rg_path.setValor('inicio -> EXML LISTARUTAS;\n');
+        return this.$; 
 break;
 case 2:
- this.$ = $$[$0-2]+'|'+ $$[$0];
+ 
+        rg_path.setValor('LISTARUTAS -> RUTA LISTARUTAS;\n');
+
 break;
-case 3: case 11: case 12: case 14: case 15: case 34: case 35: case 44:
- this.$ = $$[$0];
+case 3:
+
+                rg_path.setValor('LISTARUTAS -> RUTA ;\n');
+                this.$ = $$[$0];
 break;
 case 4:
  console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
 break;
-case 5: case 6: case 8: case 9:
- this.$ = $$[$0-3]+''+ $$[$0-2]+''+$$[$0-1]+''+$$[$0];
+case 5:
+ 
+        rg_path.setValor('RUTA -> / DATO MOSTRAR RUTA2;\n');
+
+break;
+case 6:
+ 
+        rg_path.setValor('RUTA -> // DATO MOSTRAR RUTA2;\n');
+    
 break;
 case 7:
- this.$ = $$[$0-2]+''+ $$[$0-1]+''+$$[$0];
+ 
+        rg_path.setValor('RUTA -> DATO MOSTRAR RUTA2;\n');
+    
+break;
+case 8:
+ 
+        rg_path.setValor('RUTA2 -> / DATO MOSTRAR RUTA2;\n');
+
+break;
+case 9:
+ 
+                rg_path.setValor('RUTA2 -> // DATO MOSTRAR RUTA2;\n');
+        
 break;
 case 10:
-this.$='';
+rg_path.setValor('RUTA2 -> epsilon;\n');
 break;
-case 13: case 36:
- this.$ = $$[$0-1]+''+$$[$0];
+case 11:
+ rg_path.setValor('DATO -> identificador;\n'); this.$ = $$[$0];
 break;
-case 16: case 17: case 18: case 19: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 37: case 38: case 39: case 40: case 41: case 62:
-  this.$=$$[$0];
+case 12:
+ rg_path.setValor('DATO -> multiplicacion;\n'); this.$ = $$[$0];
+break;
+case 13:
+ rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); this.$ = $$[$0-1]+''+$$[$0];
+break;
+case 14:
+ rg_path.setValor('DATO -> punto;\n'); this.$ = $$[$0];
+break;
+case 15:
+ rg_path.setValor('DATO -> doblepunto;\n'); this.$ = $$[$0];
+break;
+case 16:
+ rg_path.setValor('DATO -> siguiente;\n'); this.$=$$[$0];
+break;
+case 17:
+ rg_path.setValor('DATO -> texto;\n'); this.$=$$[$0];
+break;
+case 18:
+ rg_path.setValor('DATO -> nodo;\n'); this.$=$$[$0];
+break;
+case 19:
+ rg_path.setValor('DATO -> posicion;\n'); this.$=$$[$0];
 break;
 case 20:
- this.$ = $$[$0-2]+'::'+$$[$0];
+ rg_path.setValor('DATO -> RESERVADS :: DATO1 ;\n'); 
+break;
+case 21:
+  rg_path.setValor('RESERVADAS -> ancestros;\n'); this.$=$$[$0];
+break;
+case 22:
+  rg_path.setValor('RESERVADAS -> ancestroself;\n'); this.$=$$[$0];
+break;
+case 23:
+  rg_path.setValor('RESERVADAS -> atributos;\n'); this.$=$$[$0];
+break;
+case 24:
+  rg_path.setValor('RESERVADAS -> hijos;\n'); this.$=$$[$0];
+break;
+case 25:
+  rg_path.setValor('RESERVADAS -> descendiente;\n'); this.$=$$[$0];
+break;
+case 26:
+  rg_path.setValor('RESERVADAS -> descendienteself;\n'); this.$=$$[$0];
+break;
+case 27:
+  rg_path.setValor('RESERVADAS -> siguientes;\n'); this.$=$$[$0];
+break;
+case 28:
+  rg_path.setValor('RESERVADAS -> siguientehermano;\n'); this.$=$$[$0];
+break;
+case 29:
+  rg_path.setValor('RESERVADAS -> espacionombres;\n'); this.$=$$[$0];
+break;
+case 30:
+  rg_path.setValor('RESERVADAS -> padre;\n'); this.$=$$[$0];
+break;
+case 31:
+  rg_path.setValor('RESERVADAS -> anterior;\n'); this.$=$$[$0];
+break;
+case 32:
+  rg_path.setValor('RESERVADAS -> hemanoanterior;\n'); this.$=$$[$0];
+break;
+case 33:
+  rg_path.setValor('RESERVADAS -> mismo;\n'); this.$=$$[$0];
+break;
+case 34:
+ rg_path.setValor('DATO1 -> identificador;\n');this.$ = $$[$0];
+break;
+case 35:
+ rg_path.setValor('DATO1 -> multiplicacion;\n'); this.$ = $$[$0];
+break;
+case 36:
+ rg_path.setValor('DATO1 -> @ TODOATRIBUTO;\n'); this.$ = $$[$0-1]+''+$$[$0];
+break;
+case 37:
+  rg_path.setValor('DATO1 -> siguiente;\n'); this.$=$$[$0];
+break;
+case 38:
+  rg_path.setValor('DATO1 -> texto;\n'); this.$=$$[$0];
+break;
+case 39:
+  rg_path.setValor('DATO1 -> nodo;\n'); this.$=$$[$0];
+break;
+case 40:
+  rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); this.$=$$[$0];
+break;
+case 41:
+  rg_path.setValor('TODOATRIBUTO -> identificador;\n'); this.$=$$[$0];
 break;
 case 42:
- this.$ = $$[$0-3]+' '+ $$[$0-2]+' '+$$[$0-1]+' '+$$[$0];
+ rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');
 break;
 case 43:
- this.$ = '';
+ rg_path.setValor('MOSTRAR -> epsilon;\n'); this.$ = '';
+break;
+case 44:
+ rg_path.setValor('OPEOCOND -> identificador;\n'); this.$ = $$[$0];
 break;
 case 45:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_OR, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION and CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_OR, this._$.first_line, this._$.first_column);
 break;
 case 46:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_AND, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION or CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_AND, this._$.first_line, this._$.first_column);
 break;
 case 47:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION = CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
 break;
 case 48:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MAYOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION >= CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MAYOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
 break;
 case 49:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MENOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION <= CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MENOR_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
 break;
 case 50:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MENOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION < CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MENOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
 break;
 case 51:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MAYOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION > CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MAYOR_QUE, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
 break;
 case 52:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_NO_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION != CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_NO_IGUAL, TIPO_EXPRESION.OP_RELACIONAL, this._$.first_line, this._$.first_column);
 break;
 case 53:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_SUMA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION + CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_SUMA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
 break;
 case 54:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_RESTA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION - CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_RESTA, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
 break;
 case 55:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MULTIPLICACION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION * CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MULTIPLICACION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
 break;
 case 56:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_DIVISION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION / CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_DIVISION, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
 break;
 case 57:
-this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MODULAR, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
+rg_path.setValor('OPEOCCONDICIONOND -> CONDICION % CONDICION;\n');
+                                                        this.$ = nodoOperacionBinaria($$[$0-2],$$[$0],TIPO_OPERACION.OP_MODULAR, TIPO_EXPRESION.OP_ARITMETICA, this._$.first_line, this._$.first_column);
 break;
 case 58:
-this.$ = $$[$0-1]; 
+rg_path.setValor('OPEOCCONDICIONOND -> ( CONDICION ) ;\n');
+                                                        this.$ = $$[$0-1]; 
 break;
 case 59:
-this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.ENTERO);
+rg_path.setValor('OPEOCCONDICIONOND ->  entero;\n');
+                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.ENTERO);
 break;
 case 60:
-this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.DECIMAL);
+rg_path.setValor('OPEOCCONDICIONOND ->  decimal;\n');
+                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.DECIMAL);
 break;
 case 61:
-this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.CADENA);
+rg_path.setValor('OPEOCCONDICIONOND ->  cadena;\n');
+                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.CADENA);
+break;
+case 62:
+  this.$=$$[$0];
 break;
 }
 },
