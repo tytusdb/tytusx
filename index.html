@@ -62,14 +62,12 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-outline-primary" id="traducir" onclick="interpretarxpath()">XPATH</button>
-
         <!-- PESTAÑA tabla de simbolos -->
         <div class="btn-group" role="group">
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop6" type="button" class="btn btn-outline-primary dropdown-toggle"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ANALIZADOR
+                    ANALIZADOR 
                 </button>
                 <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop6">
                     <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
@@ -77,6 +75,10 @@
                         onclick="ejecutarXML_asc();">XML ASC</button>
                     <button type="button" class="btn btn-outline-primary" id="analizarxmldesc"
                         onclick="ejecutarXML_DESC();">XML DESC</button>
+                    <button type="button" class="btn btn-outline-primary" id="analizarxpathdesc"
+                        onclick="();">XPATH DESC</button>
+                    <button type="button" class="btn btn-outline-primary" id="analizarxpathasc"
+                        onclick="ejecutarXPATH_ASC();">XPATH ASC</button>
                 </div>
             </div>
         </div>
@@ -138,6 +140,8 @@
                             onclick="location.href='#contrg';RG_XML_DESC();">DESC XML</button>
                         <button type="button" class="btn btn-outline-warning" id="rgxmlasc"
                             onclick="location.href='#contrg';RG_XML_ASC();">ASC XML</button>
+                        <button type="button" class="btn btn-outline-warning" id="rgxpathasc"
+                            onclick="location.href='#contrg';RG_XPATH_ASC();">ASC XPATH</button>
                     </div>
                 </div>
             </div>
@@ -349,12 +353,19 @@
 
             function ejecutarXML_DESC()
             {
-                var texto = editorSalida.getDoc().getValue();
+                var texto = editor.getDoc().getValue();
                 interpretarCodigoXMLdesc(texto);
+            }
+
+            function ejecutarXPATH_ASC(){
+                var texto = editorSalida.getDoc().getValue();
+                InterpretarCodigoXPATH(texto);
             }
           </script>
 
     <!-- Importaciones -->
+    <script src="dist/Analizador/analizadorxpath/expresion/expresion.js"></script>
+    <script src="dist/Analizador/analizadorxpath/instruccion/instruccion.js"></script>
     <script src="dist/Estructuras/Ast/NodoAst.js"></script>
     <script src="dist/Estructuras/Ast/Ast.js"></script>
     <script src="dist/Estructuras/Error/NodoError.js"></script>
@@ -364,11 +375,12 @@
     <script src="dist/Estructuras/Ast/Instruccion.js"></script>
     <script src="dist/Analizador/Instrucciones/Graficar.js"></script>
     <script src="dist/Analizador/Instrucciones/ReporteGramatical_XML.js"></script>
+    <script src="dist/Analizador/Instrucciones/ReporteGramatical_XPATH.js"></script>
     <script src="dist/Estructuras/TablaSimbolos/TablaSimbolos.js"></script>
     <script src="dist/Estructuras/TablaSimbolos/NodoTablaSimbolo.js"></script>
     <script src="Gramatica/gramatica_xml_desc.js"></script>
     <script src="Gramatica/gramatica.js"></script>
-    <script src="Gramatica/gramatica_xpath.js"></script>
+    <script src="Gramatica/gramatica_xpath.js"></script>    
     <script src="dist/index.js"></script>
 
     <!-- Fin Importaciones -->

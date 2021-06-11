@@ -73,7 +73,7 @@
 
 <<EOF>>				return 'EOF';
 
-.					{ //console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
                         let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
                         erroreslexicos.setError(errores);
                     }
@@ -100,41 +100,44 @@
 %% /* Definición de la gramática */
 
 ini
-	: LISTARUTAS EOF { $$ = $1;  
-        rg_path.setValor('inicio -> EXML LISTARUTAS;\n');
-        return $$; }
+	: LISTARUTAS EOF {   
+        rg_path.setValor('inicio ->  LISTARUTAS;\n');
+        console.log($1);
+        //return $1; 
+        }
 ;
 
-LISTARUTAS: RUTA union LISTARUTAS               { 
-        rg_path.setValor('LISTARUTAS -> RUTA LISTARUTAS;\n');
-}
+LISTARUTAS: LISTARUTAS union RUTA {         
+                rg_path.setValor('LISTARUTAS -> LISTARUTAS union RUTA;\n');
+                $1.push($3); $$ = $1;}
             |RUTA{
                 rg_path.setValor('LISTARUTAS -> RUTA ;\n');
-                $$ = $1;}
+                $$ = [$1];}
             | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
-
 RUTA: diagonal  DATO MOSTRAR RUTA2      { 
         rg_path.setValor('RUTA -> / DATO MOSTRAR RUTA2;\n');
+        $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGONALSIMPLE, this._$.first_line, this._$.first_column); 
 }
     |doblediagonal  DATO MOSTRAR RUTA2      { 
         rg_path.setValor('RUTA -> // DATO MOSTRAR RUTA2;\n');
+        $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGONALDOBLE, this._$.first_line, this._$.first_column);
     }
-    |DATO MOSTRAR RUTA2               { 
+    | DATO MOSTRAR RUTA2               { 
         rg_path.setValor('RUTA -> DATO MOSTRAR RUTA2;\n');
+        $$ = new nodoRuta($1, $2, $3, TIPO_RUTA.DIAGONALVACIA, this._$.first_line, this._$.first_column);
     };
-/*
-RUTA1:diagonal  DATO MOSTRAR RUTA2      { $$ = $1+''+ $2+''+$3+''+$4+''+$5;}
-    | DATO MOSTRAR RUTA2               { $$ = $1+''+ $2+''+$3+''+$4;};
-*/
 
-RUTA2: diagonal  DATO MOSTRAR RUTA2     { 
-        rg_path.setValor('RUTA2 -> / DATO MOSTRAR RUTA2;\n');
+
+RUTA2:   diagonal  DATO MOSTRAR RUTA2{ 
+                rg_path.setValor('RUTA2 -> / DATO MOSTRAR RUTA2;\n');
+                $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGONALSIMPLE, this._$.first_line, this._$.first_column);                
 }
-        |doblediagonal DATO MOSTRAR RUTA2     { 
+        | doblediagonal DATO MOSTRAR RUTA2 { 
                 rg_path.setValor('RUTA2 -> // DATO MOSTRAR RUTA2;\n');
+                $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGONALDOBLE, this._$.first_line, this._$.first_column);
         }
-        | {rg_path.setValor('RUTA2 -> epsilon;\n');}    ;
+        | {rg_path.setValor('RUTA2 -> epsilon;\n'); }   ;
 
 DATO: identificador         { rg_path.setValor('DATO -> identificador;\n'); $$ = $1;}
     |multiplicacion         { rg_path.setValor('DATO -> multiplicacion;\n'); $$ = $1;}
@@ -170,10 +173,6 @@ DATO1: identificador         { rg_path.setValor('DATO1 -> identificador;\n');$$ 
 
 TODOATRIBUTO: multiplicacion {  rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); $$=$1;}
             | identificador  {  rg_path.setValor('TODOATRIBUTO -> identificador;\n'); $$=$1;};
-
-/*
-ESATRIBUTO: arroba {$$=$1;}
-        |   {$$='';};*/
 
 
 MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');}

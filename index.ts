@@ -45,6 +45,13 @@ let codificacion:string;
 
 function InterpretarCodigoXPATH(entrada:string){
   rg_path = new ReporteGramatical_XPATH();
+  try{
+    gramatica_xpath.parse(entrada);
+    document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
+  }catch (error){
+    console.log(error);
+    document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XPATH\n";
+  }
 }
 
 function InterpretarCodigo(entrada:string) {
@@ -173,10 +180,23 @@ function GraficarXMLDESC(){
 
 function RG_XML_ASC()
 {
+  document.getElementById('reportegr').innerHTML = "";
   document.getElementById('reportegr').innerHTML = rg_xml.getReporte();
 }
 
 function RG_XML_DESC()
 {
-  
+  document.getElementById('reportegr').innerHTML = "";
+}
+
+function RG_XPATH_ASC()
+{
+  document.getElementById('reportegr').innerHTML = "";
+  document.getElementById('reportegr').innerHTML = rg_path.getReporte();
+}
+
+function RG_XPATH_DESC()
+{
+  document.getElementById('reportegr').innerHTML = "";
+  //document.getElementById('reportegr').innerHTML = rg_path.getReporte();
 }
