@@ -17,7 +17,7 @@
     if(inicio === fin){
       return inicio;
     }
-    ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", linea: linea , columna:columna})
+    ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", Linea: linea , columna:columna})
 		return undefined;
 	}
 
@@ -67,7 +67,7 @@
 <Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* { return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
 <Etiquetai>\"[^\n\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
-<Etiquetai>[^A-ZÑa-zñ_=">]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetai>[^A-ZÑa-zñ_=">]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
@@ -75,7 +75,7 @@
 "</"[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*  		{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
 <Etiquetac>[ \r\t]+  				{}
 <Etiquetac>\n        				{}
-<Etiquetac>[^>]+            { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetac>[^>]+            { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <Etiquetac>">"						  { this.popState(); return 'CierreEtiquetaC'}
 
 
@@ -85,13 +85,13 @@
 <EtiquetaConf>"="             			      { return 'IgualAtributoConf'}
 <EtiquetaConf>\"[^\n\"]*\"        		    { yytext = yytext.substr(1,yyleng-2); return 'ValorAtributoConf'}
 <EtiquetaConf>[ \r\t]+  				          {}
-<EtiquetaConf>[^A-ZÑa-zñ_="?>]+           { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<EtiquetaConf>[^A-ZÑa-zñ_="?>]+           { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <EtiquetaConf>"?>"            			      { this.popState(); return 'CierreEtiquetaConf'}
 
 <<EOF>>                 			return 'EOF';
 
 [^<]+                       	{ yytext = ReemplazaTexto(yytext); return 'Texto' }
-.                             { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+.                             { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 /lex
 
 
@@ -106,7 +106,7 @@ ini
   : CUERPO  {$$=$1; grafo.generarPadre(1);grafo.generarHijos("INICIO"); return {datos:$1,nodes:grafo.pilaNodos,edges:grafo.PilaEdges,errores:ListaErrores}}
   | error 
     {
-      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column}) 
+      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
       return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     }
 ;
@@ -136,7 +136,7 @@ OBJETO
 ;
 
 OBJETOGENERAL
-  : InicioEtiquetaI SUB_OBJETOGENERAL                         { $2.linea=this._$.first_line; $2.columna=this._$.first_column; $$ = objetoCorrecto($1, $2.tipo,this._$.first_line, this._$.first_column)? $2:null; grafo.generarPadre(2);grafo.generarHijos($1,"SUB_OBJETOGENERAL") }
+  : InicioEtiquetaI SUB_OBJETOGENERAL                         { $2.Linea=this._$.first_line; $2.columna=this._$.first_column; $$ = objetoCorrecto($1, $2.tipo,this._$.first_line, this._$.first_column)? $2:null; grafo.generarPadre(2);grafo.generarHijos($1,"SUB_OBJETOGENERAL") }
 ;
 
 SUB_OBJETOGENERAL

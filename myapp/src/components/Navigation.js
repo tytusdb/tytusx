@@ -64,11 +64,9 @@ class Navigation extends React.Component{
                     { from: 2, to: 5 }
                 ]
             },
-            graphvizCST:""
+            graphvizCST:"",
+            Mistakes: []
         }
-        
-        
-
         this.fileInput = React.createRef();
         this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -93,13 +91,14 @@ class Navigation extends React.Component{
         var datos = {nodes:funcion.Nodos,edges:funcion.Edges}   
         this.setState({datosCST:datos}) 
         this.setState({graphvizCST:funcion.graphviz})
+        this.setState({Mistakes: funcion.errores})
     }
 
     setTextDesc(){
         console.log("setTextDesc Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
-        var parser = require('../code/analizadorXPath/XpathDesc');
+        var parser = require('../code/analizadorXPath/XPathDesc');
         var funcion = parser.parse(text);
         if(funcion.errores.length > 0)
         {
@@ -113,6 +112,7 @@ class Navigation extends React.Component{
         var datos = {nodes:funcion.Nodos,edges:funcion.Edges}   
         this.setState({datosCST:datos}) 
         this.setState({graphvizCST:funcion.graphviz})
+        this.setState({Mistakes: funcion.errores})
     }
 
     xmlDesc(){
@@ -126,6 +126,7 @@ class Navigation extends React.Component{
         console.log(resultado)
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
+        this.setState({Mistakes: resultado.Mistakes})
     }
 
     
@@ -139,6 +140,7 @@ class Navigation extends React.Component{
         }
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
+        this.setState({Mistakes: resultado.errores})
     }
 
     refresh(){
@@ -179,6 +181,7 @@ class Navigation extends React.Component{
         }
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
+        this.setState({Mistakes: resultado.errores})
     } 
 
     handleFocus = (e) =>{
@@ -192,6 +195,7 @@ class Navigation extends React.Component{
         }
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
+        this.setState({Mistakes: resultado.errores})
     }
 
 
@@ -242,7 +246,7 @@ class Navigation extends React.Component{
                         </Link>                        
                     </div>
                     <div className="col">
-                        <Link to= {{ pathname: "/mywebsite/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
+                        <Link to= {{ pathname: "/mywebsite/reporteErrores", Mistakes:this.state.Mistakes }}>
                             <button type="button" className="btn btn-primary btn-lg">Errores</button>
                         </Link>                        
                     </div>

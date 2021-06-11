@@ -88,7 +88,7 @@ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("INICIO"); return {datos
 break;
 case 2:
 
-      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column}) 
+      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
       return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     
 break;
@@ -119,7 +119,7 @@ case 9:
  this.$ = { texto:$$[$0], esTexto:true}; grafo.generarHijos("Texto")
 break;
 case 10:
- $$[$0].linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo,this._$.first_line, this._$.first_column)? $$[$0]:null; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_OBJETOGENERAL") 
+ $$[$0].Linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo,this._$.first_line, this._$.first_column)? $$[$0]:null; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_OBJETOGENERAL") 
 break;
 case 11:
  this.$=$$[$0]; this.$.atributos=$$[$0-1]; grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOS","CIERRE_ETIQUETAINICIO")
@@ -454,7 +454,7 @@ _handle_error:
     if(inicio === fin){
       return inicio;
     }
-    ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", linea: linea , columna:columna})
+    ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", Linea: linea , columna:columna})
 		return undefined;
 	}
 
@@ -828,7 +828,7 @@ case 11: return 34
 break;
 case 12: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 35
 break;
-case 13: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 13: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
 case 14: this.popState(); return 16
 break;
@@ -840,7 +840,7 @@ case 17:
 break;
 case 18:
 break;
-case 19: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 19: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
 case 20: this.popState(); return 21
 break;
@@ -854,7 +854,7 @@ case 24: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 30
 break;
 case 25:
 break;
-case 26: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 26: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
 case 27: this.popState(); return 25
 break;
@@ -862,7 +862,7 @@ case 28:return 6;
 break;
 case 29: yy_.yytext = ReemplazaTexto(yy_.yytext); return 11 
 break;
-case 30: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 30: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
 }
 },

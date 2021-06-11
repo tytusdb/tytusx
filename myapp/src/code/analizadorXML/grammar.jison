@@ -14,7 +14,7 @@
     }
     else
     {
-      ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", linea: linea , columna:columna})
+      ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", Linea: linea , columna:columna})
       return false
     }
 	}
@@ -99,7 +99,7 @@
 <Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* { return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
 <Etiquetai>\"[^\n\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
-<Etiquetai>[^A-ZÑa-zñ_=">]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetai>[^A-ZÑa-zñ_=">]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
@@ -107,7 +107,7 @@
 "</"[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*  		{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
 <Etiquetac>[ \r\t]+  				{}
 <Etiquetac>\n        				{}
-<Etiquetac>[^>]+            { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetac>[^>]+            { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <Etiquetac>">"						  { this.popState(); return 'CierreEtiquetaC'}
 
 
@@ -117,13 +117,13 @@
 <EtiquetaConf>"="             			      { return 'IgualAtributoConf'}
 <EtiquetaConf>\"[^\n\"]*\"        		    { yytext = yytext.substr(1,yyleng-2); return 'ValorAtributoConf'}
 <EtiquetaConf>[ \r\t]+  				          {}
-<EtiquetaConf>[^A-ZÑa-zñ_="?>]+           { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<EtiquetaConf>[^A-ZÑa-zñ_="?>]+           { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <EtiquetaConf>"?>"            			      { this.popState(); return 'CierreEtiquetaConf'}
 
 <<EOF>>                 			return 'EOF';
 
 [^<]+                       	{ yytext = ReemplazaTexto(yytext); return 'Texto' }
-.                             { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+.                             { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 /lex
 
 /* Asociación de operadores y precedencia */
@@ -137,7 +137,7 @@ ini :
 	CUERPO	{$$=$1; generarPadre(1); generarHijos("INICIO");  return {datos:$$,edges:PilaEdges,nodes:pilaNodos,errores:ListaErrores}}
   | error 
     {
-      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column}) 
+      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
       return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     }
 ;
@@ -180,7 +180,7 @@ ETIQUETACONFIGURACION
   | InicioEtiquetaConf CierreEtiquetaConf           			{ $$ = []; generarHijos($1,$2)}
   | InicioEtiquetaConf error CierreEtiquetaConf   
   { 
-    ListaErrores.push({Error:'Este es un error Sintactico: ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+    ListaErrores.push({Error:'Este es un error Sintactico: ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     $$= {tipo:$1,atributos:[]}
     $$=[];generarHijos($1,"error",$2)
   }
@@ -192,7 +192,7 @@ LISTA_ATRIBUTOSCONF
   | LISTA_ATRIBUTOSCONF error             
     { 
       $$=$1; generarPadre(1); generarHijos("ATRIBUTO","error") 
-      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})  
+      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})  
     }
 ;
 
@@ -206,7 +206,7 @@ ETIQUETAABRE
 	| InicioEtiquetaI LISTA_ATRIBUTOS CierreEtiquetaI	{ $$ = {tipo:$1, atributos:$2}; generarPadre(2);generarHijos($1,"LISTA_ATRIBUTOS",$3)  }
   | InicioEtiquetaI error CierreEtiquetaI   
     { 
-      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
       $$= {tipo:$1,atributos:[]}
       generarHijos($1,"error",$3)
     }
@@ -221,7 +221,7 @@ OBJETOSIMPLE
 	| InicioEtiquetaI LISTA_ATRIBUTOS FinEtiquetaI		{ $$ = new helpers.Objeto($1,$2,[],this._$.first_line, this._$.first_column); generarPadre(2);generarHijos($1,"LISTA_ATRIBUTOS",$3) }
   | InicioEtiquetaI error FinEtiquetaI   
     { 
-      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
       $$= {tipo:$1,atributos:[]}
       generarHijos($1,"error",$3)
     }
@@ -233,7 +233,7 @@ LISTA_ATRIBUTOS
   | LISTA_ATRIBUTOS error 
     { 
       $$=$1; generarPadre(1); generarHijos("ATRIBUTO","error") 
-      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     }
 ;
 
