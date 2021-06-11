@@ -132,7 +132,7 @@ case 8:
  this.$ = { texto:$$[$0], esTexto:false}; generarPadre(1);generarHijos("OBJETOSIMPLE")
 break;
 case 9:
- this.$ = { texto:$$[$0], esTexto:true}; generarHijos("texto")
+ this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; generarHijos("texto")
 break;
 case 10:
 
@@ -172,7 +172,12 @@ case 17:
     
 break;
 case 18:
- this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); generarHijos($$[$0-2],$$[$0-1],$$[$0]); 
+ 
+      this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
+      generarHijos($$[$0-2],$$[$0-1],$$[$0]);
+      if ($$[$0-2] == 'encoding')
+        tipoCodificacion =  $$[$0]
+    
 break;
 case 19:
  this.$ = {tipo:$$[$0-1], atributos:[]}; generarHijos($$[$0-1],$$[$0]) 
@@ -482,7 +487,8 @@ _handle_error:
       return false
     }
 	}
-
+  // Codificación global
+  var tipoCodificacion = "utf8"
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
   var GrahpvizNodo = ""
@@ -924,7 +930,7 @@ case 30: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">/]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
 conditions: {"EtiquetaComentario":{"rules":[4,5,6,7],"inclusive":false},"EtiquetaConf":{"rules":[22,23,24,25,26,27],"inclusive":false},"Etiquetac":{"rules":[17,18,19,20],"inclusive":false},"Etiquetai":{"rules":[8,9,10,11,12,13,14,15],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,16,21,28,29,30],"inclusive":true}}
 });
 return lexer;

@@ -18,7 +18,8 @@
       return false
     }
 	}
-
+  // Codificación global
+  var tipoCodificacion = "utf8"
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
   var GrahpvizNodo = ""
@@ -99,7 +100,7 @@
 <Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* { return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
 <Etiquetai>\"[^\n\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
-<Etiquetai>[^A-ZÑa-zñ_=">]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetai>[^A-ZÑa-zñ_=">/]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
@@ -179,7 +180,7 @@ LISTA_OBJETO
 OBJETO
 	: OBJETODOBLE										{ $$ = { texto:$1, esTexto:false}; generarPadre(1);generarHijos("OBJETODOBLE")}
 	| OBJETOSIMPLE									{ $$ = { texto:$1, esTexto:false}; generarPadre(1);generarHijos("OBJETOSIMPLE")}
-	| Texto 											  { $$ = { texto:$1, esTexto:true}; generarHijos("texto")}
+	| Texto 											  { $$ = { texto:helpers.CambiarCodificacion($1,tipoCodificacion), esTexto:true}; generarHijos("texto")}
 ;
 
 OBJETODOBLE
@@ -215,7 +216,12 @@ LISTA_ATRIBUTOSCONF
 ;
 
 ATRIBUTOCONF
-  : AtributoConf IgualAtributoConf ValorAtributoConf  { $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); generarHijos($1,$2,$3); }
+  : AtributoConf IgualAtributoConf ValorAtributoConf  { 
+      $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); 
+      generarHijos($1,$2,$3);
+      if ($1 == 'encoding')
+        tipoCodificacion =  $3
+    }
 ;
 
 
