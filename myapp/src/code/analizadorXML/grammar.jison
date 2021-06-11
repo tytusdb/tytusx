@@ -6,7 +6,8 @@
 		fin = fin.replace('</','')
 		return inicio === fin
 	}
-
+  // Codificación global
+  var tipoCodificacion = "UTF-8"
   // Datos { id:contador,label:'Nombre' }
   var pilaHijos = []
   var GrahpvizNodo = ""
@@ -152,7 +153,12 @@ LISTA_ATRIBUTOSCONF
 ;
 
 ATRIBUTOCONF
-  : AtributoConf IgualAtributoConf ValorAtributoConf  { $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); generarHijos($1,$2,$3); }
+  : AtributoConf IgualAtributoConf ValorAtributoConf  { 
+      $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); 
+      generarHijos($1,$2,$3);
+      if ($1 == '')
+        tipoCodificacion =  $3
+    }
 ;
 
 

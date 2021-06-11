@@ -7,15 +7,11 @@ class nodo {
 }
 
 
-
-
-
 class Objeto extends nodo {
     tipo = ''
     texto = ''
     atributos = []
     hijos = []
-    
     
     constructor(tipo, atributos, hijos, linea, columna, texto = ''){
         super(linea,columna)
@@ -43,7 +39,6 @@ class Objeto extends nodo {
             var retornoHijo = hijo.getTextoRelativo()
             retorno = retorno.concat(retornoHijo)
         }
-
         return retorno
     }
 }
@@ -59,6 +54,26 @@ class Atributo extends nodo {
     }
 }
 
+function CambiarCodificacion (contenido, tipoCodificacion) {
+    var buffer = Buffer.from(contenido)
+    switch(tipoCodificacion){
+        case "utf8":
+            contenido = buffer.toString("utf8")
+        break;
+        case "utf16le":
+            contenido = buffer.toString("utf16le")
+        break;
+        case "ascii":
+            contenido = buffer.toString("ascii")
+        break;
+        default:
+            //alert('No se ha logrado identificar el tipo de codificación del archivo, se usará por defect UTF-8.')
+            contenido = buffer.toString("utf8")
+    }
+
+    return contenido
+}
+
 /*
 const _Objeto = Objeto
 export { _Objeto as Objeto }
@@ -68,3 +83,4 @@ export { _Atributo as Atributo }
 
 exports.Objeto = Objeto
 exports.Atributo = Atributo
+exports.CambiarCodificacion = CambiarCodificacion
