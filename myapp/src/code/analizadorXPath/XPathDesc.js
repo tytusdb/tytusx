@@ -1083,7 +1083,7 @@ case 59:
 break;
 case 60:
 break;
-case 61: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 61: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
 }
 },

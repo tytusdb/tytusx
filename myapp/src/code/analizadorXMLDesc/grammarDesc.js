@@ -142,9 +142,9 @@ case 13:
  
       this.$=$$[$0-1]; 
       this.$.atributos=[]; 
-      grafo.generarPadre(1);
+      grafo.generarPadre(2);
       grafo.generarHijos("error","CIERRE_ETIQUETAINICIO");
-      ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+      ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});
     
 break;
 case 14:
@@ -176,10 +176,10 @@ case 22:
 break;
 case 23:
  
-    this.$=[]; this.$.push($$[$0-1]); 
-    grafo.generarPadre(2);
-    grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","error");
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column}); 
+    this.$=[]; this.$.push($$[$0-1]);
+    grafo.generarPadre(1);
+    grafo.generarHijos("ATRIBUTOCONF","error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column}); 
   
 break;
 case 24:
@@ -191,9 +191,9 @@ break;
 case 26:
  
     this.$ = []; this.$.push($$[$0-1]); 
-    grafo.generarPadre(2);grafo.generarPadre(1);
+    grafo.generarPadre(1);
     grafo.generarHijos("ATRIBUTOCONF","error");
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column}); 
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column}); 
   
 break;
 case 27:
@@ -205,25 +205,29 @@ case 27:
   
 break;
 case 28:
- this.$ = null; grafo.generarHijos($$[$0-1],"error") 
+ 
+    this.$ = []; this.$.push($$[$0-1]);
+    grafo.generarHijos($$[$0-1],"error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});   
+    
 break;
 case 29: case 31:
  this.$ = $$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO","SUB_LISTA_ATRIBUTOS") 
 break;
 case 30:
  
-    this.$ = []; this.$.push($$[$0-1]); 
-    grafo.generarPadre(2);grafo.generarPadre(1);
+    this.$ = []; this.$.push($$[$0-1]);
+    grafo.generarPadre(1);
     grafo.generarHijos("ATRIBUTO","error"); 
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});
   
 break;
 case 33:
  
-    this.$ = []; this.$.push($$[$0-1]); 
-    grafo.generarPadre(2);grafo.generarPadre(1);
+    this.$ = []; this.$.push($$[$0-1]);
+    grafo.generarPadre(1);
     grafo.generarHijos("ATRIBUTO","error");
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});  
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});  
   
 break;
 case 34:
@@ -233,7 +237,7 @@ case 35:
  
     this.$ = null; 
     grafo.generarHijos($$[$0-1],"error"); 
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});
   
 break;
 }

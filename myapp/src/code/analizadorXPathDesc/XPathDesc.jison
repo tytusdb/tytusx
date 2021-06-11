@@ -121,7 +121,7 @@
 \n{}
 
 
-.	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+.	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 
 /lex
 

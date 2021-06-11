@@ -68,7 +68,7 @@
 <Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* { return 'AtributoEtiqueta'}
 <Etiquetai>"=" 						{ return 'IgualAtributo'}
 <Etiquetai>\"[^\n\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
-<Etiquetai>[^A-ZÑa-zñ_=">/]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetai>[^A-ZÑa-zñ_=">/]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 <Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
 <Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
 
@@ -104,10 +104,22 @@
 %% /* Definición de la gramática */
 
 ini
-  : CUERPO  {$$=$1; grafo.generarPadre(1);grafo.generarHijos("INICIO"); return {datos:$1,nodes:grafo.pilaNodos,edges:grafo.PilaEdges,errores:ListaErrores}}
+  : CUERPO  
+  {
+    $$=$1; grafo.generarPadre(1);grafo.generarHijos("INICIO");
+    var retornoErrores = Object.assign([], ListaErrores);
+    ListaErrores = [];
+    var retornoGrafo = Object.assign({}, grafo);
+    grafo = new grafoCST();
+    return {datos:$1,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,errores:retornoErrores}
+  }
   | error 
     {
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      var retornoGrafo = Object.assign({}, grafo);
+      grafo = new grafoCST();
       return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     }
 ;
@@ -146,9 +158,9 @@ SUB_OBJETOGENERAL
     | error CIERRE_ETIQUETAINICIO                             { 
       $$=$1; 
       $$.atributos=[]; 
-      grafo.generarPadre(1);
+      grafo.generarPadre(2);
       grafo.generarHijos("error","CIERRE_ETIQUETAINICIO");
-      ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+      ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});
     }
 ;
 
@@ -178,10 +190,10 @@ SUB_ETIQUETACONFIG
 LISTA_ATRIBUTOSCONF
   : ATRIBUTOCONF SUB_LISTA_ATRIBUTOSCONF                { $$=$2; $$.push($1); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","SUB_LISTA_ATRIBUTOSCONF") }
   | ATRIBUTOCONF error                                  { 
-    $$=[]; $$.push($1); 
-    grafo.generarPadre(2);
-    grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","error");
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column}); 
+    $$=[]; $$.push($1);
+    grafo.generarPadre(1);
+    grafo.generarHijos("ATRIBUTOCONF","error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column}); 
   }
 ;
 
@@ -190,9 +202,9 @@ SUB_LISTA_ATRIBUTOSCONF
   |                                                     { $$ = []; grafo.generarHijos("Ɛ")}
   | ATRIBUTOCONF error                                  { 
     $$ = []; $$.push($1); 
-    grafo.generarPadre(2);grafo.generarPadre(1);
+    grafo.generarPadre(1);
     grafo.generarHijos("ATRIBUTOCONF","error");
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column}); 
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column}); 
   }
 ;
 
@@ -203,16 +215,21 @@ ATRIBUTOCONF
     if ($1 == 'encoding')
       tipoCodificacion = $3
   }
-  | AtributoConf error                                  { $$ = null; grafo.generarHijos($1,"error") }
+  | AtributoConf error                                  
+  { 
+    $$ = []; $$.push($1);
+    grafo.generarHijos($1,"error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});   
+    }
 ;
 
 LISTA_ATRIBUTOS
 	: ATRIBUTO SUB_LISTA_ATRIBUTOS							          { $$ = $2; $$.push($1); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO","SUB_LISTA_ATRIBUTOS") }
   | ATRIBUTO error                                      { 
-    $$ = []; $$.push($1); 
-    grafo.generarPadre(2);grafo.generarPadre(1);
+    $$ = []; $$.push($1);
+    grafo.generarPadre(1);
     grafo.generarHijos("ATRIBUTO","error"); 
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});
   }
 ;
 
@@ -220,10 +237,10 @@ SUB_LISTA_ATRIBUTOS
   : ATRIBUTO SUB_LISTA_ATRIBUTOS                        { $$ = $2; $$.push($1); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO","SUB_LISTA_ATRIBUTOS") }
   |                                                     { $$ = []; grafo.generarHijos("Ɛ")}
   | ATRIBUTO error                                      { 
-    $$ = []; $$.push($1); 
-    grafo.generarPadre(2);grafo.generarPadre(1);
+    $$ = []; $$.push($1);
+    grafo.generarPadre(1);
     grafo.generarHijos("ATRIBUTO","error");
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});  
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});  
   }
 ;
 
@@ -232,6 +249,6 @@ ATRIBUTO
   | AtributoEtiqueta error                              { 
     $$ = null; 
     grafo.generarHijos($1,"error"); 
-    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", Linea: this._$.first_line , columna: this._$.first_column});
   }
 ;
