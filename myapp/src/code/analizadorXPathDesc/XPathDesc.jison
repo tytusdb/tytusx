@@ -134,24 +134,30 @@
 %%
 
 XPath 
-    : Expr                                              { generarPadre(1);generarHijos("Expr");$1.reverse();$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges);return $$ }
+    : Expr                                              { generarPadre(1);generarHijos("Expr");$1.reverse();$$=new Comando($1,pilaNodos,PilaEdges,GrahpvizNodo+GrahpvizEdges,ListaErrores);return $$ }
     | error                                              
     {  
-      ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
+      ListaErrores.push({Error:"Error irrecuperable :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
       return new Comando([],[],[],"",ListaErrores)
     }
 ;
 
 Expr
     : ExprSingle P_Expr                                 { $$ = $2; $$.push($1); generarPadre(2); generarPadre(1); generarHijos("ExprSingle", "P_Expr"); }
+    | ExprSingle error 
+      { 
+        $$=[];$$.push($1);generarPadre(1);generarHijos("ExprSingle","error") 
+        ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
+        generarPadre(1); generarHijos("error",$2) 
+      }
 ;
 
 P_Expr
     : PIPE ExprSingle P_Expr                            { $$ = $3; $$.push($2); generarPadre(3); generarPadre(2); generarHijos($1,"ExprSingle","P_Expr"); }
     |                                                   { $$ = []; generarHijos("ε");}
-    | error PIPE ExprSingle P_Expr 
+    | PIPE ExprSingle error 
       { 
-        $$=[];$$.push($3);generarPadre(3);generarPadre(1);generarHijos("error",$2,"ExprSingle") 
+        $$=[];$$.push($2);generarPadre(2);generarHijos($1,"ExprSingle","error") 
         ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
         generarPadre(1); generarHijos("error",$2) 
       }

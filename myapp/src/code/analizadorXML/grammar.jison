@@ -134,11 +134,11 @@
 %% /* Definición de la gramática */
 
 ini : 
-	CUERPO	{$$=$1; generarPadre(1); generarHijos("INICIO");  return {datos:$$,edges:PilaEdges,nodes:pilaNodos,erroes:ListaErrores}}
+	CUERPO	{$$=$1; generarPadre(1); generarHijos("INICIO");  return {datos:$$,edges:PilaEdges,nodes:pilaNodos,errores:ListaErrores}}
   | error 
     {
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column}) 
-      return {datos:[],edges:[],nodes:[],erroes:ListaErrores}
+      return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     }
 ;
 
@@ -181,6 +181,7 @@ ETIQUETACONFIGURACION
   | InicioEtiquetaConf error CierreEtiquetaConf   
   { 
     ListaErrores.push({Error:'Este es un error Sintactico: ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+    $$= {tipo:$1,atributos:[]}
     $$=[];generarHijos($1,"error",$2)
   }
 ;
@@ -206,7 +207,7 @@ ETIQUETAABRE
   | InicioEtiquetaI error CierreEtiquetaI   
     { 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
-      $$= {tipo:"",atributos:[]}
+      $$= {tipo:$1,atributos:[]}
       generarHijos($1,"error",$3)
     }
 ;
@@ -218,6 +219,12 @@ ETIQUETACIERRE
 OBJETOSIMPLE
 	: InicioEtiquetaI FinEtiquetaI						{ $$ = new helpers.Objeto($1,[],[],this._$.first_line, this._$.first_column); generarHijos($1,$2) }
 	| InicioEtiquetaI LISTA_ATRIBUTOS FinEtiquetaI		{ $$ = new helpers.Objeto($1,$2,[],this._$.first_line, this._$.first_column); generarPadre(2);generarHijos($1,"LISTA_ATRIBUTOS",$3) }
+  | InicioEtiquetaI error FinEtiquetaI   
+    { 
+      ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+      $$= {tipo:$1,atributos:[]}
+      generarHijos($1,"error",$3)
+    }
 ;
 
 LISTA_ATRIBUTOS

@@ -77,19 +77,19 @@ var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"ini":3,"CUERPO":4,"LISTA_OBJETO":5,"EOF":6,"ETIQUETACONFIGURACION":7,"OBJETO":8,"OBJETODOBLE":9,"OBJETOSIMPLE":10,"Texto":11,"ETIQUETAABRE":12,"ETIQUETACIERRE":13,"InicioEtiquetaConf":14,"LISTA_ATRIBUTOSCONF":15,"CierreEtiquetaConf":16,"ATRIBUTOCONF":17,"AtributoConf":18,"IgualAtributoConf":19,"ValorAtributoConf":20,"InicioEtiquetaI":21,"CierreEtiquetaI":22,"LISTA_ATRIBUTOS":23,"InicioEtiquetaC":24,"CierreEtiquetaC":25,"FinEtiquetaI":26,"ATRIBUTO":27,"AtributoEtiqueta":28,"IgualAtributo":29,"ValorAtributo":30,"$accept":0,"$end":1},
 terminals_: {2:"error",6:"EOF",11:"Texto",14:"InicioEtiquetaConf",16:"CierreEtiquetaConf",18:"AtributoConf",19:"IgualAtributoConf",20:"ValorAtributoConf",21:"InicioEtiquetaI",22:"CierreEtiquetaI",24:"InicioEtiquetaC",25:"CierreEtiquetaC",26:"FinEtiquetaI",28:"AtributoEtiqueta",29:"IgualAtributo",30:"ValorAtributo"},
-productions_: [0,[3,1],[3,1],[4,2],[4,3],[5,2],[5,1],[8,1],[8,1],[8,1],[9,2],[9,3],[7,3],[7,2],[7,3],[15,2],[15,1],[15,2],[17,3],[12,2],[12,3],[12,3],[13,2],[10,2],[10,3],[23,2],[23,1],[23,2],[27,3]],
+productions_: [0,[3,1],[3,1],[4,2],[4,3],[5,2],[5,1],[8,1],[8,1],[8,1],[9,2],[9,3],[7,3],[7,2],[7,3],[15,2],[15,1],[15,2],[17,3],[12,2],[12,3],[12,3],[13,2],[10,2],[10,3],[10,3],[23,2],[23,1],[23,2],[27,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=$$[$0]; generarPadre(1); generarHijos("INICIO");  return {datos:this.$,edges:PilaEdges,nodes:pilaNodos,erroes:ListaErrores}
+this.$=$$[$0]; generarPadre(1); generarHijos("INICIO");  return {datos:this.$,edges:PilaEdges,nodes:pilaNodos,errores:ListaErrores}
 break;
 case 2:
 
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column}) 
-      return {datos:[],edges:[],nodes:[],erroes:ListaErrores}
+      return {datos:[],edges:[],nodes:[],errores:ListaErrores}
     
 break;
 case 3:
@@ -138,6 +138,7 @@ break;
 case 14:
  
     ListaErrores.push({Error:'Este es un error Sintactico: ' + $$[$0-1] ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
+    this.$= {tipo:$$[$0-2],atributos:[]}
     this.$=[];generarHijos($$[$0-2],"error",$$[$0-1])
   
 break;
@@ -162,10 +163,10 @@ break;
 case 20:
  this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]}; generarPadre(2);generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0])  
 break;
-case 21:
+case 21: case 25:
  
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0-1] ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
-      this.$= {tipo:"",atributos:[]}
+      this.$= {tipo:$$[$0-2],atributos:[]}
       generarHijos($$[$0-2],"error",$$[$0])
     
 break;
@@ -178,24 +179,24 @@ break;
 case 24:
  this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[],this._$.first_line, this._$.first_column); generarPadre(2);generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0]) 
 break;
-case 25:
+case 26:
  this.$ = $$[$0-1]; this.$.push($$[$0]); generarPadre(2);generarPadre(1);generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") 
 break;
-case 26:
+case 27:
  this.$ = []; this.$.push($$[$0]); generarPadre(1);generarHijos("ATRIBUTO")
 break;
-case 27:
+case 28:
  
       this.$=$$[$0-1]; generarPadre(1); generarHijos("ATRIBUTO","error") 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0] ,tipo:"Semantico", linea: this._$.first_line , columna: this._$.first_column})
     
 break;
-case 28:
+case 29:
 this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); generarHijos($$[$0-2],$$[$0-1],$$[$0]);
 break;
 }
 },
-table: [{2:[1,3],3:1,4:2,5:4,7:5,8:6,9:8,10:9,11:$V0,12:11,14:[1,7],21:$V1},{1:[3]},{1:[2,1]},{1:[2,2]},{6:[1,13],8:14,9:8,10:9,11:$V0,12:11,21:$V1},{5:15,8:6,9:8,10:9,11:$V0,12:11,21:$V1},o($V2,[2,6]),{2:[1,18],15:16,16:[1,17],17:19,18:$V3},o($V2,[2,7]),o($V2,[2,8]),o($V2,[2,9]),{5:22,8:6,9:8,10:9,11:$V0,12:11,13:21,21:$V1,24:$V4},{2:[1,27],22:[1,26],23:25,26:[1,24],27:28,28:$V5},{1:[2,3]},o($V2,[2,5]),{6:[1,30],8:14,9:8,10:9,11:$V0,12:11,21:$V1},{2:[1,33],16:[1,31],17:32,18:$V3},o($V6,[2,13]),{16:[1,34]},o($V7,[2,16]),{19:[1,35]},o($V2,[2,10]),{8:14,9:8,10:9,11:$V0,12:11,13:36,21:$V1,24:$V4},{25:[1,37]},o($V2,[2,23]),{2:[1,41],22:[1,39],26:[1,38],27:40,28:$V5},o($V8,[2,19]),{22:[1,42]},o($V9,[2,26]),{29:[1,43]},{1:[2,4]},o($V6,[2,12]),o($V7,[2,15]),o($V7,[2,17]),o($V6,[2,14]),{20:[1,44]},o($V2,[2,11]),o($V2,[2,22]),o($V2,[2,24]),o($V8,[2,20]),o($V9,[2,25]),o($V9,[2,27]),o($V8,[2,21]),{30:[1,45]},o($V7,[2,18]),o($V9,[2,28])],
+table: [{2:[1,3],3:1,4:2,5:4,7:5,8:6,9:8,10:9,11:$V0,12:11,14:[1,7],21:$V1},{1:[3]},{1:[2,1]},{1:[2,2]},{6:[1,13],8:14,9:8,10:9,11:$V0,12:11,21:$V1},{5:15,8:6,9:8,10:9,11:$V0,12:11,21:$V1},o($V2,[2,6]),{2:[1,18],15:16,16:[1,17],17:19,18:$V3},o($V2,[2,7]),o($V2,[2,8]),o($V2,[2,9]),{5:22,8:6,9:8,10:9,11:$V0,12:11,13:21,21:$V1,24:$V4},{2:[1,26],22:[1,27],23:25,26:[1,24],27:28,28:$V5},{1:[2,3]},o($V2,[2,5]),{6:[1,30],8:14,9:8,10:9,11:$V0,12:11,21:$V1},{2:[1,33],16:[1,31],17:32,18:$V3},o($V6,[2,13]),{16:[1,34]},o($V7,[2,16]),{19:[1,35]},o($V2,[2,10]),{8:14,9:8,10:9,11:$V0,12:11,13:36,21:$V1,24:$V4},{25:[1,37]},o($V2,[2,23]),{2:[1,41],22:[1,39],26:[1,38],27:40,28:$V5},{22:[1,43],26:[1,42]},o($V8,[2,19]),o($V9,[2,27]),{29:[1,44]},{1:[2,4]},o($V6,[2,12]),o($V7,[2,15]),o($V7,[2,17]),o($V6,[2,14]),{20:[1,45]},o($V2,[2,11]),o($V2,[2,22]),o($V2,[2,24]),o($V8,[2,20]),o($V9,[2,26]),o($V9,[2,28]),o($V2,[2,25]),o($V8,[2,21]),{30:[1,46]},o($V7,[2,18]),o($V9,[2,29])],
 defaultActions: {2:[2,1],3:[2,2],13:[2,3],30:[2,4]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {

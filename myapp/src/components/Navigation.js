@@ -119,6 +119,11 @@ class Navigation extends React.Component{
         var x = this.state.XMLTextarea;
         var analizadorXMLDesc = require('../code/analizadorXMLDesc/analizadorXMLDesc');
         var resultado = analizadorXMLDesc.Ejecutar(x);
+        if(resultado.errores.length>0)
+        {
+            alert("Errores en el analisis del XML")
+        }
+        console.log(resultado)
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
@@ -128,6 +133,10 @@ class Navigation extends React.Component{
         var x = this.state.XMLTextarea;
         var analizadorXML = require('../code/analizadorXML/analizadorXML');
         var resultado = analizadorXML.Ejecutar(x);
+        if(resultado.errores.length>0)
+        {
+            alert("Errores en el analisis del XML")
+        }
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
@@ -164,6 +173,10 @@ class Navigation extends React.Component{
         if(content=="") return
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
         var resultado = analizadorXML.Ejecutar(content)
+        if(resultado.errores.length>0)
+        {
+            alert("Errores en el analisis del XML")
+        }
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     } 
@@ -173,6 +186,10 @@ class Navigation extends React.Component{
         var analizadorXML = require('../code/analizadorXML/analizadorXML')
         var resultado = analizadorXML.Ejecutar(e.target.value)        
         console.log(resultado)
+        if(resultado.errores.length>0)
+        {
+            alert("Errores en el analisis del XML")
+        }
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
     }
