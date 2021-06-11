@@ -1,0 +1,214 @@
+body {
+    background-image: url("fondo.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+.editor1
+{        
+float: left; 
+margin-right: 20px;
+margin-left: 20px;
+}
+
+.editores
+{
+background-color: black;        
+float: left; 
+margin-right: 25px;
+} 
+
+.consolas
+{ 
+float: left;
+}
+
+.labelConsola
+{ 
+margin-top: 40px;
+}
+
+.consola
+{ 
+margin-top: 25px;
+}
+
+.componente
+{ 
+float: left; 
+margin-right: 10px;
+margin-left: 40px;
+margin-top: 20px;
+margin-bottom: 15px;
+}
+
+.componente2
+{ 
+float: left; 
+margin-right: 10px;
+margin-left: 250px;
+margin-top: 30px;
+margin-bottom: 15px;
+}
+
+/* Style the tab */
+.tab {
+overflow: hidden;
+border: 1px solid #ccc;
+background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+background-color: inherit;
+float: left;
+border: none;
+outline: none;
+cursor: pointer;
+padding: 14px 16px;
+transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+display: none;
+padding: 6px 25px;
+border: 1px solid #ccc;
+border-top: none;
+} 
+
+
+
+.button1 {
+background-color: #ff0000; /* RED */
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+width: 100%;
+margin-top: 10px;
+cursor: pointer;
+
+}
+
+.button2 {
+background-color: #0076e4; /* Azul */
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+width: 100%;
+margin-top: 10px;
+cursor: pointer;
+}
+
+.button3 {
+background-color: #b3ff00; /* amarillo */
+border: none;
+color: rgb(0, 0, 0);
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+width: 100%;
+margin-top: 10px;
+cursor: pointer;
+}
+
+.button4 {
+background-color: #ac00ac; /* morado */
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 16px;
+width: 100%;
+margin-top: 10px;
+cursor: pointer;
+}
+
+.label {
+color: white;
+padding: 8px;
+}
+
+.success {background-color: #4CAF50;} /* Green */
+.info {background-color: #2196F3;} /* Blue */
+.warning {background-color: #ff9800;} /* Orange */
+.danger {background-color: #f44336;} /* Red */
+.other {background-color: #e7e7e7; color: black;} /* Gray */
+
+ /* Dropdown Button */
+ .dropbtn {
+    background-color: #3498DB;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+   /* Dropdown Button */
+ .dropitem {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 16px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd}
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;} 
