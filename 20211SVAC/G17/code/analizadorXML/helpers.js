@@ -1,4 +1,4 @@
-class nodo {
+export class nodo {
     constructor(linea,columna)
     {
         this.linea=linea
@@ -7,7 +7,7 @@ class nodo {
 }
 
 
-class Objeto extends nodo {
+export class Objeto extends nodo {
     tipo = ''
     texto = ''
     atributos = []
@@ -43,7 +43,7 @@ class Objeto extends nodo {
     }
 }
 
-class Atributo extends nodo {
+export class Atributo extends nodo {
     nombre =''
     valor = ''
 
@@ -54,7 +54,7 @@ class Atributo extends nodo {
     }
 }
 
-function CambiarCodificacion (contenido, tipoCodificacion) {
+export function CambiarCodificacion (contenido, tipoCodificacion) {
     var buffer = Buffer.from(contenido)
     switch(tipoCodificacion){
         case "utf8":
@@ -79,8 +79,10 @@ const _Objeto = Objeto
 export { _Objeto as Objeto }
 const _Atributo = Atributo
 export { _Atributo as Atributo }
+const _Atributo = Atributo
+export { _Atributo as Atributo }
 */
 
-exports.Objeto = Objeto
-exports.Atributo = Atributo
-exports.CambiarCodificacion = CambiarCodificacion
+//exports.Objeto = Objeto
+//exports.Atributo = Atributo
+//exports.CambiarCodificacion = CambiarCodificacion
