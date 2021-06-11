@@ -99,7 +99,7 @@ class Navigation extends React.Component{
         console.log("setTextDesc Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
-        var parser = require('../code/analizadorXPath/XpathDesc');
+        var parser = require('../code/analizadorXPath/XPathDesc');
         var funcion = parser.parse(text);
         if(funcion.errores.length > 0)
         {

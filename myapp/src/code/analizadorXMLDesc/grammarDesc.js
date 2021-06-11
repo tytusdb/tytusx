@@ -116,7 +116,7 @@ case 8:
  this.$ = { texto:$$[$0], esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETOGENERAL")
 break;
 case 9:
- this.$ = { texto:$$[$0], esTexto:true}; grafo.generarHijos("Texto")
+ this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; grafo.generarHijos("Texto")
 break;
 case 10:
  $$[$0].linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo,this._$.first_line, this._$.first_column)? $$[$0]:null; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_OBJETOGENERAL") 
@@ -128,7 +128,13 @@ case 12:
  this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("CIERRE_ETIQUETAINICIO")
 break;
 case 13:
- this.$=$$[$0-1]; this.$.atributos=[]; grafo.generarPadre(1);grafo.generarHijos("error","CIERRE_ETIQUETAINICIO")
+ 
+      this.$=$$[$0-1]; 
+      this.$.atributos=[]; 
+      grafo.generarPadre(1);
+      grafo.generarHijos("error","CIERRE_ETIQUETAINICIO");
+      ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+    
 break;
 case 14:
  this.$ = new helpers.Objeto("", [], $$[$0-1],0,0); this.$.setTipo($$[$0]); grafo.generarPadre(3);grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_OBJETO_Epsilon","ETIQUETACIERRE") 
@@ -158,7 +164,12 @@ case 22:
  this.$=$$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","SUB_LISTA_ATRIBUTOSCONF") 
 break;
 case 23:
- this.$=[]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","error") 
+ 
+    this.$=[]; this.$.push($$[$0-1]); 
+    grafo.generarPadre(2);
+    grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column}); 
+  
 break;
 case 24:
  this.$=$$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","SUB_LISTA_ATRIBUTOSCONF")  
@@ -167,22 +178,52 @@ case 25: case 32:
  this.$ = []; grafo.generarHijos("Ɛ")
 break;
 case 26:
- this.$ = []; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF","error") 
+ 
+    this.$ = []; this.$.push($$[$0-1]); 
+    grafo.generarPadre(2);grafo.generarPadre(1);
+    grafo.generarHijos("ATRIBUTOCONF","error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column}); 
+  
 break;
 case 27:
- this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]) 
+ 
+    this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
+    grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]) 
+    if ($$[$0-2] == 'encoding')
+      tipoCodificacion = $$[$0]
+  
 break;
-case 28: case 35:
+case 28:
  this.$ = null; grafo.generarHijos($$[$0-1],"error") 
 break;
 case 29: case 31:
  this.$ = $$[$0]; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO","SUB_LISTA_ATRIBUTOS") 
 break;
-case 30: case 33:
- this.$ = []; this.$.push($$[$0-1]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO","error") 
+case 30:
+ 
+    this.$ = []; this.$.push($$[$0-1]); 
+    grafo.generarPadre(2);grafo.generarPadre(1);
+    grafo.generarHijos("ATRIBUTO","error"); 
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+  
+break;
+case 33:
+ 
+    this.$ = []; this.$.push($$[$0-1]); 
+    grafo.generarPadre(2);grafo.generarPadre(1);
+    grafo.generarHijos("ATRIBUTO","error");
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});  
+  
 break;
 case 34:
  this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0])
+break;
+case 35:
+ 
+    this.$ = null; 
+    grafo.generarHijos($$[$0-1],"error"); 
+    ListaErrores.push({Error:'Error sintactico recuperado en ' + yytext ,tipo:"Sintáctico", linea: this._$.first_line , columna: this._$.first_column});
+  
 break;
 }
 },
@@ -440,7 +481,8 @@ _handle_error:
   const {grafoCST} = require('./CSTXMLDESC')
   var grafo = new grafoCST; 
 	var atributosRaiz = []
-	
+	// Codificación global
+  var tipoCodificacion = "utf8"
   function objetoCorrecto (inicio, fin, linea, columna){
     if(!inicio || !fin)
     {
@@ -866,7 +908,7 @@ case 30: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">/]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
 conditions: {"EtiquetaComentario":{"rules":[4,5,6,7],"inclusive":false},"EtiquetaConf":{"rules":[22,23,24,25,26,27],"inclusive":false},"Etiquetac":{"rules":[17,18,19,20],"inclusive":false},"Etiquetai":{"rules":[8,9,10,11,12,13,14,15],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,16,21,28,29,30],"inclusive":true}}
 });
 return lexer;
