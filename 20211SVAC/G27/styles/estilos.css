@@ -1,0 +1,58 @@
+.boton {
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 20px;
+    color: #ffffff;
+    background-color: #0ba5f1da;
+    border-radius: 6px;
+    border: 2px solid #2f303b;
+}
+.boton:hover{
+    color: #006da0;
+    background-color: #ffffff;
+}
+
+.consola{
+    text-decoration: none;
+    padding: 0px;
+    width: 100%;
+    font-size: 12px;
+    color: #ffffff;
+    background-color: #0000009d;
+    border-radius: 6px;
+    border: 2px solid #000000da;
+}
+.consola:hover{
+    border: 2px solid #0ba5f1da;
+}
+
+.oculto{
+    display:none;
+}
+
+.CodigoSalida {
+    /* Set height, width, borders, and global font properties here */
+    font-family: monospace;
+    font-size: small;
+    height: 248px;
+    color: black;
+    direction: ltr;
+    border-style:solid;
+    border:8px 8px 8px 8px;
+    border-color: gray;
+    border-radius: 1%;
+  }
+  
+  .CodigoSalida:hover {
+    /* Set height, width, borders, and global font properties here */
+    font-family: monospace;
+    font-size: small;
+    height: 248px;
+    color: black;
+    direction: ltr;
+    border-style:solid;
+    border-color: lightskyblue;
+    border:2px 2px 2px 2px;
+    border-radius: 1%;
+  }
