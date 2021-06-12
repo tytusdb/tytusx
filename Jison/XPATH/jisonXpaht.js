@@ -104,7 +104,10 @@ case 6:
     
 break;
 case 7:
-consultas.push(new Consulta($$[$0]));
+consultas.push(new ConsultaSimple($$[$0]));
+break;
+case 9:
+if ($$[$0-1] === ".") {consultas.push(new ConsultaPunto());}
 break;
 case 12:
 
@@ -112,7 +115,12 @@ case 12:
     
 break;
 case 13:
-if (!($$[$0-2] === "")) {consultas.push(new Consulta($$[$0-2]));} consultas.push(new Consulta($$[$0]));
+
+            if (!($$[$0-2] === "")) {
+                consultas.push(new ConsultaSimple($$[$0-2]));
+            }
+            consultas.push($$[$0]);
+        
 break;
 case 14:
 
@@ -122,8 +130,14 @@ break;
 case 15:
 this.$ = "";
 break;
-case 16: case 21: case 22:
+case 16: case 23:
 this.$ = $$[$0-1];
+break;
+case 19:
+this.$ = new ConsultaPunto($$[$0]);
+break;
+case 21:
+this.$ = new ConsultaSimple($$[$0-1]);
 break;
 case 55:
 
