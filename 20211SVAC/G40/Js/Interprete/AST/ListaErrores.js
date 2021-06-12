@@ -11,10 +11,7 @@ class ListaErrores{
         this.errores.push(error);
     }
 
-    ReporteErrores(){
 
-
-    }
 
     getErrores(){
         var concatena = "";

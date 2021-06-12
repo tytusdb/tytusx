@@ -3,13 +3,15 @@
 function CargarXML(){
 
     var contenido = editor.getValue();
+    var contenidoXpath = EntradaXPath.getValue();
+
     if (contenido == ""){
-        SalidaXPath.setValue("No hay entrada para analizar.");
+        SalidaXPath.setValue("No hay entrada XML para analizar.");
         SalidaXPath.refresh();
     } else {
 
         analisisCorrecto = EjecutarXMLAsc(contenido);
-       
+        
         if (analisisCorrecto) {
             NumeroE = 1;
             DOTxmlCSTasc = "";
@@ -35,24 +37,62 @@ function CargarXML(){
             console.log(ReportesTSXML.arreglo);
             localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
             localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
-            SetSalida(JSON.stringify(ReportesTSXML.arreglo, null, 2));
+            localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
+            SetSalida(JSON.stringify(RGxml.arreglo, null, 2));
         } else {
-            SetSalida("El analizador no pudo recuperarse de un error sintactico.");
+            SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
         }
+
+        if (analisisCorrecto) {
+
+            if (contenidoXpath == ""){
+                SalidaXPath.setValue("No hay entrada XPath para analizar pero se han generado reportes XML");
+                SalidaXPath.refresh();
+            } else {
+
+                analisisXpathCorrecto = EjecutarXpathAsc(contenidoXpath);
+
+                if (analisisXpathCorrecto){
+
+                    console.log(resultadoXPath);
+
+                } else {
+                    SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
+                }
+
+            }
+
+        }
+
     }        
 }
 
 function EjecutarXMLAsc(contenidoXML){
     try {
         ListaErr.limpiarArreglo();
+        RGxml.limpiarArreglo();
         //Parser XML ascendente
-        //resultadoXML = XMLasc.parse(contenidoXML);
         resultadoXML = XMLascReports.parse(contenidoXML);
         return true;
     } catch (error) {
         console.log(error);
         return false;
     }
+}
+
+function EjecutarXpathAsc(contenidoXpath){
+
+    try {
+
+        //Parser XPath ascendente
+        resultadoXPath = XpathAsc.parse(contenidoXpath);
+        return true;
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+
 }
 
 function ErroresSemanticosXML(objetos){

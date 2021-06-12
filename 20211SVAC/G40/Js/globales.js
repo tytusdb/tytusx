@@ -24,6 +24,13 @@ const init = function(e){
         window.open('./reportes/tablaSimbolosXML.html','_blank');
     });
 
+    let btn_rgXML = document.querySelector("#rgXML");
+
+    btn_rgXML.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/gramaticalXML.html','_blank');
+    });
+
 };
 
 
