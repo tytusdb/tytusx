@@ -22,6 +22,9 @@
 
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/solicitud?accion=listar">AST</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="true" aria-expanded="false">CST</a>
@@ -180,18 +183,20 @@
         }
     </script>
 
+    <script src="./js/Errores/Erro.js"></script>
+    <script src="./js/Errores/Errores.js"></script>
+    <script src="./js/XPATH/Consulta.js"></script>
+    <script src="./Jison/XPATH/jisonXpaht.js"></script>
+    <script src="./js/XPATH/analizador.js"></script>
     <script src="./js/Entorno/Entorno.js"></script>
     <script src="./js/Entorno/Simbolo.js"></script>
     <script src="./js/Entorno/Type.js"></script>
     <script src="./js/Nodo/Nodo.js"></script>
     <script src="./js/Nodo/Atributo.js"></script>
+    <script src="./js/utils/ControlTable.js"></script>
     <script src="./js/AnalyzerXML.js"></script>
     <script src="./js/Main.js"></script>
 
-    <script src="./js/Errores/Erro.js"></script>
-    <script src="./js/Errores/Errores.js"></script>
-    <script src="./Jison/XPATH/jisonXpaht.js"></script>
-    <script src="./js/XPATH/analizador.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">

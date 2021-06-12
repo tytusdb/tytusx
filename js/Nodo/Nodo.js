@@ -32,4 +32,7 @@ class Nodo extends Simbolo {
     setEntorno(entorno) {
         this.entorno = entorno;
     }
+    toTag() {
+        return "<" + super.getNombre() + "></" + super.getNombre() + ">";
+    }
 }

@@ -1,24 +1,25 @@
 // @ts-ignore
 let errores = new Errores();
-let consultas = new Array();
-function analizarXpath(entornoGlobal) {
+let consultas: Array<Consulta> = new Array();
+function analizarXpath(entornoGlobal: Entorno){
     const textoAnalizar = document.getElementById('inputXPath');
-    const result = document.getElementById('result');
+    const result = document.getElementById('result') as HTMLTextAreaElement;
     // @ts-ignore
     jisonXpaht.parse(textoAnalizar.value);
-    let encabezadoErrores = ["Tipo", "Descripcion", "Linea", "Columna"];
+    let encabezadoErrores = ["Tipo","Descripcion","Linea","Columna"];
+
     if (errores.getSize > 0) {
         tablaEcabezado(encabezadoErrores);
         agregarContenidoErrores();
-    }
-    else {
-        let entornos = [entornoGlobal];
+    } else {
+        let entornos: Array<Entorno> = [entornoGlobal];
         entornos = recorrer(consultas, entornos, 0);
-        let resultConsulta = new Array();
+
+        let resultConsulta: Array<string> = new Array();
         entornos.forEach(e => {
             e.getTable().forEach(s => {
                 if (!(s instanceof Atributo)) {
-                    resultConsulta.push(s.toTag());
+                    resultConsulta.push((<Nodo>s).toTag());
                 }
             });
         });
@@ -26,14 +27,16 @@ function analizarXpath(entornoGlobal) {
     }
     consultas = new Array();
 }
-function recorrer(consultas, entornos, index) {
-    let newEntornos = new Array();
+
+function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: number): Array<Entorno> {
+
+    let newEntornos: Array<Entorno> = new Array();
     entornos = consultas[index].ejecutar(entornos);
-    entornos.forEach((e) => {
-        e.getTable().forEach((s) => {
+    entornos.forEach((e: Entorno) => {
+        e.getTable().forEach((s: Simbolo) => {
             if (s instanceof Nodo) {
-                if (s.getEntorno != null) {
-                    newEntornos.push(s.getEntorno());
+                if ((s as Nodo).getEntorno != null) {
+                    newEntornos.push((s as Nodo).getEntorno());
                 }
             }
         });
@@ -41,8 +44,8 @@ function recorrer(consultas, entornos, index) {
     index++;
     if (index < consultas.length) {
         return recorrer(consultas, newEntornos, index);
-    }
-    else {
+    } else {
         return entornos;
     }
 }
+

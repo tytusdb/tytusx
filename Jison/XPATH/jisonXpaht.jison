@@ -295,8 +295,7 @@ EXPRESIONES_RUTA
 ;
 
 EXPRESION_RUTA
-    : RELATIVA DIAGONALES ACCESORES
-    | RELATIVA DIAGONALES PUNTOS OPCIONAL_PREDICADO    
+    : RELATIVA DIAGONALES ACCESORES         {consultas.push(new Consulta($3));}
     | error identificador {
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
     }
@@ -316,8 +315,9 @@ PUNTOS : punto
 ;
 
 ACCESORES
-    : ID OPCIONAL_PREDICADO
+    : ID OPCIONAL_PREDICADO             {$$ = $1;}
     | ATRIBUTO OPCIONAL_PREDICADO
+    | PUNTOS OPCIONAL_PREDICADO
     | multiplicacion
     | NODE
     | TEXT
