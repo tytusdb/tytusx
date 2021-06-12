@@ -310,7 +310,8 @@ case 17:
 
         // GUARDAR LOS DATOS
         this.$ = {};
-        this.$[$$[$0-2]] = $$[$0].replaceAll('"','');
+        this.$["valorAtributo"] = $$[$0].replaceAll('"','');
+        this.$["nombreAtributo"]=$$[$0-2];
         this.$["tipo"] = "atributo";
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;

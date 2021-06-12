@@ -292,7 +292,8 @@ ATRIBUTO
 
         // GUARDAR LOS DATOS
         $$ = {};
-        $$[$1] = $3.replaceAll('"','');
+        $$["valorAtributo"] = $3.replaceAll('"','');
+        $$["nombreAtributo"]=$1;
         $$["tipo"] = "atributo";
         $$["linea"] = @1.first_line;
         $$["columna"] = @1.first_column;

@@ -12,7 +12,8 @@ class Acceso {
       case "EXPRESION":
         //0-> Simbolos 1->itemReserva 2->itemReserva? consulta sola
         //2-> Expresion si vienen varias
-
+        console.error("No estamos bien");
+        console.log(entorno);
         if (ast.hijos[0].valor == "SIMBOLOS") {
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno); //Me devuelve el arreglo de entornos
           if (!ArregloEntorno) {
@@ -63,14 +64,35 @@ class Acceso {
 
         return null;
       case "TODO_":
+        
         let contenido = "";
-        for (const iterator of entorno.hijos) {
-          contenido += this.getValorImplicito(iterator, ast);
+        let atributo;
+          if(entorno.atributos){
+            
+            atributo={
+              etiqueta:entorno.atributos.nombreAtributo,
+              valor:entorno.atributos.valorAtributo
+            }
+          }else{
+            atributo="";
+          }
+        if(entorno.tipo=="completa"){
+          
+          for (const iterator of entorno.hijos) {
+            contenido += this.getValorImplicito(iterator, ast);
+          }
+          let retorno = new Etiqueta(entorno.etiqueta, entorno.texto, contenido,atributo); //nombre,texto,contenido
+          if (retorno) {
+            return retorno.obtenerXML();
+          }
+        }else if(entorno.tipo=="unica"){
+
+          let retorno = new Etiqueta(entorno.etiqueta, entorno.texto, "",atributo,entorno.tipo); //nombre,texto,contenido
+          if (retorno) {
+            return retorno.obtenerXML();
+          }
         }
-        let retorno = new Etiqueta(entorno.etiqueta, entorno.texto, contenido); //nombre,texto,contenido
-        if (retorno) {
-          return retorno.obtenerXML();
-        }
+        
         return null;
       default:
         return null;
@@ -90,7 +112,7 @@ class Acceso {
           objeto.push(hijo);
         }
       }
-      console.log(objeto);
+      
       if (objeto.length == 0) {
         return null;
       }
