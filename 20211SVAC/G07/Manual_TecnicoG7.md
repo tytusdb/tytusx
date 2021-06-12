@@ -90,7 +90,7 @@ Esta hecho por ...
 
 
 <p align="center">
-  <img src="FRONTEND/img/topologia.png" width="800" alt="TytusX Architecture">
+  <img src="FRONTEND/img/topologia.PNG" width="800" alt="TytusX Architecture">
 </p>
 
 ## Análisis_Léxico_XML
