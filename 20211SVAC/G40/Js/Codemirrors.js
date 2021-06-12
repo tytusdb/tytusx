@@ -87,15 +87,39 @@ realFileBtn.addEventListener("change", function() {
             if(tab==1){
                 editor.setValue(contenido);
             } else if(tab==2){
-                editor2.setValue(e.target.result);
+                editor2.setValue(contenido);
             } else if(tab==3){
-                editor3.setValue(e.target.result);
+                editor3.setValue(contenido);
             } else if(tab==4){
-                editor4.setValue(e.target.result);
+                editor4.setValue(contenido);
             }
         });
         
         reader.readAsText(myFile);
+        
+      }  
+});
+
+
+const realFileBtn2 = document.getElementById("real-file2");
+const customBtn2 = document.getElementById("XPath");
+
+customBtn2.addEventListener("click", function() {
+    realFileBtn2.click();
+  });
+  
+realFileBtn2.addEventListener("change", function() {
+    if (this.files && this.files[0]) {
+        var myFile2 = this.files[0];
+        var reader2 = new FileReader();
+
+        reader2.fileName = myFile2.name;
+        reader2.addEventListener('load', function (ev) {
+            var contenido2 = ev.target.result.toString();
+            EntradaXPath.setValue(contenido2);
+        });
+        
+        reader2.readAsText(myFile2);
         
       }  
 });

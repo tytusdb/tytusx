@@ -17,9 +17,26 @@
         <script src="./Js/Interprete/AST/Error.js"></script>
         <script src="./Js/Interprete/AST/ListaErrores.js"></script>
         <script src="./Js/globales.js" ></script>
+        <script src="./Js/Interprete/AST/AST.js"></script>
+        <script src="./Js/Interprete/AST/Entorno.js"></script>
+        <script src="./Js/Interprete/AST/EntornoXML.js"></script>
+        <script src="./Js/Interprete/AST/Simbolo.js"></script>
+        <script src="./Js/Interprete/AST/TablaSimbolos.js"></script>
+        <script src="./Js/Interprete/AST/TablaSimbolosXML.js"></script>
+        <script src="./Js/Interprete/AST/Tipo.js"></script>
+        <script src="./Js/Interprete/AST/ReporteTablaSimbolos.js"></script>
+        <script src="./Js/Interprete/AST/ReporteTablaSimbolosXMl.js"></script>
+        <script src="./Js/Interprete/Expresiones/Operacion.js"></script>
+        <script src="./Js/Interprete/Expresiones/Primitivo.js"></script>
+        <script src="./Js/Interprete/Interfaces/Expresion.js"></script>
+        <script src="./Js/Interprete/Interfaces/Instruccion.js"></script>
         <script>
+
+
+            var codificacion = "UTF-8";
             var ListaErr = new ListaErrores();
             var GenerarDOT = new GenerarArbol();
+            var tablaSimbolosXML = null;
             var NumeroE = 1;
             var resultadoXML = null;
             var analisisCorrecto = true;
@@ -45,9 +62,14 @@
                         <button onclick="Menu()" class="dropbtn">Menú</button>
                         <div id="myDropdown1" class="dropdown-content">
                             <input type="file" id="real-file" hidden="hidden" />
-                            <a class="dropitem" id="botonAbrir">Abrir</a>
+                            <a class="dropitem" id="botonAbrir">Abrir archivo XML</a>
+                            <input type="file" id="real-file2" hidden="hidden" />
+                            <a class="dropitem" id="XPath">Abrir archivo XPath</a>
                             <a class="dropitem" onclick="Nuevo()" >Nuevo</a>
-                            <a class="dropitem" id="a" onclick="GenerarDescarga()">Guardar como...</a>
+                            <a class="dropitem" id="guardar-xml" onclick="GenerarDescarga()">Guardar XML como...</a>
+                            <a class="dropitem" id="guardar-xpath" onclick="GenerarDescargaXPath()">Guardar XPath como...</a>
+                            <a class="dropitem" onclick="LimpiarXML()">Limpiar editor XML</a>
+                            <a class="dropitem" onclick="LimpiarXPath()">Limpiar editor XPath</a>
                         </div>
                     </div> 
                 </div>
@@ -56,13 +78,12 @@
                         <button onclick="Descargar()" class="dropbtn">Reportes</button>
                         <div id="myDropdown2" class="dropdown-content">
                         <a class="dropitem" id="cstXML">CST XML</a>
-                        <a class="dropitem" id="erroresXML">Errores XML</a>                            
+                        <a class="dropitem" id="erroresXML">Errores XML</a>
+                        <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>                               
                         </div>
                     </div> 
                 </div>
-                <div class="componente2">
-                    <label class="label success">Carne: 201602625</label>
-                </div>  
+                
             </div>
             <div class="editores">
                 <!-- INICIO TAGS -->

@@ -17,6 +17,13 @@ const init = function(e){
         window.open('./reportes/erroresXML.html','_blank');
     });
 
+    let btn_tsXML = document.querySelector("#tsXML");
+
+    btn_tsXML.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/tablaSimbolosXML.html','_blank');
+    });
+
 };
 
 
