@@ -1,0 +1,92 @@
+/* Como utilizar la clase AST.js*/
+    AST('instrucciones');
+    AST('instrucciones').instrucciones;
+
+/* Como utilizar la clase Entorno.js */
+    Entorno('anterior').anterior;
+    Entorno('anterior').tabla;
+    Entorno('anterior').agregar('id','simbolo');
+    Entorno('anterior').eliminar('id');
+    Entorno('anterior').existeEnactual('id');
+    Entorno('anterior').getSimbolo('id');
+    Entorno('anterior').reemplazar('id', 'nuevo valor');
+    Entorno('anterior').existe('id');
+    
+/* Como utilizar la clase Simbolo.js */
+    Simbolo('tipo', 'id', 'linea', 'columna');
+    Simbolo('tipo', 'id', 'linea', 'columna').getTipo('Entorno', 'Arbol');
+    Simbolo('tipo', 'id', 'linea', 'columna').getValorImplicito('Entorno', 'Arbol');
+    Simbolo('tipo', 'id', 'linea', 'columna').indentificador;
+    Simbolo('tipo', 'id', 'linea', 'columna').linea;
+    Simbolo('tipo', 'id', 'linea', 'columna').tipo;
+
+/* Como utilizar la clase Tipo.js */
+    Tipo[0]; //String
+    Tipo[1]; //Int
+    Tipo[2]; //Double
+    Tipo[3]; //Bool
+    Tipo[4]; //Void
+    Tipo[5]; //Struct
+    Tipo[6]; //Null
+    Tipo[7]; //Array
+
+/* Como utilizar la clase Print.js */
+    Print('expresion', 'linea', 'columna');
+    Print('expresion', 'linea', 'columna').expresion;
+    Print('expresion', 'linea', 'columna').linea;
+    Print('expresion', 'linea', 'columna').columna;
+    Print('expresion', 'linea', 'columna').ejecutar('Entorno', 'Arbol');
+
+
+/****************EXPRESIONES****************/
+/* Como utilizar la clase Atributo.js */
+    var atributo = new Atributo('id', 'valor', 'linea', 'columna'); //crear nuevo atributo
+    atributo.columna;
+    atributo.linea;
+    atributo.identificador;
+    atributo.valor;
+
+/* Como utilizar la clase Objeto.js */
+    var objeto = new Objeto('id', 'valor', 'linea', 'columna'); //crear nuevo objeto
+    objeto.identificador;
+    objeto.linea;
+    objeto.listaAtributos;
+    objeto.listaObjetos;
+    objeto.texto;
+
+/* Como utilizar la clase Operacion */
+    Operador[0] = "SUMA";
+    Operador[1] = "RESTA";
+    Operador[3] = "MULTIPLICACION";
+    Operador[3] = "DIVISION";
+    Operador[4] = "MODULO";
+    Operador[5] = "MENOS_UNARIO";
+    Operador[6] = "MAYOR_QUE";
+    Operador[7] = "MENOR_QUE";
+    Operador[8] = "IGUAL_IGUAL";
+    Operador[9] = "DIFERENTE_QUE";
+    Operador[10] = "OR";
+    Operador[11] = "AND";
+    Operador[12] = "NOT";
+    Operador[13] = "MAYOR_IGUAL_QUE";
+    Operador[14] = "MENOR_IGUAL_QUE";
+    operador[15] = "DESCONOCIDO";
+
+    var operacion = new Operacion('operacion_izquierda', 'operacion_derecha', 'operador', 'linea', 'columna');
+    operacion.linea;
+    operacion.op_derecha;
+    operacion.op_izquierda;
+    operacion.operador;
+    operacion.getTipo('entorno', 'arbol');
+    operacion.getValorImplicito('entorno', 'arbol');
+    operacion.isInt('number');
+
+/* Como usar la clase Primitivo.js */
+
+    Primitivo('valor', 'linea', 'columna');
+    Primitivo('valor', 'linea', 'columna').getTipo('entorno', 'arbol');
+    Primitivo('valor', 'linea', 'columna').getValorImplicito('entorno', 'arbol');
+    Primitivo('valor', 'linea', 'columna').isInt('number');
+    Primitivo('valor', 'linea', 'columna').linea;
+    Primitivo('valor', 'linea', 'columna').columna;
+    Primitivo('valor', 'linea', 'columna').valor;
