@@ -55,7 +55,7 @@ function InterpretarCodigoXPATH(entrada:string){
 }
 
 function InterpretarCodigoXPATH_DESC(entrada:string){
-  //rg_path = new ReporteGramatical_XPATH();
+  rg_path = new ReporteGramatical_XPATH();
   try{
     gramatica_xpath_desc.parse(entrada);
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
@@ -209,5 +209,6 @@ function RG_XPATH_ASC()
 function RG_XPATH_DESC()
 {
   document.getElementById('reportegr').innerHTML = "";
+  document.getElementById('reportegr').innerHTML = rg_path.getReporte();
   //document.getElementById('reportegr').innerHTML = rg_path.getReporte();
 }
