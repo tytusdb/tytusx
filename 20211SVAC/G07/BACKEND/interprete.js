@@ -62,9 +62,7 @@ function  graficarNodo(AST_xPath,Padre){
             graficarNodo(AST_xPath.hijos[i],actual);
         }
     }
-    
-    
-    
+
 }
 function  graficarNodo_g(AST_xPath,Padre){
     
