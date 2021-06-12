@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Oswald:300,400,700'); 
+
+html {
+  font-size:100%; 
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: black;
+  line-height: 1.6;
+  margin-left:0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+image.responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tutulo1 {
+  color: white;
+  text-shadow: 2px 2px 5px aquamarine;
+  -webkit-text-stroke: 3px rgb(8, 49, 68);
+  text-align: center;
+  font-family: "Oswald", sans;
+  font-size: 5rem;
+  font-weight: bolder;
+  line-height: 3.5rem;
+}
+
+.stroke {
+  
+  text-shadow: -2px -2px 1px #000, 2px 2px 1px #000, -2px 2px 1px #000, 2px -2px 1px #000;
+}
+
+.tutulo2 {
+  color: white;
+  text-shadow: 2px 2px 5px black;
+  font-size: 3rem;
+  line-height: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+h3 {
+  text-shadow: 2px 2px 5px black;
+  font-size: 3.5rem;
+  line-height: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.contenedor {
+   background-image: url("./imagenes/fondo.jpg");
+  display: flex;
+  padding-top: 0px;
+  padding-left: 0px;
+  margin: 0 auto;
+  width: 100%;
+  height: 250;
+  justify-content: center;
+  align-items: center;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.objeto {
+  /* Padding is used for smaller screens */
+  padding: 0 30px 0 30px;
+  text-align: center;
+}
+
+.info{
+  padding-left: 300px;
+}
+
+nav {
+  align-content: left;
+  position : absolute;
+  font-size: 30px;
+  height: 62px;
+  left : 0;
+  width : 100%;
+  color: #fff;
+  background-color: rgb(150, 86, 110);
+  }
+  nav ul {
+    list-style: none;
+    overflow: hidden; /* Limpiamos errores de float */  
+    margin : 0 auto;
+  }
+  nav ul li {
+    color: white;
+  float : left;
+  }
+  nav ul li a {
+  display : block;
+  margin-right : 20px;
+  font-size : 30px;
+  font-weight: bolder;
+  line-height : 44px;
+  text-align : left;
+  text-decoration : none;
+  color: white;
+  }
+ 
+nav {
+  color: #fff;
+  float: left; /* Desplazamos el nav hacia la izquierda */
+}
+ 
+nav ul {
+  color: #fff;
+  list-style: none;
+  overflow: hidden; /* Limpiamos errores de float */
+}
+ 
+nav ul li {
+  color: #fff;
+  float: left;
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+}
+ 
+nav ul li a {
+  display: block; /* Convertimos los elementos a en elementos bloque para manipular el padding */
+  padding: 10px;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+}
+ 
+nav ul li a:hover {
+  color: white;
+  background: #DB2175;
+}
+  nav ul li.selected {
+  color : #fff;
+  }
+
+  ul.navbar-nav li.active {
+    background-color: red;
+}
+
+.enviar{
+  font-size: 50px;
+  align-self: auto;
+  margin-left: 45%;
+  margin-top: 60px;
+
+}
+
+#formularioArchivos{
+  text-align: center;
+  padding-left:20%;
+  display: block;
+  font-size: 50px;
+}
+
+#textoPorLeer{
+  float: left;
+  background-color: rgba(163, 64, 163,0.50);
+  height: auto;
+  width: 50%;
+  
+}
+#textoLeido{
+  color: black;
+  float: right;
+  background-color:rgba(255, 255, 255, 0.60);
+  height: auto;
+  width: 50%;
+}
+.cardTitulo{
+  padding-left: 50px;
+  padding-top: 0px;
+  font-size: 5rem;
+  display: inline-block;
+}
+#textoPorLeer{
+  font-size: 30px;;
+}
+
+
+#cajaTexto{
+  margin-left: 35%;
+  align-self: auto;
+  height: 100PX;
+  font-size: 80px;
+  width: 600px;
+  display: block;
+}
+

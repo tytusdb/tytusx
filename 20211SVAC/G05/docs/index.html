@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Grupo 5</title>
+
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<script src="./js/bootstrap.min.js"></script>
+	<!--<script src="./build/index.js" type="module"></script>-->
+
+</head>
+
+<body>
+	<div>
+		<nav class="navbar navbar-expand-lg bg-dark">
+			<div class="container-fluid">
+				<a class="navbar-brand">Grupo 5</a>
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Archivo</a>
+							
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li>
+									<button name="btnNuevo" id="btnNuevo" class="dropdown-item">Nuevo</button>
+								</li>
+								<li>
+									<button name="attachment" id="attachment" class="dropdown-item">Abrir</button>
+									<input id="file-input" type="file" style="display:none" />
+								</li>
+								<li>
+									<button name="btnGuardar" id="btnGuardar" class="dropdown-item">Guardar</button>
+								</li>
+							</ul>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" id="btnCargarA" role="button">Cargar</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" id="btnGraficaAST" role="button">Grafica</a>
+						</li>
+
+						<li class="nav-item">
+							<a class="nav-link" id="btnCerrar" role="button" onclick="cerrarTab();">Cerrar</a>
+						</li>
+						<li class="nav-item">
+							<a href="./Reportes.html" class="nav-link" id="btnReportes" role="button">Reportes</a>
+						</li>
+					</ul>
+
+					<form class="d-flex">
+						<input class="form-control me-2" type="search" placeholder="Ruta" aria-label="Search">
+						<button type="button" class="btn btn-outline-primary">Buscar</button>
+					</form>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+	<div style="display: flex; align-items: flex-start; margin-left: 20px; margin-right: 20px; margin-top: 20px;">
+		<div style="width: 65%; margin-right: 10px;">
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist"></div>
+			</nav>
+
+			<div class="tab-content" id="nav-tabContent"></div>
+		</div>
+
+		<div style="width: 35%; margin-left: 10px;">
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab-salida" role="tablist">
+					<button class="nav-link active" id="nav-salida-tab" data-bs-toggle="tab" data-bs-target="#nav-salida" type="button" role="tab" aria-controls="nav-salida" aria-selected="true">Salida</button>
+				</div>
+			</nav>
+
+			<div class="tab-content" id="nav-tabContent-salida">
+				<div class="tab-pane fade active show" id="nav-salida" role="tabpanel" aria-labelledby="nav-salida-tab"><textarea class="form-control" id="textAreaSalida" rows="15" style="background-color: #151515; color: lime" disabled>Salida</textarea></div>
+			</div>
+
+		</div>
+	</div>
+
+	<div style="margin-left: 20px; margin-right: 20px; margin-top: 20px;">
+		<nav>
+			<div class="nav nav-tabs" id="nav-tab-console" role="tablist">
+				<button class="nav-link active" id="nav-console-tab" data-bs-toggle="tab" data-bs-target="#nav-console" type="button" role="tab" aria-controls="nav-console" aria-selected="true">Consola</button>
+			</div>
+		</nav>
+
+		<div class="tab-content" id="nav-tabContent-console">
+			<div class="tab-pane fade active show" id="nav-console" role="tabpanel" aria-labelledby="nav-console-tab"><textarea class="form-control" id="textAreaConsole" rows="5" style="background-color: #151515; color: lime" disabled>S;G</textarea></div>
+		</div>
+
+	</div>
+</body>
+<script src="bundle.js"></script>
+<script>
+	var contTab = 1;
+	var activeTab = "";
+	var activeNav = "";
+	var activeText = "";
+	var activeNombre = "";
+
+	document.getElementById("btnNuevo").addEventListener('click', function() {
+		var nombre = prompt('Nombre del archivo');
+
+		if (nombre == "" || nombre == null) {
+			alert("Campo vacio!")
+		}else{
+			nombre += ".xml";
+
+			var boton = document.getElementById("nav-tab");
+			boton.innerHTML += `<button class="nav-link" id="nav-${contTab}-tab" data-bs-toggle="tab" data-bs-target="#nav-${contTab}" type="button" role="tab" aria-controls="nav-${contTab}" aria-selected="true" onclick="selector('nav-${contTab}-tab', 'nav-${contTab}', 'textArea${contTab}', '${nombre}');">${nombre}</button>`;
+
+			var elemento = document.getElementById("nav-tabContent");
+			elemento.innerHTML += `<div class="tab-pane fade" id="nav-${contTab}" role="tabpanel" aria-labelledby="nav-${contTab}-tab"><textarea class="form-control" id="textArea${contTab}" rows="15"></textarea></div>`;
+			
+			contTab++;
+		}
+	});
+
+	document.getElementById("attachment").addEventListener('click', function() {
+		document.getElementById("file-input").click();
+	});
+
+	document.getElementById("file-input").addEventListener('change', function(e) {
+		var archivo = e.target.files[0];
+
+		if (!archivo) {
+			return;
+		}
+
+		var boton = document.getElementById("nav-tab");
+		boton.innerHTML += `<button class="nav-link" id="nav-${contTab}-tab" data-bs-toggle="tab" data-bs-target="#nav-${contTab}" type="button" role="tab" aria-controls="nav-${contTab}" aria-selected="true" onclick="selector('nav-${contTab}-tab', 'nav-${contTab}', 'textArea${contTab}', '${archivo.name}');">${archivo.name}</button>`;
+
+		var lector = new FileReader();
+		lector.onload = function(e) {
+			var contenido = e.target.result;
+			var elemento = document.getElementById("nav-tabContent");
+			elemento.innerHTML += `<div class="tab-pane fade" id="nav-${contTab-1}" role="tabpanel" aria-labelledby="nav-${contTab-1}-tab"><textarea class="form-control" id="textArea${contTab-1}" rows="15">${contenido}</textarea></div>`;
+		};
+		lector.readAsText(archivo);
+
+		contTab++;
+	});
+
+	function selector(idTab, idNav, idText, name) {
+		activeTab = idTab;
+		activeNav = idNav;
+		activeText = idText;
+		activeName = name;
+	};
+
+	function cerrarTab(){
+		tab = document.getElementById(activeTab);
+		nav = document.getElementById(activeNav);	
+		if (!tab || !nav){
+			alert("El elemento selecionado no existe");
+		} else {
+			padre = tab.parentNode;
+			padre.removeChild(tab);
+
+			madre = nav.parentNode;
+			madre.removeChild(nav);
+		}
+	};
+
+	function descargar(filename, text) {
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+		element.setAttribute('download', filename);
+
+		element.style.display = 'none';
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
+	};
+
+	document.getElementById("btnGuardar").addEventListener("click", function () {
+		var texto = document.getElementById(activeText).value;
+		
+		descargar(activeName, texto);
+	}, false);
+
+	document.getElementById("btnCargarA").addEventListener('click', function() {
+		myBundle.ejecutarXML(document.getElementById(activeText).value);
+	});
+
+	document.getElementById("btnGraficaAST").addEventListener('click', function() {
+		myBundle.realizarGraficaAST();
+	});
+</script>
+</html>

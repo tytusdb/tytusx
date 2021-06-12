@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link  rel = "stylesheet"  href = "./codemirror-5.61.1/lib/codemirror.css"> 
+    <meta name="viewport" content="width= device-width">
+    <link rel="stylesheet" href="./css/estiloBarra.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="./css/estiloheader.css" MEDIA=screen>
+    <script  src = "./codemirror-5.61.1/lib/codemirror.js" > </script> 
+    
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .btn_blue {
+        background-color: #ffffff;
+        border-radius: 6px;
+        border: 2px solid #022349e5;
+        padding: 5px;
+        margin-left: 3px;
+    }
+</style>
+
+
+<span class="glyphicon glyphicon-search"></span>
+
+<body style="background-color: #D9FFF9">
+
+    <div id="portada">
+        <div>
+            <div class="contenedor">
+                <div class="objeto" style="width:80%; float:left; padding-top: 20px;">
+                    <h3 style="border-bottom: 60px;" class="tutulo2">Grupo 22 </h3>
+                    <h1 style="padding-top: 80px;" class="tutulo1">Analizador XPath</h1>
+                    <p></p>
+                </div>
+                <div style="padding-top: 250px;">
+                    <nav>
+                        <div class="navbar1">
+                            <a href="">Inicio</a>
+
+                            <!--<div class="dropdown3">
+                      <button class="dropbtn3">Archivo
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                      <div class="dropdown-content1">
+                        <a onclick="archivoNuevo()" id="nuevoArchivo">Nuevo</a>
+                        <a>Abrir <input id="abrir" type="file" name="file" accept=".cs" required></input></a>
+                        <a onclick="guardarDoc()">Guardar </a>
+                        <a>Guardar Como </a>
+                      </div>
+                    </div>-->
+                            <div class="dropdown3">
+                                <button class="dropbtn3">Reportes
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content1">
+                                    <a onclick="llenarTablaErrores()" id='erroresDoc'>Errores</a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<section>
+    <div style="padding-top:0px;">
+        <div style="width: 100%; padding-top: 80px;">
+            <div style="width:48%; padding-left: 5%; float:left;height: 400px;">
+
+                <button class="btn btn-light btn_blue" id="abrir1"><img src="./css/imagenes/subir.png" /> <a> <input
+                            id="abrir" type="file" name="file" required></input></a></button>
+                <button class="btn btn-light btn_blue" type="button" onclick="limpiar()"><img
+                        src="./css/imagenes/limpiar.png" /> Limpiar</button>
+                <button class="btn btn-light btn_blue" type="button" onclick=""><img src="./css/imagenes/nuevo.png" />
+                    Nuevo</button>
+                <button class="btn btn-light btn_blue" type="button" onclick="guardarEntrada()"><img src="./css/imagenes/guardar.png" />
+                        Guardar</button>    
+                <h2 style="background-color: rgb(8, 49, 68); color:white; margin-top: 20px;">Entrada</h2>
+
+                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor"></textarea>
+            </div>
+            <div style="width:48%; padding-right: 5%; float:right;">
+
+                <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/asc.png" />
+                    Analizar Ascendente </button>
+                <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/desc.png" />
+                    Analizar Descendente </button>
+
+                <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 20px;">Consulta</h2>
+                <textarea style="width: 100%; height: 400px; font-size: 20px;" id="consola" ></textarea>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div style="padding-left: 20%; padding-right: 20%; align-content: center;">
+        
+        <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 580px;">RESULTADO CONSULTA</h2>
+        <textarea class="consola_resultado"  id="resultado" readonly ></textarea>
+        <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img src="./css/imagenes/guardar.png" />
+            Guardar Resultado</button>    
+    </div>
+</section>
+    
+
+
+
+<script  src = "./codemirror-5.61.1/mode/javascript/javascript.js" > </script>
+<script src = "http://code.jquery.com/jquery-3.0.0.min.js" > </script> 
+</body>
+<script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
+
+
+</html>
