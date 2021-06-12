@@ -76,9 +76,10 @@
                     <button type="button" class="btn btn-outline-primary" id="analizarxmldesc"
                         onclick="ejecutarXML_DESC();">XML DESC</button>
                     <button type="button" class="btn btn-outline-primary" id="analizarxpathdesc"
-                        onclick="();">XPATH DESC</button>
+                        onclick="ejecutarXPATH_DESC();">XPATH DESC</button>
                     <button type="button" class="btn btn-outline-primary" id="analizarxpathasc"
                         onclick="ejecutarXPATH_ASC();">XPATH ASC</button>
+                        
                 </div>
             </div>
         </div>
@@ -361,6 +362,11 @@
                 var texto = editorSalida.getDoc().getValue();
                 InterpretarCodigoXPATH(texto);
             }
+
+            function ejecutarXPATH_DESC(){
+                var texto = editorSalida.getDoc().getValue();
+                InterpretarCodigoXPATH_DESC(texto);
+            }
           </script>
 
     <!-- Importaciones -->
@@ -380,7 +386,8 @@
     <script src="dist/Estructuras/TablaSimbolos/NodoTablaSimbolo.js"></script>
     <script src="Gramatica/gramatica_xml_desc.js"></script>
     <script src="Gramatica/gramatica.js"></script>
-    <script src="Gramatica/gramatica_xpath.js"></script>    
+    <script src="Gramatica/gramatica_xpath.js"></script>
+    <script src="Gramatica/gramatica_xpath_desc.js"></script>    
     <script src="dist/index.js"></script>
 
     <!-- Fin Importaciones -->

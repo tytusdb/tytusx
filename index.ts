@@ -54,6 +54,17 @@ function InterpretarCodigoXPATH(entrada:string){
   }
 }
 
+function InterpretarCodigoXPATH_DESC(entrada:string){
+  //rg_path = new ReporteGramatical_XPATH();
+  try{
+    gramatica_xpath_desc.parse(entrada);
+    document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
+  }catch (error){
+    console.log(error);
+    document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XPATH\n";
+  }
+}
+
 function InterpretarCodigo(entrada:string) {
   tds_xml_persistente=[];
   //var entrada = editorentrada.getValue();
