@@ -35,10 +35,11 @@ function CargarXML(){
             console.log(tablaSimbolosXML);
             console.log("↓ Arreglo Simbolos ↓");
             console.log(ReportesTSXML.arreglo);
+            RGxml.arreglo = RGxml.arreglo.reverse();
             localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
             localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
             localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
-            SetSalida(JSON.stringify(RGxml.arreglo, null, 2));
+            
         } else {
             SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
         }
@@ -54,8 +55,13 @@ function CargarXML(){
 
                 if (analisisXpathCorrecto){
 
+                    DOTXPATHASTasc = GenerarDOT.recorrerDOT(nodoxPATHASC);
+                    DOTXPATHASTasc = "digraph {" + DOTXPATHASTasc + "}";
+                    localStorage.setItem('astXPATH',DOTXPATHASTasc);
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+                    console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-
+                    SetSalida("TODO SALIO BIEN :D!!");
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -83,7 +89,7 @@ function EjecutarXMLAsc(contenidoXML){
 function EjecutarXpathAsc(contenidoXpath){
 
     try {
-
+        nodoxPATHASC = new NodoArbol("INICIO","");
         //Parser XPath ascendente
         resultadoXPath = XpathAsc.parse(contenidoXpath);
         return true;
@@ -117,7 +123,7 @@ function ExtraerCodificacion(objetos){
 
     for (var i=0; i < objetos.length;i++ ) {
         
-        if (objetos[i].agregar == 1){
+        if (objetos[i].agregar >= 1){
            // console.log("hola");
             ExtraerCodificacion(objetos[i].listaObjetos);
         } else {

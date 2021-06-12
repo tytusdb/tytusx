@@ -88,7 +88,7 @@ case 1:
                             var root = new NodoArbol("INICIO","");
                             root.agregarHijo($$[$0-1][1]);
                             console.log("TODO BIEN, TODO CORRECTO :D!! (Version 2)");
-                            this.$ = [$$[$0-1][0], root]
+                            this.$ = [$$[$0-1][0], root];
                             return this.$;
                             
 break;
@@ -165,7 +165,7 @@ case 7:
                 nodoAux.agregarHijo($$[$0-2][1]);
                 nodoAux.agregarHijo(new NodoArbol($$[$0-1],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0],"simbolo"));
-                objeto = new Objeto($$[$0-3],$$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2][0],[],1);
+                objeto = new Objeto($$[$0-3],$$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2][0],[],2);
                 this.$ = [objeto,nodoAux];
         
 break;
@@ -342,7 +342,7 @@ case 48:
                 nodoAux.agregarHijo($$[$0-2][1]);
                 nodoAux.agregarHijo(new NodoArbol($$[$0-1],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0],"simbolo"));
-                objeto = new Objeto($$[$0-3],$$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2][0],[],1);
+                objeto = new Objeto($$[$0-3],$$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2][0],[],2);
                 this.$ = [objeto,nodoAux];
          
 break;

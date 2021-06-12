@@ -67,7 +67,7 @@ INICIO : MOBJETOS EOF     { RGxml.agregarElemento("INICIO -> listaObjetosRaiz","
                             var root = new NodoArbol("INICIO","");
                             root.agregarHijo($1[1]);
                             console.log("TODO BIEN, TODO CORRECTO :D!! (Version 2)");
-                            $$ = [$1[0], root]
+                            $$ = [$1[0], root];
                             return $$;
                             } ;
 
@@ -135,7 +135,7 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_sla
                 nodoAux.agregarHijo($3[1]);
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($5,"simbolo"));
-                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],1);
+                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],2);
                 $$ = [objeto,nodoAux];
         }
         | tk_menor tk_interrogacion tk_xml tk_version tk_igual CADENA tk_encoding tk_igual CADENA tk_interrogacion tk_mayor { 
@@ -351,7 +351,7 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slas
                 nodoAux.agregarHijo($3[1]);
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($5,"simbolo"));
-                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],1);
+                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],2);
                 $$ = [objeto,nodoAux];
          }
         | error FINERROR {
