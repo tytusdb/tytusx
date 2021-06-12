@@ -10,16 +10,25 @@ export class grafoCST {
     this.PilaEdges= []
     this.GrahpvizEdges = ""
     this.contador = 0
+    this.texto=[]
+    this.TablaGramatica = []
   }
   //Genera los padres en funcion de los ultimos datos en la pila de Hijos
-  generarPadre (posicion)
+  generarPadre (posicion,padre="")
   {
     posicion--
+    var concatenado=""
     var Edges = this.pilaHijos.pop()  
     for(const temp of Edges)
     {
       this.PilaEdges.push({from:this.contador+posicion, to:temp.id})
       this.GrahpvizEdges += `${this.contador+posicion} -> ${temp.id}\n`
+      concatenado+=temp.label+" "
+    }
+    if(this.texto.length>0)
+    {
+      var textoActual=this.texto.pop()
+      this.TablaGramatica.push({padre:padre,hijos:concatenado,produccion:textoActual})
     }
   }
   //Funcion que recive X parametros 
@@ -35,6 +44,11 @@ export class grafoCST {
       this.contador++
     }
     this.pilaHijos.push(Hijos)
+  }
+
+  generarTexto(texto)
+  {
+    this.texto.push(texto)
   }
 }
 // Datos { id:contador,label:'Nombre' }

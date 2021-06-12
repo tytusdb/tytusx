@@ -1,4 +1,4 @@
-const { Colision, ColisionTipo } = require('../AST/Entorno')
+const { Colision, ColisionTipo, Tipo } = require('../AST/Entorno')
 const { Literal } = require("./Expresiones");
 
 export class Arithmetic {
@@ -77,4 +77,48 @@ function operar(izq, op, der){
         }   
     }
     return retorno
+}
+
+export class Unary {
+    constructor (op,izquierdo){
+        this.op=op
+        this.izquierdo = izquierdo;
+    }
+
+    getValor(Objetos){
+        var retorno = []
+        // recorrer lista de objetos
+        for (var obj of Objetos) {
+            var valIzq = this.izquierdo.getValor([obj])
+            // recorrer lista de resultados de izquierda
+            for (var izq of valIzq) {
+                if (Colision[Tipo.INTEGER][izq.tipo]){
+                    var newValor = null
+                switch(this.op){
+                    case "-":
+                        newValor = - izq.valor
+                    break;
+                    case "+":
+                        newValor = + izq.valor
+                    break;
+                }
+                if (newValor)
+                    retorno.push(new Literal(izq.tipo, newValor))
+                }
+            }
+        }
+        return retorno
+    }
+
+    Graficar(ListaNodes,ListaEdges,contador)
+    {
+        var NodosActuales = []
+        var nodoActual = {id:contador.num,label:this.op}
+        NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+        var nodos = this.izquierdo.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        return NodosActuales
+    }
 }

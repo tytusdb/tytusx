@@ -1,7 +1,7 @@
 %{
   const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
   const {Logical} = require("./Expresion/Logical");
-  const {Arithmetic} = require("./Expresion/Arithmetics")
+  const {Arithmetic, Unary} = require("./Expresion/Arithmetics")
   const {Literal,PathExp} = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
@@ -208,8 +208,8 @@ P_MultiplicativeExpr
 
 UnaryExpr   
     : PathExpr                                          { $$ = $1; grafo.generarPadre(1); grafo.generarHijos("PathExpr"); }
-	  | MAS /*+*/ UnaryExpr                               {  }
-	  | MENOS /*-*/ UnaryExpr                             {  }
+	  | MAS /*+*/ UnaryExpr                               { $$=new Unary($1, $2); grafo.generarPadre(2);grafo.generarHijos($1,"UnaryExp") }
+	  | MENOS /*-*/ UnaryExpr                             { $$=new Unary($1, $2); grafo.generarPadre(2);grafo.generarHijos($1,"UnaryExp") }
 ;
 
 PathExpr
@@ -322,10 +322,10 @@ Predicate
 ;
 
 PrimaryExpr 
-  : Literal                                 { $$ = $1; grafo.generarHijos("Literal");}
-	| FunctionCall                            { $$ = $1; grafo.generarHijos("FunctionCall");}
-	| ContextItemExpr                         { $$ = $1; grafo.generarHijos("ContextItemExpr");}
-	| ParenthesizedExpr                       { $$ = $1; grafo.generarHijos("ParenthesizedExpr");}
+  : Literal                                 { $$ = $1; grafo.generarPadre(1); grafo.generarHijos("Literal");}
+	| FunctionCall                            { $$ = $1; grafo.generarPadre(1); grafo.generarHijos("FunctionCall");}
+	| ContextItemExpr                         { $$ = $1; grafo.generarPadre(1); grafo.generarHijos("ContextItemExpr");}
+	| ParenthesizedExpr                       { $$ = $1; grafo.generarPadre(1); grafo.generarHijos("ParenthesizedExpr");}
 ;
 
 Literal     
@@ -343,6 +343,9 @@ ContextItemExpr
     : PUNTO                                 { $$=new ContextItemExpr([],TipoPath.ABS); grafo.generarHijos($1); }
 ;
 
-
+ParenthesizedExpr 
+  : PARENTESISA PARENTESISC             { $$=[]; grafo.generarHijos($1,$2) }
+	| PARENTESISA ExprSingle PARENTESISC  { $$=$2; grafo.generarHijos($1,$2,$3) }
+;	
 
 

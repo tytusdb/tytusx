@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/mywebsite/static/css/main.41647186.chunk.css",
-    "main.js": "/mywebsite/static/js/main.f7feb11d.chunk.js",
-    "main.js.map": "/mywebsite/static/js/main.f7feb11d.chunk.js.map",
-    "runtime-main.js": "/mywebsite/static/js/runtime-main.213264fe.js",
-    "runtime-main.js.map": "/mywebsite/static/js/runtime-main.213264fe.js.map",
-    "static/js/2.0e335cf2.chunk.js": "/mywebsite/static/js/2.0e335cf2.chunk.js",
-    "static/js/2.0e335cf2.chunk.js.map": "/mywebsite/static/js/2.0e335cf2.chunk.js.map",
-    "static/js/3.d5ef011a.chunk.js": "/mywebsite/static/js/3.d5ef011a.chunk.js",
-    "static/js/3.d5ef011a.chunk.js.map": "/mywebsite/static/js/3.d5ef011a.chunk.js.map",
-    "index.html": "/mywebsite/index.html",
-    "static/css/main.41647186.chunk.css.map": "/mywebsite/static/css/main.41647186.chunk.css.map",
-    "static/js/2.0e335cf2.chunk.js.LICENSE.txt": "/mywebsite/static/js/2.0e335cf2.chunk.js.LICENSE.txt",
-    "static/media/logo.6ce24c58.svg": "/mywebsite/static/media/logo.6ce24c58.svg"
+    "main.css": "/tytusx/20211SVAC/G17/static/css/main.a3e48668.chunk.css",
+    "main.js": "/tytusx/20211SVAC/G17/static/js/main.8449a088.chunk.js",
+    "main.js.map": "/tytusx/20211SVAC/G17/static/js/main.8449a088.chunk.js.map",
+    "runtime-main.js": "/tytusx/20211SVAC/G17/static/js/runtime-main.e2810c9d.js",
+    "runtime-main.js.map": "/tytusx/20211SVAC/G17/static/js/runtime-main.e2810c9d.js.map",
+    "static/js/2.d574271c.chunk.js": "/tytusx/20211SVAC/G17/static/js/2.d574271c.chunk.js",
+    "static/js/2.d574271c.chunk.js.map": "/tytusx/20211SVAC/G17/static/js/2.d574271c.chunk.js.map",
+    "static/js/3.d5ef011a.chunk.js": "/tytusx/20211SVAC/G17/static/js/3.d5ef011a.chunk.js",
+    "static/js/3.d5ef011a.chunk.js.map": "/tytusx/20211SVAC/G17/static/js/3.d5ef011a.chunk.js.map",
+    "index.html": "/tytusx/20211SVAC/G17/index.html",
+    "static/css/main.a3e48668.chunk.css.map": "/tytusx/20211SVAC/G17/static/css/main.a3e48668.chunk.css.map",
+    "static/js/2.d574271c.chunk.js.LICENSE.txt": "/tytusx/20211SVAC/G17/static/js/2.d574271c.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/tytusx/20211SVAC/G17/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.213264fe.js",
-    "static/js/2.0e335cf2.chunk.js",
-    "static/css/main.41647186.chunk.css",
-    "static/js/main.f7feb11d.chunk.js"
+    "static/js/runtime-main.e2810c9d.js",
+    "static/js/2.d574271c.chunk.js",
+    "static/css/main.a3e48668.chunk.css",
+    "static/js/main.8449a088.chunk.js"
   ]
 }
