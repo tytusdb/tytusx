@@ -85,18 +85,12 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
  
-    generarPadre(1);generarHijos("Expr");
+    grafo.generarPadre(1);grafo.generarHijos("Expr");
     var retornoErrores = Object.assign([], ListaErrores);
     ListaErrores = [];
-    var Nodes = Object.assign([], pilaNodos);
-    pilaNodos = [];
-    var Edges = Object.assign([], PilaEdges);
-    PilaEdges = [];
-    pilaHijos = [];
-    contador = 0;
-    this.$=new Comando($$[$0],Nodes,Edges,GrahpvizNodo+GrahpvizEdges,retornoErrores);
-    GrahpvizEdges = "";
-    GrahpvizNodo = "";
+    var retornoGrafo = Object.assign({}, grafo);
+    grafo = new grafoCST();
+    this.$=new Comando($$[$0],retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores);
     return this.$ 
   
 break;
@@ -105,232 +99,227 @@ case 2:
       ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
       var retornoErrores = Object.assign([], ListaErrores);
       ListaErrores = [];
-      pilaNodos = [];
-      PilaEdges = [];
-      pilaHijos = [];
-      contador = 0;
-      GrahpvizNodo = "";
-      GrahpvizEdges = "";
+      grafo = new grafoCST(); 
       return new Comando([],[],[],"",retornoErrores)
     
 break;
 case 3:
- this.$=[];this.$.push($$[$0]); generarPadre(1);generarHijos("ExprSingle") 
+ this.$=[];this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("ExprSingle") 
 break;
 case 4:
- this.$=$$[$0-2];this.$.push($$[$0]); generarPadre(3);generarPadre(1);generarHijos("Expr",$$[$0-1],"ExprSingle") 
+ this.$=$$[$0-2];this.$.push($$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("Expr",$$[$0-1],"ExprSingle") 
 break;
 case 5:
  
-      this.$=$$[$0-2];generarPadre(1);
+      this.$=$$[$0-2];grafo.generarPadre(1);
       ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
-      generarHijos("Expt",$$[$0-1],"error") 
+      grafo.generarHijos("Expt",$$[$0-1],"error") 
     
 break;
 case 6:
  
-    this.$=[];this.$.push($$[$0]); generarPadre(3);generarHijos("error",$$[$0-1],"ExprSingle") 
+    this.$=[];this.$.push($$[$0]); grafo.generarPadre(3);grafo.generarHijos("error",$$[$0-1],"ExprSingle") 
     ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
-    generarPadre(1); generarHijos("error",$$[$0-1]) 
+    grafo.generarPadre(1); grafo.generarHijos("error",$$[$0-1]) 
   
 break;
 case 7:
- this.$=$$[$0]; generarPadre(1);generarHijos("OrExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("OrExpr") 
 break;
 case 8:
- this.$ = $$[$0]; generarPadre(1);generarHijos("AndExpr")  
+ this.$ = $$[$0]; grafo.generarPadre(1);grafo.generarHijos("AndExpr")  
 break;
 case 9:
- this.$ = new Logical($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(1);generarHijos("OrExpr",$$[$0-1],"AndExpr") 
+ this.$ = new Logical($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("OrExpr",$$[$0-1],"AndExpr") 
 break;
 case 10:
- this.$ = $$[$0]; generarPadre(1);generarHijos("ComparisonExpr") 
+ this.$ = $$[$0]; grafo.generarPadre(1);grafo.generarHijos("ComparisonExpr") 
 break;
 case 11:
- this.$ = new Logical($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(1);generarHijos("AndExpr",$$[$0-1],"ComparisonExpr") 
+ this.$ = new Logical($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("AndExpr",$$[$0-1],"ComparisonExpr") 
 break;
 case 12:
- this.$=$$[$0]; generarPadre(1);generarHijos("StringConcatExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("StringConcatExpr") 
 break;
 case 13:
- this.$ = new ComparisonExp($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr") 
+ this.$ = new ComparisonExp($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr") 
 break;
 case 14: case 15: case 17: case 19:
- this.$ = $$[$0]; generarHijos($$[$0]) 
+ this.$ = $$[$0]; grafo.generarHijos($$[$0]) 
 break;
 case 16: case 18:
- this.$ = $$[$0]; generarHijos($$[$0])	
+ this.$ = $$[$0]; grafo.generarHijos($$[$0])	
 break;
 case 20:
- this.$=$$[$0]; generarPadre(1);generarHijos("MultiplicativeExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("MultiplicativeExpr") 
 break;
 case 21:
- this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(1);generarHijos("AdditiveExpr",$$[$0-1],"MultiplicativeExpr") 
+ this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("AdditiveExpr",$$[$0-1],"MultiplicativeExpr") 
 break;
 case 22:
- this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(1);generarHijos("AdditiveExpr",$$[$0-1],"MultiplicativeExpr")  
+ this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("AdditiveExpr",$$[$0-1],"MultiplicativeExpr")  
 break;
 case 23:
- this.$=$$[$0]; generarPadre(1);generarHijos("UnaryExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("UnaryExpr") 
 break;
 case 24:
- this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(1);generarHijos("MultiplicativeExpr",$$[$0-1],"UnaryExpr")  
+ this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("MultiplicativeExpr",$$[$0-1],"UnaryExpr")  
 break;
 case 25: case 26: case 27:
- this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); generarPadre(3);generarPadre(1);generarHijos("MultiplicativeExpr",$$[$0-1],"UnaryExpr") 
+ this.$= new Arithmetic($$[$0-2],$$[$0-1],$$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("MultiplicativeExpr",$$[$0-1],"UnaryExpr") 
 break;
 case 28:
- this.$=$$[$0]; generarPadre(1);generarHijos("PathExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("PathExpr") 
 break;
 case 31:
- $$[$0][0].tipo=TipoPath.ABS;this.$=new PathExp($$[$0]); generarPadre(2);generarHijos($$[$0-1],"RelativePathExpr") 
+ $$[$0][0].tipo=TipoPath.ABS;this.$=new PathExp($$[$0]); grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"RelativePathExpr") 
 break;
 case 32:
- $$[$0][0].tipo=TipoPath.REL;this.$=new PathExp($$[$0]); generarPadre(2);generarHijos($$[$0-1],"RelativePathExpr") 
+ $$[$0][0].tipo=TipoPath.REL;this.$=new PathExp($$[$0]); grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"RelativePathExpr") 
 break;
 case 33:
- this.$=new PathExp($$[$0]); generarPadre(1);generarHijos("RelativePathExpr") 
+ this.$=new PathExp($$[$0]); grafo.generarPadre(1);grafo.generarHijos("RelativePathExpr") 
 break;
 case 34:
- this.$=new PathExp([]); generarHijos($$[$0]) 
+ this.$=new PathExp([]); grafo.generarHijos($$[$0]) 
 break;
 case 35:
- this.$ = []; this.$.push($$[$0]); generarPadre(1);generarHijos("StepExpr")  
+ this.$ = []; this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("StepExpr")  
 break;
 case 36:
- this.$ = $$[$0-2]; $$[$0].tipo=TipoPath.ABS; this.$.push($$[$0]); generarPadre(3);generarPadre(1);generarHijos("RelativePathExpr",$$[$0-1],"StepExpr") 
+ this.$ = $$[$0-2]; $$[$0].tipo=TipoPath.ABS; this.$.push($$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("RelativePathExpr",$$[$0-1],"StepExpr") 
 break;
 case 37:
- this.$ = $$[$0-2]; $$[$0].tipo=TipoPath.REL; this.$.push($$[$0]); generarPadre(3);generarPadre(1);generarHijos("RelativePathExpr",$$[$0-1],"StepExpr") 
+ this.$ = $$[$0-2]; $$[$0].tipo=TipoPath.REL; this.$.push($$[$0]); grafo.generarPadre(3);grafo.generarPadre(1);grafo.generarHijos("RelativePathExpr",$$[$0-1],"StepExpr") 
 break;
 case 38:
- this.$=$$[$0]; generarPadre(1); generarHijos("PostfixExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("PostfixExpr") 
 break;
 case 39:
- this.$=$$[$0]; generarPadre(1); generarHijos("AxisStep") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("AxisStep") 
 break;
 case 40:
- this.$=$$[$0]; generarPadre(1);generarHijos("ReverseStep") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("ReverseStep") 
 break;
 case 41:
- this.$=$$[$0]; generarPadre(1);generarHijos("ForwardStep") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("ForwardStep") 
 break;
 case 42:
- this.$=$$[$0-1]; this.$.predicado=$$[$0]; generarPadre(2);generarPadre(1);generarHijos("ReverseStep","PredicateList") 
+ this.$=$$[$0-1]; this.$.predicado=$$[$0]; grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ReverseStep","PredicateList") 
 break;
 case 43:
- this.$=$$[$0-1]; this.$.predicado=$$[$0]; generarPadre(2);generarPadre(1);generarHijos("ForwardStep","PredicateList") 
+ this.$=$$[$0-1]; this.$.predicado=$$[$0]; grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ForwardStep","PredicateList") 
 break;
 case 44:
- this.$=[];this.$.push($$[$0]); generarPadre(1);generarHijos("Predicate") 
+ this.$=[];this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("Predicate") 
 break;
 case 45:
- this.$=$$[$0-1];this.$.push($$[$0]); generarPadre(2);generarPadre(1);generarHijos("PredicateList","Predicate") 
+ this.$=$$[$0-1];this.$.push($$[$0]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("PredicateList","Predicate") 
 break;
 case 46:
- this.$=$$[$0]; generarPadre(1); generarHijos("AbbrevForwardStep") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("AbbrevForwardStep") 
 break;
 case 47:
- this.$=$$[$0-1]; this.$.nombre=$$[$0]; generarPadre(2);generarPadre(1); generarHijos("ForwardAxis","NameTest") 
+ this.$=$$[$0-1]; this.$.nombre=$$[$0]; grafo.generarPadre(2);grafo.generarPadre(1); grafo.generarHijos("ForwardAxis","NameTest") 
 break;
 case 48:
- this.$=new Atributo($$[$0],[],TipoPath.ABS); generarPadre(2);generarHijos($$[$0-1],"NameTest") 
+ this.$=new Atributo($$[$0],[],TipoPath.ABS); grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"NameTest") 
 break;
 case 49:
- this.$=new Camino($$[$0],[],TipoPath.ABS); generarPadre(1);generarHijos("NameTest") 
+ this.$=new Camino($$[$0],[],TipoPath.ABS); grafo.generarPadre(1);grafo.generarHijos("NameTest") 
 break;
 case 50:
- this.$=new Child(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new Child(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 51:
- this.$=new Descendant(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new Descendant(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 52:
- this.$=new Attribute(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new Attribute(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 53:
- this.$=new Self(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new Self(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 54:
- this.$=new DescSelf(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new DescSelf(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 55:
- this.$=new FollowSibling(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new FollowSibling(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 56:
- this.$=new Follow(null,[],TipoPath.ABS); generarHijos($$[$0-1],$$[$0])  
+ this.$=new Follow(null,[],TipoPath.ABS); grafo.generarHijos($$[$0-1],$$[$0])  
 break;
 case 58:
- this.$=$$[$0]; generarPadre(1); generarHijos("NameTest") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("NameTest") 
 break;
 case 59: case 60: case 61:
- this.$=$$[$0]; generarHijos($$[$0]) 
+ this.$=$$[$0]; grafo.generarHijos($$[$0]) 
 break;
 case 62:
- this.$=$$[$0]; generarPadre(1);generarHijos("AbbrevReverseStep") 
+ this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("AbbrevReverseStep") 
 break;
 case 63:
- this.$=$$[$0-1]; this.$.nombre=$$[$0]; generarPadre(2);generarPadre(1);generarHijos("ReverseAxis","NameTest")  
+ this.$=$$[$0-1]; this.$.nombre=$$[$0]; grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ReverseAxis","NameTest")  
 break;
 case 64:
- this.$=new CaminoInverso("*",[],TipoPath.ABS); generarHijos($$[$0]) 
+ this.$=new CaminoInverso("*",[],TipoPath.ABS); grafo.generarHijos($$[$0]) 
 break;
 case 65:
- this.$=new Parent(null,[],Tipo.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new Parent(null,[],Tipo.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 66:
- this.$=new Ancestor(null,[],Tipo.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new Ancestor(null,[],Tipo.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 67:
- this.$=new PrecedingSibling(null,[],Tipo.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new PrecedingSibling(null,[],Tipo.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 68:
- this.$=new Preceding(null,[],Tipo.ABS); generarHijos($$[$0-1],$$[$0])
+ this.$=new Preceding(null,[],Tipo.ABS); grafo.generarHijos($$[$0-1],$$[$0])
 break;
 case 69:
- this.$=new AncestorSelf(null,[],Tipo,Tipo.ABS); generarHijos($$[$0-1],$$[$0]) 
+ this.$=new AncestorSelf(null,[],Tipo,Tipo.ABS); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 70:
- this.$=$$[$0]; generarPadre(1); generarHijos("PrimaryExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("PrimaryExpr") 
 break;
 case 71:
- this.$=$$[$0-1]; this.$.predicado = $$[$0]; generarPadre(2); generarPadre(1); generarHijos("PrimaryExpr","PostfixExprL") 
+ this.$=$$[$0-1]; this.$.predicado = $$[$0]; grafo.generarPadre(2); grafo.generarPadre(1); grafo.generarHijos("PrimaryExpr","PostfixExprL") 
 break;
 case 72:
- this.$=$$[$0-1]; generarPadre(2); generarHijos($$[$0-2],"ExprSingle",$$[$0]) 
+ this.$=$$[$0-1]; grafo.generarPadre(2); grafo.generarHijos($$[$0-2],"ExprSingle",$$[$0]) 
 break;
 case 73:
- this.$=$$[$0]; generarPadre(1); generarHijos("Literal") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("Literal") 
 break;
 case 74:
- this.$=$$[$0]; generarPadre(1); generarHijos("FunctionCall")
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("FunctionCall")
 break;
 case 75:
- this.$=$$[$0]; generarPadre(1); generarHijos("ContextItemExpr")
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("ContextItemExpr")
 break;
 case 76:
- this.$=$$[$0]; generarPadre(1); generarHijos("ParenthesizedExpr") 
+ this.$=$$[$0]; grafo.generarPadre(1); grafo.generarHijos("ParenthesizedExpr") 
 break;
 case 77:
- this.$=new Literal(Tipo.INTEGER,$$[$0]); generarHijos($$[$0]) 
+ this.$=new Literal(Tipo.INTEGER,$$[$0]); grafo.generarHijos($$[$0]) 
 break;
 case 78:
- this.$=new Literal(Tipo.DECIMAL,$$[$0]); generarHijos($$[$0]) 
+ this.$=new Literal(Tipo.DECIMAL,$$[$0]); grafo.generarHijos($$[$0]) 
 break;
 case 79:
- this.$=new Literal(Tipo.STRING,$$[$0]);  generarHijos($$[$0]) 
+ this.$=new Literal(Tipo.STRING,$$[$0]);  grafo.generarHijos($$[$0]) 
 break;
 case 80:
- this.$ = new CallFunction([],TipoPath.ABS,$$[$0-2]); generarHijos($$[$0-2],$$[$0-1],$$[$0])  
+ this.$ = new CallFunction([],TipoPath.ABS,$$[$0-2]); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0])  
 break;
 case 81:
- this.$=new ContextItemExpr([],TipoPath.ABS); generarHijos($$[$0]); 
+ this.$=new ContextItemExpr([],TipoPath.ABS); grafo.generarHijos($$[$0]); 
 break;
 case 82:
- this.$=$$[$0-1]+$$[$0]; generarHijos($$[$0-1],$$[$0]) 
+ this.$=$$[$0-1]+$$[$0]; grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 83:
- this.$=$$[$0-2]+$$[$0]; generarHijos($$[$0-2],$$[$0-1],$$[$0]) 
+ this.$=$$[$0-2]+$$[$0]; grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]) 
 break;
 }
 },
@@ -592,40 +581,9 @@ _handle_error:
   const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
   const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf,Preceding } = require('./Expresion/axes')
   const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
-
-  // Datos { id:contador,label:'Nombre' }
-  var pilaHijos = []
-  var GrahpvizNodo = ""
-  var pilaNodos= []
-  // DAtos { from:idActual, to: idHijos }
-  var PilaEdges= []
-  var GrahpvizEdges = ""
-  var contador = 0
-  //Genera los padres en funcion de los ultimos datos en la pila de Hijos
-  function generarPadre (posicion)
-  {
-    posicion--
-    var Edges = pilaHijos.pop()  
-    for(const temp of Edges)
-    {
-      PilaEdges.push({from:contador+posicion, to:temp.id})
-      GrahpvizEdges += `${contador+posicion} -> ${temp.id}\n`
-    }
-  }
-  //Funcion que recive X parametros 
-  function generarHijos()
-  {
-    var Hijos=[]
-    for(var i=0;i < arguments.length; i++)
-    {
-      var hijo = {id:contador,label:arguments[i]}
-      Hijos.push(hijo)
-      pilaNodos.push(hijo)
-      GrahpvizNodo += `${contador}[label="${arguments[i]}"]\n`
-      contador++
-    }
-    pilaHijos.push(Hijos)
-  }
+  const { grafoCST } = require('../CST')
+  
+  var grafo = new grafoCST(); 
 
   var ListaErrores = []
 /* generated by jison-lex 0.3.4 */

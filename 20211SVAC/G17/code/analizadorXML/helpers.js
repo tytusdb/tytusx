@@ -1,3 +1,4 @@
+
 export class nodo {
     constructor(linea,columna)
     {

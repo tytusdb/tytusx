@@ -85,136 +85,130 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-    this.$=$$[$0]; generarPadre(1); generarHijos("INICIO");
-    var retornoErrores = Object.assign([], ListaErrores);
-    ListaErrores = [];
-    var Nodes = Object.assign([], pilaNodos);
-    pilaNodos = [];
-    var Edges = Object.assign([], PilaEdges);
-    PilaEdges = [];
-    pilaHijos = [];
-    contador = 0;
-    return {datos:this.$,edges:Edges,nodes:Nodes,errores:retornoErrores}
-  
+      this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("INICIO");
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      var retornoGrafo = Object.assign({}, grafo);
+      grafo = new grafoCST();
+      return {datos:this.$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,errores:retornoErrores}
+    
 break;
 case 2:
 
+      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
       var retornoErrores = Object.assign([], ListaErrores);
       ListaErrores = [];
-      pilaNodos = [];
-      PilaEdges = [];
-      pilaHijos = [];
-      contador = 0;
-      ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
-       return {datos:[],edges:[],nodes:[],errores:retornoErrores}
+      var retornoGrafo = Object.assign({}, grafo);
+      grafo = new grafoCST();
+      return {datos:[],edges:[],nodes:[],errores:retornoErrores}
     
 break;
 case 3:
  this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column);  
-			generarPadre(1);generarHijos("LISTA_OBJETO")
+			grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO")
 		
 break;
 case 4:
  this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); 
-			generarPadre(2);generarPadre(1);generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
+			grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
 		
 break;
 case 5:
- this.$ = $$[$0-1]; this.$.push($$[$0].texto); generarPadre(2);generarPadre(1);generarHijos("LISTA_OBJETO","OBJETO")
+ this.$ = $$[$0-1]; this.$.push($$[$0].texto); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO","OBJETO")
 break;
 case 6:
- this.$ = $$[$0].esTexto ? $$[$0].texto: new Array($$[$0].texto); generarPadre(1);generarHijos("OBJETO") 
+ this.$ = $$[$0].esTexto ? $$[$0].texto: new Array($$[$0].texto); grafo.generarPadre(1);grafo.generarHijos("OBJETO") 
 break;
 case 7:
- this.$ = { texto:$$[$0], esTexto:false}; generarPadre(1);generarHijos("OBJETODOBLE")
+ this.$ = { texto:$$[$0], esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETODOBLE")
 break;
 case 8:
- this.$ = { texto:$$[$0], esTexto:false}; generarPadre(1);generarHijos("OBJETOSIMPLE")
+ this.$ = { texto:$$[$0], esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETOSIMPLE")
 break;
 case 9:
- this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; generarHijos("texto")
+ this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; grafo.generarHijos("texto")
 break;
 case 10:
 
 			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0],this._$.first_line,this._$.first_column) ? new helpers.Objeto($$[$0-1].tipo, $$[$0-1].atributos, [], this._$.first_line, this._$.first_column) : null;
-			generarPadre(2);generarPadre(1);generarHijos("ETIQUETAABRE","ETIQUETACIERRE")
+			grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETAABRE","ETIQUETACIERRE")
 		
 break;
 case 11:
  
 			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, $$[$0-2].atributos, $$[$0-1], this._$.first_line, this._$.first_column) : null;
-			generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
+			grafo.generarPadre(3);grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
 		
 break;
 case 12:
- this.$ = $$[$0-1]; generarPadre(2);generarHijos($$[$0-2],"LISTA_ATRIBUTOSCONF",$$[$0]) 
+ this.$ = $$[$0-1]; grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOSCONF",$$[$0]) 
 break;
 case 13:
- this.$ = []; generarHijos($$[$0-1],$$[$0])
+ this.$ = []; grafo.generarHijos($$[$0-1],$$[$0])
 break;
 case 14:
  
     ListaErrores.push({Error:'Este es un error Sintactico: ' + $$[$0-1] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     this.$= {tipo:$$[$0-2],atributos:[]}
-    this.$=[];generarHijos($$[$0-2],"error",$$[$0-1])
+    this.$=[];grafo.generarHijos($$[$0-2],"error",$$[$0-1])
   
 break;
 case 15:
- this.$ = $$[$0-1]; this.$.push($$[$0]); generarPadre(2);generarPadre(1);generarHijos("LISTA_ATRIBUTOSCONF","ATRIBUTOCONF")  
+ this.$ = $$[$0-1]; this.$.push($$[$0]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOSCONF","ATRIBUTOCONF")  
 break;
 case 16:
- this.$ = []; this.$.push($$[$0]); generarPadre(1);generarHijos("ATRIBUTOCONF") 
+ this.$ = []; this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF") 
 break;
 case 17:
  
-      this.$=$$[$0-1]; generarPadre(1); generarHijos("ATRIBUTO","error") 
+      this.$=$$[$0-1]; grafo.generarPadre(1); grafo.generarHijos("ATRIBUTO","error") 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})  
     
 break;
 case 18:
  
       this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
-      generarHijos($$[$0-2],$$[$0-1],$$[$0]);
+      grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]);
       if ($$[$0-2] == 'encoding')
         tipoCodificacion =  $$[$0]
     
 break;
 case 19:
- this.$ = {tipo:$$[$0-1], atributos:[]}; generarHijos($$[$0-1],$$[$0]) 
+ this.$ = {tipo:$$[$0-1], atributos:[]}; grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 20:
- this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]}; generarPadre(2);generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0])  
+ this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]}; grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0])  
 break;
 case 21: case 25:
  
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0-1] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
       this.$= {tipo:$$[$0-2],atributos:[]}
-      generarHijos($$[$0-2],"error",$$[$0])
+      grafo.generarHijos($$[$0-2],"error",$$[$0])
     
 break;
 case 22:
- this.$ = $$[$0-1]; generarHijos($$[$0-1],$$[$0]) 
+ this.$ = $$[$0-1]; grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 23:
- this.$ = new helpers.Objeto($$[$0-1],[],[],this._$.first_line, this._$.first_column); generarHijos($$[$0-1],$$[$0]) 
+ this.$ = new helpers.Objeto($$[$0-1],[],[],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-1],$$[$0]) 
 break;
 case 24:
- this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[],this._$.first_line, this._$.first_column); generarPadre(2);generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0]) 
+ this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[],this._$.first_line, this._$.first_column); grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0]) 
 break;
 case 26:
- this.$ = $$[$0-1]; this.$.push($$[$0]); generarPadre(2);generarPadre(1);generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") 
+ this.$ = $$[$0-1]; this.$.push($$[$0]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") 
 break;
 case 27:
- this.$ = []; this.$.push($$[$0]); generarPadre(1);generarHijos("ATRIBUTO")
+ this.$ = []; this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO")
 break;
 case 28:
  
-      this.$=$$[$0-1]; generarPadre(1); generarHijos("ATRIBUTO","error") 
+      this.$=$$[$0-1]; grafo.generarPadre(1); grafo.generarHijos("ATRIBUTO","error") 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     
 break;
 case 29:
-this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); generarHijos($$[$0-2],$$[$0-1],$$[$0]);
+this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]);
 break;
 }
 },
@@ -469,7 +463,11 @@ _handle_error:
 }};
 
 	var helpers = require('./helpers')
+  const {grafoCST} = require('../CST')
+  var grafo = new grafoCST; 
 	var atributosRaiz = []
+  var tipoCodificacion = "utf8"
+
 	function objetoCorrecto (inicio, fin,linea,columna){
     if(!inicio || !fin)
     {
@@ -488,40 +486,8 @@ _handle_error:
     }
 	}
   // Codificación global
-  var tipoCodificacion = "utf8"
-  // Datos { id:contador,label:'Nombre' }
-  var pilaHijos = []
-  var GrahpvizNodo = ""
-  var pilaNodos= []
-  // DAtos { from:idActual, to: idHijos }
-  var PilaEdges= []
-  var GrahpvizEdges = ""
-  var contador = 0
-  //Genera los padres en funcion de los ultimos datos en la pila de Hijos
-  function generarPadre (posicion)
-  {
-    posicion--
-    var Edges = pilaHijos.pop()  
-    for(const temp of Edges)
-    {
-      PilaEdges.push({from:contador+posicion, to:temp.id})
-      GrahpvizEdges += `${contador+posicion} -> ${temp.id}\n`
-    }
-  }
-  //Funcion que recive X parametros 
-  function generarHijos()
-  {
-    var Hijos=[]
-    for(var i=0;i < arguments.length; i++)
-    {
-      var hijo = {id:contador,label:arguments[i]}
-      Hijos.push(hijo)
-      pilaNodos.push(hijo)
-      GrahpvizNodo += `${contador}[label="${arguments[i]}"]\n`
-      contador++
-    }
-    pilaHijos.push(Hijos)
-  }
+
+
 
   function ReemplazaTexto(texto)
   {
@@ -530,10 +496,10 @@ _handle_error:
       return texto
     }
     var result = texto.split("&lt;").join("<");
-    result = texto.split("&gt;").join(">");
-    result = texto.split("&amp;").join("&");
-    result = texto.split("&apos;").join("'");
-    result = texto.split("&quot;").join(`"`);
+    result = result.split("&gt;").join(">");
+    result = result.split("&amp;").join("&");
+    result = result.split("&apos;").join("'");
+    result = result.split("&quot;").join(`"`);
     return result
   }
 

@@ -1,21 +1,23 @@
 %{
 	var helpers = require('../analizadorXML/helpers')
-  const {grafoCST} = require('./CSTXMLDESC')
-  var grafo = new grafoCST; 
+  const {grafoCST} = require('../CST')
+  var grafo = new grafoCST(); 
 	var atributosRaiz = []
 	// Codificación global
   var tipoCodificacion = "utf8"
+
   function objetoCorrecto (inicio, fin, linea, columna){
-    if(!inicio || !fin)
+    if(!inicio || fin==undefined)
     {
       return undefined
     }
 		inicio = inicio.replace('<','')
-    if(fin == ""){
+    if(fin.tipo == ""){
+      fin.tipo=inicio
       return inicio;
     }
-		fin = fin.replace('</','')
-    if(inicio === fin){
+		var tempfin = fin.tipo.replace('</','')
+    if(inicio === tempfin){
       return inicio;
     }
     ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", Linea: linea , columna:columna})
@@ -29,10 +31,10 @@
       return texto
     }
     var result = texto.split("&lt;").join("<");
-    result = texto.split("&gt;").join(">");
-    result = texto.split("&amp;").join("&");
-    result = texto.split("&apos;").join("'");
-    result = texto.split("&quot;").join(`"`);
+    result = result.split("&gt;").join(">");
+    result = result.split("&amp;").join("&");
+    result = result.split("&apos;").join("'");
+    result = result.split("&quot;").join(`"`);
     return result
   }
 
@@ -66,11 +68,11 @@
 <Etiquetai>\n        {}
 
 <Etiquetai>[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]* { return 'AtributoEtiqueta'}
-<Etiquetai>"=" 						{ return 'IgualAtributo'}
-<Etiquetai>\"[^\n\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
-<Etiquetai>[^A-ZÑa-zñ_=">/]+   { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
-<Etiquetai>">"						{ this.popState(); return 'CierreEtiquetaI'}
-<Etiquetai>"/>"						{ this.popState(); return 'FinEtiquetaI'}
+<Etiquetai>"=" 						      { return 'IgualAtributo'}
+<Etiquetai>\"[^\n\"]*\"				  { yytext = yytext.substr(1,yyleng-2); return 'ValorAtributo'}
+<Etiquetai>[^A-ZÑa-zñ_="/>]+    { ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
+<Etiquetai>">"						      { this.popState(); return 'CierreEtiquetaI'}
+<Etiquetai>"/>"						      { this.popState(); return 'FinEtiquetaI'}
 
 
 "</"[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*  		{ this.begin("Etiquetac"); return 'InicioEtiquetaC'}
@@ -149,7 +151,7 @@ OBJETO
 ;
 
 OBJETOGENERAL
-  : InicioEtiquetaI SUB_OBJETOGENERAL                         { $2.Linea=this._$.first_line; $2.columna=this._$.first_column; $$ = objetoCorrecto($1, $2.tipo,this._$.first_line, this._$.first_column)? $2:null; grafo.generarPadre(2);grafo.generarHijos($1,"SUB_OBJETOGENERAL") }
+  : InicioEtiquetaI SUB_OBJETOGENERAL                         { $2.Linea=this._$.first_line; $2.columna=this._$.first_column; $$ = objetoCorrecto($1, $2,this._$.first_line, this._$.first_column)? $2:null; grafo.generarPadre(2);grafo.generarHijos($1,"SUB_OBJETOGENERAL") }
 ;
 
 SUB_OBJETOGENERAL

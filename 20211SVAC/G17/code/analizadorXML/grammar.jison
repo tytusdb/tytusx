@@ -1,6 +1,10 @@
 %{
 	var helpers = require('./helpers')
+  const {grafoCST} = require('../CST')
+  var grafo = new grafoCST; 
 	var atributosRaiz = []
+  var tipoCodificacion = "utf8"
+
 	function objetoCorrecto (inicio, fin,linea,columna){
     if(!inicio || !fin)
     {
@@ -19,40 +23,8 @@
     }
 	}
   // Codificación global
-  var tipoCodificacion = "utf8"
-  // Datos { id:contador,label:'Nombre' }
-  var pilaHijos = []
-  var GrahpvizNodo = ""
-  var pilaNodos= []
-  // DAtos { from:idActual, to: idHijos }
-  var PilaEdges= []
-  var GrahpvizEdges = ""
-  var contador = 0
-  //Genera los padres en funcion de los ultimos datos en la pila de Hijos
-  function generarPadre (posicion)
-  {
-    posicion--
-    var Edges = pilaHijos.pop()  
-    for(const temp of Edges)
-    {
-      PilaEdges.push({from:contador+posicion, to:temp.id})
-      GrahpvizEdges += `${contador+posicion} -> ${temp.id}\n`
-    }
-  }
-  //Funcion que recive X parametros 
-  function generarHijos()
-  {
-    var Hijos=[]
-    for(var i=0;i < arguments.length; i++)
-    {
-      var hijo = {id:contador,label:arguments[i]}
-      Hijos.push(hijo)
-      pilaNodos.push(hijo)
-      GrahpvizNodo += `${contador}[label="${arguments[i]}"]\n`
-      contador++
-    }
-    pilaHijos.push(Hijos)
-  }
+
+
 
   function ReemplazaTexto(texto)
   {
@@ -61,10 +33,10 @@
       return texto
     }
     var result = texto.split("&lt;").join("<");
-    result = texto.split("&gt;").join(">");
-    result = texto.split("&amp;").join("&");
-    result = texto.split("&apos;").join("'");
-    result = texto.split("&quot;").join(`"`);
+    result = result.split("&gt;").join(">");
+    result = result.split("&amp;").join("&");
+    result = result.split("&apos;").join("'");
+    result = result.split("&quot;").join(`"`);
     return result
   }
 
@@ -136,81 +108,75 @@
 
 ini 
   : CUERPO	
-  {
-    $$=$1; generarPadre(1); generarHijos("INICIO");
-    var retornoErrores = Object.assign([], ListaErrores);
-    ListaErrores = [];
-    var Nodes = Object.assign([], pilaNodos);
-    pilaNodos = [];
-    var Edges = Object.assign([], PilaEdges);
-    PilaEdges = [];
-    pilaHijos = [];
-    contador = 0;
-    return {datos:$$,edges:Edges,nodes:Nodes,errores:retornoErrores}
-  }
-  | error 
     {
+      $$=$1; grafo.generarPadre(1);grafo.generarHijos("INICIO");
       var retornoErrores = Object.assign([], ListaErrores);
       ListaErrores = [];
-      pilaNodos = [];
-      PilaEdges = [];
-      pilaHijos = [];
-      contador = 0;
+      var retornoGrafo = Object.assign({}, grafo);
+      grafo = new grafoCST();
+      return {datos:$$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,errores:retornoErrores}
+    }
+  | error 
+    {
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 
-       return {datos:[],edges:[],nodes:[],errores:retornoErrores}
+      var retornoErrores = Object.assign([], ListaErrores);
+      ListaErrores = [];
+      var retornoGrafo = Object.assign({}, grafo);
+      grafo = new grafoCST();
+      return {datos:[],edges:[],nodes:[],errores:retornoErrores}
     }
 ;
 
 CUERPO
 	: LISTA_OBJETO EOF 									
 		{ $$ = new helpers.Objeto("/",[],$1,this._$.first_line, this._$.first_column);  
-			generarPadre(1);generarHijos("LISTA_OBJETO")
+			grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO")
 		}
 	| ETIQUETACONFIGURACION LISTA_OBJETO EOF			
 		{ $$ = new helpers.Objeto("/",$1,$2,this._$.first_line, this._$.first_column); 
-			generarPadre(2);generarPadre(1);generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
+			grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
 		}
 ;
 
 LISTA_OBJETO
-	: LISTA_OBJETO OBJETO					  { $$ = $1; $$.push($2.texto); generarPadre(2);generarPadre(1);generarHijos("LISTA_OBJETO","OBJETO")}
-	| OBJETO											  { $$ = $1.esTexto ? $1.texto: new Array($1.texto); generarPadre(1);generarHijos("OBJETO") }
+	: LISTA_OBJETO OBJETO					  { $$ = $1; $$.push($2.texto); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO","OBJETO")}
+	| OBJETO											  { $$ = $1.esTexto ? $1.texto: new Array($1.texto); grafo.generarPadre(1);grafo.generarHijos("OBJETO") }
 ;
 
 OBJETO
-	: OBJETODOBLE										{ $$ = { texto:$1, esTexto:false}; generarPadre(1);generarHijos("OBJETODOBLE")}
-	| OBJETOSIMPLE									{ $$ = { texto:$1, esTexto:false}; generarPadre(1);generarHijos("OBJETOSIMPLE")}
-	| Texto 											  { $$ = { texto:helpers.CambiarCodificacion($1,tipoCodificacion), esTexto:true}; generarHijos("texto")}
+	: OBJETODOBLE										{ $$ = { texto:$1, esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETODOBLE")}
+	| OBJETOSIMPLE									{ $$ = { texto:$1, esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETOSIMPLE")}
+	| Texto 											  { $$ = { texto:helpers.CambiarCodificacion($1,tipoCodificacion), esTexto:true}; grafo.generarHijos("texto")}
 ;
 
 OBJETODOBLE
 	: ETIQUETAABRE ETIQUETACIERRE						{
 			$$ = objetoCorrecto($1.tipo, $2,this._$.first_line,this._$.first_column) ? new helpers.Objeto($1.tipo, $1.atributos, [], this._$.first_line, this._$.first_column) : null;
-			generarPadre(2);generarPadre(1);generarHijos("ETIQUETAABRE","ETIQUETACIERRE")
+			grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETAABRE","ETIQUETACIERRE")
 		}
 	| ETIQUETAABRE LISTA_OBJETO ETIQUETACIERRE 			{ 
 			$$ = objetoCorrecto($1.tipo, $3) ? new helpers.Objeto($1.tipo, $1.atributos, $2, this._$.first_line, this._$.first_column) : null;
-			generarPadre(3);generarPadre(2);generarPadre(1);generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
+			grafo.generarPadre(3);grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
 		}
 ;
 
 ETIQUETACONFIGURACION
-  : InicioEtiquetaConf LISTA_ATRIBUTOSCONF CierreEtiquetaConf 	{ $$ = $2; generarPadre(2);generarHijos($1,"LISTA_ATRIBUTOSCONF",$3) }
-  | InicioEtiquetaConf CierreEtiquetaConf           			{ $$ = []; generarHijos($1,$2)}
+  : InicioEtiquetaConf LISTA_ATRIBUTOSCONF CierreEtiquetaConf 	{ $$ = $2; grafo.generarPadre(2);grafo.generarHijos($1,"LISTA_ATRIBUTOSCONF",$3) }
+  | InicioEtiquetaConf CierreEtiquetaConf           			{ $$ = []; grafo.generarHijos($1,$2)}
   | InicioEtiquetaConf error CierreEtiquetaConf   
   { 
     ListaErrores.push({Error:'Este es un error Sintactico: ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     $$= {tipo:$1,atributos:[]}
-    $$=[];generarHijos($1,"error",$2)
+    $$=[];grafo.generarHijos($1,"error",$2)
   }
 ;
 
 LISTA_ATRIBUTOSCONF
-  : LISTA_ATRIBUTOSCONF ATRIBUTOCONF       	{ $$ = $1; $$.push($2); generarPadre(2);generarPadre(1);generarHijos("LISTA_ATRIBUTOSCONF","ATRIBUTOCONF")  }
-  | ATRIBUTOCONF                			{ $$ = []; $$.push($1); generarPadre(1);generarHijos("ATRIBUTOCONF") }
+  : LISTA_ATRIBUTOSCONF ATRIBUTOCONF       	{ $$ = $1; $$.push($2); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOSCONF","ATRIBUTOCONF")  }
+  | ATRIBUTOCONF                			{ $$ = []; $$.push($1); grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF") }
   | LISTA_ATRIBUTOSCONF error             
     { 
-      $$=$1; generarPadre(1); generarHijos("ATRIBUTO","error") 
+      $$=$1; grafo.generarPadre(1); grafo.generarHijos("ATRIBUTO","error") 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})  
     }
 ;
@@ -218,7 +184,7 @@ LISTA_ATRIBUTOSCONF
 ATRIBUTOCONF
   : AtributoConf IgualAtributoConf ValorAtributoConf  { 
       $$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); 
-      generarHijos($1,$2,$3);
+      grafo.generarHijos($1,$2,$3);
       if ($1 == 'encoding')
         tipoCodificacion =  $3
     }
@@ -226,43 +192,43 @@ ATRIBUTOCONF
 
 
 ETIQUETAABRE
-	: InicioEtiquetaI CierreEtiquetaI					{ $$ = {tipo:$1, atributos:[]}; generarHijos($1,$2) }
-	| InicioEtiquetaI LISTA_ATRIBUTOS CierreEtiquetaI	{ $$ = {tipo:$1, atributos:$2}; generarPadre(2);generarHijos($1,"LISTA_ATRIBUTOS",$3)  }
+	: InicioEtiquetaI CierreEtiquetaI					{ $$ = {tipo:$1, atributos:[]}; grafo.generarHijos($1,$2) }
+	| InicioEtiquetaI LISTA_ATRIBUTOS CierreEtiquetaI	{ $$ = {tipo:$1, atributos:$2}; grafo.generarPadre(2);grafo.generarHijos($1,"LISTA_ATRIBUTOS",$3)  }
   | InicioEtiquetaI error CierreEtiquetaI   
     { 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
       $$= {tipo:$1,atributos:[]}
-      generarHijos($1,"error",$3)
+      grafo.generarHijos($1,"error",$3)
     }
 ;
 
 ETIQUETACIERRE
-	: InicioEtiquetaC CierreEtiquetaC					{ $$ = $1; generarHijos($1,$2) }
+	: InicioEtiquetaC CierreEtiquetaC					{ $$ = $1; grafo.generarHijos($1,$2) }
 ;
 
 OBJETOSIMPLE
-	: InicioEtiquetaI FinEtiquetaI						{ $$ = new helpers.Objeto($1,[],[],this._$.first_line, this._$.first_column); generarHijos($1,$2) }
-	| InicioEtiquetaI LISTA_ATRIBUTOS FinEtiquetaI		{ $$ = new helpers.Objeto($1,$2,[],this._$.first_line, this._$.first_column); generarPadre(2);generarHijos($1,"LISTA_ATRIBUTOS",$3) }
+	: InicioEtiquetaI FinEtiquetaI						{ $$ = new helpers.Objeto($1,[],[],this._$.first_line, this._$.first_column); grafo.generarHijos($1,$2) }
+	| InicioEtiquetaI LISTA_ATRIBUTOS FinEtiquetaI		{ $$ = new helpers.Objeto($1,$2,[],this._$.first_line, this._$.first_column); grafo.generarPadre(2);grafo.generarHijos($1,"LISTA_ATRIBUTOS",$3) }
   | InicioEtiquetaI error FinEtiquetaI   
     { 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
       $$= {tipo:$1,atributos:[]}
-      generarHijos($1,"error",$3)
+      grafo.generarHijos($1,"error",$3)
     }
 ;
 
 LISTA_ATRIBUTOS
-	: LISTA_ATRIBUTOS ATRIBUTO							{ $$ = $1; $$.push($2); generarPadre(2);generarPadre(1);generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") }
-	| ATRIBUTO											{ $$ = []; $$.push($1); generarPadre(1);generarHijos("ATRIBUTO")}
+	: LISTA_ATRIBUTOS ATRIBUTO							{ $$ = $1; $$.push($2); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") }
+	| ATRIBUTO											{ $$ = []; $$.push($1); grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO")}
   | LISTA_ATRIBUTOS error 
     { 
-      $$=$1; generarPadre(1); generarHijos("ATRIBUTO","error") 
+      $$=$1; grafo.generarPadre(1); grafo.generarHijos("ATRIBUTO","error") 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $2 ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     }
 ;
 
 ATRIBUTO
-	: AtributoEtiqueta IgualAtributo ValorAtributo		{$$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); generarHijos($1,$2,$3);}
+	: AtributoEtiqueta IgualAtributo ValorAtributo		{$$ = new helpers.Atributo($1,$3,this._$.first_line, this._$.first_column); grafo.generarHijos($1,$2,$3);}
 ;
 
 

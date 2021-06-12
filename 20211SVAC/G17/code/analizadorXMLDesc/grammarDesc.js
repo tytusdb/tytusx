@@ -130,7 +130,7 @@ case 9:
  this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; grafo.generarHijos("Texto")
 break;
 case 10:
- $$[$0].Linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0].tipo,this._$.first_line, this._$.first_column)? $$[$0]:null; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_OBJETOGENERAL") 
+ $$[$0].Linea=this._$.first_line; $$[$0].columna=this._$.first_column; this.$ = objetoCorrecto($$[$0-1], $$[$0],this._$.first_line, this._$.first_column)? $$[$0]:null; grafo.generarPadre(2);grafo.generarHijos($$[$0-1],"SUB_OBJETOGENERAL") 
 break;
 case 11:
  this.$=$$[$0]; this.$.atributos=$$[$0-1]; grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOS","CIERRE_ETIQUETAINICIO")
@@ -493,22 +493,24 @@ _handle_error:
 }};
 
 	var helpers = require('../analizadorXML/helpers')
-  const {grafoCST} = require('./CSTXMLDESC')
-  var grafo = new grafoCST; 
+  const {grafoCST} = require('../CST')
+  var grafo = new grafoCST(); 
 	var atributosRaiz = []
 	// Codificación global
   var tipoCodificacion = "utf8"
+
   function objetoCorrecto (inicio, fin, linea, columna){
-    if(!inicio || !fin)
+    if(!inicio || fin==undefined)
     {
       return undefined
     }
 		inicio = inicio.replace('<','')
-    if(fin == ""){
+    if(fin.tipo == ""){
+      fin.tipo=inicio
       return inicio;
     }
-		fin = fin.replace('</','')
-    if(inicio === fin){
+		var tempfin = fin.tipo.replace('</','')
+    if(inicio === tempfin){
       return inicio;
     }
     ListaErrores.push({Error:'Este es un error Semantico: Etiquetas no coinciden',tipo:"Semantico", Linea: linea , columna:columna})
@@ -522,10 +524,10 @@ _handle_error:
       return texto
     }
     var result = texto.split("&lt;").join("<");
-    result = texto.split("&gt;").join(">");
-    result = texto.split("&amp;").join("&");
-    result = texto.split("&apos;").join("'");
-    result = texto.split("&quot;").join(`"`);
+    result = result.split("&gt;").join(">");
+    result = result.split("&amp;").join("&");
+    result = result.split("&apos;").join("'");
+    result = result.split("&quot;").join(`"`);
     return result
   }
 
@@ -923,7 +925,7 @@ case 30: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">/]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_="/>]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
 conditions: {"EtiquetaComentario":{"rules":[4,5,6,7],"inclusive":false},"EtiquetaConf":{"rules":[22,23,24,25,26,27],"inclusive":false},"Etiquetac":{"rules":[17,18,19,20],"inclusive":false},"Etiquetai":{"rules":[8,9,10,11,12,13,14,15],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,16,21,28,29,30],"inclusive":true}}
 });
 return lexer;
