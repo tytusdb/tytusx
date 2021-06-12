@@ -101,6 +101,8 @@ function getValor(exp:any, ts:TablaSimbolos): any {
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL){
             const res  = exp1 == exp2;
 			return res;
+        }else{
+            return "error";
         }
     }else if(exp.clase===TIPO_EXPRESION.OP_LOGICA){
         var exp1 = getValor(exp.operandoIzq, ts);
