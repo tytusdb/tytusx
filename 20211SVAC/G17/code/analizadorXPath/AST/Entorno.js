@@ -14,15 +14,15 @@ export const Tipo = {
 export var Siblings = []
 
 export const Colision = 
-  [
-    [true , true , false, false, false, true , false],
-    [true , true , false, false, false, true , false],
-    [false, false, true , true , false, true , false],
-    [false, false, true , true , false, true , false],
-    [false, false, false, false, true , false, false],
-    [true , true , true , true , false, true , false],
-    [false, false, false, false, false, false, false]
-  ]
+[
+  [true , true , false, false, false, true , false],
+  [true , true , false, false, false, true , false],
+  [false, false, true , true , false, true , false],
+  [false, false, true , true , false, true , false],
+  [false, false, false, false, true , false, false],
+  [true , true , true , true , false, true , false],
+  [false, false, false, false, false, false, false]
+]
 
 export const ColisionTipo = 
 [
@@ -99,7 +99,7 @@ export class Comando
     ListaNodes.push(nodoActual)
     for(var i = 0; i < this.Instrucciones.length; i++)
     {
-      var nodos = this.Instrucciones[0].Graficar(ListaNodes,ListaEdges,contador)
+      var nodos = this.Instrucciones[i].Graficar(ListaNodes,ListaEdges,contador)
       if(i!=0)
       {
         ListaNodes.push({id:contador.num,label:"|"})

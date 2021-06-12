@@ -85,12 +85,13 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-      this.$=$$[$0]; grafo.generarPadre(1);grafo.generarHijos("INICIO");
+      this.$=$$[$0]; grafo.generarPadre(1,"INICIO");
+      grafo.generarHijos("INICIO");
       var retornoErrores = Object.assign([], ListaErrores);
       ListaErrores = [];
       var retornoGrafo = Object.assign({}, grafo);
       grafo = new grafoCST();
-      return {datos:this.$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,errores:retornoErrores}
+      return {datos:this.$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,tabla:retornoGrafo.TablaGramatica,errores:retornoErrores}
     
 break;
 case 2:
@@ -104,111 +105,221 @@ case 2:
     
 break;
 case 3:
- this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column);  
-			grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO")
+ 
+      this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column);  
+			grafo.generarPadre(1,"LISTA_OBJETO");
+      grafo.generarHijos("LISTA_OBJETO")
+      grafo.generarTexto("Cuerpo.entorno = ListaObjeto.entorno")
 		
 break;
 case 4:
- this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); 
-			grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
+ 
+      this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); 
+			grafo.generarPadre(2,"LISTA_OBJETO");
+      grafo.generarPadre(1,"ETIQUETACONFIGURACION");
+      grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO")
+      grafo.generarTexto("Cuerpo.entorno = ListaObjeto.entorno; Cuerpo.configuraciones = EtiquetaConfiguracion.configuraciones")
 		
 break;
 case 5:
- this.$ = $$[$0-1]; this.$.push($$[$0].texto); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_OBJETO","OBJETO")
+ 
+    this.$ = $$[$0-1]; this.$.push($$[$0].texto); 
+    grafo.generarPadre(2,"OBJETO");
+    grafo.generarPadre(1,"LISTA_OBJETO");
+    grafo.generarHijos("LISTA_OBJETO","OBJETO")
+    grafo.generarTexto('ListaObjeto.entorno = ListaObjeto_1.entorno; LostaObjeto.entorno.set(Objeto.val)')
+  
 break;
 case 6:
- this.$ = $$[$0].esTexto ? $$[$0].texto: new Array($$[$0].texto); grafo.generarPadre(1);grafo.generarHijos("OBJETO") 
+ 
+    this.$ = $$[$0].esTexto ? $$[$0].texto: new Array($$[$0].texto); 
+    grafo.generarPadre(1,"OBJETO");
+    grafo.generarHijos("OBJETO") 
+    grafo.generarTexto(`ListaObjeto.entorno = new Entorno(); LostaObjeto.entorno.set(Objeto.val)`)
+  
 break;
 case 7:
- this.$ = { texto:$$[$0], esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETODOBLE")
+ 
+    this.$ = { texto:$$[$0], esTexto:false}; 
+    grafo.generarPadre(1,"OBJETODOBLE");
+    grafo.generarHijos("OBJETODOBLE")
+    grafo.generarTexto("Objeto.val = ObjetoDoble.val")
+  
 break;
 case 8:
- this.$ = { texto:$$[$0], esTexto:false}; grafo.generarPadre(1);grafo.generarHijos("OBJETOSIMPLE")
+ 
+    this.$ = { texto:$$[$0], esTexto:false}; 
+    grafo.generarPadre(1,"OBJETOSIMPLE");
+    grafo.generarHijos("OBJETOSIMPLE")
+    grafo.generarTexto("Objeto.val = ObjetoSimple.val")
+  
 break;
 case 9:
- this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; grafo.generarHijos("texto")
+ 
+    this.$ = { texto:helpers.CambiarCodificacion($$[$0],tipoCodificacion), esTexto:true}; 
+    grafo.generarHijos("texto")
+    grafo.generarTexto("Texto.val=texto")
+  
 break;
 case 10:
 
 			this.$ = objetoCorrecto($$[$0-1].tipo, $$[$0],this._$.first_line,this._$.first_column) ? new helpers.Objeto($$[$0-1].tipo, $$[$0-1].atributos, [], this._$.first_line, this._$.first_column) : null;
-			grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETAABRE","ETIQUETACIERRE")
+			grafo.generarPadre(2,"ETIQUETACIERRE");
+      grafo.generarPadre(1,"ETIQUETAABRE");
+      grafo.generarHijos("ETIQUETAABRE","ETIQUETACIERRE")
+      grafo.generarTexto(`if(EtiquetaAbre.nombre==EtiquetaCierra.nombre){ ObjetoDoble.val = new Etiqueta(EtiquetaAbre.nombre) } else { new Error() }`)
 		
 break;
 case 11:
  
 			this.$ = objetoCorrecto($$[$0-2].tipo, $$[$0]) ? new helpers.Objeto($$[$0-2].tipo, $$[$0-2].atributos, $$[$0-1], this._$.first_line, this._$.first_column) : null;
-			grafo.generarPadre(3);grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
+			grafo.generarPadre(3,"ETIQUETACIERRE");
+      grafo.generarPadre(2,"LISTA_OBJETO");
+      grafo.generarPadre(1,"ETIQUETAABRE");
+      grafo.generarHijos("ETIQUETAABRE","LISTA_OBJETO","ETIQUETACIERRE")
+      grafo.generarTexto(`if(EtiquetaAbre.nombre==EtiquetaCierra.nombre){ ObjetoDoble.val = new Etiqueta(EtiquetaAbre.nombre,Lista_Objetos.entorno); } else { new Error() }`)
 		
 break;
 case 12:
- this.$ = $$[$0-1]; grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOSCONF",$$[$0]) 
+ 
+    this.$ = $$[$0-1]; grafo.generarPadre(2,"LISTA_ATRIBUTOSCONF");
+    grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOSCONF",$$[$0]) 
+    grafo.generarTexto(`EtiquetaConfiguracion.configuraciones=Lista_AtributosConf.configuraciones; `)
+  
 break;
 case 13:
- this.$ = []; grafo.generarHijos($$[$0-1],$$[$0])
+ 
+    this.$ = []; 
+    grafo.generarHijos($$[$0-1],$$[$0])
+    grafo.generarTexto(`EtiquetaConfiguracion.configuraciones=[]`)
+  
 break;
 case 14:
  
     ListaErrores.push({Error:'Este es un error Sintactico: ' + $$[$0-1] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     this.$= {tipo:$$[$0-2],atributos:[]}
     this.$=[];grafo.generarHijos($$[$0-2],"error",$$[$0-1])
+    grafo.generarTexto(`EtiquetaConfiguracion.configuraciones=[]; new Error()`)
   
 break;
 case 15:
- this.$ = $$[$0-1]; this.$.push($$[$0]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOSCONF","ATRIBUTOCONF")  
+ 
+      this.$ = $$[$0-1]; this.$.push($$[$0]); 
+      grafo.generarPadre(2,"ATRIBUTOCONF");
+      grafo.generarPadre(1,"LISTA_ATRIBUTOSCONF");
+      grafo.generarHijos("LISTA_ATRIBUTOSCONF","ATRIBUTOCONF")  
+      grafo.generarTexto(`Lista_AtributoConf.configuraciones=Lista_AtributoConf.configuraciones; Lista_AtributoConf.configuraciones.push(AtributoConf.configuracion)`)
+    
 break;
 case 16:
- this.$ = []; this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("ATRIBUTOCONF") 
+ 
+      this.$ = []; 
+      this.$.push($$[$0]); 
+      grafo.generarPadre(1,"ATRIBUTOCONF");
+      grafo.generarHijos("ATRIBUTOCONF") 
+      grafo.generarTexto(`Lista_AtributoConf.configuraciones= []; Lista_AtributoConf.configuraciones.push(AtributoConf.configuracion)`)
+    
 break;
 case 17:
  
-      this.$=$$[$0-1]; grafo.generarPadre(1); grafo.generarHijos("ATRIBUTO","error") 
+      this.$=$$[$0-1]; grafo.generarPadre(1,"LISTA_ATRIBUTOSCONF"); grafo.generarHijos("ATRIBUTO","error") 
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})  
+      grafo.generarTexto(`Lista_AtributoConf.configuraciones=Lista_AtributoConf.configuraciones; new Error()`)
     
 break;
 case 18:
  
       this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
       grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]);
-      if ($$[$0-2] == 'encoding')
-        tipoCodificacion =  $$[$0]
+      if ($$[$0-2] == 'encoding') tipoCodificacion =  $$[$0]
+      grafo.generarTexto(`AtributoConf.configuracion = new Configuracion(${$$[$0-2]},${$$[$0]},${this._$.first_line},${this._$.first_column})`)
     
 break;
 case 19:
- this.$ = {tipo:$$[$0-1], atributos:[]}; grafo.generarHijos($$[$0-1],$$[$0]) 
+ 
+      this.$ = {tipo:$$[$0-1], atributos:[]}; 
+      grafo.generarHijos($$[$0-1],$$[$0]) 
+      grafo.generarTexto(`EtiquetaAbre.nombre = ${$$[$0-1].replace("<","")}`)
+    
 break;
 case 20:
- this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]}; grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0])  
+ 
+      this.$ = {tipo:$$[$0-2], atributos:$$[$0-1]}; grafo.generarPadre(2,"LISTA_ATRIBUTOS");
+      grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0])  
+      grafo.generarTexto(`EtiquetaAbre.nombre = ${$$[$0-2].replace("<","")}; EtiquetaAbre.entorno = Lista_Atributos.entorno`)
+    
 break;
-case 21: case 25:
+case 21:
  
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0-1] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
       this.$= {tipo:$$[$0-2],atributos:[]}
       grafo.generarHijos($$[$0-2],"error",$$[$0])
+      grafo.generarTexto(`EtiquetaAbre.nombre = ${$$[$0-2].replace("<","")};new Error()`)
     
 break;
 case 22:
- this.$ = $$[$0-1]; grafo.generarHijos($$[$0-1],$$[$0]) 
+ 
+      this.$ = $$[$0-1]; 
+      grafo.generarHijos($$[$0-1],$$[$0]) 
+      grafo.generarTexto(`EtiquetaCierre.nombre = ${$$[$0-1].replace("</","")}`)
+    
 break;
 case 23:
- this.$ = new helpers.Objeto($$[$0-1],[],[],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-1],$$[$0]) 
+ 
+      this.$ = new helpers.Objeto($$[$0-1],[],[],this._$.first_line, this._$.first_column); 
+      grafo.generarHijos($$[$0-1],$$[$0]) 
+      grafo.generarTexto(`ObjetoSimple.val = new Etiqueta(${$$[$0-1].replace("<","")})`)
+    
 break;
 case 24:
- this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[],this._$.first_line, this._$.first_column); grafo.generarPadre(2);grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0]) 
+ 
+      this.$ = new helpers.Objeto($$[$0-2],$$[$0-1],[],this._$.first_line, this._$.first_column); 
+      grafo.generarPadre(2,"LISTA_ATRIBUTOS");
+      grafo.generarHijos($$[$0-2],"LISTA_ATRIBUTOS",$$[$0]) 
+      grafo.generarTexto(`ObjetoSimple.val = new Etiqueta(${$$[$0-2].replace("<","")},Lista_Astributos)`)
+    
+break;
+case 25:
+ 
+      ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0-1] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
+      this.$= {tipo:$$[$0-2],atributos:[]}
+      grafo.generarHijos($$[$0-2],"error",$$[$0])
+      grafo.generarTexto(`ObjetoSimple.val = new Etiqueta(${$$[$0-2].replace("<","")});new Error()`)
+    
 break;
 case 26:
- this.$ = $$[$0-1]; this.$.push($$[$0]); grafo.generarPadre(2);grafo.generarPadre(1);grafo.generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") 
+ 
+      this.$ = $$[$0-1]; this.$.push($$[$0]); 
+      grafo.generarPadre(2,"ATRIBUTO");
+      grafo.generarPadre(1,"LISTA_ATRIBUTOS");
+      grafo.generarHijos("LISTA_ATRIBUTOS","ATRIBUTO") 
+      grafo.generarTexto(`Lista_Atributos.entorno = Lista_Atributos_1.entorno;  Lista_Atributos.set(Atributo.valor)`)
+    
 break;
 case 27:
- this.$ = []; this.$.push($$[$0]); grafo.generarPadre(1);grafo.generarHijos("ATRIBUTO")
+ 
+      this.$ = []; 
+      this.$.push($$[$0]); 
+      grafo.generarPadre(1,"ATRIBUTO");
+      grafo.generarHijos("ATRIBUTO")
+      grafo.generarTexto(`Lista_Atributos.entorno = new Entorno("Atributos"); Lista_Atributos.entorno.set(Atributo.valor)`)
+    
 break;
 case 28:
  
-      this.$=$$[$0-1]; grafo.generarPadre(1); grafo.generarHijos("ATRIBUTO","error") 
+      this.$=$$[$0-1]; grafo.
+      generarPadre(1,"LISTA_ATRIBUTOS");
+      grafo.generarHijos("ATRIBUTO","error");
+      grafo.generarTexto(`Lista_Atributos.entorno=Lista_Atributos_1.entorno new Error()`)
       ListaErrores.push({Error:'Error sintactico se recupero en ' + $$[$0] ,tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column})
     
 break;
 case 29:
-this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]);
+
+    this.$ = new helpers.Atributo($$[$0-2],$$[$0],this._$.first_line, this._$.first_column); 
+    grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]);
+    grafo.generarTexto(`Atributo.valor = new Atributo(${$$[$0-2]},${$$[$0]},${this._$.first_line},${this._$.first_column})`)
+  
 break;
 }
 },
