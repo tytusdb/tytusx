@@ -107,7 +107,7 @@ case 7:
 consultas.push(new ConsultaSimple($$[$0]));
 break;
 case 9:
-if ($$[$0-1] === ".") {consultas.push(new ConsultaPunto());}
+consultas.push($$[$0-1]);
 break;
 case 12:
 
@@ -134,7 +134,10 @@ case 16: case 23:
 this.$ = $$[$0-1];
 break;
 case 19:
-this.$ = new ConsultaPunto($$[$0]);
+this.$ = new ConsultaPunto();
+break;
+case 20:
+this.$ = new ConsultaPuntos();
 break;
 case 21:
 this.$ = new ConsultaSimple($$[$0-1]);

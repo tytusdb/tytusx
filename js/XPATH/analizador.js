@@ -41,8 +41,7 @@ function recorrer(consultas, entornos, index) {
     });
     index++;
     if (index < consultas.length) {
-        if (consultas[index] instanceof ConsultaSimple)
-            entornos = newEntornos;
+        entornos = (consultas[index] instanceof ConsultaSimple) ? newEntornos : entornos;
         return recorrer(consultas, entornos, index);
     }
     else {

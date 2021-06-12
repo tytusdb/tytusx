@@ -283,7 +283,7 @@ CONSULTAS_XPATH
 CONSULTA_XPATH
     : RELATIVA                              {consultas.push(new ConsultaSimple($1));}
     | EXPRESIONES_RUTA
-    | PUNTOS EXPRESIONES_RUTA               {if ($1 === ".") {consultas.push(new ConsultaPunto());}}
+    | PUNTOS EXPRESIONES_RUTA               {consultas.push($1);}
 ;
 
 EXPRESIONES_RUTA
@@ -315,8 +315,8 @@ DIAGONALES
     | diagonal
 ;
 
-PUNTOS : punto              {$$ = new ConsultaPunto($1);}
-    | punto punto
+PUNTOS : punto              {$$ = new ConsultaPunto();}
+    | punto punto           {$$ = new ConsultaPuntos();}
 ;
 
 ACCESORES
