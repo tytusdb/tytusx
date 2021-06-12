@@ -104,30 +104,31 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/selva/animal/nombre");
+let editorXPATH = (document.getElementById("editor").value = "//@año");
 let editorXML = document.getElementById("consolaJS");
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let parserXML;
 let codificador = document.getElementById("codencod");
 let textoEntrada = `
-
-<selva>
-    <animal>
-        <nombre>Werthers</nombre>
-        <tipo>Pantera</tipo>
-        <color>Negro</color>
-        <edad>12</edad>
-        </animal>
-    <animal>
-        <nombre>Bun</nombre>
-        <tipo>León</tipo>
-        <color>Marrón</color>
-        <edad>15</edad>
-    </animal>
-</selva>
-
-
+<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+  <libro>
+    <titulo>La vida está en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
+</biblioteca>
 `
 editorXML.value = textoEntrada
 
