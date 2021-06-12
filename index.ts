@@ -64,10 +64,10 @@ function InterpretarCodigoXPATH_DESC(entrada:string){
     document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XPATH\n";
   }
 }
-
+//interpretar codigo xml ascendente
 function InterpretarCodigo(entrada:string) {
   tds_xml_persistente=[];
-  //var entrada = editorentrada.getValue();
+ 
   erroreslexicos = new ListaErrores();
   erroressintacticos = new ListaErrores();
   rg_xml = new ReporteGramatical_XML();
@@ -77,12 +77,14 @@ function InterpretarCodigo(entrada:string) {
     listaObjetos = gramatica.parse(entrada);
     //Crea entorno global
     const tsGlobal:TablaSimbolos = new TablaSimbolos([],null,"global");
+    
     //tabla de simbolos que maneja la persistencia de todos los datos
     tds_xml_persistente.push(tsGlobal);
 
     for(let aux of listaObjetos){
         aux.agregarTDS(tsGlobal,aux);
     }
+    console.log(tds_xml_persistente);
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
   } catch (error) {
     //editorsalida.setValue("");
