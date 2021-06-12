@@ -296,11 +296,11 @@ rg_path.setValor('OPEOCCONDICIONOND -> ( CONDICION ) ;\n');
 break;
 case 59:
 rg_path.setValor('OPEOCCONDICIONOND ->  entero;\n');
-                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.ENTERO);
+                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.NUMERICO);
 break;
 case 60:
 rg_path.setValor('OPEOCCONDICIONOND ->  decimal;\n');
-                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.DECIMAL);
+                                                        this.$ = nodoDato($$[$0], TIPO_PRIMITIVO.NUMERICO);
 break;
 case 61:
 rg_path.setValor('OPEOCCONDICIONOND ->  cadena;\n');

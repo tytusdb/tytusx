@@ -209,9 +209,9 @@ CONDICION:CONDICION or CONDICION                {rg_path.setValor('OPEOCCONDICIO
         | para CONDICION parc                   {rg_path.setValor('OPEOCCONDICIONOND -> ( CONDICION ) ;\n');
                                                         $$ = $2; }
         |   entero                              {rg_path.setValor('OPEOCCONDICIONOND ->  entero;\n');
-                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.ENTERO);}
+                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.NUMERICO);}
         |   decimal                             {rg_path.setValor('OPEOCCONDICIONOND ->  decimal;\n');
-                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.DECIMAL);}
+                                                        $$ = nodoDato($1, TIPO_PRIMITIVO.NUMERICO);}
         |   cadena                              {rg_path.setValor('OPEOCCONDICIONOND ->  cadena;\n');
                                                         $$ = nodoDato($1, TIPO_PRIMITIVO.CADENA);}
         //|   identificador                    { $$ = $1; }

@@ -25,8 +25,7 @@ enum TIPO_EXPRESION {
 }
 
 enum TIPO_PRIMITIVO{
-    ENTERO,
-    DECIMAL,
+    NUMERICO,    
     CADENA
 }
 
@@ -59,19 +58,41 @@ function getValor(exp:any, ts:TablaSimbolos): any {
 			return "error";
 		}
         if(exp.tipo_operacion === TIPO_OPERACION.OP_SUMA){
-            return exp1 + exp2;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 + exp2;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return exp1 + exp2;
+            }else{
+                return "error";
+            }            
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_RESTA){
-            return exp1 - exp2;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 - exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MULTIPLICACION){
-            return exp1 * exp2;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 * exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_DIVISION){
             if(exp2 != 0){
-                return exp1 / exp2;
+                if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                    return exp1 / exp2;
+                }else{
+                    return "error";
+                } 
             }
             return "error";
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MODULAR){
             if(exp2 != 0){
-                return exp1 % exp2;
+                if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                    return exp1 % exp2;
+                }else{
+                    return "error";
+                } 
             }
             return "error";
         }
@@ -84,23 +105,45 @@ function getValor(exp:any, ts:TablaSimbolos): any {
 			return "error";
         }
         if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_QUE){
-            const res  = exp1 > exp2;
-			return res;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 > exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_QUE){
-            const res  = exp1 < exp2;
-			return res;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 < exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_IGUAL){
-            const res  = exp1 >= exp2;
-			return res;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 >= exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_IGUAL){
-            const res  = exp1 <= exp2;
-            return res;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 <= exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_NO_IGUAL){
-            const res  = exp1 != exp2;
-			return res;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 != exp2;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return exp1 != exp2;
+            }else{
+                return "error";
+            } 
         }else if(exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL){
-            const res  = exp1 == exp2;
-			return res;
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return exp1 == exp2;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return exp1 == exp2;
+            }else{
+                return "error";
+            } 
         }else{
             return "error";
         }
@@ -125,7 +168,65 @@ function getValor(exp:any, ts:TablaSimbolos): any {
 }
 
 function getTipo(exp:any, ts:TablaSimbolos):any{
+    if(exp.clase===TIPO_EXPRESION.OP_ARITMETICA){
+		var tipo1 = getTipo(exp.operandoIzq, ts);
+        var tipo2 = getTipo(exp.operandoDer, ts);
+        if(tipo1 === "error" || tipo2 === "error"){
+			return "error";
+		}
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_SUMA || exp.tipo_operacion === TIPO_OPERACION.OP_RESTA || exp.tipo_operacion === TIPO_OPERACION.OP_MULTIPLICACION){
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return TIPO_PRIMITIVO.NUMERICO;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return TIPO_PRIMITIVO.CADENA;
+            }
+            return "error"
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_DIVISION || exp.tipo_operacion === TIPO_OPERACION.OP_MODULAR){
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return TIPO_PRIMITIVO.NUMERICO;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return TIPO_PRIMITIVO.CADENA;
+            }
+            return "error"
+        }
+    }else if(exp.clase===TIPO_EXPRESION.OP_RELACIONAL){
+		var tipo1 = getTipo(exp.operandoIzq, ts);
+        var tipo2 = getTipo(exp.operandoDer, ts);
+        if(tipo1 === "error" || tipo2 === "error"){
+			return "error";
+        }
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_QUE || exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_QUE || exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_IGUAL ){
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return TIPO_PRIMITIVO.NUMERICO;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return TIPO_PRIMITIVO.CADENA;
+            }
+            return "error"			
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_IGUAL || exp.tipo_operacion === TIPO_OPERACION.OP_NO_IGUAL || exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL){
+            if(tipo1 == TIPO_PRIMITIVO.NUMERICO && tipo2 == TIPO_PRIMITIVO.NUMERICO){
+                return TIPO_PRIMITIVO.NUMERICO;
+            }else if(tipo1 == TIPO_PRIMITIVO.CADENA && tipo2 == TIPO_PRIMITIVO.CADENA){
+                return TIPO_PRIMITIVO.CADENA;
+            }
+            return "error"
+        }else{
+            return "error";
+        }
+    }else if(exp.clase===TIPO_EXPRESION.OP_LOGICA){
+		var tipo1 = getTipo(exp.operandoIzq, ts);
+        var tipo2 = getTipo(exp.operandoDer, ts);
+        if(tipo1 === "error" || tipo2 === "error"){
+			return "error";
+        }
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_AND || exp.tipo_operacion === TIPO_OPERACION.OP_OR){            
+			return ;  //VALIDAR TIPO OPERACION LOGICA
+        }
 
+    }else if(exp.tipo = TIPO_PRIMITIVO.NUMERICO){
+        return exp.tipo;        
+    }else if(exp.tipo = TIPO_PRIMITIVO.CADENA){
+        return exp.tipo;        
+    }
 }
 
 function graficar():number{        
