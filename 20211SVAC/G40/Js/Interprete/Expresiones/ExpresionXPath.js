@@ -12,8 +12,25 @@ var ExpresionXPath = /** @class */ (function () {
     ExpresionXPath.prototype.getTipo = function (ent, arbol) {
         return this.tipo;
     };
-    ExpresionXPath.prototype.getValorImplicito = function (ent, arbol) {
-        throw new Error("Method not implemented.");
+    ExpresionXPath.prototype.getValorImplicito = function (ent, busqueda) {
+
+        if(busqueda == 13){
+            return "EXPRESION NORMAL :O";
+        } else if(busqueda == 14){
+            return "EXPRESION GLOBAL :O";
+        } else if(busqueda == 15){
+            return "EXPRESION FOLLOWING :O";
+        } else if(busqueda == 16){
+            return "EXPRESION FOLLOWING-SIBLING :O";
+        } else if(busqueda == 17){
+            return "EXPRESION PRECEDING :O";
+        } else if(busqueda == 18){
+            return "EXPRESION PRECEDING-SIBLING :O";
+        } else if(busqueda == 19){
+            return "EXPRESION SELF :O";
+        } 
+
+
     };
     return ExpresionXPath;
 }());
