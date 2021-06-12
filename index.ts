@@ -58,6 +58,12 @@ function InterpretarCodigoXPATH_DESC(entrada:string){
   //rg_path = new ReporteGramatical_XPATH();
   try{
     gramatica_xpath_desc.parse(entrada);
+
+    /* PRUEBAS */
+    let l = BusquedaXML(tds_xml_persistente[2], 'bookstore');
+    //console.log(l);
+    BusquedaXML(l[0], 'book');
+    
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
   }catch (error){
     console.log(error);
@@ -74,6 +80,7 @@ function InterpretarCodigo(entrada:string) {
   
 
   try {
+    tds_xml_persistente=[];
     listaObjetos = gramatica.parse(entrada);
     //Crea entorno global
     const tsGlobal:TablaSimbolos = new TablaSimbolos([],null,"global");
@@ -95,7 +102,20 @@ function InterpretarCodigo(entrada:string) {
 
 function interpretarCodigoXMLdesc(entrada:string){
   try {
-    gramatica_xml_desc.parse(entrada);
+    tds_xml_persistente=[];
+    erroreslexicos = new ListaErrores();
+    erroressintacticos = new ListaErrores();
+    rg_xml = new ReporteGramatical_XML();
+    listaObjetos = gramatica_xml_desc.parse(entrada);
+
+    //Crea entorno global
+    const tsGlobal:TablaSimbolos = new TablaSimbolos([],null,"global");
+    //tabla de simbolos que maneja la persistencia de todos los datos
+    tds_xml_persistente.push(tsGlobal);
+
+    for(let aux of listaObjetos){
+      aux.agregarTDS(tsGlobal,aux);
+    }
     
   } catch (error) {
     console.log(error);
@@ -200,6 +220,7 @@ function RG_XML_ASC()
 function RG_XML_DESC()
 {
   document.getElementById('reportegr').innerHTML = "";
+  document.getElementById('reportegr').innerHTML = rg_xml.getReporte();
 }
 
 function RG_XPATH_ASC()
@@ -211,5 +232,5 @@ function RG_XPATH_ASC()
 function RG_XPATH_DESC()
 {
   document.getElementById('reportegr').innerHTML = "";
-  //document.getElementById('reportegr').innerHTML = rg_path.getReporte();
+  document.getElementById('reportegr').innerHTML = rg_path.getReporte(); 
 }

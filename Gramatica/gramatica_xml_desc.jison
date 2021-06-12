@@ -1,12 +1,11 @@
 /* Definición Léxica */
 %lex
-%x COMMENTMULTILINE
 %options case-insensitive
-
-
 
 %%
 
+\s+											// se ignoran espacios en blanco
+[<][!][^-]*[-]+([^<!][^-]*[-]+)*[>]			// comentario multiple líneas
 
 "<"					return 'menorque';
 ">"					return 'mayorque';
@@ -21,8 +20,8 @@
 "&quot"             return 'quot';
 "?"                 return 'interroga';    
 "xml"               return 'tck_xml';
-"version"               return 'tck_version';
-"encoding"               return 'tck_encoding';
+"version"           return 'tck_version';
+"encoding"          return 'tck_encoding';
 
 /* Espacios en blanco */
 [ \r\t]+			{}
@@ -34,13 +33,6 @@
 
 \".*?\"|\'.*?\'|\`.*?\`			{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 ([a-zA-Z])[a-zA-Z0-9_]*	return 'identificador';
-
-
-/* Estado Comentarios */
-"!--"                      { this.pushState("COMMENTMULTILINE"); }
-<COMMENTMULTILINE>"-->"     { this.popState(); }
-<COMMENTMULTILINE><<EOF>>   { this.popState(); }
-<COMMENTMULTILINE>[^]       { /* Ignore anything */ }
 
 <<EOF>>				return 'EOF';
 
@@ -54,73 +46,92 @@
 
 /* Asociación de operadores y precedencia */
 
-//%left 'or'
-//%left 'and'
-%left 'menorque' 'mayorque'
-//%left 'plus' 'minus'
-//%left 'times' 'div' 'mod'
-//%left 'pow'
-//%left 'not'
-//%left UMINUS
-//%right 'interroga'
-//%left 'para' 'parc'
-
 %start ini
 
 %% /* Definición de la gramática */
 
 ini
 	: EXML LISTA_PRINCIPAL EOF { 
-        //$$ = $2;
-        console.log('Fin de Analisis');
-        //rg_xml.setValor('inicio -> EXML LISTA_PRINCIPAL;\n');
-        //return $$; 
+        $$ = $2;
+        //console.log($2);
+        rg_xml.setValor('inicio -> EXML LISTA_PRINCIPAL;\n');
+        return $$; 
     }
 ;
 
-EXML : menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque{};
+EXML : menorque  interroga tck_xml tck_version igual cadena tck_encoding igual cadena interroga mayorque
+        {
+            rg_xml.setValor('EXML -> <?xml version="CADENA" encoding="CADENA"?>;\n');
+            codificacion = $9;
+            codificacionversion = $6;
+        };
 
-LISTA_PRINCIPAL : LISTA LISTA_PRINCIPAL
-|;
+LISTA_PRINCIPAL : LISTA { rg_xml.setValor('LISTA_PRINCIPAL -> LISTA;\n'); $$ = [$1]; };
 
-LISTA:ETIQUETA_ABRE
-    | VALORES
-    | ETIQUETA_CIERRA
-    | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); };
+LISTA: menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal identificador mayorque  { 
+        rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> PARRAFO </ID>;\n');
+        $$ = new Objeto($2,$5,@1.first_line, @1.first_column,$3,[],$8, true);
+     }
+     | menorque identificador LATRIBUTOS mayorque OB menorque diagonal identificador mayorque { 
+        rg_xml.setValor('LISTA -> <ID [LATRIBUTOS]> OBJETOS </ID>;\n');
+        $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,$5,$8, true);
+     }
+     | menorque identificador LATRIBUTOS diagonal mayorque {
+         rg_xml.setValor('LISTA -> < ID [LATRIBUTOS] / >;\n');
+         $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2, false); 
+      }
+     | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); };
 
-ETIQUETA_ABRE : menorque identificador LATRIBUTOS mayorque
-              | menorque identificador LATRIBUTOS diagonal mayorque ;
+OB : LISTA OB { rg_xml.setValor('OBJETOS -> LISTA OBJETOS;\n'); $1.push($2); $$ = $1; }
+| LISTA { rg_xml.setValor('OBJETOS -> LISTA;\n'); $$ = [$1]; };
 
-ETIQUETA_CIERRA : menorque diagonal identificador mayorque;
+LATRIBUTOS : ATRIBUTO LATRIBUTOS { 
+                rg_xml.setValor('ATRIBUTOS -> ATRIBUTO ATRIBUTOS;\n');
+                $2.push($1); $$ = $2; }
+            | { rg_xml.setValor('LATRIBUTOS -> EPSILON;\n'); $$ = []; };
 
-LATRIBUTOS : ATRIBUTO LATRIBUTOS
-|;
-ATRIBUTO :  identificador igual cadena { };
+ATRIBUTO :  identificador igual cadena { 
+        rg_xml.setValor('ATRIBUTO -> ID = CADENA;\n');
+        $$ = new Atributo($1, $3, @1.first_line, @1.first_column); 
+    };
+
+PARRAFO: VALORES PARRAFO { 
+            rg_xml.setValor('PARRAFO -> VALORES PARRAFO;\n');
+            $1 = $1 + ' ' + $2; $$ = $1; }
+       | VALORES { 
+           rg_xml.setValor('PARRAFO -> VALORES;\n');
+           $$ = $1; 
+        };
 
 VALORES : identificador { 
-            //rg_xml.setValor('VALORES -> ID;\n');
+            rg_xml.setValor('VALORES -> ID;\n');
             $$ = $1; 
         }
         | decimal { 
-            //rg_xml.setValor('VALORES -> DECIMAL;\n');
+            rg_xml.setValor('VALORES -> DECIMAL;\n');
             $$ = $1; 
         }
         | entero { 
-            //rg_xml.setValor('VALORES -> ENTERO;\n');
+            rg_xml.setValor('VALORES -> ENTERO;\n');
             $$ = $1; 
         }
         | lg {
+            rg_xml.setValor('VALORES -> LG;\n');
             $$ = '<';
         }
         | gt {
+            rg_xml.setValor('VALORES -> GT;\n');
             $$ = '>';
         }
         | amp {
+            rg_xml.setValor('VALORES -> AMP;\n');
             $$ = '&';
         }
         | apos {
+            rg_xml.setValor('VALORES -> APOS;\n');
             $$ = '\'';
         }
         | quot {
+            rg_xml.setValor('VALORES -> QUOT;\n');
             $$ = '\"';
         };

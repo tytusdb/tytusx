@@ -115,5 +115,24 @@ class Objeto{
             objeto.graficarTDS(str,objeto.listaObjetos[i]);            
         }
     }
+
+    verificarEtiquetas(objeto:Objeto)
+    {
+        if(objeto.tipoEtiqueta)
+        {
+            //es una etiqueta doble
+            if(objeto.identificador != objeto.identificador_cierre)
+            {
+                //Error Semantico etiquedas diferentes
+            }
+        }
+        else
+        {
+            //Etiqueta Unica
+        }
+        for(let i:number = 0; i < objeto.listaObjetos.length; i++){
+            objeto.verificarEtiquetas(objeto.listaObjetos[i]);
+        } 
+    }
 } 
 
