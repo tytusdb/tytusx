@@ -1,9 +1,7 @@
 'use strict';
 
 const init = function(e){
-    //console.log(localStorage.getItem('cstXML'));
-    mostrarCST(localStorage.getItem('cstXML'));
-
+    mostrarAST(localStorage.getItem('astXPATH'));
 };
 
 document.addEventListener('DOMContentLoaded', function(){

@@ -31,6 +31,13 @@ const init = function(e){
         window.open('./reportes/gramaticalXML.html','_blank');
     });
 
+    let btn_astXP = document.querySelector("#astXP");
+
+    btn_astXP.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/astXPATH.html','_blank');
+    });
+
 };
 
 

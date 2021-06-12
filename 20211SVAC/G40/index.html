@@ -32,6 +32,12 @@
         <script src="./Js/Interprete/Expresiones/Primitivo.js"></script>
         <script src="./Js/Interprete/Interfaces/Expresion.js"></script>
         <script src="./Js/Interprete/Interfaces/Instruccion.js"></script>
+        <script src="./Js/Interprete/Expresiones/Axes.js"></script>
+        <script src="./Js/Interprete/Expresiones/ExpresionXPath.js"></script>
+        <script src="./Js/Interprete/Expresiones/NodoXpath.js"></script>
+        <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
+
         <script>
 
 
@@ -47,8 +53,9 @@
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
             var DOTxmlErrores = "";
-            var DOTxmlASTasc = "";
+            var DOTXPATHASTasc = "";
             var RGxml = new ReporteGramatical();
+            var nodoxPATHASC = null;
         </script>
         <title> Compi 2 - Proyecto 1 | By Oscar Llamas</title>
         <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
@@ -83,9 +90,10 @@
                         <button onclick="Descargar()" class="dropbtn">Reportes</button>
                         <div id="myDropdown2" class="dropdown-content">
                         <a class="dropitem" id="cstXML">CST XML</a>
-                        <a class="dropitem" id="erroresXML">Errores XML</a>
+                        <a class="dropitem" id="erroresXML">Errores</a>
                         <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>
-                        <a class="dropitem" id="rgXML">Reporte gramatical XML</a>                                
+                        <a class="dropitem" id="rgXML">Reporte gramatical XML</a>
+                        <a class="dropitem" id="astXP">AST XPATH</a>                               
                         </div>
                     </div> 
                 </div>

@@ -14,6 +14,14 @@ var Objeto = /** @class */ (function () {
         this.entorno = null;
     }
 
+    Objeto.prototype.getAgregar = function () {
+        return this.agregar;
+    };
+
+    Objeto.prototype.getID = function () {
+        return this.identificador1;
+    };
+
     Objeto.prototype.getEntorno = function () {
         return this.entorno;
     };

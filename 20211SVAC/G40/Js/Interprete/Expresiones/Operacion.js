@@ -1,33 +1,15 @@
 "use strict";
 //Object.defineProperty(exports, "__esModule", { value: true });
-//exports.Operacion = exports.Operador = void 0;
-//var Tipo_1 = require("../AST/Tipo");
-var Operador;
-(function (Operador) {
-    Operador[Operador["SUMA"] = 0] = "SUMA";
-    Operador[Operador["RESTA"] = 1] = "RESTA";
-    Operador[Operador["MULTIPLICACION"] = 2] = "MULTIPLICACION";
-    Operador[Operador["DIVISION"] = 3] = "DIVISION";
-    Operador[Operador["MODULO"] = 4] = "MODULO";
-    Operador[Operador["MENOS_UNARIO"] = 5] = "MENOS_UNARIO";
-    Operador[Operador["MAYOR_QUE"] = 6] = "MAYOR_QUE";
-    Operador[Operador["MENOR_QUE"] = 7] = "MENOR_QUE";
-    Operador[Operador["IGUAL_IGUAL"] = 8] = "IGUAL_IGUAL";
-    Operador[Operador["DIFERENTE_QUE"] = 9] = "DIFERENTE_QUE";
-    Operador[Operador["OR"] = 10] = "OR";
-    Operador[Operador["AND"] = 11] = "AND";
-    Operador[Operador["NOT"] = 12] = "NOT";
-    Operador[Operador["MAYOR_IGUA_QUE"] = 13] = "MAYOR_IGUA_QUE";
-    Operador[Operador["MENOR_IGUA_QUE"] = 14] = "MENOR_IGUA_QUE";
-    Operador[Operador["DESCONOCIDO"] = 15] = "DESCONOCIDO";
-});
+//exports.Operacion = void 0;
+
 var Operacion = /** @class */ (function () {
-    function Operacion(op_izquierda, op_derecha, operacion, linea, columna) {
+    function Operacion(tipo_op, op_izquierda, op_derecha, operacion, linea, columna) {
         this.linea = linea;
         this.columna = columna;
         this.op_izquierda = op_izquierda;
         this.op_derecha = op_derecha;
         this.operador = operacion;
+        this.operadores = tipo_op;
     }
     Operacion.prototype.getTipo = function (ent, arbol) {
         var valor = this.getValorImplicito(ent, arbol);
