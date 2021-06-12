@@ -126,7 +126,7 @@ case 19:
 this.$ = new Atributo($$[$0-2],$$[$0].replaceAll('\"', ""), Type.ATRIBUTO, _$[$0-2].first_line, (_$[$0-2].first_column + 1));
 break;
 case 21:
-this.$ = "-";
+this.$ = "";
 break;
 case 22:
 this.$ = $$[$0-1] + $$[$0];

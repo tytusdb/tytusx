@@ -281,7 +281,7 @@ CONSULTAS_XPATH
 ;
 
 CONSULTA_XPATH
-    : RELATIVA
+    : RELATIVA                              {consultas.push(new Consulta($1));}
     | EXPRESIONES_RUTA
     | PUNTOS EXPRESIONES_RUTA
 ;
@@ -295,14 +295,14 @@ EXPRESIONES_RUTA
 ;
 
 EXPRESION_RUTA
-    : RELATIVA DIAGONALES ACCESORES         {consultas.push(new Consulta($3));}
+    : RELATIVA DIAGONALES ACCESORES         {if (!($1 === "")) {consultas.push(new Consulta($1));} consultas.push(new Consulta($3));}
     | error identificador {
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
     }
 ;
 
-RELATIVA :
-    | identificador OPCIONAL_PREDICADO
+RELATIVA :                                  {$$ = "";}
+    | identificador OPCIONAL_PREDICADO      {$$ = $1;}
 ;
 
 DIAGONALES
@@ -316,7 +316,7 @@ PUNTOS : punto
 
 ACCESORES
     : ID OPCIONAL_PREDICADO             {$$ = $1;}
-    | ATRIBUTO OPCIONAL_PREDICADO
+    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = $1;}
     | PUNTOS OPCIONAL_PREDICADO
     | multiplicacion
     | NODE

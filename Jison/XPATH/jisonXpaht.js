@@ -103,20 +103,26 @@ case 6:
         errores.agregarError("Sintactico","No puede venir una expresion como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
+case 7:
+consultas.push(new Consulta($$[$0]));
+break;
 case 12:
 
         errores.agregarError("Sintactico","Consulta no aceptada:\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
 case 13:
-consultas.push(new Consulta($$[$0]));
+if (!($$[$0-2] === "")) {consultas.push(new Consulta($$[$0-2]));} consultas.push(new Consulta($$[$0]));
 break;
 case 14:
 
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
     
 break;
-case 21:
+case 15:
+this.$ = "";
+break;
+case 16: case 21: case 22:
 this.$ = $$[$0-1];
 break;
 case 55:

@@ -49,6 +49,33 @@ class Nodo extends Simbolo {
     }
 
     public toTag(): string {
-        return "<"+super.getNombre()+"></"+super.getNombre()+">";
+        let etiqueta: Array<string> = new Array();
+
+        etiqueta.push("<" + super.getNombre() + this.attribsToText() + ">");
+        etiqueta.push(this.texto);
+        etiqueta.push(this.nodesToTag(this.entorno));
+        etiqueta.push("</" + super.getNombre()+">");
+
+        return etiqueta.join("");
+    }
+
+    private attribsToText(): string {
+        let attribText: Array<String> = new Array();
+        this.atributos.forEach(a => {
+            attribText.push(" " + a.getNombre() + "=\"" + a.getValor() + "\"");
+        });
+        return attribText.join("");
+    }
+
+    private nodesToTag(entorno: Entorno): string {
+        let nodosText: Array<string> = new Array();
+
+        entorno.getTable().forEach(n => {
+            if (n instanceof Nodo) {
+                nodosText.push("\n" +n.toTag());
+            }
+        });
+
+        return nodosText.join("");
     }
 }

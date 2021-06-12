@@ -15,10 +15,11 @@ function analizarXpath(entornoGlobal) {
         let entornos = [entornoGlobal];
         entornos = recorrer(consultas, entornos, 0);
         let resultConsulta = new Array();
+        let i = 1;
         entornos.forEach(e => {
             e.getTable().forEach(s => {
                 if (!(s instanceof Atributo)) {
-                    resultConsulta.push(s.toTag());
+                    resultConsulta.push((i++) + ". " + s.toTag());
                 }
             });
         });
