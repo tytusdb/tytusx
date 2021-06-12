@@ -32,7 +32,7 @@ function analizarXpath(entornoGlobal: Entorno){
 function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: number): Array<Entorno> {
 
     let newEntornos: Array<Entorno> = new Array();
-    entornos = consultas[index].ejecutar(entornos);
+    entornos = consultas[index].run(entornos);
     entornos.forEach((e: Entorno) => {
         e.getTable().forEach((s: Simbolo) => {
             if (s instanceof Nodo) {
@@ -44,7 +44,8 @@ function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: n
     });
     index++;
     if (index < consultas.length) {
-        return recorrer(consultas, newEntornos, index);
+        entornos = (consultas[index] instanceof ConsultaSimple) ? newEntornos : entornos;
+        return recorrer(consultas, entornos, index);
     } else {
         return entornos;
     }
