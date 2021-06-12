@@ -1,0 +1,60 @@
+/libreria/area1/libros
+|libro[child::existencias]
+
+|//libro[child::existencias]
+
+
+|/libreria/area1/libros/libro
+
+|//@sexo
+
+|//autor[@sexo="macho"]
+
+|/bookstore/book[title="Holi"]
+
+|/tengo/sueNo[@ganasDeSeguir="noHay"]
+
+|//title/parent::book
+
+|/juan/pedro/hijos
+
+|juan/casera/hijos_casera
+
+|autor[@sexo="macho"]
+
+|bookstore[@eshta = "grande"] | bookstore
+
+|bookstore/book/title/parent::book[title="asdsadasdasd"]
+
+|bookstore/book/title[ancestor::book]
+
+|bookstore/book/title[ancestor::book and child::asdasd]
+
+|bookstore/book/title[sda=12.50 and child::asdasd]
+
+|bookstore/book/title[2+5]
+
+|/./././bookstore
+
+|./bookstore/book/title
+
+|./bookstore[child::book]
+
+|/bookstore/book/title/..[@category="web"]
+
+|/bookstore/book/title[ancestor::book[title="Learning XML"]]
+
+|bookstore/book/title/parent::book[@category="web"]
+
+|./child::eshta[marta="juan"][pedro="juan"]
+
+|/bookstore/book[@category="web"][child::title[.="Learning XML"]]
+
+
+|//book/descendant::author[.="James"]
+
+|//book[descendant::author]
+
+|//book/author[.]
+
+|//book/author[author=("J")]
