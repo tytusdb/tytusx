@@ -168,6 +168,16 @@ EXPRESION : tk_identificador PREDICADO {
                                         nodoaux.agregarHijo($2[1]);
                                         $$ = [expresionAux,nodoaux];
                                         }
+        |  tk_punto {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.PUNTO, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
+        |  tk_doblepunto {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.DOBLEPUNTO, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
         |  tk_texto PREDICADO {
                                         expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.TEXT, $2[0]);
                                         nodoaux = new NodoArbol($1,"");
@@ -245,11 +255,6 @@ AXES :          tk_ancestorself   EXPRESION      {      axesAux = new Axes(@1.fi
                                                         nodoaux.agregarHijo($2[1]);
                                                         $$ = [axesAux,nodoaux]; }
 
-        |       tk_attribute  EXPRESION          {      axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.ATTRIBUTE, $2[0]);
-                                                        nodoaux = new NodoArbol($1,"");
-                                                        nodoaux.agregarHijo($2[1]);
-                                                        $$ = [axesAux,nodoaux]; }
-
         |       tk_preceding  EXPRESION          {      axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.PRECEDING, $2[0]);
                                                         nodoaux = new NodoArbol($1,"");
                                                         nodoaux.agregarHijo($2[1]);
@@ -260,7 +265,14 @@ ATRIBUTO : tk_arroba tk_identificador tk_igual CADENA { idAux = new Primitivo($2
                                                         nodoaux = new NodoArbol("=","");
                                                         nodoaux.agregarHijo(new NodoArbol("@"+$2,""));
                                                         nodoaux.agregarHijo($4[1]);
-                                                        $$ = [operacionAux,nodoaux]; } ;
+                                                        $$ = [operacionAux,nodoaux]; } 
+                                                        
+          |  tk_attribute tk_identificador tk_igual CADENA { idAux = new Primitivo($2, @1.first_line, @1.first_column);
+                                                        operacionAux = new Operacion(TipoOperadores.ATRIBUTOS, idAux, $4[0], Operador.IGUAL, @1.first_line, @1.first_column);
+                                                        nodoaux = new NodoArbol("=","");
+                                                        nodoaux.agregarHijo(new NodoArbol("attribute::"+$2,""));
+                                                        nodoaux.agregarHijo($4[1]);
+                                                        $$ = [operacionAux,nodoaux]; };
 
 
 EXPRESION_LOGICA : EXPRESION_LOGICA tk_and EXPRESION_RELACIONAL { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.AND, @1.first_line, @1.first_column);

@@ -13,6 +13,8 @@ function CargarXML(){
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
+            IDentorno = 1;
+            IDobj = 1;
             NumeroE = 1;
             DOTxmlCSTasc = "";
             GenerarDOT.id_n = 1;
@@ -61,6 +63,7 @@ function CargarXML(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
+                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
                     SetSalida("TODO SALIO BIEN :D!!");
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
@@ -138,6 +141,70 @@ function ExtraerCodificacion(objetos){
         }
         
     }
+
+}
+
+function ObtenerObjetos(entornos){
+
+    var objetos = [];
+    
+
+    entornos.forEach(function (entorno){
+        entorno.getTabla().forEach(function (simbolo){
+
+            if(simbolo.getTipo()==Tipo.STRUCT){
+
+                if(!ObjetoYaExiste(objetos,simbolo.getValor().LeerID())){
+                    objetos.push(simbolo.getValor());
+                }  
+            }
+    
+        });
+    }); 
+
+    return objetos;
+}
+
+function ObtenerEntornos(entorno){
+
+    var entornoArr = [];
+    
+
+        entorno.getTabla().forEach(function (element){
+
+            if(element.getTipo()==Tipo.STRUCT){
+                entornoArr.push(element.getValor().getEntorno());
+            }
+    
+        });
+
+
+    return entornoArr;
+}
+
+function EntornoYaExiste(arreglo, id){
+
+    arreglo.forEach(function (entorno){
+
+        if(entorno.getID()==id){
+            return true;
+        }
+    });
+
+    return false;
+
+}
+
+function ObjetoYaExiste(arreglo, id){
+
+    arreglo.forEach(function (objeto){
+
+        if(objeto.LeerID()==id){
+            return true;
+        }
+    });
+
+    return false;
 
 }
 
