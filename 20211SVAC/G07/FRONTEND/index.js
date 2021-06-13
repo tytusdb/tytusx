@@ -169,7 +169,7 @@ document.getElementById("ast").addEventListener("click", () => {
 // MODAL XML
 // ======================================
 let btnReporteXML = document.getElementById('btnReporteXML');
-let btnReportCST = document.getElementById('btnReporteXAST');
+let btnReporteXMLCST= document.getElementById('btnReporteXMLcst');
 let btnReporteGram = document.getElementById('btnReporteXGRAM');
 
 let tablaTitulo = document.getElementById('EpicModalLabel');
@@ -199,16 +199,14 @@ btnReporteXML.addEventListener("click", () => {
   });
 });
 
-btnReportCST.addEventListener("click", () => {
-  tablaTituloCST.innerHTML = 'Reporte Arbol CST XML ' + tipoAnalizadorXML;
-  contenidoModal2.innerHTML = `
-  <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
-    <div id="graph" style="width: 100%;"></div>
-  </div>
-  `;
+btnReporteXMLCST.addEventListener("click", () => {
 
-  // Generar el arbol CST
-  generarAST(parserXML.json.nodo);
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(parserXML.json.nodo);
+
   
 });
 
