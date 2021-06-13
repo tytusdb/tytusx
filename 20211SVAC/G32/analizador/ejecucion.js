@@ -103,6 +103,7 @@ class Ejecucion {
         if (this.raiz != null) {
             this.esRaiz = true;
             this.descendiente = false;
+            this.atributo = false;
             this.consultaXML = this.cuerpoXml;
             this.verObjetos();
             this.recorrido(this.raiz);
@@ -152,13 +153,50 @@ class Ejecucion {
         }
     }
     reducir(consulta, etiqueta, nodo) {
-        if (etiqueta === '/' && nodo === 'RAIZ') {
-            this.descendiente = false;
-            return consulta;
+        if (nodo === 'RAIZ') {
+            if (etiqueta === '/') {
+                this.descendiente = false;
+                return consulta;
+            }
+            else if (etiqueta === '@') {
+                this.atributo = true;
+                return consulta;
+            }
+            else if (this.atributo) {
+                let cons = [];
+                consulta.forEach(element => {
+                    element.listaAtributos.forEach(atributo => {
+                        if (atributo.identificador === etiqueta) {
+                            cons.push(element);
+                        }
+                    });
+                });
+                return cons;
+            }
         }
-        else if (etiqueta === '//' && nodo === 'DESCENDIENTES_NODO') {
-            this.descendiente = true;
-            return consulta;
+        else if (nodo === 'DESCENDIENTES_NODO') {
+            if (etiqueta === '//') {
+                this.descendiente = true;
+                return consulta;
+            }
+            else if (etiqueta === '@') {
+                this.atributo = true;
+                return consulta;
+            }
+            else if (this.atributo) {
+                let cons = [];
+                consulta.forEach(element => {
+                    element.listaAtributos.forEach(atributo => {
+                        if (atributo.identificador === etiqueta) {
+                            cons.push(element);
+                        }
+                    });
+                    if (element.listaObjetos.length > 0) {
+                        cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta, true));
+                    }
+                });
+                return cons;
+            }
         }
         else if (nodo === 'INSTRUCCIONES') {
             let cons;
@@ -192,22 +230,33 @@ class Ejecucion {
                         cons.push(element);
                     }
                     if (element.listaObjetos.length > 0) {
-                        cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta));
+                        cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta, false));
                     }
                 });
                 return cons;
             }
         }
     }
-    recDescen(a, etiqueta) {
+    recDescen(a, etiqueta, atributo) {
         let cons = [];
         a.forEach((element) => {
-            if (element.identificador === etiqueta) {
-                console.log(element.identificador);
-                cons.push(element);
+            if (atributo) {
+                element.listaAtributos.forEach(atributo => {
+                    if (atributo.identificador === etiqueta) {
+                        cons.push(element);
+                    }
+                });
+                if (element.listaObjetos.length > 0) {
+                    cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta, true));
+                }
             }
-            else if (element.listaObjetos.length > 0) {
-                cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta));
+            else {
+                if (element.identificador === etiqueta) {
+                    cons.push(element);
+                }
+                else if (element.listaObjetos.length > 0) {
+                    cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta, false));
+                }
             }
         });
         return cons;
@@ -215,31 +264,53 @@ class Ejecucion {
     traducir() {
         let cadena = '';
         this.consultaXML.forEach(element => {
-            let etiqueta = "doble";
-            if (!element.doble) {
-                etiqueta = "única";
+            if (!this.atributo) {
+                let texto = "";
+                console.log("texto: " + element.identificador);
+                for (var i = 0; i < element.texto.length; i++) {
+                    if (this.tildes.includes(element.texto[i])) {
+                        texto += element.texto[i];
+                    }
+                    else if (this.tildes.includes(element.texto[i - 1])) {
+                        texto += element.texto[i];
+                    }
+                    else {
+                        texto += " " + element.texto[i];
+                    }
+                }
+                cadena += '<' + element.identificador;
+                if (element.listaAtributos.length > 0) {
+                    element.listaAtributos.forEach(atributos => {
+                        cadena += ' ' + atributos.identificador + '=' + atributos.valor;
+                    });
+                }
+                if (element.doble) {
+                    cadena += '>\n';
+                }
+                else {
+                    cadena += '/>\n';
+                }
+                if (texto != '') {
+                    cadena += texto + '\n';
+                }
+                if (element.listaObjetos.length > 0) {
+                    cadena += this.traducirRecursiva(element.listaObjetos);
+                }
+                if (element.doble) {
+                    cadena += '</' + element.identificador + '>\n';
+                }
             }
-            cadena += '<' + element.identificador;
-            if (element.listaAtributos.length > 0) {
-                element.listaAtributos.forEach(atributos => {
-                    cadena += ' ' + atributos.identificador + '=' + atributos.valor;
+            else {
+                element.listaAtributos.forEach(atributo => {
+                    cadena += atributo.identificador + '=' + atributo.valor + '\n';
                 });
             }
-            cadena += '>\n';
-            if (element.listaObjetos.length > 0) {
-                cadena += this.traducirRecursiva(element.listaObjetos);
-            }
-            cadena += '</' + element.identificador + '>\n';
         });
         return cadena;
     }
     traducirRecursiva(elemento) {
         let cadena = '';
         elemento.forEach(element => {
-            let etiqueta = "doble";
-            if (!element.doble) {
-                etiqueta = "única";
-            }
             let texto = "";
             for (var i = 0; i < element.texto.length; i++) {
                 if (this.tildes.includes(element.texto[i])) {
@@ -258,12 +329,21 @@ class Ejecucion {
                     cadena += ' ' + atributos.identificador + '=' + atributos.valor;
                 });
             }
-            cadena += '>\n';
-            cadena += texto + '\n';
+            if (element.doble) {
+                cadena += '>\n';
+            }
+            else {
+                cadena += '/>\n';
+            }
+            if (texto != '') {
+                cadena += texto + '\n';
+            }
             if (element.listaObjetos.length > 0) {
                 cadena += this.traducirRecursiva(element.listaObjetos);
             }
-            cadena += '</' + element.identificador + '>\n';
+            if (element.doble) {
+                cadena += '</' + element.identificador + '>\n';
+            }
         });
         return cadena;
     }
