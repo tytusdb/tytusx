@@ -3,9 +3,9 @@
  */
 
 %{	
-    const {ObjetoNodo} = require("/home/estergema/Documentos/tytusx/20211SVAC/G22/Scripts/clasesXML/ObjetoNodo.js");
-	const {Atributo} = require("/home/estergema/Documentos/tytusx/20211SVAC/G22/Scripts/clasesXML/Atributo.js");
-	const Error = require('/home/estergema/Documentos/tytusx/20211SVAC/G22/Scripts/Errores/Error.js');
+    const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
+	const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
+	const Error = require('./Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
