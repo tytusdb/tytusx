@@ -1,4 +1,6 @@
 "use strict";
+
+
 //Object.defineProperty(exports, "__esModule", { value: true });
 //exports.Axes = void 0;
 var Axes = /** @class */ (function () {
@@ -13,6 +15,12 @@ var Axes = /** @class */ (function () {
         return this.tipo;
     };
     Axes.prototype.getValorImplicito = function (ent, global, busqueda) {
+
+
+        if((this.expresion.getTipo()==TipoExpresionXPath.PUNTO) ||
+         (this.expresion.getTipo()==TipoExpresionXPath.DOBLEPUNTO)){
+            return [];
+        }
         
         var entornoActual = ent;
 
@@ -26,13 +34,13 @@ var Axes = /** @class */ (function () {
 
                 var entornoAux = [];
 
-                entornoActual.forEach(function (objeto){
+                entornoActual.forEach(function (entorno){
     
-                    var anteriorAux = objeto.getEntorno().getAnterior();
+                    var anteriorAux = entorno.getAnterior().getAnterior();
     
                     while (anteriorAux != null) {
         
-                        if(!EntornoYaExiste(entornoAux,anteriorAux.getID())){
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
                             entornoAux.push(anteriorAux);
                         }
                         anteriorAux = anteriorAux.getAnterior();                
@@ -40,7 +48,7 @@ var Axes = /** @class */ (function () {
                 });
     
                 if (entornoAux.length > 0){               
-                    entornoActual = ObtenerObjetos(entornoAux);
+                    entornoActual = entornoAux;
                     this.resultado = this.expresion.getValorImplicito(entornoActual, 13);
     
                     /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
@@ -49,7 +57,7 @@ var Axes = /** @class */ (function () {
                 } else {
                     //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                     //por lo tanto axes ancestor no devuelve nada 
-                    return null;
+                    return [];
                 }   
 
             }
@@ -63,13 +71,13 @@ var Axes = /** @class */ (function () {
 
                 var entornoAux = [];
 
-                entornoActual.forEach(function (objeto){
+                entornoActual.forEach(function (entorno){
     
-                    var anteriorAux = objeto.getEntorno();
+                    var anteriorAux = entorno.getAnterior();
     
                     while (anteriorAux != null) {
         
-                        if(!EntornoYaExiste(entornoAux,anteriorAux.getID())){
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
                             entornoAux.push(anteriorAux);
                         }
                         anteriorAux = anteriorAux.getAnterior();                
@@ -77,18 +85,16 @@ var Axes = /** @class */ (function () {
                 });
     
                 if (entornoAux.length > 0){               
-                    entornoActual = ObtenerObjetos(entornoAux);
+                    entornoActual = entornoAux;
                     this.resultado = this.expresion.getValorImplicito(entornoActual, 13);
-    
                     /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
                     return this.resultado
     
                 } else {
                     //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                     //por lo tanto axes ancestor no devuelve nada 
-                    return null;
+                    return [];
                 }   
-
             }  
 
         } else if (this.getTipo() == TipoAxes.CHILD){
@@ -120,20 +126,20 @@ var Axes = /** @class */ (function () {
 
                 var entornoAux = [];
 
-                entornoActual.forEach(function (objeto){
+                entornoActual.forEach(function (entorno){
     
-                    var anteriorAux = objeto.getEntorno().getAnterior();
+                    var anteriorAux = entorno.getAnterior();
     
                     if (anteriorAux != null) {
         
-                        if(!EntornoYaExiste(entornoAux,anteriorAux.getID())){
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
                             entornoAux.push(anteriorAux);
                         }                                       
                       }               
                 });
     
                 if (entornoAux.length > 0){               
-                    entornoActual = ObtenerObjetos(entornoAux);
+                    entornoActual = entornoAux;
                     this.resultado = this.expresion.getValorImplicito(entornoActual, 14);
     
                     /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
@@ -158,20 +164,23 @@ var Axes = /** @class */ (function () {
 
                 var entornoAux = [];
 
-                entornoActual.forEach(function (objeto){
+
+                entornoActual.forEach(function (entorno){
     
-                    var anteriorAux = objeto.getEntorno().getAnterior();
+                    var anteriorAux = entorno.getAnterior();
     
                     if (anteriorAux != null) {
         
-                        if(!EntornoYaExiste(entornoAux,anteriorAux.getID())){
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
                             entornoAux.push(anteriorAux);
                         }                                       
                       }               
                 });
+
+
     
                 if (entornoAux.length > 0){               
-                    entornoActual = ObtenerObjetos(entornoAux);
+                    entornoActual = entornoAux;
                     this.resultado = this.expresion.getValorImplicito(entornoActual, 15);
                     /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
                     return this.resultado
@@ -192,20 +201,20 @@ var Axes = /** @class */ (function () {
 
                 var entornoAux = [];
 
-                entornoActual.forEach(function (objeto){
+                entornoActual.forEach(function (entorno){
     
-                    var anteriorAux = objeto.getEntorno().getAnterior();
+                    var anteriorAux = entorno.getAnterior();
     
                     if (anteriorAux != null) {
         
-                        if(!EntornoYaExiste(entornoAux,anteriorAux.getID())){
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
                             entornoAux.push(anteriorAux);
                         }                                       
                       }               
                 });
     
                 if (entornoAux.length > 0){               
-                    entornoActual = ObtenerObjetos(entornoAux);
+                    entornoActual = entornoAux;
                     this.resultado = this.expresion.getValorImplicito(entornoActual, 16);
                     /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
                     return this.resultado;
@@ -226,37 +235,65 @@ var Axes = /** @class */ (function () {
 
                 var entornoAux = [];
 
-                entornoActual.forEach(function (objeto){
+                entornoActual.forEach(function (entorno){
     
-                    var anteriorAux = objeto.getEntorno().getAnterior();
+                    var anteriorAux = entorno.getAnterior().getAnterior();
     
                     if (anteriorAux != null) {
         
-                        if(!EntornoYaExiste(entornoAux,anteriorAux.getID())){
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
                             entornoAux.push(anteriorAux);
                         }                                       
                       }               
                 });
     
                 if (entornoAux.length > 0){               
-                    entornoActual = ObtenerObjetos(entornoAux);
+                    entornoActual = entornoAux;
                     this.resultado = this.expresion.getValorImplicito(entornoActual, 13);
                     /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
                     return this.resultado;
     
                 } else {
-                    return null;
+                    return [];
                 }   
             }
 
         } else if (this.getTipo() == TipoAxes.PRECEDING){
 
             if (busqueda==14){
+                console.log("hola");
                 this.resultado = this.expresion.getValorImplicito(global, 14);
                 return this.resultado;
-            } else {
-                this.resultado = this.expresion.getValorImplicito(entornoActual, 17);
-                return this.resultado;
+            }else {
+
+                var entornoAux = [];
+
+                entornoActual.forEach(function (entorno){
+    
+                    var anteriorAux = entorno.getAnterior().getAnterior();
+    
+                    while (anteriorAux != null) {
+        
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
+                            entornoAux.push(anteriorAux);
+                        }
+                        anteriorAux = anteriorAux.getAnterior();                
+                      }               
+                });
+    
+                if (entornoAux.length > 0){               
+                    entornoActual = entornoAux;
+                    this.resultado = this.expresion.getValorImplicito(entornoActual, 17);
+    
+                    /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
+                    return this.resultado
+    
+                } else {
+                    //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
+                    //por lo tanto axes ancestor no devuelve nada 
+                    return [];
+                }   
+
             }
 
         } else if (this.getTipo() == TipoAxes.PRECEDING_SIBLING){
@@ -265,17 +302,65 @@ var Axes = /** @class */ (function () {
                 this.resultado = this.expresion.getValorImplicito(global, 14);
                 return this.resultado;
             } else {
-                this.resultado = this.expresion.getValorImplicito(entornoActual, 18);
-                return this.resultado;
-            }
+
+                var entornoAux = [];
+
+                entornoActual.forEach(function (entorno){
+    
+                    var anteriorAux = entorno.getAnterior();
+    
+                    if (anteriorAux != null) {
+        
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
+                            entornoAux.push(anteriorAux);
+                        }                                       
+                      }               
+                });
+    
+                if (entornoAux.length > 0){               
+                    entornoActual = entornoAux;
+                    this.resultado = this.expresion.getValorImplicito(entornoActual, 18);
+                    /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
+                    return this.resultado;
+    
+                } else {
+                    this.resultado = this.expresion.getValorImplicito(entornoActual, 18);
+                    /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
+                    return this.resultado;
+                }   
+            }   
 
         } else if (this.getTipo()== TipoAxes.SELF){
             if (busqueda==14){
                 this.resultado = this.expresion.getValorImplicito(global, 14);
                 return this.resultado;
             } else {
-                this.resultado = this.expresion.getValorImplicito(entornoActual, 19);
-                return this.resultado;
+
+                var entornoAux = [];
+
+                entornoActual.forEach(function (entorno){
+    
+                    var anteriorAux = entorno.getAnterior();
+    
+                    if (anteriorAux != null) {
+        
+                        if(EntornoYaExiste(entornoAux,anteriorAux.getID())==false){
+                            entornoAux.push(anteriorAux);
+                        }                                       
+                      }               
+                });
+    
+                if (entornoAux.length > 0){               
+                    entornoActual = entornoAux;
+                    this.resultado = this.expresion.getValorImplicito(entornoActual, 19);
+                    /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
+                    return this.resultado;
+    
+                } else {
+                    this.resultado = this.expresion.getValorImplicito(entornoActual, 19);
+                    /**AQUI RETORNAMOS EL RESULTADO DE LA EXPRESION */
+                    return this.resultado;
+                }   
             }
         } 
 

@@ -5,8 +5,8 @@ class XmlTS {
     constructor() {
         this.tabla = [];
     }
-    agregar(identificador, valor, ambito, tipo, linea, columna) {
-        this.tabla.push([identificador, valor, ambito, tipo, linea, columna]);
+    agregar(identificador, valor, ambito, tipo, linea, columna, nodo) {
+        this.tabla.push([identificador, valor, ambito, tipo, linea, columna, nodo]);
     }
 }
 exports.XmlTS = XmlTS;

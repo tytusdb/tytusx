@@ -87,21 +87,22 @@ case 1:
  
         //return $$[$0-1];
         var root = new AST($$[$0-1]);
-        addProduccion('INI -> ESTRUCTURA EOF Estructura = Estructura1'); 
+        addProduccion('INI -> ESTRUCTURA EOF', 'INI.val = ESTRUCTURA.val'); 
         root.setProducciones(list_grammar);
         list_grammar = [];
         return root; 
     
 break;
 case 2:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; addProduccion('ESTRUCTURA -> ESTRUCTURA ROOT'); 
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; addProduccion('ESTRUCTURA -> ESTRUCTURA ROOT', 'ESTRUCTURA.val = ESTRUCTURA.val.push(ROOT.val)'); 
 break;
 case 3:
- this.$ = [$$[$0]]; addProduccion('ESTRUCTURA -> ROOT'); 
+ this.$ = [$$[$0]]; addProduccion('ESTRUCTURA -> ROOT', 'ESTRUCTURA.val = ROOT.val'); 
 break;
 case 4:
 
         this.$ = new Encoding($$[$0-2], _$[$0-10].first_line, _$[$0-10].first_column); 
+        addProduccion(`ROOT -> "<" "?" "xml" "version" "=" cadena encoding "=" cadena "?" ">"`, 'ROOT.val = new Encoding(cadena)');
 
     
 break;
@@ -109,49 +110,71 @@ case 5:
  
         if($$[$0-6] == $$[$0-1]){
         } else {
-            console.log("Error semantico *******************************");
         }
-        this.$ = new Objeto($$[$0-6], $$[$0-1], null, [], $$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column); addProduccion('ROOT -> menorQ identificador mayorQ LISTA_ELEMENTOS menorQ slash identificador mayorQ '); 
+        this.$ = new Objeto($$[$0-6], $$[$0-1], null, [], $$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column); 
+        addProduccion(`ROOT -> "<" identificador ">" LISTA_ELEMENTOS "<" "/" identificador ">"`, `ROOT.val = new Objeto(identificador, LISTA_ELEMENTOS)`);
+
     
 break;
 case 6:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; addProduccion('LISTA_ELEMENTOS -> LISTA_ELEMENTOS ELEMENTO '); 
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; addProduccion('LISTA_ELEMENTOS -> LISTA_ELEMENTOS ELEMENTO ',`LISTA_ELEMENTOS.val = LISTA_ELEMENTOS.val.push(ELEMENTO.val)`); 
 break;
 case 7:
- this.$ = [$$[$0]]; addProduccion('LISTA_ELEMENTOS -> ELEMENTO'); 
+ this.$ = [$$[$0]]; addProduccion('LISTA_ELEMENTOS -> ELEMENTO',`LISTA_ELEMENTOS.val = [ELEMENTO.val]`); 
 break;
 case 8:
- this.$ = new Objeto($$[$0-6], $$[$0-1], $$[$0-4], null, null, _$[$0-7].first_line, _$[$0-7].first_column); 
+ 
+        this.$ = new Objeto($$[$0-6], $$[$0-1], $$[$0-4], null, null, _$[$0-7].first_line, _$[$0-7].first_column); 
+        addProduccion(`ELEMENTO -> "<" identificador ">" Texto "<" "/" identificador ">"`,`ELEMENTO.val = new Objeto(identificador,identificador, Texto)`);
+    
 break;
 case 9:
- this.$ = new Objeto($$[$0-6], $$[$0-1], '', null, $$[$0-4], _$[$0-7].first_line, _$[$0-7].first_column); 
+ 
+        this.$ = new Objeto($$[$0-6], $$[$0-1], '', null, $$[$0-4], _$[$0-7].first_line, _$[$0-7].first_column); 
+        addProduccion(`ELEMENTO -> "<" identificador ">" LISTA_ELEMENTOS "<" "/" identificador ">"`,`ELEMENTO.val = new Objeto(identificador,identificador, LISTA_ELEMENTOS)`);
+    
 break;
 case 10:
- this.$ = new Objeto($$[$0-7], $$[$0-1], $$[$0-5], $$[$0-6], $$[$0-4], _$[$0-8].first_line, _$[$0-8].first_column); 
+ 
+        this.$ = new Objeto($$[$0-7], $$[$0-1],'', $$[$0-6], $$[$0-4], _$[$0-8].first_line, _$[$0-8].first_column); 
+        addProduccion(`ELEMENTO -> "<" identificador LISTA_ATRIBUTO ">" LISTA_ELEMENTOS "<" "/" identificador ">"`,`ELEMENTO.val = new Objeto(identificador,identificador, LISTA_ATRIBUTO, LISTA_ELEMENTOS)`);
+    
 break;
 case 11:
- this.$ = new Objeto($$[$0-7], $$[$0-1], $$[$0-4], $$[$0-6], null, _$[$0-8].first_line, _$[$0-8].first_column); 
+ 
+        this.$ = new Objeto($$[$0-7], $$[$0-1], $$[$0-4], $$[$0-6], null, _$[$0-8].first_line, _$[$0-8].first_column); 
+        addProduccion(`ELEMENTO -> "<" identificador LISTA_ATRIBUTO ">" TEXTO "<" "/" identificador ">"`,`ELEMENTO.val = new Objeto(identificador,identificador, LISTA_ATRIBUTO, Texto)`);
+    
 break;
 case 12:
- this.$ = new Objeto($$[$0-3], $$[$0-3], '', $$[$0-2], null, _$[$0-4].first_line, _$[$0-4].first_column); 
+ 
+        this.$ = new Objeto($$[$0-3], $$[$0-3], '', $$[$0-2], null, _$[$0-4].first_line, _$[$0-4].first_column); 
+        addProduccion(`ELEMENTO -> "<" identificador LISTA_ATRIBUTO "/" ">"`,`ELEMENTO.val = new Objeto(identificador, LISTA_ELEMENTOS)`);
+    
 break;
 case 13:
- this.$ = new Objeto($$[$0-2], $$[$0-2], '', null, null, _$[$0-3].first_line, _$[$0-3].first_column); 
+ 
+        this.$ = new Objeto($$[$0-2], $$[$0-2], '', null, null, _$[$0-3].first_line, _$[$0-3].first_column); 
+        addProduccion(`ELEMENTO -> "<" identificador "/" ">"`,`ELEMENTO.val = new Objeto(identificador)`);
+    
 break;
 case 14:
- this.$ = $$[$0]; 
+ this.$ = $$[$0]; addProduccion(`LISTA_ATRIBUTO -> ATRIBUTOS`,`LISTA_ATRIBUTO.val = ATRIBUTOS.val`); 
 break;
 case 15:
- this.$ = []; 
+ this.$ = []; addProduccion(`LISTA_ATRIBUTO -> ε`,`LISTA_ATRIBUTO.val = []`); 
 break;
 case 16:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; addProduccion(`ATRIBUTOS -> ATRIBUTOS ATRIBUTO`,`ATRIBUTOS.val = ATRIBUTOS.val.push(ATRIBUTO.val)`); 
 break;
 case 17:
- this.$ = [$$[$0]]; 
+ this.$ = [$$[$0]]; addProduccion(`ATRIBUTOS -> ATRIBUTO`,`ATRIBUTOS.val = ATRIBUTO.val`); 
 break;
 case 18:
- this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+ 
+        this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+        addProduccion(`ATRIBUTO -> identificador "=" cadena`,`ATRIBUTO.val = new Atributo(identificador, cadena)`);
+    
 break;
 }
 },
@@ -308,11 +331,16 @@ parse: function parse(input) {
     const { Objeto } = require("../dist/xml/expresiones/Objeto");
     const { Encoding } = require("../dist/xml/expresiones/Encoding");
     const { AST } = require("../dist/xml/ast/AST");
+    const { Gramatica } = require("../dist/xml/reportes/Gramatica");
 
     var list_grammar = [];
-    function addProduccion(valor) {
-        list_grammar.push(valor);
+    
+    function addProduccion(valor, valor) {
+        let gramatica = new Gramatica(valor,valor);
+
+        list_grammar.push(gramatica);
     }
+
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){

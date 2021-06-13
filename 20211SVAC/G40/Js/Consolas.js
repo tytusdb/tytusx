@@ -7,7 +7,7 @@ var EntradaXPath = CodeMirror.fromTextArea
     autoRefresh: true
 });
 
-EntradaXPath.setSize(850, 250);
+//EntradaXPath.setSize(850, 250);
 EntradaXPath.refresh();
 
 var SalidaXPath = CodeMirror.fromTextArea
@@ -20,5 +20,5 @@ var SalidaXPath = CodeMirror.fromTextArea
     readOnly: "nocursor"
 });
 
-SalidaXPath.setSize(850, 475);
+//SalidaXPath.setSize(850, 475);
 SalidaXPath.refresh();
