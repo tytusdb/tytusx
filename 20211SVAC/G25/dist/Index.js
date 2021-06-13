@@ -15,10 +15,12 @@ let contenido = `
   <libro>
   <fechaPublicacion ano="1973" año="1000"/>
   <autor fechaNacimiento="28/03/1936">Mario (Varga)s Llosa</autor>
+  <f fechaNacimiento="28/03/1936" />
   </libro>
   <libro>
   <fechaPublicacion ano="1973" año="1000"/>
   <autor fechaNacimiento="28/03/1936">Mario (Varga)s Llosa</autor>
+  <f fechaNacimiento="28/03/1936" />
   </libro>
 </biblioteca>
 `;
@@ -73,16 +75,19 @@ function ambito_objeto(listO, entornoAnterior) {
     return entornoObjeto;
 }
 ejecutarCodigo();
+console.log(instrucciones.getProducciones());
+//console.log(entornoGlobal.getSimbolo("biblioteca").getValorImplicito().
+//entorno.getSimbolo("libro").getValorImplicito().entorno.getSimbolo('autor').getValorImplicito().text );
 //REPORTE 
 const reporte = new ReporteXML_1.ReporteXML();
-//console.log(reporte.tablaSimbolos(entornoGlobal,"0"));
+//*console.log(reporte.tablaSimbolos(entornoGlobal,"0"));
 //console.log(entornoGlobal.getTabla())
 //console.log(entornoGlobal.getSimbolo("0").getValorImplicito().entorno.getTabla())
 //console.log(entornoGlobal.getSimbolo("0").getValorImplicito().entorno.getSimbolo("0").getValorImplicito().entorno.getTabla())
 //console.log(entornoGlobal.getSimbolo("0").getValorImplicito().entorno
 //.getSimbolo("0").getValorImplicito().entorno.getSimbolo("0").getValorImplicito().entorno.getAnterior())
 //PRODUCIONES
-//console.log(instrucciones.getProducciones());
+//console.log(instrucciones.getPr¡cciones());
 //GRAFO
 let graph = new GraphAST_1.GraphAST(instrucciones);
 console.log(graph.getGrafo());

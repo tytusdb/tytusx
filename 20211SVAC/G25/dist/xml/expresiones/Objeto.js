@@ -22,15 +22,86 @@ class Objeto {
     }
     generarGrafo(g, padre) {
         let nombreHijo = "nodo" + g.count;
-        g.graph += "    " + nombreHijo + "[label=\"" + this.id1 + "\"];\n";
-        g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
-        g.count++;
+        let padre2;
+        let padre3; //para atributos
+        if (this.text == '' && this.listObjetos == null) {
+            g.graph += "    " + nombreHijo + "[label=\" < \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\"" + this.id1 + "\"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" LISTA_ATRIBUTOS \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            padre3 = nombreHijo;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" / \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" > \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+        }
+        else {
+            g.graph += "    " + nombreHijo + "[label=\" < \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\"" + this.id1 + "\"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" LISTA_ATRIBUTOS \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            padre3 = nombreHijo;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" > \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            if (this.listObjetos != null) {
+                g.graph += "    " + nombreHijo + "[label=\" LISTA_ELEMENTOS \"];\n";
+            }
+            else {
+                g.graph += "    " + nombreHijo + "[label=\" TEXTO \"];\n";
+            }
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            padre2 = nombreHijo;
+            if (this.listObjetos == null) {
+                nombreHijo = "nodo" + g.count;
+                g.graph += "    " + nombreHijo + "[label=\"" + this.text + "\"];\n";
+                g.graph += "    " + padre2 + " -> " + nombreHijo + ";\n";
+                g.count++;
+            }
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" < \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" / \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\"" + this.id1 + "\"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+            nombreHijo = "nodo" + g.count;
+            g.graph += "    " + nombreHijo + "[label=\" > \"];\n";
+            g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+            g.count++;
+        }
         padre = nombreHijo;
         if (this.listAtributos != undefined) {
             this.listAtributos.forEach((o) => {
                 nombreHijo = "nodo" + g.count;
                 g.graph += "    " + nombreHijo + "[label=\"" + o.getNombreHijo() + "\"];\n";
-                g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+                g.graph += "    " + padre3 + " -> " + nombreHijo + ";\n";
                 g.count++;
                 o.generarGrafo(g, nombreHijo);
             });
@@ -39,7 +110,12 @@ class Objeto {
             this.listObjetos.forEach((o) => {
                 nombreHijo = "nodo" + g.count;
                 g.graph += "    " + nombreHijo + "[label=\"" + o.getNombreHijo() + "\"];\n";
-                g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+                if (this.text == '' && this.listObjetos == null) {
+                    g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+                }
+                else {
+                    g.graph += "    " + padre2 + " -> " + nombreHijo + ";\n";
+                }
                 g.count++;
                 o.generarGrafo(g, nombreHijo);
             });

@@ -127,7 +127,7 @@ case 9:
  this.$ = new Objeto($$[$0-6], $$[$0-1], '', null, $$[$0-4], _$[$0-7].first_line, _$[$0-7].first_column); 
 break;
 case 10:
- this.$ = new Objeto($$[$0-7], $$[$0-1], $$[$0-5], $$[$0-6], $$[$0-4], _$[$0-8].first_line, _$[$0-8].first_column); 
+ this.$ = new Objeto($$[$0-7], $$[$0-1],'', $$[$0-6], $$[$0-4], _$[$0-8].first_line, _$[$0-8].first_column); 
 break;
 case 11:
  this.$ = new Objeto($$[$0-7], $$[$0-1], $$[$0-4], $$[$0-6], null, _$[$0-8].first_line, _$[$0-8].first_column); 
