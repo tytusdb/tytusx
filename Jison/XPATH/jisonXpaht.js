@@ -107,7 +107,11 @@ case 7:
 consultas.push(new ConsultaSimple($$[$0]));
 break;
 case 9:
-consultas.push($$[$0-1]);
+
+        if ($$[$0-1] === "punto") {
+            consultas.push(new ConsultaPunto());
+        }
+    
 break;
 case 12:
 
@@ -119,8 +123,24 @@ case 13:
             if (!($$[$0-2] === "")) {
                 consultas.push(new ConsultaSimple($$[$0-2]));
             }
-            consultas.push($$[$0]);
-        
+            if ($$[$0-1] === "doble"){
+                if ($$[$0] === "punto") {
+                    consultas.push(new ConsultaPunto());
+                }else if ($$[$0] === "puntos") {
+                    consultas.push(new ConsultaPuntos());
+                } else {
+                    consultas.push(new ConsultaDescendente($$[$0]));
+                }
+            } else {
+                if ($$[$0] === "punto") {
+                    consultas.push(new ConsultaPunto());
+                }else if ($$[$0] === "puntos") {
+                    consultas.push(new ConsultaPuntos());
+                } else {
+                    consultas.push(new ConsultaSimple($$[$0]));
+                }
+            }
+    
 break;
 case 14:
 
@@ -130,17 +150,23 @@ break;
 case 15:
 this.$ = "";
 break;
-case 16: case 23:
+case 16: case 21: case 23:
 this.$ = $$[$0-1];
 break;
+case 17:
+this.$ = "doble";
+break;
+case 18:
+this.$ = "simple";
+break;
 case 19:
-this.$ = new ConsultaPunto();
+this.$ = "punto";
 break;
 case 20:
-this.$ = new ConsultaPuntos();
+this.$ = "puntos";
 break;
-case 21:
-this.$ = new ConsultaSimple($$[$0-1]);
+case 32:
+this.$ = $$[$0];
 break;
 case 55:
 

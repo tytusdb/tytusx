@@ -283,7 +283,11 @@ CONSULTAS_XPATH
 CONSULTA_XPATH
     : RELATIVA                              {consultas.push(new ConsultaSimple($1));}
     | EXPRESIONES_RUTA
-    | PUNTOS EXPRESIONES_RUTA               {consultas.push($1);}
+    | PUNTOS EXPRESIONES_RUTA {
+        if ($1 === "punto") {
+            consultas.push(new ConsultaPunto());
+        }
+    }
 ;
 
 EXPRESIONES_RUTA
@@ -295,12 +299,28 @@ EXPRESIONES_RUTA
 ;
 
 EXPRESION_RUTA
-    : RELATIVA DIAGONALES ACCESORES {
+    : RELATIVA DIAGONALES ACCESORES         {
             if (!($1 === "")) {
                 consultas.push(new ConsultaSimple($1));
             }
-            consultas.push($3);
-        }
+            if ($2 === "doble"){
+                if ($3 === "punto") {
+                    consultas.push(new ConsultaPunto());
+                }else if ($3 === "puntos") {
+                    consultas.push(new ConsultaPuntos());
+                } else {
+                    consultas.push(new ConsultaDescendente($3));
+                }
+            } else {
+                if ($3 === "punto") {
+                    consultas.push(new ConsultaPunto());
+                }else if ($3 === "puntos") {
+                    consultas.push(new ConsultaPuntos());
+                } else {
+                    consultas.push(new ConsultaSimple($3));
+                }
+            }
+    }
     | error identificador {
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
     }
@@ -311,16 +331,16 @@ RELATIVA :                                  {$$ = "";}
 ;
 
 DIAGONALES
-    : diagonal diagonal
-    | diagonal
+    : diagonal diagonal                     {$$ = "doble";}
+    | diagonal                              {$$ = "simple";}
 ;
 
-PUNTOS : punto              {$$ = new ConsultaPunto();}
-    | punto punto           {$$ = new ConsultaPuntos();}
+PUNTOS : punto              {$$ = "punto";}
+    | punto punto           {$$ = "puntos";}
 ;
 
 ACCESORES
-    : ID OPCIONAL_PREDICADO             {$$ = new ConsultaSimple($1);}
+    : ID OPCIONAL_PREDICADO             {$$ = $1;}
     | ATRIBUTO OPCIONAL_PREDICADO
     | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
     | multiplicacion
@@ -340,7 +360,7 @@ ATRIBUTO
     | arroba NODE
 ;
 
-ID : identificador
+ID : identificador      {$$ = $1;}
     | EJE
 ;
 

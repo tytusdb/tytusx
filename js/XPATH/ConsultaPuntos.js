@@ -5,9 +5,6 @@ class ConsultaPuntos {
             if (e.getAnterior() != null) {
                 this.addEntorno(newEntornos, e.getAnterior());
             }
-            else {
-                console.log("Es nulo");
-            }
         });
         return newEntornos;
     }

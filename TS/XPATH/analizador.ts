@@ -33,7 +33,6 @@ function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: n
 
     let newEntornos: Array<Entorno> = new Array();
     entornos = consultas[index].run(entornos);
-
     entornos.forEach((e: Entorno) => {
         e.getTable().forEach((s: Simbolo) => {
             if (s instanceof Nodo) {

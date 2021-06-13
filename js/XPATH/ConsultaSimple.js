@@ -19,4 +19,7 @@ class ConsultaSimple {
         });
         return newEntornos;
     }
+    getIdentificador() {
+        return this.identificador;
+    }
 }
