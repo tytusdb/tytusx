@@ -1,0 +1,49 @@
+#infoCliente{
+    background-color: #80bdff;
+    font-size: 25px;
+}
+
+#cui{
+    display: inline-block; 
+    margin-left: 10%;
+}
+
+#botonBuscar{
+    font-size: 20px;
+    display: inline-block; 
+    margin-left: 10%;
+}
+
+#div5{
+    font-size: 30px;
+    width: 100%;
+}
+
+.info{
+    font-weight: bolder;
+    margin-left: 30px;
+    display: inline-block;
+}
+
+#noEncontrado{
+    font-size: 30px;
+    color: red;
+}
+
+#finalizacion{
+   
+}
+
+#boton1{
+    display: block;
+    height: 70px;
+    font-size: 40px;
+}
+#boton{
+    margin-left:  40%;
+}
+#subtitulo{
+    font-weight: bolder;
+    display: block; 
+    padding-left: 25%;
+}
