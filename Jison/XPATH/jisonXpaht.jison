@@ -8,39 +8,39 @@
 
 
 "/" {
-    //console.log('Detecto diagonal'); 
-     return 'diagonal'; 
+    //console.log('Detecto diagonal');
+     return 'diagonal';
 }
 
 "." {
     //console.log('Detecto punto');
-     return 'punto'; 
+     return 'punto';
 }
 
 
 "@" {
     //console.log('Detecto arroba');
-     return 'arroba'; 
+     return 'arroba';
 }
 
 "node" {
     //console.log('Detecto node');
-     return 'node'; 
+     return 'node';
 }
 
 "text" {
     //console.log('Detecto text');
-     return 'text'; 
+     return 'text';
 }
 
 "last" {
     //console.log('Detecto last');
-     return 'last'; 
+     return 'last';
 }
 
 "position" {
     //console.log('Detecto position');
-     return 'position'; 
+     return 'position';
 }
 
 
@@ -51,57 +51,57 @@
 
 "ancestor" {
     //console.log('Detecto ancestor');
-     return 'ancestor'; 
+     return 'ancestor';
 }
 
 "ancestor-or-self" {
     //console.log('Detecto ancestor-or-self');
-     return 'ancestor-or-self'; 
+     return 'ancestor-or-self';
 }
 
 "attribute" {
     //console.log('Detecto attribute');
-     return 'attribute'; 
+     return 'attribute';
 }
 
 "child" {
     //console.log('Detecto child');
-     return 'child'; 
+     return 'child';
 }
 
 "descendant" {
     //console.log('Detecto descendant');
-     return 'descendant'; 
+     return 'descendant';
 }
 
 "descendant-or-self" {
     //console.log('Detecto descendant-or-self');
-     return 'descendant-or-self'; 
+     return 'descendant-or-self';
 }
 
 "following" {
     //console.log('Detecto following');
-     return 'following'; 
+     return 'following';
 }
 
 "following-sibling" {
     //console.log('Detecto following-sibling');
-     return 'following-sibling'; 
+     return 'following-sibling';
 }
 
 "parent" {
     //console.log('Detecto parent');
-     return 'parent'; 
+     return 'parent';
 }
 
 "preceding" {
     //console.log('Detecto preceding');
-     return 'preceding'; 
+     return 'preceding';
 }
 
 "preceding-sibling" {
     //console.log('Detecto preceding-sibling');
-     return 'preceding-sibling'; 
+     return 'preceding-sibling';
 }
 
 "self" {
@@ -188,29 +188,29 @@
 }
 
 
-"(" { 
-    //console.log('Detecto parentesis_abierto'); 
-     return 'parentesis_abierto'; 
+"(" {
+    //console.log('Detecto parentesis_abierto');
+     return 'parentesis_abierto';
     }
 
-")" { 
-    //console.log('Detecto parentesis_cerrado'); 
-     return 'parentesis_cerrado'; 
+")" {
+    //console.log('Detecto parentesis_cerrado');
+     return 'parentesis_cerrado';
     }
 
-"[" { 
+"[" {
     //console.log('Detecto corchete_abierto');
-    return 'corchete_abierto'; 
+    return 'corchete_abierto';
     }
 
-"]" { 
+"]" {
     //console.log('Detecto corchete_cerrado');
-     return 'corchete_cerrado'; 
+     return 'corchete_cerrado';
     }
 
-":" { 
-    //console.log('Detecto dos_puntos'); 
-     return 'dos_puntos'; 
+":" {
+    //console.log('Detecto dos_puntos');
+     return 'dos_puntos';
     }
 
 
@@ -218,14 +218,14 @@
 //------------------------------------------------------EXPRESIONES------------------------------------------------------
 
 
-(0|[1-9][0-9]*)(\.(0|[0-9]*[1-9](0)?))? { 
-    //console.log('Detecto digito'); 
-     return 'digito'; 
+(0|[1-9][0-9]*)(\.(0|[0-9]*[1-9](0)?))? {
+    //console.log('Detecto digito');
+     return 'digito';
     }
 
-\w+  { 
-    //console.log('Detecto identificador'); 
-     return 'identificador'; 
+\w+  {
+    //console.log('Detecto identificador');
+     return 'identificador';
     }
 
 "&&"[^\n]* {
@@ -239,14 +239,14 @@
 
 <<EOF>>   return 'eof';
 
-.					{     
+.					{
     //errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column+1]);
     agregarErrorLexico("Lexico",yytext,yylloc.first_line,yylloc.first_column+1);
     //console.log('     error lexico '+yytext);
     }
 /lex
 %{
-//metodos o atributos 
+//metodos o atributos
 %}
 
 %left 'suma' 'resta'
@@ -263,15 +263,15 @@ INIT
     : CONSULTAS_XPATH eof {
         console.log('\n\nexito al analizar');
     }
-    | error eof {        
-        errores.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);        
+    | error eof {
+        errores.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
     }
 ;
 
 
 CONSULTAS_XPATH
     : CONSULTAS_XPATH operador_o CONSULTA_XPATH
-    | CONSULTA_XPATH    
+    | CONSULTA_XPATH
     | corchete_abierto error corchete_cerrado {
         errores.agregarError("Sintactico","No puede venir un predicado como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     }
@@ -309,7 +309,7 @@ EXPRESION_RUTA
                 }else if ($3 === "puntos") {
                     consultas.push(new ConsultaPuntos());
                 } else {
-                    consultas.push(new ConsultaDescendente($3));
+                    //consultas.push(new ConsultaDescendente($3));
                 }
             } else {
                 if ($3 === "punto") {
@@ -317,7 +317,11 @@ EXPRESION_RUTA
                 }else if ($3 === "puntos") {
                     consultas.push(new ConsultaPuntos());
                 } else {
-                    consultas.push(new ConsultaSimple($3));
+                    if ($3.startsWith('@')) {
+                        consultas.push(new ConsultaAtributo($3.replace('@', '')));
+                    } else {
+                        consultas.push(new ConsultaSimple($3));
+                    }
                 }
             }
     }
@@ -341,7 +345,7 @@ PUNTOS : punto              {$$ = "punto";}
 
 ACCESORES
     : ID OPCIONAL_PREDICADO             {$$ = $1;}
-    | ATRIBUTO OPCIONAL_PREDICADO
+    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = $1;}
     | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
     | multiplicacion
     | NODE
@@ -355,7 +359,7 @@ NODE : node parentesis_abierto parentesis_cerrado
 ;
 
 ATRIBUTO
-    : arroba identificador
+    : arroba identificador          {$$ = $1 + $2;}
     | arroba multiplicacion
     | arroba NODE
 ;
@@ -364,7 +368,7 @@ ID : identificador      {$$ = $1;}
     | EJE
 ;
 
-EJE : EJES dos_puntos dos_puntos ACCESORES_EJE        
+EJE : EJES dos_puntos dos_puntos ACCESORES_EJE
 ;
 
 ACCESORES_EJE : identificador
@@ -419,7 +423,7 @@ EXPR
     | EXPR division EXPR
     | EXPR mod EXPR
     | parentesis_abierto EXPR parentesis_cerrado
-    | TIPOS    
+    | TIPOS
     | parentesis_abierto error parentesis_cerrado {
         errores.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
     }

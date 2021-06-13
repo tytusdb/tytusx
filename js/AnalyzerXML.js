@@ -86,7 +86,7 @@ switch (yystate) {
 case 1:
 return $$[$0-1];
 break;
-case 2: case 3: case 20: case 23: case 29: case 30: case 31: case 32: case 33: case 35: case 36: case 37:
+case 2: case 3: case 23: case 29: case 30: case 31: case 32: case 33: case 35: case 36: case 37:
 this.$ = $$[$0];
 break;
 case 6: case 17:
@@ -124,6 +124,9 @@ this.$=[$$[$0-4], $$[$0], $$[$0-3]];
 break;
 case 19:
 this.$ = new Atributo($$[$0-2],$$[$0].replaceAll('\"', ""), Type.ATRIBUTO, _$[$0-2].first_line, (_$[$0-2].first_column + 1));
+break;
+case 20:
+this.$ = $$[$0].trim();
 break;
 case 21:
 this.$ = "";

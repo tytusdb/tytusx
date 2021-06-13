@@ -101,7 +101,7 @@ ATTRIB
 ;
 
 TEXTTAG
-    : TEXT_TAG_CHARS        {$$ = $1;}
+    : TEXT_TAG_CHARS        {$$ = $1.trim();}
     |                       {$$ = "";}
 ;
 

@@ -12,19 +12,19 @@ class ConsultaSimple implements Consulta {
             let flag: boolean = false;
             let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s: Simbolo) => {
-                    if (s.getNombre() == this.identificador) {
-                        flag = true;
-                        nuevoEntorno.add(s);
-                    }
-                });
-                if (flag) {
-                    newEntornos.push(nuevoEntorno);
+                if (s.getNombre() == this.identificador) {
+                    flag = true;
+                    nuevoEntorno.add(s);
                 }
             });
-            return newEntornos;
+            if (flag) {
+                newEntornos.push(nuevoEntorno);
+            }
+        });
+        return newEntornos;
     }
 
-    getIdentificador(){
+    getIdentificador() {
         return this.identificador;
     }
 }
