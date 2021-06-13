@@ -153,7 +153,20 @@ botonCargar2.addEventListener("click", () => {
 })
 document.getElementById("ast").addEventListener("click", () => {
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+  
+  console.log("ingreso al CST de mercado");
+  
+  console.log(parserXML.json.nodo);
+
+  console.log("ingreso al AST");
+  
+  console.log(AST_xPath);
+
   generarAST(AST_xPath);
+
+  //graficarArbol(AST_xPath.nodo);
+
+  //generarAST(AST_xPath);
 })
 // ======================================
 // MODAL XML
@@ -281,6 +294,7 @@ function analizar_xpath_izq(){
     <div id="graph" style="width: 100%;"></div>
   </div>
   `;
+
   generarAST(AST_xPath);
   
 }
@@ -304,7 +318,8 @@ function analizar_xpath() {
     <div id="graph" style="width: 100%;"></div>
   </div>
   `;
-  generarAST(AST_xPath);
+  
+  //generarAST(AST_xPath);
   
 
   
