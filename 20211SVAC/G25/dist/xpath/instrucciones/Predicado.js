@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nodo = void 0;
-class Nodo {
+exports.Predicado = void 0;
+class Predicado {
     constructor(valor, fila, columna) {
         this.valor = valor;
         this.fila = fila;
         this.columna = columna;
-        console.log("Nodo   " + valor);
+        console.log("Predicado   " + valor);
     }
 }
-exports.Nodo = Nodo;
+exports.Predicado = Predicado;
