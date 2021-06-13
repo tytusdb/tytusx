@@ -18,12 +18,19 @@ var Objeto = /** @class */ (function () {
         return this.agregar;
     };
 
+
     Objeto.prototype.LeerID = function () {
         return this.id;
     };
 
     Objeto.prototype.SetearID = function (id) {
-        this.id = id;
+        if(this.id==0){
+            this.id = id;
+        }    
+    };
+
+    Objeto.prototype.setEntorno = function (entorno) {
+        this.entorno = entorno;
     };
 
     Objeto.prototype.getID = function () {

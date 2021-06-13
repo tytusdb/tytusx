@@ -144,12 +144,11 @@ function ExtraerCodificacion(objetos){
 
 }
 
-function ObtenerObjetos(entornos){
+function ObtenerObjetos(entorno){
 
     var objetos = [];
     
 
-    entornos.forEach(function (entorno){
         entorno.getTabla().forEach(function (simbolo){
 
             if(simbolo.getTipo()==Tipo.STRUCT){
@@ -157,10 +156,9 @@ function ObtenerObjetos(entornos){
                 if(!ObjetoYaExiste(objetos,simbolo.getValor().LeerID())){
                     objetos.push(simbolo.getValor());
                 }  
-            }
-    
+            }  
         });
-    }); 
+
 
     return objetos;
 }
@@ -184,27 +182,31 @@ function ObtenerEntornos(entorno){
 
 function EntornoYaExiste(arreglo, id){
 
+    var existe = false;
+
     arreglo.forEach(function (entorno){
 
         if(entorno.getID()==id){
-            return true;
+            existe = true;
         }
     });
 
-    return false;
+    return existe;
 
 }
 
 function ObjetoYaExiste(arreglo, id){
 
+    var existe = false;
+
     arreglo.forEach(function (objeto){
 
         if(objeto.LeerID()==id){
-            return true;
+            existe = true;
         }
     });
 
-    return false;
+    return existe;
 
 }
 
