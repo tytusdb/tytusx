@@ -75,7 +75,8 @@ function ambito_objeto(listO, entornoAnterior) {
     return entornoObjeto;
 }
 ejecutarCodigo();
-console.log(instrucciones.getProducciones());
+//REPORTE GRAMATICAL
+//console.log(instrucciones.getProducciones())
 //console.log(entornoGlobal.getSimbolo("biblioteca").getValorImplicito().
 //entorno.getSimbolo("libro").getValorImplicito().entorno.getSimbolo('autor').getValorImplicito().text );
 //REPORTE 
@@ -90,4 +91,4 @@ const reporte = new ReporteXML_1.ReporteXML();
 //console.log(instrucciones.getPr¡cciones());
 //GRAFO
 let graph = new GraphAST_1.GraphAST(instrucciones);
-console.log(graph.getGrafo());
+//console.log(graph.getGrafo());
