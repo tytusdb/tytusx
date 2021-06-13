@@ -104,27 +104,17 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "//titulo");
+let editorXPATH = (document.getElementById("editor").value = "/biblioteca/@fechaNacimiento");
 let editorXML = document.getElementById("consolaJS");
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
+let listaTokens=[];
 let parserXML;
 let codificador = document.getElementById("codencod");
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<selva>
-    <animal>
-        <nombre>Werthers</nombre>
-        <tipo>Pantera</tipo>
-        <color>Negro</color>
-        <edad>12</edad>
-        </animal>
-    <animal>
-        <nombre>Bun</nombre>
-        <tipo>León</tipo>
-        <color>Marrón</color>
-        <edad>15</edad>
-    </animal>
-</selva>
+<biblioteca fechaNacimiento="28/03/1936">
+  Hola MUNDO
+</biblioteca>
 `
 editorXML.value = textoEntrada
 
