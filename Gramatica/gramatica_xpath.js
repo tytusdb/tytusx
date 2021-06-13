@@ -140,34 +140,43 @@ rg_path.setValor('RUTA2 -> epsilon;\n');
 break;
 case 11:
  rg_path.setValor('DATO -> identificador;\n'); 
-                                this.$ = new nodoDato($$[$0], TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);
 break;
 case 12:
- rg_path.setValor('DATO -> multiplicacion;\n'); this.$ = $$[$0];
+ rg_path.setValor('DATO -> multiplicacion;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.ASTERISCO,this._$.first_line, this._$.first_column);
 break;
 case 13:
- rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); this.$ = $$[$0-1]+''+$$[$0];
+ rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.ARROBA,this._$.first_line, this._$.first_column);
 break;
 case 14:
- rg_path.setValor('DATO -> punto;\n'); this.$ = $$[$0];
+ rg_path.setValor('DATO -> punto;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.PUNTO,this._$.first_line, this._$.first_column);
 break;
 case 15:
- rg_path.setValor('DATO -> doblepunto;\n'); this.$ = $$[$0];
+ rg_path.setValor('DATO -> doblepunto;\n');
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.DOBLEPUNTO,this._$.first_line, this._$.first_column);
 break;
 case 16:
- rg_path.setValor('DATO -> siguiente;\n'); this.$=$$[$0];
+ rg_path.setValor('DATO -> siguiente;\n');
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.SIGUIENTE,this._$.first_line, this._$.first_column);
 break;
 case 17:
  rg_path.setValor('DATO -> texto;\n'); this.$=$$[$0];
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.TEXTO,this._$.first_line, this._$.first_column);
 break;
 case 18:
- rg_path.setValor('DATO -> nodo;\n'); this.$=$$[$0];
+ rg_path.setValor('DATO -> nodo;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.NODO,this._$.first_line, this._$.first_column);
 break;
 case 19:
- rg_path.setValor('DATO -> posicion;\n'); this.$=$$[$0];
+ rg_path.setValor('DATO -> posicion;\n');
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.POSICION,this._$.first_line, this._$.first_column);
 break;
 case 20:
  rg_path.setValor('DATO -> RESERVADS :: DATO1 ;\n'); 
+                                this.$ = new nodoDatorersva($$[$0-2], $$[$0], TIPO_DATO.RESERVADAS,this._$.first_line, this._$.first_column);
 break;
 case 21:
   rg_path.setValor('RESERVADAS -> ancestros;\n'); this.$=$$[$0];
@@ -209,31 +218,40 @@ case 33:
   rg_path.setValor('RESERVADAS -> mismo;\n'); this.$=$$[$0];
 break;
 case 34:
- rg_path.setValor('DATO1 -> identificador;\n');this.$ = $$[$0];
+ rg_path.setValor('DATO1 -> identificador;\n');
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);
 break;
 case 35:
- rg_path.setValor('DATO1 -> multiplicacion;\n'); this.$ = $$[$0];
+ rg_path.setValor('DATO1 -> multiplicacion;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.ASTERISCO,this._$.first_line, this._$.first_column);
 break;
 case 36:
- rg_path.setValor('DATO1 -> @ TODOATRIBUTO;\n'); this.$ = $$[$0-1]+''+$$[$0];
+ rg_path.setValor('DATO1 -> @ TODOATRIBUTO;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.ARROBA,this._$.first_line, this._$.first_column);
 break;
 case 37:
-  rg_path.setValor('DATO1 -> siguiente;\n'); this.$=$$[$0];
+  rg_path.setValor('DATO1 -> siguiente;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.SIGUIENTE,this._$.first_line, this._$.first_column);
 break;
 case 38:
-  rg_path.setValor('DATO1 -> texto;\n'); this.$=$$[$0];
+  rg_path.setValor('DATO1 -> texto;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.TEXTO,this._$.first_line, this._$.first_column);
 break;
 case 39:
-  rg_path.setValor('DATO1 -> nodo;\n'); this.$=$$[$0];
+  rg_path.setValor('DATO1 -> nodo;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.NODO,this._$.first_line, this._$.first_column);
 break;
 case 40:
-  rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); this.$=$$[$0];
+ rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); 
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.ASTERISCO,this._$.first_line, this._$.first_column);
 break;
 case 41:
-  rg_path.setValor('TODOATRIBUTO -> identificador;\n'); this.$=$$[$0];
+  rg_path.setValor('TODOATRIBUTO -> identificador;\n');  
+                                this.$ = new nodoDator($$[$0], TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);
 break;
 case 42:
  rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');
+                                this.$ = new nodoMostrar($$[$0-3],$$[$0-1], this._$.first_line, this._$.first_column);
 break;
 case 43:
  rg_path.setValor('MOSTRAR -> epsilon;\n'); this.$ = '';

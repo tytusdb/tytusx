@@ -142,16 +142,25 @@ RUTA2:   diagonal  DATO MOSTRAR RUTA2{
         | {rg_path.setValor('RUTA2 -> epsilon;\n'); }   ;
 
 DATO: identificador         { rg_path.setValor('DATO -> identificador;\n'); 
-                                $$ = new nodoDato($1, TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);}
-    |multiplicacion         { rg_path.setValor('DATO -> multiplicacion;\n'); $$ = $1;}
-    |arroba TODOATRIBUTO    { rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); $$ = $1+''+$2;}
-    |punto                  { rg_path.setValor('DATO -> punto;\n'); $$ = $1;}
-    |doblepunto             { rg_path.setValor('DATO -> doblepunto;\n'); $$ = $1;}
-    |siguiente              { rg_path.setValor('DATO -> siguiente;\n'); $$=$1;}
-    |texto                  { rg_path.setValor('DATO -> texto;\n'); $$=$1;}
-    |nodo                   { rg_path.setValor('DATO -> nodo;\n'); $$=$1;}
-    |posicion               { rg_path.setValor('DATO -> posicion;\n'); $$=$1;}
-    | RESERVADAS dospuntos DATO1 { rg_path.setValor('DATO -> RESERVADS :: DATO1 ;\n'); };
+                                $$ = new nodoDator($1, TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);}
+    |multiplicacion         { rg_path.setValor('DATO -> multiplicacion;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.ASTERISCO,this._$.first_line, this._$.first_column);}
+    |arroba TODOATRIBUTO    { rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); 
+                                $$ = new nodoDator($2, TIPO_DATO.ARROBA,this._$.first_line, this._$.first_column);}}
+    |punto                  { rg_path.setValor('DATO -> punto;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.PUNTO,this._$.first_line, this._$.first_column);}
+    |doblepunto             { rg_path.setValor('DATO -> doblepunto;\n');
+                                $$ = new nodoDator($1, TIPO_DATO.DOBLEPUNTO,this._$.first_line, this._$.first_column);}
+    |siguiente              { rg_path.setValor('DATO -> siguiente;\n');
+                                $$ = new nodoDator($1, TIPO_DATO.SIGUIENTE,this._$.first_line, this._$.first_column);}
+    |texto                  { rg_path.setValor('DATO -> texto;\n'); $$=$1;
+                                $$ = new nodoDator($1, TIPO_DATO.TEXTO,this._$.first_line, this._$.first_column);}
+    |nodo                   { rg_path.setValor('DATO -> nodo;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.NODO,this._$.first_line, this._$.first_column);}
+    |posicion               { rg_path.setValor('DATO -> posicion;\n');
+                                $$ = new nodoDator($1, TIPO_DATO.POSICION,this._$.first_line, this._$.first_column);}
+    |RESERVADAS dospuntos DATO1 { rg_path.setValor('DATO -> RESERVADS :: DATO1 ;\n'); 
+                                $$ = new nodoDatorersva($1, $3, TIPO_DATO.RESERVADAS,this._$.first_line, this._$.first_column);};
 
 RESERVADAS: ancestros            {  rg_path.setValor('RESERVADAS -> ancestros;\n'); $$=$1;}
         |ancestroself            {  rg_path.setValor('RESERVADAS -> ancestroself;\n'); $$=$1;}
@@ -167,18 +176,27 @@ RESERVADAS: ancestros            {  rg_path.setValor('RESERVADAS -> ancestros;\n
         |hemanoanterior          {  rg_path.setValor('RESERVADAS -> hemanoanterior;\n'); $$=$1;}
         |mismo                   {  rg_path.setValor('RESERVADAS -> mismo;\n'); $$=$1;};
 
-DATO1: identificador         { rg_path.setValor('DATO1 -> identificador;\n');$$ = $1;}
-    |multiplicacion         { rg_path.setValor('DATO1 -> multiplicacion;\n'); $$ = $1;}
-    |arroba TODOATRIBUTO   { rg_path.setValor('DATO1 -> @ TODOATRIBUTO;\n'); $$ = $1+''+$2;}
-    |siguiente              {  rg_path.setValor('DATO1 -> siguiente;\n'); $$=$1;}
-    |texto                  {  rg_path.setValor('DATO1 -> texto;\n'); $$=$1;}
-    |nodo                   {  rg_path.setValor('DATO1 -> nodo;\n'); $$=$1;};
+DATO1: identificador      { rg_path.setValor('DATO1 -> identificador;\n');
+                                $$ = new nodoDator($1, TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);}
+    |multiplicacion       { rg_path.setValor('DATO1 -> multiplicacion;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.ASTERISCO,this._$.first_line, this._$.first_column);}
+    |arroba TODOATRIBUTO  { rg_path.setValor('DATO1 -> @ TODOATRIBUTO;\n'); 
+                                $$ = new nodoDator($2, TIPO_DATO.ARROBA,this._$.first_line, this._$.first_column);}
+    |siguiente            {  rg_path.setValor('DATO1 -> siguiente;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.SIGUIENTE,this._$.first_line, this._$.first_column);}
+    |texto                {  rg_path.setValor('DATO1 -> texto;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.TEXTO,this._$.first_line, this._$.first_column);}
+    |nodo                 {  rg_path.setValor('DATO1 -> nodo;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.NODO,this._$.first_line, this._$.first_column);};
 
-TODOATRIBUTO: multiplicacion {  rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); $$=$1;}
-            | identificador  {  rg_path.setValor('TODOATRIBUTO -> identificador;\n'); $$=$1;};
+TODOATRIBUTO: multiplicacion { rg_path.setValor('TODOATRIBUTO -> multiplicacion;\n'); 
+                                $$ = new nodoDator($1, TIPO_DATO.ASTERISCO,this._$.first_line, this._$.first_column);} 
+            | identificador  {  rg_path.setValor('TODOATRIBUTO -> identificador;\n');  
+                                $$ = new nodoDator($1, TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);};
 
 
-MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');}
+MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');
+                                $$ = new nodoMostrar($1,$3, this._$.first_line, this._$.first_column);}
         |                           { rg_path.setValor('MOSTRAR -> epsilon;\n'); $$ = '';};
 
 OPEOCOND: CONDICION                 { rg_path.setValor('OPEOCOND -> identificador;\n'); $$ = $1;};

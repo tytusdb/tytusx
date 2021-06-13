@@ -26,11 +26,29 @@ function nodoRuta(dato:any, mostrar:any, ruta2:any, tipoRuta:TIPO_RUTA, fila:num
 	}
 }
 //nodo simple
-function nodoDato(valor:string, tipo: TIPO_DATO, fila:number, columna:number){
+function nodoDator(valor:any, tipo: TIPO_DATO, fila:number, columna:number){
     return{
         valor:valor,
         tipo:tipo,
         fila: fila,
         columna:columna
+    }
+}
+
+//nodo para dato reservadas
+function nodoDatorersva(reservadas:any, dato:any, tipo: TIPO_DATO, fila:number, columna:number){
+    return{
+        reservadas:reservadas,
+        dato:dato,
+        tipo:tipo,
+        fila: fila,
+        columna:columna
+    }
+}
+
+function nodoMostrar(exp:any, mostrar:any, fila:number, columna:number){
+    return {
+        exp:exp,
+        mostrar:mostrar
     }
 }
