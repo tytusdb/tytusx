@@ -6,6 +6,8 @@
     let gramatical = ' ';
     let gramaticapp = ' ';
     let tipoencoding = ' ';    
+
+    let verificarEtiquetas = [];
 %}
 
 // ===================================== ANALISIS LEXICO ==============================================
@@ -263,6 +265,9 @@ APERTURA
         // REPORTE GRAMATICAL
         gramaticapp = `AP  -> tk_abre tk_etiqueta AT tk_cierra \n` + gramaticapp;
         gramatical = `<APERTURA> := ${$1} ${$2} <ATRIBUTOS> ${$4} \n` + gramatical;
+
+        // Verificar Etiqueta
+        verificarEtiquetas.push(new Token("ETIQUETA",$2 , @2.first_line, @2.first_column ));
     }
 ;
 
@@ -508,6 +513,14 @@ CIERRE
         // REPORTE GRAMATICAL
         gramaticapp = `CI  -> tk_abre tk_etiqueta tk_cierra \n` + gramaticapp;
         gramatical = `<CIERRE> := ${$1} ${$2} ${$3} \n` + gramatical;
+
+        //VERIFICAR ETIQUETA
+        let etiqueta = verificarEtiquetas.pop();
+        if (etiqueta.lexema === $2) {
+            // Etiqueta correcta
+        } else {
+            listaErrores.push(new TokenError("XML", "Semantico", `Se abrio la etiqueta ${etiqueta.lexema} en la linea ${etiqueta.linea} y se esta cerrando con ${$2} en la linea ${@2.first_line}` , @2.first_line, @2.first_column ));
+        }
     }
 ;
 
