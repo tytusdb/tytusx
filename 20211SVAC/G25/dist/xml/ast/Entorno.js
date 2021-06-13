@@ -41,5 +41,8 @@ class Entorno {
     getTabla() {
         return this.tabla;
     }
+    getAnterior() {
+        return this.anterior;
+    }
 }
 exports.Entorno = Entorno;

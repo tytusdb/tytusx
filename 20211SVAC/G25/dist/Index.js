@@ -11,16 +11,14 @@ let contenido = `
 
 <?xml version="1.0" encoding="UTF-8"?>
 
-<bibliotec>
+<biblioteca>
   <libro>
-    <titulo>Pantaleon y las visitadoras</titulo>
-    <autor fechaNacimiento="28/03/1936">Mario (Varga)s Llosa</autor>
-    <fechaPublicacion ano="1973" año="1000"/>
+  <fechaPublicacion ano="1973" año="1000"/>
+  <autor fechaNacimiento="28/03/1936">Mario (Varga)s Llosa</autor>
   </libro>
   <libro>
-    <titulo>Conversacion en la catedral</titulo>
-    <autor fechaNacimiento="28/03/1936">FFF Vargas: Llosa</autor>
-    <fechaPublicacion ano="1969"/>
+  <fechaPublicacion ano="1973" año="1000"/>
+  <autor fechaNacimiento="28/03/1936">Mario (Varga)s Llosa</autor>
   </libro>
 </biblioteca>
 `;
@@ -29,17 +27,17 @@ instrucciones = gramatica.parse(contenido);
 const entornoGlobal = new Entorno_1.Entorno(null);
 function ejecutarCodigo() {
     instrucciones.getExpresiones().forEach((element) => {
+        let entornoObj = new Entorno_1.Entorno(null);
+        if (element.listObjetos != undefined && element.listObjetos != null) {
+            entornoObj = ambito_objeto(element.listObjetos, entornoGlobal);
+        }
         if (element.listAtributos != undefined) {
             if (element.listAtributos.length > 0) {
                 element.listAtributos.forEach((a) => {
                     const simbolo = new Simbolo_1.Simbolo(a.id, a.value, Tipo_1.Tipo.ATRIBUTO, a.line, a.column);
-                    entornoGlobal.agregar(simbolo);
+                    entornoObj.agregar(simbolo);
                 });
             }
-        }
-        let entornoObj = new Entorno_1.Entorno(null);
-        if (element.listObjetos != undefined && element.listObjetos != null) {
-            entornoObj = ambito_objeto(element.listObjetos, entornoGlobal);
         }
         if (element.id1 != undefined) {
             element.entorno = entornoObj;
@@ -50,21 +48,21 @@ function ejecutarCodigo() {
     //entornoGlobal.print()
 }
 function ambito_objeto(listO, entornoAnterior) {
-    const entornoObjeto = new Entorno_1.Entorno(entornoAnterior);
+    var entornoObjeto = new Entorno_1.Entorno(entornoAnterior);
     listO.forEach((element) => {
+        let entornoObj = new Entorno_1.Entorno(entornoObjeto);
+        if (element.listObjetos != undefined && element.listObjetos != null) {
+            //entornoObjeto.print();
+            entornoObj = ambito_objeto(element.listObjetos, entornoObjeto);
+        }
         if (element.listAtributos != undefined) {
             if (element.listAtributos.length > 0) {
                 element.listAtributos.forEach((a) => {
                     const simbolo = new Simbolo_1.Simbolo(a.id, a.value, Tipo_1.Tipo.ATRIBUTO, a.line, a.column);
                     //entornoObjeto.print();
-                    entornoObjeto.agregar(simbolo);
+                    entornoObj.agregar(simbolo);
                 });
             }
-        }
-        let entornoObj = new Entorno_1.Entorno(null);
-        if (element.listObjetos != undefined && element.listObjetos != null) {
-            //entornoObjeto.print();
-            entornoObj = ambito_objeto(element.listObjetos, entornoObjeto);
         }
         if (element.id1 != undefined) {
             element.entorno = entornoObj;
@@ -77,8 +75,14 @@ function ambito_objeto(listO, entornoAnterior) {
 ejecutarCodigo();
 //REPORTE 
 const reporte = new ReporteXML_1.ReporteXML();
-reporte.tablaSimbolos(entornoGlobal);
-console.log(instrucciones.getProducciones());
+//console.log(reporte.tablaSimbolos(entornoGlobal,"0"));
+//console.log(entornoGlobal.getTabla())
+//console.log(entornoGlobal.getSimbolo("0").getValorImplicito().entorno.getTabla())
+//console.log(entornoGlobal.getSimbolo("0").getValorImplicito().entorno.getSimbolo("0").getValorImplicito().entorno.getTabla())
+//console.log(entornoGlobal.getSimbolo("0").getValorImplicito().entorno
+//.getSimbolo("0").getValorImplicito().entorno.getSimbolo("0").getValorImplicito().entorno.getAnterior())
+//PRODUCIONES
+//console.log(instrucciones.getProducciones());
 //GRAFO
 let graph = new GraphAST_1.GraphAST(instrucciones);
 console.log(graph.getGrafo());
