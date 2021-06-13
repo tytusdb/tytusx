@@ -1,0 +1,97 @@
+<style>
+    textarea {
+        resize: none;
+        width: 500;
+        height: 300;
+    }
+
+    th,
+    tr,
+    td {
+        text-align: left;
+    }
+</style>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./Utilidad/codemirror/lib/codemirror.css">
+    <script src="./Utilidad/general.js"></script>
+    <script  src="./Gramatica/gramaticaXML.js"></script>
+    <script  src="./Gramatica/gramaticaXPath.js"></script>
+    <script  src="./AST/AST.js"></script>
+    <script  src="./AST/Entorno.js"></script>
+    <script  src="./AST/Simbolo.js"></script>
+    <script  src="./AST/Tipo.js"></script>
+    <script  src="./Expresiones/Primitivo.js"></script>
+    <script  src="./Instrucciones/Primitivas/Print.js"></script>
+    <script  src="./Interfaces/Expresion.js"></script>
+    <script  src="./Interfaces/Instruccion.js"></script>
+    <script  src="./Expresiones/Atributo.js"></script>
+    <script  src="./Expresiones/Operacion.js"></script>
+    <script  src="./Expresiones/Objeto.js"></script>
+    <script src="./Utilidad/TipoError.js"></script>
+    <script src="./Utilidad/ErrorCapturado.js"></script>    
+    <script src="./index.js"></script>
+    <h1>Compi 2 - GRUPO 2 GHP</h1>
+</head>
+
+<body>
+    <div>
+        <table style="width:100%">
+            <tr>
+                <th>
+                    <h4>Archivo XML</h4>
+                </th>
+                <th>
+                    <h4>XPath</h4>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <button onclick="document.getElementById('file-input').click();">Abrir</button>
+                    <input id="file-input" type="file" name="name" style="display: none;" />
+                    <button onclick="limpiarEditor('editorXML')">Limpiar</button>
+                    <button onclick="guardarArchivo('editorXML')">Guardar XML</button>                   
+                </td>
+                <td>
+                    <button onclick="document.getElementById('file-input').click();">Abrir</button>
+                    <input id="file-input" type="file" name="name" style="display: none;" />
+                    <button onclick="limpiarEditor('editorXPath')">Limpiar</button>
+                    <button onclick="guardarArchivo('editorXPath')">Guardar XPath</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea id="editorXML"></textarea>
+                </td>
+                <td>
+                    <textarea id="editorXPath"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <h4>Consola</h4>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <button onclick="analizar()">Analizar Archivos</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea id="editorConsola"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script type="text/javascript" src="./Utilidad/jquery.min.js"></script>
+    <script type="text/javascript" src="./Utilidad/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="./Utilidad/utilidades.js"></script>
+
+</body>
+
+</html>
