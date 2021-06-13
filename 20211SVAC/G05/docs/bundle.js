@@ -86,7 +86,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$=$$[$0-1]; console.log($$[$0-1]); return this.$; 
+ this.$=$$[$0-1]; return this.$; 
 break;
 case 2: case 11:
  $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
@@ -1434,7 +1434,7 @@ class GraficarAST {
                 //this.cadenaFinal += cadenaInterna
             });
             this.cadenaFinal += "\n}";
-            console.log(this.cadenaFinal);
+            // console.log(this.cadenaFinal);
             var direccion = encodeURI("https://dreampuf.github.io/GraphvizOnline/#" + this.cadenaFinal);
             window.open(direccion, '_blank');
         }
@@ -1683,14 +1683,14 @@ let ObjetosXML;
 let cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
                         </tr></thead>`;
 //Esta funcion es para mientras en lo que sincroniza con la pag
-function accionesEjecutables() {
+/*
     ejecutarXML(`
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <biblioteca dir="calle 3>5<5" prop="Sergio's">
     <libro>
         <titulo>Libro A</titulo>
-        <autor>Julio &amp;Tommy&amp; Garcia</autor>
+        <autor>Julio& &amp;Tommy&amp; Garcia</autor>
         <fechaPublicacion ano="2001" mes="Enero"/>
     </libro>
 
@@ -1706,12 +1706,15 @@ function accionesEjecutables() {
 <hemeroteca dir="zona 21" prop="kev" estado="chilera">
     
 </hemeroteca>
-`);
-    realizarGraficaAST();
-    tablaErroresFicticia();
-}
-accionesEjecutables();
+`)
+    realizarGraficaAST()
+    tablaErroresFicticia()
+*/
+//accionesEjecutables()
+//tablaErroresFicticia()
 function ejecutarXML(entrada) {
+    cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
+                        </tr></thead>`;
     //Parseo para obtener la raiz o raices  
     const objetos = gramaticaXML.parse(entrada);
     ObjetosXML = objetos;
@@ -1729,6 +1732,8 @@ function ejecutarXML(entrada) {
     });
     //esta es solo para debug jaja
     const ent = entornoGlobal;
+    console.log(cadenaReporteTS);
+    return cadenaReporteTS;
 }
 ;
 function ejecutarXML_DSC(entrada) {
@@ -1763,8 +1768,8 @@ function llenarTablaXML(objeto, entorno, padre) {
     entorno.agregar(simbolo.indentificador, simbolo);
     //Esto es para la graficada de la tabla de simbolos
     let ambitoTS = "";
-    if (ambitoTS != null) {
-        ambitoTS = objeto.identificador1;
+    if (padre != null) {
+        ambitoTS = padre.identificador1;
     }
     else {
         ambitoTS = "Global";
@@ -1776,7 +1781,7 @@ function llenarTablaXML(objeto, entorno, padre) {
     if (objeto.listaObjetos.length > 0) {
         objeto.listaObjetos.forEach((objetoHijo) => {
             const resultado = objetoHijo;
-            llenarTablaXML(objetoHijo, entornoObjeto, objetoHijo);
+            llenarTablaXML(objetoHijo, entornoObjeto, objeto);
         });
     }
 }
@@ -1800,6 +1805,27 @@ function tablaErroresFicticia() {
     });
     console.log(todosErrores);
 }
+function reporteTablaErrores() {
+    let cadenaReporteTE = ` <thead><tr><th scope="col">Tipo</th><th scope="col">Descripcion</th><th scope="col">Archivo</th><th scope="col">Fila</th><th scope="col">Columna</th>
+                        </tr></thead>`;
+    TError_js_1.errorLex.forEach(element => {
+        cadenaReporteTE += `<tr>`;
+        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
+        cadenaReporteTE += `</tr>`;
+    });
+    TError_js_1.errorSin.forEach(element => {
+        cadenaReporteTE += `<tr>`;
+        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
+        cadenaReporteTE += `</tr>`;
+    });
+    TError_js_1.errorSem.forEach(element => {
+        cadenaReporteTE += `<tr>`;
+        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
+        cadenaReporteTE += `</tr>`;
+    });
+    return cadenaReporteTE;
+}
+/*
 ejecutarXML_DSC(`
 <?xml version="1.0" encoding="UTF-8" ?>
 
@@ -1824,7 +1850,8 @@ ejecutarXML_DSC(`
     
 </hemeroteca>
 `);
-module.exports = { ejecutarXML, realizarGraficaAST, cadenaReporteTS };
+*/
+module.exports = { ejecutarXML, realizarGraficaAST, reporteTablaErrores };
 
 },{"./Analizadores/gramaticaXML.js":1,"./Analizadores/gramaticaXMLDSC.js":2,"./Graficador/GraficarAST.js":3,"./Interprete/Util/TError.js":6,"./Simbolo/Entorno.js":7,"./Simbolo/Simbolo.js":8,"./Simbolo/Tipo.js":9}],11:[function(require,module,exports){
 

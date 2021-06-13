@@ -31,6 +31,9 @@
 								<li>
 									<button name="btnGuardar" id="btnGuardar" class="dropdown-item">Guardar</button>
 								</li>
+								<li class="nav-item">
+									<button name="btnNuevo" id="btnCerrar" class="dropdown-item" onclick="cerrarTab();">Cerrar</a>
+								</li>
 							</ul>
 						</li>
 
@@ -43,10 +46,10 @@
 						</li>
 
 						<li class="nav-item">
-							<a class="nav-link" id="btnCerrar" role="button" onclick="cerrarTab();">Cerrar</a>
+							<a class="nav-link" id="btnCerrar" role="button" onclick="llenarTablaReportes();">Tabla de Simbolos</a>
 						</li>
 						<li class="nav-item">
-							<a href="./Reportes.html" class="nav-link" id="btnReportes" role="button">Reportes</a>
+							<a class="nav-link" id="btnCerrar" role="button" onclick="llenarTablaErrores();">Tabla de Errores</a>
 						</li>
 					</ul>
 
@@ -94,104 +97,21 @@
 		</div>
 
 	</div>
+
+	<div class="container mt-5">
+        <div class="row">
+            <div class="col-6 mb-2">
+                <h3 id="tituloRep" ></h3>
+                <div id="TablaReporte" class="tab-content" style="border-color:red;">
+                    <table class="table table-dark" id="tablasimbolos" style="width:100%" bordered="true">
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="bundle.js"></script>
-<script>
-	var contTab = 1;
-	var activeTab = "";
-	var activeNav = "";
-	var activeText = "";
-	var activeNombre = "";
+<script src ="scriptsIndex.js"></script>
 
-	document.getElementById("btnNuevo").addEventListener('click', function() {
-		var nombre = prompt('Nombre del archivo');
-
-		if (nombre == "" || nombre == null) {
-			alert("Campo vacio!")
-		}else{
-			nombre += ".xml";
-
-			var boton = document.getElementById("nav-tab");
-			boton.innerHTML += `<button class="nav-link" id="nav-${contTab}-tab" data-bs-toggle="tab" data-bs-target="#nav-${contTab}" type="button" role="tab" aria-controls="nav-${contTab}" aria-selected="true" onclick="selector('nav-${contTab}-tab', 'nav-${contTab}', 'textArea${contTab}', '${nombre}');">${nombre}</button>`;
-
-			var elemento = document.getElementById("nav-tabContent");
-			elemento.innerHTML += `<div class="tab-pane fade" id="nav-${contTab}" role="tabpanel" aria-labelledby="nav-${contTab}-tab"><textarea class="form-control" id="textArea${contTab}" rows="15"></textarea></div>`;
-			
-			contTab++;
-		}
-	});
-
-	document.getElementById("attachment").addEventListener('click', function() {
-		document.getElementById("file-input").click();
-	});
-
-	document.getElementById("file-input").addEventListener('change', function(e) {
-		var archivo = e.target.files[0];
-
-		if (!archivo) {
-			return;
-		}
-
-		var boton = document.getElementById("nav-tab");
-		boton.innerHTML += `<button class="nav-link" id="nav-${contTab}-tab" data-bs-toggle="tab" data-bs-target="#nav-${contTab}" type="button" role="tab" aria-controls="nav-${contTab}" aria-selected="true" onclick="selector('nav-${contTab}-tab', 'nav-${contTab}', 'textArea${contTab}', '${archivo.name}');">${archivo.name}</button>`;
-
-		var lector = new FileReader();
-		lector.onload = function(e) {
-			var contenido = e.target.result;
-			var elemento = document.getElementById("nav-tabContent");
-			elemento.innerHTML += `<div class="tab-pane fade" id="nav-${contTab-1}" role="tabpanel" aria-labelledby="nav-${contTab-1}-tab"><textarea class="form-control" id="textArea${contTab-1}" rows="15">${contenido}</textarea></div>`;
-		};
-		lector.readAsText(archivo);
-
-		contTab++;
-	});
-
-	function selector(idTab, idNav, idText, name) {
-		activeTab = idTab;
-		activeNav = idNav;
-		activeText = idText;
-		activeName = name;
-	};
-
-	function cerrarTab(){
-		tab = document.getElementById(activeTab);
-		nav = document.getElementById(activeNav);	
-		if (!tab || !nav){
-			alert("El elemento selecionado no existe");
-		} else {
-			padre = tab.parentNode;
-			padre.removeChild(tab);
-
-			madre = nav.parentNode;
-			madre.removeChild(nav);
-		}
-	};
-
-	function descargar(filename, text) {
-		var element = document.createElement('a');
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-		element.setAttribute('download', filename);
-
-		element.style.display = 'none';
-		document.body.appendChild(element);
-
-		element.click();
-
-		document.body.removeChild(element);
-	};
-
-	document.getElementById("btnGuardar").addEventListener("click", function () {
-		var texto = document.getElementById(activeText).value;
-		
-		descargar(activeName, texto);
-	}, false);
-
-	document.getElementById("btnCargarA").addEventListener('click', function() {
-		myBundle.ejecutarXML(document.getElementById(activeText).value);
-	});
-
-	document.getElementById("btnGraficaAST").addEventListener('click', function() {
-		myBundle.realizarGraficaAST();
-	});
-</script>
 </html>
