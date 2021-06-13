@@ -73,7 +73,7 @@ class Objeto{
     agregarTDS(entorno:TablaSimbolos, objeto:Objeto){
         
         const ts:TablaSimbolos = new TablaSimbolos([],entorno,this.identificador);
-        tds_xml_persistente.push(ts);
+        //tds_xml_persistente.push(ts);
         if(objeto.listaAtributos != undefined)
         {
             let atributo = new Atributo('','',0,0);            
@@ -83,12 +83,13 @@ class Objeto{
         }
 
         if(objeto.texto != ""){       
-                ts.setSimbolo(objeto.identificador, objeto.texto, objeto.tipo, objeto.identificador, this.tipoEtiqueta);                
+            ts.setSimbolo(objeto.identificador, objeto.texto, objeto.tipo, objeto.identificador, this.tipoEtiqueta);                
         }
                         
         for(let i:number = 0; i < objeto.listaObjetos.length; i++){
-            objeto.agregarTDS(ts, objeto.listaObjetos[i]);
+            ts.simbolos.push(objeto.agregarTDS(ts, objeto.listaObjetos[i]));
         }
+        return ts;
     }
 
     graficarTDS(str:[],objeto:Objeto){

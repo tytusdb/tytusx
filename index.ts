@@ -65,6 +65,8 @@ function InterpretarCodigoXPATH_DESC(entrada:string){
     let l = BusquedaXML(tds_xml_persistente[2], 'bookstore');
     //console.log(l);
     BusquedaXML(l[0], 'book');
+
+    BusquedaXMLD(tds_xml_persistente[2], 'bookstore')
     
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
   }catch (error){
@@ -88,10 +90,12 @@ function InterpretarCodigo(entrada:string) {
     const tsGlobal:TablaSimbolos = new TablaSimbolos([],null,"global");
     
     //tabla de simbolos que maneja la persistencia de todos los datos
-    tds_xml_persistente.push(tsGlobal);
+    //tds_xml_persistente.push(tsGlobal);
 
     for(let aux of listaObjetos){
-        aux.agregarTDS(tsGlobal,aux);
+        //console.log(aux);
+        tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal,aux)); //aux.agregarTDS(tsGlobal,aux);
+        tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);
     }
     console.log( tsGlobal);
     //console.log(tds_xml_persistente);
