@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compiladores 2</title>
+    <link rel="stylesheet" href="./stylesheets/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+    <script src="bundle.js"></script>
+</head>
+
+<body>
+    <ul class="nav justify-content-center">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                aria-expanded="false">Archivo</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item">Nuevo archivo</a></li>
+                <li><a class="dropdown-item">
+                        <label for="open-file">Abrir archivo</label>
+                        <input type="file" name="open-file" id="open-file" hidden>
+                    </a></li>
+                <li><a class="dropdown-item">Guardar archivo</a></li>
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                aria-expanded="false">Analisis</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" id="analizeXmlAsc">XML Ascendente</a></li>
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                aria-expanded="false">Resultados</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" id="tablaErrores" href="ErroresLexicos.html" target="_blank">Tabla de error</a></li>
+                <li><a class="dropdown-item" id="arbolxml" href="ArbolXML.html" target="_blank">Árbol sintáctico XML</a></li>
+                <li><a class="dropdown-item" id="arbolxpath" href="ArbolXpath.html" target="_blank">Árbol sintáctico XPath</a></li>
+
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                aria-expanded="false">Reportes Gramaticales</a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" id="repGramId" href="reporteGramatical.html" target="_blank">XML Ascendente</a></li>
+            </ul>
+        </li>
+    </ul>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="input-group mb-3">
+                    <input type="text" id="codeXPath" class="form-control" placeholder="Código xpath"
+                        aria-label="Código xpath" aria-describedby="sendXPath">
+                    <button class="btn btn-outline-secondary" type="button" id="analizeXPathAsc">Filtrar</button>
+                </div>
+            </div>
+            <div class="col-12">
+                <button id="clean" class="btn btn-warning">Limpiar</button>
+            </div>
+            <div class="col-6">
+                <div>
+                    <!-- onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"  -->
+                    <textarea class="form-control codeBox" name="code" id="codeBlock" name="codeBlock"></textarea>
+                </div>
+            </div>
+            <div class="col-6">
+                <textarea class="form-control codeBox" name="console" id="console" cols="30" rows="6" readonly
+                    wrap="hard">
+				</textarea>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+
+    <script>
+        let initialize = new load.Main();
+        initialize.setListener();
+        console.log('<----------------');
+    </script>
+</body>
+</body>
+
+</html>
