@@ -1,32 +1,30 @@
+//aca recibe la raiz
 function ejecutarXPATH(tds:[],listaDir){
 
         if(listaDir.dato.tipo == TIPO_DATO.IDENTIFICADOR){
+
             let temporal = BusquedaXML(tds, listaDir.dato.valor);
-            let temporal2;
-            let d = listaDir.ruta2;
-            if(listaDir.ruta2.ruta2 != undefined){
-                ejecutarXPATH(temporal[0], d);
-            }else{
-                temporal2 = BusquedaXML(temporal[0], listaDir.dato.valor);
+            let t;                    
+            if(listaDir.ruta2 != undefined){
+               t= ejecutarXPATHr(temporal, listaDir.ruta2);
             }
-            console.log('ESTO ES LO QUE IMPRIME' + temporal2);
+            console.log('ESTO ES LO QUE IMPRIME' );
+            console.log(t);
         }
 
 }
 
-
-
-function ejecutarXPATH2(tds:[],listaDir){
-
-    if(listaDir.dato.tipo == TIPO_DATO.IDENTIFICADOR){
-        let temporal = BusquedaXML(tds, listaDir.dato.valor);
-        let d = listaDir.ruta2;
-        if(listaDir.ruta2 != undefined){
-            ejecutarXPATH(temporal[0], d);
-        }else{
-            let temporal2 = BusquedaXML(temporal, listaDir.dato.valor);
-        }
-        console.log('ESTO ES LO QUE IMPRIME' + temporal2);
+function ejecutarXPATHr(tds:[], listaDir):any{
+    let entornos = [];
+    let p ;
+    for(let aux of tds){
+        let temporal = BusquedaXML(aux, listaDir.dato.valor);                    
+        entornos = entornos.concat(temporal);
     }
-
+    if(listaDir.ruta2.ruta2 != undefined){
+            p = ejecutarXPATHr(entornos, listaDir.ruta2);
+        }else{
+            p = BusquedaXMLfinal(entornos, listaDir.ruta2.dato.valor);
+        }
+    return p;
 }

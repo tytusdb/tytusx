@@ -40,6 +40,9 @@ class TablaSimbolos
 		this.simbolos.push(NuevoSimbolo);
     }
     
+    setHijo(hijo:any){
+        this.simbolos.push(hijo);
+    }
     getSimbolo(identificador:string){
 		const simbolo = this.simbolos.filter(simbolo => simbolo.identificador === identificador)[0];
 		if(simbolo) return simbolo;
