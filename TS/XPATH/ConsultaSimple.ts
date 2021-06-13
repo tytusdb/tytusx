@@ -12,7 +12,7 @@ class ConsultaSimple implements Consulta {
             let flag: boolean = false;
             let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s: Simbolo) => {
-                if (s.getNombre() == this.identificador) {
+                if (s.getNombre() == this.identificador && s instanceof Nodo) {
                     flag = true;
                     nuevoEntorno.add(s);
                 }

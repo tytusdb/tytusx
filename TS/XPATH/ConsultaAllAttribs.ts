@@ -1,4 +1,4 @@
-class ConsultaAtributo extends ConsultaSimple {
+class ConsultaAllAttribs extends ConsultaSimple {
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
@@ -8,7 +8,7 @@ class ConsultaAtributo extends ConsultaSimple {
             let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s: Simbolo) => {
                 //Recorro los simbolos buscando el atributo
-                if (s.getNombre() == super.getIdentificador() && s instanceof Atributo) {
+                if (s instanceof Atributo) {
                     //recorro los simbolos de el entorno anterior
                     e.getAnterior().getTable().forEach((s: Simbolo) => {
                         if (s instanceof Nodo) {

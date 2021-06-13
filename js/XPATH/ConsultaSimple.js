@@ -8,7 +8,7 @@ class ConsultaSimple {
             let flag = false;
             let nuevoEntorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s) => {
-                if (s.getNombre() == this.identificador) {
+                if (s.getNombre() == this.identificador && s instanceof Nodo) {
                     flag = true;
                     nuevoEntorno.add(s);
                 }

@@ -9,7 +9,13 @@ class Entorno {
     getTable() {
         return this.tabla;
     }
+    setTable(table) {
+        this.tabla = table;
+    }
     getAnterior() {
         return this.anterior;
+    }
+    setAnterior(anterior) {
+        this.anterior = anterior;
     }
 }

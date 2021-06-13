@@ -1,16 +1,14 @@
-class ConsultaAtributo extends ConsultaSimple {
-
-    public run(entornos: Array<Entorno>): Array<Entorno> {
-        let newEntornos: Array<Entorno> = new Array();
-
-        entornos.forEach((e: Entorno) => {
-            let flag: boolean = false;
-            let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
-            e.getTable().forEach((s: Simbolo) => {
+class ConsultaAllAttribs extends ConsultaSimple {
+    run(entornos) {
+        let newEntornos = new Array();
+        entornos.forEach((e) => {
+            let flag = false;
+            let nuevoEntorno = new Entorno(e.getAnterior());
+            e.getTable().forEach((s) => {
                 //Recorro los simbolos buscando el atributo
-                if (s.getNombre() == super.getIdentificador() && s instanceof Atributo) {
+                if (s instanceof Atributo) {
                     //recorro los simbolos de el entorno anterior
-                    e.getAnterior().getTable().forEach((s: Simbolo) => {
+                    e.getAnterior().getTable().forEach((s) => {
                         if (s instanceof Nodo) {
                             //Si el el entorno del nodo actual es igual al entorno del atributo lo agergo al nuevo entorno
                             if (s.getEntorno() == e) {
@@ -25,7 +23,6 @@ class ConsultaAtributo extends ConsultaSimple {
                 newEntornos.push(nuevoEntorno);
             }
         });
-
         return newEntornos;
     }
 }

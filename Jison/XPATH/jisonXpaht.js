@@ -85,8 +85,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-        console.log('\n\nexito al analizar');
-        console.log($$[$0-1]);
+        console.log('\nexito al analizar\n');
         return $$[$0-1];
     
 break;
@@ -155,9 +154,17 @@ case 13:
                     this.$.push(new ConsultaPuntos());
                 } else {
                     if ($$[$0].startsWith('@')) {
-                        this.$.push(new ConsultaAtributo($$[$0].replace('@', '')));
+                        if ($$[$0] === "@all") {
+                            this.$.push(new ConsultaAllAttribs($$[$0].replace('@', '')));
+                        } else {
+                            this.$.push(new ConsultaAtributo($$[$0].replace('@', '')));
+                        }
                     } else {
-                        this.$.push(new ConsultaSimple($$[$0]));
+                        if ($$[$0] === "all") {
+                            this.$.push(new ConsultaAllNodes($$[$0]));
+                        } else {
+                            this.$.push(new ConsultaSimple($$[$0]));
+                        }
                     }
                 }
             }
@@ -186,8 +193,14 @@ break;
 case 20:
 this.$ = "puntos";
 break;
+case 24:
+this.$ = "all";
+break;
 case 29:
 this.$ = $$[$0-1] + $$[$0];
+break;
+case 30:
+this.$ = $$[$0-1] + "all";
 break;
 case 55:
 

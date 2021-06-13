@@ -39,7 +39,9 @@ function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: n
         e.getTable().forEach((s: Simbolo) => {
             if (s instanceof Nodo) {
                 if ((s as Nodo).getEntorno != null) {
-                    newEntornos.push((s as Nodo).getEntorno());
+                    let nuevoEntorno: Entorno = (<Nodo>s).getEntorno();
+                    nuevoEntorno.setAnterior(e);
+                    newEntornos.push(nuevoEntorno);
                 }
             }
         });

@@ -34,10 +34,15 @@ class Nodo extends Simbolo {
     }
     toTag() {
         let etiqueta = new Array();
-        etiqueta.push("<" + super.getNombre() + this.attribsToText() + ">");
-        etiqueta.push(this.texto);
-        etiqueta.push(this.nodesToTag(this.entorno));
-        etiqueta.push("</" + super.getNombre() + ">");
+        if (super.getType() === Type.DOUBLE_TAG) {
+            etiqueta.push("<" + super.getNombre() + this.attribsToText() + ">");
+            etiqueta.push(this.texto);
+            etiqueta.push(this.nodesToTag(this.entorno));
+            etiqueta.push("</" + super.getNombre() + ">");
+        }
+        else {
+            etiqueta.push("<" + super.getNombre() + this.attribsToText() + "/>");
+        }
         return etiqueta.join("");
     }
     attribsToText() {

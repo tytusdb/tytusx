@@ -34,7 +34,9 @@ function recorrer(consultas, entornos, index) {
         e.getTable().forEach((s) => {
             if (s instanceof Nodo) {
                 if (s.getEntorno != null) {
-                    newEntornos.push(s.getEntorno());
+                    let nuevoEntorno = s.getEntorno();
+                    nuevoEntorno.setAnterior(e);
+                    newEntornos.push(nuevoEntorno);
                 }
             }
         });

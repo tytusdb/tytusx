@@ -25,9 +25,4 @@ class ConsultaAtributo extends ConsultaSimple {
         });
         return newEntornos;
     }
-    addEntorno(entornos, entorno) {
-        if (entornos.find(e => e === entorno) == undefined) {
-            entornos.push(entorno);
-        }
-    }
 }

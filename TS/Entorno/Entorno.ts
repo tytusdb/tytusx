@@ -16,7 +16,15 @@ class Entorno {
         return this.tabla;
     }
 
+    public setTable(table: Array<Simbolo>): void {
+        this.tabla = table;
+    }
+
     public getAnterior(): Entorno {
         return this.anterior;
+    }
+
+    public setAnterior(anterior: Entorno): void {
+        this.anterior = anterior;
     }
 }

@@ -261,8 +261,7 @@
 
 INIT
     : CONSULTAS_XPATH eof {
-        console.log('\n\nexito al analizar');
-        console.log($1);
+        console.log('\nexito al analizar\n');
         return $1;
     }
     | error eof {
@@ -323,9 +322,17 @@ EXPRESION_RUTA
                     $$.push(new ConsultaPuntos());
                 } else {
                     if ($3.startsWith('@')) {
-                        $$.push(new ConsultaAtributo($3.replace('@', '')));
+                        if ($3 === "@all") {
+                            $$.push(new ConsultaAllAttribs($3.replace('@', '')));
+                        } else {
+                            $$.push(new ConsultaAtributo($3.replace('@', '')));
+                        }
                     } else {
-                        $$.push(new ConsultaSimple($3));
+                        if ($3 === "all") {
+                            $$.push(new ConsultaAllNodes($3));
+                        } else {
+                            $$.push(new ConsultaSimple($3));
+                        }
                     }
                 }
             }
@@ -352,7 +359,7 @@ ACCESORES
     : ID OPCIONAL_PREDICADO             {$$ = $1;}
     | ATRIBUTO OPCIONAL_PREDICADO       {$$ = $1;}
     | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
-    | multiplicacion
+    | multiplicacion                    {$$ = "all";}
     | NODE
     | TEXT
 ;
@@ -365,7 +372,7 @@ NODE : node parentesis_abierto parentesis_cerrado
 
 ATRIBUTO
     : arroba identificador          {$$ = $1 + $2;}
-    | arroba multiplicacion
+    | arroba multiplicacion         {$$ = $1 + "all";}
     | arroba NODE
 ;
 
