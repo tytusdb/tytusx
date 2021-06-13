@@ -122,7 +122,7 @@ break;
 case 14:
 this.$= new Nodo("Porduccion","SIMBOLOS",[ $$[$0-2],$$[$0-1] ,$$[$0]] );
 break;
-case 16: case 42: case 54: case 58: case 61: case 77: case 90:
+case 16: case 23: case 42: case 54: case 58: case 61: case 77: case 90:
 this.$= $$[$0];
 break;
 case 18: case 19: case 20: case 22:
@@ -130,9 +130,6 @@ this.$= new Nodo("Porduccion","SIMBOLOSSECU",[ $$[$0-1], $$[$0] ] );
 break;
 case 21:
 this.$= new Nodo("Porduccion","SIMBOLOSSECU",[ $$[$0] ] );
-break;
-case 23:
-this.$= $SIMBOLOSSECU_P;
 break;
 case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37:
 this.$= new Nodo("Porduccion","RESERVA",[$$[$0-1], $$[$0] ] );

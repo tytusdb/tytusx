@@ -140,7 +140,7 @@ SIMBOLOSSECU:
         ;
 
 SIMBOLOSSECU_P:
-         EXPRESION                                              {$$= $SIMBOLOSSECU_P;}                             
+         EXPRESION                                              {$$= $EXPRESION;}                             
         |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}       
 ;
 
