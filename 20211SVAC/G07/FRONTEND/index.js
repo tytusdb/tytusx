@@ -110,25 +110,21 @@ let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let parserXML;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `
-<?xml version="1.0" encoding="UTF-8"?>
-<biblioteca>
-  <libro>
-    <titulo>La vida está en otra parte</titulo>
-    <autor>Milan Kundera</autor>
-    <fechaPublicacion año="1973"/>
-  </libro>
-  <libro>
-    <titulo>Pantaleón y las visitadoras</titulo>
-    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-    <fechaPublicacion año="1973"/>
-  </libro>
-  <libro>
-    <titulo>Conversación en la catedral</titulo>
-    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-    <fechaPublicacion año="1969"/>
-  </libro>
-</biblioteca>
+let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
+<selva>
+    <animal>
+        <nombre>Werthers</nombre>
+        <tipo>Pantera</tipo>
+        <color>Negro</color>
+        <edad>12</edad>
+        </animal>
+    <animal>
+        <nombre>Bun</nombre>
+        <tipo>León</tipo>
+        <color>Marrón</color>
+        <edad>15</edad>
+    </animal>
+</selva>
 `
 editorXML.value = textoEntrada
 
@@ -145,6 +141,7 @@ botonCargar.addEventListener("click", () => {
     console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
     codificador.innerHTML = parserXML.tipoencoding;
+    generTabla();
 
 })
 
@@ -160,7 +157,8 @@ botonCargar2.addEventListener("click", () => {
   console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
   codificador.innerHTML = parserXML.tipoencoding;
-  
+  generTabla();
+
 
 })
 document.getElementById("ast").addEventListener("click", () => {
@@ -211,7 +209,7 @@ btnReportCST.addEventListener("click", () => {
 
   // Generar el arbol CST
   generarAST(parserXML.json.nodo);
-
+  
 });
 
 btnReporteGram.addEventListener('click', () => {
@@ -288,7 +286,7 @@ function generTabla() {
     document.getElementById("msgError").style.display="none";
   }
   let titulo = document.getElementById("tbl_titulo");
-  for (const token of listaErrores) {
+  for (const token of parserXML.listaErrores) {
     titulo.insertAdjacentHTML(
       "afterend",
       "<tr class='contenido'><td>" +

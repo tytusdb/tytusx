@@ -55,9 +55,9 @@
 ## Barra_de_Menú 
 <div style="text-align: justify">
 <p align="center">
-  <img src="FRONTEND/img/menu1.PNG" width="200" alt="Menu">
-  <img src="FRONTEND/img/menu2.PNG" width="200" alt="Menu">
-    <img src="FRONTEND/img/menu3.PNG" width="200" alt="Menu">
+  <img src="FRONTEND/img/menu1.PNG" width="600" alt="Menu">
+  <img src="FRONTEND/img/menu2.PNG" width="600" alt="Menu">
+  <img src="FRONTEND/img/menu3.PNG" width="600" alt="Menu">
 </p>
 </div>
 
