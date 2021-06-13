@@ -86,12 +86,20 @@ switch (yystate) {
 case 1:
 
         console.log('\n\nexito al analizar');
+        console.log($$[$0-1]);
+        return $$[$0-1];
     
 break;
 case 2:
 
         errores.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
     
+break;
+case 3:
+$$[$0-2].push($$[$0]); this.$ = $$[$0-2];
+break;
+case 4:
+this.$ = [$$[$0]]
 break;
 case 5:
 
@@ -104,14 +112,22 @@ case 6:
     
 break;
 case 7:
-consultas.push(new ConsultaSimple($$[$0]));
+this.$ = [new ConsultaSimple($$[$0])];
+break;
+case 8: case 11: case 32:
+this.$ = $$[$0];
 break;
 case 9:
 
+        this.$= [];
         if ($$[$0-1] === "punto") {
-            consultas.push(new ConsultaPunto());
+            this.$.push(new ConsultaPunto());
         }
+        $$[$0].forEach(e => this.$.push(e));
     
+break;
+case 10:
+$$[$0].forEach(e => $$[$0-1].push(e)); this.$ = $$[$0-1];
 break;
 case 12:
 
@@ -120,32 +136,28 @@ case 12:
 break;
 case 13:
 
+            this.$ = [];
             if (!($$[$0-2] === "")) {
-                consultas.push(new ConsultaSimple($$[$0-2]));
+                this.$.push(new ConsultaSimple($$[$0-2]));
             }
             if ($$[$0-1] === "doble"){
                 if ($$[$0] === "punto") {
-                    consultas.push(new ConsultaPunto());
+                    this.$.push(new ConsultaPunto());
                 }else if ($$[$0] === "puntos") {
-                    consultas.push(new ConsultaPuntos());
+                    this.$.push(new ConsultaPuntos());
                 } else {
-                    //consultas.push(new ConsultaDescendente($$[$0]));
-                    if ($$[$0].startsWith('@')) {
-                        consultas.push(new ConsultaDescendente($$[$0].replace('@', '')));
-                    } else {
-                        consultas.push(new ConsultaDescendente($$[$0]));
-                    }
+                    this.$.push(new ConsultaDescendente($$[$0]));
                 }
             } else {
                 if ($$[$0] === "punto") {
-                    consultas.push(new ConsultaPunto());
+                    this.$.push(new ConsultaPunto());
                 }else if ($$[$0] === "puntos") {
-                    consultas.push(new ConsultaPuntos());
+                    this.$.push(new ConsultaPuntos());
                 } else {
                     if ($$[$0].startsWith('@')) {
-                        consultas.push(new ConsultaAtributo($$[$0].replace('@', '')));
+                        this.$.push(new ConsultaAtributo($$[$0].replace('@', '')));
                     } else {
-                        consultas.push(new ConsultaSimple($$[$0]));
+                        this.$.push(new ConsultaSimple($$[$0]));
                     }
                 }
             }
@@ -176,9 +188,6 @@ this.$ = "puntos";
 break;
 case 29:
 this.$ = $$[$0-1] + $$[$0];
-break;
-case 32:
-this.$ = $$[$0];
 break;
 case 55:
 

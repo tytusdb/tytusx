@@ -262,6 +262,8 @@
 INIT
     : CONSULTAS_XPATH eof {
         console.log('\n\nexito al analizar');
+        console.log($1);
+        return $1;
     }
     | error eof {
         errores.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
@@ -270,8 +272,8 @@ INIT
 
 
 CONSULTAS_XPATH
-    : CONSULTAS_XPATH operador_o CONSULTA_XPATH
-    | CONSULTA_XPATH
+    : CONSULTAS_XPATH operador_o CONSULTA_XPATH         {$1.push($3); $$ = $1;}
+    | CONSULTA_XPATH                                    {$$ = [$1]}
     | corchete_abierto error corchete_cerrado {
         errores.agregarError("Sintactico","No puede venir un predicado como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     }
@@ -281,18 +283,20 @@ CONSULTAS_XPATH
 ;
 
 CONSULTA_XPATH
-    : RELATIVA                              {consultas.push(new ConsultaSimple($1));}
-    | EXPRESIONES_RUTA
+    : RELATIVA                  {$$ = [new ConsultaSimple($1)];}
+    | EXPRESIONES_RUTA          {$$ = $1;}
     | PUNTOS EXPRESIONES_RUTA {
+        $$= [];
         if ($1 === "punto") {
-            consultas.push(new ConsultaPunto());
+            $$.push(new ConsultaPunto());
         }
+        $2.forEach(e => $$.push(e));
     }
 ;
 
 EXPRESIONES_RUTA
-    : EXPRESIONES_RUTA EXPRESION_RUTA
-    | EXPRESION_RUTA
+    : EXPRESIONES_RUTA EXPRESION_RUTA       {$2.forEach(e => $1.push(e)); $$ = $1;}
+    | EXPRESION_RUTA                        {$$ = $1;}
     | error operador_o {
         errores.agregarError("Sintactico","Consulta no aceptada:\n"+yytext,this._$.first_line,this._$.first_column);
     }
@@ -300,27 +304,28 @@ EXPRESIONES_RUTA
 
 EXPRESION_RUTA
     : RELATIVA DIAGONALES ACCESORES         {
+            $$ = [];
             if (!($1 === "")) {
-                consultas.push(new ConsultaSimple($1));
+                $$.push(new ConsultaSimple($1));
             }
             if ($2 === "doble"){
                 if ($3 === "punto") {
-                    consultas.push(new ConsultaPunto());
+                    $$.push(new ConsultaPunto());
                 }else if ($3 === "puntos") {
-                    consultas.push(new ConsultaPuntos());
+                    $$.push(new ConsultaPuntos());
                 } else {
-                    //consultas.push(new ConsultaDescendente($3));
+                    $$.push(new ConsultaDescendente($3));
                 }
             } else {
                 if ($3 === "punto") {
-                    consultas.push(new ConsultaPunto());
+                    $$.push(new ConsultaPunto());
                 }else if ($3 === "puntos") {
-                    consultas.push(new ConsultaPuntos());
+                    $$.push(new ConsultaPuntos());
                 } else {
                     if ($3.startsWith('@')) {
-                        consultas.push(new ConsultaAtributo($3.replace('@', '')));
+                        $$.push(new ConsultaAtributo($3.replace('@', '')));
                     } else {
-                        consultas.push(new ConsultaSimple($3));
+                        $$.push(new ConsultaSimple($3));
                     }
                 }
             }
