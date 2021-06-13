@@ -63,7 +63,6 @@
 [":"][":"]                          return 'bi_pto';
 ["@"]["*"]                          return 'any_atributo';
 "@"                                 return 'arroba';    
-\s+                                 return 'espacios';
 
 //error lexico
 . {
@@ -106,21 +105,16 @@
 //Gramatica 
 
 S : INSTRUCCIONES EOF  
-        { return new NodoAST({label: 'S', hijos: [$1], linea: yylineno}); }
-    | error / {                                                                                                        
+        {   return new NodoAST({label: 'S', hijos: [$1], linea: yylineno}); }
+   | error / {                                                                                                        
         tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Semántico', linea: `${yylineno + 1}`, descripcion: `No coinciden "${yytext}", se recupero del error con el simbolo /`}));
-      }
-;
+      }     
+        ;
 
-INSTRUCCIONES : INSTRUCCIONES INSTRUCCION 
-                { $$ = new NodoAST({label: 'INSTRUCCIONES', hijos: [...$1.hijos, ...$2.hijos], linea: yylineno}); }
+INSTRUCCIONES : INSTRUCCION INSTRUCCIONES 
+        { $$ = new NodoAST({label: 'INSTRUCCIONES', hijos: [...$1.hijos, ...$2.hijos], linea: yylineno}); } ;
 
-              | INSTRUCCION  
-                 { $$ = new NodoAST({label: 'INSTRUCCIONES', hijos: [...$1.hijos], linea: yylineno}); }
-              | espacios 
-                {   tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Semántico', linea: `${yylineno + 1}`, descripcion: `No se permiten espacios`}));
-    }
-              ;
+INSTRUCCIONES: { $$ = new NodoAST({label: 'INSTRUCCIONES', hijos: [], linea: yylineno}); } ;
 
 INSTRUCCION : INSTRUCCION o RUTA FILTROS
                 { $$ = new NodoAST({label: 'INSTRUCCION', hijos: [...$1.hijos, $2, ...$3.hijos, ...$4.hijos], linea: yylineno}); }
@@ -257,19 +251,17 @@ ATRIBUTO : arroba id
                 { $$ = new NodoAST({label: 'ATRIBUTO', hijos: [$1, $2], linea: yylineno}); }
 ;
 
-FILTROS :       { $$ = new NodoAST({label: 'FILTROS', hijos: [], linea: yylineno}); } 
-        | LISTA_PREDICADO 
-                { $$ = new NodoAST({label: 'FILTROS', hijos: [...$1.hijos], linea: yylineno}); }    
+FILTROS : LISTA_PREDICADO 
+          { $$ = new NodoAST({label: 'FILTROS', hijos: [...$1.hijos], linea: yylineno}); }        
         | error [ {                                                                                                        
                     tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Semántico', linea: `${yylineno + 1}`, descripcion: `No coinciden "${yytext}", se recupero del error con el simbolo [`}));
-                }    
+                }  
 ; 
 
-LISTA_PREDICADO : LISTA_PREDICADO PREDICADO
-                         { $$ = new NodoAST({label: 'LISTA_PREDICADO', hijos: [...$1.hijos, ...$2.hijos], linea: yylineno}); } 
-                | PREDICADO
-                        { $$ = new NodoAST({label: 'LISTA_PREDICADO', hijos: [...$1.hijos], linea: yylineno}); }
-                ;
+LISTA_PREDICADO : PREDICADO LISTA_PREDICADO 
+                { $$ = new NodoAST({label: 'LISTA_PREDICADO', hijos: [...$1.hijos, ...$2.hijos], linea: yylineno}); } ;
+
+LISTA_PREDICADO : { $$ = new NodoAST({label: 'LISTA_PREDICADO', hijos: [], linea: yylineno}); };
 
 PREDICADO: cor_izq  EXPR  cor_der
                  { $$ = new NodoAST({label: 'PREDICADO', hijos: [$1, ...$2.hijos, $3], linea: yylineno}); } 
@@ -277,44 +269,54 @@ PREDICADO: cor_izq  EXPR  cor_der
 
 EXPR : ATRIBUTO_PREDICADO
         { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
-     | ARITMETICAS
-        { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
-     | RELACIONALES
-        { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
-     | LOGICAS
-        { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
      | ORDEN 
         { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
      | VALORES
         { $$ = new NodoAST({label: 'EXPR', hijos: [...$1.hijos], linea: yylineno}); }
      | EJES OPC_EJES
         { $$ = new NodoAST({label: 'EXPR', hijos: [$1,...$2.hijos], linea: yylineno}); }
-     | PATH
-        { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
      | PREDICADO
         { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
      | NODO_FUNCION
+        { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
+     | OPERACIONES 
+        { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
+     | PATH
         { $$ = new NodoAST({label: 'EXPR', hijos: [$1], linea: yylineno}); }
      | par_izq EXPR par_der
         { $$ = new NodoAST({label: 'EXPR', hijos: [$1,...$2.hijos,$3], linea: yylineno}); } 
      | error / {                                                                                                        
                     tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Semántico', linea: `${yylineno + 1}`, descripcion: `No coinciden "${yytext}", se recupero del error con el simbolo /`}));
-                }  
+                } 
      ;
 
-PATH : EXPR doble_diagonal EXPR
-                { $$ = new NodoAST({label: 'PATH', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-        | EXPR diagonal EXPR
-                { $$ = new NodoAST({label: 'PATH', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-        | doble_diagonal OPC_PATH EXPR
+     OPERACIONES : EXPR OPER { 
+         $$ = new NodoAST({label: 'OPERACIONES', hijos: [...$1.hijos,...$2.hijos], linea: yylineno}); } ;
+
+     OPER: mas EXPR { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | menos EXPR { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | mul EXPR { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | div EXPR { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | mod EXPR { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | or EXPR { $$ = new NodoAST({label: 'LOGICAS', hijos: [$1, ...$2.hijos], linea: yylineno}); }
+        | and EXPR { $$ = new NodoAST({label: 'LOGICAS', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | mayor EXPR { $$ = new NodoAST({label: 'RELACIONALES', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | menor EXPR { $$ = new NodoAST({label: 'RELACIONALES', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | mayor_igual EXPR { $$ = new NodoAST({label: 'RELACIONALES', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | menor_igual EXPR { $$ = new NodoAST({label: 'RELACIONALES', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | igual  EXPR { $$ = new NodoAST({label: 'RELACIONALES', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | diferencia  EXPR { $$ = new NodoAST({label: 'RELACIONALES', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | doble_diagonal EXPR  { $$ = new NodoAST({label: 'PATH', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | diagonal EXPR { $$ = new NodoAST({label: 'PATH', hijos: [$1,...$2.hijos], linea: yylineno}); }
+        | diagonal_dos_pts { $$ = new NodoAST({label: 'PATH', hijos: [$1], linea: yylineno}); }
+;    
+
+PATH : doble_diagonal OPC_PATH EXPR
                 { $$ = new NodoAST({label: 'PATH', hijos: [$1,...$2.hijos,...$3.hijos], linea: yylineno}); }
         | diagonal OPC_PATH EXPR
                 { $$ = new NodoAST({label: 'PATH', hijos: [$1,...$2.hijos,...$3.hijos], linea: yylineno}); }
-        | EXPR diagonal_dos_pts 
-                { $$ = new NodoAST({label: 'PATH', hijos: [...$1.hijos,$2,$3], linea: yylineno}); }
         | diagonal_dos_pts
                 { $$ = new NodoAST({label: 'PATH', hijos: [$1], linea: yylineno}); }
-    
         ;
 
 OPC_PATH : id 
@@ -327,38 +329,6 @@ ORDEN : last par_izq par_der
                 { $$ = new NodoAST({label: 'ORDEN', hijos: [$1,$2,$3], linea: yylineno}); }
          | position par_izq par_der 
                 { $$ = new NodoAST({label: 'ORDEN', hijos: [$1,$2,$3], linea: yylineno}); }
-         ;
-
-ARITMETICAS: EXPR mas EXPR
-                { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }    
-            | EXPR menos EXPR
-                { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); } 
-            | EXPR mul EXPR
-                { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); } 
-            | EXPR div EXPR 
-                { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); } 
-            | EXPR mod EXPR 
-                { $$ = new NodoAST({label: 'ARITMETICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); } 
-            ;
-
-RELACIONALES: EXPR mayor EXPR
-                { $$ = new NodoAST({label: 'RELACIONALES', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-            | EXPR menor EXPR
-                { $$ = new NodoAST({label: 'RELACIONALES', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-            | EXPR mayor_igual EXPR
-                { $$ = new NodoAST({label: 'RELACIONALES', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-            | EXPR menor_igual EXPR 
-                { $$ = new NodoAST({label: 'RELACIONALES', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-            | EXPR igual EXPR
-                { $$ = new NodoAST({label: 'RELACIONALES', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-            | EXPR diferencia EXPR 
-                { $$ = new NodoAST({label: 'RELACIONALES', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-            ;
-
-LOGICAS : EXPR or EXPR
-                { $$ = new NodoAST({label: 'LOGICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
-         | EXPR and EXPR 
-                { $$ = new NodoAST({label: 'LOGICAS', hijos: [...$1.hijos,$2,...$3.hijos], linea: yylineno}); }
          ;
 
 ATRIBUTO_PREDICADO : arroba OPC
@@ -382,3 +352,5 @@ VALORES : integer
         | dos_pts
                 { $$ = new NodoAST({label: 'VALORES', hijos: [$1], linea: yylineno}); }
         ; 
+
+
