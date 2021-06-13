@@ -19,7 +19,10 @@ var EntornoXML = /** @class */ (function () {
     };
 
     EntornoXML.prototype.setID = function (id) {
-        this.id = id;
+
+        if(this.id==0){
+            this.id = id;
+        } 
     };
 
     EntornoXML.prototype.getID = function () {
