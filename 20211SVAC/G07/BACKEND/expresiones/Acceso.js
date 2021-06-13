@@ -1,5 +1,7 @@
 class Acceso {
-  constructor() {}
+  constructor() {
+    this.entornosDoble=[];
+  }
   getTipo(ast) {
     return ast.valor.tipo;
   }
@@ -12,13 +14,14 @@ class Acceso {
       case "EXPRESION":
         //0-> Simbolos 1->itemReserva 2->itemReserva? consulta sola
         //2-> Expresion si vienen varias
-        console.error("No estamos bien");
-        console.log(entorno);
+
         if (ast.hijos[0].valor == "SIMBOLOS") {
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno); //Me devuelve el arreglo de entornos
+
           if (!ArregloEntorno) {
             return null;
           }
+
           let respuesta = "";
           let instruccion;
 
@@ -35,6 +38,7 @@ class Acceso {
               for (const iterator of ArregloEntorno) {
                 respuesta += this.getValorImplicito(iterator, instruccion);
               }
+
               return respuesta;
             }
 
@@ -51,7 +55,6 @@ class Acceso {
 
           return respuesta;
         } else {
-          
           let res = this.comparar(ast.hijos[0], entorno.etiqueta); //Me devuelve el arreglo de entornos
           if (!res) {
             return null;
@@ -59,40 +62,47 @@ class Acceso {
           let instruccion = {
             valor: "TODO_", //Si instruccion.valor es TODO etonces muestro todo el entorno
           };
-          return this.getValorImplicito(entorno,instruccion );
+          return this.getValorImplicito(entorno, instruccion);
         }
 
         return null;
       case "TODO_":
-        
         let contenido = "";
         let atributo;
-          if(entorno.atributos){
-            
-            atributo={
-              etiqueta:entorno.atributos.nombreAtributo,
-              valor:entorno.atributos.valorAtributo
-            }
-          }else{
-            atributo="";
-          }
-        if(entorno.tipo=="completa"){
-          
+        if (entorno.atributos) {
+          atributo = {
+            etiqueta: entorno.atributos.nombreAtributo,
+            valor: entorno.atributos.valorAtributo,
+          };
+        } else {
+          atributo = "";
+        }
+        if (entorno.tipo == "completa") {
           for (const iterator of entorno.hijos) {
             contenido += this.getValorImplicito(iterator, ast);
           }
-          let retorno = new Etiqueta(entorno.etiqueta, entorno.texto, contenido,atributo); //nombre,texto,contenido
+          let retorno = new Etiqueta(
+            entorno.etiqueta,
+            entorno.texto,
+            contenido,
+            atributo
+          ); //nombre,texto,contenido
           if (retorno) {
             return retorno.obtenerXML();
           }
-        }else if(entorno.tipo=="unica"){
-
-          let retorno = new Etiqueta(entorno.etiqueta, entorno.texto, "",atributo,entorno.tipo); //nombre,texto,contenido
+        } else if (entorno.tipo == "unica") {
+          let retorno = new Etiqueta(
+            entorno.etiqueta,
+            entorno.texto,
+            "",
+            atributo,
+            entorno.tipo
+          ); //nombre,texto,contenido
           if (retorno) {
             return retorno.obtenerXML();
           }
         }
-        
+
         return null;
       default:
         return null;
@@ -103,25 +113,19 @@ class Acceso {
       //Accedemos al nodo barra
       if (this.getValidacion(AST.hijos[1], entorno)) {
         //Validamos que la etiqueta del nodo sea igual al entorno actual
+        if (!entorno.hijos) {
+          return entorno;
+        }
         return entorno.hijos;
       }
     } else if (AST.hijos[0] == "//") {
-      let objeto = [];
-      for (const hijo of entorno.hijos) {
-        if (this.getValidacion(AST.hijos[1], hijo)) {
-          objeto.push(hijo);
-        }
-      }
-      
-      if (objeto.length == 0) {
-        return null;
-      }
-      return objeto;
+      this.entornosDoble=[];
+      return this.getConsultaDoble(AST.hijos[1].hijos[0],entorno.hijos);
     }
+
     return null;
   }
   getValidacion(etiqueta, entorno) {
-    
     if (etiqueta.valor == "CONTENIDODOS") {
       return this.comparar(etiqueta.hijos[0], entorno.etiqueta);
     }
@@ -130,4 +134,29 @@ class Acceso {
   comparar(etiqueta, entorno) {
     return etiqueta == entorno;
   }
+  getConsultaDoble(etiqueta,entornos){
+    if(entornos!=null){
+      for (const entorno of entornos) {
+       
+        this.getConsultaDoble(etiqueta,entorno.hijos);
+        if(etiqueta==entorno.etiqueta){
+          this.entornosDoble.push(entorno);
+        }
+        
+      }
+      if(this.entornosDoble){
+        return this.entornosDoble;
+      }
+    }
+    return null;
+  }
 }
+/*
+  
+let objeto = [];
+      for (const hijo of entorno.hijos) {
+        
+      }
+      
+      
+*/

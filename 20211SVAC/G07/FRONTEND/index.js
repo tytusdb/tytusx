@@ -104,7 +104,7 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/biblioteca/libro/fechaPublicacion");
+let editorXPATH = (document.getElementById("editor").value = "//titulo");
 let editorXML = document.getElementById("consolaJS");
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
