@@ -151,13 +151,27 @@ RAIZ
         gramaticapp = `R   -> E \n` + gramaticapp;
         gramatical = `<RAIZ> := <ETIQUETA>\n` + gramatical;
     }
-       | error tk_cierra
-        {
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @2.first_column ));
-        } 
+       | error ETIQUETAERROR
 
 ;
-
+ETIQUETAERROR:
+        tk_cierra_dos 
+        {
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
+        }
+        | tk_cierra
+        {
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
+        }
+        | tk_abre_dos
+        {
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
+        }
+        | tk_abre
+        {
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
+        }
+;
 ETIQUETA
     : ETIQUETA_UNICA {
         $$ = $1;
