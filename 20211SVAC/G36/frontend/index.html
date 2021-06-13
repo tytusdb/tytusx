@@ -24,15 +24,7 @@
 <body>
     
     <header>
-        <nav>
-            <div id="nav-item">  
-                <label class="title-menu"> Descargas:   </label>  
-                <button onclick="" class="menu-item-btn">Lexico </button>
-                <button onclick="" class="menu-item-btn">Sintactico </button>
-                <button onclick="ReportJs();" class="menu-item-btn">Javascript </button>
-                <button onclick="saveAST();" class="menu-item-btn">AST </button>
-
-            </div>    
+        <nav>  
 
             <div id="nav-item">
                 
@@ -40,16 +32,24 @@
                 <input id="fileInput" title="Abrir" type="file" size="50" onchange="AbrirArchivo(this.files)" class="btnp">
                 <button onclick="agregar();" class="menu-item-btn">Nuevo </button>
                 <button onclick="quitar();" class="menu-item-btn">Eliminar </button>
-                
                 <button onclick="DescargarArchivo();" class="menu-item-btn">Guardar</button>
                 <button onclick="DescargarArchivo();" class="menu-item-btn">Guardar Como</button>
+                <button onclick="ReportXml(0)" class="menu-item-btn">Errores</button>
+                <button onclick="ReportXml(1)" class="menu-item-btn">Gramatica</button>
+                <button onclick="" class="menu-item-btn">AST</button>
+                <button onclick="" class="menu-item-btn">CST</button>
+                <button onclick="" class="menu-item-btn">Simbolos</button>
 
             </div>
             <div id="nav-item">
                 <label class="title-menu"> xpath&xquery:  </label>
                 <input id="fileInput2" title="Abrir" type="file" size="50" onchange="openXpath(this.files)" class="btnp">
                 <button onclick="limpiarXpath();" class="menu-item-btn">Limpiar </button>
-
+                <button onclick="" class="menu-item-btn">Errores</button>
+                <button onclick="" class="menu-item-btn">Gramatica</button>
+                <button onclick="" class="menu-item-btn">AST</button>
+                <button onclick="" class="menu-item-btn">CST</button>
+                <button onclick="" class="menu-item-btn">Simbolos</button>
             </div>
 
         </nav>

@@ -138,7 +138,7 @@ function DescargarArchivo(){
     var MM=hoy.getMinutes();
     var formato=get_vent().replace("textarea","")+"_"+dd+"_"+mm+"_"+yyyy+"_"+HH+"_"+MM;
 
-    var nombre="Archivo"+formato+".java";//nombre del archivo
+    var nombre="Archivo"+formato+".xml";//nombre del archivo
     var file=new Blob([contenido], {type: 'text/plain'});
 
     if(window.navigator.msSaveOrOpenBlob){
@@ -289,7 +289,7 @@ function saveReport(name,contenido,extension,typein){
     var MM=hoy.getMinutes();
     var formato=name+"_"+dd+"_"+mm+"_"+yyyy+"_"+HH+"_"+MM;
 
-    var nombre="JSrep_"+formato+"."+extension;//nombre del archivo
+    var nombre=extension+"rep_"+formato+"."+extension;//nombre del archivo
     var file=new Blob([contenido], {type: typein});
 
     if(window.navigator.msSaveOrOpenBlob){
@@ -309,17 +309,17 @@ function saveReport(name,contenido,extension,typein){
 
 }
 
-//Esto genera el reporte que se necesita 0 para los errores y  1 para los tokens
-function getReportHtml(type){
+//Esto genera el reporte que se necesita 0 para los errores y  1 para gramatica
+function getReportHtml(result, type, lenguaje){
         //Error
         console.log("%c Se esta generando su reporte html ...","color:green;");
         if(type == 0 ){                 
-                const a = gettHtml(resultJs.error,type, '#f1d152','Lista de errores');
+                const a = gettHtml(result.errores,type, '#f1d152',`Lista de errores ${lenguaje}`);
                 saveReport('Errores', a,'html','text/html');
         }
-        // Tokens
+        //Gramatica
         else{
-                const a = gettHtml(resultJs.tokens,type, "#3b90ff",'Lista de tokens');
+                const a = gettHtml(result.reglasGramatica,type, "#3b90ff",`Gramatica ${lenguaje}`);
                 saveReport('Tokens', a, 'html','text/html');
         }
 }
@@ -355,22 +355,22 @@ function gettHtml(list,type,col,tit){
         <table class="GeneratedTable">
             <thead>
                  <tr>`;
-        //Si es tipo 1 es porque es de errores 
+        //Si es tipo 0 es porque es de errores 
         if (tipo ==  0)
-            htmlBody +=" <th>No.</th> <th>Tipo Error</th>   <th>Fila</th>  <th>Columna</th> <th>Descripcion</th>\n";
+            htmlBody +=" <th>No.</th> <th>Tipo Error</th>  <th>Fila</th>  <th>Columna</th> <th>Descripcion</th> <th>Lexema</th>\n";
         else
-            htmlBody +="<th>No.</th>   <th>Fila</th>  <th>Columna</th>  <th>tipo</th> <th>Descripcion</th>";             
+            htmlBody +="<th>No.</th>   <th>Produccion</th>  <th>Regla</th>";             
         htmlBody += "</tr></thead>\n<tbody>";
 
         if(tipo == 0){
             for (var i = 0; i < list.length; i++){
                 htmlBody +=  `
-                <tr> <td> ${i} </td> <td>  ${list[i].tipo} </td> <td>  ${list[i].fila} </td> <td>  ${list[i].column}  </td> <td>   ${list[i].descripcion} </td> </tr>`;
+                <tr> <td> ${i} </td> <td>  ${list[i].tipo} </td> <td>  ${list[i].fila} </td> <td>  ${list[i].columna}  </td> <td>   ${list[i].desc} </td> <th> ${list[i].lexema}</th></tr>`;
             } 
         }else{
             for (var i = 0; i < list.length; i++){
                 htmlBody +=  `
-                <tr> <td> ${i} </td> <td>  ${list[i].fila} </td> <td>  ${list[i].column} </td> <td>  ${list[i].tipo}  </td> <td>   ${list[i].descripcion} </td> </tr>`;
+                <tr> <td> ${i} </td> <td>  ${list[i].produccion} </td> <td>  ${list[i].regla} </td> </tr>`;
             }     
         }
         
@@ -390,20 +390,15 @@ function getJsCode(){
 }
 
 
-function ReportJs(){
+function ReportXml(opcion){
 
     //Reporte de errores 
-    if(resultJs.error.length != 0)
-        getReportHtml(0);
-    //Reporte de tokens
-    if(resultJs.tokens != undefined) 
-        getReportHtml(1);
-    //Reporte de codigo generado 
-    if(resultJs.jsCode != undefined)
-        getJsCode();
-    // Reporte del ast 
-    
-
+    if(resultXml.errores.length != 0  && opcion == 0){
+        getReportHtml(resultXml.errores,0,"xml");
+    }
+    //Reporte de gramatica 
+    else if(resultXml.tokens != undefined && opcion == 1) 
+        getReportHtml(resultXml.gramatica,1,"xml");
 }
 
 function saveAST(){
