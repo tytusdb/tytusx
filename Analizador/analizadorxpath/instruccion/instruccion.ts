@@ -19,6 +19,7 @@ enum TIPO_DATO{
 function nodoRuta(dato:any, mostrar:any, ruta2:any, tipoRuta:TIPO_RUTA, fila:number, columna:number) {
 	return {
         dato: dato,
+        tipoRuta: tipoRuta,
         mostrar :mostrar,
         ruta2:ruta2,
 		fila : fila,

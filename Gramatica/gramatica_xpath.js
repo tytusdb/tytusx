@@ -114,7 +114,7 @@ break;
 case 6:
  
         rg_path.setValor('RUTA -> // DATO MOSTRAR RUTA2;\n');
-        this.$ = new nodoRuta($$[$0-2], $$[$0-1], $$[$0], TIPO_RUTA.DIAGONALDOBLE, this._$.first_line, this._$.first_column);
+        this.$ = new nodoRuta($$[$0-2], $$[$0-1], $$[$0], TIPO_RUTA.DIAGOBALDOBLE, this._$.first_line, this._$.first_column);
     
 break;
 case 7:
@@ -132,7 +132,8 @@ break;
 case 9:
  
                 rg_path.setValor('RUTA2 -> // DATO MOSTRAR RUTA2;\n');
-                this.$ = new nodoRuta($$[$0-2], $$[$0-1], $$[$0], TIPO_RUTA.DIAGONALDOBLE, this._$.first_line, this._$.first_column);
+                //nodoRuta(dato:any, mostrar:any, ruta2:any, tipoRuta:TIPO_RUTA, fila:number, columna:number) {
+                this.$ = new nodoRuta($$[$0-2], $$[$0-1], $$[$0], TIPO_RUTA.DIAGOBALDOBLE, this._$.first_line, this._$.first_column);
         
 break;
 case 10:

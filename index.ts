@@ -24,7 +24,7 @@ editorsalida.session.setUseSoftTabs(true);
 
 */
 function ejecutarCodigo(/*entrada: string*/) {
-  //gramatica.parse(entrada);
+  exepath(listaDirecciones);
 }
 
 
@@ -42,12 +42,14 @@ let rg_path:ReporteGramatical_XPATH;
 
 //variable para almacenar encoding de salida
 let codificacion:string;
+let listaDirecciones;
 // interpretar codigo XPATH ASCENDENTE
 function InterpretarCodigoXPATH(entrada:string){
   rg_path = new ReporteGramatical_XPATH();
   try{
-    let listaDirecciones = gramatica_xpath.parse(entrada);
-    ejecutarXPATH(tds_xml_persistente[0],listaDirecciones[0]);
+    listaDirecciones = gramatica_xpath.parse(entrada);
+    //console.log(listaDirecciones);
+    //ejecutarXPATH(tds_xml_persistente[0],listaDirecciones[0]);
 
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
   }catch (error){
@@ -96,8 +98,8 @@ function InterpretarCodigo(entrada:string) {
         tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal,aux)); //aux.agregarTDS(tsGlobal,aux);
         tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);
     }
-    console.log( tsGlobal);
-    console.log(tds_xml_persistente);
+    //console.log( tsGlobal);
+    //console.log(tds_xml_persistente);
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
   } catch (error) {
     //editorsalida.setValue("");

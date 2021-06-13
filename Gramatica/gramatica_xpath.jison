@@ -123,7 +123,7 @@ RUTA: diagonal  DATO MOSTRAR RUTA2      {
 }
     |doblediagonal  DATO MOSTRAR RUTA2      { 
         rg_path.setValor('RUTA -> // DATO MOSTRAR RUTA2;\n');
-        $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGONALDOBLE, this._$.first_line, this._$.first_column);
+        $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGOBALDOBLE, this._$.first_line, this._$.first_column);
     }
     | DATO MOSTRAR RUTA2               { 
         rg_path.setValor('RUTA -> DATO MOSTRAR RUTA2;\n');
@@ -137,7 +137,8 @@ RUTA2:   diagonal  DATO MOSTRAR RUTA2{
 }
         | doblediagonal DATO MOSTRAR RUTA2 { 
                 rg_path.setValor('RUTA2 -> // DATO MOSTRAR RUTA2;\n');
-                $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGONALDOBLE, this._$.first_line, this._$.first_column);
+                //nodoRuta(dato:any, mostrar:any, ruta2:any, tipoRuta:TIPO_RUTA, fila:number, columna:number) {
+                $$ = new nodoRuta($2, $3, $4, TIPO_RUTA.DIAGOBALDOBLE, this._$.first_line, this._$.first_column);
         }
         | {rg_path.setValor('RUTA2 -> epsilon;\n'); }   ;
 
