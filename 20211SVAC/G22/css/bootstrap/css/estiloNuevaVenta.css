@@ -1,0 +1,54 @@
+body{
+    background-color: #c3e6cb;
+}
+
+#div1{
+    padding-bottom: 50px;
+}
+
+#div4{
+    padding-top: 40px;
+    padding-left: auto;
+    padding-right: auto;
+    height: 100px;
+    align-content: center;
+}
+
+#nombreProducto{
+    display: inline-block;
+    width: 300px;
+    margin-right: 8%;
+}
+
+#cantidad{
+    align-content: center;
+    padding-left: 20px;
+    height: 50px;
+    width: 100px;
+    display: inline;
+}
+
+#botonAgregar{
+    display: inline-block;
+    width: 80px;
+    margin-left: 8%;
+    margin-right: auto;
+}
+
+#table{
+    width: 80%;
+    background-color: white;
+}
+
+#fechaActual{
+   
+    margin-right: auto;
+}
+
+#botonFinalizar{
+    background-color: #10242B;
+    color: white;
+    margin-left: 40px;
+    display: inline-block;
+    width: 300px;
+}
