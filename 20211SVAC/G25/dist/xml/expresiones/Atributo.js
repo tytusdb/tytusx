@@ -21,6 +21,14 @@ class Atributo {
     ;
     generarGrafo(g, padre) {
         let nombreHijo = "nodo" + g.count;
+        g.graph += "    " + nombreHijo + "[label=\"" + this.id + "\"];\n";
+        g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+        g.count++;
+        nombreHijo = "nodo" + g.count;
+        g.graph += "    " + nombreHijo + "[label=\" = \"];\n";
+        g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
+        g.count++;
+        nombreHijo = "nodo" + g.count;
         g.graph += "    " + nombreHijo + "[label=\"" + this.value + "\"];\n";
         g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
         g.count++;
