@@ -267,7 +267,6 @@ case 18:
         gramatical = `<APERTURA> := ${$$[$0-3]} ${$$[$0-2]} <ATRIBUTOS> ${$$[$0]} \n` + gramatical;
 
         // Verificar Etiqueta
-        console.log("VERIFICAR ETIQUETA APERTURA", $$[$0-2]);
         verificarEtiquetas.push(new Token("ETIQUETA",$$[$0-2] , _$[$0-2].first_line, _$[$0-2].first_column ));
     
 break;
@@ -526,12 +525,10 @@ case 32:
         gramatical = `<CIERRE> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]} \n` + gramatical;
 
         //VERIFICAR ETIQUETA
-        console.log("VERIFICAR ETIQUETA CIERRE", $$[$0-1]);
         let etiqueta = verificarEtiquetas.pop();
         if (etiqueta.lexema === $$[$0-1]) {
-            console.log('ETIQUETA', $$[$0-1], "CORRECTA");
+            // Etiqueta correcta
         } else {
-            console.log(`Error Semantico se abrio la etiqueta ${etiqueta.lexema} en la linea ${etiqueta.linea} y se esta cerrando con ${$$[$0-1]} en la linea ${_$[$0-1].first_line}`);
             listaErrores.push(new TokenError("XML", "Semantico", `Se abrio la etiqueta ${etiqueta.lexema} en la linea ${etiqueta.linea} y se esta cerrando con ${$$[$0-1]} en la linea ${_$[$0-1].first_line}` , _$[$0-1].first_line, _$[$0-1].first_column ));
         }
     

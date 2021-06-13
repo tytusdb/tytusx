@@ -267,7 +267,6 @@ APERTURA
         gramatical = `<APERTURA> := ${$1} ${$2} <ATRIBUTOS> ${$4} \n` + gramatical;
 
         // Verificar Etiqueta
-        console.log("VERIFICAR ETIQUETA APERTURA", $2);
         verificarEtiquetas.push(new Token("ETIQUETA",$2 , @2.first_line, @2.first_column ));
     }
 ;
