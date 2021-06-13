@@ -46,8 +46,8 @@
             <li class="menu-item" id="reportesPy">Reportes XML
                 <ul class="submenu">
                     <li class="subitem"><a id="btnReporteXML" data-toggle="modal" data-target="#EpicModal">Tabla de Simbolos</a></li>
-                    <li class="subitem"><a id="btnReporteXAST" data-toggle="modal" data-target="#EpicModalAST">CST</a></li>
                     <li class="subitem"><a id="btnReporteXGRAM" data-toggle="modal" data-target="#EpicModalAST">Reporte Gramatical</a></li>
+                    <li class="subitem"><a id="btnReporteXMLcst">Arbol CST</a></li>
                 </ul>
             </li>
         </ul>
@@ -162,6 +162,26 @@
         </div>
     </div>
 
+    <!-- CONTENEDOR PARA VISUALIZAR EL ARBOL CON TREANT JS -->
+    <div class="modalAST" id="modalAST">
+        <div class="modalContainer">
+            <div class="headerContainer">
+                <p class="titleContainer">Reporte Arbol AST</p>
+                <button id="closeASTContainer">X</button>
+            </div>
+            <div class="contentModal">
+                <div class="controls">
+                    <button id="btnZoomIn" class="btnControl">Zoom +</button>
+                    <button id="btnZoomOut" class="btnControl">Zoom -</button>
+                </div>
+                <div class="contentContainer">
+                    <div id="tree-simple"> </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
 
     <script src="../BACKEND/AST/Entorno.js"></script>
     <script src="../BACKEND/analizadores/xml/analizador_izq.js"></script>
@@ -198,6 +218,14 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
     <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+
+    <!-- TREANT JS -->
+    <script src="./Panzoom.js"></script>
+    <script src="./treant-js/vendor/raphael.js"></script>
+    <script src="./treant-js/Treant.js"></script>
+    <script src="./treant-js/vendor/jquery.min.js"></script>
+    <script src="./treant-js/vendor/jquery.easing.js"></script>
+    <script src="./generarArbol.js"></script>
 
 </body>
 
