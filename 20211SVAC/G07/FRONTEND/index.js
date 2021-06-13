@@ -141,7 +141,7 @@ botonCargar.addEventListener("click", () => {
     console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
     codificador.innerHTML = parserXML.tipoencoding;
-    generTabla();
+    
 
 })
 
@@ -157,7 +157,7 @@ botonCargar2.addEventListener("click", () => {
   console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
   codificador.innerHTML = parserXML.tipoencoding;
-  generTabla();
+  
 
 
 })
@@ -171,12 +171,16 @@ document.getElementById("ast").addEventListener("click", () => {
 let btnReporteXML = document.getElementById('btnReporteXML');
 let btnReporteXMLCST= document.getElementById('btnReporteXMLcst');
 let btnReporteGram = document.getElementById('btnReporteXGRAM');
+let btnReporteXMLErrores = document.getElementById('btnReporteXMLErrores');
 
 let tablaTitulo = document.getElementById('EpicModalLabel');
 let tablaTituloCST = document.getElementById('EpicModalLabelAST');
 let tabla = document.getElementById('tablaSimbolos');
 let contenidoModal2 = document.getElementById('modal2Content');
 
+let tablaCabeceras = document.getElementById('tablaCabeceras');
+
+// REPORTE TABLA DE SIMBOLOS
 btnReporteXML.addEventListener("click", () => {
   tablaTitulo.innerHTML = 'Reporte Tabla Simbolos XML ' + tipoAnalizadorXML;
   tabla.innerHTML = "";
@@ -185,6 +189,18 @@ btnReporteXML.addEventListener("click", () => {
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
 
+  // Agregar las cabeceras
+  tablaCabeceras.innerHTML = `
+  <th scope="col">Nombre</th>
+  <th scope="col">Tipo</th>
+  <th scope="col">Ambito</th>
+  <th scope="col">Fila</th>
+  <th scope="col">Columna</th>
+  <th scope="col">Valor</th>
+  `;
+
+
+  // Agregar contenido a la tabla
   tablaSimbolos.forEach(simbolo => {
     tabla.innerHTML += `
       <tr>
@@ -199,6 +215,7 @@ btnReporteXML.addEventListener("click", () => {
   });
 });
 
+// REPORTE DEL CST
 btnReporteXMLCST.addEventListener("click", () => {
 
   // Se activa el modal
@@ -210,6 +227,7 @@ btnReporteXMLCST.addEventListener("click", () => {
   
 });
 
+// REPORTE DE LA GRAMATICA
 btnReporteGram.addEventListener('click', () => {
   tablaTituloCST.innerHTML = 'Reporte Gramatical XML ' + tipoAnalizadorXML;
 
@@ -217,6 +235,39 @@ btnReporteGram.addEventListener('click', () => {
   <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramatical}</textarea>
   `;
 });
+
+//REPORTE DE ERRORES
+btnReporteXMLErrores.addEventListener("click", () => {
+  tablaTitulo.innerHTML = 'Reporte Errores XML ' + tipoAnalizadorXML;
+  tabla.innerHTML = "";
+
+  // Lista de errores
+  listaErrores = parserXML.listaErrores;
+
+  // Agregar las cabeceras
+  tablaCabeceras.innerHTML = `
+  <th scope="col">Analizador</th>
+  <th scope="col">Tipo</th>
+  <th scope="col">Descripcion</th>
+  <th scope="col">Linea</th>
+  <th scope="col">Columna</th>
+  `;
+
+  // Agregar contenido a la tabla
+  listaErrores.forEach(error => {
+    tabla.innerHTML += `
+      <tr>
+        <td>${error.analizador}</td>
+        <td>${error.tipo}</td>
+        <td>${error.descripcion}</td>
+        <td>${error.linea}</td>
+        <td>${error.columna}</td>
+      </tr>
+    `;
+  });
+});
+
+
 
 /**
  * ******************************************************
@@ -241,7 +292,7 @@ function analizar_xpath_izq(){
   </div>
   `;
   generarAST(AST_xPath);
-  generTabla();
+  
 }
 
 
@@ -264,7 +315,7 @@ function analizar_xpath() {
   </div>
   `;
   generarAST(AST_xPath);
-  generTabla();
+  
 
   
   console.log("Interpretando");
@@ -275,34 +326,6 @@ function analizar_xpath() {
   
 }
 
-let listaTokens = [];
-let listaErrores = [];
-function generTabla() {
-  if(listaErrores.length){
-    document.getElementById("msgError").style.display="block";
-  }else{
-    document.getElementById("msgError").style.display="none";
-  }
-  let titulo = document.getElementById("tbl_titulo");
-  for (const token of parserXML.listaErrores) {
-    titulo.insertAdjacentHTML(
-      "afterend",
-      "<tr class='contenido'><td>" +
-        token.analizador +
-        "</td><td>" +
-        token.tipo +
-        "</td><td>" +
-        token.descripcion +
-        "</td><td>" +
-        token.linea +
-        "</td><td>" +
-        token.columna +
-        "</td></tr >"
-    );
-  }
-
-  document.getElementById("tbl_simbolos").style.display = "block";
-}
 function imprimiConsola(txt){
     document.getElementById("consolaPython").value=txt+"\n";
 }

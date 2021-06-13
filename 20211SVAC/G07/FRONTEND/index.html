@@ -52,8 +52,10 @@
                     <li class="subitem"><a id="btnReporteXML" data-toggle="modal" data-target="#EpicModal">Tabla de Simbolos</a></li>
                     <li class="subitem"><a id="btnReporteXGRAM" data-toggle="modal" data-target="#EpicModalAST">Reporte Gramatical</a></li>
                     <li class="subitem"><a id="btnReporteXMLcst">Arbol CST</a></li>
+                    <li class="subitem"><a id="btnReporteXMLErrores" data-toggle="modal" data-target="#EpicModal">Errores</a></li>
                 </ul>
             </li>
+            
         </ul>
         
         <span>Compiladores 2 -- Grupo 7</span>
@@ -91,20 +93,8 @@
             </div>
         </aside>
     </main>
-    <div class="div_table" id="tbl_simbolos">
-        <h1>Reporte de Errores</h1>
-        <table  class="table">
-            <tr id="tbl_titulo">
-                <td>Analizador</td>
-                <td>Tipo</td>
-                <td>Descripcion</td>
-                <td>linea</td>
-                <td>columna</td>
-            </tr>
-        </table>
-    </div>
-    
 
+    
     
     <!-- MODAL PARA EL REPORTE DE LA TABLA DE SIMBOLOS -->
     <div class="modal fade" id="EpicModal" tabindex="-1" aria-labelledby="EpicModalLabel" aria-hidden="true">
@@ -122,13 +112,8 @@
 
                     <table class="table table-hover">
                         <thead>
-                            <tr>
-                              <th scope="col">Nombre</th>
-                              <th scope="col">Tipo</th>
-                              <th scope="col">Ambito</th>
-                              <th scope="col">Fila</th>
-                              <th scope="col">Columna</th>
-                              <th scope="col">Valor</th>
+                            <tr id="tablaCabeceras">
+                              
                             </tr>
                           </thead>
                           <tbody id='tablaSimbolos'>
