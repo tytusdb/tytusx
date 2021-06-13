@@ -104,7 +104,7 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/biblioteca/@fechaNacimiento");
+let editorXPATH = (document.getElementById("editor").value = "//@fechaNacimiento");
 let editorXML = document.getElementById("consolaJS");
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
@@ -112,8 +112,22 @@ let listaTokens=[];
 let parserXML;
 let codificador = document.getElementById("codencod");
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<biblioteca fechaNacimiento="28/03/1936">
-  Hola MUNDO
+<biblioteca>
+  <libro>
+    <titulo>La vida está en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
 </biblioteca>
 `
 editorXML.value = textoEntrada
