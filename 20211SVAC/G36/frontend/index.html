@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Java Transpirator </title>
+    <link rel = "stylesheet" type = "text/css" href = "./style/nav.css" />
+    <link rel = "stylesheet" type = "text/css" href = "./style/main.css" />
+    <link rel = "stylesheet" type = "text/css" href = "./style/pestana.css" />
+    <script type="text/javascript" src="./jquery-1.7.2.min.js"></script>
+
+    <!-- Estilo que utiliza el text area -->
+     <link rel="stylesheet" href="lib/theme/eclipse.css">
+     <link rel="stylesheet" href="lib/theme/monokai.css">
+     <!-- Libreria de codemirror y css -->
+     <script src="lib/codemirror.js"></script>
+     <link rel="stylesheet" href="./lib/codemirror.css">
+     <!-- Tipo de lenguaje que reconoce -->    
+     <script src="lib/mode/xml/xml.js"></script>
+     <script src="lib/mode/xquery/xquery.js"></script>
+
+</head>
+
+<body>
+    
+    <header>
+        <nav>
+            <div id="nav-item">  
+                <label class="title-menu"> Descargas:   </label>  
+                <button onclick="" class="menu-item-btn">Lexico </button>
+                <button onclick="" class="menu-item-btn">Sintactico </button>
+                <button onclick="ReportJs();" class="menu-item-btn">Javascript </button>
+                <button onclick="saveAST();" class="menu-item-btn">AST </button>
+
+            </div>    
+
+            <div id="nav-item">
+                
+                <label class="title-menu"> Xml:  </label>
+                <input id="fileInput" title="Abrir" type="file" size="50" onchange="AbrirArchivo(this.files)" class="btnp">
+                <button onclick="agregar();" class="menu-item-btn">Nuevo </button>
+                <button onclick="quitar();" class="menu-item-btn">Eliminar </button>
+                
+                <button onclick="DescargarArchivo();" class="menu-item-btn">Guardar</button>
+                <button onclick="DescargarArchivo();" class="menu-item-btn">Guardar Como</button>
+
+            </div>
+            <div id="nav-item">
+                <label class="title-menu"> xpath&xquery:  </label>
+                <input id="fileInput2" title="Abrir" type="file" size="50" onchange="openXpath(this.files)" class="btnp">
+                <button onclick="limpiarXpath();" class="menu-item-btn">Limpiar </button>
+
+            </div>
+
+        </nav>
+    </header>
+
+
+    <div class="menu-item">
+        <button onclick="compile();" id="transpilar"> Compilar </button>
+    </div>
+    
+    <br>
+   
+    <div class="inputsArea">
+        <div class="input-text">
+            <label class="tag-section"> XML </label>    
+            <div id="editor">
+               <div class="contenedor">
+             <div id="pestanas">
+                <ul id=lista>
+            </ul>
+        </div>
+
+                <div id="contenidopestanas"></div>
+            </div>  
+            </div>   
+        </div>
+        <div class="input-text" >   
+                <label class="tag-section"> Xpath & Xquery </label>    
+                <div id="editor">
+                    <div class="contenedor">
+                        <div id="pestanas2">
+                            <div id="area-input-box">
+                                <textarea id="xpathArea" name="xpathArea"></textarea>
+                            </div>
+                        </div>    
+                        
+                        </div>
+                    </div>
+                </div>
+              
+            
+            
+        </div>
+
+    </div>
+
+    <div class="console">
+        <section>
+            <div class="block-console">
+                <label class="tag-section"> Console</label>
+                <textarea disabled id="xml-output" placeholder="Your  output will be here, Happy Coding! :D "></textarea>
+            
+            </di>
+        </section>    
+    </div>
+
+
+
+    <footer> Coded by: widjos </footer>
+     <script type="text/javascript" src="./js/index.js"></script>
+</body>
+
+
+</html>
