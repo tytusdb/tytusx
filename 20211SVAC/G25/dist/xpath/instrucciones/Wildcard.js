@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nodo = void 0;
-class Nodo {
+exports.Wildcard = void 0;
+class Wildcard {
     constructor(valor, fila, columna) {
         this.valor = valor;
         this.fila = fila;
         this.columna = columna;
-        console.log("Nodo   " + valor);
+        console.log("wildcard   " + valor);
     }
 }
-exports.Nodo = Nodo;
+exports.Wildcard = Wildcard;
