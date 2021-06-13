@@ -48,7 +48,7 @@
 
 .					{ //console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
                         let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
-                        erroreslexicos.setError(errores);
+                        erroresXML.setError(errores);
                     }
 /lex
 
@@ -118,7 +118,7 @@ LISTA: /*menorque  interroga tck_xml tck_version igual cadena tck_encoding igual
     | error { 
         //console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
         let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
-        erroressintacticos.setError(errores);
+        erroresXML.setError(errores);
     };
 
 LATRIBUTOS: ATRIBUTOS        { 

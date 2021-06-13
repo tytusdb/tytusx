@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <bookstore>
 
     <book category="cooking">
@@ -12,7 +13,7 @@
         <author>J K Rowling</author>
         <year>2005</year>
         <price>29.99</price>
-    </book>
+    </book> 
 
     <book category="web">
         <title lang="en">XQuery Kick Start</title>
@@ -26,7 +27,7 @@
     </book>
 
     <book category="web">
-        <title lang="en">Learning XML</title>
+        <title lang="en">Learning </title>
         <author>Erik T Ray</author>
         <year>2003</year>
         <price>39.95</price>

@@ -74,8 +74,8 @@
 <<EOF>>				return 'EOF';
 
 .					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                        let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
-                        erroreslexicos.setError(errores);
+                        let errores = new NodoError(yytext, 'Lexico', 'Token no perteneciente al lenguaje.', 'XPATH', yylloc.first_line, yylloc.first_column);
+                        erroresXPATH.setError(errores);
                     }
 /lex
 
@@ -103,7 +103,7 @@ ini
 	: LISTARUTAS EOF {   
         rg_path.setValor('inicio ->  LISTARUTAS;\n');
         console.log($1);
-        //return $1; 
+        return $1; 
         }
 ;
 
@@ -113,7 +113,9 @@ LISTARUTAS: LISTARUTAS union RUTA {
             |RUTA{
                 rg_path.setValor('LISTARUTAS -> RUTA ;\n');
                 $$ = [$1];}
-            | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+            | error { //console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                        let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XPATH', this._$.first_line, this._$.first_column);
+                        erroresXPATH.setError(errores);}
 ;
 RUTA: diagonal  DATO MOSTRAR RUTA2      { 
         rg_path.setValor('RUTA -> / DATO MOSTRAR RUTA2;\n');
@@ -139,7 +141,8 @@ RUTA2:   diagonal  DATO MOSTRAR RUTA2{
         }
         | {rg_path.setValor('RUTA2 -> epsilon;\n'); }   ;
 
-DATO: identificador         { rg_path.setValor('DATO -> identificador;\n'); $$ = $1;}
+DATO: identificador         { rg_path.setValor('DATO -> identificador;\n'); 
+                                $$ = new nodoDato($1, TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);}
     |multiplicacion         { rg_path.setValor('DATO -> multiplicacion;\n'); $$ = $1;}
     |arroba TODOATRIBUTO    { rg_path.setValor('DATO -> @ TODOATRIBUTO;\n'); $$ = $1+''+$2;}
     |punto                  { rg_path.setValor('DATO -> punto;\n'); $$ = $1;}

@@ -120,7 +120,9 @@ case 6:
       
 break;
 case 7:
- console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+ console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
+                let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
+                erroresXML.setError(errores); 
 break;
 case 8:
  rg_xml.setValor('OBJETOS -> LISTA OBJETOS;\n'); $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
@@ -829,8 +831,8 @@ break;
 case 23:return 6;
 break;
 case 24: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
-                        //let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
-                        //erroreslexicos.setError(errores);
+                        let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
+                        erroresXML.setError(errores);
                     
 break;
 }

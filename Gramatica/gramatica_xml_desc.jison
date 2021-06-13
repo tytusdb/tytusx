@@ -37,8 +37,8 @@
 <<EOF>>				return 'EOF';
 
 .					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                        //let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
-                        //erroreslexicos.setError(errores);
+                        let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
+                        erroresXML.setError(errores);
                     }
 /lex
 
@@ -80,9 +80,11 @@ LISTA: menorque identificador LATRIBUTOS mayorque PARRAFO menorque diagonal iden
          rg_xml.setValor('LISTA -> < ID [LATRIBUTOS] / >;\n');
          $$ = new Objeto($2,'',@1.first_line, @1.first_column,$3,[],$2, false); 
       }
-     | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); };
+     | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column);
+                let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XML', this._$.first_line, this._$.first_column);
+                erroresXML.setError(errores); };
 
-OB : LISTA OB { rg_xml.setValor('OBJETOS -> LISTA OBJETOS;\n'); $1.push($2); $$ = $1; }
+OB :  LISTA OB { rg_xml.setValor('OBJETOS -> LISTA OBJETOS;\n'); $1.push($2); $$ = $1; }
 | LISTA { rg_xml.setValor('OBJETOS -> LISTA;\n'); $$ = [$1]; };
 
 LATRIBUTOS : ATRIBUTO LATRIBUTOS { 

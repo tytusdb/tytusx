@@ -3,6 +3,18 @@ enum TIPO_RUTA{
     DIAGOBALDOBLE,
     DIAGONALVACIA
 }
+enum TIPO_DATO{
+    IDENTIFICADOR,
+    ASTERISCO,
+    ARROBA,
+    PUNTO,
+    DOBLEPUNTO,
+    SIGUIENTE,
+    TEXTO,
+    NODO,
+    POSICION,
+    RESERVADAS
+}
 
 function nodoRuta(dato:any, mostrar:any, ruta2:any, tipoRuta:TIPO_RUTA, fila:number, columna:number) {
 	return {
@@ -12,4 +24,13 @@ function nodoRuta(dato:any, mostrar:any, ruta2:any, tipoRuta:TIPO_RUTA, fila:num
 		fila : fila,
 		columna: columna		
 	}
+}
+//nodo simple
+function nodoDato(valor:string, tipo: TIPO_DATO, fila:number, columna:number){
+    return{
+        valor:valor,
+        tipo:tipo,
+        fila: fila,
+        columna:columna
+    }
 }

@@ -87,7 +87,7 @@ case 1:
    
         rg_path.setValor('inicio ->  LISTARUTAS;\n');
         console.log($$[$0-1]);
-        //return $$[$0-1]; 
+        return $$[$0-1]; 
         
 break;
 case 2:
@@ -101,7 +101,9 @@ case 3:
                 this.$ = [$$[$0]];
 break;
 case 4:
- console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+ //console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                        let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XPATH', this._$.first_line, this._$.first_column);
+                        erroresXPATH.setError(errores);
 break;
 case 5:
  
@@ -137,7 +139,8 @@ case 10:
 rg_path.setValor('RUTA2 -> epsilon;\n'); 
 break;
 case 11:
- rg_path.setValor('DATO -> identificador;\n'); this.$ = $$[$0];
+ rg_path.setValor('DATO -> identificador;\n'); 
+                                this.$ = new nodoDato($$[$0], TIPO_DATO.IDENTIFICADOR,this._$.first_line, this._$.first_column);
 break;
 case 12:
  rg_path.setValor('DATO -> multiplicacion;\n'); this.$ = $$[$0];
@@ -985,8 +988,8 @@ break;
 case 47:return 5;
 break;
 case 48: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
-                        let errores = new NodoError(yy_.yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yy_.yylloc.first_line, yy_.yylloc.first_column);
-                        erroreslexicos.setError(errores);
+                        let errores = new NodoError(yy_.yytext, 'Lexico', 'Token no perteneciente al lenguaje.', 'XPATH', yy_.yylloc.first_line, yy_.yylloc.first_column);
+                        erroresXPATH.setError(errores);
                     
 break;
 }

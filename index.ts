@@ -29,8 +29,8 @@ function ejecutarCodigo(/*entrada: string*/) {
 
 
 
-let erroreslexicos:ListaErrores;
-let erroressintacticos:ListaErrores;
+let erroresXML:ListaErrores;
+let erroresXPATH:ListaErrores;
 let listaObjetos;
 let tds_xml_persistente=[];
 let graficat_tds_xml = [];
@@ -42,18 +42,20 @@ let rg_path:ReporteGramatical_XPATH;
 
 //variable para almacenar encoding de salida
 let codificacion:string;
-
+// interpretar codigo XPATH ASCENDENTE
 function InterpretarCodigoXPATH(entrada:string){
   rg_path = new ReporteGramatical_XPATH();
   try{
-    gramatica_xpath.parse(entrada);
+    let listaDirecciones = gramatica_xpath.parse(entrada);
+    ejecutarXPATH(tds_xml_persistente[2],listaDirecciones[0]);
+
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
   }catch (error){
     console.log(error);
     document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XPATH\n";
   }
 }
-
+// interpretar codigo XPATH DESCENDENTE
 function InterpretarCodigoXPATH_DESC(entrada:string){
   rg_path = new ReporteGramatical_XPATH();
   try{
@@ -70,12 +72,12 @@ function InterpretarCodigoXPATH_DESC(entrada:string){
     document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XPATH\n";
   }
 }
-//interpretar codigo xml ascendente
+//interpretar codigo XML ASCENDENTE
 function InterpretarCodigo(entrada:string) {
   tds_xml_persistente=[];
  
-  erroreslexicos = new ListaErrores();
-  erroressintacticos = new ListaErrores();
+  erroresXML = new ListaErrores();
+
   rg_xml = new ReporteGramatical_XML();
   
 
@@ -91,7 +93,8 @@ function InterpretarCodigo(entrada:string) {
     for(let aux of listaObjetos){
         aux.agregarTDS(tsGlobal,aux);
     }
-    console.log(tds_xml_persistente);
+    console.log( tsGlobal);
+    //console.log(tds_xml_persistente);
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
   } catch (error) {
     //editorsalida.setValue("");
@@ -99,12 +102,12 @@ function InterpretarCodigo(entrada:string) {
     document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XML\n";
   }
 }
-
+// interpretar codigo XML DESCEDENTE
 function interpretarCodigoXMLdesc(entrada:string){
   try {
     tds_xml_persistente=[];
-    erroreslexicos = new ListaErrores();
-    erroressintacticos = new ListaErrores();
+    erroresXML = new ListaErrores();
+    
     rg_xml = new ReporteGramatical_XML();
     listaObjetos = gramatica_xml_desc.parse(entrada);
 
@@ -116,9 +119,10 @@ function interpretarCodigoXMLdesc(entrada:string){
     for(let aux of listaObjetos){
       aux.agregarTDS(tsGlobal,aux);
     }
-    
+    document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML descendente\n";
   } catch (error) {
     console.log(error);
+    document.getElementById("consola").value += "Mensaje Grupo34 >> No analizo el documento XML descendente\n";
   }
 }
 function MostrarTDS_XML(){
@@ -150,13 +154,13 @@ function MostrarTDS_XML(){
 
   }
 }
-//Errores Lexicos del lenguaje XML
-function MostrarErroresLexicosXML()
+//Errores del lenguaje XML
+function MostrarErroresXML()
 {
   try {
     let cadena:string = "";
     let p:number = 0;
-    erroreslexicos.listaerrores.forEach(err => { 
+    erroresXML.listaerrores.forEach(err => { 
       p = p + 1;
       cadena += "<tr>\n<th scope=\"row\">" + p + "</th>\n" +
           "<td scope=\"row\">" + err.lexema + "</td>\n" +
@@ -173,13 +177,13 @@ function MostrarErroresLexicosXML()
   }
 }
 
-//Errores Sintacticos del lenguaje XML
-function MostrarErroresSintacticosXML()
+//Errores Sintacticos del lenguaje XPATH
+function MostrarErroresXPATH()
 {
   try {
     let cadena:string = "";
     let p:number = 0;
-    erroressintacticos.listaerrores.forEach(err => { 
+    erroresXPATH.listaerrores.forEach(err => { 
       p = p + 1;
       cadena += "<tr>\n<th scope=\"row\">" + p + "</th>\n" +
           "<td scope=\"row\">" + err.lexema + "</td>\n" +
@@ -232,10 +236,6 @@ function RG_XPATH_ASC()
 function RG_XPATH_DESC()
 {
   document.getElementById('reportegr').innerHTML = "";
-<<<<<<< HEAD
   document.getElementById('reportegr').innerHTML = rg_path.getReporte();
-  //document.getElementById('reportegr').innerHTML = rg_path.getReporte();
-=======
-  document.getElementById('reportegr').innerHTML = rg_path.getReporte(); 
->>>>>>> 645f903e111d88edb301ac0420d8701c25dcc35f
+
 }

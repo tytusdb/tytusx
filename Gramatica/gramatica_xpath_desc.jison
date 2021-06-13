@@ -74,8 +74,8 @@
 <<EOF>>				return 'EOF';
 
 .					{ //console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                        let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
-                        erroreslexicos.setError(errores);
+                                        let errores = new NodoError(yytext, 'lexico', 'Token no perteneciente al lenguaje.', 'XML', yylloc.first_line, yylloc.first_column);
+                                        erroresXPATH.setError(errores);
                     }
 /lex
 
@@ -101,7 +101,9 @@ ini
 
 LISTARUTAS: RUTA union LISTARUTAS               {rg_path.setValor('LISTARUTAS->RUTA union LISTARUTAS;\n'); $$ = $1+'|'+ $3;}
             |RUTA                               {rg_path.setValor('LISTARUTAS->RUTA;\n'); $$ = $1;}
-            |error                              { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+            |error                              { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                                                  let errores = new NodoError(yytext, 'Sintactico', 'Token no esperado.', 'XPATH', this._$.first_line, this._$.first_column);
+                                                  erroresXPATH.setError(errores);}
 ;
 
 RUTA: diagonal  DATO MOSTRAR RUTA2              {rg_path.setValor('RUTA->/ DATO MOSTRAR RUTA2;\n'); $$ = $1+''+ $2+''+$3+''+$4;}

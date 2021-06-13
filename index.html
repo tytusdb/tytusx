@@ -67,7 +67,7 @@
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop6" type="button" class="btn btn-outline-primary dropdown-toggle"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ANALIZADOR 
+                    ANALIZADORES
                 </button>
                 <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop6">
                     <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
@@ -101,8 +101,7 @@
                         <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
                         <button type="button" class="btn btn-outline-warning" id="reportetdsxml1"
                             onclick="location.href='#tbts';MostrarTDS_XML();">XML</button>
-                        <button type="button" class="btn btn-outline-warning" id="reporteast2"
-                            onclick="location.href='#areagraph';GraficarXMLASC();">ASC XML</button>
+                        
                     </div>
                 </div>
             </div>
@@ -162,19 +161,19 @@
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Errores Lexicos
+                        ERRORES 
                     </button>
                     <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                         <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
                         <button type="button" class="btn btn-outline-danger" id="rplexicoT"
-                            onclick="MostrarErroresLexicosXML();location.href='#tberror';">XML</button>
+                            onclick="MostrarErroresXML();location.href='#tberror';">XML</button>
                         <button type="button" class="btn btn-outline-danger" id="rplexicoE"
-                            onclick="erroreslexicos_ejecucion();location.href='#tberror';">Ejecucion</button>
+                            onclick="MostrarErroresXPATH();location.href='#tberror';">XPATH</button>
                     </div>
                 </div>
             </div>
 
-            <!-- PESTAÑA SINTACTICO -->
+            <!-- PESTAÑA SINTACTICO 
 
             <div class="btn-group" role="group">
                 <div class="btn-group" role="group">
@@ -189,9 +188,9 @@
                             onclick="erroressintacticos_ejecucion();location.href='#tberror';">Ejecucion</button>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
-            <!-- PESTAÑA SEMANTICO -->
+            <!-- PESTAÑA SEMANTICO 
 
             <div class="btn-group" role="group">
                 <div class="btn-group" role="group">
@@ -204,20 +203,29 @@
                             onclick="erroressemanticos_ejecucion();location.href='#tberror';">Ejecucion</button>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
         </div>
-
-        <div class="row">
+<br/><br/><br/>
+        <div >
             <!-- Editor de Entrada 
             <div id="editorentrada" class=" editor col-md-6"></div>-->
-
+            <div class="row">
+                <div class="col-sm-6"><h3>Código XML</h3> </div>
+                <div class="col-sm-6"><h3>Código XPATH</h3> </div>                               
+            </div>
+            
+            <div class="row">               
             <textarea id="editorentrada" name="editorentrada" rows="4" cols="100" ></textarea>
+            <textarea id="editorsalida" name="editorsalida" rows="4" cols="100" ></textarea>
+            </div>
+            
+            
 
             <!-- Editor de Salida 
             <div id="editorsalida" class=" editor col-md-6"></div>-->
 
-            <textarea id="editorsalida" name="editorsalida" rows="4" cols="100" ></textarea>
+            
 
 
         </div>
@@ -375,6 +383,7 @@
     <!-- Importaciones -->
     <script src="dist/Analizador/analizadorxpath/expresion/expresion.js"></script>
     <script src="dist/Analizador/analizadorxpath/instruccion/instruccion.js"></script>
+    <script src='dist/Analizador/analizadorxpath/instruccion/ejecutarXPATH.js'></script>
     <script src="dist/Estructuras/Ast/NodoAst.js"></script>
     <script src="dist/Estructuras/Ast/Ast.js"></script>
     <script src="dist/Estructuras/Error/NodoError.js"></script>
