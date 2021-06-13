@@ -27,6 +27,7 @@ class Acceso {
           if (ast.hijos[0].hijos[1].hijos[1]) {
             if (ast.hijos[0].hijos[1].hijos[1].valor == "ARROPROD") {
               let nombreATRIBUTO = ast.hijos[0].hijos[1].hijos[1].hijos[0];
+
               return this.pocesarArtibuto(nombreATRIBUTO, ArregloEntorno);
               
             }
@@ -168,12 +169,15 @@ class Acceso {
     return null;
   }
   pocesarArtibuto(nombreATRIBUTO, entornos) {
+    console.error(entornos);
     let txt=""
     for (const entorno of entornos) {
+      
       if (entorno.atributos){
         if (entorno.atributos.nombreAtributo) {
-          if (nombreATRIBUTO == entorno.atributos.nombreAtributo) {
-            txt+=nombreATRIBUTO +'="' +entorno.atributos.valorAtributo +'"\n';
+          
+          if (nombreATRIBUTO == entorno.atributos.nombreAtributo||nombreATRIBUTO == "*") {
+            txt+=entorno.atributos.nombreAtributo +'="' +entorno.atributos.valorAtributo +'"\n';
             
           }
         }
@@ -187,20 +191,25 @@ class Acceso {
     
   }
   getValidacion(etiqueta, entorno) {
+    console.error(etiqueta);
     if (etiqueta.valor == "CONTENIDODOS") {
+      if (etiqueta.hijos[0].valor == "RESERVA") {
+        return true;
+      }
       return this.comparar(etiqueta.hijos[0], entorno.etiqueta);
     }
+    
     return false;
   }
   comparar(etiqueta, entorno) {
-    return etiqueta == entorno;
+    return etiqueta == entorno||etiqueta=="*";
   }
   getConsultaDoble(etiqueta, entornos) {
     if (entornos != null) {
       for (const entorno of entornos) {
         this.getConsultaDoble(etiqueta, entorno.hijos);
 
-        if (etiqueta == entorno.etiqueta) {
+        if (etiqueta == entorno.etiqueta ||etiqueta=="*") {
           this.entornosDoble.push(entorno);
         }
       }
@@ -216,7 +225,7 @@ class Acceso {
         this.getConsultaDobleAtributo(etiqueta, entorno.hijos);
 
         if (entorno.atributos) {
-          if (etiqueta == entorno.atributos.nombreAtributo) {
+          if (etiqueta == entorno.atributos.nombreAtributo||etiqueta=="*") {
             this.entornosDoble.push(entorno);
           }
         }
