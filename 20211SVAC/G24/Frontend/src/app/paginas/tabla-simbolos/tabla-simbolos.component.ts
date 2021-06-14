@@ -18,7 +18,11 @@ export class TablaSimbolosComponent implements OnInit {
   dataSource = '';
   constructor() {}
   ngOnInit(): void {
-    
+
+    let info = window.localStorage.getItem('simbolos');
+    let otro = JSON.parse(info);
+    this.dataSource = otro;
+
   }
 }
 export interface Simbolos {

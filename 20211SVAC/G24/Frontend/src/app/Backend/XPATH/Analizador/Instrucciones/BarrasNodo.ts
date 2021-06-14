@@ -11,6 +11,7 @@ export default class BarrasNodo extends Instruccion {
   public Barra2:string;
   public Operacion: Instruccion
   constructor(barra1: string,expresion:Instruccion, fila: number, columna: number,barra2?:string) {
+
     super(new Tipo(tipoDato.ENTERO), fila, columna);
     this.Barra = barra1
     this.Barra2=barra2

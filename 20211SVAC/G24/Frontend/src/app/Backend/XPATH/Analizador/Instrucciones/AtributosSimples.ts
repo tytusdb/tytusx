@@ -12,6 +12,7 @@ export default class AtributoSimple extends Instruccion {
         super(new Tipo(tipoDato.CADENA), fila, columna);
         this.Operacion = select
         this.tipoAtributo=tipo
+
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
@@ -28,6 +29,7 @@ export default class AtributoSimple extends Instruccion {
             nodo.agregarHijoAST(nodoselect)
         }
         
+
         return nodo;
     }
 }
