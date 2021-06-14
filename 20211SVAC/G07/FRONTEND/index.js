@@ -177,6 +177,17 @@ document.getElementById("ast").addEventListener("click", () => {
   
 })
 
+document.getElementById("btnReporteXPATHcst").addEventListener("click", () => {
+  let AST_xPath2=analizador_xpath.parse(document.getElementById("editor").value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xPath2);
+
+})
+
 // ======================================
 // MODAL XML
 // ======================================
