@@ -86,17 +86,17 @@ function CargarXMLDesc(){
         SalidaXPath.refresh();
     } else {
 
-        analisisCorrecto = EjecutarXMLAsc(contenido);
+        analisisCorrecto = EjecutarXMLDesc(contenido);
         
         if (analisisCorrecto) {
             IDentorno = 1;
             IDobj = 1;
             NumeroE = 1;
-            DOTxmlCSTasc = "";
+            DOTxmlCSTdesc = "";
             GenerarDOT.id_n = 1;
-            DOTxmlCSTasc = GenerarDOT.recorrerDOT(resultadoXML[1]);
-            DOTxmlCSTasc = "digraph {" + DOTxmlCSTasc + "}";
-            localStorage.setItem('cstXML',DOTxmlCSTasc);
+            DOTxmlCSTdesc = GenerarDOT.recorrerDOT(resultadoXML[1]);
+            DOTxmlCSTdesc = "digraph {" + DOTxmlCSTdesc + "}";
+            localStorage.setItem('cstXMLDesc',DOTxmlCSTdesc);
             ExtraerCodificacion(resultadoXML[0]);       
             ErroresSemanticosXML(resultadoXML[0]);      
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
@@ -113,10 +113,10 @@ function CargarXMLDesc(){
             console.log(tablaSimbolosXML);
             console.log("↓ Arreglo Simbolos ↓");
             console.log(ReportesTSXML.arreglo);
-            RGxml.arreglo = RGxml.arreglo.reverse();
+           // RGxml.arreglo = RGxml.arreglo.reverse();
             localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
             localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
-            localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
+            //localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
             
         } else {
             SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
@@ -165,6 +165,19 @@ function EjecutarXMLAsc(contenidoXML){
     }
 }
 
+function EjecutarXMLDesc(contenidoXML){
+    try {
+        ListaErr.limpiarArreglo();
+        RGxmlDesc.limpiarArreglo();
+        //Parser XML ascendente
+        resultadoXML = XMLdescReports.parse(contenidoXML);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 function EjecutarXpathAsc(contenidoXpath){
 
     try {
@@ -194,7 +207,6 @@ function EjecutarXpathDesc(contenidoXpath){
     }
 
 }
-
 
 function ErroresSemanticosXML(objetos){
 

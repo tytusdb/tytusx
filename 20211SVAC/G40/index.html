@@ -10,6 +10,7 @@
         <script src="./Js/Descargas.js"></script>
         <script src="./Js/vis.js"></script>
         <script src="./Js/Interprete/Gramatica/XMLascReports.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XMLdescReports.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathAsc.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathDesc.js" ></script>
         <script src="./Js/Interprete/Expresiones/Atributo.js"></script>
@@ -53,10 +54,12 @@
             var analisisXpathCorrecto = true;
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
+            var DOTxmlCSTdesc = "";
             var DOTxmlErrores = "";
             var DOTXPATHASTasc = "";
             var DOTXPATHASTDesc = "";
             var RGxml = new ReporteGramatical();
+            var RGxmlDesc = new ReporteGramatical();
             var nodoxPATHASC = null;
             var nodoxPATHDESC = null;
             var IDentorno = 1;
@@ -96,7 +99,8 @@
                     <div class="dropdown">
                         <button onclick="Descargar()" class="dropbtn">Reportes</button>
                         <div id="myDropdown2" class="dropdown-content">
-                        <a class="dropitem" id="cstXML">CST XML</a>
+                        <a class="dropitem" id="cstXML">CST XML (Asc)</a>
+                        <a class="dropitem" id="cstXMLDesc">CST XML (Desc)</a>
                         <a class="dropitem" id="erroresXML">Errores</a>
                         <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>
                         <a class="dropitem" id="rgXML">Reporte gramatical XML</a>
