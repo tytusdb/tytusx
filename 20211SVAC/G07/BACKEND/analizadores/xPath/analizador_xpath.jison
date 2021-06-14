@@ -101,13 +101,29 @@ INICIO:
 ;                                          
 
 ELEMENTO:
-     EXPRESION ELEMENTO_P                                       {$$= new Nodo("Porduccion","ELEMENTO",[ $EXPRESION ,$ELEMENTO_P] );}
+     EXPRESION ELEMENTO_P                                       
+     {
+        $$= new Nodo("ELE","ELE");
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        }
 ;  
 
 ELEMENTO_P:
-         tk_barra_or EXPRESION ELEMENTO_P                       {$$= new Nodo("Porduccion","ELEMENTO_P",[ $tk_barra_or ,$EXPRESION,$ELEMENTO_P] );}
-        |                                                       {$$= new Nodo("Porduccion","ELEMENTO_P",[ "ε" ] );}
-     | error tk_barra_or 
+         tk_barra_or EXPRESION ELEMENTO_P                       
+             {
+        $$= new Nodo("ELEP","ELEP");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+        }
+        
+        |  
+         {
+        $$= new Nodo("ELEP","ELEP");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
+        | error tk_barra_or 
         {
             listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @2.first_column ));
         }
@@ -116,156 +132,570 @@ ELEMENTO_P:
 
 
 EXPRESION:
-          RESERVA RESERVA_P                                      {$$= new Nodo("Porduccion","EXPRESION",[ $RESERVA ,$RESERVA_P] );}
-        | SIMBOLOS CAJETIN SIMBOLOS_P                            {$$= new Nodo("Porduccion","EXPRESION",[ $SIMBOLOS, $CAJETIN ,$SIMBOLOS_P] );}
-        | tk_identificador CAJETIN  SIMBOLOSSECU SIMBOLOSSECU_P  {$$= new Nodo("Porduccion","EXPRESION",[ $tk_identificador ,$CAJETIN, $SIMBOLOSSECU, $SIMBOLOSSECU_P] );}
-        | tk_identificador                                       {$$= new Nodo("Porduccion","EXPRESION",[ $tk_identificador ] );} 
-        | tk_asterisco CAJETIN                                   {$$= new Nodo("Porduccion","EXPRESION",[ $tk_asterisco, $CAJETIN ] );} 
+          RESERVA RESERVA_P                                      
+        {
+	$$= new Nodo("EXP", "EXP" );
+	$$.agregarHijo($1);
+        $$.agregarHijo($2);
+	}
+        | SIMBOLOS CAJETIN SIMBOLOS_P       
+        {
+	$$= new Nodo("EXP", "EXP" );
+	$$.agregarHijo($1);
+        $$.agregarHijo($2);
+        $$.agregarHijo($2);
+	}
+        | tk_identificador CAJETIN  SIMBOLOSSECU SIMBOLOSSECU_P 
+        {
+	$$= new Nodo("EXP", "EXP" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+        $$.agregarHijo($4);                
+	}
+        | tk_identificador                                       
+        {
+	$$= new Nodo("EXP", "EXP" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}
+        | tk_asterisco CAJETIN                                   
+        {
+	$$= new Nodo("EXP", "EXP" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
 ;
 
 SIMBOLOS:
-          tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_diagonal ,$CONTENIDODOS] );}
-        | tk_diagonal_doble CONTENIDODOS                        {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_diagonal_doble ,$CONTENIDODOS] );}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_arroba,$ARROPROD ] );}
-        | tk_puntos_seguidos PRODUCT CONTENIDODOS               {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_puntos_seguidos, $PRODUCT ,$CONTENIDODOS] );}
-        | tk_punto PRODUCT CONTENIDODOS                         {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_punto,$PRODUCT ,$CONTENIDODOS] );}
-        | tk_asterisco CONTENIDO                                {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_asterisco ,$CONTENIDO] );}
+          tk_diagonal CONTENIDODOS                              
+        {
+	$$= new Nodo("SIM", "SIM" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
+        | tk_diagonal_doble CONTENIDODOS                        
+        {
+	$$= new Nodo("SIM", "SIM" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
+        | tk_arroba ARROPROD                                    
+        {
+	$$= new Nodo("SIM", "SIM" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_puntos_seguidos PRODUCT CONTENIDODOS               
+        {
+	$$= new Nodo("SIM", "SIM" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);        
+	}
+        | tk_punto PRODUCT CONTENIDODOS                         
+        {
+	$$= new Nodo("SIM", "SIM" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);        
+	}
+        | tk_asterisco CONTENIDO                                
+        {
+	$$= new Nodo("SIM", "SIM" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
 ;
 
 SIMBOLOS_P:
-         EXPRESION                                              {$$= new Nodo("Porduccion","SIMBOLOS_P",[ $EXPRESION ] );}                             
-        |                                                       {$$= new Nodo("Porduccion","SIMBOLOS_P",[ "ε" ] );}       
+         EXPRESION                                              
+        {
+	$$= new Nodo("SIMP", "SIMP" );
+        $$.agregarHijo($1);
+	}
+        |                                                       
+        {
+        $$= new Nodo("SIMP","SIMP");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;
 
 SIMBOLOSSECU:
-          tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_diagonal, $CONTENIDODOS ] );}
-        | tk_diagonal_doble CONTENIDODOS                        {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_diagonal_doble, $CONTENIDODOS ] );}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_arroba, $ARROPROD ] );}
-        | tk_puntos_seguidos                                    {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_puntos_seguidos ] );}
-        | tk_asterisco CONTENIDO                                {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_asterisco, $CONTENIDO ] );}
+          tk_diagonal CONTENIDODOS                              
+        {
+	$$= new Nodo("SIMS", "SIMS" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
+        | tk_diagonal_doble CONTENIDODOS                        
+        {
+	$$= new Nodo("SIMS", "SIMS" );
+        $$.agregarHijo(new Nodo($1,$1));        
+        $$.agregarHijo($2);
+	}
+        | tk_arroba ARROPROD                                    
+        {
+	$$= new Nodo("SIMS", "SIMS" );
+        $$.agregarHijo(new Nodo($1,$1));        
+        $$.agregarHijo($2);
+	}
+        | tk_puntos_seguidos                                    
+        {
+	$$= new Nodo("SIMS", "SIMS" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}
+        | tk_asterisco CONTENIDO                                
+        {
+	$$= new Nodo("SIMS", "SIMS" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
         ;
 
 SIMBOLOSSECU_P:
-         EXPRESION                                              {$$= new Nodo("Porduccion","SIMBOLOSSECU_P",[ $EXPRESION ] );}                             
-        |                                                       {$$= new Nodo("Porduccion","SIMBOLOSSECU_P",[ "ε" ] );}       
+         EXPRESION                                              
+        {
+	$$= new Nodo("SIMSP", "SIMSP" );
+        $$.agregarHijo($1);
+	}
+        |                                                       
+        {
+        $$= new Nodo("SIMSP","SIMSP");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;
 
 RESERVA:
-        tk_ancestor           ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_ancestor, $ITEMRESERVA ] );} 
-        | tk_ancestor_or_self ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_ancestor_or_self, $ITEMRESERVA ] );}
-        | tk_attribute        ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_attribute, $ITEMRESERVA ] );}
-        | tk_child            ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_child, $ITEMRESERVA ] );}
-        | tk_descendant       ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_descendant, $ITEMRESERVA ] );}
-        | tk_descendant_or_self ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_descendant_or_self, $ITEMRESERVA ] );}
-        | tk_following          ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_following, $ITEMRESERVA ] );}
-        | tk_following_sibling  ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_following_sibling, $ITEMRESERVA ] );}
-        | tk_namespace          ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_namespace, $ITEMRESERVA ] );}
-        | tk_parent             ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_parent, $ITEMRESERVA ] );}
-        | tk_preceding          ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_preceding, $ITEMRESERVA ] );}
-        | tk_preceding_sibling  ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_preceding_sibling, $ITEMRESERVA ] );}
-        | tk_self               ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_self, $ITEMRESERVA ] );}
-        | tk_node tk_parentesis_izq tk_parentesis_der  {$$= new Nodo("Porduccion","RESERVA",[$tk_node, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        | tk_last tk_parentesis_izq tk_parentesis_der  {$$= new Nodo("Porduccion","RESERVA",[$tk_last, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        | tk_position tk_parentesis_izq tk_parentesis_der {$$= new Nodo("Porduccion","RESERVA",[$tk_position, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        | tk_text tk_parentesis_izq tk_parentesis_der {$$= new Nodo("Porduccion","RESERVA",[$tk_text, $tk_parentesis_izq, $tk_parentesis_der ] );}
+        tk_ancestor           ITEMRESERVA    
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
+        | tk_ancestor_or_self ITEMRESERVA    
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_attribute        ITEMRESERVA    
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_child            ITEMRESERVA    
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_descendant       ITEMRESERVA    
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_descendant_or_self ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_following          ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_following_sibling  ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_namespace          ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_parent             ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_preceding          ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_preceding_sibling  ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_self               ITEMRESERVA  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}        
+        | tk_node tk_parentesis_izq tk_parentesis_der  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));        
+	}        
+        | tk_last tk_parentesis_izq tk_parentesis_der  
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));        
+	}         
+        | tk_position tk_parentesis_izq tk_parentesis_der 
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));        
+	}         
+        | tk_text tk_parentesis_izq tk_parentesis_der 
+        {
+	$$= new Nodo("RES", "RES" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));        
+	}         
         ;
 
 RESERVA_P:
-        EXPRESION                                                                 {$$= new Nodo("Porduccion","RESERVA_P",[$EXPRESION ] );}
-        |                                                                         {$$= new Nodo("Porduccion","RESERVA_P",[ "ε" ] );} 
+        EXPRESION  
+        {
+	$$= new Nodo("RESP", "RESP" );
+        $$.agregarHijo($1);
+	}         
+        |                                                       
+        {
+        $$= new Nodo("RESP","RESP");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;
 
 PRODUCT:
-        tk_diagonal                                                               {$$= new Nodo("Porduccion","PRODUCT",[$tk_diagonal ] );}       
-        |tk_diagonal_doble                                                        {$$= new Nodo("Porduccion","PRODUCT",[$tk_diagonal_doble ] );}
+        tk_diagonal                                    
+        {
+        $$= new Nodo("PRO","PRO");
+        $$.agregarHijo(new Nodo($1,$1));
+        }        
+        |tk_diagonal_doble                                         
+        {
+        $$= new Nodo("PRO","PRO");
+        $$.agregarHijo(new Nodo($1,$1));
+        }
 ;
 
 ARROPROD:
-        tk_asterisco                                                              {$$= new Nodo("Porduccion","ARROPROD",[$tk_asterisco ] );}
-        |tk_identificador                                                         {$$= new Nodo("Porduccion","ARROPROD",[$tk_identificador ] );}
+        tk_asterisco                                        
+        {
+        $$= new Nodo("ARO","ARO");
+        $$.agregarHijo(new Nodo($1,$1));
+        }
+        |tk_identificador                                           
+        {
+        $$= new Nodo("ARO","ARO");
+        $$.agregarHijo(new Nodo($1,$1));
+        }
 ;
 
 CONTENIDO:
-         tk_identificador                                                         {$$= new Nodo("Porduccion","CONTENIDO",[$tk_identificador ] );}
+         tk_identificador  
+        {
+	$$= new Nodo("CON", "CON" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}
 ;
 
 CONTENIDODOS:
-         tk_arroba ARROPROD                                     {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_arroba, $ARROPROD] );}
-         |tk_identificador                                      {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_identificador] );}
-         |tk_asterisco                                          {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_asterisco] );}        
-         | tk_puntos_seguidos                                   {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_puntos_seguidos] );}
-         | RESERVA                                              {$$= new Nodo("Porduccion","CONTENIDODOS",[ $RESERVA] );}
+         tk_arroba ARROPROD                         
+        {
+	$$= new Nodo("COND", "COND" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}         
+         |tk_identificador                                   
+        {
+	$$= new Nodo("COND", "COND" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}         
+         |tk_asterisco                                          
+        {
+	$$= new Nodo("COND", "COND" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}         
+         | tk_puntos_seguidos                                   
+        {
+	$$= new Nodo("COND", "COND" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}         
+         | RESERVA                                              
+        {
+	$$= new Nodo("COND", "COND" );
+        $$.agregarHijo($1);
+	}
 ;
 
 CONTENIDO_P:
-        EXPRESION                                               {$$= new Nodo("Porduccion","CONTENIDO_P",[$EXPRESION ] );}
-        |                                                       {$$= new Nodo("Porduccion","CONTENIDO_P",[ "ε" ] );}
+        EXPRESION                                              
+        {
+	$$= new Nodo("CONDP", "CONDP" );
+        $$.agregarHijo($1);
+	}        
+        |                                                       
+        {
+        $$= new Nodo("CONDP","CONDP");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;
 
 CAJETIN:
-        tk_corchete_izq PREDICADO tk_corchete_der               {$$= new Nodo("Porduccion","CAJETIN",[$tk_corchete_izq, $PREDICADO, $tk_corchete_der ] );}
-        |                                                       {$$= new Nodo("Porduccion","CAJETIN",[ "ε" ] );}
+        tk_corchete_izq PREDICADO tk_corchete_der               
+        {
+        $$= new Nodo("CAJ","CAJ");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);        
+        $$.agregarHijo(new Nodo($3,$3));
+        }        
+        |                                                       
+        {
+        $$= new Nodo("CAJ","CAJ");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;
 
 PREDICADO:
-          OPERACIONES                                           {$$= new Nodo("Porduccion","PREDICADO",[$OPERACIONES ] );}
+          OPERACIONES                                           
+        {
+	$$= new Nodo("PRE", "PRE" );
+        $$.agregarHijo($1);
+	} 
 ;
 
 OPERACIONES:
-        ITEMINICIO OPERADOR ITEMFINAL OPERACIONES_L             {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO, $OPERADOR, $ITEMFINAL, $OPERACIONES_L ] );}
-        | ITEMINICIO                                            {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO ] );}
+        ITEMINICIO OPERADOR ITEMFINAL OPERACIONES_L             
+        {
+	$$= new Nodo("OPE", "OPE" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+        $$.agregarHijo($4);                        
+	}         
+        | ITEMINICIO                                            
+        {
+	$$= new Nodo("OPE", "OPE" );
+        $$.agregarHijo($1);
+	}
 ;
 
 ITEMINICIO:
-          RESERVA                                               {$$= new Nodo("Porduccion","ITEMINICIO",[$RESERVA ] );}
-        | tk_identificador                                      {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_identificador ] );}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_arroba, $ARROPROD ] );}
-        | tk_numero                                             {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_numero ] );}
-        | tk_punto                                              {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_punto ] );}
+          RESERVA                                               
+        {
+	$$= new Nodo("ITEI", "ITEI" );
+        $$.agregarHijo($1);
+	}        
+        | tk_identificador                                      
+        {
+	$$= new Nodo("ITEI", "ITEI" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }        
+        | tk_arroba ARROPROD                                    
+        {
+	$$= new Nodo("ITEI", "ITEI" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }         
+        | tk_numero                                             
+        {
+	$$= new Nodo("ITEI", "ITEI" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_punto                                              
+        {
+	$$= new Nodo("ITEI", "ITEI" );
+        $$.agregarHijo(new Nodo($1,$1));
+        } 
 ;
 
 OPERADOR:
-        tk_mas                                                  {$$= new Nodo("Porduccion","OPERADOR",[$tk_mas ] );}
-        | tk_menos                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_menos ] );}        
-        | tk_asterisco                                          {$$= new Nodo("Porduccion","OPERADOR",[$tk_asterisco ] );}
-        | tk_div                                                {$$= new Nodo("Porduccion","OPERADOR",[$tk_div ] );}        
-        | tk_igual                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_igual ] );}
-        | tk_indiferente                                        {$$= new Nodo("Porduccion","OPERADOR",[$tk_indiferente ] );}
-        | tk_menor_igual                                        {$$= new Nodo("Porduccion","OPERADOR",[$tk_menor_igual ] );}
-        | tk_menor                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_menor ] );}
-        | tk_mayor_igual                                        {$$= new Nodo("Porduccion","OPERADOR",[$tk_mayor_igual ] );}
-        | tk_mayor                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_mayor ] );}
-        | tk_mod                                                {$$= new Nodo("Porduccion","OPERADOR",[$tk_mod ] );}
+        tk_mas                                                  
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }        
+        | tk_menos                                              
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_asterisco                                          
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_div                                                
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_igual                                              
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_indiferente                                        
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_menor_igual                                        
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_menor                                              
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_mayor_igual                                        
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_mayor                                             
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_mod                                               
+        {
+	$$= new Nodo("OPERA", "OPERA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
         ;
 
 ITEMFINAL:
-          RESERVA                                               {$$= new Nodo("Porduccion","ITEMFINAL",[ $RESERVA] );}
-        | tk_caracter                                           {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_caracter] );}}
-        | tk_hilera                                             {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_hilera.slice(1,-1)] );}}
-        | tk_identificador                                      {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_identificador] );}}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_arroba, $ARROPROD] );}}
-        | tk_numero                                             {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_numero] );}}
+          RESERVA                                               
+        {
+	$$= new Nodo("ITEF", "ITEF" );
+        $$.agregarHijo($1);
+        }        
+        | tk_caracter                                           
+        {
+	$$= new Nodo("ITEF", "ITEF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }         
+        | tk_hilera                                             
+        {
+	$$= new Nodo("ITEF", "ITEF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }                 
+        | tk_identificador                                      
+        {
+	$$= new Nodo("ITEF", "ITEF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }                 
+        | tk_arroba ARROPROD                                    
+        {
+	$$= new Nodo("ITEF", "ITEF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);        
+        }        
+        | tk_numero                                             
+        {
+	$$= new Nodo("ITEF", "ITEF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        } 
 ;
 
 OPERACIONES_L:
-          tk_or OPERACIONES                                     {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_or, $OPERACIONES] );}
-        | tk_and OPERACIONES                                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_and, $OPERACIONES] );}
-        |                                                       {$$= new Nodo("Porduccion","OPERACIONES_L",[ "ε" ] );}
+          tk_or OPERACIONES                                     
+        {
+        $$= new Nodo("OPEL","OPEL");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }
+        | tk_and OPERACIONES                                    
+        {
+        $$= new Nodo("OPEL","OPEL");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }        
+        |                                                       
+        {
+        $$= new Nodo("OPEL","OPEL");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;
 
 ITEMRESERVA:
-        tk_cuatro_puntos SIMBOLOSTERC                           {$$= new Nodo("Porduccion","ITEMRESERVA",[ $tk_cuatro_puntos, $SIMBOLOSTERC] );}
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}
+        tk_cuatro_puntos SIMBOLOSTERC                          
+        {
+        $$= new Nodo("ITER","ITER");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);        
+        }        
+        |                                                      
+        {
+        $$= new Nodo("ITER","ITER");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
 ;       
 
 SIMBOLOSTERC:
-          tk_identificador                                      {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_identificador] );}
-        | tk_asterisco                                          {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_asterisco] );}
-        | RESERVA                                               {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $RESERVA] );}
-        | tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_diagonal, $CONTENIDODOS] );}
-        | tk_diagonal_doble CONTENIDODOS                        {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_diagonal_doble, $CONTENIDODOS]);}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_arroba, $ARROPROD] );}
-        | tk_puntos_seguidos                                    {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_puntos_seguidos] );}
+          tk_identificador                                      
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo(new Nodo($1,$1));        
+        }         
+        | tk_asterisco                                          
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo(new Nodo($1,$1));        
+        } 
+        | RESERVA                                               
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo($1); 
+        } 
+        | tk_diagonal CONTENIDODOS                              
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);                 
+        } 
+        | tk_diagonal_doble CONTENIDODOS                        
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo(new Nodo($1,$1));        
+        $$.agregarHijo($2);         
+        } 
+        | tk_arroba ARROPROD                                    
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo(new Nodo($1,$1));        
+        $$.agregarHijo($2);         
+        } 
+        | tk_puntos_seguidos                                    
+        {
+        $$= new Nodo("SIMBT","SIMBT");
+        $$.agregarHijo(new Nodo($1,$1));        
+        } 
 ;
 
 
