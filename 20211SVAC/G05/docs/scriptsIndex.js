@@ -93,8 +93,8 @@ var cadenaReporteTablaS =""
 
 document.getElementById("btnAnalizarA").addEventListener('click', function() {
     cadenaReporteTablaS= myBundle.ejecutarXML(document.getElementById(activeText).value);
-    console.log(cadenaReporteTablaS)
-    alert("Se ha cargado el XML")
+    console.log(cadenaReporteTablaS);
+    alert("Se ha cargado el XML");
 });
 
 document.getElementById("btnGraficaAST").addEventListener('click', function() {
