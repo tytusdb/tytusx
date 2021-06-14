@@ -66,7 +66,7 @@ var atributo = null; */
 %%
 
 /* Definición de la gramática */
-INICIO : MOBJETOS EOF     { 
+INICIO : MOBJETOS EOF     { RGxmlDesc.agregarElemento("INICIO -> listaObjetosRaiz","INICIO.val := ListaObjetosRaiz.val");
                             var root = new NodoArbol("INICIO","");
                             root.agregarHijo($1[1]);                              
                             console.log(ListaErr.getErrores());
@@ -76,21 +76,22 @@ INICIO : MOBJETOS EOF     {
                             } ;
 
 
-MOBJETOS: MOBJETO OTRO_OBJETO { nodoAux = new NodoArbol("ListaObjetosRaiz","");                                  
+MOBJETOS: MOBJETO OTRO_OBJETO { RGxmlDesc.agregarElemento("ListaObjetosRaiz -> ObjetoRaiz OtroObjetoRaiz","ListaObjetosRaiz.val := ObjetoRaiz.val.concat(OtroObjetoRaiz.val)");
+                                nodoAux = new NodoArbol("ListaObjetosRaiz","");                                  
                                 nodoAux.agregarHijo($1[1]);
                                 nodoAux.agregarHijo($2[1]);
                                 arr = [$1[0]];
                                 arr = arr.concat($2[0]); 
                                 $$ = [arr,nodoAux]; };
 
-OTRO_OBJETO : MOBJETO OTRO_OBJETO { 
+OTRO_OBJETO : MOBJETO OTRO_OBJETO {     RGxmlDesc.agregarElemento("OtroObjeto -> ObjetoRaiz OtroObjeto","OtroObjeto.val :=  ObjetoRaiz.val.concat(OtroObjetoRaiz.val)");
                                         nodoAux = new NodoArbol("OtroObjeto","");                                  
                                         nodoAux.agregarHijo($1[1]);
                                         nodoAux.agregarHijo($2[1]);
                                         arr = [$1[0]];
                                         arr = arr.concat($2[0]); 
                                         $$ = [arr,nodoAux]; }
-        | { 
+        | {     RGxmlDesc.agregarElemento("OtroObjeto -> ϵ","OtroObjeto.val := null");
                 objeto = new Objeto("","","",1, 1,[],[],0);
                 nodoAux = new NodoArbol("OtroObjeto","");
                 nodoAux.agregarHijo(new NodoArbol("ϵ",""));
@@ -99,6 +100,7 @@ OTRO_OBJETO : MOBJETO OTRO_OBJETO {
 
                 
 MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk_identificador tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" objetos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,objetos.val)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -112,6 +114,7 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash t
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_mayor TEXTOS tk_menorslash tk_identificador tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" textos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,textos.val)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -125,6 +128,7 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash t
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_mayor tk_menorslash tk_identificador tk_mayor { 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -137,6 +141,7 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash t
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_slash tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -146,7 +151,8 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash t
                 objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],2);
                 $$ = [objeto,nodoAux];
         }
-        | tk_menor tk_interrogacion tk_xml tk_version tk_igual CADENA tk_encoding tk_igual CADENA tk_interrogacion tk_mayor { 
+        | tk_menor tk_interrogacion tk_xml tk_version tk_igual CADENA tk_encoding tk_igual CADENA tk_interrogacion tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" "?" "xml" "version" "=" Cadena "encoding" "igual" Cadena "?" ">"`,"Objeto.val := new Objeto(encoding,null,null)"); 
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"simbolo"));
@@ -190,25 +196,30 @@ FINERROR: tk_mayor
         
 
 
-CADENA : tk_cadena1 {   nodoAux = new NodoArbol($1,"cadena");
+CADENA : tk_cadena1 {   RGxmlDesc.agregarElemento(`Cadena -> tk_cadena`,"Cadena.val := tk_cadena.val");
+                        nodoAux = new NodoArbol($1,"cadena");
                         $$ = [$1, nodoAux]; }
 
-        | tk_cadena2 {  nodoAux = new NodoArbol($1,"cadena");
+        | tk_cadena2 {  RGxmlDesc.agregarElemento(`Cadena -> tk_cadena`,"Cadena.val := tk_cadena.val");
+                        nodoAux = new NodoArbol($1,"cadena");
                         $$ = [$1, nodoAux]; };
 
 
-TEXTOS: TEXTO OTRO_TEXTO { nodoAux = new NodoArbol("Textos","");                                  
+TEXTOS: TEXTO OTRO_TEXTO { RGxmlDesc.agregarElemento(`Textos -> Texto OtroTexto`,`Textos.val := Texto.val + " " + OtroTexto.val`);
+                           nodoAux = new NodoArbol("Textos","");                                  
                            nodoAux.agregarHijo($1[1]);
                            nodoAux.agregarHijo($2[1]);
                            $1[0]= $1[0] + " " + $2[0]; 
                            $$ = [$1[0],nodoAux]; };
 
-OTRO_TEXTO: TEXTO OTRO_TEXTO { nodoAux = new NodoArbol("OtroTexto","");                                  
+OTRO_TEXTO: TEXTO OTRO_TEXTO { RGxmlDesc.agregarElemento(`OtroTexto -> Texto OtroTexto`,`OtroTexto.val := Texto.val + " " + OtroTexto.val`);
+                               nodoAux = new NodoArbol("OtroTexto","");                                  
                                nodoAux.agregarHijo($1[1]);
                                nodoAux.agregarHijo($2[1]);
                                $1[0]= $1[0] + " " + $2[0]; 
                                $$ = [$1[0],nodoAux]; }
-                           | { nodoAux = new NodoArbol("OtroTexto","");                                  
+                           | { RGxmlDesc.agregarElemento(`OtroTexto -> ϵ`,`OtroTexto.val := ""`);
+                               nodoAux = new NodoArbol("OtroTexto","");                                  
                                nodoAux.agregarHijo(new NodoArbol(`""`,""));
                                $$ = ["",nodoAux]; };
 
@@ -297,20 +308,23 @@ TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   $$ = [$1,nodoAux];  };
 
 
-OBJETOS: OBJETO OTRO_UOBJETO { nodoAux = new NodoArbol("ListaObjetos","");                                  
+OBJETOS: OBJETO OTRO_UOBJETO {  RGxmlDesc.agregarElemento("ListaObjetos -> Objeto OtroObjeto","ListaObjetos.val := Objeto.val.concat(OtroObjeto.val)");
+                                nodoAux = new NodoArbol("ListaObjetos","");                                  
                                 nodoAux.agregarHijo($1[1]);
                                 nodoAux.agregarHijo($2[1]);
                                 arr = [$1[0]];
                                 arr = arr.concat($2[0]); 
                                 $$ = [arr,nodoAux]; };
 
-OTRO_UOBJETO : OBJETO OTRO_UOBJETO { nodoAux = new NodoArbol("OtroObjeto","");                                  
+OTRO_UOBJETO : OBJETO OTRO_UOBJETO {
+                                RGxmlDesc.agregarElemento("OtroObjeto -> Objeto OtroObjeto","OtroObjeto.val :=  Objeto.val.concat(OtroObjeto.val)"); 
+                                nodoAux = new NodoArbol("OtroObjeto","");                                  
                                 nodoAux.agregarHijo($1[1]);
                                 nodoAux.agregarHijo($2[1]);
                                 arr = [$1[0]];
                                 arr = arr.concat($2[0]); 
                                 $$ = [arr,nodoAux]; }
-        | { 
+        | {     RGxmlDesc.agregarElemento("OtroObjeto -> ϵ","OtroObjeto.val := null");
                 objeto = new Objeto("","","",1, 1,[],[],0);
                 nodoAux = new NodoArbol("OtroObjeto","");
                 nodoAux.agregarHijo(new NodoArbol("ϵ",""));
@@ -320,6 +334,7 @@ OTRO_UOBJETO : OBJETO OTRO_UOBJETO { nodoAux = new NodoArbol("OtroObjeto","");
 
                 
 OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk_identificador tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" objetos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,objetos.val)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -333,6 +348,7 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_mayor TEXTOS tk_menorslash tk_identificador tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" textos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,textos.val)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -346,6 +362,7 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_mayor tk_menorslash tk_identificador tk_mayor { 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -358,6 +375,7 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_slash tk_mayor {
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -376,30 +394,32 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk
         } ;
 
 
-LATRIBUTOS: ATRIBUTOS   { 
+LATRIBUTOS: ATRIBUTOS   { RGxmlDesc.agregarElemento(`ListaAtributos -> Atributos`,"ListaAtributos.val := Atributos.val");
                           nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo($1[1]);
                           $$ = [$1[0], nodoAux]; }
 
-           |            { 
+           |            { RGxmlDesc.agregarElemento(`ListaAtributos -> ε`,"ListaAtributos.val := []");
                           nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo(new NodoArbol("E","simbolo"));
                           $$ = [[], nodoAux]; };
 
-ATRIBUTOS: ATRIBUTO OTRO_ATRIBUTO {      nodoAux = new NodoArbol("ListaAtributos","");                                  
+ATRIBUTOS: ATRIBUTO OTRO_ATRIBUTO {     RGxmlDesc.agregarElemento("ListaAtributos -> Atributo OtroAtributo","ListaAtributos.val := Atributo.val.concat(OtroAtributo.val)");
+                                        nodoAux = new NodoArbol("ListaAtributos","");                                  
                                         nodoAux.agregarHijo($1[1]);
                                         nodoAux.agregarHijo($2[1]);
                                         arr = [$1[0]];
                                         arr = arr.concat($2[0]); 
                                         $$ = [arr,nodoAux]; };
 
-OTRO_ATRIBUTO : ATRIBUTO OTRO_ATRIBUTO { nodoAux = new NodoArbol("OtroAtributo","");                                  
+OTRO_ATRIBUTO : ATRIBUTO OTRO_ATRIBUTO {RGxmlDesc.agregarElemento("OtroAtributo -> Atributo OtroAtributo","OtroAtributo.val :=  Atributo.val.concat(OtroAtributo.val)"); 
+                                        nodoAux = new NodoArbol("OtroAtributo","");                                  
                                         nodoAux.agregarHijo($1[1]);
                                         nodoAux.agregarHijo($2[1]);
                                         arr = [$1[0]];
                                         arr = arr.concat($2[0]); 
                                         $$ = [arr,nodoAux]; }
-                                | { 
+                                | {     RGxmlDesc.agregarElemento("OtroAtributo -> ϵ","OtroAtributo.val := null");
                                         atributo = new Atributo("", "", @1.first_line, @1.first_column);
                                         nodoAux = new NodoArbol("OtroAtributo","");
                                         nodoAux.agregarHijo(new NodoArbol("ϵ",""));
@@ -407,7 +427,8 @@ OTRO_ATRIBUTO : ATRIBUTO OTRO_ATRIBUTO { nodoAux = new NodoArbol("OtroAtributo",
                                 };
 
 
-ATRIBUTO: tk_identificador tk_igual tk_cadena1  {  nodoAux = new NodoArbol("Atributo","");
+ATRIBUTO: tk_identificador tk_igual tk_cadena1  {  RGxmlDesc.agregarElemento(`Atributo -> id "=" Cadena`,"Atributo.val := new Atributo(id.val,cadena.val)");
+                                                   nodoAux = new NodoArbol("Atributo","");
                                                    nodoAux.agregarHijo(new NodoArbol($1,"identificador"));
                                                    nodoAux.agregarHijo(new NodoArbol($2,"simbolo"));
                                                    nodoAux.agregarHijo(new NodoArbol($3,"cadena"));
@@ -415,7 +436,8 @@ ATRIBUTO: tk_identificador tk_igual tk_cadena1  {  nodoAux = new NodoArbol("Atri
                                                    $$ = [atributo,nodoAux]; }
         
 
-        | tk_identificador tk_igual tk_cadena2  {  nodoAux = new NodoArbol("Atributo","");
+        | tk_identificador tk_igual tk_cadena2  {  RGxmlDesc.agregarElemento(`Atributo -> id "=" Cadena`,"Atributo.val := new Atributo(id.val,cadena.val)");
+                                                   nodoAux = new NodoArbol("Atributo","");
                                                    nodoAux.agregarHijo(new NodoArbol($1,"identificador"));
                                                    nodoAux.agregarHijo(new NodoArbol($2,"simbolo"));
                                                    nodoAux.agregarHijo(new NodoArbol($3,"cadena"));

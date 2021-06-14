@@ -94,23 +94,39 @@ BSL                         "\\".
 /* Definición de la gramática */
 INICIO : SETS EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
                          /*Creamos una nueva instruccion y le mandamos los nodos que debe ir a buscar*/
-                        instruccion = new XPath(@1.first_line, @1.first_column, $1)
-                        console.log("TODO CORRECTO :D XPATH DESC VERSION");
-                        $$ = instruccion;
-                        return $$; } ;
+                        if ($1!=null){
+                          instruccion = new XPath(@1.first_line, @1.first_column, $1)
+                          console.log("TODO CORRECTO :D XPATH DESC VERSION");
+                          $$ = instruccion;
+                          return $$;
+                        }else {
+                          instruccion = new XPath(@1.first_line, @1.first_column, [])
+                          console.log("TODO CORRECTO :D XPATH DESC VERSION");
+                          $$ = instruccion;
+                          return $$;
+                        }
+                        } ;
 
-SETS: SET OS {  arr = [$1];
-                if($2!=null){
-                  arr = arr.concat($2);                                          
-                }                                                                                                         
-                $$ = arr;
+SETS: SET OS {  if($1!=null && $2!=1) {
+               arr = [$1];
+              if($2!=null){
+                arr = arr.concat($2);                                          
+              }                                                                                                   
+              $$ = arr;
+              } else {          
+                  $$ = null;             
+              } 
                 };
 
-OS: SET OS { arr = [$1];
+OS: SET OS { if($1!=null && $2!=1) {
+               arr = [$1];
             if($2!=null){
               arr = arr.concat($2);                                          
-            }                                                                                                         
+            }                                                                                                       
              $$ = arr;
+            } else {                          
+              $$ = 1;                      
+            }          
            }
     | { $$ = null;  };
 
@@ -140,7 +156,9 @@ SET:    SELECTORES EXPRESION {
                         nodoaux.agregarHijo($2[1]);
                         nodoxPATHDESC.agregarHijo(nodoaux);
                         $$ = nodoXPath;
-                          };
+                          }
+    |  error {  ListaErr.agregarError(new Error(NumeroE, yylineno,this._$.first_column + 1, "Sintactico", "Se esperaba un objeto y se encontro "+ yytext,"XPATH")); NumeroE++;
+               $$ = null; };
 
 SELECTORES: tk_dobleslash OTRO_SELECTOR { arr = [TipoSelector.DOBLE_SLASH]; 
                                           arr = arr.concat($2[0]);

@@ -113,10 +113,10 @@ function CargarXMLDesc(){
             console.log(tablaSimbolosXML);
             console.log("↓ Arreglo Simbolos ↓");
             console.log(ReportesTSXML.arreglo);
-           // RGxml.arreglo = RGxml.arreglo.reverse();
+            RGxmlDesc.arreglo = RGxmlDesc.arreglo.reverse();
             localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
             localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
-            //localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
+            localStorage.setItem('rgJSONdesc',JSON.stringify(RGxmlDesc.arreglo, null, 2));
             
         } else {
             SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");

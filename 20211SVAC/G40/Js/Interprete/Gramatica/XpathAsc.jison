@@ -87,13 +87,31 @@ BSL                         "\\".
 /* Definición de la gramática */
 INICIO : SETS EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
                          /*Creamos una nueva instruccion y le mandamos los nodos que debe ir a buscar*/
-                        instruccion = new XPath(@1.first_line, @1.first_column, $1)
-                        console.log("TODO CORRECTO :D XPATH ASC VERSION");
-                        $$ = instruccion;
-                        return $$; } ;
+                        if ($1!=null){
+                          instruccion = new XPath(@1.first_line, @1.first_column, $1)
+                          console.log("TODO CORRECTO :D XPATH ASC VERSION");
+                          $$ = instruccion;
+                          return $$;
+                        }else {
+                          instruccion = new XPath(@1.first_line, @1.first_column, [])
+                          console.log("TODO CORRECTO :D XPATH ASC VERSION");
+                          $$ = instruccion;
+                          return $$;
+                        }
+                         } ;
 
-SETS: SETS SET { $1.push($2); $$ = $1;}
-    | SET {  $$ = [$1]; } ;
+SETS: SETS SET { if($1!=null && $2!=null){
+                  $1.push($2);
+                  $$ = $1; 
+                  } else {
+                    $$ = null;
+                  } }
+    | SET { if($1!=null){
+              $$ = [$1];
+            } else {
+              $$ = null;
+            }
+             } ;
 
 SET:    SELECTORES EXPRESION {         
                         nodoXPath = new NodoXpath("", TipoNodo.SELECTOR_EXPRESION, null, $1[0], $2[0], @1.first_line, @1.first_column);                
@@ -121,7 +139,10 @@ SET:    SELECTORES EXPRESION {
                         nodoaux.agregarHijo($2[1]);
                         nodoxPATHASC.agregarHijo(nodoaux);
                         $$ = nodoXPath;
-                          };
+                          }
+    | error { 
+            ListaErr.agregarError(new Error(NumeroE, yylineno,this._$.first_column + 1, "Sintactico", "Se esperaba un objeto y se encontro "+ yytext,"XPATH")); NumeroE++;
+            $$ = null; };
 
 SELECTORES: tk_dobleslash OTRO_SELECTOR { arr = [TipoSelector.DOBLE_SLASH]; 
                                           arr = arr.concat($2[0]);
