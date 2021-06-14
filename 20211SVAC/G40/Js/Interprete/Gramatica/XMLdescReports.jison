@@ -25,6 +25,7 @@ BSL                                 "\\".
 "version"                  %{ return 'tk_version'; %}
 "encoding"                  %{ return 'tk_encoding'; %}
 ">"                     %{ return 'tk_mayor'; %}
+"</"                     %{ return 'tk_menorslash'; %}
 "<"                     %{ return 'tk_menor'; %}
 "="                     %{ return 'tk_igual'; %}
 "?"                     %{ return 'tk_interrogacion'; %}
@@ -97,7 +98,7 @@ OTRO_OBJETO : MOBJETO OTRO_OBJETO {
          };
 
                 
-MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slash tk_identificador tk_mayor {
+MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk_identificador tk_mayor {
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -105,13 +106,12 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_sla
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo($5[1]);
                 nodoAux.agregarHijo(new NodoArbol($6,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($7,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($8,"identificador"));
-                nodoAux.agregarHijo(new NodoArbol($9,"simbolo"));
-                objeto = new Objeto($2,$8,'',@1.first_line, @1.first_column,$3[0],$5[0],1);
+                nodoAux.agregarHijo(new NodoArbol($7,"identificador"));
+                nodoAux.agregarHijo(new NodoArbol($8,"simbolo"));
+                objeto = new Objeto($2,$7,'',@1.first_line, @1.first_column,$3[0],$5[0],1);
                 $$ = [objeto,nodoAux];
         } 
-        | tk_menor tk_identificador LATRIBUTOS tk_mayor TEXTOS tk_menor tk_slash tk_identificador tk_mayor {
+        | tk_menor tk_identificador LATRIBUTOS tk_mayor TEXTOS tk_menorslash tk_identificador tk_mayor {
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -119,23 +119,21 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_sla
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo($5[1]);
                 nodoAux.agregarHijo(new NodoArbol($6,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($7,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($8,"identificador"));
-                nodoAux.agregarHijo(new NodoArbol($9,"simbolo"));
-                objeto = new Objeto($2,$8,$5[0],@1.first_line, @1.first_column,$3[0],[],1);
+                nodoAux.agregarHijo(new NodoArbol($7,"identificador"));
+                nodoAux.agregarHijo(new NodoArbol($8,"simbolo"));
+                objeto = new Objeto($2,$7,$5[0],@1.first_line, @1.first_column,$3[0],[],1);
                 $$ = [objeto,nodoAux];
         } 
-        | tk_menor tk_identificador LATRIBUTOS tk_mayor tk_menor tk_slash tk_identificador tk_mayor { 
+        | tk_menor tk_identificador LATRIBUTOS tk_mayor tk_menorslash tk_identificador tk_mayor { 
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
                 nodoAux.agregarHijo($3[1]);
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($5,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($6,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($7,"identificador"));
-                nodoAux.agregarHijo(new NodoArbol($8,"simbolo"));
-                objeto = new Objeto($2,$7,'',@1.first_line, @1.first_column,$3[0],[],1);
+                nodoAux.agregarHijo(new NodoArbol($6,"identificador"));
+                nodoAux.agregarHijo(new NodoArbol($7,"simbolo"));
+                objeto = new Objeto($2,$6,'',@1.first_line, @1.first_column,$3[0],[],1);
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_slash tk_mayor {
@@ -145,7 +143,7 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_sla
                 nodoAux.agregarHijo($3[1]);
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($5,"simbolo"));
-                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],1);
+                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],2);
                 $$ = [objeto,nodoAux];
         }
         | tk_menor tk_interrogacion tk_xml tk_version tk_igual CADENA tk_encoding tk_igual CADENA tk_interrogacion tk_mayor { 
@@ -321,7 +319,7 @@ OTRO_UOBJETO : OBJETO OTRO_UOBJETO { nodoAux = new NodoArbol("OtroObjeto","");
 
 
                 
-OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slash tk_identificador tk_mayor {
+OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menorslash tk_identificador tk_mayor {
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -329,13 +327,12 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slas
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo($5[1]);
                 nodoAux.agregarHijo(new NodoArbol($6,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($7,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($8,"identificador"));
-                nodoAux.agregarHijo(new NodoArbol($9,"simbolo"));
-                objeto = new Objeto($2,$8,'',@1.first_line, @1.first_column,$3[0],$5[0],1);
+                nodoAux.agregarHijo(new NodoArbol($7,"identificador"));
+                nodoAux.agregarHijo(new NodoArbol($8,"simbolo"));
+                objeto = new Objeto($2,$7,'',@1.first_line, @1.first_column,$3[0],$5[0],1);
                 $$ = [objeto,nodoAux];
         } 
-        | tk_menor tk_identificador LATRIBUTOS tk_mayor TEXTOS tk_menor tk_slash tk_identificador tk_mayor {
+        | tk_menor tk_identificador LATRIBUTOS tk_mayor TEXTOS tk_menorslash tk_identificador tk_mayor {
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
@@ -343,23 +340,21 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slas
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo($5[1]);
                 nodoAux.agregarHijo(new NodoArbol($6,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($7,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($8,"identificador"));
-                nodoAux.agregarHijo(new NodoArbol($9,"simbolo"));
-                objeto = new Objeto($2,$8,$5[0],@1.first_line, @1.first_column,$3[0],[],1);
+                nodoAux.agregarHijo(new NodoArbol($7,"identificador"));
+                nodoAux.agregarHijo(new NodoArbol($8,"simbolo"));
+                objeto = new Objeto($2,$7,$5[0],@1.first_line, @1.first_column,$3[0],[],1);
                 $$ = [objeto,nodoAux];
         } 
-        | tk_menor tk_identificador LATRIBUTOS tk_mayor tk_menor tk_slash tk_identificador tk_mayor { 
+        | tk_menor tk_identificador LATRIBUTOS tk_mayor tk_menorslash tk_identificador tk_mayor { 
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($1,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($2,"identificador"));
                 nodoAux.agregarHijo($3[1]);
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($5,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($6,"simbolo"));
-                nodoAux.agregarHijo(new NodoArbol($7,"identificador"));
-                nodoAux.agregarHijo(new NodoArbol($8,"simbolo"));
-                objeto = new Objeto($2,$7,'',@1.first_line, @1.first_column,$3[0],[],1);
+                nodoAux.agregarHijo(new NodoArbol($6,"identificador"));
+                nodoAux.agregarHijo(new NodoArbol($7,"simbolo"));
+                objeto = new Objeto($2,$6,'',@1.first_line, @1.first_column,$3[0],[],1);
                 $$ = [objeto,nodoAux];
         } 
         | tk_menor tk_identificador LATRIBUTOS tk_slash tk_mayor {
@@ -369,7 +364,7 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slas
                 nodoAux.agregarHijo($3[1]);
                 nodoAux.agregarHijo(new NodoArbol($4,"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($5,"simbolo"));
-                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],1);
+                objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],2);
                 $$ = [objeto,nodoAux];
          }
         | error  {
@@ -381,14 +376,15 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slas
         } ;
 
 
-LATRIBUTOS: ATRIBUTOS   { nodoAux = new NodoArbol("ListaAtributos","");
+LATRIBUTOS: ATRIBUTOS   { 
+                          nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo($1[1]);
                           $$ = [$1[0], nodoAux]; }
 
-           |            { nodoAux = new NodoArbol("ListaAtributos","");
+           |            { 
+                          nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo(new NodoArbol("E","simbolo"));
                           $$ = [[], nodoAux]; };
-
 
 ATRIBUTOS: ATRIBUTO OTRO_ATRIBUTO {      nodoAux = new NodoArbol("ListaAtributos","");                                  
                                         nodoAux.agregarHijo($1[1]);
