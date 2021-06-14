@@ -64,9 +64,85 @@ function CargarXML(){
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
                     resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN :D!!");
+                    SetSalida("TODO SALIO BIEN (ASCENDENTE) :D!!");
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
+                }
+
+            }
+
+        }
+
+    }        
+}
+
+function CargarXMLDesc(){
+
+    var contenido = editor.getValue();
+    var contenidoXpath = EntradaXPath.getValue();
+
+    if (contenido == ""){
+        SalidaXPath.setValue("No hay entrada XML para analizar.");
+        SalidaXPath.refresh();
+    } else {
+
+        analisisCorrecto = EjecutarXMLDesc(contenido);
+        
+        if (analisisCorrecto) {
+            IDentorno = 1;
+            IDobj = 1;
+            NumeroE = 1;
+            DOTxmlCSTdesc = "";
+            GenerarDOT.id_n = 1;
+            DOTxmlCSTdesc = GenerarDOT.recorrerDOT(resultadoXML[1]);
+            DOTxmlCSTdesc = "digraph {" + DOTxmlCSTdesc + "}";
+            localStorage.setItem('cstXMLDesc',DOTxmlCSTdesc);
+            ExtraerCodificacion(resultadoXML[0]);       
+            ErroresSemanticosXML(resultadoXML[0]);      
+            var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
+            tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
+            tablaSimbolosXML = tablaSimbolosXMLAux;
+            var ReportesTSXML = new ReporteTablaSimbolosXML();
+            ReportesTSXML.limpiarArreglo();
+            ReportesTSXML.GenerarArreglo(tablaSimbolosXML.entornoGlobal,"Global");
+            console.log("↓ Lista de errores ↓");
+            console.log(ListaErr.getErrores());
+            console.log("↓ Estructura XML ↓");
+            console.log(resultadoXML[0]);
+            console.log("↓ Tabla Simbolos ↓");
+            console.log(tablaSimbolosXML);
+            console.log("↓ Arreglo Simbolos ↓");
+            console.log(ReportesTSXML.arreglo);
+           // RGxml.arreglo = RGxml.arreglo.reverse();
+            localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
+            localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+            //localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
+            
+        } else {
+            SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
+        }
+
+        if (analisisCorrecto) {
+
+            if (contenidoXpath == ""){
+                SalidaXPath.setValue("No hay entrada XPath para analizar pero se han generado reportes XML");
+                SalidaXPath.refresh();
+            } else {
+
+                analisisXpathCorrecto = EjecutarXpathDesc(contenidoXpath);
+
+                if (analisisXpathCorrecto){
+
+                    DOTXPATHASTDesc = GenerarDOT.recorrerDOT(nodoxPATHDESC);
+                    DOTXPATHASTDesc = "digraph {" + DOTXPATHASTDesc + "}";
+                    localStorage.setItem('astXPATHDesc',DOTXPATHASTDesc);
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+                    console.log("↓ Funcion XPath ↓");
+                    console.log(resultadoXPath);
+                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                    SetSalida("TODO SALIO BIEN (DESCENDENTE ):D!!");
+                } else {
+                    SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
                 }
 
             }
@@ -89,12 +165,40 @@ function EjecutarXMLAsc(contenidoXML){
     }
 }
 
+function EjecutarXMLDesc(contenidoXML){
+    try {
+        ListaErr.limpiarArreglo();
+        RGxmlDesc.limpiarArreglo();
+        //Parser XML ascendente
+        resultadoXML = XMLdescReports.parse(contenidoXML);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 function EjecutarXpathAsc(contenidoXpath){
 
     try {
         nodoxPATHASC = new NodoArbol("INICIO","");
         //Parser XPath ascendente
         resultadoXPath = XpathAsc.parse(contenidoXpath);
+        return true;
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+
+}
+
+function EjecutarXpathDesc(contenidoXpath){
+
+    try {
+        nodoxPATHDESC = new NodoArbol("INICIO","");
+        //Parser XPath ascendente
+        resultadoXPath = XpathDesc.parse(contenidoXpath);
         return true;
         
     } catch (error) {
@@ -144,12 +248,11 @@ function ExtraerCodificacion(objetos){
 
 }
 
-function ObtenerObjetos(entornos){
+function ObtenerObjetos(entorno){
 
     var objetos = [];
     
 
-    entornos.forEach(function (entorno){
         entorno.getTabla().forEach(function (simbolo){
 
             if(simbolo.getTipo()==Tipo.STRUCT){
@@ -157,10 +260,9 @@ function ObtenerObjetos(entornos){
                 if(!ObjetoYaExiste(objetos,simbolo.getValor().LeerID())){
                     objetos.push(simbolo.getValor());
                 }  
-            }
-    
+            }  
         });
-    }); 
+
 
     return objetos;
 }
@@ -184,27 +286,31 @@ function ObtenerEntornos(entorno){
 
 function EntornoYaExiste(arreglo, id){
 
+    var existe = false;
+
     arreglo.forEach(function (entorno){
 
         if(entorno.getID()==id){
-            return true;
+            existe = true;
         }
     });
 
-    return false;
+    return existe;
 
 }
 
 function ObjetoYaExiste(arreglo, id){
 
+    var existe = false;
+
     arreglo.forEach(function (objeto){
 
         if(objeto.LeerID()==id){
-            return true;
+            existe = true;
         }
     });
 
-    return false;
+    return existe;
 
 }
 

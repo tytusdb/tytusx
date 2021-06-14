@@ -37,7 +37,7 @@ var NodoXpath = /** @class */ (function () {
     NodoXpath.prototype.getValorImplicito = function (ent, arbol) {
 
         if(ent.length<1){
-            return null;
+            return [];
         }
     
         if((this.getTipo()== TipoNodo.SELECTOR_EXPRESION) || (this.getTipo()== TipoNodo.SELECTOR_AXES)){
@@ -55,12 +55,12 @@ var NodoXpath = /** @class */ (function () {
                     
                     var entornoAux = [];
 
-                    entornoActual.forEach(function (objeto){
+                    entornoActual.forEach(function (entorno){
 
-                        if(objeto.getEntorno().getAnterior()!=null){
+                        if(entorno.getAnterior()!=null){
 
-                            if(!EntornoYaExiste(entornoAux,objeto.getEntorno().getAnterior().getID())){
-                                entornoAux.push(objeto.getEntorno().getAnterior());
+                            if(EntornoYaExiste(entornoAux,entorno.getAnterior().getID())==false){
+                                entornoAux.push(entorno.getAnterior());
                             }
                         }
                        
@@ -71,34 +71,39 @@ var NodoXpath = /** @class */ (function () {
                             busquedaGlobal = 14;
                             entornoActual = this.getGlobal();
                         }  else {
-                            entornoActual = ObtenerObjetos(entornoAux);
+                            entornoActual = entornoAux;
                         }               
                         
 
                     } else {
                         //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                         //por lo tanto el selector ..// no devuelve nada 
-                        return null;
+                        return [[],[]];
                     }                   
                 } 
             } 
 
             if (this.getTipo()== TipoNodo.SELECTOR_EXPRESION){
                this.resultado = this.expresionXpath.getValorImplicito(entornoActual, busquedaGlobal);
-               console.log(this.resultado);
+               return this.resultado;
+               //console.log(this.resultado);
             } else if (this.getTipo()== TipoNodo.SELECTOR_AXES) {
                 this.resultado = this.axes.getValorImplicito(entornoActual, this.getGlobal(), busquedaGlobal);
-                console.log(this.resultado);
+                return this.resultado;
+                //console.log(this.resultado);
             }
 
         } else if (this.getTipo()== TipoNodo.EXPRESION){
             
-           this.resultado = this.expresionXpath.getValorImplicito(entornoActual, 13);
+           this.resultado = this.expresionXpath.getValorImplicito(ent, 13);
+           return this.resultado;
+           //console.log(this.resultado);
 
         } else if (this.getTipo()== TipoNodo.AXES){
         
-           this.resultado = this.axes.getValorImplicito(entornoActual, this.getGlobal(), 13);
-           console.log(this.resultado);
+           this.resultado = this.axes.getValorImplicito(ent, this.getGlobal(), 13);
+           return this.resultado;
+           //console.log(this.resultado);
         } 
                 
     };

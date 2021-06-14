@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto 1 | Grupo 7</title>
+    <link rel="stylesheet" href="./styles.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://www.usac.edu.gt/g/logos/escudo_usac_transparente_web.png" />
+
+    <!-- TREANT JS -->
+    <link rel="stylesheet" href="./treant-js/Treant.css" type="text/css"/>
+    <link rel="stylesheet" href="./graph.css" type="text/css">
+
+</head>
+
+<body>
+    <input type="file" id="fileInput" style="display: none;" onchange="abrirArchivo(this)">
+    <nav>
+        <ul class="menu">
+            <li class="menu-item">Archivo XPath
+                <ul class="submenu">
+                    <li class="subitem" id="abrirDoc">Abrir</li>
+                    <li class="subitem" id="nuevoDoc">Nuevo</li>
+                    <li class="subitem" id="guardarDoc">Guardar</li>
+                </ul>
+            </li>
+            
+            <li class="menu-item" id="reportesPy">Ejecutar xPath ▷
+                <ul class="submenu">
+                    <li class="subitem" id="btn_EjecutarIzq"><a id="" >Ascendente</a></li>
+                    <li class="subitem" id="btn_EjecutarDer"><a id="" >Descendente</a></li>
+                </ul>
+            </li>
+            <li class="menu-item" id="cerrarDoc">Cerrar Pestaña</li>
+            <li class="menu-item" id="reportesPy">Reportes xPath
+                <ul class="submenu">
+                    <li class="subitem"><a id="ast"  data-toggle="modal" data-target="#EpicModalAST">AST</a></li>
+                    <li class="subitem"><a id="btnReporteXPATHcst"  data-toggle="modal" data-target="#EpicModalAST">CST</a></li>
+                </ul>
+            </li>
+            <li class="menu-item" id="reportesPy">Reportes XML
+                <ul class="submenu">
+                    <li class="subitem"><a id="btnReporteXML" data-toggle="modal" data-target="#EpicModal">Tabla de Simbolos</a></li>
+                    <li class="subitem"><a id="btnReporteXGRAM" data-toggle="modal" data-target="#EpicModalAST">Reporte Gramatical</a></li>
+                    <li class="subitem"><a id="btnReporteXMLcst">Arbol CST</a></li>
+                    <li class="subitem"><a id="btnReporteXMLErrores" data-toggle="modal" data-target="#EpicModal">Errores</a></li>
+                </ul>
+            </li>
+            
+        </ul>
+        
+        <span>Compiladores 2 -- Grupo 7</span>
+    </nav>
+    <div id="msgError" class="alert alert-danger" role="alert">
+        Algo salio mal :(... Revisa el reporte de errores para  más información
+    </div>
+    <main>
+        <div class="tabs-container">
+            <ul class="tabs" id="tabs">
+                <li class="tab active">File.XPath</li>
+            </ul>
+            <div class="panels" id="panels">
+                <div class="panel active">
+                    <textarea class="editor" id="editor"></textarea>
+                </div>
+            </div>
+        </div>
+        <aside class="consolas">
+            <div class="consola">
+                <h2>XML</h2>
+                <textarea id="consolaJS"></textarea>
+                <table class="btnCargar">
+                    <tr>
+                        <td><input class="subitem btnCargar" id="btnCargar" type="button" value="Cargar XML DES" onclick="alert('XML DES Cargado')" /></td>
+                        <td><input class="subitem btnCargar" id="btnCargar2" type="button" value="Cargar XML ASC"   onclick="alert('XML ASC Cargado')"/></td>
+                    </tr>
+                </table>
+                
+                
+            </div>
+            <div class="consola">
+                <h2>Salida </h2>  <p id="codencod" > Encoding </p>
+                <textarea id="consolaPython"></textarea>
+            </div>
+        </aside>
+    </main>
+
+    
+    
+    <!-- MODAL PARA EL REPORTE DE LA TABLA DE SIMBOLOS -->
+    <div class="modal fade" id="EpicModal" tabindex="-1" aria-labelledby="EpicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EpicModalLabel">Tabla de Simbolos</h5>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr id="tablaCabeceras">
+                              
+                            </tr>
+                          </thead>
+                          <tbody id='tablaSimbolos'>
+                            <!-- INFO DE LA TABLA -->
+                          </tbody>
+                    </table>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+     <!-- MODAL PARA EL REPORTE DE LOS AST -->
+     <div class="modal fade" id="EpicModalAST" tabindex="-1" aria-labelledby="EpicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EpicModalLabelAST">Arbol</h5>
+                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+
+               <div class="modal-body" id="modal2Content">
+                    <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
+                        <div id="graph" style="width: 100%;"></div>
+                    </div>
+             </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR PARA VISUALIZAR EL ARBOL CON TREANT JS -->
+    <div class="modalAST" id="modalAST">
+        <div class="modalContainer">
+            <div class="headerContainer">
+                <p class="titleContainer">Reporte Arbol AST</p>
+                <button id="closeASTContainer">X</button>
+            </div>
+            <div class="contentModal">
+                <div class="controls">
+                    <button id="btnZoomIn" class="btnControl">Zoom +</button>
+                    <button id="btnZoomOut" class="btnControl">Zoom -</button>
+                </div>
+                <div class="contentContainer">
+                    <div id="tree-simple"> </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <script src="../BACKEND/AST/Entorno.js"></script>
+    <script src="../BACKEND/analizadores/xml/analizador_izq.js"></script>
+
+    <script src="../BACKEND/analizadores/xml/analizador_der.js"></script>
+    
+    <script src="../BACKEND/AST/Nodo.js"></script>
+    <script src="../BACKEND/AST/Token.js"></script>
+    <script src="../BACKEND/AST/Datos.js"></script>
+    <script src="../BACKEND/AST/Expresion.js"></script>
+    <script src="../BACKEND/interprete.js"></script>
+    <script src="./index.js"></script>
+    <script src="../BACKEND/instruccion/Consulta.js"></script>
+    <script src="../BACKEND/expresiones/Acceso.js"></script>
+    <script src="../BACKEND/analizadores/xPath/analizadorizq_xpath.js"></script>
+    <script src="../BACKEND/analizadores/xPath/analizador_xpath.js"></script>
+    <script src="../BACKEND/analizadores/xPath/analizador_xpath_AST.js"></script>
+    <script src="../BACKEND/Eriqueta.js"></script>
+
+
+    <!-- SCRIPTS PARA LA TABLA DE SIMBOLOS -->
+    <script src="../BACKEND/analizadores/tabla/simbolo.js"></script>
+    <script src="../BACKEND/analizadores/tabla/tablaSimbolos.js"></script>
+
+    <!-- ANALIZADOR XML -->
+    <script src="../BACKEND/analizadores/xml/xml.js"></script>
+    <script src="../BACKEND/analizadores/xml/xmlDerecha.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- Popper.js first, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+
+    <!-- TREANT JS -->
+    <script src="./Panzoom.js"></script>
+    <script src="./treant-js/vendor/raphael.js"></script>
+    <script src="./treant-js/Treant.js"></script>
+    <script src="./treant-js/vendor/jquery.min.js"></script>
+    <script src="./treant-js/vendor/jquery.easing.js"></script>
+    <script src="./generarArbol.js"></script>
+
+</body>
+
+</html>

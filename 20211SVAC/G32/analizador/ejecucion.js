@@ -105,9 +105,12 @@ class Ejecucion {
             this.esRaiz = true;
             this.descendiente = false;
             this.atributo = false;
+            this.atributoTexto = '';
+            this.atributoIdentificacion = [];
             this.consultaXML = this.cuerpoXml;
             this.verObjetos();
             this.recorrido(this.raiz);
+            console.log(this.atributoIdentificacion);
             return this.traducir();
         }
         return 'no se pudo';
@@ -116,7 +119,7 @@ class Ejecucion {
         if (nodo instanceof Object) {
             if (this.identificar('S', nodo)) {
                 this.recorrido(nodo.hijos[0]);
-                console.log(this.consultaXML);
+                //console.log(this.consultaXML);
             }
             if (this.identificar('INSTRUCCIONES', nodo)) {
                 nodo.hijos.forEach((element) => {
@@ -124,9 +127,34 @@ class Ejecucion {
                         this.recorrido(element);
                     }
                     else if (typeof element === 'string') {
-                        console.log(element);
-                        this.consultaXML = this.reducir(this.consultaXML, element, 'INSTRUCCIONES');
+                        //console.log(element);
+                        if (element === '|') {
+                            this.consultaXML.forEach(element => {
+                                this.atributoIdentificacion.push({ cons: element, atributo: this.atributo, texto: this.atributoTexto });
+                            });
+                            this.esRaiz = true;
+                            this.descendiente = false;
+                            this.atributo = false;
+                            this.atributoTexto = '';
+                            this.consultaXML = this.cuerpoXml;
+                        }
+                        else {
+                            this.consultaXML = this.reducir(this.consultaXML, element, 'INSTRUCCIONES');
+                            console.log(this.consultaXML);
+                        }
                     }
+                });
+                this.consultaXML.forEach(element => {
+                    this.atributoIdentificacion.push({ cons: element, atributo: this.atributo, texto: this.atributoTexto });
+                });
+                this.atributoIdentificacion.sort((n1, n2) => {
+                    if (n1.cons.linea > n2.cons.linea) {
+                        return 1;
+                    }
+                    if (n1.cons.linea < n2.cons.linea) {
+                        return -1;
+                    }
+                    return 0;
                 });
             }
             if (this.identificar('RAIZ', nodo)) {
@@ -135,7 +163,7 @@ class Ejecucion {
                         this.recorrido(element);
                     }
                     else if (typeof element === 'string') {
-                        console.log(element);
+                        //console.log(element);
                         this.consultaXML = this.reducir(this.consultaXML, element, 'RAIZ');
                     }
                 });
@@ -146,7 +174,7 @@ class Ejecucion {
                         this.recorrido(element);
                     }
                     else if (typeof element === 'string') {
-                        console.log(element);
+                        //console.log(element);
                         this.consultaXML = this.reducir(this.consultaXML, element, 'DESCENDIENTES_NODO');
                     }
                 });
@@ -157,7 +185,7 @@ class Ejecucion {
                         this.recorrido(element);
                     }
                     else if (typeof element === 'string') {
-                        console.log(element);
+                        //console.log(element);
                         this.consultaXML = this.reducir(this.consultaXML, element, 'PADRE');
                     }
                 });
@@ -179,6 +207,7 @@ class Ejecucion {
                 consulta.forEach(element => {
                     element.listaAtributos.forEach(atributo => {
                         if (atributo.identificador === etiqueta) {
+                            this.atributoTexto = etiqueta;
                             cons.push(element);
                         }
                     });
@@ -189,6 +218,7 @@ class Ejecucion {
         else if (nodo === 'DESCENDIENTES_NODO') {
             if (etiqueta === '//') {
                 this.descendiente = true;
+                this.esRaiz = false;
                 return consulta;
             }
             else if (etiqueta === '@') {
@@ -200,6 +230,7 @@ class Ejecucion {
                 consulta.forEach(element => {
                     element.listaAtributos.forEach(atributo => {
                         if (atributo.identificador === etiqueta) {
+                            this.atributoTexto = etiqueta;
                             cons.push(element);
                         }
                     });
@@ -284,6 +315,7 @@ class Ejecucion {
             if (atributo) {
                 element.listaAtributos.forEach(atributo => {
                     if (atributo.identificador === etiqueta) {
+                        this.atributoTexto = etiqueta;
                         cons.push(element);
                     }
                 });
@@ -304,28 +336,31 @@ class Ejecucion {
     }
     traducir() {
         let cadena = '';
-        this.consultaXML.forEach(element => {
-            if (!this.atributo) {
+        let numero = 0;
+        this.atributoIdentificacion.forEach(element => {
+            numero++;
+            if (!element.atributo) {
                 let texto = "";
-                console.log("texto: " + element.identificador);
-                for (var i = 0; i < element.texto.length; i++) {
-                    if (this.tildes.includes(element.texto[i])) {
-                        texto += element.texto[i];
+                //console.log("texto: " + element.identificador);
+                for (var i = 0; i < element.cons.texto.length; i++) {
+                    if (this.tildes.includes(element.cons.texto[i])) {
+                        texto += element.cons.texto[i];
                     }
-                    else if (this.tildes.includes(element.texto[i - 1])) {
-                        texto += element.texto[i];
+                    else if (this.tildes.includes(element.cons.texto[i - 1])) {
+                        texto += element.cons.texto[i];
                     }
                     else {
-                        texto += " " + element.texto[i];
+                        texto += " " + element.cons.texto[i];
                     }
                 }
-                cadena += '<' + element.identificador;
-                if (element.listaAtributos.length > 0) {
-                    element.listaAtributos.forEach(atributos => {
+                cadena += '--------------------------------------(' + numero + ')---------------------------------\n';
+                cadena += '<' + element.cons.identificador;
+                if (element.cons.listaAtributos.length > 0) {
+                    element.cons.listaAtributos.forEach(atributos => {
                         cadena += ' ' + atributos.identificador + '=' + atributos.valor;
                     });
                 }
-                if (element.doble) {
+                if (element.cons.doble) {
                     cadena += '>\n';
                 }
                 else {
@@ -334,16 +369,19 @@ class Ejecucion {
                 if (texto != '') {
                     cadena += texto + '\n';
                 }
-                if (element.listaObjetos.length > 0) {
-                    cadena += this.traducirRecursiva(element.listaObjetos);
+                if (element.cons.listaObjetos.length > 0) {
+                    cadena += this.traducirRecursiva(element.cons.listaObjetos);
                 }
-                if (element.doble) {
-                    cadena += '</' + element.identificador + '>\n';
+                if (element.cons.doble) {
+                    cadena += '</' + element.cons.identificador + '>\n';
                 }
             }
             else {
-                element.listaAtributos.forEach(atributo => {
-                    cadena += atributo.identificador + '=' + atributo.valor + '\n';
+                cadena += '--------------------------------------(' + numero + ')---------------------------------\n';
+                element.cons.listaAtributos.forEach(atributo => {
+                    if (element.texto === atributo.identificador) {
+                        cadena += atributo.identificador + '=' + atributo.valor + '\n';
+                    }
                 });
             }
         });

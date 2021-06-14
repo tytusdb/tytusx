@@ -8,14 +8,10 @@
     <script src="./js/bootstrap.min.js"></script>
     <!--<script src="./build/index.js" type="module"></script>-->
 </head>
-<script>
-    function llenarTablaReportes() {
-        document.getElementById("tablasimbolos").innerHTML = myBundle.cadenaReporteTS
-    }
-</script>
-<script src="bundle.js"></script>
 
-<body onload="llenarTablaReportes()">
+<script src="bundle.js"></script>
+<script src="scriptsIndex.js"></script>
+<body>
 
     <div>
         <nav class="navbar navbar-expand-lg bg-dark">
@@ -26,32 +22,59 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Archivo</a>
-
+                                data-bs-toggle="dropdown" aria-expanded="false">Reportes AST</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li>
-                                    <button name="btnNuevo" id="btnNuevo" class="dropdown-item">Nuevo</button>
+                                    <button name="btnNuevo" id="btnNuevo" class="dropdown-item">Gramatica XML</button>
                                 </li>
                                 <li>
-                                    <button name="attachment" id="attachment" class="dropdown-item">Abrir</button>
+                                    <button name="attachment" id="attachment" class="dropdown-item">Gramatica Xpath</button>
                                     <input id="file-input" type="file" style="display:none" />
-                                </li>
-                                <li>
-                                    <button name="btnGuardar" id="btnGuardar" class="dropdown-item">Guardar</button>
                                 </li>
                             </ul>
                         </li>
 
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">Reporte Gramatical</a>
+
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <button name="btnNuevo" id="btnNuevo" class="dropdown-item">Gramatica XML</button>
+                                </li>
+                                <li>
+                                    <button name="attachment" id="attachment" class="dropdown-item">Gramatica Xpath</button>
+                                    <input id="file-input" type="file" style="display:none" />
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">Reporte CST</a>
+
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li>
+                                    <button name="btnNuevo" id="btnNuevo" class="dropdown-item">Gramatica XML</button>
+                                </li>
+                                <li>
+                                    <button name="attachment" id="attachment" class="dropdown-item">Gramatica Xpath</button>
+                                    <input id="file-input" type="file" style="display:none" />
+                                </li>
+                            </ul>
+                        </li>
+
+
                         <li class="nav-item">
-                            <a class="nav-link" id="btnCargarA" role="button">Cargar</a>
+                            <a class="nav-link" id="btnCargarA" role="button"  onclick="llenarTablaReportes();">Tabla de Simbolos</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="btnGraficaAST" role="button">Grafica</a>
+                            <a class="nav-link" id="btnGraficaAST" role="button"  onclick="llenarTablaErrores();">Tabla de Errores</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="btnCerrar" role="button" onclick="cerrarTab();">Cerrar</a>
+                            <a class="nav-link" id="btnCerrar" role="button">Cerrar</a>
                         </li>
                     </ul>
 
@@ -67,9 +90,10 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-6 mb-2">
+                
                 <div id="TablaReporte" class="tab-content" style="border-color:red;">
                     <table class="table table-dark" id="tablasimbolos" style="width:100%" bordered="true">
-
+                        
                     </table>
                 </div>
             </div>

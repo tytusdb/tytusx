@@ -6,6 +6,7 @@ class Nodo {
         this.valor = valor;
         this.fila = fila;
         this.columna = columna;
+        console.log("Nodo   " + valor);
     }
 }
 exports.Nodo = Nodo;
