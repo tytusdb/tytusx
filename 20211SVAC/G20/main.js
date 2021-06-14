@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
 const Objeto_1 = require("./Expresiones/Objeto");
+const Atributo_1 = require("./Expresiones/Atributo");
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
@@ -21,7 +22,7 @@ class Main {
         window.localStorage.setItem('reporteGramatical', '');
         const objetos = xmlAsc.parse(entrada);
         this.lista_objetos = objetos.objeto;
-        console.log(this.lista_objetos);
+        console.log(objetos);
         if (this.lista_objetos.length > 1) {
             console.log(this.getXmlFormat(this.lista_objetos[1]));
         }
@@ -47,10 +48,20 @@ class Main {
         let contenido = "";
         let atributos = "";
         let etiqueta = "";
-        //TODO: agregar etiquetas
+        for (let i = 0, size = objeto.listaAtributos.length; i < size; i++) {
+            if (Atributo_1.Comilla.SIMPLE === objeto.listaAtributos[i].comilla) {
+                atributos += objeto.listaAtributos[i].identificador + "='" + objeto.listaAtributos[i].textWithoutSpecial + "'";
+            }
+            else {
+                atributos += objeto.listaAtributos[i].identificador + '="' + objeto.listaAtributos[i].textWithoutSpecial + '"';
+            }
+            if (i !== size - 1) {
+                atributos += " ";
+            }
+        }
         etiqueta += '\n<' + objeto.identificador;
         if (atributos !== "") {
-            etiqueta += " " + etiqueta + " ";
+            etiqueta += " " + atributos + " ";
         }
         if (objeto.etiqueta === Objeto_1.Etiqueta.DOBLE) {
             etiqueta += '>';
@@ -90,7 +101,7 @@ class Main {
                 var contents = target.result;
                 var element = document.getElementById('codeBlock');
                 if (element !== undefined && element !== null) {
-                    element.textContent = contents;
+                    element.value = contents;
                 }
                 else {
                     console.log('Error set content');
