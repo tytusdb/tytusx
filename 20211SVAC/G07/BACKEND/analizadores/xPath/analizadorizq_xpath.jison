@@ -117,8 +117,12 @@ ELEMENTO_P:
         }
         |EXPRESION {
 			$$ = $1;
-		}
+		},
+		{
+            listaErrores.push(new TokenError("XPATH",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
+        }
 ;
+
 
 EXPRESION:
         EXPRESION CONTENIDO                     {

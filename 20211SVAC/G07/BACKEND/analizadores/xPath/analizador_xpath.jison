@@ -97,7 +97,7 @@
 %% /* language grammar */
 
 INICIO: 
-        ELEMENTO EOF                                            {return $ELEMENTO;}          //constructor(tipo, valor,hijos)                         
+        ELEMENTO EOF  {return $ELEMENTO;}         //constructor(tipo, valor,hijos)                         
 ;                                          
 
 ELEMENTO:
@@ -107,7 +107,13 @@ ELEMENTO:
 ELEMENTO_P:
          tk_barra_or EXPRESION ELEMENTO_P                       {$$= new Nodo("Porduccion","ELEMENTO_P",[ $tk_barra_or ,$EXPRESION,$ELEMENTO_P] );}
         |                                                       {$$= new Nodo("Porduccion","ELEMENTO_P",[ "ε" ] );}
+     | error tk_barra_or 
+        {
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @2.first_column ));
+        }
 ;
+
+
 
 EXPRESION:
           RESERVA RESERVA_P                                      {$$= new Nodo("Porduccion","EXPRESION",[ $RESERVA ,$RESERVA_P] );}
