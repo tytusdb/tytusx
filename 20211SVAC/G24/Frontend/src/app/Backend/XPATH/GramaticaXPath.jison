@@ -104,6 +104,8 @@ START
 INSTRUCCIONES
         : INSTRUCCIONES INSTRUCCION             {if($2!=false)$1.push($2);$$=$1;}
         | INSTRUCCION                           {$$=($1!=false) ?[$1]:[];}
+        | INSTRUCCIONES OPTION INSTRUCCION      {if($3!=false)$1.push($3);$$=$1;}
+
         ;
 
 INSTRUCCION 
@@ -116,7 +118,7 @@ INSTRUCCION
         | EXPRESION                                     {$$=$1}
         | AXES                                          {$$=$1}
         | ALL                                           {$$=$1}
-        |  OPTION INSTRUCCION                           {$$=$2}
+
         ;
 ALL 
         : SELECT  SELECT                        {$$=$1+$2}
@@ -146,7 +148,7 @@ EXPRESION
         | INSTRUCCION                                           {$$=$1}
         | SELECT                                                {$$=$1}
         | ATRIBUTO                                              {$$=$1}
-        | IDENTIFICADOR                                 {$$=$1}
+        | IDENTIFICADOR                                         {$$=$1}
         | EXPRESION COMA EXPRESION                              {$$=$1+$3}
         | EXPRESION MENOS EXPRESION                             {$$=$1+$3}
         | EXPRESION MAS EXPRESION                               {$$=$1+$3}

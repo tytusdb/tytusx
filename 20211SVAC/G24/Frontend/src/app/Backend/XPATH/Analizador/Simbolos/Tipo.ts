@@ -20,5 +20,8 @@ export enum tipoDato {
   ENTERO,
   DECIMAL,
   BOOLEANO,
-  CARACTER
+  CARACTER,
+  SELECT,
+  ATRIBUTO
+
 }

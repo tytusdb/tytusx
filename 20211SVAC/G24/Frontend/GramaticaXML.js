@@ -380,6 +380,7 @@ _handle_error:
 const atributo = require("./Expresiones/Atributo");
 const tipo= require("./Simbolos/Tipo");
 const objeto= require("./Expresiones/Objeto");
+
 const CErrores= require("./Excepciones/Errores")
 const CNodoErrores= require("./Excepciones/NodoErrores")
 const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.component")

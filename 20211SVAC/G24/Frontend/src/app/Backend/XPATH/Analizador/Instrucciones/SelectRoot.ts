@@ -8,7 +8,8 @@ import Tipo, { tipoDato } from '../Simbolos/Tipo';
 export default class SelectRoot extends Instruccion {
     public Operacion: string;
     public Operacion2:string;
-    constructor(select: string,select2:string, fila: number, columna: number){
+    constructor(select: string, fila: number, columna: number,select2?:string){
+
         super(new Tipo(tipoDato.CADENA), fila, columna);
         this.Operacion = select
         this.Operacion2= select2

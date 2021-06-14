@@ -62,10 +62,11 @@ export class ContenidoInicioComponent implements OnInit {
     var Tree:Arbol = new Arbol([objetos]);
     Tree.settablaGlobal(tablaGlobal);
     console.log(tablaGlobal);
-    
+
     
     //  PARA GUARDAR DATOS
   
+
     // TODO FOR INTERPRETAR
     for( let i of Tree.getinstrucciones()){
       if(i instanceof Objeto){
@@ -74,7 +75,9 @@ export class ContenidoInicioComponent implements OnInit {
       }
     }
     console.log(tablaGlobal);
+
     // TERMINA FOR 
+
 
     var init = new nodoAST("RAIZ");
     var instrucciones = new nodoAST("HIJOS");
@@ -82,7 +85,7 @@ export class ContenidoInicioComponent implements OnInit {
       instrucciones.agregarHijoAST(i.getNodo());
       
     }
-    
+
     for(let i of Tree.getinstrucciones()){
 
       if (i instanceof Errores) {
@@ -140,6 +143,7 @@ export class ContenidoInicioComponent implements OnInit {
     var instrucciones = new nodoAST("HIJOS");
     for(let i of Tree.getinstrucciones()){
       instrucciones.agregarHijoAST(i.getNodo());
+
     }
     for(let i of Tree.getinstrucciones()){
       /*if (i instanceof Errores) {
