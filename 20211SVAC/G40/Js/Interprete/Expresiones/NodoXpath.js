@@ -78,7 +78,7 @@ var NodoXpath = /** @class */ (function () {
                     } else {
                         //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                         //por lo tanto el selector ..// no devuelve nada 
-                        return [];
+                        return [[],[]];
                     }                   
                 } 
             } 
