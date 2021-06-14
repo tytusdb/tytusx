@@ -31,6 +31,17 @@ export default class Objeto extends Instruccion {
 
   public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
     var simbolo;
+
+    if(this.listaAtributos!=null){
+      for(let i of this.listaAtributos){
+        var s=i.interpretar(arbol,tabla);
+        if(s.identificador=="encoding"){
+          console.log(s.valor);
+          arbol.setEncoding(s.valor);
+        }
+      }
+    } 
+
     if(this.listaObjetos!=null){
       var ts=new tablaSimbolos(); /*entorno hijo */
       for(let i of this.listaObjetos){
@@ -40,20 +51,45 @@ export default class Objeto extends Instruccion {
      }
      simbolo=new Simbolo(new Tipo(tipoDato.OBJETO),this.identificador, ts);
     }else if(this.contenido!=null){
+      console.log(arbol.getEncoding());
+      //if o switch buscando codificacion
+      if(arbol.getEncoding()=="UTF-8"){
+        this.contenido=encodeURI(this.contenido);
+      }/*else if(arbol.getEncoding()=="ISO-8859-1"){
+       // nuevocontenido.
+      }*/else if(arbol.getEncoding()=="ASCII"){
+        console.log(this.getCharCodes(this.contenido));
+       this.contenido= this.getCharCodes(this.contenido)+"";
+       }else{
+         this.contenido=this.contenido;
+       }
       simbolo=new Simbolo(new Tipo(tipoDato.OBJETO),this.identificador, this.contenido);
     }else{
       listaErrores.push(new NodoErrores('SEMANTICO',  this.identificador + ' Datos nulos',this.fila,this.columna));
     }
 
-   if(this.listaAtributos!=null){
-     for(let i of this.listaAtributos){
-       var s=i.interpretar(arbol,tabla);
-       simbolo.agregarAtributo(s.identificador,s.valor);
-     }
-   } 
+    if(this.listaAtributos!=null){
+      for(let i of this.listaAtributos){
+        var s=i.interpretar(arbol,tabla);
+       
+        simbolo.agregarAtributo(s.identificador,s.valor);
+      }
+    } 
+   
   return simbolo;
 
   }
+
+  getCharCodes(s){
+    let charCodeArr = [];
+    
+    for(let i = 0; i < s.length; i++){
+        let code = s.charCodeAt(i);
+        charCodeArr.push(code);
+    }
+    
+    return charCodeArr;
+}
 
 
   public getNodo(): nodoAST {

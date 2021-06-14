@@ -17,6 +17,7 @@ export default class AtributoSimple extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
+    
     getNodo(): nodoAST {
         var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
         if(tipoDato.SELECT ===this.tipoAtributo.getTipo()){

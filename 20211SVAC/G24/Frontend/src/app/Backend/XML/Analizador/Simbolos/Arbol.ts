@@ -12,7 +12,18 @@ export default class Arbol {
   public listaSimbolos: Array<reporteTabla>;
   private dot:string;
   private c:number;
+  private encoding:String;
 
+
+
+  public getEncoding():String{
+    return this.encoding;
+  }
+
+  public setEncoding(encoding:String){
+    this.encoding=encoding;
+  }
+ 
   public getSimbolos(): Array<reporteTabla> {
     return this.listaSimbolos;
   }
