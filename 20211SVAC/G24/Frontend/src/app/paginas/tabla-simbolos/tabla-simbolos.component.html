@@ -1,0 +1,47 @@
+<h1>TABLA DE SIMBOLOS</h1>
+<div class="tabla">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="ID">
+          <th mat-header-cell *matHeaderCellDef> Id. </th>
+          <td mat-cell *matCellDef="let element"> {{element.identificador}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="TIPO">
+          <th mat-header-cell *matHeaderCellDef> Tipo </th>
+          <td mat-cell *matCellDef="let element"> {{element.forma}} </td>
+        </ng-container>
+      
+        <!-- Weight Column -->
+        <ng-container matColumnDef="TIPODATO">
+          <th mat-header-cell *matHeaderCellDef> TipoDato </th>
+          <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+        </ng-container>
+      
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="ENTORNO">
+          <th mat-header-cell *matHeaderCellDef> Entorno </th>
+          <td mat-cell *matCellDef="let element"> {{element.entorno}} </td>
+        </ng-container>
+        <ng-container matColumnDef="LINEA">
+          <th mat-header-cell *matHeaderCellDef> Linea </th>
+          <td mat-cell *matCellDef="let element"> {{element.linea}} </td>
+        </ng-container>
+        <ng-container matColumnDef="COLUMNA">
+          <th mat-header-cell *matHeaderCellDef> Columna </th>
+          <td mat-cell *matCellDef="let element"> {{element.columna}} </td>
+        </ng-container>
+        <ng-container matColumnDef="VALOR">
+          <th mat-header-cell *matHeaderCellDef> Valor </th>
+          <td mat-cell *matCellDef="let element"> {{element.valor}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+</div>
