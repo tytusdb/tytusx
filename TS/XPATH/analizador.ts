@@ -19,8 +19,12 @@ function analizarXpath(entornoGlobal: Entorno){
 
             entornos.forEach(e => {
                 e.getTable().forEach(s => {
-                    if (!(s instanceof Atributo)) {
-                        resultConsulta.push((i++) + ". " + (<Nodo>s).toTag());
+                    if (s instanceof Nodo) {
+                        if (s.justShowTextOnly()) {
+                            resultConsulta.push((i++) + ". " + s.toText());
+                        } else {
+                            resultConsulta.push((i++) + ". " + s.toTag());
+                        }
                     }
                 });
             });

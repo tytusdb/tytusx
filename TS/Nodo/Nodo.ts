@@ -4,13 +4,31 @@ class Nodo extends Simbolo {
     private nodos: Array<Nodo>;
     private entorno: Entorno;
     private texto: string;
+    private showTextOnly: boolean;
 
-	constructor($nombre: string, $atributos: Array<Atributo>, $nodos: Array<Nodo>, type: Type, $texto: string, $linea: number, $columna: number) {
-        super($nombre, type, $linea, $columna);
-		this.atributos = $atributos;
-		this.nodos = $nodos;
-		this.texto = $texto;
-	}
+    public constructor(text: string, entorno: Entorno);
+
+	public constructor($nombre: string, $atributos: Array<Atributo>, $nodos: Array<Nodo>, type: Type, $texto: string, $linea: number, $columna: number);
+
+    public constructor(...args: Array<any>) {
+
+        if (args.length === 7) {
+            super(args[0], args[3], args[5], args[6]);
+            this.atributos = args[1];
+            this.nodos = args[2];
+            this.texto = args[4];
+            this.showTextOnly = false;
+            return;
+        }
+        if (args.length === 2) {
+            super(null,null,null,null);
+            this.texto = args[0];
+            this.entorno = args[1];
+            this.showTextOnly = true;
+            return;
+        }
+
+    }
 
     public getAtributos(): Array<Atributo> {
         return this.atributos;
@@ -46,6 +64,18 @@ class Nodo extends Simbolo {
 
     public setEntorno(entorno: Entorno): void {
         this.entorno = entorno;
+    }
+
+    public setShowTextOnly(flag: boolean): void {
+        this.showTextOnly = flag;
+    }
+
+    public justShowTextOnly(): boolean {
+        return this.showTextOnly;
+    }
+
+    public toText(): string {
+        return this.texto;
     }
 
     public toTag(): string {

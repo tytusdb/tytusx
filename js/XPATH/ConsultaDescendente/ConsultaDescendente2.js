@@ -4,7 +4,6 @@ class ConsultaDescendente2 extends ConsultaSimple {
         entornos.forEach(e => {
             this.busquedaDescendente(e, newEntornos);
         });
-        console.log(newEntornos);
         return newEntornos;
     }
     busquedaDescendente(entorno, newEntornos) {

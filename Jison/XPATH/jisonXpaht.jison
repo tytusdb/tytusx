@@ -324,6 +324,8 @@ EXPRESION_RUTA
                             $$.push(new ConsultaDescAllNodes($3));
                         } else if ($3 === "text()") {
                             $$.push(new ConsultaDescText($3));
+                        } else if ($3 === "node()") {
+                            $$.push(new ConsultaDescNode($3));
                         } else {
                             $$.push(new ConsultaDescendente2($3));
                         }
@@ -346,6 +348,8 @@ EXPRESION_RUTA
                             $$.push(new ConsultaAllNodes($3));
                         } else if ($3 === "text()") {
                             $$.push(new ConsultaText($3));
+                        } else if ($3 === "node()") {
+                            $$.push(new ConsultaNode($3));
                         } else {
                             $$.push(new ConsultaSimple($3));
                         }
@@ -376,7 +380,7 @@ ACCESORES
     | ATRIBUTO OPCIONAL_PREDICADO       {$$ = $1;}
     | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
     | multiplicacion                    {$$ = "all";}
-    | NODE
+    | NODE                              {$$ = $1;}
     | TEXT                              {$$ = $1;}
 ;
 
@@ -384,13 +388,12 @@ TEXT
     : text parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 ;
 
-NODE : node parentesis_abierto parentesis_cerrado
+NODE : node parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 ;
 
 ATRIBUTO
     : arroba identificador          {$$ = $1 + $2;}
     | arroba multiplicacion         {$$ = $1 + "all";}
-    | arroba NODE
 ;
 
 ID : identificador      {$$ = $1;}

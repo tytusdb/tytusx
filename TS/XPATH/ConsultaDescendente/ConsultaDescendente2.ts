@@ -7,7 +7,6 @@ class ConsultaDescendente2 extends ConsultaSimple {
             this.busquedaDescendente(e, newEntornos);
         });
 
-        console.log(newEntornos);
         return newEntornos;
     }
 

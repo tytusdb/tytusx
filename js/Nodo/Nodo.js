@@ -1,9 +1,20 @@
 class Nodo extends Simbolo {
-    constructor($nombre, $atributos, $nodos, type, $texto, $linea, $columna) {
-        super($nombre, type, $linea, $columna);
-        this.atributos = $atributos;
-        this.nodos = $nodos;
-        this.texto = $texto;
+    constructor(...args) {
+        if (args.length === 7) {
+            super(args[0], args[3], args[5], args[6]);
+            this.atributos = args[1];
+            this.nodos = args[2];
+            this.texto = args[4];
+            this.showTextOnly = false;
+            return;
+        }
+        if (args.length === 2) {
+            super(null, null, null, null);
+            this.texto = args[0];
+            this.entorno = args[1];
+            this.showTextOnly = true;
+            return;
+        }
     }
     getAtributos() {
         return this.atributos;
@@ -31,6 +42,15 @@ class Nodo extends Simbolo {
     }
     setEntorno(entorno) {
         this.entorno = entorno;
+    }
+    setShowTextOnly(flag) {
+        this.showTextOnly = flag;
+    }
+    justShowTextOnly() {
+        return this.showTextOnly;
+    }
+    toText() {
+        return this.texto;
     }
     toTag() {
         let etiqueta = new Array();

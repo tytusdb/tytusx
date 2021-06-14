@@ -18,8 +18,13 @@ function analizarXpath(entornoGlobal) {
             entornos = recorrer(listC, entornos, 0);
             entornos.forEach(e => {
                 e.getTable().forEach(s => {
-                    if (!(s instanceof Atributo)) {
-                        resultConsulta.push((i++) + ". " + s.toTag());
+                    if (s instanceof Nodo) {
+                        if (s.justShowTextOnly()) {
+                            resultConsulta.push((i++) + ". " + s.toText());
+                        }
+                        else {
+                            resultConsulta.push((i++) + ". " + s.toTag());
+                        }
                     }
                 });
             });
