@@ -55,7 +55,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
@@ -78,7 +78,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
@@ -107,7 +107,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
@@ -151,7 +151,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
@@ -190,7 +190,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
@@ -213,7 +213,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
@@ -251,7 +251,7 @@ var ExpresionXPath = /** @class */ (function () {
 
                 objetosAux.forEach(function (objeto){
 
-                if(objeto.getID()== id){
+                if(objeto.getID().toLowerCase() == id.toLowerCase()){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
                         objetos.push(objeto);
                         if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
