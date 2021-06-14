@@ -87,76 +87,155 @@ case 1:
 return $$[$0-1];
 break;
 case 2:
-this.$= new Nodo("Porduccion","ELEMENTO",[ $$[$0-1] ,$$[$0]] );
+
+			this.$ = $$[$0-1];
+			$$[$0-1].agregarHijo($$[$0]);
+		
 break;
 case 3:
-this.$= new Nodo("Porduccion","ELEMENTO",[ $$[$0] ] );
+
+			this.$= $$[$0];
+		
 break;
 case 4:
-this.$= new Nodo("Porduccion","ELEMENTO_P",[ $$[$0-1] ,$$[$0]] );
+
+            this.$ = new Nodo("BARRA OR",$$[$0-1] );
+			this.$.agregarHijo($$[$0]);
+        
 break;
-case 5:
-this.$= new Nodo("Porduccion","ELEMENTO_P",[ $$[$0]] );
+case 5: case 23: case 25: case 39: case 40:
+
+			this.$ = $$[$0];
+		
 break;
 case 6:
-this.$= new Nodo("Porduccion","EXPRESION",[ $$[$0-1] ,$$[$0]] );
+
+                this.$ = $$[$0-1];
+                this.$.agregarHijo($$[$0]);
+        
 break;
 case 7:
-this.$= new Nodo("Porduccion","EXPRESION",[ $$[$0]] );
+
+                this.$ = $$[$0];
+        
 break;
-case 8: case 9: case 11: case 12: case 13: case 14: case 15: case 16:
-this.$= new Nodo("Porduccion","SIMBOLOS",[ $$[$0]] );
+case 8:
+
+                  this.$= new Nodo("DIAGONAL", $$[$0] );
+        
+break;
+case 9:
+
+                  this.$= new Nodo("DIAGONAL DOBLE", $$[$0] );
+        
 break;
 case 10:
-this.$= new Nodo("Porduccion","SIMBOLOS",[ $$[$0-1], $$[$0]] );
+
+                  this.$= new Nodo("DIAGONAL", $$[$0-1] );
+                  this.$.agregarHijo($$[$0]);
+        
 break;
-case 17: case 18:
-this.$= new Nodo("Porduccion","ARROPROD",[ $$[$0]] );
+case 11:
+
+                  this.$= new Nodo("PUNTOS SEGUIDOS", $$[$0] );
+        
 break;
-case 19: case 20:
-this.$= new Nodo("Porduccion","CONTENIDO",[ $$[$0-2], $$[$0-1], $$[$0]] );
+case 12:
+
+                  this.$= new Nodo("PUNTO", $$[$0] );
+        
+break;
+case 13:
+
+                  this.$= new Nodo("ASTERISCO", $$[$0] );
+        
+break;
+case 14:
+
+                  this.$= new Nodo("ID", $$[$0] );
+        
+break;
+case 15:
+
+                  this.$= new Nodo("NUMERO", $$[$0] );
+        
+break;
+case 16:
+
+                  this.$= $$[$0];
+        
+break;
+case 17:
+
+                this.$= new Nodo("ASTERISCO",$$[$0]);
+        
+break;
+case 18:
+
+                this.$= new Nodo("ID",$$[$0]);
+        
+break;
+case 19:
+
+            this.$ = $$[$0-1];
+			this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+			this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+        
+break;
+case 20:
+
+			this.$ = $$[$0-1];
+			this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+			this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+		
 break;
 case 21:
-this.$= new Nodo("Porduccion","CONTENIDO",[ $$[$0-1], $$[$0]] );
+
+			this.$ = new Nodo("","");
+			this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+			this.$.agregarHijo(new Nodo($$[$01],$$[$01]));
+		
 break;
 case 22:
-this.$= new Nodo("Porduccion","COMPLEMENTO",[ $$[$0-1], $$[$0]] );
-break;
-case 23:
-this.$= new Nodo("Porduccion","PREDICADO",[ $$[$0]] );
+
+			this.$ = $$[$0-1];
+			this.$.hijos = $$[$0].hijos;
+		
 break;
 case 24:
-this.$= new Nodo("Porduccion","OPERACIONES",[ $$[$0-1], $$[$0]] );
+
+			this.$ = $$[$0-1];
+			this.$.agregarHijo($$[$0]);
+		
 break;
-case 25:
-this.$= new Nodo("Porduccion","OPERACIONES",[ $$[$0]] );
+case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 41: case 42: case 43: case 45: case 46: case 47: case 48: case 49: case 50:
+
+			this.$ = new Nodo($$[$0], $$[$0]);
+		
 break;
-case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36:
-this.$= new Nodo("Porduccion","OPERADOR",[ $$[$0]] );
+case 37: case 38: case 64: case 65: case 66: case 67:
+
+			this.$ = new Nodo($$[$0-1], $$[$0-1]);
+			this.$.agregarHijo($$[$0-2]);
+			this.$.agregarHijo($$[$0]);
+		
 break;
-case 37: case 38:
-this.$= new Nodo("Porduccion","MASSENTENCIA",[ $$[$0-2], $$[$0-1], $$[$0]] );
-break;
-case 39:
-this.$= new Nodo("Porduccion","MASSENTENCIA",[ $$[$0]] );
-break;
-case 40: case 41: case 42: case 43: case 45: case 46: case 47: case 48: case 49: case 50:
-this.$= new Nodo("Porduccion","ITEMFINAL",[ $$[$0]] );
-break;
-case 44:
-this.$= new Nodo("Porduccion","ITEMFINAL",[ $$[$0-1], $$[$0]] );
-break;
-case 51: case 52: case 53: case 54: case 55: case 56: case 57: case 58: case 59: case 60: case 61: case 62: case 63:
-this.$= new Nodo("Porduccion","RESERVA",[ $$[$0-1], $$[$0]] );
-break;
-case 64: case 65: case 66: case 67:
-this.$= new Nodo("Porduccion","RESERVA",[ $$[$0-2], $$[$0-1], $$[$0]] );
+case 44: case 51: case 52: case 53: case 54: case 55: case 56: case 57: case 58: case 59: case 60: case 61: case 62: case 63:
+
+			this.$ = new Nodo($$[$0-1], $$[$0-1]);
+			this.$.agregarHijo($$[$0-1]);
+		
 break;
 case 68:
-this.$= new Nodo("Porduccion","ITEMRESERVA",[ $$[$0-1], $$[$0]] );
+
+			this.$ = new Nodo($$[$0-1]);
+			this.$.agregarHijo($$[$0]);
+		
 break;
 case 69:
-this.$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );
+
+            this.$ = new Nodo("ε","ε");
+        
 break;
 }
 },
