@@ -8,7 +8,7 @@ var Simbolo = /** @class */ (function () {
         this.tipo = tipo;
         this.valor = valor;
     }
-    Simbolo.prototype.getTipo = function (ent, arbol) {
+    Simbolo.prototype.getTipo = function () {
         return this.tipo;
     };
 

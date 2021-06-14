@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="./codemirror/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/monokai.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+    
+    <title>TytusX</title>
+  </head>
+  <body>
+    <h1>TytusX</h1>
+    <div class="container">
+        <div class="wrapper">
+            <div class="div_xml">
+                
+                <button onclick="analizarXML()" >ANALIZAR</button>
+                <button onclick="nuevoXML()" >NUEVO</button>
+                <button onclick="document.getElementById('upload').click();  cargarXML(); return false" >ABRIR</button>
+                <button onclick="downloadXML()" >GUARDAR</button>
+                <button onclick="limpiarXML()" >LIMPIAR</button>
+                <textarea class="form-control" style="width: 100px;" id="xml" class="xml" name="xml"></textarea>
+                <input type="file"  style="visibility: hidden;" id="upload" name="upload" required>
+              </div>
+            <div class="div_query">
+                <button onclick="analizarXPATH()" >ANALIZAR</button>
+                <button onclick="nuevoXPATH()" >NUEVO</button>
+                <button onclick="document.getElementById('upload').click();  cargarXPATH(); return false" >ABRIR</button>
+                <button onclick="downloadXPATH()" >GUARDAR</button>
+                <button onclick="limpiarXPATH()" >LIMPIAR</button>
+                <textarea class="form-control" style="width: 100px;" id="query" class="query" name="query"></textarea>
+            </div>
+            <div class="div_salida">
+                <textarea class="form-control" style="width: 100px;" id="salida" class="salida" name="salida"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="graph" class="graph"></div> 
+    
+    <!-- Create a simple CodeMirror instance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
+    <!-- Create a simple Vis JS instance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <script src="dist/Index.js" type="module"></script>
+    <script src="codemirror/config.js" ></script>
+    
+    <script src="grammar/Grammar_xml.js" ></script>
+    <script src="dist/Index.js" ></script>
+    <script src="dist/grafo/GraphAST.js" ></script>
+    <script src="dist/grafo/GraphValue.js" ></script>
+    <script src="dist/xml/interfases/Expresion.js" ></script>
+    <script src="dist/xml/ast/AST.js" ></script>
+    <script src="dist/xml/ast/Entorno.js" ></script>
+    <script src="dist/xml/ast/Simbolo.js" ></script>
+    <script src="dist/xml/ast/Tipo.js" ></script>
+    <script src="dist/xml/expresiones/Atributo.js" ></script>
+    <script src="dist/xml/expresiones/Encoding.js" ></script>
+    <script src="dist/xml/expresiones/Objeto.js" ></script>
+    <script src="dist/xml/reportes/ReporteXML.js" ></script>
+
+    <script> 
+      // provide data in the DOT language
+      var DOTstring = `
+      digraph {
+nodo0[label="CST"];
+    nodo1[label="ESTRUCTURA"];
+    nodo0 -> nodo1;
+    nodo2[label="ENCODING"];
+    nodo1 -> nodo2;
+    nodo3[label="OBJETO"];
+    nodo1 -> nodo3;
+    nodo4[label="bibliotec"];
+    nodo3 -> nodo4;
+    nodo5[label="OBJETO"];
+    nodo4 -> nodo5;
+    nodo6[label="libro"];
+    nodo5 -> nodo6;
+    nodo7[label="OBJETO"];
+    nodo6 -> nodo7;
+    nodo8[label="titulo"];
+    nodo7 -> nodo8;
+    nodo9[label="OBJETO"];
+    nodo6 -> nodo9;
+    nodo10[label="autor"];
+    nodo9 -> nodo10;
+    nodo11[label="ATRIBUTO"];
+    nodo10 -> nodo11;
+    nodo12[label="28/03/1936"];
+    nodo11 -> nodo12;
+    nodo13[label="OBJETO"];
+    nodo6 -> nodo13;
+    nodo14[label="fechaPublicacion"];
+    nodo13 -> nodo14;
+    nodo15[label="ATRIBUTO"];
+    nodo14 -> nodo15;
+    nodo16[label="1973"];
+    nodo15 -> nodo16;
+    nodo17[label="ATRIBUTO"];
+    nodo14 -> nodo17;
+    nodo18[label="1000"];
+    nodo17 -> nodo18;
+    nodo19[label="OBJETO"];
+    nodo4 -> nodo19;
+    nodo20[label="libro"];
+    nodo19 -> nodo20;
+    nodo21[label="OBJETO"];
+    nodo20 -> nodo21;
+    nodo22[label="titulo"];
+    nodo21 -> nodo22;
+    nodo23[label="OBJETO"];
+    nodo20 -> nodo23;
+    nodo24[label="autor"];
+    nodo23 -> nodo24;
+    nodo25[label="ATRIBUTO"];
+    nodo24 -> nodo25;
+    nodo26[label="28/03/1936"];
+    nodo25 -> nodo26;
+    nodo27[label="OBJETO"];
+    nodo20 -> nodo27;
+    nodo28[label="fechaPublicacion"];
+    nodo27 -> nodo28;
+    nodo29[label="ATRIBUTO"];
+    nodo28 -> nodo29;
+    nodo30[label="1969"];
+    nodo29 -> nodo30;
+
+}
+      `;
+      var parsedData = vis.network.convertDot(DOTstring);
+  
+      var data = {
+        nodes: parsedData.nodes,
+        edges: parsedData.edges
+      }
+  
+      var container = document.getElementById('graph');
+      var options = parsedData.options;
+  
+      // you can extend the options like a normal JSON variable:
+      options.layout = {
+        hierarchical: {
+          sortMethod: 'directed',  // hubsize, directed
+          shakeTowards: 'roots',  // roots, leaves
+          direction: 'UD'   // UD, DU, LR, RL
+          }
+      }
+      
+      // create a network
+      var network = new vis.Network(container, data, options);
+    </script>
+  </body>
+</html>

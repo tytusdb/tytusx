@@ -57,6 +57,8 @@ var atributo = null; */
 %}
 
 
+%left tk_menor
+
 // DEFINIMOS PRODUCCIÓN INICIAL
 %start INICIO
 
@@ -72,15 +74,28 @@ INICIO : MOBJETOS EOF     {
                             return $$;
                             } ;
 
-MOBJETOS:   MOBJETOS MOBJETO        { nodoAux = new NodoArbol("ListaObjetosRaiz","");                                  
-                                      nodoAux.agregarHijo($2[1]);
-                                      $1[1].agregarHijo(nodoAux);
-                                      $1[0].push($2[0]); 
-                                      $$ = [$1[0],$1[1]]; }
 
-	     | MOBJETO                { nodoAux = new NodoArbol("ListaObjetosRaiz","");
+MOBJETOS: MOBJETO OTRO_OBJETO { nodoAux = new NodoArbol("ListaObjetosRaiz","");                                  
+                                nodoAux.agregarHijo($1[1]);
+                                nodoAux.agregarHijo($2[1]);
+                                arr = [$1[0]];
+                                arr = arr.concat($2[0]); 
+                                $$ = [arr,nodoAux]; };
+
+OTRO_OBJETO : MOBJETO OTRO_OBJETO { 
+                                        nodoAux = new NodoArbol("OtroObjeto","");                                  
                                         nodoAux.agregarHijo($1[1]);
-                                        $$ = [[$1[0]],nodoAux];  } ;
+                                        nodoAux.agregarHijo($2[1]);
+                                        arr = [$1[0]];
+                                        arr = arr.concat($2[0]); 
+                                        $$ = [arr,nodoAux]; }
+        | { 
+                objeto = new Objeto("","","",1, 1,[],[],0);
+                nodoAux = new NodoArbol("OtroObjeto","");
+                nodoAux.agregarHijo(new NodoArbol("ϵ",""));
+                $$ = [[objeto],nodoAux]; 
+         };
+
                 
 MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slash tk_identificador tk_mayor {
                 nodoAux = new NodoArbol("ObjetoRaiz","");
@@ -149,7 +164,7 @@ MOBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_sla
                 objeto = new Objeto("version","version",$9[0],@1.first_line, @1.first_column,[],[],0);
                 $$ = [objeto,nodoAux];
         } 
-        | error FINERROR {
+        | error {
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol("Error",""));
                 ListaErr.agregarError(new Error(NumeroE, yylineno,this._$.first_column + 1, "Sintactico", "Se esperaba un objeto y se encontro "+ yytext,"XML")); NumeroE++;
@@ -183,15 +198,23 @@ CADENA : tk_cadena1 {   nodoAux = new NodoArbol($1,"cadena");
         | tk_cadena2 {  nodoAux = new NodoArbol($1,"cadena");
                         $$ = [$1, nodoAux]; };
 
-TEXTOS : TEXTOS TEXTO { nodoAux = new NodoArbol("TEXTOS","");
-                        nodoAux.agregarHijo($2[1]);
-                        $1[1].agregarHijo(nodoAux);
-                        $1[0] = $1[0] + " " + $2[0];
-                        $$ = [$1[0],$1[1]]; } 
 
-        | TEXTO {  nodoAux = new NodoArbol("TEXTOS","");
-                   nodoAux.agregarHijo($1[1]);
-                   $$ = [$1[0],nodoAux]; } ; 
+TEXTOS: TEXTO OTRO_TEXTO { nodoAux = new NodoArbol("Textos","");                                  
+                           nodoAux.agregarHijo($1[1]);
+                           nodoAux.agregarHijo($2[1]);
+                           $1[0]= $1[0] + " " + $2[0]; 
+                           $$ = [$1[0],nodoAux]; };
+
+OTRO_TEXTO: TEXTO OTRO_TEXTO { nodoAux = new NodoArbol("OtroTexto","");                                  
+                               nodoAux.agregarHijo($1[1]);
+                               nodoAux.agregarHijo($2[1]);
+                               $1[0]= $1[0] + " " + $2[0]; 
+                               $$ = [$1[0],nodoAux]; }
+                           | { nodoAux = new NodoArbol("OtroTexto","");                                  
+                               nodoAux.agregarHijo(new NodoArbol(`""`,""));
+                               $$ = ["",nodoAux]; };
+
+
 
 TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   nodoAux.agregarHijo(new NodoArbol($1,"texto"));
@@ -275,16 +298,28 @@ TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   nodoAux.agregarHijo(new NodoArbol($1,"texto"));
                                   $$ = [$1,nodoAux];  };
 
-OBJETOS:   OBJETOS OBJETO        { nodoAux = new NodoArbol("ListaObjetos","");                                  
-                                   nodoAux.agregarHijo($2[1]);
-                                   $1[1].agregarHijo(nodoAux);
-                                   $1[0].push($2[0]); 
-                                   $$ = [$1[0],$1[1]]; }
+
+OBJETOS: OBJETO OTRO_UOBJETO { nodoAux = new NodoArbol("ListaObjetos","");                                  
+                                nodoAux.agregarHijo($1[1]);
+                                nodoAux.agregarHijo($2[1]);
+                                arr = [$1[0]];
+                                arr = arr.concat($2[0]); 
+                                $$ = [arr,nodoAux]; };
+
+OTRO_UOBJETO : OBJETO OTRO_UOBJETO { nodoAux = new NodoArbol("OtroObjeto","");                                  
+                                nodoAux.agregarHijo($1[1]);
+                                nodoAux.agregarHijo($2[1]);
+                                arr = [$1[0]];
+                                arr = arr.concat($2[0]); 
+                                $$ = [arr,nodoAux]; }
+        | { 
+                objeto = new Objeto("","","",1, 1,[],[],0);
+                nodoAux = new NodoArbol("OtroObjeto","");
+                nodoAux.agregarHijo(new NodoArbol("ϵ",""));
+                $$ = [[objeto],nodoAux];
+         };
 
 
-	     | OBJETO                { nodoAux = new NodoArbol("ListaObjetos","");
-                                       nodoAux.agregarHijo($1[1]);
-                                       $$ = [[$1[0]],nodoAux];  } ;
                 
 OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slash tk_identificador tk_mayor {
                 nodoAux = new NodoArbol("Objeto","");
@@ -337,7 +372,7 @@ OBJETO  : tk_menor tk_identificador LATRIBUTOS tk_mayor OBJETOS tk_menor tk_slas
                 objeto = new Objeto($2,$2,'',@1.first_line, @1.first_column,$3[0],[],1);
                 $$ = [objeto,nodoAux];
          }
-        | error FINERROR {
+        | error  {
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol("Error",""));
                 ListaErr.agregarError(new Error(NumeroE, yylineno,this._$.first_column + 1, "Sintactico", "Se esperaba un objeto y se encontro "+ yytext,"XML")); NumeroE++;
@@ -354,15 +389,27 @@ LATRIBUTOS: ATRIBUTOS   { nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo(new NodoArbol("E","simbolo"));
                           $$ = [[], nodoAux]; };
 
-ATRIBUTOS:  ATRIBUTOS ATRIBUTO  { nodoAux = new NodoArbol("Atributos","");                                  
-                                  nodoAux.agregarHijo($2[1]);
-                                  $1[1].agregarHijo(nodoAux);
-                                  $1[0].push($2[0]); 
-                                  $$ = [$1[0],$1[1]]; }
 
-        | ATRIBUTO              { nodoAux = new NodoArbol("Atributos","");
-                                  nodoAux.agregarHijo($1[1]);
-                                  $$ = [[$1[0]],nodoAux]; } ;
+ATRIBUTOS: ATRIBUTO OTRO_ATRIBUTO {      nodoAux = new NodoArbol("ListaAtributos","");                                  
+                                        nodoAux.agregarHijo($1[1]);
+                                        nodoAux.agregarHijo($2[1]);
+                                        arr = [$1[0]];
+                                        arr = arr.concat($2[0]); 
+                                        $$ = [arr,nodoAux]; };
+
+OTRO_ATRIBUTO : ATRIBUTO OTRO_ATRIBUTO { nodoAux = new NodoArbol("OtroAtributo","");                                  
+                                        nodoAux.agregarHijo($1[1]);
+                                        nodoAux.agregarHijo($2[1]);
+                                        arr = [$1[0]];
+                                        arr = arr.concat($2[0]); 
+                                        $$ = [arr,nodoAux]; }
+                                | { 
+                                        atributo = new Atributo("", "", @1.first_line, @1.first_column);
+                                        nodoAux = new NodoArbol("OtroAtributo","");
+                                        nodoAux.agregarHijo(new NodoArbol("ϵ",""));
+                                        $$ = [[atributo],nodoAux];    
+                                };
+
 
 ATRIBUTO: tk_identificador tk_igual tk_cadena1  {  nodoAux = new NodoArbol("Atributo","");
                                                    nodoAux.agregarHijo(new NodoArbol($1,"identificador"));
