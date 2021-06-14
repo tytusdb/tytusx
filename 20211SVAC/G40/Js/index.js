@@ -64,7 +64,14 @@ function CargarXML(){
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
                     resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN (ASCENDENTE) :D!!");
+                    salidaXPath = resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                    salidaRecursiva = "";
+                    salidaGlobal = "";
+                    GenerarSalidaXPath(salidaXPath);
+                    if(salidaRecursiva==""){
+                        salidaRecursiva = "No se encontraron coincidencias. :(";
+                    }
+                    SetSalida(salidaRecursiva);
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -139,8 +146,14 @@ function CargarXMLDesc(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN (DESCENDENTE ):D!!");
+                    salidaXPath = resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                    salidaRecursiva = "";
+                    salidaGlobal = "";
+                    GenerarSalidaXPath(salidaXPath);
+                    if(salidaRecursiva==""){
+                        salidaRecursiva = "No se encontraron coincidencias. :(";
+                    }
+                    SetSalida(salidaRecursiva);
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
                 }
@@ -314,6 +327,53 @@ function ObjetoYaExiste(arreglo, id){
 
 }
 
+function GenerarSalidaXPath(objetos){
+
+    if(objetos!=null){
+        if(objetos!=[]){
+            objetos.forEach(function (objeto){
+
+                if(objeto.getAgregar()==1){
+        
+                    salidaRecursiva+='<'+objeto.getID();
+                    
+                    if (objeto.getAtributos().length > 0) {
+                        objeto.getAtributos().forEach(function (atributo) {
+                        salidaRecursiva+=" "+atributo.getID()+"="+`"`+atributo.getValor()+`"`;
+                        });
+                    }
+                    salidaRecursiva+=">";
+                    if (objeto.getObjetos().length > 0) {
+                        salidaRecursiva+="\n"
+                        GenerarSalidaXPath(objeto.getObjetos());
+                    }
+        
+                    if(objeto.getTexto()!=""){
+                        salidaRecursiva+=objeto.getTexto();
+                    }
+        
+                    salidaRecursiva+='</'+objeto.getID()+'>'+"\n";
+                } else if(objeto.getAgregar()==2){
+        
+                    salidaRecursiva+='<'+objeto.getID();
+                    
+                    if (objeto.getAtributos().length > 0) {
+                        objeto.getAtributos().forEach(function (atributo) {
+                        salidaRecursiva+=" "+atributo.getID()+"="+`"`+atributo.getValor()+`"`;
+                        });
+                    }
+                    salidaRecursiva+=" />"+"\n";
+                    }
+        
+            });
+        } else {
+            salidaRecursiva = "No se encontraron coincidencias. :(";
+        }
+    } else {
+        salidaRecursiva = "No se encontraron coincidencias. :(";
+    }
+
+}
 function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();
