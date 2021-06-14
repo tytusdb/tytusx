@@ -7,10 +7,25 @@ class Acceso {
   }
 
   getValorImplicito(entorno, ast, padre) {
+   
     switch (ast.valor) {
       case "ELEMENTO":
-        //0->Elemento 1->itemReserva
+        //0->EXPRESION 1->ELEMENTO_P
+        
+        if(ast.hijos[1].valor=="ELEMENTO_P"){
+          
+          return this.getValorImplicito(entorno, ast.hijos[0], null) + this.getValorImplicito(entorno, ast.hijos[1], null);
+        }
+        //0->EXPRESION 1->itemReserva
         return this.getValorImplicito(entorno, ast.hijos[0], null);
+      case "ELEMENTO_P":
+
+        if(ast.hijos[2].valor=="ELEMENTO_P"){
+          return this.getValorImplicito(entorno, ast.hijos[1], null) + this.getValorImplicito(entorno, ast.hijos[2], null);
+        }
+        return  this.getValorImplicito(entorno, ast.hijos[1], null);;
+
+        
       case "SIMBOLOSSECU":
       case "EXPRESION":
         //0-> Simbolos 1->itemReserva 2->itemReserva? consulta sola
@@ -169,13 +184,13 @@ class Acceso {
     return null;
   }
   pocesarArtibuto(nombreATRIBUTO, entornos) {
-    console.error(entornos);
+    
     let txt=""
     for (const entorno of entornos) {
       
       if (entorno.atributos){
         if (entorno.atributos.nombreAtributo) {
-          
+          console.log(entorno.atributos);
           if (nombreATRIBUTO == entorno.atributos.nombreAtributo||nombreATRIBUTO == "*") {
             txt+=entorno.atributos.nombreAtributo +'="' +entorno.atributos.valorAtributo +'"\n';
             
@@ -191,7 +206,7 @@ class Acceso {
     
   }
   getValidacion(etiqueta, entorno) {
-    console.error(etiqueta);
+    
     if (etiqueta.valor == "CONTENIDODOS") {
       if (etiqueta.hijos[0].valor == "RESERVA") {
         return true;
