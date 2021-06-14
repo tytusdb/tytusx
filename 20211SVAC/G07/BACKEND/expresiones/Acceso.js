@@ -91,17 +91,18 @@ class Acceso {
             for (const entorno_ of ArregloEntorno) {
               //Iteramos el arreglo de entornos para aplicar estos cambios en todos
               let temrespuesta;
+
+              temrespuesta = this.getValorImplicito(
+                entorno_,
+                instruccion,
+                entorno
+              ); //Concatenamos todas las respuestas que encontramos
               if (indiceAux == this.indice || this.indice == -1) {
-                  temrespuesta = this.getValorImplicito(
-                  entorno_,
-                  instruccion,
-                  entorno
-                ); //Concatenamos todas las respuestas que encontramos
-                indiceAux++;
+                if (temrespuesta) {
+                  respuesta += temrespuesta;
+                }
               }
-              if (temrespuesta) {
-                respuesta += temrespuesta;
-              }
+              indiceAux++;
             }
           }
 
