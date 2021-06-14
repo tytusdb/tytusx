@@ -72,12 +72,12 @@
   }
 */
 var xmlDerecha = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[2,5,24,25,26,29,31,32,33,34,35],$V3=[2,26],$V4=[1,14],$V5=[1,15],$V6=[1,18],$V7=[1,19],$V8=[1,20],$V9=[1,21],$Va=[1,22],$Vb=[10,15],$Vc=[2,24,25,26,29,31,32,33,34,35],$Vd=[22,23],$Ve=[2,20],$Vf=[1,40];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[2,5,22,23,27,29,30,31,32,33,34],$V3=[1,14],$V4=[1,15],$V5=[1,18],$V6=[1,19],$V7=[1,20],$V8=[1,21],$V9=[1,22],$Va=[2,22],$Vb=[10,15],$Vc=[2,22,23,27,29,30,31,32,33,34],$Vd=[21,25],$Ve=[2,16],$Vf=[1,36];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"PROLOGO":4,"EOF":5,"tk_inicio_prologo":6,"VERSION":7,"CODIFICACION":8,"DEPENDENCIA":9,"tk_fin_prologo":10,"RAIZ":11,"tk_igual":12,"tk_hilera":13,"tk_encoding":14,"tk_standalone":15,"ETIQUETA":16,"ETIQUETA_UNICA":17,"APERTURA":18,"CONTENIDO":19,"CIERRE":20,"ETIQUETAERROR":21,"tk_cierra_dos":22,"tk_cierra":23,"tk_abre_dos":24,"tk_abre":25,"tk_etiqueta":26,"ATRIBUTOS":27,"ATRIBUTO":28,"tk_numero":29,"CARACESPECIAL":30,"tk_less":31,"tk_great":32,"tk_amper":33,"tk_apostro":34,"tk_quota":35,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"tk_inicio_prologo",10:"tk_fin_prologo",12:"tk_igual",13:"tk_hilera",14:"tk_encoding",15:"tk_standalone",22:"tk_cierra_dos",23:"tk_cierra",24:"tk_abre_dos",25:"tk_abre",26:"tk_etiqueta",29:"tk_numero",31:"tk_less",32:"tk_great",33:"tk_amper",34:"tk_apostro",35:"tk_quota"},
-productions_: [0,[3,2],[4,6],[4,1],[7,2],[8,3],[8,0],[9,3],[9,0],[11,1],[16,1],[16,3],[16,2],[21,1],[21,1],[21,1],[21,1],[17,4],[18,4],[27,2],[27,0],[28,3],[19,2],[19,2],[19,2],[19,2],[19,0],[30,1],[30,1],[30,1],[30,1],[30,1],[20,3]],
+symbols_: {"error":2,"INICIO":3,"PROLOGO":4,"EOF":5,"tk_inicio_prologo":6,"VERSION":7,"CODIFICACION":8,"DEPENDENCIA":9,"tk_fin_prologo":10,"RAIZ":11,"tk_igual":12,"tk_hilera":13,"tk_encoding":14,"tk_standalone":15,"ETIQUETA":16,"ETIQUETA_UNICA":17,"APERTURA":18,"CONTENIDO":19,"CIERRE":20,"tk_cierra":21,"tk_abre":22,"tk_etiqueta":23,"ATRIBUTOS":24,"tk_cierra_dos":25,"ATRIBUTO":26,"tk_numero":27,"CARACESPECIAL":28,"tk_less":29,"tk_great":30,"tk_amper":31,"tk_apostro":32,"tk_quota":33,"tk_abre_dos":34,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"tk_inicio_prologo",10:"tk_fin_prologo",12:"tk_igual",13:"tk_hilera",14:"tk_encoding",15:"tk_standalone",21:"tk_cierra",22:"tk_abre",23:"tk_etiqueta",25:"tk_cierra_dos",27:"tk_numero",29:"tk_less",30:"tk_great",31:"tk_amper",32:"tk_apostro",33:"tk_quota",34:"tk_abre_dos"},
+productions_: [0,[3,2],[4,6],[4,1],[7,2],[8,3],[8,0],[9,3],[9,0],[11,1],[16,1],[16,3],[16,2],[17,4],[18,4],[24,2],[24,0],[26,3],[19,2],[19,2],[19,2],[19,2],[19,0],[28,1],[28,1],[28,1],[28,1],[28,1],[20,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -209,12 +209,12 @@ case 11:
         gramatical = `<ETIQUETA> := <APERTURA> <CONTENIDO> <CIERRE> \n` + gramatical;
     
 break;
-case 13: case 14: case 15: case 16:
+case 12:
 
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , _$[$0].first_line, _$[$0].first_column ));
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' , "Me recupero con: " + yytext , _$[$0-1].first_line, _$[$0].first_column ));
         
 break;
-case 17:
+case 13:
 
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
@@ -239,7 +239,7 @@ case 17:
         gramatical = `<ETIQUETA_UNICA> := ${$$[$0-3]} ${$$[$0-2]} <ATRIBUTOS> ${$$[$0]} \n` + gramatical;
     
 break;
-case 18:
+case 14:
 
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
@@ -270,7 +270,7 @@ case 18:
         verificarEtiquetas.push(new Token("ETIQUETA",$$[$0-2] , _$[$0-2].first_line, _$[$0-2].first_column ));
     
 break;
-case 19:
+case 15:
 
         // CST
         nodoPadre = new Nodo("ATRIBUTOS", "ATRIBUTOS");
@@ -295,14 +295,14 @@ case 19:
         gramatical = `<ATRIBUTOS> := <ATRIBUTO> <ATRIBUTOS> \n` + gramatical;
     
 break;
-case 20:
+case 16:
 
         // REPORTE GRAMATICAL
         gramaticapp = `ATS -> ε \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := ε \n` + gramatical;
     
 break;
-case 21:
+case 17:
 
         // CST
         nodoPadre = new Nodo("ATRIBUTO", "ATRIBUTO");
@@ -328,7 +328,7 @@ case 21:
 
     
 break;
-case 22:
+case 18:
 
         // CST
         nodoPadre = new Nodo("CONTENIDO", "CONTENIDO");
@@ -363,7 +363,7 @@ case 22:
         gramatical = ` <CONTENIDO> := ${$$[$0-1]} <CONTENIDO> \n` + gramatical;
     
 break;
-case 23:
+case 19:
 
         // CST
         nodoPadre = new Nodo("CONTENIDO", "CONTENIDO");
@@ -399,7 +399,7 @@ case 23:
 
     
 break;
-case 24:
+case 20:
 
         // CST
         nodoPadre = new Nodo("CONTENIDO", "CONTENIDO");
@@ -433,7 +433,7 @@ case 24:
         gramatical = `<CONTENIDO> := <ETIQUETA> <CONTENIDO> \n` + gramatical;
     
 break;
-case 25:
+case 21:
 
         // CST
         nodoPadre = new Nodo("CONTENIDO", "CONTENIDO");
@@ -468,7 +468,7 @@ case 25:
 
     
 break;
-case 27:
+case 23:
 
             this.$ = "<";
             // REPORTE GRAMATICAL
@@ -476,7 +476,7 @@ case 27:
             gramatical = `<CARAESPECIAL> := ${$$[$0]} \n` + gramatical;
         
 break;
-case 28:
+case 24:
 
             this.$ = ">";
             // REPORTE GRAMATICAL
@@ -484,7 +484,7 @@ case 28:
             gramatical = `<CARAESPECIAL> := ${$$[$0]} \n` + gramatical;
         
 break;
-case 29:
+case 25:
 
             this.$ = "&";
             // REPORTE GRAMATICAL
@@ -492,7 +492,7 @@ case 29:
             gramatical = `<CARAESPECIAL> := ${$$[$0]} \n` + gramatical;
         
 break;
-case 30:
+case 26:
 
             this.$ = "'";
             // REPORTE GRAMATICAL
@@ -500,7 +500,7 @@ case 30:
             gramatical = `<CARAESPECIAL> := ${$$[$0]} \n` + gramatical;
         
 break;
-case 31:
+case 27:
 
             this.$ = '"';
             // REPORTE GRAMATICAL
@@ -508,7 +508,7 @@ case 31:
             gramatical = `<CARAESPECIAL> := ${$$[$0]} \n` + gramatical;
         
 break;
-case 32:
+case 28:
 
         this.$ = {}
 
@@ -535,8 +535,8 @@ case 32:
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:[1,3],11:4,16:5,17:6,18:7,25:$V1},{1:[3]},{5:[1,10]},{7:11,12:[1,12]},{5:[2,3]},{5:[2,9]},o($V2,[2,10]),{2:$V0,16:16,17:6,18:7,19:13,24:$V3,25:$V1,26:$V4,29:$V5,30:17,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},{21:23,22:[1,24],23:[1,25],24:[1,26],25:[1,27]},{26:[1,28]},{1:[2,1]},o($Vb,[2,6],{8:29,14:[1,30]}),{13:[1,31]},{20:32,24:[1,33]},{2:$V0,16:16,17:6,18:7,19:34,24:$V3,25:$V1,26:$V4,29:$V5,30:17,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},{2:$V0,16:16,17:6,18:7,19:35,24:$V3,25:$V1,26:$V4,29:$V5,30:17,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},{2:$V0,16:16,17:6,18:7,19:36,24:$V3,25:$V1,26:$V4,29:$V5,30:17,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},{2:$V0,16:16,17:6,18:7,19:37,24:$V3,25:$V1,26:$V4,29:$V5,30:17,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},o($Vc,[2,27]),o($Vc,[2,28]),o($Vc,[2,29]),o($Vc,[2,30]),o($Vc,[2,31]),o($V2,[2,12]),o($V2,[2,13]),o($V2,[2,14]),o($V2,[2,15]),o($V2,[2,16]),o($Vd,$Ve,{27:38,28:39,26:$Vf}),{9:41,10:[2,8],15:[1,42]},{12:[1,43]},o([10,14,15],[2,4]),o($V2,[2,11]),{26:[1,44]},{24:[2,22]},{24:[2,23]},{24:[2,24]},{24:[2,25]},{22:[1,45],23:[1,46]},o($Vd,$Ve,{28:39,27:47,26:$Vf}),{12:[1,48]},{10:[1,49]},{12:[1,50]},{13:[1,51]},{23:[1,52]},o($V2,[2,17]),o($Vc,[2,18]),o($Vd,[2,19]),{13:[1,53]},{2:$V0,11:54,16:5,17:6,18:7,25:$V1},{13:[1,55]},o($Vb,[2,5]),o($V2,[2,32]),o([22,23,26],[2,21]),{5:[2,2]},{10:[2,7]}],
-defaultActions: {4:[2,3],5:[2,9],10:[2,1],34:[2,22],35:[2,23],36:[2,24],37:[2,25],54:[2,2],55:[2,7]},
+table: [{2:$V0,3:1,4:2,6:[1,3],11:4,16:5,17:6,18:7,22:$V1},{1:[3]},{5:[1,10]},{7:11,12:[1,12]},{5:[2,3]},{5:[2,9]},o($V2,[2,10]),{2:$V0,16:16,17:6,18:7,19:13,22:$V1,23:$V3,27:$V4,28:17,29:$V5,30:$V6,31:$V7,32:$V8,33:$V9,34:$Va},{21:[1,23]},{23:[1,24]},{1:[2,1]},o($Vb,[2,6],{8:25,14:[1,26]}),{13:[1,27]},{20:28,34:[1,29]},{2:$V0,16:16,17:6,18:7,19:30,22:$V1,23:$V3,27:$V4,28:17,29:$V5,30:$V6,31:$V7,32:$V8,33:$V9,34:$Va},{2:$V0,16:16,17:6,18:7,19:31,22:$V1,23:$V3,27:$V4,28:17,29:$V5,30:$V6,31:$V7,32:$V8,33:$V9,34:$Va},{2:$V0,16:16,17:6,18:7,19:32,22:$V1,23:$V3,27:$V4,28:17,29:$V5,30:$V6,31:$V7,32:$V8,33:$V9,34:$Va},{2:$V0,16:16,17:6,18:7,19:33,22:$V1,23:$V3,27:$V4,28:17,29:$V5,30:$V6,31:$V7,32:$V8,33:$V9,34:$Va},o($Vc,[2,23]),o($Vc,[2,24]),o($Vc,[2,25]),o($Vc,[2,26]),o($Vc,[2,27]),o($V2,[2,12]),o($Vd,$Ve,{24:34,26:35,23:$Vf}),{9:37,10:[2,8],15:[1,38]},{12:[1,39]},o([10,14,15],[2,4]),o($V2,[2,11]),{23:[1,40]},{34:[2,18]},{34:[2,19]},{34:[2,20]},{34:[2,21]},{21:[1,42],25:[1,41]},o($Vd,$Ve,{26:35,24:43,23:$Vf}),{12:[1,44]},{10:[1,45]},{12:[1,46]},{13:[1,47]},{21:[1,48]},o($V2,[2,13]),o($Vc,[2,14]),o($Vd,[2,15]),{13:[1,49]},{2:$V0,11:50,16:5,17:6,18:7,22:$V1},{13:[1,51]},o($Vb,[2,5]),o($V2,[2,28]),o([21,23,25],[2,17]),{5:[2,2]},{10:[2,7]}],
+defaultActions: {4:[2,3],5:[2,9],10:[2,1],30:[2,18],31:[2,19],32:[2,20],33:[2,21],50:[2,2],51:[2,7]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1136,23 +1136,23 @@ case 5: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.f
 break;
 case 6: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 15;
 break;
-case 7: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 24;
+case 7: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 34;
 break;
-case 8: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 22;
+case 8: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 25;
 break;
-case 9: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 25;
+case 9: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 22;
 break;
-case 10: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 23;
+case 10: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 21;
 break;
-case 11: listaTokens.push(new Token("PPmenor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 31;
+case 11: listaTokens.push(new Token("PPmenor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 29;
 break;
-case 12: listaTokens.push(new Token("PPmayor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 32;
+case 12: listaTokens.push(new Token("PPmayor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 30;
 break;
-case 13: listaTokens.push(new Token("PPampersand", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 33;
+case 13: listaTokens.push(new Token("PPampersand", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 31;
 break;
-case 14: listaTokens.push(new Token("PPapostrofe", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 34;
+case 14: listaTokens.push(new Token("PPapostrofe", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 32;
 break;
-case 15: listaTokens.push(new Token("PPcomillas", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 35;
+case 15: listaTokens.push(new Token("PPcomillas", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 33;
 break;
 case 16: listaTokens.push(new Token("Igual", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 12;
 break;

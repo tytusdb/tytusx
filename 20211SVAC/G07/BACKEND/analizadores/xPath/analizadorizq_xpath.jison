@@ -108,16 +108,12 @@ ELEMENTO:
 ELEMENTO_P:
         tk_barra_or EXPRESION                   {$$= new Nodo("Porduccion","ELEMENTO_P",[ $tk_barra_or ,$EXPRESION] );}
         |EXPRESION                              {$$= new Nodo("Porduccion","ELEMENTO_P",[ $EXPRESION] );}
-     | error ETIQUETAERROR
-;
-
-ETIQUETAERROR:
-        tk_barra_or 
+        | error  tk_barra_or 
         {
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
+            listaErrores.push(new TokenError("XPATH",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
         }
-
 ;
+
 
 EXPRESION:
         EXPRESION CONTENIDO                     {$$= new Nodo("Porduccion","EXPRESION",[ $EXPRESION ,$CONTENIDO] );}
