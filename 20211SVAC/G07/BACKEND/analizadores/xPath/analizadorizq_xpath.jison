@@ -102,23 +102,27 @@ INICIO:
 
 ELEMENTO:
         ELEMENTO ELEMENTO_P {
-			$$ = $1;
-			$1.agregarHijo($2);
+			$$= new Nodo("ELE", "ELE" );
+			$$.agregarHijo($1);
+            $$.agregarHijo($2);
 		}
         |ELEMENTO_P {
-			$$= $1;
+			$$= new Nodo("ELE", "ELE" );
+            $$.agregarHijo($1);
 		} 
 ;
 
 ELEMENTO_P:
         tk_barra_or EXPRESION {
-            $$ = new Nodo("BARRA OR",$1 );
-			$$.agregarHijo($2);
+            $$= new Nodo("ELE", "ELE" );
+			$$.agregarHijo(new Nodo($1,$1));
+            $$.agregarHijo($2);
         }
         |EXPRESION {
-			$$ = $1;
+			$$= new Nodo("ELE", "ELE" );
+            $$.agregarHijo($1);
 		},
-		{
+		|error tk_barra_or{
             listaErrores.push(new TokenError("XPATH",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
         }
 ;
@@ -126,67 +130,82 @@ ELEMENTO_P:
 
 EXPRESION:
         EXPRESION CONTENIDO                     {
-                $$ = $1;
+                $$= new Nodo("EXP", "EXP" );
+				$$.agregarHijo($1);
                 $$.agregarHijo($2);
         }
         |SIMBOLOS                               {
-                $$ = $1;
+                $$= new Nodo("EXP", "EXP" );
+				$$.agregarHijo($1);
         }
 ;
 
 SIMBOLOS
         : tk_diagonal {
-                  $$= new Nodo("DIAGONAL", $1 );
+			$$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         | tk_diagonal_doble{
-                  $$= new Nodo("DIAGONAL DOBLE", $1 );
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }       
         | tk_arroba ARROPROD{
-                  $$= new Nodo("DIAGONAL", $1 );
-                  $$.agregarHijo($2);
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
         }
         | tk_puntos_seguidos{
-                  $$= new Nodo("PUNTOS SEGUIDOS", $1 );
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         | tk_punto{
-                  $$= new Nodo("PUNTO", $1 );
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         | tk_asterisco{
-                  $$= new Nodo("ASTERISCO", $1 );
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         | tk_identificador{
-                  $$= new Nodo("ID", $1 );
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         | tk_numero{
-                  $$= new Nodo("NUMERO", $1 );
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         | RESERVA{
-                  $$= $1;
+            $$ = new Nodo("SIMBOLOS", "SIMBOLOS");
+			$$.agregarHijo($1);
         }
 ;
 
 ARROPROD:
         tk_asterisco {
-                $$= new Nodo("ASTERISCO",$1);
+            $$ = new Nodo("ARROPROD", "ARROPROD");
+			$$.agregarHijo(new Nodo($1, $1));
         }
         |tk_identificador{
-                $$= new Nodo("ID",$1);
+            $$ = new Nodo("ARROPROD", "ARROPROD");
+			$$.agregarHijo(new Nodo($1, $1));
         }
 ;
 
 CONTENIDO:
         tk_corchete_izq COMPLEMENTO tk_corchete_der  {
-            $$ = $2;
+            $$ = new Nodo("CONTENIDO","CONTENIDO");
 			$$.agregarHijo(new Nodo($1,$1));
+			$$.agregarHijo($2);
 			$$.agregarHijo(new Nodo($3,$3));
         }
         |tk_corchete_izq EXPRESION  tk_corchete_der  {
-			$$ = $2;
+			$$ = new Nodo("CONTENIDO","CONTENIDO");
 			$$.agregarHijo(new Nodo($1,$1));
+			$$.agregarHijo($2);
 			$$.agregarHijo(new Nodo($3,$3));
 		}
         |tk_corchete_izq tk_corchete_der {
-			$$ = new Nodo("","");
+			$$ = new Nodo("CONTENIDO","CONTENIDO");
 			$$.agregarHijo(new Nodo($1,$1));
 			$$.agregarHijo(new Nodo($3,$3));
 		}
@@ -194,198 +213,246 @@ CONTENIDO:
 
 COMPLEMENTO:
         EXPRESION PREDICADO {
-			$$ = $1;
-			$$.hijos = $2.hijos;
+			$$ = new Nodo("COMPLEMENTO", "COMPLEMENTO");
+			$$.agregarHijo($1);
+			$$.agregarHijo($2);
 		}
 ;
 
 PREDICADO:
           OPERACIONES {
-			$$ = $1;
+			$$ = new Nodo("PREDICADO", "PREDICADO");
+			$$.agregarHijo($1);
 		}
 ;
 
 OPERACIONES:
          OPERADOR MASSENTENCIA{
-			$$ = $1;
+			$$ = new Nodo("OPERACIONES", "OPERACIONES");
+			$$.agregarHijo($1);
 			$$.agregarHijo($2);
 		}
         | OPERADOR{
-			$$ = $1;
+			$$ = new Nodo("OPERACIONES", "OPERACIONES");
+			$$.agregarHijo($1);
 		}
 ;
 
 OPERADOR:
           tk_mas{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_menos{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_asterisco{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_div {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_igual{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_indiferente {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_menor_igual {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_menor{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_mayor_igual {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_mayor {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_mod{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("OPERADOR", "OPERADOR");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
 ;
 
 MASSENTENCIA:
          ITEMFINAL tk_or COMPLEMENTO {
-			$$ = new Nodo($2, $2);
+			$$ = new Nodo("MASSENTENCIA", "MASSENTENCIA");
 			$$.agregarHijo($1);
+			$$.agregarHijo(new Nodo($2, $2));
 			$$.agregarHijo($3);
 		}
         | ITEMFINAL tk_and COMPLEMENTO{
-			$$ = new Nodo($2, $2);
+			$$ = new Nodo("MASSENTENCIA", "MASSENTENCIA");
 			$$.agregarHijo($1);
-			$$.agregarHijo($3);
+			$$.agregarHijo(new Nodo($2, $2));
+			$$.agregarHijo($2);
 		}
         | ITEMFINAL{
-			$$ = $1;
+			$$ = new Nodo("MASSENTENCIA", "MASSENTENCIA");
+			$$.agregarHijo($1);
 		}
 ;
 
 ITEMFINAL:
           RESERVA{
-			$$ = $1;
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo($1);
 		}
         | tk_caracter {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_hilera{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_identificador{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_arroba ARROPROD{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}     
         | tk_numero{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}       
         | tk_diagonal{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_diagonal_doble{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}       
         | tk_puntos_seguidos{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}      
         | tk_punto {
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
         | tk_asterisco{
-			$$ = new Nodo($1, $1);
+			$$ = new Nodo("ITEMFINAL", "ITEMFINAL");
+			$$.agregarHijo(new Nodo($1, $1));
 		}
 ;
 
 RESERVA:
           tk_ancestor             ITEMRESERVA {
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}         
         | tk_ancestor_or_self   ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}       
         | tk_attribute          ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_child              ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_descendant         ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_descendant_or_self ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_following          ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_following_sibling  ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_namespace          ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_parent             ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_preceding          ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_preceding_sibling  ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_self               ITEMRESERVA{
-			$$ = new Nodo($1, $1);
-			$$.agregarHijo($1);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo($2);
 		}
         | tk_node tk_parentesis_izq tk_parentesis_der{
-			$$ = new Nodo($2, $2);
-			$$.agregarHijo($1);
-			$$.agregarHijo($3);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo(new Nodo($2, $2));
+			$$.agregarHijo(new Nodo($3, $3));
 		}
         | tk_last tk_parentesis_izq tk_parentesis_der{
-			$$ = new Nodo($2, $2);
-			$$.agregarHijo($1);
-			$$.agregarHijo($3);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo(new Nodo($2, $2));
+			$$.agregarHijo(new Nodo($3, $3));
 		}
         | tk_position tk_parentesis_izq tk_parentesis_der{
-			$$ = new Nodo($2, $2);
-			$$.agregarHijo($1);
-			$$.agregarHijo($3);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo(new Nodo($2, $2));
+			$$.agregarHijo(new Nodo($3, $3));
 		}     
         | tk_text tk_parentesis_izq tk_parentesis_der{
-			$$ = new Nodo($2, $2);
-			$$.agregarHijo($1);
-			$$.agregarHijo($3);
+			$$ = new Nodo("RESERVA", "RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
+			$$.agregarHijo(new Nodo($2, $2));
+			$$.agregarHijo(new Nodo($3, $3));
 		}
 ;
 
 ITEMRESERVA:
         tk_cuatro_puntos SIMBOLOS = {
-			$$ = new Nodo($1);
+			$$ = new Nodo("ITEM_RESERVA", "ITEM_RESERVA");
+			$$.agregarHijo(new Nodo($1, $1));
 			$$.agregarHijo($2);
 		}
         | {
-            $$ = new Nodo("ε","ε");
+			$$ = new Nodo("ITEM_RESERVA", "ITEM_RESERVA");
+			$$.agregarHijo(new Nodo("ε","ε"));
         }
 ;
 
