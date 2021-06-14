@@ -74,6 +74,7 @@ var TipoNodo;
     TipoNodo[TipoNodo["EXPRESION"] = 1] = "EXPRESION";
     TipoNodo[TipoNodo["AXES"] = 2] = "AXES";
     TipoNodo[TipoNodo["SELECTOR_AXES"] = 3] = "SELECTOR_AXES";
+    TipoNodo[TipoNodo["FIN"] = 4] = "FIN";
 })(TipoNodo || (TipoNodo = {}));
 
 var TipoAxes;

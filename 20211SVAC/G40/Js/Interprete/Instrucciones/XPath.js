@@ -13,6 +13,16 @@ var XPath = /** @class */ (function () {
     }
     XPath.prototype.ejecutar = function (ent, arbol) {
 
+
+        for (var i=0; i < this.listaNodos.length;i++ ) {
+        
+            if (this.listaNodos[i].getTipo() == 4){
+                objetos.splice(i,1);
+                i--; 
+               // continue;
+            }          
+        }
+
         //este arreglo con el entorno global servira por si algun nodo tiene doble slash "//",".//" o "./"
         this.global = [ent];
         //"temporal" es arreglo con el entorno global es el punto de partida donde se iniciara a buscar
