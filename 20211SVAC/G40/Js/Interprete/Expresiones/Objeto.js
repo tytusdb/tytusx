@@ -18,6 +18,9 @@ var Objeto = /** @class */ (function () {
         return this.agregar;
     };
 
+    Objeto.prototype.getTexto = function () {
+        return this.texto;
+    };    
 
     Objeto.prototype.LeerID = function () {
         return this.id;
