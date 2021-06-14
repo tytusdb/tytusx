@@ -110,7 +110,7 @@ class Ejecucion {
             this.consultaXML = this.cuerpoXml;
             this.verObjetos();
             this.recorrido(this.raiz);
-            console.log(this.atributoIdentificacion);
+            //console.log(this.atributoIdentificacion);
             return this.traducir();
         }
         return 'no se pudo';
@@ -138,9 +138,9 @@ class Ejecucion {
                             this.atributoTexto = '';
                             this.consultaXML = this.cuerpoXml;
                         }
-                        else {
+                        else if (!(element === '[') && !(element === ']')) {
                             this.consultaXML = this.reducir(this.consultaXML, element, 'INSTRUCCIONES');
-                            console.log(this.consultaXML);
+                            //console.log(this.consultaXML);
                         }
                     }
                 });
@@ -187,6 +187,34 @@ class Ejecucion {
                     else if (typeof element === 'string') {
                         //console.log(element);
                         this.consultaXML = this.reducir(this.consultaXML, element, 'PADRE');
+                    }
+                });
+            }
+            if (this.identificar('ATRIBUTO_PREDICADO', nodo)) {
+                nodo.hijos.forEach((element) => {
+                    if (element instanceof Object) {
+                        this.recorrido(element);
+                    }
+                    else if (typeof element === 'string') {
+                        //console.log(element);
+                        this.consultaXML = this.reducir(this.consultaXML, element, 'ATRIBUTO_PREDICADO');
+                    }
+                });
+            }
+            if (this.identificar('ORDEN', nodo)) {
+                nodo.hijos.forEach((element) => {
+                    if (element instanceof Object) {
+                        this.recorrido(element);
+                    }
+                    else if (typeof element === 'string' && element === 'last') {
+                        let cons;
+                        cons = [];
+                        this.consultaXML.forEach((element, index) => {
+                            if (index === this.consultaXML.length - 1) {
+                                cons.push(element);
+                            }
+                        });
+                        this.consultaXML = cons;
                     }
                 });
             }
@@ -244,7 +272,17 @@ class Ejecucion {
         else if (nodo === 'INSTRUCCIONES') {
             let cons;
             cons = [];
-            if (!this.descendiente) {
+            if (Number.isInteger(parseInt(etiqueta))) {
+                let indice = parseInt(etiqueta);
+                //console.log(indice);
+                consulta.forEach((element, index) => {
+                    if (index === indice - 1) {
+                        cons.push(element);
+                    }
+                });
+                return cons;
+            }
+            else if (!this.descendiente) {
                 if (this.esRaiz) {
                     consulta.forEach(element => {
                         if (element.identificador === etiqueta) {
@@ -302,6 +340,25 @@ class Ejecucion {
                             if (!b) {
                                 cons.push(a);
                             }
+                        }
+                    });
+                });
+                return cons;
+            }
+        }
+        else if (nodo === 'ATRIBUTO_PREDICADO') {
+            if (etiqueta === '@') {
+                this.atributo = true;
+                return consulta;
+            }
+            else if (this.atributo) {
+                this.atributo = false;
+                let cons = [];
+                consulta.forEach(element => {
+                    element.listaAtributos.forEach(atributo => {
+                        if (atributo.identificador === etiqueta) {
+                            this.atributoTexto = etiqueta;
+                            cons.push(element);
                         }
                     });
                 });
