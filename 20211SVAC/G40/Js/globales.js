@@ -38,6 +38,13 @@ const init = function(e){
         window.open('./reportes/astXPATH.html','_blank');
     });
 
+    let btn_astXPDesc = document.querySelector("#astXPDesc");
+
+    btn_astXPDesc.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/astXPATHDesc.html','_blank');
+    });
+
 };
 
 
