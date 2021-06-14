@@ -164,17 +164,14 @@ botonCargar2.addEventListener("click", () => {
 document.getElementById("ast").addEventListener("click", () => {
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
   
-  console.log("ingreso al CST de mercado");
-  
-  console.log(parserXML.json.nodo);
+  console.log(AST_xPath["Contenido"]);
+  // activarModal();
+   generarAST(AST_xPath);
+ 
+   //graficarArbol(AST_xPath["Contenido"]);
+ 
 
-  console.log("ingreso al AST");
-  
-  console.log(AST_xPath);
-
-  generarAST(AST_xPath);
-
-  //graficarArbol(AST_xPath.nodo);
+  //graficarArbol(AST_xPath["Contenido"]);
 
   //generarAST(AST_xPath);
 })
@@ -318,9 +315,11 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
+  console.log("Analizando XPATH por la derecha");
 
   
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+
 
   //GENERANDO ARBOL AST
   contenidoModal2.innerHTML = `
