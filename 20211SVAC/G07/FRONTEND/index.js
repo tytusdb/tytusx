@@ -166,19 +166,16 @@ botonCargar2.addEventListener("click", () => {
 
 })
 document.getElementById("ast").addEventListener("click", () => {
-  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+    let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
   
-  console.log(AST_xPath["Contenido"]);
-  // activarModal();
-   generarAST(AST_xPath);
- 
-   //graficarArbol(AST_xPath["Contenido"]);
- 
+    // Se activa el modal
+    activarModal();
 
-  //graficarArbol(AST_xPath["Contenido"]);
-
-  //generarAST(AST_xPath);
+    // Generar el arbol con Treant JS
+    graficarArbol(AST_xPath);
+  
 })
+
 // ======================================
 // MODAL XML
 // ======================================
@@ -298,25 +295,6 @@ function analizar_xpath_izq(){
 
   console.log("Analizando XPATH...");
   let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
-
-  // // GENERANDO ARBOL AST
-  // contenidoModal2.innerHTML = `
-  // <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
-  //   <div id="graph" style="width: 100%;"></div>
-  // </div>
-  // `;
-
-  generarAST(AST_xPath);
-
-  // Se activa el modal
-  activarModal();
-
-  console.log("VERIFICAR XPATH");
-  console.log(AST_xPath);
-
-  // Generar el arbol con Treant JS
-  graficarArbol(AST_xPath);
-
   
 }
 
