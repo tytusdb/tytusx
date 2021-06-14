@@ -161,219 +161,7 @@ var posix = {
   normalize: function normalize(path) {
     assertPath(path);
 
-<<<<<<< Updated upstream
-var $0 = $$.length - 1;
-switch (yystate) {
-case 1:
- this.$=$$[$0-1]; return this.$; 
-break;
-case 2: case 11:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
-break;
-case 3: case 12:
- this.$=[$$[$0]]; 
-break;
-case 4:
- this.$ = new Objeto($$[$0-7],'',_$[$0-7].first_line,_$[$0-7].first_column,[],[],$$[$0-1]); 
-break;
-case 5:
- this.$ = new Objeto($$[$0-6],'',_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-5],$$[$0-3],$$[$0-1]); 
-break;
-case 6:
- this.$ = new Objeto($$[$0-6],$$[$0-3],_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-5],[],$$[$0-1]) ; console.log('S' + $$[$0-3] + 'G')
-break;
-case 7:
- this.$ = new Objeto($$[$0-5],'',_$[$0-6].first_line,_$[$0-6].first_column,$$[$0-4],[],$$[$0]) ; 
-break;
-case 8:
- this.$ = new Objeto($$[$0-2],'',_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-1],[],''); 
-break;
-case 9:
- this.$=$$[$0]; 
-break;
-case 10:
- this.$=[]; 
-break;
-case 13: case 14:
- this.$ = new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
-break;
-case 15:
- $$[$0-1] = $$[$0-1] + ' ' + $$[$0]; this.$=$$[$0-1];
-break;
-case 16:
- this.$ = $$[$0];
-break;
-case 17: case 18: case 24: case 25:
- this.$ = $$[$0]; 
-break;
-case 19:
- this.$ = '<'; 
-break;
-case 20:
- this.$ = '>'; 
-break;
-case 21:
- this.$ = '&'; 
-break;
-case 22:
- this.$ = "'"; 
-break;
-case 23:
- this.$ = '"'; 
-break;
-}
-},
-table: [{3:1,4:2,6:3,7:$V0,13:$V1},{1:[3]},{5:[1,6],6:7,7:$V0,13:$V1},o($V2,[2,3]),{8:[1,8]},{14:[1,9]},{1:[2,1]},o($V2,[2,2]),{9:[1,10]},o($V3,[2,10],{15:11,20:12,21:13,14:$V4}),{10:[1,15]},{16:[1,16],19:[1,17]},o($V3,[2,9],{21:18,14:$V4}),o($V5,[2,12]),{9:[1,19]},{11:[1,20]},{4:21,6:3,7:$V0,9:$V6,13:$V1,14:$V7,17:[1,23],18:22,23:24,24:$V8,25:$V9,26:$Va,27:$Vb,28:$Vc,29:$Vd,30:$Ve},o($V2,[2,8]),o($V5,[2,11]),{10:[1,34],22:[1,35]},{9:[1,36]},{6:7,7:$V0,13:$V1,17:[1,37]},{9:$V6,14:$V7,17:[1,38],23:39,24:$V8,25:$V9,26:$Va,27:$Vb,28:$Vc,29:$Vd,30:$Ve},{14:[1,40]},o($Vf,[2,16]),o($Vf,[2,17]),o($Vf,[2,18]),o($Vf,[2,19]),o($Vf,[2,20]),o($Vf,[2,21]),o($Vf,[2,22]),o($Vf,[2,23]),o($Vf,[2,24]),o($Vf,[2,25]),o($V5,[2,13]),o($V5,[2,14]),{10:[1,41]},{14:[1,42]},{14:[1,43]},o($Vf,[2,15]),{16:[1,44]},{12:[1,45]},{16:[1,46]},{16:[1,47]},o($V2,[2,7]),o($V2,[2,4]),o($V2,[2,5]),o($V2,[2,6])],
-defaultActions: {6:[2,1]},
-parseError: function parseError (str, hash) {
-    if (hash.recoverable) {
-        this.trace(str);
-    } else {
-        var error = new Error(str);
-        error.hash = hash;
-        throw error;
-    }
-},
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
-    var args = lstack.slice.call(arguments, 1);
-    var lexer = Object.create(this.lexer);
-    var sharedState = { yy: {} };
-    for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
-    }
-    lexer.setInput(input, sharedState.yy);
-    sharedState.yy.lexer = lexer;
-    sharedState.yy.parser = this;
-    if (typeof lexer.yylloc == 'undefined') {
-        lexer.yylloc = {};
-    }
-    var yyloc = lexer.yylloc;
-    lstack.push(yyloc);
-    var ranges = lexer.options && lexer.options.ranges;
-    if (typeof sharedState.yy.parseError === 'function') {
-        this.parseError = sharedState.yy.parseError;
-    } else {
-        this.parseError = Object.getPrototypeOf(this).parseError;
-    }
-    function popStack(n) {
-        stack.length = stack.length - 2 * n;
-        vstack.length = vstack.length - n;
-        lstack.length = lstack.length - n;
-    }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
-    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
-    while (true) {
-        state = stack[stack.length - 1];
-        if (this.defaultActions[state]) {
-            action = this.defaultActions[state];
-        } else {
-            if (symbol === null || typeof symbol == 'undefined') {
-                symbol = lex();
-            }
-            action = table[state] && table[state][symbol];
-        }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
-                expected = [];
-                for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
-                    }
-                }
-                if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
-                }
-                this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected
-                });
-            }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
-                yyleng = lexer.yyleng;
-                yytext = lexer.yytext;
-                yylineno = lexer.yylineno;
-                yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
-            }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
-            }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
-        }
-    }
-    return true;
-}};
-=======
     if (path.length === 0) return '.';
->>>>>>> Stashed changes
 
     var isAbsolute = path.charCodeAt(0) === 47 /*/*/;
     var trailingSeparator = path.charCodeAt(path.length - 1) === 47 /*/*/;
@@ -1751,95 +1539,11 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-<<<<<<< Updated upstream
-},{"_process":13,"fs":11,"path":12}],3:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GraficarAST = void 0;
-class GraficarAST {
-    constructor() {
-        this.cadenaFinal = "";
-        this.i = 0;
-        this.j = 0;
-    }
-    graficar(arbol) {
-        try {
-            this.cadenaFinal += "digraph G{ node[shape = \"oval\" , style=filled, color=\"yellow\"];\n\n";
-            this.cadenaFinal += "L_Objetos;\n";
-            arbol.forEach((objeto) => {
-                let cadenaInterna = "";
-                if (objeto.identificador1 == "?XML") {
-                    //Acciones para el prologo
-                }
-                else {
-                    this.cadenaFinal += 'L_Objetos->';
-                    this.cadenaFinal += this.recorrer(objeto);
-                }
-                //this.cadenaFinal += cadenaInterna
-            });
-            this.cadenaFinal += "\n}";
-            // console.log(this.cadenaFinal);
-            var direccion = encodeURI("https://dreampuf.github.io/GraphvizOnline/#" + this.cadenaFinal);
-            window.open(direccion, '_blank');
-        }
-        catch (error) {
-        }
-    }
-    recorrer(nodo) {
-        let cadena = "";
-        this.i++;
-        let padre = "nodo" + this.i;
-        //Con esta linea agregamos el objeto anterior al padre
-        cadena += padre + ";\n";
-        cadena += padre + "[label = \"" + nodo.identificador1 + "\"];\n";
-        if (nodo.listaAtributos.length > 0) {
-            nodo.listaAtributos.forEach((atributo) => {
-                this.j++;
-                let atrib = "nodoA" + this.j;
-                //Acciones para graficara tributos a objeto
-                cadena += padre + "->" + atrib + ";\n";
-                cadena += atrib + "[label =\"" + atributo.identificador + "=" + atributo.valor.replace(/['"]+/g, '') + "\"];\n";
-            });
-        }
-        //Verificamos si tiene texto para agregarselo
-        if (nodo.texto != '') {
-            this.i++;
-            let nodoTexto = "nodoT" + this.i;
-            cadena += padre + "->" + nodoTexto + ";\n";
-            cadena += nodoTexto + "[label =\"" + nodo.texto + "\"];\n";
-        }
-        if (nodo.listaObjetos.length > 0) {
-            nodo.listaObjetos.forEach((objetoHijo) => {
-                //Con esta linea agregamos el objeto anterior al padre
-                cadena += padre + "->";
-                cadena += this.recorrer(objetoHijo);
-            });
-        }
-        return cadena;
-    }
-}
-exports.GraficarAST = GraficarAST;
-
-},{}],4:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Atributo = void 0;
-class Atributo {
-    constructor(id, valor, linea, columna) {
-        this.identificador = id;
-        this.valor = valor;
-        this.linea = linea;
-        this.columna = columna;
-    }
-}
-exports.Atributo = Atributo;
-=======
 },{"../Interprete/Expresion/Atributo":9,"../Interprete/Expresion/Objeto":10,"../Interprete/Util/TError":11,"_process":3,"fs":1,"path":2}],5:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
   Returns a Parser object of the following structure:
->>>>>>> Stashed changes
 
   Parser: {
     yy: {}
@@ -2132,38 +1836,11 @@ const { Objeto } = require('../Interprete/Expresion/Objeto');
 const { Atributo } = require('../Interprete/Expresion/Atributo');
 const {ELexico, ESintactico} = require('../Interprete/Util/TError')
 
-<<<<<<< Updated upstream
-},{}],10:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Tipo_js_1 = require("./Simbolo/Tipo.js");
-const Entorno_js_1 = require("./Simbolo/Entorno.js");
-const Simbolo_js_1 = require("./Simbolo/Simbolo.js");
-const GraficarAST_js_1 = require("./Graficador/GraficarAST.js");
-const TError_js_1 = require("./Interprete/Util/TError.js");
-const gramaticaXML = require('./Analizadores/gramaticaXML.js');
-const gramaticaXMLD = require('./Analizadores/gramaticaXMLDSC.js');
-let ObjetosXML;
-let cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
-                        </tr></thead>`;
-//Esta funcion es para mientras en lo que sincroniza con la pag
-/*
-    ejecutarXML(`
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<biblioteca dir="calle 3>5<5" prop="Sergio's">
-    <libro>
-        <titulo>Libro A</titulo>
-        <autor>Julio& &amp;Tommy&amp; Garcia</autor>
-        <fechaPublicacion ano="2001" mes="Enero"/>
-    </libro>
-=======
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
 
 EOF:1,
->>>>>>> Stashed changes
 
 parseError:function parseError(str, hash) {
         if (this.yy.parser) {
@@ -2194,28 +1871,6 @@ setInput:function (input, yy) {
         return this;
     },
 
-<<<<<<< Updated upstream
-<hemeroteca dir="zona 21" prop="kev" estado="chilera">
-    
-</hemeroteca>
-`)
-    realizarGraficaAST()
-    tablaErroresFicticia()
-*/
-//accionesEjecutables()
-//tablaErroresFicticia()
-function ejecutarXML(entrada) {
-    cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
-                        </tr></thead>`;
-    //Parseo para obtener la raiz o raices  
-    const objetos = gramaticaXML.parse(entrada);
-    ObjetosXML = objetos;
-    const entornoGlobal = new Entorno_js_1.Entorno(null);
-    //funcion recursiva para manejo de entornos
-    objetos.forEach((objeto) => {
-        if (objeto.identificador1 == "?XML") {
-            //Acciones para el prologo
-=======
 // consumes and returns one char from the input
 input:function () {
         var ch = this._input[0];
@@ -2230,113 +1885,10 @@ input:function () {
             this.yylloc.last_line++;
         } else {
             this.yylloc.last_column++;
->>>>>>> Stashed changes
         }
         if (this.options.ranges) {
             this.yylloc.range[1]++;
         }
-<<<<<<< Updated upstream
-    });
-    //esta es solo para debug jaja
-    const ent = entornoGlobal;
-    console.log(cadenaReporteTS);
-    return cadenaReporteTS;
-}
-;
-function ejecutarXML_DSC(entrada) {
-    const objetos = gramaticaXMLD.parse(entrada);
-}
-;
-function llenarTablaXML(objeto, entorno, padre) {
-    //Inicializamos los entornos del objeto
-    const entornoObjeto = new Entorno_js_1.Entorno(null);
-    //Verificamos si tiene atributos para asignarselos
-    if (objeto.listaAtributos.length > 0) {
-        objeto.listaAtributos.forEach((atributo) => {
-            //ESto para el llenada
-            const simbolo = new Simbolo_js_1.Simbolo(Tipo_js_1.Tipo.ATRIBUTO, atributo.identificador, atributo.linea, atributo.columna, atributo.valor.replace(/['"]+/g, ''), entornoObjeto);
-            entornoObjeto.agregar(simbolo.indentificador, simbolo);
-            //Esto es para la graficada de la tabla de simbolos
-            cadenaReporteTS += `<tr>`;
-            cadenaReporteTS += `<td>${simbolo.indentificador}</td><td>Atributo</td><td>${objeto.identificador1}</td><td>${atributo.linea}</td><td>${atributo.columna}</td>`;
-            cadenaReporteTS += `<tr>`;
-        });
-    }
-    //Verificamos si tiene texto para agregarselo
-    if (objeto.texto != '') {
-        const simbolo = new Simbolo_js_1.Simbolo(Tipo_js_1.Tipo.ATRIBUTO, 'textoInterno', objeto.linea, objeto.columna, objeto.texto, entornoObjeto);
-        entornoObjeto.agregar(simbolo.indentificador, simbolo);
-        //Esto es para la graficada de la tabla de simbolos
-        // cadenaReporteTS+=`<td>${objeto.texto}</td><td>Atributo</td><td>${objeto.identificador1}</td><td>${objeto.linea}</td><td>${objeto.columna}</td>`
-    }
-    //Agregamos al entorno global
-    objeto.entorno = entornoObjeto;
-    const simbolo = new Simbolo_js_1.Simbolo(Tipo_js_1.Tipo.ETIQUETA, objeto.identificador1, objeto.linea, objeto.columna, objeto, entornoObjeto);
-    entorno.agregar(simbolo.indentificador, simbolo);
-    //Esto es para la graficada de la tabla de simbolos
-    let ambitoTS = "";
-    if (padre != null) {
-        ambitoTS = padre.identificador1;
-    }
-    else {
-        ambitoTS = "Global";
-    }
-    cadenaReporteTS += `<tr>`;
-    cadenaReporteTS += `<td>${objeto.identificador1}</td><td>Objeto</td><td>${ambitoTS}</td><td>${objeto.linea}</td><td>${objeto.columna}</td>`;
-    cadenaReporteTS += `</tr>`;
-    //Verificamos si tiene mas hijos para recorrerlos recursivamente
-    if (objeto.listaObjetos.length > 0) {
-        objeto.listaObjetos.forEach((objetoHijo) => {
-            const resultado = objetoHijo;
-            llenarTablaXML(objetoHijo, entornoObjeto, objeto);
-        });
-    }
-}
-;
-function realizarGraficaAST() {
-    const graficador = new GraficarAST_js_1.GraficarAST;
-    graficador.graficar(ObjetosXML);
-}
-function tablaErroresFicticia() {
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'@\'", 'XML', 1, 1);
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'$\'", 'XML', 1, 1);
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'%\'", 'XML', 1, 1);
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'+\'", 'Xpath', 1, 1);
-    new TError_js_1.ESintactico('Sintactico', "No se esperaba \'@\'", 'XML', 1, 1);
-    let todosErrores = "";
-    TError_js_1.errorLex.forEach(element => {
-        todosErrores += "[error][ linea: " + element.linea + " columna: " + element.columna + " ] " + element.descripcion + ", Tipo:" + element.tipo + "\n";
-    });
-    TError_js_1.errorSin.forEach(element => {
-        todosErrores += "[error][ linea: " + element.linea + " columna: " + element.columna + " ] " + element.descripcion + ", Tipo:" + element.tipo + "\n";
-    });
-    console.log(todosErrores);
-}
-function reporteTablaErrores() {
-    let cadenaReporteTE = ` <thead><tr><th scope="col">Tipo</th><th scope="col">Descripcion</th><th scope="col">Archivo</th><th scope="col">Fila</th><th scope="col">Columna</th>
-                        </tr></thead>`;
-    TError_js_1.errorLex.forEach(element => {
-        cadenaReporteTE += `<tr>`;
-        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
-        cadenaReporteTE += `</tr>`;
-    });
-    TError_js_1.errorSin.forEach(element => {
-        cadenaReporteTE += `<tr>`;
-        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
-        cadenaReporteTE += `</tr>`;
-    });
-    TError_js_1.errorSem.forEach(element => {
-        cadenaReporteTE += `<tr>`;
-        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
-        cadenaReporteTE += `</tr>`;
-    });
-    return cadenaReporteTE;
-}
-/*
-ejecutarXML_DSC(`
-<?xml version="1.0" encoding="UTF-8" ?>
-=======
->>>>>>> Stashed changes
 
         this._input = this._input.slice(1);
         return ch;
@@ -2355,19 +1907,10 @@ unput:function (ch) {
         this.match = this.match.substr(0, this.match.length - 1);
         this.matched = this.matched.substr(0, this.matched.length - 1);
 
-<<<<<<< Updated upstream
-<hemeroteca dir="zona 21" prop="kev" estado="chilera">
-    
-</hemeroteca>
-`);
-*/
-module.exports = { ejecutarXML, realizarGraficaAST, reporteTablaErrores };
-=======
         if (lines.length - 1) {
             this.yylineno -= lines.length - 1;
         }
         var r = this.yylloc.range;
->>>>>>> Stashed changes
 
         this.yylloc = {
             first_line: this.yylloc.first_line,
