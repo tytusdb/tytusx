@@ -91,7 +91,7 @@ document.getElementById("btnGuardar").addEventListener("click", function () {
 
 var cadenaReporteTablaS =""
 
-document.getElementById("btnCargarA").addEventListener('click', function() {
+document.getElementById("btnAnalizarA").addEventListener('click', function() {
     cadenaReporteTablaS= myBundle.ejecutarXML(document.getElementById(activeText).value);
     console.log(cadenaReporteTablaS)
     alert("Se ha cargado el XML")
@@ -110,7 +110,8 @@ function llenarTablaReportes() {
     valorTabla=1
    manejoTablas()
    
-}
+};
+
 function llenarTablaErrores() {
     valorTabla=2
    manejoTablas()
@@ -128,4 +129,4 @@ function manejoTablas() {
         tituloReporte = "Tabla de Errores"
         document.getElementById("tituloRep").innerText = tituloReporte
     }
-}
+};
