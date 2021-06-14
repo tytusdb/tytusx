@@ -8,6 +8,7 @@ class Acceso {
   }
 
   getValorImplicito(entorno, ast, padre) {
+    
     switch (ast.valor) {
       case "ELEMENTO":
         //0->EXPRESION 1->ELEMENTO_P
@@ -65,7 +66,7 @@ class Acceso {
               let respuesta = "";
               for (const iterator of ArregloEntorno) {
                 if (indiceAux == this.indice || this.indice == -1) {
-                  console.error(this.indice);
+     
                   respuesta += this.getValorImplicito(
                     iterator,
                     instruccion,
@@ -77,7 +78,7 @@ class Acceso {
 
               return respuesta;
             }
-
+            
             return this.getValorImplicito(entorno, instruccion, padre);
           } else {
             if (ArregloEntorno.length == 0) {
@@ -97,12 +98,17 @@ class Acceso {
                 instruccion,
                 entorno
               ); //Concatenamos todas las respuestas que encontramos
+
               if (indiceAux == this.indice || this.indice == -1) {
                 if (temrespuesta) {
                   respuesta += temrespuesta;
                 }
+                
+                this.indice=-1;
               }
-              indiceAux++;
+              if(temrespuesta){
+                indiceAux++;
+              }      
             }
           }
 
@@ -130,6 +136,7 @@ class Acceso {
 
         return null;
       case "TODO_":
+        
         let contenido = "";
         let atributo;
         if (entorno.atributos) {
@@ -140,10 +147,13 @@ class Acceso {
         } else {
           atributo = "";
         }
+        
         if (entorno.tipo == "completa") {
           for (const iterator of entorno.hijos) {
             contenido += this.getValorImplicito(iterator, ast, entorno);
           }
+
+          
           let retorno = new Etiqueta(
             entorno.etiqueta,
             entorno.texto,
@@ -151,8 +161,10 @@ class Acceso {
             atributo
           ); //nombre,texto,contenido
           if (retorno) {
+
             return retorno.obtenerXML();
           }
+          
         } else if (entorno.tipo == "unica") {
           let retorno = new Etiqueta(
             entorno.etiqueta,
@@ -165,7 +177,7 @@ class Acceso {
             return retorno.obtenerXML();
           }
         }
-
+        
         return null;
       default:
         return null;
@@ -202,7 +214,7 @@ class Acceso {
     for (const entorno of entornos) {
       if (entorno.atributos) {
         if (entorno.atributos.nombreAtributo) {
-          console.log(entorno.atributos);
+     
           if (
             nombreATRIBUTO == entorno.atributos.nombreAtributo ||
             nombreATRIBUTO == "*"
