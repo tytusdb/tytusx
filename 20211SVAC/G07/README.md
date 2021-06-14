@@ -12,7 +12,7 @@ Los requerimientos previos necesarios para poder compilar nuestro programa es un
 
 A continuacion mostramos el link de nuestro repo:
 
-[Link de Visualizacion de pagina](https://gtcaps.github.io/tytusx/20211SVAC/G07/FRONTEND/index.html)
+[Link de Visualizacion de pagina](https://tytusdb.github.io/tytusx/20211SVAC/G07/FRONTEND/index.html)
 
 #### Paso 2: Analisis XML
 Intenta copiar esta entrada y colocarla en el bloque de texto de XML:

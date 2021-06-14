@@ -167,22 +167,16 @@ botonCargar2.addEventListener("click", () => {
 
 })
 document.getElementById("ast").addEventListener("click", () => {
-  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+    let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
   
-  console.log("ingreso al CST de mercado");
+    // Se activa el modal
+    activarModal();
+
+    // Generar el arbol con Treant JS
+    graficarArbol(AST_xPath);
   
-  console.log(parserXML.json.nodo);
-
-  console.log("ingreso al AST");
-  
-  console.log(AST_xPath);
-
-  generarAST(AST_xPath);
-
-  //graficarArbol(AST_xPath.nodo);
-
-  //generarAST(AST_xPath);
 })
+
 // ======================================
 // MODAL XML
 // ======================================
@@ -302,15 +296,6 @@ function analizar_xpath_izq(){
 
   console.log("Analizando XPATH...");
   let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
-
-  // GENERANDO ARBOL AST
-  contenidoModal2.innerHTML = `
-  <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
-    <div id="graph" style="width: 100%;"></div>
-  </div>
-  `;
-
-  generarAST(AST_xPath);
   
 }
 
@@ -323,9 +308,11 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
+  console.log("Analizando XPATH por la derecha");
 
   
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+  console.log(AST_xPath);
 
   //GENERANDO ARBOL AST
   contenidoModal2.innerHTML = `
