@@ -298,7 +298,8 @@ function analizar_xpath_izq(){
 
   console.log("Analizando XPATH...");
   let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
-
+  console.log("Analizando XPATH por la derecha");
+  console.log(AST_xPath);
   // GENERANDO ARBOL AST
   contenidoModal2.innerHTML = `
   <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
@@ -323,7 +324,7 @@ function analizar_xpath() {
 
   
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
-
+  console.log(AST_xPath);
 
   //GENERANDO ARBOL AST
   contenidoModal2.innerHTML = `
