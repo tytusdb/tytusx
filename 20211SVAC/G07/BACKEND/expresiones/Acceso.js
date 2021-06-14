@@ -1,35 +1,41 @@
 class Acceso {
   constructor() {
     this.entornosDoble = [];
+    this.indice = -1;
   }
   getTipo(ast) {
     return ast.valor.tipo;
   }
 
   getValorImplicito(entorno, ast, padre) {
-   
     switch (ast.valor) {
       case "ELEMENTO":
         //0->EXPRESION 1->ELEMENTO_P
-        
-        if(ast.hijos[1].valor=="ELEMENTO_P"){
-          
-          return this.getValorImplicito(entorno, ast.hijos[0], null) + this.getValorImplicito(entorno, ast.hijos[1], null);
+
+        if (ast.hijos[1].valor == "ELEMENTO_P") {
+          return (
+            this.getValorImplicito(entorno, ast.hijos[0], null) +
+            this.getValorImplicito(entorno, ast.hijos[1], null)
+          );
         }
         //0->EXPRESION 1->itemReserva
         return this.getValorImplicito(entorno, ast.hijos[0], null);
       case "ELEMENTO_P":
-
-        if(ast.hijos[2].valor=="ELEMENTO_P"){
-          return this.getValorImplicito(entorno, ast.hijos[1], null) + this.getValorImplicito(entorno, ast.hijos[2], null);
+        if (ast.hijos[2].valor == "ELEMENTO_P") {
+          return (
+            this.getValorImplicito(entorno, ast.hijos[1], null) +
+            this.getValorImplicito(entorno, ast.hijos[2], null)
+          );
         }
-        return  this.getValorImplicito(entorno, ast.hijos[1], null);;
+        return this.getValorImplicito(entorno, ast.hijos[1], null);
 
-        
       case "SIMBOLOSSECU":
       case "EXPRESION":
         //0-> Simbolos 1->itemReserva 2->itemReserva? consulta sola
         //2-> Expresion si vienen varias
+        if (ast.hijos[1].valor == "CAJETIN") {
+          this.indice = this.procesarIndice(ast.hijos[1].hijos[1]);
+        }
         if (ast.hijos[0].valor == "SIMBOLOS") {
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
 
@@ -44,7 +50,6 @@ class Acceso {
               let nombreATRIBUTO = ast.hijos[0].hijos[1].hijos[1].hijos[0];
 
               return this.pocesarArtibuto(nombreATRIBUTO, ArregloEntorno);
-              
             }
           }
           if (ast.hijos[2].valor == "EXPRESION") {
@@ -59,11 +64,15 @@ class Acceso {
             if (ast.hijos[0].hijos[0] == "//") {
               let respuesta = "";
               for (const iterator of ArregloEntorno) {
-                respuesta += this.getValorImplicito(
-                  iterator,
-                  instruccion,
-                  entorno
-                );
+                if (indiceAux == this.indice || this.indice == -1) {
+                  console.error(this.indice);
+                  respuesta += this.getValorImplicito(
+                    iterator,
+                    instruccion,
+                    entorno
+                  );
+                }
+                indiceAux++;
               }
 
               return respuesta;
@@ -81,11 +90,15 @@ class Acceso {
             }
             for (const entorno_ of ArregloEntorno) {
               //Iteramos el arreglo de entornos para aplicar estos cambios en todos
-              let temrespuesta = this.getValorImplicito(
-                entorno_,
-                instruccion,
-                entorno
-              ); //Concatenamos todas las respuestas que encontramos
+              let temrespuesta;
+              if (indiceAux == this.indice || this.indice == -1) {
+                  temrespuesta = this.getValorImplicito(
+                  entorno_,
+                  instruccion,
+                  entorno
+                ); //Concatenamos todas las respuestas que encontramos
+                indiceAux++;
+              }
               if (temrespuesta) {
                 respuesta += temrespuesta;
               }
@@ -172,7 +185,7 @@ class Acceso {
     } else if (AST.hijos[0] == "//") {
       this.entornosDoble = [];
 
-      if ((AST.hijos[1].hijos[0] == "@")) {
+      if (AST.hijos[1].hijos[0] == "@") {
         return this.getConsultaDobleAtributo(
           AST.hijos[1].hijos[1].hijos[0],
           entorno.hijos
@@ -184,47 +197,48 @@ class Acceso {
     return null;
   }
   pocesarArtibuto(nombreATRIBUTO, entornos) {
-    
-    let txt=""
+    let txt = "";
     for (const entorno of entornos) {
-      
-      if (entorno.atributos){
+      if (entorno.atributos) {
         if (entorno.atributos.nombreAtributo) {
           console.log(entorno.atributos);
-          if (nombreATRIBUTO == entorno.atributos.nombreAtributo||nombreATRIBUTO == "*") {
-            txt+=entorno.atributos.nombreAtributo +'="' +entorno.atributos.valorAtributo +'"\n';
-            
+          if (
+            nombreATRIBUTO == entorno.atributos.nombreAtributo ||
+            nombreATRIBUTO == "*"
+          ) {
+            txt +=
+              entorno.atributos.nombreAtributo +
+              '="' +
+              entorno.atributos.valorAtributo +
+              '"\n';
           }
         }
       }
     }
-    if(txt!=""){
+    if (txt != "") {
       return txt;
     }
-    return null
-
-    
+    return null;
   }
   getValidacion(etiqueta, entorno) {
-    
     if (etiqueta.valor == "CONTENIDODOS") {
       if (etiqueta.hijos[0].valor == "RESERVA") {
         return true;
       }
       return this.comparar(etiqueta.hijos[0], entorno.etiqueta);
     }
-    
+
     return false;
   }
   comparar(etiqueta, entorno) {
-    return etiqueta == entorno||etiqueta=="*";
+    return etiqueta == entorno || etiqueta == "*";
   }
   getConsultaDoble(etiqueta, entornos) {
     if (entornos != null) {
       for (const entorno of entornos) {
         this.getConsultaDoble(etiqueta, entorno.hijos);
 
-        if (etiqueta == entorno.etiqueta ||etiqueta=="*") {
+        if (etiqueta == entorno.etiqueta || etiqueta == "*") {
           this.entornosDoble.push(entorno);
         }
       }
@@ -234,13 +248,19 @@ class Acceso {
     }
     return null;
   }
+  procesarIndice(operaciones) {
+    if (operaciones.hijos[0].valor == "ITEMINICIO") {
+      return operaciones.hijos[0].hijos[0];
+    }
+    return -1;
+  }
   getConsultaDobleAtributo(etiqueta, entornos) {
     if (entornos != null) {
       for (const entorno of entornos) {
         this.getConsultaDobleAtributo(etiqueta, entorno.hijos);
 
         if (entorno.atributos) {
-          if (etiqueta == entorno.atributos.nombreAtributo||etiqueta=="*") {
+          if (etiqueta == entorno.atributos.nombreAtributo || etiqueta == "*") {
             this.entornosDoble.push(entorno);
           }
         }
