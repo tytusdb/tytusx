@@ -84,7 +84,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- 
+ RGxmlDesc.agregarElemento("INICIO -> listaObjetosRaiz","INICIO.val := ListaObjetosRaiz.val");
                             var root = new NodoArbol("INICIO","");
                             root.agregarHijo($$[$0-1][1]);                              
                             console.log(ListaErr.getErrores());
@@ -94,7 +94,8 @@ case 1:
                             
 break;
 case 2:
- nodoAux = new NodoArbol("ListaObjetosRaiz","");                                  
+ RGxmlDesc.agregarElemento("ListaObjetosRaiz -> ObjetoRaiz OtroObjetoRaiz","ListaObjetosRaiz.val := ObjetoRaiz.val.concat(OtroObjetoRaiz.val)");
+                                nodoAux = new NodoArbol("ListaObjetosRaiz","");                                  
                                 nodoAux.agregarHijo($$[$0-1][1]);
                                 nodoAux.agregarHijo($$[$0][1]);
                                 arr = [$$[$0-1][0]];
@@ -102,7 +103,7 @@ case 2:
                                 this.$ = [arr,nodoAux]; 
 break;
 case 3:
- 
+     RGxmlDesc.agregarElemento("OtroObjeto -> ObjetoRaiz OtroObjeto","OtroObjeto.val :=  ObjetoRaiz.val.concat(OtroObjetoRaiz.val)");
                                         nodoAux = new NodoArbol("OtroObjeto","");                                  
                                         nodoAux.agregarHijo($$[$0-1][1]);
                                         nodoAux.agregarHijo($$[$0][1]);
@@ -111,7 +112,7 @@ case 3:
                                         this.$ = [arr,nodoAux]; 
 break;
 case 4:
- 
+     RGxmlDesc.agregarElemento("OtroObjeto -> ϵ","OtroObjeto.val := null");
                 objeto = new Objeto("","","",1, 1,[],[],0);
                 nodoAux = new NodoArbol("OtroObjeto","");
                 nodoAux.agregarHijo(new NodoArbol("ϵ",""));
@@ -120,6 +121,7 @@ case 4:
 break;
 case 5:
 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" objetos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,objetos.val)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-7],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-6],"identificador"));
@@ -135,6 +137,7 @@ case 5:
 break;
 case 6:
 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" textos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,textos.val)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-7],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-6],"identificador"));
@@ -150,6 +153,7 @@ case 6:
 break;
 case 7:
  
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-6],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-5],"identificador"));
@@ -164,6 +168,7 @@ case 7:
 break;
 case 8:
 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-4],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-3],"identificador"));
@@ -175,7 +180,8 @@ case 8:
         
 break;
 case 9:
- 
+
+                RGxmlDesc.agregarElemento(`Objeto -> "<" "?" "xml" "version" "=" Cadena "encoding" "igual" Cadena "?" ">"`,"Objeto.val := new Objeto(encoding,null,null)"); 
                 nodoAux = new NodoArbol("ObjetoRaiz","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-10],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-9],"simbolo"));
@@ -202,29 +208,34 @@ case 10:
         
 break;
 case 20:
-   nodoAux = new NodoArbol($$[$0],"cadena");
+   RGxmlDesc.agregarElemento(`Cadena -> tk_cadena`,"Cadena.val := tk_cadena.val");
+                        nodoAux = new NodoArbol($$[$0],"cadena");
                         this.$ = [$$[$0], nodoAux]; 
 break;
 case 21:
-  nodoAux = new NodoArbol($$[$0],"cadena");
+  RGxmlDesc.agregarElemento(`Cadena -> tk_cadena`,"Cadena.val := tk_cadena.val");
+                        nodoAux = new NodoArbol($$[$0],"cadena");
                         this.$ = [$$[$0], nodoAux]; 
 break;
 case 22:
- nodoAux = new NodoArbol("Textos","");                                  
+ RGxmlDesc.agregarElemento(`Textos -> Texto OtroTexto`,`Textos.val := Texto.val + " " + OtroTexto.val`);
+                           nodoAux = new NodoArbol("Textos","");                                  
                            nodoAux.agregarHijo($$[$0-1][1]);
                            nodoAux.agregarHijo($$[$0][1]);
                            $$[$0-1][0]= $$[$0-1][0] + " " + $$[$0][0]; 
                            this.$ = [$$[$0-1][0],nodoAux]; 
 break;
 case 23:
- nodoAux = new NodoArbol("OtroTexto","");                                  
+ RGxmlDesc.agregarElemento(`OtroTexto -> Texto OtroTexto`,`OtroTexto.val := Texto.val + " " + OtroTexto.val`);
+                               nodoAux = new NodoArbol("OtroTexto","");                                  
                                nodoAux.agregarHijo($$[$0-1][1]);
                                nodoAux.agregarHijo($$[$0][1]);
                                $$[$0-1][0]= $$[$0-1][0] + " " + $$[$0][0]; 
                                this.$ = [$$[$0-1][0],nodoAux]; 
 break;
 case 24:
- nodoAux = new NodoArbol("OtroTexto","");                                  
+ RGxmlDesc.agregarElemento(`OtroTexto -> ϵ`,`OtroTexto.val := ""`);
+                               nodoAux = new NodoArbol("OtroTexto","");                                  
                                nodoAux.agregarHijo(new NodoArbol(`""`,""));
                                this.$ = ["",nodoAux]; 
 break;
@@ -276,7 +287,8 @@ case 44:
                                   this.$ = [$$[$0],nodoAux];  
 break;
 case 45:
- nodoAux = new NodoArbol("ListaObjetos","");                                  
+  RGxmlDesc.agregarElemento("ListaObjetos -> Objeto OtroObjeto","ListaObjetos.val := Objeto.val.concat(OtroObjeto.val)");
+                                nodoAux = new NodoArbol("ListaObjetos","");                                  
                                 nodoAux.agregarHijo($$[$0-1][1]);
                                 nodoAux.agregarHijo($$[$0][1]);
                                 arr = [$$[$0-1][0]];
@@ -284,7 +296,9 @@ case 45:
                                 this.$ = [arr,nodoAux]; 
 break;
 case 46:
- nodoAux = new NodoArbol("OtroObjeto","");                                  
+
+                                RGxmlDesc.agregarElemento("OtroObjeto -> Objeto OtroObjeto","OtroObjeto.val :=  Objeto.val.concat(OtroObjeto.val)"); 
+                                nodoAux = new NodoArbol("OtroObjeto","");                                  
                                 nodoAux.agregarHijo($$[$0-1][1]);
                                 nodoAux.agregarHijo($$[$0][1]);
                                 arr = [$$[$0-1][0]];
@@ -292,7 +306,7 @@ case 46:
                                 this.$ = [arr,nodoAux]; 
 break;
 case 47:
- 
+     RGxmlDesc.agregarElemento("OtroObjeto -> ϵ","OtroObjeto.val := null");
                 objeto = new Objeto("","","",1, 1,[],[],0);
                 nodoAux = new NodoArbol("OtroObjeto","");
                 nodoAux.agregarHijo(new NodoArbol("ϵ",""));
@@ -301,6 +315,7 @@ case 47:
 break;
 case 48:
 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" objetos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,objetos.val)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-7],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-6],"identificador"));
@@ -316,6 +331,7 @@ case 48:
 break;
 case 49:
 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" textos "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,textos.val)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-7],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-6],"identificador"));
@@ -331,6 +347,7 @@ case 49:
 break;
 case 50:
  
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos ">" "<" / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-6],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-5],"identificador"));
@@ -345,6 +362,7 @@ case 50:
 break;
 case 51:
 
+                RGxmlDesc.agregarElemento(`Objeto -> "<" id atributos / id>`,"Objeto.val := new Objeto(id.val,atributos.val,null)");
                 nodoAux = new NodoArbol("Objeto","");
                 nodoAux.agregarHijo(new NodoArbol($$[$0-4],"simbolo"));
                 nodoAux.agregarHijo(new NodoArbol($$[$0-3],"identificador"));
@@ -365,19 +383,20 @@ case 52:
         
 break;
 case 53:
- 
+ RGxmlDesc.agregarElemento(`ListaAtributos -> Atributos`,"ListaAtributos.val := Atributos.val");
                           nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo($$[$0][1]);
                           this.$ = [$$[$0][0], nodoAux]; 
 break;
 case 54:
- 
+ RGxmlDesc.agregarElemento(`ListaAtributos -> ε`,"ListaAtributos.val := []");
                           nodoAux = new NodoArbol("ListaAtributos","");
                           nodoAux.agregarHijo(new NodoArbol("E","simbolo"));
                           this.$ = [[], nodoAux]; 
 break;
 case 55:
-      nodoAux = new NodoArbol("ListaAtributos","");                                  
+     RGxmlDesc.agregarElemento("ListaAtributos -> Atributo OtroAtributo","ListaAtributos.val := Atributo.val.concat(OtroAtributo.val)");
+                                        nodoAux = new NodoArbol("ListaAtributos","");                                  
                                         nodoAux.agregarHijo($$[$0-1][1]);
                                         nodoAux.agregarHijo($$[$0][1]);
                                         arr = [$$[$0-1][0]];
@@ -385,7 +404,8 @@ case 55:
                                         this.$ = [arr,nodoAux]; 
 break;
 case 56:
- nodoAux = new NodoArbol("OtroAtributo","");                                  
+RGxmlDesc.agregarElemento("OtroAtributo -> Atributo OtroAtributo","OtroAtributo.val :=  Atributo.val.concat(OtroAtributo.val)"); 
+                                        nodoAux = new NodoArbol("OtroAtributo","");                                  
                                         nodoAux.agregarHijo($$[$0-1][1]);
                                         nodoAux.agregarHijo($$[$0][1]);
                                         arr = [$$[$0-1][0]];
@@ -393,7 +413,7 @@ case 56:
                                         this.$ = [arr,nodoAux]; 
 break;
 case 57:
- 
+     RGxmlDesc.agregarElemento("OtroAtributo -> ϵ","OtroAtributo.val := null");
                                         atributo = new Atributo("", "", _$[$0].first_line, _$[$0].first_column);
                                         nodoAux = new NodoArbol("OtroAtributo","");
                                         nodoAux.agregarHijo(new NodoArbol("ϵ",""));
@@ -401,7 +421,8 @@ case 57:
                                 
 break;
 case 58: case 59:
-  nodoAux = new NodoArbol("Atributo","");
+  RGxmlDesc.agregarElemento(`Atributo -> id "=" Cadena`,"Atributo.val := new Atributo(id.val,cadena.val)");
+                                                   nodoAux = new NodoArbol("Atributo","");
                                                    nodoAux.agregarHijo(new NodoArbol($$[$0-2],"identificador"));
                                                    nodoAux.agregarHijo(new NodoArbol($$[$0-1],"simbolo"));
                                                    nodoAux.agregarHijo(new NodoArbol($$[$0],"cadena"));

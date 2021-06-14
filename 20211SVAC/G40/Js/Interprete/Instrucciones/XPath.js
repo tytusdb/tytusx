@@ -9,7 +9,7 @@ var XPath = /** @class */ (function () {
         this.global = null;
         this.temporal = null;
         this.resultadoAux = null;
-        this.objetos = null;
+        this.objetos = [];
     }
     XPath.prototype.ejecutar = function (ent, arbol) {
 
