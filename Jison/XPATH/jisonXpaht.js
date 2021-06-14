@@ -113,7 +113,7 @@ break;
 case 7:
 this.$ = [new ConsultaSimple($$[$0])];
 break;
-case 8: case 11: case 32:
+case 8: case 11: case 26: case 32:
 this.$ = $$[$0];
 break;
 case 9:
@@ -145,7 +145,21 @@ case 13:
                 }else if ($$[$0] === "puntos") {
                     this.$.push(new ConsultaPuntos());
                 } else {
-                    this.$.push(new ConsultaDescendente($$[$0]));
+                    if ($$[$0].startsWith('@')) {
+                        if ($$[$0] === "@all") {
+                            this.$.push(new ConsultaDescAllAttr($$[$0].replace('@', '')));
+                        } else {
+                            this.$.push(new ConsultaDescAttr($$[$0].replace('@', '')));
+                        }
+                    } else {
+                        if ($$[$0] === "all") {
+                            this.$.push(new ConsultaDescAllNodes($$[$0]));
+                        } else if ($$[$0] === "text()") {
+                            this.$.push(new ConsultaDescText($$[$0]));
+                        } else {
+                            this.$.push(new ConsultaDescendente2($$[$0]));
+                        }
+                    }
                 }
             } else {
                 if ($$[$0] === "punto") {
@@ -162,6 +176,8 @@ case 13:
                     } else {
                         if ($$[$0] === "all") {
                             this.$.push(new ConsultaAllNodes($$[$0]));
+                        } else if ($$[$0] === "text()") {
+                            this.$.push(new ConsultaText($$[$0]));
                         } else {
                             this.$.push(new ConsultaSimple($$[$0]));
                         }
@@ -195,6 +211,9 @@ this.$ = "puntos";
 break;
 case 24:
 this.$ = "all";
+break;
+case 27:
+this.$ = $$[$0-2] + "()";
 break;
 case 29:
 this.$ = $$[$0-1] + $$[$0];

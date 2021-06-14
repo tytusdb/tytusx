@@ -313,7 +313,21 @@ EXPRESION_RUTA
                 }else if ($3 === "puntos") {
                     $$.push(new ConsultaPuntos());
                 } else {
-                    $$.push(new ConsultaDescendente($3));
+                    if ($3.startsWith('@')) {
+                        if ($3 === "@all") {
+                            $$.push(new ConsultaDescAllAttr($3.replace('@', '')));
+                        } else {
+                            $$.push(new ConsultaDescAttr($3.replace('@', '')));
+                        }
+                    } else {
+                        if ($3 === "all") {
+                            $$.push(new ConsultaDescAllNodes($3));
+                        } else if ($3 === "text()") {
+                            $$.push(new ConsultaDescText($3));
+                        } else {
+                            $$.push(new ConsultaDescendente2($3));
+                        }
+                    }
                 }
             } else {
                 if ($3 === "punto") {
@@ -330,6 +344,8 @@ EXPRESION_RUTA
                     } else {
                         if ($3 === "all") {
                             $$.push(new ConsultaAllNodes($3));
+                        } else if ($3 === "text()") {
+                            $$.push(new ConsultaText($3));
                         } else {
                             $$.push(new ConsultaSimple($3));
                         }
@@ -361,10 +377,11 @@ ACCESORES
     | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
     | multiplicacion                    {$$ = "all";}
     | NODE
-    | TEXT
+    | TEXT                              {$$ = $1;}
 ;
 
-TEXT : text parentesis_abierto parentesis_cerrado
+TEXT
+    : text parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 ;
 
 NODE : node parentesis_abierto parentesis_cerrado
