@@ -5,11 +5,9 @@ function analizarXpath(entornoGlobal: Entorno){
     const textoAnalizar = document.getElementById('inputXPath');
     const result = document.getElementById('result') as HTMLTextAreaElement;
     // @ts-ignore
-    jisonXpaht.parse(textoAnalizar.value);
-    let encabezadoErrores = ["Tipo","Descripcion","Linea","Columna"];
+    jisonXpaht.parse(textoAnalizar.value);    
 
-    if (errores.getSize > 0) {
-        tablaEcabezado(encabezadoErrores);
+    if (errores.getSize > 0) {        
         agregarContenidoErrores();
     } else {
         let entornos: Array<Entorno> = [entornoGlobal];

@@ -6,9 +6,7 @@ function analizarXpath(entornoGlobal) {
     const result = document.getElementById('result');
     // @ts-ignore
     jisonXpaht.parse(textoAnalizar.value);
-    let encabezadoErrores = ["Tipo", "Descripcion", "Linea", "Columna"];
     if (errores.getSize > 0) {
-        tablaEcabezado(encabezadoErrores);
         agregarContenidoErrores();
     }
     else {

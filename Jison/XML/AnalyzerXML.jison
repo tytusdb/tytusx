@@ -56,7 +56,7 @@ START
         let auxRetorno = new NodoPadre("START","-> START","",
                 [
                     new NodoPadre("XML_STRUCTURE","START -> XML_STRUCTURE EOF","{}",$1[1]),
-                    new NodoHijo("EOF","","",)
+                    new NodoHijo("EOF","","")
                 ]
             );
         return [$1[0],auxRetorno];
@@ -85,7 +85,7 @@ XML_STRUCTURE
 PROLOG
     : less_than question_mark xml version assign value encoding assign TYPE_ENCODING question_mark greater_than TEXTTAG {
         $$ = [
-            new NodoHijo("<","PROLOG -> <?xml version = value encoding = TYPE_ENCODING ?>","{}"),
+            new NodoHijo("<","PROLOG -> &lt;?xml version = value encoding = TYPE_ENCODING ?&gt;","{}"),
             new NodoHijo("?","",""),
             new NodoHijo("xml","",""),
             new NodoHijo("version","",""),
@@ -101,7 +101,7 @@ PROLOG
     }
     | less_than question_mark xml encoding assign TYPE_ENCODING version assign value question_mark greater_than TEXTTAG {
         $$ = [
-            new NodoHijo("<","PROLOG -> <?xml version = value encoding = TYPE_ENCODING ?>","{}"),
+            new NodoHijo("<","PROLOG -> &lt;?xml version = value encoding = TYPE_ENCODING ?&gt;","{}"),
             new NodoHijo("?","",""),
             new NodoHijo("xml","",""),
             new NodoHijo("encoding","",""),
@@ -196,7 +196,7 @@ CLOSING_TAG
     : less_than slash IDENTIFIER greater_than TEXTTAG       {
             $$ = [$3[0],
                 [
-                    new NodoHijo("<","< / IDENTIFIER > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
+                    new NodoHijo("<","CLOSING_TAG -> < / IDENTIFIER > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
                     new NodoHijo("/","",""),
                     new NodoPadre("IDENTIFIER","","",$3[1]),
                     new NodoHijo(">","",""),
@@ -210,7 +210,7 @@ EMPTY_TAG
     : less_than IDENTIFIER slash greater_than TEXTTAG               {
             $$=[$2[0], $5[0],[],
                 [
-                    new NodoHijo("<","< IDENTIFIER / > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
+                    new NodoHijo("<","EMPTY_TAG -> < IDENTIFIER / > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
                     new NodoPadre("IDENTIFIER","","",$2[1]),                    
                     new NodoHijo("/","",""),
                     new NodoHijo(">","",""),
@@ -223,7 +223,7 @@ EMPTY_TAG
     | less_than IDENTIFIER ATTRIBS slash greater_than TEXTTAG       {
         $$=[$2[0], $6[0], $3[0],
                 [
-                    new NodoHijo("<","< IDENTIFIER ATRIBS / > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
+                    new NodoHijo("<","EMPTY_TAG -> < IDENTIFIER ATRIBS / > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
                     new NodoPadre("IDENTIFIER","","",$2[1]),
                     new NodoPadre("ATRIBS","","",$3[1]),
                     new NodoHijo("/","",""),
@@ -271,7 +271,7 @@ TEXTTAG
         }
     
     |                       {
-        $$ = ["",[new NodoHijo("TEXTTAG","TEXTTAG ->  ","{}")]];
+        $$ = ["",[new NodoHijo("TEXTTAG","TEXTTAG -> lambda ","{}")]];
         }
 ;
 

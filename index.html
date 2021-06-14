@@ -38,7 +38,7 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                             aria-haspopup="true" aria-expanded="false">Reportes gramaticales</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Reporte gramatical Ascendente XML</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#modalReporteGA" href="#">Reporte gramatical Ascendente XML</a>
                             <a class="dropdown-item" href="#">Reporte gramatical Descendente XML</a>
                         </div>
                     </li>
@@ -144,6 +144,33 @@
         </div>
     </div>
 
+    <!-- Modal ReporteGramatICAL-->
+    <div class="modal" id="modalReporteGA">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">Rerpote Gramatical Ascendente XML</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-dark">
+                            <thead id="tableHeadReporteGramatical" class="thead-light">
+                            </thead>
+                            <tbody id="tableBodyReporteGramatical">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+</div>
+
     <script>
         function borrar() {
             let areaXpath = document.getElementById('inputXPath');
@@ -198,6 +225,10 @@
     <script src="./js/Nodo/Nodo.js"></script>
     <script src="./js/Nodo/Atributo.js"></script>
     <script src="./js/utils/ControlTable.js"></script>
+    <script src="./js/Reportes/CST/NodosCST.js"></script>
+    <script src="./js/Reportes/CST/NodoHijo.js"></script>
+    <script src="./js/Reportes/CST/NodoPadre.js"></script>
+    <script src="./js/Reportes/ReporteGramatical/ReporteGramatical.js"></script>
     <script src="./js/AnalyzerXML.js"></script>
     <script src="./js/Main.js"></script>
 

@@ -3,10 +3,12 @@ function analizar(): void {
     const consola: HTMLTextAreaElement = document.getElementById('result')  as HTMLTextAreaElement;
 
     // @ts-ignore
-    let nodos: Array<Nodo> = AnalyzerXML.parse(texto.value);
+    let auxResultado = AnalyzerXML.parse(texto.value);    
+    let nodos: Array<Nodo> = auxResultado[0];
     let entornoGlobal: Entorno = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
     setSymbolTable(entornoGlobal);
+    agregarContenidoReporteGramatical(new ReporteGramatical().run(auxResultado[1]));
 
     analizarXpath(entornoGlobal);
 }

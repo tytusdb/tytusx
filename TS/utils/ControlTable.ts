@@ -1,5 +1,5 @@
-function tablaEcabezado(encabezadoEntrada:string[]){
-    let encabezado = document.getElementById("tableHead");
+function tablaEcabezado(encabezadoEntrada:string[],nombreTabla:string){
+    let encabezado = document.getElementById(nombreTabla);
     encabezado.innerHTML = "";
     let aux = [];
     aux.push("<tr>");
@@ -11,6 +11,8 @@ function tablaEcabezado(encabezadoEntrada:string[]){
 }
 
 function agregarContenidoErrores(){
+    let encabezadoErrores = ["Tipo","Descripcion","Linea","Columna"];
+    tablaEcabezado(encabezadoErrores,"tableHead");
     let body = document.getElementById("tableBody");
     body.innerHTML = "";
     let aux = new Array();
@@ -26,7 +28,7 @@ function agregarContenidoErrores(){
 }
 
 function setSymbolTable(entorno: Entorno) {
-    tablaEcabezado(["Identificador", "Valor", "Tipo", "Ambito", "Linea", "Columna"]);
+    tablaEcabezado(["Identificador", "Valor", "Tipo", "Ambito", "Linea", "Columna"],"tableHead");
     let tableBody = document.querySelector('#tableBody');
 
     tableBody.innerHTML = "";
@@ -53,4 +55,18 @@ function symbolstToTable(content: Array<string>, entorno: Entorno) {
             }
         }
     });
+}
+
+function agregarContenidoReporteGramatical(entrada:Array<Array<string>>){
+    tablaEcabezado(["Produccion","Regla semantica"],"tableHeadReporteGramatical");
+    let body = document.getElementById("tableBodyReporteGramatical");
+    body.innerHTML = "";
+    let aux = new Array();
+    entrada.forEach((e) =>{
+        aux.push("<tr>");
+        aux.push("\t<td>"+e[0]+"</td>");
+        aux.push("\t<td>"+e[1]+"</td>");            
+        aux.push("</tr>");
+    });
+    body.innerHTML = aux.join("");
 }

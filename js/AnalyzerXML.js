@@ -73,7 +73,7 @@
 */
 var AnalyzerXML = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,12],$V1=[1,15],$V2=[1,16],$V3=[5,9],$V4=[1,20],$V5=[1,23],$V6=[1,24],$V7=[1,25],$V8=[1,22],$V9=[11,12,13,15,17,25,35],$Va=[2,21],$Vb=[1,43],$Vc=[1,44],$Vd=[1,45],$Ve=[1,46],$Vf=[1,47],$Vg=[1,48],$Vh=[11,12,15,17,25,35],$Vi=[5,9,29,30,31,32,33,34],$Vj=[1,65],$Vk=[1,66],$Vl=[1,67],$Vm=[10,12];
-var parser = {trace: function trace () { },
+var parser = {trace: function trace() { },
 yy: {},
 symbols_: {"error":2,"START":3,"XML_STRUCTURE":4,"EOF":5,"PROLOG":6,"NODES":7,"COMMENT":8,"less_than":9,"question_mark":10,"xml":11,"version":12,"assign":13,"value":14,"encoding":15,"TYPE_ENCODING":16,"greater_than":17,"TEXTTAG":18,"NODE":19,"OPENING_TAG":20,"CLOSING_TAG":21,"EMPTY_TAG":22,"IDENTIFIER":23,"ATTRIBS":24,"slash":25,"ATTRIB":26,"TEXT_TAG_CHARS":27,"TEXT_TAG_CHAR":28,"lt":29,"gt":30,"amp":31,"apos":32,"quot":33,"textTag":34,"identifier":35,"exclamation_mark":36,"doble_guion":37,"textComment":38,"utf":39,"iso":40,"ascii":41,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",9:"less_than",10:"question_mark",11:"xml",12:"version",13:"assign",14:"value",15:"encoding",17:"greater_than",25:"slash",29:"lt",30:"gt",31:"amp",32:"apos",33:"quot",34:"textTag",35:"identifier",36:"exclamation_mark",37:"doble_guion",38:"textComment",39:"utf",40:"iso",41:"ascii"},
@@ -84,73 +84,267 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-return $$[$0-1];
+        
+        let auxRetorno = new NodoPadre("START","-> START","",
+                [
+                    new NodoPadre("XML_STRUCTURE","START -> XML_STRUCTURE EOF","{}",$$[$0-1][1]),
+                    new NodoHijo("EOF","","")
+                ]
+            );
+        return [$$[$0-1][0],auxRetorno];
+        
 break;
-case 2: case 3: case 20: case 23: case 29: case 30: case 31: case 32: case 33: case 35: case 36: case 37:
-this.$ = $$[$0];
+case 2: case 3:
+
+        this.$ = [$$[$0][0],
+            [
+                new NodoPadre("PROLOG","XML_STRUCTURE -> PROLOG NODES","{}",$$[$0-1]),
+                new NodoPadre("NODES","","",$$[$0][1])
+            ]
+        ];
+        
 break;
-case 6: case 17:
-$$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+case 4:
+
+        this.$ = [
+            new NodoHijo("<","PROLOG -> &lt;?xml version = value encoding = TYPE_ENCODING ?&gt;","{}"),
+            new NodoHijo("?","",""),
+            new NodoHijo("xml","",""),
+            new NodoHijo("version","",""),
+            new NodoHijo("=","",""),
+            new NodoHijo("value","",""),
+            new NodoHijo("encoding","",""),
+            new NodoHijo("=","",""),
+            new NodoPadre("TYPE_ENCODING","","",$$[$0-3][1]),
+            new NodoHijo("?","",""),
+            new NodoHijo(">","",""),
+            new NodoPadre("TEXTTAG","","",$$[$0][1]),
+        ];
+    
 break;
-case 7: case 18:
-this.$ = [$$[$0]];
+case 5:
+
+        this.$ = [
+            new NodoHijo("<","PROLOG -> &lt;?xml version = value encoding = TYPE_ENCODING ?&gt;","{}"),
+            new NodoHijo("?","",""),
+            new NodoHijo("xml","",""),
+            new NodoHijo("encoding","",""),
+            new NodoHijo("=","",""),
+            new NodoPadre("TYPE_ENCODING","","",$$[$0-6][1]),
+            new NodoHijo("version","",""),
+            new NodoHijo("=","",""),
+            new NodoHijo("value","",""),            
+            new NodoHijo("?","",""),
+            new NodoHijo(">","",""),
+            new NodoPadre("TEXTTAG","","",$$[$0][1]),
+        ];
+    
+break;
+case 6:
+
+        $$[$0-1][0].push($$[$0][0]); 
+        this.$ = [$$[$0-1][0],
+            [
+                new NodoPadre("NODES","NODES -> NODES NODE","NODES.list = NODES.list",$$[$0-1][1]),
+                new NodoPadre("NODE","","",$$[$0][1])
+            ]
+        ];        
+        
+break;
+case 7:
+
+        this.$ = [[$$[$0][0]],
+            [
+                new NodoPadre("NODES","NODES -> NODE","{NODES.syn = NODE.syn}",$$[$0][1])
+            ]
+        ];        
+        
 break;
 case 8:
-this.$ = new Nodo($$[$0-2][0], $$[$0-2][2], $$[$0-1], Type.DOUBLE_TAG,  $$[$0-2][1], _$[$0-2].first_line, (_$[$0-2].first_column + 1));
+        
+        this.$ = [new Nodo($$[$0-2][0], $$[$0-2][2], $$[$0-1][0], Type.DOUBLE_TAG,  $$[$0-2][0][1], _$[$0-2].first_line, (_$[$0-2].first_column + 1)),
+            [
+                new NodoPadre("OPENING_TAG","NODE -> OPENING_TAG NODES CLOSING_TAG","{}",$$[$0-2][3]),
+                new NodoPadre("NODES","","",$$[$0-1][1]),
+                new NodoPadre("CLOSING_TAG","","",$$[$0][1])
+            ]
+        ];
+        
 break;
 case 9:
-this.$ = new Nodo($$[$0-1][0], $$[$0-1][2], [], Type.DOUBLE_TAG,  $$[$0-1][1], _$[$0-1].first_line, (_$[$0-1].first_column + 1));
+        
+        this.$ = [new Nodo($$[$0-1][0], $$[$0-1][2], [], Type.DOUBLE_TAG,  $$[$0-1][1], _$[$0-1].first_line, (_$[$0-1].first_column + 1)),
+            [
+                new NodoPadre("OPENING_TAG","NODE -> OPENING_TAG CLOSING_TAG","{}",$$[$0-1][3]),
+                new NodoPadre("CLOSING_TAG","","",$$[$0][1])
+            ]
+        ];
+        
 break;
 case 10:
-this.$ = new Nodo($$[$0][0], $$[$0][2], [], Type.EMPTY,       $$[$0][1], _$[$0].first_line, (_$[$0].first_column + 1));
+
+        this.$ = [new Nodo($$[$0][0], $$[$0][2], [], Type.EMPTY,       $$[$0][1], _$[$0].first_line, (_$[$0].first_column + 1)),
+            [
+                new NodoPadre("EMPTY_TAG","NODE -> EMPTY_TAG","",$$[$0][3])
+            ]
+        ];
+        
 break;
 case 11:
-this.$ = new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0);
+
+        this.$ = [new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0),[]];
+        
+        
 break;
 case 12:
-this.$=[$$[$0-2],$$[$0],[]];
+
+        this.$=[$$[$0-2][0],$$[$0][0],[],
+            [
+                new NodoHijo("<","OPENING_TAG -> < IDENTIFIER > TEXTTAG","{OPENING_TAG.list = OPENING_TAG.list;}"),
+                new NodoPadre("IDENTIFIER","","",[$$[$0-2][1]]),                
+                new NodoHijo(">","",""),
+                new NodoPadre("TEXTTAG","","",$$[$0][1])
+            ]
+        ];
+        
+        
 break;
 case 13:
-this.$=[$$[$0-3],$$[$0],$$[$0-2]];
+
+        this.$=[$$[$0-3][0],$$[$0][0],$$[$0-2][0],
+            [
+                new NodoHijo("<","OPENING_TAG -> < IDENTIFIER ATRIBS > TEXTTAG","{OPENING_TAG.list = OPENING_TAG.list;}"),
+                new NodoPadre("IDENTIFIER","","",[$$[$0-3][1]]),
+                new NodoPadre("ATRIBS","","",$$[$0-2][1]),
+                new NodoHijo(">","",""),
+                new NodoPadre("TEXTTAG","","",$$[$0][1])
+            ]
+        ];        
+        
 break;
 case 14:
-this.$ = $$[$0-2];
+
+            this.$ = [$$[$0-2][0],
+                [
+                    new NodoHijo("<","CLOSING_TAG -> < / IDENTIFIER > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
+                    new NodoHijo("/","",""),
+                    new NodoPadre("IDENTIFIER","","",$$[$0-2][1]),
+                    new NodoHijo(">","",""),
+                    new NodoPadre("TEXTTAG","","",$$[$0][1])
+                ]
+            ];        
+        
 break;
 case 15:
-this.$=[$$[$0-3], $$[$0], []];
+
+            this.$=[$$[$0-3][0], $$[$0][0],[],
+                [
+                    new NodoHijo("<","EMPTY_TAG -> < IDENTIFIER / > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
+                    new NodoPadre("IDENTIFIER","","",$$[$0-3][1]),                    
+                    new NodoHijo("/","",""),
+                    new NodoHijo(">","",""),
+                    new NodoPadre("TEXTTAG","","",$$[$0][1])
+                ]
+            ];
+            
+            
 break;
 case 16:
-this.$=[$$[$0-4], $$[$0], $$[$0-3]];
+
+        this.$=[$$[$0-4][0], $$[$0][0], $$[$0-3][0],
+                [
+                    new NodoHijo("<","EMPTY_TAG -> < IDENTIFIER ATRIBS / > TEXTTAG","{EMPTY_TAG.list = EMPTY_TAG.list}"),
+                    new NodoPadre("IDENTIFIER","","",$$[$0-4][1]),
+                    new NodoPadre("ATRIBS","","",$$[$0-3][1]),
+                    new NodoHijo("/","",""),
+                    new NodoHijo(">","",""),
+                    new NodoPadre("TEXTTAG","","",$$[$0][1])
+                ]
+            ];
+        
+break;
+case 17:
+
+            $$[$0-1][0].push($$[$0][0]);
+            this.$ = [$$[$0-1][0],
+                [
+                    new NodoPadre ("ATRIBS","ATRIBS -> ATRIBS ATRIB","ATRIBS.list = ATRIBUTO.list",$$[$0-1][1]),
+                    new NodoPadre ("ATRIB","","",$$[$0][1])
+                ]
+            ];
+            
+break;
+case 18:
+        
+            this.$ = [ [ $$[$0][0] ], [ new NodoPadre("ATRIB","ATRIBS -> ATRIB","{ATTRIBS.syn = ATRIB.syn}",[$$[$0]]) ] ];
+        
 break;
 case 19:
-this.$ = new Atributo($$[$0-2],$$[$0].replaceAll('\"', ""), Type.ATRIBUTO, _$[$0-2].first_line, (_$[$0-2].first_column + 1));
+
+        this.$ = [
+            new Atributo($$[$0-2][0],$$[$0].replaceAll('\"', ""), Type.ATRIBUTO, _$[$0-2].first_line, (_$[$0-2].first_column + 1)),
+            [
+                new NodoPadre("IDENTIFIER","ATRIB -> IDENTIFIER = value","{ATRIB.syn=value.lexval}",$$[$0-2][1]),
+                new NodoHijo("=","",""),
+                new NodoHijo("value","","")
+            ]
+        ];
+break;
+case 20:
+
+        this.$ = [$$[$0][0],
+                [
+                    new NodoPadre("TEXT_TAG_CHAR","TEXTTAG -> TEXT_TAG_CHARS","{TEXTTAG.syn = TEXT_TAG_CHARS.syn}",$$[$0][1])
+                ]
+            ];
+        
 break;
 case 21:
-this.$ = "";
+
+        this.$ = ["",[new NodoHijo("TEXTTAG","TEXTTAG -> lambda ","{}")]];
+        
 break;
 case 22:
-this.$ = $$[$0-1] + $$[$0];
+        
+        this.$ = [$$[$0-1][0] + $$[$0][0],
+        [
+            new NodoPadre("TEXT_TAG_CHAR","TEXT_TAG_CHARS -> TEXT_TAG_CHARS TEXT_TAG_CHAR","{TEXT_TAG_CHARS.syn = TEXT_TAG_CHARS.syn + TEXT_TAG_CHAR.syn}",[$$[$0-1][1]]),
+            new NodoPadre("ATRIB","","",$$[$0-1][1])
+        ]];
+        
 break;
-case 24:
-this.$ = "<";
+case 23:
+
+        this.$ = [$$[$0][0],
+            [
+                new NodoPadre("TEXT_TAG_CHAR","TEXT_TAG_CHARS -> TEXT_TAG_CHAR","{TEXT_TAG_CHARS.syn = TEXT_TAG_CHAR.syn}",[$$[$0][1]])
+            ]
+            ];
+        
 break;
-case 25:
-this.$ = ">";
+case 24: case 25: case 26: case 27: case 28: case 29:
+this.$ = [$$[$0],new NodoHijo($$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"{TEXT_TAG_CHAR.val = "+$$[$0]+".lexval}")];
 break;
-case 26:
-this.$ = "&";
+case 30:
+this.$ = [$$[$0],[new NodoHijo($$[$0],"IDENTIFIER -> identifier","{IDENTIFIER.val = identifier.lexval}")]];
 break;
-case 27:
-this.$ = "'";
+case 31:
+this.$ = [$$[$0],[new NodoHijo($$[$0],"IDENTIFIER -> xml"       ,"{IDENTIFIER.val = xml.lexval}")]];
 break;
-case 28:
-this.$ = "\"";
+case 32:
+this.$ = [$$[$0],[new NodoHijo($$[$0],"IDENTIFIER -> version"   ,"{IDENTIFIER.val = version.lexval}")]];
+break;
+case 33:
+this.$ = [$$[$0],[new NodoHijo($$[$0],"IDENTIFIER -> encoding"  ,"{IDENTIFIER.val = encoding.lexval}")]];
+break;
+case 35: case 36: case 37:
+this.$ = [$$[$0],[new NodoHijo($$[$0],"TYPE_ENCODING -> "+$$[$0],"{TYPE_ENCODING.val = uft.lexval}")]];
 break;
 }
 },
 table: [{3:1,4:2,6:3,8:4,9:[1,5]},{1:[3]},{5:[1,6]},{7:7,8:11,9:$V0,19:8,20:9,22:10},{6:13,9:[1,14]},{10:$V1,36:$V2},{1:[2,1]},{5:[2,2],8:11,9:$V0,19:17,20:9,22:10},o($V3,[2,7]),{7:18,8:11,9:$V4,19:8,20:9,21:19,22:10},o($V3,[2,10]),o($V3,[2,11]),{11:$V5,12:$V6,15:$V7,23:21,35:$V8,36:$V2},{7:26,8:11,9:$V0,19:8,20:9,22:10},{10:$V1},{11:[1,27]},{37:[1,28]},o($V3,[2,6]),{8:11,9:$V4,19:17,20:9,21:29,22:10},o($V3,[2,9]),{11:$V5,12:$V6,15:$V7,23:21,25:[1,30],35:$V8,36:$V2},{11:$V5,12:$V6,15:$V7,17:[1,31],23:35,24:32,25:[1,33],26:34,35:$V8},o($V9,[2,30]),o($V9,[2,31]),o($V9,[2,32]),o($V9,[2,33]),{5:[2,3],8:11,9:$V0,19:17,20:9,22:10},{12:[1,36],15:[1,37]},{38:[1,38]},o($V3,[2,8]),{11:$V5,12:$V6,15:$V7,23:39,35:$V8},{9:$Va,18:40,27:41,28:42,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg},{11:$V5,12:$V6,15:$V7,17:[1,49],23:35,25:[1,50],26:51,35:$V8},{17:[1,52]},o($Vh,[2,18]),{13:[1,53]},{13:[1,54]},{13:[1,55]},{37:[1,56]},{17:[1,57]},{9:[2,12]},o($V3,[2,20],{28:58,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg}),o($Vi,[2,23]),o($Vi,[2,24]),o($Vi,[2,25]),o($Vi,[2,26]),o($Vi,[2,27]),o($Vi,[2,28]),o($Vi,[2,29]),{9:$Va,18:59,27:41,28:42,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg},{17:[1,60]},o($Vh,[2,17]),o($V3,$Va,{27:41,28:42,18:61,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg}),{14:[1,62]},{14:[1,63]},{16:64,39:$Vj,40:$Vk,41:$Vl},{17:[1,68]},o($V3,$Va,{27:41,28:42,18:69,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg}),o($Vi,[2,22]),{9:[2,13]},o($V3,$Va,{27:41,28:42,18:70,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg}),o($V3,[2,15]),o($Vh,[2,19]),{15:[1,71]},{12:[1,72]},o($Vm,[2,35]),o($Vm,[2,36]),o($Vm,[2,37]),o($V3,[2,34]),o($V3,[2,14]),o($V3,[2,16]),{13:[1,73]},{13:[1,74]},{16:75,39:$Vj,40:$Vk,41:$Vl},{14:[1,76]},{10:[1,77]},{10:[1,78]},{17:[1,79]},{17:[1,80]},{9:$Va,18:81,27:41,28:42,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg},{9:$Va,18:82,27:41,28:42,29:$Vb,30:$Vc,31:$Vd,32:$Ve,33:$Vf,34:$Vg},{9:[2,4]},{9:[2,5]}],
 defaultActions: {6:[2,1],40:[2,12],59:[2,13],81:[2,4],82:[2,5]},
-parseError: function parseError (str, hash) {
+parseError: function parseError(str, hash) {
     if (hash.recoverable) {
         this.trace(str);
     } else {
@@ -438,7 +632,7 @@ showPosition:function () {
     },
 
 // test the lexed token: return FALSE when not a match, otherwise return token
-test_match:function(match, indexed_rule) {
+test_match:function (match, indexed_rule) {
         var token,
             lines,
             backup;
@@ -568,7 +762,7 @@ next:function () {
     },
 
 // return next match that has a token
-lex:function lex () {
+lex:function lex() {
         var r = this.next();
         if (r) {
             return r;
@@ -578,12 +772,12 @@ lex:function lex () {
     },
 
 // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
-begin:function begin (condition) {
+begin:function begin(condition) {
         this.conditionStack.push(condition);
     },
 
 // pop the previously active lexer condition state off the condition stack
-popState:function popState () {
+popState:function popState() {
         var n = this.conditionStack.length - 1;
         if (n > 0) {
             return this.conditionStack.pop();
@@ -593,7 +787,7 @@ popState:function popState () {
     },
 
 // produce the lexer rule set which is active for the currently active lexer condition state
-_currentRules:function _currentRules () {
+_currentRules:function _currentRules() {
         if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
             return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
         } else {
@@ -602,7 +796,7 @@ _currentRules:function _currentRules () {
     },
 
 // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
-topState:function topState (n) {
+topState:function topState(n) {
         n = this.conditionStack.length - 1 - Math.abs(n || 0);
         if (n >= 0) {
             return this.conditionStack[n];
@@ -612,7 +806,7 @@ topState:function topState (n) {
     },
 
 // alias for begin(condition)
-pushState:function pushState (condition) {
+pushState:function pushState(condition) {
         this.begin(condition);
     },
 
@@ -706,7 +900,7 @@ if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
 exports.parser = AnalyzerXML;
 exports.Parser = AnalyzerXML.Parser;
 exports.parse = function () { return AnalyzerXML.parse.apply(AnalyzerXML, arguments); };
-exports.main = function commonjsMain (args) {
+exports.main = function commonjsMain(args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
