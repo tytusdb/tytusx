@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Compiladores 2 - Proyecto XPath</title>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="js/funciones.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
+  <script src="https://codemirror.net/mode/xml/xml.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+  <script src="xpath/Gramatica/gramatica.js"></script>
+</head>
+
+<body>
+  <!-- Barra de navegacion -->
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="">XPath</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-primary" onclick="cargarArchivoXML()">Abrir XML</button><input id="input" type="file"
+              name="name" style="display: none;" />
+            <button class="btn btn-primary" onclick="guardarArchivoXML()">Guardar XML</button>
+            <button class="btn btn-primary" onclick="limpiarXML()">Limpiar XML</button>
+          </div>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-secondary" onclick="cargarArchivoXPath()">Abrir XPath</button><input id="input" type="file"
+              name="name" style="display: none;" />
+            <button class="btn btn-secondary" onclick="guardarArchivoXPath()">Guardar XPath</button>
+            <button class="btn btn-secondary" onclick="limpiarXPath()">Limpiar XPath</button>    
+          </div>
+          <div class="btn-group btn-group-md">
+          <button class="btn btn-danger" onclick="analizarXPath()">Analizar</button>       
+        </div>
+          <div class="btn-group btn-group-sm">
+            <button class="btn btn-tertiary">Tabla de simbolos</button>
+            <button class="btn btn-tertiary">Reporte AST</button>
+            <button class="btn btn-tertiary">Reporte gramatical</button>
+          </div>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Editores de texto -->
+  <div class="container-fluid text-center" style="background-color:lightgray;">
+    <div class="row content">
+      <!-- Entrada de consulta XPath -->
+      <div class="col-sm-6 text-left">
+        <h4>Query</h4>
+        <p><textarea id="txtQuery"
+            style="background-color: black; color: whitesmoke; width: 100%; height: 60px; font-size: large;"></textarea>
+        </p>
+        <!-- Entrada de texto XML -->
+        <h4>XML</h4>
+        <p><textarea id="txtXML" rows="20"></textarea></p>
+      </div>
+      <!-- Resultado de consulta XPath -->
+      <div class="col-sm-6 text-left">
+        <h4>Salida</h4>
+        <p><textarea id="txtSalida" style="width: 100%; height: 520px;"></textarea></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consola del intérprete -->
+  <footer class="container-fluid text-left">
+    <div class="col-lg-12">
+      <h4>Consola</h4>
+      <p><textarea id="txtConsola" readonly
+          style="background-color: black; color: whitesmoke; width: 100%; height: 150px; font-family:'Courier New', Courier, monospace; font-size: large;"></textarea></p>
+      </div>
+      <script>
+        var editor = CodeMirror.fromTextArea(txtXML, {
+          lineNumbers: true,
+          mode: "application/xml"
+        });
+        editor.setSize(null, 415);
+        </script>
+      </footer>
+</body>
+</html>

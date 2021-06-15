@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<HTML>
+
+<HEAD>
+    <TITLE>REPORTE DE ERRORES JS</TITLE>
+
+    <link rel="stylesheet" type="text/css" href="../css/css/main.css">
+</HEAD>
+
+<BODY>
+    <div class="articulo">
+        <H3>Universidad de San Carlos de Guatemala<BR>Facultad de Ingenieria<BR>Escuela de Ciencias y Sistemas
+            <BR>Mario Obed Morales Guitz<BR>201213283</H3>
+        <CENTER>
+            <H2>PROYECTO 2 <BR>REPORTE DE ERRORES JS</H2>
+        </CENTER>
+    </div>
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100">
+                    <table>
+                        <table id="divTabla">
+                            <thead>
+                                <tr class="table100-head">
+                                    <td><b>NO.</b></td>
+                                    <td><b>Tipo</b></td>
+                                    <td><b>Descripcion</b></td>
+                                    <td><b>Fila</b></td>
+                                    <td><b>Columna</b></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="../js_files/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="../js_files/jquery-ui.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        /*
+            //***************************
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:3000/errores', true);
+            xhr.onload = function (e) {
+                let respuesta = xhr.response;
+                if (respuesta == 404) {
+                    alert("error");
+                } else {
+                    //      alert(respuesta);
+                    creartabla(respuesta);
+                }
+            };
+            xhr.send();
+            //*******************
+    */
+        window.onload = function () {
+
+            fetch('/proyecto2-compi1/generateError')
+                .then(response => {
+                    if (response.status == 200) {
+                        return response.text();
+                    } else {
+                        throw "Respuesta incorrecta del servidor"
+                    }
+                })
+                .then(responseText => {
+                    let users = JSON.parse(responseText).results;
+                    creartabla(users)
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+
+
+
+        function creartabla(errores) {
+            errores += "";
+            document.querySelector("#divTabla").innerHTML += errores;
+        }
+    </script>
+</BODY>
+
+</HTML>
