@@ -308,51 +308,63 @@ EXPRESION_RUTA
                 $$.push(new ConsultaSimple($1));
             }
             if ($2 === "doble"){
-                if ($3 === "punto") {
-                    $$.push(new ConsultaPunto());
-                }else if ($3 === "puntos") {
-                    $$.push(new ConsultaPuntos());
-                } else {
-                    if ($3.startsWith('@')) {
-                        if ($3 === "@all") {
-                            $$.push(new ConsultaDescAllAttr($3.replace('@', '')));
-                        } else {
-                            $$.push(new ConsultaDescAttr($3.replace('@', '')));
-                        }
+                if (!Array.isArray($3)) {
+                    if ($3 === "punto") {
+                        $$.push(new ConsultaPunto());
+                    }else if ($3 === "puntos") {
+                        $$.push(new ConsultaPuntos());
                     } else {
-                        if ($3 === "all") {
-                            $$.push(new ConsultaDescAllNodes($3));
-                        } else if ($3 === "text()") {
-                            $$.push(new ConsultaDescText($3));
-                        } else if ($3 === "node()") {
-                            $$.push(new ConsultaDescNode($3));
+                        if ($3.startsWith('@')) {
+                            if ($3 === "@all") {
+                                $$.push(new ConsultaDescAllAttr($3.replace('@', '')));
+                            } else {
+                                $$.push(new ConsultaDescAttr($3.replace('@', '')));
+                            }
                         } else {
-                            $$.push(new ConsultaDescendente2($3));
+                            if ($3 === "all") {
+                                $$.push(new ConsultaDescAllNodes($3));
+                            } else if ($3 === "text()") {
+                                $$.push(new ConsultaDescText($3));
+                            } else if ($3 === "node()") {
+                                $$.push(new ConsultaDescNode($3));
+                            }
                         }
+                    }
+                } else {
+                    if ($3.length === 1) {
+                        $$.push(new ConsultaDescendente2($3[0]));
+                    } else {
+                        $$.push(new ConsultaEje($3[0], $3[1]));
                     }
                 }
             } else {
-                if ($3 === "punto") {
-                    $$.push(new ConsultaPunto());
-                }else if ($3 === "puntos") {
-                    $$.push(new ConsultaPuntos());
-                } else {
-                    if ($3.startsWith('@')) {
-                        if ($3 === "@all") {
-                            $$.push(new ConsultaAllAttribs($3.replace('@', '')));
-                        } else {
-                            $$.push(new ConsultaAtributo($3.replace('@', '')));
-                        }
+                if (!Array.isArray($3)) {
+                    if ($3 === "punto") {
+                        $$.push(new ConsultaPunto());
+                    }else if ($3 === "puntos") {
+                        $$.push(new ConsultaPuntos());
                     } else {
-                        if ($3 === "all") {
-                            $$.push(new ConsultaAllNodes($3));
-                        } else if ($3 === "text()") {
-                            $$.push(new ConsultaText($3));
-                        } else if ($3 === "node()") {
-                            $$.push(new ConsultaNode($3));
+                        if ($3.startsWith('@')) {
+                            if ($3 === "@all") {
+                                $$.push(new ConsultaAllAttribs($3.replace('@', '')));
+                            } else {
+                                $$.push(new ConsultaAtributo($3.replace('@', '')));
+                            }
                         } else {
-                            $$.push(new ConsultaSimple($3));
+                            if ($3 === "all") {
+                                $$.push(new ConsultaAllNodes($3));
+                            } else if ($3 === "text()") {
+                                $$.push(new ConsultaText($3));
+                            } else if ($3 === "node()") {
+                                $$.push(new ConsultaNode($3));
+                            }
                         }
+                    }
+                } else {
+                    if ($3.length === 1) {
+                        $$.push(new ConsultaSimple($3[0]));
+                    } else {
+                        $$.push(new ConsultaEje($3[0], $3[1]));
                     }
                 }
             }
@@ -396,31 +408,33 @@ ATRIBUTO
     | arroba multiplicacion         {$$ = $1 + "all";}
 ;
 
-ID : identificador      {$$ = $1;}
-    | EJE
+ID : identificador      {$$ = [$1];}
+    | EJE               {$$ = $1;}
 ;
 
-EJE : EJES dos_puntos dos_puntos ACCESORES_EJE
+EJE : EJES dos_puntos dos_puntos ACCESORES_EJE  {$$ = [$1, $4]}
 ;
 
-ACCESORES_EJE : identificador
-    | NODE
-    | TEXT
-    | multiplicacion
+ACCESORES_EJE
+    : identificador               {$$ = $1;}
+    | NODE                        {$$ = $1;}
+    | TEXT                        {$$ = $1;}
+    | multiplicacion              {$$ = $1;}
 ;
 
-EJES : ancestor
-    | ancestor-or-self
-    | attribute
-    | child
-    | descendant
-    | descendant-or-self
-    | following
-    | following-sibling
-    | parent
-    | preceding
-    | preceding-sibling
-    | self
+EJES
+    : ancestor                  {$$ = $1;}
+    | ancestor-or-self          {$$ = $1;}
+    | attribute                 {$$ = $1;}
+    | child                     {$$ = $1;}
+    | descendant                {$$ = $1;}
+    | descendant-or-self        {$$ = $1;}
+    | following                 {$$ = $1;}
+    | following-sibling         {$$ = $1;}
+    | parent                    {$$ = $1;}
+    | preceding                 {$$ = $1;}
+    | preceding-sibling         {$$ = $1;}
+    | self                      {$$ = $1;}
 ;
 
 OPCIONAL_PREDICADO : | PREDICADOS
