@@ -45,7 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<p>bnf works!</p>\r\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"produccion\">\n      <th mat-header-cell *matHeaderCellDef> Produccion </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.produccion}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"accion\">\n      <th mat-header-cell *matHeaderCellDef> Accion </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.accion}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>");
 
 /***/ }),
 
@@ -71,7 +71,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div id = \"barra\">\r\n  <mat-toolbar color = \"warn\">\r\n    <span>Tytus X</span>\r\n\r\n    <div class = \"spacer\"></div>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\r\n    <mat-menu #archivo = \"matMenu\">\r\n        <button mat-menu-item>\r\n            <mat-icon>attach_file</mat-icon>\r\n            <label for = \"file\">Abrir XML</label>\r\n            <input type = \"file\"\r\n            id = \"file\"\r\n            class = \"hidend\"\r\n            (change) = \"abrirXML($event.target.files)\">\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>attach_file</mat-icon>\r\n            <span>Abrir XPath</span>\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>delete</mat-icon>\r\n            <span>Limpiar</span>\r\n        </button>\r\n    </mat-menu>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\r\n    <mat-menu #ejecutar = \"matMenu\">\r\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\r\n            <mat-icon>keyboard_arrow_up</mat-icon>\r\n            <span>Ascendete</span>\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>keyboard_arrow_down</mat-icon>\r\n            <span>Descendente</span>\r\n        </button>\r\n    </mat-menu>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\r\n    <mat-menu #reporte = \"matMenu\">\r\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\r\n            <span>Tabla de simbolos XML</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\r\n          <span>CST XML</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\r\n          <span>BNF XML</span>\r\n        </button>  \r\n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\r\n          <span>BNF XPATH</span>\r\n        </button>  \r\n      </mat-menu>\r\n</mat-toolbar>\r\n</div>\r\n\r\n<div id = \"superior\">\r\n  <ngx-codemirror\r\n    [options] = \"editorQueryOptions\"\r\n    [(ngModel)] = \"querys\">\r\n  </ngx-codemirror>\r\n</div>\r\n\r\n<div id = \"separador1\"></div>\r\n\r\n<div id = \"inferior\">\r\n  <div id = \"izquierda\">\r\n    <ngx-codemirror\r\n      [options] = \"editorXMLEntradaOptions\"\r\n      [(ngModel)] = \"xmlEntrada\">\r\n    </ngx-codemirror>\r\n  </div>\r\n  <div id = \"separador2\"></div>\r\n  <div id = \"derecha\">\r\n    <ngx-codemirror\r\n      [options] = \"editorXMLSalidaOptions\"\r\n      [(ngModel)] = \"xmlSalida\">\r\n    </ngx-codemirror>\r\n  </div> \r\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div id = \"barra\">\n  <mat-toolbar color = \"warn\">\n    <span>Tytus X</span>\n\n    <div class = \"spacer\"></div>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\n    <mat-menu #archivo = \"matMenu\">\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <label for = \"file\">Abrir XML</label>\n            <input type = \"file\"\n            id = \"file\"\n            class = \"hidend\"\n            (change) = \"abrirXML($event.target.files)\">\n        </button>\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <span>Abrir XPath</span>\n        </button>\n        <button mat-menu-item>\n            <mat-icon>delete</mat-icon>\n            <span>Limpiar</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\n    <mat-menu #ejecutar = \"matMenu\">\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\n            <mat-icon>keyboard_arrow_up</mat-icon>\n            <span>Ascendete</span>\n        </button>\n        <button mat-menu-item>\n            <mat-icon>keyboard_arrow_down</mat-icon>\n            <span>Descendente</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\n    <mat-menu #reporte = \"matMenu\">\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\n            <span>Tabla de simbolos XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\n          <span>CST XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\n          <span>BNF XML</span>\n        </button>  \n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\n          <span>BNF XPATH</span>\n        </button>  \n      </mat-menu>\n</mat-toolbar>\n</div>\n\n<div id = \"superior\">\n  <ngx-codemirror\n    [options] = \"editorQueryOptions\"\n    [(ngModel)] = \"querys\">\n  </ngx-codemirror>\n</div>\n\n<div id = \"separador1\"></div>\n\n<div id = \"inferior\">\n  <div id = \"izquierda\">\n    <ngx-codemirror\n      [options] = \"editorXMLEntradaOptions\"\n      [(ngModel)] = \"xmlEntrada\">\n    </ngx-codemirror>\n  </div>\n  <div id = \"separador2\"></div>\n  <div id = \"derecha\">\n    <ngx-codemirror\n      [options] = \"editorXMLSalidaOptions\"\n      [(ngModel)] = \"xmlSalida\">\n    </ngx-codemirror>\n  </div> \n</div>");
 
 /***/ }),
 
@@ -84,7 +84,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\r\n\r\n    <!--- Note that these columns can be defined in any order.\r\n    The actual rendered columns are set as a property on the row definition\" -->\r\n    <!-- Position Column -->\r\n    <ng-container matColumnDef=\"no\">\r\n      <th mat-header-cell *matHeaderCellDef> No. </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Name Column -->\r\n    <ng-container matColumnDef=\"nombre\">\r\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.nombre}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Weight Column -->\r\n    <ng-container matColumnDef=\"tipo\">\r\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Symbol Column -->\r\n    <ng-container matColumnDef=\"valor\">\r\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"ambito\">\r\n        <th mat-header-cell *matHeaderCellDef> Ambito </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.ambito}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"fila\">\r\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"columna\">\r\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\r\n    </ng-container>\r\n\r\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n</table>");
+/* harmony default export */ __webpack_exports__["default"] = ("<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"nombre\">\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.nombre}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"tipo\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\n    </ng-container>\n\n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"valor\">\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"ambito\">\n        <th mat-header-cell *matHeaderCellDef> Ambito </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.ambito}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"tipoEtiqueta\">\n      <th mat-header-cell *matHeaderCellDef> Tipo de etiqueta </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipoEtiqueta}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"fila\">\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"columna\">\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>");
 
 /***/ }),
 
@@ -253,26 +253,18 @@ class GramaticaBNF {
         this.reporte2 = repo2;
     }
     getBNFReport() {
-        var reportBody = `<TABLE BORDER> \n`;
-        reportBody += `    <thead> \n`;
-        reportBody += `        <tr> \n`;
-        reportBody += `        <th>Producción</th> \n`;
-        reportBody += `        <th>Regla Semantica</th> \n`;
-        reportBody += `        </tr> \n`;
-        reportBody += `    </thead> \n`;
-        reportBody += `    <tbody> \n`;
+        let ret = [];
         for (let i = 0; i < this.reporte.length; i++) {
-            reportBody += this.generarBodyReporte(this.reporte[i], this.reporte2[i]);
+            ret.push(this.generarBodyReporte(this.reporte[i], this.reporte2[i], i));
         }
-        reportBody += `    </tbody> \n`;
-        reportBody += `</TABLE> \n`;
-        return reportBody;
+        return ret;
     }
-    generarBodyReporte(object, object2) {
-        var fila = `  <tr> \n`;
-        fila += `      <td class="text-left">${object}</td>\n`;
-        fila += `      <td class="text-left">${object2}</td>\n`;
-        fila += `  </tr> \n`;
+    generarBodyReporte(object, object2, iterator) {
+        var fila = {
+            no: iterator,
+            produccion: object,
+            accion: object2
+        };
         return fila;
     }
 }
@@ -329,10 +321,13 @@ class TablaSimbolos {
         objeto.texto === '' ? valor = "Etiqueta raiz" : valor = objeto.texto;
         let ambitoElemento;
         ambito === null ? ambitoElemento = "Global" : ambitoElemento = ambito;
+        let tipoEti;
+        objeto.completa === 1 ? tipoEti = "Doble" : tipoEti = "Simple";
         let fila = { no: this.contador,
             nombre: objeto.identificador,
             tipo: tipo,
             valor: valor,
+            tipoEtiqueta: tipoEti,
             linea: objeto.linea,
             columna: objeto.columna,
             ambito: ambitoElemento
@@ -352,6 +347,7 @@ class TablaSimbolos {
             nombre: objeto.identificador,
             tipo: tipo,
             valor: objeto.valor,
+            tipoEtiqueta: "No aplica",
             linea: objeto.linea,
             columna: objeto.columna,
             ambito: ambito
@@ -509,7 +505,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
    
-                                        reportBNF.push('&lt;START&gt; ::= &lt;RAICES&gt; EOF');
+                                        reportBNF.push(`<START> ::= <RAICES> EOF`);
                                         reportBNF2.push('Start.val = Raiz.val. // Fin del documento');
                                         this.$ = $$[$0-1];
                                         return new SalidaGramatica(this.$, reportBNF, reportBNF2,$$[$0-2]);
@@ -520,7 +516,7 @@ case 2:
 break;
 case 4:
    
-                                reportBNF.push('&lt;RAICES&gt; ::= &lt;RAICES&gt; &lt;RAIZ&gt;');
+                                reportBNF.push('<RAICES> ::= <RAICES> <RAIZ>');
                                 reportBNF2.push('Raices.val = Raices.push(Raiz)');
                                 $$[$0-1].push($$[$0]);
                                 this.$ = $$[$0-1];
@@ -528,35 +524,35 @@ case 4:
 break;
 case 5:
  
-                                reportBNF.push('&lt;RAICES&gt; ::= &lt;RAIZ&gt;');
+                                reportBNF.push('<RAICES> ::= <RAIZ>');
                                 reportBNF2.push('Raices.val = Raiz.val');
                                 this.$ = [$$[$0]];
                             
 break;
 case 6:
  
-                                reportBNF.push('&lt;RAIZ&gt; ::= &lt;OBJETO&gt;');
+                                reportBNF.push('<RAIZ> ::= <OBJETO>');
                                 reportBNF2.push('Raiz.val = Objeto.val');
                                 this.$ = $$[$0];
                             
 break;
 case 7:
  
-                                                                                    reportBNF.push('&lt;OBJETO&gt; ::= lt identifier &lt;LATRIBUTOS&gt; gt &lt;OBJETOS&gt; lt div identifier gt');
+                                                                                    reportBNF.push('<OBJETO> ::= lt identifier <LATRIBUTOS> gt <OBJETOS> lt div identifier gt');
                                                                                     reportBNF2.push('Objeto = new Objeto(id,\'\',linea, columna, atributos, objetos)');
                                                                                     this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],1,$$[$0-1]);
                                                                                 
 break;
 case 8:
  
-                                                                                    reportBNF.push('&lt;OBJETO&gt; ::= lt identifier &lt;LATRIBUTOS&gt; gt &lt;LISTA_ID_OBJETO&gt; lt div identifier gt');
+                                                                                    reportBNF.push('<OBJETO> ::= lt identifier <LATRIBUTOS> gt <LISTA_ID_OBJETO> lt div identifier gt');
                                                                                     reportBNF2.push('Objeto = new Objeto(id,texto,linea, columna,atributos,[])');
                                                                                     this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],1,$$[$0-1]);
                                                                                 
 break;
 case 9:
  
-                                                                                    reportBNF.push('&lt;OBJETO&gt; ::= lt identifier &lt;LATRIBUTOS&gt; div gt');
+                                                                                    reportBNF.push('<OBJETO> ::= lt identifier <LATRIBUTOS> div gt');
                                                                                     reportBNF2.push('Objeto = new Objeto(id,\'\',linea, columna,atributos,[])');
                                                                                     this.$ = new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],0,'');
                                                                                 
@@ -568,21 +564,21 @@ case 10:
 break;
 case 11:
  
-                                                    reportBNF.push('&lt;LATRIBUTOS&gt; ::= &lt;ATRIBUTOS&gt;');
+                                                    reportBNF.push('<LATRIBUTOS> ::= <ATRIBUTOS>');
                                                     reportBNF2.push('Lista_Atributos.val = Atributos.val');
                                                     this.$ = $$[$0];
                                                 
 break;
 case 12:
  
-                                                    reportBNF.push('&lt;LATRIBUTOS&gt; ::= /*vacio*/');
+                                                    reportBNF.push('<LATRIBUTOS> ::= /*vacio*/');
                                                     reportBNF2.push('Lista_Atributos.val = [] ');
                                                     this.$ = [];
                                                 
 break;
 case 13:
    
-                                                    reportBNF.push('&lt;ATRIBUTOS&gt; ::= &lt;ATRIBUTOS&gt; &lt;ATRIBUTO&gt;');
+                                                    reportBNF.push('<ATRIBUTOS> ::= <ATRIBUTOS> <ATRIBUTO>');
                                                     reportBNF2.push('Atributos.val = Atributos.push(Atributo)');
                                                     $$[$0-1].push($$[$0]);
                                                     this.$ = $$[$0-1];/*revisar*/
@@ -590,20 +586,20 @@ case 13:
 break;
 case 14:
  
-                                                    reportBNF.push('&lt;ATRIBUTOS&gt; ::= &lt;ATRIBUTO&gt;');
+                                                    reportBNF.push('<ATRIBUTOS> ::= <ATRIBUTO>');
                                                     reportBNF2.push('Atributos.val = Atributo.val');
                                                     this.$ = [$$[$0]];
                                                 
 break;
 case 15:
    
-                                                    reportBNF.push('&lt;ATRIBUTO&gt; ::= identifier asig StringLiteral');
+                                                    reportBNF.push('<ATRIBUTO> ::= identifier asig StringLiteral');
                                                     reportBNF2.push('Atributo = new Atributo(id, valor, fila, columna)');
                                                     this.$ = new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
                                                 
 break;
 case 18:
-   reportBNF.push('&lt;OBJETOS&gt; ::= &lt;OBJETOS&gt; &lt;OBJETO&gt;');
+   reportBNF.push('<OBJETOS> ::= <OBJETOS> <OBJETO>');
                                 reportBNF2.push('Objetos.val = Objetos.push(Objeto)');
                                 $$[$0-1].push($$[$0]);
                                 this.$ = $$[$0-1];
@@ -611,21 +607,21 @@ case 18:
 break;
 case 19:
  
-                                reportBNF.push('&lt;OBJETOS&gt; ::= &lt;OBJETO&gt;');
+                                reportBNF.push('<OBJETOS> ::= <OBJETO>');
                                 reportBNF2.push('Objetos.val = Objeto.val');
                                 this.$ = [$$[$0]];
                             
 break;
 case 20:
  
-                                                        reportBNF.push('&lt;LISTA_ID_OBJETO&gt; ::= &lt;LISTA_ID_OBJETO&gt; &lt;LISTA_VALORES&gt;');
+                                                        reportBNF.push('<LISTA_ID_OBJETO> ::= <LISTA_ID_OBJETO> <LISTA_VALORES>');
                                                         reportBNF2.push('Lista_Id_Objeto.val = Lista_Id_Objeto.val + \' \' + Lista_Id_Objeto.val');
                                                         this.$ = $$[$0-1] + ' ' + $$[$0];
                                                     
 break;
 case 21:
    
-                                                        reportBNF.push('&lt;LISTA_ID_OBJETO&gt; ::= &lt;LISTA_VALORES&gt;');
+                                                        reportBNF.push('<LISTA_ID_OBJETO> ::= <LISTA_VALORES>');
                                                         reportBNF2.push('Lista_Id_Objeto.val = Lista_valores.val');
                                                         this.$ = $$[$0];
                                                     
@@ -1403,13 +1399,13 @@ class AnalizadorASCXML {
         // BNF
         let gramBnf = new _AST_GramaticaBNF__WEBPACK_IMPORTED_MODULE_1__["GramaticaBNF"](salidaG.reporteBNF, salidaG.reporteBNF2);
         let reporteBNF = gramBnf.getBNFReport();
-        //console.log('--------', gramBnf.getBNFReport() );
         // DOT CST
         let reporteCST = arbolCST.generarArbolCST(salidaG.objetos);
         let ret = {
             tablaRep: reporteTabla,
             bnfRep: reporteBNF,
-            cstRep: reporteCST
+            cstRep: reporteCST,
+            encoding: salidaG.encoding
         };
         return ret;
     }
@@ -2367,6 +2363,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _paginas_tabla_xml_tabla_xml_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./paginas/tabla-xml/tabla-xml.component */ "./src/app/paginas/tabla-xml/tabla-xml.component.ts");
 /* harmony import */ var _paginas_principal_home_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./paginas/principal/home.component */ "./src/app/paginas/principal/home.component.ts");
 /* harmony import */ var _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./paginas/grafico/grafico.component */ "./src/app/paginas/grafico/grafico.component.ts");
+/* harmony import */ var _paginas_bnf_bnf_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./paginas/bnf/bnf.component */ "./src/app/paginas/bnf/bnf.component.ts");
+
 
 
 
@@ -2377,7 +2375,8 @@ const routes = [
     { path: '', pathMatch: 'prefix', redirectTo: 'home' },
     { path: 'home', component: _paginas_principal_home_component__WEBPACK_IMPORTED_MODULE_4__["HomeComponent"] },
     { path: 'tablaSimbolosXML', component: _paginas_tabla_xml_tabla_xml_component__WEBPACK_IMPORTED_MODULE_3__["TablaXMLComponent"] },
-    { path: 'grafico', component: _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_5__["GraficoComponent"] }
+    { path: 'grafico', component: _paginas_grafico_grafico_component__WEBPACK_IMPORTED_MODULE_5__["GraficoComponent"] },
+    { path: 'bnf', component: _paginas_bnf_bnf_component__WEBPACK_IMPORTED_MODULE_6__["BnfComponent"] }
 ];
 let AppRoutingModule = class AppRoutingModule {
 };
@@ -2526,7 +2525,7 @@ AppModule = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3BhZ2luYXMvYm5mL2JuZi5jb21wb25lbnQuY3NzIn0= */");
+/* harmony default export */ __webpack_exports__["default"] = ("table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ibmYvYm5mLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL2JuZi9ibmYuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */");
 
 /***/ }),
 
@@ -2545,8 +2544,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let BnfComponent = class BnfComponent {
-    constructor() { }
+    constructor() {
+        this.displayedColumns = ['no', 'produccion', 'accion'];
+        this.simbolos = localStorage.getItem('bnf');
+    }
     ngOnInit() {
+        this.simbolos = JSON.parse(this.simbolos);
+        console.log(this.simbolos, "vacia?");
     }
 };
 BnfComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
@@ -2570,7 +2574,7 @@ BnfComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("#vis {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiN2aXMge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbn0iXX0= */");
+/* harmony default export */ __webpack_exports__["default"] = ("#vis {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiN2aXMge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTtcbn0iXX0= */");
 
 /***/ }),
 
@@ -2595,8 +2599,8 @@ let GraficoComponent = class GraficoComponent {
     constructor() { }
     ngOnInit() {
         var container = document.getElementById("vis");
-        console.log(localStorage.getItem("CSTxml"));
-        var DOTstring = localStorage.getItem("CSTxml");
+        console.log(localStorage.getItem("grafo"));
+        var DOTstring = localStorage.getItem("grafo");
         ;
         var parsedData = vis__WEBPACK_IMPORTED_MODULE_2__["network"].convertDot(DOTstring);
         var data = {
@@ -2642,7 +2646,7 @@ GraficoComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("#barra {\r\n    height: 06vh;\r\n}\r\n\r\n.spacer {\r\n    flex: 1 1 auto;\r\n}\r\n\r\n#superior { \r\n    height: 24vh;\r\n}\r\n\r\n#separador1 {\r\n    height: 01vh;\r\n    background-color: #f44336;\r\n}\r\n\r\n#inferior {\r\n    height: 69vh;\r\n    width: 100vw;\r\n    display: flex;\r\n}\r\n\r\n#izquierda {\r\n    width: 49.50vw;\r\n}\r\n\r\n#separador2 {\r\n    width: 01vw;\r\n    background-color: #f44336;\r\n}\r\n\r\n#derecha {\r\n    width: 49.50vw;\r\n}\r\n\r\n\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQiIsImZpbGUiOiJzcmMvYXBwL3BhZ2luYXMvcHJpbmNpcGFsL2hvbWUuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNiYXJyYSB7XHJcbiAgICBoZWlnaHQ6IDA2dmg7XHJcbn1cclxuXHJcbi5zcGFjZXIge1xyXG4gICAgZmxleDogMSAxIGF1dG87XHJcbn1cclxuXHJcbiNzdXBlcmlvciB7IFxyXG4gICAgaGVpZ2h0OiAyNHZoO1xyXG59XHJcblxyXG4jc2VwYXJhZG9yMSB7XHJcbiAgICBoZWlnaHQ6IDAxdmg7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xyXG59XHJcblxyXG4jaW5mZXJpb3Ige1xyXG4gICAgaGVpZ2h0OiA2OXZoO1xyXG4gICAgd2lkdGg6IDEwMHZ3O1xyXG4gICAgZGlzcGxheTogZmxleDtcclxufVxyXG5cclxuI2l6cXVpZXJkYSB7XHJcbiAgICB3aWR0aDogNDkuNTB2dztcclxufVxyXG5cclxuI3NlcGFyYWRvcjIge1xyXG4gICAgd2lkdGg6IDAxdnc7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjQ0MzM2O1xyXG59XHJcblxyXG4jZGVyZWNoYSB7XHJcbiAgICB3aWR0aDogNDkuNTB2dztcclxufVxyXG5cclxuIl19 */");
+/* harmony default export */ __webpack_exports__["default"] = ("#barra {\n    height: 06vh;\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\n#superior { \n    height: 24vh;\n}\n\n#separador1 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#inferior {\n    height: 69vh;\n    width: 100vw;\n    display: flex;\n}\n\n#izquierda {\n    width: 49.50vw;\n}\n\n#separador2 {\n    width: 01vw;\n    background-color: #f44336;\n}\n\n#derecha {\n    width: 49.50vw;\n}\n\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQiIsImZpbGUiOiJzcmMvYXBwL3BhZ2luYXMvcHJpbmNpcGFsL2hvbWUuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNiYXJyYSB7XG4gICAgaGVpZ2h0OiAwNnZoO1xufVxuXG4uc3BhY2VyIHtcbiAgICBmbGV4OiAxIDEgYXV0bztcbn1cblxuI3N1cGVyaW9yIHsgXG4gICAgaGVpZ2h0OiAyNHZoO1xufVxuXG4jc2VwYXJhZG9yMSB7XG4gICAgaGVpZ2h0OiAwMXZoO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XG59XG5cbiNpbmZlcmlvciB7XG4gICAgaGVpZ2h0OiA2OXZoO1xuICAgIHdpZHRoOiAxMDB2dztcbiAgICBkaXNwbGF5OiBmbGV4O1xufVxuXG4jaXpxdWllcmRhIHtcbiAgICB3aWR0aDogNDkuNTB2dztcbn1cblxuI3NlcGFyYWRvcjIge1xuICAgIHdpZHRoOiAwMXZ3O1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XG59XG5cbiNkZXJlY2hhIHtcbiAgICB3aWR0aDogNDkuNTB2dztcbn1cblxuIl19 */");
 
 /***/ }),
 
@@ -2687,7 +2691,8 @@ let HomeComponent = class HomeComponent {
             lint: true
         };
         //editor XML entrada
-        this.xmlEntrada = `<bookstore>
+        this.xmlEntrada = `<?xml version="1.0" encoding="UTF-8"?>
+<bookstore>
   <book>
     <title lang="en">Harry Potter</title>
     <price>29.99</price>
@@ -2725,6 +2730,7 @@ let HomeComponent = class HomeComponent {
         this.tablaXML = [];
         this.cstXML = "";
         this.bnfXML = [];
+        this.encodingXML = "";
         this.queryMod = "";
     }
     ngOnInit() {
@@ -2753,8 +2759,7 @@ let HomeComponent = class HomeComponent {
                 this.queryMod += ret1.objetos[i].estado + ret1.objetos[i].identificador;
             }
         }
-        console.log(this.queryMod);
-        console.log(ret1.objetos);
+        console.log(ret);
         this.tablaXML = ret.tablaRep;
         this.cstXML = ret.cstRep;
         this.bnfXML = ret.bnfRep;
@@ -2767,10 +2772,13 @@ let HomeComponent = class HomeComponent {
     }
     reporteCSTXML() {
         localStorage.clear();
-        localStorage.setItem('CSTxml', this.cstXML);
+        localStorage.setItem('grafo', this.cstXML);
         window.open("grafico", "_blank");
     }
     reporteBNFXML() {
+        localStorage.clear();
+        localStorage.setItem('bnf', JSON.stringify(this.bnfXML));
+        window.open("bnf", "_blank");
     }
     reproteBNFXPATH() {
     }
@@ -2800,7 +2808,7 @@ HomeComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14bWwvdGFibGEteG1sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhtbC90YWJsYS14bWwuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG59Il19 */");
+/* harmony default export */ __webpack_exports__["default"] = ("table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14bWwvdGFibGEteG1sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhtbC90YWJsYS14bWwuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */");
 
 /***/ }),
 
@@ -2822,7 +2830,7 @@ __webpack_require__.r(__webpack_exports__);
 
 let TablaXMLComponent = class TablaXMLComponent {
     constructor(_servicio) {
-        this.displayedColumns = ['no', 'nombre', 'tipo', 'valor', 'ambito', 'fila', 'columna'];
+        this.displayedColumns = ['no', 'nombre', 'tipo', 'valor', 'ambito', 'tipoEtiqueta', 'fila', 'columna'];
         this.simbolos = localStorage.getItem('tablaXML');
     }
     ngOnInit() {
@@ -2961,7 +2969,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Documents\Compiladores2\OLC2_Proyecto\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/chepe/OLC2_Proyecto/src/main.ts */"./src/main.ts");
 
 
 /***/ }),
@@ -3011,4 +3019,4 @@ module.exports = __webpack_require__(/*! D:\Documents\Compiladores2\OLC2_Proyect
 /***/ })
 
 },[[0,"runtime","vendor"]]]);
-//# sourceMappingURL=main-es2017.49a53d07573cbadf70c8.js.map
+//# sourceMappingURL=main-es2017.5508032c47418e6388fc.js.map
