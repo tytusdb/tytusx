@@ -42,7 +42,7 @@ var XPath = /** @class */ (function () {
         console.log(this.temporal);
         console.log("↓ SALIDA XPATH  (OBJETOS) ↓");
         console.log(this.objetos);
-        return this.temporal;
+        return this.objetos;
 
     };
 
