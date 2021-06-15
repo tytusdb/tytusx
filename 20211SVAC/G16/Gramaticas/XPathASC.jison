@@ -129,6 +129,10 @@ INICIO:
 									  $$.AgregarHijo($2); }
 	|INICIO barra INICIO 			{ $$=new NodoAST.default("|"); 
 									  $$.AgregarHijo($1); $$.AgregarHijo($3); }
+	|id								{ $$=new NodoAST.default($1); }
+	|id PREDICADO					{ $$=new NodoAST.default($1); $$.AgregarHijo($1); }
+	|punto 							{ $$=new NodoAST.default($1); }
+	|doblep 						{ $$=new NodoAST.default($1); }
 	|error EOF 						{ ErrorL.Errores.add(new nodoError.Error("Sintáctico","Se esperaba el inicio de una instrucción "+yytext,@1.first_line,@1.first_column,"XPath")); }
 ;
 
