@@ -83,6 +83,9 @@ S: INICIO EOF { $$=$1; return $$; };
 INICIO:
 	 diagonal LDIAGONAL 	{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
 	|dobled LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
+	|id LDIAGONAL 			{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
+	|punto LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
+	|doblep LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
 ;
 
 INICIOP:
@@ -94,6 +97,7 @@ INICIOP:
 
 LDIAGONAL:
 	 id LID 				{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
+	|LID					{ $$=$1; }
 	|EXPRESION LEXPRESION 	{ $$=$1; $$.AgregarHijo($2); }
 	|EJES INICIOP			{ $$=$1; $$.AgregarHijo($2); }
 ;
