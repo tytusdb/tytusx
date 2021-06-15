@@ -4,7 +4,7 @@
         const { EtiquetaInicio } = require('../Xml/EtiquetaInicio')
         const { Atributo } = require('../Xml/Atributo')
         const { XmlResultado } = require('../Xml/XmlResultado')
-
+//efee
         let idSent = 1;
 
         function getId() {
