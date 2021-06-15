@@ -1,23 +1,26 @@
 {
   "files": {
-    "main.css": "/tytusx/20211SVAC/G17/static/css/main.a3e48668.chunk.css",
-    "main.js": "/tytusx/20211SVAC/G17/static/js/main.8449a088.chunk.js",
-    "main.js.map": "/tytusx/20211SVAC/G17/static/js/main.8449a088.chunk.js.map",
-    "runtime-main.js": "/tytusx/20211SVAC/G17/static/js/runtime-main.e2810c9d.js",
-    "runtime-main.js.map": "/tytusx/20211SVAC/G17/static/js/runtime-main.e2810c9d.js.map",
-    "static/js/2.d574271c.chunk.js": "/tytusx/20211SVAC/G17/static/js/2.d574271c.chunk.js",
-    "static/js/2.d574271c.chunk.js.map": "/tytusx/20211SVAC/G17/static/js/2.d574271c.chunk.js.map",
-    "static/js/3.d5ef011a.chunk.js": "/tytusx/20211SVAC/G17/static/js/3.d5ef011a.chunk.js",
-    "static/js/3.d5ef011a.chunk.js.map": "/tytusx/20211SVAC/G17/static/js/3.d5ef011a.chunk.js.map",
+    "main.css": "/tytusx/20211SVAC/G17/static/css/main.206ad37e.chunk.css",
+    "main.js": "/tytusx/20211SVAC/G17/static/js/main.e5b4359a.chunk.js",
+    "main.js.map": "/tytusx/20211SVAC/G17/static/js/main.e5b4359a.chunk.js.map",
+    "runtime-main.js": "/tytusx/20211SVAC/G17/static/js/runtime-main.e4f5e8ff.js",
+    "runtime-main.js.map": "/tytusx/20211SVAC/G17/static/js/runtime-main.e4f5e8ff.js.map",
+    "static/css/2.c7a26ce1.chunk.css": "/tytusx/20211SVAC/G17/static/css/2.c7a26ce1.chunk.css",
+    "static/js/2.662397a4.chunk.js": "/tytusx/20211SVAC/G17/static/js/2.662397a4.chunk.js",
+    "static/js/2.662397a4.chunk.js.map": "/tytusx/20211SVAC/G17/static/js/2.662397a4.chunk.js.map",
+    "static/js/3.6cd4e87d.chunk.js": "/tytusx/20211SVAC/G17/static/js/3.6cd4e87d.chunk.js",
+    "static/js/3.6cd4e87d.chunk.js.map": "/tytusx/20211SVAC/G17/static/js/3.6cd4e87d.chunk.js.map",
     "index.html": "/tytusx/20211SVAC/G17/index.html",
-    "static/css/main.a3e48668.chunk.css.map": "/tytusx/20211SVAC/G17/static/css/main.a3e48668.chunk.css.map",
-    "static/js/2.d574271c.chunk.js.LICENSE.txt": "/tytusx/20211SVAC/G17/static/js/2.d574271c.chunk.js.LICENSE.txt",
+    "static/css/2.c7a26ce1.chunk.css.map": "/tytusx/20211SVAC/G17/static/css/2.c7a26ce1.chunk.css.map",
+    "static/css/main.206ad37e.chunk.css.map": "/tytusx/20211SVAC/G17/static/css/main.206ad37e.chunk.css.map",
+    "static/js/2.662397a4.chunk.js.LICENSE.txt": "/tytusx/20211SVAC/G17/static/js/2.662397a4.chunk.js.LICENSE.txt",
     "static/media/logo.6ce24c58.svg": "/tytusx/20211SVAC/G17/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.e2810c9d.js",
-    "static/js/2.d574271c.chunk.js",
-    "static/css/main.a3e48668.chunk.css",
-    "static/js/main.8449a088.chunk.js"
+    "static/js/runtime-main.e4f5e8ff.js",
+    "static/css/2.c7a26ce1.chunk.css",
+    "static/js/2.662397a4.chunk.js",
+    "static/css/main.206ad37e.chunk.css",
+    "static/js/main.e5b4359a.chunk.js"
   ]
 }
