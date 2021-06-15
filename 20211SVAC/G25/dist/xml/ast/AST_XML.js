@@ -1,11 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AST = void 0;
-const Tipo_1 = require("./Tipo");
-class AST {
+class AST_XML {
     constructor(expresiones) {
         this.expresiones = expresiones;
         this.list_grammar = new Array();
+        this.list_error = new Array();
         this.line = 0;
         this.column = 0;
     }
@@ -14,6 +12,38 @@ class AST {
     }
     setProducciones(lista_grammar) {
         this.list_grammar = lista_grammar;
+    }
+    setErrores(lista_error) {
+        this.list_error = lista_error;
+    }
+    getErrores() {
+        let count = 1;
+        let text = `
+        <table class="default">
+            <tr>
+            <td>No.</td>
+            <td>Tipo</td>
+            <td>Descripción</td>
+            <td>Línea</td>
+            <td>Columna</td>
+            </tr>
+        `;
+        this.list_error.forEach((e) => {
+            text += `
+            <tr>
+                <td>${count}</td>
+                <td>${e.getTipo()}</td>
+                <td>${e.getDescripcion()}</td>
+                <td>${e.getLine()}</td>
+                <td>${e.getColumn()}</td>
+            </tr>
+            `;
+            count++;
+        });
+        text += `
+            </table>
+        `;
+        return text;
     }
     getProducciones() {
         let count = 1;
@@ -41,7 +71,7 @@ class AST {
         return text;
     }
     getTipo(e) {
-        return Tipo_1.Tipo.OBJETO;
+        return Tipo.OBJETO;
     }
     ;
     getValorImplicito(e) {
@@ -69,4 +99,3 @@ class AST {
     }
     ;
 }
-exports.AST = AST;

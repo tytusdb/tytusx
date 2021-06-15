@@ -1,6 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Simbolo = void 0;
 class Simbolo {
     constructor(id, valor, tipo, line, column) {
         this.id = id;
@@ -24,4 +22,3 @@ class Simbolo {
     }
     ;
 }
-exports.Simbolo = Simbolo;

@@ -1,10 +1,14 @@
 
 var editor = CodeMirror.fromTextArea(document.getElementById("xml"), {
+    mode : "xml",
+    theme: "monokai",
+    htmlMode: true,
     lineNumbers: true,
     styleActiveLine: true,
     matchBrackets: true,
-    theme: "monokai"
+    autoRefresh: true
 });
+
 var editor1 = CodeMirror.fromTextArea(document.getElementById("query"), {
     lineNumbers: true,
     styleActiveLine: true,
@@ -24,7 +28,7 @@ function analizarXML() {
 }
 
 function analizarXPATH() {
-    ejecutarCodigo(editor1.getValue())
+    ejecutarXPATH(editor1.getValue())
 }
 
 function nuevoXML() {

@@ -71,8 +71,8 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var Grammar_xml = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[5,7],$V2=[1,14],$V3=[1,15],$V4=[1,19],$V5=[2,7],$V6=[1,21],$V7=[1,22],$V8=[1,30],$V9=[14,15,17];
+var Grammar_xml_desc = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,14],$V2=[1,15],$V3=[1,19],$V4=[2,7],$V5=[1,21],$V6=[1,22],$V7=[1,30],$V8=[14,15,17],$V9=[5,7];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"INI":3,"ESTRUCTURA":4,"EOF":5,"ROOT":6,"menorQ":7,"interrogacion":8,"xml":9,"version":10,"igual":11,"cadena":12,"encoding":13,"mayorQ":14,"identificador":15,"LISTA_ELEMENTOS":16,"slash":17,"ELEMENTO":18,"Texto":19,"LISTA_ATRIBUTO":20,"ATRIBUTOS":21,"ATRIBUTO":22,"$accept":0,"$end":1},
@@ -94,10 +94,17 @@ case 1:
     
 break;
 case 2:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; addProduccion('ESTRUCTURA -> ESTRUCTURA ROOT', 'ESTRUCTURA.val = ESTRUCTURA.val.push(ROOT.val)'); 
+ 
+        $$[$0].push($$[$0-1]); this.$ = $$[$0]; 
+
+        addProduccion('ESTRUCTURA -> ROOT ESTRUCTURA', 'ESTRUCTURA.val = ESTRUCTURA.val.push(ROOT.val)'); 
+    
 break;
 case 3:
- this.$ = [$$[$0]]; addProduccion('ESTRUCTURA -> ROOT', 'ESTRUCTURA.val = ROOT.val'); 
+ 
+        this.$ = [$$[$0]]; 
+        addProduccion('ESTRUCTURA -> ROOT', 'ESTRUCTURA.val = ROOT.val'); 
+    
 break;
 case 4:
 
@@ -192,8 +199,8 @@ case 20:
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:$V0},{1:[3]},{5:[1,5],6:6,7:$V0},o($V1,[2,3]),{8:[1,7],15:[1,8]},{1:[2,1]},o($V1,[2,2]),{9:[1,9]},{14:[1,10]},{10:[1,11]},{2:$V2,7:$V3,16:12,18:13},{11:[1,16]},{2:$V4,7:[1,17],18:18},o($V5,$V5),{14:[1,20],15:$V6},{15:$V7},{12:[1,23]},{15:$V7,17:[1,24]},o($V5,[2,6]),{15:$V6},o($V5,[2,8]),o($V5,[2,15]),{14:[1,25],15:$V8,17:[1,27],20:26,21:28,22:29},{13:[1,31]},{15:[1,32]},{2:$V2,7:$V3,16:34,18:13,19:[1,33]},{14:[1,35],17:[1,36]},{14:[1,37]},o([14,17],[2,16],{22:38,15:$V8}),o($V9,[2,19]),{11:[1,39]},{11:[1,40]},{14:[1,41]},{7:[1,42]},{2:$V4,7:[1,43],18:18},{2:$V2,7:$V3,16:44,18:13,19:[1,45]},{14:[1,46]},o($V5,[2,14]),o($V9,[2,18]),{12:[1,47]},{12:[1,48]},o($V1,[2,5]),{17:[1,49]},{15:$V7,17:[1,50]},{2:$V4,7:[1,51],18:18},{7:[1,52]},o($V5,[2,13]),o($V9,[2,20]),{8:[1,53]},{15:[1,54]},{15:[1,55]},{15:$V7,17:[1,56]},{17:[1,57]},{14:[1,58]},{14:[1,59]},{14:[1,60]},{15:[1,61]},{15:[1,62]},o($V1,[2,4]),o($V5,[2,9]),o($V5,[2,10]),{14:[1,63]},{14:[1,64]},o($V5,[2,11]),o($V5,[2,12])],
-defaultActions: {5:[2,1]},
+table: [{3:1,4:2,6:3,7:$V0},{1:[3]},{5:[1,5]},{4:6,5:[2,3],6:3,7:$V0},{8:[1,7],15:[1,8]},{1:[2,1]},{5:[2,2]},{9:[1,9]},{14:[1,10]},{10:[1,11]},{2:$V1,7:$V2,16:12,18:13},{11:[1,16]},{2:$V3,7:[1,17],18:18},o($V4,$V4),{14:[1,20],15:$V5},{15:$V6},{12:[1,23]},{15:$V6,17:[1,24]},o($V4,[2,6]),{15:$V5},o($V4,[2,8]),o($V4,[2,15]),{14:[1,25],15:$V7,17:[1,27],20:26,21:28,22:29},{13:[1,31]},{15:[1,32]},{2:$V1,7:$V2,16:34,18:13,19:[1,33]},{14:[1,35],17:[1,36]},{14:[1,37]},o([14,17],[2,16],{22:38,15:$V7}),o($V8,[2,19]),{11:[1,39]},{11:[1,40]},{14:[1,41]},{7:[1,42]},{2:$V3,7:[1,43],18:18},{2:$V1,7:$V2,16:44,18:13,19:[1,45]},{14:[1,46]},o($V4,[2,14]),o($V8,[2,18]),{12:[1,47]},{12:[1,48]},o($V9,[2,5]),{17:[1,49]},{15:$V6,17:[1,50]},{2:$V3,7:[1,51],18:18},{7:[1,52]},o($V4,[2,13]),o($V8,[2,20]),{8:[1,53]},{15:[1,54]},{15:[1,55]},{15:$V6,17:[1,56]},{17:[1,57]},{14:[1,58]},{14:[1,59]},{14:[1,60]},{15:[1,61]},{15:[1,62]},o($V9,[2,4]),o($V4,[2,9]),o($V4,[2,10]),{14:[1,63]},{14:[1,64]},o($V4,[2,11]),o($V4,[2,12])],
+defaultActions: {5:[2,1],6:[2,2]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -883,9 +890,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = Grammar_xml;
-exports.Parser = Grammar_xml.Parser;
-exports.parse = function () { return Grammar_xml.parse.apply(Grammar_xml, arguments); };
+exports.parser = Grammar_xml_desc;
+exports.Parser = Grammar_xml_desc.Parser;
+exports.parse = function () { return Grammar_xml_desc.parse.apply(Grammar_xml_desc, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
