@@ -22,6 +22,8 @@ class Acceso {
         //0->EXPRESION 1->itemReserva
         return this.getValorImplicito(entorno, ast.hijos[0], null);
       case "ELEMENTO_P":
+        this.indice = -1;
+        indiceAux=0;
         if (ast.hijos[2].valor == "ELEMENTO_P") {
           return (
             this.getValorImplicito(entorno, ast.hijos[1], null) +
@@ -39,6 +41,7 @@ class Acceso {
         }
         if (ast.hijos[0].valor == "SIMBOLOS") {
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
+          
 
           if (!ArregloEntorno) {
             return null;
@@ -64,13 +67,14 @@ class Acceso {
           if (instruccion.valor == "TODO_") {
             if (ast.hijos[0].hijos[0] == "//") {
               let respuesta = "";
+              padre=entorno;
               for (const iterator of ArregloEntorno) {
                 if (indiceAux == this.indice || this.indice == -1) {
      
                   respuesta += this.getValorImplicito(
                     iterator,
                     instruccion,
-                    entorno
+                    padre
                   );
                 }
                 indiceAux++;
@@ -82,21 +86,22 @@ class Acceso {
             return this.getValorImplicito(entorno, instruccion, padre);
           } else {
             if (ArregloEntorno.length == 0) {
+              padre=entorno;
               let temrespuesta = this.getValorImplicito(
                 ArregloEntorno,
                 instruccion,
-                entorno
+                padre
               );
               return temrespuesta;
             }
             for (const entorno_ of ArregloEntorno) {
               //Iteramos el arreglo de entornos para aplicar estos cambios en todos
               let temrespuesta;
-
+              padre=entorno;
               temrespuesta = this.getValorImplicito(
                 entorno_,
                 instruccion,
-                entorno
+                padre
               ); //Concatenamos todas las respuestas que encontramos
 
               if (indiceAux == this.indice || this.indice == -1) {
@@ -123,7 +128,8 @@ class Acceso {
           if (ast.hijos.length > 1) {
             let respuesta = "";
             for (const hijo of entorno.hijos) {
-              respuesta += this.getValorImplicito(hijo, ast.hijos[2], entorno);
+              padre=entorno;
+              respuesta += this.getValorImplicito(hijo, ast.hijos[2], padre);
             }
 
             return respuesta;
@@ -150,7 +156,8 @@ class Acceso {
         
         if (entorno.tipo == "completa") {
           for (const iterator of entorno.hijos) {
-            contenido += this.getValorImplicito(iterator, ast, entorno);
+            padre=entorno;
+            contenido += this.getValorImplicito(iterator, ast, padre);
           }
 
           
@@ -193,8 +200,11 @@ class Acceso {
         }
         return entorno.hijos;
       } else if (AST.hijos[1].hijos[0] == "@") {
+        return [entorno];
+      }else if (AST.hijos[1].hijos[0] == "..") {
         return [padre];
       }
+
     } else if (AST.hijos[0] == "//") {
       this.entornosDoble = [];
 

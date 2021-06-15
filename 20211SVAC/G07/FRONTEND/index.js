@@ -104,7 +104,7 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/biblioteca/libro[1]/titulo");
+let editorXPATH = (document.getElementById("editor").value = "/biblioteca/libro/..");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
@@ -335,7 +335,7 @@ function analizar_xpath() {
   //generarAST(AST_xPath);
   
 
-  
+  generarAST(AST_xPath);
   console.log("Interpretando");
   interpretar(AST_xPath,parserXML.json);
   //interpretar(AST_xPath,AST_xml);
