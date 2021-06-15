@@ -1,8 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Objeto = void 0;
-const Entorno_1 = require("../ast/Entorno");
-const Tipo_1 = require("../ast/Tipo");
 class Objeto {
     constructor(id1, id2, text, listAtributos, listObjetos, line, column) {
         this.id1 = id1;
@@ -12,10 +8,10 @@ class Objeto {
         this.listObjetos = listObjetos;
         this.line = line;
         this.column = column;
-        this.entorno = new Entorno_1.Entorno(null);
+        this.entorno = new Entorno(null);
     }
     getTipo(e) {
-        return Tipo_1.Tipo.OBJETO;
+        return Tipo.OBJETO;
     }
     getValorImplicito(e) {
         return this;
@@ -126,4 +122,3 @@ class Objeto {
         return "OBJETO";
     }
 }
-exports.Objeto = Objeto;
