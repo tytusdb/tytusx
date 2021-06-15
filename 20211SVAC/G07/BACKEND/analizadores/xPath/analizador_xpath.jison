@@ -143,7 +143,7 @@ EXPRESION:
 	$$= new Nodo("EXP", "EXP" );
 	$$.agregarHijo($1);
         $$.agregarHijo($2);
-        $$.agregarHijo($2);
+        $$.agregarHijo($3);
 	}
         | tk_identificador CAJETIN  SIMBOLOSSECU SIMBOLOSSECU_P 
         {
@@ -494,7 +494,7 @@ OPERACIONES:
         $$.agregarHijo($2);
         $$.agregarHijo($3);
         $$.agregarHijo($4);                        
-	}         
+	}       
         | ITEMINICIO                                            
         {
 	$$= new Nodo("OPE", "OPE" );
@@ -635,7 +635,14 @@ OPERACIONES_L:
         $$= new Nodo("OPEL","OPEL");
         $$.agregarHijo(new Nodo($1,$1));
         $$.agregarHijo($2);
-        }        
+        }
+        | OPERADOR ITEMFINAL   OPERACIONES_L                                       
+        {
+	$$= new Nodo("OPE", "OPE" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);        
+        }         
         |                                                       
         {
         $$= new Nodo("OPEL","OPEL");
