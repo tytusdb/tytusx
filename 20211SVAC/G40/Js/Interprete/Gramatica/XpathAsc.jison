@@ -85,15 +85,61 @@ BSL                         "\\".
 %%
 
 /* Definición de la gramática */
-INICIO : SETS EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
+INICIO : LISTA_XPATH EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
                          /*Creamos una nueva instruccion y le mandamos los nodos que debe ir a buscar*/
-                        instruccion = new XPath(@1.first_line, @1.first_column, $1)
-                        console.log("TODO CORRECTO :D XPATH ASC VERSION");
-                        $$ = instruccion;
-                        return $$; } ;
+                        if ($1!=null){                    
+                          console.log("TODO CORRECTO :D XPATH ASC VERSION");
+                          $$ = $1;
+                          return $$;
+                        }else {
+                          console.log("TODO CORRECTO :D XPATH ASC VERSION");
+                          $$ = [];
+                          return $$;
+                        }
+                         } ;
 
-SETS: SETS SET { $1.push($2); $$ = $1;}
-    | SET {  $$ = [$1]; } ;
+LISTA_XPATH: SETS OTRO_SET { if($1!=null){
+                              instruccion = new XPath(@1.first_line, @1.first_column, $1);
+                              arr = [instruccion];
+                              if($2!=null){
+                              arr = arr.concat($2);
+                              }                                   
+                              $$ = arr;
+                              }else {
+                                arr = null;
+                                if($2!=null){
+                                arr = $2;                                   
+                                } 
+                                $$ = arr;}};
+        
+OTRO_SET: tk_barra SETS OTRO_SET { if ($2!=null){
+                                    instruccion = new XPath(@1.first_line, @1.first_column, $2);
+                                    arr = [instruccion];
+                                    if($3!=null){
+                                    arr = arr.concat($3);
+                                    }                                   
+                                    $$ = arr;                                   
+                                  }else {
+                                    arr = null;
+                                    if($3!=null){
+                                    arr = $3;                                   
+                                    } 
+                                    $$ = arr;
+                                  }}
+        | {  $$ = null; };      
+
+SETS: SETS SET { if($1!=null && $2!=null){
+                  $1.push($2);
+                  $$ = $1; 
+                  } else {
+                    $$ = null;
+                  } }
+    | SET { if($1!=null){
+              $$ = [$1];
+            } else {
+              $$ = null;
+            }
+             } ;
 
 SET:    SELECTORES EXPRESION {         
                         nodoXPath = new NodoXpath("", TipoNodo.SELECTOR_EXPRESION, null, $1[0], $2[0], @1.first_line, @1.first_column);                
@@ -121,7 +167,10 @@ SET:    SELECTORES EXPRESION {
                         nodoaux.agregarHijo($2[1]);
                         nodoxPATHASC.agregarHijo(nodoaux);
                         $$ = nodoXPath;
-                          };
+                          }
+    | error { 
+            ListaErr.agregarError(new Error(NumeroE, yylineno,this._$.first_column + 1, "Sintactico", "Se esperaba un objeto y se encontro "+ yytext,"XPATH")); NumeroE++;
+            $$ = null; };
 
 SELECTORES: tk_dobleslash OTRO_SELECTOR { arr = [TipoSelector.DOBLE_SLASH]; 
                                           arr = arr.concat($2[0]);
@@ -175,6 +224,16 @@ EXPRESION : tk_identificador PREDICADO {
                                         }
         |  tk_doblepunto {     
                                         expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.DOBLEPUNTO, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
+        |  tk_arrobaasterisco {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.ARROBA, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
+        |  tk_arroba tk_identificador {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $2, TipoExpresionXPath.ARROBA_ID, null);
                                         nodoaux = new NodoArbol($1,"");
                                         $$ = [expresionAux,nodoaux];
                                         }

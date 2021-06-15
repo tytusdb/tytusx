@@ -9,6 +9,8 @@
     let gramaticapp = ' ';
     let tipoencoding = ' ';
 
+    let verificarEtiquetas = [];
+
 
 %}
 
@@ -151,27 +153,13 @@ RAIZ
         gramaticapp = `R   -> E \n` + gramaticapp;
         gramatical = `<RAIZ> := <ETIQUETA>\n` + gramatical;
     }
-       | error ETIQUETAERROR
+       | error  tk_cierra
+        {
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ', "Me recupero con:  " + yytext , @1.first_line, @2.first_column ));
+        }
 
 ;
-ETIQUETAERROR:
-        tk_cierra_dos 
-        {
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
-        }
-        | tk_cierra
-        {
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
-        }
-        | tk_abre_dos
-        {
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
-        }
-        | tk_abre
-        {
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , @1.first_line, @1.first_column ));
-        }
-;
+
 ETIQUETA
     : ETIQUETA_UNICA {
         $$ = $1;
@@ -281,6 +269,10 @@ APERTURA
         gramaticapp = `AP  -> tk_abre tk_etiqueta ATS tk_cierra\n` + gramaticapp;
         gramatical = `<APERTURA> := ${$1} ${$2} <ATRIBUTOS> ${$3} \n` + gramatical;
 
+
+        // Verificar Etiqueta
+        verificarEtiquetas.push(new Token("ETIQUETA",$2 , @2.first_line, @2.first_column ));
+
     }
     |tk_abre tk_etiqueta tk_cierra {
         $$ = {}
@@ -300,6 +292,9 @@ APERTURA
         //REPORTE GRAMATICA
         gramaticapp = `AP  -> tk_abre tk_etiqueta tk_cierra \n` + gramaticapp;
         gramatical = `<APERTURA> := ${$1} ${$2} ${$3}\n` + gramatical;
+
+        // Verificar Etiqueta
+        verificarEtiquetas.push(new Token("ETIQUETA",$2 , @2.first_line, @2.first_column ));
 
     }
 ;
@@ -529,8 +524,16 @@ CIERRE
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-            gramaticapp = `CI  -> tk_abre_dos tk_etiqueta tk_cierra \n` + gramaticapp;
-            gramatical = `<CIERRE> := ${$1} ${$2} ${$3}\n` + gramatical;
+        gramaticapp = `CI  -> tk_abre_dos tk_etiqueta tk_cierra \n` + gramaticapp;
+        gramatical = `<CIERRE> := ${$1} ${$2} ${$3}\n` + gramatical;
+
+        //VERIFICAR ETIQUETA
+        let etiqueta = verificarEtiquetas.pop();
+        if (etiqueta.lexema === $2) {
+            // Etiqueta correcta
+        } else {
+            listaErrores.push(new TokenError("XML", "Semantico", `Se abrio la etiqueta ${etiqueta.lexema} en la linea ${etiqueta.linea} y se esta cerrando con ${$2} en la linea ${@2.first_line}` , @2.first_line, @2.first_column ));
+        }
     }
 ;
 

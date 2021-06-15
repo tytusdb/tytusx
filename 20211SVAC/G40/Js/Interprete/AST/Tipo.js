@@ -53,6 +53,8 @@ var TipoExpresionXPath;
     TipoExpresionXPath[TipoExpresionXPath["TEXT"] = 3] = "TEXT";
     TipoExpresionXPath[TipoExpresionXPath["PUNTO"] = 4] = "PUNTO";
     TipoExpresionXPath[TipoExpresionXPath["DOBLEPUNTO"] = 5] = "DOBLEPUNTO";
+    TipoExpresionXPath[TipoExpresionXPath["ARROBA"] = 6] = "ARROBA";
+    TipoExpresionXPath[TipoExpresionXPath["ARROBA_ID"] = 7] = "ARROBA_ID";
 })(TipoExpresionXPath || (TipoExpresionXPath = {}));
 
 
@@ -74,6 +76,7 @@ var TipoNodo;
     TipoNodo[TipoNodo["EXPRESION"] = 1] = "EXPRESION";
     TipoNodo[TipoNodo["AXES"] = 2] = "AXES";
     TipoNodo[TipoNodo["SELECTOR_AXES"] = 3] = "SELECTOR_AXES";
+    TipoNodo[TipoNodo["FIN"] = 4] = "FIN";
 })(TipoNodo || (TipoNodo = {}));
 
 var TipoAxes;

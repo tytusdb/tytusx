@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<HEAD>
+	<TITLE>REPORTE AST</TITLE>
+	<style>
+		body {
+			padding: 20px;
+		}
+
+		h2 {
+			color: #000;
+			font-family: Calibri;
+		}
+	</style>
+</HEAD>
+
+<body>
+
+
+
+	<div class="articulo">
+		<H3>Universidad de San Carlos de Guatemala<BR>Facultad de Ingenieria<BR>Escuela de Ciencias y Sistemas<BR>Mario
+			Morales<BR>201213283<BR></H3>
+		<CENTER>
+			<H2>PROYECTO 2 <BR>REPORTE AST</H2>
+		</CENTER>
+	</div>
+
+	<div id="graph" style="text-align: center;"></div>
+	<style>
+		.container {
+			display: inline-block;
+			margin-left: 15%;
+		}
+	</style>
+
+
+	<script>
+
+		window.onload = function () {
+
+			fetch('/proyecto2-compi1/generate')
+				.then(response => {
+					if (response.status == 200) {
+						return response.text();
+					} else {
+						throw "Respuesta incorrecta del servidor"
+					}
+				})
+				.then(responseText => {
+					let users = JSON.parse(responseText).results;
+					d3.select("#graph").graphviz()
+						.renderDot(users);
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		}
+
+	</script>
+
+	<script src="//d3js.org/d3.v5.min.js"></script>
+	<script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+	<script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+</body>
+
+</html>

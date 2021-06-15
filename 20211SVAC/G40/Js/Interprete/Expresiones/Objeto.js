@@ -22,6 +22,14 @@ var Objeto = /** @class */ (function () {
         return this.texto;
     };    
 
+    Objeto.prototype.getAtributos = function () {
+        return this.listaAtributos;
+    }; 
+
+    Objeto.prototype.getObjetos = function () {
+        return this.listaObjetos;
+    }; 
+
     Objeto.prototype.LeerID = function () {
         return this.id;
     };
