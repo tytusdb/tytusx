@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			#customers {
+				font-family: Arial, Helvetica, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			#customers td,
+			#customers th {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
+
+			#customers tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+
+			#customers tr:hover {
+				background-color: #ddd;
+			}
+
+			#customers th {
+				padding-top: 12px;
+				padding-bottom: 12px;
+				text-align: left;
+				background-color: #04aa6d;
+				color: white;
+			}
+		</style>
+		<meta charset="utf-8" />
+		<title>Reporte gramatical</title>
+	</head>
+
+	<body>
+		<table id="customers">
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody id="reporteGramatical"></tbody>
+		</table>
+		<script>
+			let htmlTbody = window.localStorage.getItem('reporteGramatical');
+			let tbody = document.getElementById('reporteGramatical');
+			if (htmlTbody !== undefined && tbody !== undefined) {
+				try {
+					tbody.innerHTML = htmlTbody;
+				} catch (error) {}
+			}
+		</script>
+	</body>
+</html>
