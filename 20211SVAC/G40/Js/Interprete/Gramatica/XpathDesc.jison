@@ -243,6 +243,16 @@ EXPRESION : tk_identificador PREDICADO {
                                         nodoaux = new NodoArbol($1,"");
                                         $$ = [expresionAux,nodoaux];
                                         }
+        |  tk_arrobaasterisco {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.ARROBA, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
+        |  tk_arroba tk_identificador {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $2, TipoExpresionXPath.ARROBA_ID, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
         |  tk_texto PREDICADO {
                                         expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.TEXT, $2[0]);
                                         nodoaux = new NodoArbol($1,"");
