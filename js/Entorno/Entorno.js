@@ -9,4 +9,7 @@ class Entorno {
     getTable() {
         return this.tabla;
     }
+    getAnterior() {
+        return this.anterior;
+    }
 }

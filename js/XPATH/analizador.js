@@ -1,35 +1,48 @@
 // @ts-ignore
 let errores = new Errores();
-function analizar() {
+let consultas = new Array();
+function analizarXpath(entornoGlobal) {
     const textoAnalizar = document.getElementById('inputXPath');
+    const result = document.getElementById('result');
     // @ts-ignore
     jisonXpaht.parse(textoAnalizar.value);
-    let encabezadoErrores = ["Tipo", "Descripcion", "Linea", "Columna"];
-    tablaEcabezado(encabezadoErrores);
-    agregarContenidoErrores();
-}
-function tablaEcabezado(encabezadoEntrada) {
-    let encabezado = document.getElementById("tableHead");
-    encabezado.innerHTML = "";
-    let aux = [];
-    aux.push("<tr>");
-    for (let i = 0; i < encabezadoEntrada.length; i++) {
-        aux.push("\t<th>" + encabezadoEntrada[i] + "</th>");
+    if (errores.getSize > 0) {
+        agregarContenidoErrores();
     }
-    aux.push("</tr>");
-    encabezado.innerHTML = aux.join("");
+    else {
+        let entornos = [entornoGlobal];
+        entornos = recorrer(consultas, entornos, 0);
+        let resultConsulta = new Array();
+        let i = 1;
+        entornos.forEach(e => {
+            e.getTable().forEach(s => {
+                if (!(s instanceof Atributo)) {
+                    resultConsulta.push((i++) + ". " + s.toTag());
+                }
+            });
+        });
+        result.value = resultConsulta.join("\n");
+    }
+    consultas = new Array();
 }
-function agregarContenidoErrores() {
-    let body = document.getElementById("tableBody");
-    body.innerHTML = "";
-    let aux = new Array();
-    errores.getErrores().forEach((e) => {
-        aux.push("<tr>");
-        aux.push("\t<td>" + e.getTipo + "</td>");
-        aux.push("\t<td>" + e.getDescripcion + "</td>");
-        aux.push("\t<td>" + e.getLinea + "</td>");
-        aux.push("\t<td>" + e.getColumna + "</td>");
-        aux.push("</tr>");
+function recorrer(consultas, entornos, index) {
+    let newEntornos = new Array();
+    entornos = consultas[index].run(entornos);
+    entornos.forEach((e) => {
+        e.getTable().forEach((s) => {
+            if (s instanceof Nodo) {
+                if (s.getEntorno != null) {
+                    newEntornos.push(s.getEntorno());
+                }
+            }
+        });
     });
-    body.innerHTML = aux.join("");
+    index++;
+    if (index < consultas.length) {
+        entornos = (consultas[index] instanceof ConsultaSimple) ? newEntornos : entornos;
+        return recorrer(consultas, entornos, index);
+    }
+    else {
+        return entornos;
+    }
 }

@@ -5,6 +5,6 @@ thead tr th{
 }
 
 .table-responsive {
-    height:400px;
+    height:350px;
     overflow-y:scroll;
 }

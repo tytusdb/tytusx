@@ -281,9 +281,13 @@ CONSULTAS_XPATH
 ;
 
 CONSULTA_XPATH
-    : RELATIVA
+    : RELATIVA                              {consultas.push(new ConsultaSimple($1));}
     | EXPRESIONES_RUTA
-    | PUNTOS EXPRESIONES_RUTA
+    | PUNTOS EXPRESIONES_RUTA {
+        if ($1 === "punto") {
+            consultas.push(new ConsultaPunto());
+        }
+    }
 ;
 
 EXPRESIONES_RUTA
@@ -295,29 +299,50 @@ EXPRESIONES_RUTA
 ;
 
 EXPRESION_RUTA
-    : RELATIVA DIAGONALES ACCESORES
-    | RELATIVA DIAGONALES PUNTOS OPCIONAL_PREDICADO    
+    : RELATIVA DIAGONALES ACCESORES         {
+            if (!($1 === "")) {
+                consultas.push(new ConsultaSimple($1));
+            }
+            if ($2 === "doble"){
+                if ($3 === "punto") {
+                    consultas.push(new ConsultaPunto());
+                }else if ($3 === "puntos") {
+                    consultas.push(new ConsultaPuntos());
+                } else {
+                    consultas.push(new ConsultaDescendente($3));
+                }
+            } else {
+                if ($3 === "punto") {
+                    consultas.push(new ConsultaPunto());
+                }else if ($3 === "puntos") {
+                    consultas.push(new ConsultaPuntos());
+                } else {
+                    consultas.push(new ConsultaSimple($3));
+                }
+            }
+    }
     | error identificador {
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
     }
 ;
 
-RELATIVA :
-    | identificador OPCIONAL_PREDICADO
+RELATIVA :                                  {$$ = "";}
+    | identificador OPCIONAL_PREDICADO      {$$ = $1;}
 ;
 
 DIAGONALES
-    : diagonal diagonal
-    | diagonal
+    : diagonal diagonal                     {$$ = "doble";}
+    | diagonal                              {$$ = "simple";}
 ;
 
-PUNTOS : punto
-    | punto punto
+PUNTOS : punto              {$$ = "punto";}
+    | punto punto           {$$ = "puntos";}
 ;
 
 ACCESORES
-    : ID OPCIONAL_PREDICADO
+    : ID OPCIONAL_PREDICADO             {$$ = $1;}
     | ATRIBUTO OPCIONAL_PREDICADO
+    | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
     | multiplicacion
     | NODE
     | TEXT
@@ -335,7 +360,7 @@ ATRIBUTO
     | arroba NODE
 ;
 
-ID : identificador
+ID : identificador      {$$ = $1;}
     | EJE
 ;
 

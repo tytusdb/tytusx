@@ -32,4 +32,28 @@ class Nodo extends Simbolo {
     setEntorno(entorno) {
         this.entorno = entorno;
     }
+    toTag() {
+        let etiqueta = new Array();
+        etiqueta.push("<" + super.getNombre() + this.attribsToText() + ">");
+        etiqueta.push(this.texto);
+        etiqueta.push(this.nodesToTag(this.entorno));
+        etiqueta.push("</" + super.getNombre() + ">");
+        return etiqueta.join("");
+    }
+    attribsToText() {
+        let attribText = new Array();
+        this.atributos.forEach(a => {
+            attribText.push(" " + a.getNombre() + "=\"" + a.getValor() + "\"");
+        });
+        return attribText.join("");
+    }
+    nodesToTag(entorno) {
+        let nodosText = new Array();
+        entorno.getTable().forEach(n => {
+            if (n instanceof Nodo) {
+                nodosText.push("\n" + n.toTag());
+            }
+        });
+        return nodosText.join("");
+    }
 }
