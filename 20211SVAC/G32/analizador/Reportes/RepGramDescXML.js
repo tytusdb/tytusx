@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepGramAscXML = void 0;
+exports.RepGramDescXML = void 0;
 //La clase a exportar para el reporte gramatical ascendente del XML
-class RepGramAscXML {
+class RepGramDescXML {
     constructor() {
         this.lista = [];
     }
     static getInstance() {
-        if (!RepGramAscXML.instance) {
-            RepGramAscXML.instance = new RepGramAscXML();
+        if (!RepGramDescXML.instance) {
+            RepGramDescXML.instance = new RepGramDescXML();
         }
-        return RepGramAscXML.instance;
+        return RepGramDescXML.instance;
     }
     push(valor) {
         //unshift para agregar un dato al inicio
@@ -27,4 +27,4 @@ class RepGramAscXML {
         return this.lista;
     }
 }
-exports.RepGramAscXML = RepGramAscXML;
+exports.RepGramDescXML = RepGramDescXML;
