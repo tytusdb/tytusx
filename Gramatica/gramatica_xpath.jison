@@ -197,7 +197,7 @@ TODOATRIBUTO: multiplicacion { rg_path.setValor('TODOATRIBUTO -> multiplicacion;
 
 
 MOSTRAR: corabre OPEOCOND corcierra MOSTRAR { rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');
-                                $$ = new nodoMostrar($1,$3, this._$.first_line, this._$.first_column);}
+                                $$ = new nodoMostrar($2,$4, this._$.first_line, this._$.first_column);}
         |                           { rg_path.setValor('MOSTRAR -> epsilon;\n'); $$ = '';};
 
 OPEOCOND: CONDICION                 { rg_path.setValor('OPEOCOND -> identificador;\n'); $$ = $1;};

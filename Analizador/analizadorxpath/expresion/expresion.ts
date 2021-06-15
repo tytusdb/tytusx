@@ -43,7 +43,8 @@ function nodoOperacionBinaria(operandoIzq:any, operandoDer:any, tipo:TIPO_OPERAC
 function nodoDato(valor:any, tipo:TIPO_PRIMITIVO){
     return {
         valor : valor,
-        tipo_primitivo : tipo
+        tipo_primitivo : tipo,
+        dato:false
     }
 }
 
@@ -163,7 +164,9 @@ function getValor(exp:any, ts:TablaSimbolos): any {
 			return res;
         }
 
-    }
+    }else if(exp.tipo_primitivo === TIPO_PRIMITIVO.NUMERICO || exp.tipo_primitivo === TIPO_PRIMITIVO.CADENA){
+		return exp.valor;
+	}
 
 }
 
@@ -222,10 +225,10 @@ function getTipo(exp:any, ts:TablaSimbolos):any{
 			return ;  //VALIDAR TIPO OPERACION LOGICA
         }
 
-    }else if(exp.tipo = TIPO_PRIMITIVO.NUMERICO){
-        return exp.tipo;        
-    }else if(exp.tipo = TIPO_PRIMITIVO.CADENA){
-        return exp.tipo;        
+    }else if(exp.tipo_primitivo == TIPO_PRIMITIVO.NUMERICO){
+        return exp.tipo_primitivo;        
+    }else if(exp.tipo_primitivo == TIPO_PRIMITIVO.CADENA){
+        return exp.tipo_primitivo;        
     }
 }
 

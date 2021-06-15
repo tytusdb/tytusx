@@ -252,7 +252,7 @@ case 41:
 break;
 case 42:
  rg_path.setValor('MOSTRAR -> [ OPEOCOND ]  MOSTRAR;\n');
-                                this.$ = new nodoMostrar($$[$0-3],$$[$0-1], this._$.first_line, this._$.first_column);
+                                this.$ = new nodoMostrar($$[$0-2],$$[$0], this._$.first_line, this._$.first_column);
 break;
 case 43:
  rg_path.setValor('MOSTRAR -> epsilon;\n'); this.$ = '';
