@@ -5,10 +5,10 @@ import { reporteTabla } from '../Reportes/reporteTabla';
 import obtenerValor from '../Reportes/cambiarTipo';
 import Objeto from '../Expresiones/Objeto';
 import nodoAST from '../Abstracto/nodoAST';
+import Atributo from '../Expresiones/Atributo';
 export default class Arbol {
   private instrucciones: Array<Instruccion>;
   private errores: Array<Errores>;
-
   public listaSimbolos: Array<reporteTabla>;
   private dot:string;
   private c:number;
@@ -27,37 +27,36 @@ export default class Arbol {
   public getSimbolos(): Array<reporteTabla> {
     return this.listaSimbolos;
   }
-  public actualizarTabla(
-    identificador: string,
-    valor: string,
-    linea: string,
-    entorno: string,
-    columna: string
-  ): boolean {
+
+
+   /* public actualizarTabla(identificador: string,contenido: string, listaAtributos: Atributo[] = [], listaObjetos: Objeto[], entorno:String,linea: string, columna: string): boolean {
     for (var elemento of this.listaSimbolos) {
       if (
-        elemento.getIdentificador().toString() == identificador.toLowerCase() &&
+        elemento.getIdentificador().toString() == identificador &&
         elemento.getEntorno().toString() == entorno.toString()
       ) {
-        elemento.setValor(valor);
+        elemento.setContenido(contenido);
+        elemento.setListaAtributos(listaAtributos);
+        elemento.setListaObjetos(listaObjetos);
         elemento.setLinea(linea);
-        elemento.setColumna(columna);
+        elemento.setColumna(linea);
+
         return true;
       }
     }
     return false;
   }
-  public BuscarTipo(identificador: string): string {
+public BuscarTipo(identificador: string): string {
     for (var elemento of this.listaSimbolos) {
       if (elemento.getIdentificador() == identificador.toLowerCase()) {
         return elemento.getForma().toString();
       }
     }
     return 'as';
-  }
+  }*/
 
 
-  public getFuncion(identificador: String) {
+ /* public getFuncion(identificador: String) {
     for (let f of this.instrucciones) {
       if (f instanceof Objeto) {
         if (
@@ -89,8 +88,7 @@ export default class Arbol {
         }
       }
     }
-  }
-
+  }*/
 
   public geterrores(): Array<Errores> {
     return this.errores;
@@ -98,6 +96,8 @@ export default class Arbol {
   public seterrores(value: Array<Errores>) {
     this.errores = value;
   }
+
+
 
   public getinstrucciones(): Array<Instruccion> {
     return this.instrucciones;
