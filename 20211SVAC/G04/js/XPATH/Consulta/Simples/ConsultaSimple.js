@@ -8,9 +8,15 @@ class ConsultaSimple {
             let flag = false;
             let nuevoEntorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s) => {
-                if (s.getNombre() == this.identificador && s instanceof Nodo) {
-                    flag = true;
-                    nuevoEntorno.add(s);
+                if (s instanceof Nodo) {
+                    if (this.identificador === "*") {
+                        flag = true;
+                        nuevoEntorno.add(s);
+                    }
+                    else if (s.getNombre() == this.identificador) {
+                        flag = true;
+                        nuevoEntorno.add(s);
+                    }
                 }
             });
             if (flag) {

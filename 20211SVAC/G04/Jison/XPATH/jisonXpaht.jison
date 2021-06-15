@@ -307,67 +307,7 @@ EXPRESION_RUTA
             if (!($1 === "")) {
                 $$.push(new ConsultaSimple($1));
             }
-            if ($2 === "doble"){
-                if (!Array.isArray($3)) {
-                    if ($3 === "punto") {
-                        $$.push(new ConsultaPunto());
-                    }else if ($3 === "puntos") {
-                        $$.push(new ConsultaPuntos());
-                    } else {
-                        if ($3.startsWith('@')) {
-                            if ($3 === "@all") {
-                                $$.push(new ConsultaDescAllAttr($3.replace('@', '')));
-                            } else {
-                                $$.push(new ConsultaDescAttr($3.replace('@', '')));
-                            }
-                        } else {
-                            if ($3 === "all") {
-                                $$.push(new ConsultaDescAllNodes($3));
-                            } else if ($3 === "text()") {
-                                $$.push(new ConsultaDescText($3));
-                            } else if ($3 === "node()") {
-                                $$.push(new ConsultaDescNode($3));
-                            }
-                        }
-                    }
-                } else {
-                    if ($3.length === 1) {
-                        $$.push(new ConsultaDescendente2($3[0]));
-                    } else {
-                        $$.push(new ConsultaEje($3[0], $3[1]));
-                    }
-                }
-            } else {
-                if (!Array.isArray($3)) {
-                    if ($3 === "punto") {
-                        $$.push(new ConsultaPunto());
-                    }else if ($3 === "puntos") {
-                        $$.push(new ConsultaPuntos());
-                    } else {
-                        if ($3.startsWith('@')) {
-                            if ($3 === "@all") {
-                                $$.push(new ConsultaAllAttribs($3.replace('@', '')));
-                            } else {
-                                $$.push(new ConsultaAtributo($3.replace('@', '')));
-                            }
-                        } else {
-                            if ($3 === "all") {
-                                $$.push(new ConsultaAllNodes($3));
-                            } else if ($3 === "text()") {
-                                $$.push(new ConsultaText($3));
-                            } else if ($3 === "node()") {
-                                $$.push(new ConsultaNode($3));
-                            }
-                        }
-                    }
-                } else {
-                    if ($3.length === 1) {
-                        $$.push(new ConsultaSimple($3[0]));
-                    } else {
-                        $$.push(new ConsultaEje($3[0], $3[1]));
-                    }
-                }
-            }
+            $$.push(FabricaConsulta.fabricar($2, $3.id, $3.eje));
     }
     | error identificador {
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
@@ -389,11 +329,11 @@ PUNTOS : punto              {$$ = "punto";}
 
 ACCESORES
     : ID OPCIONAL_PREDICADO             {$$ = $1;}
-    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = $1;}
-    | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
-    | multiplicacion                    {$$ = "all";}
-    | NODE                              {$$ = $1;}
-    | TEXT                              {$$ = $1;}
+    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = {id: $1, eje: ""};}
+    | PUNTOS OPCIONAL_PREDICADO         {$$ = {id: $1, eje: ""};}
+    | multiplicacion                    {$$ = {id: $1, eje: ""};}
+    | NODE                              {$$ = {id: $1, eje: ""};}
+    | TEXT                              {$$ = {id: $1, eje: ""};}
 ;
 
 TEXT
@@ -405,14 +345,14 @@ NODE : node parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 
 ATRIBUTO
     : arroba identificador          {$$ = $1 + $2;}
-    | arroba multiplicacion         {$$ = $1 + "all";}
+    | arroba multiplicacion         {$$ = $1 + $2;}
 ;
 
-ID : identificador      {$$ = [$1];}
+ID : identificador      {$$ = {id: $1, eje: ""};}
     | EJE               {$$ = $1;}
 ;
 
-EJE : EJES dos_puntos dos_puntos ACCESORES_EJE  {$$ = [$1, $4]}
+EJE : EJES dos_puntos dos_puntos ACCESORES_EJE  {$$ = {id: $4, eje: $1}}
 ;
 
 ACCESORES_EJE

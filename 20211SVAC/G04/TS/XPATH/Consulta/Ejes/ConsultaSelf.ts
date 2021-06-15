@@ -1,18 +1,19 @@
-class ConsultaSimple implements Consulta {
+class ConsultaSelf implements Consulta {
 
-    private identificador: string;
+    private id: string;
 
     constructor(id: string) {
-        this.identificador = id;
+        this.id = id;
     }
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
-        entornos.forEach((e: Entorno) => {
+
+        entornos.forEach(e => {
             let flag: boolean = false;
             let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s: Simbolo) => {
-                if (s.getNombre() == this.identificador && s instanceof Nodo) {
+                if (s.getNombre() === this.id && s instanceof Nodo) {
                     flag = true;
                     nuevoEntorno.add(s);
                 }
@@ -21,10 +22,7 @@ class ConsultaSimple implements Consulta {
                 newEntornos.push(nuevoEntorno);
             }
         });
-        return newEntornos;
-    }
 
-    getIdentificador() {
-        return this.identificador;
+        return newEntornos;
     }
 }

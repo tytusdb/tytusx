@@ -113,7 +113,7 @@ break;
 case 7:
 this.$ = [new ConsultaSimple($$[$0])];
 break;
-case 8: case 11: case 25: case 26: case 32: case 34: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47: case 48: case 49:
+case 8: case 11: case 32: case 34: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47: case 48: case 49:
 this.$ = $$[$0];
 break;
 case 9:
@@ -139,67 +139,7 @@ case 13:
             if (!($$[$0-2] === "")) {
                 this.$.push(new ConsultaSimple($$[$0-2]));
             }
-            if ($$[$0-1] === "doble"){
-                if (!Array.isArray($$[$0])) {
-                    if ($$[$0] === "punto") {
-                        this.$.push(new ConsultaPunto());
-                    }else if ($$[$0] === "puntos") {
-                        this.$.push(new ConsultaPuntos());
-                    } else {
-                        if ($$[$0].startsWith('@')) {
-                            if ($$[$0] === "@all") {
-                                this.$.push(new ConsultaDescAllAttr($$[$0].replace('@', '')));
-                            } else {
-                                this.$.push(new ConsultaDescAttr($$[$0].replace('@', '')));
-                            }
-                        } else {
-                            if ($$[$0] === "all") {
-                                this.$.push(new ConsultaDescAllNodes($$[$0]));
-                            } else if ($$[$0] === "text()") {
-                                this.$.push(new ConsultaDescText($$[$0]));
-                            } else if ($$[$0] === "node()") {
-                                this.$.push(new ConsultaDescNode($$[$0]));
-                            }
-                        }
-                    }
-                } else {
-                    if ($$[$0].length === 1) {
-                        this.$.push(new ConsultaDescendente2($$[$0][0]));
-                    } else {
-                        this.$.push(new ConsultaEje($$[$0][0], $$[$0][1]));
-                    }
-                }
-            } else {
-                if (!Array.isArray($$[$0])) {
-                    if ($$[$0] === "punto") {
-                        this.$.push(new ConsultaPunto());
-                    }else if ($$[$0] === "puntos") {
-                        this.$.push(new ConsultaPuntos());
-                    } else {
-                        if ($$[$0].startsWith('@')) {
-                            if ($$[$0] === "@all") {
-                                this.$.push(new ConsultaAllAttribs($$[$0].replace('@', '')));
-                            } else {
-                                this.$.push(new ConsultaAtributo($$[$0].replace('@', '')));
-                            }
-                        } else {
-                            if ($$[$0] === "all") {
-                                this.$.push(new ConsultaAllNodes($$[$0]));
-                            } else if ($$[$0] === "text()") {
-                                this.$.push(new ConsultaText($$[$0]));
-                            } else if ($$[$0] === "node()") {
-                                this.$.push(new ConsultaNode($$[$0]));
-                            }
-                        }
-                    }
-                } else {
-                    if ($$[$0].length === 1) {
-                        this.$.push(new ConsultaSimple($$[$0][0]));
-                    } else {
-                        this.$.push(new ConsultaEje($$[$0][0], $$[$0][1]));
-                    }
-                }
-            }
+            this.$.push(FabricaConsulta.fabricar($$[$0-1], $$[$0].id, $$[$0].eje));
     
 break;
 case 14:
@@ -210,7 +150,7 @@ break;
 case 15:
 this.$ = "";
 break;
-case 16: case 21: case 22: case 23:
+case 16: case 21:
 this.$ = $$[$0-1];
 break;
 case 17:
@@ -225,23 +165,20 @@ break;
 case 20:
 this.$ = "puntos";
 break;
-case 24:
-this.$ = "all";
+case 22: case 23:
+this.$ = {id: $$[$0-1], eje: ""};
+break;
+case 24: case 25: case 26: case 31:
+this.$ = {id: $$[$0], eje: ""};
 break;
 case 27: case 28:
 this.$ = $$[$0-2] + "()";
 break;
-case 29:
+case 29: case 30:
 this.$ = $$[$0-1] + $$[$0];
 break;
-case 30:
-this.$ = $$[$0-1] + "all";
-break;
-case 31:
-this.$ = [$$[$0]];
-break;
 case 33:
-this.$ = [$$[$0-3], $$[$0]]
+this.$ = {id: $$[$0], eje: $$[$0-3]}
 break;
 case 54:
 

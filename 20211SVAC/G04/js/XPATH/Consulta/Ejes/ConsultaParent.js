@@ -1,24 +1,21 @@
 class ConsultaParent {
-
-    public run(entornos: Array<Entorno>, id: string): Array<Entorno> {
-        let newEntornos: Array<Entorno> = new Array();
-
+    constructor(id) {
+        this.id = id;
+    }
+    run(entornos) {
+        let newEntornos = new Array();
         entornos.forEach(e => {
-
             e.getAnterior().getTable().forEach(s => {
                 if (s instanceof Nodo) {
-                    if (s.getNombre() === id) {
+                    if (s.getNombre() === this.id) {
                         this.addEntorno(newEntornos, e.getAnterior());
                     }
                 }
             });
-
         });
-
         return newEntornos;
     }
-
-    private addEntorno(entornos: Array<Entorno>, entorno: Entorno) {
+    addEntorno(entornos, entorno) {
         if (entornos.find(e => e === entorno) == undefined) {
             entornos.push(entorno);
         }
