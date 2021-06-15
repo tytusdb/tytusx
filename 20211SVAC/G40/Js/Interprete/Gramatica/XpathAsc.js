@@ -72,12 +72,12 @@
   }
 */
 var XpathAsc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,8],$V2=[1,26],$V3=[1,27],$V4=[1,28],$V5=[1,29],$V6=[1,10],$V7=[1,11],$V8=[1,12],$V9=[1,13],$Va=[1,14],$Vb=[1,15],$Vc=[1,16],$Vd=[1,17],$Ve=[1,18],$Vf=[1,19],$Vg=[1,20],$Vh=[1,21],$Vi=[1,22],$Vj=[1,23],$Vk=[1,24],$Vl=[1,25],$Vm=[5,10,12,13,15,16,17,18,20,21,22,27,28,29,30,31,32,33,34,35,36,37,38],$Vn=[18,20,21,22,27,28,29,30,31,32,33,34,35,36,37,38],$Vo=[5,10,12,13,15,16,17,18,20,21,22,25,27,28,29,30,31,32,33,34,35,36,37,38,41,43,45,47,48,49,50,52,54,55,56,57,59],$Vp=[2,24],$Vq=[1,37],$Vr=[2,18],$Vs=[1,74],$Vt=[1,63],$Vu=[1,65],$Vv=[1,66],$Vw=[1,75],$Vx=[1,64],$Vy=[1,67],$Vz=[1,68],$VA=[1,69],$VB=[1,70],$VC=[1,71],$VD=[1,73],$VE=[25,43,45],$VF=[1,87],$VG=[1,86],$VH=[1,85],$VI=[1,88],$VJ=[1,89],$VK=[20,25,41,43,45,47,48,49,50,52,54,55,56,57,59],$VL=[1,102],$VM=[1,103],$VN=[25,41,43,45,47,48,49,50,52,54,55,59];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,8],$V2=[1,9],$V3=[1,28],$V4=[1,29],$V5=[1,30],$V6=[1,31],$V7=[1,11],$V8=[1,12],$V9=[1,13],$Va=[1,14],$Vb=[1,15],$Vc=[1,16],$Vd=[1,17],$Ve=[1,18],$Vf=[1,19],$Vg=[1,20],$Vh=[1,21],$Vi=[1,22],$Vj=[1,23],$Vk=[1,24],$Vl=[1,25],$Vm=[1,26],$Vn=[1,27],$Vo=[2,5,10,12,13,15,16,17,18,20,21,22,23,24,29,30,31,32,33,34,35,36,37,38,39],$Vp=[18,20,21,22,23,24,29,30,31,32,33,34,35,36,37,38,39],$Vq=[2,5,10,12,13,15,16,17,18,20,21,22,23,24,27,29,30,31,32,33,34,35,36,37,38,39,42,45,47,49,50,51,52,54,56,57,58,59,61],$Vr=[2,27],$Vs=[1,39],$Vt=[2,19],$Vu=[1,75],$Vv=[1,64],$Vw=[1,66],$Vx=[1,67],$Vy=[1,76],$Vz=[1,77],$VA=[1,65],$VB=[1,68],$VC=[1,69],$VD=[1,70],$VE=[1,71],$VF=[1,72],$VG=[1,74],$VH=[27,45,47],$VI=[1,89],$VJ=[1,88],$VK=[1,87],$VL=[1,90],$VM=[1,91],$VN=[20,27,42,45,47,49,50,51,52,54,56,57,58,59,61],$VO=[1,105],$VP=[1,106],$VQ=[27,42,45,47,49,50,51,52,54,56,57,61];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"SETS":4,"EOF":5,"SET":6,"SELECTORES":7,"EXPRESION":8,"AXES":9,"tk_dobleslash":10,"OTRO_SELECTOR":11,"tk_slash":12,"tk_dpds":13,"AGREGAR_SELECTOR":14,"tk_pds":15,"tk_dps":16,"tk_ps":17,"tk_identificador":18,"PREDICADO":19,"tk_asterisco":20,"tk_texto":21,"tk_node":22,"tk_corchetea":23,"EXPRESION_FILTRO":24,"tk_corchetec":25,"EXPRESION_LOGICA":26,"tk_ancestorself":27,"tk_ancestor":28,"tk_child":29,"tk_descendantself":30,"tk_descendant":31,"tk_followingsibling":32,"tk_following":33,"tk_self":34,"tk_parent":35,"tk_precedingsibling":36,"tk_attribute":37,"tk_preceding":38,"ATRIBUTO":39,"tk_arroba":40,"tk_igual":41,"CADENA":42,"tk_and":43,"EXPRESION_RELACIONAL":44,"tk_or":45,"EXPRESION_NUMERICA":46,"tk_mayor":47,"tk_menor":48,"tk_mayorigual":49,"tk_menorigual":50,"EXPRESION_CADENA":51,"tk_noigual":52,"tk_arrobaasterisco":53,"tk_menos":54,"tk_mas":55,"tk_mod":56,"tk_division":57,"tk_parentesisa":58,"tk_parentesisc":59,"tk_entero":60,"tk_decimal":61,"tk_last":62,"tk_position":63,"tk_cadena1":64,"tk_cadena2":65,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",10:"tk_dobleslash",12:"tk_slash",13:"tk_dpds",15:"tk_pds",16:"tk_dps",17:"tk_ps",18:"tk_identificador",20:"tk_asterisco",21:"tk_texto",22:"tk_node",23:"tk_corchetea",25:"tk_corchetec",27:"tk_ancestorself",28:"tk_ancestor",29:"tk_child",30:"tk_descendantself",31:"tk_descendant",32:"tk_followingsibling",33:"tk_following",34:"tk_self",35:"tk_parent",36:"tk_precedingsibling",37:"tk_attribute",38:"tk_preceding",40:"tk_arroba",41:"tk_igual",43:"tk_and",45:"tk_or",47:"tk_mayor",48:"tk_menor",49:"tk_mayorigual",50:"tk_menorigual",52:"tk_noigual",53:"tk_arrobaasterisco",54:"tk_menos",55:"tk_mas",56:"tk_mod",57:"tk_division",58:"tk_parentesisa",59:"tk_parentesisc",60:"tk_entero",61:"tk_decimal",62:"tk_last",63:"tk_position",64:"tk_cadena1",65:"tk_cadena2"},
-productions_: [0,[3,2],[4,2],[4,1],[6,2],[6,1],[6,1],[6,2],[7,2],[7,1],[7,1],[7,2],[7,1],[11,2],[11,2],[11,2],[11,2],[14,1],[14,0],[8,2],[8,2],[8,2],[8,2],[19,3],[19,0],[24,1],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[39,4],[26,3],[26,3],[26,1],[44,3],[44,3],[44,3],[44,3],[44,3],[44,3],[44,1],[44,1],[44,1],[44,1],[44,1],[44,1],[51,1],[51,1],[46,2],[46,3],[46,3],[46,3],[46,3],[46,3],[46,3],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[42,1],[42,1]],
+symbols_: {"error":2,"INICIO":3,"SETS":4,"EOF":5,"SET":6,"SELECTORES":7,"EXPRESION":8,"AXES":9,"tk_dobleslash":10,"OTRO_SELECTOR":11,"tk_slash":12,"tk_dpds":13,"AGREGAR_SELECTOR":14,"tk_pds":15,"tk_dps":16,"tk_ps":17,"tk_identificador":18,"PREDICADO":19,"tk_asterisco":20,"tk_punto":21,"tk_doblepunto":22,"tk_texto":23,"tk_node":24,"tk_corchetea":25,"EXPRESION_FILTRO":26,"tk_corchetec":27,"EXPRESION_LOGICA":28,"tk_ancestorself":29,"tk_ancestor":30,"tk_child":31,"tk_descendantself":32,"tk_descendant":33,"tk_followingsibling":34,"tk_following":35,"tk_self":36,"tk_parent":37,"tk_precedingsibling":38,"tk_preceding":39,"ATRIBUTO":40,"tk_arroba":41,"tk_igual":42,"CADENA":43,"tk_attribute":44,"tk_and":45,"EXPRESION_RELACIONAL":46,"tk_or":47,"EXPRESION_NUMERICA":48,"tk_mayor":49,"tk_menor":50,"tk_mayorigual":51,"tk_menorigual":52,"EXPRESION_CADENA":53,"tk_noigual":54,"tk_arrobaasterisco":55,"tk_menos":56,"tk_mas":57,"tk_mod":58,"tk_division":59,"tk_parentesisa":60,"tk_parentesisc":61,"tk_entero":62,"tk_decimal":63,"tk_last":64,"tk_position":65,"tk_cadena1":66,"tk_cadena2":67,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",10:"tk_dobleslash",12:"tk_slash",13:"tk_dpds",15:"tk_pds",16:"tk_dps",17:"tk_ps",18:"tk_identificador",20:"tk_asterisco",21:"tk_punto",22:"tk_doblepunto",23:"tk_texto",24:"tk_node",25:"tk_corchetea",27:"tk_corchetec",29:"tk_ancestorself",30:"tk_ancestor",31:"tk_child",32:"tk_descendantself",33:"tk_descendant",34:"tk_followingsibling",35:"tk_following",36:"tk_self",37:"tk_parent",38:"tk_precedingsibling",39:"tk_preceding",41:"tk_arroba",42:"tk_igual",44:"tk_attribute",45:"tk_and",47:"tk_or",49:"tk_mayor",50:"tk_menor",51:"tk_mayorigual",52:"tk_menorigual",54:"tk_noigual",55:"tk_arrobaasterisco",56:"tk_menos",57:"tk_mas",58:"tk_mod",59:"tk_division",60:"tk_parentesisa",61:"tk_parentesisc",62:"tk_entero",63:"tk_decimal",64:"tk_last",65:"tk_position",66:"tk_cadena1",67:"tk_cadena2"},
+productions_: [0,[3,2],[4,2],[4,1],[6,2],[6,1],[6,1],[6,2],[6,1],[7,2],[7,1],[7,1],[7,2],[7,1],[11,2],[11,2],[11,2],[11,2],[14,1],[14,0],[8,2],[8,2],[8,1],[8,1],[8,2],[8,2],[19,3],[19,0],[26,1],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[9,2],[40,4],[40,4],[28,3],[28,3],[28,1],[46,3],[46,3],[46,3],[46,3],[46,3],[46,3],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[53,1],[53,1],[48,2],[48,3],[48,3],[48,3],[48,3],[48,3],[48,3],[48,1],[48,1],[48,1],[48,1],[48,1],[48,1],[43,1],[43,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,16 +86,34 @@ switch (yystate) {
 case 1:
   /*SELECT ES EL ARREGLO DE NODOS*/
                          /*Creamos una nueva instruccion y le mandamos los nodos que debe ir a buscar*/
-                        instruccion = new XPath(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1])
-                        console.log("TODO CORRECTO :D XPATH ASC VERSION");
-                        this.$ = instruccion;
-                        return this.$; 
+                        if ($$[$0-1]!=null){
+                          instruccion = new XPath(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1])
+                          console.log("TODO CORRECTO :D XPATH ASC VERSION");
+                          this.$ = instruccion;
+                          return this.$;
+                        }else {
+                          instruccion = new XPath(_$[$0-1].first_line, _$[$0-1].first_column, [])
+                          console.log("TODO CORRECTO :D XPATH ASC VERSION");
+                          this.$ = instruccion;
+                          return this.$;
+                        }
+                         
 break;
 case 2:
- $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+ if($$[$0-1]!=null && $$[$0]!=null){
+                  $$[$0-1].push($$[$0]);
+                  this.$ = $$[$0-1]; 
+                  } else {
+                    this.$ = null;
+                  } 
 break;
 case 3:
-  this.$ = [$$[$0]]; 
+ if($$[$0]!=null){
+              this.$ = [$$[$0]];
+            } else {
+              this.$ = null;
+            }
+             
 break;
 case 4:
          
@@ -133,58 +151,63 @@ case 7:
                           
 break;
 case 8:
+ 
+            ListaErr.agregarError(new Error(NumeroE, yylineno,this._$.first_column + 1, "Sintactico", "Se esperaba un objeto y se encontro "+ yytext,"XPATH")); NumeroE++;
+            this.$ = null; 
+break;
+case 9:
  arr = [TipoSelector.DOBLE_SLASH]; 
                                           arr = arr.concat($$[$0][0]);
                                           $$[$0-1] = $$[$0-1]+""+$$[$0][1] ;
                                           this.$ = [arr,$$[$0-1]];
                                         
 break;
-case 9:
+case 10:
  this.$ = [[TipoSelector.DOBLE_SLASH],$$[$0]]; 
 break;
-case 10:
+case 11:
  this.$ = [[TipoSelector.SLASH],$$[$0]];  
 break;
-case 11:
+case 12:
   arr = [TipoSelector.SLASH] 
                                       arr = arr.concat($$[$0][0]);
                                       $$[$0-1] = $$[$0-1]+""+$$[$0][1];
                                       this.$ = [arr,$$[$0-1]]; 
 break;
-case 12:
+case 13:
  this.$ = [$$[$0][0],$$[$0][1]];   
 break;
-case 13:
+case 14:
  arr = [TipoSelector.DOSPUNTOS_DOSSLASH];
                                           arr = arr.concat($$[$0][0]);
                                           $$[$0-1] = $$[$0-1]+""+$$[$0][1];
                                           this.$ = [arr,$$[$0-1]];  
 break;
-case 14:
+case 15:
  arr = [TipoSelector.PUNTO_DOSSLASH];
                                           arr = arr.concat($$[$0][0]);
                                           $$[$0-1] = $$[$0-1]+""+$$[$0][1];
                                           this.$ = [arr,$$[$0-1]];  
 break;
-case 15:
+case 16:
  arr = [TipoSelector.DOSPUNTOS_SLASH];
                                           arr = arr.concat($$[$0][0]);
                                           $$[$0-1] = $$[$0-1]+""+$$[$0][1];
                                           this.$ = [arr,$$[$0-1]];  
 break;
-case 16:
+case 17:
  arr = [TipoSelector.PUNTO_SLASH];
                                           arr = arr.concat($$[$0][0]);
                                           $$[$0-1] = $$[$0-1]+""+$$[$0][1];
                                           this.$ = [arr,$$[$0-1]];  
 break;
-case 17:
+case 18:
  this.$ = [$$[$0][0],$$[$0][1]]; 
 break;
-case 18:
+case 19:
  this.$ = [[TipoSelector.FIN],""]; 
 break;
-case 19:
+case 20:
 
                                         expresionAux = new ExpresionXPath(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1], TipoExpresionXPath.IDENTIFICADOR, $$[$0][0]);
                                         nodoaux = new NodoArbol($$[$0-1],"");
@@ -192,7 +215,7 @@ case 19:
                                         this.$ = [expresionAux,nodoaux];
                                         
 break;
-case 20:
+case 21:
      
                                         expresionAux = new ExpresionXPath(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1], TipoExpresionXPath.ASTERISCO, $$[$0][0]);
                                         nodoaux = new NodoArbol($$[$0-1],"");
@@ -200,7 +223,21 @@ case 20:
                                         this.$ = [expresionAux,nodoaux];
                                         
 break;
-case 21:
+case 22:
+     
+                                        expresionAux = new ExpresionXPath(_$[$0].first_line, _$[$0].first_column, $$[$0], TipoExpresionXPath.PUNTO, null);
+                                        nodoaux = new NodoArbol($$[$0],"");
+                                        this.$ = [expresionAux,nodoaux];
+                                        
+break;
+case 23:
+     
+                                        expresionAux = new ExpresionXPath(_$[$0].first_line, _$[$0].first_column, $$[$0], TipoExpresionXPath.DOBLEPUNTO, null);
+                                        nodoaux = new NodoArbol($$[$0],"");
+                                        this.$ = [expresionAux,nodoaux];
+                                        
+break;
+case 24:
 
                                         expresionAux = new ExpresionXPath(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1], TipoExpresionXPath.TEXT, $$[$0][0]);
                                         nodoaux = new NodoArbol($$[$0-1],"");
@@ -208,14 +245,14 @@ case 21:
                                         this.$ = [expresionAux,nodoaux];
                                         
 break;
-case 22:
+case 25:
           expresionAux = new ExpresionXPath(_$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1], TipoExpresionXPath.NODE, $$[$0][0]);
                                         nodoaux = new NodoArbol($$[$0-1],"");
                                         nodoaux.agregarHijo($$[$0][1]);
                                         this.$ = [expresionAux,nodoaux];
                                         
 break;
-case 23:
+case 26:
  
                                         nodoaux = new NodoArbol("Predicado","");
                                         nodoaux.agregarHijo(new NodoArbol("[",""));
@@ -223,89 +260,83 @@ case 23:
                                         nodoaux.agregarHijo(new NodoArbol("]",""));
                                         this.$ = [$$[$0-1][0],nodoaux];
 break;
-case 24:
+case 27:
  
                                         nodoaux = new NodoArbol("Predicado","");
                                         nodoaux.agregarHijo(new NodoArbol("[",""));
                                         nodoaux.agregarHijo(new NodoArbol("]",""));
                                         this.$ = [[],nodoaux];
 break;
-case 25:
+case 28:
   this.$ = $$[$0];  
 break;
-case 26:
+case 29:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.ANCESTOR_OR_SELF, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 27:
+case 30:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.ANCESTOR, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 28:
+case 31:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.CHILD, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 29:
+case 32:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.DESCENDANT_OR_SELF, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 30:
+case 33:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.DESCENDANT, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 31:
+case 34:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.FOLLOWING_SIBLING, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 32:
+case 35:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.FOLLOWING, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 33:
+case 36:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.SELF, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 34:
+case 37:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.PARENT, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 35:
+case 38:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.PRECEDING_SIBLING, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 36:
-      axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.ATTRIBUTE, $$[$0][0]);
-                                                        nodoaux = new NodoArbol($$[$0-1],"");
-                                                        nodoaux.agregarHijo($$[$0][1]);
-                                                        this.$ = [axesAux,nodoaux]; 
-break;
-case 37:
+case 39:
       axesAux = new Axes(_$[$0-1].first_line, _$[$0-1].first_column, TipoAxes.PRECEDING, $$[$0][0]);
                                                         nodoaux = new NodoArbol($$[$0-1],"");
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [axesAux,nodoaux]; 
 break;
-case 38:
+case 40:
  idAux = new Primitivo($$[$0-2], _$[$0-3].first_line, _$[$0-3].first_column);
                                                         operacionAux = new Operacion(TipoOperadores.ATRIBUTOS, idAux, $$[$0][0], Operador.IGUAL, _$[$0-3].first_line, _$[$0-3].first_column);
                                                         nodoaux = new NodoArbol("=","");
@@ -313,86 +344,94 @@ case 38:
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [operacionAux,nodoaux]; 
 break;
-case 39:
+case 41:
+ idAux = new Primitivo($$[$0-2], _$[$0-3].first_line, _$[$0-3].first_column);
+                                                        operacionAux = new Operacion(TipoOperadores.ATRIBUTOS, idAux, $$[$0][0], Operador.IGUAL, _$[$0-3].first_line, _$[$0-3].first_column);
+                                                        nodoaux = new NodoArbol("=","");
+                                                        nodoaux.agregarHijo(new NodoArbol("attribute::"+$$[$0-2],""));
+                                                        nodoaux.agregarHijo($$[$0][1]);
+                                                        this.$ = [operacionAux,nodoaux]; 
+break;
+case 42:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.AND, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                   nodoaux = new NodoArbol("and","");
                                                                   nodoaux.agregarHijo($$[$0-2][1]);
                                                                   nodoaux.agregarHijo($$[$0][1]);
                                                                   this.$ = [operacionAux,nodoaux]; 
 break;
-case 40:
+case 43:
   operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.OR, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                   nodoaux = new NodoArbol("or","");
                                                                   nodoaux.agregarHijo($$[$0-2][1]);
                                                                   nodoaux.agregarHijo($$[$0][1]);
                                                                   this.$ = [operacionAux,nodoaux]; 
 break;
-case 41: case 48: case 49: case 54: case 55: case 66:
+case 44: case 51: case 52: case 57: case 58: case 69:
  this.$ = $$[$0]; 
 break;
-case 42:
+case 45:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.MAYOR_QUE, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                          nodoaux = new NodoArbol(">","");
                                                                          nodoaux.agregarHijo($$[$0-2][1]);
                                                                          nodoaux.agregarHijo($$[$0][1]);
                                                                          this.$ = [operacionAux,nodoaux]; 
 break;
-case 43:
+case 46:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.MENOR_QUE, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                          nodoaux = new NodoArbol("<","");
                                                                          nodoaux.agregarHijo($$[$0-2][1]);
                                                                          nodoaux.agregarHijo($$[$0][1]);
                                                                          this.$ = [operacionAux,nodoaux]; 
 break;
-case 44:
+case 47:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.MAYOR_IGUAL_QUE, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                               nodoaux = new NodoArbol(">=","");
                                                                               nodoaux.agregarHijo($$[$0-2][1]);
                                                                               nodoaux.agregarHijo($$[$0][1]);
                                                                               this.$ = [operacionAux,nodoaux]; 
 break;
-case 45:
+case 48:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.MENOR_IGUAL_QUE, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                               nodoaux = new NodoArbol("<=","");
                                                                               nodoaux.agregarHijo($$[$0-2][1]);
                                                                               nodoaux.agregarHijo($$[$0][1]);
                                                                               this.$ = [operacionAux,nodoaux]; 
 break;
-case 46:
+case 49:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.IGUAL, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                        nodoaux = new NodoArbol("=","");
                                                                        nodoaux.agregarHijo($$[$0-2][1]);
                                                                        nodoaux.agregarHijo($$[$0][1]);
                                                                        this.$ = [operacionAux,nodoaux]; 
 break;
-case 47:
+case 50:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.DIFERENTE_QUE, _$[$0-2].first_line, _$[$0-2].first_column);
                                                                          nodoaux = new NodoArbol("=","");
                                                                          nodoaux.agregarHijo($$[$0-2][1]);
                                                                          nodoaux.agregarHijo($$[$0][1]);
                                                                          this.$ = [operacionAux,nodoaux]; 
 break;
-case 50:
+case 53:
   expresionAux = new ExpresionDefinida(_$[$0].first_line, _$[$0].first_column, ExpresionDefinida.ASTERISCO);
                                         nodoaux = new NodoArbol("*","");
                                         this.$ = [expresionAux,nodoaux]; 
 break;
-case 51:
+case 54:
     expresionAux = new ExpresionDefinida(_$[$0].first_line, _$[$0].first_column, ExpresionDefinida.ARROBA);
                                                 nodoaux = new NodoArbol("@*","");
                                                 this.$ = [expresionAux,nodoaux]; 
 break;
-case 52:
+case 55:
       expresionAux = new ExpresionDefinida(_$[$0].first_line, _$[$0].first_column, ExpresionDefinida.TEXT);
                                         nodoaux = new NodoArbol($$[$0],"");
                                         this.$ = [expresionAux,nodoaux]; 
 break;
-case 53:
+case 56:
        expresionAux = new ExpresionDefinida(_$[$0].first_line, _$[$0].first_column, ExpresionDefinida.NODE);
                                         nodoaux = new NodoArbol($$[$0],"");
                                         this.$ = [expresionAux,nodoaux]; 
 break;
-case 56:
+case 59:
    negativo = new Primitivo(-1, _$[$0-1].first_line, _$[$0-1].first_column);
                                                                   operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0][0], negativo, Operador.MULTIPLICACION, _$[$0-1].first_line, _$[$0-1].first_column);
                                                                   nodoaux = new NodoArbol("*","");
@@ -400,78 +439,78 @@ case 56:
                                                                   nodoaux.agregarHijo($$[$0][1]);
                                                                   this.$ = [operacionAux,nodoaux]; 
 break;
-case 57:
+case 60:
    operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.SUMA, _$[$0-2].first_line, _$[$0-2].first_column);
                                                         nodoaux = new NodoArbol("+","");
                                                         nodoaux.agregarHijo($$[$0-2][1]);
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [operacionAux,nodoaux]; 
 break;
-case 58:
+case 61:
    operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.RESTA, _$[$0-2].first_line, _$[$0-2].first_column);
                                                         nodoaux = new NodoArbol("-","");
                                                         nodoaux.agregarHijo($$[$0-2][1]);
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [operacionAux,nodoaux]; 
 break;
-case 59:
+case 62:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.MULTIPLICACION, _$[$0-2].first_line, _$[$0-2].first_column);
                                                           nodoaux = new NodoArbol("*","");
                                                           nodoaux.agregarHijo($$[$0-2][1]);
                                                           nodoaux.agregarHijo($$[$0][1]);
                                                           this.$ = [operacionAux,nodoaux]; 
 break;
-case 60:
+case 63:
   operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.MODULO, _$[$0-2].first_line, _$[$0-2].first_column);
                                                       nodoaux = new NodoArbol("%","");                                                    
                                                       nodoaux.agregarHijo($$[$0-2][1]);
                                                       nodoaux.agregarHijo($$[$0][1]);
                                                       this.$ = [operacionAux,nodoaux]; 
 break;
-case 61:
+case 64:
  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $$[$0-2][0], $$[$0][0], Operador.DIVISION, _$[$0-2].first_line, _$[$0-2].first_column);
                                                         nodoaux = new NodoArbol("÷","");
                                                         nodoaux.agregarHijo($$[$0-2][1]);
                                                         nodoaux.agregarHijo($$[$0][1]);
                                                         this.$ = [operacionAux,nodoaux]; 
 break;
-case 62:
+case 65:
  this.$ = $$[$0-1];  
 break;
-case 63:
+case 66:
  primitivoAux = new Primitivo(Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
                           nodoaux = new NodoArbol($$[$0],"");
                           this.$ = [primitivoAux,nodoaux];   
 break;
-case 64:
+case 67:
  primitivoAux = new Primitivo(Number($$[$0]), _$[$0].first_line, _$[$0].first_column);
                             nodoaux = new NodoArbol($$[$0],"");
                             this.$ = [primitivoAux,nodoaux];   
 break;
-case 65:
+case 68:
  expresionAux = new ExpresionDefinida(_$[$0].first_line, _$[$0].first_column, TipoExpresionDefinida.LAST);
               nodoaux = new NodoArbol($$[$0],"");
               this.$ = [expresionAux,nodoaux];   
 break;
-case 67:
+case 70:
    expresionAux = new ExpresionDefinida(_$[$0].first_line, _$[$0].first_column, TipoExpresionDefinida.POSITION);
                       nodoaux = new NodoArbol($$[$0],"");
                       this.$ = [expresionAux,nodoaux]; 
 break;
-case 68:
+case 71:
  primitivoAux = new Primitivo($$[$0], _$[$0].first_line, _$[$0].first_column);
                         nodoaux = new NodoArbol($$[$0],"");
                         this.$ = [primitivoAux,nodoaux];
 break;
-case 69: case 70:
+case 72: case 73:
  primitivoAux = new Primitivo($$[$0], _$[$0].first_line, _$[$0].first_column);
                               nodoaux = new NodoArbol($$[$0],"");
                               this.$ = [primitivoAux,nodoaux];   
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:5,9:6,10:$V0,11:9,12:$V1,13:$V2,15:$V3,16:$V4,17:$V5,18:$V6,20:$V7,21:$V8,22:$V9,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl},{1:[3]},{5:[1,30],6:31,7:4,8:5,9:6,10:$V0,11:9,12:$V1,13:$V2,15:$V3,16:$V4,17:$V5,18:$V6,20:$V7,21:$V8,22:$V9,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl},o($Vm,[2,3]),{8:32,9:33,18:$V6,20:$V7,21:$V8,22:$V9,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl},o($Vm,[2,5]),o($Vm,[2,6]),o($Vn,[2,9],{11:34,13:$V2,15:$V3,16:$V4,17:$V5}),o($Vn,[2,10],{11:35,13:$V2,15:$V3,16:$V4,17:$V5}),o($Vn,[2,12]),o($Vo,$Vp,{19:36,23:$Vq}),o($Vo,$Vp,{19:38,23:$Vq}),o($Vo,$Vp,{19:39,23:$Vq}),o($Vo,$Vp,{19:40,23:$Vq}),{8:41,18:$V6,20:$V7,21:$V8,22:$V9},{8:42,18:$V6,20:$V7,21:$V8,22:$V9},{8:43,18:$V6,20:$V7,21:$V8,22:$V9},{8:44,18:$V6,20:$V7,21:$V8,22:$V9},{8:45,18:$V6,20:$V7,21:$V8,22:$V9},{8:46,18:$V6,20:$V7,21:$V8,22:$V9},{8:47,18:$V6,20:$V7,21:$V8,22:$V9},{8:48,18:$V6,20:$V7,21:$V8,22:$V9},{8:49,18:$V6,20:$V7,21:$V8,22:$V9},{8:50,18:$V6,20:$V7,21:$V8,22:$V9},{8:51,18:$V6,20:$V7,21:$V8,22:$V9},{8:52,18:$V6,20:$V7,21:$V8,22:$V9},o($Vn,$Vr,{14:53,11:54,13:$V2,15:$V3,16:$V4,17:$V5}),o($Vn,$Vr,{11:54,14:55,13:$V2,15:$V3,16:$V4,17:$V5}),o($Vn,$Vr,{11:54,14:56,13:$V2,15:$V3,16:$V4,17:$V5}),o($Vn,$Vr,{11:54,14:57,13:$V2,15:$V3,16:$V4,17:$V5}),{1:[2,1]},o($Vm,[2,2]),o($Vm,[2,4]),o($Vm,[2,7]),o($Vn,[2,8]),o($Vn,[2,11]),o($Vo,[2,19]),{9:72,18:$Vs,20:$Vt,21:$Vu,22:$Vv,24:58,26:59,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,39:62,40:$Vw,44:60,46:61,53:$Vx,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},o($Vo,[2,20]),o($Vo,[2,21]),o($Vo,[2,22]),o($Vo,[2,26]),o($Vo,[2,27]),o($Vo,[2,28]),o($Vo,[2,29]),o($Vo,[2,30]),o($Vo,[2,31]),o($Vo,[2,32]),o($Vo,[2,33]),o($Vo,[2,34]),o($Vo,[2,35]),o($Vo,[2,36]),o($Vo,[2,37]),o($Vn,[2,13]),o($Vn,[2,17]),o($Vn,[2,14]),o($Vn,[2,15]),o($Vn,[2,16]),{25:[1,76]},{25:[2,25],43:[1,77],45:[1,78]},o($VE,[2,41]),o($VE,[2,48],{20:$VF,41:[1,83],47:[1,79],48:[1,80],49:[1,81],50:[1,82],52:[1,84],54:$VG,55:$VH,56:$VI,57:$VJ}),o($VE,[2,49]),o($VE,[2,50]),o($VE,[2,51]),o($VE,[2,52]),o($VE,[2,53]),{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:90,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:91,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},o($VK,[2,63]),o($VK,[2,64]),o($VK,[2,65]),o($VK,[2,66]),o($VK,[2,67]),o($VK,[2,68]),{18:[1,92]},o($Vo,[2,23]),{9:72,18:$Vs,20:$Vt,21:$Vu,22:$Vv,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,39:62,40:$Vw,44:93,46:61,53:$Vx,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,20:$Vt,21:$Vu,22:$Vv,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,39:62,40:$Vw,44:94,46:61,53:$Vx,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:95,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:96,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:97,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:98,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,42:100,46:101,51:99,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VL,65:$VM},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,42:100,46:101,51:104,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VL,65:$VM},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:105,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:106,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:107,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:108,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},{9:72,18:$Vs,27:$Va,28:$Vb,29:$Vc,30:$Vd,31:$Ve,32:$Vf,33:$Vg,34:$Vh,35:$Vi,36:$Vj,37:$Vk,38:$Vl,46:109,54:$Vy,58:$Vz,60:$VA,61:$VB,62:$VC,63:$VD},o($VK,[2,56]),{20:$VF,54:$VG,55:$VH,56:$VI,57:$VJ,59:[1,110]},{41:[1,111]},o($VE,[2,39]),o($VE,[2,40]),o($VE,[2,42],{20:$VF,54:$VG,55:$VH,56:$VI,57:$VJ}),o($VE,[2,43],{20:$VF,54:$VG,55:$VH,56:$VI,57:$VJ}),o($VE,[2,44],{20:$VF,54:$VG,55:$VH,56:$VI,57:$VJ}),o($VE,[2,45],{20:$VF,54:$VG,55:$VH,56:$VI,57:$VJ}),o($VE,[2,46]),o($VE,[2,54]),o($VE,[2,55],{20:$VF,54:$VG,55:$VH,56:$VI,57:$VJ}),o($VE,[2,69]),o($VE,[2,70]),o($VE,[2,47]),o($VN,[2,57],{20:$VF,56:$VI,57:$VJ}),o($VN,[2,58],{20:$VF,56:$VI,57:$VJ}),o($VK,[2,59]),o($VK,[2,60]),o($VK,[2,61]),o($VK,[2,62]),{42:112,64:$VL,65:$VM},o($VE,[2,38])],
-defaultActions: {30:[2,1]},
+table: [{2:$V0,3:1,4:2,6:3,7:4,8:5,9:6,10:$V1,11:10,12:$V2,13:$V3,15:$V4,16:$V5,17:$V6,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},{1:[3]},{2:$V0,5:[1,32],6:33,7:4,8:5,9:6,10:$V1,11:10,12:$V2,13:$V3,15:$V4,16:$V5,17:$V6,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},o($Vo,[2,3]),{8:34,9:35,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn},o($Vo,[2,5]),o($Vo,[2,6]),o($Vo,[2,8]),o($Vp,[2,10],{11:36,13:$V3,15:$V4,16:$V5,17:$V6}),o($Vp,[2,11],{11:37,13:$V3,15:$V4,16:$V5,17:$V6}),o($Vp,[2,13]),o($Vq,$Vr,{19:38,25:$Vs}),o($Vq,$Vr,{19:40,25:$Vs}),o($Vq,[2,22]),o($Vq,[2,23]),o($Vq,$Vr,{19:41,25:$Vs}),o($Vq,$Vr,{19:42,25:$Vs}),{8:43,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:44,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:45,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:46,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:47,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:48,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:49,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:50,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:51,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:52,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},{8:53,18:$V7,20:$V8,21:$V9,22:$Va,23:$Vb,24:$Vc},o($Vp,$Vt,{14:54,11:55,13:$V3,15:$V4,16:$V5,17:$V6}),o($Vp,$Vt,{11:55,14:56,13:$V3,15:$V4,16:$V5,17:$V6}),o($Vp,$Vt,{11:55,14:57,13:$V3,15:$V4,16:$V5,17:$V6}),o($Vp,$Vt,{11:55,14:58,13:$V3,15:$V4,16:$V5,17:$V6}),{1:[2,1]},o($Vo,[2,2]),o($Vo,[2,4]),o($Vo,[2,7]),o($Vp,[2,9]),o($Vp,[2,12]),o($Vq,[2,20]),{9:73,18:$Vu,20:$Vv,23:$Vw,24:$Vx,26:59,28:60,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,40:63,41:$Vy,44:$Vz,46:61,48:62,55:$VA,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},o($Vq,[2,21]),o($Vq,[2,24]),o($Vq,[2,25]),o($Vq,[2,29]),o($Vq,[2,30]),o($Vq,[2,31]),o($Vq,[2,32]),o($Vq,[2,33]),o($Vq,[2,34]),o($Vq,[2,35]),o($Vq,[2,36]),o($Vq,[2,37]),o($Vq,[2,38]),o($Vq,[2,39]),o($Vp,[2,14]),o($Vp,[2,18]),o($Vp,[2,15]),o($Vp,[2,16]),o($Vp,[2,17]),{27:[1,78]},{27:[2,28],45:[1,79],47:[1,80]},o($VH,[2,44]),o($VH,[2,51],{20:$VI,42:[1,85],49:[1,81],50:[1,82],51:[1,83],52:[1,84],54:[1,86],56:$VJ,57:$VK,58:$VL,59:$VM}),o($VH,[2,52]),o($VH,[2,53]),o($VH,[2,54]),o($VH,[2,55]),o($VH,[2,56]),{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:92,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:93,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},o($VN,[2,66]),o($VN,[2,67]),o($VN,[2,68]),o($VN,[2,69]),o($VN,[2,70]),o($VN,[2,71]),{18:[1,94]},{18:[1,95]},o($Vq,[2,26]),{9:73,18:$Vu,20:$Vv,23:$Vw,24:$Vx,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,40:63,41:$Vy,44:$Vz,46:96,48:62,55:$VA,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,20:$Vv,23:$Vw,24:$Vx,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,40:63,41:$Vy,44:$Vz,46:97,48:62,55:$VA,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:98,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:99,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:100,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:101,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,43:103,48:104,53:102,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG,66:$VO,67:$VP},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,43:103,48:104,53:107,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG,66:$VO,67:$VP},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:108,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:109,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:110,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:111,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},{9:73,18:$Vu,29:$Vd,30:$Ve,31:$Vf,32:$Vg,33:$Vh,34:$Vi,35:$Vj,36:$Vk,37:$Vl,38:$Vm,39:$Vn,48:112,56:$VB,60:$VC,62:$VD,63:$VE,64:$VF,65:$VG},o($VN,[2,59]),{20:$VI,56:$VJ,57:$VK,58:$VL,59:$VM,61:[1,113]},{42:[1,114]},{42:[1,115]},o($VH,[2,42]),o($VH,[2,43]),o($VH,[2,45],{20:$VI,56:$VJ,57:$VK,58:$VL,59:$VM}),o($VH,[2,46],{20:$VI,56:$VJ,57:$VK,58:$VL,59:$VM}),o($VH,[2,47],{20:$VI,56:$VJ,57:$VK,58:$VL,59:$VM}),o($VH,[2,48],{20:$VI,56:$VJ,57:$VK,58:$VL,59:$VM}),o($VH,[2,49]),o($VH,[2,57]),o($VH,[2,58],{20:$VI,56:$VJ,57:$VK,58:$VL,59:$VM}),o($VH,[2,72]),o($VH,[2,73]),o($VH,[2,50]),o($VQ,[2,60],{20:$VI,58:$VL,59:$VM}),o($VQ,[2,61],{20:$VI,58:$VL,59:$VM}),o($VN,[2,62]),o($VN,[2,63]),o($VN,[2,64]),o($VN,[2,65]),{43:116,66:$VO,67:$VP},{43:117,66:$VO,67:$VP},o($VH,[2,40]),o($VH,[2,41])],
+defaultActions: {32:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -481,16 +520,33 @@ parseError: function parseError (str, hash) {
         throw error;
     }
 },
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+parse: function parse (input) {
+    var self = this,
+        stack = [0],
+        tstack = [], // token stack
+        vstack = [null], // semantic value stack
+        lstack = [], // location stack
+        table = this.table,
+        yytext = '',
+        yylineno = 0,
+        yyleng = 0,
+        recovering = 0,
+        TERROR = 2,
+        EOF = 1;
+
     var args = lstack.slice.call(arguments, 1);
+
+    //this.reductionCount = this.shiftCount = 0;
+
     var lexer = Object.create(this.lexer);
     var sharedState = { yy: {} };
+    // copy state
     for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
+      if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+        sharedState.yy[k] = this.yy[k];
+      }
     }
+
     lexer.setInput(input, sharedState.yy);
     sharedState.yy.lexer = lexer;
     sharedState.yy.parser = this;
@@ -499,123 +555,207 @@ parse: function parse(input) {
     }
     var yyloc = lexer.yylloc;
     lstack.push(yyloc);
+
     var ranges = lexer.options && lexer.options.ranges;
+
     if (typeof sharedState.yy.parseError === 'function') {
         this.parseError = sharedState.yy.parseError;
     } else {
         this.parseError = Object.getPrototypeOf(this).parseError;
     }
-    function popStack(n) {
+
+    function popStack (n) {
         stack.length = stack.length - 2 * n;
         vstack.length = vstack.length - n;
         lstack.length = lstack.length - n;
     }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
+
+_token_stack:
+    var lex = function () {
+        var token;
+        token = lexer.lex() || EOF;
+        // if token isn't its numeric value, convert
+        if (typeof token !== 'number') {
+            token = self.symbols_[token] || token;
+        }
+        return token;
+    }
+
     var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
     while (true) {
+        // retreive state number from top of stack
         state = stack[stack.length - 1];
+
+        // use default actions if available
         if (this.defaultActions[state]) {
             action = this.defaultActions[state];
         } else {
             if (symbol === null || typeof symbol == 'undefined') {
                 symbol = lex();
             }
+            // read action for current state and first input
             action = table[state] && table[state][symbol];
         }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
+
+_handle_error:
+        // handle parse error
+        if (typeof action === 'undefined' || !action.length || !action[0]) {
+            var error_rule_depth;
+            var errStr = '';
+
+            // Return the rule stack depth where the nearest error rule can be found.
+            // Return FALSE when no error recovery rule was found.
+            function locateNearestErrorRecoveryRule(state) {
+                var stack_probe = stack.length - 1;
+                var depth = 0;
+
+                // try to recover from error
+                for(;;) {
+                    // check for error recovery rule in this state
+                    if ((TERROR.toString()) in table[state]) {
+                        return depth;
+                    }
+                    if (state === 0 || stack_probe < 2) {
+                        return false; // No suitable error recovery rule available.
+                    }
+                    stack_probe -= 2; // popStack(1): [symbol, action]
+                    state = stack[stack_probe];
+                    ++depth;
+                }
+            }
+
+            if (!recovering) {
+                // first see if there's any chance at hitting an error recovery rule:
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
+
+                // Report error
                 expected = [];
                 for (p in table[state]) {
                     if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
+                        expected.push("'"+this.terminals_[p]+"'");
                     }
                 }
                 if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                    errStr = 'Parse error on line '+(yylineno+1)+":\n"+lexer.showPosition()+"\nExpecting "+expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol)+ "'";
                 } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                    errStr = 'Parse error on line '+(yylineno+1)+": Unexpected " +
+                                  (symbol == EOF ? "end of input" :
+                                              ("'"+(this.terminals_[symbol] || symbol)+"'"));
                 }
                 this.parseError(errStr, {
                     text: lexer.match,
                     token: this.terminals_[symbol] || symbol,
                     line: lexer.yylineno,
                     loc: yyloc,
-                    expected: expected
+                    expected: expected,
+                    recoverable: (error_rule_depth !== false)
                 });
+            } else if (preErrorSymbol !== EOF) {
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
             }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
+
+            // just recovered from another error
+            if (recovering == 3) {
+                if (symbol === EOF || preErrorSymbol === EOF) {
+                    throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
+                }
+
+                // discard current lookahead and grab another
                 yyleng = lexer.yyleng;
                 yytext = lexer.yytext;
                 yylineno = lexer.yylineno;
                 yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
+                symbol = lex();
             }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
+
+            // try to recover from error
+            if (error_rule_depth === false) {
+                throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
             }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
+            popStack(error_rule_depth);
+
+            preErrorSymbol = (symbol == TERROR ? null : symbol); // save the lookahead token
+            symbol = TERROR;         // insert generic error symbol as new lookahead
+            state = stack[stack.length-1];
+            action = table[state] && table[state][TERROR];
+            recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
         }
+
+        // this shouldn't happen, unless resolve defaults are off
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: '+state+', token: '+symbol);
+        }
+
+        switch (action[0]) {
+            case 1: // shift
+                //this.shiftCount++;
+
+                stack.push(symbol);
+                vstack.push(lexer.yytext);
+                lstack.push(lexer.yylloc);
+                stack.push(action[1]); // push state
+                symbol = null;
+                if (!preErrorSymbol) { // normal execution/no error
+                    yyleng = lexer.yyleng;
+                    yytext = lexer.yytext;
+                    yylineno = lexer.yylineno;
+                    yyloc = lexer.yylloc;
+                    if (recovering > 0) {
+                        recovering--;
+                    }
+                } else {
+                    // error just occurred, resume old lookahead f/ before error
+                    symbol = preErrorSymbol;
+                    preErrorSymbol = null;
+                }
+                break;
+
+            case 2:
+                // reduce
+                //this.reductionCount++;
+
+                len = this.productions_[action[1]][1];
+
+                // perform semantic action
+                yyval.$ = vstack[vstack.length-len]; // default to $$ = $1
+                // default location, uses first token for firsts, last for lasts
+                yyval._$ = {
+                    first_line: lstack[lstack.length-(len||1)].first_line,
+                    last_line: lstack[lstack.length-1].last_line,
+                    first_column: lstack[lstack.length-(len||1)].first_column,
+                    last_column: lstack[lstack.length-1].last_column
+                };
+                if (ranges) {
+                  yyval._$.range = [lstack[lstack.length-(len||1)].range[0], lstack[lstack.length-1].range[1]];
+                }
+                r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+
+                if (typeof r !== 'undefined') {
+                    return r;
+                }
+
+                // pop off stack
+                if (len) {
+                    stack = stack.slice(0,-1*len*2);
+                    vstack = vstack.slice(0, -1*len);
+                    lstack = lstack.slice(0, -1*len);
+                }
+
+                stack.push(this.productions_[action[1]][0]);    // push nonterminal (reduce)
+                vstack.push(yyval.$);
+                lstack.push(yyval._$);
+                // goto new state = table[STATE][NONTERMINAL]
+                newState = table[stack[stack.length-2]][stack[stack.length-1]];
+                stack.push(newState);
+                break;
+
+            case 3:
+                // accept
+                return true;
+        }
+
     }
+
     return true;
 }};
 
@@ -948,69 +1088,69 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0: return 22;  
+case 0: return 24;  
 break;
-case 1: return 62;  
+case 1: return 64;  
 break;
-case 2: return 63;  
+case 2: return 65;  
 break;
-case 3: return 21;  
+case 3: return 23;  
 break;
-case 4: return 27;  
+case 4: return 29;  
 break;
-case 5: return 28;  
+case 5: return 30;  
 break;
-case 6: return 37;  
+case 6: return 44;  
 break;
-case 7: return 29;  
+case 7: return 31;  
 break;
-case 8: return 30;  
+case 8: return 32;  
 break;
-case 9: return 31;  
+case 9: return 33;  
 break;
-case 10: return 32;  
+case 10: return 34;  
 break;
-case 11: return 33;  
+case 11: return 35;  
 break;
-case 12: return 35;  
+case 12: return 37;  
 break;
-case 13: return 36;  
+case 13: return 38;  
 break;
-case 14: return 38;  
+case 14: return 39;  
 break;
-case 15: return 34;  
+case 15: return 36;  
 break;
-case 16: return 57;  
+case 16: return 59;  
 break;
-case 17: return 45;  
+case 17: return 47;  
 break;
-case 18: return 43;  
+case 18: return 45;  
 break;
-case 19: return 56;  
+case 19: return 58;  
 break;
-case 20: return 53;  
+case 20: return 55;  
 break;
-case 21: return 40;  
+case 21: return 41;  
 break;
 case 22: return 'tk_barra';  
 break;
-case 23: return 55;  
+case 23: return 57;  
 break;
-case 24: return 54;  
+case 24: return 56;  
 break;
 case 25: return 20;  
 break;
-case 26: return 52; 
+case 26: return 54; 
 break;
-case 27: return 50; 
+case 27: return 52; 
 break;
-case 28: return 49; 
+case 28: return 51; 
 break;
-case 29: return 41; 
+case 29: return 42; 
 break;
-case 30: return 47; 
+case 30: return 49; 
 break;
-case 31: return 48; 
+case 31: return 50; 
 break;
 case 32: return 'tk_interrogacion'; 
 break;
@@ -1026,27 +1166,27 @@ case 37: return 10;
 break;
 case 38: return 12; 
 break;
-case 39: return 'tk_doblepunto'; 
+case 39: return 22; 
 break;
-case 40: return 'tk_punto'; 
+case 40: return 21; 
 break;
-case 41: return 61;  
+case 41: return 63;  
 break;
-case 42: return 60;  
+case 42: return 62;  
 break;
-case 43: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 64; 
+case 43: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 66; 
 break;
-case 44: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 65; 
+case 44: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 67; 
 break;
 case 45: return 18; 
 break;
-case 46: return 23; 
+case 46: return 25; 
 break;
-case 47: return 25; 
+case 47: return 27; 
 break;
-case 48: return 58; 
+case 48: return 60; 
 break;
-case 49: return 59; 
+case 49: return 61; 
 break;
 case 50:/* skip whitespace */
 break;

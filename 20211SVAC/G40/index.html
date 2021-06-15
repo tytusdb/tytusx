@@ -10,7 +10,9 @@
         <script src="./Js/Descargas.js"></script>
         <script src="./Js/vis.js"></script>
         <script src="./Js/Interprete/Gramatica/XMLascReports.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XMLdescReports.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathAsc.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XpathDesc.js" ></script>
         <script src="./Js/Interprete/Expresiones/Atributo.js"></script>
         <script src="./Js/Interprete/Expresiones/Objeto.js"></script>
         <script src="./Js/Interprete/AST/GenerarArbol.js"></script>
@@ -52,10 +54,21 @@
             var analisisXpathCorrecto = true;
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
+            var DOTxmlCSTdesc = "";
             var DOTxmlErrores = "";
             var DOTXPATHASTasc = "";
+            var DOTXPATHASTDesc = "";
             var RGxml = new ReporteGramatical();
+            var RGxmlDesc = new ReporteGramatical();
             var nodoxPATHASC = null;
+            var nodoxPATHDESC = null;
+            var IDentorno = 1;
+            var IDobj = 1;
+            var objetosGlobal = null;
+            var entornosGlobal = null;
+            var salidaXPath = null;
+            var salidaRecursiva = "";
+            var salidaGlobal = "";
         </script>
         <title> Compi 2 - Proyecto 1 | By Oscar Llamas</title>
         <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
@@ -89,11 +102,14 @@
                     <div class="dropdown">
                         <button onclick="Descargar()" class="dropbtn">Reportes</button>
                         <div id="myDropdown2" class="dropdown-content">
-                        <a class="dropitem" id="cstXML">CST XML</a>
+                        <a class="dropitem" id="cstXML">CST XML (Asc)</a>
+                        <a class="dropitem" id="cstXMLDesc">CST XML (Desc)</a>
                         <a class="dropitem" id="erroresXML">Errores</a>
                         <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>
-                        <a class="dropitem" id="rgXML">Reporte gramatical XML</a>
-                        <a class="dropitem" id="astXP">AST XPATH</a>                               
+                        <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
+                        <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
+                        <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
+                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>                                
                         </div>
                     </div> 
                 </div>
@@ -119,7 +135,7 @@
                     <textarea id="editor"></textarea>
                     <span>
                         <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
-                        <button class="button3" >Ejecutar (Desc)</button>
+                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>   
                     <!-- FIN EDITOR 1 -->                 
                 </div>                   

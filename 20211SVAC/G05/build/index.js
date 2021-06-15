@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+=======
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Tipo_js_1 = require("./Simbolo/Tipo.js");
@@ -7,18 +9,19 @@ const GraficarAST_js_1 = require("./Graficador/GraficarAST.js");
 const TError_js_1 = require("./Interprete/Util/TError.js");
 const gramaticaXML = require('./Analizadores/gramaticaXML.js');
 const gramaticaXMLD = require('./Analizadores/gramaticaXMLDSC.js');
+const gramaticaXpath = require('./Analizadores/gramaticaXPath.js');
 let ObjetosXML;
 let cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
                         </tr></thead>`;
 //Esta funcion es para mientras en lo que sincroniza con la pag
-function accionesEjecutables() {
+/*
     ejecutarXML(`
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <biblioteca dir="calle 3>5<5" prop="Sergio's">
     <libro>
         <titulo>Libro A</titulo>
-        <autor>Julio &amp;Tommy&amp; Garcia</autor>
+        <autor>Julio& &amp;Tommy&amp; Garcia</autor>
         <fechaPublicacion ano="2001" mes="Enero"/>
     </libro>
 
@@ -34,12 +37,15 @@ function accionesEjecutables() {
 <hemeroteca dir="zona 21" prop="kev" estado="chilera">
     
 </hemeroteca>
-`);
-    realizarGraficaAST();
-    tablaErroresFicticia();
-}
-accionesEjecutables();
+`)
+    realizarGraficaAST()
+    tablaErroresFicticia()
+*/
+//accionesEjecutables()
+//tablaErroresFicticia()
 function ejecutarXML(entrada) {
+    cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
+                        </tr></thead>`;
     //Parseo para obtener la raiz o raices  
     const objetos = gramaticaXML.parse(entrada);
     ObjetosXML = objetos;
@@ -57,10 +63,30 @@ function ejecutarXML(entrada) {
     });
     //esta es solo para debug jaja
     const ent = entornoGlobal;
+    console.log(cadenaReporteTS);
+    return cadenaReporteTS;
+}
+;
+ejecutarXpath("/biblioteca");
+function ejecutarXpath(entrada) {
+    const objetos = gramaticaXpath.parse(entrada);
+    objetos[0][0][0][0][0].forEach((objeto) => {
+        /*ObjetosXML.forEach((objeto: Objeto) => {
+            let cadenaInterna: string = ""
+            if (objeto.identificador1 == "?XML") {
+                
+            } else {
+                
+            }
+            
+        })*/
+    });
 }
 ;
 function ejecutarXML_DSC(entrada) {
     const objetos = gramaticaXMLD.parse(entrada);
+    ObjetosXML = objetos;
+    const entornoGlobal = new Entorno_js_1.Entorno(null);
 }
 ;
 function llenarTablaXML(objeto, entorno, padre) {
@@ -91,8 +117,8 @@ function llenarTablaXML(objeto, entorno, padre) {
     entorno.agregar(simbolo.indentificador, simbolo);
     //Esto es para la graficada de la tabla de simbolos
     let ambitoTS = "";
-    if (ambitoTS != null) {
-        ambitoTS = objeto.identificador1;
+    if (padre != null) {
+        ambitoTS = padre.identificador1;
     }
     else {
         ambitoTS = "Global";
@@ -104,7 +130,7 @@ function llenarTablaXML(objeto, entorno, padre) {
     if (objeto.listaObjetos.length > 0) {
         objeto.listaObjetos.forEach((objetoHijo) => {
             const resultado = objetoHijo;
-            llenarTablaXML(objetoHijo, entornoObjeto, objetoHijo);
+            llenarTablaXML(objetoHijo, entornoObjeto, objeto);
         });
     }
 }
@@ -113,22 +139,29 @@ function realizarGraficaAST() {
     const graficador = new GraficarAST_js_1.GraficarAST;
     graficador.graficar(ObjetosXML);
 }
-function tablaErroresFicticia() {
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'@\'", 'XML', 1, 1);
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'$\'", 'XML', 1, 1);
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'%\'", 'XML', 1, 1);
-    new TError_js_1.ELexico('Lexico', "Caracter inesperado \'+\'", 'Xpath', 1, 1);
-    new TError_js_1.ESintactico('Sintactico', "No se esperaba \'@\'", 'XML', 1, 1);
-    let todosErrores = "";
+;
+function reporteTablaErrores() {
+    let cadenaReporteTE = ` <thead><tr><th scope="col">Tipo</th><th scope="col">Descripcion</th><th scope="col">Archivo</th><th scope="col">Fila</th><th scope="col">Columna</th>
+                        </tr></thead>`;
     TError_js_1.errorLex.forEach(element => {
-        todosErrores += "[error][ linea: " + element.linea + " columna: " + element.columna + " ] " + element.descripcion + ", Tipo:" + element.tipo + "\n";
+        cadenaReporteTE += `<tr>`;
+        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
+        cadenaReporteTE += `</tr>`;
     });
     TError_js_1.errorSin.forEach(element => {
-        todosErrores += "[error][ linea: " + element.linea + " columna: " + element.columna + " ] " + element.descripcion + ", Tipo:" + element.tipo + "\n";
+        cadenaReporteTE += `<tr>`;
+        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
+        cadenaReporteTE += `</tr>`;
     });
-    console.log(todosErrores);
+    TError_js_1.errorSem.forEach(element => {
+        cadenaReporteTE += `<tr>`;
+        cadenaReporteTE += `<td>${element.tipo}</td><td>Objeto</td><td>${element.descripcion}</td><td>${element.analizador}</td><td>${element.linea}</td><td>${element.columna}</td>`;
+        cadenaReporteTE += `</tr>`;
+    });
+    return cadenaReporteTE;
 }
-ejecutarXML_DSC(`
+;
+/*ejecutarXML_DSC(`
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <biblioteca dir="calle 3>5<5" prop="Sergio's">
@@ -151,5 +184,6 @@ ejecutarXML_DSC(`
 <hemeroteca dir="zona 21" prop="kev" estado="chilera">
     
 </hemeroteca>
-`);
-module.exports = { ejecutarXML, realizarGraficaAST, cadenaReporteTS };
+`);*/
+module.exports = { ejecutarXML, realizarGraficaAST, reporteTablaErrores };
+>>>>>>> Stashed changes
