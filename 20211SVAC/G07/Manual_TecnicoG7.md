@@ -33,7 +33,7 @@
 - [TytusX Grupo 7 - TytusDB](#TytusX_Grupo_7_-_TytusDB) 
 - [Objetivos](#Objetivos)
 - [Requisitos_del_Sistema](#Requisitos_del_Sistema)
-- [¿Cómo_Funciona?](#¿Cómo_Funciona?)
+- [Componentes](#Componentes)
 - [Análisis_Léxico_XML](#Análisis_Léxico_XML)
 - [Análisis_Sintáctico_XML_ASC](#Análisis_Sintáctico_XML_ASC)
 - [Análisis_Sintáctico_XML_DESC](#Análisis_Sintáctico_XML_DESC)
@@ -50,18 +50,23 @@
 
 # TytusX_Grupo_7_-_TytusDB
 
-<div style="text-align: justify">TytusX ...</div>
+<div style="text-align: justify">TytusX es un proyecto Open Source Native XML Database with Query Languages XPath and XQuery in JavaScript. Este proyecto es desarrollado por estudiantes de la Universidad de San Carlos de Guatemala con el fin de cumplir con un compilador capaz de interpretar lenguaje XML y traducir mediante consultas en XPATH A xml para poder obtener el resultado.TytusX es un administrador de bases de datos  documental de código abierto desarrollado bajo licencia MIT que utilizará lenguaje JavaScript para su construcción. Soportará archivos XML y manejará los lenguajes de consultas XPath y XQuery.</div>
 <br>
 
 ## Objetivos  
 ### General  
 * <div style="text-align: justify">Objetivo general</div>
+* <div style="text-align: justify">Que el estudiante aplique la fase de analisis y sintesis de la construccion de un compilador para realizar por un lado un interprete y por otro lado un traductor a un codigo ejecutable utilizando herramientas de analisis ascendente.</div>
 
 ### Específicos  
-* <div style="text-align: justify">Texto 1</div>
-* <div style="text-align: justify">Texto 2</div>
-* <div style="text-align: justify">Texto 3</div>
-* <div style="text-align: justify">Texto 4</div>
+* <div style="text-align: justify">Objetivos específicos</div>
+* <div style="text-align: justify">Que el estudiante genere un analizador lexico y sintactico para construir un interprete haciendo uso de atributos heredados y sintetizados.</div>
+* <div style="text-align: justify">Que el estudiante utilice tanto una gramática adecuada para el analizador ascendente y otra gramática adecuada para el analizador descendente.</div>
+* <div style="text-align: justify">Que el estudiante maneje la pila o el árbol que proporciona el analizador sintáctico para simular el paso de atributos heredados.</div>
+* <div style="text-align: justify">Que el estudiante implemente la ejecución de la traducción utilizando traducción dirigida por la sintaxis.</div>
+* <div style="text-align: justify">Que el estudiante comprenda los conceptos acerca de traducciones.</div>
+* <div style="text-align: justify">Que el estudiante traduzca el código fuente a un código de tres direcciones.</div>
+* <div style="text-align: justify">Que el estudiante aplique las reglas de optimización en el código de tres direcciones previo a su ejecución.</div>
 <br>
 
 ## Requisitos_del_Sistema
@@ -71,22 +76,15 @@ características mínimas:
 * Procesador Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz, 2712 Mhz, 2 procesadores principales, 4 procesadores lógicos
 * Javascript  
 * Sistema Operativo: Windows 7 o superior.
-* Sistemas ....
 </div>
 <br>
 
-## ¿Cómo_Funciona?
+## Componentes
 <div style="text-align: justify">
 
 <h3>XML - XPATH Compilador G7</h3>
 
-Este componente proporciona ...
-
-<h3>Componentes</h3>
-
-Esta hecho por ...
-
-</div>
+La página debe mostrar 3 segmentos: el primero, en la parte superior a la izquierda con el XML por utilizar; el segundo, el segmento superior a la derecha con el query o los queries; y el tercero, el segmento inferior que mostrará el resultado del query o de los queries. Cada segmento solamente contendrá una pestaña, es decir, no se puede abrir más de un XML ni más de un archivo de queries.</div>
 
 
 <p align="center">

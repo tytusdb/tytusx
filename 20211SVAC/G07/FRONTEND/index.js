@@ -104,17 +104,105 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/biblioteca/@fechaNacimiento");
+let editorXPATH = (document.getElementById("editor").value = "/biblioteca/libro/..");
 let editorXML = document.getElementById("consolaJS");
+let indiceAux=0;
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<biblioteca fechaNacimiento="28/03/1936">
-  Hola MUNDO
-</biblioteca>
+let textoEntrada = `<?xml version="3.1" encoding="UTF-8"?>
+<nuevayork>
+    <zoologico>
+        <park>
+            <selva>
+                <animal>
+                    <nombre>Werthers</nombre>
+                    <tipo>Pantera</tipo>
+                    <color>Negro</color>
+                    <edad>12</edad>
+                </animal>
+                <animal>
+                    <nombre>Bun</nombre>
+                    <tipo>León</tipo>
+                    <color>Marrón</color>
+                    <edad>15</edad>
+                </animal>
+            </selva>
+            <selva>
+                <animal>
+                    <nombre>Adrian</nombre>
+                    <tipo>Bufalo</tipo>
+                    <color>Negro</color>
+                    <edad>23</edad>
+                </animal>
+                <animal>
+                    <nombre>Jose</nombre>
+                    <tipo>Conejo</tipo>
+                    <color>Marrón</color>
+                    <edad>2</edad>
+                </animal>
+            </selva>
+            <selva>
+                <animal>
+                    <nombre>Kaka</nombre>
+                    <tipo>tigre</tipo>
+                    <color>amarillo</color>
+                    <edad>12</edad>
+                </animal>
+                <animal>
+                    <nombre>Joel</nombre>
+                    <tipo>iguana</tipo>
+                    <color>verde</color>
+                    <edad>10</edad>
+                </animal>
+            </selva>
+            <selva>
+                <animal>
+                    <nombre>Juan</nombre>
+                    <tipo>koala</tipo>
+                    <color>blanco</color>
+                    <edad>10</edad>
+                </animal>
+                <animal>
+                    <nombre>Jorge</nombre>
+                    <tipo>caiman</tipo>
+                    <color>verde</color>
+                    <edad>34</edad>
+                </animal>
+            </selva>
+            <selva>
+                <animal>
+                    <nombre>Carlos</nombre>
+                    <tipo>tucan</tipo>
+                    <color>rojo</color>
+                    <edad>11</edad>
+                </animal>
+                <animal>
+                    <nombre>Kiko</nombre>
+                    <tipo>loro</tipo>
+                    <color>verde</color>
+                    <edad>22</edad>
+                </animal>
+            </selva>
+            <selva>
+                <animal>
+                    <nombre>Toto</nombre>
+                    <tipo>pollo</tipo>
+                    <color>cafe</color>
+                    <edad>7</edad>
+                </animal>
+                <animal>
+                    <nombre>Tuki</nombre>
+                    <tipo>tucansito</tipo>
+                    <color>rojo blanco</color>
+                    <edad>10</edad>
+                </animal>
+            </selva>
+        </park>
+    </zoologico>
+</nuevayork>
 `
 editorXML.value = textoEntrada
 
@@ -152,22 +240,27 @@ botonCargar2.addEventListener("click", () => {
 
 })
 document.getElementById("ast").addEventListener("click", () => {
-  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+    let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
   
-  console.log("ingreso al CST de mercado");
+    // Se activa el modal
+    activarModal();
+
+    // Generar el arbol con Treant JS
+    graficarArbol(AST_xPath);
   
-  console.log(parserXML.json.nodo);
-
-  console.log("ingreso al AST");
-  
-  console.log(AST_xPath);
-
-  generarAST(AST_xPath);
-
-  //graficarArbol(AST_xPath.nodo);
-
-  //generarAST(AST_xPath);
 })
+
+document.getElementById("btnReporteXPATHcst").addEventListener("click", () => {
+  let AST_xPath2=analizador_xpath.parse(document.getElementById("editor").value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xPath2);
+
+})
+
 // ======================================
 // MODAL XML
 // ======================================
@@ -287,15 +380,6 @@ function analizar_xpath_izq(){
 
   console.log("Analizando XPATH...");
   let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
-
-  // GENERANDO ARBOL AST
-  contenidoModal2.innerHTML = `
-  <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
-    <div id="graph" style="width: 100%;"></div>
-  </div>
-  `;
-
-  generarAST(AST_xPath);
   
 }
 
@@ -308,9 +392,11 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
+  console.log("Analizando XPATH por la derecha");
 
   
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+  console.log(AST_xPath);
 
   //GENERANDO ARBOL AST
   contenidoModal2.innerHTML = `
@@ -322,7 +408,7 @@ function analizar_xpath() {
   //generarAST(AST_xPath);
   
 
-  
+  generarAST(AST_xPath);
   console.log("Interpretando");
   interpretar(AST_xPath,parserXML.json);
   //interpretar(AST_xPath,AST_xml);
