@@ -1,0 +1,163 @@
+<div class="container-fluid title pt-2 pb-1">
+  <h2>TytusX</h2>
+</div>
+<div class="btn-toolbar" role="toolbar">
+  <div class="mb-2 btn-group">
+    <div class="dropdown">
+      <button class="btn btn-dark rounded-0 " type="button" id="dropdownMenu" data-toggle="dropdown"
+        aria-haspopup="flase" aria-expanded="false">
+        Abrir
+      </button>
+      <div class="dropdown-menu rounded-0 bg-dark">
+        <button (click)="openDialog(1)" class="dropdown-item text-white item" type="button">XML</button>
+        <input id="fileInput1" type="file" style="display:none" accept=".xml" (change)="readFile($event,1)"
+          [(ngModel)]="fname">
+        <button (click)="openDialog(2)" class="dropdown-item text-white item" type="button">XPath</button>
+        <input id="fileInput2" type="file" style="display:none" (change)="readFile($event,2)" [(ngModel)]="fname">
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-dark rounded-0 " type="button" id="dropdownMenu" data-toggle="dropdown"
+        aria-haspopup="flase" aria-expanded="false">
+        Guardar
+      </button>
+      <div class="dropdown-menu rounded-0 bg-dark">
+        <button (click)="saveFile(1)" class="dropdown-item text-white item" type="button">XML</button>
+        <button (click)="saveFile(2)" class="dropdown-item text-white item" type="button">XPath</button>
+      </div>
+    </div>
+    <button (click)="newTab()" type="button" class="btn btn-dark rounded-0">Nueva pestaña</button>
+    <button (click)="closeTab()" type="button" class="btn btn-dark rounded-0">Cerrar pestaña</button>
+    <div class="dropdown">
+      <button class="btn btn-dark rounded-0 " type="button" id="dropdownMenu" data-toggle="dropdown"
+        aria-haspopup="flase" aria-expanded="false">
+        Limpiar
+      </button>
+      <div class="dropdown-menu rounded-0 bg-dark">
+        <button (click)="cleanEditor(1)" class="dropdown-item text-white item" type="button">XML</button>
+        <button (click)="cleanEditor(2)" class="dropdown-item text-white item" type="button">XPath</button>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn-dark rounded-0 dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Reportes
+      </button>
+      <div class="dropdown-menu rounded-0 bg-dark">
+        <button (click)="getAST()" class="dropdown-item text-white item" type="button">AST</button>
+        <button (click)="getCST()" class="dropdown-item text-white item" type="button">CST</button>
+        <button (click)="getDAG()" class="dropdown-item text-white item" type="button">DAG</button>
+      </div>
+    </div>
+  </div>
+  <div class="btn-group sel_g" role="group">
+    <select id="grammar_selector" class="form-select btn btn-dark rounded-0">
+      <option disabled>Seleccione gramática</option>
+      <option selected value="1">Ascendente</option>
+      <option value="2">Descendente</option>
+    </select>
+  </div>
+</div>
+
+
+<div class="container-fluid px-5 pt-2">
+
+  <form #iForm="ngForm" class="mb-4" (ngSubmit)="onSubmit()" novalidate>
+    <div class="row mb-5 file-editors">
+      <div class="col-lg-6 col-sm-12">
+        <p class="my-0 text-white subtitulo">Entrada XML</p>
+        <ngx-monaco-editor id="entrada" name="entrada" class="codebox" [options]="EditorOptions" [(ngModel)]="entrada">
+        </ngx-monaco-editor>
+      </div>
+      <div class="col-lg-6 col-sm-12">
+        <p class="my-0 text-white subtitulo">Editor de consultas</p>
+        <ngx-monaco-editor id="consulta" name="consulta" class="codebox" [options]="EditorOptions"
+          [(ngModel)]="consulta">
+        </ngx-monaco-editor>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-12">
+        <button type="submit" class="btn btn-outline-light btn-lg"><i class="fas fa-play-circle"></i> COMPILAR</button>
+      </div>
+    </div>
+    <div class="row mb-5 file-console">
+      <div class="col-12">
+        <p class="my-0 text-white subtitulo">Consola de salida</p>
+        <ngx-monaco-editor id="salida" name="salida" class="console" [options]="ConsoleOptions" [(ngModel)]="salida">
+        </ngx-monaco-editor>
+      </div>
+    </div>
+  </form>
+  <br>
+  <hr>
+
+  <div class="row my-5">
+    <div class="col-12">
+      <p class="my-1 text-white subtitulo">Tabla de símbolos</p>
+      <table class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Contenido</th>
+            <th scope="col">Ámbito</th>
+            <th class="text-center" scope="col">Fila</th>
+            <th class="text-center" scope="col">Columna</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of simbolos; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{item.id}}</td>
+            <td>{{item.tipo}}</td>
+            <td>{{item.value}}</td>
+            <td>{{item.entorno}}</td>
+            <td class="text-center">{{item.linea}}</td>
+            <td class="text-center">{{item.columna}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row my-5">
+    <div class="col-12">
+      <p class="mt-2 mb-1 text-white subtitulo">Tabla de errores</p>
+      <table class="table table-striped table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Error</th>
+            <th scope="col">Origen</th>
+            <th class="text-center" scope="col">Fila</th>
+            <th class="text-center" scope="col">Columna</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of errores; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{item.tipo}}</td>
+            <td>{{item.error}}</td>
+            <td>{{item.origen}}</td>
+            <td class="text-center">{{item.linea}}</td>
+            <td class="text-center">{{item.columna}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<footer class="text-center text-lg-start">
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    <p class="foot my-0">
+      © 2021 Grupo 23 - Organización de Lenguajes y Compiladores 2 - TytusX
+    </p>
+  </div>
+</footer>

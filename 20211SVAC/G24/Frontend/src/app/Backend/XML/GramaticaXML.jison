@@ -20,7 +20,9 @@ const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.c
 "//".*            	  {}
 "<!--"                {console.log("Comenzo el comentario"); this.begin("Comentario"); }
 <Comentario>[ \r\t]+  {}
-<Comentario>\n        {}
+<Comentario>\n+       {}
+<Comentario>\s+       {}
+
 <Comentario>"-->"     {console.log("Termino el comentario"); this.popState();}
 <Comentario>[^"-->"]+ {console.log("Texto dentro del comentario: "+yytext+" :("); return 'COMENTARIOS'} 
 

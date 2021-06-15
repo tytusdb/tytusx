@@ -5,11 +5,13 @@ function CargarXML(){
     var contenido = editor.getValue();
     var contenidoXpath = EntradaXPath.getValue();
 
+
     if (contenido == ""){
         SalidaXPath.setValue("No hay entrada XML para analizar.");
         SalidaXPath.refresh();
     } else {
 
+        contenido = ReemplazarEspeciales(contenido);
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
@@ -104,6 +106,7 @@ function CargarXMLDesc(){
         SalidaXPath.refresh();
     } else {
 
+        contenido = ReemplazarEspeciales(contenido);
         analisisCorrecto = EjecutarXMLDesc(contenido);
         
         if (analisisCorrecto) {
@@ -175,7 +178,7 @@ function CargarXMLDesc(){
 
                         contador++;
                     } );
-             
+                    salidaGlobal = salidaGlobal.replaceAll(" =\"\"", "");
                     SetSalida(salidaGlobal);
 
                 } else {
@@ -273,8 +276,8 @@ function ExtraerCodificacion(objetos){
         } else {
 
             if (objetos[i].identificador1 == "version" && objetos[i].identificador2 == "version"){
-                codificacion = objetos[i].texto;
-                console.log("La nueva codificacion es: "+codificacion);
+                codificacionGlobal = objetos[i].texto;
+                console.log("La nueva codificacion es: "+codificacionGlobal);
             }         
             objetos.splice(i,1);
             i--; 
@@ -351,6 +354,21 @@ function ObjetoYaExiste(arreglo, id){
 
 }
 
+function AtributoYaExiste(arreglo, id){
+
+    var existe = false;
+
+    arreglo.forEach(function (atributo){
+
+        if(atributo.getID()==id){
+            existe = true;
+        }
+    });
+
+    return existe;
+
+}
+
 function GenerarSalidaXPath(objetos){
 
     if(objetos!=null){
@@ -373,7 +391,7 @@ function GenerarSalidaXPath(objetos){
                     }
         
                     if(objeto.getTexto()!=""){
-                        salidaRecursiva+=objeto.getTexto();
+                        salidaRecursiva+= CambiarCodificacion(objeto.getTexto());
                     }
         
                     salidaRecursiva+='</'+objeto.getID()+'>'+"\n";
@@ -403,5 +421,64 @@ function SetSalida(texto){
     SalidaXPath.refresh();
 }
 
+function ReemplazarEspeciales(cadena){
 
+    var pattern = /(?=[a-zA-ZñÑ]*)'(?=[a-zA-ZñÑ]*)/g;
+    var aposPattern = /&apos;/gi;
+    var ampPattern = /&amp;/gi;
+    var ltPattern = /&lt;/gi;
+    var gtPattern = /&gt;/gi;
+    var quotPattern = /&quot;/gi;
+    cadena = cadena.replace(pattern, " &apos;");
+    cadena = cadena.replace(aposPattern, " &apos; ");
+    cadena = cadena.replace(ampPattern, " &amp; ");
+    cadena = cadena.replace(ltPattern, " &lt; ");
+    cadena = cadena.replace(gtPattern, " &gt; ");
+    cadena = cadena.replace(quotPattern, " &quot; ");
+    return cadena
+}
 
+function DefinirCodificacion(codificacion){
+
+    switch(codificacion.toLowerCase()) {
+        case "utf-8":
+        case "utf8":
+            codificacionGlobal = "UTF-8";
+          break;
+        case "iso-8859-1":
+        case "iso8859-1":
+        case "iso-88591":
+        case "iso88591": 
+            codificacionGlobal = "ISO-8859-1";
+          break;
+        default:
+            codificacionGlobal = "UTF-8";
+      }
+}
+
+function CambiarCodificacion(cadena){
+ try {
+    var cadenaAux = cadena;
+    var cadenaUTF8 = "";
+    var cadenaISO = "";
+    switch(codificacionGlobal) {
+        case "UTF-8":
+            cadenaUTF8 = decodeURIComponent(cadenaAux);
+            cadenaISO = decodeURIComponent(escape(cadenaUTF8));
+            cadenaAux = cadenaISO;
+          break;
+        case "ISO-8859-1": 
+            cadenaUTF8 = unescape(encodeURIComponent(cadenaAux));
+            cadenaAux = cadenaUTF8;
+          break;
+        default:
+            cadenaUTF8 = decodeURIComponent(cadenaAux);
+            cadenaISO = decodeURIComponent(escape(cadenaUTF8));
+            cadenaAux = cadenaISO;
+      }
+    return cadenaAux;
+ } catch (error) {
+     console.log(error);
+     return cadena
+ }
+}

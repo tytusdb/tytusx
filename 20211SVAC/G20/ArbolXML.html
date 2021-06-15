@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>XML CST</title>
+		<script src="vis/vis.js"></script>
+		<link href="vis/vis.css" rel="stylesheet" type="text/css" />
+
+		<style type="text/css">
+			#mynetwork {
+				/* width: 600px; */
+				width: 100%;
+				height: 800px;
+				border: 2px solid lightgray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="mynetwork"></div>
+
+		<!-- Add an invisible <div> element to the document, to hold the JSON data: -->
+		<div
+			id="networkJSON-results"
+			class="results"
+			style="display: none"
+		></div>
+
+		<script type="text/javascript">
+			var options = {
+				edges: {
+					smooth: {
+						type: 'cubicBezier',
+						roundness: 0.4,
+					},
+
+					arrows: {
+						to: { enabled: true, scaleFactor: 0.75, type: 'arrow' },
+						// to: {enabled: false, scaleFactor:0.5, type:'bar'},
+						middle: {
+							enabled: false,
+							scaleFactor: 1,
+							type: 'arrow',
+						},
+						from: {
+							enabled: false,
+							scaleFactor: 0.3,
+							type: 'arrow',
+						},
+						// from: {enabled: false, scaleFactor:0.5, type:'arrow'}
+					},
+					arrowStrikethrough: true,
+					chosen: true,
+					color: {
+						// color:'#848484',
+						color: 'red',
+						highlight: '#848484',
+						hover: '#848484',
+						inherit: 'from',
+						opacity: 1.0,
+					},
+					dashes: false,
+					font: {
+						color: '#343434',
+						size: 14, // px
+						face: 'arial',
+						background: 'none',
+						strokeWidth: 2, // px
+						strokeColor: '#ffffff',
+						align: 'horizontal',
+						multi: false,
+						vadjust: 0,
+						bold: {
+							color: '#343434',
+							size: 14, // px
+							face: 'arial',
+							vadjust: 0,
+							mod: 'bold',
+						},
+						ital: {
+							color: '#343434',
+							size: 14, // px
+							face: 'arial',
+							vadjust: 0,
+							mod: 'italic',
+						},
+						boldital: {
+							color: '#343434',
+							size: 14, // px
+							face: 'arial',
+							vadjust: 0,
+							mod: 'bold italic',
+						},
+						mono: {
+							color: '#343434',
+							size: 15, // px
+							face: 'courier new',
+							vadjust: 2,
+							mod: '',
+						},
+					},
+				},
+
+				shape: 'box',
+
+				layout: {
+					improvedLayout: true,
+					hierarchical: {
+						direction: 'UD',
+					},
+				},
+				physics: false,
+			};
+
+			var nodes = [];
+			var edges = [];
+
+			var aux = window.localStorage.getItem('nodos');
+			var aux2 = window.localStorage.getItem('edges');
+
+			if (aux) {
+				nodes = JSON.parse(aux);
+			} else {
+				nodes = [
+					{ id: 1, label: 'a' },
+					{ id: 2, label: 'b' },
+					{ id: 3, label: 'c' },
+				];
+			}
+
+			if (aux2) {
+				edges = JSON.parse(aux2);
+			} else {
+				edges = [
+					{ from: 1, to: 2 },
+					{ from: 1, to: 3 },
+					{ from: 2, to: 3 },
+				];
+			}
+
+			var container = document.getElementById('mynetwork');
+			var data = {
+				nodes: nodes,
+				edges: edges,
+			};
+			var network = new vis.Network(container, data, options);
+		</script>
+	</body>
+</html>
