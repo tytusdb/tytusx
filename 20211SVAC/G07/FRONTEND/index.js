@@ -111,98 +111,26 @@ let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
+let globalencod;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `<?xml version="3.1" encoding="UTF-8"?>
-<nuevayork>
-    <zoologico>
-        <park>
-            <selva>
-                <animal>
-                    <nombre>Werthers</nombre>
-                    <tipo>Pantera</tipo>
-                    <color>Negro</color>
-                    <edad>12</edad>
-                </animal>
-                <animal>
-                    <nombre>Bun</nombre>
-                    <tipo>León</tipo>
-                    <color>Marrón</color>
-                    <edad>15</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Adrian</nombre>
-                    <tipo>Bufalo</tipo>
-                    <color>Negro</color>
-                    <edad>23</edad>
-                </animal>
-                <animal>
-                    <nombre>Jose</nombre>
-                    <tipo>Conejo</tipo>
-                    <color>Marrón</color>
-                    <edad>2</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Kaka</nombre>
-                    <tipo>tigre</tipo>
-                    <color>amarillo</color>
-                    <edad>12</edad>
-                </animal>
-                <animal>
-                    <nombre>Joel</nombre>
-                    <tipo>iguana</tipo>
-                    <color>verde</color>
-                    <edad>10</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Juan</nombre>
-                    <tipo>koala</tipo>
-                    <color>blanco</color>
-                    <edad>10</edad>
-                </animal>
-                <animal>
-                    <nombre>Jorge</nombre>
-                    <tipo>caiman</tipo>
-                    <color>verde</color>
-                    <edad>34</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Carlos</nombre>
-                    <tipo>tucan</tipo>
-                    <color>rojo</color>
-                    <edad>11</edad>
-                </animal>
-                <animal>
-                    <nombre>Kiko</nombre>
-                    <tipo>loro</tipo>
-                    <color>verde</color>
-                    <edad>22</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Toto</nombre>
-                    <tipo>pollo</tipo>
-                    <color>cafe</color>
-                    <edad>7</edad>
-                </animal>
-                <animal>
-                    <nombre>Tuki</nombre>
-                    <tipo>tucansito</tipo>
-                    <color>rojo blanco</color>
-                    <edad>10</edad>
-                </animal>
-            </selva>
-        </park>
-    </zoologico>
-</nuevayork>
+let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+  <libro>
+    <titulo>La vida está äen otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
+</biblioteca>
 `
 editorXML.value = textoEntrada
 
@@ -219,7 +147,7 @@ botonCargar.addEventListener("click", () => {
     console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
     codificador.innerHTML = parserXML.tipoencoding;
-    
+    globalencod =parserXML.tipoencoding;
 
 })
 
@@ -235,7 +163,7 @@ botonCargar2.addEventListener("click", () => {
   console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
   codificador.innerHTML = parserXML.tipoencoding;
-  
+  globalencod =parserXML.tipoencoding;
 
 
 })
@@ -416,10 +344,45 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+    // Original
+    function encode_utf8(s) {
+      return unescape(encodeURIComponent(s));
+    }
+
+    function decode_utf8(s) {
+      return decodeURIComponent(escape(s));
+    }
+
+    function codificarascci(t) {
+      var caracteres = [];
+      valor = t;
+      for (var i = 0; i < valor.length; i++) {
+        caracteres[i] = valor.charAt(i).charCodeAt(0);
+      }
+      return caracteres.toString().replaceAll(",",' ');
+    }
 
 function imprimiConsola(txt){
-    document.getElementById("consolaPython").value=txt+"\n";
-}
+  console.log("imprimir en consola");
+  console.log(globalencod);  
+  //console.log(encode_utf8(txt)+"\n");
+  // asi se imprime la salida
+  //  document.getElementById("consolaPython").value=txt+"\n";
+    if(globalencod.includes('ISO-8859-1')){
+      console.log("entre en iso");
+      document.getElementById("consolaPython").value=encode_utf8(txt)+"\n";
+    }
+//IMPLEMENTACION DEL CODIGO ASCII
+/*    else if(globalencod.includes('ASCII')){
+      console.log("entre en ASCII");
+      document.getElementById("consolaPython").value = codificarascci(txt)+"\n";
+    }
+*/
+    else{
+      console.log("entre en utf");
+      document.getElementById("consolaPython").value=txt+"\n";
+    }
+  }
 document.getElementById("msgError").style.display="none";
 
 
