@@ -11,6 +11,7 @@ const parseXML = function (entrada) {
                 document.getElementById('consola').value += ">Se ejecutó el parser";
                 console.info('Entrada fue parseada correctamente!!!!');
                 document.getElementById('consola').value += ">Entrada parseada correctamente! \n";
+                return resultado;
             } else {
                 console.info('No se ejecutó la clase parser');
             }
