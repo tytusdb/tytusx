@@ -63,15 +63,26 @@ function CargarXML(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    salidaXPath = resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    salidaRecursiva = "";
+                    
                     salidaGlobal = "";
-                    GenerarSalidaXPath(salidaXPath);
-                    if(salidaRecursiva==""){
-                        salidaRecursiva = "No se encontraron coincidencias. :(";
-                    }
-                    SetSalida(salidaRecursiva);
+                    var contador = 1;
+                    resultadoXPath.forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        GenerarSalidaXPath(salidaXPath);
+
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
+
+                        contador++;
+                    } );
+             
+                    SetSalida(salidaGlobal);
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -146,14 +157,27 @@ function CargarXMLDesc(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    salidaXPath = resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    salidaRecursiva = "";
+                    
                     salidaGlobal = "";
-                    GenerarSalidaXPath(salidaXPath);
-                    if(salidaRecursiva==""){
-                        salidaRecursiva = "No se encontraron coincidencias. :(";
-                    }
-                    SetSalida(salidaRecursiva);
+                    var contador = 1;
+                    resultadoXPath.forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        GenerarSalidaXPath(salidaXPath);
+
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
+
+                        contador++;
+                    } );
+             
+                    SetSalida(salidaGlobal);
+
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
                 }
