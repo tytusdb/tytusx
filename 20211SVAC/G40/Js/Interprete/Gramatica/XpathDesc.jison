@@ -92,20 +92,48 @@ BSL                         "\\".
 %%
 
 /* Definición de la gramática */
-INICIO : SETS EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
+INICIO : LISTA_XPATH EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
                          /*Creamos una nueva instruccion y le mandamos los nodos que debe ir a buscar*/
-                        if ($1!=null){
-                          instruccion = new XPath(@1.first_line, @1.first_column, $1)
+                        if ($1!=null){                    
                           console.log("TODO CORRECTO :D XPATH DESC VERSION");
-                          $$ = instruccion;
+                          $$ = $1;
                           return $$;
                         }else {
-                          instruccion = new XPath(@1.first_line, @1.first_column, [])
                           console.log("TODO CORRECTO :D XPATH DESC VERSION");
-                          $$ = instruccion;
+                          $$ = [];
                           return $$;
                         }
-                        } ;
+                         } ;
+
+LISTA_XPATH: SETS OTRO_SET { if($1!=null){
+                              instruccion = new XPath(@1.first_line, @1.first_column, $1);
+                              arr = [instruccion];
+                              if($2!=null){
+                              arr = arr.concat($2);
+                              }                                   
+                              $$ = arr;
+                              }else {
+                                arr = null;
+                                if($2!=null){
+                                arr = $2;                                   
+                                } 
+                                $$ = arr;}};
+        
+OTRO_SET: tk_barra SETS OTRO_SET { if ($2!=null){
+                                    instruccion = new XPath(@1.first_line, @1.first_column, $2);
+                                    arr = [instruccion];
+                                    if($3!=null){
+                                    arr = arr.concat($3);
+                                    }                                   
+                                    $$ = arr;                                   
+                                  }else {
+                                    arr = null;
+                                    if($3!=null){
+                                    arr = $3;                                   
+                                    } 
+                                    $$ = arr;
+                                  }}
+        | {  $$ = null; };   
 
 SETS: SET OS {  if($1!=null && $2!=1) {
                arr = [$1];
