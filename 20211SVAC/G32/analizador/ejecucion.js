@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ejecucion = void 0;
 const xmlTS_1 = require("./arbol/xmlTS");
+const operacion_1 = require("./expresiones/operacion");
+const primitivo_1 = require("./expresiones/primitivo");
 class Ejecucion {
     constructor(prologo, cuerpo, cadena, raiz) {
         this.tildes = ['á', 'é', 'í', 'ó', 'ú'];
@@ -107,6 +109,7 @@ class Ejecucion {
             this.atributo = false;
             this.atributoTexto = '';
             this.atributoIdentificacion = [];
+            this.indiceValor = null;
             this.consultaXML = this.cuerpoXml;
             this.verObjetos();
             this.recorrido(this.raiz);
@@ -136,6 +139,7 @@ class Ejecucion {
                             this.descendiente = false;
                             this.atributo = false;
                             this.atributoTexto = '';
+                            this.indiceValor = null;
                             this.consultaXML = this.cuerpoXml;
                         }
                         else if (!(element === '[') && !(element === ']')) {
@@ -217,6 +221,16 @@ class Ejecucion {
                         this.consultaXML = cons;
                     }
                 });
+            }
+            if (this.identificar('ARITMETICAS', nodo) || this.identificar('integer', nodo)) {
+                if (this.identificar('integer', nodo)) {
+                    this.consultaXML = this.reducir(this.consultaXML, nodo.hijos[0], 'INSTRUCCIONES');
+                }
+                else {
+                    let val = null;
+                    val = this.calcular(nodo);
+                    this.consultaXML = this.reducir(this.consultaXML, val.getValorImplicito(val), 'INSTRUCCIONES');
+                }
             }
             if (this.identificar('HIJOS', nodo)) {
                 nodo.hijos.forEach((element) => {
@@ -468,6 +482,58 @@ class Ejecucion {
             }
         });
         return cons;
+    }
+    calcular(nodo) {
+        if (this.identificar('ARITMETICAS', nodo)) {
+            let izq, der = null;
+            let op = "";
+            nodo.hijos.forEach((element) => {
+                if (element instanceof Object) {
+                    if (op === "" && this.identificar('integer', element)) {
+                        izq = new primitivo_1.Primitivo(Number(element.hijos[0]), 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('integer', element)) {
+                        der = new primitivo_1.Primitivo(Number(element.hijos[0]), 1, 1);
+                    }
+                    else if (op === "" && this.identificar('ARITMETICAS', element)) {
+                        izq = this.calcular(element);
+                    }
+                    else if (!(op === "") && this.identificar('ARITMETICAS', element)) {
+                        der = this.calcular(element);
+                    }
+                    else if (op === "" && this.identificar('ORDEN', element)) {
+                        izq = new primitivo_1.Primitivo(Number(this.consultaXML.length), 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('ORDEN', element)) {
+                        der = new primitivo_1.Primitivo(Number(this.consultaXML.length), 1, 1);
+                    }
+                }
+                else if (typeof element === 'string') {
+                    if (!(element === '(') && !(element === ')')) {
+                        op = element;
+                    }
+                }
+            });
+            if (izq && der && !(op === "")) {
+                let a;
+                if (op === '+') {
+                    a = new operacion_1.Operacion(izq, der, operacion_1.Operador.SUMA, 1, 1);
+                }
+                else if (op === '-') {
+                    a = new operacion_1.Operacion(izq, der, operacion_1.Operador.RESTA, 1, 1);
+                }
+                else if (op === '*') {
+                    a = new operacion_1.Operacion(izq, der, operacion_1.Operador.MULTIPLICACION, 1, 1);
+                }
+                else if (op === 'div') {
+                    a = new operacion_1.Operacion(izq, der, operacion_1.Operador.DIVISION, 1, 1);
+                }
+                else if (op === 'mod') {
+                    a = new operacion_1.Operacion(izq, der, operacion_1.Operador.MODULO, 1, 1);
+                }
+                return a;
+            }
+        }
     }
     traducir() {
         let cadena = '';
