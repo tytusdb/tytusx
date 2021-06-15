@@ -63,8 +63,26 @@ function CargarXML(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN (ASCENDENTE) :D!!");
+                    
+                    salidaGlobal = "";
+                    var contador = 1;
+                    resultadoXPath.forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        GenerarSalidaXPath(salidaXPath);
+
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
+
+                        contador++;
+                    } );
+             
+                    SetSalida(salidaGlobal);
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -113,10 +131,10 @@ function CargarXMLDesc(){
             console.log(tablaSimbolosXML);
             console.log("↓ Arreglo Simbolos ↓");
             console.log(ReportesTSXML.arreglo);
-           // RGxml.arreglo = RGxml.arreglo.reverse();
+            RGxmlDesc.arreglo = RGxmlDesc.arreglo.reverse();
             localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
             localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
-            //localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
+            localStorage.setItem('rgJSONdesc',JSON.stringify(RGxmlDesc.arreglo, null, 2));
             
         } else {
             SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
@@ -139,8 +157,27 @@ function CargarXMLDesc(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN (DESCENDENTE ):D!!");
+                    
+                    salidaGlobal = "";
+                    var contador = 1;
+                    resultadoXPath.forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        GenerarSalidaXPath(salidaXPath);
+
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
+
+                        contador++;
+                    } );
+             
+                    SetSalida(salidaGlobal);
+
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
                 }
@@ -314,6 +351,53 @@ function ObjetoYaExiste(arreglo, id){
 
 }
 
+function GenerarSalidaXPath(objetos){
+
+    if(objetos!=null){
+        if(objetos!=[]){
+            objetos.forEach(function (objeto){
+
+                if(objeto.getAgregar()==1){
+        
+                    salidaRecursiva+='<'+objeto.getID();
+                    
+                    if (objeto.getAtributos().length > 0) {
+                        objeto.getAtributos().forEach(function (atributo) {
+                        salidaRecursiva+=" "+atributo.getID()+"="+`"`+atributo.getValor()+`"`;
+                        });
+                    }
+                    salidaRecursiva+=">";
+                    if (objeto.getObjetos().length > 0) {
+                        salidaRecursiva+="\n"
+                        GenerarSalidaXPath(objeto.getObjetos());
+                    }
+        
+                    if(objeto.getTexto()!=""){
+                        salidaRecursiva+=objeto.getTexto();
+                    }
+        
+                    salidaRecursiva+='</'+objeto.getID()+'>'+"\n";
+                } else if(objeto.getAgregar()==2){
+        
+                    salidaRecursiva+='<'+objeto.getID();
+                    
+                    if (objeto.getAtributos().length > 0) {
+                        objeto.getAtributos().forEach(function (atributo) {
+                        salidaRecursiva+=" "+atributo.getID()+"="+`"`+atributo.getValor()+`"`;
+                        });
+                    }
+                    salidaRecursiva+=" />"+"\n";
+                    }
+        
+            });
+        } else {
+            salidaRecursiva = "No se encontraron coincidencias. :(";
+        }
+    } else {
+        salidaRecursiva = "No se encontraron coincidencias. :(";
+    }
+
+}
 function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();

@@ -66,6 +66,9 @@
             var IDobj = 1;
             var objetosGlobal = null;
             var entornosGlobal = null;
+            var salidaXPath = null;
+            var salidaRecursiva = "";
+            var salidaGlobal = "";
         </script>
         <title> Compi 2 - Proyecto 1 | By Oscar Llamas</title>
         <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
@@ -103,7 +106,8 @@
                         <a class="dropitem" id="cstXMLDesc">CST XML (Desc)</a>
                         <a class="dropitem" id="erroresXML">Errores</a>
                         <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>
-                        <a class="dropitem" id="rgXML">Reporte gramatical XML</a>
+                        <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
+                        <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
                         <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
                         <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>                                
                         </div>

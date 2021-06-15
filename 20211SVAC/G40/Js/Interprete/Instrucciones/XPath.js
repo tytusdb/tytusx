@@ -9,7 +9,7 @@ var XPath = /** @class */ (function () {
         this.global = null;
         this.temporal = null;
         this.resultadoAux = null;
-        this.objetos = null;
+        this.objetos = [];
     }
     XPath.prototype.ejecutar = function (ent, arbol) {
 
@@ -42,7 +42,7 @@ var XPath = /** @class */ (function () {
         console.log(this.temporal);
         console.log("↓ SALIDA XPATH  (OBJETOS) ↓");
         console.log(this.objetos);
-        return this.temporal;
+        return this.objetos;
 
     };
 
