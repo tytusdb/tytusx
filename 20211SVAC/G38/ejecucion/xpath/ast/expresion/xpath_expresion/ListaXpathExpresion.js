@@ -9,12 +9,24 @@ class ListaXpathExpresion {
         return new Tipo(TipoDato.xpathValue);
     }
     getValor(ent) {
-        var ts = new TablaSimbolos(null);
+        var ts = XpathUtil.crearTablaSimbolos([]);
         this.expresionesXpath.forEach(function (expresion) {
-            //concatenar salidas
-            ts.listaSimbolos = ts.listaSimbolos.concat(expresion.getValor(ent).listaSimbolos);
+            let nuevoResultado = ts.listaSimbolos.concat(expresion.getValor(ent).listaSimbolos);
+            ts.listaSimbolos = nuevoResultado;
         });
         ts.replaceAtributesWithObjects();
+        ts.eliminarDuplicados();
         return ts.toStr();
+    }
+    validarMerge(listaAntigua, listaNueva) {
+        var tsAntigua = XpathUtil.crearTablaSimbolos(listaAntigua);
+        var tsNueva = XpathUtil.crearTablaSimbolos(listaNueva);
+        if (tsAntigua.isEqual(tsAntigua)) {
+            return tsAntigua.listaSimbolos;
+        }
+        else {
+            tsAntigua.merge(tsNueva);
+            return tsAntigua.listaSimbolos;
+        }
     }
 }

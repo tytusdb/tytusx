@@ -56,4 +56,10 @@ class XpathUtil {
         ts.listaSimbolos = listSimbolos;
         return ts;
     }
+    static generarIdUnicoTsRow() {
+        let cad = "#tsRow" + this.contador;
+        this.contador += 1;
+        return cad;
+    }
 }
+XpathUtil.contador = 0;

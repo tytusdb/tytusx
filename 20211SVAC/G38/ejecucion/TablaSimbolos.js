@@ -268,6 +268,9 @@ class TablaSimbolos {
         let i = 1;
         let cad = "";
         for (let row of this._listaSimbolos) {
+            if (row != null && row.nodo instanceof XmlRoot) {
+                continue;
+            }
             cad += i + ".\n" + row.toStr("");
             i += 1;
         }
@@ -304,5 +307,25 @@ class TablaSimbolos {
             }
         }
         return true;
+    }
+    eliminarDuplicados() {
+        var nuevaLista = [];
+        if (this._listaSimbolos == null) {
+            this.listaSimbolos = nuevaLista;
+            return;
+        }
+        for (let subRow of this._listaSimbolos) {
+            let existe = false;
+            for (let tmp of nuevaLista) {
+                if (tmp.id == subRow.id) {
+                    existe = true;
+                    break;
+                }
+            }
+            if (!existe) {
+                nuevaLista.push(subRow);
+            }
+        }
+        this._listaSimbolos = nuevaLista;
     }
 }

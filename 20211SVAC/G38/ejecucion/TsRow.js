@@ -9,6 +9,7 @@ class TsRow {
         this._entorno = entorno;
         this._entorno_row = entorno_row;
         this._sub_entorno = [];
+        this._id = XpathUtil.generarIdUnicoTsRow();
     }
     contieneTexto() {
         let contieneTexto = false;
@@ -160,5 +161,8 @@ class TsRow {
             }
         }
         return true;
+    }
+    get id() {
+        return this._id;
     }
 }
