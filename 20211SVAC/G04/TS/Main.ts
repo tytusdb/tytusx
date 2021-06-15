@@ -1,3 +1,4 @@
+let raizCST:NodoPadre;
 function analizar(): void {
     const texto: HTMLTextAreaElement = document.getElementById('inputXML') as HTMLTextAreaElement;
     const consola: HTMLTextAreaElement = document.getElementById('result')  as HTMLTextAreaElement;
@@ -7,9 +8,8 @@ function analizar(): void {
     let nodos: Array<Nodo> = auxResultado[0];
     let entornoGlobal: Entorno = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
-    setSymbolTable(entornoGlobal);
-    agregarContenidoReporteGramatical(new ReporteGramatical().run(auxResultado[1]));
-
+    setSymbolTable(entornoGlobal);    
+    raizCST = auxResultado[1];
     analizarXpath(entornoGlobal);
 }
 

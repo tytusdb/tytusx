@@ -1,10 +1,12 @@
 class NodoPadre implements NodosCST {
+    id:number;
     nombre:string;
     produccion:string;
     reglas:string;
     hijos:Array<NodosCST>;
 
-    constructor(nombre:string,produccion:string,regla:string,hijos:Array<NodosCST>){
+    constructor(id:number,nombre:string,produccion:string,regla:string,hijos:Array<NodosCST>){
+        this.id = id;
         this.nombre = nombre;
         this.produccion = produccion;
         this.reglas = regla;
@@ -21,5 +23,11 @@ class NodoPadre implements NodosCST {
     }
     getHijos():Array<NodosCST>{
         return this.hijos;
+    }
+    getId(){
+        return this.id;
+    }
+    getNomre(){
+        return this.nombre;
     }
 }

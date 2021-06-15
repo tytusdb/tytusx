@@ -1,3 +1,4 @@
+let raizCST;
 function analizar() {
     const texto = document.getElementById('inputXML');
     const consola = document.getElementById('result');
@@ -7,7 +8,7 @@ function analizar() {
     let entornoGlobal = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
     setSymbolTable(entornoGlobal);
-    agregarContenidoReporteGramatical(new ReporteGramatical().run(auxResultado[1]));
+    raizCST = auxResultado[1];
     analizarXpath(entornoGlobal);
 }
 function addSimbolosToEntorno(anterior, nodos, ambito) {

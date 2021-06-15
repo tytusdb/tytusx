@@ -1,5 +1,6 @@
 class NodoPadre {
-    constructor(nombre, produccion, regla, hijos) {
+    constructor(id, nombre, produccion, regla, hijos) {
+        this.id = id;
         this.nombre = nombre;
         this.produccion = produccion;
         this.reglas = regla;
@@ -16,5 +17,11 @@ class NodoPadre {
     }
     getHijos() {
         return this.hijos;
+    }
+    getId() {
+        return this.id;
+    }
+    getNomre() {
+        return this.nombre;
     }
 }
