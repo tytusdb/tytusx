@@ -1379,18 +1379,20 @@ var GramaticaXML = (function () {
                     case 3:
                         break;
                     case 4:
+                        break;
+                    case 5:
                         console.log("Termino el comentario");
                         this.popState();
                         break;
-                    case 5:
+                    case 6:
                         console.log("Texto dentro del comentario: " + yy_.yytext + " :(");
                         return 17;
                         break;
-                    case 6:
+                    case 7:
                         this.begin('cuerpo');
                         return 15;
                         break;
-                    case 7:
+                    case 8:
                         this.begin('INITIAL');
                         if (palabra.replaceAll(" ", "") == "")
                             return 16;
@@ -1399,69 +1401,69 @@ var GramaticaXML = (function () {
                         if (palabra.replaceAll(" ", "") == "")
                             return 7;
                         break;
-                    case 8:
-                        this.begin('INITIAL');
-                        return 13;
-                        yy_.yytext = palabra;
-                        palabra = "";
-                        return 7;
-                        break;
                     case 9:
                         this.begin('INITIAL');
-                        return 14;
+                        return 13;
                         yy_.yytext = palabra;
                         palabra = "";
                         return 7;
                         break;
                     case 10:
-                        palabra += yy_.yytext;
+                        this.begin('INITIAL');
+                        return 14;
+                        yy_.yytext = palabra;
+                        palabra = "";
+                        return 7;
                         break;
                     case 11:
-                        return 12;
+                        palabra += yy_.yytext;
                         break;
                     case 12:
-                        return 16;
+                        return 12;
                         break;
                     case 13:
-                        return 14;
+                        return 16;
                         break;
                     case 14:
-                        return 9;
+                        return 14;
                         break;
                     case 15:
-                        return 13;
+                        return 9;
                         break;
                     case 16:
-                        return 19;
+                        return 13;
                         break;
                     case 17:
-                        yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 2);
-                        return 20;
+                        return 19;
                         break;
                     case 18:
                         yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 2);
-                        return 21;
+                        return 20;
                         break;
                     case 19:
-                        return 10;
+                        yy_.yytext = yy_.yytext.substr(1, yy_.yyleng - 2);
+                        return 21;
                         break;
                     case 20:
-                        return 5;
+                        return 10;
                         break;
                     case 21:
+                        return 5;
                         break;
                     case 22:
                         break;
                     case 23:
                         break;
                     case 24:
+                        break;
+                    case 25:
                         inicio.listaErrores.push(new CNodoErrores.default("Lexico", "No se esperaba el caracter: " + yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column));
                         console.log("Lexico, No se esperaba el caracter: " + yy_.yytext + " Linea: " + yy_.yylloc.first_line + "Columna: " + yy_.yylloc.first_column);
                         break;
                 }
             },
-            rules: [/^(?:\/\/.*)/i, /^(?:<!--)/i, /^(?:[ \r\t]+)/i, /^(?:\n)/i, /^(?:-->)/i, /^(?:[^"-->"]+)/i, /^(?:>)/i, /^(?:<\/)/i, /^(?:<)/i, /^(?:<)/i, /^(?:.)/i, /^(?:\?>)/i, /^(?:<\/)/i, /^(?:\/>)/i, /^(?:<\?)/i, /^(?:<)/i, /^(?:=)/i, /^(?:"[^\"]*")/i, /^(?:'[^\']*')/i, /^(?:([a-zA-Z])[a-zA-Z0-9_^Ññáéíúó]*)/i, /^(?:$)/i, /^(?:[ \r\t]+)/i, /^(?:\n+)/i, /^(?:\s+)/i, /^(?:.)/i],
-            conditions: { "Comentario": { "rules": [2, 3, 4, 5], "inclusive": false }, "xml": { "rules": [0, 1, 6, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], "inclusive": true }, "cuerpo": { "rules": [0, 1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], "inclusive": true }, "INITIAL": { "rules": [0, 1, 6, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24], "inclusive": true } }
+            rules: [/^(?:\/\/.*)/i, /^(?:<!--)/i, /^(?:[ \r\t]+)/i, /^(?:\n+)/i, /^(?:\s+)/i, /^(?:-->)/i, /^(?:[^"-->"]+)/i, /^(?:>)/i, /^(?:<\/)/i, /^(?:<)/i, /^(?:<)/i, /^(?:.)/i, /^(?:\?>)/i, /^(?:<\/)/i, /^(?:\/>)/i, /^(?:<\?)/i, /^(?:<)/i, /^(?:=)/i, /^(?:"[^\"]*")/i, /^(?:'[^\']*')/i, /^(?:([a-zA-Z])[a-zA-Z0-9_^Ññáéíúó]*)/i, /^(?:$)/i, /^(?:[ \r\t]+)/i, /^(?:\n+)/i, /^(?:\s+)/i, /^(?:.)/i],
+            conditions: { "Comentario": { "rules": [2, 3, 4, 5, 6], "inclusive": false }, "xml": { "rules": [0, 1, 7, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], "inclusive": true }, "cuerpo": { "rules": [0, 1, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], "inclusive": true }, "INITIAL": { "rules": [0, 1, 7, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], "inclusive": true } }
         });
         return lexer;
     })();
