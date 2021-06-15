@@ -76,6 +76,9 @@ var Objeto = /** @class */ (function (_super) {
             }
         }
     };
+    Objeto.prototype.getAST = function () {
+        //let dot = 
+    };
     return Objeto;
 }(Nodo_1.Nodo));
 exports.Objeto = Objeto;
