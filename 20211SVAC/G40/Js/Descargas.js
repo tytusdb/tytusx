@@ -28,6 +28,23 @@ function LimpiarXPath(){
     EntradaXPath.setValue("");
 }
 
+function LimpiarSalida(){
+    SalidaXPath.setValue("");
+}
+
+function LimpiarTodo(){
+    if(tab==1){
+        editor.setValue("");
+    } else if(tab==2){
+        editor2.setValue("");
+    } else if(tab==3){
+        editor3.setValue("");
+    } else if(tab==4){
+        editor4.setValue("");
+    }
+    EntradaXPath.setValue("");
+    SalidaXPath.setValue("");
+}
 
 function download(text, name, type) {
     var a = document.getElementById("guardar-xml");
