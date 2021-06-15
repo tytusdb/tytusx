@@ -1,11 +1,13 @@
-var Objeto = /** @class */ (function () {
-    function Objeto(id, texto, linea, columna, listaAtributos, listaObjetos) {
+class Objeto {
+    constructor(id, texto, linea, columna, listaAtributos, listaObjetos) {
         this.identificador = id;
         this.texto = texto;
         this.linea = linea;
         this.columna = columna;
-        this.listaAtributos = this.listaAtributos;
-        this.listaObjetos = this.listaObjetos;
+        this.listaAtributos = listaAtributos;
+        this.listaObjetos = listaObjetos;
     }
-    return Objeto;
-}());
+    agregarObjeto(obj) {
+        this.listaObjetos.push(obj);
+    }
+}
