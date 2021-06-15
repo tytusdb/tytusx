@@ -1,0 +1,6 @@
+enum Type {
+    EMPTY = "ETIQUETA AUTO CERRADA",
+    DOUBLE_TAG = "ETIQUETA",
+    ATRIBUTO = "ATRIBUTO",
+    COMMENT = "COMMENT"
+}
