@@ -106,6 +106,7 @@ function CargarXMLDesc(){
         SalidaXPath.refresh();
     } else {
 
+        contenido = ReemplazarEspeciales(contenido);
         analisisCorrecto = EjecutarXMLDesc(contenido);
         
         if (analisisCorrecto) {
@@ -177,7 +178,7 @@ function CargarXMLDesc(){
 
                         contador++;
                     } );
-             
+                    salidaGlobal = salidaGlobal.replaceAll(" =\"\"", "");
                     SetSalida(salidaGlobal);
 
                 } else {
@@ -275,8 +276,8 @@ function ExtraerCodificacion(objetos){
         } else {
 
             if (objetos[i].identificador1 == "version" && objetos[i].identificador2 == "version"){
-                codificacion = objetos[i].texto;
-                console.log("La nueva codificacion es: "+codificacion);
+                codificacionGlobal = objetos[i].texto;
+                console.log("La nueva codificacion es: "+codificacionGlobal);
             }         
             objetos.splice(i,1);
             i--; 
@@ -390,7 +391,7 @@ function GenerarSalidaXPath(objetos){
                     }
         
                     if(objeto.getTexto()!=""){
-                        salidaRecursiva+=objeto.getTexto();
+                        salidaRecursiva+= CambiarCodificacion(objeto.getTexto());
                     }
         
                     salidaRecursiva+='</'+objeto.getID()+'>'+"\n";
@@ -437,4 +438,47 @@ function ReemplazarEspeciales(cadena){
     return cadena
 }
 
+function DefinirCodificacion(codificacion){
 
+    switch(codificacion.toLowerCase()) {
+        case "utf-8":
+        case "utf8":
+            codificacionGlobal = "UTF-8";
+          break;
+        case "iso-8859-1":
+        case "iso8859-1":
+        case "iso-88591":
+        case "iso88591": 
+            codificacionGlobal = "ISO-8859-1";
+          break;
+        default:
+            codificacionGlobal = "UTF-8";
+      }
+}
+
+function CambiarCodificacion(cadena){
+ try {
+    var cadenaAux = cadena;
+    var cadenaUTF8 = "";
+    var cadenaISO = "";
+    switch(codificacionGlobal) {
+        case "UTF-8":
+            cadenaUTF8 = decodeURIComponent(cadenaAux);
+            cadenaISO = decodeURIComponent(escape(cadenaUTF8));
+            cadenaAux = cadenaISO;
+          break;
+        case "ISO-8859-1": 
+            cadenaUTF8 = unescape(encodeURIComponent(cadenaAux));
+            cadenaAux = cadenaUTF8;
+          break;
+        default:
+            cadenaUTF8 = decodeURIComponent(cadenaAux);
+            cadenaISO = decodeURIComponent(escape(cadenaUTF8));
+            cadenaAux = cadenaISO;
+      }
+    return cadenaAux;
+ } catch (error) {
+     console.log(error);
+     return cadena
+ }
+}

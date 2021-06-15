@@ -70,38 +70,38 @@ BSL                                 "\\".
 
 
 /* Definición de la gramática */
-START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF
+START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF { return $10;}
     ;
 
   
 
 RAIZ:
-    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt    
-    | lt identifier  gt RAICES  lt div identifier gt     
+    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); }
+    | lt identifier  gt RAICES  lt div identifier gt {$$= new Objeto($2,'',0,0,null);}    
              
 ;
 
 RAICES:
-    RAICES OBJETO        
-	| OBJETO  
+    RAICES OBJETO {$$= $1;  $$.push($2);}
+	| OBJETO  {$$= [];  $$.push($1);}
 ;        
 
   
 OBJETO:
-           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt     
-        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt     
-        |  lt identifier  gt RAICES  lt div identifier gt     
-        |  lt identifier  gt identifier  lt div identifier gt     
+           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); } 
+        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,0,0,$3,null); } 
+        |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}       
+        |  lt identifier  gt identifier  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}    
            
 ;
 
 
 ATRIBUTOS:
-    ATRIBUTOS ATRIBUTO                              
-    | ATRIBUTO   
+    ATRIBUTOS ATRIBUTO   {$$=$1; $$.push($2);}                           
+    | ATRIBUTO {$$=[]; $$.push($1);}
 
 ;
 
 ATRIBUTO: 
-    identifier asig StringLiteral                   
+    identifier asig StringLiteral {$$= new Atributo($1,$3);}                 
 ;
