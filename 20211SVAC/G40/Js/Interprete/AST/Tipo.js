@@ -53,6 +53,8 @@ var TipoExpresionXPath;
     TipoExpresionXPath[TipoExpresionXPath["TEXT"] = 3] = "TEXT";
     TipoExpresionXPath[TipoExpresionXPath["PUNTO"] = 4] = "PUNTO";
     TipoExpresionXPath[TipoExpresionXPath["DOBLEPUNTO"] = 5] = "DOBLEPUNTO";
+    TipoExpresionXPath[TipoExpresionXPath["ARROBA"] = 6] = "ARROBA";
+    TipoExpresionXPath[TipoExpresionXPath["ARROBA_ID"] = 7] = "ARROBA_ID";
 })(TipoExpresionXPath || (TipoExpresionXPath = {}));
 
 

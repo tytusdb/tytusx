@@ -5,11 +5,13 @@ function CargarXML(){
     var contenido = editor.getValue();
     var contenidoXpath = EntradaXPath.getValue();
 
+
     if (contenido == ""){
         SalidaXPath.setValue("No hay entrada XML para analizar.");
         SalidaXPath.refresh();
     } else {
 
+        contenido = ReemplazarEspeciales(contenido);
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
@@ -351,6 +353,21 @@ function ObjetoYaExiste(arreglo, id){
 
 }
 
+function AtributoYaExiste(arreglo, id){
+
+    var existe = false;
+
+    arreglo.forEach(function (atributo){
+
+        if(atributo.getID()==id){
+            existe = true;
+        }
+    });
+
+    return existe;
+
+}
+
 function GenerarSalidaXPath(objetos){
 
     if(objetos!=null){
@@ -403,5 +420,21 @@ function SetSalida(texto){
     SalidaXPath.refresh();
 }
 
+function ReemplazarEspeciales(cadena){
+
+    var pattern = /(?=[a-zA-ZñÑ]*)'(?=[a-zA-ZñÑ]*)/g;
+    var aposPattern = /&apos;/gi;
+    var ampPattern = /&amp;/gi;
+    var ltPattern = /&lt;/gi;
+    var gtPattern = /&gt;/gi;
+    var quotPattern = /&quot;/gi;
+    cadena = cadena.replace(pattern, " &apos;");
+    cadena = cadena.replace(aposPattern, " &apos; ");
+    cadena = cadena.replace(ampPattern, " &amp; ");
+    cadena = cadena.replace(ltPattern, " &lt; ");
+    cadena = cadena.replace(gtPattern, " &gt; ");
+    cadena = cadena.replace(quotPattern, " &quot; ");
+    return cadena
+}
 
 
