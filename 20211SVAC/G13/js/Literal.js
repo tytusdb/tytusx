@@ -32,6 +32,9 @@ var Literal = /** @class */ (function (_super) {
     Literal.prototype.getValor = function () {
         return new Literal(this.tipo, this.valor, this.linea, this.columna);
     };
+    Literal.prototype.copiarValor = function () {
+        return new Literal(this.tipo, this.valor, this.linea, this.columna);
+    };
     return Literal;
 }(Expresion_1.Expresion));
 exports.Literal = Literal;

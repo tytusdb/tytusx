@@ -5,4 +5,5 @@ export abstract class Expresion extends NodoXPath {
     valor: any;
 
     abstract getValor(): Expresion;
+    abstract copiarValor(): Expresion;
 }

@@ -1,6 +1,6 @@
 "use strict";
-var XPathAsc = require('../src/XPath');
-var XPathDes = require('../src/XPathDesc');
+var XPathAsc = require('./XPath');
+var XPathDes = require('./XPathDesc');
 var fs = require('fs');
 var arbolXPath;
 var countId = 0;
@@ -10,18 +10,16 @@ module.exports.erroresXPath = leXpath;
 
 
 function execAscendente(entrada, xmlObj) {
+    xmlObj.pasarPadre();
     var arbolXml = xmlObj;
+    
+    //Ejecuto el parser del XPath
     arbolXPath = XPathAsc.parse(entrada);
-    
-    //var ast = aJson(arbolXPath);
-    //console.log(JSON.stringify(ast));
-    
-    //console.log(leXpath);
+    //Recorro el arbol XPath y ejecuto instrucciones
     var resultado = ejecutarRaiz(arbolXml, arbolXPath);
 
     return resultado;
 }
-
 module.exports.execAscendente = execAscendente;
 
 function execDescendente(entrada) {
@@ -37,13 +35,33 @@ function execDescendente(entrada) {
     console.log("\n"+resultado);
 }
 
+function removeDot(consulta) {
+    while (consulta[0].valor == '.') {
+        consulta.shift()
+    }
+}
+
 function ejecutarRaiz(XML, XPATH){
     var respuestas = [];
+    //
     XPATH.forEach((consulta) => {
-        var verif = ejecucionRecursiva(XML, consulta);
-        if(verif != undefined && verif != '')
-            respuestas.push(verif);
+        //var verif = ejecucionRecursiva(XML, consulta);
+        removeDot(consulta);
+
+        if(consulta[0].ambito == 'local') {
+            if(XML.etiqueta_id == consulta[0].valor) {
+                var auxConsulta = copiarConsultas(consulta);
+                auxConsulta.shift();
+    
+                var verif = newRecursiva(XML, auxConsulta);
+                if(verif != undefined && verif != '')
+                    respuestas.push(verif);
+            }
+        } else {
+            //Hacer busqueda india :v
+        }
     });
+    //
 
     var texto = '';
     if(respuestas.length > 0) {
@@ -56,18 +74,119 @@ function ejecutarRaiz(XML, XPATH){
     
     return texto;
 }
-function ejecucionRecursiva(XML, consulta, cadena) {
-    var res = [];
-    var expr;
+function newRecursiva(XML, consulta) { //XML = Posible Arreglo de objetos XML
+    var resultadoIntermedio = [];
 
-    if(consulta[0].exp != undefined) {
-        //expr = consulta[0].exp.getValor();
-        //console.log(typeof(consulta[0].exp));
+    if(Array.isArray(XML)) {
+        //Recorrer y consultar
+        XML.forEach((objXML) => {
+            var ver = consultar(objXML, consulta[0]);
+            if (ver != undefined || ver != null) {
+                if(ver.length != 0) {
+                    if(Array.isArray(ver)) {
+                        ver.forEach((al) => {
+                            resultadoIntermedio.push(al);    
+                        });
+                    } else {
+                        resultadoIntermedio.push(ver);
+                    }
+                }
+            }
+        });
+    } else {
+        //Solo consultar
+        var ver = consultar(XML, consulta[0]);
+        if(ver != undefined || ver != null) { //cambiar a push y verificar que me devuelve >0
+            if(Array.isArray(ver)) {
+                if(ver.length > 0) {
+                    ver.forEach((al) => {
+                        resultadoIntermedio.push(al);    
+                    });
+                }
+            } else {
+                resultadoIntermedio.push(ver);  
+            }
+        }
     }
+
+    var newConsulta = copiarConsultas(consulta);
+    newConsulta.shift();
+
+    var resultado = resultadoIntermedio;
+    if(newConsulta.length != 0) {
+        var resultado = newRecursiva(resultadoIntermedio, newConsulta);
+    }
+
+    return resultado;
+}
+
+function consultar(oXML, oXPath) {
+    if(oXPath.ambito == 'local') {
+        // Nodo Actual
+        if(oXPath.valor == '.') {
+            return oXML;
+        } else if(oXPath.valor == '..') {
+            //Verificar bien el flujo con el ..
+            if(oXML.padre != undefined) {
+                return oXML.padre;
+            }
+            return;
+        }
+
+        //Nodos desconocidos
+        if(oXPath.valor == '*') {
+            //verificar si es * o @*
+        } else if(oXPath.valor == 'node()') {
+            //Devolver todos los nodos :v
+        }
+        
+        //Atributos
+        if(oXPath.atributo == true) {
+            // Recorrer lista de atributos
+        } else {
+            var resAux = [];
+            
+            //Verificar si tiene predicado
+            if(oXPath.exp != undefined) {
+                //Buscar en la lista de nodos del padre lo que diga el predicado
+                //Verificar si quiere buscar nodo en x posicion, algun atributo o mas
+                //if(oXML.padre != undefined) {
+                    oXML.lista_objetos.forEach((obH) => {
+                        if(obH.etiqueta_id == oXPath.valor) {
+                            resAux.push(obH);
+                        }
+                    });
+
+                    
+                    var expVal = oXPath.exp.getValor();
+                    if(expVal == 0 || expVal.tipo == 1) {
+                        var oTmp = resAux[expVal.valor];
+                        if(oTmp != undefined) {
+                            return oTmp;
+                        }
+                    }
+                //}
+            } else {
+                // Recorrer lista de nodos
+                oXML.lista_objetos.forEach((obH) => {
+                    if(obH.etiqueta_id == oXPath.valor) {
+                        resAux.push(obH);
+                    }
+                });
+                return resAux;
+            }
+        }
+    } else if (oXPath.ambito == 'full') {
+        console.log('consulta hardcore');
+    }
+}
+
+function ejecucionRecursiva(XML, consulta) {
+    var res = [];
 
     if(consulta[0].ambito == 'local') {
         if(consulta[0].valor == '.') {
-            var auxConsulta = JSON.parse(JSON.stringify(consulta));
+            var auxConsulta = copiarConsultas(consulta);
             auxConsulta.shift();
             return ejecucionRecursiva(XML, auxConsulta);
         }
@@ -81,25 +200,38 @@ function ejecucionRecursiva(XML, consulta, cadena) {
         if(consulta[0].atributo == true) {
             //Verificar y recorrer para @*, @id
         } else if(consulta[0].valor == XML.etiqueta_id) {
-            var tmpConsulta = JSON.parse(JSON.stringify(consulta));
+            var tmpConsulta = copiarConsultas(consulta);
             tmpConsulta.shift();
             if(tmpConsulta.length == 0) {
                 //Resolver
                 //delete XML['nodo'];
                 return XML;
             } else {
-                XML.lista_objetos.forEach((o) => {
-                    var tmp = ejecucionRecursiva(o, tmpConsulta); 
-                    if(tmp != '') {
-                        res.push(tmp);
-                    }
-                });
                 if (tmpConsulta[0].exp != undefined) {
-                    var oTmp = res[tmpConsulta[0].exp.valor];
-                    if(oTmp != undefined) {
-                        res = [];
-                        res.push(oTmp);
+                    var resAux = [];
+                    XML.lista_objetos.forEach((obj) => {
+                        if(obj.etiqueta_id == tmpConsulta[0].valor) {
+                            resAux.push(obj);
+                        }
+                    });
+
+                    var expVal = tmpConsulta[0].exp.getValor(); //Verificar tipos??
+                    if(expVal.tipo == 0 || expVal.tipo == 1) {
+                        var oTmp = resAux[expVal.valor];
+                        if(oTmp != undefined) {
+                            res = [];
+                            res.push(oTmp);
+                        }
+                    } else { //Verificar si es arreglo? 
+
                     }
+                } else {
+                    XML.lista_objetos.forEach((o) => {
+                        var tmp = ejecucionRecursiva(o, tmpConsulta); 
+                        if(tmp != '') {
+                            res.push(tmp);
+                        }
+                    });
                 }
             }
         }
@@ -110,6 +242,14 @@ function ejecucionRecursiva(XML, consulta, cadena) {
         }
     }
     return res;
+}
+function copiarConsultas (lConsultas) {
+    var aux = [];
+    lConsultas.forEach((consulta) => {
+        aux.push(consulta.copiarValor());
+    })
+
+    return aux;
 }
 function seguirFull(XML, consulta){
 }
@@ -198,6 +338,8 @@ function aJson() {
 
     return ast;
 }
+module.exports.aJson = aJson;
+
 function obtenerValor(Exp) {
     var E = {}
     if(Exp.operacion != undefined) {
@@ -212,13 +354,4 @@ function obtenerValor(Exp) {
         E.id = countId++;
     }
     return E;
-}
-
-module.exports.aJson = aJson;
-function deleteNod(respuesta){
-    respuesta.forEach((oXML) => {
-        delete oXML['nodo'];
-        if(oXML.lista_objetos != undefined)
-            deleteNod(oXML.lista_objetos);
-    });
 }

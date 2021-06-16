@@ -17,4 +17,8 @@ export class Literal extends Expresion {
     getValor(): Expresion {
         return new Literal(this.tipo, this.valor, this.linea, this.columna);
     }
+
+    copiarValor(): Expresion {
+        return new Literal(this.tipo, this.valor, this.linea, this.columna);
+    }
 }

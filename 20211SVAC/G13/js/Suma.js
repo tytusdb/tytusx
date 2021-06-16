@@ -29,6 +29,9 @@ var Suma = /** @class */ (function (_super) {
         _this.columna = c;
         return _this;
     }
+    Suma.prototype.copiarValor = function () {
+        return new Suma(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    };
     Suma.prototype.getValor = function () {
         var res = new Literal_1.Literal(69, '@ERROR@', this.linea, this.columna);
         var e1 = this.hI.getValor();

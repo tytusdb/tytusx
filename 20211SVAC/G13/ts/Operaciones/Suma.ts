@@ -20,6 +20,10 @@ export class Suma extends Expresion {
         this.columna = c;
     }
     
+    copiarValor(): Expresion {
+        return new Suma(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    }
+    
     public getValor(): Expresion {
         var res:Literal = new Literal(69,'@ERROR@', this.linea, this.columna);
         var e1 = this.hI.getValor();
