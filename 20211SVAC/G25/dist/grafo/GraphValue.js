@@ -1,6 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GraphValue = void 0;
 class GraphValue {
     /**
      * @param count Contador de nodos
@@ -23,4 +21,3 @@ class GraphValue {
         this.graph = graph;
     }
 }
-exports.GraphValue = GraphValue;

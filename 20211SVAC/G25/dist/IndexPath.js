@@ -1,10 +1,10 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Ast_1 = require("./xpath/ast/Ast");
-var gramatica = require('../grammar/Grammar_xpath');
+/*import { AST_XPATH } from "./xpath/ast/AST_XPATH";*
+
+const gramatica = require('../grammar/Grammar_xpath');*/
 function ejecutarCodigo(entrada) {
     const instrucciones = gramatica.parse(entrada);
-    const AST = new Ast_1.ast(instrucciones);
+    const AST = new AST_XPATH(instrucciones);
     console.log(AST);
 }
-ejecutarCodigo("@");
+ejecutarCodigo('//biblioteca/libro/autor');

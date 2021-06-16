@@ -1,0 +1,145 @@
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/theme/dracula.css';
+@import '~codemirror/theme/material-ocean.css';
+@import '~codemirror/addon/fold/foldgutter.css';
+@import '~codemirror/addon/lint/lint.css';
+
+html,
+body {
+  height: 100%;
+  background-color: #21222C;
+  color: #fff;
+}
+
+.bg-dark {
+  background-color: #0f111a !important;
+}
+
+.CodeMirror {
+  font-family: "Lucida Console" !important;
+  font-size: 12px !important;
+  height: 100%;
+}
+
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  background-color: #282a36;
+}
+
+.layout-px-spacing {
+  padding: 20px 20px 0 20px !important;
+}
+
+.layout-spacing {
+  padding-bottom: 20px;
+}
+
+/* MAT TAB */
+.mat-tab-header-pagination-chevron {
+  border-color: #F8F8F2FF;
+}
+
+.mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron {
+  color: rgba(0, 0, 0, .26)
+}
+
+.mat-tab-label,
+.mat-tab-link {
+  color: #F8F8F2FF;
+  font-size: 14px !important;
+  height: 36.5px !important;
+  font-weight: 500;
+}
+
+.mat-tab-label-active {
+  opacity: 1 !important;
+  color: #fff !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #E91E63FF;
+}
+
+/* MAT BUTTON */
+.mat-button.mat-primary,
+.mat-icon-button.mat-primary,
+.mat-stroked-button.mat-primary {
+  color: #E91E63FF;
+}
+
+/* TABLE */
+table {
+  width: 100%;
+}
+
+th,
+td {
+  padding: 0 1em !important;
+}
+
+tr.mat-header-row {
+  height: 30px;
+  font-size: 15px !important;
+  font-weight: bold;
+}
+
+.mat-header-cell {
+  font-size: 15px;
+  color: #F8F8F2;
+  background-color: #0f111a !important;
+}
+
+.mat-cell,
+.mat-footer-cell {
+  color: #F8F8F2;
+  font-size: 13px;
+}
+
+.mat-table thead,
+.mat-table tbody,
+.mat-table tfoot,
+mat-header-row,
+mat-row,
+mat-footer-row,
+[mat-header-row],
+[mat-row],
+[mat-footer-row],
+.mat-table-sticky {
+  background-color: #282A36FF;
+}
+
+.mat-paginator,
+.mat-paginator-page-size .mat-select-trigger {
+  font-size: 13px;
+  color: #F8F8F2;
+  background-color: #0f111a;
+}
+
+/* SNACKBAR */
+.mat-simple-snackbar-action {
+  color: #EB3573FF;
+}
+
+.mat-snack-bar-container {
+  color: #F8F8F2FF;
+  background: #21222c;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12)
+}
+
+/* UPDLOAD */
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.upload-btn-wrapper input[type=file] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+}

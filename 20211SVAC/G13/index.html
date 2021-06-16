@@ -10,6 +10,10 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
+    ></script>
   </head>
   <body>
     <nav
@@ -105,34 +109,93 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <div id="canvas"></div>
+      
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">AST XPath</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="cstxml-tab" data-toggle="tab" href="#cstxml" role="tab" aria-controls="cstxml" aria-selected="false">CST XML</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="simbolos-tab" data-toggle="tab" href="#simbolos" role="tab" aria-controls="simbolos" aria-selected="false">Tabla de simbolos</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Tabla Gramatica</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Errores XML</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent" style="margin-bottom: 60px;">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row">
+            <div class="col">
+              <div id="canvas"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="cstxml" role="tabpanel" aria-labelledby="cstxml-tab">
+          <div class="row">
+            <div class="col">
+              <div id="canvas1"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="simbolos" role="tabpanel" aria-labelledby="simbolos-tab">
+          <table class="table" id="simbolosXml">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Ambito</th>
+                <th scope="col">Linea</th>
+                <th scope="col">Columna</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <table class="table" id="gramTabla">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Producción</th>
+                <th scope="col">Regla semantica</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+          <table class="table" id="erroresXml">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Contenido</th>
+                <th scope="col">Mensaje</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Linea</th>
+                <th scope="col">Columna</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="row">
-        <table id="tablaSimbolos" class="table table-sm">
-          <caption style="caption-side: top">
-            Tabla de simbolos
-          </caption>
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Valor</th>
-              <th scope="col">Fila</th>
-              <th scope="col">Columna</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-          </tbody>
-        </table>
-      </div>
+
     </div>
 
     <script src="bundle.js"></script>
-    <!--script src="dibujo.js"></!--script-->
+    
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

@@ -3,17 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width= device-width">
     <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href = "./codemirror-5.61.1/lib/codemirror.css"> 
+    <link rel="stylesheet" href="./codemirror-5.61.1/lib/codemirror.css">
+    <meta name="viewport" content="width= device-width">
     <link rel="stylesheet" href="./css/estiloBarra.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./css/estiloheader.css" MEDIA=screen>
-    <script  src = "./codemirror-5.61.1/lib/codemirror.js" > </script> 
-    <script  src="Scripts/require.js"></script>
-    
-    <title>Analizador XPATH</title>
+    <script src="./codemirror-5.61.1/lib/codemirror.js"> </script>
+    <script src="./Scripts/require.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Analizador</title>
 </head>
 <style>
     .btn_blue {
@@ -59,10 +58,35 @@
                                     <i class="fa fa-caret-down"></i>
                                 </button>
                                 <div class="dropdown-content1">
-                                    <a onclick="llenarTablaErrores()" id='erroresDoc'>Errores</a>
+                                    <form action="./Frontend/errores.html" method="get">
+                                        <input hidden id="tabErrores" name="erroresV" />
+                                        <input onclick="llenarTablaErrores()" type="submit" value="ERRORES">
+                                    </form>
                                 </div>
                             </div>
-                        </div>
+                            <div class="dropdown3">
+                                <button class="dropbtn3">Arboles
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content1">
+                                    <form action="./Frontend/errores.html" method="get">
+                                        <input hidden id="tabErrores" name="erroresV" />
+                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="CST">
+                                    </form>
+                                    <form action="./Frontend/errores.html" method="get">
+                                        <input hidden id="tabErrores" name="erroresV" />
+                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="AST">
+                                    </form>
+                                </div>
+                            </div>
+                            <form action="./Frontend/tablaSimbolos.html" method="get">
+                                <input hidden id="tabErrores" name="simbolostb"/>
+                                    <a><input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla de Simbolos"></a>
+                            </form>
+                            <form action="./Frontend/tabGramatical.html" method="get">
+                                <input hidden id="gramaticaltb" name="tablaGr"/>
+                                    <input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla Gramatical">
+                            </form>
                     </nav>
                 </div>
             </div>
@@ -78,74 +102,129 @@
                                 id="abrir" type="file" name="file" required></input></a></button>
                     <button class="btn btn-light btn_blue" type="button" onclick="limpiar()"><img
                             src="./css/imagenes/limpiar.png" /> Limpiar</button>
-                    <button class="btn btn-light btn_blue" type="button" onclick=""><img src="./css/imagenes/nuevo.png" />
+                    <button class="btn btn-light btn_blue" type="button" onclick=""><img
+                            src="./css/imagenes/nuevo.png" />
                         Nuevo</button>
-                    <button class="btn btn-light btn_blue" type="button" onclick="guardarEntrada()"><img src="./css/imagenes/guardar.png" />
-                            Guardar</button>    
+                    <button class="btn btn-light btn_blue" type="button" onclick="guardarEntrada()"><img
+                            src="./css/imagenes/guardar.png" />
+                        Guardar</button>
                     <h2 style="background-color: rgb(8, 49, 68); color:white; margin-top: 20px;">Entrada</h2>
 
                     <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor"></textarea>
+                    <button type="button" class="btn btn-light btn_blue" id="ascendente"><img
+                            src="./css/imagenes/asc.png" />
+                        Analizar XML Ascendente </button>
+                    <button type="button" class="btn btn-light btn_blue" id="descendente"><img
+                            src="./css/imagenes/desc.png" />
+                        Analizar XML Descendente </button>
                 </div>
                 <div style="width:48%; padding-right: 5%; float:right;">
 
-                    <button type="button" class="btn btn-light btn_blue" onclick="" id ="ascendente" ><img src="./css/imagenes/asc.png" />
+                    <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/asc.png" />
                         Analizar Ascendente </button>
-                    <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/desc.png" />
+                    <button type="button" class="btn btn-light btn_blue" onclick="reglasgg()"><img
+                            src="./css/imagenes/desc.png" />
                         Analizar Descendente </button>
 
-                    <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 20px;">Consulta</h2>
-                    <textarea style="width: 100%; height: 400px; font-size: 20px;" id="consola" ></textarea>
+                    <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 20px;">Consulta
+                    </h2>
+                    <textarea style="width: 100%; height: 400px; font-size: 20px;" id="consola"></textarea>
                 </div>
             </div>
         </div>
     </section>
     <section>
         <div style="padding-left: 20%; padding-right: 20%; align-content: center;">
-            
-            <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 580px;">RESULTADO CONSULTA</h2>
-            <textarea class="consola_resultado"  id="resultado" readonly ></textarea>
-            <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img src="./css/imagenes/guardar.png" />
-                Guardar Resultado</button>    
+
+            <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 580px;">RESULTADO
+                CONSULTA</h2>
+            <textarea class="consola_resultado" id="resultado" readonly></textarea>
+            <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img
+                    src="./css/imagenes/guardar.png" />
+                Guardar Resultado</button>
         </div>
     </section>
 
     <!-- necesario para que sean validos todos los js traspilados-->
     <script>var exports = {};</script>
-    
 
-    <script src = "http://code.jquery.com/jquery-3.0.0.min.js" > </script>
-    <script  src = "./codemirror-5.61.1/mode/javascript/javascript.js" > </script>
+
+
+    <script src="./codemirror-5.61.1/mode/javascript/javascript.js"> </script>
+    <script src="http://code.jquery.com/jquery-3.0.0.min.js"> </script>
     <script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
+
     <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
     <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
     <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
-    <script type="text/javascript" src="Scripts/Gramaticas/xml/gramarxml.js"></script>
-    <script type="text/javascript" src="Scripts/Reportes/GraficaXML.js"></script>
-    <script type="text/javascript" src="parser.js"></script>
-    <script type="module" >
+    <script type="text/javascript" src="Gramaticas/xml/gramarxml.js"></script>
+    <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
+    <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
+    <script src="./Gramaticas/xml/funcionesParseo.js"></script>
+    <script src="./Scripts/Arboles/Tipo.js"></script>
+    <script type="text/javascript">
 
-        $(function() {
-            $('#ascendente').click(function() {
+            $('#ascendente').click(function () {
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['Scripts/Gramaticas/xml/gramarxml.js'],
-                    function (grammarXML){
-                        let entrada = document.getElementById("editor").value;
-                        let xmlAST = grammarXML.getParser().parse(entrada);
+                requirejs(['./Scripts/Gramaticas/xml/gramarxml.js'],
+                    function (grammarXML) {
+                        erroresGramar = [];
+                        var entrada =  editor.getValue();
+                        if (entrada.length >= 0) {
+                            var xmlAST = grammarXML.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
                     });
             });
-        });
+
+            $('#descendente').click(function () {
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['./Scripts/Gramaticas/xml/gramarxmldes.js'],
+                    function (gramarxmlDes) {
+                        erroresGramar = [];
+                        var entrada =  editor.getValue();
+                        console.log(entrada);
+                        if (entrada.length >= 0) {
+                            var xmldesAST = gramarxmlDes.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
+
+            });
 
     </script>
-
-
-    <!-- Ejecuta un analisis cuando carga la pagina -->
-    <!--script>
-        requirejs(['Scripts/Gramaticas/xml/gramarxml.js'],
-            function (parserxml){
-                let entrada = document.getElementById("editor").value;
-                console.log(parserxml.getParser().parse(entrada));
-            });
-    </script-->
-
 </body>
+
 </html>
+
+
+
+<!--<script>
+
+<button id="botonWindowOpen">Abrir pop-up</button>
+<button id="botonWindowClose">Cerrar pop-up</button>
+  //Variable que almacena el método window.open()
+  var miVentana;
+
+  //La función window_open crea el pop-up o ventana emergente
+  function window_open(){
+    miVentana = window.open( "http://01luisrene.com", "nombrePop-Up", "width=380,height=500, top=85,left=50");
+  }
+  
+  //La función window_close cerrara el pop-up o ventana emergente
+  function window_close(){
+    miVentana.close();
+  }
+  
+  // Llamo a la función window_open en el evento click del botón con id = "botonWindowOpen"
+  document.getElementById("botonWindowOpen").onclick = function() {window_open()};
+
+  // Llamo a la función window_close en el evento click del botón con id = "botonWindowClose"
+  document.getElementById("botonWindowClose").onclick = function() {window_close()};
+</script>-->

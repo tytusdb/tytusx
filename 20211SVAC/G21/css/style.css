@@ -1,0 +1,198 @@
+:root{
+    --primary-color     : #0F111A;
+    --secondary-color   : #00010A;
+    --accent-color      : #FF4151;
+    --color-0           : #3B4252;
+    --color-1           : #BF616A;
+    --foreground        : #e5e9f0;
+    --color-2           : #A3BE8C;
+    --color-3           : #EBCB8B;
+    --color-4           : #81A1C1;
+    --color-5           : #B48EAD;
+    --color-6           : #88C0D0;
+    --color-8           : #4C566A;
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    padding: 0rem 2rem;
+    background: var(--secondary-color);
+    color: var(--foreground);
+    overflow-x: hidden;
+}
+
+.row, .col{
+    margin-top: 1rem;
+}
+
+
+nav {
+    background-color: var(--primary-color);
+    width: 100%;
+    border-radius: 25px 25px 0 0;
+}
+
+.nav-wrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0.5rem 0.75rem;
+}
+
+.nav__options li{
+    margin: 0px 5px;
+}
+
+.nav__options li button{
+    background-color: var(--accent-color);
+    display: flex;
+    align-items: center;
+}
+
+
+.title-editor{
+    margin: 0;
+    font-size: 2rem;
+}
+
+
+/**
+* tabs
+*/
+
+.tabs{
+    background-color: var(--primary-color);
+    height: 64px;
+    border-radius: 25px 25px 0 0;
+}
+.tabs li a i {
+    margin-left: 15px;
+    padding: 20px;
+}
+
+.tabs .indicator {
+    background-color: var(--accent-color);
+}
+
+.tabs .tab {
+    height: 64px;
+    line-height: 64px;
+}
+.tabs .tab a,
+.tabs .tab a.active {
+    /* background-color: transparent; */
+    color: var(--foreground);
+}
+
+.tabs .tab a:hover {
+    /* background-color: transparent; */
+    color: #D5D5D5;
+}
+
+.tabs .tab a:focus,
+.tabs .tab a:focus.active {
+    /* background-color: transparent; */
+    color: #BDBDBD;
+}
+
+
+.tab__panel{
+    background-color: var(--primary-color);
+    padding: 1.5rem 2rem !important;
+    min-height:39vh;
+    height:39vh;
+    border-radius: 0 0 25px 25px;
+    margin: 0;
+    
+    overflow-y: auto;
+}
+
+.tab__panel__btn {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/**
+* SELECT && INPUT && DATA TABLE
+*/
+
+.dropdown-content li {
+    background-color: var(--secondary-color) !important;
+}
+
+.dropdown-content li:hover {
+    background-color: var(--accent-color) !important;
+}
+
+.dropdown-content li:hover span {
+    color: var(--foreground);
+}
+
+input{
+    color: var(--foreground);
+}
+
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: var(--foreground);
+}
+
+tbody tr td{
+    background-color: var(--primary-color) !important;
+}
+
+thead, tfoot{
+    background-color: var(--secondary-color) !important;
+}
+
+
+a.paginate_button{
+    border-radius: 50% !important;
+    
+}
+a.paginate_button.current{
+    background: var(--accent-color) !important;
+    border: 0 !important;
+
+}
+
+
+/**
+*
+*/
+
+.xml__editor, .xpath__editor{
+    height: 39vh;
+}
+
+.CodeMirror {
+    height: 100%;
+    width: 100%;
+    border-radius: 0 0 25px 25px;
+    padding: 0 0.75rem;
+}
+
+
+#ast__visualization{
+    width: 85%;
+    height: 85%;
+    border: 1px solid var(--color-8);
+}
+
+.container__graph{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
