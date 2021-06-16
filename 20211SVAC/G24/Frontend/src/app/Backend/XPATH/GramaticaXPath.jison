@@ -7,6 +7,13 @@ const CErrores= require("./Excepciones/Errores")
 const CNodoErrores= require("./Excepciones/NodoErrores")
 const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.component")
 const selectroot= require("./Instrucciones/SelectRoot")
+const todo = require("./Instrucciones/todo")
+const atributosimple = require("./Instrucciones/AtributosSimples")
+const atributosexpresion = require("./Instrucciones/AtributosExpresion")
+const atributospredicado = require("./Instrucciones/AtributosPredicado")
+const predicado = require("./Instrucciones/Predicados")
+
+
 %}
 %lex
 %options case-insensitive
@@ -127,19 +134,19 @@ INSTRUCCION
 
         ;
 PREDICADOS
-        :INSTRUCCION                     {$$=$1}
-        | IDENTIFICADOR  L_CORCHETES                    {$$=$1+$2}
+        :INSTRUCCION                                    {$$=($1!=false) ?[$1]:[];}
+        | IDENTIFICADOR  L_CORCHETES                    {$$ = new predicado.default($1,$2,@1.first_line,@1.first_column);}
         ;
 ALL 
-        : SELECT  SELECT                        {$$=$1+$2}
-        | SELECT                                {$$ = new selectroot.default($1,@1.first_line,@1.first_column, $2);}
-        | MULTIPLICACION                        {$$=$1}
+        : SELECT  SELECT                        {$$ = new selectroot.default($1,@1.first_line,@1.first_column, $2);}
+        | SELECT                                {$$ = new selectroot.default($1,@1.first_line,@1.first_column, null);}
+        | MULTIPLICACION                        {$$ = new todo.default($1,@1.first_line,@1.first_column);}
         ;
 ATRIBUTO 
-        : ATRIBUTOS EXPRESION     {$$=$1+$2}
-        | ATRIBUTOS SELECT                              {$$= $1+$2}
-        | ATRIBUTOS MULTIPLICACION                      {$$= $1+$2}
-        | ATRIBUTOS IDENTIFICADOR  L_CORCHETES          {$$=$1+$2+$3}
+        : ATRIBUTOS EXPRESION                           {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
+        | ATRIBUTOS SELECT                              {$$ = new atributosimple.default($1,$2,@1.first_line,@1.first_column);}
+        | ATRIBUTOS MULTIPLICACION                      {$$ = new atributosimple.default($1,$2,@1.first_line,@1.first_column);}
+        | ATRIBUTOS IDENTIFICADOR  L_CORCHETES          {$$ = new atributospredicado.default($2,$3,@1.first_line,@1.first_column);}
         ; 
 
 L_CORCHETES

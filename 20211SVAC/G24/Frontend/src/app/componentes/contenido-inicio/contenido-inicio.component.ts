@@ -250,8 +250,8 @@ export class ContenidoInicioComponent implements OnInit {
     var Tree:ArbolXpath = new ArbolXpath([objetos]);
     
 
-    var init2 = new nodoAst("RAIZ");
-    var instrucciones = new nodoAst("HIJOS");
+   
+    var instrucciones = new nodoAst("INSTRUCCIONES");
     var contador=0;
   
     
@@ -259,8 +259,8 @@ export class ContenidoInicioComponent implements OnInit {
       this.ciclo(i,contador,instrucciones)
     }
     
-    init2.agregarHijoAST(instrucciones);
-    let sim_string = JSON.stringify(init2);
+    
+    let sim_string = JSON.stringify(instrucciones);
     localStorage.setItem("astpath", sim_string);
   }
 

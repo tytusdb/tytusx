@@ -20,11 +20,11 @@ export default class BarrasNodo extends Instruccion {
   }
   public getNodosAST(): nodoAST {
     var nodo= new nodoAST('INSTRUCCION'); //PADRE SELECT
-    var nodsBarras= new nodoAST("BARRA1")
+    var nodsBarras= new nodoAST(this.Barra)
     nodo.agregarHijoAST(nodsBarras)
     if(this.Barra2!=null){
       /*nodo.agregarHijo(this.Barra2)*/
-      var nodsBarras2= new nodoAST("BARRA2")
+      var nodsBarras2= new nodoAST(this.Barra2)
       nodo.agregarHijoAST(nodsBarras2)
     }
     if(this.Operacion!=null){
