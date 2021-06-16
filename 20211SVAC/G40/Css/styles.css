@@ -21,7 +21,8 @@ margin-right: 25px;
 
 .consolas
 { 
-float: left;
+  height: 100vh;
+  float: left;
 }
 
 .labelConsola
@@ -31,7 +32,7 @@ margin-top: 40px;
 
 .consola
 { 
-margin-top: 25px;
+ margin-top: 25px;
 }
 
 .componente

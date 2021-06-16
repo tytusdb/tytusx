@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Reporte Tabla de Símbolos</title>
+    <!-- Bootstrap CSS -->
+    <link href="../styles/estilos.css" rel="stylesheet" type="text/css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <!--Scripts JS de las clases TS-->
+    <script src="../Interfaces/Instruccion.js"></script>
+    <script src="../Interfaces/Expresion.js"></script>
+    <script src="../AST/AST.js"></script>
+    <script src="../AST/Entorno.js"></script>
+    <script src="../AST/Simbolo.js"></script>
+    <script src="../AST/Tipo.js"></script>
+    <script src="../Instrucciones/Primitivas/Print.js"></script>
+    <script src="../Expresiones/Atributo.js"></script>
+    <script src="../Expresiones/Objeto.js"></script>
+    <script src="../Expresiones/Operacion.js"></script>
+    <script src="../Expresiones/Primitivo.js"></script>
+    <script src="../Arbol/Nodo.js"></script>
+    <script src="../Arbol/Arbol.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid" style="text-align: center; justify-content: center;">
+        <!-- As a heading -->
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand mb-0 h1">TytusX</span>
+            <span class="navbar-brand mb-0 h1">G27</span>
+        </nav>
+        <br>
+        <div id="tablaErrores" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;">
+                <h2>Reporte de Errores</h2>
+                <br />
+            <table class="table" style="width:80%;" align="center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Línea</th>
+                        <th scope="col">Columna</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div id="contenidoTablaErrores"></div>  
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../js/default.js"></script>
+</body>
+<script src="../js/funcionesXPath.js"></script>
+<script src="../Reportes/graficaCST.js"></script>
+<script src="../js/viz.js"></script>
+<script src="../js/full.render.js"></script>
+<script src="../Gramatica/gramaticaXML.js"></script>
+
+</html>

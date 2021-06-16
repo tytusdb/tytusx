@@ -1,0 +1,115 @@
+.ta {
+    resize: auto;
+}
+
+.btnp {
+    border: none;
+    background: #3a7999;
+    color: #f2f2f2;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 2px;
+    position: relative;
+    box-sizing: border-box;
+    transition: all 500ms ease;
+}
+
+.contenedor{
+    width: auto;
+    margin: auto;
+    background:#272829;
+    color: rgb(0, 112, 163);
+    padding: 10px 15px 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.8);
+    justify-content: center;
+}
+
+
+
+.contenedor .titulo{
+    font-size: 3.5ex;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+#pestanas {
+    float: top;
+    font-size: 3ex;
+    font-weight: bold;
+}
+
+#pestanas ul{
+    margin-left: -5px;
+}
+
+#pestanas li{
+    list-style-type: none;
+    float: left;
+    text-align: center;
+    margin: 0px 2px -2px -0px;
+    background: #22556e;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid rgb(0, 112, 163);
+    border-bottom: dimgray;
+    padding: 0px 20px 0px 20px;
+}
+
+#pestanas a:link{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+#contenidopestanas{
+    clear: both;
+    background: dimgray;
+    padding: 20px 8px 15px 8px;
+    border-radius: 3px;
+    border-top-left-radius: 0px;
+    border: 1px solid rgb(0, 112, 163);
+    font-size: 10px;
+    width: auto;
+}
+
+#pestanascon {
+    float: top;
+    font-size: 3ex;
+    font-weight: bold;
+}
+
+#pestanascon ul{
+    margin-left: -40px;
+}
+
+#pestanascon li{
+    list-style-type: none;
+    float: left;
+    text-align: center;
+    margin: 0px 2px -2px -0px;
+    background: #22556e;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 2px solid rgb(0, 112, 163);
+    border-bottom: dimgray;
+    padding: 0px 20px 0px 20px;
+}
+
+#pestanascon a:link{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+
+#area-input-box {
+    clear: both;
+    background: dimgray;
+    padding: 40px 8px 15px 8px;
+    border-radius: 3px;
+    border-top-left-radius: 0px;
+    border: 1px solid rgb(0, 112, 163);
+    font-size: 10px;
+    width: auto;
+    
+}

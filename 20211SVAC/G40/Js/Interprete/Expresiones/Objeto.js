@@ -1,6 +1,5 @@
 "use strict";
 
-
 var Objeto = /** @class */ (function () {
     function Objeto(id1, id2, texto, linea, columna, listaAtributos, listaObjetos, agregar) {
         this.identificador1 = id1;
@@ -12,10 +11,37 @@ var Objeto = /** @class */ (function () {
         this.listaObjetos = listaObjetos;
         this.agregar = agregar;
         this.entorno = null;
+        this.id = 0;
     }
 
     Objeto.prototype.getAgregar = function () {
         return this.agregar;
+    };
+
+    Objeto.prototype.getTexto = function () {
+        return this.texto;
+    };    
+
+    Objeto.prototype.getAtributos = function () {
+        return this.listaAtributos;
+    }; 
+
+    Objeto.prototype.getObjetos = function () {
+        return this.listaObjetos;
+    }; 
+
+    Objeto.prototype.LeerID = function () {
+        return this.id;
+    };
+
+    Objeto.prototype.SetearID = function (id) {
+        if(this.id==0){
+            this.id = id;
+        }    
+    };
+
+    Objeto.prototype.setEntorno = function (entorno) {
+        this.entorno = entorno;
     };
 
     Objeto.prototype.getID = function () {

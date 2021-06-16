@@ -7,11 +7,13 @@ var EntradaXPath = CodeMirror.fromTextArea
     autoRefresh: true
 });
 
-EntradaXPath.setSize(850, 250);
+EntradaXPath.setSize(null, 130);
 EntradaXPath.refresh();
 
 var SalidaXPath = CodeMirror.fromTextArea
 (document.getElementById('salida_xpath'),{
+    mode : "text/html",
+    htmlMode: true,
     theme: "cobalt",
     lineNumbers: false,
     fixedGutter: false,
@@ -20,5 +22,5 @@ var SalidaXPath = CodeMirror.fromTextArea
     readOnly: "nocursor"
 });
 
-SalidaXPath.setSize(850, 475);
+SalidaXPath.setSize(null, 600);
 SalidaXPath.refresh();

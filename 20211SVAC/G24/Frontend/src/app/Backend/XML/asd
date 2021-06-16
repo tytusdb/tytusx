@@ -1,0 +1,59 @@
+%lex
+%options case-insensitive
+
+%s cuerpo
+
+
+
+%%
+
+
+">"                     this.begin('cuerpo'); return 'MAYORQUE'
+
+<cuerpo>"</"           this.begin('INITIAL'); if(palabra.replaceAll(" ","") == "") return 'SALIDA'; yytext = palabra; palabra = ""; return 'CUERPO';
+<cuerpo>"<"           this.begin('INITIAL'); if(palabra.replaceAll(" ","") == "") return 'MENORQUE'; yytext = palabra; palabra = ""; return 'CUERPO';
+<cuerpo>.             palabra += yytext;
+"</"                     return 'SALIDA'
+"/>"                    return 'SALIDA';
+"<"                     return 'MENORQUE'
+"="                     return 'IGUAL';
+([a-zA-Z])[a-zA-Z0-9_]*  return 'IDENTIFICADOR';
+<<EOF>>               return 'EOF'
+[ \r\t]+ {}
+\n+ {}
+\s+ {}
+.                       console.log("Error Lexico");
+/lex
+
+// DEFINIMOS PRECEDENCIA DE OPERADORES
+
+%{
+    var palabra = ""
+%}
+
+// DEFINIMOS PRODUCCIÓN INICIAL
+%start START
+
+%%
+/* Definición de la gramática */
+
+
+START
+        : OBJETO EOF                   { return $1;}
+        ;
+
+INSTRUCCION
+        : CUERPO { $$ = $1;}
+        | OBJETOS { $$ = $1;}
+        ;
+
+OBJETOS
+        : OBJETOS OBJETO { $1.push($2); $$ = $1; }
+        | OBJETO { $$ = [$1]; }
+        ;
+
+OBJETO
+        : MENORQUE IDENTIFICADOR MAYORQUE INSTRUCCION SALIDA IDENTIFICADOR MAYORQUE {$$ = $2 + " -> [" + $4 + "]";}
+        | MENORQUE IDENTIFICADOR MAYORQUE INSTRUCCION IDENTIFICADOR MAYORQUE {$$ = $2 + " -> " + $4;}
+
+        ;

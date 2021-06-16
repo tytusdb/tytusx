@@ -221,7 +221,7 @@ case 22:
                    nodoAux.agregarHijo($$[$0][1]);
                    this.$ = [$$[$0][0],nodoAux]; 
 break;
-case 23: case 24: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38:
+case 23: case 24: case 36: case 37: case 38:
  nodoAux = new NodoArbol("TEXTO","");
                                   nodoAux.agregarHijo(new NodoArbol($$[$0],"texto"));
                                   this.$ = [$$[$0],nodoAux]; 
@@ -246,9 +246,44 @@ case 28:
                                   nodoAux.agregarHijo(new NodoArbol("\'","texto"));
                                   this.$ = ["\'",nodoAux]; 
 break;
+case 29:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("\'","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
+case 30:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("interrogacion","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
+case 31:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("comilla doble","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
+case 32:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("corcheteA","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
+case 33:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("corcheteC","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
+case 34:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("llave abierta","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
+case 35:
+ nodoAux = new NodoArbol("TEXTO","");
+                                  nodoAux.agregarHijo(new NodoArbol("Llave cerrada","texto"));
+                                  this.$ = [$$[$0],nodoAux]; 
+break;
 case 39:
  nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol("\"","texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("&quot;","texto"));
                                   this.$ = ["\"",nodoAux]; 
 break;
 case 40:
@@ -265,7 +300,7 @@ case 41:
 break;
 case 42:
  nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($$[$0],"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("texto","texto"));
                                   this.$ = [$$[$0],nodoAux];  
 break;
 case 43:
@@ -1051,7 +1086,7 @@ case 31:
 break;
 }
 },
-rules: [/^(?:\/\/.*)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:>)/i,/^(?:<)/i,/^(?:=)/i,/^(?:\?)/i,/^(?:\/)/i,/^(?:"[^\"]*")/i,/^(?:'[^\']*')/i,/^(?:([a-zA-ZáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*)/i,/^(?:[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_!@#$%\+\^\'\`\"&\*()/¡:;.,~-]+)/i,/^(?:['])/i,/^(?:["])/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\s+)/i,/^(?:[ \t\r\n\f])/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:\/\/.*)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:>)/i,/^(?:<)/i,/^(?:=)/i,/^(?:\?)/i,/^(?:\/)/i,/^(?:"[^\"]*")/i,/^(?:'[^\']*')/i,/^(?:([a-zA-ZäëïöüÄËÏÖÜáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9äëïöüÄËÏÖÜáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*)/i,/^(?:[a-zA-Z0-9äëïöüÄËÏÖÜáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_!@#$%\+\^\'\`\"&\*()/¡:;.,~-]+)/i,/^(?:['])/i,/^(?:["])/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\s+)/i,/^(?:[ \t\r\n\f])/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"inclusive":true},"INITIAL":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"inclusive":true}}
 });
 return lexer;

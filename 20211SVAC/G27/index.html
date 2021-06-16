@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Ejemplo Analizador</title>
+    <title>TytusX G27</title>
     <!--plugin de codeMirror-->
     <link rel="stylesheet" type="text/css" href="plugin/codemirror/lib/codemirror.css">
     <!-- Bootstrap CSS -->
@@ -25,13 +25,17 @@
     <script src="Expresiones/Objeto.js"></script>
     <script src="Expresiones/Operacion.js"></script>
     <script src="Expresiones/Primitivo.js"></script>
+    <script src="Arbol/Nodo.js"></script>
+    <script src="Arbol/Arbol.js"></script>
+
 </head>
 
 <body>
     <div class="container-fluid">
         <!-- As a heading -->
         <nav class="navbar navbar-dark bg-dark">
-            <span class="navbar-brand mb-0 h1">TytusX G27</span>
+            <span class="navbar-brand mb-0 h1">TytusX</span>
+            <span class="navbar-brand mb-0 h1">G27</span>
         </nav>
         <div id="botones" style="margin-top:10px; margin-bottom: 10px;">
             <button type="button" class="btn btn-dark" onclick="NewDocument();" title="Nuevo Archivo en Blanco">
@@ -51,20 +55,29 @@
                 </svg>
             </button>
             <input type="file" class="oculto" id="abreArchivo">
-            <button type="button" class="btn btn-dark" onclick="" title="Guardar archivo">
+            <button type="button" class="btn btn-dark" onclick="pruebaGraficarViz();" title="Guardar archivo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                     class="bi bi-calendar-event" viewBox="0 0 16 16">
                     <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z" />
                     <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
                 </svg>
             </button>
-            <button type="button" class="btn btn-dark" onclick="" title="Generar reportes">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16">
-                    <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
-                    <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
-                </svg>
-            </button>
-            <button type="button" class="btn btn-secondary" onclick="PruebaTipo();" title="Reinicia la ejecución">
+            <div class="btn-group">
+                <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Generar reportes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16">
+                        <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1H5z"/>
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button class="dropdown-item btn-dark" type="button" onclick="abrirReporteAST();">Reporte AST</button>
+                    <button class="dropdown-item" type="button" onclick="abrirReporteCST();">Reporte CST</button>
+                    <button class="dropdown-item" type="button" onclick="abrirReporteTS();">Reporte TS</button>
+                    <button class="dropdown-item" type="button" onclick="abrirReporteErrores();">Reporte Errores</button>
+                    <button class="dropdown-item" type="button" onclick="abrirReporteGramatical();">Reporte Gramatical</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="" title="Reinicia la ejecución">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-app" viewBox="0 0 16 16">
                     <path d="M11 2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3h6zM5 1a4 4 0 0 0-4 4v6a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5z"/>
                 </svg>
@@ -112,6 +125,30 @@
                 </td>
             </tr>
         </table>
+        <br>
+        <br>
+        <!--***************************area para reportes******************************-->
+        <!--Area para reporte de AST-->
+        <div id="reporteASTGrafica" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <input type="hidden" id="hiddenAST" Text="">
+
+        <!--Area para reporte de Tabla de Símbolos-->
+        <div id="reporteCSTGrafica" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <input type="hidden" id="hiddenCST" Text="">
+
+        <!--Area para reporte de Tabla de Símbolos-->
+        <div id="reporteTablaSimbolosIndex" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <input type="hidden" id="hiddenTablaSimbolos" Text="">
+
+        <!--Area para reporte de Errores-->
+        <div id="reporteErroresTabla" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <input type="hidden" id="hiddenErrores" Text="">
+
+        <!--Area para reporte de Tabla de Símbolos-->
+        <div id="reporteGramatical" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <input type="hidden" id="hiddenGramatical" Text="">
+
+        <div id="grafica"></div>
     </div>
 
 <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
@@ -123,9 +160,31 @@
 </body>
 <script>
     function AnalyzeXML() {
-        //let entrada = document.getElementById("editor").value;
+        alert('prueba');
+        //let entrada = document.getElementById("Entrada").value;
         let entrada = showCode();
-        parseXML(entrada);
+        
+        let resultado =parseXML(entrada);
+        //resultado: ObjetoXML
+        if (resultado){
+            //alert('Se obtuvo resultado');
+            document.getElementById("EntradaXPath").value = resultado.identificador ;//+" "+ resultado.listaObjetos[1].identificador;
+            //document.getElementById("Entrada").value = resultado.identificador +" "+ resultado.listaObjetos[1].identificador;
+            alert('Resultado: '+ resultado.identificador);
+            //document.getElementById("Salida").innerHTML = construyeGraficaTS(resultado);
+
+            /*
+            var codigoTablaSimbolos = parseXMLTS();
+            document.getElementById("hiddenTablaSimbolos").value = codigoTablaSimbolos;
+            var hid = document.getElementById("hiddenTablaSimbolos").value;
+            */
+            alert("TS construida exitosamente!");
+            
+        }else{
+            alert (':(');
+        }
+        
+        return true;
     }
 
     function AnalyzeXPath() {
@@ -147,5 +206,10 @@
 </script>
 <script src="js/funcionesXPath.js"></script>
 <script src="js/funcionesXML.js"></script>
+<script src="Reportes/graficaCST.js"></script>
+<script src="Reportes/graficaAST.js"></script>
+<script src="Reportes/reporteTS.js"></script>
+<script src="js/viz.js"></script>
+<script src="js/full.render.js"></script>
 <script src="Gramatica/gramaticaXML.js"></script>
 </html>
