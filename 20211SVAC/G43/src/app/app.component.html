@@ -1,0 +1,180 @@
+<p>
+  <mat-toolbar class="toolbarP">
+    <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-3 divCenter">
+        <span class="Titulo">TytusX - OLC2 - JUNIO 2021</span>
+      </div>
+      <div class="col-md-3">
+      </div>
+     </div>
+     <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-3 divCenter">
+        <span class="Titulo">201314408 - Erick Hernandez</span>
+      </div>
+      <div class="col-md-3">
+      </div>
+     </div>
+    </div>
+
+  </mat-toolbar>
+</p>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <p>XPATH</p>
+
+      <div class="col-md-12">
+        <mat-card class="mcardH">
+          <div class="row">
+            <div  class = "col-md-3" >
+              <input type="file" id="file" (change)="fileChanged($event)" /> 
+              <label for="file" style="width: 100px; padding-top: 6px;">NUEVO</label>
+            </div>
+            <div class = "col-md-3">
+              <button mat-raised-button color="#E1E8EC" (click)="myFunc()">ABRIR</button>
+            </div>
+            <div class = "col-md-3" >
+              <button mat-raised-button color="#E1E8EC">GUARDAR</button>
+            </div>
+            <div class = "col-md-3" >
+              <button mat-raised-button color="#E1E8EC" (click)="CleanEditors()">LIMPIAR</button>
+            </div>
+          </div>
+        </mat-card>
+        </div>
+
+        <br/>
+
+      <td-code-editor 
+      style="height: 400px" 
+      [(ngModel)]='this.dat.Cod_tab1' 
+      theme="vs" 
+      flex language="xml"
+      (ngModelChange)="onCodeChanged1($event)"
+      ></td-code-editor>
+    </div>
+
+    <div class="col-md-6">
+
+      <p>XQUERY</p>
+
+      <div class="col-md-12">
+        <mat-card class="mcardH">
+          <div class="row">
+            <div  class = "col-md-3" >
+              <input type="file" id="file" (change)="fileChanged($event)" /> 
+              <label for="file" style="width: 100px; padding-top: 6px;">NUEVO</label>
+            </div>
+            <div class = "col-md-3">
+              <button mat-raised-button color="#E1E8EC" (click)="myFunc()">ABRIR</button>
+            </div>
+            <div class = "col-md-3" >
+              <button mat-raised-button color="#E1E8EC">GUARDAR</button>
+            </div>
+            <div class = "col-md-3" >
+              <button mat-raised-button color="#E1E8EC" (click)="CleanEditors()">LIMPIAR</button>
+            </div>
+          </div>
+        </mat-card>
+        </div>
+
+        <br/>
+
+      <td-code-editor 
+      style="height: 400px" 
+      [(ngModel)]='this.dat.Cod_tab2' 
+      theme="vs" 
+      flex language="XQUERY"
+      (ngModelChange)="onCodeChanged2($event)"
+      ></td-code-editor>
+    </div>
+
+  </div>
+</div>
+
+<br/>
+<br/>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <td-code-editor 
+      style="height: 400px" 
+      [(ngModel)]='this.dat.Cod_tab3' 
+      theme="vs" 
+      flex language="xquery"
+      (ngModelChange)="onCodeChanged3($event)"
+      ></td-code-editor>
+    </div>
+  </div>
+</div>
+
+
+<div class="container" hidden>
+  <div class="row">
+    <div class="col-md-3">
+    <mat-card class="mcardH">
+      <div class="row">
+        <div  class = "col-md-12" >
+          <input type="file" id="file" (change)="fileChanged($event)" /> 
+          <label for="file" style="padding-top: 8px;">Cargar Documento</label>
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+        <div class = "col-md-12">
+          <button mat-raised-button color="primary" (click)="myFunc()">Traducir</button>
+        </div>
+      </div>
+    <br/>
+        <div class="row">
+        <div class = "col-md-12" >
+          <button mat-raised-button color="primary">Ejecutar</button>
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+      <div class = "col-md-12" >
+        <button mat-raised-button color="primary" (click)="CleanEditors()">Limpiar</button>
+      </div>
+    </div>
+    </mat-card>
+    </div>
+
+
+    <div class="col-md-9" hidden>
+      <mat-tab-group class="mcard" mat-align-tabs="center" style="width: 1000px;">
+        <mat-tab  label="CODIGO" >
+        
+          <p>CODE TAB 1</p>
+          <td-code-editor 
+          style="height: 400px" 
+          [(ngModel)]='this.dat.Cod_tab1' 
+          theme="vs" 
+          flex language="typescript"
+          (ngModelChange)="onCodeChanged1($event)"
+          ></td-code-editor>
+
+
+          <app-code-tab style="width: 100%;"></app-code-tab>
+
+          
+        
+
+        </mat-tab>
+        <mat-tab label="AST">
+          
+        </mat-tab>
+        <mat-tab label="REPORTES">
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+</div>
+</div>

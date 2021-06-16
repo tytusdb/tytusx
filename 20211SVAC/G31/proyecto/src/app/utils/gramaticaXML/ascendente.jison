@@ -365,10 +365,22 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                             texto: `${$1} ${$2}`,
                             gramatica: `<TEXTO > ::= "${$1} ${$2}"\n`
                             }
+                            $$.texto = $$.texto.replace('&amp;', '&');
+                            $$.texto = $$.texto.replace('&quot;', "'");
+                            $$.texto = $$.texto.replace('&apos;', '"');
+                            $$.texto = $$.texto.replace('&lt;', '<');
+                            $$.texto = $$.texto.replace('&gt;', '>');
                           }
-  | CONTENIDO             { $$ = {
+  | CONTENIDO             {
+                            $$ = {
                               texto: $1,
-                              gramatica: `<TEXTO> ::= "${$1}"\n`  }
+                              gramatica: `<TEXTO> ::= "${$1}"\n`
+                            }
+                            $$.texto = $$.texto.replace('&amp;', '&');
+                            $$.texto = $$.texto.replace('&quot;', "'");
+                            $$.texto = $$.texto.replace('&apos;', '"');
+                            $$.texto = $$.texto.replace('&lt;', '<');
+                            $$.texto = $$.texto.replace('&gt;', '>');
                           }
   ;
 
