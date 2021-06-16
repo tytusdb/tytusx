@@ -1,12 +1,18 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Wildcard = void 0;
 class Wildcard {
     constructor(valor, fila, columna) {
         this.valor = valor;
-        this.fila = fila;
+        this.linea = fila;
         this.columna = columna;
         console.log("wildcard   " + valor);
     }
+    getValorImplicito() {
+        return null;
+    }
+    generarGrafo(g, padre) {
+        return this.valor;
+    }
+    getNombreHijo() {
+        return "";
+    }
 }
-exports.Wildcard = Wildcard;

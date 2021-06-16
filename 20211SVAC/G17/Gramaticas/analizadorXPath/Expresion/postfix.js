@@ -1,4 +1,4 @@
-import { concat, pad } from "lodash"
+import { concat, pad, truncate } from "lodash"
 import { Tipo, TipoPath, Predicado } from "../AST/Entorno"
 import { Camino } from "./axes"
 import { Literal, Nodo } from "./Expresiones"
@@ -234,7 +234,15 @@ export class Position extends PostFix
   {
     var posiciones = []
     for (const nodo of nodos) {
-      posiciones.push(new Literal(Tipo.INTEGER,nodo.posicion))
+      var posicion=nodo.posicion
+      while((posicion)>Math.trunc(posicion)+0.09)
+      {
+        var temp = Math.trunc(posicion)
+        temp*=10
+        posicion*=10.0;
+        posicion-=temp
+      }
+      posiciones.push(new Literal(Tipo.INTEGER,Math.trunc(posicion)))
     }
     return posiciones
   }
