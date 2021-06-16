@@ -981,7 +981,7 @@ E:	E tk_menorigual E { $$=builder.newOperation($1, $3, Tipos.RELACIONAL_MENORIGU
 				   prod_1 = grammar_stack.pop();
 				   prod_2 = grammar_stack.pop();
 				   grammar_stack.push({'E -: E tk_mod E': [prod_2, 'token: tk_mod\t Lexema: ' + $2, prod_1]}); }
-	| tk_menos E %prec umenos { $$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this.$.first_line, this.$.first_column+1), $2, Tipos.OPERACION_RESTA, this.$.first_line, this.$.first_column+1);); 
+	| tk_menos E %prec umenos { $$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this.$.first_line, this.$.first_column+1), $2, Tipos.OPERACION_RESTA, this.$.first_line, this.$.first_column+1); 
 								prod_1 = grammar_stack.pop();
 						  		grammar_stack.push({'E -: tk_menos E': ['token: tk_menos\t Lexema: ' + $1, prod_1]});}
 	| tk_ParA E tk_ParC { $$=$2;
