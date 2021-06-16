@@ -21,8 +21,11 @@
 
 %%
 
-"or"  return "ROR"
-"and" return "RAND"
+"or"    return "ROR"
+"and"   return "RAND"
+"idiv"  return "IDIV"
+"div"   return "DIV"
+"mod"   return "MOD"
 "return" return "RRETURN"
 "for" return "RFOR"
 "in"  return "RIN"
@@ -59,10 +62,8 @@
 "]"         return "CORB"
 "+"         return "MAS"
 "-"         return "MENOS"
+"**"        return "DobleAsterisco"
 "*"         return "POR"
-"div"       return "DIV"
-"idiv"      return "IDIV"
-"mod"       return "MOD"
 ">="        return "MAYORIG"
 "<="        return "MENORIG"
 "!="        return "DIFERENTE"

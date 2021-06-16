@@ -68,14 +68,14 @@ class Entorno {
             objeto.listaObjetos.forEach((objetoHijo) => {
                 if (objetoHijo instanceof Objeto) {
                     this.registrarObjetoEnTS(objetoHijo, entornoObjeto);
-                    const simboloObjeto = new Simbolo(Tipo.STRUCT, objetoHijo.identificador, objetoHijo.linea, objetoHijo.columna, objetoHijo);
+                    const simboloObjeto = new Simbolo(Tipo.OBJETO, objetoHijo.identificador, objetoHijo.linea, objetoHijo.columna, objetoHijo);
                     entornoObjeto.agregar(simboloObjeto.identificador, simboloObjeto);
                     console.log("simboloHijo Objeto " + simboloObjeto.identificador + " = " + simboloObjeto.valor.texto);
                 }
             });
         }
         objeto.entorno = entornoObjeto;
-        const simbolo = new Simbolo(Tipo.STRUCT, objeto.identificador, objeto.linea, objeto.columna, objeto);
+        const simbolo = new Simbolo(Tipo.OBJETO, objeto.identificador, objeto.linea, objeto.columna, objeto);
         entornoPadre.agregar(simbolo.identificador, simbolo);
         console.log("finaliza padre " + objeto.identificador);
     }
