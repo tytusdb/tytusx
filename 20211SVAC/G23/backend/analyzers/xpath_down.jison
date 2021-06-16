@@ -356,6 +356,7 @@ function getPredicado(obj){
 "text"                  return 'tk_text'
 "position"              return 'tk_position'
 "|"                     return 'tk_line'
+"||"                    return 'tk_2line'
 "+"                     return 'tk_mas'
 "-"                     return 'tk_menos'
 "!="                    return 'tk_diferent'
@@ -394,6 +395,7 @@ function getPredicado(obj){
 
 
 /lex
+<<<<<<< Updated upstream
 
 %{
 	const { Objeto } = require('../model/xpath/Objeto');
@@ -403,6 +405,9 @@ function getPredicado(obj){
 
 /* operator associations and precedence */
 %left 'tk_or' 'tk_line'
+=======
+%left 'tk_or' 'tk_line' 'tk_2line'
+>>>>>>> Stashed changes
 %left 'tk_and'
 %left 'tk_equal' 'tk_diferent' 'tk_menor' 'tk_menorigual' 'tk_mayor' 'tk_mayorigual'
 %left 'tk_mas' 'tk_menos'
@@ -432,8 +437,11 @@ XPATH_U: XPATH XPATH_Up {
 XPATH_Up: tk_line XPATH XPATH_Up {
 		prod_1 = grammar_stack.pop();
 		prod_2 = grammar_stack.pop();
-		grammar_stack.push({'XPATH_Up -: tk_line XPATH XPATH_Up ':['token: tk_line\t Lexema: ' + $1, prod_2, prod_1]});
-}
+		grammar_stack.push({'XPATH_Up -: tk_line XPATH XPATH_Up ':['token: tk_line\t Lexema: ' + $1, prod_2, prod_1]});}
+        | tk_2line XPATH XPATH_Up {
+            prod_1 = grammar_stack.pop();
+            prod_2 = grammar_stack.pop();
+            grammar_stack.push({'XPATH_Up -: tk_2line XPATH XPATH_Up ':['token: tk_2line\t Lexema: ' + $1, prod_2, prod_1]});}
 		| { grammar_stack.push({'XPATH_Up -: Empty': ['EMPTY']}); }
 ;
 
