@@ -163,7 +163,7 @@ case 6:
 break;
 case 7:
 
-                                    $$[$0-1].objetos.push($$[$0].objetos)
+                                    $$[$0-1].objetos.push($$[$0].objetos);
                                     this.$ = {
                                       objetos: $$[$0-1].objetos,
                                       grafica: new NodoGrafico('OBJETOS', [$$[$0].grafica, $$[$0-1].grafica]),
@@ -209,6 +209,11 @@ case 10:
                                                     valorObj: `${$$[$0-1].valorObj} ${$$[$0].valorObj}\n`
                                                   }
                                                   this.$.objetos.valorObj = this.$.valorObj;
+                                                  this.$.objetos.valorObj = this.$.objetos.valorObj.replace('&amp;', '&');
+                                                  this.$.objetos.valorObj = this.$.objetos.valorObj.replace('&quot;', "'");
+                                                  this.$.objetos.valorObj = this.$.objetos.valorObj.replace('&apos;', '"');
+                                                  this.$.objetos.valorObj = this.$.objetos.valorObj.replace('&lt;', '<');
+                                                  this.$.objetos.valorObj = this.$.objetos.valorObj.replace('&gt;', '>');
                                                   this.$.gramatica += $$[$0-1].gramatica;
                                                   this.$.gramatica += $$[$0].gramatica;
 
@@ -386,6 +391,12 @@ case 22:
                                   gramatica: `<TEXTO> ::= "${$$[$0]}"\n`,
                                   valor: $$[$0]
                                 }
+
+                                  this.$.valor = this.$.valor.replace('&amp;', '&');
+                                  this.$.valor = this.$.valor.replace('&quot;', "'");
+                                  this.$.valor = this.$.valor.replace('&apos;', '"');
+                                  this.$.valor = this.$.valor.replace('&lt;', '<');
+                                  this.$.valor = this.$.valor.replace('&gt;', '>');
                               
 break;
 }

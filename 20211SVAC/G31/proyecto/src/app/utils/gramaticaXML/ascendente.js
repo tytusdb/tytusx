@@ -412,12 +412,24 @@ case 20:
                             texto: `${$$[$0-1]} ${$$[$0]}`,
                             gramatica: `<TEXTO > ::= "${$$[$0-1]} ${$$[$0]}"\n`
                             }
+                            this.$.texto = this.$.texto.replace('&amp;', '&');
+                            this.$.texto = this.$.texto.replace('&quot;', "'");
+                            this.$.texto = this.$.texto.replace('&apos;', '"');
+                            this.$.texto = this.$.texto.replace('&lt;', '<');
+                            this.$.texto = this.$.texto.replace('&gt;', '>');
 
 break;
 case 21:
- this.$ = {
+
+                            this.$ = {
                               texto: $$[$0],
-                              gramatica: `<TEXTO> ::= "${$$[$0]}"\n`  }
+                              gramatica: `<TEXTO> ::= "${$$[$0]}"\n`
+                            }
+                            this.$.texto = this.$.texto.replace('&amp;', '&');
+                            this.$.texto = this.$.texto.replace('&quot;', "'");
+                            this.$.texto = this.$.texto.replace('&apos;', '"');
+                            this.$.texto = this.$.texto.replace('&lt;', '<');
+                            this.$.texto = this.$.texto.replace('&gt;', '>');
 
 break;
 case 22: case 23: case 24: case 25:
