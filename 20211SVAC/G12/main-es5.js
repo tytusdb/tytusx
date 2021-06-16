@@ -17,7 +17,7 @@
     /***/
     function _(module, exports, __webpack_require__) {
       module.exports = __webpack_require__(
-      /*! C:\Users\h\Desktop\Prueba Compi\Compiladores_P2-main (4)\Compiladores_P2-main\CompiP2\src\main.ts */
+      /*! C:\Users\fuent\Desktop\compiladores 2 componer\CompiP2\src\main.ts */
       "zUnb");
       /***/
     },
@@ -202,11 +202,11 @@
           key: "ejecutar",
           value: function ejecutar() {}
         }, {
-          key: "imprimirTabla",
-          value: function imprimirTabla() {}
-        }, {
           key: "openPage",
           value: function openPage(pageName, valor) {}
+        }, {
+          key: "imprimirTabla",
+          value: function imprimirTabla() {}
         }]);
 
         return AppComponent;
