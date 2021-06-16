@@ -1,6 +1,6 @@
 import tablaSimbolos from './tablaSimbolos';
 import { Instruccion } from '../Abstracto/Instruccion';
-import Errores from '../Excepciones/NodoErrores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import { reporteTabla } from '../Reportes/reporteTabla';
 import obtenerValor from '../Reportes/cambiarTipo';
 import Objeto from '../Expresiones/Objeto';
@@ -8,7 +8,9 @@ import nodoAST from '../Abstracto/nodoAST';
 import Atributo from '../Expresiones/Atributo';
 export default class Arbol {
   private instrucciones: Array<Instruccion>;
-  private errores: Array<Errores>;
+
+  private NodoErrores: Array<NodoErrores>;
+
   public listaSimbolos: Array<reporteTabla>;
   private dot:string;
   private c:number;
@@ -90,11 +92,11 @@ public BuscarTipo(identificador: string): string {
     }
   }*/
 
-  public geterrores(): Array<Errores> {
-    return this.errores;
+  public getNodoErrores(): Array<NodoErrores> {
+    return this.NodoErrores;
   }
-  public seterrores(value: Array<Errores>) {
-    this.errores = value;
+  public setNodoErrores(value: Array<NodoErrores>) {
+    this.NodoErrores = value;
   }
 
 
@@ -127,7 +129,7 @@ public BuscarTipo(identificador: string): string {
     this.instrucciones = instrucciones;
     this.consola = '';
     this.tablaGlobal = new tablaSimbolos();
-    this.errores = new Array<Errores>();
+    this.NodoErrores = new Array<NodoErrores>();
     this.listaSimbolos = new Array<reporteTabla>();
     this.dot = ""
     this.c = 0

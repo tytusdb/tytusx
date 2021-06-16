@@ -8,7 +8,6 @@ import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
-import Errores from 'src/app/Backend/XPATH/Analizador/Excepciones/Errores';
 import NodoErrores from '../Excepciones/NodoErrores';
 import { listaErrores } from 'src/app/componentes/contenido-inicio/contenido-inicio.component';
 import { reporteTabla } from '../Reportes/reporteTabla';

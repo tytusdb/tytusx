@@ -2,7 +2,7 @@
 
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
@@ -24,24 +24,24 @@ export default class Relacional extends Instruccion {
     this.cond2 = cond2;
   }
 
-  public getNodo(): nodoAST {
+  public getNodosAST(): nodoAST {
     let nodo = new nodoAST('RELACIONAL');
-    nodo.agregarHijoAST(this.cond1.getNodo());
+    nodo.agregarHijoAST(this.cond1.getNodosAST());
     nodo.agregarHijo(this.relacion + '', 'rel', this.relacion);
-    nodo.agregarHijoAST(this.cond2.getNodo());
+    nodo.agregarHijoAST(this.cond2.getNodosAST());
     return nodo;
   }
   public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
     let izq, der;
     izq = this.obtieneValor(this.cond1, arbol, tabla);
-    if (izq instanceof Errores) return izq;
+    if (izq instanceof NodoErrores) return izq;
     der = this.obtieneValor(this.cond2, arbol, tabla);
-    if (der instanceof Errores) return der;
+    if (der instanceof NodoErrores) return der;
     if (
       this.cond1.tipoDato.getTipo() == tipoDato.CADENA &&
       this.cond2.tipoDato.getTipo() != tipoDato.CADENA
     ) {
-      return new Errores(
+      return new NodoErrores(
         'ERROR SEMANTICO',
         'NO SE PUEDE COMPARAR UNA CADENA CON OTRO TIPO DE DATO QUE NO SEA CADENA',
         this.fila,
@@ -51,7 +51,7 @@ export default class Relacional extends Instruccion {
       this.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
       this.cond1.tipoDato.getTipo() != tipoDato.CADENA
     ) {
-      return new Errores(
+      return new NodoErrores(
         'ERROR SEMANTICO',
         'NO SE PUEDE COMPARAR UNA CADENA CON OTRO TIPO DE DATO QUE NO SEA CADENA',
         this.fila,
