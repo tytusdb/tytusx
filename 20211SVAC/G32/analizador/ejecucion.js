@@ -253,6 +253,16 @@ class Ejecucion {
                     }
                 });
             }
+            if (this.identificar('ATRIBUTO_DESCENDIENTES', nodo)) {
+                nodo.hijos.forEach((element) => {
+                    if (element instanceof Object) {
+                        this.recorrido(element);
+                    }
+                    else if (typeof element === 'string') {
+                        this.consultaXML = this.reducir(this.consultaXML, element, 'ATRIBUTO_DESCENDIENTES');
+                    }
+                });
+            }
         }
     }
     reducir(consulta, etiqueta, nodo) {
@@ -287,6 +297,27 @@ class Ejecucion {
                             }
                             else {
                                 //arreglar cuando solo viene texto 
+                                this.node_texto = true;
+                                if (element.texto != null)
+                                    cons = cons.concat(element);
+                            }
+                        }
+                    });
+                });
+                return cons;
+            }
+            else if (etiqueta === 'text()') {
+                let cons = [];
+                consulta.forEach(element => {
+                    this.ts.tabla.forEach(padre => {
+                        if (padre[0] === element.identificador && padre[4] === element.linea && padre[5] === element.columna) {
+                            if (element.listaObjetos.length > 0) {
+                                //elemento
+                            }
+                            else {
+                                this.node_texto = true;
+                                if (element.texto != null)
+                                    cons = cons.concat(element);
                             }
                         }
                     });
@@ -331,6 +362,44 @@ class Ejecucion {
                     });
                 });
                 this.nodo_descendente = true;
+                return cons;
+            }
+            else if (etiqueta === 'node()') {
+                let cons = [];
+                consulta.forEach(element => {
+                    this.ts.tabla.forEach(padre => {
+                        if (padre[0] === element.identificador && padre[4] === element.linea && padre[5] === element.columna) {
+                            if (element.listaObjetos.length > 0) {
+                                cons = cons.concat(element.listaObjetos);
+                            }
+                            else {
+                                //arreglar cuando solo viene texto 
+                                this.node_texto = true;
+                                if (element.texto != null)
+                                    cons = cons.concat(element);
+                            }
+                        }
+                    });
+                });
+                this.node_desc = true;
+                return cons;
+            }
+            else if (etiqueta === 'text()') {
+                let cons = [];
+                consulta.forEach(element => {
+                    this.ts.tabla.forEach(padre => {
+                        if (padre[0] === element.identificador && padre[4] === element.linea && padre[5] === element.columna) {
+                            if (element.listaObjetos.length > 0) {
+                                if (element.texto != null) {
+                                    this.node_texto = true;
+                                    cons = cons.concat(element.listaObjetos);
+                                }
+                            }
+                            else {
+                            }
+                        }
+                    });
+                });
                 return cons;
             }
         }
@@ -445,7 +514,7 @@ class Ejecucion {
                 return cons;
             }
         }
-        if (nodo === 'ATRIBUTO_NODO') {
+        else if (nodo === 'ATRIBUTO_NODO') {
             if (etiqueta === '/@*') {
                 let cons = [];
                 consulta.forEach(element => {
@@ -454,6 +523,18 @@ class Ejecucion {
                     }
                 });
                 this.atributo_nodo = true;
+                return cons;
+            }
+        }
+        else if (nodo === 'ATRIBUTO_DESCENDIENTES') {
+            if (etiqueta === '//@*') {
+                let cons = [];
+                consulta.forEach(element => {
+                    if (element.listaObjetos.length > 0) {
+                        cons = cons.concat(element);
+                    }
+                });
+                //this.atributo_nodo = true;
                 return cons;
             }
         }
@@ -588,6 +669,38 @@ class Ejecucion {
                         });
                     }
                 }
+                else if (this.node_desc) {
+                    cadena += '<' + element.cons.identificador;
+                    if (element.cons.listaAtributos.length > 0) {
+                        element.cons.listaAtributos.forEach(atributos => {
+                            cadena += ' ' + atributos.identificador + '=' + atributos.valor;
+                        });
+                    }
+                    if (element.cons.doble) {
+                        cadena += '>\n';
+                    }
+                    else {
+                        cadena += '/>\n';
+                    }
+                    if (texto != '') {
+                        cadena += texto + '\n';
+                    }
+                    if (element.cons.listaObjetos.length > 0) {
+                        cadena += this.traducirRecursiva(element.cons.listaObjetos);
+                    }
+                    if (element.cons.doble) {
+                        cadena += '</' + element.cons.identificador + '>\n';
+                    }
+                    if (texto != '') {
+                        cadena += texto + '\n';
+                    }
+                }
+                else if (this.node_texto) {
+                    if (element.texto != null) {
+                        cadena += texto + '\n';
+                    }
+                }
+                
                 else {
                     cadena += '<' + element.cons.identificador;
                     if (element.cons.listaAtributos.length > 0) {
