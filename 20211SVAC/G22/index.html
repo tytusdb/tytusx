@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./codemirror-5.61.1/lib/codemirror.css">
@@ -111,10 +112,10 @@
                     <h2 style="background-color: rgb(8, 49, 68); color:white; margin-top: 20px;">Entrada</h2>
 
                     <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor"></textarea>
-                    <button type="button" class="btn btn-light btn_blue" id="ascendente"><img
+                    <button type="button" class="btn btn-light btn_blue"  onclick="analisisAsc()" id="ascendente"><img
                             src="./css/imagenes/asc.png" />
                         Analizar XML Ascendente </button>
-                    <button type="button" class="btn btn-light btn_blue" id="descendente"><img
+                    <button type="button" class="btn btn-light btn_blue"  onclick="analisisDesc()" id="descendente"><img
                             src="./css/imagenes/desc.png" />
                         Analizar XML Descendente </button>
                 </div>
@@ -151,7 +152,7 @@
 
 
     <script src="./codemirror-5.61.1/mode/javascript/javascript.js"> </script>
-    <script src="http://code.jquery.com/jquery-3.0.0.min.js"> </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
 
     <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
@@ -164,39 +165,43 @@
     <script src="./Scripts/Arboles/Tipo.js"></script>
     <script type="text/javascript">
 
-            $('#ascendente').click(function () {
+
+
+            var btnXML = document.getElementById("ascendente");
+            inputElement.addEventListener("onclick", leerArchivo, false);
+
+            function analisisAsc(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['./Scripts/Gramaticas/xml/gramarxml.js'],
-                    function (grammarXML) {
+                requirejs(['grammarXMLAsc'],
+                    function (grammarXMLAsc) {
                         erroresGramar = [];
                         var entrada =  editor.getValue();
                         if (entrada.length >= 0) {
-                            var xmlAST = grammarXML.getParser().parse(entrada);
+                            var xmlAST = grammarXMLAsc.getParser().parse(entrada);
                             llenarTablaErrores();
                             llenarTablaGramatical();
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
                     });
-            });
+            }
 
-            $('#descendente').click(function () {
+            function analisisDesc(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['./Scripts/Gramaticas/xml/gramarxmldes.js'],
-                    function (gramarxmlDes) {
+                requirejs(['grammarXMLDesc'],
+                    function (grammarXMLDesc) {
                         erroresGramar = [];
                         var entrada =  editor.getValue();
                         console.log(entrada);
                         if (entrada.length >= 0) {
-                            var xmldesAST = gramarxmlDes.getParser().parse(entrada);
+                            var xmldesAST = grammarXMLDesc.getParser().parse(entrada);
                             llenarTablaErrores();
                             llenarTablaGramatical();
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
                     });
-
-            });
+            }
 
     </script>
 </body>
