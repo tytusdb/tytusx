@@ -162,9 +162,8 @@
     <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
     <script src="./Gramaticas/xml/funcionesParseo.js"></script>
     <script src="./Scripts/Arboles/Tipo.js"></script>
-    <script type="module">
+    <script type="text/javascript">
 
-        $(function () {
             $('#ascendente').click(function () {
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
                 requirejs(['./Scripts/Gramaticas/xml/gramarxml.js'],
@@ -179,12 +178,8 @@
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
                     });
-
-
             });
-        })(jQuery);
 
-        $(function () {
             $('#descendente').click(function () {
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
                 requirejs(['./Scripts/Gramaticas/xml/gramarxmldes.js'],
@@ -202,7 +197,6 @@
                     });
 
             });
-        })(jQuery);
 
     </script>
 </body>
