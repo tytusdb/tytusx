@@ -76,6 +76,23 @@ export default class Main extends Component {
 
         try {
             const querys = parseXPATH.parse(this.state.xpath)
+            console.log(querys)
+            for (const key in querys) {
+                texto = querys[key].GraficarAST(texto);
+                if (indice < querys.length) {
+                    texto += "nodo" + key.toString() + "[label=\"|\"];\n"
+                    texto += "nodo" + querys[key].line.toString() + "_" + querys[key].column.toString() + "->nodo" + key.toString() + ";\n";
+                    texto += "nodo" + key.toString() + "->nodo" + querys[indice].line.toString() + "_" + querys[indice].column.toString() + ";\n";
+                    indice++;
+                }
+            }
+
+
+            console.log(texto);
+
+            this.setState({
+                repAstXpath: "digraph G {" +texto +"}",
+            });
             var erroresSemanticos: string[] = [];
             var salida = "";
 
@@ -151,6 +168,9 @@ export default class Main extends Component {
                 }
             }
             const querys2 = parseXPATH.parse(this.state.xpath)
+            this.setState({
+                repAstXpath: "digraph G {" +texto +"}",
+            });
             var erroresSemanticos: string[] = [];
             var salida = "";
             for (const query of querys2) {
