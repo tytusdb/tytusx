@@ -192,7 +192,7 @@ case 46:
 this.$=new aritmetica.default(aritmetica.Operadores.MODULADOR,_$[$0-2].first_line,_$[$0-2].first_column,$$[$0-2],$$[$0]);
 break;
 case 47:
- this.$=$$[$0-1]+$$[$0]; 
+this.$=new aritmetica.default(aritmetica.Operadores.MENOSNUM,_$[$0-1].first_line,_$[$0-1].first_column,$$[$0],null);
 break;
 case 48: case 49: case 50: case 51:
 this.$ = new especiales.default($$[$0-2],_$[$0-2].first_line,_$[$0-2].first_column);

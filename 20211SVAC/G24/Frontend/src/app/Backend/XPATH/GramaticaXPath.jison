@@ -189,7 +189,7 @@ EXPRESION
         | EXPRESION OR EXPRESION                                {$$=new logica.default(logica.Logicas.OR,@1.first_line,@1.first_column,$1,$3);}
         | EXPRESION AND EXPRESION                               {$$=new logica.default(logica.Logicas.AND,@1.first_line,@1.first_column,$1,$3);}
         | EXPRESION MODULO EXPRESION                            {$$=new aritmetica.default(aritmetica.Operadores.MODULADOR,@1.first_line,@1.first_column,$1,$3);}
-        | MENOS EXPRESION %prec UMENOS	                        { $$=$1+$2; }
+        | MENOS EXPRESION %prec UMENOS	                        {$$=new aritmetica.default(aritmetica.Operadores.MENOSNUM,@1.first_line,@1.first_column,$2,null);}
         | LAST PARIZQ PARDER                                    {$$ = new especiales.default($1,@1.first_line,@1.first_column);}
         | POSITION PARIZQ PARDER                                {$$ = new especiales.default($1,@1.first_line,@1.first_column);}
         | NODE PARIZQ PARDER                                    {$$ = new especiales.default($1,@1.first_line,@1.first_column);}
