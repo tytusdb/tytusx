@@ -32,4 +32,8 @@ export class Primitivo implements Expression{
         }
     }
 
+    public GraficarAST(texto:string):string {
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.valor.toString() + "\"];\n";
+        return texto;
+    }
 }

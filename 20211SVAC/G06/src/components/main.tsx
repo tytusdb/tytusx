@@ -139,7 +139,17 @@ export default class Main extends Component {
         //console.log(ast)
         //console.log(listaErrores)
         try {
-
+            const querysDesc = parseXPATHDesc.parse(this.state.xpath)
+            console.log(querysDesc);
+            for (const key in querysDesc) {
+                texto = querysDesc[key].GraficarAST(texto);
+                if (indice < querysDesc.length) {
+                    texto += "nodo" + key.toString() + "[label=\"|\"];\n"
+                    texto += "nodo" + querysDesc[key].line.toString() + "_" + querysDesc[key].column.toString() + "->nodo" + key.toString() + ";\n";
+                    texto += "nodo" + key.toString() + "->nodo" + querysDesc[indice].line.toString() + "_" + querysDesc[indice].column.toString() + ";\n";
+                    indice++;
+                }
+            }
             const querys2 = parseXPATH.parse(this.state.xpath)
             var erroresSemanticos: string[] = [];
             var salida = "";
@@ -159,6 +169,7 @@ export default class Main extends Component {
         } catch (error) {
             console.log(error);
         }
+
         
     }
 
