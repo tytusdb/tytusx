@@ -1,13 +1,3 @@
-
-%{
-
-const barrasnodo= require("./Instrucciones/BarrasNodo")
-const identificador= require("./Expresiones/Identificador");
-const CErrores= require("./Excepciones/Errores")
-const CNodoErrores= require("./Excepciones/NodoErrores")
-const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.component")
-const selectroot= require("./Instrucciones/SelectRoot")
-%}
 %lex
 %options case-insensitive
 
@@ -86,7 +76,7 @@ escape                              \\{escapechar}
 "."                   return 'SELECT'
 
 <<EOF>>               return 'EOF'
-.                      {inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yytext +" Linea: "+ yylloc.first_line + "Columna: " + yylloc.first_column);}
+.                     return 'INVALID'
 /lex
 
 // DEFINIMOS PRECEDENCIA DE OPERADORES
@@ -119,8 +109,8 @@ INSTRUCCIONES
 
 INSTRUCCION 
         
-        : BARRA BARRA  EXPRESION                        {$$ = new barrasnodo.default($1,$3,@1.first_line,@1.first_column, $2);}
-        | BARRA    EXPRESION                            {$$ = new barrasnodo.default($1,$2,@1.first_line,@1.first_column, null);}
+        : BARRA BARRA  EXPRESION                       {$$=$1+$2+$3}
+        | BARRA    EXPRESION                          {$$=$1+$2}
         | ATRIBUTO                                      {$$=$1}
         | AXES                                          {$$=$1}
         | ALL                                           {$$=$1}
@@ -132,7 +122,7 @@ PREDICADOS
         ;
 ALL 
         : SELECT  SELECT                        {$$=$1+$2}
-        | SELECT                                {$$ = new selectroot.default($1,@1.first_line,@1.first_column, $2);}
+        | SELECT                                {$$=$1}
         | MULTIPLICACION                        {$$=$1}
         ;
 ATRIBUTO 
@@ -157,7 +147,7 @@ EXPRESION
         | STRING_LITERAL                                        {$$=$1}
         | ALL                                                   {$$=$1}
         | ATRIBUTO                                              {$$=$1}
-        | IDENTIFICADOR                                         {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
+        | IDENTIFICADOR                                         {$$=$1}
         | PREDICADOS                                            {$$=$1}
         | EXPRESION COMA EXPRESION                              {$$=$1+$3}
         | EXPRESION MENOS EXPRESION                             {$$=$1+$3}

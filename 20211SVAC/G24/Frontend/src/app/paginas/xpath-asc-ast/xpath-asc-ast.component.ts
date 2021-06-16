@@ -1,33 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
+import nodoAST from 'src/app/Backend/XPATH/Analizador/Abstracto/nodoAST';
+import { parse } from 'ts-node';
 import * as vis from 'vis';
 @Component({
-  selector: 'app-arbol-cst',
-  templateUrl: './arbol-cst.component.html',
-  styleUrls: ['./arbol-cst.component.css']
+  selector: 'app-xpath-asc-ast',
+  templateUrl: './xpath-asc-ast.component.html',
+  styleUrls: ['./xpath-asc-ast.component.css']
 })
-export class ArbolCstComponent implements OnInit {
+export class XpathAscAstComponent implements OnInit {
   contador=1;
   cuerpo='';
   dataSource = '';
   nodes = null;
   edges = null;
   network = null;
+  cadena="";
   directionInput = document.getElementById("direction");
+  constructor() { }
   c = 0;
-  constructor() {
-    
-  }
 
   ngOnInit(): void {
-    this.destroy();
+    
     this.nodes = [];
     this.edges = [];
-    var connectionCount = [];
-    let info = window.localStorage.getItem('simbolo');
+    let info = window.localStorage.getItem('astpath');
     let contenido:nodoAST = <nodoAST>JSON.parse(info);
-    console.log(contenido)
-
+    
+    /*this.cadena+=this.getValor(contenido)+"--"
+    this.graficaAST(contenido)
+    console.log(this.cadena)*/
     
     var nivel = 0;
     this.nodes.push({id: this.c, label: this.getValor(contenido), nivel:nivel})
@@ -44,25 +45,48 @@ export class ArbolCstComponent implements OnInit {
       this.nodes[nodo.id]["level"]=nodo.nivel;
     }
 
+   
     var container = document.getElementById("mynetwork");
+
+      
+      
+      
     var data = {
       nodes: this.nodes,
       edges: this.edges,
     };
 
     var options = {
+      nodes:{// Control de nodos
+        borderWidth: 2,//Ajuste de ancho de borde de nodo
+        size: 30,//Haga clic en la configuración de ancho cuando esté seleccionado,
+        color: {
+            border: '#A72168',//Configuración de color del borde
+            background:'#F695BB',
+        },
+        font:{
+          color:"#000000",
+          face: 'Century Gothic'
+          }
+    },
       edges: {
         smooth: {
           type: "cubicBezier",
           forceDirection: "vertical",
           roundness: 0.4,
-        },
+        }
       },
       layout: {
+        randomSeed: undefined,
+        improvedLayout:true,
+
         hierarchical: {
+          
           direction: "UD",
+          sortMethod: "hubsize"
         },
       },
+      
       physics: false,
     };
     this.network = new vis.Network(container, data, options);
@@ -71,10 +95,8 @@ export class ArbolCstComponent implements OnInit {
       document.getElementById("selection").innerText =
         "Selection: " + params.nodes;
     });
-
-
-
   }
+  
   destroy() {
     if (this.network !== null) {
       this.network.destroy();
@@ -104,4 +126,13 @@ export class ArbolCstComponent implements OnInit {
       return nodo.listaNodos;
     }
 
+    graficaAST(nodo: nodoAST){
+      
+      for(let hijo of this.getHijos(nodo))
+      {
+        this.cadena+= this.getValor(hijo)+"->"
+        this.graficaAST(hijo)
+      }
+      
+    }
 }
