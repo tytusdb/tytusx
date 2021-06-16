@@ -7,11 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< Updated upstream
-module.exports = __webpack_require__(/*! C:\Users\fuent\Desktop\compiladores 2_p1_github\PruebasCommit\src\polyfills.ts */"hN/g");
-=======
-module.exports = __webpack_require__(/*! C:\Users\hilbe\Desktop\USAC\17vo Semestre 2020\COMPI2_Vacas\PruebasCommit\src\polyfills.ts */"hN/g");
->>>>>>> Stashed changes
+module.exports = __webpack_require__(/*! C:\Users\h\Documents\GitHub\Compi2\PruebasCommit\src\polyfills.ts */"hN/g");
 
 
 /***/ }),
