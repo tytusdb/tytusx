@@ -57,6 +57,31 @@ const abrirArchivo = function(evento){
     }
 };
 
+function abrirReporteAST(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    window.open("Paginas/reporteAST.html","_blank");
+}
+
+function abrirReporteCST(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    window.open("Paginas/reporteCST.html","_blank");
+}
+
+function abrirReporteErrores(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    window.open("Paginas/reporteErrores.html","_blank");
+}
+
+function abrirReporteTS(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    window.open("Paginas/reporteTS.html","_blank");
+}
+
+function abrirReporteGramatical(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    window.open("Paginas/reporteGramatical.html","_blank");
+}
+
 
 /*********************GRAFICA ARBOL **********************************************/
 function probandoArbol(){
