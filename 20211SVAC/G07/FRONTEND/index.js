@@ -464,6 +464,9 @@ btnReporteXMLErrores.addEventListener("click", () => {
   // Lista de errores
   listaErrores = parserXML.listaErrores;
 
+  console.log("ESTA ES LA LISTA DE ERROES");
+  console.log(listaErrores);
+
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
   <th scope="col">Analizador</th>
