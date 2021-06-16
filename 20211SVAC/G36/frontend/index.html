@@ -18,6 +18,7 @@
      <!-- Tipo de lenguaje que reconoce -->    
      <script src="lib/mode/xml/xml.js"></script>
      <script src="lib/mode/xquery/xquery.js"></script>
+     <script type="text/javascript" src="./js/vis.js"></script>
 
 </head>
 
@@ -34,11 +35,11 @@
                 <button onclick="quitar();" class="menu-item-btn">Eliminar </button>
                 <button onclick="DescargarArchivo();" class="menu-item-btn">Guardar</button>
                 <button onclick="DescargarArchivo();" class="menu-item-btn">Guardar Como</button>
-                <button onclick="ReportXml(0)" class="menu-item-btn">Errores</button>
-                <button onclick="ReportXml(1)" class="menu-item-btn">Gramatica</button>
-                <button onclick="" class="menu-item-btn">AST</button>
-                <button onclick="" class="menu-item-btn">CST</button>
-                <button onclick="" class="menu-item-btn">Simbolos</button>
+                <button onclick="ReportXml(0);" class="menu-item-btn">Errores</button>
+                <button onclick="ReportXml(1);" class="menu-item-btn">Gramatica</button>
+                <button onclick="getArbolXML(true);" class="menu-item-btn">AST</button>
+                <button onclick="getArbolXML(false);" class="menu-item-btn">CST</button>
+                <button onclick="reporteTabla();" class="menu-item-btn">Tabla Simbolos</button>
 
             </div>
             <div id="nav-item">
@@ -105,11 +106,24 @@
             </di>
         </section>    
     </div>
+    <div id="grafo">
 
+    </div>
 
 
     <footer> Coded by: widjos </footer>
+    <script>var exports = {"__esModule": true};</script>
      <script type="text/javascript" src="./js/index.js"></script>
+     <script src="../Analisis/build/XML/Gramatica/xmlA.js"></script>
+     <script src="../Analisis/build/XML/Abstractas/Entorno.js"></script>
+     <script src="../Analisis/build/XML/Abstractas/Nodo.js"></script>
+     <script src="../Analisis/build/XML/Abstractas/Simbolo.js"></script>
+     <script src="../Analisis/build/XML/Abstractas/Tabla.js"></script>
+     <script src="../Analisis/build/XML/Abstractas/Tipo.js"></script>
+     <script src="../Analisis/build/XML/Objetos/Objeto.js"></script>
+     <script src="../Analisis/build/XML/AST/NodoAST.js"></script>
+
+     
 </body>
 
 
