@@ -1,3 +1,13 @@
+
+%{
+
+const barrasnodo= require("./Instrucciones/BarrasNodo")
+const identificador= require("./Expresiones/Identificador");
+const CErrores= require("./Excepciones/Errores")
+const CNodoErrores= require("./Excepciones/NodoErrores")
+const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.component")
+const selectroot= require("./Instrucciones/SelectRoot")
+%}
 %lex
 %options case-insensitive
 
@@ -15,22 +25,21 @@ escape                              \\{escapechar}
 "//".*                              // comentario simple línea
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] // comentario multiple líneas
 
-
+"ancestor-or-self"    return 'ANCESTORSELF'
+"descendant-or-self"  return 'DESCENDENTSELF'
+"following-sibling"   return 'FOLLOWINGSIBLI'
+"preceding-sibling"   return 'PRECEDINGSIBLI'
 {entero}	      return 'entero'
 {stringliteral}       return 'STRING_LITERAL'
 {caracterliteral}     return 'CARACTER_LITERAL'
 "ancestor"            return 'ANCESTOR'
-"ancestor-or-self"    return 'ANCESTORSELF' 
 "attribute"           return 'ATTRIBUTE'        
 "child"               return 'CHILD'
 "descendant"          return 'DESCENDENT'
-"descendant-or-self"  return 'DESCENDENTSELF'
 "following"           return 'FOLLOWING'
-"following-sibling"   return 'FOLLOWINGSIBLI'
 "namespace"           return 'NAMESPACE'
 "parent"              return 'PARENT'
 "preceding"           return 'PRECEDING'
-"preceding-sibling"   return 'PRECEDINGSIBLI'
 "self"                return 'SELF'
 "last"                return 'LAST'
 "position"            return 'POSITION'
@@ -77,7 +86,7 @@ escape                              \\{escapechar}
 "."                   return 'SELECT'
 
 <<EOF>>               return 'EOF'
-.                     return 'INVALID'
+.                      {inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yytext +" Linea: "+ yylloc.first_line + "Columna: " + yylloc.first_column);}
 /lex
 
 // DEFINIMOS PRECEDENCIA DE OPERADORES
@@ -110,19 +119,20 @@ INSTRUCCIONES
 
 INSTRUCCION 
         
-        : BARRA BARRA  EXPRESION                       {$$=$1+$2+$3}
-        | BARRA    EXPRESION                          {$$=$1+$2}
-        | IDENTIFICADOR INSTRUCCION                     {$$=$1+$2}
-        | IDENTIFICADOR  L_CORCHETES                    {$$=$1+$2}
+        : BARRA BARRA  EXPRESION                        {$$ = new barrasnodo.default($1,$3,@1.first_line,@1.first_column, $2);}
+        | BARRA    EXPRESION                            {$$ = new barrasnodo.default($1,$2,@1.first_line,@1.first_column, null);}
         | ATRIBUTO                                      {$$=$1}
-        | EXPRESION                                     {$$=$1}
         | AXES                                          {$$=$1}
         | ALL                                           {$$=$1}
 
         ;
+PREDICADOS
+        :INSTRUCCION                     {$$=$1}
+        | IDENTIFICADOR  L_CORCHETES                    {$$=$1+$2}
+        ;
 ALL 
         : SELECT  SELECT                        {$$=$1+$2}
-        | SELECT                                {$$=$1}
+        | SELECT                                {$$ = new selectroot.default($1,@1.first_line,@1.first_column, $2);}
         | MULTIPLICACION                        {$$=$1}
         ;
 ATRIBUTO 
@@ -145,10 +155,10 @@ EXPRESION
         | entero                                                {$$=$1}
         | CARACTER_LITERAL                                      {$$=$1}
         | STRING_LITERAL                                        {$$=$1}
-        | INSTRUCCION                                           {$$=$1}
-        | SELECT                                                {$$=$1}
+        | ALL                                                   {$$=$1}
         | ATRIBUTO                                              {$$=$1}
-        | IDENTIFICADOR                                         {$$=$1}
+        | IDENTIFICADOR                                         {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
+        | PREDICADOS                                            {$$=$1}
         | EXPRESION COMA EXPRESION                              {$$=$1+$3}
         | EXPRESION MENOS EXPRESION                             {$$=$1+$3}
         | EXPRESION MAS EXPRESION                               {$$=$1+$3}
@@ -173,18 +183,18 @@ EXPRESION
         
 
 AXES
-        :ANCESTOR DOSPUNTOS DOSPUNTOS INSTRUCCION                    {$$=$1+"::"+$4}
-        |ANCESTORSELF DOSPUNTOS DOSPUNTOS INSTRUCCION                {$$=$1+"::"+$4}
-        |ATTRIBUTE DOSPUNTOS DOSPUNTOS INSTRUCCION                   {$$=$1+"::"+$4}
-        |CHILD DOSPUNTOS DOSPUNTOS INSTRUCCION                       {$$=$1+"::"+$4}
-        |DESCENDENT DOSPUNTOS DOSPUNTOS INSTRUCCION                  {$$=$1+"::"+$4} 
-        |DESCENDENTSELF DOSPUNTOS DOSPUNTOS INSTRUCCION              {$$=$1+"::"+$4}
-        |FOLLOWING DOSPUNTOS DOSPUNTOS INSTRUCCION                   {$$=$1+"::"+$4}
-        |FOLLOWINGSIBLI DOSPUNTOS DOSPUNTOS INSTRUCCION              {$$=$1+"::"+$4}
-        |NAMESPACE DOSPUNTOS DOSPUNTOS INSTRUCCION                   {$$=$1+"::"+$4}
-        |PARENT DOSPUNTOS DOSPUNTOS INSTRUCCION                      {$$=$1+"::"+$4}
-        |PRECEDING DOSPUNTOS DOSPUNTOS INSTRUCCION                   {$$=$1+"::"+$4}
-        |PRECEDINGSIBLI DOSPUNTOS DOSPUNTOS INSTRUCCION              {$$=$1+"::"+$4}
-        |SELF DOSPUNTOS DOSPUNTOS INSTRUCCION                        {$$=$1+"::"+$4}
+        :ANCESTOR DOSPUNTOS DOSPUNTOS EXPRESION                    {$$=$1+"::"+$4}
+        |ANCESTORSELF DOSPUNTOS DOSPUNTOS EXPRESION                {$$=$1+"::"+$4}
+        |ATTRIBUTE DOSPUNTOS DOSPUNTOS EXPRESION                   {$$=$1+"::"+$4}
+        |CHILD DOSPUNTOS DOSPUNTOS EXPRESION                       {$$=$1+"::"+$4}
+        |DESCENDENT DOSPUNTOS DOSPUNTOS EXPRESION                  {$$=$1+"::"+$4} 
+        |DESCENDENTSELF DOSPUNTOS DOSPUNTOS EXPRESION              {$$=$1+"::"+$4}
+        |FOLLOWING DOSPUNTOS DOSPUNTOS EXPRESION                  {$$=$1+"::"+$4}
+        |FOLLOWINGSIBLI DOSPUNTOS DOSPUNTOS EXPRESION             {$$=$1+"::"+$4}
+        |NAMESPACE DOSPUNTOS DOSPUNTOS EXPRESION                  {$$=$1+"::"+$4}
+        |PARENT DOSPUNTOS DOSPUNTOS EXPRESION                     {$$=$1+"::"+$4}
+        |PRECEDING DOSPUNTOS DOSPUNTOS EXPRESION                  {$$=$1+"::"+$4}
+        |PRECEDINGSIBLI DOSPUNTOS DOSPUNTOS EXPRESION             {$$=$1+"::"+$4}
+        |SELF DOSPUNTOS DOSPUNTOS EXPRESION                       {$$=$1+"::"+$4}
         ;
 

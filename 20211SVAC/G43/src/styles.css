@@ -1,0 +1,79 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.toolbarP{
+    background-color: #F3BA00; 
+    position: relative;
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)
+}
+
+.mcard{
+    background-color: #565462;
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)
+}
+
+.mcardH{
+    background-color: #84693b;
+    box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)
+}
+
+
+.divCenter{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.Titulo{
+    color: rgb(255, 255, 255);
+}
+
+.mcardH{
+    background-color: #01587A;
+}
+
+.SimpleButton{
+    display: flex; 
+    justify-content: center;
+}
+
+
+[type="file"] {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute !important;
+    white-space: nowrap;
+    width: 1px;
+  }
+  
+  [type="file"] + label {
+    box-shadow:0 1px 1px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 2px 2px 0 rgba(0,0,0,.12);
+    background-color: #3F51B5;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    padding-left: 2rem 4rem;
+  }
+  
+  [type="file"]:focus + label,
+  [type="file"] + label:hover {
+      background-color: #3F51B5;
+  }
+  
+  [type="file"]:focus + label {
+    outline: 1px dotted #3F51B5;
+  }
+
+
+  .mat-tab-body-wrapper{
+    height: 700px;
+  }

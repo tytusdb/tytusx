@@ -133,6 +133,30 @@ INICIO:
 	|id PREDICADO					{ $$=new NodoAST.default($1); $$.AgregarHijo($1); }
 	|punto 							{ $$=new NodoAST.default($1); }
 	|doblep 						{ $$=new NodoAST.default($1); }
+	|INICIO diagonal punto			{ $$=new NodoAST.default("/");
+									  let nodo9=new NodoAST.default($3);
+									  $$.AgregarHijo($1); $$.AgregarHijo(nodo9); }
+	|INICIO diagonal doblep			{ $$=new NodoAST.default("/");
+									  let nodo10=new NodoAST.default($3);
+									  $$.AgregarHijo($1); $$.AgregarHijo(nodo10); }
+	|diagonal punto					{ $$=new NodoAST.default("/");
+									  let nodo11=new NodoAST.default($2);
+									  $$.AgregarHijo(nodo11); }
+	|diagonal doblep				{ $$=new NodoAST.default("/");
+									  let nodo12=new NodoAST.default($2);
+									  $$.AgregarHijo(nodo12); }
+	|INICIO dobled punto			{ $$=new NodoAST.default("//");
+									  let nodo13=new NodoAST.default($3);
+									  $$.AgregarHijo($1); $$.AgregarHijo(nodo13); }
+	|INICIO dobled doblep			{ $$=new NodoAST.default("//");
+									  let nodo14=new NodoAST.default($3);
+									  $$.AgregarHijo($1); $$.AgregarHijo(nodo14); }
+	|dobled doblep					{ $$=new NodoAST.default("//");
+									  let nodo15=new NodoAST.default($2);
+									  $$.AgregarHijo(nodo15); }
+	|dobled punto					{ $$=new NodoAST.default("//");
+									  let nodo16=new NodoAST.default($2);
+									  $$.AgregarHijo(nodo16); }
 	|error EOF 						{ ErrorL.Errores.add(new nodoError.Error("Sintáctico","Se esperaba el inicio de una instrucción "+yytext,@1.first_line,@1.first_column,"XPath")); }
 ;
 
@@ -214,6 +238,9 @@ CONTENIDO:
 	 					  let nodoc1=new NodoAST.default($1); $$.AgregarHijo(nodoc1); }
 	|id parizq parder 	{ $$=new NodoAST.default("Contenido");
 	 					  let nodoc2=new NodoAST.default($1); $$.AgregarHijo(nodoc2); }
+	|id PREDICADO		{ $$=new NodoAST.default("Contenido"); 
+						  let nodoc6=new NodoAST.default($1); nodoc6.AgregarHijo($2);
+						  $$.AgregarHijo(nodoc6); }
 	|por 				{ $$=new NodoAST.default("Contenido");
 	 					  let nodoc3=new NodoAST.default($1); $$.AgregarHijo(nodoc3); }
 	|por diagonal	 	{ $$=new NodoAST.default("Contenido");

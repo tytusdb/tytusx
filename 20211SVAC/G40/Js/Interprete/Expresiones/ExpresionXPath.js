@@ -36,6 +36,12 @@ var ExpresionXPath = /** @class */ (function () {
         } else if (this.getTipo()== TipoExpresionXPath.DOBLEPUNTO){
             this.resultado = this.buscarDoblePunto(entornoActual,tipoBusqueda);
             return this.resultado;
+        } else if (this.getTipo()== TipoExpresionXPath.ARROBA){
+            this.resultado = this.buscarArrobaAsterisco(entornoActual,tipoBusqueda);
+            return this.resultado;
+        } else if (this.getTipo()== TipoExpresionXPath.ARROBA_ID){
+            this.resultado = this.buscarArrobaID(entornoActual,tipoBusqueda,this.identificador);
+            return this.resultado;
         }
 
     };
@@ -928,6 +934,64 @@ var ExpresionXPath = /** @class */ (function () {
 
     ExpresionXPath.prototype.buscarPunto = function (ent, busqueda) {
         return [entornosGlobal, objetosGlobal];
+    };
+
+    ExpresionXPath.prototype.buscarArrobaAsterisco = function (ent, busqueda) {
+        //return [entornosGlobal, objetosGlobal];
+        var entornoActual = ent;
+        var objetos = [];
+        var entornos = [];
+
+        
+
+            objetosGlobal.forEach(function (objeto){
+
+            if(objeto.getAtributos().length>0){
+                if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
+                    objetos.push(objeto);
+                    if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
+                        entornos.push(objeto.getEntorno());
+                    } 
+                }  
+                  
+            } 
+            });            
+        
+        objetosGlobal = objetos;
+        entornosGlobal = entornos;                                         
+        return [entornos, objetos];
+
+    };
+
+    ExpresionXPath.prototype.buscarArrobaID = function (ent, busqueda, idAux) {
+        //return [entornosGlobal, objetosGlobal];
+        var entornoActual = ent;
+        var objetos = [];
+        var entornos = [];
+        var idAux = idAux;        
+
+            objetosGlobal.forEach(function (objeto){
+
+            if(objeto.getAtributos().length>0){
+
+                if(AtributoYaExiste(objeto.getAtributos(),idAux)==true){
+
+                    if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
+                        objetos.push(objeto);
+                        if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
+                            entornos.push(objeto.getEntorno());
+                        } 
+                    }  
+
+                }
+                                         
+            } 
+            });            
+        
+        objetosGlobal = objetos;
+        entornosGlobal = entornos;                                         
+        return [entornos, objetos];
+
     };
 
     ExpresionXPath.prototype.buscarDoblePunto = function (ent, busqueda) {
