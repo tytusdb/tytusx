@@ -111,6 +111,7 @@ let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
+let globalencod;
 let codificador = document.getElementById("codencod");
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 <biblioteca>
@@ -146,7 +147,7 @@ botonCargar.addEventListener("click", () => {
     console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
     codificador.innerHTML = parserXML.tipoencoding;
-    
+    globalencod =parserXML.tipoencoding;
 
 })
 
@@ -162,7 +163,7 @@ botonCargar2.addEventListener("click", () => {
   console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
   codificador.innerHTML = parserXML.tipoencoding;
-  
+  globalencod =parserXML.tipoencoding;
 
 
 })
@@ -343,10 +344,45 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+    // Original
+    function encode_utf8(s) {
+      return unescape(encodeURIComponent(s));
+    }
+
+    function decode_utf8(s) {
+      return decodeURIComponent(escape(s));
+    }
+
+    function codificarascci(t) {
+      var caracteres = [];
+      valor = t;
+      for (var i = 0; i < valor.length; i++) {
+        caracteres[i] = valor.charAt(i).charCodeAt(0);
+      }
+      return caracteres.toString().replaceAll(",",' ');
+    }
 
 function imprimiConsola(txt){
-    document.getElementById("consolaPython").value=txt+"\n";
-}
+  console.log("imprimir en consola");
+  console.log(globalencod);  
+  //console.log(encode_utf8(txt)+"\n");
+  // asi se imprime la salida
+  //  document.getElementById("consolaPython").value=txt+"\n";
+    if(globalencod.includes('ISO-8859-1')){
+      console.log("entre en iso");
+      document.getElementById("consolaPython").value=encode_utf8(txt)+"\n";
+    }
+//IMPLEMENTACION DEL CODIGO ASCII
+/*    else if(globalencod.includes('ASCII')){
+      console.log("entre en ASCII");
+      document.getElementById("consolaPython").value = codificarascci(txt)+"\n";
+    }
+*/
+    else{
+      console.log("entre en utf");
+      document.getElementById("consolaPython").value=txt+"\n";
+    }
+  }
 document.getElementById("msgError").style.display="none";
 
 
