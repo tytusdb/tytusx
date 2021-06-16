@@ -1,23 +1,32 @@
 <div class="contenedor">
   <div class="consolaContainer">
-    <label>EDITOR XPATH</label>
-      <mat-button-toggle (click)="interpretarContenido(contenido.value)" value="Interpretar">Ejecutar</mat-button-toggle>
+    EDITOR XPATH
+    <mat-button-toggle-group name="fontStyle">
+      <mat-button-toggle (click)="EjecutarAsc(consolas.value)" value="Interpretar">Ejecutar Desc </mat-button-toggle>
+      <mat-button-toggle (click)="EjecutarAsc(consolas.value)" value="Interpretar2">Ejecutar Asc </mat-button-toggle>
+    </mat-button-toggle-group>
     <textarea #consolas id="consolas" class="consola"></textarea>
-</div>
-    <div class="editores">
-      <div id="ediT">
-        <label>Editor XML</label> <mat-button-toggle-group  name="fontStyle" aria-label="Font Style">
-          <mat-button-toggle (click)="interpretarContenido(contenido.value)"  value="Interpretar">Interpretar XML Asc</mat-button-toggle>
-          <mat-button-toggle (click)="interpretarContenidoDesc(contenido.value)" value="InterpretarDesc">Interpretar XML Desc</mat-button-toggle>
-          <mat-button-toggle value="Abrir Archivo" (click)="textInput.click()">Abrir Archivo XML</mat-button-toggle>
-          <input type="file" hidden="true" #textInput onclick="this.value=null"(change)="textInputChange($event)" accept=".ty"/>
-          <mat-button-toggle  value="Guardar">Guardar XML</mat-button-toggle></mat-button-toggle-group>
-              <textarea #contenido   id="contenido" class="forma" (this.onload)="getConsola()"></textarea>
-              </div>
-              <div id="ediT">
-                <label>RESULTADO XPATH</label>
-              <textarea #resultado   id="resultado" class="forma"></textarea></div>
+  </div>
+  <div class="editores">
+    <div id="ediT">
+      <label>Editor XML</label>
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle (click)="interpretarContenido(contenido.value)" value="Interpretar">Interpretar XML Asc
+        </mat-button-toggle>
+        <mat-button-toggle (click)="interpretarContenidoDesc(contenido.value)" value="InterpretarDesc">Interpretar XML
+          Desc</mat-button-toggle>
+        <mat-button-toggle value="Abrir Archivo" (click)="textInput.click()">Abrir Archivo XML</mat-button-toggle>
+        <input type="file" hidden="true" #textInput onclick="this.value=null" (change)="textInputChange($event)"
+          accept=".ty" />
+        <mat-button-toggle value="Guardar">Guardar XML</mat-button-toggle>
+      </mat-button-toggle-group>
+      <textarea #contenido id="contenido" class="forma" (this.onload)="getConsola()"></textarea>
     </div>
+    <div><br></div>
+    <div id="ediT">
+      <label>RESULTADO XPATH</label>
+      <textarea #resultado id="resultado" class="forma"></textarea>
+    </div>
+  </div>
 
 </div>
-

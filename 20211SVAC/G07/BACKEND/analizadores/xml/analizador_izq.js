@@ -72,12 +72,12 @@
   }
 */
 var analizador_izq = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,9],$V2=[5,20,21,26,30,32,33,34,35,36],$V3=[1,21],$V4=[1,22],$V5=[1,23],$V6=[1,26],$V7=[1,27],$V8=[1,28],$V9=[1,29],$Va=[1,30],$Vb=[10,15],$Vc=[20,21,26,30,32,33,34,35,36],$Vd=[1,41],$Ve=[18,19,26];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,9],$V2=[5,22,23,28,30,31,32,33,34,35],$V3=[1,18],$V4=[1,19],$V5=[1,22],$V6=[1,23],$V7=[1,24],$V8=[1,25],$V9=[1,26],$Va=[1,17],$Vb=[10,15],$Vc=[22,23,28,30,31,32,33,34,35],$Vd=[1,37],$Ve=[17,23,25];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"PROLOGO":4,"EOF":5,"tk_inicio_prologo":6,"VERSION":7,"CODIFICACION":8,"DEPENDENCIA":9,"tk_fin_prologo":10,"RAIZ":11,"tk_igual":12,"tk_hilera":13,"tk_encoding":14,"tk_standalone":15,"ETIQUETA":16,"ETIQUETAERROR":17,"tk_cierra_dos":18,"tk_cierra":19,"tk_abre_dos":20,"tk_abre":21,"ETIQUETA_UNICA":22,"APERTURA":23,"CONTENIDO":24,"CIERRE":25,"tk_etiqueta":26,"ATRIBUTOS":27,"ATRIBUTO":28,"LISTACONT":29,"tk_numero":30,"CARACESPECIAL":31,"tk_less":32,"tk_great":33,"tk_amper":34,"tk_apostro":35,"tk_quota":36,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"tk_inicio_prologo",10:"tk_fin_prologo",12:"tk_igual",13:"tk_hilera",14:"tk_encoding",15:"tk_standalone",18:"tk_cierra_dos",19:"tk_cierra",20:"tk_abre_dos",21:"tk_abre",26:"tk_etiqueta",30:"tk_numero",32:"tk_less",33:"tk_great",34:"tk_amper",35:"tk_apostro",36:"tk_quota"},
-productions_: [0,[3,2],[4,6],[4,1],[7,2],[8,3],[8,0],[9,3],[9,0],[11,1],[11,2],[17,1],[17,1],[17,1],[17,1],[16,1],[16,3],[16,2],[22,4],[23,4],[23,3],[27,2],[27,1],[28,3],[24,2],[24,1],[29,1],[29,1],[29,1],[29,1],[31,1],[31,1],[31,1],[31,1],[31,1],[25,3]],
+symbols_: {"error":2,"INICIO":3,"PROLOGO":4,"EOF":5,"tk_inicio_prologo":6,"VERSION":7,"CODIFICACION":8,"DEPENDENCIA":9,"tk_fin_prologo":10,"RAIZ":11,"tk_igual":12,"tk_hilera":13,"tk_encoding":14,"tk_standalone":15,"ETIQUETA":16,"tk_cierra":17,"ETIQUETA_UNICA":18,"APERTURA":19,"CONTENIDO":20,"CIERRE":21,"tk_abre":22,"tk_etiqueta":23,"ATRIBUTOS":24,"tk_cierra_dos":25,"ATRIBUTO":26,"LISTACONT":27,"tk_numero":28,"CARACESPECIAL":29,"tk_less":30,"tk_great":31,"tk_amper":32,"tk_apostro":33,"tk_quota":34,"tk_abre_dos":35,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"tk_inicio_prologo",10:"tk_fin_prologo",12:"tk_igual",13:"tk_hilera",14:"tk_encoding",15:"tk_standalone",17:"tk_cierra",22:"tk_abre",23:"tk_etiqueta",25:"tk_cierra_dos",28:"tk_numero",30:"tk_less",31:"tk_great",32:"tk_amper",33:"tk_apostro",34:"tk_quota",35:"tk_abre_dos"},
+productions_: [0,[3,2],[4,6],[4,1],[7,2],[8,3],[8,0],[9,3],[9,0],[11,1],[11,2],[16,1],[16,3],[16,2],[18,4],[19,4],[19,3],[24,2],[24,1],[26,3],[20,2],[20,1],[27,1],[27,1],[27,1],[27,1],[29,1],[29,1],[29,1],[29,1],[29,1],[21,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -86,8 +86,8 @@ switch (yystate) {
 case 1:
 
     // REPORTE GRAMATICA
-    gramaticapp = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nI   -> P EOF \n` + gramaticapp;
-    gramatical = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n<INICIO> := <PROLOGO> <EOF>\n` + gramatical;
+    gramaticapp = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nI   -> P EOF \n` + gramaticapp;
+    gramatical = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n<INICIO> := <PROLOGO> <EOF>\n` + gramatical;
    
 
     return {
@@ -104,7 +104,7 @@ case 2:
         this.$ = $$[$0];
 
         // REPORTE GRAMATICA
-        gramaticapp = `P   -> tk_inicio V C D tk_fin R \n` + gramaticapp;
+        gramaticapp = `PROLOGO.VAL -> inicio.lexval VERSION.VAL CODIFICACION.VAL DEPENDENCIA.VAL finp.lexval RAIZ.VAL \n` + gramaticapp;
         gramatical = `<PROLOGO> := ${$$[$0-5]} <VERSION> <CODIFICACION> ${$$[$0-1]} <DEPENDENCIA> <RAIZ>\n` + gramatical;
 
     
@@ -112,38 +112,38 @@ break;
 case 3:
 
         this.$ = $$[$0];
-        gramaticapp = `P   -> R \n` + gramaticapp;
+        gramaticapp = `PROLOGO.VAL -> RAIZ.VAL \n` + gramaticapp;
         gramatical = `<PROLOGO> := <RAIZ>\n` + gramatical;
     
 break;
 case 4:
 
-        gramaticapp += `V   -> tk_igual tk_cadena\n` + gramaticapp;
+        gramaticapp += `ERSION.VAL -> igual.lexval cadena.lexval\n` + gramaticapp;
         gramatical += `<VERSION> := ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
     
 break;
 case 5:
 
-        gramaticapp = `C   -> tk_encoding tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `CODIFICACION.VAL -> encoding.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<CODIFICACION> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
         tipoencoding = `${$$[$0]}`.replaceAll("\"", ' ');
     
 break;
 case 6:
 
-        gramaticapp = `C   -> ε \n` + gramaticapp;
+        gramaticapp = `CODIFICACION.VAL -> ε \n` + gramaticapp;
         gramatical = `<CODIFCACION> :=  epsilon\n` + gramatical;
     
 break;
 case 7:
 
-        gramaticapp = `D   -> tk_standalone tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `DEPENDENCIA.VAL -> standalone.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<DEPENDENCIA> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
     
 break;
 case 8:
  
-        gramaticapp = `D   -> ε \n` + gramaticapp;
+        gramaticapp = `DEPENDENCIA.VAL -> ε \n` + gramaticapp;
         gramatical = `<DEPENDENCIA> := epsilon\n` + gramatical;
     
 break;
@@ -158,16 +158,16 @@ case 9:
 
 
         //REPORTE GRAMATICA
-        gramaticapp = `R   -> E \n` + gramaticapp;
+        gramaticapp = `RAIZ.VAL -> ETIQUETA.VAL \n` + gramaticapp;
         gramatical = `<RAIZ> := <ETIQUETA>\n` + gramatical;
     
 break;
-case 11: case 12: case 13: case 14:
+case 10:
 
-            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' + yytext, "No se esperaba " + yytext , _$[$0].first_line, _$[$0].first_column ));
+            listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ', "Me recupero con:  " + yytext , _$[$0-1].first_line, _$[$0].first_column ));
         
 break;
-case 15:
+case 11:
 
         this.$ = $$[$0];
 
@@ -178,11 +178,11 @@ case 15:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> EU \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> ETIQUETA_UNICA.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> :=  <ETIQUETA_UNICA>\n` + gramatical;
     
 break;
-case 16:
+case 12:
 
         
 
@@ -203,13 +203,13 @@ case 16:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> AP CO CI \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> APERTURA.VAL CONTENIDO.VAL CIERRE.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> := <APERTURA> <CONTENIDO> <CIERRE>\n` + gramatical;
 
 
     
 break;
-case 17:
+case 13:
 
 
 
@@ -222,11 +222,11 @@ case 17:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> AP CI \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> APERTURA.VAL CIERRE.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> := <APERTURA> <CIERRE>\n` + gramatical;
     
 break;
-case 18:
+case 14:
 
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
@@ -247,12 +247,12 @@ case 18:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `EU  -> tk_abre tk_etiqueta ATS tk_cierra_dos \n` + gramaticapp;
+        gramaticapp = `ETIQEUTA_UNICA.VAL -> abre.lexval etiqueta.lexval ATRIBUTOS.VAL cierra_dos.lexval \n` + gramaticapp;
         gramatical = `<ETIQUETA_UNICA> := ${$$[$0-3]} ${$$[$0-2]} <ATRIBUTOS> ${$$[$0]} \n` + gramatical;
 
     
 break;
-case 19:
+case 15:
 
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
@@ -274,12 +274,16 @@ case 19:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AP  -> tk_abre tk_etiqueta ATS tk_cierra\n` + gramaticapp;
+        gramaticapp = `APERTURA.VAL -> abre.lexval etiqueta.lexval ATRIBUTOS.VAL cierra.lexval\n` + gramaticapp;
         gramatical = `<APERTURA> := ${$$[$0-3]} ${$$[$0-2]} <ATRIBUTOS> ${$$[$0-1]} \n` + gramatical;
+
+
+        // Verificar Etiqueta
+        verificarEtiquetas.push(new Token("ETIQUETA",$$[$0-2] , _$[$0-2].first_line, _$[$0-2].first_column ));
 
     
 break;
-case 20:
+case 16:
 
         this.$ = {}
         this.$["etiqueta"] = $$[$0-1];
@@ -296,12 +300,15 @@ case 20:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AP  -> tk_abre tk_etiqueta tk_cierra \n` + gramaticapp;
+        gramaticapp = `APERTURA.VAL -> abre.lexval etiqueta.lexval cierra.lexval \n` + gramaticapp;
         gramatical = `<APERTURA> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
+
+        // Verificar Etiqueta
+        verificarEtiquetas.push(new Token("ETIQUETA",$$[$0-1] , _$[$0-1].first_line, _$[$0-1].first_column ));
 
     
 break;
-case 21:
+case 17:
 
         // CST
         nodoPadre = new Nodo("ATRIBUTOS", "ATRIBUTOS");
@@ -321,12 +328,12 @@ case 21:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `ATS -> ATS AT \n` + gramaticapp;
+        gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTOS.VAL ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTOS> <ATRIBUTO>\n` + gramatical;
 
     
 break;
-case 22:
+case 18:
 
         // CST
         nodoPadre = new Nodo("ATRIBUTOS", "ATRIBUTOS");
@@ -338,11 +345,11 @@ case 22:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `ATS -> AT \n` + gramaticapp;
+        gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTO>\n` + gramatical;
     
 break;
-case 23:
+case 19:
 
         // CST
         nodoPadre = new Nodo("ATRIBUTO", "ATRIBUTO");
@@ -360,11 +367,11 @@ case 23:
         this.$["nodo"] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AT  -> tk_etiqueta tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `ATRIBUTO.VAL -> etiqueta.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<ATRIBUTO> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]} \n` + gramatical;
     
 break;
-case 24:
+case 20:
 
         this.$ = $$[$0-1];
 
@@ -387,13 +394,13 @@ case 24:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CO  -> CO LCO \n` + gramaticapp;
+        gramaticapp = `CONTENIDO.VAL -> CONTENIDO.VAL LISTACONT.VAL \n` + gramaticapp;
         gramatical = `<CONTENIDO> := <CONTENIDO> <LISTACONT>\n` + gramatical;
 
 
     
 break;
-case 25:
+case 21:
 
 
         // CST
@@ -406,12 +413,12 @@ case 25:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CO  -> LCO \n` + gramaticapp;
+        gramaticapp = `CONTENIDO.VAL -> LISTACONT.VAL \n` + gramaticapp;
         gramatical = `<CONTENIDO> := <LISTACONT>\n` + gramatical;
 
     
 break;
-case 26:
+case 22:
        
         // CST
         nodoPadre = new Nodo("LISTACONT", "LISTACONT");
@@ -423,11 +430,11 @@ case 26:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> tk_etiqueta \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> etiqueta.lexval \n` + gramaticapp;
         gramatical = `<LISTACONT> :=  ${$$[$0]}\n` + gramatical;
     
 break;
-case 27:
+case 23:
 
         // CST
         nodoPadre = new Nodo("LISTACONT", "LISTACONT");
@@ -439,11 +446,11 @@ case 27:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> tk_numero\n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> numero.lexval\n` + gramaticapp;
         gramatical = `<LISTACONT> :=  ${$$[$0]}\n` + gramatical;
     
 break;
-case 28:
+case 24:
 
         // CST
         nodoPadre = new Nodo("LISTACONT", "LISTACONT");
@@ -456,12 +463,12 @@ case 28:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> E \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> ETIQEUTA.VAL \n` + gramaticapp;
         gramatical = `<LISTACONT> := <ETIQUETA>\n` + gramatical;
 
     
 break;
-case 29:
+case 25:
 
         
         // CST
@@ -475,57 +482,57 @@ case 29:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> CS \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> CARACTERESPECIAL.VAL \n` + gramaticapp;
         gramatical = `<LISTACONT> := <CARACESPECIAL>\n` + gramatical;
 
     
 break;
-case 30:
+case 26:
 
             this.$ = "<";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_less \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> less.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
-case 31:
+case 27:
 
             this.$ = ">";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_great \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> great.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
-case 32:
+case 28:
 
             this.$ = "&";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_amper \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> amper.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
-case 33:
+case 29:
 
             this.$ = "'";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_apostro \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> apostro.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
-case 34:
+case 30:
 
             this.$ = '"';
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_quota \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> quota.lexval  \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
-case 35:
+case 31:
 
         this.$ = {}
 
@@ -538,14 +545,22 @@ case 35:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-            gramaticapp = `CI  -> tk_abre_dos tk_etiqueta tk_cierra \n` + gramaticapp;
-            gramatical = `<CIERRE> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
+        gramaticapp = `CIERRE.VAL -> abre_dos.lexval etiqueta.lexval cierra.lexval \n` + gramaticapp;
+        gramatical = `<CIERRE> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
+
+        //VERIFICAR ETIQUETA
+        let etiqueta = verificarEtiquetas.pop();
+        if (etiqueta.lexema === $$[$0-1]) {
+            // Etiqueta correcta
+        } else {
+            listaErrores.push(new TokenError("XML", "Semantico", `Se abrio la etiqueta ${etiqueta.lexema} en la linea ${etiqueta.linea} y se esta cerrando con ${$$[$0-1]} en la linea ${_$[$0-1].first_line}` , _$[$0-1].first_line, _$[$0-1].first_column ));
+        }
     
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:[1,3],11:4,16:5,21:$V1,22:7,23:8},{1:[3]},{5:[1,10]},{7:11,12:[1,12]},{5:[2,3]},{5:[2,9]},{17:13,18:[1,14],19:[1,15],20:[1,16],21:[1,17]},o($V2,[2,15]),{16:24,20:$V3,21:$V1,22:7,23:8,24:18,25:19,26:$V4,29:20,30:$V5,31:25,32:$V6,33:$V7,34:$V8,35:$V9,36:$Va},{26:[1,31]},{1:[2,1]},o($Vb,[2,6],{8:32,14:[1,33]}),{13:[1,34]},{5:[2,10]},{5:[2,11]},{5:[2,12]},{5:[2,13]},{5:[2,14]},{16:24,20:$V3,21:$V1,22:7,23:8,25:35,26:$V4,29:36,30:$V5,31:25,32:$V6,33:$V7,34:$V8,35:$V9,36:$Va},o($V2,[2,17]),o($Vc,[2,25]),{26:[1,37]},o($Vc,[2,26]),o($Vc,[2,27]),o($Vc,[2,28]),o($Vc,[2,29]),o($Vc,[2,30]),o($Vc,[2,31]),o($Vc,[2,32]),o($Vc,[2,33]),o($Vc,[2,34]),{19:[1,39],26:$Vd,27:38,28:40},{9:42,10:[2,8],15:[1,43]},{12:[1,44]},o([10,14,15],[2,4]),o($V2,[2,16]),o($Vc,[2,24]),{19:[1,45]},{18:[1,46],19:[1,47],26:$Vd,28:48},o($Vc,[2,20]),o($Ve,[2,22]),{12:[1,49]},{10:[1,50]},{12:[1,51]},{13:[1,52]},o($V2,[2,35]),o($V2,[2,18]),o($Vc,[2,19]),o($Ve,[2,21]),{13:[1,53]},{2:$V0,11:54,16:5,21:$V1,22:7,23:8},{13:[1,55]},o($Vb,[2,5]),o($Ve,[2,23]),{5:[2,2]},{10:[2,7]}],
-defaultActions: {4:[2,3],5:[2,9],10:[2,1],13:[2,10],14:[2,11],15:[2,12],16:[2,13],17:[2,14],54:[2,2],55:[2,7]},
+table: [{2:$V0,3:1,4:2,6:[1,3],11:4,16:5,18:7,19:8,22:$V1},{1:[3]},{5:[1,10]},{7:11,12:[1,12]},{5:[2,3]},{5:[2,9]},{17:[1,13]},o($V2,[2,11]),{16:20,18:7,19:8,20:14,21:15,22:$V1,23:$V3,27:16,28:$V4,29:21,30:$V5,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},{23:[1,27]},{1:[2,1]},o($Vb,[2,6],{8:28,14:[1,29]}),{13:[1,30]},{5:[2,10]},{16:20,18:7,19:8,21:31,22:$V1,23:$V3,27:32,28:$V4,29:21,30:$V5,31:$V6,32:$V7,33:$V8,34:$V9,35:$Va},o($V2,[2,13]),o($Vc,[2,21]),{23:[1,33]},o($Vc,[2,22]),o($Vc,[2,23]),o($Vc,[2,24]),o($Vc,[2,25]),o($Vc,[2,26]),o($Vc,[2,27]),o($Vc,[2,28]),o($Vc,[2,29]),o($Vc,[2,30]),{17:[1,35],23:$Vd,24:34,26:36},{9:38,10:[2,8],15:[1,39]},{12:[1,40]},o([10,14,15],[2,4]),o($V2,[2,12]),o($Vc,[2,20]),{17:[1,41]},{17:[1,43],23:$Vd,25:[1,42],26:44},o($Vc,[2,16]),o($Ve,[2,18]),{12:[1,45]},{10:[1,46]},{12:[1,47]},{13:[1,48]},o($V2,[2,31]),o($V2,[2,14]),o($Vc,[2,15]),o($Ve,[2,17]),{13:[1,49]},{2:$V0,11:50,16:5,18:7,19:8,22:$V1},{13:[1,51]},o($Vb,[2,5]),o($Ve,[2,19]),{5:[2,2]},{10:[2,7]}],
+defaultActions: {4:[2,3],5:[2,9],10:[2,1],13:[2,10],50:[2,2],51:[2,7]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -801,6 +816,8 @@ _handle_error:
     let gramatical = ' ';
     let gramaticapp = ' ';
     let tipoencoding = ' ';
+
+    let verificarEtiquetas = [];
 
 
 /* generated by jison-lex 0.3.4 */
@@ -1145,23 +1162,23 @@ case 5: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.f
 break;
 case 6: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 15;
 break;
-case 7: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 20;
+case 7: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 35;
 break;
-case 8: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 18;
+case 8: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 25;
 break;
-case 9: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 21;
+case 9: listaTokens.push(new Token("Abre", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 22;
 break;
-case 10: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 19;
+case 10: listaTokens.push(new Token("Cierra", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 17;
 break;
-case 11: listaTokens.push(new Token("PPmenor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 32;
+case 11: listaTokens.push(new Token("PPmenor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 30;
 break;
-case 12: listaTokens.push(new Token("PPmayor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 33;
+case 12: listaTokens.push(new Token("PPmayor", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 31;
 break;
-case 13: listaTokens.push(new Token("PPampersand", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 34;
+case 13: listaTokens.push(new Token("PPampersand", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 32;
 break;
-case 14: listaTokens.push(new Token("PPapostrofe", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 35;
+case 14: listaTokens.push(new Token("PPapostrofe", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 33;
 break;
-case 15: listaTokens.push(new Token("PPcomillas", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 36;
+case 15: listaTokens.push(new Token("PPcomillas", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 34;
 break;
 case 16: listaTokens.push(new Token("Igual", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 12;
 break;
@@ -1175,7 +1192,7 @@ case 20: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line,
 break;
 case 21: return "EOF"; 
 break;
-case 22: listaErrores.push(new Token("ERROR LEXICO", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column )); 
+case 22: listaErrores.push(new TokenError("XML",'Error Lexico ' , "Caracter desconocido " + yy_.yytext ,  yy_.yylloc.first_line, yy_.yylloc.first_column )); 
 break;
 }
 },

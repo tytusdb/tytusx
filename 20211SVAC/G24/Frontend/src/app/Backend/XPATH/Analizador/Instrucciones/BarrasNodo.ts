@@ -1,7 +1,8 @@
 
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
+import Identificador from '../Expresiones/Identificador';
 import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
@@ -17,17 +18,20 @@ export default class BarrasNodo extends Instruccion {
     this.Barra2=barra2
     this.Operacion= expresion
   }
-  public getNodo(): nodoAST {
+  public getNodosAST(): nodoAST {
     var nodo= new nodoAST('INSTRUCCION'); //PADRE SELECT
-    nodo.agregarHijo(this.Barra2);
+    var nodsBarras= new nodoAST("BARRA1")
+    nodo.agregarHijoAST(nodsBarras)
     if(this.Barra2!=null){
-      nodo.agregarHijo(this.Barra2)
+      /*nodo.agregarHijo(this.Barra2)*/
+      var nodsBarras2= new nodoAST("BARRA2")
+      nodo.agregarHijoAST(nodsBarras2)
     }
     if(this.Operacion!=null){
-      var expresion= new nodoAST("EXPRESION")
-      expresion.agregarHijoAST(this.Operacion.getNodo())
-      nodo.agregarHijoAST(expresion)
+        
+          nodo.agregarHijoAST(this.Operacion.getNodosAST())
     }
+    
     return nodo;
   }
 
@@ -38,7 +42,7 @@ export default class BarrasNodo extends Instruccion {
     if (variable != null) {
         /*SI NO ES NULA*/
     } else {
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'VARIABLE ' + this.Operacion + ' NO EXISTE',
         this.fila,

@@ -1,3 +1,4 @@
+
 var nombreEntrada ='';
 var textA = document.getElementById("editor");
 var editor = CodeMirror.fromTextArea(textA, {
@@ -5,6 +6,7 @@ var editor = CodeMirror.fromTextArea(textA, {
 mode: "text/html",
 matchBrackets: true
 });
+
 
 
 var contenidoGeneral ;
@@ -34,6 +36,7 @@ function leerArchivo(e) {
       console.log(contenido);
     };
     lector.readAsText(archivo);
+    reiniciarArreglos();
 };
 
 function mostrarContenido(contenido){
@@ -45,7 +48,7 @@ function limpiar() {
   editor.setValue('');
   nombreEntrada = null;
   document.getElementById("abrir").value = '';
-
+  reiniciarArreglos();
 }
 
 
@@ -87,6 +90,3 @@ function guardarResultado() {
     }
   } 
 }
-
-
-

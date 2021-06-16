@@ -90,7 +90,7 @@
 %left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual'
 %left 'tk_mas' 'tk_menos'
 %left 'tk_asterisco' 'tk_div' 'tk_mod'
-
+%left unmenos
 
 %start INICIO
 
@@ -202,8 +202,28 @@ CAJETIN:
 ;
 
 PREDICADO:
-          OPERACIONES                                           {$$= $OPERACIONES;}
+        DATO                                                  {$$= $DATO;}
 ;
+
+DATO:
+         tk_numero                                               {$$= $tk_numero;}   
+        |tk_identificador                                        {$$= new Nodo("Porduccion","ID",[$tk_identificador]);}
+        |tk_hilera                                               {$$= new Nodo("Porduccion","CADENA",[$tk_hilera]);}
+        |tk_last tk_parentesis_izq tk_parentesis_der             {$$= new Nodo("Porduccion","LAST",[]);} 
+        |DATO tk_mas DATO                                        {$$= new Nodo("Porduccion","SUM",[$1,$tk_mas,$3]);}  
+        |DATO tk_menos DATO                                      {$$= new Nodo("Porduccion","RES",[ $1,$2,$3]);} 
+        |DATO tk_asterisco DATO                                  {$$= new Nodo("Porduccion","MUL",[ $1,$2,$3]);} 
+        |DATO tk_div DATO                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |DATO tk_igual DATO                                      {$$= new Nodo("Porduccion","IGUAL",[ $1,$2,$3]);}
+        |tk_menos DATO %prec UMENOS		                 {$$= new Nodo("Porduccion","NEG",[ $1,$2]); }
+;
+
+
+
+
+
+
+
 
 OPERACIONES:
         ITEMINICIO OPERADOR ITEMFINAL OPERACIONES_L             {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO, $OPERADOR, $ITEMFINAL, $OPERACIONES_L ] );}
@@ -244,6 +264,7 @@ ITEMFINAL:
 OPERACIONES_L:
           tk_or OPERACIONES                                     {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_or, $OPERACIONES] );}
         | tk_and OPERACIONES                                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_and, $OPERACIONES] );}
+        | OPERADOR ITEMFINAL   OPERACIONES_L                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $OPERADOR, $ITEMFINAL, $OPERACIONES_L] );}        
         |                                                       {$$= new Nodo("Porduccion","OPERACIONES_L",[ "ε" ] );}
 ;
 
