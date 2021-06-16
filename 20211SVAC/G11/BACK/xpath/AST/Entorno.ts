@@ -1,4 +1,3 @@
-import { Simbolo } from "./Simbolo";
 
 
 export class Entorno{
