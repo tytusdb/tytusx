@@ -14,7 +14,7 @@ export default class Todo extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
-    getNodo(): nodoAST {
+    getNodosAST(): nodoAST {
         var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
         var all= new nodoAST("MULTIPLICACION")
         all.agregarHijo(this.Operacion)

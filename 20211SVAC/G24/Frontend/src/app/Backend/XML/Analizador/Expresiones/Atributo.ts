@@ -5,6 +5,7 @@ import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 import Tipo from "src/app/Backend/XML/Analizador/Simbolos/Tipo";
 import { tipoDato } from "src/app/Backend/XML/Analizador/Simbolos/Tipo";
 import { Instruccion } from "src/app/Backend/XML/Analizador/Abstracto/Instruccion";
+import { reporteTabla } from "../Reportes/reporteTabla";
 
 export default class Atributo extends Instruccion{
   public identificador: string;
