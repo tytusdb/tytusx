@@ -40,27 +40,26 @@ class Acceso {
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
 
           if (ast.hijos[1].valor == "CAJETIN") {
-            console.error("Aqui");
-            console.log(ast);
-            console.log(ArregloEntorno);
-            console.log(padre);
             if (ArregloEntorno) {
               if (padre) {
                 this.indice =
                   this.procesarIndice(
                     ast.hijos[1].hijos[1],
-                    padre.hijos.length
+                    padre.hijos.length,
+                    padre
                   ) - 1;
               } else {
                 this.indice =
                   this.procesarIndice(
                     ast.hijos[1].hijos[1],
-                    ArregloEntorno.length
+                    ArregloEntorno.length,
+                    ArregloEntorno
                   ) - 1;
               }
             }
+            console.error(this.indice);
           }
-          
+
           if (!ArregloEntorno) {
             return null;
           }
@@ -124,26 +123,30 @@ class Acceso {
               //Iteramos el arreglo de entornos para aplicar estos cambios en todos
 
               let temrespuesta = [];
-              let atri=false 
+              let atri = false;
+
               if (instruccion.hijos[0].hijos[1].hijos[1]) {
-                if (instruccion.hijos[0].hijos[1].hijos[1].valor == "ARROPROD") {
-                  let nombreATRIBUTO = instruccion.hijos[0].hijos[1].hijos[1].hijos[0];
-                 let res=this.pocesarArtibuto(nombreATRIBUTO, [entorno_]);
-                 if(res != null){
-                  atri=true;
-                 }
-                  temrespuesta.unshift(res);
+                if (
+                  instruccion.hijos[0].hijos[1].hijos[1].valor == "ARROPROD"
+                ) {
+                  let nombreATRIBUTO =
+                    instruccion.hijos[0].hijos[1].hijos[1].hijos[0];
+                  let res = this.pocesarArtibuto(nombreATRIBUTO, [entorno_]);
+                  if (res != null) {
+                    atri = true;
+                  }
+                  temrespuesta.push(res);
                 }
               } else {
                 for (const iterator of entorno_.hijos) {
-                  temrespuesta.unshift(
+                  temrespuesta.push(
                     this.getValorImplicito(iterator, instruccion, entorno_)
                   ); //Concatenamos todas las respuestas que encontramos
                 }
               }
               for (const res of temrespuesta) {
                 if (res != null) {
-                  if (indiceAux == this.indice || this.indice == -1||atri) {
+                  if (indiceAux == this.indice || this.indice == -1) {
                     respuesta += res;
                   }
                   if (res) {
@@ -225,7 +228,7 @@ class Acceso {
   getAccionNodo(AST, entorno, padre) {
     if (AST.hijos[0] == "/") {
       //Accedemos al nodo barra
-      
+
       if (this.getValidacion(AST.hijos[1], entorno)) {
         //Validamos que la etiqueta del nodo sea igual al entorno actual
         if (!entorno.hijos == []) {
@@ -266,18 +269,15 @@ class Acceso {
               '="' +
               entorno.atributos.valorAtributo +
               '"\n';
-              
           }
         }
-        
       }
-      
     }
-    
+
     if (txt != "") {
       return txt;
     }
-    
+
     return null;
   }
   getValidacion(etiqueta, entorno) {
@@ -309,7 +309,7 @@ class Acceso {
     }
     return null;
   }
-  procesarIndice(operaciones, last) {
+  procesarIndice(operaciones, last,entorno) {
     if (operaciones.valor) {
       if (operaciones.valor == "SUM") {
         let num1 = this.procesarIndice(operaciones.hijos[0], last);
@@ -329,10 +329,42 @@ class Acceso {
         return parseInt(num1) / parseInt(num2);
       } else if (operaciones.valor == "LAST") {
         return parseInt(last);
+      } else if (operaciones.valor == "IGUAL") {
+        let tipo;
+        let cadena;
+        if (operaciones.hijos[0].valor == "ATRIBUTO") {
+          tipo={
+              tipo:"ATRIBUTO",
+              valor:operaciones.hijos[0].hijos[0]
+          }
+        }
+        if (operaciones.hijos[2].valor == "CADENA") {
+            cadena=operaciones.hijos[2].hijos[0];
+        }
+
+        return this.getIndexByData(tipo,cadena,entorno);
+
       }
     }
     return operaciones; //No devuelve nada
   }
+  getIndexByData(tipo,cadena,entorno){
+    
+    let index_=-1;
+    for (const iterator of entorno.hijos) {
+      index_++;
+      if(iterator.atributos){
+        if(iterator.atributos.nombreAtributo==tipo.valor){
+          if(cadena==iterator.atributos.valorAtributo){
+            
+            return index_;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
   getConsultaDobleAtributo(etiqueta, entornos) {
     if (entornos != null) {
       for (const entorno of entornos) {
