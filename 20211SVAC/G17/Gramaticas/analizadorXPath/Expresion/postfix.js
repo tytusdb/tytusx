@@ -258,6 +258,10 @@ export class Node extends PostFix
   {
     var posiciones = []
     for (const nodo of nodos) {
+      if(nodo.valor!="")
+      {
+        posiciones.push(new Literal(Tipo.STRING,nodo.valor))
+      }
       posiciones = posiciones.concat(new Camino("*",[],this.tipo).getValor([nodo]))
     }
     return posiciones

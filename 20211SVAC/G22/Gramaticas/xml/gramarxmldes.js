@@ -84,19 +84,44 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-return $$[$0-3];
+ unirErrores();this.$[0]=$$[$0-1]; this.$[2]=$$[$0-2]; ; 
+											var regla = new Regla("XML_GRAMAR","XML_GRAMAR-> ENCABEZADO ABRIR_ELEMENTO ETIQUETA EOF","return [ETIQUETA][ENCABEZADO];");ingresarRegla(regla);
+	
 break;
 case 2:
-return $$[$0-2];
+ unirErrores(); 
+											var regla = new Regla("XML_GRAMAR","XML_GRAMAR-> ABRIR_ELEMENTO ETIQUETA EOF","return ETIQUETA;");ingresarRegla(regla);
+											this.$=$$[$0-1];
+							
 break;
 case 3:
- console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+ 
+			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
+			erroresSintacticos.push(error); unirErrores(); 
+			
 break;
-case 5: case 6: case 7: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47: case 48: case 49: case 50:
-this.$ = new Primitivo($$[$0], _$[$0].first_line, _$[$0].first_column); 
+case 4:
+
+		this.$=$$[$0-3];
+		var regla = new Regla("GRAMATICAL","ENCABEZADO-> menosque c_interroga xml version igual QUOTES TIPO_DATO QUOTES encoding igual QUOTES FORMAT QUOTES c_interroga masque","return FORMAT;");ingresarRegla(regla);
+	
+break;
+case 5:
+this.$ = $$[$0]; 
+			var regla = new Regla("GRAMATICAL","FORMAT-> UTF","return UTF;");ingresarRegla(regla);
+break;
+case 6:
+this.$ = $$[$0]; 
+			var regla = new Regla("GRAMATICAL","FORMAT-> ASCII","return ASCII;");ingresarRegla(regla);
+break;
+case 7:
+this.$ = $$[$0];
+			var regla = new Regla("GRAMATICAL","FORMAT-> ISO","return ISO;");ingresarRegla(regla);
 break;
 case 8:
-this.$=$$[$0-1]; etiquetas.push($$[$0]);
+this.$=$$[$0]; etiquetas.push($$[$0]);
+										var regla = new Regla("GRAMATICAL","ABRIR_ELEMENTO-> menosque identificador","return identificador;");ingresarRegla(regla);
 break;
 case 9:
  if(validarEtiqueta($$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column)){	
@@ -108,67 +133,185 @@ case 9:
 																			this.$ = new ObjetoNodo($$[$0-1],'', _$[$0-5].first_line, _$[$0-5].first_column, $$[$0-5], $$[$0-3]);
 																		} 
 																		 etiquetas.pop();
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); si(CONTENIDO_INTERNO[0]=texto){\n	 nuevo objetoNodo(etiquetaNombre, texto, ATRIBUTOS)\n}else{		nuevo objetoNodo(etiquetaNombre, ATRIBUTOS, CONTENIDO_INTERNO)\n};\n etquetas.pop();");
+																		 
+																	 }else{
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); ERROR SEMANTICO");
 																	 }
+																	 ingresarRegla(regla);
 																	
 break;
 case 10:
  if(validarEtiqueta($$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column)){	
-																		if($$[$0-2][1]=='texto'){
+																		if($$[$0-3][1]=='texto'){
 																			this.$ = new ObjetoNodo($$[$0-1] ,$$[$0-3], _$[$0-4].first_line, _$[$0-4].first_column, [], []);
 																		}else{
 																			this.$ = new ObjetoNodo($$[$0-1] ,'', _$[$0-4].first_line, _$[$0-4].first_column, [], $$[$0-3]);
 																		}  
 																		etiquetas.pop();
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); si(CONTENIDO_INTERNO[0]=texto){\n	 nuevo objetoNodo(etiquetaNombre, texto)\n}else{		nuevo objetoNodo(etiquetaNombre, arreglo atributos)\n};\n etquetas.pop();");
+																	 }else{
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); ERROR SEMANTICO");
 																	 }
+																		ingresarRegla(regla);
 																	
 break;
-case 11: case 12:
-this.$ = []; etiquetas.pop();
+case 11:
+ var etiquetaN= etiquetas.pop(); this.$ = new ObjetoNodo(etiquetaN ,'', _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-2], []); 
+							var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS div masque","etiquetaNombre=etquetas.pop(); nuevo objetoNodo(etiquetaNombre, arreglo atributos);\n");ingresarRegla(regla);
 break;
-case 13: case 18:
+case 12:
+this.$ = [];  var etiquetaN= etiquetas.pop();this.$ = new ObjetoNodo(etiquetaN ,'', _$[$0-1].first_line, _$[$0-1].first_column, [], []);
+							var regla = new Regla("GRAMATICAL","ETIQUETA-> div masque","etiquetaNombre=etquetas.pop(); \n return new ObjetoNodo(etiquetaNombre);\n agregarRegla());");ingresarRegla(regla);
+break;
+case 13:
 this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","ATRIBUTOS-> ATRIBUTO A_PRIMA ","ATRIBUTOS=[ATRIBUTO];\n ATRIBUTOS= ATRIBUTOS.agregar(A_PRIMA);\nreturn C_ATRIBUTO;");ingresarRegla(regla);
 break;
 case 14:
 this.$=[$$[$0-1]]; this.$ = this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","A_PRIMA-> ATRIBUTO A_PRIMA ","A_PRIMA=[TIPOCONTENIDO];\n A_PRIMA= C_A_PRIMA.agregar(C_A_PRIMA);\nreturn C_A_PRIMA;");ingresarRegla(regla);
 break;
-case 15: case 19: case 22:
+case 15:
 this.$=[];
+						var regla = new Regla("GRAMATICAL","A_PRIMA-> ATRIBUTO A_PRIMA","return [];");ingresarRegla(regla);
 break;
 case 16:
 this.$= new Atributo( $$[$0-4], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column);
+						var regla = new Regla("GRAMATICAL","ATRIBUTO-> identificador igual QUOTES C_ATRIBUTO QUOTES","return nuevoAtributo(identificador, C_ATRIBUTO);");ingresarRegla(regla);
 break;
-case 17: case 20: case 21:
+case 17:
 this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","C_ATRIBUTO-> ELEMENTO L_E_PRIMA ","C_ATRIBUTO=[ELEMENTO];\n C_ATRIBUTO= C_ATRIBUTO.agregar(C_A_PRIMA);\nreturn C_ATRIBUTO;");ingresarRegla(regla);
+break;
+case 18:
+this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","C_A_PRIMA-> TIPOCONTENIDO C_A_PRIMA","C_A_PRIMA=[TIPOCONTENIDO];\n C_A_PRIMA= C_A_PRIMA.agregar(C_A_PRIMA);\nreturn C_A_PRIMA;");ingresarRegla(regla);
+break;
+case 19:
+this.$=[];
+						var regla = new Regla("GRAMATICAL","C_A_PRIMA-> epsilon ","return [];");ingresarRegla(regla);
+break;
+case 20:
+this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","L_ELEMENTOS-> ELEMENTO L_E_PRIMA ","L_ELEMENTOS=[ELEMENTO];\n L_ELEMENTOS= L_ELEMENTOS.agregar(L_E_PRIMA);\nreturn L_ELEMENTOS;");ingresarRegla(regla);
+break;
+case 21:
+this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","L_E_PRIMA-> ELEMENTO L_E_PRIMA ","L_E_PRIMA=[ELEMENTO];\n L_E_PRIMA= L_E_PRIMA.agregar(L_E_PRIMA);\nreturn L_E_PRIMA;");ingresarRegla(regla);
+break;
+case 22:
+this.$=[];
+						var regla = new Regla("GRAMATICAL","L_E_PRIMA-> menosque ","return [];");ingresarRegla(regla);
 break;
 case 23:
 this.$=$$[$0];
+							var regla = new Regla("GRAMATICAL","ELEMENTO-> ABRIR_ELEMENTO 	ETIQUETA","return ETIQUETA;");ingresarRegla(regla);
 break;
 case 24:
 this.$ = [$$[$0], 'texto'];
+							var regla = new Regla("GRAMATICAL","CONTENIDO_INTERNO-> CONTENIDO_ETIQUETA","return CONTENIDO_ETIQUETA;");ingresarRegla(regla);
 break;
 case 25:
 this.$ = [$$[$0],'objetos'];
+							var regla = new Regla("GRAMATICAL","CONTENIDO_INTERNO-> L_ELEMENTOS","return L_ELEMENTOS;");ingresarRegla(regla);
 break;
 case 26:
-this.$=[$$[$0-1]]; this.$=  this.$.concat($$[$0]);var contenido =  escribirLista(this.$); this.$= contenido
+this.$=[$$[$0-1]]; this.$=  this.$.concat($$[$0]);var contenido =  escribirLista(this.$); this.$= contenido; console.log(this.$);
 break;
 case 27:
 this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);  
+								var regla = new Regla("GRAMATICAL","C_E_PRIMA-> TIPOCONTENIDO C_E_PRIMA","C_E_PRIMA=[TIPOCONTENIDO];C_E_PRIMA= C_E_PRIMA.agregar(C_E_PRIMA);\nreturn C_E_PRIMA;");ingresarRegla(regla);
 break;
 case 28:
 this.$=[]; 
+								var regla = new Regla("GRAMATICAL","C_E_PRIMA-> menosque","return []];");ingresarRegla(regla);
 break;
-case 29: case 30: case 31:
+case 29:
 this.$ = $$[$0];
+					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> TIPO_DATO","return TIPO_DATO;");ingresarRegla(regla);
+break;
+case 30:
+this.$ = $$[$0];
+					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> SIGNOS","return SIGNOS;");ingresarRegla(regla);
+break;
+case 31:
+this.$ = $$[$0];
+					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> SPECIALCHARS","return  SPECIALCHARS;");ingresarRegla(regla);
 break;
 case 32:
 this.$=[$$[$0-1]];  this.$ = this.$+$$[$0]; 
+						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> TIPO_DATO C_T_PRIMA","C_T_PRIMA=[TIPO_DATO];\n C_T_PRIMA= C_T_PRIMA.agregar(C_T_PRIMA); \n return C_T_PRIMA;");ingresarRegla(regla);
 break;
 case 33:
 this.$ = $$[$0-1]+' '+ $$[$0];
+						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> TIPO_DATO C_T_PRIMA","return  concat(TIPO_DATO, C_T_PRIMA)");ingresarRegla(regla);
 break;
 case 34:
 this.$ = [];
+						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> epsilon","return  lessthan");ingresarRegla(regla);
+break;
+case 35:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> lessthan","return  lessthan");ingresarRegla(regla);
+break;
+case 36:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> ampersand","return  ampersand");ingresarRegla(regla);
+break;
+case 37:
+this.$= $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> simplequote","return  simplequote");ingresarRegla(regla);
+break;
+case 38: case 41:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> underscore","return  identificador");ingresarRegla(regla);
+break;
+case 39:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> doublequote","return  doublequote");ingresarRegla(regla);
+break;
+case 40:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> colon","return  colon");ingresarRegla(regla);
+break;
+case 42:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","TIPO_DATO-> identificador","return  identificador");ingresarRegla(regla);
+break;
+case 43:
+this.$= $$[$0]; 
+					var regla = new Regla("GRAMATICAL","TIPO_DATO-> decimal","return  decimal");ingresarRegla(regla);
+break;
+case 44:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","TIPO_DATO->  entero","return  entero");ingresarRegla(regla);
+break;
+case 45:
+this.$ =  $$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> mas","return  mas;"); ingresarRegla(regla);
+break;
+case 46:
+this.$ =  $$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> menos","return  menos;"); ingresarRegla(regla);
+break;
+case 47:
+this.$ =  $$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> por","return  por;"); ingresarRegla(regla);
+break;
+case 48:
+this.$ =$$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> div","return  div;");ingresarRegla(regla);
+break;
+case 49:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","QUOTES->comilla","return comilla;"); ingresarRegla(regla);
+				
+break;
+case 50:
+this.$= $$[$0].toString(); 
+				var regla = new Regla("GRAMATICAL","QUOTES-> apostrofe","return apostrofe;"); ingresarRegla(regla);
+				
 break;
 }
 },
@@ -422,25 +565,31 @@ _handle_error:
     return true;
 }};
 
-	
+	//const {Error} = require('../../Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
 	var errorSemantico=[];
+	
 
-	const {Error} = require('../../Scripts/Errores/Error.js');
-    const {Primitivo} = require("../../Scripts/Arboles/Primitivo");
-    const {Operacion, Operador} = require("../../Scripts/Arboles/Operacion");
-    const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
-    const {Atributo} = require("../../Scripts/clasesXML/Atributo");
-	//const {Nodo} = require("../../Scripts/clasesXML/Nodo");
-
-	var AUX=0;
+	
+	define(function () {
+    return {
+        getParser: function () {
+            return gramarxmldes;
+        }
+    };
+});
+    //const {Primitivo} = require("../../Scripts/Arboles/Primitivo");
+    //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
+    //const {Atributo} = require("../../Scripts/clasesXML/Atributo");
+	//const {Nodo} = require("../../Scripts/clasesXML/Nodo");\
+	var AUXid=0;
 	var etiquetas=[];
 	function escribirLista(primitivos) {
 		var texto = '';
 		primitivos.forEach(function (element) {
-			texto = texto + " " + element.valor;
+			texto = texto + " " + element;
 		});
 		console.log(texto);
 		return texto;
@@ -454,10 +603,33 @@ _handle_error:
 		}else{
 			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
 			console.log("error semantico"+linea + columna);
-			const errorSEM = Error( linea, columna, 'semantico','xmldesc', nombre);
-			errorSemantico.push(errorSEM);
-			console.log(error);
+			var errorSEM = new Error( linea, columna, 'semantico','xmldesc', nombre);
+			errorSemantico.push( errorSEM) ;
+			console.log(errorSEM);
 			return false;
+		}
+	}
+		
+	function unirErrores(){
+			erroresGramar[0]= erroresLexicos ;
+			erroresGramar[1]= erroresSintacticos;
+			erroresGramar[2]=errorSemantico;
+		
+		console.log(erroresGramar.length);
+		console.log(erroresGramar[0].length);
+		console.log(erroresGramar[1].length);
+		console.log(erroresGramar[2].length);
+	}
+
+	function ingresarRegla(regla){
+		if(reglas.length>0){
+			var reglas2=[];
+			reglas2.push(regla);
+			reglas= reglas2.concat(reglas);
+			console.log('agregando regla'+reglas.length);
+		}else{
+			reglas.push(regla);
+			console.log('agregando regla'+reglas.length);
 		}
 	}
 /* generated by jison-lex 0.3.4 */

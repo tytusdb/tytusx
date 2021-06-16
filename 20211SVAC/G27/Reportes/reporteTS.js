@@ -24,7 +24,9 @@ function construyeGraficaTS(Arbol){
         console.log("\n>>>Reconoció la Raíz del TS: "+Arbol.identificador);
         if (Raiz){
             console.log("\n>>>Se construye encabezado de la tabla de simbolos...");
-            script = "<table class=\"table\" style=\"width:80%;\" align=\"center\">\n";
+            script += "<h2>Reporte Tabla de Símbolos</h2>\n";
+            script += "<br>\n";
+            script += "<table class=\"table\" style=\"width:80%;\" align=\"center\">\n";
             script += "<thead class=\"thead-dark\">\n";
             script += "<tr>\n";
             script += "<th scope=\"col\">#</th>\n"
@@ -46,7 +48,7 @@ function construyeGraficaTS(Arbol){
             script += "<td>"+    Raiz.identificador  + "</td>\n";
             script += "<td>"+    Raiz.texto          + "</td>\n";
             script += "<td>"+    "Global"            + "</td>\n"; 
-            script += "<td>"+    Raiz.fila           + "</td>\n";
+            script += "<td>"+    Raiz.linea           + "</td>\n";
             script += "<td>"+    Raiz.columna        + "</td>\n";
             script += "</tr>\n";
 
@@ -66,13 +68,18 @@ function construyeGraficaTS(Arbol){
 function construyeAtributos(Nodo){
     console.log("\n>>>Ingresó a construir los atributos del nodo: " + Nodo.identificador);
     var script = "";
-    contNodos++;
+    var numHijos = 0;
+    var numObjetos = 0;
     //se obtiene la cantidad de hijos del nodo
-    var numHijos = Nodo.listaAtributos.length();
-    console.log("\n>>>Cantidad de hijos del nodo: "+ numHijos);
+    if(Nodo.listaAtributos != null){
+        alert('Entro a asignación de hijos');
+        numHijos = Nodo.listaAtributos.length;
+    }
+    console.log("\n>>>Cantidad de atributos del nodo: "+ numHijos);
 
     //si el nodo padre tiene hijos entonces se crearán los nodos hijos en graphviz
     if (numHijos > 0){
+        contNodos++;
         console.log("\n>>>Ingresará a imprimir los atributos del nodo...");
         for (var i = 0; i < numHijos; i++){
             contNodos++;
@@ -86,7 +93,7 @@ function construyeAtributos(Nodo){
             filaHijo += "<td>"+    Atributo.identificador  + "</td>\n";
             filaHijo += "<td>"+    Atributo.texto          + "</td>\n";
             filaHijo += "<td>"+    Nodo.identificador              + "</td>\n"; 
-            filaHijo += "<td>"+    Atributo.fila           + "</td>\n";
+            filaHijo += "<td>"+    Atributo.linea           + "</td>\n";
             filaHijo += "<td>"+    Atributo.columna        + "</td>\n";
             filaHijo += "</tr>\n";
             console.log("\n++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -99,7 +106,11 @@ function construyeAtributos(Nodo){
         console.log("\n");
     }
 
-    var numObjetos = Nodo.listaObjetos.length();
+    if (Nodo.listaObjetos != null){
+        var numObjetos = Nodo.listaObjetos.length;
+    }
+    
+    console.log("\n>>>Cantidad de Objetos hijos del nodo: "+numObjetos);
     if (numObjetos > 0){
         //Empezará a verificar los objetos del nodo
         for (var i = 0; i < numObjetos; i++){
@@ -126,16 +137,23 @@ function construyeObjetos(Nodo, Padre){
     filaHijo += "<td>"+    Nodo.identificador  + "</td>\n";
     filaHijo += "<td>"+    Nodo.texto          + "</td>\n";
     filaHijo += "<td>"+    Padre.identificador  + "</td>\n"; 
-    filaHijo += "<td>"+    Nodo.fila           + "</td>\n";
+    filaHijo += "<td>"+    Nodo.linea           + "</td>\n";
     filaHijo += "<td>"+    Nodo.columna        + "</td>\n";
     filaHijo += "</tr>\n";
-    script += filaPadre;
+    script += filaHijo;
 
-    var numAtributos = Nodo.listaAtributos.length();
-    if (numAtributos > 0)
-    {
+    //var numAtributos = Nodo.listaAtributos.length;
+    //console.log("\n>>>Cantidad de atributos del nodo: "+ numAtributos);
+    //if (numAtributos > 0)
+    //{
         script += construyeAtributos(Nodo);
-    }
+    //}
 
     return script;
+}
+
+const codigoTS = function(){
+    var tabla = document.getElementById('Salida').value;
+    alert("Tabla:\n"+tabla);
+    return tabla;
 }
