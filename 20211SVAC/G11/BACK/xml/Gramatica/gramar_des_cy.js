@@ -84,91 +84,91 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$ = new Node('start',''); this.$.addChild($$[$0-2]); this.$.addChild($$[$0-1]); return this.$; 
+ this.$ = new Node_tree('start',''); this.$.addChild($$[$0-2]); this.$.addChild($$[$0-1]); return this.$; 
 break;
 case 2:
- this.$ = new Node('encod',''); this.$.addChild(new Node($$[$0],'XML')); 
+ this.$ = new Node_tree('encod',''); this.$.addChild(new Node_tree($$[$0],'XML')); 
 break;
 case 3:
- this.$ = new Node('encod',''); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('encod',''); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 4:
- this.$ = new Node('raices',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('raices',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 5:
- this.$ = new Node('raiz_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('raiz_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 6: case 18:
- this.$ = new Node('raiz_p',''); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('raiz_p',''); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 7:
- this.$ = new Node('raiz',''); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('raiz',''); this.$.addChild($$[$0]); 
 break;
 case 8:
- this.$ = new Node('error','error'); 
+ this.$ = new Node_tree('error','error'); 
 break;
 case 9: case 10:
- this.$ = new Node('elemento',''); this.$.addChild(new Node('<'+$$[$0-5],'ETI_A'));  this.$.addChild($$[$0-4]); this.$.addChild(new Node($$[$0-3],'ETI_CS'));  this.$.addChild($$[$0-2]); this.$.addChild(new Node('</'+$$[$0-1],'ETI_C')); this.$.addChild(new Node($$[$0],'ETI_CS')); 
+ this.$ = new Node_tree('elemento',''); this.$.addChild(new Node_tree('<'+$$[$0-5],'ETI_A'));  this.$.addChild($$[$0-4]); this.$.addChild(new Node_tree($$[$0-3],'ETI_CS'));  this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree('</'+$$[$0-1],'ETI_C')); this.$.addChild(new Node_tree($$[$0],'ETI_CS')); 
 break;
 case 11:
- this.$ = new Node('elemento',''); this.$.addChild(new Node('<'+$$[$0-2],'ETI_A'));  this.$.addChild($$[$0-1]); this.$.addChild(new Node($$[$0],'ETI_CC'));  
+ this.$ = new Node_tree('elemento',''); this.$.addChild(new Node_tree('<'+$$[$0-2],'ETI_A'));  this.$.addChild($$[$0-1]); this.$.addChild(new Node_tree($$[$0],'ETI_CC'));  
 break;
 case 12:
- this.$ = new Node('list_atributos',''); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('list_atributos',''); this.$.addChild($$[$0]); 
 break;
 case 13:
- this.$ = new Node('list_atributos',''); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('list_atributos',''); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 14:
- this.$ = new Node('list_elementos',''); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('list_elementos',''); this.$.addChild($$[$0]); 
 break;
 case 15:
- this.$ = new Node('list_elementos',''); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('list_elementos',''); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 16:
- this.$ = new Node('atributos',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('atributos',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 17:
- this.$ = new Node('atributo_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('atributo_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 19:
- this.$ = new Node('atributo',''); this.$.addChild(new Node($$[$0-2],'ID')); this.$.addChild(new Node($$[$0-1],'IGUAL')); this.$.addChild(new Node($$[$0],'CADENA')); 
+ this.$ = new Node_tree('atributo',''); this.$.addChild(new Node_tree($$[$0-2],'ID')); this.$.addChild(new Node_tree($$[$0-1],'IGUAL')); this.$.addChild(new Node_tree($$[$0],'CADENA')); 
 break;
 case 20:
- this.$ = new Node('list_text_elemento',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('list_text_elemento',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 21:
- this.$ = new Node('lte_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('lte_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 22:
- this.$ = new Node('lte_p',''); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('lte_p',''); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 23:
- this.$ = new Node('tipo',''); this.$.addChild(new Node($$[$0],'TEXTO'));   
+ this.$ = new Node_tree('tipo',''); this.$.addChild(new Node_tree($$[$0],'TEXTO'));   
 break;
 case 24:
- this.$ = new Node('tipo',''); this.$.addChild(new Node($$[$0],'LESS'));   
+ this.$ = new Node_tree('tipo',''); this.$.addChild(new Node_tree($$[$0],'LESS'));   
 break;
 case 25:
- this.$ = new Node('tipo',''); this.$.addChild(new Node($$[$0],'MORE'));  
+ this.$ = new Node_tree('tipo',''); this.$.addChild(new Node_tree($$[$0],'MORE'));  
 break;
 case 26:
- this.$ = new Node('tipo',''); this.$.addChild(new Node($$[$0],'AMP'));  
+ this.$ = new Node_tree('tipo',''); this.$.addChild(new Node_tree($$[$0],'AMP'));  
 break;
 case 27:
- this.$ = new Node('tipo',''); this.$.addChild(new Node($$[$0],'APOS'));  
+ this.$ = new Node_tree('tipo',''); this.$.addChild(new Node_tree($$[$0],'APOS'));  
 break;
 case 28:
- this.$ = new Node('tipo',''); this.$.addChild(new Node($$[$0],'QUOT'));  
+ this.$ = new Node_tree('tipo',''); this.$.addChild(new Node_tree($$[$0],'QUOT'));  
 break;
 case 29:
- this.$ = new Node('elementos',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('elementos',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 30:
- this.$ = new Node('elementos_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('elementos_p',''); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 31:
- this.$ = new Node('elementos_p',''); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('elementos_p',''); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 }
 },
@@ -422,9 +422,6 @@ _handle_error:
     return true;
 }};
 
-    let tabla_err = require('./tabla_error');
-    let nodo_err  = require('./nodo_error');
-     
      function change_especials(etiqueta){
           if(etiqueta.includes("&lt;")){
                return etiqueta.replace(/&lt;/g,'<');
@@ -464,7 +461,6 @@ _handle_error:
 
      function error_semanti(izqid,dereid,fila,columna){
           if(!(izqid==dereid)){
-               tabla_err.errores.addError(new nodo_err.nodoError('Semántico','Las etiquetas no coinciden: '+izqid+' -- '+dereid,fila,columna));
           }
      }
 
@@ -478,11 +474,10 @@ _handle_error:
           if (posicion !== -1){
                return text.substr(pos_final,longitud);
           }else{
-               tabla_err.errores.addError(new nodo_err.nodoError('Sintactico','No se encuentra el token: encoding',fila,columna));
           }
      }
 
-     const Node = require('./nodo_tree');
+
 
 
 parser.arbol ={ 
@@ -835,7 +830,7 @@ case 8: yy_.yytext=change_especials(yy_.yytext); return 24;
 break;
 case 9: this.popState(); return tag_principal(yy_.yytext); 
 break;
-case 10: tabla_err.errores.addError(new nodo_err.nodoError('Lexico','No se esperaba el caracter: '+yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column)); 
+case 10:  
 break;
 case 11:return 28
 break;
