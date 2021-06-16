@@ -1,6 +1,6 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
@@ -18,7 +18,7 @@ export default class AtributoSimple extends Instruccion {
         throw new Error("Method not implemented.");
     }
     
-    getNodo(): nodoAST {
+    getNodosAST(): nodoAST {
         var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
         if(tipoDato.SELECT ===this.tipoAtributo.getTipo()){
             var nodoselect= new nodoAST("SELECT");

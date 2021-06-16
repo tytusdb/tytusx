@@ -20,7 +20,7 @@ export class SideBarComponent implements OnDestroy {
     },
     { name: 'Reporte gramatical', route: 'gramatical', icon: 'list_alt' },
     /*device_hub*/
-    { name: 'Arbol CST', route: 'cst', icon: 'device_hub' },
+    { name: 'Arbol AST', route: 'xpath-ast', icon: 'device_hub' },
     { name: 'Reporte Errores', route: 'errores', icon: 'coronavirus' },
     //ast
     //errores

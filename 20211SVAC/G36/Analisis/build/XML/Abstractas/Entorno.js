@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Entorno = void 0;
-var Tipo_1 = require("./Tipo");
+//var Tipo_1 = require("./Tipo");
 var Entorno = /** @class */ (function () {
     function Entorno(padre) {
         if (padre != undefined || padre != null) {
@@ -22,7 +22,7 @@ var Entorno = /** @class */ (function () {
         //retornar todos los atributos dentro del entorno
         var result = [];
         this.ambito.forEach(function (element) {
-            if (element.tipo == Tipo_1.Tipo.ATRIBUTO) {
+            if (element.tipo == Tipo.ATRIBUTO) {
                 result.push(element);
             }
         });

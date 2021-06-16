@@ -1,12 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.Atributo = void 0;
-class Atributo {
-    constructor(identificador, valor, linea, columna) {
+var Atributo = /** @class */ (function () {
+    function Atributo(identificador, valor, linea, columna) {
         this.identificador = identificador;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
     }
-}
+    return Atributo;
+}());
 exports.Atributo = Atributo;

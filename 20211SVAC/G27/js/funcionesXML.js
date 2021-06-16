@@ -258,5 +258,3 @@ function showCode(){
     var text = editor.getValue();
     return text;
 }
-
-

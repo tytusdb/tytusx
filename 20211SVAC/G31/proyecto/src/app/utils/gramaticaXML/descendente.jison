@@ -126,7 +126,7 @@ OBJETOS_GLOBALES: OBJETOS_GLOBALES OBJETO          {
 
 
 OBJETOS: OBJETOS OBJETO          {
-                                    $1.objetos.push($2.objetos)
+                                    $1.objetos.push($2.objetos);
                                     $$ = {
                                       objetos: $1.objetos,
                                       grafica: new NodoGrafico('OBJETOS', [$2.grafica, $1.grafica]),
@@ -168,6 +168,11 @@ OBJETO: INICIO_ETIQUETA  DENTRO_OBJETO       {
                                                     valorObj: `${$1.valorObj} ${$2.valorObj}\n`
                                                   }
                                                   $$.objetos.valorObj = $$.valorObj;
+                                                  $$.objetos.valorObj = $$.objetos.valorObj.replace('&amp;', '&');
+                                                  $$.objetos.valorObj = $$.objetos.valorObj.replace('&quot;', "'");
+                                                  $$.objetos.valorObj = $$.objetos.valorObj.replace('&apos;', '"');
+                                                  $$.objetos.valorObj = $$.objetos.valorObj.replace('&lt;', '<');
+                                                  $$.objetos.valorObj = $$.objetos.valorObj.replace('&gt;', '>');
                                                   $$.gramatica += $1.gramatica;
                                                   $$.gramatica += $2.gramatica;
 
@@ -338,6 +343,12 @@ TEXTO: 'dentro'               {
                                   gramatica: `<TEXTO> ::= "${$1}"\n`,
                                   valor: $1
                                 }
+
+                                  $$.valor = $$.valor.replace('&amp;', '&');
+                                  $$.valor = $$.valor.replace('&quot;', "'");
+                                  $$.valor = $$.valor.replace('&apos;', '"');
+                                  $$.valor = $$.valor.replace('&lt;', '<');
+                                  $$.valor = $$.valor.replace('&gt;', '>');
                               }
 ;
 
