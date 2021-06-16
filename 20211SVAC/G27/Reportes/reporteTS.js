@@ -89,13 +89,14 @@ function construyeAtributos(Nodo){
             console.log("\n>>>Construyendo Nodo: "+ Nodo.identificador + "  y Atributo: " + Atributo.identificador);
             var filaHijo = "";
             filaHijo += "<tr>\n";
-            filaHijo += "<td>"+    contNodos           + "</td>\n";
-            filaHijo += "<td>"+    Atributo.identificador  + "</td>\n";
-            filaHijo += "<td>"+    Atributo.texto          + "</td>\n";
-            filaHijo += "<td>"+    Nodo.identificador              + "</td>\n"; 
+            filaHijo += "<td>"+    contNodos                + "</td>\n";
+            filaHijo += "<td>"+    Atributo.identificador   + "</td>\n";
+            filaHijo += "<td>"+    Atributo.tipo            + "</td>\n";
+            filaHijo += "<td>"+    Nodo.identificador       + "</td>\n"; 
             filaHijo += "<td>"+    Atributo.linea           + "</td>\n";
-            filaHijo += "<td>"+    Atributo.columna        + "</td>\n";
+            filaHijo += "<td>"+    Atributo.columna         + "</td>\n";
             filaHijo += "</tr>\n";
+            script += filaHijo;
             console.log("\n++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
         console.log("\n>>>Terminó de generar los atributos...");
@@ -109,7 +110,7 @@ function construyeAtributos(Nodo){
     if (Nodo.listaObjetos != null){
         var numObjetos = Nodo.listaObjetos.length;
     }
-    
+
     console.log("\n>>>Cantidad de Objetos hijos del nodo: "+numObjetos);
     if (numObjetos > 0){
         //Empezará a verificar los objetos del nodo
@@ -133,12 +134,12 @@ function construyeObjetos(Nodo, Padre){
     var filaHijo = "";
     //se genera la fila para el primer nodo
     filaHijo += "<tr>\n";
-    filaHijo += "<td>"+    contNodos           + "</td>\n";
-    filaHijo += "<td>"+    Nodo.identificador  + "</td>\n";
-    filaHijo += "<td>"+    Nodo.texto          + "</td>\n";
+    filaHijo += "<td>"+    contNodos            + "</td>\n";
+    filaHijo += "<td>"+    Nodo.identificador   + "</td>\n";
+    filaHijo += "<td>"+    Nodo.tipo            + "</td>\n";
     filaHijo += "<td>"+    Padre.identificador  + "</td>\n"; 
     filaHijo += "<td>"+    Nodo.linea           + "</td>\n";
-    filaHijo += "<td>"+    Nodo.columna        + "</td>\n";
+    filaHijo += "<td>"+    Nodo.columna         + "</td>\n";
     filaHijo += "</tr>\n";
     script += filaHijo;
 
