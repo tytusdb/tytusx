@@ -6,6 +6,7 @@ import { InicioService } from 'src/app/servicios/inicio.service';
 import * as Analizador from 'src/app/Backend/XML/Analizador/GramaticaXML';
 import * as AnalizadorD from 'src/app/Backend/XML/Analizador/GramaticaXMLDescPRUEBA';
 import * as AnalizarAscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPath'
+import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPathDesc'
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
@@ -280,7 +281,30 @@ export class ContenidoInicioComponent implements OnInit {
       this.ciclo(i,numero,instruc);
     }
   }
+/*********************************************************************************************************/
+/***********************************************XPATH DESCENDENTE*****************************************/
+/*********************************************************************************************************/
+EjecutarDesc(texto: string){
+  if (texto == null) return document.write('Error');
+  const analizador = AnalizarDscXpath;
+  const objetos = analizador.parse(texto);
+  var Tree:ArbolXpath = new ArbolXpath([objetos]);
+  
 
+ 
+  var instrucciones = new nodoAst("INSTRUCCIONES");
+  var contador=0;
+
+  
+  for(let i of Tree.getinstrucciones()){
+    this.ciclo(i,contador,instrucciones)
+  }
+  
+  
+  let sim_string = JSON.stringify(instrucciones);
+  localStorage.setItem("astpath", sim_string);
+}
+/****************************************************************************************************************/
 
   textoEsperado = '';
   textInputChange(fileInputEvent: any) {
