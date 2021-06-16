@@ -111,7 +111,7 @@ export class ContenidoInicioComponent implements OnInit {
             this.llenarTablaSimbolos(objetos,Tree);
           
         }else{
-          contenido=objetos.replaceAll("%20"," ");
+          contenido=objetos.replaceAll("%20"," ").replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&").replaceAll("&apos;","'").replaceAll("&quot;","\"");
         }
         var Reporte = new reporteTabla(nombre,contenido,atributos,listaobjetitos);
         Tree.listaSimbolos.push(Reporte);
@@ -194,7 +194,7 @@ export class ContenidoInicioComponent implements OnInit {
           this.llenarTablaSimbolos(objetos,tri);
         
       }else{
-        contenido=objetos.replaceAll("%20"," ");
+        contenido=objetos.replaceAll("%20"," ").replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&").replaceAll("&apos;","'").replaceAll("&quot;","\"");
       }
       var Reporte = new reporteTabla(nombre,contenido,atributos,listaobjetitos);
       tri.listaSimbolos.push(Reporte);
