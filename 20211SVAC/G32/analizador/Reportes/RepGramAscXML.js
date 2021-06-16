@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RepGramAscXML = void 0;
+//La clase a exportar para el reporte gramatical ascendente del XML
 class RepGramAscXML {
     constructor() {
         this.lista = [];

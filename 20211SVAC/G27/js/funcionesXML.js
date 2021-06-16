@@ -11,8 +11,17 @@ const parseXML = function (entrada) {
                 document.getElementById('consola').value += ">Se ejecutó el parser";
                 console.info('Entrada fue parseada correctamente!!!!');
                 document.getElementById('consola').value += ">Entrada parseada correctamente! \n";
+
+                //Si la entrada fue parseada correctamente, se procede a generar el reporte de Tabla de Símbolos
+                console.log("\n\n\n################################################################");
+                var codigoTablaSimbolos = construyeGraficaTS(resultado);
+                console.log("\n################################################################");
+                document.getElementById("hiddenTablaSimbolos").value = codigoTablaSimbolos;
+
+
+                return resultado;
             } else {
-                console.info('No se ejecutó la clase parser');
+                console.info('\nNo se ejecutó la clase parser');
             }
         } catch (e) {
             document.getElementById('consola').value += ">Error al parsear la entrada: \n>" + e.toString() + "\n";
@@ -25,6 +34,34 @@ const parseXML = function (entrada) {
     }
 
 };
+
+const parseXMLTS = function (raiz){
+    var listaA = [];
+    var listaO = []; 
+    var listaA2 = [];
+    var listaO2 = [];
+    var listaA3 = [];
+    var listaO3 = [];
+    var listaA4 = [];
+    var listaO4 = [];
+
+    var raiz = new Objeto('Raiz', 'Raiz', 0,0,listaA,listaO);
+    var atributo = new Atributo('Atributo1', 'Atributo1_Valor',5, 3);
+    var Nodo1 = new Objeto('N1','N1', 10,1, listaA2, listaO2);
+    var Nodo2 = new Objeto('N2', 'N2', 15,1, listaA3, listaO3);
+    var Nodo3 = new Objeto('N3','Libro',30,10,listaA4,listaO4);
+    //raiz.listaAtributos = atributo;
+    raiz.agregarObjeto(Nodo1);
+    raiz.agregarObjeto(Nodo2);
+    Nodo1.agregarObjeto(Nodo3);
+    alert("Cantidad objetos Raiz: "+raiz.listaObjetos.length);
+    alert("Cantidad objetos Nodo1: "+Nodo1.listaObjetos.length);
+    //alert("Raiz ID: " + raiz.identificador);
+    //alert("Hijo ID: " + raiz.listaObjetos[0].identificador +"\nHijo2 ID: "+raiz.listaObjetos[1].identificador);
+    
+    return construyeGraficaTS(raiz);
+
+}
 
 /******************************************FUNCIONES DE MENÚ DE BOTONES**************************************************************** */
 //función para crear un nuevo archivo reiniciando los objetos de texto
@@ -56,6 +93,49 @@ const abrirArchivo = function(evento){
         alert('No se ha seleccionado ningún archivo.');
     }
 };
+
+function abrirReporteAST(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    //window.open("Paginas/reporteAST.html","_blank");
+    var informacion = document.getElementById('hiddenAST').value;
+    document.getElementById('reporteASTGrafica').visible = true;
+    document.getElementById('reporteASTGrafica').innerHTML = informacion;
+}
+
+function abrirReporteCST(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    //window.open("Paginas/reporteCST.html","_blank");
+    var informacion = document.getElementById('hiddenCST').value;
+    document.getElementById('reporteCSTGrafica').visible = true;
+    document.getElementById('reporteCSTGrafica').innerHTML = informacion;
+}
+
+function abrirReporteErrores(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    //window.open("Paginas/reporteErrores.html","_blank");
+    var informacion = document.getElementById('hiddenErrores').value;
+    document.getElementById('reporteErroresTabla').visible = true;
+    document.getElementById('reporteErroresTabla').innerHTML = informacion;
+}
+
+function abrirReporteTS(tabla){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    var tablas = document.getElementById("hiddenTablaSimbolos").value;
+    //tablas = tablas.replace('\n','');
+    //var url = "Paginas/reporteTS.html?Tabla="+tablas;
+    //alert("URL: \n"+tablas);
+    //window.open(url,"_blank");
+    document.getElementById('reporteTablaSimbolosIndex').visible = true;
+    document.getElementById('reporteTablaSimbolosIndex').innerHTML = tablas;
+}
+
+function abrirReporteGramatical(){
+    //window.open("Paginas/reporteAST.html","popup","width=600,height=600");
+    //window.open("Paginas/reporteGramatical.html","_blank");
+    var informacion = document.getElementById('hiddenGramatical').value;
+    document.getElementById('reporteGramatical').visible = true;
+    document.getElementById('reporteGramatical').innerHTML = informacion;
+}
 
 
 /*********************GRAFICA ARBOL **********************************************/
