@@ -1,4 +1,4 @@
-![](RackMultipart20210616-4-1s5mr1q_html_768563dc68e87d99.png)
+![image](https://user-images.githubusercontent.com/24401039/122161315-bd057100-ce2e-11eb-9afb-b496476672bc.png)
 
 # **TytusX: Manual Técnico**
 
@@ -12,7 +12,7 @@ Vacaciones junio de 2021
 
 # Diagrama de aplicación
 
-![](RackMultipart20210616-4-1s5mr1q_html_b4729692c61956af.png)
+![image](https://user-images.githubusercontent.com/24401039/122161332-c8589c80-ce2e-11eb-8e9d-eedb8f2e1e65.png)
 
 # Especificación de Tecnologías utilizadas
 
@@ -22,7 +22,7 @@ HTML 5 (HyperText Markup Language, versión 5) es la quinta revisión importante
 
 Al no ser reconocido en viejas versiones de navegadores por sus nuevas etiquetas, se recomienda al usuario común actualizar su navegador a la versión más nueva, para poder disfrutar de todo el potencial que provee HTML 5.
 
-![](RackMultipart20210616-4-1s5mr1q_html_772195d97311b4bf.jpg)
+![image](https://user-images.githubusercontent.com/24401039/122161353-cf7faa80-ce2e-11eb-9c90-37d3abf6bb3b.png)
 
 ## CSS 3
 
@@ -30,11 +30,14 @@ CSS es un lenguaje de diseño gráfico que permite definir y crear la presentaci
 
 En la propia definición de CSS vemos que está muy ligado desde su nacimiento a HTML. Desde que nació, el objetivo de CSS fue poner un poco de orden a la hora de aplicar los estilos a las páginas web.
 
+
+
 ## Javascript
 
 JavaScript es un lenguaje de programación o de secuencias de comandos que te permite implementar funciones complejas en páginas web, cada vez que una página web hace algo más que sentarse allí y mostrar información estática para que la veas, muestra oportunas actualizaciones de contenido, mapas interactivos, animación de Gráficos 2D/3D, desplazamiento de máquinas reproductoras de vídeo, etc., puedes apostar que probablemente JavaScript está involucrado. Es la tercera capa del pastel de las tecnologías web estándar
 
-![](RackMultipart20210616-4-1s5mr1q_html_40d599fc3f9a4ec6.png)
+![image](https://user-images.githubusercontent.com/24401039/122161390-ddcdc680-ce2e-11eb-9e7e-41d5fb64dbad.png)
+
 
 ## TypeScript
 
@@ -44,7 +47,8 @@ TypeScript extiende la sintaxis de JavaScript, por tanto cualquier código JavaS
 
 TypeScript soporta ficheros de definición que contengan información sobre los tipos de librerías JavaScript existentes, similares a los ficheros de cabeceras de C/C++ que describen la estructura de ficheros de objetos existentes. Esto permite a otros programas usar los valores definidos en los ficheros como si fueran entidades TypeScript de tipado estático. Existen cabeceras para librerías populares como jQuery, MongoDB y D3.js, y los módulos básicos de Node.js.
 
-![](RackMultipart20210616-4-1s5mr1q_html_b1db005c86dacae.png)
+![image](https://user-images.githubusercontent.com/24401039/122161408-e4f4d480-ce2e-11eb-96f4-a2be7d21eadd.png)
+
 
 ## Codemirror
 
@@ -54,13 +58,13 @@ La primera versión del editor fue escrita a principios de 2007, para la consola
 
 A finales de 2010, el proyecto Ace, otro editor de código basado en JavaScript, fue pionero en nuevas técnicas de implementación y demostró que es posible, incluso en JavaScript, manejar documentos con miles de líneas sin un rendimiento degradado. Esto provocó una reescritura de CodeMirror2​ según los mismos principios. El resultado fue la versión 2, que ya no dependía de contentEditable y mejoró significativamente el rendimiento.
 
-![](RackMultipart20210616-4-1s5mr1q_html_d17a45bb78080eb5.png)
+![image](https://user-images.githubusercontent.com/24401039/122161428-ee7e3c80-ce2e-11eb-93ce-af56f75dfe6e.png)
 
 ## Jison
 
 Jison es, en escencia, un clone del generador grammatical Bison y Yacc, pero en javascript. Incluye su propio analizador lexico modelado en base a Flex (analizador lexico para JAVA). Fue creado originalmente por Zach Carter para ayudar el estudio de un curso de compiladores.
 
-![](RackMultipart20210616-4-1s5mr1q_html_a7b3bcc4eb482db7.png)
+![image](https://user-images.githubusercontent.com/24401039/122161438-f2aa5a00-ce2e-11eb-8d97-3a5044b5aa8f.png)
 
 # Comandos de Compilación
 
@@ -114,5 +118,3 @@ Genera y luego copia ambias gramáticas hacia la carpeta build
 npm run full-build
 ```
 Genera una compilación completa del código typescript, así como la generación y posterior copia hacia la carpeta build de ambas gramáticas.
-
-![](RackMultipart20210616-4-1s5mr1q_html_46bd759368a4ed09.gif)
