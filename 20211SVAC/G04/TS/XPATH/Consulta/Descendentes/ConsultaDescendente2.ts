@@ -1,4 +1,4 @@
-class ConsultaDescendente2 extends ConsultaSimple {
+class ConsultaDescendente2 extends ConsultaSimple implements ConsultaDesc {
 
     run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
@@ -10,7 +10,7 @@ class ConsultaDescendente2 extends ConsultaSimple {
         return newEntornos;
     }
 
-    private busquedaDescendente(entorno: Entorno, newEntornos: Array<Entorno>) {
+    public busquedaDescendente(entorno: Entorno, newEntornos: Array<Entorno>): void {
         let flag: boolean = false;
         let nuevoEntorno: Entorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
