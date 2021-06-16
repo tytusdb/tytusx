@@ -1,12 +1,18 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AxesPredicado = void 0;
 class AxesPredicado {
     constructor(valor, fila, columna) {
         this.valor = valor;
-        this.fila = fila;
+        this.linea = fila;
         this.columna = columna;
         console.log("AxesPredicado   " + valor);
     }
+    getValorImplicito() {
+        return this.valor;
+    }
+    generarGrafo(g, padre) {
+        return null;
+    }
+    getNombreHijo() {
+        return "";
+    }
 }
-exports.AxesPredicado = AxesPredicado;

@@ -41,7 +41,7 @@ export const Colision =
   [true , true , false, false, false, true , false],
   [true , true , false, false, false, true , false],
   [false, false, true , true , false, true , false],
-  [false, false, true , true , false, true , false],
+  [true, true, true , true , false, true , false],
   [false, false, false, false, true , false, false],
   [true , true , true , true , false, true , false],
   [false, false, false, false, false, false, false]
@@ -96,7 +96,7 @@ export class Comando
       retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
     }
     for (const retorno of retornos) {
-      if(retorno.tipo == Tipo.NODO || retorno.tipo == Tipo.ATRIB)
+      if(retorno.tipo == Tipo.NODO)
       {
         Salida += ConvertiraXML(retorno.entorno,0) + "\n"
       }
@@ -117,24 +117,39 @@ export class Comando
   {
     var ListaNodes = []
     var ListaEdges = []
-    var contador = {num:0}
-    
+    var contador = {num:2}
+    ListaNodes.push({id:1,label:"AST"})
+    ListaEdges.push({from:1,to:2})
     var nodoActual = {id:contador.num,label:"XPath"}
     contador.num++
     ListaNodes.push(nodoActual)
     for(var i = 0; i < this.Instrucciones.length; i++)
     {
-      var nodos = this.Instrucciones[i].Graficar(ListaNodes,ListaEdges,contador)
+      var nodos = [] 
       if(i!=0)
       {
         ListaNodes.push({id:contador.num,label:"|"})
+        nodos.push({id:contador.num,label:"|"})
         contador.num++
       }
+      nodos = nodos.concat(this.Instrucciones[i].Graficar(ListaNodes,ListaEdges,contador))
       for (const nodo of nodos) {
         ListaEdges.push({from:nodoActual.id,to:nodo.id})
       }
     }
     return {nodes:ListaNodes,edges:ListaEdges}
+  }
+
+  InvertirNodes()
+  {
+    var NoGrade = this.Nodos[this.Nodos.length-1].id
+    for (const nodo of this.Nodos) {
+      nodo.id = Math.abs(nodo.id-NoGrade)
+    }
+    for (const edge of this.Edges) {
+      edge.from = Math.abs(edge.from-NoGrade)
+      edge.to = Math.abs(edge.to-NoGrade)
+    }
   }
 }
 
@@ -191,13 +206,10 @@ export function Predicado(predicado,retorno)
           case Tipo.INTEGER:
           case Tipo.DECIMAL:
             var temp=[]
-            var actuales=new Map()
             var posicion=1;
             for (const posible of posibles) {
-              if(actuales.has==posibles.valor) continue
               if(retorno[posible.valor-1])
               {
-                actuales.set(posibles.valor,posibles.valor)
                 temp.push(retorno[posible.valor-1])
                 posicion++;
               }

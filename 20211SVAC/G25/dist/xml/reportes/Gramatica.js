@@ -1,6 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Gramatica = void 0;
 class Gramatica {
     constructor(produccion, regla) {
         this.produccion = produccion;
@@ -13,4 +11,3 @@ class Gramatica {
         return this.regla;
     }
 }
-exports.Gramatica = Gramatica;

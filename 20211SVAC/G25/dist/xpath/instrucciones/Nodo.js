@@ -1,12 +1,18 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nodo = void 0;
 class Nodo {
     constructor(valor, fila, columna) {
         this.valor = valor;
-        this.fila = fila;
+        this.linea = fila;
         this.columna = columna;
         console.log("Nodo   " + valor);
     }
+    getValorImplicito() {
+        return this.valor;
+    }
+    generarGrafo(g, padre) {
+        return null;
+    }
+    getNombreHijo() {
+        return "";
+    }
 }
-exports.Nodo = Nodo;

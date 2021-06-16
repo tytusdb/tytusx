@@ -81,35 +81,31 @@
 S: INICIO EOF { $$=$1; return $$; };
 
 INICIO:
-	 diagonal LDIAGONAL 	{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|dobled LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|id LDIAGONAL 			{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|punto LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|doblep LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-;
-
-INICIOP:
-	 diagonal LDIAGONAL 	{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|dobled LDIAGONAL 		{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|barra INICIO INICIOP 	{ $$=new NodoAST.default($1); $$.AgregarHijo($2); $$.AgregarHijo($3); }
-	|						{  }
+	 diagonal LDIAGONAL 	{ $$=new NodoAST.default("/"); $$.AgregarHijo($2); }
+	|dobled LDIAGONAL 		{ $$=new NodoAST.default("//"); $$.AgregarHijo($2); }
+	|id	LID					{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
+	|punto INICIOP			{ $$=new NodoAST.default("."); $$.AgregarHijo($2); }
+	|doblep INICIOP			{ $$=new NodoAST.default(".."); $$.AgregarHijo($2); }
 ;
 
 LDIAGONAL:
-	 id LID 				{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
-	|LID					{ $$=$1; }
-	|EXPRESION LEXPRESION 	{ $$=$1; $$.AgregarHijo($2); }
-	|EJES INICIOP			{ $$=$1; $$.AgregarHijo($2); }
+	 id LID				{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
+	|EXPRESION LID 		{ $$=$1; $$.AgregarHijo($2); }
+	|EJES INICIOP		{ $$=$1; $$.AgregarHijo($2); }
+	|punto	INICIOP 	{ $$=new NodoAST.default("."); $$.AgregarHijo($2); }
+	|doblep INICIOP		{ $$=new NodoAST.default(".."); $$.AgregarHijo($2); }
 ;
 
 LID:
-	 PREDICADO INICIOP 	{ $$=$1; $$.AgregarHijo($2); }
-	|INICIOP 			{ $$=$1; }
+	 INICIOP			{ $$=$1; }
+	|PREDICADO INICIOP	{ $$=$1; $$.AgregarHijo($2); }
 ;
 
-LEXPRESION:
-	 PREDICADO INICIOP 	{ $$=$1; $$.AgregarHijo($2); }
-	|INICIOP 		 	{ $$=$1; }
+INICIOP:
+	 diagonal LDIAGONAL 	{ $$=new NodoAST.default("/"); $$.AgregarHijo($2); }
+	|dobled LDIAGONAL 		{ $$=new NodoAST.default("//"); $$.AgregarHijo($2); }
+	|barra INICIO INICIOP	{ $$=new NodoAST.default("|"); $$.AgregarHijo($2); $$.AgregarHijo($3); }
+	|						{  }
 ;
 
 PREDICADO:
@@ -192,7 +188,7 @@ EJE:
 ;
 
 CONTENIDO:
-	 id LIDCONTENIDO 	{ $$=new NodoAST.default($1); }
+	 id LIDCONTENIDO 	{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
 	|por LPORCONTENIDO 	{ $$=new NodoAST.default($1+$2); }
 	|FUNCIONES    		{ $$=$1; }
 	|EXPRESION 			{ $$=$1; }
@@ -201,6 +197,7 @@ CONTENIDO:
 
 LIDCONTENIDO:
 	 parizq parder 	{  }
+	|PREDICADO		{ $$=$1; }
 	|				{  }
 ;
 

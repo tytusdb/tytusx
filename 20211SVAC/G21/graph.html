@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> TytusX Grahp Viewer</title>
+
+    <!-- ============================= MY STYLE ============================== -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container__graph">
+
+        <h1 style="text-align: center;"> Graph Viewer </h1>
+        <div id="ast__visualization"></div>
+    </div>
+        
+    <script src="js/vis.js"></script>
+    
+    <script>
+        let dotString;
+
+        const result = localStorage.getItem("dot");
+        
+        if (result)  dotString = result;
+        else  dotString =  ` digraph G { a->b; a->c; a->d; b->e; } `;
+        const container = document.getElementById("ast__visualization");
+      
+        const parsedData = vis.network.convertDot(dotString);
+        const data = {
+            nodes: parsedData.nodes,
+            edges: parsedData.edges
+        };
+        console.log( container );
+
+        let options = parsedData.options;
+
+        // you can extend the options like a normal JSON variable:
+        options = {
+            nodes: {
+                shape: "dot",
+                size: 10,
+                borderWidth: 2,
+                color: {
+                    background: "#0F111A",
+                    border: "#FF4151",
+                    highlight: { 
+                        background: "#4C566A", 
+                        border: "#FF4151" 
+                    },
+                    hover: { 
+                        background: "#FF4151", 
+                        border: "#0F111A" 
+                    }
+                },
+                font: {
+                    size: 14,
+                    color: "#e5e9f0",
+                    face: "courier",
+                },
+            },
+            layout: {
+                hierarchical: {
+                    direction: "UD",
+                    sortMethod: "directed",
+                    shakeTowards: "roots"
+                }
+            },
+            edges: {
+                arrows: "to"
+            },
+            interaction: { hover: true }
+        };
+
+        // create a network
+        var network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>

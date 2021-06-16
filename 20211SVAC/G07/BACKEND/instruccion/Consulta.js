@@ -2,6 +2,7 @@ class Consulta {
   constructor(entorno) {
     this.entorno = entorno;
   }
+  
   ejecutar( AST) {
     indiceAux=0;
     let retorno =new Acceso();

@@ -71,6 +71,8 @@ export class Camino extends Axes
         else
         {
           retorno = RecursivaCamino(nodos,this.nombre,this.predicado,posicion,1)
+          retornos = concatenarNodos(retornos,retorno)
+          break
         }
         retornos = concatenarNodos(retornos,retorno)
       }
@@ -166,6 +168,8 @@ function RecursivaAtributo(nodos,nombre,predicado)
         var nuevoNodo = Object.assign({},nodo)
         nuevoNodo.tipo=Tipo.ATRIB
         nuevoNodo.posicion=posicion
+        nuevoNodo.valor=atributo.valor
+        nuevoNodo.pila.push(nodo.entorno)
         retorno.push(nuevoNodo)
         posicion++
       }
@@ -214,7 +218,7 @@ export class Descendant extends Axes
     var retornos = []
     for (const nodo of nodos) { 
       var descendientes = []
-      descendientes = new Camino(this.nombre,[],TipoPath.REL).getValor(nodos)
+      descendientes = new Camino(this.nombre,[],TipoPath.REL).getValor([nodo])
       descendientes = Predicado(this.predicado,descendientes)
       if(this.tipo==TipoPath.REL)
       {
@@ -590,7 +594,7 @@ export class AncestorSelf extends Axes
         for (const hijo of nodo.entorno.hijos) {     
           var nuevaPila = Object.assign([],nodo.pila)
           nuevaPila.push(nodo.entorno)
-          var retorno = new AncestorSelf(this.nombre,this.predicado,this.Tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto)]) 
+          var retorno = new AncestorSelf(this.nombre,this.predicado,this.tipo).getValor([new Nodo(Tipo.NODO,hijo,nuevaPila,hijo.texto)]) 
           for (const iterator of retorno) {
             retornos.set(iterator.entorno,iterator) 
           }

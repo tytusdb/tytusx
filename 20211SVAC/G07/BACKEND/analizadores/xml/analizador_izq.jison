@@ -60,7 +60,7 @@
 <<EOF>>                                     %{ return "EOF"; %}
 
 // ERRORES LEXICOS
-.                                           %{ listaErrores.push(new Token("ERROR LEXICO", yytext, yylloc.first_line, yylloc.first_column )); %}
+.                                           %{ listaErrores.push(new TokenError("XML",'Error Lexico ' , "Caracter desconocido " + yytext ,  yylloc.first_line, yylloc.first_column )); %}
 
 /lex
 
@@ -78,8 +78,8 @@
 /* Definición de la gramática */
 INICIO: PROLOGO EOF {
     // REPORTE GRAMATICA
-    gramaticapp = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nI   -> P EOF \n` + gramaticapp;
-    gramatical = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n<INICIO> := <PROLOGO> <EOF>\n` + gramatical;
+    gramaticapp = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nI   -> P EOF \n` + gramaticapp;
+    gramatical = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n<INICIO> := <PROLOGO> <EOF>\n` + gramatical;
    
 
     return {
@@ -96,13 +96,13 @@ PROLOGO
         $$ = $6;
 
         // REPORTE GRAMATICA
-        gramaticapp = `P   -> tk_inicio V C D tk_fin R \n` + gramaticapp;
+        gramaticapp = `PROLOGO.VAL -> inicio.lexval VERSION.VAL CODIFICACION.VAL DEPENDENCIA.VAL finp.lexval RAIZ.VAL \n` + gramaticapp;
         gramatical = `<PROLOGO> := ${$1} <VERSION> <CODIFICACION> ${$5} <DEPENDENCIA> <RAIZ>\n` + gramatical;
 
     }
     | RAIZ {
         $$ = $1;
-        gramaticapp = `P   -> R \n` + gramaticapp;
+        gramaticapp = `PROLOGO.VAL -> RAIZ.VAL \n` + gramaticapp;
         gramatical = `<PROLOGO> := <RAIZ>\n` + gramatical;
     }
     }
@@ -110,7 +110,7 @@ PROLOGO
 
 VERSION
     :tk_igual tk_hilera {
-        gramaticapp += `V   -> tk_igual tk_cadena\n` + gramaticapp;
+        gramaticapp += `ERSION.VAL -> igual.lexval cadena.lexval\n` + gramaticapp;
         gramatical += `<VERSION> := ${$1} ${$2}\n` + gramatical;
     }
     
@@ -118,23 +118,23 @@ VERSION
 
 CODIFICACION
     :tk_encoding tk_igual tk_hilera {
-        gramaticapp = `C   -> tk_encoding tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `CODIFICACION.VAL -> encoding.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<CODIFICACION> := ${$1} ${$2} ${$3}\n` + gramatical;
         tipoencoding = `${$3}`.replaceAll("\"", ' ');
     }
     | {
-        gramaticapp = `C   -> ε \n` + gramaticapp;
+        gramaticapp = `CODIFICACION.VAL -> ε \n` + gramaticapp;
         gramatical = `<CODIFCACION> :=  epsilon\n` + gramatical;
     }
 ;
 
 DEPENDENCIA
     :tk_standalone tk_igual tk_hilera {
-        gramaticapp = `D   -> tk_standalone tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `DEPENDENCIA.VAL -> standalone.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<DEPENDENCIA> := ${$1} ${$2} ${$3}\n` + gramatical;
     }
     | { 
-        gramaticapp = `D   -> ε \n` + gramaticapp;
+        gramaticapp = `DEPENDENCIA.VAL -> ε \n` + gramaticapp;
         gramatical = `<DEPENDENCIA> := epsilon\n` + gramatical;
     }
 ;
@@ -150,7 +150,7 @@ RAIZ
 
 
         //REPORTE GRAMATICA
-        gramaticapp = `R   -> E \n` + gramaticapp;
+        gramaticapp = `RAIZ.VAL -> ETIQUETA.VAL \n` + gramaticapp;
         gramatical = `<RAIZ> := <ETIQUETA>\n` + gramatical;
     }
        | error  tk_cierra
@@ -171,7 +171,7 @@ ETIQUETA
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> EU \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> ETIQUETA_UNICA.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> :=  <ETIQUETA_UNICA>\n` + gramatical;
     }
     | APERTURA CONTENIDO CIERRE {
@@ -194,7 +194,7 @@ ETIQUETA
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> AP CO CI \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> APERTURA.VAL CONTENIDO.VAL CIERRE.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> := <APERTURA> <CONTENIDO> <CIERRE>\n` + gramatical;
 
 
@@ -211,7 +211,7 @@ ETIQUETA
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> AP CI \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> APERTURA.VAL CIERRE.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> := <APERTURA> <CIERRE>\n` + gramatical;
     }
     
@@ -238,7 +238,7 @@ ETIQUETA_UNICA
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `EU  -> tk_abre tk_etiqueta ATS tk_cierra_dos \n` + gramaticapp;
+        gramaticapp = `ETIQEUTA_UNICA.VAL -> abre.lexval etiqueta.lexval ATRIBUTOS.VAL cierra_dos.lexval \n` + gramaticapp;
         gramatical = `<ETIQUETA_UNICA> := ${$1} ${$2} <ATRIBUTOS> ${$4} \n` + gramatical;
 
     }
@@ -266,7 +266,7 @@ APERTURA
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AP  -> tk_abre tk_etiqueta ATS tk_cierra\n` + gramaticapp;
+        gramaticapp = `APERTURA.VAL -> abre.lexval etiqueta.lexval ATRIBUTOS.VAL cierra.lexval\n` + gramaticapp;
         gramatical = `<APERTURA> := ${$1} ${$2} <ATRIBUTOS> ${$3} \n` + gramatical;
 
 
@@ -290,7 +290,7 @@ APERTURA
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AP  -> tk_abre tk_etiqueta tk_cierra \n` + gramaticapp;
+        gramaticapp = `APERTURA.VAL -> abre.lexval etiqueta.lexval cierra.lexval \n` + gramaticapp;
         gramatical = `<APERTURA> := ${$1} ${$2} ${$3}\n` + gramatical;
 
         // Verificar Etiqueta
@@ -319,7 +319,7 @@ ATRIBUTOS
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `ATS -> ATS AT \n` + gramaticapp;
+        gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTOS.VAL ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTOS> <ATRIBUTO>\n` + gramatical;
 
     }
@@ -334,7 +334,7 @@ ATRIBUTOS
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `ATS -> AT \n` + gramaticapp;
+        gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTO>\n` + gramatical;
     }
 ;
@@ -357,7 +357,7 @@ ATRIBUTO
         $$["nodo"] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AT  -> tk_etiqueta tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `ATRIBUTO.VAL -> etiqueta.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<ATRIBUTO> := ${$1} ${$2} ${$3} \n` + gramatical;
     }
 ;
@@ -385,7 +385,7 @@ CONTENIDO
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CO  -> CO LCO \n` + gramaticapp;
+        gramaticapp = `CONTENIDO.VAL -> CONTENIDO.VAL LISTACONT.VAL \n` + gramaticapp;
         gramatical = `<CONTENIDO> := <CONTENIDO> <LISTACONT>\n` + gramatical;
 
 
@@ -402,7 +402,7 @@ CONTENIDO
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CO  -> LCO \n` + gramaticapp;
+        gramaticapp = `CONTENIDO.VAL -> LISTACONT.VAL \n` + gramaticapp;
         gramatical = `<CONTENIDO> := <LISTACONT>\n` + gramatical;
 
     } 
@@ -420,7 +420,7 @@ LISTACONT
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> tk_etiqueta \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> etiqueta.lexval \n` + gramaticapp;
         gramatical = `<LISTACONT> :=  ${$1}\n` + gramatical;
     }   
     | tk_numero {
@@ -434,7 +434,7 @@ LISTACONT
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> tk_numero\n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> numero.lexval\n` + gramaticapp;
         gramatical = `<LISTACONT> :=  ${$1}\n` + gramatical;
     }
     | ETIQUETA {
@@ -449,7 +449,7 @@ LISTACONT
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> E \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> ETIQEUTA.VAL \n` + gramaticapp;
         gramatical = `<LISTACONT> := <ETIQUETA>\n` + gramatical;
 
     } 
@@ -466,7 +466,7 @@ LISTACONT
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> CS \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> CARACTERESPECIAL.VAL \n` + gramaticapp;
         gramatical = `<LISTACONT> := <CARACESPECIAL>\n` + gramatical;
 
     } 
@@ -478,35 +478,35 @@ CARACESPECIAL
             $$ = "<";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_less \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> less.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$1}\n` + gramatical;
         }
         | tk_great {
             $$ = ">";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_great \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> great.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$1}\n` + gramatical;
         }
         | tk_amper {
             $$ = "&";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_amper \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> amper.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$1}\n` + gramatical;
         }
         | tk_apostro {
             $$ = "'";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_apostro \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> apostro.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$1}\n` + gramatical;
         }
         | tk_quota {
             $$ = '"';
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_quota \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> quota.lexval  \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$1}\n` + gramatical;
         }
         ;
@@ -524,7 +524,7 @@ CIERRE
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CI  -> tk_abre_dos tk_etiqueta tk_cierra \n` + gramaticapp;
+        gramaticapp = `CIERRE.VAL -> abre_dos.lexval etiqueta.lexval cierra.lexval \n` + gramaticapp;
         gramatical = `<CIERRE> := ${$1} ${$2} ${$3}\n` + gramatical;
 
         //VERIFICAR ETIQUETA

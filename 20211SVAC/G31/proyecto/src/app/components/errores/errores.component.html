@@ -1,0 +1,29 @@
+<div class="table-responsive">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="tipo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> TIPO </th>
+      <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> DESCRIPCION </th>
+      <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="linea">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> LINEA </th>
+      <td mat-cell *matCellDef="let element"> {{element.linea}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="columna">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> COLUMNA </th>
+      <td mat-cell *matCellDef="let element"> {{element.columna}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator="matPaginator" [pageSize]="pageSize" showFirstLastButtons></mat-paginator>
+</div>
