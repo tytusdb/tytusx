@@ -25,6 +25,7 @@ import { table } from 'console';
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
 import { type } from 'os';
+import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
 
 
 export let listaErrores: Array<NodoErrores>;
@@ -263,7 +264,7 @@ export class ContenidoInicioComponent implements OnInit {
     let sim_string = JSON.stringify(instrucciones);
     localStorage.setItem("astpath", sim_string);
   }
-
+/*ESTE MUESTRA LOS CICLOS PARA COLOCAR EL ARBOL AST CON GETNODO*/
   ciclo(i:any, numero:number, instruc:nodoAst){
     if(i[numero]!=null){
      
@@ -271,10 +272,16 @@ export class ContenidoInicioComponent implements OnInit {
         let temp:BarrasNodo= i[numero]
         instruc.agregarHijoAST(temp.getNodosAST())
       }
+      if(i[numero] instanceof Axes){
+        let temp:Axes= i[numero]
+        instruc.agregarHijoAST(temp.getNodosAST())
+      }
       numero++
       this.ciclo(i,numero,instruc);
     }
   }
+
+
   textoEsperado = '';
   textInputChange(fileInputEvent: any) {
     var archivo = fileInputEvent.target.files[0];
