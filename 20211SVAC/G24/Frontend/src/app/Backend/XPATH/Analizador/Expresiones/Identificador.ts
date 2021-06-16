@@ -12,8 +12,7 @@ export default class Identificador extends Instruccion {
     this.identificador = identificador.toLowerCase();
   }
   public getNodosAST(): nodoAST {
-    let nodo = new nodoAST('IDENTIFICADOR');
-    nodo.agregarHijo(this.identificador);
+    let nodo = new nodoAST(this.identificador);
     return nodo;
   }
   public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
