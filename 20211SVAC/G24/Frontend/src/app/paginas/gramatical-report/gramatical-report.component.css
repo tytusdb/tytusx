@@ -1,0 +1,12 @@
+textarea{
+    background: url(http://i.imgur.com/2cOaJ.png);
+background-attachment: local;
+background-repeat: no-repeat;
+padding-left: 40px;
+font-size: 95%;
+color: white;
+position: relative;
+left: 100px;
+    border-color:rgb(126, 123, 123);
+    background-color: rgb(58, 56, 56);
+}

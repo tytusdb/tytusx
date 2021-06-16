@@ -15,86 +15,89 @@ var Tipo;
 
 var Operador;
 (function (Operador) {
-    Operador[Operador["SUMA"] = 0] = "SUMA";
-    Operador[Operador["RESTA"] = 1] = "RESTA";
-    Operador[Operador["MULTIPLICACION"] = 2] = "MULTIPLICACION";
-    Operador[Operador["DIVISION"] = 3] = "DIVISION";
-    Operador[Operador["MODULO"] = 4] = "MODULO";
-    Operador[Operador["MENOS_UNARIO"] = 5] = "MENOS_UNARIO";
-    Operador[Operador["MAYOR_QUE"] = 6] = "MAYOR_QUE";
-    Operador[Operador["MENOR_QUE"] = 7] = "MENOR_QUE";
-    Operador[Operador["IGUAL"] = 8] = "IGUAL";
-    Operador[Operador["DIFERENTE_QUE"] = 9] = "DIFERENTE_QUE";
-    Operador[Operador["OR"] = 10] = "OR";
-    Operador[Operador["AND"] = 11] = "AND";
-    Operador[Operador["NOT"] = 12] = "NOT";
-    Operador[Operador["MAYOR_IGUAL_QUE"] = 13] = "MAYOR_IGUAL_QUE";
-    Operador[Operador["MENOR_IGUAL_QUE"] = 14] = "MENOR_IGUAL_QUE";
-    Operador[Operador["DESCONOCIDO"] = 15] = "DESCONOCIDO";
+    Operador[Operador["SUMA"] = 9] = "SUMA";
+    Operador[Operador["RESTA"] = 10] = "RESTA";
+    Operador[Operador["MULTIPLICACION"] = 11] = "MULTIPLICACION";
+    Operador[Operador["DIVISION"] = 12] = "DIVISION";
+    Operador[Operador["MODULO"] = 13] = "MODULO";
+    Operador[Operador["MENOS_UNARIO"] = 14] = "MENOS_UNARIO";
+    Operador[Operador["MAYOR_QUE"] = 15] = "MAYOR_QUE";
+    Operador[Operador["MENOR_QUE"] = 16] = "MENOR_QUE";
+    Operador[Operador["IGUAL"] = 17] = "IGUAL";
+    Operador[Operador["DIFERENTE_QUE"] = 18] = "DIFERENTE_QUE";
+    Operador[Operador["OR"] = 19] = "OR";
+    Operador[Operador["AND"] = 20] = "AND";
+    Operador[Operador["NOT"] = 21] = "NOT";
+    Operador[Operador["MAYOR_IGUAL_QUE"] = 22] = "MAYOR_IGUAL_QUE";
+    Operador[Operador["MENOR_IGUAL_QUE"] = 23] = "MENOR_IGUAL_QUE";
+    Operador[Operador["DESCONOCIDO"] = 24] = "DESCONOCIDO";
 })(Operador || (Operador = {}));
 
 
 var TipoSelector;
 (function (TipoSelector) {
-    TipoSelector[TipoSelector["DOBLE_SLASH"] = 0] = "DOBLE_SLASH";
-    TipoSelector[TipoSelector["SLASH"] = 1] = "SLASH";
-    TipoSelector[TipoSelector["DOSPUNTOS_DOSSLASH"] = 2] = "DOSPUNTOS_DOSSLASH";
-    TipoSelector[TipoSelector["PUNTO_DOSSLASH"] = 3] = "PUNTO_DOSSLASH";
-    TipoSelector[TipoSelector["DOSPUNTOS_SLASH"] = 4] = "DOSPUNTOS_SLASH";
-    TipoSelector[TipoSelector["PUNTO_SLASH"] = 5] = "PUNTO_SLASH";
-    TipoSelector[TipoSelector["FIN"] = 6] = "FIN";
+    TipoSelector[TipoSelector["DOBLE_SLASH"] = 25] = "DOBLE_SLASH";
+    TipoSelector[TipoSelector["SLASH"] = 26] = "SLASH";
+    TipoSelector[TipoSelector["DOSPUNTOS_DOSSLASH"] = 27] = "DOSPUNTOS_DOSSLASH";
+    TipoSelector[TipoSelector["PUNTO_DOSSLASH"] = 28] = "PUNTO_DOSSLASH";
+    TipoSelector[TipoSelector["DOSPUNTOS_SLASH"] = 29] = "DOSPUNTOS_SLASH";
+    TipoSelector[TipoSelector["PUNTO_SLASH"] = 30] = "PUNTO_SLASH";
+    TipoSelector[TipoSelector["FIN"] = 31] = "FIN";
 })(TipoSelector || (TipoSelector = {}));
 
 var TipoExpresionXPath;
 (function (TipoExpresionXPath) {
-    TipoExpresionXPath[TipoExpresionXPath["IDENTIFICADOR"] = 0] = "IDENTIFICADOR";
-    TipoExpresionXPath[TipoExpresionXPath["ASTERISCO"] = 1] = "ASTERISCO";
-    TipoExpresionXPath[TipoExpresionXPath["NODE"] = 2] = "NODE";
-    TipoExpresionXPath[TipoExpresionXPath["TEXT"] = 3] = "TEXT";
-    TipoExpresionXPath[TipoExpresionXPath["PUNTO"] = 4] = "PUNTO";
-    TipoExpresionXPath[TipoExpresionXPath["DOBLEPUNTO"] = 5] = "DOBLEPUNTO";
+    TipoExpresionXPath[TipoExpresionXPath["IDENTIFICADOR"] = 32] = "IDENTIFICADOR";
+    TipoExpresionXPath[TipoExpresionXPath["ASTERISCO"] = 33] = "ASTERISCO";
+    TipoExpresionXPath[TipoExpresionXPath["NODE"] = 34] = "NODE";
+    TipoExpresionXPath[TipoExpresionXPath["TEXT"] = 35] = "TEXT";
+    TipoExpresionXPath[TipoExpresionXPath["PUNTO"] = 36] = "PUNTO";
+    TipoExpresionXPath[TipoExpresionXPath["DOBLEPUNTO"] = 37] = "DOBLEPUNTO";
+    TipoExpresionXPath[TipoExpresionXPath["ARROBA"] = 38] = "ARROBA";
+    TipoExpresionXPath[TipoExpresionXPath["ARROBA_ID"] = 39] = "ARROBA_ID";
 })(TipoExpresionXPath || (TipoExpresionXPath = {}));
 
 
 var TipoExpresionDefinida;
 (function (TipoExpresionDefinida) {
-    TipoExpresionDefinida[TipoExpresionDefinida["LAST"] = 0] = "LAST";
-    TipoExpresionDefinida[TipoExpresionDefinida["POSITION"] = 1] = "POSITION";
-    TipoExpresionDefinida[TipoExpresionDefinida["AXES"] = 2] = "AXES";
-    TipoExpresionDefinida[TipoExpresionDefinida["ASTERISCO"] = 3] = "ASTERISCO";
-    TipoExpresionDefinida[TipoExpresionDefinida["ARROBA"] = 4] = "ARROBA";
-    TipoExpresionDefinida[TipoExpresionDefinida["NODE"] = 5] = "NODE";
-    TipoExpresionDefinida[TipoExpresionDefinida["TEXT"] = 6] = "TEXT";
+    TipoExpresionDefinida[TipoExpresionDefinida["LAST"] = 40] = "LAST";
+    TipoExpresionDefinida[TipoExpresionDefinida["POSITION"] = 41] = "POSITION";
+    TipoExpresionDefinida[TipoExpresionDefinida["AXES"] = 42] = "AXES";
+    TipoExpresionDefinida[TipoExpresionDefinida["ASTERISCO"] = 43] = "ASTERISCO";
+    TipoExpresionDefinida[TipoExpresionDefinida["ARROBA"] = 44] = "ARROBA";
+    TipoExpresionDefinida[TipoExpresionDefinida["NODE"] = 45] = "NODE";
+    TipoExpresionDefinida[TipoExpresionDefinida["TEXT"] = 46] = "TEXT";
 })(TipoExpresionDefinida || (TipoExpresionDefinida = {}));
 
 
 var TipoNodo;
 (function (TipoNodo) {
-    TipoNodo[TipoNodo["SELECTOR_EXPRESION"] = 0] = "SELECTOR_EXPRESION";
-    TipoNodo[TipoNodo["EXPRESION"] = 1] = "EXPRESION";
-    TipoNodo[TipoNodo["AXES"] = 2] = "AXES";
-    TipoNodo[TipoNodo["SELECTOR_AXES"] = 3] = "SELECTOR_AXES";
+    TipoNodo[TipoNodo["SELECTOR_EXPRESION"] = 47] = "SELECTOR_EXPRESION";
+    TipoNodo[TipoNodo["EXPRESION"] = 48] = "EXPRESION";
+    TipoNodo[TipoNodo["AXES"] = 49] = "AXES";
+    TipoNodo[TipoNodo["SELECTOR_AXES"] = 50] = "SELECTOR_AXES";
+    TipoNodo[TipoNodo["FIN"] = 51] = "FIN";
 })(TipoNodo || (TipoNodo = {}));
 
 var TipoAxes;
 (function (TipoAxes) {
-    TipoAxes[TipoAxes["ANCESTOR"] = 0] = "ANCESTOR";
-    TipoAxes[TipoAxes["ANCESTOR_OR_SELF"] = 1] = "ANCESTOR_OR_SELF";
-    TipoAxes[TipoAxes["ATTRIBUTE"] = 2] = "ATTRIBUTE";
-    TipoAxes[TipoAxes["CHILD"] = 3] = "CHILD";
-    TipoAxes[TipoAxes["DESCENDANT"] = 4] = "DESCENDANT";
-    TipoAxes[TipoAxes["DESCENDANT_OR_SELF"] = 5] = "DESCENDANT_OR_SELF";
-    TipoAxes[TipoAxes["FOLLOWING"] = 6] = "FOLLOWING";
-    TipoAxes[TipoAxes["FOLLOWING_SIBLING"] = 7] = "FOLLOWING_SIBLING";
-    TipoAxes[TipoAxes["PARENT"] = 8] = "PARENT";
-    TipoAxes[TipoAxes["PRECEDING"] = 9] = "PRECEDING";
-    TipoAxes[TipoAxes["PRECEDING_SIBLING"] = 10] = "PRECEDING_SIBLING";
-    TipoAxes[TipoAxes["SELF"] = 11] = "SELF";
-    TipoAxes[TipoAxes["NINGUNO"] = 12] = "NINGUNO";
+    TipoAxes[TipoAxes["ANCESTOR"] = 52] = "ANCESTOR";
+    TipoAxes[TipoAxes["ANCESTOR_OR_SELF"] = 53] = "ANCESTOR_OR_SELF";
+    TipoAxes[TipoAxes["ATTRIBUTE"] = 54] = "ATTRIBUTE";
+    TipoAxes[TipoAxes["CHILD"] = 55] = "CHILD";
+    TipoAxes[TipoAxes["DESCENDANT"] = 56] = "DESCENDANT";
+    TipoAxes[TipoAxes["DESCENDANT_OR_SELF"] = 57] = "DESCENDANT_OR_SELF";
+    TipoAxes[TipoAxes["FOLLOWING"] = 58] = "FOLLOWING";
+    TipoAxes[TipoAxes["FOLLOWING_SIBLING"] = 59] = "FOLLOWING_SIBLING";
+    TipoAxes[TipoAxes["PARENT"] = 60] = "PARENT";
+    TipoAxes[TipoAxes["PRECEDING"] = 61] = "PRECEDING";
+    TipoAxes[TipoAxes["PRECEDING_SIBLING"] = 62] = "PRECEDING_SIBLING";
+    TipoAxes[TipoAxes["SELF"] = 63] = "SELF";
+    TipoAxes[TipoAxes["NINGUNO"] = 64] = "NINGUNO";
 })(TipoAxes || (TipoAxes = {}));
 
 var TipoOperadores;
 (function (TipoOperadores) {
-    TipoOperadores[TipoOperadores["ELEMENTOS"] = 0] = "ELEMENTOS";
-    TipoOperadores[TipoOperadores["ATRIBUTOS"] = 1] = "ATRIBUTOS";
+    TipoOperadores[TipoOperadores["ELEMENTOS"] = 65] = "ELEMENTOS";
+    TipoOperadores[TipoOperadores["ATRIBUTOS"] = 66] = "ATRIBUTOS";
 })(TipoOperadores || (TipoOperadores = {}));

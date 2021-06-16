@@ -117,6 +117,15 @@ var Operacion = /** @class */ (function () {
     Operacion.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
     };
+
+    Operacion.prototype.setOperadorIzquierda = function (opIzquierda) {
+        this.op_izquierda = opIzquierda;
+    };
+
+    Operacion.prototype.setOperadorDerecha = function (opDerecha) {
+        this.op_derecha = opDerecha;
+    };
+
     return Operacion;
 }());
 //exports.Operacion = Operacion;

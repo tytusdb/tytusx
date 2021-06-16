@@ -18,8 +18,9 @@ var Axes = /** @class */ (function () {
 
 
         if((this.expresion.getTipo()==TipoExpresionXPath.PUNTO) ||
-         (this.expresion.getTipo()==TipoExpresionXPath.DOBLEPUNTO)){
-            return [];
+         (this.expresion.getTipo()==TipoExpresionXPath.DOBLEPUNTO)  ||
+         (this.expresion.getTipo()==TipoExpresionXPath.ARROBA)){
+            return [[],[]];
         }
         
         var entornoActual = ent;
@@ -57,7 +58,7 @@ var Axes = /** @class */ (function () {
                 } else {
                     //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                     //por lo tanto axes ancestor no devuelve nada 
-                    return [];
+                    return [[],[]];
                 }   
 
             }
@@ -93,7 +94,7 @@ var Axes = /** @class */ (function () {
                 } else {
                     //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                     //por lo tanto axes ancestor no devuelve nada 
-                    return [];
+                    return [[],[]];
                 }   
             }  
 
@@ -254,7 +255,7 @@ var Axes = /** @class */ (function () {
                     return this.resultado;
     
                 } else {
-                    return [];
+                    return [[],[]];
                 }   
             }
 
@@ -291,7 +292,7 @@ var Axes = /** @class */ (function () {
                 } else {
                     //si llegamos a esta parte significa que ningun elemento tenia una raiz padre
                     //por lo tanto axes ancestor no devuelve nada 
-                    return [];
+                    return [[],[]];
                 }   
 
             }
@@ -366,8 +367,6 @@ var Axes = /** @class */ (function () {
 
     };
 
-
-    
     return Axes;
 }());
 //exports.Axes = Axes;

@@ -37,7 +37,7 @@ var NodoXpath = /** @class */ (function () {
     NodoXpath.prototype.getValorImplicito = function (ent, arbol) {
 
         if(ent.length<1){
-            return [];
+            return [[],[]];
         }
     
         if((this.getTipo()== TipoNodo.SELECTOR_EXPRESION) || (this.getTipo()== TipoNodo.SELECTOR_AXES)){

@@ -244,6 +244,7 @@ ITEMFINAL:
 OPERACIONES_L:
           tk_or OPERACIONES                                     {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_or, $OPERACIONES] );}
         | tk_and OPERACIONES                                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_and, $OPERACIONES] );}
+        | OPERADOR ITEMFINAL   OPERACIONES_L                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $OPERADOR, $ITEMFINAL, $OPERACIONES_L] );}        
         |                                                       {$$= new Nodo("Porduccion","OPERACIONES_L",[ "ε" ] );}
 ;
 
