@@ -13,22 +13,19 @@ export class Arithmetic {
     getValor(Objetos){
         var retorno = []
 
-        for (var obj of Objetos){
-            var valIzq = this.izquierdo.getValor([obj])
-            var valDer = this.derecho.getValor([obj])
-
+        var valIzq = this.izquierdo.getValor(Objetos)
+        var valDer = this.derecho.getValor(Objetos)
             // plano cartesiano entre valores izq y valores 
-            for (var izq of valIzq){
-                for (var der of valDer){
-                    var newValor = operar(izq, this.op, der)
-                    if (newValor && !this.contiene(retorno,newValor)){
-                        retorno.push(
-                            new Literal(
-                                ColisionTipo[izq.tipo][der.tipo],
-                                newValor
-                            )
+        for (var izq of valIzq){
+            for (var der of valDer){
+                var newValor = operar(izq, this.op, der)
+                if (newValor && !this.contiene(retorno,newValor)){
+                    retorno.push(
+                        new Literal(
+                            ColisionTipo[izq.tipo][der.tipo],
+                            newValor
                         )
-                    }
+                    )
                 }
             }
         }

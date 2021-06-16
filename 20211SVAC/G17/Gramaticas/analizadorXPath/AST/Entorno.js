@@ -41,7 +41,7 @@ export const Colision =
   [true , true , false, false, false, true , false],
   [true , true , false, false, false, true , false],
   [false, false, true , true , false, true , false],
-  [false, false, true , true , false, true , false],
+  [true, true, true , true , false, true , false],
   [false, false, false, false, true , false, false],
   [true , true , true , true , false, true , false],
   [false, false, false, false, false, false, false]
@@ -96,7 +96,7 @@ export class Comando
       retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
     }
     for (const retorno of retornos) {
-      if(retorno.tipo == Tipo.NODO || retorno.tipo == Tipo.ATRIB)
+      if(retorno.tipo == Tipo.NODO)
       {
         Salida += ConvertiraXML(retorno.entorno,0) + "\n"
       }
@@ -206,13 +206,10 @@ export function Predicado(predicado,retorno)
           case Tipo.INTEGER:
           case Tipo.DECIMAL:
             var temp=[]
-            var actuales=new Map()
             var posicion=1;
             for (const posible of posibles) {
-              if(actuales.has==posibles.valor) continue
               if(retorno[posible.valor-1])
               {
-                actuales.set(posibles.valor,posibles.valor)
                 temp.push(retorno[posible.valor-1])
                 posicion++;
               }

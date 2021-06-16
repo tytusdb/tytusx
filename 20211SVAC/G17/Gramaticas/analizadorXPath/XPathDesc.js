@@ -1213,81 +1213,81 @@ case 0:return "ROR"
 break;
 case 1:return "RAND"
 break;
-case 2:return "RRETURN"
+case 2:return "DIV"
 break;
-case 3:return "RFOR"
+case 3:return "IDIV"
 break;
-case 4:return "RIN"
+case 4:return "MOD"
 break;
-case 5:return "RTO"
+case 5:return "RRETURN"
 break;
-case 6:return "EQ"
+case 6:return "RFOR"
 break;
-case 7:return "NE"
+case 7:return "RIN"
 break;
-case 8:return "LT"
+case 8:return "RTO"
 break;
-case 9:return "LE"
+case 9:return "EQ"
 break;
-case 10:return "GT"
+case 10:return "NE"
 break;
-case 11:return "GE"
+case 11:return "LT"
 break;
-case 12:return "RCHILD"
+case 12:return "LE"
 break;
-case 13:return "RDESSELF"
+case 13:return "GT"
 break;
-case 14:return "RDESCENDANT"
+case 14:return "GE"
 break;
-case 15:return "RATTRIBUTE"
+case 15:return "RCHILD"
 break;
-case 16:return "RSELF"
+case 16:return "RDESSELF"
 break;
-case 17:return "RFOLLOWSIBLING"
+case 17:return "RDESCENDANT"
 break;
-case 18:return "RFOLLOW"
+case 18:return "RATTRIBUTE"
 break;
-case 19:return "RNAMESPACE"
+case 19:return "RSELF"
 break;
-case 20:return "RPARENT"
+case 20:return "RFOLLOWSIBLING"
 break;
-case 21:return "RANCESTORORSELF"
+case 21:return "RFOLLOW"
 break;
-case 22:return "RANCESTOR"
+case 22:return "RNAMESPACE"
 break;
-case 23:return "RPRECEDSIBLING"
+case 23:return "RPARENT"
 break;
-case 24:return "RPRECED"
+case 24:return "RANCESTORORSELF"
 break;
-case 25:return "DECIMAL"
+case 25:return "RANCESTOR"
 break;
-case 26:return "INTEGER"
+case 26:return "RPRECEDSIBLING"
 break;
-case 27: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return "CADENA" 
+case 27:return "RPRECED"
 break;
-case 28:return "NOMBRE"
+case 28:return "DECIMAL"
 break;
-case 29:return "DOBLEBARRA"
+case 29:return "INTEGER"
 break;
-case 30:return "BARRA"
+case 30: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return "CADENA" 
 break;
-case 31:return "ARROBA"
+case 31:return "NOMBRE"
 break;
-case 32:return "CORA"
+case 32:return "DOBLEBARRA"
 break;
-case 33:return "CORB"
+case 33:return "BARRA"
 break;
-case 34:return "MAS"
+case 34:return "ARROBA"
 break;
-case 35:return "MENOS"
+case 35:return "CORA"
 break;
-case 36:return "POR"
+case 36:return "CORB"
 break;
-case 37:return "DIV"
+case 37:return "MAS"
 break;
-case 38:return "IDIV"
+case 38:return "MENOS"
 break;
-case 39:return "MOD"
+case 39:return "POR"
 break;
 case 40:return "MAYORIG"
 break;
@@ -1333,7 +1333,7 @@ case 60: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo
 break;
 }
 },
-rules: [/^(?:or\b)/i,/^(?:and\b)/i,/^(?:return\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:to\b)/i,/^(?:eq\b)/i,/^(?:ne\b)/i,/^(?:lt\b)/i,/^(?:le\b)/i,/^(?:gt\b)/i,/^(?:ge\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:attribute\b)/i,/^(?:self\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:(\.[0-9]+)|([0-9]+\.[0-9]+))/i,/^(?:[0-9]+)/i,/^(?:("[^"]*")|('[^']*'))/i,/^(?:([a-zA-ZñÑ_])([a-zA-ZñÑ0-9_-]|\.)*)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:idiv\b)/i,/^(?:mod\b)/i,/^(?:>=)/i,/^(?:<=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\|)/i,/^(?:,)/i,/^(?:\$)/i,/^(?:!)/i,/^(?:@)/i,/^(?:\.\.)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\?)/i,/^(?:\.)/i,/^(?:::)/i,/^(?::)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:.)/i],
+rules: [/^(?:or\b)/i,/^(?:and\b)/i,/^(?:div\b)/i,/^(?:idiv\b)/i,/^(?:mod\b)/i,/^(?:return\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:to\b)/i,/^(?:eq\b)/i,/^(?:ne\b)/i,/^(?:lt\b)/i,/^(?:le\b)/i,/^(?:gt\b)/i,/^(?:ge\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:attribute\b)/i,/^(?:self\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:(\.[0-9]+)|([0-9]+\.[0-9]+))/i,/^(?:[0-9]+)/i,/^(?:("[^"]*")|('[^']*'))/i,/^(?:([a-zA-ZñÑ_])([a-zA-ZñÑ0-9_-]|\.)*)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:>=)/i,/^(?:<=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\|)/i,/^(?:,)/i,/^(?:\$)/i,/^(?:!)/i,/^(?:@)/i,/^(?:\.\.)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\?)/i,/^(?:\.)/i,/^(?:::)/i,/^(?::)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:.)/i],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60],"inclusive":true}}
 });
 return lexer;
