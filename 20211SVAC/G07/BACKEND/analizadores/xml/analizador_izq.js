@@ -1192,7 +1192,7 @@ case 20: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line,
 break;
 case 21: return "EOF"; 
 break;
-case 22: listaErrores.push(new Token("ERROR LEXICO", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column )); 
+case 22: listaErrores.push(new TokenError("XML",'Error Lexico ' , "Caracter desconocido " + yy_.yytext ,  yy_.yylloc.first_line, yy_.yylloc.first_column )); 
 break;
 }
 },

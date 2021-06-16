@@ -60,7 +60,7 @@
 <<EOF>>                                     %{ return "EOF"; %}
 
 // ERRORES LEXICOS
-.                                           %{ listaErrores.push(new Token("ERROR LEXICO", yytext, yylloc.first_line, yylloc.first_column )); %}
+.                                           %{ listaErrores.push(new TokenError("XML",'Error Lexico ' , "Caracter desconocido " + yytext ,  yylloc.first_line, yylloc.first_column )); %}
 
 /lex
 

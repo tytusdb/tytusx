@@ -56,7 +56,8 @@
 <<EOF>>                                     %{ return "EOF"; %}
 
 // ERRORES LEXICOS
-.                                           %{ listaErrores.push(new Token("ERROR LEXICO", yytext, yylloc.first_line, yylloc.first_column )); %}
+.                                           %{ listaErrores.push(new TokenError("XML",'Error Lexico ' , "Caracter desconocido " + yytext ,  yylloc.first_line, yylloc.first_column )); %}
+
 
 /lex
 
@@ -194,6 +195,7 @@ ETIQUETA
         | error tk_cierra
         {
             listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
+            
         }
 ;
 

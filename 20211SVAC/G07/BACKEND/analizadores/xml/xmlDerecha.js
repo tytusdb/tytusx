@@ -212,6 +212,7 @@ break;
 case 12:
 
             listaErrores.push(new TokenError("XML",'Este es un error sintáctico: ' , "Me recupero con: " + yytext , _$[$0-1].first_line, _$[$0].first_column ));
+            
         
 break;
 case 13:
@@ -1166,7 +1167,7 @@ case 20: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line,
 break;
 case 21: return "EOF"; 
 break;
-case 22: listaErrores.push(new Token("ERROR LEXICO", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column )); 
+case 22: listaErrores.push(new TokenError("XML",'Error Lexico ' , "Caracter desconocido " + yy_.yytext ,  yy_.yylloc.first_line, yy_.yylloc.first_column )); 
 break;
 }
 },

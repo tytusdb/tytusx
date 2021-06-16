@@ -104,7 +104,7 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/CATALOG/CD[last()-5+2-2*1 div 2]");
+let editorXPATH = (document.getElementById("editor").value = "//PRICE[9]/@calificacion");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
@@ -463,6 +463,9 @@ btnReporteXMLErrores.addEventListener("click", () => {
 
   // Lista de errores
   listaErrores = parserXML.listaErrores;
+
+  console.log("ESTA ES LA LISTA DE ERROES");
+  console.log(listaErrores);
 
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
