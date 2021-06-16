@@ -1,0 +1,55 @@
+<mat-tab-group mat-stretch-tabs class="bg-dark" dynamicHeight="true" style="height: calc(100vh - 80px);">
+
+  <mat-tab label="QUERY">
+    <ng-template matTabContent>
+      <div style="height: calc(100vh - 116.5px);">
+        <ngx-codemirror [(ngModel)]="content" [options]="options"></ngx-codemirror>
+      </div>
+    </ng-template>
+  </mat-tab>
+
+</mat-tab-group>
+
+
+<nav class="navbar navbar-dark py-0 bg-dark navbar-expand-sm">
+  <ul class="navbar-nav me-auto">
+    <li class="nav-item upload-btn-wrapper">
+      <button mat-icon-button color="primary" matTooltip="Subir Archivo" matTooltipPosition="above">
+        <mat-icon>cloud_upload</mat-icon>
+      </button>
+      <input type="file" (change)="cargar($event)">
+    </li>
+    <li class="nav-item">
+      <button mat-icon-button color="primary" matTooltip="Descargar Archivo" matTooltipPosition="above"
+        (click)="guardar()">
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button mat-icon-button color="primary" matTooltip="Limpiar" matTooltipPosition="above" (click)="content = '';">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </li>
+  </ul>
+
+  <ul class="navbar-nav ms-auto">
+    <li class="nav-item">
+      <button mat-icon-button color="primary" matTooltip="Ejecutar Ascendente" matTooltipPosition="above"
+        (click)="ejecutarASC()">
+        <mat-icon>arrow_upward</mat-icon>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button mat-icon-button color="primary" matTooltip="Ejecutar Descendente" matTooltipPosition="above"
+        (click)="ejecutarDESC()">
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button mat-icon-button color="primary" matTooltip="Ver Reportes" matTooltipPosition="above"
+      (click)="cargarReportes()">
+        <mat-icon>checklist_rtl</mat-icon>
+      </button>
+    </li>
+  </ul>
+</nav>
