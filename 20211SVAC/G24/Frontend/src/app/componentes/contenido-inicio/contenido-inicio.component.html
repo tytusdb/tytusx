@@ -1,7 +1,10 @@
 <div class="contenedor">
   <div class="consolaContainer">
     <label>EDITOR XPATH</label>
-      <mat-button-toggle (click)="interpretarContenido(contenido.value)" value="Interpretar">Ejecutar</mat-button-toggle>
+      <mat-button-toggle (click)="EjecutarAsc(consolas.value)" value="Interpretar">Ejecutar Desc</mat-button-toggle>
+      <br>
+      <br>
+      <mat-button-toggle (click)="EjecutarAsc(consolas.value)" value="Interpretar">Ejecutar Asc</mat-button-toggle>
     <textarea #consolas id="consolas" class="consola"></textarea>
 </div>
     <div class="editores">

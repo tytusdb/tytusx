@@ -21,7 +21,7 @@ export default class Nativo extends Instruccion {
     }
   }
 
-  public getNodo(): nodoAST {
+  public getNodosAST(): nodoAST {
     let nodo = new nodoAST('NATIVO');
     nodo.agregarHijo(this.valor + '');
     return nodo;

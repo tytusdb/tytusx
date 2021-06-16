@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ArbolCstComponent } from './arbol-cst.component';
+import { XpathAscAstComponent } from './xpath-asc-ast.component';
 
-describe('ArbolCstComponent', () => {
-  let component: ArbolCstComponent;
-  let fixture: ComponentFixture<ArbolCstComponent>;
+describe('XpathAscAstComponent', () => {
+  let component: XpathAscAstComponent;
+  let fixture: ComponentFixture<XpathAscAstComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArbolCstComponent ]
+      declarations: [ XpathAscAstComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ArbolCstComponent);
+    fixture = TestBed.createComponent(XpathAscAstComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

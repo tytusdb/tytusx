@@ -5,19 +5,30 @@ import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 import { InicioService } from 'src/app/servicios/inicio.service';
 import * as Analizador from 'src/app/Backend/XML/Analizador/GramaticaXML';
 import * as AnalizadorD from 'src/app/Backend/XML/Analizador/GramaticaXMLDescPRUEBA';
+import * as AnalizarAscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPath'
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
+import ArbolXpath from 'src/app/Backend/XPATH/Analizador/Simbolos/Arbol';
 import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
-import { Instruccion } from 'src/app/Backend/XML/Analizador/Abstracto/Instruccion';
+import nodoAst from 'src/app/Backend/XPATH/Analizador/Abstracto/nodoAST'
+import { Instruccion } from 'src/app/Backend/XPATH/Analizador/Abstracto/Instruccion';
+
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import NodoErrores from 'src/app/Backend/XML/Analizador/Excepciones/NodoErrores';
 import Objeto from 'src/app/Backend/XML/Analizador/Expresiones/Objeto';
+
 import { reporteTabla } from 'src/app/Backend/XML/Analizador/Reportes/reporteTabla';
 import { table } from 'console';
 
+import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
+import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
+import { type } from 'os';
+
+
 export let listaErrores: Array<NodoErrores>;
+
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -57,6 +68,7 @@ export class ContenidoInicioComponent implements OnInit {
   interpretarContenido(texto: string) {
     listaErrores = new Array<Errores>();
     if (texto == null) return document.write('Error');
+
     try {
       const analizador = Analizador;
       const objetos = analizador.parse(texto);
@@ -105,8 +117,7 @@ export class ContenidoInicioComponent implements OnInit {
         Tree.listaSimbolos.push(Reporte);
         
       }
-
-    
+   
       // TERMINA FOR 
 
 
@@ -229,10 +240,41 @@ export class ContenidoInicioComponent implements OnInit {
 
     //console.log(gramar);
   }
+/*********************************************************************************************************/
+/***********************************************XPATH ASCENDENTE******************************************/
+/*********************************************************************************************************/
+  EjecutarAsc(texto: string){
+    if (texto == null) return document.write('Error');
+    const analizador = AnalizarAscXpath;
+    const objetos = analizador.parse(texto);
+    var Tree:ArbolXpath = new ArbolXpath([objetos]);
+    
 
+    var init2 = new nodoAst("RAIZ");
+    var instrucciones = new nodoAst("HIJOS");
+    var contador=0;
+  
+    
+    for(let i of Tree.getinstrucciones()){
+      this.ciclo(i,contador,instrucciones)
+    }
+    
+    init2.agregarHijoAST(instrucciones);
+    let sim_string = JSON.stringify(init2);
+    localStorage.setItem("astpath", sim_string);
+  }
 
-
-
+  ciclo(i:any, numero:number, instruc:nodoAst){
+    if(i[numero]!=null){
+     
+      if(i[numero] instanceof BarrasNodo){
+        let temp:BarrasNodo= i[numero]
+        instruc.agregarHijoAST(temp.getNodosAST())
+      }
+      numero++
+      this.ciclo(i,numero,instruc);
+    }
+  }
   textoEsperado = '';
   textInputChange(fileInputEvent: any) {
     var archivo = fileInputEvent.target.files[0];

@@ -1,6 +1,6 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
@@ -17,7 +17,7 @@ export default class SelectRoot extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
-    getNodo(): nodoAST {
+    getNodosAST(): nodoAST {
         var nodo= new nodoAST("ALL"); //PADRE SELECT
         var nodoselect= new nodoAST("SELECT")
         nodoselect.agregarHijo(this.Operacion)
