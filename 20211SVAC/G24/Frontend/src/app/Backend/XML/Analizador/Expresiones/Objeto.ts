@@ -1,10 +1,8 @@
 
 import { Instruccion } from 'src/app/Backend/XML/Analizador/Abstracto/Instruccion';
-
 import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
 import Atributo from 'src/app/Backend/XML/Analizador/Expresiones/Atributo';
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
-
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';

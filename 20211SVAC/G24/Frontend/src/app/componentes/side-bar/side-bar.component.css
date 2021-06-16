@@ -1,11 +1,12 @@
 .example-container {
-  display: flex;
+  display:flex;
   flex-direction: column;
-  position: absolute;
+  position:absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  font-family: "Century Gothic";
 }
 
 .example-is-mobile .example-toolbar {
@@ -18,10 +19,12 @@
 }
 h1.example-app-name {
   margin-left: 30%;
-  color: #f9faf7;
-  font-size: 50px;
+  color: #ffffff;
+  font-size: 65px;
+  font-family:"Century Gothic"; 
+  font-weight: bold;
 }
-.matsnv {
+  .matsnv {
   background-color: #109e8b;
   color: #f9faf7;
 }
@@ -31,7 +34,6 @@ h1.example-app-name {
   text-decoration: none;
   width: 100px;
   height: 100%;
-  background-image: url("../../../assets/mnwhit.svg");
   background-repeat: no-repeat;
   background-position: center;
 }

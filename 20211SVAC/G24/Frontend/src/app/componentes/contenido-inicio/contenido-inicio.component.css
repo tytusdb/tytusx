@@ -1,22 +1,24 @@
 mat-button-toggle-group {
-  margin-top: 20px;
-  background-color: #110b0a;
+  margin-top: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #fafafa;
 }
 
 mat-button-toggle {
-  width: auto;
   height: 50px;
-  background-color: #6f23d3;
+  width: 150px;
+  background-color: #262c7c;
   color: #f9faf7;
-  font: "Century Gothic"
+  font-family: "Century Gothic";
 }
 .contenedor {
-  background: #5d5dbb;
+  background: #6666e2;
   background: linear-gradient(to right, #4adff3, #5ff16b);
   height: auto;
-  width: 95%;
-  margin-left: 2%;
-  font: "Century Gothic"
+  width: 97%;
+  margin-left: 1.5%;
+  font-family: "Century Gothic";
 
 }
 
