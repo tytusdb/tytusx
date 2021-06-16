@@ -104,7 +104,7 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/biblioteca/libro/..");
+let editorXPATH = (document.getElementById("editor").value = "/biblioteca/libro[1+2*3-12 div 2]");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
@@ -112,97 +112,24 @@ let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `<?xml version="3.1" encoding="UTF-8"?>
-<nuevayork>
-    <zoologico>
-        <park>
-            <selva>
-                <animal>
-                    <nombre>Werthers</nombre>
-                    <tipo>Pantera</tipo>
-                    <color>Negro</color>
-                    <edad>12</edad>
-                </animal>
-                <animal>
-                    <nombre>Bun</nombre>
-                    <tipo>León</tipo>
-                    <color>Marrón</color>
-                    <edad>15</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Adrian</nombre>
-                    <tipo>Bufalo</tipo>
-                    <color>Negro</color>
-                    <edad>23</edad>
-                </animal>
-                <animal>
-                    <nombre>Jose</nombre>
-                    <tipo>Conejo</tipo>
-                    <color>Marrón</color>
-                    <edad>2</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Kaka</nombre>
-                    <tipo>tigre</tipo>
-                    <color>amarillo</color>
-                    <edad>12</edad>
-                </animal>
-                <animal>
-                    <nombre>Joel</nombre>
-                    <tipo>iguana</tipo>
-                    <color>verde</color>
-                    <edad>10</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Juan</nombre>
-                    <tipo>koala</tipo>
-                    <color>blanco</color>
-                    <edad>10</edad>
-                </animal>
-                <animal>
-                    <nombre>Jorge</nombre>
-                    <tipo>caiman</tipo>
-                    <color>verde</color>
-                    <edad>34</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Carlos</nombre>
-                    <tipo>tucan</tipo>
-                    <color>rojo</color>
-                    <edad>11</edad>
-                </animal>
-                <animal>
-                    <nombre>Kiko</nombre>
-                    <tipo>loro</tipo>
-                    <color>verde</color>
-                    <edad>22</edad>
-                </animal>
-            </selva>
-            <selva>
-                <animal>
-                    <nombre>Toto</nombre>
-                    <tipo>pollo</tipo>
-                    <color>cafe</color>
-                    <edad>7</edad>
-                </animal>
-                <animal>
-                    <nombre>Tuki</nombre>
-                    <tipo>tucansito</tipo>
-                    <color>rojo blanco</color>
-                    <edad>10</edad>
-                </animal>
-            </selva>
-        </park>
-    </zoologico>
-</nuevayork>
+let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+  <libro>
+    <titulo>La vida está en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
+</biblioteca>
 `
 editorXML.value = textoEntrada
 

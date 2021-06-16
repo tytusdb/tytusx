@@ -8,7 +8,7 @@ class Acceso {
   }
 
   getValorImplicito(entorno, ast, padre) {
-    
+   
     switch (ast.valor) {
       case "ELEMENTO":
         //0->EXPRESION 1->ELEMENTO_P
@@ -38,11 +38,12 @@ class Acceso {
         //2-> Expresion si vienen varias
         if (ast.hijos[1].valor == "CAJETIN") {
           this.indice = this.procesarIndice(ast.hijos[1].hijos[1]);
+          
         }
         if (ast.hijos[0].valor == "SIMBOLOS") {
-          let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
           
-
+          let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
+         
           if (!ArregloEntorno) {
             return null;
           }
@@ -57,6 +58,7 @@ class Acceso {
             }
           }
           if (ast.hijos[2].valor == "EXPRESION") {
+            
             instruccion = ast.hijos[2];
           } else {
             instruccion = {
@@ -67,14 +69,14 @@ class Acceso {
           if (instruccion.valor == "TODO_") {
             if (ast.hijos[0].hijos[0] == "//") {
               let respuesta = "";
-              padre=entorno;
+              
               for (const iterator of ArregloEntorno) {
                 if (indiceAux == this.indice || this.indice == -1) {
      
                   respuesta += this.getValorImplicito(
                     iterator,
                     instruccion,
-                    padre
+                    entorno
                   );
                 }
                 indiceAux++;
@@ -83,25 +85,29 @@ class Acceso {
               return respuesta;
             }
             
+            if(ast.hijos[0].hijos[1].hijos[0]==".."){
+              return this.getValorImplicito(ArregloEntorno[0], instruccion, padre);
+            }
+            
             return this.getValorImplicito(entorno, instruccion, padre);
           } else {
             if (ArregloEntorno.length == 0) {
-              padre=entorno;
+             
               let temrespuesta = this.getValorImplicito(
                 ArregloEntorno,
                 instruccion,
-                padre
+                entorno
               );
               return temrespuesta;
             }
             for (const entorno_ of ArregloEntorno) {
               //Iteramos el arreglo de entornos para aplicar estos cambios en todos
               let temrespuesta;
-              padre=entorno;
+              
               temrespuesta = this.getValorImplicito(
                 entorno_,
                 instruccion,
-                padre
+                entorno
               ); //Concatenamos todas las respuestas que encontramos
 
               if (indiceAux == this.indice || this.indice == -1) {
@@ -128,8 +134,8 @@ class Acceso {
           if (ast.hijos.length > 1) {
             let respuesta = "";
             for (const hijo of entorno.hijos) {
-              padre=entorno;
-              respuesta += this.getValorImplicito(hijo, ast.hijos[2], padre);
+              
+              respuesta += this.getValorImplicito(hijo, ast.hijos[2], entorno);
             }
 
             return respuesta;
@@ -156,8 +162,8 @@ class Acceso {
         
         if (entorno.tipo == "completa") {
           for (const iterator of entorno.hijos) {
-            padre=entorno;
-            contenido += this.getValorImplicito(iterator, ast, padre);
+            
+            contenido += this.getValorImplicito(iterator, ast, entorno);
           }
 
           
@@ -202,6 +208,7 @@ class Acceso {
       } else if (AST.hijos[1].hijos[0] == "@") {
         return [entorno];
       }else if (AST.hijos[1].hijos[0] == "..") {
+        
         return [padre];
       }
 
@@ -272,10 +279,26 @@ class Acceso {
     return null;
   }
   procesarIndice(operaciones) {
-    if (operaciones.hijos[0].valor == "ITEMINICIO") {
-      return operaciones.hijos[0].hijos[0];
+    if (operaciones.valor) {
+      if (operaciones.valor=="SUM") {
+        let num1=this.procesarIndice(operaciones.hijos[0]);
+        let num2=this.procesarIndice(operaciones.hijos[2])
+        return parseInt(num1) + parseInt(num2);
+      }else if (operaciones.valor=="RES") {
+        let num1=this.procesarIndice(operaciones.hijos[0]);
+        let num2=this.procesarIndice(operaciones.hijos[2])
+        return parseInt(num1) - parseInt(num2);
+      }else if (operaciones.valor=="MUL") {
+        let num1=this.procesarIndice(operaciones.hijos[0]);
+        let num2=this.procesarIndice(operaciones.hijos[2])
+        return parseInt(num1) * parseInt(num2);
+      }else if (operaciones.valor=="DIV") {
+        let num1=this.procesarIndice(operaciones.hijos[0]);
+        let num2=this.procesarIndice(operaciones.hijos[2])
+        return parseInt(num1) / parseInt(num2);
+      }
     }
-    return -1;
+    return operaciones;//No devuelve nada
   }
   getConsultaDobleAtributo(etiqueta, entornos) {
     if (entornos != null) {
