@@ -20,6 +20,10 @@ export class Modulo extends Expresion {
         this.columna = c;
     }
     
+    copiarValor(): Expresion {
+        return new Modulo(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    }
+
     getValor(): Expresion {
         var res:Literal = new Literal(69,'@ERROR@', this.linea, this.columna);
         var e1 = this.hI.getValor();

@@ -29,6 +29,9 @@ var Multiplicacion = /** @class */ (function (_super) {
         _this.columna = c;
         return _this;
     }
+    Multiplicacion.prototype.copiarValor = function () {
+        return new Multiplicacion(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    };
     Multiplicacion.prototype.getValor = function () {
         var res = new Literal_1.Literal(69, '@ERROR@', this.linea, this.columna);
         var e1 = this.hI.getValor();

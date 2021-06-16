@@ -29,6 +29,9 @@ var Division = /** @class */ (function (_super) {
         _this.columna = c;
         return _this;
     }
+    Division.prototype.copiarValor = function () {
+        return new Division(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    };
     Division.prototype.getValor = function () {
         var res = new Literal_1.Literal(69, '@ERROR@', this.linea, this.columna);
         var e1 = this.hI.getValor();

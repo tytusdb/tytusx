@@ -20,6 +20,10 @@ export class Division extends Expresion {
         this.columna = c;
     }
     
+    copiarValor(): Expresion {
+        return new Division(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    }
+
     getValor(): Expresion {
         var res:Literal = new Literal(69,'@ERROR@', this.linea, this.columna);
         var e1 = this.hI.getValor();
