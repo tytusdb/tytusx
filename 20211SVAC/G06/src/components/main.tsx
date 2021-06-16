@@ -10,9 +10,8 @@ const parser = require('../Grammar/xmlGrammar');
 const parserXmlDesc = require('../Grammar/xmlGrammarDesc');
 const parserReport = require('../Reportes/xmlReport');
 const parserReportDesc = require('../Reportes/xmlReportDesc');
-/*
 const parseXPATH = require('../Grammar/XPATHparser');
-const parseXPATHDesc = require('../Grammar/XPATHparserDesc');*/
+const parseXPATHDesc = require('../Grammar/XPATHparserDesc');
 
 export default class Main extends Component {
 
@@ -48,7 +47,10 @@ export default class Main extends Component {
             encoding = result.encoding;
             listaErrores = result.listaErrores;
             entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
-            
+            var buf = new Buffer("Hello World");
+            console.log(buf.toString("ascii"));
+            console.log("---------------------");
+            console.log(buf.toString("utf8"));
             if (listaErrores.length === 0) {
                 var xmlResRep = parserReport.parse(this.state.xml);
                 this.setState({
@@ -72,7 +74,28 @@ export default class Main extends Component {
         console.log(listaErrores);
 
 
-        
+        try {
+            const querys = parseXPATH.parse(this.state.xpath)
+            var erroresSemanticos: string[] = [];
+            var salida = "";
+
+            for (const query of querys) {
+                try {
+                    salida += query.execute(ast[0]).value;
+
+                } catch (error) {
+                    erroresSemanticos.push(error)
+                }
+            }
+            console.log(salida);
+
+            this.setState({
+                consoleResult: salida,
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
 
     }
 
@@ -115,7 +138,37 @@ export default class Main extends Component {
         }
         //console.log(ast)
         //console.log(listaErrores)
-       
+        try {
+            const querysDesc = parseXPATHDesc.parse(this.state.xpath)
+            console.log(querysDesc);
+            for (const key in querysDesc) {
+                texto = querysDesc[key].GraficarAST(texto);
+                if (indice < querysDesc.length) {
+                    texto += "nodo" + key.toString() + "[label=\"|\"];\n"
+                    texto += "nodo" + querysDesc[key].line.toString() + "_" + querysDesc[key].column.toString() + "->nodo" + key.toString() + ";\n";
+                    texto += "nodo" + key.toString() + "->nodo" + querysDesc[indice].line.toString() + "_" + querysDesc[indice].column.toString() + ";\n";
+                    indice++;
+                }
+            }
+            const querys2 = parseXPATH.parse(this.state.xpath)
+            var erroresSemanticos: string[] = [];
+            var salida = "";
+            for (const query of querys2) {
+                try {
+                    salida += query.execute(ast[0]).value;
+                } catch (error) {
+                    erroresSemanticos.push(error)
+                }
+            }
+            console.log(salida);
+
+            this.setState({
+                consoleResult: salida
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
 
         
     }
