@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\hilbe\Downloads\Compiladores_P2-main (4)\Compiladores_P2-main\CompiP2\src\main.ts */"zUnb");
+module.exports = __webpack_require__(/*! C:\Users\h\Desktop\Prueba Compi\Compiladores_P2-main (4)\Compiladores_P2-main\CompiP2\src\main.ts */"zUnb");
 
 
 /***/ }),
