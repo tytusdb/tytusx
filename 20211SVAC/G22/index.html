@@ -88,7 +88,7 @@
                 </div>
                 <div style="width:48%; padding-right: 5%; float:right;">
 
-                    <button type="button" class="btn btn-light btn_blue" onclick="" id ="ascendente" ><img src="./css/imagenes/asc.png" />
+                    <button type="button" class="btn btn-light btn_blue" onclick="analisisAsc()" id ="ascendente" ><img src="./css/imagenes/asc.png" />
                         Analizar Ascendente </button>
                     <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/desc.png" />
                         Analizar Descendente </button>
@@ -120,20 +120,17 @@
     <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
     <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
     <script type="text/javascript" src="Scripts/Gramaticas/xml/gramarxml.js"></script>
-    <script type="text/javascript" src="Scripts/Reportes/GraficaXML.js"></script>
-    <script type="text/javascript" src="parser.js"></script>
-    <script type="module" >
+    <script type="text/javascript" >
 
-        $(function() {
-            $('#ascendente').click(function() {
-                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
-                requirejs(['Scripts/Gramaticas/xml/gramarxml.js'],
-                    function (grammarXML){
-                        let entrada = document.getElementById("editor").value;
-                        let xmlAST = grammarXML.getParser().parse(entrada);
-                    });
+    function analisisAsc(){
+        // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+        requirejs(['grammarXMLAsc'],
+            function (grammarXMLAsc){
+                let entrada = document.getElementById("editor").value;
+                let xmlAST = grammarXMLAsc.getParser().parse(entrada);
+                console.log(xmlAST);
             });
-        });
+    }
 
     </script>
 
