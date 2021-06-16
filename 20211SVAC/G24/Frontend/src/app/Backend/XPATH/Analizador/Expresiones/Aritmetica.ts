@@ -1,6 +1,6 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
@@ -26,15 +26,15 @@ export default class Aritmetica extends Instruccion {
       this.operando2 = op2;
     }
   }
-  public getNodo(): nodoAST {
+  public getNodosAST(): nodoAST {
     let nodo = new nodoAST('ARITMETICA');
     if (this.operandoUnico != null) {
       nodo.agregarHijo(this.operador + '');
-      nodo.agregarHijoAST(this.operandoUnico.getNodo());
+      nodo.agregarHijoAST(this.operandoUnico.getNodosAST());
     } else {
-      nodo.agregarHijoAST(this.operando1?.getNodo());
+      nodo.agregarHijoAST(this.operando1?.getNodosAST());
       nodo.agregarHijo(this.operador + '', 'ar', this.operador);
-      nodo.agregarHijoAST(this.operando2?.getNodo());
+      nodo.agregarHijoAST(this.operando2?.getNodosAST());
     }
     return nodo;
   }
@@ -43,12 +43,12 @@ export default class Aritmetica extends Instruccion {
     izq = der = uno = null;
     if (this.operandoUnico != null) {
       uno = this.operandoUnico.interpretar(arbol, tabla);
-      if (uno instanceof Errores) return uno;
+      if (uno instanceof NodoErrores) return uno;
     } else {
       izq = this.operando1?.interpretar(arbol, tabla);
-      if (izq instanceof Errores) return izq;
+      if (izq instanceof NodoErrores) return izq;
       der = this.operando2?.interpretar(arbol, tabla);
-      if (der instanceof Errores) return der;
+      if (der instanceof NodoErrores) return der;
     }
     switch (this.operador) {
       case Operadores.SUMA:
@@ -64,7 +64,7 @@ export default class Aritmetica extends Instruccion {
       case Operadores.MENOSNUM:
         return this.opMenosUnario(uno);
       default:
-        return new Errores(
+        return new NodoErrores(
           'ERROR SEMANTICO',
           'OPERADOR INVALIDO',
           this.fila,
@@ -176,7 +176,7 @@ export default class Aritmetica extends Instruccion {
           return izq + '' + der;
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -231,7 +231,7 @@ export default class Aritmetica extends Instruccion {
           return otro1 + '' + otro;
         default:
           //error semantico
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -283,7 +283,7 @@ export default class Aritmetica extends Instruccion {
           return parseInt(izq) - res;
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -313,7 +313,7 @@ export default class Aritmetica extends Instruccion {
           return parseFloat(izq) - res;
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -337,7 +337,7 @@ export default class Aritmetica extends Instruccion {
           return otr1 == 'true' ? parseFloat(der) - 1 : parseFloat(der);
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -346,7 +346,7 @@ export default class Aritmetica extends Instruccion {
       }
     } else if (numero == 4) {
       //cadena
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -369,7 +369,7 @@ export default class Aritmetica extends Instruccion {
           return res1 - parseFloat(der);
         default:
           //error semantico
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -416,7 +416,7 @@ export default class Aritmetica extends Instruccion {
           return parseInt(izq) * res;
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -441,7 +441,7 @@ export default class Aritmetica extends Instruccion {
           return parseFloat(izq) * res;
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -451,7 +451,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 3) {
       //boolean
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -460,7 +460,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 4) {
       //cadena
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -483,7 +483,7 @@ export default class Aritmetica extends Instruccion {
           return res1 * parseFloat(der);
         default:
           //error semantico
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -536,7 +536,7 @@ export default class Aritmetica extends Instruccion {
             : 'NO SE PUEDE DIVIDIR SOBRE CERO';
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -567,7 +567,7 @@ export default class Aritmetica extends Instruccion {
             : 'NO SE PUEDE DIVIDIR SOBRE CERO';
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -577,7 +577,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 3) {
       //boolean
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -586,7 +586,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 4) {
       //cadena
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -613,7 +613,7 @@ export default class Aritmetica extends Instruccion {
             : 'NO SE PUEDE DIVIDIR SOBRE CERO';
         default:
           //error semantico
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -656,7 +656,7 @@ export default class Aritmetica extends Instruccion {
           return parseFloat(izq) % parseFloat(der);
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -676,7 +676,7 @@ export default class Aritmetica extends Instruccion {
           return parseFloat(izq) % parseFloat(der);
         default:
           //error
-          return new Errores(
+          return new NodoErrores(
             'SEMANTICO',
             'TIPO DE DATO NO PERMITIDO',
             this.fila,
@@ -686,7 +686,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 3) {
       //boolean
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -695,7 +695,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 4) {
       //cadena
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,
@@ -704,7 +704,7 @@ export default class Aritmetica extends Instruccion {
     } else if (numero == 5) {
       //caracter
       //error
-      return new Errores(
+      return new NodoErrores(
         'SEMANTICO',
         'TIPO DE DATO NO PERMITIDO',
         this.fila,

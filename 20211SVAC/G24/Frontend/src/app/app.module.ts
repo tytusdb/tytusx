@@ -21,9 +21,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { CodemirrorModule } from 'ng2-codemirror';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ArbolCstComponent } from './paginas/arbol-cst/arbol-cst.component';
 import { GramaticalReportComponent } from './paginas/gramatical-report/gramatical-report.component';
 import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
+import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.component';
 
 @NgModule({
   declarations: [
@@ -35,9 +35,9 @@ import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
     SideBarComponent,
     TabsinicioComponent,
     ContenidoInicioComponent,
-    ArbolCstComponent,
     GramaticalReportComponent,
     AstDescComponent,
+    XpathAscAstComponent,
   ],
   imports: [
     BrowserModule,
