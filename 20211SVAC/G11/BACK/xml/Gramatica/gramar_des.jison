@@ -1,8 +1,6 @@
 // IMPORTS ERRORES Y FUNCIONES
 %{
-    let tabla_err = require('./tabla_error');
-    let nodo_err  = require('./nodo_error');
-     
+
      function change_especials(etiqueta){
           if(etiqueta.includes("&lt;")){
                return etiqueta.replace(/&lt;/g,'<');
@@ -42,7 +40,7 @@
 
      function error_semanti(izqid,dereid,fila,columna){
           if(!(izqid==dereid)){
-               tabla_err.errores.addError(new nodo_err.nodoError('Semántico','Las etiquetas no coinciden: '+izqid+' -- '+dereid,fila,columna));
+               errores.addError(new nodoError('Semántico','Las etiquetas no coinciden: '+izqid+' -- '+dereid,fila,columna));
           }
      }
 
@@ -56,7 +54,7 @@
           if (posicion !== -1){
                return text.substr(pos_final,longitud);
           }else{
-               tabla_err.errores.addError(new nodo_err.nodoError('Sintactico','No se encuentra el token: encoding',fila,columna));
+               errores.addError(new nodoError('Sintactico','No se encuentra el token: encoding',fila,columna));
           }
      }
 %}
@@ -79,7 +77,7 @@
 <Etiqueta>"="                                                                             { return 'IGUAL'; }
 <Etiqueta>([\"\“\”](([^\"\“\”\\])*([\\].)*)*[\"\“\”])|([\'](([^\'\\])*([\\].)*)*[\'])     { yytext=change_especials(yytext); return 'CADENA'; }
 <Etiqueta>[\/]?[>]                                                                        { this.popState(); return tag_principal(yytext); }
-<Etiqueta>.                                                                               { tabla_err.errores.addError(new nodo_err.nodoError('Lexico','No se esperaba el caracter: '+yytext,yylloc.first_line,yylloc.first_column)); }
+<Etiqueta>.                                                                               { errores.addError(new nodoError('Lexico','No se esperaba el caracter: '+yytext,yylloc.first_line,yylloc.first_column)); }
 
 // RESERVADAS
 "&lt;"                                          return 'LESS'
@@ -91,15 +89,13 @@
 ([^><&'"])+                                     return 'TEXTO'
 
 <<EOF>>                                         return 'EOF'
-.                                               { tabla_err.errores.addError(new nodo_err.nodoError('Lexico','No se esperaba el caracter: '+yytext,yylloc.first_line,yylloc.first_column)); }//ERRORES LEXICOS
+.                                               { errores.addError(new nodoError('Lexico','No se esperaba el caracter: '+yytext,yylloc.first_line,yylloc.first_column)); }//ERRORES LEXICOS
 /lex
 
 %start start
 
 //SECCION DE IMPORTS
 %{
-    const {Elemento} = require("../scripts/js/Elemento");
-    const {Atributo} = require("../scripts/js/Atributo");
     let lista_gramatica = [];
     let tipo_encoding ="";
 %}
@@ -123,7 +119,7 @@ raiz_p : raiz raiz_p       { $2.push($1); $$ = $2; lista_gramatica.push({'p':'ra
        ;
 
 raiz : elemento            { $$ = $1; lista_gramatica.push({'p':'raiz -> elemento','g':'raiz.val = elemento.val'}); }
-     | error               { tabla_err.errores.addError(new nodo_err.nodoError('Sintactico','No se esperaba el token: '+yytext,this._$.first_line,this._$.first_column)); lista_gramatica.push({'p':'raiz -> error','g':'error'}); }
+     | error               { errores.addError(new nodoError('Sintactico','No se esperaba el token: '+yytext,this._$.first_line,this._$.first_column)); lista_gramatica.push({'p':'raiz -> error','g':'error'}); }
      ;
 
 elemento : ETI_A list_atributos ETI_CS elementos  ETI_C ETI_CS               { $$ = new Elemento($1,'',@1.first_line, @1.first_column,$2,$4,$5); error_semanti($1,$5,@1.first_line,@1.first_column); lista_gramatica.push({'p':'elemento -> ETI_A lista_atributos ETI_CS elementos ETI_C ETI_CS','g':'elemento.val = array(lista_atributos.val,elementos.val)'}); }

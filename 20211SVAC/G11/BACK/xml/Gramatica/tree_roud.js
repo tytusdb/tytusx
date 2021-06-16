@@ -1,8 +1,7 @@
 var id_n = 1;
-
 class Tree_tour {
     constructor() {
-
+        id_n=1;
     }
 
     tour(node) {
