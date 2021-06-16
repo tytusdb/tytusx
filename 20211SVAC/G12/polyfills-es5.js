@@ -489,6 +489,7 @@
     },
 
     /***/
+<<<<<<< Updated upstream
     1:
     /*!***********************************************************************************************************************************!*\
       !*** multi ./node_modules/@angular-devkit/build-angular/src/webpack/es5-polyfills.js zone.js/dist/zone-legacy ./src/polyfills.ts ***!
@@ -513,6 +514,8 @@
     },
 
     /***/
+=======
+>>>>>>> Stashed changes
     "14Sl":
     /*!******************************************************************************!*\
       !*** ./node_modules/core-js/internals/fix-regexp-well-known-symbol-logic.js ***!
@@ -967,6 +970,30 @@
       }() || Function('return this')();
       /***/
 
+    },
+
+    /***/
+    3:
+    /*!***********************************************************************************************************************************!*\
+      !*** multi ./node_modules/@angular-devkit/build-angular/src/webpack/es5-polyfills.js zone.js/dist/zone-legacy ./src/polyfills.ts ***!
+      \***********************************************************************************************************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function _(module, exports, __webpack_require__) {
+      __webpack_require__(
+      /*! C:\Users\hilbe\Desktop\USAC\17vo Semestre 2020\COMPI2_Vacas\PruebasCommit\node_modules\@angular-devkit\build-angular\src\webpack\es5-polyfills.js */
+      "voQr");
+
+      __webpack_require__(
+      /*! zone.js/dist/zone-legacy */
+      "R0gw");
+
+      module.exports = __webpack_require__(
+      /*! C:\Users\hilbe\Desktop\USAC\17vo Semestre 2020\COMPI2_Vacas\PruebasCommit\src\polyfills.ts */
+      "hN/g");
+      /***/
     },
 
     /***/
@@ -19662,6 +19689,6 @@
       });
       /***/
     }
-  }, [[1, "runtime"]]]);
+  }, [[3, "runtime"]]]);
 })();
 //# sourceMappingURL=polyfills-es5.js.map

@@ -1,13 +1,17 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["polyfills"],{
 
-/***/ 2:
+/***/ 4:
 /*!********************************!*\
   !*** multi ./src/polyfills.ts ***!
   \********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< Updated upstream
 module.exports = __webpack_require__(/*! C:\Users\fuent\Desktop\compiladores 2_p1_github\PruebasCommit\src\polyfills.ts */"hN/g");
+=======
+module.exports = __webpack_require__(/*! C:\Users\hilbe\Desktop\USAC\17vo Semestre 2020\COMPI2_Vacas\PruebasCommit\src\polyfills.ts */"hN/g");
+>>>>>>> Stashed changes
 
 
 /***/ }),
@@ -3038,5 +3042,5 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ })
 
-},[[2,"runtime"]]]);
+},[[4,"runtime"]]]);
 //# sourceMappingURL=polyfills-es2015.js.map
