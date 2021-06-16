@@ -615,6 +615,318 @@ class Ejecucion {
                 return a;
             }
         }
+        if (this.identificar('RELACIONALES', nodo)) {
+            let izq, der = null;
+            let op = "";
+            //console.log("entró relacional")
+            nodo.hijos.forEach((element) => {
+                if (element instanceof Object) {
+                    if (op === "" && this.identificar('integer', element)) {
+                        izq = new primitivo_1.Primitivo(Number(element.hijos[0]), 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('integer', element)) {
+                        der = new primitivo_1.Primitivo(Number(element.hijos[0]), 1, 1);
+                    }
+                    else if (op === "" && this.identificar('double', element)) {
+                        izq = new primitivo_1.Primitivo(Number(parseInt(element.hijos[0])), 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('double', element)) {
+                        der = new primitivo_1.Primitivo(Number(parseInt(element.hijos[0])), 1, 1);
+                    }
+                    else if (op === "" && this.identificar('string', element)) {
+                        let texto = element.hijos[0].slice(1, -1);
+                        let t = texto.split(" ");
+                        texto = '';
+                        for (var i = 0; i < t.length; i++) {
+                            texto += t[i];
+                        }
+                        izq = new primitivo_1.Primitivo(texto, 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('string', element)) {
+                        //console.log("entró string derecho");
+                        let texto = element.hijos[0].slice(1, -1);
+                        let t = texto.split(" ");
+                        texto = '';
+                        for (var i = 0; i < t.length; i++) {
+                            texto += t[i];
+                        }
+                        //console.log(texto);
+                        der = new primitivo_1.Primitivo(texto, 1, 1);
+                    }
+                    else if (op === "" && this.identificar('ARITMETICAS', element)) {
+                        izq = this.calcular(element, logica, position);
+                    }
+                    else if (!(op === "") && this.identificar('ARITMETICAS', element)) {
+                        der = this.calcular(element, logica, position);
+                    }
+                    else if (op === "" && this.identificar('ORDEN', element)) {
+                        if (element.hijos[0] === 'position')
+                            izq = new primitivo_1.Primitivo(Number(position), 1, 1);
+                        else
+                            izq = new primitivo_1.Primitivo(Number(this.consultaXML.length), 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('ORDEN', element)) {
+                        if (element.hijos[0] === 'position')
+                            der = new primitivo_1.Primitivo(Number(position), 1, 1);
+                        else
+                            der = new primitivo_1.Primitivo(Number(this.consultaXML.length), 1, 1);
+                    }
+                    else if (op === "" && this.identificar('ATRIBUTO_PREDICADO', element)) {
+                        logica.listaAtributos.forEach(atri => {
+                            if (atri.identificador === element.hijos[1]) {
+                                let valor = atri.valor.slice(1, -1);
+                                if (Number.isInteger(parseInt(valor)) && !valor.includes("/") && !valor.includes("-")) {
+                                    //console.log(parseInt(valor));
+                                    izq = new primitivo_1.Primitivo(Number(parseInt(valor)), 1, 1);
+                                }
+                                else {
+                                    let texto = valor;
+                                    let t = texto.split(" ");
+                                    texto = '';
+                                    for (var i = 0; i < t.length; i++) {
+                                        texto += t[i];
+                                    }
+                                    izq = new primitivo_1.Primitivo(texto, 1, 1);
+                                }
+                            }
+                        });
+                    }
+                    else if (!(op === "") && this.identificar('ATRIBUTO_PREDICADO', element)) {
+                        logica.listaAtributos.forEach(atri => {
+                            if (atri.identificador === element.hijos[1]) {
+                                let valor = atri.valor.slice(1, -1);
+                                if (Number.isInteger(parseInt(valor)) && !valor.includes("/") && !valor.includes("-")) {
+                                    der = new primitivo_1.Primitivo(Number(parseInt(valor)), 1, 1);
+                                }
+                                else {
+                                    let texto = valor;
+                                    let t = texto.split(" ");
+                                    texto = '';
+                                    for (var i = 0; i < t.length; i++) {
+                                        texto += t[i];
+                                    }
+                                    der = new primitivo_1.Primitivo(texto, 1, 1);
+                                }
+                            }
+                        });
+                    }
+                    else if (op === "" && this.identificar('id', element)) {
+                        //console.log("entró id");
+                        logica.listaObjetos.forEach(ob => {
+                            if (ob.identificador === element.hijos[0]) {
+                                let texto = "";
+                                for (var i = 0; i < ob.texto.length; i++) {
+                                    texto += ob.texto[i];
+                                }
+                                if (Number.isInteger(parseInt(texto)) && !texto.includes("/") && !texto.includes("-")) {
+                                    //console.log(parseInt(texto));
+                                    izq = new primitivo_1.Primitivo(Number(parseInt(texto)), 1, 1);
+                                }
+                                else {
+                                    //console.log(texto);
+                                    izq = new primitivo_1.Primitivo(texto, 1, 1);
+                                }
+                            }
+                        });
+                    }
+                    else if (!(op === "") && this.identificar('id', element)) {
+                        logica.listaObjetos.forEach(ob => {
+                            if (ob.identificador === element.hijos[0]) {
+                                //console.log(ob.texto);
+                                let texto = "";
+                                for (var i = 0; i < ob.texto.length; i++) {
+                                    texto += ob.texto[i];
+                                }
+                                if (Number.isInteger(parseInt(texto)) && !texto.includes("/") && !texto.includes("-")) {
+                                    //console.log(parseInt(texto));
+                                    der = new primitivo_1.Primitivo(Number(parseInt(texto)), 1, 1);
+                                }
+                                else {
+                                    //console.log(texto);
+                                    der = new primitivo_1.Primitivo(texto, 1, 1);
+                                }
+                            }
+                        });
+                    }
+                    else if (op === "" && this.identificar('punto', element)) {
+                        //console.log("at " + this.atributo);
+                        if (logica.identificador === this.punto && !this.atributo) {
+                            let texto = "";
+                            for (var i = 0; i < logica.texto.length; i++) {
+                                texto += logica.texto[i];
+                            }
+                            if (Number.isInteger(parseInt(texto)) && !texto.includes("/") && !texto.includes("-")) {
+                                //console.log(parseInt(texto));
+                                izq = new primitivo_1.Primitivo(Number(parseInt(texto)), 1, 1);
+                            }
+                            else {
+                                //console.log(texto);
+                                izq = new primitivo_1.Primitivo(texto, 1, 1);
+                            }
+                        }
+                        else {
+                            logica.listaAtributos.forEach(atri => {
+                                if (atri.identificador === this.punto) {
+                                    let valor = atri.valor.slice(1, -1);
+                                    if (Number.isInteger(parseInt(valor)) && !valor.includes("/") && !valor.includes("-")) {
+                                        izq = new primitivo_1.Primitivo(Number(parseInt(valor)), 1, 1);
+                                    }
+                                    else {
+                                        let texto = valor;
+                                        let t = texto.split(" ");
+                                        texto = '';
+                                        for (var i = 0; i < t.length; i++) {
+                                            texto += t[i];
+                                        }
+                                        izq = new primitivo_1.Primitivo(texto, 1, 1);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if (!(op === "") && this.identificar('punto', element)) {
+                        if (logica.identificador === this.punto && !this.atributo) {
+                            //console.log(logica.texto);
+                            let texto = "";
+                            for (var i = 0; i < logica.texto.length; i++) {
+                                texto += logica.texto[i];
+                            }
+                            if (Number.isInteger(parseInt(texto)) && !texto.includes("/") && !texto.includes("-")) {
+                                //console.log(parseInt(texto));
+                                der = new primitivo_1.Primitivo(Number(parseInt(texto)), 1, 1);
+                            }
+                            else {
+                                //console.log(texto);
+                                der = new primitivo_1.Primitivo(texto, 1, 1);
+                            }
+                        }
+                        else {
+                            logica.listaAtributos.forEach(atri => {
+                                if (atri.identificador === this.punto) {
+                                    let valor = atri.valor.slice(1, -1);
+                                    if (Number.isInteger(parseInt(valor)) && !valor.includes("/") && !valor.includes("-")) {
+                                        der = new primitivo_1.Primitivo(Number(parseInt(valor)), 1, 1);
+                                    }
+                                    else {
+                                        let texto = valor;
+                                        let t = texto.split(" ");
+                                        texto = '';
+                                        for (var i = 0; i < t.length; i++) {
+                                            texto += t[i];
+                                        }
+                                        der = new primitivo_1.Primitivo(texto, 1, 1);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if (op === "" && this.identificar('PATH', element)) {
+                        //console.log("at " + this.atributo);
+                        if (logica.identificador === this.punto && !this.atributo) {
+                            let texto = "";
+                            for (var i = 0; i < logica.texto.length; i++) {
+                                texto += logica.texto[i];
+                            }
+                            if (Number.isInteger(parseInt(texto)) && !texto.includes("/") && !texto.includes("-")) {
+                                //console.log(parseInt(texto));
+                                izq = new primitivo_1.Primitivo(Number(parseInt(texto)), 1, 1);
+                            }
+                            else {
+                                //console.log(texto);
+                                izq = new primitivo_1.Primitivo(texto, 1, 1);
+                            }
+                        }
+                        else {
+                            logica.listaAtributos.forEach(atri => {
+                                if (atri.identificador === this.punto) {
+                                    let valor = atri.valor.slice(1, -1);
+                                    //console.log(valor);
+                                    if (Number.isInteger(parseInt(valor)) && !valor.includes("/") && !valor.includes("-")) {
+                                        izq = new primitivo_1.Primitivo(Number(parseInt(valor)), 1, 1);
+                                    }
+                                    else {
+                                        let texto = valor;
+                                        let t = texto.split(" ");
+                                        texto = '';
+                                        for (var i = 0; i < t.length; i++) {
+                                            texto += t[i];
+                                        }
+                                        izq = new primitivo_1.Primitivo(texto, 1, 1);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if (!(op === "") && this.identificar('PATH', element)) {
+                        if (logica.identificador === this.punto && !this.atributo) {
+                            //console.log(logica.texto);
+                            let texto = "";
+                            for (var i = 0; i < logica.texto.length; i++) {
+                                texto += logica.texto[i];
+                            }
+                            if (Number.isInteger(parseInt(texto)) && !texto.includes("/") && !texto.includes("-")) {
+                                //console.log(parseInt(texto));
+                                der = new primitivo_1.Primitivo(Number(parseInt(texto)), 1, 1);
+                            }
+                            else {
+                                //console.log(texto);
+                                der = new primitivo_1.Primitivo(texto, 1, 1);
+                            }
+                        }
+                        else {
+                            logica.listaAtributos.forEach(atri => {
+                                if (atri.identificador === this.punto) {
+                                    let valor = atri.valor.slice(1, -1);
+                                    if (Number.isInteger(parseInt(valor)) && !valor.includes("/") && !valor.includes("-")) {
+                                        der = new primitivo_1.Primitivo(Number(parseInt(valor)), 1, 1);
+                                    }
+                                    else {
+                                        let texto = valor;
+                                        let t = texto.split(" ");
+                                        texto = '';
+                                        for (var i = 0; i < t.length; i++) {
+                                            texto += t[i];
+                                        }
+                                        der = new primitivo_1.Primitivo(texto, 1, 1);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                else if (typeof element === 'string') {
+                    if (!(element === '(') && !(element === ')')) {
+                        op = element;
+                    }
+                }
+            });
+            if (izq && der && !(op === "")) {
+                //console.log(izq.getValorImplicito(izq) + ',' + der.getValorImplicito(der));
+                let a;
+                if (op === '<') {
+                    a = new relacional_1.Relacion(izq, der, operacion_1.Operador.MENOR_QUE, 1, 1);
+                }
+                else if (op === '>') {
+                    a = new relacional_1.Relacion(izq, der, operacion_1.Operador.MAYOR_QUE, 1, 1);
+                }
+                else if (op === '<=') {
+                    a = new relacional_1.Relacion(izq, der, operacion_1.Operador.MENOR_IGUA_QUE, 1, 1);
+                }
+                else if (op === '>=') {
+                    a = new relacional_1.Relacion(izq, der, operacion_1.Operador.MAYOR_IGUA_QUE, 1, 1);
+                }
+                else if (op === '=') {
+                    a = new relacional_1.Relacion(izq, der, operacion_1.Operador.IGUAL_IGUAL, 1, 1);
+                }
+                else if (op === '!=') {
+                    a = new relacional_1.Relacion(izq, der, operacion_1.Operador.DIFERENTE_QUE, 1, 1);
+                }
+                else if (op === '!') {
+                    a = new relacional_1.Relacion(izq, null, operacion_1.Operador.NOT, 1, 1);
+                }
+                return a;
+            }
+        }
     }
     traducir() {
         let cadena = '';
