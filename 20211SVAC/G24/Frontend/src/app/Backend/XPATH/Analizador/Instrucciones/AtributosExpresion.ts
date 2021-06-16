@@ -18,11 +18,11 @@ export default class AtributoExpresion extends Instruccion {
         throw new Error("Method not implemented.");
     }
     getNodosAST(): nodoAST {
-        var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
+        var nodo= new nodoAST("ATRIBUTO"); //PADRE SELECT
         if(this.expresion!=null){
-            var exp= new nodoAST("EXPRESION");
-            exp.agregarHijoAST(this.expresion.getNodosAST())
-            nodo.agregarHijoAST(exp);
+            nodo.agregarHijo(this.Operacion)
+            nodo.agregarHijoAST(this.expresion.getNodosAST())
+           
         }
         
         return nodo;
