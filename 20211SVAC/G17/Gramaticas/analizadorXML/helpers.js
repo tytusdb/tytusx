@@ -56,20 +56,37 @@ export class Atributo extends nodo {
 }
 
 export function CambiarCodificacion (contenido, tipoCodificacion) {
-    var buffer = Buffer.from(contenido)
-    switch(tipoCodificacion){
+    //var buffer = Buffer.from(contenido)
+    var iconv = require('iconv-lite');
+    switch(tipoCodificacion.toLowerCase()){
         case "utf8":
-            contenido = buffer.toString("utf8")
-        break;
+        case "utf-8":
+            contenido = iconv.decode(contenido, "utf-8");
+            break
+        case "utf-16le":
         case "utf16le":
-            contenido = buffer.toString("utf16le")
-        break;
+            contenido = iconv.decode(contenido, "utf-16le");
+            break
+        case "utf-16be":
+        case "utf16be":
+            contenido = iconv.decode(contenido, "utf-16be");
+            break
+        case "utf-16":
+        case "utf-16":
+            contenido = iconv.decode(contenido, "utf-16");
+            break;
         case "ascii":
-            contenido = buffer.toString("ascii")
+            contenido = iconv.decode(contenido, "ascii");
+            var utf16beexists=iconv.encodingExists("ascii")
+        case "iso-8859-1":
+            contenido = iconv.decode(contenido, "ISO-8859-1");
+            // const bytes = stringToBytes(contenido);
+            // const blob = new Blob([bytes.buffer], { type: 'text/plain; charset=ISO-8859-1' });
+            // contenido = buffer.toString("")
         break;
         default:
             //alert('No se ha logrado identificar el tipo de codificación del archivo, se usará por defect UTF-8.')
-            contenido = buffer.toString("utf8")
+            contenido = iconv.decode(contenido, "utf-8");
     }
 
     return contenido
