@@ -151,7 +151,7 @@ class Acceso {
                   }
                 }
               }
-              //this.indice = -1;
+              this.indice = -1;
             }
           }
 

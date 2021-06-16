@@ -464,7 +464,7 @@ btnReporteXMLErrores.addEventListener("click", () => {
   // Lista de errores
   listaErrores = parserXML.listaErrores;
 
-  console.log("ESTA ES LA LISTA DE ERROES");
+  console.log("ESTA ES LA LISTA DE ERRORES");
   console.log(listaErrores);
 
   // Agregar las cabeceras
@@ -505,9 +505,22 @@ function analizar_xpath_izq(){
   listaTokens = [];
   listaErrores = [];
 
+  parserXML = xmlDerecha.parse(editorXML.value);
+
   console.log("Analizando XPATH...");
-  let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
+  let AST_xPathizq=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
   
+  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+
+  contenidoModal2.innerHTML = `
+  <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
+    <div id="graph" style="width: 100%;"></div>
+  </div>
+  `;
+
+  generarAST(AST_xPathizq);
+  console.log("Interpretando");
+  interpretar(AST_xPath,parserXML.json);
 }
 
 
@@ -519,6 +532,7 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
+  parserXML = xmlDerecha.parse(editorXML.value);
   console.log("Analizando XPATH por la derecha");
 
   
