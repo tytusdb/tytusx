@@ -207,6 +207,7 @@ PREDICADO:
 
 DATO:
          tk_numero                                               {$$= $tk_numero;}   
+        |tk_last tk_parentesis_izq tk_parentesis_der             {$$= new Nodo("Porduccion","LAST",[]);} 
         |DATO tk_mas DATO                                        {$$= new Nodo("Porduccion","SUM",[$1,$tk_mas,$3]);}  
         |DATO tk_menos DATO                                      {$$= new Nodo("Porduccion","RES",[ $1,$2,$3]);} 
         |DATO tk_asterisco DATO                                  {$$= new Nodo("Porduccion","MUL",[ $1,$2,$3]);} 

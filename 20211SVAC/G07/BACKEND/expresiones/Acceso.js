@@ -36,14 +36,17 @@ class Acceso {
       case "EXPRESION":
         //0-> Simbolos 1->itemReserva 2->itemReserva? consulta sola
         //2-> Expresion si vienen varias
-        if (ast.hijos[1].valor == "CAJETIN") {
-          this.indice = this.procesarIndice(ast.hijos[1].hijos[1]);
-          
-        }
+        
         if (ast.hijos[0].valor == "SIMBOLOS") {
           
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
-         
+          if (ast.hijos[1].valor == "CAJETIN") {
+            if(ArregloEntorno){
+             
+              this.indice = this.procesarIndice(ast.hijos[1].hijos[1],padre.hijos.length)-1;
+              console.error(this.indice);
+            } 
+          }
           if (!ArregloEntorno) {
             return null;
           }
@@ -278,24 +281,26 @@ class Acceso {
     }
     return null;
   }
-  procesarIndice(operaciones) {
+  procesarIndice(operaciones,last) {
     if (operaciones.valor) {
       if (operaciones.valor=="SUM") {
-        let num1=this.procesarIndice(operaciones.hijos[0]);
-        let num2=this.procesarIndice(operaciones.hijos[2])
+        let num1=this.procesarIndice(operaciones.hijos[0],last);
+        let num2=this.procesarIndice(operaciones.hijos[2],last);
         return parseInt(num1) + parseInt(num2);
       }else if (operaciones.valor=="RES") {
-        let num1=this.procesarIndice(operaciones.hijos[0]);
-        let num2=this.procesarIndice(operaciones.hijos[2])
+        let num1=this.procesarIndice(operaciones.hijos[0],last);
+        let num2=this.procesarIndice(operaciones.hijos[2],last);
         return parseInt(num1) - parseInt(num2);
       }else if (operaciones.valor=="MUL") {
-        let num1=this.procesarIndice(operaciones.hijos[0]);
-        let num2=this.procesarIndice(operaciones.hijos[2])
+        let num1=this.procesarIndice(operaciones.hijos[0],last);
+        let num2=this.procesarIndice(operaciones.hijos[2],last);
         return parseInt(num1) * parseInt(num2);
       }else if (operaciones.valor=="DIV") {
-        let num1=this.procesarIndice(operaciones.hijos[0]);
-        let num2=this.procesarIndice(operaciones.hijos[2])
+        let num1=this.procesarIndice(operaciones.hijos[0],last);
+        let num2=this.procesarIndice(operaciones.hijos[2],last);
         return parseInt(num1) / parseInt(num2);
+      }else if(operaciones.valor=="LAST"){
+        return parseInt(last);
       }
     }
     return operaciones;//No devuelve nada
