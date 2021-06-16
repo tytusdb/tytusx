@@ -858,7 +858,7 @@ if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
     }
 }
 
-define(function () {
+define('grammarXMLAsc',function () {
     return {
         getParser: function () {
             return gramarxml;
