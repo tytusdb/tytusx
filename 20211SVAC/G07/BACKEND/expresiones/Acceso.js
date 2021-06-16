@@ -8,7 +8,6 @@ class Acceso {
   }
 
   getValorImplicito(entorno, ast, padre) {
-   
     switch (ast.valor) {
       case "ELEMENTO":
         //0->EXPRESION 1->ELEMENTO_P
@@ -23,7 +22,7 @@ class Acceso {
         return this.getValorImplicito(entorno, ast.hijos[0], null);
       case "ELEMENTO_P":
         this.indice = -1;
-        indiceAux=0;
+        indiceAux = 0;
         if (ast.hijos[2].valor == "ELEMENTO_P") {
           return (
             this.getValorImplicito(entorno, ast.hijos[1], null) +
@@ -36,17 +35,32 @@ class Acceso {
       case "EXPRESION":
         //0-> Simbolos 1->itemReserva 2->itemReserva? consulta sola
         //2-> Expresion si vienen varias
-        
+
         if (ast.hijos[0].valor == "SIMBOLOS") {
-          
           let ArregloEntorno = this.getAccionNodo(ast.hijos[0], entorno, padre); //Me devuelve el arreglo de entornos
+
           if (ast.hijos[1].valor == "CAJETIN") {
-            if(ArregloEntorno){
-             
-              this.indice = this.procesarIndice(ast.hijos[1].hijos[1],padre.hijos.length)-1;
-              console.error(this.indice);
-            } 
+            console.error("Aqui");
+            console.log(ast);
+            console.log(ArregloEntorno);
+            console.log(padre);
+            if (ArregloEntorno) {
+              if (padre) {
+                this.indice =
+                  this.procesarIndice(
+                    ast.hijos[1].hijos[1],
+                    padre.hijos.length
+                  ) - 1;
+              } else {
+                this.indice =
+                  this.procesarIndice(
+                    ast.hijos[1].hijos[1],
+                    ArregloEntorno.length
+                  ) - 1;
+              }
+            }
           }
+          
           if (!ArregloEntorno) {
             return null;
           }
@@ -61,7 +75,6 @@ class Acceso {
             }
           }
           if (ast.hijos[2].valor == "EXPRESION") {
-            
             instruccion = ast.hijos[2];
           } else {
             instruccion = {
@@ -72,10 +85,9 @@ class Acceso {
           if (instruccion.valor == "TODO_") {
             if (ast.hijos[0].hijos[0] == "//") {
               let respuesta = "";
-              
+
               for (const iterator of ArregloEntorno) {
                 if (indiceAux == this.indice || this.indice == -1) {
-     
                   respuesta += this.getValorImplicito(
                     iterator,
                     instruccion,
@@ -87,15 +99,18 @@ class Acceso {
 
               return respuesta;
             }
-            
-            if(ast.hijos[0].hijos[1].hijos[0]==".."){
-              return this.getValorImplicito(ArregloEntorno[0], instruccion, padre);
+
+            if (ast.hijos[0].hijos[1].hijos[0] == "..") {
+              return this.getValorImplicito(
+                ArregloEntorno[0],
+                instruccion,
+                padre
+              );
             }
-            
+
             return this.getValorImplicito(entorno, instruccion, padre);
           } else {
             if (ArregloEntorno.length == 0) {
-             
               let temrespuesta = this.getValorImplicito(
                 ArregloEntorno,
                 instruccion,
@@ -103,26 +118,40 @@ class Acceso {
               );
               return temrespuesta;
             }
+            let index = 0;
+
             for (const entorno_ of ArregloEntorno) {
               //Iteramos el arreglo de entornos para aplicar estos cambios en todos
-              let temrespuesta;
-              
-              temrespuesta = this.getValorImplicito(
-                entorno_,
-                instruccion,
-                entorno
-              ); //Concatenamos todas las respuestas que encontramos
 
-              if (indiceAux == this.indice || this.indice == -1) {
-                if (temrespuesta) {
-                  respuesta += temrespuesta;
+              let temrespuesta = [];
+              let atri=false 
+              if (instruccion.hijos[0].hijos[1].hijos[1]) {
+                if (instruccion.hijos[0].hijos[1].hijos[1].valor == "ARROPROD") {
+                  let nombreATRIBUTO = instruccion.hijos[0].hijos[1].hijos[1].hijos[0];
+                 let res=this.pocesarArtibuto(nombreATRIBUTO, [entorno_]);
+                 if(res != null){
+                  atri=true;
+                 }
+                  temrespuesta.unshift(res);
                 }
-                
-                this.indice=-1;
+              } else {
+                for (const iterator of entorno_.hijos) {
+                  temrespuesta.unshift(
+                    this.getValorImplicito(iterator, instruccion, entorno_)
+                  ); //Concatenamos todas las respuestas que encontramos
+                }
               }
-              if(temrespuesta){
-                indiceAux++;
-              }      
+              for (const res of temrespuesta) {
+                if (res != null) {
+                  if (indiceAux == this.indice || this.indice == -1||atri) {
+                    respuesta += res;
+                  }
+                  if (res) {
+                    indiceAux++;
+                  }
+                }
+              }
+              //this.indice = -1;
             }
           }
 
@@ -137,7 +166,6 @@ class Acceso {
           if (ast.hijos.length > 1) {
             let respuesta = "";
             for (const hijo of entorno.hijos) {
-              
               respuesta += this.getValorImplicito(hijo, ast.hijos[2], entorno);
             }
 
@@ -151,7 +179,6 @@ class Acceso {
 
         return null;
       case "TODO_":
-        
         let contenido = "";
         let atributo;
         if (entorno.atributos) {
@@ -162,14 +189,12 @@ class Acceso {
         } else {
           atributo = "";
         }
-        
+
         if (entorno.tipo == "completa") {
           for (const iterator of entorno.hijos) {
-            
             contenido += this.getValorImplicito(iterator, ast, entorno);
           }
 
-          
           let retorno = new Etiqueta(
             entorno.etiqueta,
             entorno.texto,
@@ -177,10 +202,8 @@ class Acceso {
             atributo
           ); //nombre,texto,contenido
           if (retorno) {
-
             return retorno.obtenerXML();
           }
-          
         } else if (entorno.tipo == "unica") {
           let retorno = new Etiqueta(
             entorno.etiqueta,
@@ -193,7 +216,7 @@ class Acceso {
             return retorno.obtenerXML();
           }
         }
-        
+
         return null;
       default:
         return null;
@@ -202,19 +225,18 @@ class Acceso {
   getAccionNodo(AST, entorno, padre) {
     if (AST.hijos[0] == "/") {
       //Accedemos al nodo barra
+      
       if (this.getValidacion(AST.hijos[1], entorno)) {
         //Validamos que la etiqueta del nodo sea igual al entorno actual
-        if (!entorno.hijos) {
-          return entorno;
+        if (!entorno.hijos == []) {
+          return [entorno];
         }
         return entorno.hijos;
       } else if (AST.hijos[1].hijos[0] == "@") {
         return [entorno];
-      }else if (AST.hijos[1].hijos[0] == "..") {
-        
+      } else if (AST.hijos[1].hijos[0] == "..") {
         return [padre];
       }
-
     } else if (AST.hijos[0] == "//") {
       this.entornosDoble = [];
 
@@ -224,6 +246,7 @@ class Acceso {
           entorno.hijos
         );
       }
+
       return this.getConsultaDoble(AST.hijos[1].hijos[0], entorno.hijos);
     }
 
@@ -234,7 +257,6 @@ class Acceso {
     for (const entorno of entornos) {
       if (entorno.atributos) {
         if (entorno.atributos.nombreAtributo) {
-     
           if (
             nombreATRIBUTO == entorno.atributos.nombreAtributo ||
             nombreATRIBUTO == "*"
@@ -244,13 +266,18 @@ class Acceso {
               '="' +
               entorno.atributos.valorAtributo +
               '"\n';
+              
           }
         }
+        
       }
+      
     }
+    
     if (txt != "") {
       return txt;
     }
+    
     return null;
   }
   getValidacion(etiqueta, entorno) {
@@ -258,6 +285,7 @@ class Acceso {
       if (etiqueta.hijos[0].valor == "RESERVA") {
         return true;
       }
+
       return this.comparar(etiqueta.hijos[0], entorno.etiqueta);
     }
 
@@ -281,29 +309,29 @@ class Acceso {
     }
     return null;
   }
-  procesarIndice(operaciones,last) {
+  procesarIndice(operaciones, last) {
     if (operaciones.valor) {
-      if (operaciones.valor=="SUM") {
-        let num1=this.procesarIndice(operaciones.hijos[0],last);
-        let num2=this.procesarIndice(operaciones.hijos[2],last);
+      if (operaciones.valor == "SUM") {
+        let num1 = this.procesarIndice(operaciones.hijos[0], last);
+        let num2 = this.procesarIndice(operaciones.hijos[2], last);
         return parseInt(num1) + parseInt(num2);
-      }else if (operaciones.valor=="RES") {
-        let num1=this.procesarIndice(operaciones.hijos[0],last);
-        let num2=this.procesarIndice(operaciones.hijos[2],last);
+      } else if (operaciones.valor == "RES") {
+        let num1 = this.procesarIndice(operaciones.hijos[0], last);
+        let num2 = this.procesarIndice(operaciones.hijos[2], last);
         return parseInt(num1) - parseInt(num2);
-      }else if (operaciones.valor=="MUL") {
-        let num1=this.procesarIndice(operaciones.hijos[0],last);
-        let num2=this.procesarIndice(operaciones.hijos[2],last);
+      } else if (operaciones.valor == "MUL") {
+        let num1 = this.procesarIndice(operaciones.hijos[0], last);
+        let num2 = this.procesarIndice(operaciones.hijos[2], last);
         return parseInt(num1) * parseInt(num2);
-      }else if (operaciones.valor=="DIV") {
-        let num1=this.procesarIndice(operaciones.hijos[0],last);
-        let num2=this.procesarIndice(operaciones.hijos[2],last);
+      } else if (operaciones.valor == "DIV") {
+        let num1 = this.procesarIndice(operaciones.hijos[0], last);
+        let num2 = this.procesarIndice(operaciones.hijos[2], last);
         return parseInt(num1) / parseInt(num2);
-      }else if(operaciones.valor=="LAST"){
+      } else if (operaciones.valor == "LAST") {
         return parseInt(last);
       }
     }
-    return operaciones;//No devuelve nada
+    return operaciones; //No devuelve nada
   }
   getConsultaDobleAtributo(etiqueta, entornos) {
     if (entornos != null) {
