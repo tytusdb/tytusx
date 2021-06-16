@@ -86,8 +86,8 @@ switch (yystate) {
 case 1:
 
     // REPORTE GRAMATICA
-    gramaticapp = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nI   -> P EOF \n` + gramaticapp;
-    gramatical = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n<INICIO> := <PROLOGO> <EOF>\n` + gramatical;
+    gramaticapp = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nI   -> P EOF \n` + gramaticapp;
+    gramatical = `~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n<INICIO> := <PROLOGO> <EOF>\n` + gramatical;
    
 
     return {
@@ -104,7 +104,7 @@ case 2:
         this.$ = $$[$0];
 
         // REPORTE GRAMATICA
-        gramaticapp = `P   -> tk_inicio V C D tk_fin R \n` + gramaticapp;
+        gramaticapp = `PROLOGO.VAL -> inicio.lexval VERSION.VAL CODIFICACION.VAL DEPENDENCIA.VAL finp.lexval RAIZ.VAL \n` + gramaticapp;
         gramatical = `<PROLOGO> := ${$$[$0-5]} <VERSION> <CODIFICACION> ${$$[$0-1]} <DEPENDENCIA> <RAIZ>\n` + gramatical;
 
     
@@ -112,38 +112,38 @@ break;
 case 3:
 
         this.$ = $$[$0];
-        gramaticapp = `P   -> R \n` + gramaticapp;
+        gramaticapp = `PROLOGO.VAL -> RAIZ.VAL \n` + gramaticapp;
         gramatical = `<PROLOGO> := <RAIZ>\n` + gramatical;
     
 break;
 case 4:
 
-        gramaticapp += `V   -> tk_igual tk_cadena\n` + gramaticapp;
+        gramaticapp += `ERSION.VAL -> igual.lexval cadena.lexval\n` + gramaticapp;
         gramatical += `<VERSION> := ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
     
 break;
 case 5:
 
-        gramaticapp = `C   -> tk_encoding tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `CODIFICACION.VAL -> encoding.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<CODIFICACION> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
         tipoencoding = `${$$[$0]}`.replaceAll("\"", ' ');
     
 break;
 case 6:
 
-        gramaticapp = `C   -> ε \n` + gramaticapp;
+        gramaticapp = `CODIFICACION.VAL -> ε \n` + gramaticapp;
         gramatical = `<CODIFCACION> :=  epsilon\n` + gramatical;
     
 break;
 case 7:
 
-        gramaticapp = `D   -> tk_standalone tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `DEPENDENCIA.VAL -> standalone.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<DEPENDENCIA> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
     
 break;
 case 8:
  
-        gramaticapp = `D   -> ε \n` + gramaticapp;
+        gramaticapp = `DEPENDENCIA.VAL -> ε \n` + gramaticapp;
         gramatical = `<DEPENDENCIA> := epsilon\n` + gramatical;
     
 break;
@@ -158,7 +158,7 @@ case 9:
 
 
         //REPORTE GRAMATICA
-        gramaticapp = `R   -> E \n` + gramaticapp;
+        gramaticapp = `RAIZ.VAL -> ETIQUETA.VAL \n` + gramaticapp;
         gramatical = `<RAIZ> := <ETIQUETA>\n` + gramatical;
     
 break;
@@ -178,7 +178,7 @@ case 11:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> EU \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> ETIQUETA_UNICA.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> :=  <ETIQUETA_UNICA>\n` + gramatical;
     
 break;
@@ -203,7 +203,7 @@ case 12:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> AP CO CI \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> APERTURA.VAL CONTENIDO.VAL CIERRE.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> := <APERTURA> <CONTENIDO> <CIERRE>\n` + gramatical;
 
 
@@ -222,7 +222,7 @@ case 13:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `E   -> AP CI \n` + gramaticapp;
+        gramaticapp = `ETIQUETA.VAL -> APERTURA.VAL CIERRE.VAL \n` + gramaticapp;
         gramatical = `<ETIQUETA> := <APERTURA> <CIERRE>\n` + gramatical;
     
 break;
@@ -247,7 +247,7 @@ case 14:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `EU  -> tk_abre tk_etiqueta ATS tk_cierra_dos \n` + gramaticapp;
+        gramaticapp = `ETIQEUTA_UNICA.VAL -> abre.lexval etiqueta.lexval ATRIBUTOS.VAL cierra_dos.lexval \n` + gramaticapp;
         gramatical = `<ETIQUETA_UNICA> := ${$$[$0-3]} ${$$[$0-2]} <ATRIBUTOS> ${$$[$0]} \n` + gramatical;
 
     
@@ -274,7 +274,7 @@ case 15:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AP  -> tk_abre tk_etiqueta ATS tk_cierra\n` + gramaticapp;
+        gramaticapp = `APERTURA.VAL -> abre.lexval etiqueta.lexval ATRIBUTOS.VAL cierra.lexval\n` + gramaticapp;
         gramatical = `<APERTURA> := ${$$[$0-3]} ${$$[$0-2]} <ATRIBUTOS> ${$$[$0-1]} \n` + gramatical;
 
 
@@ -300,7 +300,7 @@ case 16:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AP  -> tk_abre tk_etiqueta tk_cierra \n` + gramaticapp;
+        gramaticapp = `APERTURA.VAL -> abre.lexval etiqueta.lexval cierra.lexval \n` + gramaticapp;
         gramatical = `<APERTURA> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
 
         // Verificar Etiqueta
@@ -328,7 +328,7 @@ case 17:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `ATS -> ATS AT \n` + gramaticapp;
+        gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTOS.VAL ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTOS> <ATRIBUTO>\n` + gramatical;
 
     
@@ -345,7 +345,7 @@ case 18:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `ATS -> AT \n` + gramaticapp;
+        gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTO>\n` + gramatical;
     
 break;
@@ -367,7 +367,7 @@ case 19:
         this.$["nodo"] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `AT  -> tk_etiqueta tk_igual tk_cadena \n` + gramaticapp;
+        gramaticapp = `ATRIBUTO.VAL -> etiqueta.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<ATRIBUTO> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]} \n` + gramatical;
     
 break;
@@ -394,7 +394,7 @@ case 20:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CO  -> CO LCO \n` + gramaticapp;
+        gramaticapp = `CONTENIDO.VAL -> CONTENIDO.VAL LISTACONT.VAL \n` + gramaticapp;
         gramatical = `<CONTENIDO> := <CONTENIDO> <LISTACONT>\n` + gramatical;
 
 
@@ -413,7 +413,7 @@ case 21:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CO  -> LCO \n` + gramaticapp;
+        gramaticapp = `CONTENIDO.VAL -> LISTACONT.VAL \n` + gramaticapp;
         gramatical = `<CONTENIDO> := <LISTACONT>\n` + gramatical;
 
     
@@ -430,7 +430,7 @@ case 22:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> tk_etiqueta \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> etiqueta.lexval \n` + gramaticapp;
         gramatical = `<LISTACONT> :=  ${$$[$0]}\n` + gramatical;
     
 break;
@@ -446,7 +446,7 @@ case 23:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> tk_numero\n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> numero.lexval\n` + gramaticapp;
         gramatical = `<LISTACONT> :=  ${$$[$0]}\n` + gramatical;
     
 break;
@@ -463,7 +463,7 @@ case 24:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> E \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> ETIQEUTA.VAL \n` + gramaticapp;
         gramatical = `<LISTACONT> := <ETIQUETA>\n` + gramatical;
 
     
@@ -482,7 +482,7 @@ case 25:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `LCO -> CS \n` + gramaticapp;
+        gramaticapp = `LISTACONT.VAL -> CARACTERESPECIAL.VAL \n` + gramaticapp;
         gramatical = `<LISTACONT> := <CARACESPECIAL>\n` + gramatical;
 
     
@@ -492,7 +492,7 @@ case 26:
             this.$ = "<";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_less \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> less.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
@@ -501,7 +501,7 @@ case 27:
             this.$ = ">";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_great \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> great.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
@@ -510,7 +510,7 @@ case 28:
             this.$ = "&";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_amper \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> amper.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
@@ -519,7 +519,7 @@ case 29:
             this.$ = "'";
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_apostro \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> apostro.lexval \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
@@ -528,7 +528,7 @@ case 30:
             this.$ = '"';
 
             //REPORTE GRAMATICA
-            gramaticapp = `CS  -> tk_quota \n` + gramaticapp;
+            gramaticapp = `CARACTERESPECIAL.VAL -> quota.lexval  \n` + gramaticapp;
             gramatical = `<CARACESPECIAL> := ${$$[$0]}\n` + gramatical;
         
 break;
@@ -545,7 +545,7 @@ case 31:
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
-        gramaticapp = `CI  -> tk_abre_dos tk_etiqueta tk_cierra \n` + gramaticapp;
+        gramaticapp = `CIERRE.VAL -> abre_dos.lexval etiqueta.lexval cierra.lexval \n` + gramaticapp;
         gramatical = `<CIERRE> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]}\n` + gramatical;
 
         //VERIFICAR ETIQUETA

@@ -309,8 +309,8 @@ btnReporteXMLCST.addEventListener("click", () => {
 btnReporteGram.addEventListener('click', () => {
   tablaTituloCST.innerHTML = 'Reporte Gramatical XML ' + tipoAnalizadorXML;
 
-  contenidoModal2.innerHTML = `<textarea style="width: 38%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
-  <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramatical}</textarea>
+  contenidoModal2.innerHTML = `<textarea style="width: 38%; height: 700px; resize: none;">${parserXML.gramatical}</textarea>
+  <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
   `;
 });
 
