@@ -93,7 +93,13 @@ function InterpretarCodigo(entrada:string) {
     
     //tabla de simbolos que maneja la persistencia de todos los datos
     //tds_xml_persistente.push(tsGlobal);
-
+    let etiquetasVerificadas = true;
+    for(let aux of listaObjetos){        
+      etiquetasVerificadas = aux.verificarEtiquetas(aux);  
+      if(!etiquetasVerificadas){
+        console.log("error en etiquetas");
+      }
+    }
     for(let aux of listaObjetos){        
         tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal,aux)); //aux.agregarTDS(tsGlobal,aux);
         tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);

@@ -9,8 +9,7 @@ function exepath(listainstrucciones:[])
         if(listainstrucciones[j].ruta2==undefined) /////si vienen solo una ruta
         {
             for(let i:number = 0; i < p.length; i++)
-        {
-            
+        {            
             let auxiliar=[];
             auxiliar=getrutasimple(listainstrucciones[j], p[i]);
             if(auxiliar!=undefined)
@@ -23,14 +22,14 @@ function exepath(listainstrucciones:[])
 
         else //////mas de una ruta
         {
-        for(let i:number = 0; i < p.length; i++)
-        {
-            //console.log(listainstrucciones[j]);
-            //console.log(p[i]);
-            //if(listainstrucciones[j])
-            console.log(getInfoXpath(listainstrucciones[j], p[i]))
-            //break;
-        }
+            for(let i:number = 0; i < p.length; i++)
+            {
+                //console.log(listainstrucciones[j]);
+                //console.log(p[i]);
+                //if(listainstrucciones[j])
+                console.log(getInfoXpath(listainstrucciones[j], p[i]))
+                //break;
+            }
         }
         
     }
@@ -67,8 +66,8 @@ function getInfoXpath(listainstrucciones:any, entorno:TablaSimbolos)
                     }
                     else 
                     {
-                        console.log(listainstrucciones);
-                        console.log(entorno[i].simbolos[j].entorno);
+                        //console.log(listainstrucciones);
+                        //console.log(entorno[i].simbolos[j].entorno);
                         aux.push(entorno[i].simbolos[j]);
                     }
                 }
@@ -85,7 +84,7 @@ function getInfoXpath(listainstrucciones:any, entorno:TablaSimbolos)
         return aux;        
     }
     
-<<<<<<< HEAD
+
 }
 
 function getrutasimple(listainstrucciones:any, entorno:TablaSimbolos)
@@ -156,7 +155,6 @@ function buscaretiqueta(etiqueta:string, entorno:TablaSimbolos)
         return aux;
     }
 
-=======
     
 }
 
@@ -197,11 +195,10 @@ function filtrarCondicion(aux:any, entorno:any, listainstrucciones:any){
 
         if(entornofiltrado.length >0){
             if(listainstrucciones.mostrar.mostrar != undefined){
-                entornofiltrado = filtrarCondicion(entornofiltrado,entorno,listainstrucciones.mostrar);
+                return filtrarCondicion(entornofiltrado,entorno,listainstrucciones.mostrar);
             }
-            return entornofiltrado;
+            //return entornofiltrado;
         }return ;
         
     }
->>>>>>> bb2305d78a1b3422cae9fd4c5b5ce08be672cee1
 }

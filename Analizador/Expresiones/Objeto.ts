@@ -117,23 +117,30 @@ class Objeto{
         }
     }
 
-    verificarEtiquetas(objeto:Objeto)
+    verificarEtiquetas(objeto:Objeto) : boolean
     {
+        
+        for(let i:number = 0; i < objeto.listaObjetos.length; i++){
+           let valida =  objeto.verificarEtiquetas(objeto.listaObjetos[i]);
+           if(!valida){return false;}
+        } 
         if(objeto.tipoEtiqueta)
         {
             //es una etiqueta doble
             if(objeto.identificador != objeto.identificador_cierre)
             {
                 //Error Semantico etiquedas diferentes
+                return false;
             }
+        
         }
         else
         {
             //Etiqueta Unica
+            return true;
         }
-        for(let i:number = 0; i < objeto.listaObjetos.length; i++){
-            objeto.verificarEtiquetas(objeto.listaObjetos[i]);
-        } 
+        return true;
+        
     }
 } 
 
