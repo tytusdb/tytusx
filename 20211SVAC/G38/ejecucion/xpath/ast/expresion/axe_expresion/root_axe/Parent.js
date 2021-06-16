@@ -25,6 +25,6 @@ class Parent {
                 throw Error("No se puede devolver texto de un nodo padre");
                 break;
         }
-        return ts;
+        return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
     }
 }

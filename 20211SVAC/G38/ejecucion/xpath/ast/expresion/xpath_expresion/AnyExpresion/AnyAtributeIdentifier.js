@@ -10,6 +10,7 @@ class AnyAtributeIdentifier {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent.findAtributesByNombreElementoRecursive(this.identifier);
+        let ts = ent.findAtributesByNombreElementoRecursive(this.identifier);
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

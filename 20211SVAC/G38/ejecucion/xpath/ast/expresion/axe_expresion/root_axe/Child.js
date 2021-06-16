@@ -25,6 +25,6 @@ class Child {
                 ts = ent.findAllObjectsOrAtributesWithText();
                 break;
         }
-        return ts;
+        return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
     }
 }
