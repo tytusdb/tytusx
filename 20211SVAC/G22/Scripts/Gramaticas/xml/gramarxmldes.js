@@ -72,27 +72,251 @@
   }
 */
 var gramarxmldes = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,16],$V1=[1,19],$V2=[1,14],$V3=[1,17],$V4=[1,20],$V5=[1,21],$V6=[1,22],$V7=[1,23],$V8=[7,8],$V9=[17,34],$Va=[2,15],$Vb=[1,31],$Vc=[1,41],$Vd=[1,43],$Ve=[1,45],$Vf=[1,46],$Vg=[1,47],$Vh=[1,48],$Vi=[1,49],$Vj=[1,50],$Vk=[1,51],$Vl=[1,52],$Vm=[1,42],$Vn=[1,44],$Vo=[2,54],$Vp=[2,41],$Vq=[1,56],$Vr=[8,21,23,34,41,42,43,44,45,46,47,48,49,50,51,52,53],$Vs=[17,21,23,34,48,49],$Vt=[2,30],$Vu=[1,69],$Vv=[1,73],$Vw=[1,74],$Vx=[9,15,17,18,19,20,21,23,34,41,42,43,44,45,46,47,48,49,50,51],$Vy=[52,53],$Vz=[2,19];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,10],$V2=[1,13],$V3=[1,11],$V4=[1,15],$V5=[1,29],$V6=[1,35],$V7=[1,36],$V8=[1,37],$V9=[1,38],$Va=[1,39],$Vb=[1,40],$Vc=[1,41],$Vd=[1,42],$Ve=[1,30],$Vf=[1,31],$Vg=[1,32],$Vh=[1,33],$Vi=[1,34],$Vj=[17,24],$Vk=[2,15],$Vl=[17,21,24],$Vm=[1,54],$Vn=[1,57],$Vo=[8,21,24,39,40,41,42,43,44,45,46,47,48,49,50,51,52],$Vp=[7,8],$Vq=[1,61],$Vr=[1,62],$Vs=[9,15,17,18,19,20,21,24,39,40,41,42,43,44,45,46,47,48,49,50],$Vt=[51,52],$Vu=[2,19];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"XML_GRAMAR":3,"ENCABEZADO":4,"ABRIR_ELEMENTO":5,"CONTENIDO_ELEMENTO":6,"EOF":7,"menosque":8,"c_interroga":9,"xml":10,"version":11,"igual":12,"QUOTES":13,"TIPO_DATO":14,"encoding":15,"FORMAT":16,"masque":17,"UTF":18,"ASCII":19,"ISO":20,"identificador":21,"inicoment":22,"menos":23,"ETIQUETA":24,"COMENTARIO":25,"ATRIBUTOS":26,"CIERRE_ELEMENTO":27,"ATRIBUTO":28,"A_PRIMA":29,"C_ATRIBUTO":30,"TIPOCONTENIDO":31,"C_A_PRIMA":32,"CONTENIDO_ETIQUETA":33,"div":34,"L_ELEMENTOS":35,"ELEMENTO":36,"L_E_PRIMA":37,"C_E_PRIMA":38,"SIGNOS":39,"SPECIALCHARS":40,"lessthan":41,"graterthan":42,"ampersand":43,"simplequote":44,"doublequote":45,"colon":46,"underscore":47,"decimal":48,"entero":49,"mas":50,"por":51,"comilla":52,"apostrofe":53,"C_TEXTO":54,"C_T_PRIMA":55,"$accept":0,"$end":1},
-terminals_: {2:"error",7:"EOF",8:"menosque",9:"c_interroga",10:"xml",11:"version",12:"igual",15:"encoding",17:"masque",18:"UTF",19:"ASCII",20:"ISO",21:"identificador",22:"inicoment",23:"menos",34:"div",41:"lessthan",42:"graterthan",43:"ampersand",44:"simplequote",45:"doublequote",46:"colon",47:"underscore",48:"decimal",49:"entero",50:"mas",51:"por",52:"comilla",53:"apostrofe"},
-productions_: [0,[3,4],[3,1],[4,15],[16,1],[16,1],[16,1],[5,2],[5,4],[6,1],[6,1],[24,2],[24,1],[26,2],[29,2],[29,0],[28,5],[30,2],[32,2],[32,0],[27,6],[27,5],[27,5],[27,2],[35,2],[37,2],[37,1],[36,2],[33,2],[38,2],[38,0],[31,1],[31,1],[31,1],[40,1],[40,1],[40,1],[40,1],[40,1],[40,1],[40,1],[14,1],[14,1],[14,1],[39,1],[39,1],[39,1],[39,1],[13,1],[13,1],[25,4],[25,3],[54,2],[55,2],[55,0]],
+symbols_: {"error":2,"XML_GRAMAR":3,"ENCABEZADO":4,"ABRIR_ELEMENTO":5,"ETIQUETA":6,"EOF":7,"menosque":8,"c_interroga":9,"xml":10,"version":11,"igual":12,"QUOTES":13,"TIPO_DATO":14,"encoding":15,"FORMAT":16,"masque":17,"UTF":18,"ASCII":19,"ISO":20,"identificador":21,"ATRIBUTOS":22,"CONTENIDO_INTERNO":23,"div":24,"ATRIBUTO":25,"A_PRIMA":26,"C_ATRIBUTO":27,"TIPOCONTENIDO":28,"C_A_PRIMA":29,"L_ELEMENTOS":30,"ELEMENTO":31,"L_E_PRIMA":32,"CONTENIDO_ETIQUETA":33,"C_E_PRIMA":34,"SIGNOS":35,"SPECIALCHARS":36,"C_TEXTO":37,"C_T_PRIMA":38,"lessthan":39,"graterthan":40,"ampersand":41,"simplequote":42,"doublequote":43,"colon":44,"underscore":45,"decimal":46,"entero":47,"mas":48,"menos":49,"por":50,"comilla":51,"apostrofe":52,"$accept":0,"$end":1},
+terminals_: {2:"error",7:"EOF",8:"menosque",9:"c_interroga",10:"xml",11:"version",12:"igual",15:"encoding",17:"masque",18:"UTF",19:"ASCII",20:"ISO",21:"identificador",24:"div",39:"lessthan",40:"graterthan",41:"ampersand",42:"simplequote",43:"doublequote",44:"colon",45:"underscore",46:"decimal",47:"entero",48:"mas",49:"menos",50:"por",51:"comilla",52:"apostrofe"},
+productions_: [0,[3,4],[3,3],[3,1],[4,15],[16,1],[16,1],[16,1],[5,2],[6,6],[6,5],[6,3],[6,2],[22,2],[26,2],[26,0],[25,5],[27,2],[29,2],[29,0],[30,2],[32,2],[32,1],[31,2],[23,1],[23,1],[33,2],[34,2],[34,1],[28,1],[28,1],[28,1],[37,2],[38,2],[38,0],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[14,1],[14,1],[14,1],[35,1],[35,1],[35,1],[35,1],[13,1],[13,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-return $$[$0-3];
+ unirErrores();this.$[0]=$$[$0-1]; this.$[2]=$$[$0-2]; ; 
+											var regla = new Regla("XML_GRAMAR","XML_GRAMAR-> ENCABEZADO ABRIR_ELEMENTO ETIQUETA EOF","return [ETIQUETA][ENCABEZADO];");ingresarRegla(regla);
+	
 break;
 case 2:
- console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+ unirErrores(); 
+											var regla = new Regla("XML_GRAMAR","XML_GRAMAR-> ABRIR_ELEMENTO ETIQUETA EOF","return ETIQUETA;");ingresarRegla(regla);
+											this.$=$$[$0-1];
+							
+break;
+case 3:
+ 
+			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
+			erroresSintacticos.push(error); unirErrores(); 
+			
+break;
+case 4:
+
+		this.$=$$[$0-3];
+		var regla = new Regla("GRAMATICAL","ENCABEZADO-> menosque c_interroga xml version igual QUOTES TIPO_DATO QUOTES encoding igual QUOTES FORMAT QUOTES c_interroga masque","return FORMAT;");ingresarRegla(regla);
+	
+break;
+case 5:
+this.$ = $$[$0]; 
+			var regla = new Regla("GRAMATICAL","FORMAT-> UTF","return UTF;");ingresarRegla(regla);
+break;
+case 6:
+this.$ = $$[$0]; 
+			var regla = new Regla("GRAMATICAL","FORMAT-> ASCII","return ASCII;");ingresarRegla(regla);
+break;
+case 7:
+this.$ = $$[$0];
+			var regla = new Regla("GRAMATICAL","FORMAT-> ISO","return ISO;");ingresarRegla(regla);
+break;
+case 8:
+this.$=$$[$0]; etiquetas.push($$[$0]);
+										var regla = new Regla("GRAMATICAL","ABRIR_ELEMENTO-> menosque identificador","return identificador;");ingresarRegla(regla);
+break;
+case 9:
+ if(validarEtiqueta($$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column)){	
+		
+																		if($$[$0-3][1]=='texto'){
+																						//     id, text,   linea,        columna,  atributo, objeto
+																		 	this.$ = new ObjetoNodo($$[$0-1] ,$$[$0-3], _$[$0-5].first_line, _$[$0-5].first_column, $$[$0-5], []);
+																		}else{
+																			this.$ = new ObjetoNodo($$[$0-1],'', _$[$0-5].first_line, _$[$0-5].first_column, $$[$0-5], $$[$0-3]);
+																		} 
+																		 etiquetas.pop();
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); si(CONTENIDO_INTERNO[0]=texto){\n	 nuevo objetoNodo(etiquetaNombre, texto, ATRIBUTOS)\n}else{		nuevo objetoNodo(etiquetaNombre, ATRIBUTOS, CONTENIDO_INTERNO)\n};\n etquetas.pop();");
+																		 
+																	 }else{
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); ERROR SEMANTICO");
+																	 }
+																	 ingresarRegla(regla);
+																	
+break;
+case 10:
+ if(validarEtiqueta($$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column)){	
+																		if($$[$0-3][1]=='texto'){
+																			this.$ = new ObjetoNodo($$[$0-1] ,$$[$0-3], _$[$0-4].first_line, _$[$0-4].first_column, [], []);
+																		}else{
+																			this.$ = new ObjetoNodo($$[$0-1] ,'', _$[$0-4].first_line, _$[$0-4].first_column, [], $$[$0-3]);
+																		}  
+																		etiquetas.pop();
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); si(CONTENIDO_INTERNO[0]=texto){\n	 nuevo objetoNodo(etiquetaNombre, texto)\n}else{		nuevo objetoNodo(etiquetaNombre, arreglo atributos)\n};\n etquetas.pop();");
+																	 }else{
+																		var regla = new Regla("GRAMATICAL","ETIQUETA-> masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); ERROR SEMANTICO");
+																	 }
+																		ingresarRegla(regla);
+																	
+break;
+case 11:
+ var etiquetaN= etiquetas.pop(); this.$ = new ObjetoNodo(etiquetaN ,'', _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-2], []); 
+							var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS div masque","etiquetaNombre=etquetas.pop(); nuevo objetoNodo(etiquetaNombre, arreglo atributos);\n");ingresarRegla(regla);
+break;
+case 12:
+this.$ = [];  var etiquetaN= etiquetas.pop();this.$ = new ObjetoNodo(etiquetaN ,'', _$[$0-1].first_line, _$[$0-1].first_column, [], []);
+							var regla = new Regla("GRAMATICAL","ETIQUETA-> div masque","etiquetaNombre=etquetas.pop(); \n return new ObjetoNodo(etiquetaNombre);\n agregarRegla());");ingresarRegla(regla);
+break;
+case 13:
+this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","ATRIBUTOS-> ATRIBUTO A_PRIMA ","ATRIBUTOS=[ATRIBUTO];\n ATRIBUTOS= ATRIBUTOS.agregar(A_PRIMA);\nreturn C_ATRIBUTO;");ingresarRegla(regla);
+break;
+case 14:
+this.$=[$$[$0-1]]; this.$ = this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","A_PRIMA-> ATRIBUTO A_PRIMA ","A_PRIMA=[TIPOCONTENIDO];\n A_PRIMA= C_A_PRIMA.agregar(C_A_PRIMA);\nreturn C_A_PRIMA;");ingresarRegla(regla);
+break;
+case 15:
+this.$=[];
+						var regla = new Regla("GRAMATICAL","A_PRIMA-> ATRIBUTO A_PRIMA","return [];");ingresarRegla(regla);
+break;
+case 16:
+this.$= new Atributo( $$[$0-4], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column);
+						var regla = new Regla("GRAMATICAL","ATRIBUTO-> identificador igual QUOTES C_ATRIBUTO QUOTES","return nuevoAtributo(identificador, C_ATRIBUTO);");ingresarRegla(regla);
+break;
+case 17:
+this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","C_ATRIBUTO-> ELEMENTO L_E_PRIMA ","C_ATRIBUTO=[ELEMENTO];\n C_ATRIBUTO= C_ATRIBUTO.agregar(C_A_PRIMA);\nreturn C_ATRIBUTO;");ingresarRegla(regla);
+break;
+case 18:
+this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","C_A_PRIMA-> TIPOCONTENIDO C_A_PRIMA","C_A_PRIMA=[TIPOCONTENIDO];\n C_A_PRIMA= C_A_PRIMA.agregar(C_A_PRIMA);\nreturn C_A_PRIMA;");ingresarRegla(regla);
+break;
+case 19:
+this.$=[];
+						var regla = new Regla("GRAMATICAL","C_A_PRIMA-> epsilon ","return [];");ingresarRegla(regla);
+break;
+case 20:
+this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","L_ELEMENTOS-> ELEMENTO L_E_PRIMA ","L_ELEMENTOS=[ELEMENTO];\n L_ELEMENTOS= L_ELEMENTOS.agregar(L_E_PRIMA);\nreturn L_ELEMENTOS;");ingresarRegla(regla);
+break;
+case 21:
+this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
+						var regla = new Regla("GRAMATICAL","L_E_PRIMA-> ELEMENTO L_E_PRIMA ","L_E_PRIMA=[ELEMENTO];\n L_E_PRIMA= L_E_PRIMA.agregar(L_E_PRIMA);\nreturn L_E_PRIMA;");ingresarRegla(regla);
+break;
+case 22:
+this.$=[];
+						var regla = new Regla("GRAMATICAL","L_E_PRIMA-> menosque ","return [];");ingresarRegla(regla);
+break;
+case 23:
+this.$=$$[$0];
+							var regla = new Regla("GRAMATICAL","ELEMENTO-> ABRIR_ELEMENTO 	ETIQUETA","return ETIQUETA;");ingresarRegla(regla);
+break;
+case 24:
+this.$ = [$$[$0], 'texto'];
+							var regla = new Regla("GRAMATICAL","CONTENIDO_INTERNO-> CONTENIDO_ETIQUETA","return CONTENIDO_ETIQUETA;");ingresarRegla(regla);
+break;
+case 25:
+this.$ = [$$[$0],'objetos'];
+							var regla = new Regla("GRAMATICAL","CONTENIDO_INTERNO-> L_ELEMENTOS","return L_ELEMENTOS;");ingresarRegla(regla);
+break;
+case 26:
+this.$=[$$[$0-1]]; this.$=  this.$.concat($$[$0]);var contenido =  escribirLista(this.$); this.$= contenido; console.log(this.$);
+break;
+case 27:
+this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);  
+								var regla = new Regla("GRAMATICAL","C_E_PRIMA-> TIPOCONTENIDO C_E_PRIMA","C_E_PRIMA=[TIPOCONTENIDO];C_E_PRIMA= C_E_PRIMA.agregar(C_E_PRIMA);\nreturn C_E_PRIMA;");ingresarRegla(regla);
+break;
+case 28:
+this.$=[]; 
+								var regla = new Regla("GRAMATICAL","C_E_PRIMA-> menosque","return []];");ingresarRegla(regla);
+break;
+case 29:
+this.$ = $$[$0];
+					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> TIPO_DATO","return TIPO_DATO;");ingresarRegla(regla);
+break;
+case 30:
+this.$ = $$[$0];
+					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> SIGNOS","return SIGNOS;");ingresarRegla(regla);
+break;
+case 31:
+this.$ = $$[$0];
+					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> SPECIALCHARS","return  SPECIALCHARS;");ingresarRegla(regla);
+break;
+case 32:
+this.$=[$$[$0-1]];  this.$ = this.$+$$[$0]; 
+						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> TIPO_DATO C_T_PRIMA","C_T_PRIMA=[TIPO_DATO];\n C_T_PRIMA= C_T_PRIMA.agregar(C_T_PRIMA); \n return C_T_PRIMA;");ingresarRegla(regla);
+break;
+case 33:
+this.$ = $$[$0-1]+' '+ $$[$0];
+						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> TIPO_DATO C_T_PRIMA","return  concat(TIPO_DATO, C_T_PRIMA)");ingresarRegla(regla);
+break;
+case 34:
+this.$ = [];
+						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> epsilon","return  lessthan");ingresarRegla(regla);
+break;
+case 35:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> lessthan","return  lessthan");ingresarRegla(regla);
+break;
+case 36:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> ampersand","return  ampersand");ingresarRegla(regla);
+break;
+case 37:
+this.$= $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> simplequote","return  simplequote");ingresarRegla(regla);
+break;
+case 38: case 41:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> underscore","return  identificador");ingresarRegla(regla);
+break;
+case 39:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> doublequote","return  doublequote");ingresarRegla(regla);
+break;
+case 40:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> colon","return  colon");ingresarRegla(regla);
+break;
+case 42:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","TIPO_DATO-> identificador","return  identificador");ingresarRegla(regla);
+break;
+case 43:
+this.$= $$[$0]; 
+					var regla = new Regla("GRAMATICAL","TIPO_DATO-> decimal","return  decimal");ingresarRegla(regla);
+break;
+case 44:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","TIPO_DATO->  entero","return  entero");ingresarRegla(regla);
+break;
+case 45:
+this.$ =  $$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> mas","return  mas;"); ingresarRegla(regla);
+break;
+case 46:
+this.$ =  $$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> menos","return  menos;"); ingresarRegla(regla);
+break;
+case 47:
+this.$ =  $$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> por","return  por;"); ingresarRegla(regla);
+break;
+case 48:
+this.$ =$$[$0]; 
+			var regla = new Regla("GRAMATICAL","SIGNOS-> div","return  div;");ingresarRegla(regla);
+break;
+case 49:
+this.$ = $$[$0]; 
+					var regla = new Regla("GRAMATICAL","QUOTES->comilla","return comilla;"); ingresarRegla(regla);
+				
+break;
+case 50:
+this.$= $$[$0].toString(); 
+				var regla = new Regla("GRAMATICAL","QUOTES-> apostrofe","return apostrofe;"); ingresarRegla(regla);
+				
 break;
 }
 },
-table: [{2:[1,3],3:1,4:2,8:[1,4]},{1:[3]},{5:5,8:[1,6]},{1:[2,2]},{9:[1,7]},{6:8,14:18,17:$V0,21:$V1,23:$V2,24:9,25:10,26:11,27:12,28:15,34:$V3,48:$V4,49:$V5,54:13},{21:$V6,22:$V7},{10:[1,24]},{7:[1,25]},o($V8,[2,9]),o($V8,[2,10]),{17:$V0,27:26,34:$V3},o($V8,[2,12]),{23:[1,27]},{23:[1,28]},o($V9,$Va,{29:29,28:30,21:$Vb}),{5:40,8:[1,34],14:37,21:$Vc,23:$Vd,31:35,33:32,34:$Ve,35:33,36:36,39:38,40:39,41:$Vf,42:$Vg,43:$Vh,44:$Vi,45:$Vj,46:$Vk,47:$Vl,48:$V4,49:$V5,50:$Vm,51:$Vn},{17:[1,53]},{14:55,21:$Vc,23:$Vo,48:$V4,49:$V5,55:54},o([21,23,48,49],$Vp,{12:$Vq}),o($Vr,[2,42]),o($Vr,[2,43]),o($Vs,[2,7]),{23:[1,57]},{11:[1,58]},{1:[2,1]},o($V8,[2,11]),{23:[1,59]},{17:[1,60]},o($V9,[2,13]),o($V9,$Va,{28:30,29:61,21:$Vb}),{12:$Vq},{8:[1,62]},{34:[1,63]},{21:$V6,22:$V7,34:[1,64]},{8:$Vt,14:37,21:$Vc,23:$Vd,31:66,34:$Ve,38:65,39:38,40:39,41:$Vf,42:$Vg,43:$Vh,44:$Vi,45:$Vj,46:$Vk,47:$Vl,48:$V4,49:$V5,50:$Vm,51:$Vn},{5:40,8:$Vu,36:68,37:67},o($Vr,[2,31]),o($Vr,[2,32]),o($Vr,[2,33]),{6:70,14:18,17:$V0,21:$V1,23:$V2,24:9,25:10,26:11,27:12,28:15,34:$V3,48:$V4,49:$V5,54:13},o($Vr,$Vp),o($Vr,[2,44]),o($Vr,[2,45]),o($Vr,[2,46]),o($Vr,[2,47]),o($Vr,[2,34]),o($Vr,[2,35]),o($Vr,[2,36]),o($Vr,[2,37]),o($Vr,[2,38]),o($Vr,[2,39]),o($Vr,[2,40]),o($V8,[2,23]),{23:[2,52]},{14:55,21:$Vc,23:$Vo,48:$V4,49:$V5,55:71},{13:72,52:$Vv,53:$Vw},{23:[1,75]},{12:[1,76]},{17:[1,77]},o($V8,[2,51]),o($V9,[2,14]),{34:[1,78]},{21:[1,79]},{21:[1,80]},{8:[2,28]},{8:$Vt,14:37,21:$Vc,23:$Vd,31:66,34:$Ve,38:81,39:38,40:39,41:$Vf,42:$Vg,43:$Vh,44:$Vi,45:$Vj,46:$Vk,47:$Vl,48:$V4,49:$V5,50:$Vm,51:$Vn},{34:[2,24]},{5:40,8:$Vu,36:68,37:82},{21:$V6,22:$V7,34:[2,26]},{8:[2,27]},{23:[2,53]},{14:37,21:$Vc,23:$Vd,30:83,31:84,34:$Ve,39:38,40:39,41:$Vf,42:$Vg,43:$Vh,44:$Vi,45:$Vj,46:$Vk,47:$Vl,48:$V4,49:$V5,50:$Vm,51:$Vn},o($Vx,[2,48]),o($Vx,[2,49]),o($Vs,[2,8]),{13:85,52:$Vv,53:$Vw},o($V8,[2,50]),{21:[1,86]},{17:[1,87]},{17:[1,88]},{8:[2,29]},{34:[2,25]},{13:89,52:$Vv,53:$Vw},o($Vy,$Vz,{14:37,39:38,40:39,32:90,31:91,21:$Vc,23:$Vd,34:$Ve,41:$Vf,42:$Vg,43:$Vh,44:$Vi,45:$Vj,46:$Vk,47:$Vl,48:$V4,49:$V5,50:$Vm,51:$Vn}),{14:92,21:$Vc,48:$V4,49:$V5},{17:[1,93]},o($V8,[2,21]),o($V8,[2,22]),o([17,21,34],[2,16]),o($Vy,[2,17]),o($Vy,$Vz,{14:37,39:38,40:39,31:91,32:94,21:$Vc,23:$Vd,34:$Ve,41:$Vf,42:$Vg,43:$Vh,44:$Vi,45:$Vj,46:$Vk,47:$Vl,48:$V4,49:$V5,50:$Vm,51:$Vn}),{13:95,52:$Vv,53:$Vw},o($V8,[2,20]),o($Vy,[2,18]),{15:[1,96]},{12:[1,97]},{13:98,52:$Vv,53:$Vw},{16:99,18:[1,100],19:[1,101],20:[1,102]},{13:103,52:$Vv,53:$Vw},o($Vy,[2,4]),o($Vy,[2,5]),o($Vy,[2,6]),{9:[1,104]},{17:[1,105]},{8:[2,3]}],
-defaultActions: {3:[2,2],25:[2,1],54:[2,52],65:[2,28],67:[2,24],70:[2,27],71:[2,53],81:[2,29],82:[2,25],105:[2,3]},
+table: [{2:[1,4],3:1,4:2,5:3,8:[1,5]},{1:[3]},{5:6,8:$V0},{6:8,17:$V1,21:$V2,22:9,24:$V3,25:12},{1:[2,3]},{9:[1,14],21:$V4},{6:16,17:$V1,21:$V2,22:9,24:$V3,25:12},{21:$V4},{7:[1,17]},{17:[1,18],24:[1,19]},{5:28,8:$V0,14:25,21:$V5,23:20,24:$V6,28:23,30:22,31:24,33:21,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi},{17:[1,43]},o($Vj,$Vk,{26:44,25:45,21:$V2}),{12:[1,46]},{10:[1,47]},o($Vl,[2,8]),{7:[1,48]},{1:[2,2]},{5:28,8:$V0,14:25,21:$V5,23:49,24:$V6,28:23,30:22,31:24,33:21,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi},{17:[1,50]},{24:[1,51]},{24:[2,24]},{24:[2,25]},{8:$Vm,14:25,21:$V5,24:$V6,28:53,34:52,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi},{5:28,8:$Vn,31:56,32:55},o($Vo,[2,29]),o($Vo,[2,30]),o($Vo,[2,31]),{6:58,17:$V1,21:$V2,22:9,24:$V3,25:12},o($Vo,[2,42]),o($Vo,[2,43]),o($Vo,[2,44]),o($Vo,[2,45]),o($Vo,[2,46]),o($Vo,[2,47]),o($Vo,[2,48]),o($Vo,[2,35]),o($Vo,[2,36]),o($Vo,[2,37]),o($Vo,[2,38]),o($Vo,[2,39]),o($Vo,[2,40]),o($Vo,[2,41]),o($Vp,[2,12]),o($Vj,[2,13]),o($Vj,$Vk,{25:45,26:59,21:$V2}),{13:60,51:$Vq,52:$Vr},{11:[1,63]},{1:[2,1]},{24:[1,64]},o($Vp,[2,11]),{21:[1,65]},{24:[2,26]},{8:$Vm,14:25,21:$V5,24:$V6,28:53,34:66,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi},{24:[2,28]},{24:[2,20]},{5:28,8:$Vn,31:56,32:67},{21:$V4,24:[2,22]},{8:[2,23]},o($Vj,[2,14]),{14:25,21:$V5,24:$V6,27:68,28:69,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi},o($Vs,[2,49]),o($Vs,[2,50]),{12:[1,70]},{21:[1,71]},{17:[1,72]},{24:[2,27]},{24:[2,21]},{13:73,51:$Vq,52:$Vr},o($Vt,$Vu,{14:25,35:26,36:27,29:74,28:75,21:$V5,24:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi}),{13:76,51:$Vq,52:$Vr},{17:[1,77]},o($Vp,[2,10]),o($Vl,[2,16]),o($Vt,[2,17]),o($Vt,$Vu,{14:25,35:26,36:27,28:75,29:78,21:$V5,24:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi}),{14:79,21:$V5,46:$Ve,47:$Vf},o($Vp,[2,9]),o($Vt,[2,18]),{13:80,51:$Vq,52:$Vr},{15:[1,81]},{12:[1,82]},{13:83,51:$Vq,52:$Vr},{16:84,18:[1,85],19:[1,86],20:[1,87]},{13:88,51:$Vq,52:$Vr},o($Vt,[2,5]),o($Vt,[2,6]),o($Vt,[2,7]),{9:[1,89]},{17:[1,90]},{8:[2,4]}],
+defaultActions: {4:[2,3],17:[2,2],21:[2,24],22:[2,25],48:[2,1],52:[2,26],54:[2,28],55:[2,20],58:[2,23],66:[2,27],67:[2,21],90:[2,4]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -340,6 +564,74 @@ _handle_error:
 
     return true;
 }};
+
+	//const {Error} = require('../../Scripts/Errores/Error.js');
+	var erroresLexicos = [];
+	var variables=[];
+	var erroresSintacticos = [];
+	var errorSemantico=[];
+	
+
+	
+	define('grammarXMLDesc',function () {
+    return {
+        getParser: function () {
+            return gramarxmldes;
+        }
+    };
+});
+    //const {Primitivo} = require("../../Scripts/Arboles/Primitivo");
+    //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
+    //const {Atributo} = require("../../Scripts/clasesXML/Atributo");
+	//const {Nodo} = require("../../Scripts/clasesXML/Nodo");\
+	var AUXid=0;
+	var etiquetas=[];
+	function escribirLista(primitivos) {
+		var texto = '';
+		primitivos.forEach(function (element) {
+			texto = texto + " " + element;
+		});
+		console.log(texto);
+		return texto;
+	}
+
+	function validarEtiqueta(nombre, linea, columna){
+		if(etiquetas[etiquetas.length - 1] == nombre){
+			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
+			//console.log("iguales");
+			return true;
+		}else{
+			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
+			console.log("error semantico"+linea + columna);
+			var errorSEM = new Error( linea, columna, 'semantico','xmldesc', nombre);
+			errorSemantico.push( errorSEM) ;
+			console.log(errorSEM);
+			return false;
+		}
+	}
+		
+	function unirErrores(){
+			erroresGramar[0]= erroresLexicos ;
+			erroresGramar[1]= erroresSintacticos;
+			erroresGramar[2]=errorSemantico;
+		
+		console.log(erroresGramar.length);
+		console.log(erroresGramar[0].length);
+		console.log(erroresGramar[1].length);
+		console.log(erroresGramar[2].length);
+	}
+
+	function ingresarRegla(regla){
+		if(reglas.length>0){
+			var reglas2=[];
+			reglas2.push(regla);
+			reglas= reglas2.concat(reglas);
+			console.log('agregando regla'+reglas.length);
+		}else{
+			reglas.push(regla);
+			console.log('agregando regla'+reglas.length);
+		}
+	}
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -668,86 +960,94 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:return 'REVALUAR';
+case 0:this.begin('comment');
 break;
-case 1:return 'ACEPTAR';
+case 1:this.popState(); console.log('comentario');
 break;
-case 2:return 'ptcoma';
+case 2:/* skip comment content*/
 break;
-case 3:return 'parizq';
+case 3:/* skip whitespace */
 break;
-case 4:return 'parder';
+case 4:return 'REVALUAR';
 break;
-case 5:return 'corizq';
+case 5:return 'ACEPTAR';
 break;
-case 6:return 'corder';
+case 6:return 'ptcoma';
 break;
-case 7:return 8;
+case 7:return 'parizq';
 break;
-case 8:return 17;
+case 8:return 'parder';
 break;
-case 9:return 12;
+case 9:return 'corizq';
 break;
-case 10:return 52;
+case 10:return 'corder';
 break;
-case 11:return 53;
+case 11:return 8;
 break;
-case 12:return 22;
+case 12:return 17;
 break;
-case 13:return 9;
+case 13:return 12;
 break;
-case 14:return 10;
+case 14:return 51;
 break;
-case 15:return 11;
+case 15:return 52;
 break;
-case 16:return 15;
+case 16:return 'inicoment';
 break;
-case 17:return 18
+case 17:return 9;
 break;
-case 18:return 19;
+case 18:return 10;
 break;
-case 19:return 20;
+case 19:return 11;
 break;
-case 20:return 41;
+case 20:return 15;
 break;
-case 21:return 42;
+case 21:return 18
 break;
-case 22:return 43;
+case 22:return 19;
 break;
-case 23:return 44;
+case 23:return 20;
 break;
-case 24:return 45;
+case 24:return 39;
 break;
-case 25:return 46;
+case 25:return 40;
 break;
-case 26:return 47;
+case 26:return 41;
 break;
-case 27:return 50;
+case 27:return 42;
 break;
-case 28:return 23;
+case 28:return 43;
 break;
-case 29:return 51;
+case 29:return 44;
 break;
-case 30:return 34;
+case 30:return 45;
 break;
-case 31:
+case 31:return 48;
 break;
-case 32:
+case 32:return 49;
 break;
-case 33:return 48;
+case 33:return 50;
 break;
-case 34:return 49;
+case 34:return 24;
 break;
-case 35:return 21;
+case 35:
 break;
-case 36:return 7;
+case 36:
 break;
-case 37: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
+case 37:return 46;
+break;
+case 38:return 47;
+break;
+case 39:return 21;
+break;
+case 40:return 7;
+break;
+case 41: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
 break;
 }
 },
-rules: [/^(?:Evaluar\b)/i,/^(?:Aceptar\b)/i,/^(?:;)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:")/i,/^(?:')/i,/^(?:!)/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:UTF-8\b)/i,/^(?:ASCII\b)/i,/^(?:ISO859-1\b)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?::)/i,/^(?:_\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:([a-zA-Z0-9])[a-zA-Z0-9_]*)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37],"inclusive":true}}
+rules: [/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:Evaluar\b)/i,/^(?:Aceptar\b)/i,/^(?:;)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:")/i,/^(?:')/i,/^(?:!)/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:UTF-8\b)/i,/^(?:ASCII\b)/i,/^(?:ISO859-1\b)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?::)/i,/^(?:_\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑóáéíúÁÉÍÓÚ]*)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41],"inclusive":true},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41],"inclusive":true}}
 });
 return lexer;
 })();
