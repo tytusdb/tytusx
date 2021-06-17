@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
 exports.PR = void 0;
-var Tipo_1 = require("../AST/Tipo");
 var PR = /** @class */ (function () {
     function PR(val, li, col) {
         this.valor = val;
