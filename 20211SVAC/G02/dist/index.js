@@ -42,6 +42,10 @@ function agregarErroresXMLConsola(listaErrores) {
     var header = "==========ERRORES XML==========";
     agregarErroresConsola(header, listaErrores);
 }
+function agregarErroresXPathConsola(listaErrores) {
+    var header = "==========ERRORES XPath==========";
+    agregarErroresConsola(header, listaErrores);
+}
 function agregarErroresConsola(header, listaErrores) {
     agregarLinea(header);
     listaErrores.forEach((err) => {

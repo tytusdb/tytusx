@@ -90,6 +90,7 @@ function analizar() {
 
     procesarProyecto(instruccionesXML, instruccionesXPath);
     agregarErroresXMLConsola(erroresXML);
+    agregarErroresXPathConsola(erroresXPath);
     editorConsola.setValue(consola);
 }
 

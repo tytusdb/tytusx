@@ -76,7 +76,7 @@ charliteral                         \'{stringsingle}\'
 
 //error lexico
 .                                   {
-                                        console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+                                        erroresXPath.push(new ErrorCapturado(TipoError.ERROR_LEXICO, yytext, 'Error lexico detectado',yylloc.first_line, yylloc.first_column));
                                     }
 
 <<EOF>>                     return 'EOF'
@@ -137,7 +137,8 @@ PATHEXPR:
     | diagonal diagonal STEPEXPR PATHEXPR{
         $$ = [];
     }
-    | {$$=[]};
+    | {$$=[]}
+    | error { $$ = []; console.log('error sintactico ' + yytext); erroresXPath.push(new ErrorCapturado(TipoError.ERROR_SINTACTICO, yytext, 'Se esperaba token diferente',this._$.first_line, this._$.first_column));};
 
 NODEXPR:
     EXPR PATHEXPR{var nodo1=new Nodo([$1],@1.first_line,@2.first_column); var lista=[nodo1]; $$=lista;}
