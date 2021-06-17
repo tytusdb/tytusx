@@ -13,6 +13,9 @@ class Objeto {
     getTipo(e) {
         return Tipo.OBJETO;
     }
+    getListaAtributos() {
+        return this.listAtributos;
+    }
     getValorImplicito(e) {
         return this;
     }

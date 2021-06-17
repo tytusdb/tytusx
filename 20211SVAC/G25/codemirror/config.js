@@ -89,5 +89,22 @@ function downloadXPATH() {
     document.body.removeChild(element);
 }
 
+function reporteGramaticalXML() {
+    var tabla = document.getElementById("tablaXML"); 
+    tabla.innerHTML = "";
+    tabla.innerHTML = getReporteGramaticalXMLASC();
+}
+
+function tablaSimboloXML() {
+    var tabla = document.getElementById("tabla_simbolo"); 
+    tabla.innerHTML = "";
+    tabla.innerHTML = getTablaSimboloXML();
+}
+
+function erroresXML() {
+    var errores = document.getElementById("errores"); 
+    errores.innerHTML = "";
+    errores.innerHTML = getReporteErrorXMLASC();
+}
 
 

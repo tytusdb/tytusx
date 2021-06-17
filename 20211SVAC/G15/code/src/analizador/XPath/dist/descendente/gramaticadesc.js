@@ -72,12 +72,12 @@
   }
 */
 var gramaticadesc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,38],$V1=[1,15],$V2=[1,16],$V3=[1,40],$V4=[1,42],$V5=[1,43],$V6=[1,44],$V7=[1,45],$V8=[1,46],$V9=[1,47],$Va=[1,48],$Vb=[1,49],$Vc=[1,55],$Vd=[1,61],$Ve=[1,62],$Vf=[1,63],$Vg=[1,64],$Vh=[1,34],$Vi=[1,35],$Vj=[1,36],$Vk=[1,37],$Vl=[1,38],$Vm=[1,39],$Vn=[1,52],$Vo=[1,53],$Vp=[1,54],$Vq=[1,50],$Vr=[1,51],$Vs=[1,33],$Vt=[5,89],$Vu=[1,68],$Vv=[5,11,89],$Vw=[1,71],$Vx=[5,11,15,89],$Vy=[5,11,15,18,19,20,21,22,23,89],$Vz=[1,81],$VA=[1,82],$VB=[5,11,15,18,19,20,21,22,23,28,29,89],$VC=[1,85],$VD=[1,86],$VE=[1,87],$VF=[5,11,15,18,19,20,21,22,23,28,29,33,34,35,89],$VG=[1,90],$VH=[5,11,15,18,19,20,21,22,23,28,29,33,34,35,39,89],$VI=[1,96],$VJ=[1,95],$VK=[5,11,15,18,19,20,21,22,23,28,29,33,34,35,39,43,45,89],$VL=[1,98],$VM=[5,11,15,18,19,20,21,22,23,28,29,33,34,35,39,43,45,88,89],$VN=[5,11,15,28,29,33,34,35,43,45,57,58,60,61,62,63,64,65,66,67,73,76,77,78,81,82,83,84,85,86,89,95,96,97,98,99,100],$VO=[67,73,76,77,78];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,37],$V1=[1,13],$V2=[1,14],$V3=[1,38],$V4=[1,40],$V5=[1,41],$V6=[1,42],$V7=[1,43],$V8=[1,44],$V9=[1,45],$Va=[1,46],$Vb=[1,47],$Vc=[1,53],$Vd=[1,59],$Ve=[1,60],$Vf=[1,61],$Vg=[1,62],$Vh=[1,32],$Vi=[1,33],$Vj=[1,34],$Vk=[1,35],$Vl=[1,36],$Vm=[1,37],$Vn=[1,50],$Vo=[1,51],$Vp=[1,52],$Vq=[1,48],$Vr=[1,49],$Vs=[1,31],$Vt=[5,86],$Vu=[1,66],$Vv=[5,11,86],$Vw=[5,11,14,86],$Vx=[5,11,14,17,18,19,20,21,22,86],$Vy=[1,78],$Vz=[1,79],$VA=[5,11,14,17,18,19,20,21,22,27,28,86],$VB=[1,82],$VC=[1,83],$VD=[1,84],$VE=[5,11,14,17,18,19,20,21,22,27,28,32,33,34,86],$VF=[1,87],$VG=[5,11,14,17,18,19,20,21,22,27,28,32,33,34,38,86],$VH=[1,93],$VI=[1,92],$VJ=[5,11,14,17,18,19,20,21,22,27,28,32,33,34,38,40,42,86],$VK=[1,95],$VL=[5,11,14,17,18,19,20,21,22,27,28,32,33,34,38,40,42,85,86],$VM=[5,11,14,27,28,32,33,34,40,42,54,55,57,58,59,60,61,62,63,64,70,73,74,75,78,79,80,81,82,83,86,92,93,94,95,96,97],$VN=[64,70,73,74,75];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"XPATH":3,"EXPR":4,"EOF":5,"EXPRESIONSIMPLE":6,"OREXPRESION":7,"ANDEXPRESION":8,"OREXPRESIONL1":9,"OREXPRESIONL2":10,"or_":11,"COMPARACIONEXPRESION":12,"ANDEXPRESIONL1":13,"ANDEXPRESIONL2":14,"and_":15,"STRINGCONCATENA":16,"COMPARACIONGENERAL":17,"igual":18,"diferente":19,"menorq":20,"menorigual":21,"mayorq":22,"mayorigual":23,"SUMAEXPRESION":24,"MULTIPLICACIONEXPRESION":25,"SUMAEXPRESIONL1":26,"SUMAEXPRESIONL2":27,"mas":28,"menos":29,"UNIONEXPRESION":30,"MULTIPLICACIONEXPRESIONL1":31,"MULTIPLICACIONEXPRESIONL2":32,"mul":33,"div_":34,"mod_":35,"INTERSECCINEXPRESION":36,"UNIONEXPRESIONL1":37,"UNIONEXPRESIONL2":38,"simpleor":39,"INSTACIAEXPRESION":40,"EXPRESIONUNARIA":41,"PATHEXPRESION":42,"ddiagonal":43,"RUTARELATIVA":44,"sdiagonal":45,"PASOEXPRESION":46,"RUTARELATIVAL1":47,"RUTARELATIVAL2":48,"POSTEXPRESION":49,"AXISEXPRESION":50,"REVERSOPASO":51,"PREDICADO":52,"DELANTEPASO":53,"ABREVIATURADESPUESPASO":54,"DELANTEAXIS":55,"NODOPRUEBA":56,"arroba":57,"child":58,"ddospuntos":59,"descendant":60,"attribute":61,"self":62,"descendant_or_self":63,"following":64,"following_sibling":65,"namespace":66,"NOMBRETEST":67,"PRIMERTEST":68,"METODONODO":69,"METODOTEXTO":70,"METODOLAST":71,"METODOPOSITION":72,"node":73,"lparen":74,"rparen":75,"text":76,"last":77,"position":78,"REVERSOAXIS":79,"ABREVIATURAREVERSEPASO":80,"parent":81,"ancestor_or_self":82,"ancestor":83,"preceding_sibling":84,"preceding":85,"dpunto":86,"EXPRESIONPRIMARIA":87,"lcorchete":88,"rcorchete":89,"LITERAL":90,"ITEMEXPRESION":91,"EXPRESIONSTRING":92,"EXPRESIONNUMERICA":93,"EXPRESIONARROBA":94,"identifier":95,"DecimalLiteral":96,"IntegerLiteral":97,"StringLiteral":98,"CharLiteral":99,"spunto":100,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",11:"or_",15:"and_",18:"igual",19:"diferente",20:"menorq",21:"menorigual",22:"mayorq",23:"mayorigual",28:"mas",29:"menos",33:"mul",34:"div_",35:"mod_",39:"simpleor",43:"ddiagonal",45:"sdiagonal",57:"arroba",58:"child",59:"ddospuntos",60:"descendant",61:"attribute",62:"self",63:"descendant_or_self",64:"following",65:"following_sibling",66:"namespace",67:"NOMBRETEST",73:"node",74:"lparen",75:"rparen",76:"text",77:"last",78:"position",81:"parent",82:"ancestor_or_self",83:"ancestor",84:"preceding_sibling",85:"preceding",86:"dpunto",88:"lcorchete",89:"rcorchete",95:"identifier",96:"DecimalLiteral",97:"IntegerLiteral",98:"StringLiteral",99:"CharLiteral",100:"spunto"},
-productions_: [0,[3,2],[4,1],[6,1],[7,2],[7,1],[9,2],[9,1],[10,2],[8,2],[8,1],[13,2],[13,1],[14,2],[12,3],[12,1],[17,1],[17,1],[17,1],[17,1],[17,1],[17,1],[16,1],[24,2],[24,1],[26,2],[26,1],[27,2],[27,2],[25,2],[25,1],[31,2],[31,1],[32,2],[32,2],[32,2],[30,2],[30,1],[30,0],[37,2],[37,1],[38,2],[36,1],[40,1],[41,1],[42,2],[42,2],[42,1],[42,1],[42,1],[44,2],[44,1],[47,2],[47,1],[48,2],[48,2],[46,1],[46,1],[50,2],[50,2],[50,1],[50,1],[53,1],[53,2],[54,2],[54,1],[55,2],[55,2],[55,2],[55,2],[55,2],[55,2],[55,2],[55,2],[56,1],[56,1],[68,1],[68,1],[68,1],[68,1],[69,3],[70,3],[71,3],[72,3],[51,2],[51,1],[79,2],[79,2],[79,2],[79,2],[79,2],[80,1],[49,2],[49,1],[52,3],[87,1],[87,1],[90,1],[90,1],[90,1],[94,2],[94,2],[93,1],[93,1],[92,1],[92,1],[92,1],[91,1]],
+symbols_: {"error":2,"XPATH":3,"EXPR":4,"EOF":5,"EXPRESIONSIMPLE":6,"OREXPRESION":7,"ANDEXPRESION":8,"OREXPRESIONL1":9,"OREXPRESIONL2":10,"or_":11,"COMPARACIONEXPRESION":12,"ANDEXPRESIONL1":13,"ANDEXPRESIONL2":14,"STRINGCONCATENA":15,"COMPARACIONGENERAL":16,"igual":17,"diferente":18,"menorq":19,"menorigual":20,"mayorq":21,"mayorigual":22,"SUMAEXPRESION":23,"MULTIPLICACIONEXPRESION":24,"SUMAEXPRESIONL1":25,"SUMAEXPRESIONL2":26,"mas":27,"menos":28,"UNIONEXPRESION":29,"MULTIPLICACIONEXPRESIONL1":30,"MULTIPLICACIONEXPRESIONL2":31,"mul":32,"div_":33,"mod_":34,"INTERSECCINEXPRESION":35,"UNIONEXPRESIONL1":36,"UNIONEXPRESIONL2":37,"simpleor":38,"PATHEXPRESION":39,"ddiagonal":40,"RUTARELATIVA":41,"sdiagonal":42,"PASOEXPRESION":43,"RUTARELATIVAL1":44,"RUTARELATIVAL2":45,"POSTEXPRESION":46,"AXISEXPRESION":47,"REVERSOPASO":48,"PREDICADO":49,"DELANTEPASO":50,"ABREVIATURADESPUESPASO":51,"DELANTEAXIS":52,"NODOPRUEBA":53,"arroba":54,"child":55,"ddospuntos":56,"descendant":57,"attribute":58,"self":59,"descendant_or_self":60,"following":61,"following_sibling":62,"namespace":63,"NOMBRETEST":64,"PRIMERTEST":65,"METODONODO":66,"METODOTEXTO":67,"METODOLAST":68,"METODOPOSITION":69,"node":70,"lparen":71,"rparen":72,"text":73,"last":74,"position":75,"REVERSOAXIS":76,"ABREVIATURAREVERSEPASO":77,"parent":78,"ancestor_or_self":79,"ancestor":80,"preceding_sibling":81,"preceding":82,"dpunto":83,"EXPRESIONPRIMARIA":84,"lcorchete":85,"rcorchete":86,"LITERAL":87,"ITEMEXPRESION":88,"EXPRESIONSTRING":89,"EXPRESIONNUMERICA":90,"EXPRESIONARROBA":91,"identifier":92,"DecimalLiteral":93,"IntegerLiteral":94,"StringLiteral":95,"CharLiteral":96,"spunto":97,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",11:"or_",14:"ANDEXPRESIONL2",17:"igual",18:"diferente",19:"menorq",20:"menorigual",21:"mayorq",22:"mayorigual",27:"mas",28:"menos",32:"mul",33:"div_",34:"mod_",38:"simpleor",40:"ddiagonal",42:"sdiagonal",54:"arroba",55:"child",56:"ddospuntos",57:"descendant",58:"attribute",59:"self",60:"descendant_or_self",61:"following",62:"following_sibling",63:"namespace",64:"NOMBRETEST",70:"node",71:"lparen",72:"rparen",73:"text",74:"last",75:"position",78:"parent",79:"ancestor_or_self",80:"ancestor",81:"preceding_sibling",82:"preceding",83:"dpunto",85:"lcorchete",86:"rcorchete",92:"identifier",93:"DecimalLiteral",94:"IntegerLiteral",95:"StringLiteral",96:"CharLiteral",97:"spunto"},
+productions_: [0,[3,2],[4,1],[6,1],[7,2],[7,1],[9,2],[9,1],[10,2],[8,2],[8,1],[13,2],[13,1],[12,3],[12,1],[16,1],[16,1],[16,1],[16,1],[16,1],[16,1],[15,1],[23,2],[23,1],[25,2],[25,1],[26,2],[26,2],[24,2],[24,1],[30,2],[30,1],[31,2],[31,2],[31,2],[29,2],[29,1],[29,0],[36,2],[36,1],[37,2],[35,1],[39,2],[39,2],[39,1],[39,1],[39,1],[41,2],[41,1],[44,2],[44,1],[45,2],[45,2],[43,1],[43,1],[47,2],[47,2],[47,1],[47,1],[50,1],[50,2],[51,2],[51,1],[52,2],[52,2],[52,2],[52,2],[52,2],[52,2],[52,2],[52,2],[53,1],[53,1],[65,1],[65,1],[65,1],[65,1],[66,3],[67,3],[68,3],[69,3],[48,2],[48,1],[76,2],[76,2],[76,2],[76,2],[76,2],[77,1],[46,2],[46,1],[49,3],[84,1],[84,1],[87,1],[87,1],[87,1],[91,2],[91,2],[90,1],[90,1],[89,1],[89,1],[89,1],[88,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -85,31 +85,641 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-                        this.$= new Nodito("INICIO","Xpath");
-		       //this.$.addHijos($$[$0-1]);
+                        this.$= new Nodo("INICIO","Xpath");
+		        this.$.addHijos($$[$0-1]);
                      return { ErrorLexico:arreglolexico,msj:"Analisis XPath Ascendenete Finalizado.\n.",diagramaAST:this.$};
        
         
 break;
 case 2:
-    
-                          
-                        
+       
+                                this.$ = new Nodo("EXPRESIONSIMPLE","PATHEXPRESION");
+                                this.$.addHijos($$[$0]);
+                                
 break;
-case 105:
-    
-                               // this.$ = new Nodo($$[$0],"EXPRESIONSTRING:charliteral");
-                             
+case 3:
+       
+                                                this.$ = new Nodo("EXPRESIONSIMPLE","PATHEXPRESION");
+                                                this.$.addHijos($$[$0]);
+                                                
 break;
-case 106:
-    
-                               // this.$ = new Nodo($$[$0],"EXPRESIONSTRING:identificador");
-                            
+case 4:
+       
+                                                this.$ = new Nodo("OREXPRESION","PATHEXPRESION");
+                                                this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);
+                                                
+break;
+case 5:
+       
+                                                this.$ = new Nodo("OREXPRESION","PATHEXPRESION");
+                                                this.$.addHijos($$[$0]);
+                                                
+break;
+case 6:
+       
+                                                this.$ = new Nodo("OREXPRESIONL1","PATHEXPRESION");
+                                                this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);
+                                                
+break;
+case 7:
+       
+                                                this.$ = new Nodo("OREXPRESIONL1","PATHEXPRESION");
+                                                this.$.addHijos($$[$0]);
+                                        
+break;
+case 8:
+       this.$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                this.$.addHijos(new Nodo($$[$0-1],"or"));
+                                                this.$.addHijos($$[$0]);
+                                        
+break;
+case 9:
+   
+                                                        this.$ = new Nodo("ANDEXPRESION","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0-1]);
+                                                        this.$.addHijos($$[$0]);
+                                                
+break;
+case 10:
+   
+                                                        this.$ = new Nodo("ANDEXPRESION","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0]);
+                                                
+break;
+case 11:
+   
+                                                        this.$ = new Nodo("ANDEXPRESIONL2","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0-1]);
+                                                        this.$.addHijos($$[$0]);
+                                                
+break;
+case 12:
+       this.$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0]);
+                                                
+break;
+case 13:
+   
+                                                                                this.$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0-2]);
+                                                                                this.$.addHijos($$[$0-1]);
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 14:
+   
+                                                                                this.$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 15:
+   
+                                                        this.$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0],"igual"));
+                                                
+break;
+case 16:
+   
+                                                        this.$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0],"diferente"));
+                                                
+break;
+case 17:
+   
+                                                        this.$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0],"menorq"));
+                                                
+break;
+case 18:
+   
+                                                        this.$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0],"menorigual"));
+                                                
+break;
+case 19:
+   
+                                                        this.$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0],"mayorq"));
+                                                
+break;
+case 20:
+   
+                                                        this.$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0],"mayorigual"));
+                                                
+break;
+case 21:
+   
+                                                                                this.$ = new Nodo("STRINGCONCATENA","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 22:
+   
+                                                                                this.$ = new Nodo("SUMAEXPRESION","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0-1]);
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 23:
+   
+                                                                                this.$ = new Nodo("SUMAEXPRESION","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 24:
+   
+                                                                                this.$ = new Nodo("SUMAEXPRESIONL1","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0-1]);
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 25:
+   
+                                                                                this.$ = new Nodo("SUMAEXPRESIONL1","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 26:
+   
+                                                                                this.$ = new Nodo("SUMAEXPRESIONL2","PATHEXPRESION");
+                                                                                this.$.addHijos(new Nodo($$[$0-1],"mas"));
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 27:
+   
+                                                                                this.$ = new Nodo("SUMAEXPRESIONL2","PATHEXPRESION");
+                                                                                this.$.addHijos(new Nodo($$[$0-1],"menos"));
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 28:
+   
+                                                                                this.$ = new Nodo("MULTIPLICACIONEXPRESION","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0-1]);
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 29:
+   
+                                                                                this.$ = new Nodo("MULTIPLICACIONEXPRESION","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 30:
+   
+                                                                                this.$ = new Nodo("MULTIPLICACIONEXPRESIONL1","PATHEXPRESION");
+                                                                                this.$.addHijos($$[$0-1]);
+                                                                                this.$.addHijos($$[$0]);
+                                                                                
+break;
+case 31:
+   
+                                                        this.$ = new Nodo("MULTIPLICACIONEXPRESIONL1","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 32:
+   
+                                                        this.$ = new Nodo("MULTIPLICACIONEXPRESIONL2","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0-1],"mul"));
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 33:
+   
+                                                        this.$ = new Nodo("MULTIPLICACIONEXPRESIONL2","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0-1],"div"));
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 34:
+   
+                                                        this.$ = new Nodo("MULTIPLICACIONEXPRESIONL2","PATHEXPRESION");
+                                                        this.$.addHijos(new Nodo($$[$0-1],"mod"));
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 35:
+   
+                                                        this.$ = new Nodo("UNIONEXPRESION","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0-1]);
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 36:
+   
+                                                        this.$ = new Nodo("UNIONEXPRESION","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 38:
+   
+                                                        this.$ = new Nodo("UNIONEXPRESIONL1","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0-1]);
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 39:
+   
+                                                        this.$ = new Nodo("UNIONEXPRESIONL1","PATHEXPRESION");
+                                                        this.$.addHijos($$[$0]);
+                                                        
+break;
+case 40:
+   
+                                                this.$ = new Nodo("UNIONEXPRESIONL2","PATHEXPRESION");
+                                                this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 41:
+   
+                                                this.$ = new Nodo("INTERSECCINEXPRESION","PATHEXPRESION");
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 42:
+   
+                                                this.$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"ddiagonal"));
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 43:
+   
+                                                this.$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"sdiagonal"));
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 44:
+   
+                                                this.$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0],"ddiagonal"));	
+                                                
+break;
+case 45:
+   
+                                                this.$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0],"sdiagonal"));	
+                                                
+break;
+case 46:
+   
+                                                this.$ = new Nodo("PATHEXPRESION","POSTEXPRESION");
+			                        this.$.addHijos($$[$0]);
+                                                
+break;
+case 47:
+   
+                                                this.$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);
+                                                
+break;
+case 48:
+   
+                                                this.$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        this.$.addHijos($$[$0]);
+                                                
+break;
+case 49:
+   
+                                                this.$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 50:
+   
+                                                this.$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        this.$.addHijos($$[$0]);	
+                                                
+break;
+case 51: case 52:
+   
+                                                this.$ = new Nodo("RUTARELATIVAL2","POSTEXPRESION");
+			                        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 53:
+   
+                                                this.$ = new Nodo("PASOEXPRESION","POSTEXPRESION");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 54:
+   
+                                                this.$ = new Nodo("PASOEXPRESION","AXISEXPRESION");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 55:
+   
+                                                this.$ = new Nodo("AXISEXPRESION","REVERSOPASO");
+			                        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);	
+                                        
+break;
+case 56:
+   
+                                                this.$ = new Nodo("AXISEXPRESION","DELANTEPASO");
+			                        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);	
+                                        
+break;
+case 57:
+   
+                                                this.$ = new Nodo("AXISEXPRESION","REVERSOPASO");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 58:
+   
+                                                this.$ = new Nodo("AXISEXPRESION","DELANTEPASO");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 59:
+   
+                                                this.$ = new Nodo("DELANTEPASO","ABREVIATURADESPUESPASO");
+			                        this.$.addHijos($$[$0]);	
+                                                
+break;
+case 60:
+   
+                                                this.$ = new Nodo("DELANTEPASO","TERM");
+			                        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);	
+                                                
+break;
+case 61:
+   
+                                                this.$ = new Nodo("ABREVIATURADESPUESPASO","NODOPRUEBA-arroba");
+			                        this.$.addHijos($$[$0-1]);	
+                                                
+break;
+case 62:
+   
+                                                this.$ = new Nodo("ABREVIATURADESPUESPASO","NODOPRUEBA");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 63:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"child"));	
+                                        
+break;
+case 64:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"descendant"));	
+                                        
+break;
+case 65:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"attribute"));	
+                                        
+break;
+case 66:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"self"));	
+                                        
+break;
+case 67:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"descendant_or_self"));	
+                                        
+break;
+case 68:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"following"));	
+                                        
+break;
+case 69:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"following_sibling"));	
+                                        
+break;
+case 70:
+   
+                                                this.$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos(new Nodo($$[$0-1],"namespace"));	
+                                        
+break;
+case 71:
+   
+                                                this.$ = new Nodo("NODOPRUEBA","NOMBRETEST");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 72:
+   
+                                                this.$ = new Nodo("NODOPRUEBA","NOMBREPRIMERTESTTEST");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 73:
+   
+                                                this.$ = new Nodo("PRIMERTEST","METODONODO");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 74:
+   
+                                                this.$ = new Nodo("PRIMERTEST","METODOTEXTO");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 75:
+   
+                                                this.$ = new Nodo("PRIMERTEST","METODOLAST");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 76:
+   
+                                                this.$ = new Nodo("PRIMERTEST","METODOPOSITION");
+			                        this.$.addHijos($$[$0]);	
+                                        
+break;
+case 77:
+   
+                                                this.$ = new Nodo("METODONODO","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-2],"node")); 	
+                                        
+break;
+case 78:
+   
+                                                this.$ = new Nodo("METODOLAST","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-2],"position")); 	
+                                        
+break;
+case 79:
+   
+                                                this.$ = new Nodo("METODOLAST","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-2],"last")); 	
+                                        
+break;
+case 80:
+   
+                                                this.$ = new Nodo("METODOPOSITION","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-2],"position")); 	
+                                        
+break;
+case 81:
+ 
+                                                this.$ = new Nodo("REVERSOPASO","REVERSOAXIS");
+					        this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);
+					
+break;
+case 82:
+ 
+                                                this.$ = new Nodo("REVERSOPASO","ABREVIATURAREVERSEPASO");
+					        this.$.addHijos($$[$0]);
+					
+break;
+case 83:
+   
+                                                this.$ = new Nodo("REVERSOAXIS","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-1],"parent")); 	
+                                        
+break;
+case 84:
+   
+                                                this.$ = new Nodo("REVERSOAXIS","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-1],"ancestor_or_self")); 	
+                                        
+break;
+case 85:
+   
+                                                this.$ = new Nodo("REVERSOAXIS","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-1],"ancestor")); 	
+                                        
+break;
+case 86:
+   
+                                                this.$ = new Nodo("REVERSOAXIS","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-1],"preceding_sibling")); 	
+                                        
+break;
+case 87:
+   
+                                                this.$ = new Nodo("REVERSOAXIS","TERM");
+			                        this.$.addHijos(new Nodo($$[$0-1],"preceding")); 	
+                                        
+break;
+case 88:
+   
+                                this.$ = new Nodo("ABREVIATURAREVERSEPASO","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"dpunto")); 	
+                                
+break;
+case 89:
+ 
+                                                        this.$ = new Nodo("POSTEXPRESION","EXPRESIONPRIMARIA2");
+					                this.$.addHijos($$[$0-1]);
+                                                        this.$.addHijos($$[$0]);
+					        
+break;
+case 90:
+ 
+                                                        this.$ = new Nodo("POSTEXPRESION","EXPRESIONPRIMARIA");
+					                this.$.addHijos($$[$0]);
+					        
+break;
+case 91:
+ 
+                                                this.$ = new Nodo("PREDICADO","LITERAL");
+					        this.$.addHijos($$[$0-2]);
+                                                this.$.addHijos($$[$0-1]);
+                                                this.$.addHijos($$[$0]);
+					
+break;
+case 92: case 93:
+ 
+                                                this.$ = new Nodo("EXPRESIONPRIMARIA","LITERAL");
+					        this.$.addHijos($$[$0]);
+					
+break;
+case 94:
+ this.$ = new Nodo("LITERAL","EXPRESIONSTRING");
+					        this.$.addHijos($$[$0]);
+					
+break;
+case 95:
+ this.$ = new Nodo("LITERAL","EXPRESIONNUMERICA");
+					        this.$.addHijos($$[$0]);
+					
+break;
+case 96:
+ this.$ = new Nodo("LITERAL","EXPRESIONARROBA");
+					        this.$.addHijos($$[$0]);
+					
+break;
+case 97:
+   
+                                        this.$ = new Nodo("EXPRESIONARROBA","TERM");
+			                this.$.addHijos(new Nodo($$[$0],"identificador")); 	
+                                        
+break;
+case 98:
+   
+                                        this.$ = new Nodo("EXPRESIONARROBA","TERM");
+			                this.$.addHijos(new Nodo($$[$0],"mul")); 	
+                                        
+break;
+case 99:
+   
+                                this.$ = new Nodo("EXP","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"decimal")); 	
+                                
+break;
+case 100:
+   
+                                this.$ = new Nodo("EXP","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"entero")); 	
+                                
+break;
+case 101:
+   this.$ = new Nodo("EXP","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"identificador")); 	
+                                
+break;
+case 102:
+   
+                                this.$ = new Nodo("EXP","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"char")); 	
+                                
+break;
+case 103:
+   
+                                this.$ = new Nodo("EXP","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"identificador")); 	
+                                
+break;
+case 104:
+   
+                                this.$ = new Nodo("ITEMEXPRESION","TERM");
+			        this.$.addHijos(new Nodo($$[$0],"spunto")); 	
+                                
 break;
 }
 },
-table: [o([5,11,15,18,19,20,21,22,23,28,29,33,34,35],$V0,{3:1,4:2,6:3,7:4,8:5,12:6,16:7,24:8,25:9,30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),{1:[3]},{5:[1,65]},o($Vt,[2,2]),o($Vt,[2,3]),o($Vt,[2,5],{9:66,10:67,11:$Vu}),o($Vv,[2,10],{13:69,14:70,15:$Vw}),o($Vx,[2,15],{17:72,18:[1,73],19:[1,74],20:[1,75],21:[1,76],22:[1,77],23:[1,78]}),o($Vy,[2,22]),o($Vy,[2,24],{26:79,27:80,28:$Vz,29:$VA}),o($VB,[2,30],{31:83,32:84,33:$VC,34:$VD,35:$VE}),o($VF,[2,37],{37:88,38:89,39:$VG}),o($VH,[2,42]),o($VH,[2,43]),o($VH,[2,44]),o($VH,[2,47],{46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,44:91,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VH,[2,48],{46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,44:92,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VH,[2,49]),o($VH,[2,51],{47:93,48:94,43:$VI,45:$VJ}),o($VK,[2,56]),o($VK,[2,57]),o($VK,[2,93],{52:97,88:$VL}),o($VK,[2,60],{52:99,88:$VL}),o($VK,[2,61],{52:100,88:$VL}),o($VM,[2,95]),o($VM,[2,96]),{56:101,67:$Vc,68:56,69:57,70:58,71:59,72:60,73:$Vd,76:$Ve,77:$Vf,78:$Vg},o($VM,[2,85]),o($VM,[2,62]),{56:102,67:$Vc,68:56,69:57,70:58,71:59,72:60,73:$Vd,76:$Ve,77:$Vf,78:$Vg},o($VM,[2,97]),o($VM,[2,98]),o($VM,[2,99]),o($VM,[2,107]),{59:[1,103]},{59:[1,104]},{59:[1,105]},{59:[1,106]},{59:[1,107]},o($VM,[2,91]),{33:[1,110],56:108,67:$Vc,68:56,69:57,70:58,71:59,72:60,73:$Vd,76:$Ve,77:$Vf,78:$Vg,95:[1,109]},o($VM,[2,65]),{59:[1,111]},{59:[1,112]},{59:[1,113]},{59:[1,114]},{59:[1,115]},{59:[1,116]},{59:[1,117]},{59:[1,118]},o($VM,[2,104]),o($VM,[2,105]),o($VM,[2,106]),o($VM,[2,102]),o($VM,[2,103]),o($VM,[2,74]),o($VM,[2,75]),o($VM,[2,76]),o($VM,[2,77]),o($VM,[2,78]),o($VM,[2,79]),{74:[1,119]},{74:[1,120]},{74:[1,121]},{74:[1,122]},{1:[2,1]},o($Vt,[2,4],{10:123,11:$Vu}),o($Vv,[2,7]),o($VF,$V0,{12:6,16:7,24:8,25:9,30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,8:124,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($Vv,[2,9],{14:125,15:$Vw}),o($Vx,[2,12]),o($VF,$V0,{16:7,24:8,25:9,30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,12:126,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o([5,11,15,28,29,33,34,35,89],$V0,{24:8,25:9,30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,16:127,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VN,[2,16]),o($VN,[2,17]),o($VN,[2,18]),o($VN,[2,19]),o($VN,[2,20]),o($VN,[2,21]),o($Vy,[2,23],{27:128,28:$Vz,29:$VA}),o($VB,[2,26]),o($VF,$V0,{30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,25:129,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VF,$V0,{30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,25:130,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VB,[2,29],{32:131,33:$VC,34:$VD,35:$VE}),o($VF,[2,32]),o($VF,$V0,{36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,30:132,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VF,$V0,{36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,30:133,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VF,$V0,{36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,30:134,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VF,[2,36],{38:135,39:$VG}),o($VH,[2,40]),{36:136,40:12,41:13,42:14,43:$V1,44:17,45:$V2,46:18,49:19,50:20,51:22,53:23,54:28,55:29,56:41,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,68:56,69:57,70:58,71:59,72:60,73:$Vd,76:$Ve,77:$Vf,78:$Vg,79:26,80:27,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,87:21,90:24,91:25,92:30,93:31,94:32,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs},o($VH,[2,45]),o($VH,[2,46]),o($VH,[2,50],{48:137,43:$VI,45:$VJ}),o($VK,[2,53]),{46:138,49:19,50:20,51:22,53:23,54:28,55:29,56:41,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,68:56,69:57,70:58,71:59,72:60,73:$Vd,76:$Ve,77:$Vf,78:$Vg,79:26,80:27,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,87:21,90:24,91:25,92:30,93:31,94:32,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs},{46:139,49:19,50:20,51:22,53:23,54:28,55:29,56:41,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,68:56,69:57,70:58,71:59,72:60,73:$Vd,76:$Ve,77:$Vf,78:$Vg,79:26,80:27,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,87:21,90:24,91:25,92:30,93:31,94:32,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs},o($VK,[2,92]),o([11,15,18,19,20,21,22,23,28,29,33,34,35,89],$V0,{6:3,7:4,8:5,12:6,16:7,24:8,25:9,30:10,36:11,40:12,41:13,42:14,44:17,46:18,49:19,50:20,87:21,51:22,53:23,90:24,91:25,79:26,80:27,54:28,55:29,92:30,93:31,94:32,56:41,68:56,69:57,70:58,71:59,72:60,4:140,43:$V1,45:$V2,57:$V3,58:$V4,60:$V5,61:$V6,62:$V7,63:$V8,64:$V9,65:$Va,66:$Vb,67:$Vc,73:$Vd,76:$Ve,77:$Vf,78:$Vg,81:$Vh,82:$Vi,83:$Vj,84:$Vk,85:$Vl,86:$Vm,95:$Vn,96:$Vo,97:$Vp,98:$Vq,99:$Vr,100:$Vs}),o($VK,[2,58]),o($VK,[2,59]),o($VM,[2,84]),o($VM,[2,63]),o($VO,[2,86]),o($VO,[2,87]),o($VO,[2,88]),o($VO,[2,89]),o($VO,[2,90]),o($VM,[2,64]),o($VM,[2,100]),o($VM,[2,101]),o($VO,[2,66]),o($VO,[2,67]),o($VO,[2,68]),o($VO,[2,69]),o($VO,[2,70]),o($VO,[2,71]),o($VO,[2,72]),o($VO,[2,73]),{75:[1,141]},{75:[1,142]},{75:[1,143]},{75:[1,144]},o($Vv,[2,6]),o($Vv,[2,8]),o($Vx,[2,11]),o($Vx,[2,13]),o($Vx,[2,14]),o($VB,[2,25]),o($VB,[2,27]),o($VB,[2,28]),o($VF,[2,31]),o($VF,[2,33]),o($VF,[2,34]),o($VF,[2,35]),o($VH,[2,39]),o($VH,[2,41]),o($VK,[2,52]),o($VK,[2,54]),o($VK,[2,55]),{89:[1,145]},o($VM,[2,80]),o($VM,[2,81]),o($VM,[2,82]),o($VM,[2,83]),o($VK,[2,94])],
-defaultActions: {65:[2,1]},
+table: [o([5,11,14,17,18,19,20,21,22,27,28,32,33,34],$V0,{3:1,4:2,6:3,7:4,8:5,12:6,15:7,23:8,24:9,29:10,35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),{1:[3]},{5:[1,63]},o($Vt,[2,2]),o($Vt,[2,3]),o($Vt,[2,5],{9:64,10:65,11:$Vu}),o($Vv,[2,10],{13:67,14:[1,68]}),o($Vw,[2,14],{16:69,17:[1,70],18:[1,71],19:[1,72],20:[1,73],21:[1,74],22:[1,75]}),o($Vx,[2,21]),o($Vx,[2,23],{25:76,26:77,27:$Vy,28:$Vz}),o($VA,[2,29],{30:80,31:81,32:$VB,33:$VC,34:$VD}),o($VE,[2,36],{36:85,37:86,38:$VF}),o($VG,[2,41]),o($VG,[2,44],{43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,41:88,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VG,[2,45],{43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,41:89,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VG,[2,46]),o($VG,[2,48],{44:90,45:91,40:$VH,42:$VI}),o($VJ,[2,53]),o($VJ,[2,54]),o($VJ,[2,90],{49:94,85:$VK}),o($VJ,[2,57],{49:96,85:$VK}),o($VJ,[2,58],{49:97,85:$VK}),o($VL,[2,92]),o($VL,[2,93]),{53:98,64:$Vc,65:54,66:55,67:56,68:57,69:58,70:$Vd,73:$Ve,74:$Vf,75:$Vg},o($VL,[2,82]),o($VL,[2,59]),{53:99,64:$Vc,65:54,66:55,67:56,68:57,69:58,70:$Vd,73:$Ve,74:$Vf,75:$Vg},o($VL,[2,94]),o($VL,[2,95]),o($VL,[2,96]),o($VL,[2,104]),{56:[1,100]},{56:[1,101]},{56:[1,102]},{56:[1,103]},{56:[1,104]},o($VL,[2,88]),{32:[1,107],53:105,64:$Vc,65:54,66:55,67:56,68:57,69:58,70:$Vd,73:$Ve,74:$Vf,75:$Vg,92:[1,106]},o($VL,[2,62]),{56:[1,108]},{56:[1,109]},{56:[1,110]},{56:[1,111]},{56:[1,112]},{56:[1,113]},{56:[1,114]},{56:[1,115]},o($VL,[2,101]),o($VL,[2,102]),o($VL,[2,103]),o($VL,[2,99]),o($VL,[2,100]),o($VL,[2,71]),o($VL,[2,72]),o($VL,[2,73]),o($VL,[2,74]),o($VL,[2,75]),o($VL,[2,76]),{71:[1,116]},{71:[1,117]},{71:[1,118]},{71:[1,119]},{1:[2,1]},o($Vt,[2,4]),o($Vt,[2,7],{10:65,9:120,11:$Vu}),o($VE,$V0,{12:6,15:7,23:8,24:9,29:10,35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,8:121,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($Vv,[2,9],{14:[1,122]}),o($Vw,[2,12]),o([5,11,14,27,28,32,33,34,86],$V0,{23:8,24:9,29:10,35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,15:123,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VM,[2,15]),o($VM,[2,16]),o($VM,[2,17]),o($VM,[2,18]),o($VM,[2,19]),o($VM,[2,20]),o($Vx,[2,22],{26:124,27:$Vy,28:$Vz}),o($VA,[2,25]),o($VE,$V0,{29:10,35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,24:125,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VE,$V0,{29:10,35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,24:126,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VA,[2,28],{31:127,32:$VB,33:$VC,34:$VD}),o($VE,[2,31]),o($VE,$V0,{35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,29:128,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VE,$V0,{35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,29:129,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VE,$V0,{35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,29:130,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VE,[2,35],{37:131,38:$VF}),o($VG,[2,39]),{35:132,39:12,40:$V1,41:15,42:$V2,43:16,46:17,47:18,48:20,50:21,51:26,52:27,53:39,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,65:54,66:55,67:56,68:57,69:58,70:$Vd,73:$Ve,74:$Vf,75:$Vg,76:24,77:25,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,84:19,87:22,88:23,89:28,90:29,91:30,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs},o($VG,[2,42]),o($VG,[2,43]),o($VG,[2,47],{45:133,40:$VH,42:$VI}),o($VJ,[2,50]),{43:134,46:17,47:18,48:20,50:21,51:26,52:27,53:39,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,65:54,66:55,67:56,68:57,69:58,70:$Vd,73:$Ve,74:$Vf,75:$Vg,76:24,77:25,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,84:19,87:22,88:23,89:28,90:29,91:30,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs},{43:135,46:17,47:18,48:20,50:21,51:26,52:27,53:39,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,65:54,66:55,67:56,68:57,69:58,70:$Vd,73:$Ve,74:$Vf,75:$Vg,76:24,77:25,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,84:19,87:22,88:23,89:28,90:29,91:30,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs},o($VJ,[2,89]),o([11,14,17,18,19,20,21,22,27,28,32,33,34,86],$V0,{6:3,7:4,8:5,12:6,15:7,23:8,24:9,29:10,35:11,39:12,41:15,43:16,46:17,47:18,84:19,48:20,50:21,87:22,88:23,76:24,77:25,51:26,52:27,89:28,90:29,91:30,53:39,65:54,66:55,67:56,68:57,69:58,4:136,40:$V1,42:$V2,54:$V3,55:$V4,57:$V5,58:$V6,59:$V7,60:$V8,61:$V9,62:$Va,63:$Vb,64:$Vc,70:$Vd,73:$Ve,74:$Vf,75:$Vg,78:$Vh,79:$Vi,80:$Vj,81:$Vk,82:$Vl,83:$Vm,92:$Vn,93:$Vo,94:$Vp,95:$Vq,96:$Vr,97:$Vs}),o($VJ,[2,55]),o($VJ,[2,56]),o($VL,[2,81]),o($VL,[2,60]),o($VN,[2,83]),o($VN,[2,84]),o($VN,[2,85]),o($VN,[2,86]),o($VN,[2,87]),o($VL,[2,61]),o($VL,[2,97]),o($VL,[2,98]),o($VN,[2,63]),o($VN,[2,64]),o($VN,[2,65]),o($VN,[2,66]),o($VN,[2,67]),o($VN,[2,68]),o($VN,[2,69]),o($VN,[2,70]),{72:[1,137]},{72:[1,138]},{72:[1,139]},{72:[1,140]},o($Vt,[2,6]),o($Vv,[2,8]),o($Vw,[2,11]),o($Vw,[2,13]),o($VA,[2,24]),o($VA,[2,26]),o($VA,[2,27]),o($VE,[2,30]),o($VE,[2,32]),o($VE,[2,33]),o($VE,[2,34]),o($VG,[2,38]),o($VG,[2,40]),o($VJ,[2,49]),o($VJ,[2,51]),o($VJ,[2,52]),{86:[1,141]},o($VL,[2,77]),o($VL,[2,78]),o($VL,[2,79]),o($VL,[2,80]),o($VJ,[2,91])],
+defaultActions: {63:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -258,7 +868,7 @@ parse: function parse(input) {
 }};
 
 
-    const Nodito= require('./Nodito').default;
+    const Nodo= require('./Nodo');
     var arreglolexico = "Codigo:";
 
  
@@ -593,31 +1203,31 @@ options: {},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:return 83;
+case 0:return 80;
 break;
-case 1:return 82;
+case 1:return 79;
 break;
-case 2:return 61;
+case 2:return 58;
 break;
-case 3:return 58;
+case 3:return 55;
 break;
-case 4:return 60;
+case 4:return 57;
 break;
-case 5:return 63;
+case 5:return 60;
 break;
-case 6:return 64;
+case 6:return 61;
 break;
-case 7:return 65;
+case 7:return 62;
 break;
 case 8:return 'namespace_node';
 break;
-case 9:return 81;
+case 9:return 78;
 break;
-case 10:return 85;
+case 10:return 82;
 break;
-case 11:return 84;
+case 11:return 81;
 break;
-case 12:return 62;
+case 12:return 59;
 break;
 case 13:return 'null';
 break;
@@ -625,75 +1235,75 @@ case 14:return 'true';
 break;
 case 15:return 'false';
 break;
-case 16:return 73;
+case 16:return 70;
 break;
-case 17:return 76;
+case 17:return 73;
 break;
-case 18:return 77;
+case 18:return 74;
 break;
-case 19:return 78;
+case 19:return 75;
 break;
-case 20:return 34;
+case 20:return 33;
 break;
 case 21:return 11;
 break;
-case 22:return 15;
+case 22:return 'and_';
 break;
-case 23:return 35;
+case 23:return 34;
 break;
-case 24:return 39;
+case 24:return 38;
 break;
-case 25:return 28;
+case 25:return 27;
 break;
-case 26:return 29;
+case 26:return 28;
 break;
-case 27:return 33;
+case 27:return 32;
 break;
-case 28:return 18;
+case 28:return 17;
 break;
-case 29:return 19;
+case 29:return 18;
 break;
-case 30:return 20;
+case 30:return 19;
 break;
-case 31:return 21;
+case 31:return 20;
 break;
-case 32:return 22;
+case 32:return 21;
 break;
-case 33:return 23;
+case 33:return 22;
 break;
-case 34:return 74;
+case 34:return 71;
 break;
-case 35:return 75;
+case 35:return 72;
 break;
-case 36:return 88;
+case 36:return 85;
 break;
-case 37:return 89;
+case 37:return 86;
 break;
-case 38:return 43; //Probar Esto
+case 38:return 40; //Probar Esto
 break;
-case 39:return 45;
+case 39:return 42;
 break;
-case 40:return 86;
+case 40:return 83;
 break;
-case 41:return 100;
+case 41:return 97;
 break;
-case 42:return 57;
+case 42:return 54;
 break;
-case 43:return 59;
+case 43:return 56;
 break;
 case 44:/*skip comment */
 break;
 case 45:/* skip whitespace */
 break;
-case 46:return 96;
+case 46:return 93;
 break;
-case 47:return 97;
+case 47:return 94;
 break;
-case 48:return 95;
+case 48:return 92;
 break;
-case 49:return 98;
+case 49:return 95;
 break;
-case 50:return 99;
+case 50:return 96;
 break;
 case 51:
                                         console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
@@ -703,7 +1313,7 @@ case 52:return 5;
 break;
 }
 },
-rules: [/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:namespace-node\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:node\b)/,/^(?:text\b)/,/^(?:last\b)/,/^(?:position\b)/,/^(?:div\b)/,/^(?:or\b)/,/^(?:and\b)/,/^(?:mod\b)/,/^(?:\|)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:=)/,/^(?:!=)/,/^(?:<)/,/^(?:<=)/,/^(?:>)/,/^(?:>=)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:\/\/)/,/^(?:\/)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:@)/,/^(?:::)/,/^(?:(\(:((\\([\'\"\\bfnrtv]))|([^\:)\\]+)):\)))/,/^(?:\s+)/,/^(?:((([0-9]+)\.[0-9]*)|(\.([0-9]+))))/,/^(?:([0-9]+))/,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]+))*'))/,/^(?:.)/,/^(?:$)/],
+rules: [/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:namespace-node\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:null\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?:node\b)/,/^(?:text\b)/,/^(?:last\b)/,/^(?:position\b)/,/^(?:div\b)/,/^(?:or\b)/,/^(?:and\b)/,/^(?:mod\b)/,/^(?:\|)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:=)/,/^(?:!=)/,/^(?:<)/,/^(?:<=)/,/^(?:>)/,/^(?:>=)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:\/\/)/,/^(?:\/)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:@)/,/^(?:::)/,/^(?:(\(:((\\([\'\"\\bfnrtv]))|([^\:)\\]+)):\)))/,/^(?:\s+)/,/^(?:((([0-9]+)\.[0-9]*)|(\.([0-9]+))))/,/^(?:([0-9]+))/,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑá-ü]*)/,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]+))*'))/,/^(?:.)/,/^(?:$)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52],"inclusive":true}}
 });
 return lexer;

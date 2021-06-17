@@ -10,7 +10,9 @@ export class TablaSimbolosComponent implements OnInit {
     'ID',
     'CONTENIDO',
     'LISTA ATRIBUTO',
-    'LISTA OBJETO'
+    'LISTA OBJETO',
+    'LINEA',
+    'COLUMNA'
   ];
   dataSource = '';
   constructor() {}
