@@ -46,8 +46,7 @@ content                         [^<]
 
 \s+                                 /* skip whitespace */
 
-"<"                         return 'lt';
-">"                         return 'gt';
+
 "="                         return 'igual';
 "/"                         return 'diag';
 "."                         return "dot";
@@ -66,6 +65,8 @@ content                         [^<]
 "div"                       return "div";
 "<="                        return 'lte';
 ">="                        return "gte";
+"<"                         return 'lt';
+">"                         return 'gt';
 "!="                        return "nequal";
 "or"                        return "or";
 "and"                       return "and";
@@ -73,8 +74,8 @@ content                         [^<]
 
 /* PALABRAS RESERVADAS */
 
-"ancestor"                      return "ancestor";
 "ancestor-or-self"              return "ancestorSelf";
+"ancestor"                      return "ancestor";
 "attribute"                     return "attribute";
 "child"                         return "child";
 "descendant-or-self"            return "descendantSelf";
@@ -101,8 +102,6 @@ content                         [^<]
 
 {stringliteral}                     return 'cadena';
 {charliteral}                       return 'cadena2';
-
-
 
 
 
@@ -269,10 +268,19 @@ PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line
         | IntegerLiteral { $$ = new Primitiva($1, TipoPrim.INTEGER, @1.first_line, @1.first_column); }
         |   cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         |   cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
-        | identifier { $$ = new Primitiva($1, TipoPrim.IDENTIFIER, @1.first_line, @1.first_column); }
         | attr identifier { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
         | attr asterisco { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
         | dot { $$ = new Primitiva($1, TipoPrim.DOT, @1.first_line, @1.first_column);}
+        | identifier LISTANODOS 
+        { 
+                if($2.length > 0){
+                        $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; $$ = $$.concat($2); 
+                        $$ = new Primitiva($$, TipoPrim.CONSULTA, @1.first_line, @1.first_column);
+                }else{
+                        $$ = new Primitiva($1, TipoPrim.IDENTIFIER, @1.first_line, @1.first_column);
+
+                }
+        }        
         | FUNCIONES { $$ = new Primitiva($1, TipoPrim.FUNCION, @1.first_line, @1.first_column);}
     ;
 
