@@ -4,11 +4,11 @@ function analizar() {
     const consola = document.getElementById('result');
     // @ts-ignore
     let auxResultado = AnalyzerXML.parse(texto.value);
-    let nodos = auxResultado[0];
+    let nodos = auxResultado.nodos;
     let entornoGlobal = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
     setSymbolTable(entornoGlobal);
-    raizCST = auxResultado[1];
+    raizCST = auxResultado.raizCST;
     analizarXpath(entornoGlobal);
 }
 function addSimbolosToEntorno(anterior, nodos, ambito) {

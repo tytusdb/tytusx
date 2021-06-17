@@ -87,26 +87,26 @@ case 1:
 
         let auxRetorno = new NodoPadre(getId(),"START","-> START","",
                 [
-                    new NodoPadre(getId(),"XML_STRUCTURE","START -> XML_STRUCTURE EOF","return XML_STRUCTURE.info",$$[$0-1][1]),
+                    new NodoPadre(getId(),"XML_STRUCTURE","START -> XML_STRUCTURE EOF","return XML_STRUCTURE.info",$$[$0-1].hijos),
                     new NodoHijo(getId(),"EOF","","")
                 ]
             );            
-        return [$$[$0-1][0],auxRetorno];
+        return {nodos:$$[$0-1].nodos,raizCST:auxRetorno};
         
 break;
 case 2: case 3:
 
-        this.$ = [$$[$0][0],
-            [
-                new NodoPadre(getId(),"PROLOG","XML_STRUCTURE -> PROLOG NODES","XML_STRUCTURE.info = [PROLOG.valor,NODES.listado]",$$[$0-1]),
-                new NodoPadre(getId(),"NODES","","",$$[$0][1])
+        this.$ = {nodos:$$[$0].nodos
+        ,hijos:[
+                new NodoPadre(getId(),"PROLOG","XML_STRUCTURE -> PROLOG NODES","XML_STRUCTURE.info = [PROLOG.valor,NODES.listado]",$$[$0-1].hijos),
+                new NodoPadre(getId(),"NODES","","",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 4:
 
-        this.$ = [
+        this.$ = {hijos:[
             new NodoHijo(getId(),"<","PROLOG -> &lt;?xml version = value encoding = TYPE_ENCODING ?&gt;","PROLOG.encoding = TYPE_ENCODING.valor"),
             new NodoHijo(getId(),"?","",""),
             new NodoHijo(getId(),"xml","",""),
@@ -115,251 +115,262 @@ case 4:
             new NodoHijo(getId(),"value","",""),
             new NodoHijo(getId(),"encoding","",""),
             new NodoHijo(getId(),"=","",""),
-            new NodoPadre(getId(),"TYPE_ENCODING","","",$$[$0-3][1]),
+            new NodoPadre(getId(),"TYPE_ENCODING","","",$$[$0-3].hijos),
             new NodoHijo(getId(),"?","",""),
             new NodoHijo(getId(),">","",""),
-            new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1]),
-        ];
+            new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos),
+        ]};
     
 break;
 case 5:
 
-        this.$ = [
+        this.$ = {hijos:[
             new NodoHijo(getId(),"<","PROLOG -> &lt;?xml version = value encoding = TYPE_ENCODING ?&gt;","PROLOG.encoding = TYPE_ENCODING.valor"),
             new NodoHijo(getId(),"?","",""),
             new NodoHijo(getId(),"xml","",""),
             new NodoHijo(getId(),"encoding","",""),
             new NodoHijo(getId(),"=","",""),
-            new NodoPadre(getId(),"TYPE_ENCODING","","",$$[$0-6][1]),
+            new NodoPadre(getId(),"TYPE_ENCODING","","",$$[$0-6].hijos),
             new NodoHijo(getId(),"version","",""),
             new NodoHijo(getId(),"=","",""),
             new NodoHijo(getId(),"value","",""),
             new NodoHijo(getId(),"?","",""),
             new NodoHijo(getId(),">","",""),
-            new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1]),
-        ];
+            new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos),
+        ]};
     
 break;
 case 6:
 
-        $$[$0-1][0].push($$[$0][0]);
-        this.$ = [$$[$0-1][0],
-            [
-                new NodoPadre(getId(),"NODES","NODES -> NODES NODE","NODES1.agregar(NODE.valor)<br>NODES.listado = NODES1.listado",$$[$0-1][1]),
-                new NodoPadre(getId(),"NODE","","",$$[$0][1])
+        $$[$0-1].nodos.push($$[$0].nodo);
+        this.$ = {nodos:$$[$0-1].nodos
+        ,hijos:[
+                new NodoPadre(getId(),"NODES","NODES -> NODES NODE","NODES1.agregar(NODE.valor)<br>NODES.listado = NODES1.listado",$$[$0-1].hijos),
+                new NodoPadre(getId(),"NODE","","",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 7:
 
-        this.$ = [[$$[$0][0]],
-            [
-                new NodoPadre(getId(),"NODES","NODES -> NODE","NODES.valor = nuevoListado[NODE.valor]",$$[$0][1])
+        this.$ = {nodos:[$$[$0].nodo]
+            ,hijos:[
+                new NodoPadre(getId(),"NODES","NODES -> NODE","NODES.valor = nuevoListado[NODE.valor]",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 8:
-
-        this.$ = [new Nodo($$[$0-2][0], $$[$0-2][2], $$[$0-1][0], Type.DOUBLE_TAG,  $$[$0-2][1], _$[$0-2].first_line, (_$[$0-2].first_column + 1)),
-            [
-                new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG NODES CLOSING_TAG","NODE.valor = nuevoNodo(NODES.listado)",$$[$0-2][3]),
-                new NodoPadre(getId(),"NODES","","",$$[$0-1][1]),
-                new NodoPadre(getId(),"CLOSING_TAG","","",$$[$0][1])
+        
+        this.$ = {nodo:new Nodo($$[$0-2].identificador, $$[$0-2].atributos, $$[$0-1].nodos, Type.DOUBLE_TAG,  $$[$0-2].textoEtiqueta, _$[$0-2].first_line, (_$[$0-2].first_column + 1))
+        ,hijos:[
+                new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG NODES CLOSING_TAG","NODE.valor = nuevoNodo(NODES.listado)",$$[$0-2].hijos),
+                new NodoPadre(getId(),"NODES","","",$$[$0-1].hijos),
+                new NodoPadre(getId(),"CLOSING_TAG","","",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 9:
 
-        this.$ = [new Nodo($$[$0-1][0], $$[$0-1][2], [], Type.DOUBLE_TAG,  $$[$0-1][1], _$[$0-1].first_line, (_$[$0-1].first_column + 1)),
-            [
-                new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG CLOSING_TAG","NODE.valor = nuevoNodo()",$$[$0-1][3]),
-                new NodoPadre(getId(),"CLOSING_TAG","","",$$[$0][1])
+        this.$ = {nodo:new Nodo($$[$0-1].identificador, $$[$0-1].atributos, [], Type.DOUBLE_TAG,  $$[$0-1].textoEtiqueta, _$[$0-1].first_line, (_$[$0-1].first_column + 1))
+        ,hijos:[
+                new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG CLOSING_TAG","NODE.valor = nuevoNodo()",$$[$0-1].hijos),
+                new NodoPadre(getId(),"CLOSING_TAG","","",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 10:
 
-        this.$ = [new Nodo($$[$0][0], $$[$0][2], [], Type.EMPTY,       $$[$0][1], _$[$0].first_line, (_$[$0].first_column + 1)),
-            [
-                new NodoPadre(getId(),"EMPTY_TAG","NODE -> EMPTY_TAG","NODE.valor = nuevoNodo()",$$[$0][3])
+        this.$ = {nodo:new Nodo($$[$0].identificador, $$[$0].atributos, [], Type.EMPTY,       $$[$0].textoEtiqueta, _$[$0].first_line, (_$[$0].first_column + 1))
+        ,hijos:[
+                new NodoPadre(getId(),"EMPTY_TAG","NODE -> EMPTY_TAG","NODE.valor = nuevoNodo()",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 11:
 
-        this.$ = [new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0),[]];
+        this.$ = {nodo:new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0),
+            hijos:[]
+        };
 
         
 break;
 case 12:
-
-        this.$=[$$[$0-2][0],$$[$0][0],[],
-            [
+        
+        this.$={identificador:$$[$0-2].contenido
+            ,textoEtiqueta:$$[$0].contenido
+            ,atributos:[]
+            ,hijos:[
                 new NodoHijo(getId(),"<","OPENING_TAG -> < IDENTIFIER > TEXTTAG","OPENING_TAG.info = [IDENTIFIER.valor, TEXTAG.valor, ATTRIBS.listado]"),
-                new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-2][1]),
+                new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-2].hijos),
                 new NodoHijo(getId(),">","",""),
-                new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1])
+                new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos)
             ]
-        ];
+        };
 
         
 break;
 case 13:
-
-        this.$=[$$[$0-3][0],$$[$0][0],$$[$0-2][0],
-            [
+        
+        this.$={identificador:$$[$0-3].contenido
+            ,textoEtiqueta:$$[$0].contenido
+            ,atributos:$$[$0-2].atributos
+            ,hijos:[
                 new NodoHijo(getId(),"<","OPENING_TAG -> < IDENTIFIER ATRIBS > TEXTTAG","OPENING_TAG.info = [IDENTIFIER.valor, TEXTAG.valor, ATTRIBS.listado]"),
-                new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-3][1]),
-                new NodoPadre(getId(),"ATRIBS","","",$$[$0-2][1]),
+                new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-3].hijos),
+                new NodoPadre(getId(),"ATRIBS","","",$$[$0-2].hijos),
                 new NodoHijo(getId(),">","",""),
-                new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1])
+                new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos)
             ]
-        ];
+        };
         
 break;
 case 14:
 
-            this.$ = [$$[$0-2][0],
-                [
+        this.$ = {identificador:$$[$0-2].contenido
+                ,hijos:[
                     new NodoHijo(getId(),"<","CLOSING_TAG -> < / IDENTIFIER > TEXTTAG","CLOSING_TAG.valor = IDENTIFIER.valor"),
                     new NodoHijo(getId(),"/","",""),
-                    new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-2][1]),
+                    new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-2].hijos),
                     new NodoHijo(getId(),">","",""),
-                    new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1])
-                ]
-            ];
+                    new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos)
+            ]
+            };
         
 break;
 case 15:
 
-            this.$=[$$[$0-3][0], $$[$0][0],[],
-                [
+            this.$={identificador:$$[$0-3].contenido
+                ,textoEtiqueta: $$[$0].contenido
+                ,atributos:[]
+                ,hijos:[
                     new NodoHijo(getId(),"<","EMPTY_TAG -> < IDENTIFIER / > ","EMPTY_TAG.info = [IDENTIFIER.valor, TEXTAG.valor, ATTRIBS.listado]"),
-                    new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-3][1]),
+                    new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-3].hijos),
                     new NodoHijo(getId(),"/","",""),
                     new NodoHijo(getId(),">","",""),
-                    new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1])
+                    new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos)
                 ]
-            ];
+            };
 
             
 break;
 case 16:
 
-        this.$=[$$[$0-4][0], $$[$0][0], $$[$0-3][0],
-                [
+        this.$={identificador:$$[$0-4].contenido
+            ,textoEtiqueta: $$[$0].contenido
+            ,atributos: $$[$0-3].atributos
+            ,hijos:[
                     new NodoHijo(getId(),"<","EMPTY_TAG -> < IDENTIFIER ATRIBS / > TEXTTAG","EMPTY_TAG.info = [IDENTIFIER.valor, TEXTAG.valor, ATTRIBS.listado]"),
-                    new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-4][1]),
-                    new NodoPadre(getId(),"ATRIBS","","",$$[$0-3][1]),
+                    new NodoPadre(getId(),"IDENTIFIER","","",$$[$0-4].hijos),
+                    new NodoPadre(getId(),"ATRIBS","","",$$[$0-3].hijos),
                     new NodoHijo(getId(),"/","",""),
                     new NodoHijo(getId(),">","",""),
-                    new NodoPadre(getId(),"TEXTTAG","","",$$[$0][1])
+                    new NodoPadre(getId(),"TEXTTAG","","",$$[$0].hijos)
                 ]
-            ];
+        };
         
 break;
 case 17:
 
-            $$[$0-1][0].push($$[$0][0]);            
-            this.$ = [$$[$0-1][0],
-                [
-                    new NodoPadre(getId(),"ATRIBS","ATRIBS -> ATRIBS ATRIB","NODES1.agregar(ATRIB.valor)<br>ATRIBS.listado = ATRIB1.listado",$$[$0-1][1]),
-                    new NodoPadre(getId(),"ATRIB","","",$$[$0][1])
+            $$[$0-1].atributos.push($$[$0].atributo);            
+            this.$ = {atributos:$$[$0-1].atributos
+                ,hijos:[
+                    new NodoPadre(getId(),"ATRIBS","ATRIBS -> ATRIBS ATRIB","ATRIB1.agregar(ATRIB.valor)<br>ATRIBS.listado = ATRIB1.listado",$$[$0-1].hijos),
+                    new NodoPadre(getId(),"ATRIB","","",$$[$0].hijos)
                 ]
-            ];
+            };
             
 break;
 case 18:
 
-            this.$ = [ [ $$[$0][0] ], [ new NodoPadre(getId(),"ATRIB","ATRIBS -> ATRIB","ATRIBS.valor = nuevoListado[ATRIB.valor]",$$[$0][1]) ] ];
+            this.$ = {atributos:[ $$[$0].atributo ], hijos:[ new NodoPadre(getId(),"ATRIB","ATRIBS -> ATRIB","ATRIBS.valor = nuevoListado[ATRIB.valor]",$$[$0].hijos) ] };
         
 break;
 case 19:
 
-        this.$ = [
-            new Atributo($$[$0-2][0],$$[$0].replaceAll('\"', ""), Type.ATRIBUTO, _$[$0-2].first_line, (_$[$0-2].first_column + 1)),
-            [
-                new NodoPadre(getId(),"IDENTIFIER","ATRIB -> IDENTIFIER = value","ATRIB.valor=value.lexicoValor",$$[$0-2][1]),
+        this.$ = {atributo:
+            new Atributo($$[$0-2].contenido,$$[$0].replaceAll('\"', ""), Type.ATRIBUTO, _$[$0-2].first_line, (_$[$0-2].first_column + 1))
+            ,hijos:[
+                new NodoPadre(getId(),"IDENTIFIER","ATRIB -> IDENTIFIER = value","ATRIB.valor=value.lexicoValor",$$[$0-2].hijos),
                 new NodoHijo(getId(),"=","",""),
                 new NodoHijo(getId(),"value","","")
             ]
-        ];
+        }
+        ;
 break;
 case 20:
 
-        this.$ = [$$[$0][0].trim(),
-                [
-                    new NodoPadre(getId(),"TEXT_TAG_CHAR","TEXTTAG -> TEXT_TAG_CHARS","TEXTTAG.valor = TEXT_TAG_CHARS.valor",$$[$0][1])
+        this.$ = {contenido: $$[$0].contenido,
+                hijos:[
+                    new NodoPadre(getId(),"TEXT_TAG_CHAR","TEXTTAG -> TEXT_TAG_CHARS","TEXTTAG.valor = TEXT_TAG_CHARS.valor",$$[$0].hijos)
                 ]
-            ];
+            };
         
 break;
 case 21:
 
-        this.$ = ["",[new NodoHijo(getId(),"lambda","TEXTTAG -> lambda ","")]];
+        this.$ = {contenido:"",hijos:[new NodoHijo(getId(),"lambda","TEXTTAG -> lambda ","")]};
         
 break;
 case 22:
 
-        this.$ = [$$[$0-1][0] + $$[$0][0],
-        [
-            new NodoPadre(getId(),"TEXT_TAG_CHAR","TEXT_TAG_CHARS -> TEXT_TAG_CHARS TEXT_TAG_CHAR","TEXT_TAG_CHARS.valor = TEXT_TAG_CHARS.valor + TEXT_TAG_CHAR.valor",[$$[$0-1][1]]),
-            new NodoPadre(getId(),"ATRIB","","",$$[$0-1][1])
-        ]];
+        this.$ = {contenido: $$[$0-1].contenido + $$[$0].contenido,
+        hijos:[
+            new NodoPadre(getId(),"TEXT_TAG_CHAR","TEXT_TAG_CHARS -> TEXT_TAG_CHARS TEXT_TAG_CHAR","TEXT_TAG_CHARS.valor = TEXT_TAG_CHARS.valor + TEXT_TAG_CHAR.valor",[$$[$0-1].hijos]),
+            new NodoPadre(getId(),"TEXT_TAG_CHARS","","",$$[$0-1].hijos)
+        ]};
         
 break;
 case 23:
 
-        this.$ = [$$[$0][0],
-            [
-                new NodoPadre(getId(),"TEXT_TAG_CHAR","TEXT_TAG_CHARS -> TEXT_TAG_CHAR","TEXT_TAG_CHARS.valor = TEXT_TAG_CHAR.valor",[$$[$0][1]])
+        this.$ = {contenido:$$[$0].contenido,
+            hijos:[
+                new NodoPadre(getId(),"TEXT_TAG_CHAR","TEXT_TAG_CHARS -> TEXT_TAG_CHAR","TEXT_TAG_CHARS.valor = TEXT_TAG_CHAR.valor",[$$[$0].hijos])
             ]
-            ];
+        };
         
 break;
 case 24:
-this.$ = ["<",new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")];
+this.$ = {contenido:"<"            ,hijos:new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")};
 break;
 case 25:
-this.$ = [">",new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")];
+this.$ = {contenido:">"            ,hijos:new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")};
 break;
 case 26:
-this.$ = ["&",new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")];
+this.$ = {contenido:"&"            ,hijos:new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")};
 break;
 case 27:
-this.$ = ["'",new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")];
+this.$ = {contenido:"'"            ,hijos:new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")};
 break;
 case 28:
-this.$ = ["\"",new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")];
+this.$ = {contenido:"\""           ,hijos:new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")};
 break;
 case 29:
-this.$ = [$$[$0],new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")];
+this.$ = {contenido:$$[$0].trim()      ,hijos:new NodoHijo(getId(),$$[$0],"TEXT_TAG_CHAR -> "+$$[$0],"TEXT_TAG_CHAR.valor = "+$$[$0]+".lexicoValor")};
 break;
 case 30:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> identifier","IDENTIFIER.valor = identifier.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> identifier","IDENTIFIER.valor = identifier.lexicoValor")]};
 break;
 case 31:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> xml"       ,"IDENTIFIER.valor = xml.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> xml"       ,"IDENTIFIER.valor = xml.lexicoValor")]};
 break;
 case 32:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> version"   ,"IDENTIFIER.valor = version.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> version"   ,"IDENTIFIER.valor = version.lexicoValor")]};
 break;
 case 33:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> encoding"  ,"IDENTIFIER.valor = encoding.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"IDENTIFIER -> encoding"  ,"IDENTIFIER.valor = encoding.lexicoValor")]};
 break;
 case 35:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"TYPE_ENCODING -> "+$$[$0],"TYPE_ENCODING.valor = uft.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"TYPE_ENCODING -> "+$$[$0],"TYPE_ENCODING.valor = uft.lexicoValor")]};
 break;
 case 36:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"TYPE_ENCODING -> "+$$[$0],"TYPE_ENCODING.valor = iso.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"TYPE_ENCODING -> "+$$[$0],"TYPE_ENCODING.valor = iso.lexicoValor")]};
 break;
 case 37:
-this.$ = [$$[$0],[new NodoHijo(getId(),$$[$0],"TYPE_ENCODING -> "+$$[$0],"TYPE_ENCODING.valor = ascii.lexicoValor")]];
+this.$ = {contenido:$$[$0]             ,hijos:[new NodoHijo(getId(),$$[$0],"TYPE_ENCODING -> "+$$[$0],"TYPE_ENCODING.valor = ascii.lexicoValor")]};
 break;
 }
 },

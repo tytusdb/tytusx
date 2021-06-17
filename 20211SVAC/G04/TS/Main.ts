@@ -5,11 +5,11 @@ function analizar(): void {
 
     // @ts-ignore
     let auxResultado = AnalyzerXML.parse(texto.value);    
-    let nodos: Array<Nodo> = auxResultado[0];
+    let nodos: Array<Nodo> = auxResultado.nodos;
     let entornoGlobal: Entorno = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
     setSymbolTable(entornoGlobal);    
-    raizCST = auxResultado[1];
+    raizCST = auxResultado.raizCST;
     analizarXpath(entornoGlobal);
 }
 
@@ -17,12 +17,10 @@ function addSimbolosToEntorno(anterior: Entorno, nodos: Array<Nodo>, ambito: str
     nodos.forEach((nodo:Nodo) => {
         if (nodo.getType() != Type.COMMENT) {
             let entornoNode: Entorno = new Entorno(anterior);
-
             nodo.getAtributos().forEach((attr: Atributo) => {
                 attr.setAmbito(nodo.getNombre());
                 entornoNode.add(attr);
             });
-
             if (nodo.getNodos().length > 0) {
                 addSimbolosToEntorno(entornoNode, nodo.getNodos(), nodo.getNombre());
             }
