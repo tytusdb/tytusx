@@ -864,7 +864,7 @@ break;
 case 25:return 5;
 break;
 case 26: 
-        addError(`Error léxico`,`No se esperaba "${yy_.yytext}"`,yy_.yylloc.first_line, yy_.yylloc.first_column);
+        list_error.push(`Error léxico`,`No se esperaba ${yy_.yytext}`,yy_.yylloc.first_line, yy_.yylloc.first_column);         
 	
 break;
 }
