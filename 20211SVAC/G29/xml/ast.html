@@ -8,19 +8,13 @@
     <h1>AST XML</h1>
   </div>
   <div class="container-fluid" id="ast" style="overflow: auto;"></div>
-  <div class="alert alert-danger text-center mt-5" role="alert">
-    <h1>AST XPATH</h1>
-  </div>
-  <div class="container-fluid" id="astx" style="overflow: auto;"></div>
 </div>
 
 <script>
 
   var ast = '';
-  var astx = '';
 
   (window.localStorage.getItem('ast') !== undefined && window.localStorage.getItem('ast')) ? ast = localStorage.getItem('ast') : ast = '';
-  (window.localStorage.getItem('astx') !== undefined && window.localStorage.getItem('astx')) ? astx = localStorage.getItem('astx') : astx = '';
 
   var options = {
     format: 'svg'
@@ -28,14 +22,10 @@
   }
 
   var astImage = Viz(ast, options);
-  var astxImage = Viz(astx,options);
 
   var imgAst = document.getElementById('ast');
-  var imgAstx = document.getElementById('astx');
 
   imgAst.innerHTML = astImage;		// SVG
-  imgAstx.innerHTML = astxImage;
   imgAst.appendChild(astImage);	// PNG
-  imgAstx.appendChild(astxImage);
 
 </script>
