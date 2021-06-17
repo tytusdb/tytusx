@@ -3,7 +3,7 @@ let errores = new Errores();
 function analizar(): void {
     const texto: HTMLTextAreaElement = document.getElementById('inputXML') as HTMLTextAreaElement;
     const consola: HTMLTextAreaElement = document.getElementById('result')  as HTMLTextAreaElement;
-    
+    errores = new Errores();
     let auxResultado;
     try{
         // @ts-ignore
@@ -14,7 +14,6 @@ function analizar(): void {
         ,raizCST:new NodoPadre(0,"error","Error sin recuperacion","",[])
         }
     }
-    
     let nodos: Array<Nodo> = auxResultado.nodos;
     let entornoGlobal: Entorno = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
