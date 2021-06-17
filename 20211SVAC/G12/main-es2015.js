@@ -896,6 +896,17 @@ class Analizador {
         catch (error) {
         }
     }
+    recorrerDesxpath(input) {
+        try {
+            let ast = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](input);
+            console.log(ast);
+            console.log(ast);
+            let nodo_ast = ast.recorrer();
+            return nodo_ast;
+        }
+        catch (error) {
+        }
+    }
 }
 
 
@@ -1085,6 +1096,8 @@ class Logicas extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return instrucciondoble; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class instrucciondoble {
     constructor(i1, i2) {
         this.i1 = i1;
@@ -1100,7 +1113,10 @@ class instrucciondoble {
         }
     }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("|", "");
+        padre.AddHijo(this.i1.recorrer());
+        padre.AddHijo(this.i2.recorrer());
+        return padre;
     }
 }
 
@@ -1803,6 +1819,8 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return barrabarra; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class barrabarra {
     constructor(exprecion, sig) {
         this.exprecion = exprecion;
@@ -1868,6 +1886,9 @@ class barrabarra {
         if (typeof valor == 'number') {
             this.isNumero(controlador, ts, valor);
         }
+        else {
+            this.esbool(controlador, ts);
+        }
     }
     isNumero(controlador, ts, valor) {
         if (this.sig != null) {
@@ -1875,6 +1896,14 @@ class barrabarra {
         }
         else {
             this.obtenerallNumero(controlador, ts, valor);
+        }
+    }
+    esbool(controlador, ts) {
+        if (this.sig != null) {
+            this.siguienteBool(controlador, ts);
+        }
+        else {
+            this.obtenerBool(controlador, ts);
         }
     }
     siguienteNumero(controlador, ts, valor) {
@@ -1911,8 +1940,58 @@ class barrabarra {
             }
         }
     }
+    siguienteBool(controlador, ts) {
+        let cont = 1;
+        let posicion = 1;
+        if (ts != null) {
+            for (let tssig of ts.sig) {
+                if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        this.sig.ejecutar(controlador, tssig.sig);
+                    }
+                    cont++;
+                }
+                else {
+                    this.siguienteBool(controlador, tssig.sig);
+                }
+                posicion++;
+            }
+        }
+    }
+    obtenerBool(controlador, ts) {
+        let cont = 1;
+        let posicion = 1;
+        if (ts != null) {
+            for (let informacion of ts.tabla) {
+                if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+                    cont++;
+                }
+                posicion++;
+            }
+            for (let tssig of ts.sig) {
+                this.obtenerBool(controlador, tssig.sig);
+            }
+        }
+    }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("//", "");
+        padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.exprecion.id, ""));
+        if (this.exprecion.exprecion != null) {
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+            padre.AddHijo(this.exprecion.exprecion.recorrer());
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+        }
+        if (this.sig != null) {
+            padre.AddHijo(this.sig.recorrer());
+        }
+        return padre;
     }
 }
 
@@ -3025,6 +3104,8 @@ class Asignacion {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return axesbarrabarra; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class axesbarrabarra {
     constructor(tipo, exprecion, sig) {
         this.tipo = tipo;
@@ -3056,8 +3137,25 @@ class axesbarrabarra {
     obtenerall(controlador, ts) {
         if (ts != null) {
             for (let informacion of ts.tabla) {
-                if (informacion.identificador == this.exprecion.id) {
-                    controlador.append(informacion.sim.objeto.gethtml(""));
+                if (this.exprecion.tipo == 1) {
+                    if (this.exprecion.id == "*" && informacion.sim.simbolo == 1) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+                    else {
+                        if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 1) {
+                            controlador.append(informacion.sim.objeto.gethtml(""));
+                        }
+                    }
+                }
+                else {
+                    if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 2) {
+                        controlador.append(informacion.sim.valor + "\n");
+                    }
+                    else {
+                        if (this.exprecion.id == "*" && informacion.sim.simbolo == 2) {
+                            controlador.append(informacion.sim.valor);
+                        }
+                    }
                 }
             }
             for (let tssig of ts.sig) {
@@ -3068,8 +3166,7 @@ class axesbarrabarra {
     siguiente(controlador, ts) {
         if (ts != null) {
             for (let tssig of ts.sig) {
-                if (this.exprecion.id == tssig.identificador) {
-                    console.log(this.exprecion.id);
+                if (this.exprecion.id == tssig.identificador || this.exprecion.id == "*") {
                     this.sig.ejecutar(controlador, tssig.sig);
                 }
                 else {
@@ -3084,6 +3181,9 @@ class axesbarrabarra {
         if (typeof valor == 'number') {
             this.isNumero(controlador, ts, valor);
         }
+        else {
+            this.esbool(controlador, ts);
+        }
     }
     isNumero(controlador, ts, valor) {
         if (this.sig != null) {
@@ -3091,6 +3191,14 @@ class axesbarrabarra {
         }
         else {
             this.obtenerallNumero(controlador, ts, valor);
+        }
+    }
+    esbool(controlador, ts) {
+        if (this.sig != null) {
+            this.siguienteBool(controlador, ts);
+        }
+        else {
+            this.obtenerBool(controlador, ts);
         }
     }
     siguienteNumero(controlador, ts, valor) {
@@ -3127,8 +3235,58 @@ class axesbarrabarra {
             }
         }
     }
+    siguienteBool(controlador, ts) {
+        let cont = 1;
+        let posicion = 1;
+        if (ts != null) {
+            for (let tssig of ts.sig) {
+                if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        this.sig.ejecutar(controlador, tssig.sig);
+                    }
+                    cont++;
+                }
+                else {
+                    this.siguienteBool(controlador, tssig.sig);
+                }
+                posicion++;
+            }
+        }
+    }
+    obtenerBool(controlador, ts) {
+        let cont = 1;
+        let posicion = 1;
+        if (ts != null) {
+            for (let informacion of ts.tabla) {
+                if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+                    cont++;
+                }
+                posicion++;
+            }
+            for (let tssig of ts.sig) {
+                this.obtenerBool(controlador, tssig.sig);
+            }
+        }
+    }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("//", "");
+        padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Child::" + this.exprecion.id, ""));
+        if (this.exprecion.exprecion != null) {
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+            padre.AddHijo(this.exprecion.exprecion.recorrer());
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+        }
+        if (this.sig != null) {
+            padre.AddHijo(this.sig.recorrer());
+        }
+        return padre;
     }
 }
 
@@ -3172,6 +3330,8 @@ class Detener {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return acceso; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class acceso {
     constructor(exprecion, sig) {
         this.exprecion = exprecion;
@@ -3285,7 +3445,17 @@ class acceso {
         }
     }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/", "");
+        padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.exprecion.id, ""));
+        if (this.exprecion.exprecion != null) {
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+            padre.AddHijo(this.exprecion.exprecion.recorrer());
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+        }
+        if (this.sig != null) {
+            padre.AddHijo(this.sig.recorrer());
+        }
+        return padre;
     }
 }
 
@@ -3360,20 +3530,25 @@ function AppComponent_div_13_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7); const ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r6.recorrer(); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente XML");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7); const ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r8.ejecutarDescendente(); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente XML");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7); const ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r9.xprecorrerDes(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 } }
 function AppComponent_div_18_Template(rf, ctx) { if (rf & 1) {
-    const _r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+    const _r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10); const ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r9.imprimirTabla(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r11); const ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r10.imprimirTabla(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Gramatical");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
@@ -3386,7 +3561,7 @@ function AppComponent_div_18_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 23);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10); const ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r11.openPage("TablaSim", 2); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r11); const ctx_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r12.openPage("TablaSim", 2); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\u00E1ntico");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
@@ -3433,6 +3608,29 @@ class AppComponent {
         if (this.entradaxml != "") {
             console.log("Vamos a graficar");
             let nodo_ast = ana.recorrerDes(this.entradaxml);
+            let grafo = nodo_ast.GraficarSintactico(); //Aqui tenemos la cadena de graphviz para graficar
+            console.log(grafo);
+            const container = document.getElementById("app");
+            var parsedData = vis__WEBPACK_IMPORTED_MODULE_3__["network"].convertDot(grafo);
+            var data = {
+                nodes: parsedData.nodes,
+                edges: parsedData.edges
+            };
+            var options = parsedData.options;
+            options.layout = {
+                "hierarchical": true
+            };
+            options.nodes = {
+                color: "cyan"
+            };
+            var network = new vis__WEBPACK_IMPORTED_MODULE_3__["Network"](container, data, options);
+        }
+    }
+    xprecorrerDes() {
+        let ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+        if (this.entradaxpath != "") {
+            console.log("Vamos a graficar");
+            let nodo_ast = ana.recorrerDesxpath(this.entradaxpath);
             let grafo = nodo_ast.GraficarSintactico(); //Aqui tenemos la cadena de graphviz para graficar
             console.log(grafo);
             const container = document.getElementById("app");
@@ -3524,7 +3722,7 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineCompo
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, " Arbol ");
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "span", 5);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 6, 0, "div", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 9, 0, "div", 6);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](14, "li", 3);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](15, "a", 4);
@@ -3671,6 +3869,8 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineCompo
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return position; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class position {
     getTipo(controlador, ts) {
         throw new Error("Method not implemented.");
@@ -3679,7 +3879,8 @@ class position {
         return controlador.position;
     }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("position();", "");
+        return padre;
     }
 }
 
@@ -5166,6 +5367,8 @@ class contenido {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return puntopunto; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class puntopunto {
     constructor(exprecion, sig) {
         this.exprecion = exprecion;
@@ -5180,16 +5383,23 @@ class puntopunto {
             this.contador = 1;
         }
         else {
-            ts = ts.ant;
-            for (let informacion of ts.tabla) {
-                if (informacion.sim.simbolo == 1) {
-                    controlador.append(informacion.sim.objeto.gethtml(""));
+            if (this.contador == 0) {
+                ts = ts.ant;
+                for (let informacion of ts.tabla) {
+                    if (informacion.sim.simbolo == 1) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
                 }
             }
+            this.contador = 1;
         }
     }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/..", "");
+        if (this.sig != null) {
+            padre.AddHijo(this.sig.recorrer());
+        }
+        return padre;
     }
 }
 
@@ -5822,6 +6032,8 @@ class While {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return axes; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class axes {
     constructor(tipo, exprecion, sig) {
         this.tipo = tipo;
@@ -5844,15 +6056,37 @@ class axes {
         else {
             if (this.sig != null) {
                 for (let tssig of ts.sig) {
-                    if (this.exprecion.id == tssig.identificador) {
+                    if (this.exprecion.id == "*") {
                         this.sig.ejecutar(controlador, tssig.sig);
+                    }
+                    else {
+                        if (this.exprecion.id == tssig.identificador) {
+                            this.sig.ejecutar(controlador, tssig.sig);
+                        }
                     }
                 }
             }
             else {
                 for (let informacion of ts.tabla) {
-                    if (informacion.identificador == this.exprecion.id) {
-                        controlador.append(informacion.sim.objeto.gethtml(""));
+                    if (this.exprecion.tipo == 1) {
+                        if (this.exprecion.id == "*") {
+                            controlador.append(informacion.sim.objeto.gethtml(""));
+                        }
+                        else {
+                            if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 1) {
+                                controlador.append(informacion.sim.objeto.gethtml(""));
+                            }
+                        }
+                    }
+                    else {
+                        if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 2) {
+                            controlador.append(informacion.sim.valor + "\n");
+                        }
+                        else {
+                            if (this.exprecion.id == "*" && informacion.sim.simbolo == 2) {
+                                controlador.append(informacion.sim.valor);
+                            }
+                        }
                     }
                 }
             }
@@ -5863,6 +6097,9 @@ class axes {
         let valor = this.exprecion.exprecion.getValor(controlador, ts);
         if (typeof valor == 'number') {
             this.isNumero(controlador, ts, valor);
+        }
+        else {
+            this.isboolean(controlador, ts);
         }
     }
     isNumero(controlador, ts, posicion) {
@@ -5888,8 +6125,49 @@ class axes {
             }
         }
     }
+    isboolean(controlador, ts) {
+        let posicion = 1;
+        console.log("entre");
+        let cont = 1;
+        if (this.sig != null) {
+            for (let tssig of ts.sig) {
+                if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        this.sig.ejecutar(controlador, tssig.sig);
+                    }
+                    cont++;
+                }
+                posicion++;
+            }
+        }
+        else {
+            for (let informacion of ts.tabla) {
+                if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+                    cont++;
+                }
+                posicion++;
+            }
+        }
+    }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/", "");
+        padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Child::" + this.exprecion.id, ""));
+        if (this.exprecion.exprecion != null) {
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+            padre.AddHijo(this.exprecion.exprecion.recorrer());
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+        }
+        if (this.sig != null) {
+            padre.AddHijo(this.sig.recorrer());
+        }
+        return padre;
     }
 }
 
@@ -7453,6 +7731,8 @@ class Primitivo {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return last; });
+/* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+
 class last {
     constructor() {
     }
@@ -7468,7 +7748,8 @@ class last {
         return cont;
     }
     recorrer() {
-        throw new Error("Method not implemented.");
+        let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("LAST();", "");
+        return padre;
     }
 }
 

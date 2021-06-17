@@ -91,7 +91,8 @@ case 1:
 break;
 case 2:
 
-        errores.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
+        return [];
     
 break;
 case 3:
@@ -102,12 +103,14 @@ this.$ = [$$[$0]]
 break;
 case 5:
 
-        errores.agregarError("Sintactico","No puede venir un predicado como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
+        this.$ = [];
+        erroresXpath.agregarError("Sintactico","No puede venir un predicado como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
 case 6:
 
-        errores.agregarError("Sintactico","No puede venir una expresion como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
+        this.$ = [];
+        erroresXpath.agregarError("Sintactico","No puede venir una expresion como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
 case 7:
@@ -130,7 +133,8 @@ $$[$0].forEach(e => $$[$0-1].push(e)); this.$ = $$[$0-1];
 break;
 case 12:
 
-        errores.agregarError("Sintactico","Consulta no aceptada:\n"+yytext,this._$.first_line,this._$.first_column);
+        this.$ = [];
+        erroresXpath.agregarError("Sintactico","Consulta no aceptada:\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
 case 13:
@@ -144,7 +148,8 @@ case 13:
 break;
 case 14:
 
-        errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
+        this.$ = [];
     
 break;
 case 15:
@@ -185,12 +190,12 @@ this.$ = $$[$0-1]+$$[$0];
 break;
 case 54:
 
-        errores.agregarError("Sintactico","Error en predicado\n"+yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico","Error en predicado\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
 case 73:
 
-        errores.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
     
 break;
 }
@@ -979,9 +984,7 @@ break;
 case 41:return 5;
 break;
 case 42:
-    //errores.push(['Lexico','dato: '+yy_.yytext,'Linea '+yy_.yylloc.first_line,'columna '+yy_.yylloc.first_column+1]);
     agregarErrorLexico("Lexico",yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column+1);
-    //console.log('     error lexico '+yy_.yytext);
     
 break;
 }
