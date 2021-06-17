@@ -63,6 +63,31 @@ function limpiarXPath(){
 
 function analizarXPath(){
     var entrada = document.getElementById("txtQuery").value;
-    console.log(entrada);
-    gramatica.parse(entrada);
+    var cadena = gramatica.parse(entrada);
+    return cadena;
+}
+
+function analizarXML(){
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
+    //console.log(entrada);
+    var tabla = gramatica1.parse(entrada);
+    return tabla;
+}
+
+function getXPath(){
+    return document.getElementById("txtQuery").value;
+}
+
+function getXML(){
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
+    return entrada;
+}
+
+function ejecutar(){
+    var tabla = analizarXML();
+    var cadena = analizarXPath();
+    console.log(tabla);
+    console.log(cadena);
 }
