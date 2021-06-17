@@ -11,4 +11,4 @@
 |[Grupo 26](https://tytusdb.github.io/tytusx/20211SVAC/G26/)|[Grupo 27](https://tytusdb.github.io/tytusx/20211SVAC/G27/)|[Grupo 28](https://tytusdb.github.io/tytusx/20211SVAC/G28/)|[Grupo 29](https://tytusdb.github.io/tytusx/20211SVAC/G29/)|[Grupo 30](https://tytusdb.github.io/tytusx/20211SVAC/G30/)|
 |[Grupo 31](https://tytusdb.github.io/tytusx/20211SVAC/G31/)|[Grupo 32](https://tytusdb.github.io/tytusx/20211SVAC/G32/)|[Grupo 33](https://tytusdb.github.io/tytusx/20211SVAC/G33/)|[Grupo 34](https://tytusdb.github.io/tytusx/20211SVAC/G34/)|Grupo 35|
 |[Grupo 36](https://tytusdb.github.io/tytusx/20211SVAC/G36/frontend/)|[Grupo 37](https://tytusdb.github.io/tytusx/20211SVAC/G37/)|[Grupo 38](https://tytusdb.github.io/tytusx/20211SVAC/G38/)|Grupo 39|[Grupo 40](https://tytusdb.github.io/tytusx/20211SVAC/G40/)|
-|Grupo 41|Grupo 42|[Grupo 43](https://tytusdb.github.io/tytusx/20211SVAC/G43/src/)| | |
+|Grupo 41|Grupo 42|Grupo 43| | |
