@@ -79,7 +79,7 @@ class XpathUtil{
 
     static contador_nodo:number = 0;
     static generarIdUnicoXmlNode():string{
-        let cad = "XmlObject"+this.contador_nodo;
+        let cad = "N"+this.contador_nodo;
         this.contador_nodo+=1;
         return cad;
     }
