@@ -1,40 +1,18 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var XMLGramAsc = __importStar(require("./Gramatica/XML_GramaticaAsc"));
+exports.__esModule = true;
+var XMLGramAsc = require("./Gramatica/XML_GramaticaAsc");
 var Entorno_1 = require("./AST/Entorno");
 var Objeto_1 = require("./XML/Objeto");
 var Atributo_1 = require("./XML/Atributo");
-var XMLGramDesc = __importStar(require("./Gramatica/XML_GramaticaDesc"));
-var ListaError_1 = __importDefault(require("./Global/ListaError"));
-var XPathGramAsc = __importStar(require("./Gramatica/XPath_GramaticaAsc"));
+var XMLGramDesc = require("./Gramatica/XML_GramaticaDesc");
+var ListaError_1 = require("./Global/ListaError");
+var XPathGramAsc = require("./Gramatica/XPath_GramaticaAsc");
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
 var Analizador = /** @class */ (function () {
     function Analizador() {
         this.global = new Entorno_1.Entorno('global', null, null);
-        ListaError_1.default.limpiar();
+        ListaError_1["default"].limpiar();
         if (typeof Analizador._instance === "object") {
             return Analizador._instance;
         }
@@ -46,7 +24,7 @@ var Analizador = /** @class */ (function () {
     };
     Analizador.prototype.iniciarVariables = function () {
         this.global = new Entorno_1.Entorno('global', null, null);
-        ListaError_1.default.limpiar();
+        ListaError_1["default"].limpiar();
     };
     Analizador.prototype.xmlDescendente = function (entrada) {
         var _this = this;
@@ -58,7 +36,7 @@ var Analizador = /** @class */ (function () {
             }
         });
         console.log(this.global);
-        console.log(ListaError_1.default);
+        console.log(ListaError_1["default"]);
     };
     Analizador.prototype.xmlAscendente = function (entrada) {
         var _this = this;
@@ -74,7 +52,7 @@ var Analizador = /** @class */ (function () {
             });
         }
         console.log(this.global);
-        console.log(ListaError_1.default);
+        console.log(ListaError_1["default"]);
         /*global.tsimbolos.forEach((elem:any) => {
           console.log(elem);
         });*/
@@ -97,15 +75,85 @@ var Analizador = /** @class */ (function () {
     };
     Analizador.prototype.getErrores = function () {
         var err = '';
-        ListaError_1.default.listaError.forEach(function (elem) {
+        ListaError_1["default"].listaError.forEach(function (elem) {
             err = err + elem.getMensaje() + '\n';
         });
         return err;
     };
+    Analizador.prototype.getRepTablaSimbolos = function () {
+        var _this = this;
+        var cadenaDot = '';
+        var tabla = this.global.tsimbolos;
+        var indice = 0;
+        cadenaDot = 'digraph {'
+            + 'tbl ['
+            + 'shape=plaintext,'
+            + 'label=<'
+            + '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+            + '<tr>'
+            + '<td>No.</td><td>Nombre</td><td>Tipo</td><td>Ambito</td><td>Nodo</td><td>Fila</td><td>Columna</td>'
+            + '</tr>';
+        tabla.forEach(function (elem) {
+            indice++;
+            cadenaDot = cadenaDot
+                + '<tr>'
+                + '<td>' + indice + '</td>'
+                + '<td>' + elem.valor.nombre + '</td>'
+                + '<td>' + _this.getTipoDato(elem.valor.tipo) + '</td>'
+                + '<td>' + elem.nombre + '</td>'
+                + '<td>' + elem.nombre + '</td>'
+                + '<td>' + elem.valor.linea + '</td>'
+                + '<td>' + elem.valor.columna + '</td>'
+                + '</tr>';
+        });
+        cadenaDot = cadenaDot + '</table>'
+            + '>];'
+            + '}';
+        return cadenaDot;
+    };
+    Analizador.prototype.getTipoDato = function (t) {
+        switch (t) {
+            case 1:
+                return 'Cadena';
+            case 2:
+                return 'Etiqueta';
+            case 3:
+                return 'Atributo';
+        }
+        ;
+        return '';
+    };
+    Analizador.prototype.getRepErrores = function () {
+        var cadenaDot = '';
+        var indice = 0;
+        cadenaDot = 'digraph {'
+            + 'tbl ['
+            + 'shape=plaintext,'
+            + 'label=<'
+            + '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+            + '<tr>'
+            + '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Fila</td><td>Columna</td>'
+            + '</tr>';
+        ListaError_1["default"].listaError.forEach(function (elem) {
+            indice++;
+            cadenaDot = cadenaDot
+                + '<tr>'
+                + '<td>' + indice + '</td>'
+                + '<td>' + elem.getTipo() + '</td>'
+                + '<td>' + elem.getDescripcion() + '</td>'
+                + '<td>' + elem.getLinea() + '</td>'
+                + '<td>' + elem.getColumna() + '</td>'
+                + '</tr>';
+        });
+        cadenaDot = cadenaDot + '</table>'
+            + '>];'
+            + '}';
+        return cadenaDot;
+    };
     return Analizador;
 }());
 var analizador = new Analizador();
-exports.default = analizador;
+exports["default"] = analizador;
 /*
 function xpathAscendente(entrada:string){
   console.log("-- XPATH ASCENDENTE -- ")

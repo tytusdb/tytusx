@@ -88,6 +88,10 @@ class App extends React.Component {
     this.setState({xpath: value});
   }
 
+  handleDot = (value) => {
+    this.setState({dot: value});
+  }
+
   nuevo = () => {
     this.setState({fileName: '', xml: '', xpath: ''});
   }
@@ -181,7 +185,7 @@ class App extends React.Component {
     switch(this.state.selectedOption){
       case 'Ascendente':
         analizador.xmlAscendente(this.state.xml);
-        analizador.XPathAscendente(this.state.xpath);
+        /*analizador.XPathAscendente(this.state.xpath);*/
         break;
       case 'Descendente':
         analizador.xmlDescendente(this.state.xml);
@@ -192,6 +196,14 @@ class App extends React.Component {
     this.setState({consoleText:analizador.getErrores()});
     if (this.state.selectedOption !== '') 
       this.setState({alertOpen: true});
+  }
+
+  reporteTablaSimbolos = (event) => {
+    this.setState({dot:analizador.getRepTablaSimbolos()});
+  }
+
+  reporteListaErrores = (event) => {
+    this.setState({dot:analizador.getRepErrores()});
   }
 
   render(){
@@ -313,7 +325,14 @@ class App extends React.Component {
               <Paper className="paper">
                 <div className="row">
                   <div className="col-md-12">
+                    <br></br>
                     <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>Reportes</InputLabel>
+                    <Button className="btn bg-primary" onClick={this.reporteTablaSimbolos}>Tabla de Simbolos</Button> |
+                    <Button className="btn bg-secondary">AST</Button> |
+                    <Button className="btn bg-success">CST</Button> |
+                    <Button className="btn bg-danger" onClick={this.reporteListaErrores}>Lista de Errores</Button> |
+                    <Button className="btn bg-warning">GRAMATICA</Button>
+                    <br></br>
                     <div style={{borderStyle: 'solid', borderRadius: '2em'}}>
                       <Graphviz dot={this.state.dot} options={{fit:true, width:950,zoom: true}}/>
                     </div>
