@@ -372,6 +372,21 @@ function AtributoYaExiste(arreglo, id){
 
 }
 
+function BuscarObjeto(arreglo, id){
+
+    var existe = null;
+
+    arreglo.forEach(function (objeto){
+
+        if(objeto.getID().toLowerCase()==id.toLowerCase()){
+            existe = objeto;
+        }
+    });
+
+    return existe;
+
+}
+
 function GenerarSalidaXPath(objetos){
 
     if(objetos!=null){
