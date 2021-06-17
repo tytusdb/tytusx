@@ -1,7 +1,7 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 
@@ -14,12 +14,8 @@ export default class Todo extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
-    getNodo(): nodoAST {
-        var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
-        var all= new nodoAST("MULTIPLICACION")
-        all.agregarHijo(this.Operacion)
-        nodo.agregarHijoAST(all);
-        
+    getNodosAST(): nodoAST {
+        var nodo= new nodoAST(this.Operacion); //PADRE SELECT    
         return nodo;
     }
 }

@@ -3,6 +3,18 @@ class ListaErrores {
     constructor() {
         this.lista = [];
     }
+    static hayErroresXml() {
+        if (this._erroresXML.lista == null || this._erroresXML.lista.length == 0) {
+            return false;
+        }
+        return true;
+    }
+    static hayErroresXpath() {
+        if (this._erroresXpath.lista == null || this._erroresXpath.lista.length == 0) {
+            return false;
+        }
+        return true;
+    }
     static InicializarXpath() {
         this._erroresXpath = new ListaErrores();
     }

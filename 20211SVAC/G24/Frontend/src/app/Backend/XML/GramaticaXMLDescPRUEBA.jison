@@ -44,7 +44,7 @@ const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.c
 \'[^\']*\'             { yytext=yytext.substr(1,yyleng-2); return 'QUOTE'; }
 
 
-([a-zA-Z])[a-zA-Z0-9_]*  return 'IDENTIFICADOR';
+([a-zA-Z_À-ÿ])[a-zA-Z0-9_^ÑñÀ-ÿ]*  return 'IDENTIFICADOR';
 <<EOF>>               return 'EOF'
 [ \r\t]+ {}
 \n+ {}

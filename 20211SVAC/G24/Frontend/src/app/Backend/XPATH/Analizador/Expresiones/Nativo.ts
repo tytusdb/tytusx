@@ -1,7 +1,7 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class Nativo extends Instruccion {
@@ -21,7 +21,7 @@ export default class Nativo extends Instruccion {
     }
   }
 
-  public getNodo(): nodoAST {
+  public getNodosAST(): nodoAST {
     let nodo = new nodoAST('NATIVO');
     nodo.agregarHijo(this.valor + '');
     return nodo;

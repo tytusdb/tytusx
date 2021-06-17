@@ -33,6 +33,9 @@ const analizarXML= function (cadEntrada){
             }else{
                 throw "No se pudo generar correctamente el árbol. ";
             }
+            if(ListaErrores.hayErroresXml()){
+                //print("Hubieron errores durante el analisis")
+            }
             _rootXml = rootXml;
         }catch (e){
             throw ('Error al generar el AST. '+e);
@@ -52,6 +55,7 @@ const analizarXML= function (cadEntrada){
     }
 };
 
+
 /**
  * Metodo que analiza el xpath
  * @param entrada
@@ -67,6 +71,40 @@ const analizarXPATH= function (cadEntrada){
                 console.info('Se genero correctamente el árbol xpath. ');
             }else{
                 throw "No se pudo generar correctamente el árbol de xpath. ";
+            }
+            if(ListaErrores.hayErroresXpath()){
+                print("Hubieron errores durante el analisis en XPATH");
+            }
+            _rootXpath = rootXpath;
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        console.info('Se cargo exitosamente las tabla de simbolos. ');
+        print(CONSOLE_MESSAGE_SUCCESSFULL_XPATH);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
+
+/**
+ * Metodo que analiza el xpath
+ * @param entrada
+ */
+const analizarXPATHDescendente= function (cadEntrada){
+    try {
+        print("Iniciando ejecucion: "+new Date());
+        ReporteGramatical.InicializarReporteGramaticalXpath();
+        try {
+            ListaErrores.InicializarXpath();
+            let rootXpath = XpathAnalyzerDescendant.parse(cadEntrada);
+            if(rootXpath){
+                console.info('Se genero correctamente el árbol xpath. ');
+            }else{
+                throw "No se pudo generar correctamente el árbol de xpath. ";
+            }
+            if(ListaErrores.hayErroresXpath()){
+                print("Hubieron errores durante el analisis en XPATH");
             }
             _rootXpath = rootXpath;
         }catch (e){
@@ -88,7 +126,8 @@ const ejecutar= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXPATH(cadEntradaXpath);
-        let result = _rootXpath.getValor(_tsXml);
+        let nodoAImprimir = _rootXpath.getValor(_tsXml);
+        let result = XpathUtil.convertirNodosXpathATexto(nodoAImprimir);
         print(result);
         print('FIN EJECUCION');
     }catch (e){
@@ -106,9 +145,10 @@ const print = function (strTexto){
 
 
 const getStringAst = function (){
-    if(_backEnd==undefined || _backEnd.root==undefined){
+    if(_tsXml==undefined || _tsXml==undefined){
         print("No existe árbol que graficar.");
     }
+
     _graphicUtil = new GraphicUtil();
     return _graphicUtil.generarGrafo(_backEnd.root);
 };

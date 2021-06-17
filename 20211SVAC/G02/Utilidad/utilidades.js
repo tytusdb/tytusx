@@ -75,8 +75,18 @@ function destroyClickedElement(event) {
 }
 
 function analizar(){
-    var instruccionesXML = gramaticaXML.parse(editorXML.getValue());
-    var instruccionesXPath = gramaticaXPath.parse(editorXPath.getValue());
+    erroresXML = [];
+    erroresXPath = [];
+    reglasGramaticalesXML = [];
+    reglasGramaticalesXPath = [];
+    if(editorXML.getValue() == ""){
+        editorXML.setValue('<?xml version="1.0" encoding="UTF-8"?><note><head><to letra="soyLetra">Person+^&^@</to><CC /><HC /></head><from>Jani@</from><heading>Reminder</heading><body>Dont forget me this weekend</body></note>');
+    }
+    if(editorXPath.getValue() == ""){
+        editorXPath.setValue('note');
+    }
+    instruccionesXML = gramaticaXML.parse(editorXML.getValue());
+    instruccionesXPath = gramaticaXPath.parse(editorXPath.getValue());
 
     procesarProyecto(instruccionesXML, instruccionesXPath);
     agregarErroresXMLConsola(erroresXML);

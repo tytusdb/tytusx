@@ -1,4 +1,4 @@
-import Simbolo from './Simbolo';
+/*import Simbolo from './Simbolo';
 import Tipo, { tipoDato } from './Tipo';
 
 export default class tablaSimbolos {
@@ -54,3 +54,4 @@ export default class tablaSimbolos {
   }
 }
 //ARREGLO DE SOLO ID DE METODOS
+*/

@@ -9,6 +9,9 @@ var ExpresionXPath = /** @class */ (function () {
         this.identificador = identificador;
         this.predicado = predicado;
         this.resultado = null;
+        this.resultadoPredicado = null;
+        this.entornosPredicado = null;
+        this.objetosPredicado = null;
     }
     ExpresionXPath.prototype.getTipo = function (ent, arbol) {
         return this.tipo;
@@ -20,21 +23,82 @@ var ExpresionXPath = /** @class */ (function () {
 
         if (this.getTipo()== TipoExpresionXPath.IDENTIFICADOR){
             this.resultado = this.buscarIDs(entornoActual,tipoBusqueda, this.identificador);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
             return this.resultado;
+
         } else if (this.getTipo()== TipoExpresionXPath.ASTERISCO){
             this.resultado = this.buscarAsterisco(entornoActual,tipoBusqueda);
+
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
             return this.resultado;
+
         } else if (this.getTipo()== TipoExpresionXPath.NODE){
             this.resultado = this.buscarNodos(entornoActual,tipoBusqueda);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
             return this.resultado;
+
         } else if (this.getTipo()== TipoExpresionXPath.TEXT){
             this.resultado = this.buscarTextos(entornoActual,tipoBusqueda);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
             return this.resultado;
+            
         } else if (this.getTipo()== TipoExpresionXPath.PUNTO){
             this.resultado = this.buscarPunto(entornoActual,tipoBusqueda);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
             return this.resultado;
         } else if (this.getTipo()== TipoExpresionXPath.DOBLEPUNTO){
             this.resultado = this.buscarDoblePunto(entornoActual,tipoBusqueda);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
+            return this.resultado;
+
+        } else if (this.getTipo()== TipoExpresionXPath.ARROBA){
+            this.resultado = this.buscarArrobaAsterisco(entornoActual,tipoBusqueda);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
+            return this.resultado;
+
+        } else if (this.getTipo()== TipoExpresionXPath.ARROBA_ID){
+            this.resultado = this.buscarArrobaID(entornoActual,tipoBusqueda,this.identificador);
+            this.entornosPredicado = this.resultado[0];
+            this.objetosPredicado = this.resultado[1];
+
+            if(this.predicado!=null){
+                this.resultado = this.EjecutarPredicado(this.objetosPredicado,this.entornosPredicado);
+            }
             return this.resultado;
         }
 
@@ -514,7 +578,7 @@ var ExpresionXPath = /** @class */ (function () {
 
         } else if (busqueda==14){
          
-            function LlamadaRecursiva(id, entorno){
+            function LlamadaRecursiva(entorno){
 
                 var objetosAux = ObtenerObjetos(entorno);
 
@@ -532,7 +596,7 @@ var ExpresionXPath = /** @class */ (function () {
             }
                       
             entornoActual.forEach(function (entorno){
-                LlamadaRecursiva(id,entorno);
+                LlamadaRecursiva(entorno);
             });            
             objetosGlobal = objetos;
             entornosGlobal = entornos; 
@@ -704,12 +768,9 @@ var ExpresionXPath = /** @class */ (function () {
 
         if (busqueda==13){
 
+       
 
-            entornoActual.forEach(function (entorno){
-
-                var objetosAux = ObtenerObjetos(entorno);
-
-                objetosAux.forEach(function (objeto){
+                objetosGlobal.forEach(function (objeto){
 
                 if(objeto.getTexto() != ""){
                     if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
@@ -721,7 +782,7 @@ var ExpresionXPath = /** @class */ (function () {
                       
                 } 
                 });            
-            });
+            
             objetosGlobal = objetos;
             entornosGlobal = entornos; 
             return [entornos, objetos];
@@ -930,6 +991,131 @@ var ExpresionXPath = /** @class */ (function () {
         return [entornosGlobal, objetosGlobal];
     };
 
+    ExpresionXPath.prototype.buscarArrobaAsterisco = function (ent, busqueda) {
+        //return [entornosGlobal, objetosGlobal];
+        var entornoActual = ent;
+        var objetos = [];
+        var entornos = [];    
+        if (busqueda==13){
+
+            objetosGlobal.forEach(function (objeto){
+
+                if(objeto.getAtributos().length>0){
+                    if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
+                        objetos.push(objeto);
+                        if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
+                            entornos.push(objeto.getEntorno());
+                        } 
+                    }  
+                      
+                } 
+                });            
+            
+            objetosGlobal = objetos;
+            entornosGlobal = entornos;                                         
+            return [entornos, objetos];
+           
+
+        } else if (busqueda==14){
+         
+            function LlamadaRecursiva(objetosArr){
+
+
+                objetosArr.forEach(function (objeto){
+
+                    if(objeto.getAtributos().length>0){
+                        if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
+                            objetos.push(objeto);
+                            if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
+                                entornos.push(objeto.getEntorno());
+                            } 
+                        }  
+                          
+                    }  else {
+                    LlamadaRecursiva(ObtenerObjetos(objeto.getEntorno()));
+                    } 
+                }); 
+            }
+                      
+            
+            LlamadaRecursiva(objetosGlobal);                             
+            objetosGlobal = objetos;
+            entornosGlobal = entornos; 
+            return [entornos, objetos];
+            
+        } 
+
+    };
+
+    ExpresionXPath.prototype.buscarArrobaID = function (ent, busqueda, idAux) {
+        //return [entornosGlobal, objetosGlobal];
+        var entornoActual = ent;
+        var objetos = [];
+        var entornos = [];
+        var idAux = idAux;      
+        
+        
+        if (busqueda==13){
+
+            objetosGlobal.forEach(function (objeto){
+
+                if(objeto.getAtributos().length>0){
+    
+                    if(AtributoYaExiste(objeto.getAtributos(),idAux)==true){
+    
+                        if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
+                            objetos.push(objeto);
+                            if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
+                                entornos.push(objeto.getEntorno());
+                            } 
+                        }  
+    
+                    }
+                                             
+                } 
+                });            
+            
+            objetosGlobal = objetos;
+            entornosGlobal = entornos;                                         
+            return [entornos, objetos];
+           
+
+        } else if (busqueda==14){
+         
+            function LlamadaRecursiva(objetosArr){
+
+
+                objetosArr.forEach(function (objeto){
+
+                    if(objeto.getAtributos().length>0){
+    
+                        if(AtributoYaExiste(objeto.getAtributos(),idAux)==true){
+        
+                            if(ObjetoYaExiste(objetos,objeto.LeerID())==false){
+                                objetos.push(objeto);
+                                if(EntornoYaExiste(entornos,objeto.getEntorno().getID())==false){
+                                    entornos.push(objeto.getEntorno());
+                                } 
+                            }         
+                        } else {
+                            LlamadaRecursiva(ObtenerObjetos(objeto.getEntorno()));
+                            }                                                
+                    }  else {
+                    LlamadaRecursiva(ObtenerObjetos(objeto.getEntorno()));
+                    } 
+                }); 
+            }
+                      
+            
+            LlamadaRecursiva(objetosGlobal);                             
+            objetosGlobal = objetos;
+            entornosGlobal = entornos; 
+            return [entornos, objetos];
+            
+        }
+
+    };
+
     ExpresionXPath.prototype.buscarDoblePunto = function (ent, busqueda) {
         
         var entornoActual = ent;
@@ -987,6 +1173,168 @@ var ExpresionXPath = /** @class */ (function () {
 
     ExpresionXPath.prototype.getIdentificador = function () {
         return this.identificador;
+    };
+
+    ExpresionXPath.prototype.EjecutarPredicado = function (objetos, entornos){
+        
+        var objetosAux = [];
+        var entornosAux = [];
+
+        if(this.predicado.getTipo()==Tipo.INT){
+
+            var indice = this.predicado.getValorImplicito("","");
+
+            if(indice>0){
+
+                if(objetos.length>0){
+
+                    indice = indice - 1;
+                    objetosAux.push(objetos[indice]);
+                    entornosAux.push(objetos[indice].getEntorno());
+
+                }
+
+            } 
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+
+        } else if (this.predicado.getTipo()==Tipo.DOUBLE){ 
+            ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+            `La expresion del predicado no puede ser solamente un decimal`,"XPATH")); NumeroE++;
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        } else if (this.predicado.getTipo()==Tipo.STRING){
+            
+            var id = this.predicado.getValorImplicito("","");
+            
+            objetos.forEach(function (objeto){
+
+                for (var i=0; i < objeto.getObjetos().length;i++ ){
+
+                    if(objeto.getObjetos()[i].getID().toLowerCase()==id.toLowerCase()){
+                        
+                        if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                            objetosAux.push(objeto);
+                            if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                entornosAux.push(objeto.getEntorno());
+                            } 
+                        }  
+                        break;
+                    }
+                }
+                }); 
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];    
+
+        } else if (this.predicado.getTipo()==TipoExpresionDefinida.LAST){
+
+            var indice = this.predicado.getValorImplicito(objetos,entornos);
+
+            if(indice>-1){
+
+                if(objetos.length>=0){
+                    indice = indice - 1;
+                    objetosAux.push(objetos[indice]);
+                    entornosAux.push(objetos[indice].getEntorno());
+
+                }
+
+            } 
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+
+        } else if (this.predicado.getTipo()==TipoExpresionDefinida.POSITION){
+
+            var resultadoPosition = this.predicado.getValorImplicito(objetos,entornos);
+            objetosAux = resultadoPosition[1];
+            entornosAux = resultadoPosition[0];
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        } else if (this.predicado.getTipo()==666){
+            
+            var resultadoOperacion = this.predicado.getValorImplicito(objetos,entornos);
+
+            if (typeof(resultadoOperacion) === 'number'){
+
+                if (this.isInt(Number(resultadoOperacion))) {
+
+                    var indice = resultadoOperacion;
+        
+                    if(indice>0){
+        
+                        if(objetos.length>0){
+        
+                            indice = indice - 1;
+                            objetosAux.push(objetos[indice]);
+                            entornosAux.push(objetos[indice].getEntorno());
+                        }
+        
+                    } 
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+                   
+                } else {
+
+                    ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                    `La expresion del predicado no puede ser solamente un decimal`,"XPATH")); NumeroE++;
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                }
+                                                        
+            } else {
+                objetosAux = resultadoOperacion[1];
+                entornosAux = resultadoOperacion[0];
+                objetosGlobal = objetosAux;
+                entornosGlobal = entornosAux;                                         
+                return [entornosAux, objetosAux];
+            }
+
+        } else if (this.predicado.getTipo()==TipoExpresionDefinida.ASTERISCO){
+            var resultadoAsterisco = this.predicado.getValorImplicito(objetos,entornos);   
+            objetosAux = resultadoAsterisco[1];
+            entornosAux = resultadoAsterisco[0];
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        } else if (this.predicado.getTipo()==TipoExpresionDefinida.ARROBA){
+            var resultadoAsterisco = this.predicado.getValorImplicito(objetos,entornos);   
+            objetosAux = resultadoAsterisco[1];
+            entornosAux = resultadoAsterisco[0];
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        } else if (this.predicado.getTipo()==TipoExpresionDefinida.NODE){
+            var resultadoAsterisco = this.predicado.getValorImplicito(objetos,entornos);   
+            objetosAux = resultadoAsterisco[1];
+            entornosAux = resultadoAsterisco[0];
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        } else if (this.predicado.getTipo()==TipoExpresionDefinida.TEXT){
+            var resultadoAsterisco = this.predicado.getValorImplicito(objetos,entornos);   
+            objetosAux = resultadoAsterisco[1];
+            entornosAux = resultadoAsterisco[0];
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        } else { 
+            objetosGlobal = objetosAux;
+            entornosGlobal = entornosAux;                                         
+            return [entornosAux, objetosAux];
+        }
+
+    };
+
+    ExpresionXPath.prototype.isInt = function (n) {
+        return Number(n) === n && n % 1 === 0;
     };
 
     return ExpresionXPath;

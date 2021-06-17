@@ -1,0 +1,200 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#" id="principalTitle">TYTUSX</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            XML FILE
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#" (click)="downloadXmlFile()">Save</a>
+            <a class="dropdown-item" href="#" (click)="cleanXmlEditor()">Clean</a>
+            <a class="dropdown-item" href="#" (click)="executeXML()">RUN</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            XPATH FILE
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#" (click)="downloadXpathFile()">Save</a>
+            <a class="dropdown-item" href="#" (click)="cleanXpathEditor()">Clean</a>
+            <a class="dropdown-item" href="#" (click)="executeXPATH()">RUN</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">USAC 2021</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+<div class="content">  
+  <div class="row">
+
+    <div class="col-xl-6">
+        <h3>XML EDITOR</h3>
+        <input type="file" (change)="uploadXmlFile($event)">
+        <ngx-codemirror
+        [(ngModel)]="contentXML"
+        [options]="{
+            lineNumbers: true,
+            theme: 'panda-syntax',
+            mode: 'xml'
+        }"
+        ></ngx-codemirror>
+    </div>
+  
+    <div class="col-xl-5">
+        <h3>XPATH EDITOR</h3>
+        <input type="file" (change)="uploadXpathFile($event)">
+        <ngx-codemirror
+        [(ngModel)]="contentXPATH"
+        [options]="{
+            lineNumbers: true,
+            theme: 'panda-syntax',
+            mode: 'xml'
+        }"
+        ></ngx-codemirror>
+    </div>
+
+  </div>
+
+  <div class="console">
+        <h3>CONSOLA</h3>
+        <div class="form-group">
+          <ngx-codemirror
+          [(ngModel)]="consoleOutput"
+          [options]="{
+              theme: 'ayu-mirage',
+              readOnly: true
+          }"
+          ></ngx-codemirror>
+        </div>
+  </div>
+  
+  
+
+  
+
+  <div class="row" id="exceptionsRow">
+
+    <div class="col-xl-6">
+      <div class="card border-dark mb-3" id ="exceptionsTable">
+        <div class="card-header">
+          <h4 class="text-center">TABLA GENERAL DE ERRORES XML</h4>
+        </div>
+        <div class="card-body"> 
+          <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col mb-5">TIPO       </th>
+                      <th scope="col mb-5">FILA       </th>
+                      <th scope="col mb-5">COLUMNA    </th>
+                      <th scope="col mb-5">DESCRIPCION</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                  <tr *ngFor="let exception of exceptions">
+                    <td>{{exception.sTipo}} </td>
+                    <td>{{exception.sFila}} </td>
+                    <td>{{exception.sColumna}} </td>
+                    <td>{{exception.sDescripcion}} </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
+    </div>
+  
+    <div class="col-xl-5">
+      <div class="card border-dark mb-3" id ="exceptionsTable2">
+        <div class="card-header">
+          <h4 class="text-center">TABLA GENERAL DE ERRORES XPATH</h4>
+        </div>
+        <div class="card-body"> 
+          <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col mb-5">TIPO       </th>
+                      <th scope="col mb-5">FILA       </th>
+                      <th scope="col mb-5">COLUMNA    </th>
+                      <th scope="col mb-5">DESCRIPCION</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                  <tr *ngFor="let exception of exceptions2">
+                    <td>{{exception.sTipo}} </td>
+                    <td>{{exception.sFila}} </td>
+                    <td>{{exception.sColumna}} </td>
+                    <td>{{exception.sDescripcion}} </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card border-dark mb-3" id ="symbolsTable">
+    <div class="card-header">
+      <h4 class="text-center">TABLA DE SIMBOLOS XML</h4>
+    </div>
+    <div class="card-body"> 
+      <div class="table-responsive">
+          <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                  <th scope="col mb-5">TIPO         </th>
+                  <th scope="col mb-5">IDENTIFICADOR</th>
+                  <th scope="col mb-5">VALOR        </th>
+                  <th scope="col mb-5">AMBITO       </th>
+                  <th scope="col mb-5">FILA         </th>
+                  <th scope="col mb-5">COLUMNA      </th>
+                </tr>
+              </thead>
+            <tbody>
+              <!-- <tr *ngFor="let symbol of symbols">
+                <td>{{exception.sTipo}} </td>
+                <td>{{exception.sFila}} </td>
+                <td>{{exception.sColumna}} </td>
+                <td>{{exception.sDescripcion}} </td>
+              </tr> -->
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grammarReport">
+    <h3>REPORTE GRAMATICAL</h3>
+    <div class="form-group">
+      <ngx-codemirror
+      [(ngModel)]="grammarOutput"
+      [options]="{
+          theme: 'ayu-mirage',
+          readOnly: true
+      }"
+      ></ngx-codemirror>
+    </div>
+  </div>
+</div>
+
+<div class="xmlCst">
+  <h3>XML CST ASCENDENTE</h3>
+  <div echarts [options]="chartOption" style="height: 100vh; width: 100%;"></div>  
+</div>
+
+<div class="xpathCst">
+  <h3>XPath CST ASCENDENTE</h3>
+  <div echarts [options]="chartOption2" style="height: 100vh; width: 100%;"></div>  
+</div>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.js"
+        integrity="sha512-3hvETTLZ2bfLNiJFCKpYd9jeVGTpMmFV84HFTdDYI9JPkk8bf70UZAmSLOSWFWRQNO5eGJUKI0NEwUgpkAXO6Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.css"
+        integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/dracula.min.css"
+        integrity="sha512-gFMl3u9d0xt3WR8ZeW05MWm3yZ+ZfgsBVXLSOiFz2xeVrZ8Neg0+V1kkRIo9LikyA/T9HuS91kDfc2XWse0K0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/xml/xml.min.js"
+        integrity="sha512-XPih7uxiYsO+igRn/NA2A56REKF3igCp5t0W1yYhddwHsk70rN1bbbMzYkxrvjQ6uk+W3m+qExHIJlFzE6m5eg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/bulma-checkradio/dist/css/bulma-checkradio.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"
+        integrity="sha512-XHDcSyqhOoO2ocB7sKOCJEkUjw/pQCJViP1ynpy+EGh/LggzrP6U/V3a++LQTnZT7sCQKeHRyWHfhN2afjXjCg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <title>Tytus X - Grupo 14</title>
+</head>
+
+<body>
+    <nav class="navbar bgcolor" role="navigation" aria-label="main navigation">
+        <div class="container">
+            <div class="navbar-brand">
+                <h1 class="navbar-item has-text-weight-bold is-title has-text-white">Tytus X</h1>
+            </div>
+            <div class="navbar-menu ml-5">
+                <div class="navbar-start">
+                    <div class="navbar-item is-hoverable">
+                        <a class="has-text-white">
+                            XML Options
+                        </a>
+                        <div class="navbar-dropdown">
+                            <input type="file" id="file" style="display: none" accept=".xml" />
+                            <a class="navbar-item" id="openBrowser">
+                                Abrir
+                            </a>
+                            <a class="navbar-item" id="Download">
+                                Guardar
+                            </a>
+                            <a class="navbar-item" id="Clean">
+                                Limpiar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <button class="button has-text-white" id="Ejecutar">Ejecutar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+    <div class="container mt-5">
+
+        <div class="columns is-gapless is-multiline">
+            <div class="column is-half">
+                <div class="tags has-addons">
+                    <span class="tag is-warning"></span>
+                    <span class="tag is-warning is-light">XPath</span>
+                </div>
+            </div>
+            <div class="column is-half has-text-right">
+                <div class="field has-text-white">
+                    <input class="is-checkradio is-danger is-circle" id="aXPath" type="radio" name="xpath" checked>
+                    <label for="aXPath">Ascendente</label>
+                    <input class="is-checkradio is-danger is-circle" id="dXPath" name="xpath" type="radio" disabled>
+                    <label for="dXPath">Desc</label>
+                </div>
+            </div>
+            <div id="xpath" class="column" style="height: 60px;">
+            </div>
+        </div>
+
+        <div class="columns mt-3">
+            <div class="column">
+                <div class="columns is-gapless is-multiline">
+                    <div class="column is-half">
+                        <div class="tags has-addons">
+                            <span class="tag is-info"></span>
+                            <span class="tag is-info is-light">XML</span>
+                        </div>
+                    </div>
+                    <div class="column is-half has-text-right">
+                        <div class="field has-text-white">
+                            <input class="is-checkradio is-danger is-circle" id="aXml" type="radio" name="xml" checked>
+                            <label for="aXml">Ascendente</label>
+                            <input class="is-checkradio is-danger is-circle" id="dXml" name="xml" type="radio">
+                            <label for="dXml">Desc</label>
+                        </div>
+                    </div>
+                    <div id="codemirror" class="column" style="height: 421px;">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="column">
+                <div class="columns is-gapless is-multiline">
+                    <div class="column is-full">
+                        <div class="tags has-addons">
+                            <span class="tag is-success"></span>
+                            <span class="tag is-success is-light">Resultado</span>
+                        </div>
+                    </div>
+
+                    <div id="resultado" class="column" style="height: 421px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="container box bgcolor mt-5" id="cst-xml" style="height: 700px;">
+        <h3 class="is-size-4 has-text-centered has-text-white" id="cst-xml">CST XML</h3>
+        <div id="grafoXML" style="height: 95%;">
+
+        </div>
+
+    </div>
+
+    <div class="container pb-5" id="simbolTable">
+        <h3 class="is-size-4 has-text-centered has-text-white">Tabla de Simbolos</h3>
+        <div class="table-responsive">
+            <table class="table is-narrow is-hoverable">
+                <thead>
+                    <tr class="th is-selected">
+                        <th>#</th>
+                        <th>ID</th>
+                        <th>Valor</th>
+                        <th>Entorno</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyJS">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/bundle.js"></script>
+<script>
+    $('#cst-xml').hide();
+    $('#simbolTable').hide();
+</script>
+
+</html>

@@ -1,0 +1,53 @@
+<div class="row">
+
+  <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing ">
+    <app-xml-editor></app-xml-editor>
+  </div>
+
+  <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing ">
+    <app-query-editor></app-query-editor>
+  </div>
+
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing ">
+    <mat-tab-group class="bg-dark" dynamicHeight="true" mat-stretch-tabs
+      style="height: calc(100vh - 36.5px); max-width: calc(100vw - 40px);">
+
+      <mat-tab label="CONSOLA">
+        <ng-template matTabContent>
+          <app-consola></app-consola>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="REPORTE GRAMATICAL">
+        <ng-template matTabContent>
+          <app-reporte-gramatical></app-reporte-gramatical>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="AST">
+        <ng-template matTabContent>
+          <app-ast></app-ast>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="CST">
+        <ng-template matTabContent>
+          <app-cst></app-cst>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="ERRORES">
+        <ng-template matTabContent>
+          <app-errores></app-errores>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="TABLA DE SIMBOLOS">
+        <ng-template matTabContent>
+          <app-simbolos></app-simbolos>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+</div>

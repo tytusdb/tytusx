@@ -1,10 +1,17 @@
 "use strict";
 var consola = "";
 var entornoGlobal;
+var erroresXML = [];
+var erroresXPath = [];
+var reglasGramaticalesXML;
+var reglasGramaticalesXPath;
+var instruccionesXML;
+var instruccionesXPath;
 function procesarProyecto(instruccionesXML, instruccionesXPath) {
     consola = "Iniciando analisis";
     entornoGlobal = new Entorno(null);
     ejecutarXML(instruccionesXML);
+    ejecutarXPath(instruccionesXPath);
     return consola;
 }
 function ejecutarXML(instrucciones) {
@@ -24,6 +31,13 @@ function ejecutarXML(instrucciones) {
     agregarLinea("Encoding " + (encoding == null ? "No se encontro encoding" : encoding.valor));
     agregarLinea("============================");
 }
+function ejecutarXPath(instrucciones) {
+    agregarLinea("Analizando XPath");
+    instrucciones.forEach((element) => {
+        element.ejecutar(entornoGlobal, instrucciones);
+    });
+    agregarLinea("Finalizando XPath");
+}
 function agregarErroresXMLConsola(listaErrores) {
     var header = "==========ERRORES XML==========";
     agregarErroresConsola(header, listaErrores);
@@ -34,19 +48,6 @@ function agregarErroresConsola(header, listaErrores) {
         agregarLinea("Error: " + err.tipoError + " - " + err.mensaje + " - " + err.token + " - " + err.linea + " - " + err.columna);
     });
 }
-function ejecutarXPath(instrucciones) {
-    agregarLinea("Analizando XPath");
-    const entornoGlobal = new Entorno(null);
-    const ast = new AST(instrucciones);
-    instrucciones.forEach((element) => {
-        element.ejecutar(entornoGlobal, ast);
-    });
-}
 function agregarLinea(texto) {
     consola += "\n" + texto;
 }
-/*ejecutarXML(`
-    print(1);
-    print(true);
-    print("hola mundo");
-`);*/ 

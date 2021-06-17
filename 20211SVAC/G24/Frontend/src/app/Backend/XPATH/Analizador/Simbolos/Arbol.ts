@@ -1,11 +1,11 @@
-import tablaSimbolos from './tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import { Instruccion } from '../Abstracto/Instruccion';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import { reporteTabla } from '../Reportes/reporteTabla';
 import obtenerValor from '../Reportes/cambiarTipo';
 export default class Arbol {
   private instrucciones: Array<Instruccion>;
-  private errores: Array<Errores>;
+  private NodoErrores: Array<NodoErrores>;
   private funciones: Array<Instruccion>;
   public listaSimbolos: Array<reporteTabla>;
 
@@ -46,11 +46,11 @@ export default class Arbol {
   public setfunciones(value: Array<Instruccion>) {
     this.funciones = value;
   }
-  public geterrores(): Array<Errores> {
-    return this.errores;
+  public getNodoErrores(): Array<NodoErrores> {
+    return this.NodoErrores;
   }
-  public seterrores(value: Array<Errores>) {
-    this.errores = value;
+  public setNodoErrores(value: Array<NodoErrores>) {
+    this.NodoErrores = value;
   }
 
   public getinstrucciones(): Array<Instruccion> {
@@ -81,7 +81,7 @@ export default class Arbol {
     this.instrucciones = instrucciones;
     this.consola = '';
     this.tablaGlobal = new tablaSimbolos();
-    this.errores = new Array<Errores>();
+    this.NodoErrores = new Array<NodoErrores>();
     this.funciones = new Array<Instruccion>();
     this.listaSimbolos = new Array<reporteTabla>();
   }

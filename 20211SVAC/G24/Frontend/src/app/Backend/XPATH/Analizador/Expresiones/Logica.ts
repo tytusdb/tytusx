@@ -2,9 +2,9 @@
 
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class Logica extends Instruccion {
@@ -28,15 +28,15 @@ export default class Logica extends Instruccion {
     }
   }
 
-  public getNodo(): nodoAST {
+  public getNodosAST(): nodoAST {
     let nodo = new nodoAST('LOGICO');
     if (this.condExcep != null) {
       nodo.agregarHijo(this.loogica + '', 'log', this.loogica);
-      nodo.agregarHijoAST(this.condExcep.getNodo());
+      nodo.agregarHijoAST(this.condExcep.getNodosAST());
     } else {
-      nodo.agregarHijoAST(this.cond1?.getNodo());
+      nodo.agregarHijoAST(this.cond1?.getNodosAST());
       nodo.agregarHijo(this.loogica + '', 'log', this.loogica);
-      nodo.agregarHijoAST(this.cond2?.getNodo());
+      nodo.agregarHijoAST(this.cond2?.getNodosAST());
     }
     return nodo;
   }
@@ -45,12 +45,12 @@ export default class Logica extends Instruccion {
     izq = der = unico = null;
     if (this.condExcep != null) {
       unico = this.condExcep.interpretar(arbol, tabla);
-      if (unico instanceof Errores) return unico;
+      if (unico instanceof NodoErrores) return unico;
     } else {
       izq = this.cond1?.interpretar(arbol, tabla);
-      if (izq instanceof Errores) return izq;
+      if (izq instanceof NodoErrores) return izq;
       der = this.cond2?.interpretar(arbol, tabla);
-      if (der instanceof Errores) return der;
+      if (der instanceof NodoErrores) return der;
     }
     //inicio comparacion
     switch (this.loogica) {
