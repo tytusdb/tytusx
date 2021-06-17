@@ -110,9 +110,15 @@ class Ejecucion {
             this.atributoTexto = '';
             this.atributoIdentificacion = [];
             this.indiceValor = null;
+            this.punto = '';
             this.consultaXML = this.cuerpoXml;
             this.verObjetos();
-            this.recorrido(this.raiz);
+            try {
+                this.recorrido(this.raiz);
+            }
+            catch (error) {
+                return 'No se encontró por algun error';
+            }
             //console.log(this.atributoIdentificacion);
             return this.traducir();
         }
@@ -140,9 +146,10 @@ class Ejecucion {
                             this.atributo = false;
                             this.atributoTexto = '';
                             this.indiceValor = null;
+                            this.punto = '';
                             this.consultaXML = this.cuerpoXml;
                         }
-                        else if (!(element === '[') && !(element === ']')) {
+                        else if (!(element === '[') && !(element === ']') && !(element === '(') && !(element === ')')) {
                             this.consultaXML = this.reducir(this.consultaXML, element, 'INSTRUCCIONES');
                             //console.log(this.consultaXML);
                         }
@@ -228,7 +235,7 @@ class Ejecucion {
                 }
                 else {
                     let val = null;
-                    val = this.calcular(nodo);
+                    val = this.calcular(nodo, null, 0);
                     this.consultaXML = this.reducir(this.consultaXML, val.getValorImplicito(val), 'INSTRUCCIONES');
                 }
             }
@@ -276,6 +283,7 @@ class Ejecucion {
                 return consulta;
             }
             else if (this.atributo) {
+                this.punto = etiqueta;
                 let cons = [];
                 consulta.forEach(element => {
                     element.listaAtributos.forEach(atributo => {
@@ -336,6 +344,7 @@ class Ejecucion {
                 return consulta;
             }
             else if (this.atributo) {
+                this.punto = etiqueta;
                 let cons = [];
                 consulta.forEach(element => {
                     element.listaAtributos.forEach(atributo => {
@@ -417,6 +426,7 @@ class Ejecucion {
                 return cons;
             }
             else if (!this.descendiente) {
+                this.punto = etiqueta;
                 if (this.esRaiz) {
                     consulta.forEach(element => {
                         if (element.identificador === etiqueta) {
@@ -440,6 +450,7 @@ class Ejecucion {
                 }
             }
             else {
+                this.punto = etiqueta;
                 consulta.forEach(element => {
                     if (element.identificador === etiqueta) {
                         cons.push(element);
@@ -556,6 +567,9 @@ class Ejecucion {
             else {
                 if (element.identificador === etiqueta) {
                     cons.push(element);
+                    if (this.descendiente && element.listaObjetos.length > 0) {
+                        cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta, false));
+                    }
                 }
                 else if (element.listaObjetos.length > 0) {
                     cons = cons.concat(this.recDescen(element.listaObjetos, etiqueta, false));
@@ -564,7 +578,63 @@ class Ejecucion {
         });
         return cons;
     }
-    calcular(nodo) {
+    path(nodo) {
+        let cons = this.pathh;
+        //console.log('entra');
+        if (this.identificar('PATH', nodo)) {
+            nodo.hijos.forEach((element, index) => {
+                if (element instanceof Object) {
+                    if (element.label === 'PATH') {
+                        this.path(element);
+                    }
+                    else if (element.label === 'ATRIBUTO_PREDICADO') {
+                        cons = this.reducir(cons, element.hijos[0], 'RAIZ');
+                        cons = this.reducir(cons, element.hijos[1], 'RAIZ');
+                        this.pathh = cons;
+                        this.pathhCount--;
+                        //console.log('/@identificador ', this.pathh);
+                    }
+                    else if (element.label === 'id') {
+                        cons = this.reducir(cons, '/', 'RAIZ');
+                        cons = this.reducir(cons, element.hijos[0], 'INSTRUCCIONES');
+                        this.pathh = cons;
+                        if (index === 0)
+                            this.pathhCount++;
+                        else
+                            this.pathhCount++;
+                        //console.log('id ', this.pathh);
+                    }
+                    else if (element.label === 'dos_pts') {
+                        cons = this.reducir(cons, '/..', 'PADRE');
+                        this.pathh = cons;
+                        this.pathhCount--;
+                        //console.log('padre ', this.pathh);
+                    }
+                }
+                else if (typeof element === 'string') {
+                    //console.log(element);
+                    if (element === '..') {
+                        cons = this.reducir(cons, '/..', 'PADRE');
+                        this.pathh = cons;
+                        //console.log('padre ', this.pathh);
+                    }
+                    else if (element === '/') {
+                        cons = this.pathh;
+                        cons = this.reducir(cons, element, 'RAIZ');
+                        this.pathh = cons;
+                        this.pathhCount++;
+                        //console.log('raiz ', this.pathh);
+                    }
+                    else {
+                        cons = this.reducir(cons, element, 'INSTRUCCIONES');
+                        //console.log('instruccion');
+                        this.pathh = cons;
+                    }
+                }
+            });
+        }
+    }
+    calcular(nodo, logica, position) {
         if (this.identificar('ARITMETICAS', nodo)) {
             let izq, der = null;
             let op = "";
@@ -576,11 +646,17 @@ class Ejecucion {
                     else if (!(op === "") && this.identificar('integer', element)) {
                         der = new primitivo_1.Primitivo(Number(element.hijos[0]), 1, 1);
                     }
+                    else if (op === "" && this.identificar('double', element)) {
+                        izq = new primitivo_1.Primitivo(Number(parseInt(element.hijos[0])), 1, 1);
+                    }
+                    else if (!(op === "") && this.identificar('double', element)) {
+                        der = new primitivo_1.Primitivo(Number(parseInt(element.hijos[0])), 1, 1);
+                    }
                     else if (op === "" && this.identificar('ARITMETICAS', element)) {
-                        izq = this.calcular(element);
+                        izq = this.calcular(element, null, position);
                     }
                     else if (!(op === "") && this.identificar('ARITMETICAS', element)) {
-                        der = this.calcular(element);
+                        der = this.calcular(element, null, position);
                     }
                     else if (op === "" && this.identificar('ORDEN', element)) {
                         izq = new primitivo_1.Primitivo(Number(this.consultaXML.length), 1, 1);
