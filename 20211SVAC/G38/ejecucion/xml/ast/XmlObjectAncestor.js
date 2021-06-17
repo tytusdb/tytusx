@@ -1,7 +1,7 @@
 "use strict";
 class XmlObjectAncestor {
     constructor(id, name, parent, line, column) {
-        this._id = id;
+        this._id = XpathUtil.generarIdUnicoXmlNode();
         this._name = name;
         this._parent = parent;
         this._line = line;

@@ -12,6 +12,7 @@ function CargarXML(){
     } else {
 
         contenido = ReemplazarEspeciales(contenido);
+        console.log(contenido.toString());
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
@@ -441,13 +442,13 @@ function SetSalida(texto){
 
 function ReemplazarEspeciales(cadena){
 
-    var pattern = /(?=[a-zA-ZñÑ]*)'(?=[a-zA-ZñÑ]*)/g;
+    var pattern = /(?<=[a-zA-ZñÑ]+)'/gi;
     var aposPattern = /&apos;/gi;
     var ampPattern = /&amp;/gi;
     var ltPattern = /&lt;/gi;
     var gtPattern = /&gt;/gi;
     var quotPattern = /&quot;/gi;
-    cadena = cadena.replace(pattern, " &apos;");
+    cadena = cadena.replace(pattern, " &apos; ");
     cadena = cadena.replace(aposPattern, " &apos; ");
     cadena = cadena.replace(ampPattern, " &amp; ");
     cadena = cadena.replace(ltPattern, " &lt; ");

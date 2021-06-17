@@ -31,11 +31,9 @@ function ejecutarXML(instrucciones) {
 }
 function ejecutarXPath(instrucciones) {
     agregarLinea("Analizando XPath");
-    /*const entornoGlobal:Entorno = new Entorno(null);
-    const ast:AST = new AST(instrucciones);*/
-    /*instrucciones.forEach((element:Instruccion) => {
-        element.ejecutar(entornoGlobal,ast);
-    });*/
+    instrucciones.forEach((element) => {
+        element.ejecutar(entornoGlobal, instrucciones);
+    });
     agregarLinea("Finalizando XPath");
 }
 function agregarErroresXMLConsola(listaErrores) {

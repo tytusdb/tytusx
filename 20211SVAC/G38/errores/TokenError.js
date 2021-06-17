@@ -1,9 +1,9 @@
 "use strict";
 var TipoError;
 (function (TipoError) {
-    TipoError[TipoError["Lexico"] = 0] = "Lexico";
-    TipoError[TipoError["Sintactico"] = 1] = "Sintactico";
-    TipoError[TipoError["Semantico"] = 2] = "Semantico";
+    TipoError["Lexico"] = "Lexico";
+    TipoError["Sintactico"] = "Sintactico";
+    TipoError["Semantico"] = "Semantico";
 })(TipoError || (TipoError = {}));
 class TokenError {
     constructor(tipoError, mensaje, linea, columna) {
