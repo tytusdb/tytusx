@@ -142,6 +142,13 @@ function consultar(oXML, oXPath) {
         //Atributos
         if(oXPath.atributo == true) {
             // Recorrer lista de atributos
+            var aux = [];
+            oXML.lista_atributos.forEach((att) => {
+                if(att.atributo == oXPath.valor) {
+                    aux.push(oXML);
+                }
+            });
+            return aux;
         } else {
             var resAux = [];
             
@@ -157,8 +164,8 @@ function consultar(oXML, oXPath) {
                 });
                 
                 var expVal = oXPath.exp.getValor([resAux]);
-                if(expVal.tipo == 0) {
-                    var oTmp = resAux[expVal.valor];
+                if(expVal.tipo == 0 || expVal.tipo == 1) {
+                    var oTmp = resAux[expVal.valor - 1];
                     if(oTmp != undefined) {
                         return oTmp;
                     }
