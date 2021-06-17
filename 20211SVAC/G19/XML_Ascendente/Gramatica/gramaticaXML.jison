@@ -115,7 +115,7 @@ RAIZ:
 OBJETO:
       lt identifier LATRIBUTOS gt OBJETOS           lt div identifier gt       {contadorLineas++; 
                                                                                     if($2==$8){
-                                                                                    $$= new EntornoXML($2,'',@1.first_line, @1.first_column,$3,$5,'',null,$8);
+                                                                                    $$= new EntornoXML($2,'',@1.first_line, @1.first_column,$3,$5,$8);
                                                                                     }else{
                                                                                     console.log("Error semantico"+ $2)
                                                                                     var er =new NodoError("Error Semantico","XML Ascendente","Etiquetas no coincidenG: "+ $2+"-> "+$8, @1.first_line, @1.first_column);
@@ -124,17 +124,17 @@ OBJETO:
                                                                                         }
     | lt identifier LATRIBUTOS gt LISTA_ID_OBJETO   lt div identifier gt       { contadorLineas++; 
                                                                                     if($2==$8){
-                                                                                    $$= new EntornoXML($2,$5,@1.first_line, @1.first_column,$3,[],'',null,$8);
+                                                                                    $$= new EntornoXML($2,$5,@1.first_line, @1.first_column,$3,[],$8);
                                                                                     }else{
                                                                                     console.log("Error semantico"+ $2)
                                                                                     var er =new NodoError("Error Semantico","XML Ascendente","Etiquetas no coincidenG: "+ $2+"-> "+$8, @1.first_line, @1.first_column);
                                                                                     Errores.add(er);
                                                                                     } 
                                                                                      }
-    | lt identifier LATRIBUTOS div gt                                          { $$= new EntornoXML($2,'',@1.first_line, @1.first_column,$3,[],'',null,'Unica'); }
+    | lt identifier LATRIBUTOS div gt                                          { $$= new EntornoXML($2,'',@1.first_line, @1.first_column,$3,[],'Unica'); }
     | lt identifier LATRIBUTOS gt  lt div identifier gt       { contadorLineas++; 
                                                                 if($2==$8){
-                                                                $$ = new EntornoXML($2,$5,@1.first_line, @1.first_column,[],[],'',null,$7);
+                                                                $$ = new EntornoXML($2,$5,@1.first_line, @1.first_column,[],[],$7);
                                                                 }else{
                                                                 console.log("Error semantico"+ $2+ @1.first_column)
                                                                 var er =new NodoError("Error Semantico","XML Ascendente","Etiquetas no coincidenG: "+ $2+"-> "+$7, @1.first_line, @1.first_column);
@@ -163,7 +163,7 @@ ATRIBUTOS:
 ;
 
 ATRIBUTO: 
-    identifier asig StringLiteral                   { $$= new Atributo($1, $3, @1.first_line, @1.first_column,null); }
+    identifier asig StringLiteral                   { $$= new Atributo($1, $3, @1.first_line, @1.first_column); }
     |error StringLiteral {console.error('Error Sintactico: ' + yytext + ', linea: ' + @1.first_line + ',  columna: ' + @1.first_column);
                                var er =new NodoError("Error Sintatico","XML Ascendente","No se esperaba el caracter: "+ $1+"Se esperaba: ATRIBUTO ", @1.first_line,@1.first_column);
                                Errores.add(er);}

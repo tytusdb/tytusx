@@ -1,6 +1,6 @@
 # **TytusX**
-## _Grupo 15 | Escuela de Vacaciones Junio 2021_
-Universidad de San Carlos de Guatala
+## _Grupo 13 | Escuela de Vacaciones Junio 2021_
+Universidad de San Carlos de Guatemala
 Faculta de Ingenieria
 Escuela de Ciencias y Sistemas
 > TytusX es un administrador de bases de datos documental de código abierto desarrollado bajo licencia MIT. Hace uso del lenguaje JavaScript para su desarrollo. Soporta archivos > con formato XML y es capaz de realizar diversas consultas sobre los archivos XML con el lenguaje XPath.
@@ -10,41 +10,41 @@ Escuela de Ciencias y Sistemas
 # MANUAL DE USUARIO **(DEMO)**
 > Visita [TytusX](https://tytusdb.github.io/tytusx/20211SVAC/G13/) (website de la aplicación)
 > 
-Para empezar debera de ingresarse una entrada en el campo de texto proveido, ya sea seleccionando un archivo personal, tecleando la entrada en la caja de texto o copiando y pegando el documento con formato XML.
-#### - **Ánalisis**
-Una vez la entrada a analizar se encuentra en el area de texto se cuenta con dos botones, `Ascendente` y `Descendente.`
-Al presionar cualquiera de los dos botones la aplicación procede a realizar una análisis sobre el codigo con sintaxis XML
-de forma ascedente o descendente según corresponda.
+Para empezar debera de ingresarse una entrada en el campo de texto proveído, ya sea seleccionando un archivo personal, tecleando la entrada en la caja de texto o copiando y pegando el documento con formato XML.
+#### - **Análisis**
+Una vez la entrada a analizar se encuentra en el área de texto se cuenta con dos botones, `Ascendente` y `Descendente.`
+Al presionar cualquiera de los dos botones la aplicación procede a realizar una análisis sobre el código con sintaxis XML
+de forma ascendente o descendente según corresponda.
 
 Una vez la xml ha sido analizada con éxito es posible realizar consultas con sintaxis del lenguaje XPath. Para ello deberá
 teclear la consulta en el campo de texto correspondiente y presionar el botón `Consultar`, si la consulta es válida para la entrada dada
-se mostrara la salida en el cuadro de texto correspondiente.
+se mostrará la salida en el cuadro de texto correspondiente.
 
 
 #### - **Reportes**
-Si se detectan errores durante el ánalisis de la entrada la aplicacion generará un `reporte de errores` especificando cuál fue el error y qué tipo de error fue localizado
-en la entrada junto con su ubicacion en la entrada.
-De no encontrar errores en la entrada la aplicación esta genera un reporte detallado con la `tabla de simbolos`. Es posible saber en dónde fue
-localizado el simbolo, el nombre de etiqueta en incluso su ámbito (etiqueta padre).
+Si se detectan errores durante el análisis de la entrada la aplicación generará un `reporte de errores` especificando cuál fue el error y qué tipo de error fue localizado
+en la entrada junto con su ubicación en la entrada.
+De no encontrar errores en la entrada la aplicación esta genera un reporte detallado con la `tabla de símbolos`. Es posible saber en dónde fue
+localizado el símbolo, el nombre de etiqueta en incluso su ámbito (etiqueta padre).
 
-##### - *CST (Concrete Syntas Tree)*
-Una vez el analisis de la entrada ha sido ejecutado y ha finalizado también es posible observar el árbol conreto de análsis.
-Este árbol refleja el analisis de la entrada XML, se observan todos los nodos generados por las producciones de la gramática.
-La forma del árbol generado por este reporte depende del tipo de análsis seleccionado por el usuario.
+##### - *CST (Concrete Syntax Tree)*
+Una vez el análisis de la entrada ha sido ejecutado y ha finalizado también es posible observar el `árbol concreto de análisis`.
+Este árbol refleja el análisis de la entrada XML, se observan todos los nodos generados por las producciones de la gramática.
+La forma del árbol generado por este reporte depende del tipo de análisis seleccionado por el usuario.
 
 ##### - *Reporte Gramatical*
-Junto con el árbol de CST de la entrada XML también se genera un reporte gramatical en el cual se puden observar las producciones de la grámatica
-usada en el análisis de XML, la tabla generada despliega las filas justo en el orden que el analizador ha derivado durante el analisis, además se
-muestran las acciones semánticas de cada producción. La salida de este reporte, al igual que con el repote del CST, dependerá del tipo de análisis
-que el usuario decida usar, dependiendo del tipo de análsis los reportes presentarán las características correspondientes.
+Junto con el árbol de CST de la entrada XML también se genera un `reporte gramatical` en el cual se pueden observar las producciones de la gramática
+usada en el análisis de XML, la tabla generada despliega las filas justo en el orden que el analizador ha derivado durante el análisis, además se
+muestran las acciones semánticas de cada producción. La salida de este reporte, al igual que con el reporte del CST, dependerá del tipo de análisis
+que el usuario decida usar, dependiendo del tipo de análisis los reportes presentarán las características correspondientes.
 
-##### - *AST (Abstract Syntas Tree)*
-Una vez se ha realizado una consulta sobre una entrada XML la aplicación genera el árbol de análisis sintáctico dondé es posible ver como el
-analizador a procesado al entrada, ya sea para el análsis ascendente o descendente.
+##### - *AST (Abstract Syntax Tree)*
+Una vez se ha realizado una consulta sobre una entrada XML la aplicación genera el árbol de análisis sintáctico donde es posible ver como el
+el analizador a procesado al entrada, ya sea para el análisis ascendente o descendente.
 
 # MANUAL TÉCNICO
 
-## Ténologias Incluidas
+## Tecnologías Incluidas
 
 ## Jison
 ¿Qué es?
@@ -69,7 +69,7 @@ La biblioteca consta de los componentes DataSet, Timeline, Network, Graph2d y Gr
 
 
 ## Gramáticas
-Se presentan las gramticas utilzadas en el desarrollo de este proyecto con notacion BFN para su mejor entendimiento.
+Se presentan las gramáticas utilizadas en el desarrollo de este proyecto con notación BFN para su mejor comprensión y entendimiento.
  ## XML
  #### Ascendente
 ```sh
@@ -229,5 +229,3 @@ El aviso de copyright anterior y este aviso de permiso se incluirán en todas la
 **Free Software, Hell Yeah!**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-

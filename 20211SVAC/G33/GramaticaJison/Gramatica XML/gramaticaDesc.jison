@@ -80,6 +80,7 @@ BSL                                 "\\".
 
 //error lexico
 .   {
+        listaErrores.push(new tError('Léxico',`Simbolo inesperado: ${yytext}`,yylloc.first_line,yylloc.first_column ));
         console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
     }
 
@@ -92,7 +93,9 @@ BSL                                 "\\".
     const {Objeto} = require("../Expresiones/Objeto");
     const {Atributo} = require("../Expresiones/Atributo");
     const {SalidaGramatica} = require("../AST/SalidaGramatica");
+    const {tError} = require("../Expresiones/tError");
 
+    var listaErrores = [];
     var reportBNF = [];
     var reportBNF2 = [];
 %}
@@ -123,7 +126,7 @@ START :
             reportBNF.push(`<START> ::= <ENCODING> <RAIZ> EOF`);
             reportBNF2.push('Start.val = Raiz.val. // Fin del documento');
             $$ = $2;
-            return new SalidaGramatica($$, reportBNF, reportBNF2, $1);
+            return new SalidaGramatica($$, reportBNF, reportBNF2, $1,listaErrores);
         };
 
 ENCODING: 
@@ -132,7 +135,12 @@ ENCODING:
             reportBNF.push(`<ENCODING> ::= lt interC xml version asig StringLiteral encoding asig StringLiteral interC gt`);
             reportBNF2.push('Encoding.val = StringLiteral'); 
             $$ = $9; 
-        };
+        }
+    |   error gt                                                                            
+        {
+            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,@1.first_line,@1.first_column));
+        }
+        ;
 
 RAIZ: 
     OBJETO RAIZ
@@ -187,6 +195,10 @@ OBJETOSEC:
             reportBNF.push('<OBJETOSEC> ::= div gt')
             reportBNF2.push('Objetosec.val = {texto: vacio, lista: vacia: id: vacio, tipo: simple}')
             $$ = {texto: '', lista: null, id: '', tipo: 0}
+        }
+    |   error gt                                                                            
+        {
+            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,@1.first_line,@1.first_column));
         };
 
 OBJETOTER:
@@ -214,6 +226,10 @@ OBJETOTER:
                     $$ === $3 
                 }
             }
+        }
+        |   error gt                                                                            
+        {
+            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,@1.first_line,@1.first_column));
         };
 
 LATRIBUTOS: 

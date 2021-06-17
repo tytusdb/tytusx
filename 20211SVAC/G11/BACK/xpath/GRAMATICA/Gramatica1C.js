@@ -90,19 +90,19 @@ case 2: case 3: case 10: case 11: case 13: case 14: case 15: case 23: case 111:
  this.$ = $$[$0]; 
 break;
 case 4:
- this.$ = new Node('LISTAS'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('LISTAS'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 5:
- this.$ = new Node('LISTAS'); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('LISTAS'); this.$.addChild($$[$0]); 
 break;
 case 6: case 7: case 8: case 9:
- this.$ = new Node('LISTA1'); this.$.addChild($$[$0-2]); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('LISTA1'); this.$.addChild($$[$0-2]); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 12:
- this.$ = new Node('LISTA1'); this.$.addChild($$[$0-1]); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('LISTA1'); this.$.addChild($$[$0-1]); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 16:
- this.$ = new Node('','LISTA1'); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('','LISTA1'); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 17: case 22: case 24: case 64:
 Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))
@@ -117,220 +117,220 @@ case 20:
  this.$ = new Nodo_Tree('BARRAS'); this.$.addChild(new Nodo_Tree($$[$0],'TK_OR')); 
 break;
 case 21:
- this.$ = new Node('PUNTO'); this.$.addChild(new Node($$[$0-1],'TK_PUNTO')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('PUNTO'); this.$.addChild(new Node_tree($$[$0-1],'TK_PUNTO')); this.$.addChild($$[$0]); 
 break;
 case 25:
- this.$ = new Node('IDS'); this.$.addChild(new Node($$[$0-2],'TK_DBARRA')); this.$.addChild(new Node($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('IDS'); this.$.addChild(new Node_tree($$[$0-2],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]); 
 break;
 case 26:
- this.$ = new Node('IDS'); this.$.addChild(new Node($$[$0-2],'TK_BARRA'));  this.$.addChild(new Node($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('IDS'); this.$.addChild(new Node_tree($$[$0-2],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]); 
 break;
 case 27:
- this.$ = new Node('IDS'); this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_IDENTIFICADOR')); 
+ this.$ = new Node_tree('IDS'); this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_IDENTIFICADOR')); 
 break;
 case 28:
- this.$ = new Node('IDS'); this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_IDENTIFICADOR')); 
+ this.$ = new Node_tree('IDS'); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_IDENTIFICADOR')); 
 break;
 case 29:
- this.$ = new Node('IDS'); this.$.addChild(new Node($$[$0],'TK_IDENTIFICADOR')); 
+ this.$ = new Node_tree('IDS'); this.$.addChild(new Node_tree($$[$0],'TK_IDENTIFICADOR')); 
 break;
 case 30:
- this.$ = new Node('ATRIBUTO'); this.$.addChild(new Node($$[$0-3],'TK_DBARRA')); this.$.addChild(new Node($$[$0-2],'TK_ARROBA')); this.$.addChild(new Nodo_Tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('ATRIBUTO'); this.$.addChild(new Node_tree($$[$0-3],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0-2],'TK_ARROBA')); this.$.addChild(new Nodo_Tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
 break;
 case 31:
- this.$ = new Node('ATRIBUTO'); this.$.addChild(new Node($$[$0-3],'TK_BARRA'));  this.$.addChild(new Node($$[$0-2],'TK_ARROBA')); this.$.addChild(new Nodo_Tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('ATRIBUTO'); this.$.addChild(new Node_tree($$[$0-3],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0-2],'TK_ARROBA')); this.$.addChild(new Nodo_Tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
 break;
 case 32:
- this.$ = new Node('ATRIBUTO'); this.$.addChild(new Node($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node($$[$0-1],'TK_POR'));    this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('ATRIBUTO'); this.$.addChild(new Node_tree($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node_tree($$[$0-1],'TK_POR'));    this.$.addChild($$[$0]); 
 break;
 case 33: case 34:
- this.$ = new Node('ATRIBUTO'); this.$.addChild(new Node($$[$0-3],'TK_DBARRA')); this.$.addChild(new Node($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('ATRIBUTO'); this.$.addChild(new Node_tree($$[$0-3],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node_tree($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]); 
 break;
 case 35:
- this.$ = new Node('ATRIBUTO'); this.$.addChild(new Node($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]);
+ this.$ = new Node_tree('ATRIBUTO'); this.$.addChild(new Node_tree($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node_tree($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild($$[$0]);
 break;
 case 36:
- this.$ = new Node('L_ATRIBUTO'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('L_ATRIBUTO'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 37:
- this.$ = new Node('L_ATRIBUTO'); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('L_ATRIBUTO'); this.$.addChild($$[$0]); 
 break;
 case 38:
- this.$ = new Node('ATRIBUTO1'); this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_DPUNTO')); 
+ this.$ = new Node_tree('ATRIBUTO1'); this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_DPUNTO')); 
 break;
 case 39:
- this.$ = new Node('ATRIBUTO1'); this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_PUNTO')); 
+ this.$ = new Node_tree('ATRIBUTO1'); this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_PUNTO')); 
 break;
 case 40:
- this.$ = new Node('ATRIBUTO1'); this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_DPUNTO')); 
+ this.$ = new Node_tree('ATRIBUTO1'); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_DPUNTO')); 
 break;
 case 41:
- this.$ = new Node('ATRIBUTO1'); this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_PUNTO')); 
+ this.$ = new Node_tree('ATRIBUTO1'); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_PUNTO')); 
 break;
 case 42:
- this.$ = new Node('ATRIBUTO1'); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('ATRIBUTO1'); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 case 43: case 44:
- this.$ = new Node('PALABRAS_R'); this.$.addChild(new Node($$[$0-4],'TK_DBARRA')); this.$.addChild($$[$0-3]); this.$.addChild(new Node($$[$0-2],'TK_DDP')); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('PALABRAS_R'); this.$.addChild(new Node_tree($$[$0-4],'TK_DBARRA')); this.$.addChild($$[$0-3]); this.$.addChild(new Node_tree($$[$0-2],'TK_DDP')); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 45: case 46:
- this.$ = new Node('PALABRAS_R'); this.$.addChild(new Node($$[$0-3],'TK_DBARRA')); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_DDP')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('PALABRAS_R'); this.$.addChild(new Node_tree($$[$0-3],'TK_DBARRA')); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_DDP')); this.$.addChild($$[$0]); 
 break;
 case 47: case 48: case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: case 58: case 59: case 60: case 61: case 62: case 63:
- this.$ = new Node('PR'); this.$.addChild(new Node($$[$0],'TK_DBARRA')); 
+ this.$ = new Node_tree('PR'); this.$.addChild(new Node_tree($$[$0],'TK_DBARRA')); 
 break;
 case 65:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-1],'TK_LAST')); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-1],'TK_LAST')); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 66:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-1],'TK_POSITION')); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-1],'TK_POSITION')); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 67:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-1],'TK_NODE')); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-1],'TK_NODE')); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 68:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-1],'TK_TEXT')); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-1],'TK_TEXT')); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 69:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0],'TK_IDENTIFICADOR')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0],'TK_IDENTIFICADOR')); 
 break;
 case 70:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-3],'TK_PUNTO'));  this.$.addChild(new Node($$[$0-2],'TK_DBARRA')); this.$.addChild(new Node($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-3],'TK_PUNTO'));  this.$.addChild(new Node_tree($$[$0-2],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
 break;
 case 71:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-3],'TK_PUNTO'));  this.$.addChild(new Node($$[$0-2],'TK_BARRA'));  this.$.addChild(new Node($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-3],'TK_PUNTO'));  this.$.addChild(new Node_tree($$[$0-2],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
 break;
 case 72:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-2],'TK_DBARRA')); this.$.addChild(new Node($$[$0-1],'TK_POR'));    this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-2],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0-1],'TK_POR'));    this.$.addChild($$[$0]); 
 break;
 case 73:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-2],'TK_BARRA'));  this.$.addChild(new Node($$[$0-1],'TK_POR'));    this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-2],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0-1],'TK_POR'));    this.$.addChild($$[$0]); 
 break;
 case 74:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-2],'TK_PUNTO'));  this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_POR')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-2],'TK_PUNTO'));  this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_POR')); 
 break;
 case 75:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-2],'TK_PUNTO'));  this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_POR')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-2],'TK_PUNTO'));  this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_POR')); 
 break;
 case 76:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_POR')); 
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_POR')); 
 break;
 case 77:
- this.$ = new Node('OPCION'); this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_POR'));
+ this.$ = new Node_tree('OPCION'); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_POR'));
 break;
 case 78:
- this.$ = new Node('L_ASTERISCO'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('L_ASTERISCO'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 79:
- this.$ = new Node('L_ASTERISCO'); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('L_ASTERISCO'); this.$.addChild($$[$0]); 
 break;
 case 80:
- this.$ = new Node('ASTERISCO1'); this.$.addChild(new Node($$[$0-2],'TK_CORCHETE_IZQUIERDO')); this.$.addChild($$[$0-1]); this.$.addChild(new Node($$[$0],'TK_CORCHETE_IZQUIERDO')); 
+ this.$ = new Node_tree('ASTERISCO1'); this.$.addChild(new Node_tree($$[$0-2],'TK_CORCHETE_IZQUIERDO')); this.$.addChild($$[$0-1]); this.$.addChild(new Node_tree($$[$0],'TK_CORCHETE_IZQUIERDO')); 
 break;
 case 81:
- this.$ = new Node('ASTERISCO1'); this.$.addChild(new Node($$[$0],'TK_IDENTIFICADOR')); 
+ this.$ = new Node_tree('ASTERISCO1'); this.$.addChild(new Node_tree($$[$0],'TK_IDENTIFICADOR')); 
 break;
 case 82:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MAS')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MAS')); this.$.addChild($$[$0]); 
 break;
 case 83:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MENOS')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MENOS')); this.$.addChild($$[$0]); 
 break;
 case 84:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_POR')); this.$.addChild($$[$0]) 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]) 
 break;
 case 85:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_DIVISION')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_DIVISION')); this.$.addChild($$[$0]); 
 break;
 case 86:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MODULO')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MODULO')); this.$.addChild($$[$0]); 
 break;
 case 87:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_IGUALDAD')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_IGUALDAD')); this.$.addChild($$[$0]); 
 break;
 case 88:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_DESIGUALDAD')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_DESIGUALDAD')); this.$.addChild($$[$0]); 
 break;
 case 89:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MENOR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MENOR')); this.$.addChild($$[$0]); 
 break;
 case 90:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MENOR_IGUAL')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MENOR_IGUAL')); this.$.addChild($$[$0]); 
 break;
 case 91:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MAYOR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MAYOR')); this.$.addChild($$[$0]); 
 break;
 case 92:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_MAYOR_IGUAL')); this.$.addChild($$[$0]);
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_MAYOR_IGUAL')); this.$.addChild($$[$0]);
 break;
 case 93:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_OR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_OR')); this.$.addChild($$[$0]); 
 break;
 case 94:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_AND')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_AND')); this.$.addChild($$[$0]); 
 break;
 case 95:
- this.$ = new Node('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-1],'TK_BARRA_VERTICAL')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA_VERTICAL')); this.$.addChild($$[$0]); 
 break;
 case 96:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0-2],'TK_PARENTESIS_IZQUIERDO')); this.$.addChild($$[$0-1]); this.$.addChild(new Node($$[$0],'TK_PARENTESIS_DERECHO')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0-2],'TK_PARENTESIS_IZQUIERDO')); this.$.addChild($$[$0-1]); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS_DERECHO')); 
 break;
 case 97:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0-1],'TK_MENOS')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0-1],'TK_MENOS')); this.$.addChild($$[$0]); 
 break;
 case 98:
- this.$ = new Node('EXP'); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0]); 
 break;
 case 99:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0-1],'TK_ARROBA')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0-1],'TK_ARROBA')); this.$.addChild($$[$0]); 
 break;
 case 100:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0],'TK_DECIMAL')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0],'TK_DECIMAL')); 
 break;
 case 101:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0],'TK_ENTERO')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0],'TK_ENTERO')); 
 break;
 case 102:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0],'TK_CADENA' )); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0],'TK_CADENA' )); 
 break;
 case 103:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild(new Node($$[$0],'TK_DBARRA')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0-1],'TK_IDENTIFICADOR')); this.$.addChild(new Node_tree($$[$0],'TK_DBARRA')); 
 break;
 case 104:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0],'TK_IDENTIFICADOR')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0],'TK_IDENTIFICADOR')); 
 break;
 case 105:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0-1],'TK_POSITION')); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0-1],'TK_POSITION')); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 106:
- this.$ = new Node('EXP'); this.$.addChild(new Node($$[$0-1],'TK_LAST')); this.$.addChild(new Node($$[$0],'TK_PARENTESIS')); 
+ this.$ = new Node_tree('EXP'); this.$.addChild(new Node_tree($$[$0-1],'TK_LAST')); this.$.addChild(new Node_tree($$[$0],'TK_PARENTESIS')); 
 break;
 case 107:
- this.$ = new Node('EXP'); this.$.addChild($$[$0]);
+ this.$ = new Node_tree('EXP'); this.$.addChild($$[$0]);
 break;
 case 108:
- this.$ = new Node('PAL_RE'); this.$.addChild($$[$0-2]); this.$.addChild(new Node($$[$0-2],'TK_DDP')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('PAL_RE'); this.$.addChild($$[$0-2]); this.$.addChild(new Node_tree($$[$0-2],'TK_DDP')); this.$.addChild($$[$0]); 
 break;
 case 109:
- this.$ = new Node('ATRI'); this.$.addChild(new Node($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('ATRI'); this.$.addChild(new Node_tree($$[$0-2],'TK_ARROBA')); this.$.addChild(new Node_tree($$[$0-1],'TK_POR')); this.$.addChild($$[$0]); 
 break;
 case 110:
- this.$ = new Node('L_ATRI'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
+ this.$ = new Node_tree('L_ATRI'); this.$.addChild($$[$0-1]); this.$.addChild($$[$0]); 
 break;
 case 112:
- this.$ = new Node('ATRI1'); this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_DPUNTO')); 
+ this.$ = new Node_tree('ATRI1'); this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_DPUNTO')); 
 break;
 case 113:
- this.$ = new Node('ATRI1'); this.$.addChild(new Node($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node($$[$0],'TK_PUNTO'));  
+ this.$ = new Node_tree('ATRI1'); this.$.addChild(new Node_tree($$[$0-1],'TK_DBARRA')); this.$.addChild(new Node_tree($$[$0],'TK_PUNTO'));  
 break;
 case 114:
- this.$ = new Node('ATRI1'); this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_DPUNTO')); 
+ this.$ = new Node_tree('ATRI1'); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_DPUNTO')); 
 break;
 case 115:
- this.$ = new Node('ATRI1'); this.$.addChild(new Node($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node($$[$0],'TK_PUNTO'));  
+ this.$ = new Node_tree('ATRI1'); this.$.addChild(new Node_tree($$[$0-1],'TK_BARRA'));  this.$.addChild(new Node_tree($$[$0],'TK_PUNTO'));  
 break;
 case 116:
- this.$ = new Node('ATRI1'); this.$.addChild(new Node('ε','ε')); 
+ this.$ = new Node_tree('ATRI1'); this.$.addChild(new Node_tree('ε','ε')); 
 break;
 }
 },

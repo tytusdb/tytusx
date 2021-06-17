@@ -105,7 +105,7 @@ commentliteral                        \(\: {commentdouble} \:\)
 //Char
 {charliteral}                       return 'CharLiteral';
 //Identificador
-[a-zA-Z_][a-zA-Z0-9_ñÑ]*            return 'identifier';
+[a-zA-Z_][a-zA-Z0-9_ñÑá-ü]*            return 'identifier';
 
 //error lexico
 .                                   {
@@ -171,7 +171,7 @@ PATHRELL1: PATHRELL1  sdiagonal PATHRELL1     {
                                                  $$.addHijos($3); 
                                               } 
        |PATHRELL1 ddiagonal  PATHRELL1           { 
-                                                 $$ = new Nodo($2,"PATHRELL1:sdiagonal");
+                                                 $$ = new Nodo($2,"PATHRELL1:ddiagonal");
                                                  $$.addHijos($1); 
                                                  $$.addHijos($3); 
                                               } 

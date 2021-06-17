@@ -3192,7 +3192,7 @@ function limpiarTabla(nombreTabla) {
         table.deleteRow(tableHeaderRowCount);
     }
 }
-},{"./arbolASTXpath":7,"./arbolCSTxml":8,"./encodingTransform":9,"./src/XML.js":27,"./src/XPathDesc":29,"./src/indexXPath":30,"./src/xmldes.js":31,"./tablaSimbolos":32}],11:[function(require,module,exports){
+},{"./arbolASTXpath":7,"./arbolCSTxml":8,"./encodingTransform":9,"./src/XML.js":28,"./src/XPathDesc":30,"./src/indexXPath":31,"./src/xmldes.js":32,"./tablaSimbolos":33}],11:[function(require,module,exports){
 /*! https://mths.be/utf8js v3.0.0 by @mathias */
 ;(function(root) {
 
@@ -3601,7 +3601,7 @@ var Expresion = /** @class */ (function (_super) {
 }(NodoXPath_1.NodoXPath));
 exports.Expresion = Expresion;
 
-},{"./NodoXPath":22}],16:[function(require,module,exports){
+},{"./NodoXPath":23}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //Clase para guardar las filas del reporte gramatical
@@ -3722,6 +3722,87 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Menor = void 0;
+var Expresion_1 = require("./Expresion");
+var Literal_1 = require("./Literal");
+var Menor = /** @class */ (function (_super) {
+    __extends(Menor, _super);
+    function Menor(izq, der, l, c) {
+        var _this = _super.call(this) || this;
+        _this.operacion = '+';
+        _this.hI = izq;
+        _this.hD = der;
+        _this.linea = l;
+        _this.columna = c;
+        return _this;
+    }
+    Menor.prototype.copiarValor = function () {
+        return new Menor(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    };
+    Menor.prototype.getValor = function (entorno) {
+        var res = new Literal_1.Literal(69, '@ERROR@', this.linea, this.columna);
+        var e1 = this.hI.getValor(entorno);
+        var e2 = this.hD.getValor(entorno);
+        if (e1.tipo == 6 && e1.valor == 'position()') {
+            //Verificar que el otro sea nuemro
+            if (e2.tipo == 0 || e2.tipo == 1) {
+                var result = [];
+                for (var i = 1; i < e2.valor; i++) {
+                    result.push(entorno[0][i - 1]);
+                }
+                if (result.length > 0) {
+                    res.tipo = 100;
+                    res.valor = result;
+                    return res;
+                }
+            }
+            else {
+                //ERROR: tipo2 no compatible para position()
+            }
+        }
+        else if (e2.tipo == 6 && e2.valor == 'position()') {
+            if (e1.tipo == 0 || e1.tipo == 1) {
+                var result = [];
+                for (var i = parseInt(e1.valor.toString()) + 1; i < entorno[0].length + 1; i++) {
+                    result.push(entorno[0][i - 1]);
+                }
+                if (result.length > 0) {
+                    res.tipo = 100;
+                    res.valor = result;
+                    return res;
+                }
+            }
+            else {
+                //ERROR: tipo2 no compatible para position()
+            }
+        }
+        else {
+            //ERROR: tipo1 no es valido para las sumas
+        }
+        return res;
+    };
+    return Menor;
+}(Expresion_1.Expresion));
+exports.Menor = Menor;
+
+},{"./Expresion":15,"./Literal":18}],20:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
 exports.Modulo = void 0;
 var Expresion_1 = require("./Expresion");
 var Literal_1 = require("./Literal");
@@ -3802,7 +3883,7 @@ var Modulo = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Modulo = Modulo;
 
-},{"./Expresion":15,"./Literal":18}],20:[function(require,module,exports){
+},{"./Expresion":15,"./Literal":18}],21:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -3880,7 +3961,7 @@ var Multiplicacion = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Multiplicacion = Multiplicacion;
 
-},{"./Expresion":15,"./Literal":18}],21:[function(require,module,exports){
+},{"./Expresion":15,"./Literal":18}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Nodo = /** @class */ (function () {
@@ -3942,7 +4023,7 @@ var Nodo = /** @class */ (function () {
 }());
 exports.Nodo = Nodo;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 exports.NodoXPath = void 0;
@@ -3956,7 +4037,7 @@ var NodoXPath = /** @class */ (function () {
 }());
 exports.NodoXPath = NodoXPath;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ObjetoXML = /** @class */ (function () {
@@ -4098,7 +4179,7 @@ var ObjetoXML = /** @class */ (function () {
 }());
 exports.ObjetoXML = ObjetoXML;
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 exports.ObjetoXPath = void 0;
@@ -4127,7 +4208,7 @@ var ObjetoXPath = /** @class */ (function () {
 }());
 exports.ObjetoXPath = ObjetoXPath;
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -4204,7 +4285,7 @@ var Resta = /** @class */ (function (_super) {
     return Resta;
 }(Expresion_1.Expresion));
 exports.Resta = Resta;
-},{"./Expresion":15,"./Literal":18}],26:[function(require,module,exports){
+},{"./Expresion":15,"./Literal":18}],27:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -4282,7 +4363,7 @@ var Suma = /** @class */ (function (_super) {
 }(Expresion_1.Expresion));
 exports.Suma = Suma;
 
-},{"./Expresion":15,"./Literal":18}],27:[function(require,module,exports){
+},{"./Expresion":15,"./Literal":18}],28:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -4371,7 +4452,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-        //console.log("Se inicia el analisis Lexico/Sintactico 'Ascendente'");        
+        console.log("Se inicia el analisis Lexico/Sintactico 'Ascendente'");        
         let cst = new Nodo(0,'S',[$$[$0-1].nodo]);
         cst.setProdu(new FilaGrammar(getGrammar('S')));
         let gramaticaRep = cst.getGrammar();
@@ -4428,6 +4509,7 @@ case 5:
         this.$ = {};
         this.$.nodo = new Nodo(setid(),"ENCODING");
         this.$.nodo.setProdu(new FilaGrammar(getGrammar('ENCODING2')));
+        this.$.nodo.addNodo(new Nodo(setid(),'epsilon'));
     
 break;
 case 6:
@@ -4435,7 +4517,9 @@ case 6:
         tgs = setTag($$[$0-3]);
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-2].nodo);
         aux.addNodo(new Nodo(setid(),'Slash'));
         aux.addNodo(new Nodo(setid(),'>'));
@@ -4454,13 +4538,17 @@ case 7:
         
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-5].nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.addNodo($$[$0-3].nodo);
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO2')));
 
@@ -4471,7 +4559,7 @@ case 7:
 
         if(tgs != tgc){
             let mensaje = ('las etiquetas de inicio y fin no coindicen!');            
-            errores.push(new Error('semantico',tgc,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
+            errores.push(new Error('Semantico',tgc,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
         }
     
 break;
@@ -4482,7 +4570,9 @@ case 8:
 
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-5].nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         if($$[$0-3]!=undefined){
@@ -4490,7 +4580,9 @@ case 8:
         }
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO3')));
 
@@ -4505,15 +4597,12 @@ case 8:
 
         if(tgs != tgc){
             let mensaje = ('las etiquetas de inicio y fin no coindicen!');            
-            errores.push(new Error('semantico',tgs,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
+            errores.push(new Error('Semantico',tgs,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
         } 
     
 break;
-case 9:
-  addErr($$[$0-1],_$[$0-1],'Se esperaba '); this.$ = undefined; 
-break;
-case 10: case 11:
-  addErr($$[$0-1],_$[$0-1],'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,>]'); this.$ = undefined; 
+case 9: case 10: case 11:
+  addErr($$[$0-1],_$[$0-1],'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,">","<",contenido]'); this.$ = undefined; 
 break;
 case 12:
 
@@ -4578,7 +4667,7 @@ case 16:
 break;
 case 17:
 
-        addErr($$[$0-1],_$[$0-1],'Caracteres inseperados se han encontrado, se esperaba "="');
+        addErr($$[$0-1],_$[$0-1],'Caracteres inseperados se han encontrado, se esperaba ["=",atributo,id]');
         this.$ = undefined;
     
 break;
@@ -5064,7 +5153,7 @@ _handle_error:
 
     const addErr = (err,loc,msj) => {
         //tipo,linea,columna,mensaje
-        errores.push(new Error('semantico',err,loc.first_line,loc.first_column,msj));
+        errores.push(new Error('Sintactico',err,loc.first_line,loc.first_column,msj));
     }
 
     const setCoding = () => {
@@ -5483,7 +5572,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./AtributoXML.js":12,"./Error.js":14,"./FilaGrammar.js":16,"./Nodo.js":21,"./ObjetoXML.js":23,"_process":6,"fs":1,"path":5}],28:[function(require,module,exports){
+},{"./AtributoXML.js":12,"./Error.js":14,"./FilaGrammar.js":16,"./Nodo.js":22,"./ObjetoXML.js":24,"_process":6,"fs":1,"path":5}],29:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -5630,6 +5719,9 @@ case 21:
 break;
 case 22:
  this.$ = new Modulo($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
+break;
+case 23:
+ this.$ = new Menor($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
 case 31:
  
@@ -5807,6 +5899,7 @@ parse: function parse(input) {
 }};
 
     const { ObjetoXPath } = require('./ObjetoXPath');
+    const { Menor } = require('./Menor');
     const { Suma } = require('./Suma');
     const { Resta } = require('./Resta');
     const { Multiplicacion } = require('./Multiplicacion');
@@ -6280,7 +6373,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./Division":13,"./Error":14,"./Id":17,"./Literal":18,"./Modulo":19,"./Multiplicacion":20,"./ObjetoXPath":24,"./Resta":25,"./Suma":26,"_process":6,"fs":1,"path":5}],29:[function(require,module,exports){
+},{"./Division":13,"./Error":14,"./Id":17,"./Literal":18,"./Menor":19,"./Modulo":20,"./Multiplicacion":21,"./ObjetoXPath":25,"./Resta":26,"./Suma":27,"_process":6,"fs":1,"path":5}],30:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -6427,6 +6520,9 @@ case 23:
 break;
 case 24:
  this.$ = new Modulo($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
+break;
+case 25:
+ this.$ = new Menor($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
 case 33:
  
@@ -6604,6 +6700,7 @@ parse: function parse(input) {
 }};
 
     const { ObjetoXPath } = require('./ObjetoXPath');
+    const { Menor } = require('./Menor');
     const { Suma } = require('./Suma');
     const { Resta } = require('./Resta');
     const { Multiplicacion } = require('./Multiplicacion');
@@ -7077,7 +7174,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./Division":13,"./Error":14,"./Id":17,"./Literal":18,"./Modulo":19,"./Multiplicacion":20,"./ObjetoXPath":24,"./Resta":25,"./Suma":26,"_process":6,"fs":1,"path":5}],30:[function(require,module,exports){
+},{"./Division":13,"./Error":14,"./Id":17,"./Literal":18,"./Menor":19,"./Modulo":20,"./Multiplicacion":21,"./ObjetoXPath":25,"./Resta":26,"./Suma":27,"_process":6,"fs":1,"path":5}],31:[function(require,module,exports){
 "use strict";
 var XPathAsc = require('./XPath');
 var XPathDes = require('./XPathDesc');
@@ -7215,8 +7312,25 @@ function consultar(oXML, oXPath) {
         //Nodos desconocidos
         if(oXPath.valor == '*') {
             //verificar si es * o @*
+            if(oXPath.atributo == true) {
+                var aux = [];
+                oXML.lista_atributos.forEach((att) => {
+                    aux.push(oXML);
+                });
+                return aux;
+            } else {
+                var aux = [];
+                oXML.lista_objetos.forEach((att) => {
+                    aux.push(att);
+                });
+                return aux;
+            }
         } else if(oXPath.valor == 'node()') {
-            //Devolver todos los nodos :v
+            var aux = [];
+            oXML.lista_objetos.forEach((att) => {
+                aux.push(att);
+            });
+            return aux;
         }
         
         //Atributos
@@ -7224,9 +7338,7 @@ function consultar(oXML, oXPath) {
             // Recorrer lista de atributos
             var aux = [];
             oXML.lista_atributos.forEach((att) => {
-                if(att.atributo == oXPath.valor) {
-                    aux.push(oXML);
-                }
+                aux.push(oXML);
             });
             return aux;
         } else {
@@ -7249,6 +7361,13 @@ function consultar(oXML, oXPath) {
                     if(oTmp != undefined) {
                         return oTmp;
                     }
+                } else if(expVal.tipo == 100) {
+                    //recorrer el resultado
+                    var oTemp = [];
+                    expVal.valor.forEach((alv) => {
+                        oTemp.push(alv);
+                    });
+                    return oTemp;
                 }
                 //}
             } else {
@@ -7379,7 +7498,7 @@ function obtenerValor(Exp) {
     }
     return E;
 }
-},{"./XPath":28,"./XPathDesc":29}],31:[function(require,module,exports){
+},{"./XPath":29,"./XPathDesc":30}],32:[function(require,module,exports){
 (function (process){(function (){
 /* parser generated by jison 0.4.18 */
 /*
@@ -7525,6 +7644,7 @@ case 5:
         this.$ = {};
         this.$.nodo = new Nodo(setid(),"ENCODING");
         this.$.nodo.setProdu(new FilaGrammar(getGrammar('ENCODING2')));
+        this.$.nodo.addNodo(new Nodo(setid(),'epsilon'));
     
 break;
 case 6:
@@ -7533,7 +7653,9 @@ case 6:
         tgs = setTag($$[$0-3]);
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-2].nodo);
         aux.addNodo(new Nodo(setid(),'Slash'));
         aux.addNodo(new Nodo(setid(),'>'));
@@ -7552,13 +7674,17 @@ case 7:
         
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-5].nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.addNodo($$[$0-3].nodo);
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO2')));
 
@@ -7581,7 +7707,9 @@ case 8:
 
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-5].nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         if($$[$0-3]!=undefined){
@@ -7589,7 +7717,9 @@ case 8:
         }
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO3')));
 
@@ -7610,7 +7740,7 @@ case 8:
     
 break;
 case 9: case 10: case 11:
-  addErr($$[$0-1],_$[$0-1],'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,>]'); this.$ = undefined; 
+  addErr($$[$0-1],_$[$0-1],'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,">","<",contenido]'); this.$ = undefined; 
 break;
 case 12:
 
@@ -7689,7 +7819,7 @@ case 17:
 break;
 case 18:
 
-        addErr($$[$0-1],_$[$0-1],'Caracteres inseperados se han encontrado, se esperaba "="');
+        addErr($$[$0-1],_$[$0-1],'Caracteres inseperados se han encontrado, se esperaba ["=",atributo,id]');
         this.$ = undefined;
     
 break;
@@ -8206,7 +8336,7 @@ _handle_error:
 
     const addErr = (err,loc,msj) => {
         //tipo,linea,columna,mensaje
-        errores.push(new Error('semantico',err,loc.first_line,loc.first_column,msj));
+        errores.push(new Error('Sintactico',err,loc.first_line,loc.first_column,msj));
     }
 
     const setCoding = () => {
@@ -8620,7 +8750,7 @@ if (typeof module !== 'undefined' && require.main === module) {
 }
 }
 }).call(this)}).call(this,require('_process'))
-},{"./AtributoXML.js":12,"./Error.js":14,"./FilaGrammar.js":16,"./Nodo.js":21,"./ObjetoXML.js":23,"_process":6,"fs":1,"path":5}],32:[function(require,module,exports){
+},{"./AtributoXML.js":12,"./Error.js":14,"./FilaGrammar.js":16,"./Nodo.js":22,"./ObjetoXML.js":24,"_process":6,"fs":1,"path":5}],33:[function(require,module,exports){
 function hacerTablaSimbolos(objeto) {
     
     const resultArray = [];
