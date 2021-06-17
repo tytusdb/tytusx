@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="./codemirror/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/monokai.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+    
+    <title>TytusX</title>
+  </head>
+  <body>
+    <h1>TytusX</h1>
+    <div class="container">
+        <div class="wrapper">
+            <div class="div_xml">
+                <button onclick="analizarXML()" >ANALIZAR</button>
+                <button onclick="nuevoXML()" >NUEVO</button>
+                <button onclick="document.getElementById('upload').click();  cargarXML(); return false" >ABRIR</button>
+                <button onclick="downloadXML()" >GUARDAR</button>
+                <button onclick="limpiarXML()" >LIMPIAR</button>
+                <select id="selectBox" onchange="changeFunc();">
+                  <option value="0">Options</option>
+                  <option value="1">Generar reporte Gramatica</option>
+                  <option value="2">Generar grafo ASC</option>
+                  <option value="3">Generar tabla de Simbolos</option>
+                  <option value="4">Reporte de errores</option>
+                </select>
+                <textarea class="form-control" style="width: 100px;" id="xml" class="xml" name="xml"></textarea>
+                <input type="file"  style="visibility: hidden;" id="upload" name="upload" required>
+              </div>
+            <div class="div_query">
+                <button onclick="analizarXPATH()" >ANALIZAR</button>
+                <button onclick="nuevoXPATH()" >NUEVO</button>
+                <button onclick="document.getElementById('upload').click();  cargarXPATH(); return false" >ABRIR</button>
+                <button onclick="downloadXPATH()" >GUARDAR</button>
+                <button onclick="limpiarXPATH()" >LIMPIAR</button>
+                <select id="selectBox2" onchange="changeFunc2();">
+                  <option value="0">Options</option>
+                  <option value="1">Generar grafo</option>
+                  <option value="2">Reporte de errores</option>
+                </select>
+                <textarea class="form-control" style="width: 100px;" id="query" class="query" name="query"></textarea>
+            </div>
+            <div class="div_salida">
+                <textarea class="form-control" style="width: 100px;" id="salida" class="salida" name="salida"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="graph" class="graph"></div> 
+    
+    <div>
+      <table class="default">
+        <tr>
+        <td>No.</td>
+        <td>Produccion</td>
+        <td>Regla semántica</td>
+        </tr>
+        <tbody id="tablaXML">
+        </tbody>
+    </table>
+    </div>
+
+    <div id="tabla_simbolo">
+
+    </div>
+
+    <div id="errores">
+
+    </div>
+
+
+    <!-- Create a simple CodeMirror instance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
+    <!-- Create a simple Vis JS instance -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+
+    <script src="dist/grafo/GraphAST.js" ></script>
+    <script src="dist/grafo/GraphASTXPATH.js" ></script>
+    <script src="dist/grafo/GraphValue.js" ></script>
+
+    <script src="dist/xml/interfases/Expresion.js" ></script>
+    <script src="dist/xml/ast/AST_XML.js" ></script>
+    <script src="dist/xml/ast/Entorno.js" ></script>
+    <script src="dist/xml/ast/Simbolo.js" ></script>
+    <script src="dist/xml/ast/Tipo.js" ></script>
+    <script src="dist/xml/expresiones/Atributo.js" ></script>
+    <script src="dist/xml/expresiones/Encoding.js" ></script>
+    <script src="dist/xml/expresiones/Objeto.js" ></script>
+    <!-- <script src="dist/xml/reportes/Error.js" ></script> -->
+    <script src="dist/xml/reportes/Gramatica.js" ></script>
+    <script src="dist/xml/reportes/ReporteXML.js" ></script>
+    
+    <script src="dist/xpath/ast/AST_XPATH.js" ></script>
+    <script src="dist/xpath/ast/tipox.js" ></script>
+    <script src="dist/xpath/ast/TipoPrimitivo.js" ></script>
+    <script src="dist/xpath/instrucciones/Axes.js" ></script>
+    <script src="dist/xpath/instrucciones/AxesPredicado.js" ></script>
+    <script src="dist/xpath/instrucciones/Expresion.js" ></script>
+    <script src="dist/xpath/instrucciones/Nodo.js" ></script>
+    <script src="dist/xpath/instrucciones/Predicado.js" ></script>
+    <script src="dist/xpath/instrucciones/Wildcard.js" ></script>
+    <script src="dist/xpath/interfases/Instruccion.js" ></script>
+    <script src="dist/xpath/reportes/Error.js" ></script>
+    <script src="dist/xpath/reportes/GenerarTabla.js" ></script>
+
+    <script src="grammar/Grammar_xml.js" ></script>
+    <script src="grammar/Grammar_xml_desc.js" ></script>
+    <script src="grammar/Grammar_xpath.js" ></script>
+    <script src="grammar/G_xpath.js" ></script>
+
+    <script src="dist/Index.js"></script>
+
+    <script src="codemirror/config.js" ></script>
+
+    <script> 
+      // provide data in the DOT language
+      function generarGrafo() {
+        var DOTstring = getGrafoAscXML();
+        var parsedData = vis.network.convertDot(DOTstring);
+    
+        var data = {
+          nodes: parsedData.nodes,
+          edges: parsedData.edges
+        }
+    
+        var container = document.getElementById('graph');
+        var options = parsedData.options;
+    
+        // you can extend the options like a normal JSON variable:
+        options.layout = {
+          hierarchical: {
+            sortMethod: 'directed',  // hubsize, directed
+            shakeTowards: 'roots',  // roots, leaves
+            direction: 'UD'   // UD, DU, LR, RL
+            }
+        }
+        
+        // create a network
+        var network = new vis.Network(container, data, options);
+      }
+      
+      function generarGrafoXPATH() {
+        var DOTstring = getGrafoAscXPATH();
+        var parsedData = vis.network.convertDot(DOTstring);
+    
+        var data = {
+          nodes: parsedData.nodes,
+          edges: parsedData.edges
+        }
+    
+        var container = document.getElementById('graph');
+        var options = parsedData.options;
+    
+        // you can extend the options like a normal JSON variable:
+        options.layout = {
+          hierarchical: {
+            sortMethod: 'directed',  // hubsize, directed
+            shakeTowards: 'roots',  // roots, leaves
+            direction: 'UD'   // UD, DU, LR, RL
+            }
+        }
+        
+        // create a network
+        var network = new vis.Network(container, data, options);
+      }
+      
+      function changeFunc() {
+        var selectBox = document.getElementById("selectBox");
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        
+        if (selectedValue == "1") {
+          reporteGramaticalXML()
+        } else if(selectedValue == "2") {
+          generarGrafo()
+        } else if(selectedValue == "3") {
+          tablaSimboloXML()
+        } else if(selectedValue == "4") {
+          crear_tabla_errores_xml()//erroresXML()
+        }
+      }
+
+      function changeFunc2() {
+        var selectBox = document.getElementById("selectBox2");
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        
+        if (selectedValue == "1") {
+          generarGrafoXPATH()
+        } else if(selectedValue == "2") {
+          crear_tabla_errores_xpaht()
+        }
+      }
+    </script>
+  </body>
+</html>

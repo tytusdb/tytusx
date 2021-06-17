@@ -3,27 +3,12 @@ function exepath(listainstrucciones) {
     var p = tds_xml_persistente[0];
     //console.log(p[i]);
     for (var j = 0; j < listainstrucciones.length; j++) {
-        if (listainstrucciones[j].ruta2 == undefined) /////si vienen solo una ruta
-         {
-            for (var i = 0; i < p.length; i++) {
-                var auxiliar = [];
-                auxiliar = getrutasimple(listainstrucciones[j], p[i]);
-                if (auxiliar != undefined) {
-                    if (auxiliar.length > 0) {
-                        console.log(getrutasimple(listainstrucciones[j], p[i]));
-                    }
-                }
-            }
-        }
-        else //////mas de una ruta
-         {
-            for (var i = 0; i < p.length; i++) {
-                //console.log(listainstrucciones[j]);
-                //console.log(p[i]);
-                //if(listainstrucciones[j])
-                console.log(getInfoXpath(listainstrucciones[j], p[i]));
-                //break;
-            }
+        for (var i = 0; i < p.length; i++) {
+            //console.log(listainstrucciones[j]);
+            //console.log(p[i]);
+            //if(listainstrucciones[j])
+            console.log(getInfoXpath(listainstrucciones[j], p[i]));
+            //break;
         }
     }
 }
@@ -42,13 +27,11 @@ function getInfoXpath(listainstrucciones, entorno) {
                 for (var j = 0; j < entorno[i].simbolos.length; j++) {
                     if (listainstrucciones.ruta2 != undefined) {
                         if (entorno[i].simbolos[j].tipo != 6 && listainstrucciones.ruta2.dato.valor === entorno[i].simbolos[j].entorno) {
-                            console.log("if");
+                            //console.log(entorno[i].simbolos[j]);
                             aux.push(entorno[i].simbolos[j]);
                         }
                     }
                     else {
-                        //console.log(listainstrucciones);
-                        //console.log(entorno[i].simbolos[j].entorno);
                         aux.push(entorno[i].simbolos[j]);
                     }
                 }
@@ -60,60 +43,6 @@ function getInfoXpath(listainstrucciones, entorno) {
         if (listainstrucciones.mostrar != undefined) {
             var entornofiltrado = filtrarCondicion(aux, entorno, listainstrucciones);
             return entornofiltrado;
-        }
-        return aux;
-    }
-}
-function getrutasimple(listainstrucciones, entorno) {
-    if (listainstrucciones.tipoRuta == 0) //diagonal simple
-     {
-        if (listainstrucciones.dato.valor === entorno.entorno) {
-            return entorno;
-        }
-        else {
-            return undefined;
-        }
-    }
-    else if (listainstrucciones.tipoRuta == 1) //diagonal doble
-     {
-        return buscaretiqueta(listainstrucciones.dato.valor, entorno);
-    }
-    if (listainstrucciones.tipoRuta == 3) //sin diagonal
-     {
-        if (listainstrucciones.dato.valor === entorno.entorno) {
-            return entorno;
-        }
-        else {
-            return undefined;
-        }
-    }
-}
-function buscaretiqueta(etiqueta, entorno) {
-    //console.log(entorno);
-    var aux = [];
-    if (entorno.simbolos != undefined) {
-        if (entorno.entorno === etiqueta) {
-            aux.push(entorno.simbolos);
-            return aux;
-        }
-        else {
-            for (var j = 0; j < entorno.simbolos.length; j++) {
-                var aux1 = buscaretiqueta(etiqueta, entorno.simbolos[j]);
-                if (aux1 != undefined) {
-                    if (aux1.length > 0) {
-                        aux.push(aux1);
-                    }
-                }
-            }
-            return aux;
-        }
-    }
-    else {
-        if (entorno.entorno === etiqueta) {
-            aux.push(entorno);
-        }
-        else {
-            return undefined;
         }
         return aux;
     }
@@ -155,10 +84,10 @@ function filtrarCondicion(aux, entorno, listainstrucciones) {
             }
         }
         if (entornofiltrado.length > 0) {
-            if (listainstrucciones.mostrar.mostrar != undefined) {
-                return filtrarCondicion(entornofiltrado, entorno, listainstrucciones.mostrar);
-            }
-            //return entornofiltrado;
+            //if(listainstrucciones.mostrar.mostrar != undefined){
+            //    entornofiltrado =  filtrarCondicion(entornofiltrado,entorno,listainstrucciones.mostrar);
+            //}
+            return entornofiltrado;
         }
         return;
     }
