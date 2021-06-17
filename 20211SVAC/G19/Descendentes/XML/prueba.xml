@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+  <libro>
+    <titulo>La vida está  &lt; en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+</biblioteca>
+
+
+<biblioteca>
+  <libro>
+    <fechaPublicacion año="1973"/>
+  </libro>
+</biblioteca>
