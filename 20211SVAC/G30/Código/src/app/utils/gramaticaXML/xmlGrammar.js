@@ -139,7 +139,6 @@ case 6:
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n"
                                                                                           };
-                                                                                          console.log("OBJ\t"+$$[$0-5]+"\t-\t"+ambitoActual);
                                                                                     
 break;
 case 7:
@@ -154,7 +153,6 @@ case 7:
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
                                                                                           };
-                                                                                          console.log("OBJ\t"+$$[$0-5]+"\t"+$$[$0-3]+$$[$0-2]+"\t"+ambitoActual);
                                                                                     
 break;
 case 8:
@@ -169,7 +167,6 @@ case 8:
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
                                                                                           };
-                                                                                          console.log("OBJ\t"+$$[$0-4]+"\t"+$$[$0-2]+"\t"+ambitoActual);
                                                                                     
 break;
 case 9:
@@ -197,9 +194,6 @@ case 10:
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n" + $$[$0-4].producciones
                                                                                           };
-                                                                                          
-                                                                                          console.log("OBJ\t"+$$[$0-5]+"\t-\t"+ambitoActual);
-                                                                                          ambitoActual = $$[$0-5];
                                                                                     
 break;
 case 11:
@@ -214,9 +208,6 @@ case 11:
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-6].producciones + $$[$0-4].producciones
                                                                                           };
-                                                                                          console.log("OBJ\t"+$$[$0-7]+"\t-\t"+ambitoActual);
-                                                                                          console.log($$[$0-7]);console.log([$$[$0-7]]);
-                                                                                          ambitoActual = $$[$0-7];
                                                                                     
 break;
 case 12:
@@ -231,10 +222,6 @@ case 12:
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-4].producciones
                                                                                           };
-                                                                                          
-                                                                                          console.log("OBJ\t"+$$[$0-6]+"\t-\t"+ambitoActual);
-                                                                                          console.log($$[$0-6]);console.log([$$[$0-6]]);
-                                                                                          ambitoActual = $$[$0-6];
                                                                                     
 break;
 case 13:
@@ -547,7 +534,6 @@ _handle_error:
 
     const { Paquete } = require('src/app/models/CST/paquete.model');
     const { NodoCST } = require('src/app/models/CST/nodoCST.model');
-    var ambitoActual = "global";
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){

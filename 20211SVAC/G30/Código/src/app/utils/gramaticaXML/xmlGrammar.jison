@@ -57,7 +57,6 @@
 %{
     const { Paquete } = require('src/app/models/CST/paquete.model');
     const { NodoCST } = require('src/app/models/CST/nodoCST.model');
-    var ambitoActual = "global";
 
 %}
 
@@ -124,7 +123,6 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n"
                                                                                           };
-                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
                                                                                     }
 
       | 'tk_<' 'identificador' 'tk_>' PRECONTENIDO 'contenidoEtiqueta' 'identificador' 'tk_>'    {     if($2 != $6){
@@ -138,7 +136,6 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
                                                                                           };
-                                                                                          console.log("OBJ\t"+$2+"\t"+$4+$5+"\t"+ambitoActual);
                                                                                     }
                                                                                     
       | 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'    {     if($2 != $5){
@@ -150,10 +147,8 @@ OBJETO
                                                                                                       new NodoCST('contenidoE', [new NodoCST($4, [])]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),   new NodoCST('id', [new NodoCST($5, [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n",
-                                                                                                simbolos: ["OBJ\t"+$2+"\t"+$4+"\t"+ambitoActual]
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
                                                                                           };
-                                                                                          console.log("OBJ\t"+$2+"\t"+$4+"\t"+ambitoActual);
                                                                                     }
 
       /*| 'tk_<' 'identificador' LATRIBUTOS 'tk_/' 'tk_>'                        {     $$ = {
@@ -188,9 +183,6 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n" + $3.producciones
                                                                                           };
-                                                                                          
-                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
-                                                                                          ambitoActual = $2;
                                                                                     }
       | 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'  
                                                                                     {     if($2 != $8){
@@ -204,9 +196,6 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $3.producciones + $5.producciones
                                                                                           };
-                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
-                                                                                          console.log($2);console.log([$2]);
-                                                                                          ambitoActual = $2;
                                                                                     }
       | 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'  {     if($2 != $7){
                                                                                                 listaErroresJison.push( new Excepcion('Semántico', this._$.first_line, this._$.first_column, `Etiqueta no correspondiente`));
@@ -219,10 +208,6 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $4.producciones
                                                                                           };
-                                                                                          
-                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
-                                                                                          console.log($2);console.log([$2]);
-                                                                                          ambitoActual = $2;
                                                                                     }
       /*| error 'tk_<'                                  {
                                                       listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));

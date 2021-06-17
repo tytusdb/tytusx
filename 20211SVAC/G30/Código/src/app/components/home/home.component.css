@@ -8,9 +8,22 @@
     padding-right: 0%;
 }
 
+#exceptionsRow{
+    align-items: center;
+    padding-left: 4%;
+    padding-right: 0%;
+}
+
 .console{
-    padding: 30px;
     padding-top: 10px;
+    padding-left: 6%;
+    padding-right: 12%;
+    margin: 15px;
+}
+.grammarReport{
+    padding-top: 50px;
+    padding-left: 6%;
+    padding-right: 12%;
     margin: 15px;
 }
 
@@ -34,6 +47,12 @@ input {
 }
 #exceptionsTable2{
     margin: 6%;
+    margin-right: 12% ;
+}
+
+#symbolsTable{
+    margin-left: 6%;
+    margin-bottom: 6%;
     margin-right: 12% ;
 }
 

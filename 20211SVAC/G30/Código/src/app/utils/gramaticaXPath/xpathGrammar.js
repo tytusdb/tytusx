@@ -92,56 +92,61 @@ case 1:
         const gramaticarecorrida = '';
         const raiz = this.$.final
         console.log('XPATH completo! :D');
-        const miPaquete = new Paquete(errores, tokenss, raiz, gramaticarecorrida);        
+        const miPaquete = new Paquete(errores, tokensF, raiz, gramaticarecorrida);        
 		return miPaquete;
 	
 break;
 case 2:
 
                                     this.$ = {
-                                        final: new NodoFinal('Instrucciones-primero', [$$[$0-1].final, $$[$0].final])
+                                        final: new NodoFinal('INSTRUCCIONES', [$$[$0-1].final, $$[$0].final])
                                     };
+                                    
                                 
 break;
 case 3:
 
                                     this.$ = {
-                                        final: new NodoFinal('Primero', [$$[$0].final])
+                                        final: $$[$0].final,
                                     };
                                 
 break;
 case 4:
 
                                 this.$ = {
-                                    final: new NodoFinal('slash2_i', [$$[$0-1], $$[$0].final])
-                                };
+                                    final: new NodoFinal('NODO', [new NodoFinal($$[$0-1], []), $$[$0].final])
+                                };                                
+                                tokenss.push(new Token($$[$0-1], '//'));                                
                             
 break;
 case 5:
 
                                 this.$ = {
-                                    final: new NodoFinal('slash_i', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('NODO', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
+                                tokenss.push(new Token($$[$0-1], '/')); 
                             
 break;
 case 6:
 
                                 this.$ = {
-                                    final: new NodoFinal('actual_i', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('NODO', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
+                                tokenss.push(new Token($$[$0-1], '.')); 
                             
 break;
 case 7:
 
                                 this.$ = {
-                                    final: new NodoFinal('padre_i', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('NODO', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
+                                tokenss.push(new Token($$[$0-1], '..')); 
                             
 break;
 case 8:
 
                                 this.$ = {
-                                    final: new NodoFinal('sinBarritas', [$$[$0].final])
+                                    final: $$[$0].final,
                                 };
                             
 break;
@@ -161,178 +166,131 @@ case 9:
                 
             
 break;
-case 10:
+case 10: case 12:
 
                                 this.$ = {
-                                    final: new NodoFinal('ID_b', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('ID', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
+                                tokenss.push(new Token($$[$0-1], 'ID')); 
                             
 break;
 case 11:
 
                                 this.$ = {
-                                    final: new NodoFinal('ID', [$$[$0]])
+                                    final: new NodoFinal('ID', [new NodoFinal($$[$0], [])])
                                 };
+                                tokenss.push(new Token($$[$0], 'ID')); 
                             
 break;
-case 12:
+case 13: case 19:
 
                                 this.$ = {
-                                    final: new NodoFinal('ID', [$$[$0-1], $$[$0].final])
-                                };
-                            
-break;
-case 13:
-
-                                this.$ = {
-                                    final: new NodoFinal('ID', [$$[$0-2], $$[$0-1].final, $$[$0].final])
+                                    final: new NodoFinal('ID', [new NodoFinal($$[$0-2], []), $$[$0-1].final, $$[$0].final])
                                 };
                             
 break;
 case 14:
 
                                 this.$ = {
-                                    final: $$[$0-1].final,
+                                    final: new NodoFinal('AXE', [$$[$0-1].final, $$[$0].final]),
                                 };
                             
 break;
-case 15:
+case 15: case 16: case 29: case 31:
 
                                 this.$ = {
-                                    final: new NodoFinal('slash2', [$$[$0-1], $$[$0].final])
-                                };
-                            
-break;
-case 16:
-
-                                this.$ = {
-                                    final: new NodoFinal('slash', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('NODO', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
                             
 break;
 case 17:
 
                                 this.$ = {
-                                    final: new NodoFinal('AND', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('AND', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
                             
 break;
 case 18:
 
                                 this.$ = {
-                                    final: new NodoFinal('EOF', ['EOF'])
-                                };
-                            
-break;
-case 19:
-
-                                this.$ = {
-                                    final: new NodoFinal('id_s_i', [$$[$0-2], $$[$0-1].final, $$[$0].final])
+                                    final: new NodoFinal('EOF', [new NodoFinal('EOF', [])])
                                 };
                             
 break;
 case 20:
 
                                 this.$ = {
-                                    final: new NodoFinal('all_s_i', [$$[$0-2], $$[$0-1].final, $$[$0].final])
+                                    final: new NodoFinal('ALL', [new NodoFinal($$[$0-2], []), $$[$0-1].final, $$[$0].final])
                                 };
                             
 break;
 case 21:
 
                                 this.$ = {
-                                    final: new NodoFinal('all_i', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('ALL', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
                             
 break;
 case 22:
 
                                 this.$ = {
-                                    final: new NodoFinal('ID_i', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('ID', [new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
                             
 break;
-case 23:
+case 23: case 24:
 
                                 this.$ = {
-                                    final: new NodoFinal('atributo_s', [$$[$0-2], $$[$0-1], $$[$0].final])
-                                };
-                            
-break;
-case 24:
-
-                                this.$ = {
-                                    final: new NodoFinal('atributos_s', [$$[$0-2], $$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('Atributos', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), $$[$0].final])
                                 };
                             
 break;
 case 25:
 
                                 this.$ = {
-                                    final: new NodoFinal('atributo', [$$[$0-1], $$[$0]])
+                                    final: new NodoFinal('Atributo', [new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                                 };
                             
 break;
 case 26:
 
                                 this.$ = {
-                                    final: new NodoFinal('atributos', [$$[$0-1], $$[$0]])
+                                    final: new NodoFinal('Atributos', [new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                                 };
                             
 break;
 case 27:
 
                                 this.$ = {
-                                    final: new NodoFinal('Axes', [$$[$0-1].final, $$[$0].final])
+                                    final: new NodoFinal('AXE', [$$[$0-1].final, $$[$0].final])
                                 };
                             
 break;
-case 28:
+case 28: case 30:
 
                                 this.$ = {
-                                    final: new NodoFinal('local_s', [$$[$0-2], $$[$0-1].final, $$[$0].final])
-                                };
-                            
-break;
-case 29:
-
-                                this.$ = {
-                                    final: new NodoFinal('local', [$$[$0-1], $$[$0].final])
-                                };
-                            
-break;
-case 30:
-
-                                this.$ = {
-                                    final: new NodoFinal('padre_s', [$$[$0-2], $$[$0-1].final, $$[$0].final])
-                                };
-                            
-break;
-case 31:
-
-                                this.$ = {
-                                    final: new NodoFinal('padre', [$$[$0-1], $$[$0].final])
+                                    final: new NodoFinal('NODO', [new NodoFinal($$[$0-2], []), $$[$0-1].final, $$[$0].final])
                                 };
                             
 break;
 case 32:
 
                                 this.$ = {
-                                    final: new NodoFinal('F_TEXT', [$$[$0-2],$$[$0-1],$$[$0]])
+                                    final: new NodoFinal('F_TEXT', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                                 };
                             
 break;
 case 33:
 
                                 this.$ = {
-                                    final: new NodoFinal('F_NODE', [$$[$0-2],$$[$0-1],$$[$0]])
+                                    final: new NodoFinal('F_NODE', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                                 };
                             
 break;
 case 34:
 
                         this.$ = {
-                            final: new NodoFinal('specs', [$$[$0-2], $$[$0-1].final, $$[$0]])
+                            final: new NodoFinal('specs', [new NodoFinal($$[$0-2], []), $$[$0-1].final, new NodoFinal($$[$0], [])])
                         };
                     
 break;
@@ -341,6 +299,7 @@ case 35:
                             this.$ = {
                                 final: new NodoFinal('expr', [new NodoFinal($$[$0-2], []), $$[$0-1].final, new NodoFinal($$[$0], [])])
                             };
+                            tokenss.push(new Token($$[$0-1], $$[$0-1]));
                         
 break;
 case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44: case 45: case 46: case 47: case 48:
@@ -348,6 +307,7 @@ case 36: case 37: case 38: case 39: case 40: case 41: case 42: case 43: case 44:
                             this.$ = {
                                 final: new NodoFinal('expr', [$$[$0-2].final, new NodoFinal($$[$0-1], []), $$[$0].final])
                             };
+                            tokenss.push(new Token($$[$0-1], $$[$0-1]));
                         
 break;
 case 49:
@@ -362,6 +322,9 @@ case 50:
                             this.$ = {
                                 final: new NodoFinal('f_text', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0-2], 'text'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 case 51:
@@ -369,6 +332,9 @@ case 51:
                             this.$ = {
                                 final: new NodoFinal('f_node', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0-2], 'node'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 case 52:
@@ -376,6 +342,9 @@ case 52:
                             this.$ = {
                                 final: new NodoFinal('f_position', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0-2], 'position'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 case 53:
@@ -383,6 +352,10 @@ case 53:
                             this.$ = {
                                 final: new NodoFinal('f_last', [new NodoFinal($$[$0-2], []), new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0-2], 'last'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
+                            
                         
 break;
 case 54:
@@ -390,6 +363,8 @@ case 54:
                             this.$ = {
                                 final: new NodoFinal('Atributo', [new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0-1], '@')); 
+                            tokenss.push(new Token($$[$0], 'ID')); 
                         
 break;
 case 55:
@@ -397,6 +372,8 @@ case 55:
                             this.$ = {
                                 final: new NodoFinal('Atributos', [new NodoFinal($$[$0-1], []), new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0-1], '@')); 
+                            tokenss.push(new Token($$[$0], '*')); 
                         
 break;
 case 56:
@@ -404,13 +381,15 @@ case 56:
                             this.$ = {
                                 final: new NodoFinal('ID', [new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0], 'ID')); 
                         
 break;
 case 57:
                                 
                             this.$ = {
-                                final: new NodoFinal('Numero', [new NodoFinal($$[$0], [])])
+                                final: new NodoFinal('Numero', [new NodoFinal($$[$0], [])])                                
                             }; 
+                            tokenss.push(new Token($$[$0], 'numero')); 
                         
 break;
 case 58:
@@ -418,6 +397,7 @@ case 58:
                             this.$ = {
                                 final: new NodoFinal('Cadena', [new NodoFinal($$[$0], [])])
                             }; 
+                            tokenss.push(new Token($$[$0], 'cadena')); 
                         
 break;
 case 59:
@@ -448,6 +428,7 @@ case 61:
                                         this.$ = {
                                            final: new NodoFinal('AXE', [$$[$0-2].final, new NodoFinal($$[$0-1], []), $$[$0].final])
                                         };
+                                        tokenss.push(new Token($$[$0-1], '::')); 
                                     
 break;
 case 62:
@@ -455,6 +436,7 @@ case 62:
                                         this.$ = {
                                            final: new NodoFinal('AXE', [$$[$0-3].final, new NodoFinal($$[$0-2], []), $$[$0-1].final, $$[$0].final])
                                         };
+                                        tokenss.push(new Token($$[$0-2], '::')); 
                                     
 break;
 case 63:
@@ -462,6 +444,7 @@ case 63:
                                 this.$ = {
                                 final: new NodoFinal('PR_ancestor', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'ancestor')); 
                             
 break;
 case 64:
@@ -469,6 +452,7 @@ case 64:
                                 this.$ = {
                                 final: new NodoFinal('PR_ancestor-or-self', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'ancestor-or-self'));  
                             
 break;
 case 65:
@@ -476,6 +460,7 @@ case 65:
                                 this.$ = {
                                 final: new NodoFinal('PR_attribute', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'attribute'));  
                             
 break;
 case 66:
@@ -483,6 +468,7 @@ case 66:
                                 this.$ = {
                                     final: new NodoFinal('PR_child', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'child'));  
                             
 break;
 case 67:
@@ -490,6 +476,7 @@ case 67:
                                 this.$ = {
                                     final: new NodoFinal('PR_descendant', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'descendant'));  
                             
 break;
 case 68:
@@ -497,6 +484,7 @@ case 68:
                                 this.$ = {
                                     final: new NodoFinal('PR_descendant-or-self', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'descendant-or-self'));  
                             
 break;
 case 69:
@@ -504,6 +492,7 @@ case 69:
                                 this.$ = {
                                     final: new NodoFinal('PR_following', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'following'));  
                             
 break;
 case 70:
@@ -511,6 +500,7 @@ case 70:
                                 this.$ = {
                                     final: new NodoFinal('PR_following-sibling', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'following-sibling'));  
                             
 break;
 case 71:
@@ -518,6 +508,7 @@ case 71:
                                 this.$ = {
                                     final: new NodoFinal('PR_namespace', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'namespace'));  
                             
 break;
 case 72:
@@ -525,6 +516,7 @@ case 72:
                                 this.$ = {
                                     final: new NodoFinal('PR_parent', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'parent'));  
                             
 break;
 case 73:
@@ -532,20 +524,23 @@ case 73:
                                 this.$ = {
                                     final: new NodoFinal('PR_preceding', [new NodoFinal($$[$0], [])])
                                 }; 
+                                tokenss.push(new Token($$[$0], 'preceeding'));  
                             
 break;
 case 74:
                                 
                                 this.$ = {
                                     final: new NodoFinal('PR_preceding-sibling', [new NodoFinal($$[$0], [])])
-                                };  
+                                }; 
+                                tokenss.push(new Token($$[$0], 'preceding-sibling')); 
                             
 break;
 case 75:
 
                                 this.$ = {
                                     final: new NodoFinal('PR_SELF', [new NodoFinal($$[$0], [])])
-                                };                                
+                                };   
+                                tokenss.push(new Token($$[$0], 'self'));                             
                             
 break;
 case 76:
@@ -553,6 +548,7 @@ case 76:
                             this.$ = {
                                 final: new NodoFinal('ALL', [new NodoFinal($$[$0], [])])
                             };
+                            tokenss.push(new Token($$[$0], '*'));
                         
 break;
 case 77:
@@ -560,6 +556,7 @@ case 77:
                             this.$ = {
                                 final: new NodoFinal('ID', [new NodoFinal($$[$0], [])])
                             };
+                            tokenss.push(new Token($$[$0], 'ID'));
                         
 break;
 case 78:
@@ -567,6 +564,9 @@ case 78:
                             this.$ = {
                                 final: new NodoFinal('F_TEXT', [new NodoFinal('text', []),new NodoFinal('(', []),new NodoFinal(')', [])])
                             };
+                            tokenss.push(new Token($$[$0-2], 'text'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 case 79:
@@ -574,6 +574,9 @@ case 79:
                             this.$ = {
                                 final: new NodoFinal('F_NODE', [new NodoFinal('node', []),new NodoFinal('(', []),new NodoFinal(')', [])])
                             };
+                            tokenss.push(new Token($$[$0-2], 'node'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 case 80:
@@ -581,6 +584,9 @@ case 80:
                             this.$ = {
                                 final: new NodoFinal('F_POSITION', [new NodoFinal('final', []),new NodoFinal('(', []),new NodoFinal(')', [])])
                             };
+                            tokenss.push(new Token($$[$0-2], 'final'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 case 81:
@@ -588,6 +594,9 @@ case 81:
                             this.$ = {
                                 final: new NodoFinal('F_LAST', [new NodoFinal('last', []),new NodoFinal('(', []),new NodoFinal(')', [])])
                             };
+                            tokenss.push(new Token($$[$0-2], 'last'));
+                            tokenss.push(new Token($$[$0-1], '('));
+                            tokenss.push(new Token($$[$0], ')'));
                         
 break;
 }
@@ -850,6 +859,7 @@ _handle_error:
     const { ambitoToken } = require('src/app/models/xpathTipo.model');
     const { Paquete } = require('src/app/models/reportes.model');
     const { NodoFinal } = require('src/app/models/AST/nodoAST.model');
+    const { Token } = require('src/app/models/token.model');
 
     
     var ambito = '';
@@ -859,6 +869,8 @@ _handle_error:
     var contaerrores = 0;
     var contatokens = 0;
     var tokenss = [];
+
+    var tokensF = [];
 
     var specabierto = false;
 
@@ -1192,101 +1204,149 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 42
+case 1: tokensF.push(new Token('1111', 'NUMBER'));
+                        return 42;
 break;
-case 2:return 7
+case 2: tokensF.push(new Token('//', '//'));
+                        return 7;
 break;
-case 3:return 9
+case 3: tokensF.push(new Token('/', '/'));
+                        return 9;
 break;
-case 4:return "cadena"
+case 4: tokensF.push(new Token('cadena', 'cadena'));
+                        return 43;
 break;
-case 5:return "cadena"
+case 5: tokensF.push(new Token('cadena', 'cadena'));
+                        return 43;
 break;
-case 6:return 24
+case 6: tokensF.push(new Token('[', '['));
+                        return 24;
 break;
-case 7:return 26
+case 7: tokensF.push(new Token(']', ']'));
+                        return 26;
 break;
-case 8:return 21
+case 8: tokensF.push(new Token('(', '('));
+                        return 21;
 break;
-case 9:return 22
+case 9: tokensF.push(new Token(')', ')'));
+                        return 22;
 break;
-case 10:return 17
+case 10: tokensF.push(new Token('|', '|'));
+                        return 17;
 break;
-case 11:return 27
+case 11: tokensF.push(new Token('+', '+'));
+                        return 27;
 break;
-case 12:return 28
+case 12: tokensF.push(new Token('-', '-'));
+                        return 28;
 break;
-case 13:return 18
+case 13: tokensF.push(new Token('*', '*'));
+                        return 18;
 break;
-case 14:return 29
+case 14: tokensF.push(new Token('div', 'div'));
+                        return 29;
 break;
-case 15:return 30
+case 15: tokensF.push(new Token('=', '='));
+                        return 30;
 break;
-case 16:return 31
+case 16: tokensF.push(new Token('!=', '!='));
+                        return 31;
 break;
-case 17:return 33
+case 17: tokensF.push(new Token('<=', '<='));
+                        return 33;
 break;
-case 18:return 32
+case 18: tokensF.push(new Token('<', '<'));
+                        return 32;
 break;
-case 19:return 35
+case 19: tokensF.push(new Token('>=', '>='));
+                        return 35;
 break;
-case 20:return 34
+case 20: tokensF.push(new Token('>', '>'));
+                        return 34;
 break;
-case 21:return 36
+case 21: tokensF.push(new Token('or', 'or'));
+                        return 36;
 break;
-case 22:return 37
+case 22: tokensF.push(new Token('and', 'and'));
+                        return 37;
 break;
-case 23:return 38
+case 23: tokensF.push(new Token('mod', 'mod'));
+                        return 38;
 break;
-case 24:return 19
+case 24: tokensF.push(new Token('@', '@'));
+                        return 19;
 break;
-case 25:return '\''
+case 25: tokensF.push(new Token('\'', '\''));
+                        return '\'';
 break;
-case 26:return '\"'
+case 26: tokensF.push(new Token('\"', '\"'));
+                        return '\"';
 break;
-case 27:return 48
+case 27: tokensF.push(new Token('ancestor-or-self', 'ancestor-or-self'));
+                        return 48;
 break;
-case 28:return 47
+case 28: tokensF.push(new Token('ancestor', 'ancestor'));
+                        return 47;
 break;
-case 29:return 49
+case 29: tokensF.push(new Token('attribute', 'attribute'));
+                        return 49;
 break;
-case 30:return 50
+case 30: tokensF.push(new Token('child', 'child'));
+                        return 50;
 break;
-case 31:return 52
+case 31: tokensF.push(new Token('descendant-or-self', 'descendant-or-self'));
+                        return 52;
 break;
-case 32:return 51
+case 32: tokensF.push(new Token('descendant', 'descendant'));
+                        return 51;
 break;
-case 33:return 'following-or-sibling'
+case 33: tokensF.push(new Token('following-or-sibling', 'following-or-sibling'));
+                        return 'following-or-sibling';
 break;
-case 34:return 53
+case 34: tokensF.push(new Token('following', 'following'));
+                        return 53;
 break;
-case 35:return 55
+case 35: tokensF.push(new Token('namespace', 'namespace'));
+                        return 55;
 break;
-case 36:return 56
+case 36: tokensF.push(new Token('parent', 'parent'));
+                        return 56;
 break;
-case 37:return 58
+case 37: tokensF.push(new Token('preceding-sibling', 'preceding-sibling'));
+                        return 58;
 break;
-case 38:return 57
+case 38: tokensF.push(new Token('preceding', 'preceding'));
+                        return 57;
 break;
-case 39:return 59
+case 39: tokensF.push(new Token('self', 'self'));
+                        return 59;
 break;
-case 40:return 20
+case 40: tokensF.push(new Token('text', 'text'));
+                        return 20;
 break;
-case 41:return 23
+case 41: tokensF.push(new Token('node', 'node'));
+                        return 23;
 break;
-case 42:return 20
+case 42: tokensF.push(new Token('position', 'position'));
+                        return 40;
 break;
-case 43:return 41
+case 43: tokensF.push(new Token('last', 'last'));
+                        return 41;
 break;
-case 44:return 45
+case 44: tokensF.push(new Token('::', '::'));
+                        return 45;
 break;
-case 45:return 12
+case 45: tokensF.push(new Token('..', '..'));
+                        return 12;
 break;
-case 46:return 10
+case 46: tokensF.push(new Token('.', '.'));
+                        return 10;
 break;
-case 47:return 14
+case 47: tokensF.push(new Token('ID', 'ID'));
+                        return 14;
 break;
-case 48:return 5
+case 48: tokensF.push(new Token('EOF', 'EOF'));
+                        return 5;
 break;
 case 49:
                 contaerrores++;                

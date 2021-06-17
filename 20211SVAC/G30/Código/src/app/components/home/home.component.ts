@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   public contentXML: string;
   public contentXPATH: string;
   public consoleOutput: string;
+  public grammarOutput: string;
   private file!: File;
   
   //XML
@@ -35,6 +36,8 @@ export class HomeComponent implements OnInit {
   //XPATH
   public resultadoAnalisisXPath: Paquete2;
   public exceptions2: Array<Excepcion>;
+
+
   public chartOption2: any;
   public autoResize2: boolean;
 
@@ -49,6 +52,7 @@ export class HomeComponent implements OnInit {
     this.contentXML = '';
     this.contentXPATH = '';
     this.consoleOutput = '';
+    this.grammarOutput = '';
     
     //XML
     this.resAnalisisXML = new Paquete([], new NodoCST('INICIO', []), "", "", "");
@@ -131,58 +135,6 @@ export class HomeComponent implements OnInit {
 
   }
 
-  // el num es true si es la tabla de símbolos xml, y false si es la tabla de símbolos de xpath
-  public hacerTablaSimbolos(arreglo: Array<Token>, num:boolean):void {
-
-    let a = `<!DOCTYPE html>
-    <html>
-    <head>
-    <style>
-    table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-    </style>
-    </head>
-    <body>
-    
-    <h2>Tabla de Símbolos</h2>
-    
-    <table style="width:100%">
-      <tr>
-        <th>Tipo</th>
-        <th>Valor</th> 
-        <th>Fila</th>
-        <th>Columna</th>
-       </tr>`;
-
-    for (var index in arreglo){
-
-        a += "<tr><td>" + arreglo[index].sTipo + "</td>";
-        a += "<td>" + arreglo[index].sValorToken + "</td>";
-        a += "<td>" + arreglo[index].sFila + "</td>";
-        a += "<td>" + arreglo[index].sColumna + "</td></tr>";
-  
-      }
-  
-      a += `</table>
-      
-      </body>
-      </html>`;
-
-      if (num) {
-
-        this.simbolosXML = a;
-        console.log(this.simbolosXML);
-        
-      } else {
-  
-        this.simbolosXPath = a;
-        console.log(this.simbolosXPath);
-        
-      }
-
-  }
 
   public executeXML(): void {
     this.erroresXML = '';
@@ -192,7 +144,7 @@ export class HomeComponent implements OnInit {
 
     this.exceptions = this.resAnalisisXML.getErrores();
     this.setChartOption(this.resAnalisisXML.getArbol());
-    this.consoleOutput = this.resAnalisisXML.getGramaticaRecorrida();
+    this.grammarOutput = this.resAnalisisXML.getGramaticaRecorrida();
     
     console.log(this.resAnalisisXML.getXmlVersion());
     console.log(this.resAnalisisXML.getXmlEncoding());
@@ -205,7 +157,15 @@ export class HomeComponent implements OnInit {
 
     this.resultadoAnalisisXPath = parser2.parse(this.contentXPATH);
     this.exceptions2 = this.resultadoAnalisisXPath.getErrores();
-    this.setChartOption2(this.resultadoAnalisisXPath.getArbolAST())
+    JSON.parse(JSON.stringify(this.resultadoAnalisisXPath.getArbolAST()));
+
+    let x =  `"menuitem": [
+      {"value": "New", "onclick": "CreateNewDoc()"},
+      {"value": "Open", "onclick": "OpenDoc()"},
+      {"value": "Close", "onclick": "CloseDoc()"}
+    ] `;
+
+    this.setChartOption2(this.resultadoAnalisisXPath.getArbolAST());
 
   }
 
@@ -222,9 +182,6 @@ export class HomeComponent implements OnInit {
 
   public uploadXmlFile(event: any): void {
     this.file = event.target.files[0];
-    this.uploadXmlEditor();
-  }
-  private uploadXmlEditor(): void {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       if (fileReader.result != null) {
@@ -233,11 +190,9 @@ export class HomeComponent implements OnInit {
     }
     fileReader.readAsText(this.file);
   }
+
   public uploadXpathFile(event: any): void {
     this.file = event.target.files[0];
-    this.uploadXpathEditor();
-  }
-  private uploadXpathEditor(): void {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       if (fileReader.result != null) {
@@ -245,6 +200,8 @@ export class HomeComponent implements OnInit {
       }
     }
     fileReader.readAsText(this.file);
+  }
+  private uploadXpathEditor(): void {
   }
   //#endregion FUNCIONES BÁSICAS
 
@@ -296,8 +253,10 @@ export class HomeComponent implements OnInit {
     };
   }
   public setChartOption2(data: Object){
+    console.log('Chart options:');
     console.log(data);
-    this.chartOption = {
+
+    this.chartOption2 = {
       backgroundColor: 'black',
       tooltip: {
         trigger: 'item',

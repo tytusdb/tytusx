@@ -7,7 +7,7 @@ import { NodoCST } from "../models/CST/nodoCST.model";
 export class Paquete {
 
     private errores: Array<Excepcion>;
-    private arbolAST: NodoFinal;
+    public arbolAST: NodoFinal;
     private gramaticaRecorrida: string;
     private tokens: Array<Token>;
 
@@ -35,30 +35,10 @@ export class Paquete {
     }
 }
 
-export const reportes = {
+export class Descendente {
 
-    Errores: new Array<Excepcion>(),
-    Tokens: new Array<Token>(),
-
-    nuevoError: function (tipo:string, desc:string, fila:number, columna:number){
-
-        this.Errores.push(new Excepcion(tipo, fila, columna, desc));
-        return;
-    },
-
-    getErrores: function (){
-        return this.Errores;
-    },
     
-    nuevoToken: function (tipo: string, fila:number, columna:number, valor:string, ambito:string, profundidad:number){
-    
-        this.Tokens.push(new Token(tipo, fila, columna, valor, ambito, profundidad));
-        return;
-    }, 
-    
-    getTokens: function (){
-        return this.Tokens;
-    }
+
 
 }
 

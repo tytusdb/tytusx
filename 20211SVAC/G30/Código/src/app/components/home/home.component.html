@@ -36,7 +36,7 @@
 <div class="content">  
   <div class="row">
 
-    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing ">
+    <div class="col-xl-6">
         <h3>XML EDITOR</h3>
         <input type="file" (change)="uploadXmlFile($event)">
         <ngx-codemirror
@@ -49,7 +49,7 @@
         ></ngx-codemirror>
     </div>
   
-    <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing ">
+    <div class="col-xl-5">
         <h3>XPATH EDITOR</h3>
         <input type="file" (change)="uploadXpathFile($event)">
         <ngx-codemirror
@@ -78,80 +78,123 @@
   </div>
   
   
+
   
 
-  <div class="card border-dark mb-3" id ="exceptionsTable">
-      <div class="card-header">
-        <h4 class="text-center">TABLA GENERAL DE ERRORES</h4>
-      </div>
-      <div class="card-body"> 
-        <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                  <tr>
-                    <th scope="col mb-5">TIPO       </th>
-                    <th scope="col mb-5">FILA       </th>
-                    <th scope="col mb-5">COLUMNA    </th>
-                    <th scope="col mb-5">DESCRIPCION</th>
+  <div class="row" id="exceptionsRow">
+
+    <div class="col-xl-6">
+      <div class="card border-dark mb-3" id ="exceptionsTable">
+        <div class="card-header">
+          <h4 class="text-center">TABLA GENERAL DE ERRORES XML</h4>
+        </div>
+        <div class="card-body"> 
+          <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col mb-5">TIPO       </th>
+                      <th scope="col mb-5">FILA       </th>
+                      <th scope="col mb-5">COLUMNA    </th>
+                      <th scope="col mb-5">DESCRIPCION</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                  <tr *ngFor="let exception of exceptions">
+                    <td>{{exception.sTipo}} </td>
+                    <td>{{exception.sFila}} </td>
+                    <td>{{exception.sColumna}} </td>
+                    <td>{{exception.sDescripcion}} </td>
                   </tr>
-                </thead>
-              <tbody>
-                <tr *ngFor="let exception of exceptions">
-                  <td>{{exception.sTipo}} </td>
-                  <td>{{exception.sFila}} </td>
-                  <td>{{exception.sColumna}} </td>
-                  <td>{{exception.sDescripcion}} </td>
-                </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+          </div>
+        </div>
+    </div>
+    </div>
+  
+    <div class="col-xl-5">
+      <div class="card border-dark mb-3" id ="exceptionsTable2">
+        <div class="card-header">
+          <h4 class="text-center">TABLA GENERAL DE ERRORES XPATH</h4>
+        </div>
+        <div class="card-body"> 
+          <div class="table-responsive">
+              <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col mb-5">TIPO       </th>
+                      <th scope="col mb-5">FILA       </th>
+                      <th scope="col mb-5">COLUMNA    </th>
+                      <th scope="col mb-5">DESCRIPCION</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                  <tr *ngFor="let exception of exceptions2">
+                    <td>{{exception.sTipo}} </td>
+                    <td>{{exception.sFila}} </td>
+                    <td>{{exception.sColumna}} </td>
+                    <td>{{exception.sDescripcion}} </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
         </div>
       </div>
+    </div>
+
   </div>
 
-  <div class="card border-dark mb-3" id ="exceptionsTable2">
+  <div class="card border-dark mb-3" id ="symbolsTable">
     <div class="card-header">
-      <h4 class="text-center">TABLA GENERAL DE ERRORES XPATH</h4>
+      <h4 class="text-center">TABLA DE SIMBOLOS XML</h4>
     </div>
     <div class="card-body"> 
       <div class="table-responsive">
           <table class="table table-sm table-hover">
             <thead>
                 <tr>
-                  <th scope="col mb-5">TIPO       </th>
-                  <th scope="col mb-5">FILA       </th>
-                  <th scope="col mb-5">COLUMNA    </th>
-                  <th scope="col mb-5">DESCRIPCION</th>
+                  <th scope="col mb-5">TIPO         </th>
+                  <th scope="col mb-5">IDENTIFICADOR</th>
+                  <th scope="col mb-5">VALOR        </th>
+                  <th scope="col mb-5">AMBITO       </th>
+                  <th scope="col mb-5">FILA         </th>
+                  <th scope="col mb-5">COLUMNA      </th>
                 </tr>
               </thead>
             <tbody>
-              <tr *ngFor="let exception of exceptions2">
+              <!-- <tr *ngFor="let symbol of symbols">
                 <td>{{exception.sTipo}} </td>
                 <td>{{exception.sFila}} </td>
                 <td>{{exception.sColumna}} </td>
                 <td>{{exception.sDescripcion}} </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
       </div>
     </div>
   </div>
 
-  <div class="grammarReport" id ="exceptionsTable2">
+  <div class="grammarReport">
     <h3>REPORTE GRAMATICAL</h3>
     <div class="form-group">
-      <textarea readonly class="form-control" id="grammarOutput" rows="3"
-        style="height: 185px; width: 100%; background-color: black; ">
-      </textarea>
+      <ngx-codemirror
+      [(ngModel)]="grammarOutput"
+      [options]="{
+          theme: 'ayu-mirage',
+          readOnly: true
+      }"
+      ></ngx-codemirror>
     </div>
   </div>
 </div>
 
 <div class="xmlCst">
   <h3>XML CST ASCENDENTE</h3>
-  <div echarts [options]="chartOption" [autoResize]="autoResize" style="height: 100vh; width: 100%;"></div>  
+  <div echarts [options]="chartOption" style="height: 100vh; width: 100%;"></div>  
 </div>
 
 <div class="xpathCst">
   <h3>XPath CST ASCENDENTE</h3>
-  <div echarts [options]="chartOption2" [autoResize]="autoResize" style="height: 100vh; width: 100%;"></div>  
+  <div echarts [options]="chartOption2" style="height: 100vh; width: 100%;"></div>  
 </div>

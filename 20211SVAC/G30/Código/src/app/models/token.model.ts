@@ -1,21 +1,26 @@
 export class Token {
     private tipo: string;
     private valorToken: string;
-    private noFila: number;
+    /*private noFila: number;
     private noColumna: number;
     private ambito: string;
     private profundidad: number;
 
-    constructor( tipo:string, f:number,c:number,val: string, ambito:string, profundidad:number) {
+    /*constructor( tipo:string, f:number,c:number,val: string, ambito:string, profundidad:number) {
         this.tipo = tipo;
         this.valorToken = val;
         this.noFila=f;
         this.noColumna=c;
         this.ambito = ambito;
         this.profundidad = profundidad;
+    }*/
+
+    constructor(valor: string, tipo:string){
+        this.valorToken = valor;
+        this.tipo = tipo;
     }
     
-    public get sFila() : string {
+    /*public get sFila() : string {
         return this.noFila.toString();
     }
     public get sColumna() : string {
@@ -39,5 +44,5 @@ export class Token {
     }
     public get sProfundidad() : number {
         return this.profundidad;
-    }
+    }*/
 }
