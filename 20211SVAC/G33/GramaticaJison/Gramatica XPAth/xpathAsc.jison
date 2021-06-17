@@ -65,7 +65,9 @@ pero todo esto se ignora*/
 [ \t\r\n\f] {}
 
 //Estado sumidero donde van a caer todos los errores
-. {}
+. {         
+    listaErrores.push(new tError('Léxico',`Simbolo inesperado: ${yytext}`,yylloc.first_line,yylloc.first_column ));
+}
 
 /lex
 
@@ -78,7 +80,9 @@ pero todo esto se ignora*/
     const Logica = require('./Operaciones/Logica'); 
     const { Predicate } = require('./Expresiones/Predicate');
     //const { Atributo } = require('./Expresiones/Atributo');
+    const { tError } = require('./Expresiones/tError');
 
+    var listaErrores = [];
     var produccion = [];
     var accion = [];
 %}
@@ -104,7 +108,7 @@ INICIOPURO :
         {
             produccion.push('<INICIOPURO> ::= <INICIO> EOF');
             accion.push('INICIOPURO.Val = INICIO.val //fin del documento');
-            return new SalidaGramatica($1, produccion, accion);
+            return new SalidaGramatica($1, produccion, accion,listaErrores);
         };
 
 INICIO : 
@@ -182,7 +186,12 @@ DIAGONALES :
             produccion.push(`<DIAGONALES> ::= //`);
             accion.push('DIAGONALES.Val = \"//\"'); 
             $$ = "//" 
-        };
+        }
+    |   error tk_diagonal                                                                            
+        {
+            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,@1.first_line,@1.first_column));
+        }
+        ;
 
 DERIVACIONDIAGONAL : 
     DIAGONALES DERIVADOS DERIVACIONDIAGONAL 
