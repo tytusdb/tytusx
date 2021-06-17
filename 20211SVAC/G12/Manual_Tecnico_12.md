@@ -12,16 +12,16 @@
     <th>Carnet</th>
   </tr>
   <tr>
+    <td>Jonnathan Antonio Castillo Avendaño    (Coordinador)</td>
+    <td>201314340</td>
+  </tr>
+  <tr>
     <td>Hilbert Josue Perucho Ramirez</td>
     <td>201313889</td>
   </tr>
   <tr>
-    <td>Nombre</td>
-    <td>Carne</td>
-  </tr>
-  <tr>
-    <td>Nombre</td>
-    <td>Carne</td>
+    <td>Ricardo Humberto Fuentes Garcia</td>
+    <td>201513747</td>
   </tr>
 </table>
 </div>
@@ -74,7 +74,7 @@
 ## Componentes
 <div style="text-align: justify">
 
-<h3>XML - XPATH Compilador G7</h3>
+<h3>XML - XPATH - G12</h3>
 
 El compilador de XML aparecera en la pantalla en la parte superior donde se ingresara un archivo de entrada el cual contendra una serie de instrucciones en gramatica XML, lo que se debe de realizar es analizar dicha gramatica la cual estara unida con una gramatica que sea de tipo XPATH, al momento de ejecutar estas gramaticas debera de devolver un resultado en gramatica de tipo XML con los resultados.</div>
 
