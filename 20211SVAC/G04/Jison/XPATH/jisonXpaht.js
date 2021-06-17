@@ -979,9 +979,7 @@ break;
 case 41:return 5;
 break;
 case 42:
-    //errores.push(['Lexico','dato: '+yy_.yytext,'Linea '+yy_.yylloc.first_line,'columna '+yy_.yylloc.first_column+1]);
     agregarErrorLexico("Lexico",yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column+1);
-    //console.log('     error lexico '+yy_.yytext);
     
 break;
 }

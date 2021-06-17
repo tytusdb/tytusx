@@ -27,8 +27,6 @@ function analizarXpath(entornoGlobal: Entorno){
             });
         });
         result.value = resultConsulta.join("\n");
-
-
     }
 }
 
