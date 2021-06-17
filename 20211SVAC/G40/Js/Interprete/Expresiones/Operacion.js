@@ -43,7 +43,8 @@ var Operacion = /** @class */ (function () {
 
                     objeto.getAtributos().forEach(function (atributo){
         
-                        if(atributo.getID()==idAux && atributo.getValor()==valorAux){
+                        if(atributo.getID().toString().toLowerCase()==idAux.toString().toLowerCase() 
+                        && atributo.getValor().toString()==valorAux.toString()){
         
                             if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
                                 objetosAux.push(objeto);
@@ -62,14 +63,16 @@ var Operacion = /** @class */ (function () {
                 return [entornosAux, objetosAux];
            } else if (this.operadores==TipoOperadores.ELEMENTOS) {
 
-            var idAux = this.op_izquierda.getValorImplicito(objetos, entornos).toString();
-            var valorAux = this.op_derecha.getValorImplicito(objetos,entornos).toString();
+            if(this.op_derecha.esCadena()==true){
+
+                var idAux = this.op_izquierda.getValorImplicito(objetos, entornos).toString();
+                var valorAux = this.op_derecha.getValorImplicito(objetos,entornos).toString();
 
                 objetos.forEach(function (objeto){
 
                     objeto.getObjetos().forEach(function (obj){
         
-                        if(obj.getID()==idAux && obj.getTexto()==valorAux){
+                        if(obj.getID().toString().toLowerCase()==idAux.toLowerCase() && obj.getTexto().toString()==valorAux){
         
                             if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
                                 objetosAux.push(objeto);
@@ -86,6 +89,126 @@ var Operacion = /** @class */ (function () {
                 objetosGlobal = objetosAux;
                 entornosGlobal = entornosAux;                                         
                 return [entornosAux, objetosAux];
+
+            } else {
+
+                var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+                var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+                if ((typeof (valor1) === "string") && (typeof (valor2) === "number")){
+                    
+                    var errorS = false;
+
+                    objetos.forEach(function (objeto){
+
+                        objeto.getObjetos().forEach(function (obj){
+                            
+            
+                            if(obj.getID().toString().toLowerCase()==valor1.toString().toLowerCase()){
+
+                                if(isNumeric(obj.getTexto())==true){
+                                    
+                                    if(Number(obj.getTexto())==valor2) {
+
+                                        if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                            objetosAux.push(objeto);
+                                            if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                                entornosAux.push(objeto.getEntorno());
+                                            } 
+                                        }  
+                                    }
+                                } else{
+                                    errorS = true;
+                                }                                  
+                            }                                                 
+                        });
+                        });  
+                    
+                    if(errorS==true){
+                        ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                        valor1 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    }
+                    
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                } else if ((typeof (valor1) === "number") && (typeof (valor2) === "string")){
+                    
+                    var errorS = false;
+
+                    objetos.forEach(function (objeto){
+
+                        objeto.getObjetos().forEach(function (obj){
+                            
+                            if(obj.getID().toString().toLowerCase()==valor2.toString().toLowerCase()){
+                                
+                                if(isNumeric(obj.getTexto())==true){
+                                    
+                                    if(Number(obj.getTexto())==valor1) {
+
+                                        if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                            objetosAux.push(objeto);
+                                            if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                                entornosAux.push(objeto.getEntorno());
+                                            } 
+                                        }  
+                                    }
+                                } else{
+                                    errorS = true;
+                                }                                  
+                            }                                                 
+                        });
+                        });   
+                        
+                    if(errorS==true){
+                        ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                                valor2 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    }
+                    
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                } else if ((typeof (valor1) === "string") && (typeof (valor2) === "string")) {
+
+                    var errorS = false;
+
+                    objetos.forEach(function (objeto){
+
+                        var id1 = BuscarObjeto(objeto.getObjetos(), valor1);
+                        var id2 = BuscarObjeto(objeto.getObjetos(), valor2);
+
+                        if((id1 != null && id2 != null)){
+
+                            if(id1.getTexto().toString() == id2.getTexto().toString()) {
+
+                                if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                    objetosAux.push(objeto);
+                                    if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                        entornosAux.push(objeto.getEntorno());
+                                    } 
+                                }  
+                            }
+
+                        } else {
+                            errorS = true;
+                        }
+                        
+                        });    
+                        
+                    if(errorS==true){
+                        ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                        `Ningun identificador apunta a un valor numérico para ser comparado`,"XPATH")); NumeroE++;
+                    }
+                    
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                }
+            }
+
            }
 
         } else if (this.operador==Operador.MAYOR_QUE){
@@ -161,7 +284,7 @@ var Operacion = /** @class */ (function () {
                     
                 if(errorS==true){
                     ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
-                            valor1 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                            valor2 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
                 }
                 
                 objetosGlobal = objetosAux;
@@ -280,7 +403,7 @@ var Operacion = /** @class */ (function () {
                     
                 if(errorS==true){
                     ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
-                    valor1 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    valor2 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
                 }
                 
                 objetosGlobal = objetosAux;
@@ -399,7 +522,7 @@ var Operacion = /** @class */ (function () {
                     
                 if(errorS==true){
                     ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
-                    valor1 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    valor2 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
                 }
                 
                 objetosGlobal = objetosAux;
@@ -518,7 +641,7 @@ var Operacion = /** @class */ (function () {
                     
                 if(errorS==true){
                     ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
-                    valor1 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    valor2 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
                 }
                 
                 objetosGlobal = objetosAux;
@@ -639,6 +762,187 @@ var Operacion = /** @class */ (function () {
             }
 
 
+
+        } else if (this.operador==Operador.DIFERENTE_QUE){
+
+            if(this.operadores==TipoOperadores.ATRIBUTOS){
+
+                
+
+                var idAux = this.op_izquierda.getValorImplicito(objetos, entornos);
+                var valorAux = this.op_derecha.getValorImplicito(objetos,entornos);
+
+                objetos.forEach(function (objeto){
+
+                    objeto.getAtributos().forEach(function (atributo){
+        
+                        if(atributo.getID().toString().toLowerCase()==idAux.toString().toLowerCase() 
+                        && atributo.getValor().toString()!=valorAux.toString()){
+        
+                            if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                objetosAux.push(objeto);
+                                if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                    entornosAux.push(objeto.getEntorno());
+                                } 
+                            }  
+        
+                        }
+                                                 
+                    });
+                    });            
+                
+                objetosGlobal = objetosAux;
+                entornosGlobal = entornosAux;                                         
+                return [entornosAux, objetosAux];
+           } else if (this.operadores==TipoOperadores.ELEMENTOS) {
+
+            if(this.op_derecha.esCadena()==true){
+
+                var idAux = this.op_izquierda.getValorImplicito(objetos, entornos).toString();
+                var valorAux = this.op_derecha.getValorImplicito(objetos,entornos).toString();
+
+                objetos.forEach(function (objeto){
+
+                    objeto.getObjetos().forEach(function (obj){
+        
+                        if(obj.getID().toString().toLowerCase()==idAux.toLowerCase() && obj.getTexto().toString()!=valorAux){
+        
+                            if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                objetosAux.push(objeto);
+                                if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                    entornosAux.push(objeto.getEntorno());
+                                } 
+                            }  
+        
+                        }
+                                                 
+                    });
+                    });            
+                
+                objetosGlobal = objetosAux;
+                entornosGlobal = entornosAux;                                         
+                return [entornosAux, objetosAux];
+
+            } else {
+
+                var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+                var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+                if ((typeof (valor1) === "string") && (typeof (valor2) === "number")){
+                    
+                    var errorS = false;
+
+                    objetos.forEach(function (objeto){
+
+                        objeto.getObjetos().forEach(function (obj){
+                            
+            
+                            if(obj.getID().toString().toLowerCase()==valor1.toString().toLowerCase()){
+
+                                if(isNumeric(obj.getTexto())==true){
+                                    
+                                    if(Number(obj.getTexto())!=valor2) {
+
+                                        if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                            objetosAux.push(objeto);
+                                            if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                                entornosAux.push(objeto.getEntorno());
+                                            } 
+                                        }  
+                                    }
+                                } else{
+                                    errorS = true;
+                                }                                  
+                            }                                                 
+                        });
+                        });  
+                    
+                    if(errorS==true){
+                        ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                        valor1 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    }
+                    
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                } else if ((typeof (valor1) === "number") && (typeof (valor2) === "string")){
+                    
+                    var errorS = false;
+
+                    objetos.forEach(function (objeto){
+
+                        objeto.getObjetos().forEach(function (obj){
+                            
+                            if(obj.getID().toString().toLowerCase()==valor2.toString().toLowerCase()){
+                                
+                                if(isNumeric(obj.getTexto())==true){
+                                    
+                                    if(Number(obj.getTexto())!=valor1) {
+
+                                        if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                            objetosAux.push(objeto);
+                                            if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                                entornosAux.push(objeto.getEntorno());
+                                            } 
+                                        }  
+                                    }
+                                } else{
+                                    errorS = true;
+                                }                                  
+                            }                                                 
+                        });
+                        });   
+                        
+                    if(errorS==true){
+                        ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                                valor2 + ` debe compararse con un valor numerico.`,"XPATH")); NumeroE++;
+                    }
+                    
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                } else if ((typeof (valor1) === "string") && (typeof (valor2) === "string")) {
+
+                    var errorS = false;
+
+                    objetos.forEach(function (objeto){
+
+                        var id1 = BuscarObjeto(objeto.getObjetos(), valor1);
+                        var id2 = BuscarObjeto(objeto.getObjetos(), valor2);
+
+                        if((id1 != null && id2 != null)){
+
+                            if(id1.getTexto().toString() != id2.getTexto().toString()) {
+
+                                if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                    objetosAux.push(objeto);
+                                    if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                        entornosAux.push(objeto.getEntorno());
+                                    } 
+                                }  
+                            }
+
+                        } else {
+                            errorS = true;
+                        }
+                        
+                        });    
+                        
+                    if(errorS==true){
+                        ListaErr.agregarError(new Error(NumeroE, 1,1, "Semántico",
+                        `Ningun identificador apunta a un valor numérico para ser comparado`,"XPATH")); NumeroE++;
+                    }
+                    
+                    objetosGlobal = objetosAux;
+                    entornosGlobal = entornosAux;                                         
+                    return [entornosAux, objetosAux];
+
+                }
+            }
+
+           }
 
         } else {
             objetosGlobal = objetos;
