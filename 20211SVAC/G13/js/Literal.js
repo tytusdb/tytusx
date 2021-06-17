@@ -29,7 +29,15 @@ var Literal = /** @class */ (function (_super) {
         _this.columna = c;
         return _this;
     }
-    Literal.prototype.getValor = function () {
+    Literal.prototype.getValor = function (entorno) {
+        if (this.valor == 'last()' && this.tipo == 6) {
+            return new Literal(0, entorno[0].length - 1, this.linea, this.columna);
+        }
+        else {
+            return new Literal(this.tipo, this.valor, this.linea, this.columna);
+        }
+    };
+    Literal.prototype.copiarValor = function () {
         return new Literal(this.tipo, this.valor, this.linea, this.columna);
     };
     return Literal;

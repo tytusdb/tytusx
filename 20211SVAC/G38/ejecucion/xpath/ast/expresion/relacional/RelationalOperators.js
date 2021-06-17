@@ -6,5 +6,5 @@ var RelationalOperators;
     RelationalOperators["lessThan"] = "<";
     RelationalOperators["lessOrEqualThan"] = "<=";
     RelationalOperators["greaterThan"] = ">";
-    RelationalOperators["greaterOrLessThan"] = ">=";
+    RelationalOperators["greaterOrEqualThan"] = ">=";
 })(RelationalOperators || (RelationalOperators = {}));

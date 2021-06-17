@@ -8,6 +8,7 @@ function analisis_asc(){
     fill_gramar_asc();
     fill_error();
     grafica_xml_asc();
+    analisis_ascXpath();
     alert('succes','Analisis completado');
 }
 
@@ -16,6 +17,7 @@ function analisis_desc(){
     fill_gramar_desc();
     fill_error();
     grafica_xml_desc();
+    analisis_descXpath();
     alert('succes','Analisis completado');
 }
 
@@ -45,6 +47,75 @@ function getError() {
         return "Error al enviar errores: " + er.toString();
     }
 }
+
+function analisis_ascXpath() {
+    let text = document.getElementById('txtxpath').value
+    var objetos = Gramatica1.parse(text);
+    var entornoGlobal = new Entorno(null);
+    var ast = new AST(objetos);
+    // console.log(objetos);
+    // console.log('');
+    GenerarTablaGA();
+    GenerarError();
+    objetos.forEach(function (element) {
+      try {
+        element.ejecutar(entornoGlobal, ast);
+      } catch (e) {
+
+      }
+
+    });
+  }
+
+  function analisis_descXpath() {
+    let text = document.getElementById('txtxpath').value
+    var objetos = Gramatica2.parse(text);
+    var entornoGlobal = new Entorno(null);
+    var ast = new AST(objetos);
+    // console.log(objetos);
+    // console.log('');
+    GenerarTablaGD();
+    GenerarError();
+    objetos.forEach(function (element) {
+
+      try {
+        element.ejecutar(entornoGlobal, ast);
+      } catch (e) {
+
+      }
+    });
+
+  }
+
+  function GenerarTablaGA() {
+    let texto = "<table class = \"table\">";
+    texto += "<tr><th scope=\"col\">#</th><th scope=\"col\">PRODUCCION</th><th scope=\"col\">REGLA SEMANTICA</th></tr>";
+
+
+    for (let i = 0; i < ReporteGA.r_gramatica.length; i++) {
+      texto += "<tr><th scope=\"col\">" + i + "</th><th scope=\"col\">" + ReporteGA.r_gramatica[i].getbnf() + "</th><th scope=\"col\">" + ReporteGA.r_gramatica[i].getpre() + "</th> </tr>";
+    }
+    texto += "</table>";
+    document.getElementById('tabla_ascendente').innerHTML = texto;
+  }
+
+  function GenerarError() {
+    let varerror = Error.geterror();
+    console.log(varerror);
+    document.getElementById('Tabla_Errores').innerHTML = varerror;
+  }
+
+  function GenerarTablaGD() {
+    let texto = "<table class = \"table\">";
+    texto += "<tr><th scope=\"col\">#</th><th scope=\"col\">PRODUCCION</th><th scope=\"col\">REGLA SEMANTICA</th></tr>";
+
+
+    for (let i = 0; i < ReporteGD.r_gramaticad.length; i++) {
+      texto += "<tr><th scope=\"col\">" + i + "</th><th scope=\"col\">" + ReporteGD.r_gramaticad[i].getbnf() + "</th><th scope=\"col\">" + ReporteGD.r_gramaticad[i].getpre() + "</th> </tr>";
+    }
+    texto += "</table>";
+    document.getElementById('tabla_descendente').innerHTML = texto;
+  }
 
 function pilitatablaSimbolos(element, padreEntorno) {
     var entornoObjeto = new Entorno(null);

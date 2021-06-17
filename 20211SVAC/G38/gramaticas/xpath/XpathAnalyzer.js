@@ -72,12 +72,12 @@
   }
 */
 var XpathAnalyzer = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,11],$V4=[1,12],$V5=[1,13],$V6=[1,6],$V7=[1,7],$V8=[1,15],$V9=[1,16],$Va=[1,17],$Vb=[1,18],$Vc=[1,19],$Vd=[1,20],$Ve=[1,21],$Vf=[1,22],$Vg=[1,23],$Vh=[1,24],$Vi=[1,25],$Vj=[1,26],$Vk=[1,27],$Vl=[1,29],$Vm=[5,6,11,14,26,31,32,33,34,35,36,37,38,39,40,41,42],$Vn=[2,5,6,11,14,21,23,26,31,32,33,34,35,36,37,38,39,40,41,42],$Vo=[1,46],$Vp=[1,72],$Vq=[1,78],$Vr=[1,86],$Vs=[1,84],$Vt=[1,85],$Vu=[1,81],$Vv=[1,82],$Vw=[1,83],$Vx=[1,115],$Vy=[1,124],$Vz=[1,125],$VA=[1,118],$VB=[1,119],$VC=[1,120],$VD=[1,121],$VE=[1,122],$VF=[1,123],$VG=[1,113],$VH=[1,114],$VI=[1,116],$VJ=[1,117],$VK=[11,14,26,31,32,33,34,35,36,37,38,39,40,41,42],$VL=[2,5,6,11,14,21,23,24,26,31,32,33,34,35,36,37,38,39,40,41,42],$VM=[14,26,31,32,33,34,35,36,37,38,39,40],$VN=[14,26,31,32,33,34,35,36,37,38];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,11],$V4=[1,12],$V5=[1,13],$V6=[1,6],$V7=[1,7],$V8=[1,15],$V9=[1,16],$Va=[1,17],$Vb=[1,18],$Vc=[1,19],$Vd=[1,20],$Ve=[1,21],$Vf=[1,22],$Vg=[1,23],$Vh=[1,24],$Vi=[1,25],$Vj=[1,26],$Vk=[1,27],$Vl=[1,29],$Vm=[5,6,11,14,26,31,32,33,34,35,36,37,38,39,40,41,42],$Vn=[2,5,6,11,14,21,23,26,31,32,33,34,35,36,37,38,39,40,41,42],$Vo=[1,48],$Vp=[1,76],$Vq=[1,82],$Vr=[1,88],$Vs=[1,89],$Vt=[1,85],$Vu=[1,86],$Vv=[1,87],$Vw=[1,120],$Vx=[1,129],$Vy=[1,130],$Vz=[1,123],$VA=[1,124],$VB=[1,125],$VC=[1,126],$VD=[1,127],$VE=[1,128],$VF=[1,118],$VG=[1,119],$VH=[1,121],$VI=[1,122],$VJ=[11,14,26,31,32,33,34,35,36,37,38,39,40,41,42],$VK=[2,5,6,11,14,21,23,24,26,31,32,33,34,35,36,37,38,39,40,41,42],$VL=[14,26,31,32,33,34,35,36,37,38,39,40],$VM=[14,26,31,32,33,34,35,36,37,38];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"START":3,"LISTA-XPATH":4,"EOF":5,"node_set":6,"XPATH-EXPRESION":7,"EXPRESION":8,"FIRST_EXPRESION":9,"identifier":10,"times":11,"node":12,"lparen":13,"rparen":14,"current_expresion":15,"atribute_expresion":16,"LISTA_PREDICATES":17,"AXES_NAME":18,"axe_connector":19,"text":20,"root_expresion":21,"parent_expresion":22,"any_expresion":23,"lcorchetes":24,"PREDICATE":25,"rcorchetes":26,"EXPRESION_NUMERICA":27,"EXPRESION_RELACIONAL":28,"EXPRESION_LOGICA":29,"PRIMITIVA":30,"or":31,"and":32,"lt":33,"lte":34,"gt":35,"gte":36,"equal":37,"nequal":38,"plus":39,"minus":40,"div":41,"mod":42,"ancestor-or-self":43,"ancestor":44,"attribute":45,"child":46,"descendant-or-self":47,"descendant":48,"following-sibling":49,"following":50,"namespace":51,"preceding-sibling":52,"preceding":53,"parent":54,"self":55,"FUNCION_NATIVA":56,"last":57,"position":58,"DoubleLiteral":59,"IntegerLiteral":60,"StringLiteral":61,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",6:"node_set",10:"identifier",11:"times",12:"node",13:"lparen",14:"rparen",15:"current_expresion",16:"atribute_expresion",19:"axe_connector",20:"text",21:"root_expresion",22:"parent_expresion",23:"any_expresion",24:"lcorchetes",26:"rcorchetes",31:"or",32:"and",33:"lt",34:"lte",35:"gt",36:"gte",37:"equal",38:"nequal",39:"plus",40:"minus",41:"div",42:"mod",43:"ancestor-or-self",44:"ancestor",45:"attribute",46:"child",47:"descendant-or-self",48:"descendant",49:"following-sibling",50:"following",51:"namespace",52:"preceding-sibling",53:"preceding",54:"parent",55:"self",57:"last",58:"position",59:"DoubleLiteral",60:"IntegerLiteral",61:"StringLiteral"},
-productions_: [0,[3,2],[4,3],[4,1],[7,2],[7,1],[7,1],[9,1],[9,1],[9,3],[9,1],[9,2],[9,2],[9,4],[9,3],[9,3],[9,5],[9,2],[9,4],[9,2],[9,3],[9,3],[9,5],[9,5],[9,4],[9,4],[9,6],[9,6],[8,2],[8,3],[8,3],[8,5],[8,2],[8,2],[8,2],[8,4],[8,4],[8,4],[8,6],[8,6],[8,2],[8,3],[8,3],[8,5],[8,2],[8,2],[8,2],[8,4],[8,4],[8,4],[8,6],[8,6],[8,3],[8,4],[8,4],[8,6],[8,3],[8,3],[8,3],[8,5],[8,5],[8,5],[8,7],[8,7],[8,3],[8,4],[8,4],[8,6],[8,3],[8,3],[8,3],[8,5],[8,5],[8,5],[8,7],[8,7],[8,1],[17,4],[17,3],[25,1],[25,1],[25,1],[25,1],[25,3],[29,3],[29,3],[28,3],[28,3],[28,3],[28,3],[28,3],[28,3],[27,3],[27,3],[27,3],[27,3],[27,3],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[56,3],[56,3],[56,3],[30,1],[30,1],[30,1],[30,1],[30,1]],
+productions_: [0,[3,2],[4,3],[4,1],[7,2],[7,1],[7,1],[9,1],[9,1],[9,3],[9,1],[9,2],[9,2],[9,4],[9,3],[9,3],[9,5],[9,2],[9,4],[9,2],[9,3],[9,3],[9,5],[9,5],[9,4],[9,4],[9,6],[9,6],[8,2],[8,3],[8,3],[8,5],[8,2],[8,2],[8,2],[8,4],[8,4],[8,4],[8,6],[8,6],[8,4],[8,2],[8,3],[8,3],[8,5],[8,2],[8,2],[8,2],[8,4],[8,4],[8,4],[8,6],[8,6],[8,4],[8,3],[8,4],[8,4],[8,6],[8,3],[8,3],[8,3],[8,5],[8,5],[8,5],[8,7],[8,7],[8,5],[8,3],[8,4],[8,4],[8,6],[8,3],[8,3],[8,3],[8,5],[8,5],[8,5],[8,7],[8,7],[8,5],[8,1],[17,4],[17,3],[25,1],[25,1],[25,1],[25,1],[25,3],[29,3],[29,3],[28,3],[28,3],[28,3],[28,3],[28,3],[28,3],[27,3],[27,3],[27,3],[27,3],[27,3],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[18,1],[56,3],[56,3],[30,1],[30,1],[30,1],[30,1],[30,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -260,324 +260,336 @@ case 39:
                                                                       
 break;
 case 40:
+ ReporteGramatical.agregarProduccionXpath("Expresion -> /text()","Expresion = new TextExpresion();");
+                                 this.$ = new RootText([], _$[$0-3].first_line, _$[$0-3].first_column); 
+break;
+case 41:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> //id","EXPRESION = NodoXpath('//',id);");
                                         this.$ = new AnyIdentifier($$[$0],[],_$[$0].first_line,_$[$0].first_column); 
 break;
-case 41:
+case 42:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> //@id","EXPRESION = NodoXpath('//@',id);");
                                                             this.$ = new AnyAtributeIdentifier($$[$0],[],_$[$0].first_line,_$[$0].first_column); 
 break;
-case 42:
+case 43:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> //@ *","EXPRESION = new Atributo(/times);");
                                                        this.$ = new AnyAtributeTimes([],_$[$0-2].first_line, _$[$0-2].first_column ); 
 break;
-case 43:
+case 44:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> //_$[$0-2]()","EXPRESION = new Atributo(//nodo);");
                                                                    this.$ = new AnyAtributeTimes([],_$[$0-4].first_line, _$[$0-4].first_column ); 
 break;
-case 44:
+case 45:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> //.","EXPRESION = NodoXpath('//.');");
                                                 this.$ = new AnyCurrent([],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 45:
+case 46:
     ReporteGramatical.agregarProduccionXpath("EXPRESION -> //..","EXPRESION = NodoXpath('//..');");
                                                 this.$ = new AnyParent([],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 46:
+case 47:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> //*","EXPRESION = NodoXpath('//*');");
                                     this.$ = new AnyTimes([],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 47:
+case 48:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> //node()","EXPRESION = NodoXpath('//node');");
                                                 this.$ = new AnyNode([],_$[$0-3].first_line,_$[$0-3].first_column); 
 break;
-case 48:
+case 49:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: id","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-2]]+"', "+$$[$0]+" );");
                                                                 this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-2],AxeOperation.identifier, $$[$0],[],_$[$0-1].first_line, _$[$0-1].first_column);
                                                               
 break;
-case 49:
+case 50:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: *","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-2]]+"', * );");
                                                            this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-2],AxeOperation.times, "",[],_$[$0-1].first_line, _$[$0-1].first_column);
                                                          
 break;
-case 50:
+case 51:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: node()","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-4]]+"', node() );");
                                                                         this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-4],AxeOperation.node, "",[],_$[$0-3].first_line, _$[$0-3].first_column);
                                                                       
 break;
-case 51:
+case 52:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: text()","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-4]]+"', text() );");
                                                                         this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-4],AxeOperation.text, "",[],_$[$0-3].first_line, _$[$0-3].first_column);
                                                                       
 break;
-case 52:
+case 53:
+ ReporteGramatical.agregarProduccionXpath("Expresion -> //text()","Expresion = new AnyTextExpresion();");
+                                               this.$ = new AnyText([], _$[$0-3].first_line, _$[$0-3].first_column); 
+break;
+case 54:
     ReporteGramatical.agregarProduccionXpath("EXPRESION -> /id LISTA_PREDICADOS","EXPRESION = NodoXpath('/',id, LISTA_PREDICADOS);");
                                                             this.$ = new RootIdentifier($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 53:
+case 55:
   ReporteGramatical.agregarProduccionXpath("EXPREISON -> /@ id","EXPREISON = new Atributo(/id);");
                                                                           this.$ = new RootAtributeIdentifier($$[$0-1],$$[$0],_$[$0-3].first_line, _$[$0-3].first_column ); 
 break;
-case 54:
+case 56:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> @ *","EXPRESION = new Atributo(times);");
                                                                       this.$ = new RootAtributeTimes($$[$0],_$[$0-3].first_line, _$[$0-3].first_column ); 
 break;
-case 55:
+case 57:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> /_$[$0-3]()","EXPRESION = new Atributo(/nodo);");
                                                                                    this.$ = new RootAtributeTimes($$[$0],_$[$0-5].first_line, _$[$0-5].first_column ); 
 break;
-case 56:
+case 58:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> '/.' LISTA_PREDICADOS","EXPRESION = NodoXpath('/.',LISTA_PREDICADOS);");
                                                                 this.$ = new RootCurrent($$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
-case 57:
+case 59:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> '/..' LISTA_PREDICADOS","EXPRESION = NodoXpath('/..',LISTA_PREDICADOS);");
                                                                 this.$ = new RootParent($$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
-case 58:
+case 60:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> /* LISTA_PREDICADOS","EXPRESION = NodoXpath('/*',LISTA_PREDICADOS);");
                                                     this.$ = new RootTimes($$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
-case 59:
+case 61:
     ReporteGramatical.agregarProduccionXpath("EXPRESION -> '/node()' LISTA_PREDICADOS","EXPRESION = NodoXpath('/node',LISTA_PREDICADOS);");
                                                                     this.$ = new RootNode($$[$0],_$[$0-4].first_line,_$[$0-4].first_column); 
 break;
-case 60:
+case 62:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> /AXES_NAME :: id LISTA_PREDICADOS","EXPRESION = new AxeExpresion('"+AxeType[$$[$0-3]]+"', "+$$[$0-1]+", LISTA_PREDICADOS );");
                                                                                  this.$ = AxeFabric.createAxeExpresion($$[$0-3],AxeOperation.identifier, $$[$0-1],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
                                                                                
 break;
-case 61:
+case 63:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> /AXES_NAME :: * LISTA_PREDICADOS","EXPRESION = new AxeExpresion('"+AxeType[$$[$0-3]]+"', * , LISTA_PREDICADOS);");
                                                                             this.$ = AxeFabric.createAxeExpresion($$[$0-3],AxeOperation.times, "",$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
                                                                           
 break;
-case 62:
+case 64:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> /AXES_NAME :: node()","EXPRESION = new AxeExpresion('"+AxeType[$$[$0-5]]+"', node(), LISTA_PREDICADOS );");
                                                                                          this.$ = AxeFabric.createAxeExpresion($$[$0-5],AxeOperation.node, "",$$[$0],_$[$0-4].first_line, _$[$0-4].first_column);
                                                                                        
 break;
-case 63:
+case 65:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> /AXES_NAME :: text()","EXPRESION = new AxeExpresion('"+AxeType[$$[$0-5]]+"', text(), LISTA_PREDICADOS );");
                                                                                          this.$ = AxeFabric.createAxeExpresion($$[$0-5],AxeOperation.text, "",$$[$0],_$[$0-4].first_line, _$[$0-4].first_column);
                                                                                         
 break;
-case 64:
+case 66:
+ ReporteGramatical.agregarProduccionXpath("Expresion -> /text()","Expresion = new TextExpresion();");
+                                                                 this.$ = new RootText($$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 
+break;
+case 67:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //id LISTA_PREDICADOS","EXPRESION = NodoXpath('//',id, LISTA_PREDICADOS);");
                                                         this.$ = new AnyIdentifier($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 65:
+case 68:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> //@id LISTA_PREDICADOS","EXPRESION = NodoXpath('//@',id,LISTA_PREDICADOS);");
                                                                             this.$ = new AnyAtributeIdentifier($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 66:
+case 69:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> //@ * LISTA_PREDICADOS","EXPRESION = new Atributo(//times,LISTA_PREDICADOS);");
                                                                          this.$ = new AnyAtributeTimes($$[$0],_$[$0-3].first_line, _$[$0-3].first_column ); 
 break;
-case 67:
+case 70:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> //_$[$0-3]() LISTA_PREDICADOS","EXPRESION = new Atributo(//nodo,LISTA_PREDICADOS);");
                                                                                      this.$ = new AnyAtributeTimes($$[$0],_$[$0-5].first_line, _$[$0-5].first_column ); 
 break;
-case 68:
+case 71:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> '//.' LISTA_PREDICADOS","EXPRESION = NodoXpath('//.',LISTA_PREDICADOS);");
                                                                 this.$ = new AnyCurrent($$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
-case 69:
+case 72:
    ReporteGramatical.agregarProduccionXpath("EXPRESION -> '//..' LISTA_PREDICADOS","EXPRESION = NodoXpath('//..',LISTA_PREDICADOS);");
                                                                 this.$ = new AnyParent($$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
-case 70:
+case 73:
   ReporteGramatical.agregarProduccionXpath("EXPRESION -> //* LISTA_PREDICADOS","EXPRESION = NodoXpath('//*',LISTA_PREDICADOS);");
                                                     this.$ = new AnyTimes($$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
 break;
-case 71:
+case 74:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //node() LISTA_PREDICADOS","EXPRESION = NodoXpath('//node',LISTA_PREDICADOS);");
                                                                 this.$ = new AnyNode($$[$0],_$[$0-4].first_line,_$[$0-4].first_column); 
 break;
-case 72:
+case 75:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: id LISTA_PREDICADOS","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-3]]+"', "+$$[$0-1]+", LISTA_PREDICADOS );");
                                                                                 this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-3],AxeOperation.identifier, $$[$0-1],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
                                                                               
 break;
-case 73:
+case 76:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: * LISTA_PREDICADOS","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-3]]+"', * , LISTA_PREDICADOS);");
                                                                            this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-3],AxeOperation.times, "",$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
                                                                          
 break;
-case 74:
+case 77:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: node()","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-5]]+"', node(), LISTA_PREDICADOS );");
                                                                                         this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-5],AxeOperation.node, "",$$[$0],_$[$0-4].first_line, _$[$0-4].first_column);
                                                                                       
 break;
-case 75:
+case 78:
  ReporteGramatical.agregarProduccionXpath("EXPRESION -> //AXES_NAME :: text()","EXPRESION = new AnyAxeExpresion('"+AxeType[$$[$0-5]]+"', text(), LISTA_PREDICADOS );");
                                                                                         this.$ = AnyAxeFabric.createAnyAxeExpresion($$[$0-5],AxeOperation.text, "",$$[$0],_$[$0-4].first_line, _$[$0-4].first_column);
                                                                                        
 break;
-case 76:
+case 79:
+ ReporteGramatical.agregarProduccionXpath("Expresion -> //text()","Expresion = new AnyTextExpresion();");
+                                                               this.$ = new AnyText($$[$0], _$[$0-4].first_line, _$[$0-4].first_column); 
+break;
+case 80:
 
               ReporteGramatical.agregarProduccionXpath("EXPRESION -> error","ListaErrores.agregar(error)");
               ListaErrores.AgregarErrorXPATH(new TokenError(TipoError.Sintactico,"No se esperaba: "+yytext+".",_$[$0].first_line,_$[$0].first_column));
               this.$ = new NodoError(_$[$0].first_line,_$[$0].first_column);
           
 break;
-case 77:
+case 81:
  ReporteGramatical.agregarProduccionXpath("LISTA_PREDICADOS -> LISTA_PREDICADOS [ PREDICADO ]","LISTA_PREDICADOS1.LISTA.ADD(PREDICADO); </br>LISTA_PREDICADOS.LISTA = LISTA_PREDICADOS1.LISTA;");
                                                                      $$[$0-3].push($$[$0-1]); this.$ = $$[$0-3]; 
 break;
-case 78:
+case 82:
  ReporteGramatical.agregarProduccionXpath("LISTA_PREDICADOS -> [ PREDICADO ]","LISTA_PREDICADOS.LISTA = []; </br>LISTA_PREDICADOS.LISTA.ADD(PREDICADO);");
                                                     this.$ = [$$[$0-1]];
                                                   
 break;
-case 79:
+case 83:
  ReporteGramatical.agregarProduccionXpath("PREDICADO -> EXPRESION_NUMERICA","PREDICADO = EXPRESION_NUMERICA;");
                                  this.$ = $$[$0]; 
 break;
-case 80:
+case 84:
  ReporteGramatical.agregarProduccionXpath("PREDICADO -> EXPRESION_RELACIONAL","PREDICADO = EXPRESION_RELACIONAL;");
                                    this.$ = $$[$0]; 
 break;
-case 81:
+case 85:
   ReporteGramatical.agregarProduccionXpath("PREDICADO -> EXPRESION_LOGICA","PREDICADO = EXPRESION_LOGICA;");
                                 this.$ = $$[$0]; 
 break;
-case 82:
+case 86:
  ReporteGramatical.agregarProduccionXpath("PREDICADO -> PRIMITIVA","PREDICADO = PRIMITIVA;");
                         this.$ = $$[$0]; 
 break;
-case 83:
+case 87:
    ReporteGramatical.agregarProduccionXpath("PREDICADO -> ( PREDICADO )","PREDICADO = PREDICADO1;");
                                         this.$ = $$[$0-1]; 
 break;
-case 84:
+case 88:
   ReporteGramatical.agregarProduccionXpath("PREDICADO -> PREDICADO or PREDICADO","PREDICADO = new OrLogica(PREDICADO1,PREDICADO2);");
                                             this.$ = new OrLogica($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 85:
+case 89:
  ReporteGramatical.agregarProduccionXpath("PREDICADO -> PREDICADO or PREDICADO","PREDICADO = new AndLogica(PREDICADO1,PREDICADO2);");
                                             this.$ = new AndLogica($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 86:
+case 90:
   ReporteGramatical.agregarProduccionXpath("EXPRESION_RELACIONAL -> PREDICADO < PREDICADO","PREDICADO = new Relacional(PREDICADO1,PREDICADO2,'<');");
                                                 this.$ = new Relational($$[$0-2],$$[$0],RelationalOperators.lessThan,_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 87:
+case 91:
  ReporteGramatical.agregarProduccionXpath("EXPRESION_RELACIONAL -> PREDICADO <= PREDICADO","PREDICADO = new Relacional(PREDICADO1,PREDICADO2,'<=');");
                                                 this.$ = new Relational($$[$0-2],$$[$0],RelationalOperators.lessOrEqualThan,_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 88:
+case 92:
   ReporteGramatical.agregarProduccionXpath("EXPRESION_RELACIONAL -> PREDICADO > PREDICADO","PREDICADO = new Relacional(PREDICADO1,PREDICADO2,'>');");
                                                 this.$ = new Relational($$[$0-2],$$[$0],RelationalOperators.greaterThan,_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 89:
+case 93:
  ReporteGramatical.agregarProduccionXpath("EXPRESION_RELACIONAL -> PREDICADO >= PREDICADO","PREDICADO = new Relacional(PREDICADO1,PREDICADO2,'>=');");
-                                                this.$ = new Relational($$[$0-2],$$[$0],RelationalOperators.greaterOrLessThan,_$[$0-1].first_line,_$[$0-1].first_column); 
+                                                this.$ = new Relational($$[$0-2],$$[$0],RelationalOperators.greaterOrEqualThan,_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 90:
+case 94:
    ReporteGramatical.agregarProduccionXpath("EXPRESION_RELACIONAL -> PREDICADO = PREDICADO","PREDICADO = new Relacional(PREDICADO1,PREDICADO2,'=');");
                                                     this.$ = new Comparison($$[$0-2],$$[$0],RelationalOperators.equal,_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 91:
+case 95:
   ReporteGramatical.agregarProduccionXpath("EXPRESION_RELACIONAL -> PREDICADO != PREDICADO","PREDICADO = new Relacional(PREDICADO1,PREDICADO2,'!=');");
                                                     this.$ = new Comparison($$[$0-2],$$[$0],RelationalOperators.notEqual,_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 92:
+case 96:
   ReporteGramatical.agregarProduccionXpath("EXPRESION_NUMERICA -> PREDICADO + PREDICADO","PREDICADO = new Aritmetica(PREDICADO1,PREDICADO2,'+');");
                                                 this.$ = new Suma($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 93:
+case 97:
  ReporteGramatical.agregarProduccionXpath("EXPRESION_NUMERICA -> PREDICADO - PREDICADO","PREDICADO = new Aritmetica(PREDICADO1,PREDICADO2,'-');");
                                                 this.$ = new Resta($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 94:
+case 98:
  ReporteGramatical.agregarProduccionXpath("EXPRESION_NUMERICA -> PREDICADO * PREDICADO","PREDICADO = new Aritmetica(PREDICADO1,PREDICADO2,'*');");
                                                 this.$ = new Multiplicacion($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 95:
+case 99:
    ReporteGramatical.agregarProduccionXpath("EXPRESION_NUMERICA -> PREDICADO div PREDICADO","PREDICADO = new Aritmetica(PREDICADO1,PREDICADO2,'/');");
                                                 this.$ = new Division($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 96:
+case 100:
    ReporteGramatical.agregarProduccionXpath("EXPRESION_NUMERICA -> PREDICADO mod PREDICADO","PREDICADO = new Aritmetica(PREDICADO1,PREDICADO2,'%');");
                                                 this.$ = new Modulo($$[$0-2],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); 
 break;
-case 97:
+case 101:
  this.$ = AxeType.ancestoOrSelfType; 
 break;
-case 98:
+case 102:
  this.$ = AxeType.ancestorType; 
 break;
-case 99:
+case 103:
  this.$ = AxeType.attributeType; 
 break;
-case 100:
+case 104:
  this.$ = AxeType.childType; 
 break;
-case 101:
+case 105:
  this.$ = AxeType.descendantOrSelfType; 
 break;
-case 102:
+case 106:
  this.$ = AxeType.descendantType; 
 break;
-case 103:
+case 107:
  this.$ = AxeType.followingSiblingType; 
 break;
-case 104:
+case 108:
  this.$ = AxeType.followingType; 
 break;
-case 105:
+case 109:
  this.$ = AxeType.namespaceType; 
 break;
-case 106:
+case 110:
  this.$ = AxeType.precedingSiblingType; 
 break;
-case 107:
+case 111:
  this.$ = AxeType.precedingType; 
 break;
-case 108:
+case 112:
  this.$ = AxeType.parentType; 
 break;
-case 109:
+case 113:
  this.$ = AxeType.selfType; 
 break;
-case 110:
+case 114:
  ReporteGramatical.agregarProduccionXpath("FUNCION_NATIVA -> last()","FUNCION_NATIVA = new FuncionNativa('last');");
                                      this.$ = new NativeFunctionExpresion(NativeFunction.last, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
-case 111:
+case 115:
     ReporteGramatical.agregarProduccionXpath("FUNCION_NATIVA -> position()","FUNCION_NATIVA = new FuncionNativa('position');");
                                             this.$ = new NativeFunctionExpresion(NativeFunction.position, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
-case 112:
- ReporteGramatical.agregarProduccionXpath("FUNCION_NATIVA -> text()","FUNCION_NATIVA = new FuncionNativa('text');");
-                                     this.$ = new NativeFunctionExpresion(NativeFunction.text, _$[$0-2].first_line, _$[$0-2].first_column); 
-break;
-case 113:
+case 116:
  ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> LISTA-XPATH","PRIMITIVA = new ListaXpath( LISTA-XPATH );");
                          this.$ = new ListaXpathExpresion($$[$0], _$[$0].first_line,_$[$0].first_column); 
 break;
-case 114:
+case 117:
  ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> FUNCION_NATIVA-XPATH","PRIMITIVA = FUNCION_NATIVA;");
                             this.$ = $$[$0]; 
 break;
-case 115:
+case 118:
   ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> decimal","PRIMITIVA = new PRIMITIVA(Tipo.Decimal,decimal);");
                             this.$ = new Primitive(Number($$[$0]), new Tipo(TipoDato.numero),_$[$0].first_line, _$[$0].first_column ); 
 break;
-case 116:
+case 119:
  ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> entero","PRIMITIVA = new PRIMITIVA(Tipo.entero,entero);");
                             this.$ = new Primitive(Number($$[$0]), new Tipo(TipoDato.numero),_$[$0].first_line, _$[$0].first_column ); 
 break;
-case 117:
+case 120:
   ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> cadena","PRIMITIVA = new PRIMITIVA(Tipo.cadena,cadena);");
-                            this.$ = new Primitive($$[$0], new Tipo(TipoDato.cadena),_$[$0].first_line, _$[$0].first_column ); 
+                            this.$ = new Primitive($$[$0].substr(1,$$[$0].length-2), new Tipo(TipoDato.cadena),_$[$0].first_line, _$[$0].first_column ); 
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,15:$V4,16:$V5,18:14,21:$V6,23:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},{1:[3]},{5:[1,28],6:$Vl},o($Vm,[2,3],{8:30,2:$V0,21:$V6,23:$V7}),o($Vn,[2,5]),o($Vn,[2,6]),{10:[1,31],11:[1,35],12:[1,36],15:[1,33],16:[1,32],18:37,22:[1,34],43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},{10:[1,38],11:[1,42],12:[1,43],15:[1,40],16:[1,39],18:44,22:[1,41],43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},o($Vn,[2,76]),o($Vn,[2,7],{17:45,24:$Vo}),o($Vn,[2,8],{17:47,24:$Vo}),{13:[1,48]},o($Vn,[2,10]),{10:[1,49],11:[1,50],12:[1,51]},{19:[1,52]},{19:[2,97]},{19:[2,98]},{19:[2,99]},{19:[2,100]},{19:[2,101]},{19:[2,102]},{19:[2,103]},{19:[2,104]},{19:[2,105]},{19:[2,106]},{19:[2,107]},{19:[2,108]},{19:[2,109]},{1:[2,1]},{2:$V0,7:53,8:4,9:5,10:$V1,11:$V2,12:$V3,15:$V4,16:$V5,18:14,21:$V6,23:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},o($Vn,[2,4]),o($Vn,[2,28],{17:54,24:$Vo}),{10:[1,55],11:[1,56],12:[1,57]},o($Vn,[2,32],{17:58,24:$Vo}),o($Vn,[2,33],{17:59,24:$Vo}),o($Vn,[2,34],{17:60,24:$Vo}),{13:[1,61]},{19:[1,62]},o($Vn,[2,40],{17:63,24:$Vo}),{10:[1,64],11:[1,65],12:[1,66]},o($Vn,[2,44],{17:67,24:$Vo}),o($Vn,[2,45],{17:68,24:$Vo}),o($Vn,[2,46],{17:69,24:$Vo}),{13:[1,70]},{19:[1,71]},o($Vn,[2,17],{24:$Vp}),{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:73,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},o($Vn,[2,19],{24:$Vp}),{14:[1,87]},o($Vn,[2,11],{17:88,24:$Vo}),o($Vn,[2,12],{17:89,24:$Vo}),{13:[1,90]},{10:[1,91],11:[1,92],12:[1,93],20:[1,94]},o($Vm,[2,2],{8:30,2:$V0,21:$V6,23:$V7}),o($Vn,[2,52],{24:$Vp}),o($Vn,[2,29],{17:95,24:$Vo}),o($Vn,[2,30],{17:96,24:$Vo}),{13:[1,97]},o($Vn,[2,56],{24:$Vp}),o($Vn,[2,57],{24:$Vp}),o($Vn,[2,58],{24:$Vp}),{14:[1,98]},{10:[1,99],11:[1,100],12:[1,101],20:[1,102]},o($Vn,[2,64],{24:$Vp}),o($Vn,[2,41],{17:103,24:$Vo}),o($Vn,[2,42],{17:104,24:$Vo}),{13:[1,105]},o($Vn,[2,68],{24:$Vp}),o($Vn,[2,69],{24:$Vp}),o($Vn,[2,70],{24:$Vp}),{14:[1,106]},{10:[1,107],11:[1,108],12:[1,109],20:[1,110]},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:111,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{11:$Vx,26:[1,112],31:$Vy,32:$Vz,33:$VA,34:$VB,35:$VC,36:$VD,37:$VE,38:$VF,39:$VG,40:$VH,41:$VI,42:$VJ},o($VK,[2,79]),o($VK,[2,80]),o($VK,[2,81]),o($VK,[2,82]),{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:126,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},o($VK,[2,113],{6:$Vl}),o($VK,[2,114]),o($VK,[2,115]),o($VK,[2,116]),o($VK,[2,117]),{13:[1,127]},{13:[1,128]},{13:[1,129]},o($Vn,[2,9],{17:130,24:$Vo}),o($Vn,[2,14],{24:$Vp}),o($Vn,[2,15],{24:$Vp}),{14:[1,131]},o($Vn,[2,20],{17:132,24:$Vo}),o($Vn,[2,21],{17:133,24:$Vo}),{13:[1,134]},{13:[1,135]},o($Vn,[2,53],{24:$Vp}),o($Vn,[2,54],{24:$Vp}),{14:[1,136]},o($Vn,[2,35],{17:137,24:$Vo}),o($Vn,[2,36],{17:138,24:$Vo}),o($Vn,[2,37],{17:139,24:$Vo}),{13:[1,140]},{13:[1,141]},o($Vn,[2,65],{24:$Vp}),o($Vn,[2,66],{24:$Vp}),{14:[1,142]},o($Vn,[2,47],{17:143,24:$Vo}),o($Vn,[2,48],{17:144,24:$Vo}),o($Vn,[2,49],{17:145,24:$Vo}),{13:[1,146]},{13:[1,147]},{11:$Vx,26:[1,148],31:$Vy,32:$Vz,33:$VA,34:$VB,35:$VC,36:$VD,37:$VE,38:$VF,39:$VG,40:$VH,41:$VI,42:$VJ},o($VL,[2,78]),{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:149,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:150,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:151,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:152,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:153,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:154,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:155,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:156,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:157,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:158,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:159,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:160,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{2:$V0,4:79,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,20:$Vr,21:$V6,23:$V7,25:161,27:74,28:75,29:76,30:77,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:80,57:$Vs,58:$Vt,59:$Vu,60:$Vv,61:$Vw},{11:$Vx,14:[1,162],31:$Vy,32:$Vz,33:$VA,34:$VB,35:$VC,36:$VD,37:$VE,38:$VF,39:$VG,40:$VH,41:$VI,42:$VJ},{14:[1,163]},{14:[1,164]},{14:[1,165]},o($Vn,[2,18],{24:$Vp}),o($Vn,[2,13],{17:166,24:$Vo}),o($Vn,[2,24],{24:$Vp}),o($Vn,[2,25],{24:$Vp}),{14:[1,167]},{14:[1,168]},o($Vn,[2,31],{17:169,24:$Vo}),o($Vn,[2,59],{24:$Vp}),o($Vn,[2,60],{24:$Vp}),o($Vn,[2,61],{24:$Vp}),{14:[1,170]},{14:[1,171]},o($Vn,[2,43],{17:172,24:$Vo}),o($Vn,[2,71],{24:$Vp}),o($Vn,[2,72],{24:$Vp}),o($Vn,[2,73],{24:$Vp}),{14:[1,173]},{14:[1,174]},o($VL,[2,77]),o($VM,[2,92],{11:$Vx,41:$VI,42:$VJ}),o($VM,[2,93],{11:$Vx,41:$VI,42:$VJ}),o($VK,[2,94]),o($VK,[2,95]),o($VK,[2,96]),o($VN,[2,86],{11:$Vx,39:$VG,40:$VH,41:$VI,42:$VJ}),o($VN,[2,87],{11:$Vx,39:$VG,40:$VH,41:$VI,42:$VJ}),o($VN,[2,88],{11:$Vx,39:$VG,40:$VH,41:$VI,42:$VJ}),o($VN,[2,89],{11:$Vx,39:$VG,40:$VH,41:$VI,42:$VJ}),o($VN,[2,90],{11:$Vx,39:$VG,40:$VH,41:$VI,42:$VJ}),o($VN,[2,91],{11:$Vx,39:$VG,40:$VH,41:$VI,42:$VJ}),o([14,26,31],[2,84],{11:$Vx,32:$Vz,33:$VA,34:$VB,35:$VC,36:$VD,37:$VE,38:$VF,39:$VG,40:$VH,41:$VI,42:$VJ}),o([14,26,31,32],[2,85],{11:$Vx,33:$VA,34:$VB,35:$VC,36:$VD,37:$VE,38:$VF,39:$VG,40:$VH,41:$VI,42:$VJ}),o($VK,[2,83]),o($VK,[2,110]),o($VK,[2,111]),o($VK,[2,112]),o($Vn,[2,16],{24:$Vp}),o($Vn,[2,22],{17:175,24:$Vo}),o($Vn,[2,23],{17:176,24:$Vo}),o($Vn,[2,55],{24:$Vp}),o($Vn,[2,38],{17:177,24:$Vo}),o($Vn,[2,39],{17:178,24:$Vo}),o($Vn,[2,67],{24:$Vp}),o($Vn,[2,50],{17:179,24:$Vo}),o($Vn,[2,51],{17:180,24:$Vo}),o($Vn,[2,26],{24:$Vp}),o($Vn,[2,27],{24:$Vp}),o($Vn,[2,62],{24:$Vp}),o($Vn,[2,63],{24:$Vp}),o($Vn,[2,74],{24:$Vp}),o($Vn,[2,75],{24:$Vp})],
-defaultActions: {15:[2,97],16:[2,98],17:[2,99],18:[2,100],19:[2,101],20:[2,102],21:[2,103],22:[2,104],23:[2,105],24:[2,106],25:[2,107],26:[2,108],27:[2,109],28:[2,1]},
+table: [{2:$V0,3:1,4:2,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,15:$V4,16:$V5,18:14,21:$V6,23:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},{1:[3]},{5:[1,28],6:$Vl},o($Vm,[2,3],{8:30,2:$V0,21:$V6,23:$V7}),o($Vn,[2,5]),o($Vn,[2,6]),{10:[1,31],11:[1,35],12:[1,36],15:[1,33],16:[1,32],18:37,20:[1,38],22:[1,34],43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},{10:[1,39],11:[1,43],12:[1,44],15:[1,41],16:[1,40],18:45,20:[1,46],22:[1,42],43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},o($Vn,[2,80]),o($Vn,[2,7],{17:47,24:$Vo}),o($Vn,[2,8],{17:49,24:$Vo}),{13:[1,50]},o($Vn,[2,10]),{10:[1,51],11:[1,52],12:[1,53]},{19:[1,54]},{19:[2,101]},{19:[2,102]},{19:[2,103]},{19:[2,104]},{19:[2,105]},{19:[2,106]},{19:[2,107]},{19:[2,108]},{19:[2,109]},{19:[2,110]},{19:[2,111]},{19:[2,112]},{19:[2,113]},{1:[2,1]},{2:$V0,7:55,8:4,9:5,10:$V1,11:$V2,12:$V3,15:$V4,16:$V5,18:14,21:$V6,23:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk},o($Vn,[2,4]),o($Vn,[2,28],{17:56,24:$Vo}),{10:[1,57],11:[1,58],12:[1,59]},o($Vn,[2,32],{17:60,24:$Vo}),o($Vn,[2,33],{17:61,24:$Vo}),o($Vn,[2,34],{17:62,24:$Vo}),{13:[1,63]},{19:[1,64]},{13:[1,65]},o($Vn,[2,41],{17:66,24:$Vo}),{10:[1,67],11:[1,68],12:[1,69]},o($Vn,[2,45],{17:70,24:$Vo}),o($Vn,[2,46],{17:71,24:$Vo}),o($Vn,[2,47],{17:72,24:$Vo}),{13:[1,73]},{19:[1,74]},{13:[1,75]},o($Vn,[2,17],{24:$Vp}),{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:77,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},o($Vn,[2,19],{24:$Vp}),{14:[1,90]},o($Vn,[2,11],{17:91,24:$Vo}),o($Vn,[2,12],{17:92,24:$Vo}),{13:[1,93]},{10:[1,94],11:[1,95],12:[1,96],20:[1,97]},o($Vm,[2,2],{8:30,2:$V0,21:$V6,23:$V7}),o($Vn,[2,54],{24:$Vp}),o($Vn,[2,29],{17:98,24:$Vo}),o($Vn,[2,30],{17:99,24:$Vo}),{13:[1,100]},o($Vn,[2,58],{24:$Vp}),o($Vn,[2,59],{24:$Vp}),o($Vn,[2,60],{24:$Vp}),{14:[1,101]},{10:[1,102],11:[1,103],12:[1,104],20:[1,105]},{14:[1,106]},o($Vn,[2,67],{24:$Vp}),o($Vn,[2,42],{17:107,24:$Vo}),o($Vn,[2,43],{17:108,24:$Vo}),{13:[1,109]},o($Vn,[2,71],{24:$Vp}),o($Vn,[2,72],{24:$Vp}),o($Vn,[2,73],{24:$Vp}),{14:[1,110]},{10:[1,111],11:[1,112],12:[1,113],20:[1,114]},{14:[1,115]},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:116,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{11:$Vw,26:[1,117],31:$Vx,32:$Vy,33:$Vz,34:$VA,35:$VB,36:$VC,37:$VD,38:$VE,39:$VF,40:$VG,41:$VH,42:$VI},o($VJ,[2,83]),o($VJ,[2,84]),o($VJ,[2,85]),o($VJ,[2,86]),{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:131,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},o($VJ,[2,116],{6:$Vl}),o($VJ,[2,117]),o($VJ,[2,118]),o($VJ,[2,119]),o($VJ,[2,120]),{13:[1,132]},{13:[1,133]},o($Vn,[2,9],{17:134,24:$Vo}),o($Vn,[2,14],{24:$Vp}),o($Vn,[2,15],{24:$Vp}),{14:[1,135]},o($Vn,[2,20],{17:136,24:$Vo}),o($Vn,[2,21],{17:137,24:$Vo}),{13:[1,138]},{13:[1,139]},o($Vn,[2,55],{24:$Vp}),o($Vn,[2,56],{24:$Vp}),{14:[1,140]},o($Vn,[2,35],{17:141,24:$Vo}),o($Vn,[2,36],{17:142,24:$Vo}),o($Vn,[2,37],{17:143,24:$Vo}),{13:[1,144]},{13:[1,145]},o($Vn,[2,40],{17:146,24:$Vo}),o($Vn,[2,68],{24:$Vp}),o($Vn,[2,69],{24:$Vp}),{14:[1,147]},o($Vn,[2,48],{17:148,24:$Vo}),o($Vn,[2,49],{17:149,24:$Vo}),o($Vn,[2,50],{17:150,24:$Vo}),{13:[1,151]},{13:[1,152]},o($Vn,[2,53],{17:153,24:$Vo}),{11:$Vw,26:[1,154],31:$Vx,32:$Vy,33:$Vz,34:$VA,35:$VB,36:$VC,37:$VD,38:$VE,39:$VF,40:$VG,41:$VH,42:$VI},o($VK,[2,82]),{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:155,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:156,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:157,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:158,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:159,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:160,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:161,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:162,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:163,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:164,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:165,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:166,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{2:$V0,4:83,7:3,8:4,9:5,10:$V1,11:$V2,12:$V3,13:$Vq,15:$V4,16:$V5,18:14,21:$V6,23:$V7,25:167,27:78,28:79,29:80,30:81,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:84,57:$Vr,58:$Vs,59:$Vt,60:$Vu,61:$Vv},{11:$Vw,14:[1,168],31:$Vx,32:$Vy,33:$Vz,34:$VA,35:$VB,36:$VC,37:$VD,38:$VE,39:$VF,40:$VG,41:$VH,42:$VI},{14:[1,169]},{14:[1,170]},o($Vn,[2,18],{24:$Vp}),o($Vn,[2,13],{17:171,24:$Vo}),o($Vn,[2,24],{24:$Vp}),o($Vn,[2,25],{24:$Vp}),{14:[1,172]},{14:[1,173]},o($Vn,[2,31],{17:174,24:$Vo}),o($Vn,[2,61],{24:$Vp}),o($Vn,[2,62],{24:$Vp}),o($Vn,[2,63],{24:$Vp}),{14:[1,175]},{14:[1,176]},o($Vn,[2,66],{24:$Vp}),o($Vn,[2,44],{17:177,24:$Vo}),o($Vn,[2,74],{24:$Vp}),o($Vn,[2,75],{24:$Vp}),o($Vn,[2,76],{24:$Vp}),{14:[1,178]},{14:[1,179]},o($Vn,[2,79],{24:$Vp}),o($VK,[2,81]),o($VL,[2,96],{11:$Vw,41:$VH,42:$VI}),o($VL,[2,97],{11:$Vw,41:$VH,42:$VI}),o($VJ,[2,98]),o($VJ,[2,99]),o($VJ,[2,100]),o($VM,[2,90],{11:$Vw,39:$VF,40:$VG,41:$VH,42:$VI}),o($VM,[2,91],{11:$Vw,39:$VF,40:$VG,41:$VH,42:$VI}),o($VM,[2,92],{11:$Vw,39:$VF,40:$VG,41:$VH,42:$VI}),o($VM,[2,93],{11:$Vw,39:$VF,40:$VG,41:$VH,42:$VI}),o($VM,[2,94],{11:$Vw,39:$VF,40:$VG,41:$VH,42:$VI}),o($VM,[2,95],{11:$Vw,39:$VF,40:$VG,41:$VH,42:$VI}),o([14,26,31],[2,88],{11:$Vw,32:$Vy,33:$Vz,34:$VA,35:$VB,36:$VC,37:$VD,38:$VE,39:$VF,40:$VG,41:$VH,42:$VI}),o([14,26,31,32],[2,89],{11:$Vw,33:$Vz,34:$VA,35:$VB,36:$VC,37:$VD,38:$VE,39:$VF,40:$VG,41:$VH,42:$VI}),o($VJ,[2,87]),o($VJ,[2,114]),o($VJ,[2,115]),o($Vn,[2,16],{24:$Vp}),o($Vn,[2,22],{17:180,24:$Vo}),o($Vn,[2,23],{17:181,24:$Vo}),o($Vn,[2,57],{24:$Vp}),o($Vn,[2,38],{17:182,24:$Vo}),o($Vn,[2,39],{17:183,24:$Vo}),o($Vn,[2,70],{24:$Vp}),o($Vn,[2,51],{17:184,24:$Vo}),o($Vn,[2,52],{17:185,24:$Vo}),o($Vn,[2,26],{24:$Vp}),o($Vn,[2,27],{24:$Vp}),o($Vn,[2,64],{24:$Vp}),o($Vn,[2,65],{24:$Vp}),o($Vn,[2,77],{24:$Vp}),o($Vn,[2,78],{24:$Vp})],
+defaultActions: {15:[2,101],16:[2,102],17:[2,103],18:[2,104],19:[2,105],20:[2,106],21:[2,107],22:[2,108],23:[2,109],24:[2,110],25:[2,111],26:[2,112],27:[2,113],28:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);

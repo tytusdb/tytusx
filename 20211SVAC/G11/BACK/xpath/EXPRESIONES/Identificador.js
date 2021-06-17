@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Identificador = void 0;
-var Tipo_1 = require("../AST/Tipo");
+
 var Identificador = /** @class */ (function () {
     function Identificador(id, ex, li, col) {
         this.identificador = id;
@@ -10,10 +10,10 @@ var Identificador = /** @class */ (function () {
         this.columna = col;
     }
     Identificador.prototype.getTipo = function (ent, arbol) {
-        return Tipo_1.Tipo.IDENTIFICADOR;
+        return TipoXpath.IDENTIFICADOR;
     };
     Identificador.prototype.getValorImplicito = function (ent, arbol) {
-        return Tipo_1.Tipo.IDENTIFICADOR;
+        return TipoXpath.IDENTIFICADOR;
     };
     Identificador.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;

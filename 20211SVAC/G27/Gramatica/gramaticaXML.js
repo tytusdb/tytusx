@@ -87,22 +87,22 @@ case 1:
  return $$[$0-1];
 break;
 case 2: case 6:
- this.$= new Objeto($$[$0-7],'',0,0,$$[$0-6],$$[$0-4]); 
+ this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
 break;
-case 3:
-this.$= new Objeto($$[$0-6],'',0,0,null);
+case 3: case 8:
+this.$= new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,null,$$[$0-4]);
 break;
 case 4:
-this.$= $$[$0-1];  this.$.push($$[$0]);
+this.$= $$[$0-1];  this.$.push($$[$0]);  alert($$[$0].texto);
 break;
 case 5:
-this.$= [];  this.$.push($$[$0]);
+this.$= [];  this.$.push($$[$0]); alert($$[$0].texto);
 break;
 case 7:
- this.$= new Objeto($$[$0-7],$$[$0-4],0,0,$$[$0-6],null); 
+ this.$= new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],null); 
 break;
-case 8: case 9:
-this.$= new Objeto($$[$0-6],'',0,0,null,$$[$0-4]);
+case 9:
+ this.$= new Objeto($$[$0-6],$$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column,null,null);
 break;
 case 10:
 this.$=$$[$0-1]; this.$.push($$[$0]);
@@ -111,7 +111,7 @@ case 11:
 this.$=[]; this.$.push($$[$0]);
 break;
 case 12:
-this.$= new Atributo($$[$0-2],$$[$0]);
+this.$= new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
 break;
 }
 },

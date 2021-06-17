@@ -84,61 +84,61 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=$$[$0-1]; ReporteGD.agregar('<S>::=<LISTA>','S.VAL = LISTA.VAL',''); return this.$;
+this.$=$$[$0-1]; ReporteGD.agregar('S::=LISTA','S.VAL = LISTA.VAL',''); return this.$;
 break;
 case 2:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA>::=<PUNTO>','LISTA.VAL = PUNTO.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA::=PUNTO','LISTA.VAL = PUNTO.VAL','');
 break;
 case 3:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA>::=<LISTAS>','LISTA.VAL = LISTAS.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA::=LISTAS','LISTA.VAL = LISTAS.VAL','');
 break;
 case 4:
-$$[$0].push($$[$0-1]); this.$=$$[$0]; ReporteGD.agregar('<LISTAS>::=<LISTA1><LISTAS>','LISTAS.VAL = LISTA1.VAL + LISTAS.VAL','');
+$$[$0].push($$[$0-1]); this.$=$$[$0]; ReporteGD.agregar('LISTAS::=LISTA1LISTAS','LISTAS.VAL = LISTA1.VAL + LISTAS.VAL','');
 break;
 case 5:
-this.$=[$$[$0]]; ReporteGD.agregar('<LISTAS>::=<LISTA1>','LISTAS.VAL = LISTA1.VAL','');
+this.$=[$$[$0]]; ReporteGD.agregar('LISTAS::=LISTA1','LISTAS.VAL = LISTA1.VAL','');
 break;
 case 6:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<ATRIBUTO>','LISTA1.VAL = ATRIBUTO.VAL + BARRAS.VAL + LISTA1.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL + BARRAS.VAL + LISTA1.VAL','');
 break;
 case 7:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<ASTERISCO>','LISTA1.VAL = ASTERISCO.VAL + BARRAS.VAL + LISTA1.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL + BARRAS.VAL + LISTA1.VAL','');
 break;
 case 8:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<PALABRAS_R>','LISTA1.VAL = PALABRAS_R.VAL + BARRAS.VAL + LISTA1.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL + BARRAS.VAL + LISTA1.VAL','');
 break;
 case 9:
-this.$=$$[$0-2]; ReporteGD.agregar('<LISTA1>::=<ATRIBUTO1>','LISTA1.VAL = ATRIBUTO1.VAL + BARRAS.VAL + LISTA1.VAL','');
+this.$=$$[$0-2]; ReporteGD.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL + BARRAS.VAL + LISTA1.VAL','');
 break;
 case 10:
-this.$=$$[$0-3]; ReporteGD.agregar('<LISTA1>::=<PR>','LISTA1.VAL = PR.VAL + TK_PARENTESIS.VAL + BARRAS.VAL + LISTA1.VAL','');
+this.$=$$[$0-3]; ReporteGD.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL + TK_PARENTESIS.VAL + BARRAS.VAL + LISTA1.VAL','');
 break;
 case 11:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<IDS>','LISTA1.VAL = IDS.VAL + BARRAS.VAL + LISTA1.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL + BARRAS.VAL + LISTA1.VAL','');
 break;
 case 12:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<ATRIBUTO>','LISTA1.VAL = ATRIBUTO.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL','');
 break;
 case 13:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<ATRIBUTO1>','LISTA1.VAL = ATRIBUTO1.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL','');
 break;
 case 14:
-this.$=$$[$0-1]; ReporteGD.agregar('<LISTA1>::=<PR>','LISTA1.VAL = PR.VAL+ TK_PARENTESIS.VAL','');
+this.$=$$[$0-1]; ReporteGD.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL+ TK_PARENTESIS.VAL','');
 break;
 case 15:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<PALABRAS_R>','LISTA1.VAL = PALABRAS_R.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');
 break;
 case 16:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<IDS>','LISTA1.VAL = IDS.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL','');
 break;
 case 17:
-this.$=$$[$0]; ReporteGD.agregar('<LISTA1>::=<ASTERISCO>','LISTA1.VAL = ASTERISCO.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL','');
 break;
 case 18:
-ReporteGD.agregar('<LISTA1>::=ε','LISTA1.VAL = EPSILON','');
+ReporteGD.agregar('LISTA1::=ε','LISTA1.VAL = EPSILON','');
 break;
 case 19: case 24: case 26:
-Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))
+Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))
 break;
 case 20:
 this.$=$$[$0]
@@ -147,292 +147,292 @@ case 21: case 22:
 this.$ = $$[$0]
 break;
 case 23:
-this.$=$$[$0]; ReporteGD.agregar('<PUNTO>::=tk_punto <PUNTO1>','PUNTO.VAL = TK_PUNTO.VAL + PUNTO1.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PUNTO::=tk_punto PUNTO1','PUNTO.VAL = TK_PUNTO.VAL + PUNTO1.VAL','');
 break;
 case 25:
-this.$=$$[$0]; ReporteGD.agregar('<PUNTO1>::=<LISTAS>','PUNTO1.VAL = LISTAS.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PUNTO1::=LISTAS','PUNTO1.VAL = LISTAS.VAL','');
 break;
 case 27:
-this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<IDS>::=tk_dbarra tk_identificador <ASTERISCO1>','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');
+this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('IDS::=tk_dbarra tk_identificador ASTERISCO1','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');
 break;
 case 28:
-this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<IDS>::=tk_barra tk_identificador <ASTERISCO1>','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL +  ASTERISCO1.VAL','');
+this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('IDS::=tk_barra tk_identificador ASTERISCO1','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL +  ASTERISCO1.VAL','');
 break;
 case 29:
-this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<IDS>::=tk_dbarra tk_identificador','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL','');
+this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('IDS::=tk_dbarra tk_identificador','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL','');
 break;
 case 30:
-this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<IDS>::=tk_barra tk_identificador','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL','');
+this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('IDS::=tk_barra tk_identificador','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL','');
 break;
 case 31:
-this.$ = new Conca('.','',$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0].first_line,_$[$0].first_column); ReporteGD.agregar('<IDS>::=tk_identificador','IDS.VAL = TK_IDENTIFICADOR.VAL  ','');
+this.$ = new Conca('.','',$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0].first_line,_$[$0].first_column); ReporteGD.agregar('IDS::=tk_identificador','IDS.VAL = TK_IDENTIFICADOR.VAL  ','');
 break;
 case 32:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<ATRIBUTO>::=tk_dbarra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 33:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<ATRIBUTO>::=tk_barra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 34:
-this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<ATRIBUTO>::=tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 35:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<ATRIBUTO>::=tk_dbarra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 36:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<ATRIBUTO>::=tk_barra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 37:
-this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<ATRIBUTO>::=tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 38:
-$$[$0].push($$[$0-1]); this.$=$$[$0]; ReporteGD.agregar('<L_ATRIBUTO>::=<ATRIBUTO1> <L_ATRIBUTO>','L_ATRIBUTO.VAL = ATRIBUTO1.VAL + L_ATRIBUTO.VAL','');
+$$[$0].push($$[$0-1]); this.$=$$[$0]; ReporteGD.agregar('L_ATRIBUTO::=ATRIBUTO1 L_ATRIBUTO','L_ATRIBUTO.VAL = ATRIBUTO1.VAL + L_ATRIBUTO.VAL','');
 break;
 case 39:
-this.$=[$$[$0]]; ReporteGD.agregar('<L_ATRIBUTO>::=<ATRIBUTO1>','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');
+this.$=[$$[$0]]; ReporteGD.agregar('L_ATRIBUTO::=ATRIBUTO1','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');
 break;
 case 40:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<ATRIBUTO1>::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 41:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<ATRIBUTO1>::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 42:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<ATRIBUTO1>::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 43:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<ATRIBUTO1>::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 44:
-this.$ = new Atributo('','',_$[$0].first_line,_$[$0].first_column); ReporteGD.agregar('<ATRIBUTO1>::= ε','ATRIBUTO1.VAL = EPSILON','');
+this.$ = new AtributoXpath('','',_$[$0].first_line,_$[$0].first_column); ReporteGD.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');
 break;
 case 45:
-this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGD.agregar('<PALABRAS_R>::=tk_dbarra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 46:
-this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGD.agregar('<PALABRAS_R>::=tk_barra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGD.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 47:
-this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<PALABRAS_R>::=tk_dbarra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 48:
-this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<PALABRAS_R>::=tk_barra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 49:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_ancestor','PR.VAL = TK_ANCESTOR.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_ancestor','PR.VAL = TK_ANCESTOR.VAL','');
 break;
 case 50:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_ancestor_or_self','PR.VAL = TK_ANCESTOR_OR_SELF.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_ancestor_or_self','PR.VAL = TK_ANCESTOR_OR_SELF.VAL','');
 break;
 case 51:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_attribute','PR.VAL = TK_ATTRIBUTE.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_attribute','PR.VAL = TK_ATTRIBUTE.VAL','');
 break;
 case 52:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_child','PR.VAL = TK_CHILD.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_child','PR.VAL = TK_CHILD.VAL','');
 break;
 case 53:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_descendant','PR.VAL = TK_DESCENDANT.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_descendant','PR.VAL = TK_DESCENDANT.VAL','');
 break;
 case 54:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_descendant_or_self','PR.VAL = TK_DESCENDANT_OR_SELF.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_descendant_or_self','PR.VAL = TK_DESCENDANT_OR_SELF.VAL','');
 break;
 case 55:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_following','PR.VAL = TK_FOLLOWING.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_following','PR.VAL = TK_FOLLOWING.VAL','');
 break;
 case 56:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_following_sibling','PR.VAL = TK_FOLLOWING_SIBLING.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_following_sibling','PR.VAL = TK_FOLLOWING_SIBLING.VAL','');
 break;
 case 57:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_namespace','PR.VAL = TK_NAMESPACE.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_namespace','PR.VAL = TK_NAMESPACE.VAL','');
 break;
 case 58:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_parent','PR.VAL = TK_PARENT.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_parent','PR.VAL = TK_PARENT.VAL','');
 break;
 case 59:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_preceding','PR.VAL = TK_PRECEDING.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_preceding','PR.VAL = TK_PRECEDING.VAL','');
 break;
 case 60:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_preceding_sibling','PR.VAL = TK_PRECEDING_SIBLING.VAL ','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_preceding_sibling','PR.VAL = TK_PRECEDING_SIBLING.VAL ','');
 break;
 case 61: case 62: case 63: case 64: case 65:
-this.$=$$[$0]; ReporteGD.agregar('<PR>::=tk_self','PR = TK_SELF.VAL','');
+this.$=$$[$0]; ReporteGD.agregar('PR::=tk_self','PR = TK_SELF.VAL','');
 break;
 case 66:
-Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));
+Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));
 break;
 case 67:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<OPCION>::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('OPCION::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');
 break;
 case 68:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<OPCION>::=tk_position tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('OPCION::=tk_position tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
 break;
 case 69:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<OPCION>::=tk_node tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('OPCION::=tk_node tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
 break;
 case 70:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<OPCION>::=tk_text tk_parentesis','OPCION.VAL = TK_TEXT.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('OPCION::=tk_text tk_parentesis','OPCION.VAL = TK_TEXT.VAL + TK_PARENTESIS.VAL','');
 break;
 case 71:
-this.$ = new PR($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGD.agregar('<OPCION>::=tk_identificador','OPCION.VAL = TK_IDENTIFICADOR.VAL','');
+this.$ = new PR($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGD.agregar('OPCION::=tk_identificador','OPCION.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 72:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_punto tk_dbarra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_DBARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
 break;
 case 73:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_punto tk_barra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_DBARRA.VAL + TK_BARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL + TK_BARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
 break;
 case 74:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_dbarra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_DBARRA TK_POR.VAL + L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('ASTERISCO::=tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA TK_POR.VAL + L_ASTERISCO.VAL','');
 break;
 case 75:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_barra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_BARRA.VAL+TK_POR.VAL+L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('ASTERISCO::=tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_BARRA.VAL+TK_POR.VAL+L_ASTERISCO.VAL','');
 break;
 case 76:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_punto tk_dbarra tk_por','ASTERISCO.VAL = TK_PUNTO.VAL+ TK_DBARRA.VAL+TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por','ASTERISCO.VAL = TK_PUNTO.VAL+ TK_DBARRA.VAL+TK_POR.VAL','');
 break;
 case 77:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_punto tk_barra tk_por','ASTERISCO.VAL =TK_PUNTO.VAL+TK_BARRA.VAL+TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_barra tk_por','ASTERISCO.VAL =TK_PUNTO.VAL+TK_BARRA.VAL+TK_POR.VAL','');
 break;
 case 78:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_dbarra tk_por','ASTERISCO.VAL = TK_DBARRA.VAL + TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('ASTERISCO::=tk_dbarra tk_por','ASTERISCO.VAL = TK_DBARRA.VAL + TK_POR.VAL','');
 break;
 case 79:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('<ASTERISCO>::=tk_barra tk_por','ASTERISCO.VAL = TK_BARRA.VAL + TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGD.agregar('ASTERISCO::=tk_barra tk_por','ASTERISCO.VAL = TK_BARRA.VAL + TK_POR.VAL','');
 break;
 case 80:
-$$[$0].push($$[$0-1]); this.$=$$[$0]; ReporteGD.agregar('<L_ASTERISCO>::= ASTERISCO1 L_ASTERISCO','L_ASTERISCO.VAL = ASTERISCO1.VAL + L_ASTERISCO.VAL','');
+$$[$0].push($$[$0-1]); this.$=$$[$0]; ReporteGD.agregar('L_ASTERISCO::= ASTERISCO1 L_ASTERISCO','L_ASTERISCO.VAL = ASTERISCO1.VAL + L_ASTERISCO.VAL','');
 break;
 case 81:
-this.$=[$$[$0]]; ReporteGD.agregar('<L_ASTERISCO>::=<ASTERISCO1>','L_ASTERISCO.VAL = ASTERISCO1.VAL','');
+this.$=[$$[$0]]; ReporteGD.agregar('L_ASTERISCO::=ASTERISCO1','L_ASTERISCO.VAL = ASTERISCO1.VAL','');
 break;
 case 82:
-this.$ = $$[$0-1]; ReporteGD.agregar('<ASTERISCO1>::=tk_corchete_izquierdo <EXP> tk_corchete_derecho','ASTERISCO1.VAL = EXP.VAL','');
+this.$ = $$[$0-1]; ReporteGD.agregar('ASTERISCO1::=tk_corchete_izquierdo EXP tk_corchete_derecho','ASTERISCO1.VAL = EXP.VAL','');
 break;
 case 83:
-this.$ = $$[$0]; ReporteGD.agregar('<ASTERISCO1>::=TK_IDENTIFICADOR','ASTERISCO1.VAL = TK_IDENTIFICADOR.VAL','');
+this.$ = $$[$0]; ReporteGD.agregar('ASTERISCO1::=TK_IDENTIFICADOR','ASTERISCO1.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 84:
- ReporteGD.agregar('<EXP>::=<EXP1> <EXP_P>','EXP_P.inh = EXP1.VAL | EXP.VAL= EXP_P.syn','');
+ ReporteGD.agregar('EXP::=EXP1 EXP_P','EXP_P.inh = EXP1.VAL | EXP.VAL= EXP_P.syn','');
 break;
 case 85:
- ReporteGD.agregar('<EXP_P>::=tk_mas <EXP1> <EXP_P>','EXP_P.inh = EXP_P.inh + EXP1.VAL | EXP_P.syn = EXP_P.syn','');
+ ReporteGD.agregar('EXP_P::=tk_mas EXP1 EXP_P','EXP_P.inh = EXP_P.inh + EXP1.VAL | EXP_P.syn = EXP_P.syn','');
 break;
 case 86:
- ReporteGD.agregar('<EXP_P>::=tk_menos <EXP1> <EXP_P>','EXP_P.inh = EXP_P.inh - EXP1.VAL | EXP_P.syn = EXP_P.syn','');
+ ReporteGD.agregar('EXP_P::=tk_menos EXP1 EXP_P','EXP_P.inh = EXP_P.inh - EXP1.VAL | EXP_P.syn = EXP_P.syn','');
 break;
 case 87:
- ReporteGD.agregar('<EXP_P>::=ε','EXP_P.syn = EXP_P.inh','');
+ ReporteGD.agregar('EXP_P::=ε','EXP_P.syn = EXP_P.inh','');
 break;
 case 88:
- ReporteGD.agregar('<EXP1>::=<EXP2> <EXP1_P>','EXP1_P.inh = EXP2.VAL | EXP1.VAL= EXP1_P.syn','');
+ ReporteGD.agregar('EXP1::=EXP2 EXP1_P','EXP1_P.inh = EXP2.VAL | EXP1.VAL= EXP1_P.syn','');
 break;
 case 89:
- ReporteGD.agregar('<EXP1_P>::=tk_por <EXP2> <EXP1_P>','EXP1_P.inh = EXP1_P.inh * EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');
+ ReporteGD.agregar('EXP1_P::=tk_por EXP2 EXP1_P','EXP1_P.inh = EXP1_P.inh * EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');
 break;
 case 90:
- ReporteGD.agregar('<EXP1_P>::=tk_division <EXP2> <EXP1_P>','EXP1_P.inh = EXP1_P.inh / EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');
+ ReporteGD.agregar('EXP1_P::=tk_division EXP2 EXP1_P','EXP1_P.inh = EXP1_P.inh / EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');
 break;
 case 91:
- ReporteGD.agregar('<EXP1_P>::=tk_modulo <EXP2> <EXP1_P>','EXP1_P.inh = EXP1_P.inh mod EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');
+ ReporteGD.agregar('EXP1_P::=tk_modulo EXP2 EXP1_P','EXP1_P.inh = EXP1_P.inh mod EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');
 break;
 case 92:
- ReporteGD.agregar('<EXP1_P>::=ε','EXP1_P.syn = EXP1_P.inh','');
+ ReporteGD.agregar('EXP1_P::=ε','EXP1_P.syn = EXP1_P.inh','');
 break;
 case 93:
- ReporteGD.agregar('<EXP2>::=<EXP3> <EXP2_P>','EXP2_P.inh = EXP3.VAL | EXP2.VAL= EXP2_P.syn');
+ ReporteGD.agregar('EXP2::=EXP3 EXP2_P','EXP2_P.inh = EXP3.VAL | EXP2.VAL= EXP2_P.syn');
 break;
 case 94:
- ReporteGD.agregar('<EXP2_P>::=tk_menor <EXP3> <EXP2_P>','EXP2_P.inh = EXP2_P.inh < EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
+ ReporteGD.agregar('EXP2_P::=tk_menor EXP3 EXP2_P','EXP2_P.inh = EXP2_P.inh  EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
 break;
 case 95:
- ReporteGD.agregar('<EXP2_P>::=tk_mayor <EXP3> <EXP2_P>','EXP2_P.inh = EXP2_P.inh > EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
+ ReporteGD.agregar('EXP2_P::=tk_mayor EXP3 EXP2_P','EXP2_P.inh = EXP2_P.inh  EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
 break;
 case 96:
- ReporteGD.agregar('<EXP2_P>::=tk_menor_igual <EXP3> <EXP2_P>','EXP2_P.inh = EXP2_P.inh <= EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
+ ReporteGD.agregar('EXP2_P::=tk_menor_igual EXP3 EXP2_P','EXP2_P.inh = EXP2_P.inh = EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
 break;
 case 97:
- ReporteGD.agregar('<EXP2_P>::=tk_mayor_igual <EXP3> <EXP2_P>','EXP2_P.inh = EXP2_P.inh >= EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
+ ReporteGD.agregar('EXP2_P::=tk_mayor_igual EXP3 EXP2_P','EXP2_P.inh = EXP2_P.inh = EXP3.VAL | EXP2_P.syn = EXP2_P.syn','');
 break;
 case 98:
- ReporteGD.agregar('<EXP2_P>::=tk_igualdad <EXP3> <EXP2_P>','EXP2_P.inh = EXP2_P.inh = EXP3.VAL | EXP2_syn = EXP2_P.syn','');
+ ReporteGD.agregar('EXP2_P::=tk_igualdad EXP3 EXP2_P','EXP2_P.inh = EXP2_P.inh = EXP3.VAL | EXP2_syn = EXP2_P.syn','');
 break;
 case 99:
- ReporteGD.agregar('<EXP2_P>::=tk_desigualdad <EXP3> <EXP2_P>','EXP2_P.inh = EXP2_P.inh != EXP3.VAL | EXP2_syn = EXP2_P.syn','');
+ ReporteGD.agregar('EXP2_P::=tk_desigualdad EXP3 EXP2_P','EXP2_P.inh = EXP2_P.inh != EXP3.VAL | EXP2_syn = EXP2_P.syn','');
 break;
 case 100:
- ReporteGD.agregar('<EXP2_P>::=ε','EXP2_P.syn = EXP2_P.inh','');
+ ReporteGD.agregar('EXP2_P::=ε','EXP2_P.syn = EXP2_P.inh','');
 break;
 case 101:
- ReporteGD.agregar('<EXP3>::=<EXP4> <EXP3_P>','EXP3_P.inh = EXP4.VAL | EXP4.VAL= EXP3_P.syn','');
+ ReporteGD.agregar('EXP3::=EXP4 EXP3_P','EXP3_P.inh = EXP4.VAL | EXP4.VAL= EXP3_P.syn','');
 break;
 case 102:
- ReporteGD.agregar('<EXP3_P>::=tk_or <EXP4> <EXP3_P>','EXP3_P.inh = EXP3_P.inh < EXP4.VAL | EXP3_P.syn = EXP3_P.syn','');
+ ReporteGD.agregar('EXP3_P::=tk_or EXP4 EXP3_P','EXP3_P.inh = EXP3_P.inh  EXP4.VAL | EXP3_P.syn = EXP3_P.syn','');
 break;
 case 103:
- ReporteGD.agregar('<EXP3_P>::=tk_and <EXP4> <EXP3_P>','EXP3_P.inh = EXP3_P.inh < EXP4.VAL | EXP3_P.syn = EXP3_P.syn','');
+ ReporteGD.agregar('EXP3_P::=tk_and EXP4 EXP3_P','EXP3_P.inh = EXP3_P.inh  EXP4.VAL | EXP3_P.syn = EXP3_P.syn','');
 break;
 case 104:
- ReporteGD.agregar('<EXP3>::=tk_barra_vertical <EXP4> <EXP3_P>','EXP3_P.inh = EXP3_P.inh < EXP4.VAL | EXP3_P.syn = EXP3_P.syn','');
+ ReporteGD.agregar('EXP3::=tk_barra_vertical EXP4 EXP3_P','EXP3_P.inh = EXP3_P.inh  EXP4.VAL | EXP3_P.syn = EXP3_P.syn','');
 break;
 case 105:
- ReporteGD.agregar('<EXP3>::=ε','EXP3_P.syn = EXP3_P.inh','');
+ ReporteGD.agregar('EXP3::=ε','EXP3_P.syn = EXP3_P.inh','');
 break;
 case 106:
- ReporteGD.agregar('<EXP4>::=tk_parentesis_izquierdo <EXP> tk_parentesis_derecho','EXP4.VAL = EXP.VAL ','');
+ ReporteGD.agregar('EXP4::=tk_parentesis_izquierdo EXP tk_parentesis_derecho','EXP4.VAL = EXP.VAL ','');
 break;
 case 107:
- ReporteGD.agregar('<EXP4>::=<ATRI>','EXP4.VAL = ATRI.VAL','');
+ ReporteGD.agregar('EXP4::=ATRI','EXP4.VAL = ATRI.VAL','');
 break;
 case 108:
- ReporteGD.agregar('<EXP4>::=tk_arroba <EXP>','EXP4.VAL = TK_ARROBA.VAL + EXP.VAL','');
+ ReporteGD.agregar('EXP4::=tk_arroba EXP','EXP4.VAL = TK_ARROBA.VAL + EXP.VAL','');
 break;
 case 109:
- ReporteGD.agregar('<EXP4>::=tk_decimal','EXP4.VAL = TK_DECIMA.LEXVAL','');
+ ReporteGD.agregar('EXP4::=tk_decimal','EXP4.VAL = TK_DECIMA.LEXVAL','');
 break;
 case 110:
- ReporteGD.agregar('<EXP4>::=tk_entero','EXP4.VAL = TK_ENTERO.LEXVAL','');
+ ReporteGD.agregar('EXP4::=tk_entero','EXP4.VAL = TK_ENTERO.LEXVAL','');
 break;
 case 111:
- ReporteGD.agregar('<EXP4>::=tk_cadena','EXP4.VAL = TK_CADENA.VAL','');
+ ReporteGD.agregar('EXP4::=tk_cadena','EXP4.VAL = TK_CADENA.VAL','');
 break;
 case 112:
- ReporteGD.agregar('<EXP4>::=tk_identificador','EXP4.VAL = TK_IDENTIFICADOR.VAL','');
+ ReporteGD.agregar('EXP4::=tk_identificador','EXP4.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 113:
- ReporteGD.agregar('<EXP4>::=tk_position tk_parentesis','EXP4.VAL = TK_POSITION.VAL + TK_PARENTESIS.VAL','');
+ ReporteGD.agregar('EXP4::=tk_position tk_parentesis','EXP4.VAL = TK_POSITION.VAL + TK_PARENTESIS.VAL','');
 break;
 case 114:
- ReporteGD.agregar('<EXP4>::=tk_last tk_parentesis','EXP4.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');
+ ReporteGD.agregar('EXP4::=tk_last tk_parentesis','EXP4.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');
 break;
 case 115:
- ReporteGD.agregar('<EXP4>::=<PAL_RE>','EXP4.VAL = PAL_RE.VAL','');
+ ReporteGD.agregar('EXP4::=PAL_RE','EXP4.VAL = PAL_RE.VAL','');
 break;
 case 116:
-this.$ = new PAL_RE($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGD.agregar('<PAL_RE>::=<PR> tk_ddp <OPCION>','PAL_RE.VAL = PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new PAL_RE($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGD.agregar('PAL_RE::=PR tk_ddp OPCION','PAL_RE.VAL = PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 117:
-this.$ = new Atri($$[$0-2]+$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGD.agregar('<ATRI>::=tk_arroba tk_por <L_ATRI>','ATRI.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRI.VAL','');
+this.$ = new Atri($$[$0-2]+$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGD.agregar('ATRI::=tk_arroba tk_por L_ATRI','ATRI.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRI.VAL','');
 break;
 case 118:
-$$[$0].push($$[$0-1]); this.$=$$[$0];  ReporteGD.agregar('<L_ATRI>::= ATRI1 L_ATRI','L_ATRI.VAL = ATRI1.VAL + L_ATRI.VAL','');
+$$[$0].push($$[$0-1]); this.$=$$[$0];  ReporteGD.agregar('L_ATRI::= ATRI1 L_ATRI','L_ATRI.VAL = ATRI1.VAL + L_ATRI.VAL','');
 break;
 case 119:
-this.$=[$$[$0]];  ReporteGD.agregar('<ATRI1>::=<ATRI1>','L_ATRI.VAL = ATRI1.VAL','');
+this.$=[$$[$0]];  ReporteGD.agregar('ATRI1::=ATRI1','L_ATRI.VAL = ATRI1.VAL','');
 break;
 case 120:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('<ATRI1>::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 121:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('<ATRI1>::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 122:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('<ATRI1>::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');
 break;
 case 123:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('<ATRI1>::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');
 break;
 case 124:
- ReporteGD.agregar('<ATRI1>::=ε','ATRI1.VAL = EPSILON','');
+ ReporteGD.agregar('ATRI1::=ε','ATRI1.VAL = EPSILON','');
 break;
 }
 },
@@ -1113,10 +1113,12 @@ case 46: return 76;
 break;
 case 47:  return 5;   
 break;
+case 48:Error.add(new NodoError("Lexico","No se esperaba el caracter: "+yy_.yytext,yy_.yylineno));
+break;
 }
 },
-rules: [/^(?:>=)/,/^(?:<=)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:!=)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:\|)/,/^(?:div\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:mod\b)/,/^(?:\(\))/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:::)/,/^(?:\/\/)/,/^(?:\/)/,/^(?:@)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:namespace\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:last\b)/,/^(?:position\b)/,/^(?:node\b)/,/^(?:text\b)/,/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)\b)/,/^(?:[0-9]+\b)/,/^(?:[A-Za-z]+["_"0-9A-Za-z]*)/,/^(?:[[\']([^\'\n]|(\\'))*[\']|[[\"]([^\"\n]|(\\"))*[\"])/,/^(?:$)/],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
+rules: [/^(?:>=)/,/^(?:<=)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:!=)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:\|)/,/^(?:div\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:mod\b)/,/^(?:\(\))/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:::)/,/^(?:\/\/)/,/^(?:\/)/,/^(?:@)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:namespace\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:last\b)/,/^(?:position\b)/,/^(?:node\b)/,/^(?:text\b)/,/^(?:\s+)/,/^(?:[0-9]+(\.[0-9]+)\b)/,/^(?:[0-9]+\b)/,/^(?:[A-Za-z]+["_"0-9A-Za-z]*)/,/^(?:[[\']([^\'\n]|(\\'))*[\']|[[\"]([^\"\n]|(\\"))*[\"])/,/^(?:$)/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48],"inclusive":true}}
 });
 return lexer;
 })();
