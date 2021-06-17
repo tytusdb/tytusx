@@ -8,6 +8,14 @@ class Errores {
         this.errores1.push(errorEntrada);
     }
 
+    public agregarEncabezado(tipo:string){
+        this.errores1.unshift(new Erro ("Listado de errores del lenguaje: "+tipo,"----------------------------------------",0,0));
+    }
+
+    public agregarEncabezadoFinal(tipo:string){
+        this.errores1.push(new Erro ("Listado de errores del lenguaje: "+tipo,"----------------------------------------",0,0));
+    }
+
     getErrores():Array<Erro> {
         return this.errores1;
     }

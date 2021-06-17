@@ -230,9 +230,7 @@
 <<EOF>>   return 'eof';
 
 .					{
-    //errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column+1]);
     agregarErrorLexico("Lexico",yytext,yylloc.first_line,yylloc.first_column+1);
-    //console.log('     error lexico '+yytext);
     }
 /lex
 %{

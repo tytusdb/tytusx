@@ -1,5 +1,6 @@
 class NodoHijo {
-    constructor(nombre, produccion, regla) {
+    constructor(id, nombre, produccion, regla) {
+        this.id = id;
         this.nombre = nombre;
         this.produccion = produccion;
         this.reglas = regla;
@@ -12,5 +13,11 @@ class NodoHijo {
     }
     getReglaSemantica() {
         return this.reglas;
+    }
+    getId() {
+        return this.id;
+    }
+    getNomre() {
+        return this.nombre;
     }
 }

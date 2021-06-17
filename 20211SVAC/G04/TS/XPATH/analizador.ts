@@ -1,12 +1,11 @@
-// @ts-ignore
-let errores = new Errores();
 function analizarXpath(entornoGlobal: Entorno){
     const textoAnalizar = document.getElementById('inputXPath');
     const result = document.getElementById('result') as HTMLTextAreaElement;
     // @ts-ignore
     let matrizConsultas: Array<Array<Consulta>> = jisonXpaht.parse(textoAnalizar.value);
 
-    if (errores.getSize > 0) {
+    if (errores.getSize > 0) {        
+        errores.agregarEncabezadoFinal("XPATH");
         agregarContenidoErrores();
     } else {
         let i: number = 1;
