@@ -78,7 +78,7 @@ export class ContenidoInicioComponent implements OnInit {
 
       var Tree: Arbol = new Arbol([objetos]);
       Tree.settablaGlobal(this.tablaGlobal);
-      console.log(this.tablaGlobal);
+      
 
 
       //  PARA GUARDAR DATOS
@@ -99,16 +99,21 @@ export class ContenidoInicioComponent implements OnInit {
         var atributos = "";
         var listaobjetitos = "";
         var contenido = "";
+        var linea = key.getLinea();
+        var columna = key.getColumna();
         var nombre = key.getidentificador();
         for (var [key2, value2] of key.getAtributo()) {
           //alert(key + " = " + value);
           atributos += `${key2}=>${value2}, `
+
         }
         let objetos = key.getvalor();
         if (objetos instanceof tablaSimbolos) {
           for (var key3 of objetos.tablaActual) {
             //alert(key + " = " + value);
             listaobjetitos += `${key3.getidentificador()}, `
+            //linea=`${key3.getLinea()} `
+            // columna=`${key3.getColumna()} `
 
           }
 
@@ -116,9 +121,12 @@ export class ContenidoInicioComponent implements OnInit {
 
         } else {
           contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
+
+          //Tree.actualizarTabla(contenido,linea,columna);
+
         }
-        var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos);
-        Tree.listaSimbolos.push(Reporte);
+        var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos, linea, columna);
+        //Tree.listaSimbolos.push(Reporte);
 
       }
 
@@ -183,24 +191,28 @@ export class ContenidoInicioComponent implements OnInit {
       var atributos = "";
       var listaobjetitos = "";
       var contenido = "";
+      var linea = key.getLinea();
+      var columna = key.getColumna();
       var nombre = key.getidentificador();
-      for (var [key2, value2] of key.getAtributo()) {
+      for (var [key2, value2,] of key.getAtributo()) {
         //alert(key + " = " + value);
-        atributos += `${key2}=>${value2}, `
+        atributos += `${key2}=>${value2}, `;
       }
       let objetos = key.getvalor();
       if (objetos instanceof tablaSimbolos) {
         for (var key3 of objetos.tablaActual) {
           //alert(key + " = " + value);
           listaobjetitos += `${key3.getidentificador()}, `
+
         }
 
         this.llenarTablaSimbolos(objetos, tri);
 
       } else {
         contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
+        tri.actualizarTabla(contenido, linea.toString(), columna.toString());
       }
-      var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos);
+      var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos, linea, columna);
       tri.listaSimbolos.push(Reporte);
 
     }
@@ -251,9 +263,7 @@ export class ContenidoInicioComponent implements OnInit {
 
   EjecutarAsc(texto: string) {
 
-
-
-    if (texto == null) return document.write('Error');
+    // if (texto == null) return document.write('Error');
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
@@ -273,8 +283,6 @@ export class ContenidoInicioComponent implements OnInit {
       c++;
       if (i instanceof BarrasNodo) {
         var resultador = i.interpretar(Tree, tablita);
-        console.log(resultador);
-        console.log("estamos en barra nodo")
         if (resultador instanceof tablaSimbolos) {
           tablita = resultador
           if (c == ast.getinstrucciones().length) {

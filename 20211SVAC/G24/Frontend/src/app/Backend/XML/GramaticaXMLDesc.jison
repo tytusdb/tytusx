@@ -7,12 +7,7 @@
 
 %%
 /* Espacios en blanco */
-"//".*            	  {}
-"<!--"                {console.log("Comenzo el comentario"); this.begin("Comentario"); }
-<Comentario>[ \r\t]+  {}
-<Comentario>\n        {}
-<Comentario>"-->"     {console.log("Termino el comentario"); this.popState();}
-<Comentario>[^"-->"]+ {console.log("Texto dentro del comentario: "+yytext+" :("); return 'COMENTARIOS'}
+[<][!][-][-][^>]*[-][-]+[>]                        {}
 
 ">"                     this.begin('cuerpo'); return 'MAYORQUE'
 
@@ -76,8 +71,6 @@ OBJETO
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS SELFCLOSE INSTRUCCION      {$$ = $2 +" -> atributos:  -> "+ $3+ " -> [" + $5 + "]";}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS MAYORQUE INSTRUCCION SALIDA IDENTIFICADOR MAYORQUE {$$ = $2 +" -> atributos:  -> "+ $3+ " -> [" + $5 + "]";}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS MAYORQUE INSTRUCCION IDENTIFICADOR MAYORQUE {$$ = $2 + " -> atributos:  -> "+ $3 + " instruccion: "+ $5;}
-        | COMENTARIOS {$$="<!-- "+$1+" --!>"}
-        |       {$$=""}
         ;
 
 
