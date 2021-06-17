@@ -86,7 +86,7 @@ switch (yystate) {
 case 1:
  const raiz = new NodoCST('INICIO', [$$[$0-1].nodos]);
                                                         const prod = "<INICIO>\t::= PROBJ EOF\n"+$$[$0-1].producciones;
-                                                        const paquete = new Paquete(listaErroresJison, raiz, prod, $$[$0-1].version, $$[$0-1].encoding);
+                                                        const paquete = new Paquete(listaErroresJison, raiz, prod, $$[$0-1].version, $$[$0-1].encoding, $$[$0-1].simbolos);
                                                             console.log("Analisis Completo"); 
                                                             listaErroresJison = [];
                                                             return paquete; 
@@ -103,7 +103,8 @@ this.$ = {
                                                             version: $$[$0-1].version,
                                                             encoding: $$[$0-1].encoding,
                                                             nodos: new NodoCST('PROBJ', [$$[$0-1].nodos, $$[$0].nodos]),
-                                                            producciones: "<PROBJ>\t\t::= PROLOG OBJETO\n" + $$[$0-1].producciones + $$[$0].producciones
+                                                            producciones: "<PROBJ>\t\t::= PROLOG OBJETO\n" + $$[$0-1].producciones + $$[$0].producciones,
+                                                            simbolos: $$[$0].simbolos
                                                       };
                                                       
 break;
@@ -111,7 +112,8 @@ case 4:
 this.$ = {
                                                             prolog: { version: "", encoding: "" },
                                                             nodos: new NodoCST('PROBJ', [$$[$0].nodos]),
-                                                            producciones: "<PROBJ>\t\t::= <OBJETOS>\n" + $$[$0].producciones
+                                                            producciones: "<PROBJ>\t\t::= <OBJETOS>\n" + $$[$0].producciones,
+                                                            simbolos: $$[$0].simbolos
                                                       };
                                                       
 break;
@@ -137,7 +139,8 @@ case 6:
                                                                                                       new NodoCST('<', []),                           new NodoCST('id', [new NodoCST($$[$0-5], [])]), new NodoCST('>', []),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),   new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n"
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n",
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-5], "", this._$.first_line, this._$.first_column, [])
                                                                                           };
                                                                                     
 break;
@@ -151,7 +154,8 @@ case 7:
                                                                                                       new NodoCST('contenidoE', [new NodoCST($$[$0-3]+$$[$0-2], [])]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),   new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n",
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-5], $$[$0-3]+$$[$0-2], this._$.first_line, this._$.first_column, [])
                                                                                           };
                                                                                     
 break;
@@ -165,8 +169,10 @@ case 8:
                                                                                                       new NodoCST('contenidoE', [new NodoCST($$[$0-2], [])]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),   new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n",
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-4], $$[$0-2], this._$.first_line, this._$.first_column, [])
                                                                                           };
+                                                                                          
                                                                                     
 break;
 case 9:
@@ -178,7 +184,8 @@ case 9:
                                                                                                       new NodoCST('<', []),   new NodoCST('id', [new NodoCST($$[$0-6], [])]), new NodoCST('LATRIBUTOS', [$$[$0-5].nodos]),    new NodoCST('>', []),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),                     new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-5].producciones
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-5].producciones,
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-6], "", this._$.first_line, this._$.first_column, $$[$0-5].simbolos)
                                                                                           };
                                                                                     
 break;
@@ -192,7 +199,8 @@ case 10:
                                                                                                       new NodoCST('contenidoE', [new NodoCST($$[$0-2], [])]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),                     new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n" + $$[$0-4].producciones
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n" + $$[$0-4].producciones,
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-5], $$[$0-2], this._$.first_line, this._$.first_column, $$[$0-4].simbolos)
                                                                                           };
                                                                                     
 break;
@@ -206,7 +214,8 @@ case 11:
                                                                                                       new NodoCST('OBJETOS', [$$[$0-4].nodos]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),                     new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-6].producciones + $$[$0-4].producciones
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-6].producciones + $$[$0-4].producciones,
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-7], "", this._$.first_line, this._$.first_column, $$[$0-6].simbolos.concat($$[$0-4].simbolos))
                                                                                           };
                                                                                     
 break;
@@ -220,7 +229,8 @@ case 12:
                                                                                                       new NodoCST('OBJETOS', [$$[$0-4].nodos]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),                     new NodoCST('id', [new NodoCST($$[$0-1], [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-4].producciones
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $$[$0-4].producciones,
+                                                                                                simbolos: new Simbolo("OBJETO", $$[$0-6], "", this._$.first_line, this._$.first_column, $$[$0-4].simbolos)
                                                                                           };
                                                                                     
 break;
@@ -231,19 +241,28 @@ case 13:
                                                       
 break;
 case 14:
-     this.$ = {
+     $$[$0-1].simbolos.push($$[$0].simbolos);
+                                                      this.$ = {
                                                             nodos: new NodoCST('OBJETOS', [$$[$0-1].nodos, $$[$0].nodos]),
-                                                            producciones: "<OBJETOS>\t::= OBJETOS OBJETO\n" + $$[$0-1].producciones + $$[$0].producciones
+                                                            producciones: "<OBJETOS>\t::= OBJETOS OBJETO\n" + $$[$0-1].producciones + $$[$0].producciones,
+                                                            simbolos: $$[$0-1].simbolos
                                                       };
                                                 
 break;
 case 15: case 17:
-this.$ = $$[$0];
+this.$ = {
+                                                            nodos: $$[$0].nodos,
+                                                            producciones: $$[$0].producciones,
+                                                            simbolos: [$$[$0].simbolos]
+                                                      };
+                                                
 break;
 case 16:
-     this.$ = {
+      $$[$0-1].simbolos.push($$[$0].simbolos);
+                                                      this.$ = {
                                                             nodos: new NodoCST('LATRIBUTOS', [$$[$0-1].nodos, $$[$0].nodos]),
-                                                            producciones: "<LATRIBUTOS>\t::= LATRIBUTOS ATRIBUTO\n" + $$[$0-1].producciones + $$[$0].producciones
+                                                            producciones: "<LATRIBUTOS>\t::= LATRIBUTOS ATRIBUTO\n" + $$[$0-1].producciones + $$[$0].producciones,
+                                                            simbolos: $$[$0-1].simbolos
                                                       };
                                                 
 break;
@@ -252,7 +271,8 @@ case 18:
                                                             nodos: new NodoCST('ATRIBUTO', [
                                                                   new NodoCST('id', [new NodoCST($$[$0-2], [])]), new NodoCST('=', []), new NodoCST('cadena', [new NodoCST($$[$0], [])])
                                                             ]),
-                                                            producciones: "<ATRIBUTO>\t\t::= 'identificador' 'tk_=' 'cadena'\n"
+                                                            producciones: "<ATRIBUTO>\t\t::= 'identificador' 'tk_=' 'cadena'\n",
+                                                            simbolos: new Simbolo("ATRIBUTO", $$[$0-2], $$[$0], this._$.first_line, this._$.first_column, [])
                                                       };
                                                 
 break;
@@ -534,7 +554,8 @@ _handle_error:
 
     const { Paquete } = require('src/app/models/CST/paquete.model');
     const { NodoCST } = require('src/app/models/CST/nodoCST.model');
-
+    const { Simbolo } = require('src/app/models/CST/simbolo.model');
+    var listaSimbolos = Array();
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
