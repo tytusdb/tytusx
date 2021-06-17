@@ -32,9 +32,9 @@
 - [Objetivos](#Objetivos)
 - [Requisitos_del_Sistema](#Requisitos_del_Sistema)
 - [Componentes](#Componentes)
-- [Análisis_Léxico_XML](#Analisis Lexico - Gramatica - XML)
-- [Análisis_Sintáctico_XML_DESC](#Gramatica Descendente - XML)
-- [Análisis_Léxico_XPATH](#Analisis - XPATH)
+- [Análisis_Léxico_XML](#Analisis_Lexico_Gramatica_XML)
+- [Análisis_Sintáctico_XML_DESC](#Gramatica_Descendente_XML)
+- [Análisis_Léxico_XPATH](#Analisis_XPATH)
 
 
 
@@ -83,7 +83,7 @@ El compilador de XML aparecera en la pantalla en la parte superior donde se ingr
   <img src="Imagenes/Arquitectura.png" width="800" alt="TytusX Architecture">
 </p>
 
-## Analisis Sintactico - Gramatica - XML
+## Analisis_Sintactico_Gramatica_XML
 
 ~~~
 
@@ -123,7 +123,7 @@ texto_libre : texto_libre TEXTO
 
 ~~~
 
-### Gramatica Descendente - XML
+### Gramatica_Descendente_XML
 
 ~~~
 
@@ -163,7 +163,7 @@ texto_libre :  TEXTO  texto_libre
 
 ~~~
 
-## Analisis - XPATH
+## Analisis_XPATH
 
 # Precedencia de Operadores
 ~~~
@@ -256,72 +256,4 @@ OPERADORES :  OPERADORES MAS OPERADORES
             | CADENA
             | ARROBA ID
             ;
-~~~
-
-
-## Archivo_Entrada_XML
-
-<h3>Ejemplo de Archivo Entrada:</h3>
-
-~~~
-<?xml version="1.0" encoding="UTF-8"?>
-<biblioteca>
-    <libro>
-        <titulo>La vida está en otra parte</titulo>
-        <autor>Milan Kundera</autor>
-        <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-        <titulo>Pantaleón y las visitadoras</titulo>
-        <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-        <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-        <titulo>Conversación en la catedral</titulo>
-        <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-        <fechaPublicacion año="1969"/>
-    </libro>
-</biblioteca>
-~~~
-
-## Archivo_Entrada_XPATH
-
-~~~
-
-/biblioteca/libro
-
-~~~
-
-## Salida
-
-~~~
-
-<libro >
-  <titulo >
-    La vida está en otra parte
-  </titulo>
-  <autor >
-    Milan Kundera
-  </autor>
-  <fechaPublicacion año="1973"/>
-</libro>
-<libro >
-  <titulo >
-    Pantaleón y las visitadoras
-  </titulo>
-  <autor fechaNacimiento="28/03/1936">
-    Mario Vargas Llosa
-  </autor>
-  <fechaPublicacion año="1973"/>
-</libro>
-<libro >
-  <titulo >
-    Conversación en la catedral
-  </titulo>
-  <autor fechaNacimiento="28/03/1936">
-    Mario Vargas Llosa
-  </autor>
-  <fechaPublicacion año="1969"/>
-</libro>
-
 ~~~
