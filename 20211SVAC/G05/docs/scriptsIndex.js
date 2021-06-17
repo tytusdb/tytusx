@@ -94,7 +94,13 @@ var cadenaReporteTablaS =""
 document.getElementById("btnAnalizarA").addEventListener('click', function() {
     cadenaReporteTablaS= myBundle.ejecutarXML(document.getElementById(activeText).value);
     console.log(cadenaReporteTablaS);
-    alert("Se ha cargado el XML");
+    alert("Se ha cargado el XML Ascendente");
+});
+
+document.getElementById("btnAnalizarD").addEventListener('click', function() {
+    cadenaReporteTablaS= myBundle.ejecutarXML_DSC(document.getElementById(activeText).value);
+    console.log(cadenaReporteTablaS);
+    alert("Se ha cargado el XML Descendente");
 });
 
 document.getElementById("btnGraficaAST").addEventListener('click', function() {
@@ -137,5 +143,15 @@ function manejoTablas() {
         document.getElementById("tablasimbolos").innerHTML = cadenaError
         tituloReporte = "Tabla de Errores"
         document.getElementById("tituloRep").innerText = tituloReporte
+    } else if (valorTabla == 3) {
+        var cadenaGramatical = myBundle.llenarReporteG()
+        document.getElementById("tablasimbolos").innerHTML = cadenaGramatical
+        tituloReporte = "Reporte Gramatical"
+        document.getElementById("tituloRep").innerText = tituloReporte
     }
 };
+
+function llenarReporteGramatical(){
+    valorTabla = 3
+    manejoTablas()
+}
