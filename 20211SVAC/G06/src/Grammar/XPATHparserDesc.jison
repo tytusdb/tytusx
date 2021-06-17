@@ -41,7 +41,7 @@
                     tmp = "";
                     return 'scadena';
                   }
-\s+     
+                  
 "//"                  return '//'
 "/"                   return '/'
 '..'                  return '..'

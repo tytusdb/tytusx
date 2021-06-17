@@ -4,13 +4,16 @@ export default class Simbolo {
   private tipo: Tipo;
   private identificador: String;
   private atributo = new Map<String, String>();
-
+  private linea: String;
+  private columna: String;
   private valor: any; //este es el valor que va a recibir
 
-  constructor(tipo: Tipo, identificador: String, valor?: any) {
+  constructor(tipo: Tipo, identificador: String, linea: String, columna: String, valor?: any) {
     this.tipo = tipo;
     this.identificador = identificador.toLowerCase();
     this.valor = valor;
+    this.linea = linea;
+    this.columna = columna;
   }
   //getters y setters
   public gettipo(): Tipo {
@@ -32,15 +35,29 @@ export default class Simbolo {
     this.valor = value;
   }
 
-  public agregarAtributo(par1:String, par2:String){
-    this.atributo.set(par1,par2);
+  public agregarAtributo(par1: String, par2: String) {
+    this.atributo.set(par1, par2);
   }
 
-  public getAtributo():Map<String,String>{
+  public getAtributo(): Map<String, String> {
     return this.atributo;
   }
 
-  public setAtributo(atributo:Map<String,String>){
-    this.atributo=atributo;
+  public setAtributo(atributo: Map<String, String>) {
+    this.atributo = atributo;
   }
+
+  public getLinea(): String {
+    return this.linea;
+  }
+  public getColumna(): String {
+    return this.columna;
+  }
+  public setLinea(linea: String) {
+    this.linea = linea;
+  }
+  public setColumna(col: String) {
+    this.columna = col;
+  }
+
 }

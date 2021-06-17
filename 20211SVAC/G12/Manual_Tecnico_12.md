@@ -74,7 +74,7 @@
 ## Componentes
 <div style="text-align: justify">
 
-<h3>XML - XPATH Compilador G7</h3>
+<h3>XML - XPATH - G12</h3>
 
 El compilador de XML aparecera en la pantalla en la parte superior donde se ingresara un archivo de entrada el cual contendra una serie de instrucciones en gramatica XML, lo que se debe de realizar es analizar dicha gramatica la cual estara unida con una gramatica que sea de tipo XPATH, al momento de ejecutar estas gramaticas debera de devolver un resultado en gramatica de tipo XML con los resultados.</div>
 

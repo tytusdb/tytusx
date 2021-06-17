@@ -55,12 +55,13 @@ function InterpretarCodigoXPATH(entrada) {
 function InterpretarCodigoXPATH_DESC(entrada) {
     rg_path = new ReporteGramatical_XPATH();
     try {
-        gramatica_xpath_desc.parse(entrada);
+        //gramatica_xpath_desc.parse(entrada);
+        listaDirecciones = gramatica_xpath.parse(entrada);
         /* PRUEBAS */
-        var l = BusquedaXML(tds_xml_persistente[2], 'bookstore');
+        //let l = BusquedaXML(tds_xml_persistente[2], 'bookstore');
         //console.log(l);
-        BusquedaXML(l[0], 'book');
-        BusquedaXMLD(tds_xml_persistente[2], 'bookstore');
+        //BusquedaXML(l[0], 'book');
+        //BusquedaXMLD(tds_xml_persistente[2], 'bookstore')
         document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
     }
     catch (error) {
@@ -82,16 +83,19 @@ function InterpretarCodigo(entrada) {
         //tds_xml_persistente.push(tsGlobal);
         var etiquetasVerificadas = true;
         for (var _i = 0, listaObjetos_1 = listaObjetos; _i < listaObjetos_1.length; _i++) {
-            var aux = listaObjetos_1[_i];
-            etiquetasVerificadas = aux.verificarEtiquetas(aux);
+            var aux1 = listaObjetos_1[_i];
+            etiquetasVerificadas = aux1.verificarEtiquetas(aux1);
             if (!etiquetasVerificadas) {
-                console.log("error en etiquetas");
+                var errores = new NodoError('Error en etiqueta', 'Semantico', 'Etiqueta de cierre no coincide con etiqueta que abre.', 'XML', aux1.fila, aux1.columna);
+                erroresXML.setError(errores);
             }
-        }
-        for (var _a = 0, listaObjetos_2 = listaObjetos; _a < listaObjetos_2.length; _a++) {
-            var aux = listaObjetos_2[_a];
-            tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal, aux)); //aux.agregarTDS(tsGlobal,aux);
-            tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);
+            else {
+                for (var _a = 0, listaObjetos_2 = listaObjetos; _a < listaObjetos_2.length; _a++) {
+                    var aux = listaObjetos_2[_a];
+                    tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal, aux)); //aux.agregarTDS(tsGlobal,aux);
+                    tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);
+                }
+            }
         }
         //console.log( tsGlobal);
         //console.log(tds_xml_persistente);

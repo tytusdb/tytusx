@@ -14,14 +14,22 @@ var Hereda = [];
 var ArrayEntorno=[];
 var texto="";
 
-
+var BanderaDDiagonal = false;
 
 var cadenaSalidaConsola = "";
 var TablaEntornosActual=[];
 var TablaEntornosActualPadre=[];
 
-var TablaEntornosActualTemporal=[];
 
+var TablaDiagonales=[];
+var ContadorDiagonales=0;
+
+
+var TablaAtributos=[];
+var BanderaHayAtributos = false;
+
+var TablaEntornosActualTemporal=[];
+var TablaEntornosActualTemporalPadre=[];
 
 function AnalisisXPath(texto){
     var analisis=  parser.parse(texto.toString()); 
@@ -29,6 +37,7 @@ function AnalisisXPath(texto){
     var CodigoGraphvizRecuperado= Raiz.RecorrerAST(analisis.diagramaAST);
     Raiz.LimpiarVariableGraph();
     console.log(CodigoGraphvizRecuperado);
+    cadenaSalidaConsola="";
     return {objeto:analisis,DotAst:CodigoGraphvizRecuperado,msj:'Analisis Ascendente XPath finalizado.',nodo:analisis.diagramaAST};
 }
 //AnalisisXPath('//bookstore[7+3 or 4*3 or price=12] | //racknack//braith//caicul[7+3 and price>32 or price=12]| //totis//chel[7+3 and price>32 or price=12]');
@@ -37,6 +46,11 @@ function Run(nodos,Entorno,encoding){
     cadenaTablaSimbolos="";
     TablaEntornosActual = [];
     TablaEntornosActualTemporal = [];
+    TablaAtributos=[];
+    TablaDiagonales=[];
+    ContadorDiagonales = 1;
+    BanderaHayAtributos = false;
+
     var retornarSalida = ""
     var i=0;
 
@@ -46,10 +60,10 @@ function Run(nodos,Entorno,encoding){
 
     var ten = recorrer(nodos,Entorno,encoding);
 
-    if(ten != "0" || TablaEntornosActual.length != 0){
 
+
+   // if(ten != "0" || TablaEntornosActual.length != 0){
         console.log("\nEMPIEZA TABLAS ENTORNOS ACTUAL:\n");
-
         // console.log("TAMANIO TABLA -> " + TablaEntornosActual.length);
         // console.log("YY TEN -> " + ten);
         
@@ -58,16 +72,30 @@ function Run(nodos,Entorno,encoding){
             console.log("Padre");
             console.log(TablaEntornosActualPadre[index]);
         }
+        
 
-        EscribirSalidaConsola();
+        //REVISAR ESTO, PARA PODER ACEPTAR LOS PADRES Y DEMAS, LA BANDERA ES PARA  VER SI VIENEN SOLO ATRIBUTOS
 
+        if (BanderaHayAtributos) {
+            EscribirSalidaAtriutos();
+        }else{
+            EscribirSalidaConsola();
+        }
+
+        
+
+
+        
         console.log("\n: FINALIZA TABLAS ENTORNOS ACTUAL\n");
-
         retornarSalida = cadenaSalidaConsola;
 
-    }else{
-        retornarSalida = "NO SE ENCONTRO EL NODO REQUERIDO"
-    }
+    //}else{
+       // retornarSalida = "NO SE ENCONTRO EL NODO REQUERIDO";
+    ///}
+
+
+
+
 
     
     // ArrayEntorno.forEach(function (item, index) {
@@ -79,8 +107,6 @@ function Run(nodos,Entorno,encoding){
     //   Hereda = [];
     //     PintarTablasSimbolos(EntornoPadre);
     // return cadenaTablaSimbolos;
-
-
 
     return retornarSalida;
 }
@@ -107,7 +133,8 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
             return sorI+"\n"+sorD;
             
         case "PATHRELL1:sdiagonal":
-                
+            TablaDiagonales.push(nodos.Valor);
+
                 var hlength=nodos.Hijos.length; 
                 var path1="";
                 var path2="";    
@@ -124,6 +151,9 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
             return path1+path2;
                 
         case "PATHRELL1:ddiagonal":
+
+            TablaDiagonales.push(nodos.Valor);
+
             var hlength=nodos.Hijos.length; 
             var path1="";
             var path2="";    
@@ -137,6 +167,8 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
         return path1+path2;
 
         case "PATHRELL2:sdiagonal":
+            TablaDiagonales.push(nodos.Valor);
+
                 var hlength=nodos.Hijos.length; 
                 var path1="";
                 var path2="";    
@@ -151,6 +183,8 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
             return path1+path2;
                 
         case "PATHRELL2:ddiagonal":
+            TablaDiagonales.push(nodos.Valor);
+
             var hlength=nodos.Hijos.length; 
                 var path1="";
                 var path2="";    
@@ -169,22 +203,60 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
         case "ACCES:identificador":
             var tem = "0";
 
-            // console.log("AQUI ENTRO EL ACCES.INDENTIFICADOR ->" + nodos.Valor);
-
             TablaEntornosActualTemporal = TablaEntornosActual;
             TablaEntornosActual = [];
             TablaEntornosActualPadre = [];
 
-            for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
-                BuscarEntornos(nodos.Valor,TablaEntornosActualTemporal[index] );
+
+            var TipoDiagonal = TablaDiagonales[TablaDiagonales.length-ContadorDiagonales];          
+            // console.log("*** INICION DE TABLA DE DIAGONALES:"); 
+            // console.log("Nodo:" + nodos.Valor + " Diagon:" + TipoDiagonal);                         //ver que diagonal es, y ver la posicion de diagonales
+            
+            // console.log("tamanio:"+TablaDiagonales.length + "cont:"+ContadorDiagonales );
+            // for (let index = 0; index < TablaDiagonales.length; index++) {
+            //     console.log("HAY:"+TablaDiagonales[index] + "POS:" + index);
+            // }
+            
+            
+            if(TipoDiagonal=="//"){
+                for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                    BuscarEntornoHijo(TablaEntornosActualTemporal[index] );
+                }
+
+                //entra unicamente si es el primer comando es //, ejm: //hola/cosa, si el // esta en medio del comando, no entra ej:  /hola//cosa
+                if(TablaDiagonales[TablaDiagonales.length-1] == "//" && ContadorDiagonales==1){       
+                    TablaEntornosActualTemporal=[]
+                    TablaEntornosActualTemporal = TablaEntornosActual;
+                    TablaEntornosActual = [];
+                    TablaEntornosActualPadre = [];
+
+                    for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                        BuscarEntornoHijo(TablaEntornosActualTemporal[index] );
+                    }
+                }
+                
+
+                TablaEntornosActualTemporal =[];
+                TablaEntornosActualTemporal = TablaEntornosActual;
+                TablaEntornosActual = [];
+                TablaEntornosActualPadre = [];
+
+                for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                    BuscarEntornosObjetos(nodos.Valor,TablaEntornosActualTemporal[index] );
+                }
+                
+            }else{
+
+                for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                    BuscarEntornosObjetos(nodos.Valor,TablaEntornosActualTemporal[index] );
+                }
+                
             }
 
+            ContadorDiagonales++;
             
             
 
-            if(TablaEntornosActual.length !=0 || TablaEntornosActual[0] === undefined){
-                tem = "1";
-            }
 
             //     console.log("<<<<<<<    "+nodos.Valor+"\n");
             //     bandera=0;
@@ -205,12 +277,70 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
             return tem;
                 
         case "ACCES:arrobaidentificador":
-            var tem = "";
-            //TablaEntornosActualTemporal = TablaEntornosActual;
-            //TablaEntornosActual = [];
-            //TablaEntornosActualPadre = [];
-            var tems=nodos.valor.split("@", 3);
-            console.log(tems[2]);
+            var tem = "0";
+            //console.log("AQUI ENTRO EL ACCES.INDENTIFICADOR ->" + nodos.Valor);
+
+            TablaEntornosActualTemporal = TablaEntornosActual;
+            TablaEntornosActualTemporalPadre = TablaEntornosActualPadre;
+            TablaEntornosActual = [];
+            TablaEntornosActualPadre = [];
+
+
+            var TipoDiagonal = TablaDiagonales[TablaDiagonales.length-ContadorDiagonales];  
+
+            var tems=nodos.Valor.replace(/[@"]+/g, '');
+            
+
+            if(TipoDiagonal=="//"){
+                for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                    BuscarEntornoHijo(TablaEntornosActualTemporal[index] );
+                }
+
+                //entra unicamente si es el primer comando es //, ejm: //hola/cosa, si el // esta en medio del comando, no entra ej:  /hola//cosa
+                if(TablaDiagonales[TablaDiagonales.length-1] == "//" && ContadorDiagonales==1){       
+                    TablaEntornosActualTemporal=[]
+                    TablaEntornosActualTemporal = TablaEntornosActual;
+                    TablaEntornosActual = [];
+                    TablaEntornosActualPadre = [];
+
+                    for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                        BuscarEntornoHijo(TablaEntornosActualTemporal[index] );
+                    }
+
+                    TablaEntornosActualTemporal=[]
+                    TablaEntornosActualTemporal = TablaEntornosActual;
+                    TablaEntornosActual = [];
+                    TablaEntornosActualPadre = [];
+
+                    for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                        BuscarEntornoHijo(TablaEntornosActualTemporal[index] );
+                    }
+                }
+                
+
+                TablaEntornosActualTemporal =[];
+                TablaEntornosActualTemporal = TablaEntornosActual;
+                TablaEntornosActual = [];
+                TablaEntornosActualPadre = [];
+
+                for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                    BuscarEntornosAtributos(tems, TablaEntornosActualTemporal[index]);
+                }
+                
+            }else{
+
+                for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
+                    console.log("*** Padre ****");
+                    console.log(TablaEntornosActualTemporal[index]);
+                    BuscarEntornosAtributos(tems, TablaEntornosActualTemporal[index], TablaEntornosActualTemporalPadre[index]);
+                }
+                
+            }
+
+            ContadorDiagonales++;
+            
+
+
             /*for (let index = 0; index < TablaEntornosActualTemporal.length; index++) {
                 BuscarEntornos(nodos.Valor,TablaEntornosActualTemporal[index] );
             }
@@ -415,6 +545,15 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
         return tem;
 
         case "OPERACION:or":
+
+            console.log("$$$$$$$$$$$$$$$$$$ ENTRO A OR $$$$$$$$$$$$$$$$$$$");
+
+            // if (BanderaHayAtributos) {
+            //     EscribirSalidaAtriutos();
+            // }else{
+            //     EscribirSalidaConsola();
+            // }
+
             var tem="";
             var OP1=recorrer(nodos.Hijos[0],Entorno,encoding);
             var OP2=recorrer(nodos.Hijos[2],Entorno,encoding);
@@ -433,6 +572,7 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
             var tem="";
             var OP1=recorrer(nodos.Hijos[0],Entorno,encoding);
             var OP2=recorrer(nodos.Hijos[2],Entorno,encoding);
+
 
             if(typeof(OP1)==="boolean" && typeof(OP2)==="boolean"){
             
@@ -512,10 +652,8 @@ function recorrer(nodos,Entorno,encoding,EntornoOriginal){
 
 
 
-
-function BuscarEntornos(token,entornoObjeto) {
+function BuscarEntornosObjetos(token,entornoObjeto) {
     var contadorEntorno = 0;
-
     while (entornoObjeto.tabla[String(contadorEntorno)] != undefined) {
 
         if(entornoObjeto.tabla[String(contadorEntorno)].indentificador=== token.toLowerCase()){     //<---- comparo con minusculas, por que el identificador son  todos minusculas       
@@ -527,10 +665,67 @@ function BuscarEntornos(token,entornoObjeto) {
     }
 }
 
+
+function BuscarEntornosAtributos(token,entornoObjeto,simboloObjeto) {
+    var contadorEntorno = 0;
+
+    while (entornoObjeto.tabla[String(contadorEntorno)] != undefined) {
+
+        if(entornoObjeto.tabla[String(contadorEntorno)].indentificador=== token.toLowerCase()){     //<---- comparo con minusculas, por que el identificador son  todos minusculas       
+            
+            //console.log("ES UN ATRIBUTO");
+
+            //console.log(entornoObjeto.tabla[String(contadorEntorno)]);
+            TablaAtributos.push(entornoObjeto.tabla[String(contadorEntorno)]);
+            TablaEntornosActual.push(entornoObjeto);
+            TablaEntornosActualPadre.push(simboloObjeto);
+
+
+            BanderaHayAtributos = true;
+
+            // TablaEntornosActual.push(entornoObjeto.tabla[String(contadorEntorno)].entorno);
+            // TablaEntornosActualPadre.push(entornoObjeto.tabla[String(contadorEntorno)]);           
+        }
+
+        contadorEntorno++;
+    }
+}
+
+
+function BuscarEntornoHijo(entornoObjeto) {
+    var contadorEntorno = 0;
+
+    while (entornoObjeto.tabla[String(contadorEntorno)] != undefined) {
+
+//if(entornoObjeto.tabla[String(contadorEntorno)].indentificador=== token.toLowerCase()){     //<---- comparo con minusculas, por que el identificador son  todos minusculas       
+            TablaEntornosActual.push(entornoObjeto.tabla[String(contadorEntorno)].entorno);
+            TablaEntornosActualPadre.push(entornoObjeto.tabla[String(contadorEntorno)]);           
+        //}
+
+
+        contadorEntorno++;
+    }
+}
+
+
+function EscribirSalidaAtriutos(){
+    var Simbolo;
+
+    espacios = "";
+    for (let i = 0; i < TablaAtributos.length; i++) {
+        Simbolo = TablaAtributos[i];
+
+        cadenaSalidaConsola += Simbolo.indentificador + "=" + Simbolo.valor + "\n";
+
+    }
+
+}
+
+
 var espacios = "";
 function EscribirSalidaConsola(){
     var Simbolo;
-    cadenaSalidaConsola = "";
+    //cadenaSalidaConsola = "";
     espacios = "";
     for (let i = 0; i < TablaEntornosActual.length; i++) {
         Simbolo = TablaEntornosActualPadre[i];
