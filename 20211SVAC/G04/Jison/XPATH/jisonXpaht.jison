@@ -54,11 +54,6 @@
      return 'ancestor';
 }
 
-"ancestor-or-self" {
-    //console.log('Detecto ancestor-or-self');
-     return 'ancestor-or-self';
-}
-
 "attribute" {
     //console.log('Detecto attribute');
      return 'attribute';
@@ -74,9 +69,9 @@
      return 'descendant';
 }
 
-"descendant-or-self" {
+"-or-self" {
     //console.log('Detecto descendant-or-self');
-     return 'descendant-or-self';
+     return 'or-self';
 }
 
 "following" {
@@ -84,9 +79,9 @@
      return 'following';
 }
 
-"following-sibling" {
+"-sibling" {
     //console.log('Detecto following-sibling');
-     return 'following-sibling';
+     return 'sibling';
 }
 
 "parent" {
@@ -97,11 +92,6 @@
 "preceding" {
     //console.log('Detecto preceding');
      return 'preceding';
-}
-
-"preceding-sibling" {
-    //console.log('Detecto preceding-sibling');
-     return 'preceding-sibling';
 }
 
 "self" {
@@ -364,16 +354,16 @@ ACCESORES_EJE
 
 EJES
     : ancestor                  {$$ = $1;}
-    | ancestor-or-self          {$$ = $1;}
+    | ancestor or-self          {$$ = $1+$2;}
     | attribute                 {$$ = $1;}
     | child                     {$$ = $1;}
+    | descendant or-self        {$$ = $1+$2;}
     | descendant                {$$ = $1;}
-    | descendant-or-self        {$$ = $1;}
     | following                 {$$ = $1;}
-    | following-sibling         {$$ = $1;}
+    | following sibling         {$$ = $1+$2;}
     | parent                    {$$ = $1;}
     | preceding                 {$$ = $1;}
-    | preceding-sibling         {$$ = $1;}
+    | preceding sibling         {$$ = $1+$2;}
     | self                      {$$ = $1;}
 ;
 

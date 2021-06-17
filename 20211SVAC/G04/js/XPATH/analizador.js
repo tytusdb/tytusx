@@ -32,9 +32,7 @@ function analizarXpath(entornoGlobal) {
 }
 function recorrer(consultas, entornos, index) {
     let newEntornos = new Array();
-    console.log(entornos);
     entornos = consultas[index].run(entornos);
-    console.log("After run", entornos);
     entornos.forEach((e) => {
         e.getTable().forEach((s) => {
             if (s instanceof Nodo) {

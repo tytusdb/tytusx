@@ -15,18 +15,20 @@ class FabricaConsulta {
                     } else {
                         if (eje === "") {
                             switch (id) {
-                                case "*":       return new ConsultaDescAllNodes(id);
+                                case "*":       return new ConsultaDescendente2(id);
                                 case "text()":  return new ConsultaDescText();
                                 case "node()":  return new ConsultaDescNode();
                                 default:        return new ConsultaDescendente2(id);
                             }
                         } else {
                             switch(eje) {
-                                case "self":        return new ConsultaSelf(id);
-                                case "parent":      return new ConsultaParent(id);
-                                case "attribute":   return new ConsultaDescAttribute(id);
-                                case "child":       return new ConsultaDescendente2(id);
-                                case "descendant":  return new ConsultaDescendente2(id);
+                                case "self":                return new ConsultaSelf(id);
+                                case "parent":              return new ConsultaParent(id);
+                                case "attribute":           return new ConsultaDescAttribute(id);
+                                case "child":               return new ConsultaDescendente2(id);
+                                case "descendant-or-self":  return new ConsultaDescOrSelf(id);
+                                case "descendant":          return new ConsultaDescendente2(id);
+                                case "following":           return new ConsultaFollowing(id);
                             }
                         }
                     }
@@ -52,11 +54,14 @@ class FabricaConsulta {
                             }
                         } else {
                             switch(eje) {
-                                case "self":        return new ConsultaSelf(id);
-                                case "parent":      return new ConsultaParent(id);
-                                case "attribute":   return new ConsultaAttribute(id);
-                                case "child":       return new ConsultaSimple(id);
-                                case "descendant":  return new ConsultaDescendente2(id);
+                                case "self":                return new ConsultaSelf(id);
+                                case "parent":              return new ConsultaParent(id);
+                                case "attribute":           return new ConsultaAttribute(id);
+                                case "child":               return new ConsultaSimple(id);
+                                case "descendant-or-self":  return new ConsultaDescOrSelf(id);
+                                case "descendant":          return new ConsultaDescendente2(id);
+                                case "following":           return new ConsultaFollowing(id);
+                                case "following-sibling":   return new ConsultaFollowSibling(id);
                             }
                         }
                     }
