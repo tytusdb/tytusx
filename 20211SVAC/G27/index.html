@@ -196,9 +196,15 @@
         let entradaXpath = document.getElementById("EntradaXPath").value;        
         let arrayObjetos = parseXML(entradaXML);        
         let arrayElementos = parseXPath(entradaXpath);                                                
-        if (arrayElementos && arrayObjetos){      
-            var e = new Ejecutar(arrayElementos,arrayObjetos);   
-            let arrayResultado = e.ejecutar(arrayObjetos);   
+        if (arrayElementos && arrayObjetos){     
+            let arrayResultado =[];
+            // e.ejecutar(arrayObjetos);  
+            for (var j=0; j<arrayElementos.length; j+=1){
+
+                arrayResultado= arrayResultado.concat(arrayElementos[j].ejecutar(arrayObjetos));
+            } 
+            
+            
             for (var i = 0; i < arrayResultado.length; i+=1) {                
                 cadenaResultado+=arrayResultado[i].texto+"\n";
             }            
