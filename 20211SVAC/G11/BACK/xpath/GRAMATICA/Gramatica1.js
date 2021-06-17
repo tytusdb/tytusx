@@ -84,49 +84,49 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-this.$=$$[$0-1]; ReporteGA.agregar('<S>::=<LISTA>','S.VAL = LISTA.VAL',''); return this.$;
+this.$=$$[$0-1]; ReporteGA.agregar('S::=LISTA','S.VAL = LISTA.VAL',''); return this.$;
 break;
 case 2:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA>::=<PUNTO>','LISTA.VAL = PUNTO.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA::=PUNTO','LISTA.VAL = PUNTO.VAL','');
 break;
 case 3:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA>::=<LISTAS>','LISTA.VAL = LISTAS.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA::=LISTAS','LISTA.VAL = LISTAS.VAL','');
 break;
 case 4:
-$$[$0-1].push($$[$0]); this.$=$$[$0-1]; ReporteGA.agregar('<LISTAS>::=<LISTAS><LISTA1>','LISTAS.VAL = LISTAS.VAL + LISTA1.VAL','');
+$$[$0-1].push($$[$0]); this.$=$$[$0-1]; ReporteGA.agregar('LISTAS::=LISTASLISTA1','LISTAS.VAL = LISTAS.VAL + LISTA1.VAL','');
 break;
 case 5:
-this.$=[$$[$0]]; ReporteGA.agregar('<LISTAS>::=<LISTA1>','LISTAS.VAL = LISTA1.VAL','');
+this.$=[$$[$0]]; ReporteGA.agregar('LISTAS::=LISTA1','LISTAS.VAL = LISTA1.VAL','');
 break;
 case 6: case 12:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA1>::=<IDS>','LISTA1.VAL = IDS.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL','');
 break;
 case 7: case 13:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA1>::=<ATRIBUTO>','LISTA1.VAL = ATRIBUTO.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL','');
 break;
 case 8: case 17:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA1>::=<ASTERISCO>','LISTA1.VAL = ASTERISCO.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL','');
 break;
 case 9: case 16:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA1>::=<PALABRAS_R>','LISTA1.VAL = PALABRAS_R.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');
 break;
 case 10:
-this.$=$$[$0-2]; ReporteGA.agregar('<LISTA1>::=<ATRIBUTO1>','LISTA1.VAL = ATRIBUTO1.VAL','');
+this.$=$$[$0-2]; ReporteGA.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL','');
 break;
 case 11:
-this.$=$$[$0-3]; ReporteGA.agregar('<LISTA1>::=<PR>','LISTA1.VAL = PR.VAL','');
+this.$=$$[$0-3]; ReporteGA.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL','');
 break;
 case 14:
-this.$=$$[$0]; ReporteGA.agregar('<LISTA1>::=<ATRIBUTO1>','LISTA1.VAL = ATRIBUTO1.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL','');
 break;
 case 15:
-this.$=$$[$0-1]; ReporteGA.agregar('<LISTA1>::=<PR>','LISTA1.VAL = PR.VAL','');
+this.$=$$[$0-1]; ReporteGA.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL','');
 break;
 case 18:
-ReporteGA.agregar('<LISTA1>::=ε','LISTA1.VAL = EPSILON','');
+ReporteGA.agregar('LISTA1::=ε','LISTA1.VAL = EPSILON','');
 break;
 case 19: case 24: case 26:
-Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))
+Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))
 break;
 case 20:
 this.$=$$[$0]
@@ -135,274 +135,274 @@ case 21: case 22:
 this.$ = $$[$0]
 break;
 case 23:
-this.$=$$[$0]; ReporteGA.agregar('<PUNTO>::=tk_punto <PUNTO1>','PUNTO.VAL = TK_PUNTO + PUNTO1.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PUNTO::=tk_punto PUNTO1','PUNTO.VAL = TK_PUNTO + PUNTO1.VAL','');
 break;
 case 25:
-this.$=$$[$0]; ReporteGA.agregar('<PUNTO1>::=<LISTAS>','PUNTO1.VAL = LISTAS.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PUNTO1::=LISTAS','PUNTO1.VAL = LISTAS.VAL','');
 break;
 case 27:
-this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<IDS>::=tk_dbarra tk_identificador <ASTERISCO1>','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');
+this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('IDS::=tk_dbarra tk_identificador ASTERISCO1','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');
 break;
 case 28:
-this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<IDS>::=tk_barra tk_identificador <ASTERISCO1>','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL +  ASTERISCO1.VAL','');
+this.$ = new Conca('&',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('IDS::=tk_barra tk_identificador ASTERISCO1','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL +  ASTERISCO1.VAL','');
 break;
 case 29:
-this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<IDS>::=tk_dbarra tk_identificador','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL','');
+this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('IDS::=tk_dbarra tk_identificador','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL','');
 break;
 case 30:
-this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<IDS>::=tk_barra tk_identificador','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL','');
+this.$ = new Conca('.',$$[$0-1],$$[$0],new Dato('',_$[$0-1].first_line,_$[$0-1].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('IDS::=tk_barra tk_identificador','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL','');
 break;
 case 31:
-this.$ = new Conca('.','',$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<IDS>::=tk_identificador','IDS.VAL = TK_IDENTIFICADOR.VAL  ','');
+this.$ = new Conca('.','',$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('IDS::=tk_identificador','IDS.VAL = TK_IDENTIFICADOR.VAL  ','');
 break;
 case 32:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<ATRIBUTO>::=tk_dbarra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 33:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<ATRIBUTO>::=tk_barra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 34:
-this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<ATRIBUTO>::=tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 35:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<ATRIBUTO>::=tk_dbarra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 36:
-this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<ATRIBUTO>::=tk_barra tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?',$$[$0-3],$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 37:
-this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<ATRIBUTO>::=tk_arroba tk_por <L_ATRIBUTO>','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
+this.$ = new Conca('?','',$$[$0-2]+$$[$0-1],new L_Atributo($$[$0],_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');
 break;
 case 38:
-$$[$0-1].push($$[$0]); this.$=$$[$0-1]; ReporteGA.agregar('<L_ATRIBUTO>::=<L_ATRIBUTO> <ATRIBUTO1>','L_ATRIBUTO.VAL = L_ATRIBUTO.VAL + ATRIBUTO1.VAL','');
+$$[$0-1].push($$[$0]); this.$=$$[$0-1]; ReporteGA.agregar('L_ATRIBUTO::=L_ATRIBUTO ATRIBUTO1','L_ATRIBUTO.VAL = L_ATRIBUTO.VAL + ATRIBUTO1.VAL','');
 break;
 case 39:
-this.$=[$$[$0]]; ReporteGA.agregar('<L_ATRIBUTO>::=<ATRIBUTO1>','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');
+this.$=[$$[$0]]; ReporteGA.agregar('L_ATRIBUTO::=ATRIBUTO1','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');
 break;
 case 40:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<ATRIBUTO1>::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 41:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<ATRIBUTO1>::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 42:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<ATRIBUTO1>::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 43:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<ATRIBUTO1>::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 44:
-this.$ = new Atributo('','',_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<ATRIBUTO1>::= ε','ATRIBUTO1.VAL = EPSILON','');
+this.$ = new Atributo('','',_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');
 break;
 case 45:
-this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGA.agregar('<PALABRAS_R>::=tk_dbarra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGA.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 46:
-this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGA.agregar('<PALABRAS_R>::=tk_barra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGA.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 47:
-this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<PALABRAS_R>::=tk_dbarra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 48:
-this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<PALABRAS_R>::=tk_barra <PR> tk_ddp <OPCION>','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new Conca('!',$$[$0-3],$$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 49:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_ancestor','PR.VAL = TK_ANCESTOR.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_ancestor','PR.VAL = TK_ANCESTOR.VAL','');
 break;
 case 50:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_ancestor_or_self','PR.VAL = TK_ANCESTOR_OR_SELF.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_ancestor_or_self','PR.VAL = TK_ANCESTOR_OR_SELF.VAL','');
 break;
 case 51:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_attribute','PR.VAL = TK_ATTRIBUTE.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_attribute','PR.VAL = TK_ATTRIBUTE.VAL','');
 break;
 case 52:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_child','PR.VAL = TK_CHILD.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_child','PR.VAL = TK_CHILD.VAL','');
 break;
 case 53:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_descendant','PR.VAL = TK_DESCENDANT.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_descendant','PR.VAL = TK_DESCENDANT.VAL','');
 break;
 case 54:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_descendant_or_self','PR.VAL = TK_DESCENDANT_OR_SELF.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_descendant_or_self','PR.VAL = TK_DESCENDANT_OR_SELF.VAL','');
 break;
 case 55:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_following','PR.VAL = TK_FOLLOWING.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_following','PR.VAL = TK_FOLLOWING.VAL','');
 break;
 case 56:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_following_sibling','PR.VAL = TK_FOLLOWING_SIBLING.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_following_sibling','PR.VAL = TK_FOLLOWING_SIBLING.VAL','');
 break;
 case 57:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_namespace','PR.VAL = TK_NAMESPACE.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_namespace','PR.VAL = TK_NAMESPACE.VAL','');
 break;
 case 58:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_parent','PR.VAL = TK_PARENT.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_parent','PR.VAL = TK_PARENT.VAL','');
 break;
 case 59:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_preceding','PR.VAL = TK_PRECEDING.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_preceding','PR.VAL = TK_PRECEDING.VAL','');
 break;
 case 60:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_preceding_sibling','PR.VAL = TK_PRECEDING_SIBLING.VAL ','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_preceding_sibling','PR.VAL = TK_PRECEDING_SIBLING.VAL ','');
 break;
 case 61: case 62: case 63: case 64: case 65:
-this.$=$$[$0]; ReporteGA.agregar('<PR>::=tk_self','PR = TK_SELF.VAL','');
+this.$=$$[$0]; ReporteGA.agregar('PR::=tk_self','PR = TK_SELF.VAL','');
 break;
 case 66:
-Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));
+Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));
 break;
 case 67:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<OPCION>::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('OPCION::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');
 break;
 case 68:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<OPCION>::=tk_position tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('OPCION::=tk_position tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
 break;
 case 69:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<OPCION>::=tk_node tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('OPCION::=tk_node tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');
 break;
 case 70:
-this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<OPCION>::=tk_text tk_parentesis','OPCION.VAL = TK_TEXT.VAL + TK_PARENTESIS.VAL','');
+this.$ = new PR($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('OPCION::=tk_text tk_parentesis','OPCION.VAL = TK_TEXT.VAL + TK_PARENTESIS.VAL','');
 break;
 case 71:
-this.$ = new PR($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<OPCION>::=tk_identificador','OPCION.VAL = TK_IDENTIFICADOR.VAL','');
+this.$ = new PR($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('OPCION::=tk_identificador','OPCION.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 72:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_punto tk_dbarra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_DBARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
 break;
 case 73:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_punto tk_barra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_DBARRA.VAL + TK_BARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column); ReporteGA.agregar('ASTERISCO::=tk_punto tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL + TK_BARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');
 break;
 case 74:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_dbarra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_DBARRA TK_POR.VAL + L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('ASTERISCO::=tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA TK_POR.VAL + L_ASTERISCO.VAL','');
 break;
 case 75:
-this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_barra tk_por <L_ASTERISCO>','ASTERISCO.VAL = TK_BARRA.VAL+TK_POR.VAL+L_ASTERISCO.VAL','');
+this.$ = new Conca('#',$$[$0-2],$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('ASTERISCO::=tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_BARRA.VAL+TK_POR.VAL+L_ASTERISCO.VAL','');
 break;
 case 76:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_punto tk_dbarra tk_por','ASTERISCO.VAL = TK_PUNTO.VAL+ TK_DBARRA.VAL+TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por','ASTERISCO.VAL = TK_PUNTO.VAL+ TK_DBARRA.VAL+TK_POR.VAL','');
 break;
 case 77:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_punto tk_barra tk_por','ASTERISCO.VAL =TK_PUNTO.VAL+TK_BARRA.VAL+TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('ASTERISCO::=tk_punto tk_barra tk_por','ASTERISCO.VAL =TK_PUNTO.VAL+TK_BARRA.VAL+TK_POR.VAL','');
 break;
 case 78:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_dbarra tk_por','ASTERISCO.VAL = TK_DBARRA.VAL + TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ASTERISCO::=tk_dbarra tk_por','ASTERISCO.VAL = TK_DBARRA.VAL + TK_POR.VAL','');
 break;
 case 79:
-this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<ASTERISCO>::=tk_barra tk_por','ASTERISCO.VAL = TK_BARRA.VAL + TK_POR.VAL','');
+this.$ = new Conca('por',$$[$0-1],$$[$0],new Dato('',_$[$0].first_line,_$[$0].first_column),_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ASTERISCO::=tk_barra tk_por','ASTERISCO.VAL = TK_BARRA.VAL + TK_POR.VAL','');
 break;
 case 80:
-$$[$0-1].push($$[$0]); this.$=$$[$0-1]; ReporteGA.agregar('<L_ASTERISCO>::=<L_ASTESCO ASTERISCO1','L_ASTERISCO.VAL = L_ASTERISCO.VAL + ASTERISCO1.VAL','');
+$$[$0-1].push($$[$0]); this.$=$$[$0-1]; ReporteGA.agregar('L_ASTERISCO::=L_ASTESCO ASTERISCO1','L_ASTERISCO.VAL = L_ASTERISCO.VAL + ASTERISCO1.VAL','');
 break;
 case 81:
-this.$=[$$[$0]]; ReporteGA.agregar('<L_ASTERISCO>::=<ASTERISCO1>','L_ASTERISCO.VAL = ASTERISCO1.VAL','');
+this.$=[$$[$0]]; ReporteGA.agregar('L_ASTERISCO::=ASTERISCO1','L_ASTERISCO.VAL = ASTERISCO1.VAL','');
 break;
 case 82:
-this.$ = $$[$0-1]; ReporteGA.agregar('<ASTERISCO1>::=tk_corchete_izquierdo <EXP> tk_corchete_derecho','ASTERISCO1.VAL = EXP.VAL','');
+this.$ = $$[$0-1]; ReporteGA.agregar('ASTERISCO1::=tk_corchete_izquierdo EXP tk_corchete_derecho','ASTERISCO1.VAL = EXP.VAL','');
 break;
 case 83:
-this.$ = $$[$0]; ReporteGA.agregar('<ASTERISCO1>::=TK_IDENTIFICADOR','ASTERISCO1.VAL = TK_IDENTIFICADOR.VAL','');
+this.$ = $$[$0]; ReporteGA.agregar('ASTERISCO1::=TK_IDENTIFICADOR','ASTERISCO1.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 84:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.SUMA,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<EXP>::=<EXP> tk_mas <T>','EXP.VAL = EXP1.VAL + T.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.SUMA,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('EXP::=EXP tk_mas T','EXP.VAL = EXP1.VAL + T.VAL','');
 break;
 case 85:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.RESTA,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<EXP>::=<EXP> tk_menos <T>','EXP.VAL = EXP1.VAL - T.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.RESTA,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('EXP::=EXP tk_menos T','EXP.VAL = EXP1.VAL - T.VAL','');
 break;
 case 86:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.MULTIPLICACION,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<T>::=<T> tk_por <F>','T.VAL = T1.VAL * F.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.MULTIPLICACION,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('T::=T tk_por F','T.VAL = T1.VAL * F.VAL','');
 break;
 case 87:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.DIVISION,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<T>::=<T> tk_division <F>','T.VAL = T1.VAL / F.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.DIVISION,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('T::=T tk_division F','T.VAL = T1.VAL / F.VAL','');
 break;
 case 88:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.MODULO,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<T>::=<T> tk_modulo <F>','T.VAL = T1.VAL MOD F.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.MODULO,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('T::=T tk_modulo F','T.VAL = T1.VAL MOD F.VAL','');
 break;
 case 89:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.IGUALDAD,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_igualdad <G>','F.VAL = F1.VAL == G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.IGUALDAD,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_igualdad G','F.VAL = F1.VAL == G.VAL','');
 break;
 case 90:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.DESIGUALDAD,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_desigualdad <G>','F.VAL = F1.VAL != G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.DESIGUALDAD,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_desigualdad G','F.VAL = F1.VAL != G.VAL','');
 break;
 case 91:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.MENOR,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_menor <G>','F.VAL = F1.VAL < G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.MENOR,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_menor G','F.VAL = F1.VAL  G.VAL','');
 break;
 case 92:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.MENOR_IGUAL,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_menor_igual <G>','F.VAL = F1.VAL <= G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.MENOR_IGUAL,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_menor_igual G','F.VAL = F1.VAL = G.VAL','');
 break;
 case 93:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.MAYOR,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_mayor <G>','F.VAL = F1.VAL > G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.MAYOR,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_mayor G','F.VAL = F1.VAL  G.VAL','');
 break;
 case 94:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.MAYOR_IGUAL,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_mayor_igual <G>','F.VAL = F1.VAL >= G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.MAYOR_IGUAL,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_mayor_igual G','F.VAL = F1.VAL = G.VAL','');
 break;
 case 95:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.OR,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_or <G>','F.VAL = F1.VAL OR G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.OR,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_or G','F.VAL = F1.VAL OR G.VAL','');
 break;
 case 96:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.AND,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_and <G>','F.VAL = F1.VAL AND G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.AND,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_and G','F.VAL = F1.VAL AND G.VAL','');
 break;
 case 97:
-this.$ = new Operacion($$[$0-2],$$[$0],Operador.CONCATENACION,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('<F>::=<F> tk_barra_vertical <G>','F.VAL = F1.VAL | G.VAL','');
+this.$ = new Operacion($$[$0-2],$$[$0],Operador.CONCATENACION,_$[$0-2].first_line,_$[$0-2].first_column); ReporteGA.agregar('F::=F tk_barra_vertical G','F.VAL = F1.VAL | G.VAL','');
 break;
 case 98:
-this.$ = $$[$0-1]; ReporteGA.agregar('<G>::=tk_parentesis_izquierdo <EXP> tk_parentesis_derecho','G.VAL = EXP.VAL','');
+this.$ = $$[$0-1]; ReporteGA.agregar('G::=tk_parentesis_izquierdo EXP tk_parentesis_derecho','G.VAL = EXP.VAL','');
 break;
 case 99:
-this.$ = new Operacion($$[$0-1],$$[$0],Operador.MENOS_UNARIO,_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<G>::=tk_menos <EXP>','G.VAL = TK_MENOS.VAL * EXP.VAL','');
+this.$ = new Operacion($$[$0-1],$$[$0],Operador.MENOS_UNARIO,_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('G::=tk_menos EXP','G.VAL = TK_MENOS.VAL * EXP.VAL','');
 break;
 case 100:
-this.$=$$[$0];  ReporteGA.agregar('<G>::=<ATRI>','G.VAL = ATRI.VAL','');
+this.$=$$[$0];  ReporteGA.agregar('G::=ATRI','G.VAL = ATRI.VAL','');
 break;
 case 101:
-this.$=$$[$0-1];  ReporteGA.agregar('<G>::=tk_arroba <EXP>','EXP.VAL = TK_ARROBA + EXP.VAL','');
+this.$=$$[$0-1];  ReporteGA.agregar('G::=tk_arroba EXP','EXP.VAL = TK_ARROBA + EXP.VAL','');
 break;
 case 102:
-this.$ = new Dato(Number($$[$0]),_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<G>::=tk_decimal','G.VAL = TK_DECIMAL.LEXVAL','');
+this.$ = new Dato(Number($$[$0]),_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('G::=tk_decimal','G.VAL = TK_DECIMAL.LEXVAL','');
 break;
 case 103:
-this.$ = new Dato(Number($$[$0]),_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<G>::=tk_entero','G.VAL = TK_ENTERO.LEXVAL','');
+this.$ = new Dato(Number($$[$0]),_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('G::=tk_entero','G.VAL = TK_ENTERO.LEXVAL','');
 break;
 case 104:
-this.$ = new Dato($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<G>::=tk_cadena','G.VAL = TK_CADENA.VAL','');
+this.$ = new Dato($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('G::=tk_cadena','G.VAL = TK_CADENA.VAL','');
 break;
 case 105:
-this.$ = new Dato($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<G>::=tk_identificador','G.VAL = TK_IDENTIFICADOR.VAL','');
+this.$ = new Dato($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('G::=tk_identificador','G.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 106:
-this.$ = new Dato($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('<G>::=tk_identificador','G.VAL = TK_IDENTIFICADOR.VAL','');
+this.$ = new Dato($$[$0],_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('G::=tk_identificador','G.VAL = TK_IDENTIFICADOR.VAL','');
 break;
 case 107:
-this.$ = new Dato($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<G>::=tk_position tk_parentesis','G.VAL = TK_POSITION.VAL','');
+this.$ = new Dato($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('G::=tk_position tk_parentesis','G.VAL = TK_POSITION.VAL','');
 break;
 case 108:
-this.$ = new Dato($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('<G>::=tk_last tk_parentesis','G.VAL = TK_LAST.VAL','');
+this.$ = new Dato($$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('G::=tk_last tk_parentesis','G.VAL = TK_LAST.VAL','');
 break;
 case 109:
-this.$=$$[$0];  ReporteGA.agregar('<G>::=<PAL_RE>','G.VAL = PAL_RE.VAL','');
+this.$=$$[$0];  ReporteGA.agregar('G::=PAL_RE','G.VAL = PAL_RE.VAL','');
 break;
 case 110:
-this.$ = new PAL_RE($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGA.agregar('<PAL_RE>::=<PR> tk_ddp <OPCION>','PAL_RE.VAL = PR.VAL + TK_DDP.VAL + OPCION.VAL','');
+this.$ = new PAL_RE($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGA.agregar('PAL_RE::=PR tk_ddp OPCION','PAL_RE.VAL = PR.VAL + TK_DDP.VAL + OPCION.VAL','');
 break;
 case 111:
-this.$ = new Atri($$[$0-2]+$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGA.agregar('<ATRI>::=tk_arroba tk_por <L_ATRI>','ATRI.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRI.VAL','');
+this.$ = new Atri($$[$0-2]+$$[$0-1],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);  ReporteGA.agregar('ATRI::=tk_arroba tk_por L_ATRI','ATRI.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRI.VAL','');
 break;
 case 112:
-$$[$0-1].push($$[$0]); this.$=$$[$0-1];  ReporteGA.agregar('<L_ATRI>::=<L_ATRI> <ATRI1>','L_ATRI.VAL = L_ATRI.VAL + ATRI1.VAL','');
+$$[$0-1].push($$[$0]); this.$=$$[$0-1];  ReporteGA.agregar('L_ATRI::=L_ATRI ATRI1','L_ATRI.VAL = L_ATRI.VAL + ATRI1.VAL','');
 break;
 case 113:
-this.$=[$$[$0]];  ReporteGA.agregar('<ATRI1>::=<ATRI1>','L_ATRI.VAL = ATRI1.VAL','');
+this.$=[$$[$0]];  ReporteGA.agregar('ATRI1::=ATRI1','L_ATRI.VAL = ATRI1.VAL','');
 break;
 case 114:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('<ATRI1>::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 115:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('<ATRI1>::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 116:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('<ATRI1>::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');
 break;
 case 117:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('<ATRI1>::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');
+this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');
 break;
 case 118:
- ReporteGA.agregar('<ATRI1>::=ε','ATRI1.VAL = EPSILON','');
+ ReporteGA.agregar('ATRI1::=ε','ATRI1.VAL = EPSILON','');
 break;
 }
 },
@@ -1083,7 +1083,7 @@ case 46: return 68;
 break;
 case 47:  return 5;   
 break;
-case 48:Errores.Error.add(new CNodoError.NodoError("Lexico","No se esperaba el caracter: "+yy_.yytext,yy_.yylineno))
+case 48:Error.add(new NodoError("Lexico","No se esperaba el caracter: "+yy_.yytext,yy_.yylineno))
 break;
 }
 },
