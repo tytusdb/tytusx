@@ -239,6 +239,136 @@ class Ejecucion {
                     this.consultaXML = this.reducir(this.consultaXML, val.getValorImplicito(val), 'INSTRUCCIONES');
                 }
             }
+            if (this.identificar('RELACIONALES', nodo)) {
+                let val = null;
+                let cons = [];
+                let es = '';
+                nodo.hijos.forEach((element) => {
+                    if (element instanceof Object) {
+                        if (this.identificar('ATRIBUTO_PREDICADO', element)) {
+                            es = 'es@';
+                        }
+                        else if (this.identificar('id', element)) {
+                            es = 'esID';
+                        }
+                        else if (this.identificar('punto', element)) {
+                            es = 'esPunto';
+                        }
+                        else if (this.identificar('PATH', element)) {
+                            es = 'esPath';
+                            //console.log(es);
+                            this.pathh = this.consultaXML;
+                            this.pathhCount = 0;
+                            this.path(element);
+                        }
+                    }
+                });
+                if (es === 'esPath') {
+                    this.pathh.forEach((element, index) => {
+                        if (this.atributo) {
+                            if (element.listaAtributos.length > 0) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    console.log(element);
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                        else {
+                            if (element) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                    });
+                    this.atributo = false;
+                    this.pathh = [];
+                    for (let index = 0; index < this.pathhCount; index++) {
+                        cons.forEach(element => {
+                            this.ts.tabla.forEach(padre => {
+                                if (padre[0] === element.identificador && padre[4] === element.linea && padre[5] === element.columna) {
+                                    let a = padre[6];
+                                    let b = false;
+                                    cons.forEach(element => {
+                                        if (element == a) {
+                                            b = true;
+                                        }
+                                    });
+                                    if (!b) {
+                                        cons.push(a);
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    if (cons.length > 0) {
+                        this.consultaXML.forEach((element) => {
+                            cons.forEach(y => {
+                                if (element.identificador === y.identificador && element.linea === y.linea && element.columna === y.columna) {
+                                    this.pathh.push(element);
+                                }
+                                else if (y.listaObjetos.length > 0) {
+                                    y.listaObjetos.forEach(yy => {
+                                        if (element.identificador === yy.identificador && element.linea === yy.linea && element.columna === yy.columna) {
+                                            this.pathh.push(element);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    }
+                    cons = this.pathh;
+                }
+                else
+                    this.consultaXML.forEach((element, index) => {
+                        if (es === 'es@') {
+                            if (element.listaAtributos.length > 0) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                        else if (es === 'esID') {
+                            //console.log("entró esID");
+                            if (element.listaObjetos.length > 0) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                        else if (es === "esPunto") {
+                            if (this.atributo) {
+                                if (element.listaAtributos.length > 0) {
+                                    val = this.calcular(nodo, element, index);
+                                    if (val.getValorImplicito(val)) {
+                                        cons.push(element);
+                                    }
+                                }
+                            }
+                            else {
+                                if (element) {
+                                    val = this.calcular(nodo, element, index);
+                                    if (val.getValorImplicito(val)) {
+                                        cons.push(element);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                //console.log(cons.length)
+                if (cons.length > 0) {
+                    this.consultaXML = cons;
+                }
+                else {
+                    this.consultaXML = [];
+                    const er = new error_1.Error({ tipo: 'Semántico', linea: '0', descripcion: 'No existe ese atributo.' });
+                    errores_1.Errores.getInstance().push(er);
+                }
+            }
             if (this.identificar('HIJOS', nodo)) {
                 nodo.hijos.forEach((element) => {
                     if (element instanceof Object) {
