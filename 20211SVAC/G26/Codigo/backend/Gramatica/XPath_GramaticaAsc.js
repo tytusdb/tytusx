@@ -71,276 +71,250 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramarxmldes = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,10],$V2=[1,13],$V3=[1,11],$V4=[1,15],$V5=[1,29],$V6=[1,35],$V7=[1,36],$V8=[1,37],$V9=[1,38],$Va=[1,39],$Vb=[1,40],$Vc=[1,41],$Vd=[1,42],$Ve=[1,43],$Vf=[1,44],$Vg=[1,45],$Vh=[1,46],$Vi=[1,47],$Vj=[1,30],$Vk=[1,31],$Vl=[1,32],$Vm=[1,33],$Vn=[1,34],$Vo=[17,24],$Vp=[2,15],$Vq=[17,21,24],$Vr=[1,59],$Vs=[1,62],$Vt=[8,21,24,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57],$Vu=[7,8],$Vv=[1,66],$Vw=[1,67],$Vx=[9,15,17,18,19,20,21,24,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55],$Vy=[56,57],$Vz=[2,19];
+var XPath_GramaticaAsc = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,16],$V2=[1,7],$V3=[1,9],$V4=[1,8],$V5=[1,15],$V6=[1,14],$V7=[1,12],$V8=[1,13],$V9=[5,6],$Va=[5,6,12],$Vb=[2,39],$Vc=[1,26],$Vd=[5,6,12,16,20,43,44,45,46,47,48,49,50,51,52,53,54,56],$Ve=[1,31],$Vf=[1,34],$Vg=[1,35],$Vh=[1,36],$Vi=[1,37],$Vj=[1,38],$Vk=[1,39],$Vl=[1,40],$Vm=[1,41],$Vn=[1,42],$Vo=[1,43],$Vp=[1,44],$Vq=[1,45],$Vr=[1,46],$Vs=[1,58],$Vt=[1,59],$Vu=[1,60],$Vv=[1,62],$Vw=[1,54],$Vx=[1,55],$Vy=[1,56],$Vz=[1,57],$VA=[1,80],$VB=[1,81],$VC=[1,82],$VD=[1,83],$VE=[1,84],$VF=[1,85],$VG=[1,86],$VH=[1,87],$VI=[1,88],$VJ=[1,89],$VK=[1,90],$VL=[1,91],$VM=[1,92],$VN=[16,20,43,44,45,46,47,48,49,50,51,52,53,54,56],$VO=[1,98],$VP=[1,101],$VQ=[1,99],$VR=[1,100],$VS=[16,43,44,46,47,48,49,50,51,52,53,56],$VT=[16,46,47,48,49,50,51,52,53,56];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"XML_GRAMAR":3,"ENCABEZADO":4,"ABRIR_ELEMENTO":5,"ETIQUETA":6,"EOF":7,"menosque":8,"c_interroga":9,"xml":10,"version":11,"igual":12,"QUOTES":13,"TIPO_DATO":14,"encoding":15,"FORMAT":16,"masque":17,"UTF":18,"ASCII":19,"ISO":20,"identificador":21,"ATRIBUTOS":22,"CONTENIDO_INTERNO":23,"div":24,"ATRIBUTO":25,"A_PRIMA":26,"C_ATRIBUTO":27,"TIPOCONTENIDO":28,"C_A_PRIMA":29,"L_ELEMENTOS":30,"ELEMENTO":31,"L_E_PRIMA":32,"CONTENIDO_ETIQUETA":33,"C_E_PRIMA":34,"SIGNOS":35,"SPECIALCHARS":36,"C_TEXTO":37,"C_T_PRIMA":38,"lessthan":39,"graterthan":40,"ampersand":41,"simplequote":42,"doublequote":43,"colon":44,"underscore":45,"corder":46,"corizq":47,"parder":48,"parizq":49,"ptcoma":50,"decimal":51,"entero":52,"mas":53,"menos":54,"por":55,"comilla":56,"apostrofe":57,"$accept":0,"$end":1},
-terminals_: {2:"error",7:"EOF",8:"menosque",9:"c_interroga",10:"xml",11:"version",12:"igual",15:"encoding",17:"masque",18:"UTF",19:"ASCII",20:"ISO",21:"identificador",24:"div",39:"lessthan",40:"graterthan",41:"ampersand",42:"simplequote",43:"doublequote",44:"colon",45:"underscore",46:"corder",47:"corizq",48:"parder",49:"parizq",50:"ptcoma",51:"decimal",52:"entero",53:"mas",54:"menos",55:"por",56:"comilla",57:"apostrofe"},
-productions_: [0,[3,4],[3,3],[3,1],[4,15],[16,1],[16,1],[16,1],[5,2],[6,6],[6,5],[6,3],[6,2],[22,2],[26,2],[26,0],[25,5],[27,2],[29,2],[29,0],[30,2],[32,2],[32,1],[31,2],[23,1],[23,1],[33,2],[34,2],[34,1],[28,1],[28,1],[28,1],[37,2],[38,2],[38,0],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[36,1],[14,1],[14,1],[14,1],[35,1],[35,1],[35,1],[35,1],[13,1],[13,1]],
+symbols_: {"error":2,"START":3,"LISTACONSULTAS":4,"EOF":5,"andSelect":6,"CONSULTA":7,"identifier":8,"LISTANODOS":9,"MASTIPOS":10,"NODO":11,"diag":12,"TIPONODO":13,"corA":14,"EXPRESION":15,"corC":16,"AXES":17,"attr":18,"PREDICATE":19,"asterisco":20,"dot":21,"FUNCIONES":22,"ancestor":23,"dospuntos":24,"NODETEST":25,"ancestorSelf":26,"attribute":27,"child":28,"descendant":29,"descendantSelf":30,"following":31,"followingSib":32,"namespace":33,"parent":34,"preced":35,"precedSib":36,"self":37,"textFunc":38,"nodeFunc":39,"LISTAEXPRESIONES":40,"PRIMITIVA":41,"OPERACION":42,"mas":43,"menos":44,"div":45,"lte":46,"lt":47,"gte":48,"gt":49,"igual":50,"nequal":51,"or":52,"and":53,"mod":54,"parA":55,"parC":56,"DoubleLiteral":57,"IntegerLiteral":58,"cadena":59,"cadena2":60,"lastFunc":61,"positionFunc":62,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"andSelect",8:"identifier",12:"diag",14:"corA",16:"corC",18:"attr",20:"asterisco",21:"dot",23:"ancestor",24:"dospuntos",26:"ancestorSelf",27:"attribute",28:"child",29:"descendant",30:"descendantSelf",31:"following",32:"followingSib",33:"namespace",34:"parent",35:"preced",36:"precedSib",37:"self",38:"textFunc",39:"nodeFunc",43:"mas",44:"menos",45:"div",46:"lte",47:"lt",48:"gte",49:"gt",50:"igual",51:"nequal",52:"or",53:"and",54:"mod",55:"parA",56:"parC",57:"DoubleLiteral",58:"IntegerLiteral",59:"cadena",60:"cadena2",61:"lastFunc",62:"positionFunc"},
+productions_: [0,[3,2],[4,3],[4,1],[7,1],[7,2],[7,2],[7,1],[7,1],[9,2],[9,1],[11,2],[11,3],[11,2],[11,3],[13,1],[13,4],[13,1],[13,1],[10,3],[10,3],[10,2],[10,3],[10,2],[10,1],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[19,3],[19,0],[25,2],[25,2],[25,2],[25,2],[40,2],[40,1],[15,1],[15,1],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[42,3],[41,1],[41,1],[41,1],[41,1],[41,1],[41,2],[41,2],[41,1],[41,1],[22,1],[22,1],[22,1],[22,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- unirErrores();this.$[0]=$$[$0-1]; this.$[2]=$$[$0-2]; ; 
-											var regla = new Regla("XML_GRAMAR","XML_GRAMAR-> ENCABEZADO ABRIR_ELEMENTO ETIQUETA EOF","return [ETIQUETA][ENCABEZADO];");ingresarRegla(regla);
-	
+ this.$ = $$[$0-1]; return this.$; 
 break;
 case 2:
- unirErrores(); 
-											var regla = new Regla("XML_GRAMAR","XML_GRAMAR-> ABRIR_ELEMENTO ETIQUETA EOF","return ETIQUETA;");ingresarRegla(regla);
-											this.$=$$[$0-1];
-							
+ $$[$0-2].push(new Consulta($$[$0],_$[$0].first_line, _$[$0].first_column)); this.$ = $$[$0-2]; 
 break;
 case 3:
- 
-			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
-			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
-			erroresSintacticos.push(error); unirErrores(); 
-			
+ this.$ = [new Consulta($$[$0], _$[$0].first_line, _$[$0].first_column)];
 break;
 case 4:
-
-		this.$=$$[$0-3];
-		var regla = new Regla("GRAMATICAL","ENCABEZADO-> menosque c_interroga xml version igual QUOTES TIPO_DATO QUOTES encoding igual QUOTES FORMAT QUOTES c_interroga masque","return FORMAT;");ingresarRegla(regla);
-	
+ this.$ = [new Nodo($$[$0], TipoNodo.IDENTIFIER, _$[$0].first_line, _$[$0].first_column)]
 break;
 case 5:
-this.$ = $$[$0]; 
-			var regla = new Regla("GRAMATICAL","FORMAT-> UTF","return UTF;");ingresarRegla(regla);
+this.$ = [new Nodo($$[$0-1], TipoNodo.IDENTIFIER, _$[$0-1].first_line, _$[$0-1].first_column)]; this.$ = this.$.concat($$[$0]); 
 break;
 case 6:
-this.$ = $$[$0]; 
-			var regla = new Regla("GRAMATICAL","FORMAT-> ASCII","return ASCII;");ingresarRegla(regla);
+ this.$ = [$$[$0-1]]; this.$ = this.$.concat($$[$0])
 break;
-case 7:
-this.$ = $$[$0];
-			var regla = new Regla("GRAMATICAL","FORMAT-> ISO","return ISO;");ingresarRegla(regla);
+case 7: case 47: case 73: case 74:
+ this.$ = $$[$0];
 break;
 case 8:
-this.$=$$[$0]; etiquetas.push($$[$0]);
-										var regla = new Regla("GRAMATICAL","ABRIR_ELEMENTO-> menosque identificador","return identificador;");ingresarRegla(regla);
+ this.$ = [$$[$0]];
 break;
 case 9:
- if(validarEtiqueta($$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column)){	
-		
-																		if($$[$0-3][1]=='texto'){
-																						//     id, text,   linea,        columna,  atributo, objeto
-																		 	this.$ = new ObjetoNodo($$[$0-1] ,$$[$0-3], _$[$0-5].first_line, _$[$0-5].first_column, $$[$0-5], []);
-																		}else{
-																			this.$ = new ObjetoNodo($$[$0-1],'', _$[$0-5].first_line, _$[$0-5].first_column, $$[$0-5], $$[$0-3]);
-																		} 
-																		 etiquetas.pop();
-																		var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); si(CONTENIDO_INTERNO[0]=texto){\n	 nuevo objetoNodo(etiquetaNombre, texto, ATRIBUTOS)\n}else{		nuevo objetoNodo(etiquetaNombre, ATRIBUTOS, CONTENIDO_INTERNO)\n};\n etquetas.pop();");
-																		 
-																	 }else{
-																		var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); ERROR SEMANTICO");
-																	 }
-																	 ingresarRegla(regla);
-																	
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
 break;
 case 10:
- if(validarEtiqueta($$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column)){	
-																		if($$[$0-3][1]=='texto'){
-																			this.$ = new ObjetoNodo($$[$0-1] ,$$[$0-3], _$[$0-4].first_line, _$[$0-4].first_column, [], []);
-																		}else{
-																			this.$ = new ObjetoNodo($$[$0-1] ,'', _$[$0-4].first_line, _$[$0-4].first_column, [], $$[$0-3]);
-																		}  
-																		etiquetas.pop();
-																		var regla = new Regla("GRAMATICAL","ETIQUETA-> masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); si(CONTENIDO_INTERNO[0]=texto){\n	 nuevo objetoNodo(etiquetaNombre, texto)\n}else{		nuevo objetoNodo(etiquetaNombre, arreglo atributos)\n};\n etquetas.pop();");
-																	 }else{
-																		var regla = new Regla("GRAMATICAL","ETIQUETA-> masque CONTENIDO_INTERNO  div identificador masque"," validarEtiqueta(); ERROR SEMANTICO");
-																	 }
-																		ingresarRegla(regla);
-																	
+ this.$ = [$$[$0]]; 
 break;
 case 11:
- var etiquetaN= etiquetas.pop(); this.$ = new ObjetoNodo(etiquetaN ,'', _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-2], []); 
-							var regla = new Regla("GRAMATICAL","ETIQUETA-> ATRIBUTOS div masque","etiquetaNombre=etquetas.pop(); nuevo objetoNodo(etiquetaNombre, arreglo atributos);\n");ingresarRegla(regla);
+ 
+                if(this.$ != null){
+                        $$[$0].fromRoot = true; this.$ = $$[$0];
+                }
+        
 break;
 case 12:
-this.$ = [];  var etiquetaN= etiquetas.pop();this.$ = new ObjetoNodo(etiquetaN ,'', _$[$0-1].first_line, _$[$0-1].first_column, [], []);
-							var regla = new Regla("GRAMATICAL","ETIQUETA-> div masque","etiquetaNombre=etquetas.pop(); \n return new ObjetoNodo(etiquetaNombre);\n agregarRegla());");ingresarRegla(regla);
+ 
+                if(this.$ != null){
+                        $$[$0].fromRoot = false; this.$ = $$[$0];
+                }
+        
 break;
 case 13:
-this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);
-						var regla = new Regla("GRAMATICAL","ATRIBUTOS-> ATRIBUTO A_PRIMA ","ATRIBUTOS=[ATRIBUTO];\n ATRIBUTOS= ATRIBUTOS.agregar(A_PRIMA);\nreturn C_ATRIBUTO;");ingresarRegla(regla);
+ console.log('Entra a error sintactico de one diag');
+            errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', _$[$0-1].first_line, _$[$0-1].first_column); 
+            this.$ = new Nodo($$[$0], TipoNodo.NODOERROR, _$[$0-1].first_line, _$[$0-1].first_column);
 break;
 case 14:
-this.$=[$$[$0-1]]; this.$ = this.$.concat($$[$0]);
-						var regla = new Regla("GRAMATICAL","A_PRIMA-> ATRIBUTO A_PRIMA ","A_PRIMA=[TIPOCONTENIDO];\n A_PRIMA= C_A_PRIMA.agregar(C_A_PRIMA);\nreturn C_A_PRIMA;");ingresarRegla(regla);
+ console.log('Entra a error sintactico de two diags');
+            errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', _$[$0-2].first_line, _$[$0-2].first_column); 
+            this.$ = new Nodo($$[$0], TipoNodo.NODOERROR, _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 15:
-this.$=[];
-						var regla = new Regla("GRAMATICAL","A_PRIMA-> ATRIBUTO A_PRIMA","return [];");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0], TipoNodo.IDENTIFIER, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 16:
-this.$= new Atributo( $$[$0-4], $$[$0-1], _$[$0-4].first_line, _$[$0-4].first_column);
-						var regla = new Regla("GRAMATICAL","ATRIBUTO-> identificador igual QUOTES C_ATRIBUTO QUOTES","return nuevoAtributo(identificador, C_ATRIBUTO);");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-3], TipoNodo.IDENTIFIER, _$[$0-3].first_line, _$[$0-3].first_column, new Predicate($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column));
 break;
-case 17:
-this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
-						var regla = new Regla("GRAMATICAL","C_ATRIBUTO-> ELEMENTO L_E_PRIMA ","C_ATRIBUTO=[ELEMENTO];\n C_ATRIBUTO= C_ATRIBUTO.agregar(C_A_PRIMA);\nreturn C_ATRIBUTO;");ingresarRegla(regla);
+case 17: case 18: case 46: case 71: case 72:
+ this.$ = $$[$0]; 
 break;
-case 18:
-this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);
-						var regla = new Regla("GRAMATICAL","C_A_PRIMA-> TIPOCONTENIDO C_A_PRIMA","C_A_PRIMA=[TIPOCONTENIDO];\n C_A_PRIMA= C_A_PRIMA.agregar(C_A_PRIMA);\nreturn C_A_PRIMA;");ingresarRegla(regla);
-break;
-case 19:
-this.$=[];
-						var regla = new Regla("GRAMATICAL","C_A_PRIMA-> epsilon ","return [];");ingresarRegla(regla);
-break;
-case 20:
-this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
-						var regla = new Regla("GRAMATICAL","L_ELEMENTOS-> ELEMENTO L_E_PRIMA ","L_ELEMENTOS=[ELEMENTO];\n L_ELEMENTOS= L_ELEMENTOS.agregar(L_E_PRIMA);\nreturn L_ELEMENTOS;");ingresarRegla(regla);
+case 19: case 20:
+ this.$ = new Nodo($$[$0-1], TipoNodo.ATRIBUTO, _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 21:
-this.$=[$$[$0-1]]; this.$=this.$.concat($$[$0]);
-						var regla = new Regla("GRAMATICAL","L_E_PRIMA-> ELEMENTO L_E_PRIMA ","L_E_PRIMA=[ELEMENTO];\n L_E_PRIMA= L_E_PRIMA.agregar(L_E_PRIMA);\nreturn L_E_PRIMA;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-1], TipoNodo.DOT, _$[$0-1].first_line, _$[$0-1].first_column);
 break;
 case 22:
-this.$=[];
-						var regla = new Regla("GRAMATICAL","L_E_PRIMA-> menosque ","return [];");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2]+$$[$0-1], TipoNodo.DOTDOT, _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 23:
-this.$=$$[$0];
-							var regla = new Regla("GRAMATICAL","ELEMENTO-> ABRIR_ELEMENTO 	ETIQUETA","return ETIQUETA;");ingresarRegla(regla);
+  this.$ = new Nodo($$[$0-1], TipoNodo.ASTERISCO, _$[$0-1].first_line, _$[$0-1].first_column);
 break;
 case 24:
-this.$ = [$$[$0], 'texto'];
-							var regla = new Regla("GRAMATICAL","CONTENIDO_INTERNO-> CONTENIDO_ETIQUETA","return CONTENIDO_ETIQUETA;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0], TipoNodo.FUNCION, _$[$0].first_line, _$[$0].first_column);
 break;
 case 25:
-this.$ = [$$[$0],'objetos'];
-							var regla = new Regla("GRAMATICAL","CONTENIDO_INTERNO-> L_ELEMENTOS","return L_ELEMENTOS;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.ANCESTOR, $$[$0])
 break;
 case 26:
-this.$=[$$[$0-1]]; this.$=  this.$.concat($$[$0]);var contenido =  escribirLista(this.$); this.$= contenido; console.log(this.$);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.ANCESTORORSELF, $$[$0])
 break;
 case 27:
-this.$=[$$[$0-1]]; this.$= this.$.concat($$[$0]);  
-								var regla = new Regla("GRAMATICAL","C_E_PRIMA-> TIPOCONTENIDO C_E_PRIMA","C_E_PRIMA=[TIPOCONTENIDO];C_E_PRIMA= C_E_PRIMA.agregar(C_E_PRIMA);\nreturn C_E_PRIMA;");ingresarRegla(regla);
+ this.$ =new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.ATTRIBUTE, $$[$0])
 break;
 case 28:
-this.$=[]; 
-								var regla = new Regla("GRAMATICAL","C_E_PRIMA-> menosque","return []];");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.CHILD, $$[$0])
 break;
 case 29:
-this.$ = $$[$0];
-					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> TIPO_DATO","return TIPO_DATO;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.DESCENDANT, $$[$0])
 break;
 case 30:
-this.$ = $$[$0];
-					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> SIGNOS","return SIGNOS;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.DESCENDANTORSELF, $$[$0])
 break;
 case 31:
-this.$ = $$[$0];
-					var regla = new Regla("GRAMATICAL","TIPOCONTENIDO-> SPECIALCHARS","return  SPECIALCHARS;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.FOLLOWING, $$[$0])
 break;
 case 32:
-this.$=[$$[$0-1]];  this.$ = this.$+$$[$0]; 
-						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> TIPO_DATO C_T_PRIMA","C_T_PRIMA=[TIPO_DATO];\n C_T_PRIMA= C_T_PRIMA.agregar(C_T_PRIMA); \n return C_T_PRIMA;");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.FOLLOWINGSIBLING, $$[$0])
 break;
 case 33:
-this.$ = $$[$0-1]+' '+ $$[$0];
-						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> TIPO_DATO C_T_PRIMA","return  concat(TIPO_DATO, C_T_PRIMA)");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.NAMESPACE, $$[$0])
 break;
 case 34:
-this.$ = [];
-						var regla = new Regla("GRAMATICAL","C_T_PRIMA-> epsilon","return  lessthan");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.PARENT, $$[$0])
 break;
 case 35:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> lessthan","return  lessthan");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.PRECEDING, $$[$0])
 break;
 case 36:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> ampersand","return  ampersand");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.PRECEDINGSIBLING, $$[$0])
 break;
 case 37:
-this.$= $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> simplequote","return  simplequote");ingresarRegla(regla);
+ this.$ = new Nodo($$[$0-2], TipoNodo.AXIS, _$[$0-2].first_line, _$[$0-2].first_column, undefined, TipoAxis.SELF, $$[$0])
 break;
 case 38:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> underscore","return  identificador");ingresarRegla(regla);
+ this.$ = new Predicate($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 39:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> doublequote","return  doublequote");ingresarRegla(regla);
+ this.$ = [];
 break;
 case 40:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> colon","return  colon");ingresarRegla(regla);
+ 
+                        if($$[$0] instanceof Predicate){
+                                this.$ = new Nodo($$[$0-1], TipoNodo.IDENTIFIER, _$[$0-1].first_line, _$[$0-1].first_column, $$[$0]);                                
+                        }else{
+                                this.$ = new Nodo($$[$0-1], TipoNodo.IDENTIFIER, _$[$0-1].first_line, _$[$0-1].first_column);
+                        }
+                
 break;
 case 41:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","SPECIALCHARS-> underscore","return  underscore");ingresarRegla(regla);
+ 
+                        if($$[$0] instanceof Predicate){
+                                this.$ = new Nodo($$[$0-1], TipoNodo.FUNCION, _$[$0-1].first_line, _$[$0-1].first_column, $$[$0]);
+                        }else{
+                                this.$ = new Nodo($$[$0-1], TipoNodo.IDENTIFIER, _$[$0-1].first_line, _$[$0-1].first_column);
+                        }
+                
 break;
 case 42:
-this.$ = $$[$0];
-	                var regla = new Regla("GRAMATICAL","SPECIALCHARS-> corder","return  corder");ingresarRegla(regla);
+ 
+                        if($$[$0] instanceof Predicate){
+                                this.$ = new Nodo($$[$0-1], TipoNodo.FUNCION, _$[$0-1].first_line, _$[$0-1].first_column);
+                        }else{
+                                this.$ = new Nodo($$[$0-1], TipoNodo.FUNCION, _$[$0-1].first_line, _$[$0-1].first_column, $$[$0]);
+                        }
+                
 break;
 case 43:
-this.$ = $$[$0];
-	                var regla = new Regla("GRAMATICAL","SPECIALCHARS-> corizq","return  corizq");ingresarRegla(regla);
+ 
+                        if($$[$0] instanceof Predicate){
+                                this.$ = new Nodo($$[$0-1], TipoNodo.ASTERISCO, _$[$0-1].first_line, _$[$0-1].first_column);
+                        }else{
+                                this.$ = new Nodo($$[$0-1], TipoNodo.ASTERISCO, _$[$0-1].first_line, _$[$0-1].first_column, $$[$0]);
+                        }
+                
 break;
 case 44:
-this.$ = $$[$0];
-	                var regla = new Regla("GRAMATICAL","SPECIALCHARS-> parder","return parder");ingresarRegla(regla);
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]
 break;
 case 45:
-this.$ = $$[$0];
-	                var regla = new Regla("GRAMATICAL","SPECIALCHARS-> parizq","return  parizq");ingresarRegla(regla);
-break;
-case 46:
-this.$ = $$[$0];
-	                var regla = new Regla("GRAMATICAL","SPECIALCHARS-> ptcoma","return  ptcoma");ingresarRegla(regla);
-break;
-case 47:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","TIPO_DATO-> identificador","return  identificador");ingresarRegla(regla);
+ this.$ =  [$$[$0]] 
 break;
 case 48:
-this.$= $$[$0]; 
-					var regla = new Regla("GRAMATICAL","TIPO_DATO-> decimal","return  decimal");ingresarRegla(regla);
+ this.$ = new Operacion(TipoOperacion.MULTIPLICACION, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 49:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","TIPO_DATO->  entero","return  entero");ingresarRegla(regla);
+ this.$ = new Operacion(TipoOperacion.SUMA, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 50:
-this.$ =  $$[$0]; 
-			var regla = new Regla("GRAMATICAL","SIGNOS-> mas","return  mas;"); ingresarRegla(regla);
+ this.$ = new Operacion(TipoOperacion.RESTA, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 51:
-this.$ =  $$[$0]; 
-			var regla = new Regla("GRAMATICAL","SIGNOS-> menos","return  menos;"); ingresarRegla(regla);
+ this.$ = new Operacion(TipoOperacion.DIVISION, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 52:
-this.$ =  $$[$0]; 
-			var regla = new Regla("GRAMATICAL","SIGNOS-> por","return  por;"); ingresarRegla(regla);
+ this.$ = new Operacion(TipoOperacion.MENORIGUALQUE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 53:
-this.$ =$$[$0]; 
-			var regla = new Regla("GRAMATICAL","SIGNOS-> div","return  div;");ingresarRegla(regla);
+ this.$ = new Operacion(TipoOperacion.MENORQUE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 54:
-this.$ = $$[$0]; 
-					var regla = new Regla("GRAMATICAL","QUOTES->comilla","return comilla;"); ingresarRegla(regla);
-				
+ this.$ = new Operacion(TipoOperacion.MAYORIGUALQUE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
 case 55:
-this.$= $$[$0].toString(); 
-				var regla = new Regla("GRAMATICAL","QUOTES-> apostrofe","return apostrofe;"); ingresarRegla(regla);
-				
+ this.$ = new Operacion(TipoOperacion.MAYORQUE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 56:
+ this.$ = new Operacion(TipoOperacion.IGUAL, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 57:
+ this.$ = new Operacion(TipoOperacion.DIFERENTEQUE, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 58:
+ this.$ = new Operacion(TipoOperacion.OR, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 59:
+ this.$ = new Operacion(TipoOperacion.AND, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 60:
+ this.$ = new Operacion(TipoOperacion.MOD, $$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 61:
+ this.$ = new Operacion(TipoOperacion.PAR, $$[$0-2], null, _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 62:
+ this.$ = new Primitiva($$[$0], TipoPrim.DOUBLE, _$[$0].first_line, _$[$0].first_column); 
+break;
+case 63:
+ this.$ = new Primitiva($$[$0], TipoPrim.INTEGER, _$[$0].first_line, _$[$0].first_column); 
+break;
+case 64: case 65:
+ this.$ = new Primitiva($$[$0], TipoPrim.CADENA, _$[$0].first_line, _$[$0].first_column); 
+break;
+case 66:
+ this.$ = new Primitiva($$[$0], TipoPrim.IDENTIFIER, _$[$0].first_line, _$[$0].first_column); 
+break;
+case 67: case 68:
+ this.$ = new Primitiva($$[$0-1], TipoPrim.ATRIBUTO, _$[$0-1].first_line, _$[$0-1].first_column);
+break;
+case 69:
+ this.$ = new Primitiva($$[$0], TipoPrim.DOT, _$[$0].first_line, _$[$0].first_column);
+break;
+case 70:
+ this.$ = new Primitiva($$[$0], TipoPrim.FUNCION, _$[$0].first_line, _$[$0].first_column);
 break;
 }
 },
-table: [{2:[1,4],3:1,4:2,5:3,8:[1,5]},{1:[3]},{5:6,8:$V0},{6:8,17:$V1,21:$V2,22:9,24:$V3,25:12},{1:[2,3]},{9:[1,14],21:$V4},{6:16,17:$V1,21:$V2,22:9,24:$V3,25:12},{21:$V4},{7:[1,17]},{17:[1,18],24:[1,19]},{5:28,8:$V0,14:25,21:$V5,23:20,24:$V6,28:23,30:22,31:24,33:21,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn},{17:[1,48]},o($Vo,$Vp,{26:49,25:50,21:$V2}),{12:[1,51]},{10:[1,52]},o($Vq,[2,8]),{7:[1,53]},{1:[2,2]},{5:28,8:$V0,14:25,21:$V5,23:54,24:$V6,28:23,30:22,31:24,33:21,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn},{17:[1,55]},{24:[1,56]},{24:[2,24]},{24:[2,25]},{8:$Vr,14:25,21:$V5,24:$V6,28:58,34:57,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn},{5:28,8:$Vs,31:61,32:60},o($Vt,[2,29]),o($Vt,[2,30]),o($Vt,[2,31]),{6:63,17:$V1,21:$V2,22:9,24:$V3,25:12},o($Vt,[2,47]),o($Vt,[2,48]),o($Vt,[2,49]),o($Vt,[2,50]),o($Vt,[2,51]),o($Vt,[2,52]),o($Vt,[2,53]),o($Vt,[2,35]),o($Vt,[2,36]),o($Vt,[2,37]),o($Vt,[2,38]),o($Vt,[2,39]),o($Vt,[2,40]),o($Vt,[2,41]),o($Vt,[2,42]),o($Vt,[2,43]),o($Vt,[2,44]),o($Vt,[2,45]),o($Vt,[2,46]),o($Vu,[2,12]),o($Vo,[2,13]),o($Vo,$Vp,{25:50,26:64,21:$V2}),{13:65,56:$Vv,57:$Vw},{11:[1,68]},{1:[2,1]},{24:[1,69]},o($Vu,[2,11]),{21:[1,70]},{24:[2,26]},{8:$Vr,14:25,21:$V5,24:$V6,28:58,34:71,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn},{24:[2,28]},{24:[2,20]},{5:28,8:$Vs,31:61,32:72},{21:$V4,24:[2,22]},{8:[2,23]},o($Vo,[2,14]),{14:25,21:$V5,24:$V6,27:73,28:74,35:26,36:27,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn},o($Vx,[2,54]),o($Vx,[2,55]),{12:[1,75]},{21:[1,76]},{17:[1,77]},{24:[2,27]},{24:[2,21]},{13:78,56:$Vv,57:$Vw},o($Vy,$Vz,{14:25,35:26,36:27,29:79,28:80,21:$V5,24:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn}),{13:81,56:$Vv,57:$Vw},{17:[1,82]},o($Vu,[2,10]),o($Vq,[2,16]),o($Vy,[2,17]),o($Vy,$Vz,{14:25,35:26,36:27,28:80,29:83,21:$V5,24:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:$Ve,47:$Vf,48:$Vg,49:$Vh,50:$Vi,51:$Vj,52:$Vk,53:$Vl,54:$Vm,55:$Vn}),{14:84,21:$V5,51:$Vj,52:$Vk},o($Vu,[2,9]),o($Vy,[2,18]),{13:85,56:$Vv,57:$Vw},{15:[1,86]},{12:[1,87]},{13:88,56:$Vv,57:$Vw},{16:89,18:[1,90],19:[1,91],20:[1,92]},{13:93,56:$Vv,57:$Vw},o($Vy,[2,5]),o($Vy,[2,6]),o($Vy,[2,7]),{9:[1,94]},{17:[1,95]},{8:[2,4]}],
-defaultActions: {4:[2,3],17:[2,2],21:[2,24],22:[2,25],53:[2,1],57:[2,26],59:[2,28],60:[2,20],63:[2,23],71:[2,27],72:[2,21],95:[2,4]},
+table: [{3:1,4:2,7:3,8:$V0,9:6,10:5,11:11,12:$V1,18:$V2,20:$V3,21:$V4,22:10,38:$V5,39:$V6,61:$V7,62:$V8},{1:[3]},{5:[1,17],6:[1,18]},o($V9,[2,3]),o($V9,[2,4],{11:11,9:19,12:$V1}),o($V9,[2,8],{11:11,9:20,12:$V1}),o($V9,[2,7],{11:21,12:$V1}),{8:[1,22],20:[1,23]},o($Va,$Vb,{19:24,14:$Vc,21:[1,25]}),o($Va,$Vb,{19:27,14:$Vc}),o($Va,[2,24]),o($Va,[2,10]),o($Vd,[2,71]),o($Vd,[2,72]),o($Vd,[2,73]),o($Vd,[2,74]),{2:[1,30],8:$Ve,10:32,12:[1,29],13:28,17:33,18:$V2,20:$V3,21:$V4,22:10,23:$Vf,26:$Vg,27:$Vh,28:$Vi,29:$Vj,30:$Vk,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp,36:$Vq,37:$Vr,38:$V5,39:$V6,61:$V7,62:$V8},{1:[2,1]},{7:47,8:$V0,9:6,10:5,11:11,12:$V1,18:$V2,20:$V3,21:$V4,22:10,38:$V5,39:$V6,61:$V7,62:$V8},o($V9,[2,5],{11:21,12:$V1}),o($V9,[2,6],{11:21,12:$V1}),o($Va,[2,9]),o($Va,$Vb,{19:48,14:$Vc}),o($Va,$Vb,{19:49,14:$Vc}),o($Va,[2,21]),o($Va,$Vb,{19:50,14:$Vc}),{8:$Vs,15:51,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},o($Va,[2,23]),o($Va,[2,11]),{2:[1,64],8:$Ve,10:32,13:63,17:33,18:$V2,20:$V3,21:$V4,22:10,23:$Vf,26:$Vg,27:$Vh,28:$Vi,29:$Vj,30:$Vk,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp,36:$Vq,37:$Vr,38:$V5,39:$V6,61:$V7,62:$V8},o($Va,[2,13]),o($Va,[2,15],{14:[1,65]}),o($Va,[2,17]),o($Va,[2,18]),{24:[1,66]},{24:[1,67]},{24:[1,68]},{24:[1,69]},{24:[1,70]},{24:[1,71]},{24:[1,72]},{24:[1,73]},{24:[1,74]},{24:[1,75]},{24:[1,76]},{24:[1,77]},{24:[1,78]},o($V9,[2,2]),o($Va,[2,19]),o($Va,[2,20]),o($Va,[2,22]),{16:[1,79],20:$VA,43:$VB,44:$VC,45:$VD,46:$VE,47:$VF,48:$VG,49:$VH,50:$VI,51:$VJ,52:$VK,53:$VL,54:$VM},o($VN,[2,46]),o($VN,[2,47]),o($VN,[2,62]),o($VN,[2,63]),o($VN,[2,64]),o($VN,[2,65]),o($VN,[2,66]),{8:[1,93],20:[1,94]},o($VN,[2,69]),o($VN,[2,70]),{8:$Vs,15:95,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},o($Va,[2,12]),o($Va,[2,14]),{8:$Vs,15:96,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$VO,20:$VP,25:97,38:$VQ,39:$VR},{8:$VO,20:$VP,25:102,38:$VQ,39:$VR},{8:$VO,20:$VP,25:103,38:$VQ,39:$VR},{8:$VO,20:$VP,25:104,38:$VQ,39:$VR},{8:$VO,20:$VP,25:105,38:$VQ,39:$VR},{8:$VO,20:$VP,25:106,38:$VQ,39:$VR},{8:$VO,20:$VP,25:107,38:$VQ,39:$VR},{8:$VO,20:$VP,25:108,38:$VQ,39:$VR},{8:$VO,20:$VP,25:109,38:$VQ,39:$VR},{8:$VO,20:$VP,25:110,38:$VQ,39:$VR},{8:$VO,20:$VP,25:111,38:$VQ,39:$VR},{8:$VO,20:$VP,25:112,38:$VQ,39:$VR},{8:$VO,20:$VP,25:113,38:$VQ,39:$VR},o($Va,[2,38]),{8:$Vs,15:114,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:115,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:116,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:117,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:118,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:119,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:120,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:121,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:122,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:123,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:124,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:125,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},{8:$Vs,15:126,18:$Vt,21:$Vu,22:61,38:$V5,39:$V6,41:52,42:53,55:$Vv,57:$Vw,58:$Vx,59:$Vy,60:$Vz,61:$V7,62:$V8},o($VN,[2,67]),o($VN,[2,68]),{20:$VA,43:$VB,44:$VC,45:$VD,46:$VE,47:$VF,48:$VG,49:$VH,50:$VI,51:$VJ,52:$VK,53:$VL,54:$VM,56:[1,127]},{16:[1,128],20:$VA,43:$VB,44:$VC,45:$VD,46:$VE,47:$VF,48:$VG,49:$VH,50:$VI,51:$VJ,52:$VK,53:$VL,54:$VM},o($Va,[2,25]),o($Va,$Vb,{19:129,14:$Vc}),o($Va,$Vb,{19:130,14:$Vc}),o($Va,$Vb,{19:131,14:$Vc}),o($Va,$Vb,{19:132,14:$Vc}),o($Va,[2,26]),o($Va,[2,27]),o($Va,[2,28]),o($Va,[2,29]),o($Va,[2,30]),o($Va,[2,31]),o($Va,[2,32]),o($Va,[2,33]),o($Va,[2,34]),o($Va,[2,35]),o($Va,[2,36]),o($Va,[2,37]),o($VN,[2,48]),o($VS,[2,49],{20:$VA,45:$VD,54:$VM}),o($VS,[2,50],{20:$VA,45:$VD,54:$VM}),o($VN,[2,51]),o($VT,[2,52],{20:$VA,43:$VB,44:$VC,45:$VD,54:$VM}),o($VT,[2,53],{20:$VA,43:$VB,44:$VC,45:$VD,54:$VM}),o($VT,[2,54],{20:$VA,43:$VB,44:$VC,45:$VD,54:$VM}),o($VT,[2,55],{20:$VA,43:$VB,44:$VC,45:$VD,54:$VM}),o($VT,[2,56],{20:$VA,43:$VB,44:$VC,45:$VD,54:$VM}),o($VT,[2,57],{20:$VA,43:$VB,44:$VC,45:$VD,54:$VM}),o([16,52,56],[2,58],{20:$VA,43:$VB,44:$VC,45:$VD,46:$VE,47:$VF,48:$VG,49:$VH,50:$VI,51:$VJ,53:$VL,54:$VM}),o([16,52,53,56],[2,59],{20:$VA,43:$VB,44:$VC,45:$VD,46:$VE,47:$VF,48:$VG,49:$VH,50:$VI,51:$VJ,54:$VM}),o($VN,[2,60]),o($VN,[2,61]),o($Va,[2,16]),o($Va,[2,40]),o($Va,[2,41]),o($Va,[2,42]),o($Va,[2,43])],
+defaultActions: {17:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -589,73 +563,20 @@ _handle_error:
     return true;
 }};
 
-	//const {Error} = require('../../Scripts/Errores/Error.js');
-	var erroresLexicos = [];
-	var variables=[];
-	var erroresSintacticos = [];
-	var errorSemantico=[];
-	
+    //const Nodo = require("./AST/nodo_arbol");
+    //var raiz;
 
-	
-	define('grammarXMLDesc',function () {
-    return {
-        getParser: function () {
-            return gramarxmldes;
-        }
-    };
-});
-    //const {Primitivo} = require("../../Scripts/Arboles/Primitivo");
-    //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
-    //const {Atributo} = require("../../Scripts/clasesXML/Atributo");
-	//const {Nodo} = require("../../Scripts/clasesXML/Nodo");\
-	var AUXid=0;
-	var etiquetas=[];
-	function escribirLista(primitivos) {
-		var texto = '';
-		primitivos.forEach(function (element) {
-			texto = texto + " " + element;
-		});
-		console.log(texto);
-		return texto;
-	}
+    const {Primitiva} = require("../Expresiones/Primitiva");
+    const {Operacion} = require("../Expresiones/Operacion");
+    const {Consulta} = require("../XPath/Consulta");
+    const {Nodo} = require("../XPath/Nodo");
+    const {Predicate} = require("../XPath/Predicate");
+    const {TipoPrim} = require("../Expresiones/Primitiva")
+    const {TipoOperacion} = require("../Expresiones/Operacion");
+    const {TipoNodo} = require("../XPath/Nodo");
+    const {TipoAxis} = require("../XPath/Nodo")
 
-	function validarEtiqueta(nombre, linea, columna){
-		if(etiquetas[etiquetas.length - 1] == nombre){
-			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
-			//console.log("iguales");
-			return true;
-		}else{
-			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
-			console.log("error semantico"+linea + columna);
-			var errorSEM = new Error( linea, columna, 'semantico','xmldesc', nombre);
-			errorSemantico.push( errorSEM) ;
-			console.log(errorSEM);
-			return false;
-		}
-	}
-		
-	function unirErrores(){
-			erroresGramar[0]= erroresLexicos ;
-			erroresGramar[1]= erroresSintacticos;
-			erroresGramar[2]=errorSemantico;
-		
-		console.log(erroresGramar.length);
-		console.log(erroresGramar[0].length);
-		console.log(erroresGramar[1].length);
-		console.log(erroresGramar[2].length);
-	}
-
-	function ingresarRegla(regla){
-		if(reglas.length>0){
-			var reglas2=[];
-			reglas2.push(regla);
-			reglas= reglas2.concat(reglas);
-			console.log('agregando regla'+reglas.length);
-		}else{
-			reglas.push(regla);
-			console.log('agregando regla'+reglas.length);
-		}
-	}
+    const errores = require('../Global/ListaError');
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -980,98 +901,111 @@ pushState:function pushState (condition) {
 stateStackSize:function stateStackSize() {
         return this.conditionStack.length;
     },
-options: {"case-insensitive":true},
+options: {},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:this.begin('comment');
+case 0:/* skip whitespace */
 break;
-case 1:this.popState(); console.log('comentario');
+case 1:return 47;
 break;
-case 2:/* skip comment content*/
+case 2:return 49;
 break;
-case 3:/* skip whitespace */
+case 3:return 50;
 break;
-case 4:return 'REVALUAR';
+case 4:return 12;
 break;
-case 5:return 'ACEPTAR';
+case 5:return "dot";
 break;
-case 6:return 50;
+case 6:return "attr";
 break;
-case 7:return 49;
+case 7:return "corA";
 break;
-case 8:return 48;
+case 8:return "corC";
 break;
-case 9:return 47;
+case 9:return "andSelect";
 break;
-case 10:return 46;
+case 10:return "dospuntos";
 break;
-case 11:return 8;
+case 11:return "parA";
 break;
-case 12:return 17;
+case 12:return "parC";
 break;
-case 13:return 12;
+case 13:return 20;
 break;
-case 14:return 56;
+case 14:return "mas";
 break;
-case 15:return 57;
+case 15:return "menos";
 break;
-case 16:return 'inicoment';
+case 16:return "div";
 break;
-case 17:return 9;
+case 17:return 46;
 break;
-case 18:return 10;
+case 18:return "gte";
 break;
-case 19:return 11;
+case 19:return "nequal";
 break;
-case 20:return 15;
+case 20:return "or";
 break;
-case 21:return 18
+case 21:return "and";
 break;
-case 22:return 19;
+case 22:return "mod";
 break;
-case 23:return 20;
+case 23:return "ancestorSelf";
 break;
-case 24:return 39;
+case 24:return "ancestor";
 break;
-case 25:return 40;
+case 25:return "attribute";
 break;
-case 26:return 41;
+case 26:return "child";
 break;
-case 27:return 42;
+case 27:return "descendantSelf";
 break;
-case 28:return 43;
+case 28:return "descendant";
 break;
-case 29:return 44;
+case 29:return "followingSib";
 break;
-case 30:return 45;
+case 30:return "following";
 break;
-case 31:return 53;
+case 31:return "namespace";
 break;
-case 32:return 54;
+case 32:return "parent";
 break;
-case 33:return 55;
+case 33:return "precedSib";
 break;
-case 34:return 24;
+case 34:return "preced";
 break;
-case 35:
+case 35:return "self";
 break;
-case 36:
+case 36:return "lastFunc";
 break;
-case 37:return 51;
+case 37:return "positionFunc";
 break;
-case 38:return 52;
+case 38:return "nodeFunc";
 break;
-case 39:return 21;
+case 39:return "textFunc";
 break;
-case 40:return 7;
+case 40:return 57;
 break;
-case 41: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
+case 41:return 58;
+break;
+case 42:return 8;
+break;
+case 43:return 59;
+break;
+case 44:return 60;
+break;
+case 45:
+                                        console.log(errores.default);
+                                        errores.default.agregarError('lexico', 'Simbolo inesperado ' + yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column);
+                                    
+break;
+case 46:return 5
 break;
 }
 },
-rules: [/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:Evaluar\b)/i,/^(?:Aceptar\b)/i,/^(?:;)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:")/i,/^(?:')/i,/^(?:!)/i,/^(?:\?)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:UTF-8\b)/i,/^(?:ASCII\b)/i,/^(?:ISO859-1\b)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?::)/i,/^(?:_\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+\b)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑóáéíúÁÉÍÓÚ]*)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41],"inclusive":true},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41],"inclusive":true}}
+rules: [/^(?:\s+)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:\/)/,/^(?:\.)/,/^(?:@)/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:::)/,/^(?:\()/,/^(?:\))/,/^(?:\*)/,/^(?:\+)/,/^(?:-)/,/^(?:div\b)/,/^(?:<=)/,/^(?:>=)/,/^(?:!=)/,/^(?:or\b)/,/^(?:and\b)/,/^(?:mod\b)/,/^(?:ancestor-or-self\b)/,/^(?:ancestor\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant-or-self\b)/,/^(?:descendant\b)/,/^(?:following-sibling\b)/,/^(?:following\b)/,/^(?:namespace\b)/,/^(?:parent\b)/,/^(?:preceding-sibling\b)/,/^(?:preceding\b)/,/^(?:self\b)/,/^(?:last\(\))/,/^(?:position\(\))/,/^(?:node\(\))/,/^(?:text\(\))/,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/,/^(?:[0-9]+)/,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ.-]*)/,/^(?:("((\\([\'\"\\]))|([^\"\\]+))*"))/,/^(?:('((\\([\'\"\\]))|([^\'\\]))*'))/,/^(?:.)/,/^(?:$)/],
+conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"inclusive":true}}
 });
 return lexer;
 })();
@@ -1085,9 +1019,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramarxmldes;
-exports.Parser = gramarxmldes.Parser;
-exports.parse = function () { return gramarxmldes.parse.apply(gramarxmldes, arguments); };
+exports.parser = XPath_GramaticaAsc;
+exports.Parser = XPath_GramaticaAsc.Parser;
+exports.parse = function () { return XPath_GramaticaAsc.parse.apply(XPath_GramaticaAsc, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');

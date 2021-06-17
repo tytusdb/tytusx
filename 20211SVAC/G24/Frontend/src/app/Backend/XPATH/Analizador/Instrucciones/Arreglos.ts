@@ -2,16 +2,16 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class Arreglos extends Instruccion {
   public l_corchetes: Instruccion;
-  public Objetos:Instruccion;
-  constructor(objetos:Instruccion, fila: number, columna: number, instruccion: Instruccion) {
+  public expresion:Instruccion;
+  constructor(objetos:Instruccion, fila: number, columna: number, instruccion?: Instruccion) {
     super(new Tipo(tipoDato.ENTERO), fila, columna);
     this.l_corchetes= instruccion
-    this.Objetos=objetos;
+    this.expresion=objetos;
   }
   public getNodosAST(): nodoAST {
     let nodo = new nodoAST('L_CORCHETES');
@@ -21,14 +21,14 @@ export default class Arreglos extends Instruccion {
      * L_CORCHETES CORCHETEIZQ EXPRESION CORCHETEDER
      */
     if(this.l_corchetes!=null){
-        let lista= new nodoAST("L_CORCHETES")
-        lista.agregarHijoAST(this.l_corchetes.getNodosAST());
-        nodo.agregarHijoAST(lista);
+        
+        nodo.agregarHijoAST(this.l_corchetes.getNodosAST());
+        
     }
-    if(this.Objetos!=null){
-        let expresion= new nodoAST("EXPRESION")
-        expresion.agregarHijoAST(this.Objetos.getNodosAST());
-        nodo.agregarHijoAST(expresion);
+    if(this.expresion!=null){
+        
+        nodo.agregarHijoAST(this.expresion.getNodosAST());
+        
     }
     return nodo;
   }
