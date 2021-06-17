@@ -2198,3 +2198,558 @@ break;
 case 1:/* skip whitespace */
 break;
 case 2:return 10;
+break;
+case 3: const re = /[\s\t\n]+/
+                                              var aux = yy_.yytext.replace('<', ''); 
+                                              aux = aux.replace('>', '');
+                                              aux = aux.replace(re, '');
+                                              if(aux.length > 0) {
+                                                  return 18
+                                              } else {
+                                                  return 14
+                                              }
+                                            
+break;
+case 4:return 12;
+break;
+case 5:return 19;
+break;
+case 6:return 20;
+break;
+case 7:return 8;
+break;
+case 8:return 16;
+break;
+case 9:return 24;
+break;
+case 10:return 25;
+break;
+case 11:return 13;
+break;
+case 12:return 5
+break;
+case 13: 
+        console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+    
+break;
+}
+},
+rules: [/^(?:\s+)/i,/^(?:<!.*?>)/i,/^(?:<\?xml\b)/i,/^(?:>([^<]|\n)*<)/i,/^(?:\?>)/i,/^(?:\/>)/i,/^(?:>)/i,/^(?:<)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:("[^"]*"))/i,/^(?:[a-zA-Zá-úÁ-Úä-üÄ-Ü_][a-zA-Z0-9_\-ñÑá-úÁ-Úä-üÄ-Ü]*)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13],"inclusive":true}}
+});
+return lexer;
+})();
+parser.lexer = lexer;
+function Parser () {
+  this.yy = {};
+}
+Parser.prototype = parser;parser.Parser = Parser;
+return new Parser;
+})();
+
+
+if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+exports.parser = DescGrammer;
+exports.Parser = DescGrammer.Parser;
+exports.parse = function () { return DescGrammer.parse.apply(DescGrammer, arguments); };
+exports.main = function commonjsMain (args) {
+    if (!args[1]) {
+        console.log('Usage: '+args[0]+' FILE');
+        process.exit(1);
+    }
+    var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+    return exports.parser.parse(source);
+};
+if (typeof module !== 'undefined' && require.main === module) {
+  exports.main(process.argv.slice(1));
+}
+}
+}).call(this)}).call(this,require('_process'))
+},{"../../InterpreteXPath/AST/Etiqueta":10,"../Expresion/Atributo":4,"../Expresion/Objeto":5,"_process":3,"fs":1,"path":2}],8:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Simbolo = void 0;
+var Simbolo = /** @class */ (function () {
+    function Simbolo(id, tipo, valor, fila, columna, indice) {
+        this.id = id;
+        this.fila = fila;
+        this.columna = columna;
+        this.tipo = tipo;
+        this.valor = valor;
+        this.entorno = [];
+        if ('undefined' === typeof indice) {
+            this.indice = '';
+        }
+        else {
+            this.indice = indice.toString();
+        }
+    }
+    Simbolo.prototype.getTipo = function () {
+        return this.tipo;
+    };
+    Simbolo.prototype.getValorImplicito = function () {
+        return this.valor;
+    };
+    return Simbolo;
+}());
+exports.Simbolo = Simbolo;
+
+},{}],9:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TipoDato = void 0;
+var TipoDato;
+(function (TipoDato) {
+    TipoDato[TipoDato["STRING"] = 0] = "STRING";
+    TipoDato[TipoDato["INT"] = 1] = "INT";
+    TipoDato[TipoDato["DOUBLE"] = 2] = "DOUBLE";
+    TipoDato[TipoDato["BOOL"] = 3] = "BOOL";
+    TipoDato[TipoDato["VOID"] = 4] = "VOID";
+    TipoDato[TipoDato["STRUCT"] = 5] = "STRUCT";
+    TipoDato[TipoDato["ARRAY"] = 6] = "ARRAY";
+    TipoDato[TipoDato["ATRIBUTO"] = 7] = "ATRIBUTO";
+    TipoDato[TipoDato["ETIQUETA"] = 8] = "ETIQUETA";
+})(TipoDato = exports.TipoDato || (exports.TipoDato = {}));
+
+},{}],10:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Etiqueta = void 0;
+var Nodo_1 = require("./Nodo");
+var NodoAST_1 = __importDefault(require("./NodoAST"));
+var Etiqueta = /** @class */ (function (_super) {
+    __extends(Etiqueta, _super);
+    function Etiqueta(id, fila, columna, etiqueta, valor) {
+        var _this = _super.call(this, fila, columna) || this;
+        _this.identificador = id;
+        _this.fila = fila;
+        _this.columna = columna;
+        _this.etiqueta = etiqueta;
+        _this.valor = valor;
+        return _this;
+    }
+    Etiqueta.prototype.obtenerNodos = function () {
+        var nodo;
+        if (this.identificador == "atributo") {
+            nodo = new NodoAST_1.default("LISTA_ATRIBUTOS");
+        }
+        else {
+            nodo = new NodoAST_1.default("LISTA_OBJETOS");
+        }
+        if (this.etiqueta != null) {
+            var eti = this.etiqueta.obtenerNodos()[0];
+            nodo.addHijo(eti);
+        }
+        if (this.valor != null) {
+            nodo.addHijo(this.valor.obtenerNodos()[0]);
+        }
+        return [nodo, nodo];
+    };
+    return Etiqueta;
+}(Nodo_1.Nodo));
+exports.Etiqueta = Etiqueta;
+
+},{"./Nodo":11,"./NodoAST":12}],11:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Nodo = void 0;
+var Nodo = /** @class */ (function () {
+    function Nodo(line, column) {
+        this.line = line;
+        this.column = column;
+    }
+    return Nodo;
+}());
+exports.Nodo = Nodo;
+
+},{}],12:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var NodoAST = /** @class */ (function () {
+    function NodoAST(valor) {
+        this.hijos = new Array();
+        this.valor = valor;
+    }
+    NodoAST.prototype.addHijos = function (hijos) {
+        this.hijos = hijos;
+    };
+    NodoAST.prototype.addHijo = function (hijo) {
+        this.hijos.push(hijo);
+    };
+    NodoAST.prototype.addHijoSimple = function (hijo) {
+        this.hijos.push(new NodoAST(hijo));
+    };
+    NodoAST.prototype.getValor = function () {
+        return this.valor;
+    };
+    NodoAST.prototype.setValor = function (cad) {
+        this.valor = cad;
+    };
+    NodoAST.prototype.getHijos = function () {
+        return this.hijos;
+    };
+    return NodoAST;
+}());
+exports.default = NodoAST;
+
+},{}],13:[function(require,module,exports){
+const { Simbolo } = require("../InterpreteXML/TablaSimbolo/Simbolo");
+var scriptXML = require("./scriptXML");
+
+document.getElementById("file").addEventListener("change", add, false);
+document
+  .getElementById("openBrowser")
+  .addEventListener("click", openBrowser, false);
+document.getElementById("Download").addEventListener("click", Download, false);
+document.getElementById("Clean").addEventListener("click", Clean, false);
+document.getElementById("Ejecutar").addEventListener("click", Ejecutar, false);
+
+var editor = CodeMirror(document.getElementById("codemirror"), {
+  mode: "xml",
+  lineNumbers: true,
+  theme: "dracula",
+  autoRefresh: true,
+});
+editor.setSize("100%", "100%");
+
+var xpath = CodeMirror(document.getElementById("xpath"), {
+  mode: "text",
+  theme: "dracula",
+  //autoRefresh: true
+});
+xpath.setSize("100%", "100%");
+
+var res = CodeMirror(document.getElementById("resultado"), {
+  mode: "xml",
+  lineNumbers: true,
+  theme: "dracula",
+  autoRefresh: true,
+});
+res.setSize("100%", "100%");
+
+var container = document.getElementById("grafoXML");
+
+function openBrowser() {
+  let fileinput = document.getElementById("file");
+  fileinput.click();
+}
+
+function add(evt) {
+  let fil = evt.target.files[0];
+  if (!fil) {
+    return;
+  }
+
+  if (fil.type == "text/xml") {
+    let cuerpo = "";
+    let lector = new FileReader();
+    lector.onload = function (evt) {
+      cuerpo = evt.target.result;
+      editor.getDoc().setValue(cuerpo);
+    };
+
+    lector.readAsText(fil);
+  } else {
+    alert("Por favor seleccione un archivo XML.");
+  }
+}
+
+function Download() {
+  let content = editor.getDoc().getValue();
+  let nombre = "archivo.xml"; //nombre del archivo
+  let file = new Blob([content], { type: "xml" });
+
+  if (window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(file, nombre);
+  } else {
+    let a = document.createElement("a"),
+      url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = nombre;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 0);
+  }
+}
+
+function Clean() {
+  editor.getDoc().setValue("");
+}
+
+function Ejecutar() {
+  let objetos = "";
+  let contentXML = editor.getDoc().getValue();
+  let Tablasimbolos = "";
+  if (document.getElementById("aXml").checked) {
+    objetos = scriptXML.ParsearAsc(contentXML);
+    Tablasimbolos = scriptXML.BuildSimbolTable(objetos[1]);
+  } else {
+    objetos = scriptXML.ParsearDesc(contentXML);
+    Tablasimbolos = scriptXML.BuildSimbolTable(objetos[1]);
+  }
+  scriptXML.Graficar(objetos);
+  MostrarCST(scriptXML.dot);
+  MostrarSimbolos(Tablasimbolos);
+
+  if (document.getElementById("aXPath").checked) {
+    alert("Y analisis de XPath ascendente");
+  } else {
+    alert("Analisis de XML descendente");
+  }
+}
+
+function MostrarCST(DOTstring) {
+  var parsedData = vis.network.convertDot(DOTstring);
+  var data = {
+    nodes: parsedData.nodes,
+    edges: parsedData.edges,
+  };
+
+  var options = {
+    scale: 0.8,
+    nodes: {
+      shape: "box",
+      size: 15,
+      font: {
+        color: "#282a36",
+        face: "helvetica",
+      },
+      color: "#ffffff",
+    },
+    edges: {
+      smooth: false,
+      arrows: {
+        to: true,
+      },
+    },
+    layout: {
+      //Clasificación
+      hierarchical: {
+        levelSeparation: 150, // La distancia entre diferentes niveles
+        nodeSpacing: 200, // La distancia mínima entre nodos en el eje libre
+        treeSpacing: 500, // La distancia entre diferentes árboles
+        // dirección
+        direction: "UD",
+        sortMethod: "directed", // hubsize, directed
+      },
+    },
+  };
+
+  $("#cst-xml").show();
+  var network = new vis.Network(container, data, options);
+}
+
+var cont = 1;
+function MostrarSimbolos(simbolos) {
+  $("#simbolTable").show();
+  let $cuerpo = document.getElementById("tbodyJS");
+  cont = 1;
+  $cuerpo.innerHTML = "";
+
+  let $tr = document.createElement("tr");
+  // Número
+  let $conta = document.createElement("th");
+  $conta.textContent = cont;
+  $tr.appendChild($conta);
+  cont = cont + 1;
+  // ID
+  let $id = document.createElement("td");
+  $id.textContent = "Global";
+  $tr.appendChild($id);
+  // Valor
+  let $valor = document.createElement("td");
+  $valor.textContent = "";
+  $tr.appendChild($valor);
+  // Entorno
+  let $Entorno = document.createElement("td");
+  $Entorno.textContent = "";
+  $tr.appendChild($Entorno);
+
+  $cuerpo.appendChild($tr);
+  MostrarFilasTabla(simbolos, $cuerpo);
+}
+
+function MostrarFilasTabla(simbolo, cuerpo) {
+  simbolo.entorno.forEach((element) => {
+    let $tr = document.createElement("tr");
+    // Número
+    let $conta = document.createElement("th");
+    $conta.textContent = cont;
+    $tr.appendChild($conta);
+    cont = cont + 1;
+    // ID
+    let $id = document.createElement("td");
+    $id.textContent = element.id + element.indice;
+    $tr.appendChild($id);
+    // Valor
+    let $valor = document.createElement("td");
+    $valor.textContent = element.getValorImplicito();
+    $tr.appendChild($valor);
+    // Entorno
+    let $Entorno = document.createElement("td");
+    $Entorno.textContent = simbolo.id + simbolo.indice;
+    $tr.appendChild($Entorno);
+
+    cuerpo.appendChild($tr);
+    MostrarFilasTabla(element, cuerpo);
+  });
+}
+
+},{"../InterpreteXML/TablaSimbolo/Simbolo":8,"./scriptXML":14}],14:[function(require,module,exports){
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BuildSimbolTable = exports.ParsearDesc = exports.dot = exports.Graficar = exports.ParsearAsc = void 0;
+var Simbolo_1 = require("../InterpreteXML/TablaSimbolo/Simbolo");
+var TipoDato_1 = require("../InterpreteXML/TablaSimbolo/TipoDato");
+var NodoAST_1 = __importDefault(require("../InterpreteXPath/AST/NodoAST"));
+var gramaticaAsc = require("../InterpreteXML/GrammerXML/AscGrammer");
+var gramaticaDesc = require("../InterpreteXML/GrammerXML/DescGrammer");
+var dot = "";
+exports.dot = dot;
+var c = 0;
+function ParsearAsc(entrada) {
+    var objetos = gramaticaAsc.parse(entrada);
+    //console.log(objetos);
+    return objetos;
+}
+exports.ParsearAsc = ParsearAsc;
+function ParsearDesc(entrada) {
+    var objetos = gramaticaDesc.parse(entrada);
+    //console.log(objetos);
+    return objetos;
+}
+exports.ParsearDesc = ParsearDesc;
+function Graficar(datos) {
+    var instr = new NodoAST_1.default("INICIO");
+    datos.forEach(function (element) {
+        instr.addHijo(element.obtenerNodos()[0]);
+    });
+    var grafo = "";
+    grafo = getDot(instr);
+}
+exports.Graficar = Graficar;
+function getDot(raiz) {
+    exports.dot = dot = "";
+    exports.dot = dot += "digraph {\n";
+    exports.dot = dot += 'n0[label="' + raiz.getValor().replace(/\"/g, "") + '"];\n';
+    c = 1;
+    recorrerAST("n0", raiz);
+    exports.dot = dot += "}";
+    return dot;
+}
+function recorrerAST(padre, nPadre) {
+    for (var _i = 0, _a = nPadre.getHijos(); _i < _a.length; _i++) {
+        var hijo = _a[_i];
+        var nombreHijo = "n" + c;
+        exports.dot = dot += nombreHijo + '[label="' + hijo.getValor().replace(/\"/g, "") + '"];\n';
+        exports.dot = dot += padre + "->" + nombreHijo + ";\n";
+        c++;
+        recorrerAST(nombreHijo, hijo);
+    }
+}
+function BuildSimbolTable(listado) {
+    var global = new Simbolo_1.Simbolo("Global", TipoDato_1.TipoDato.ARRAY, "", 0, 0);
+    var root = new Simbolo_1.Simbolo(listado.identificador, TipoDato_1.TipoDato.ETIQUETA, listado.texto, listado.linea, listado.columna);
+    global.entorno.push(root);
+    buildGlobal(root, listado);
+    return global;
+}
+exports.BuildSimbolTable = BuildSimbolTable;
+function buildGlobal(entorno, padre) {
+    if (padre.lista != null) {
+        getEtiqueta(entorno, padre.lista, TipoDato_1.TipoDato.ATRIBUTO);
+    }
+    if (padre.listaObjetos != null) {
+        getEtiqueta(entorno, padre.listaObjetos, TipoDato_1.TipoDato.ETIQUETA);
+    }
+}
+function getEtiqueta(entorno, padre, tipo) {
+    if (padre.etiqueta != null) {
+        if (padre.etiqueta.identificador == "objeto" || padre.etiqueta.identificador == "atributo") {
+            getEtiqueta(entorno, padre.etiqueta, tipo);
+        }
+        else {
+            if (tipo == TipoDato_1.TipoDato.ATRIBUTO) {
+                getValorAtributo(entorno, padre.etiqueta);
+            }
+            else {
+                getValorObjeto(entorno, padre.etiqueta);
+            }
+        }
+    }
+    if (padre.valor != null) {
+        if (padre.valor.identificador === "objeto" || padre.valor.identificador === "atributo") {
+            getEtiqueta(entorno, padre.valor, tipo);
+        }
+        else {
+            if (tipo == TipoDato_1.TipoDato.ATRIBUTO) {
+                getValorAtributo(entorno, padre.valor);
+            }
+            else {
+                getValorObjeto(entorno, padre.valor);
+            }
+        }
+    }
+}
+function getValorAtributo(entorno, padre) {
+    var cont = BuscarRepetido(entorno, padre.identificador);
+    var root;
+    if (cont > 0) {
+        root = new Simbolo_1.Simbolo(padre.identificador, TipoDato_1.TipoDato.ATRIBUTO, padre.valor, padre.fila, padre.columna, cont);
+    }
+    else {
+        root = new Simbolo_1.Simbolo(padre.identificador, TipoDato_1.TipoDato.ATRIBUTO, padre.valor, padre.fila, padre.columna);
+    }
+    entorno.entorno.push(root);
+}
+function getValorObjeto(entorno, padre) {
+    var cont = BuscarRepetido(entorno, padre.identificador);
+    var root;
+    if (cont > 0) {
+        root = new Simbolo_1.Simbolo(padre.identificador, TipoDato_1.TipoDato.ETIQUETA, padre.texto, padre.fila, padre.columna, cont);
+    }
+    else {
+        root = new Simbolo_1.Simbolo(padre.identificador, TipoDato_1.TipoDato.ETIQUETA, padre.texto, padre.fila, padre.columna);
+    }
+    entorno.entorno.push(root);
+    if (padre.lista != null || padre.listaObjetos != null) {
+        buildGlobal(root, padre);
+    }
+}
+function BuscarRepetido(entorno, identi) {
+    var id = identi;
+    var i = 0;
+    var aux = 0;
+    for (i; i < entorno.entorno.length; i++) {
+        if (id === entorno.entorno[i].id) {
+            aux++;
+        }
+    }
+    return aux;
+}
+
+},{"../InterpreteXML/GrammerXML/AscGrammer":6,"../InterpreteXML/GrammerXML/DescGrammer":7,"../InterpreteXML/TablaSimbolo/Simbolo":8,"../InterpreteXML/TablaSimbolo/TipoDato":9,"../InterpreteXPath/AST/NodoAST":12}]},{},[13]);
