@@ -74,15 +74,15 @@ function destroyClickedElement(event) {
     document.body.removeChild(event.target);
 }
 
-function analizar(){
+function analizar() {
     erroresXML = [];
     erroresXPath = [];
     reglasGramaticalesXML = [];
     reglasGramaticalesXPath = [];
-    if(editorXML.getValue() == ""){
+    if (editorXML.getValue() == "") {
         editorXML.setValue('<?xml version="1.0" encoding="UTF-8"?><note><head><to letra="soyLetra">Person+^&^@</to><CC /><HC /></head><from>Jani@</from><heading>Reminder</heading><body>Dont forget me this weekend</body></note>');
     }
-    if(editorXPath.getValue() == ""){
+    if (editorXPath.getValue() == "") {
         editorXPath.setValue('note');
     }
     instruccionesXML = gramaticaXML.parse(editorXML.getValue());
@@ -91,4 +91,18 @@ function analizar(){
     procesarProyecto(instruccionesXML, instruccionesXPath);
     agregarErroresXMLConsola(erroresXML);
     editorConsola.setValue(consola);
+}
+
+function graficarASTXML() {
+    procesarASTXML();
+    var viz = new Viz();
+    viz.renderSVGElement(cadenaASTXML)
+        .then(function (element) {
+            let elemento = document.getElementById('image');
+            elemento.appendChild(element);
+        })
+        .catch(error => {
+            viz = new Viz();
+            console.error(error);
+        });
 }

@@ -15,13 +15,12 @@ acceptedcharssingle                 [^\'\\]
 stringsingle                        {escape}|{acceptedcharssingle}
 charliteral                         \'{stringsingle}\'
 
-BSL                                 "\\".
+
 %s                                  comment
 %%
 
-"//".*                              /* skip comments */
-"/*"                                this.begin('comment');
-<comment>"*/"                       this.popState();
+"<!--"                                this.begin('comment');
+<comment>"-->"                       this.popState();
 <comment>.                          /* skip comment content*/
 \s+                                 /* skip whitespace */
 
