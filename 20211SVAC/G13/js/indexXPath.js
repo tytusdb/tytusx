@@ -1,20 +1,20 @@
 "use strict";
 var XPathAsc = require('./XPath');
 var XPathDes = require('./XPathDesc');
-var fs = require('fs');
 var arbolXPath;
 var countId = 0;
 
 let leXpath = [];
 module.exports.erroresXPath = leXpath;
 
-
 function execAscendente(entrada, xmlObj) {
+    countId = 0;
     xmlObj.pasarPadre();
     var arbolXml = xmlObj;
     
-    //Ejecuto el parser del XPath
+    //Ejecuto el parser ascendente del XPath
     arbolXPath = XPathAsc.parse(entrada);
+    
     //Recorro el arbol XPath y ejecuto instrucciones
     var resultado = ejecutarRaiz(arbolXml, arbolXPath);
 
@@ -22,24 +22,20 @@ function execAscendente(entrada, xmlObj) {
 }
 module.exports.execAscendente = execAscendente;
 
-function execDescendente(entrada) {
-    console.log('\n========== DESCENDENTE ==========');
+function execDescendente(entrada, xmlObj) {
+    countId = 0;
+    xmlObj.pasarPadre();
+    var arbolXml = xmlObj;
 
-    var XMLtxt = fs.readFileSync('../src/simp.xml');
-    var obXML = XmlDsc.parse(XMLtxt.toString());
-    var arbolXml = obXML[0];
-    
-    var arbolXPath = XPathDes.parse(entrada);
+    //Ejecuto el parser descendente del XPath
+    arbolXPath = XPathDes.parse(entrada);
+   
+    //Recorro el arbol XPath Descendente y ejecuto instrucciones
     var resultado = ejecutarRaiz(arbolXml, arbolXPath);
-    
-    console.log("\n"+resultado);
-}
 
-function removeDot(consulta) {
-    while (consulta[0].valor == '.') {
-        consulta.shift()
-    }
+    return resultado;
 }
+module.exports.execDescendente = execDescendente;
 
 function ejecutarRaiz(XML, XPATH){
     var respuestas = [];
@@ -52,10 +48,13 @@ function ejecutarRaiz(XML, XPATH){
             if(XML.etiqueta_id == consulta[0].valor) {
                 var auxConsulta = copiarConsultas(consulta);
                 auxConsulta.shift();
-    
-                var verif = newRecursiva(XML, auxConsulta);
-                if(verif != undefined && verif != '')
-                    respuestas.push(verif);
+                if(auxConsulta.length > 0) {
+                    var verif = newRecursiva(XML, auxConsulta);
+                    if(verif != undefined && verif != '')
+                        respuestas.push(verif);
+                } else {
+                    respuestas.push([XML]);
+                }
             }
         } else {
             //Hacer busqueda india :v
@@ -80,6 +79,7 @@ function newRecursiva(XML, consulta) { //XML = Posible Arreglo de objetos XML
     if(Array.isArray(XML)) {
         //Recorrer y consultar
         XML.forEach((objXML) => {
+            //Verificar objetos repetidos??    
             var ver = consultar(objXML, consulta[0]);
             if (ver != undefined || ver != null) {
                 if(ver.length != 0) {
@@ -119,7 +119,6 @@ function newRecursiva(XML, consulta) { //XML = Posible Arreglo de objetos XML
 
     return resultado;
 }
-
 function consultar(oXML, oXPath) {
     if(oXPath.ambito == 'local') {
         // Nodo Actual
@@ -151,20 +150,19 @@ function consultar(oXML, oXPath) {
                 //Buscar en la lista de nodos del padre lo que diga el predicado
                 //Verificar si quiere buscar nodo en x posicion, algun atributo o mas
                 //if(oXML.padre != undefined) {
-                    oXML.lista_objetos.forEach((obH) => {
-                        if(obH.etiqueta_id == oXPath.valor) {
-                            resAux.push(obH);
-                        }
-                    });
-
-                    
-                    var expVal = oXPath.exp.getValor();
-                    if(expVal == 0 || expVal.tipo == 1) {
-                        var oTmp = resAux[expVal.valor];
-                        if(oTmp != undefined) {
-                            return oTmp;
-                        }
+                oXML.lista_objetos.forEach((obH) => {
+                    if(obH.etiqueta_id == oXPath.valor) {
+                        resAux.push(obH);
                     }
+                });
+                
+                var expVal = oXPath.exp.getValor([resAux]);
+                if(expVal.tipo == 0) {
+                    var oTmp = resAux[expVal.valor];
+                    if(oTmp != undefined) {
+                        return oTmp;
+                    }
+                }
                 //}
             } else {
                 // Recorrer lista de nodos
@@ -181,67 +179,10 @@ function consultar(oXML, oXPath) {
     }
 }
 
-function ejecucionRecursiva(XML, consulta) {
-    var res = [];
-
-    if(consulta[0].ambito == 'local') {
-        if(consulta[0].valor == '.') {
-            var auxConsulta = copiarConsultas(consulta);
-            auxConsulta.shift();
-            return ejecucionRecursiva(XML, auxConsulta);
-        }
-
-        if(consulta[0].valor == '*') {
-
-        } else if(consulta[0].valor == 'node()') {
-
-        }
-
-        if(consulta[0].atributo == true) {
-            //Verificar y recorrer para @*, @id
-        } else if(consulta[0].valor == XML.etiqueta_id) {
-            var tmpConsulta = copiarConsultas(consulta);
-            tmpConsulta.shift();
-            if(tmpConsulta.length == 0) {
-                //Resolver
-                //delete XML['nodo'];
-                return XML;
-            } else {
-                if (tmpConsulta[0].exp != undefined) {
-                    var resAux = [];
-                    XML.lista_objetos.forEach((obj) => {
-                        if(obj.etiqueta_id == tmpConsulta[0].valor) {
-                            resAux.push(obj);
-                        }
-                    });
-
-                    var expVal = tmpConsulta[0].exp.getValor(); //Verificar tipos??
-                    if(expVal.tipo == 0 || expVal.tipo == 1) {
-                        var oTmp = resAux[expVal.valor];
-                        if(oTmp != undefined) {
-                            res = [];
-                            res.push(oTmp);
-                        }
-                    } else { //Verificar si es arreglo? 
-
-                    }
-                } else {
-                    XML.lista_objetos.forEach((o) => {
-                        var tmp = ejecucionRecursiva(o, tmpConsulta); 
-                        if(tmp != '') {
-                            res.push(tmp);
-                        }
-                    });
-                }
-            }
-        }
-    } else if(consulta[0].ambito == 'full') {
-        console.log('FULL');
-        if(consulta[0].valor == '.') {
-            console.log('\t> cosa hardcore');
-        }
+function removeDot(consulta) {
+    while (consulta[0].valor == '.') {
+        consulta.shift()
     }
-    return res;
 }
 function copiarConsultas (lConsultas) {
     var aux = [];
@@ -250,10 +191,6 @@ function copiarConsultas (lConsultas) {
     })
 
     return aux;
-}
-function seguirFull(XML, consulta){
-}
-function getFull(XML,consulta) {
 }
 function printRespuestas(respuesta) {
     var txt = '';

@@ -32,10 +32,10 @@ var Modulo = /** @class */ (function (_super) {
     Modulo.prototype.copiarValor = function () {
         return new Modulo(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
     };
-    Modulo.prototype.getValor = function () {
+    Modulo.prototype.getValor = function (entorno) {
         var res = new Literal_1.Literal(69, '@ERROR@', this.linea, this.columna);
-        var e1 = this.hI.getValor();
-        var e2 = this.hD.getValor();
+        var e1 = this.hI.getValor(entorno);
+        var e2 = this.hD.getValor(entorno);
         if (e1.tipo == 0) {
             if (e2.tipo == 0) {
                 if (parseInt(e2.valor.toString()) != 0) {
