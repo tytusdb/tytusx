@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataServiceProvider } from 'src/data-service';
 import * as saveAs from 'file-saver';
+import { NgxXml2jsonService } from 'ngx-xml2json';
 
 
 @Component({
@@ -10,10 +11,10 @@ import * as saveAs from 'file-saver';
 })
 export class AppComponent {
   title = 'Proyecto1201314408';
-
+  xml = `<note><to>User</to><from>Library</from><heading>Message</heading><body>Some XML to convert to JSON!</body></note>`;
  
 
-  constructor(public dat: DataServiceProvider){
+  constructor(public dat: DataServiceProvider, public ngxXml2jsonService: NgxXml2jsonService){
 
   }
 
@@ -71,6 +72,14 @@ fileChanged2(e) {
 
   onCodeChanged3(value) {
     this.dat.Cod_tab3 = value;
+  }
+
+
+  parseValueXML(){
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(this.dat.Cod_tab1, 'text/xml');
+    const obj = this.ngxXml2jsonService.xmlToJson(xml);
+    console.log(obj);
   }
 
 }

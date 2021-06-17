@@ -1,7 +1,8 @@
 "use strict";
+
 exports.__esModule = true;
 exports.Atri = void 0;
-var Tipo_1 = require("../AST/Tipo");
+
 var Atri = /** @class */ (function () {
     function Atri(tk_id, la, l, c) {
         this.tk_id = tk_id;
@@ -10,7 +11,7 @@ var Atri = /** @class */ (function () {
         this.columna = c;
     }
     Atri.prototype.getTipo = function (ent, arbol) {
-        return Tipo_1.Tipo.CADENA;
+        return TipoXpath.CADENA;
     };
     Atri.prototype.getValorImplicito = function (ent, arbol) {
         return this.tk_id;

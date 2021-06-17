@@ -19,11 +19,15 @@ export class Multiplicacion extends Expresion {
         this.linea = l;
         this.columna = c;
     }
+
+    copiarValor(): Expresion {
+        return new Multiplicacion(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    }
     
-    getValor(): Expresion {
+    getValor(entorno: any): Expresion {
         var res:Literal = new Literal(69,'@ERROR@', this.linea, this.columna);
-        var e1 = this.hI.getValor();
-        var e2 = this.hD.getValor();
+        var e1 = this.hI.getValor(entorno);
+        var e2 = this.hD.getValor(entorno);
 
         if(e1.tipo == 0) {
             if(e2.tipo == 0) {

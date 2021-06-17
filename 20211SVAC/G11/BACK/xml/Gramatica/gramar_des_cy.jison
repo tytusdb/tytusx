@@ -1,8 +1,5 @@
 // IMPORTS ERRORES Y FUNCIONES
 %{
-    let tabla_err = require('./tabla_error');
-    let nodo_err  = require('./nodo_error');
-     
      function change_especials(etiqueta){
           if(etiqueta.includes("&lt;")){
                return etiqueta.replace(/&lt;/g,'<');
@@ -42,7 +39,6 @@
 
      function error_semanti(izqid,dereid,fila,columna){
           if(!(izqid==dereid)){
-               tabla_err.errores.addError(new nodo_err.nodoError('Semántico','Las etiquetas no coinciden: '+izqid+' -- '+dereid,fila,columna));
           }
      }
 
@@ -56,7 +52,6 @@
           if (posicion !== -1){
                return text.substr(pos_final,longitud);
           }else{
-               tabla_err.errores.addError(new nodo_err.nodoError('Sintactico','No se encuentra el token: encoding',fila,columna));
           }
      }
 %}
@@ -79,7 +74,7 @@
 <Etiqueta>"="                                                                             { return 'IGUAL'; }
 <Etiqueta>([\"\“\”](([^\"\“\”\\])*([\\].)*)*[\"\“\”])|([\'](([^\'\\])*([\\].)*)*[\'])     { yytext=change_especials(yytext); return 'CADENA'; }
 <Etiqueta>[\/]?[>]                                                                        { this.popState(); return tag_principal(yytext); }
-<Etiqueta>.                                                                               { tabla_err.errores.addError(new nodo_err.nodoError('Lexico','No se esperaba el caracter: '+yytext,yylloc.first_line,yylloc.first_column)); }
+<Etiqueta>.                                                                               {  }
 
 // RESERVADAS
 "&lt;"                                          return 'LESS'
@@ -98,7 +93,7 @@
 
 //SECCION DE IMPORTS
 %{
-     const Node = require('./nodo_tree');
+
 %}
 
 %%
@@ -106,67 +101,67 @@
 /*
     SINTACTICO
 */
-start : encod raices EOF   { $$ = new Node('start',''); $$.addChild($1); $$.addChild($2); return $$; }
+start : encod raices EOF   { $$ = new Node_tree('start',''); $$.addChild($1); $$.addChild($2); return $$; }
       ;
 
-encod : XML                { $$ = new Node('encod',''); $$.addChild(new Node($1,'XML')); }
-      |                    { $$ = new Node('encod',''); $$.addChild(new Node('ε','ε')); }
+encod : XML                { $$ = new Node_tree('encod',''); $$.addChild(new Node_tree($1,'XML')); }
+      |                    { $$ = new Node_tree('encod',''); $$.addChild(new Node_tree('ε','ε')); }
       ;
 
-raices : raiz raiz_p       { $$ = new Node('raices',''); $$.addChild($1); $$.addChild($2); }
+raices : raiz raiz_p       { $$ = new Node_tree('raices',''); $$.addChild($1); $$.addChild($2); }
        ;
 
-raiz_p : raiz raiz_p       { $$ = new Node('raiz_p',''); $$.addChild($1); $$.addChild($2); }
-       |                   { $$ = new Node('raiz_p',''); $$.addChild(new Node('ε','ε')); }
+raiz_p : raiz raiz_p       { $$ = new Node_tree('raiz_p',''); $$.addChild($1); $$.addChild($2); }
+       |                   { $$ = new Node_tree('raiz_p',''); $$.addChild(new Node_tree('ε','ε')); }
        ;
 
-raiz : elemento            { $$ = new Node('raiz',''); $$.addChild($1); }
-     | error               { $$ = new Node('error','error'); }
+raiz : elemento            { $$ = new Node_tree('raiz',''); $$.addChild($1); }
+     | error               { $$ = new Node_tree('error','error'); }
      ;
 
-elemento : ETI_A list_atributos ETI_CS elementos  ETI_C ETI_CS       { $$ = new Node('elemento',''); $$.addChild(new Node('<'+$1,'ETI_A'));  $$.addChild($2); $$.addChild(new Node($3,'ETI_CS'));  $$.addChild($4); $$.addChild(new Node('</'+$5,'ETI_C')); $$.addChild(new Node($6,'ETI_CS')); }
-         | ETI_A list_atributos ETI_CS list_elementos  ETI_C ETI_CS  { $$ = new Node('elemento',''); $$.addChild(new Node('<'+$1,'ETI_A'));  $$.addChild($2); $$.addChild(new Node($3,'ETI_CS'));  $$.addChild($4); $$.addChild(new Node('</'+$5,'ETI_C')); $$.addChild(new Node($6,'ETI_CS')); }
-         | ETI_A list_atributos ETI_CC                               { $$ = new Node('elemento',''); $$.addChild(new Node('<'+$1,'ETI_A'));  $$.addChild($2); $$.addChild(new Node($3,'ETI_CC'));  }
+elemento : ETI_A list_atributos ETI_CS elementos  ETI_C ETI_CS       { $$ = new Node_tree('elemento',''); $$.addChild(new Node_tree('<'+$1,'ETI_A'));  $$.addChild($2); $$.addChild(new Node_tree($3,'ETI_CS'));  $$.addChild($4); $$.addChild(new Node_tree('</'+$5,'ETI_C')); $$.addChild(new Node_tree($6,'ETI_CS')); }
+         | ETI_A list_atributos ETI_CS list_elementos  ETI_C ETI_CS  { $$ = new Node_tree('elemento',''); $$.addChild(new Node_tree('<'+$1,'ETI_A'));  $$.addChild($2); $$.addChild(new Node_tree($3,'ETI_CS'));  $$.addChild($4); $$.addChild(new Node_tree('</'+$5,'ETI_C')); $$.addChild(new Node_tree($6,'ETI_CS')); }
+         | ETI_A list_atributos ETI_CC                               { $$ = new Node_tree('elemento',''); $$.addChild(new Node_tree('<'+$1,'ETI_A'));  $$.addChild($2); $$.addChild(new Node_tree($3,'ETI_CC'));  }
          ;
 
-list_atributos : atributos                               { $$ = new Node('list_atributos',''); $$.addChild($1); }
-               |                                         { $$ = new Node('list_atributos',''); $$.addChild(new Node('ε','ε')); }
+list_atributos : atributos                               { $$ = new Node_tree('list_atributos',''); $$.addChild($1); }
+               |                                         { $$ = new Node_tree('list_atributos',''); $$.addChild(new Node_tree('ε','ε')); }
                ;
 
-list_elementos : list_text_elemento                      { $$ = new Node('list_elementos',''); $$.addChild($1); }
-               |                                         { $$ = new Node('list_elementos',''); $$.addChild(new Node('ε','ε')); }
+list_elementos : list_text_elemento                      { $$ = new Node_tree('list_elementos',''); $$.addChild($1); }
+               |                                         { $$ = new Node_tree('list_elementos',''); $$.addChild(new Node_tree('ε','ε')); }
                ;
 
-atributos : atributo atributo_p                          { $$ = new Node('atributos',''); $$.addChild($1); $$.addChild($2); }
+atributos : atributo atributo_p                          { $$ = new Node_tree('atributos',''); $$.addChild($1); $$.addChild($2); }
           ;
 
-atributo_p : atributo atributo_p                         { $$ = new Node('atributo_p',''); $$.addChild($1); $$.addChild($2); }
-           |                                             { $$ = new Node('raiz_p',''); $$.addChild(new Node('ε','ε')); }
+atributo_p : atributo atributo_p                         { $$ = new Node_tree('atributo_p',''); $$.addChild($1); $$.addChild($2); }
+           |                                             { $$ = new Node_tree('raiz_p',''); $$.addChild(new Node_tree('ε','ε')); }
            ;
 
-atributo : ID IGUAL CADENA                               { $$ = new Node('atributo',''); $$.addChild(new Node($1,'ID')); $$.addChild(new Node($2,'IGUAL')); $$.addChild(new Node($3,'CADENA')); }
+atributo : ID IGUAL CADENA                               { $$ = new Node_tree('atributo',''); $$.addChild(new Node_tree($1,'ID')); $$.addChild(new Node_tree($2,'IGUAL')); $$.addChild(new Node_tree($3,'CADENA')); }
          ;
 
-list_text_elemento : tipo lte_p                          { $$ = new Node('list_text_elemento',''); $$.addChild($1); $$.addChild($2); }
+list_text_elemento : tipo lte_p                          { $$ = new Node_tree('list_text_elemento',''); $$.addChild($1); $$.addChild($2); }
                    ;
 
-lte_p : tipo lte_p                                       { $$ = new Node('lte_p',''); $$.addChild($1); $$.addChild($2); }
-      |                                                  { $$ = new Node('lte_p',''); $$.addChild(new Node('ε','ε')); }
+lte_p : tipo lte_p                                       { $$ = new Node_tree('lte_p',''); $$.addChild($1); $$.addChild($2); }
+      |                                                  { $$ = new Node_tree('lte_p',''); $$.addChild(new Node_tree('ε','ε')); }
       ;
 
-tipo : TEXTO                                            { $$ = new Node('tipo',''); $$.addChild(new Node($1,'TEXTO'));   }
-     | LESS                                             { $$ = new Node('tipo',''); $$.addChild(new Node($1,'LESS'));   }
-     | MORE                                             { $$ = new Node('tipo',''); $$.addChild(new Node($1,'MORE'));  }
-     | AMP                                              { $$ = new Node('tipo',''); $$.addChild(new Node($1,'AMP'));  }
-     | APOS                                             { $$ = new Node('tipo',''); $$.addChild(new Node($1,'APOS'));  }
-     | QUOT                                             { $$ = new Node('tipo',''); $$.addChild(new Node($1,'QUOT'));  }
+tipo : TEXTO                                            { $$ = new Node_tree('tipo',''); $$.addChild(new Node_tree($1,'TEXTO'));   }
+     | LESS                                             { $$ = new Node_tree('tipo',''); $$.addChild(new Node_tree($1,'LESS'));   }
+     | MORE                                             { $$ = new Node_tree('tipo',''); $$.addChild(new Node_tree($1,'MORE'));  }
+     | AMP                                              { $$ = new Node_tree('tipo',''); $$.addChild(new Node_tree($1,'AMP'));  }
+     | APOS                                             { $$ = new Node_tree('tipo',''); $$.addChild(new Node_tree($1,'APOS'));  }
+     | QUOT                                             { $$ = new Node_tree('tipo',''); $$.addChild(new Node_tree($1,'QUOT'));  }
      ;
 
-elementos : elemento elementos_p                       { $$ = new Node('elementos',''); $$.addChild($1); $$.addChild($2); }
+elementos : elemento elementos_p                       { $$ = new Node_tree('elementos',''); $$.addChild($1); $$.addChild($2); }
           ;
 
-elementos_p : elemento elementos_p                     { $$ = new Node('elementos_p',''); $$.addChild($1); $$.addChild($2); }
-            |                                          { $$ = new Node('elementos_p',''); $$.addChild(new Node('ε','ε')); } 
+elementos_p : elemento elementos_p                     { $$ = new Node_tree('elementos_p',''); $$.addChild($1); $$.addChild($2); }
+            |                                          { $$ = new Node_tree('elementos_p',''); $$.addChild(new Node_tree('ε','ε')); } 
             ;
 %%
 

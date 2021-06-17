@@ -1,0 +1,94 @@
+<div class="container">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title >
+         Proyecto Compi2 Bv
+       </mat-card-title>
+      <mat-card-subtitle> 
+        <div class="example-label " style="text-align: left;">Opciones</div>
+         <div class="row">
+            <div class="col-md-6">
+              <div class="example-button-row ">
+                <div class="example-flex-container">
+                  
+                  <div class="example-button-container">
+                    <button mat-mini-fab aria-label="Example icon button with a menu icon" color="primary" (click)="openFile()"
+                        matTooltip="Cargar Archivo">
+                      <mat-icon>publish</mat-icon>
+                    </button>
+                    <input type="file" style="display:none" (change)="handle($event)" >
+                  </div>
+                  <div class="example-button-container">
+                    <button mat-mini-fab aria-label="Example icon button with a menu icon" color="primary"  (click)="expFile()"
+                        matTooltip="Guardar Archivo">
+                      <mat-icon>save</mat-icon>
+                    </button>
+                  </div>
+                  <div class="example-button-container">
+                    <button mat-mini-fab [matMenuTriggerFor]="menu" color="primary" aria-label="Example icon-button with a menu" matTooltip="Reportes">
+                      <mat-icon>menu_book</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="openTablaSimbolos()"> 
+                        <span>Tabla de Simbolos</span>
+                      </button>
+                      
+                      <button mat-menu-item (click)="generarReporteErroresXML()">
+                        <span>Reporte de Errores</span>
+                      </button>
+                      <button mat-menu-item>
+                        <span>Reporte 3</span>
+                      </button>
+                    </mat-menu>
+                  </div>
+                </div>
+              </div>
+            </div>
+         </div>
+
+       
+    </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+     
+    <div class="form-group">
+      <label for="txtXpath">Editor xPath:</label>
+      <textarea style="resize: none;" id="txtXpath"  [(ngModel)]="txtXpath" class="form-control"  rows="2" [ngModelOptions]="{standalone: true}"></textarea>
+    </div>
+    <form>
+      <div class="form-group">
+        <div class="form-group">
+          <label for="txtXml">Editor XML:</label>
+          <textarea style="resize: none;"   [(ngModel)]="xmlText" class="form-control" id="txtXml" rows="15" [ngModelOptions]="{standalone: true}"></textarea>
+        </div>
+      </div>
+    </form>
+     <div class="form-group">
+      <label for="exampleFormControlTextarea1">Consola:</label>
+      <textarea class="form-control" style="resize: none;" id="exampleFormControlTextarea1"   [(ngModel)]="consoleValue" rows="3" readonly [ngModelOptions]="{standalone: true}"></textarea>
+    </div>
+    </mat-card-content>
+    <mat-card-actions>
+      
+      <button mat-button color="primary" (click)="Compilar()">Compilar</button>
+      <button mat-button>Borrar</button>
+    </mat-card-actions>
+  </mat-card>
+  <div>
+    <button (click)="dibujar()">Generar AST XML Ascendente</button>  
+    <button (click)="generarReporteGramaticalXML()">Generar Reporte Gramatical XML Ascendente</button> 
+    <div id="graph"></div>
+    <table  border="1">
+      <tr>REPORTE GRAMATICAL XML ASCENDENTE</tr>
+      <tr> <TD>PRODUCCION</TD> <TD>ACCIONES</TD>  </tr>  
+
+      <tr *ngFor="let fila of this.rgxmlasc">
+        <td>{{fila.Produccion}}</td>
+        <td>{{fila.Regla_}}</td>
+      </tr>
+      </table>
+  </div>
+
+
+</div>

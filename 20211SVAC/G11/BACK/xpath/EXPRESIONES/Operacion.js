@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Operacion = exports.Operador = void 0;
-var Tipo_1 = require("../AST/Tipo");
+
 var Operador;
 (function (Operador) {
     Operador[Operador["SUMA"] = 0] = "SUMA";
@@ -32,18 +32,18 @@ var Operacion = /** @class */ (function () {
     Operacion.prototype.getTipo = function (ent, arbol) {
         var valor = this.getValorImplicito(ent, arbol);
         if (typeof (valor) === 'boolean') {
-            return Tipo_1.Tipo.BOOL;
+            return TipoXpath.BOOL;
         }
         else if (typeof (valor) === 'string') {
-            return Tipo_1.Tipo.CADENA;
+            return TipoXpath.CADENA;
         }
         else if (typeof (valor) === 'number') {
             if (this.isInt(Number(valor))) {
-                return Tipo_1.Tipo.ENTERO;
+                return TipoXpath.ENTERO;
             }
-            return Tipo_1.Tipo.DECIMAL;
+            return TipoXpath.DECIMAL;
         }
-        return Tipo_1.Tipo.IDENTIFICADOR;
+        return TipoXpath.IDENTIFICADOR;
     };
     Operacion.prototype.getValorImplicito = function (ent, arbol) {
         if (this.operador !== Operador.MENOS_UNARIO) {
