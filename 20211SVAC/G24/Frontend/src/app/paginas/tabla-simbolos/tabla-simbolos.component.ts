@@ -8,29 +8,19 @@ import { Component, OnInit } from '@angular/core';
 export class TablaSimbolosComponent implements OnInit {
   displayedColumns: string[] = [
     'ID',
-    'TIPO',
-    'TIPODATO',
-    'ENTORNO',
-    'LINEA',
-    'COLUMNA',
-    'VALOR',
+    'CONTENIDO',
+    'LISTA ATRIBUTO',
+    'LISTA OBJETO'
   ];
   dataSource = '';
   constructor() {}
   ngOnInit(): void {
 
-    let info = window.localStorage.getItem('simbolos');
+    let info = window.localStorage.getItem('symbol');
     let otro = JSON.parse(info);
     this.dataSource = otro;
-
+    console.log("Aqui abajo tabla simbolos")
+    console.log(this.dataSource)
   }
 }
-export interface Simbolos {
-  id: string;
-  tipo: string;
-  tipoDato: string;
-  entorno: string;
-  linea: string;
-  columna: string;
-  valor: string;
-}
+

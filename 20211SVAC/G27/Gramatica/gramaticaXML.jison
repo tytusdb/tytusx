@@ -70,38 +70,38 @@ BSL                                 "\\".
 
 
 /* Definición de la gramática */
-START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF
+START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF { return $10;}
     ;
 
   
 
 RAIZ:
-    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt    
-    | lt identifier  gt RAICES  lt div identifier gt     
+    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
+    | lt identifier  gt RAICES  lt div identifier gt {$$= new Objeto($2,'',@1.first_line, @1.first_column,null,$4);}    
              
 ;
 
 RAICES:
-    RAICES OBJETO        
-	| OBJETO  
+    RAICES OBJETO {$$= $1;  $$.push($2);  alert($2.texto);}
+	| OBJETO  {$$= [];  $$.push($1); alert($1.texto);}
 ;        
 
   
 OBJETO:
-           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt     
-        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt     
-        |  lt identifier  gt RAICES  lt div identifier gt     
-        |  lt identifier  gt identifier  lt div identifier gt     
+           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); } 
+        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,@1.first_line, @1.first_column,$3,null); } 
+        |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',@1.first_line, @1.first_column,null,$4);}       
+        |  lt identifier  gt identifier  lt div identifier gt  { $$= new Objeto($2,$4,@1.first_line, @1.first_column,null,null);}    
            
 ;
 
 
 ATRIBUTOS:
-    ATRIBUTOS ATRIBUTO                              
-    | ATRIBUTO   
+    ATRIBUTOS ATRIBUTO   {$$=$1; $$.push($2);}                           
+    | ATRIBUTO {$$=[]; $$.push($1);}
 
 ;
 
 ATRIBUTO: 
-    identifier asig StringLiteral                   
+    identifier asig StringLiteral {$$= new Atributo($1,$3,@1.first_line, @1.first_column);}                 
 ;

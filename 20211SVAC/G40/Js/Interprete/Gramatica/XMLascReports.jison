@@ -31,8 +31,8 @@ BSL                                 "\\".
 "/"                     %{ return 'tk_slash'; %}
 \"[^\"]*\"              %{ yytext = yytext.substr(1, yyleng-2); return 'tk_cadena1'; %}
 \'[^\']*\'              %{ yytext = yytext.substr(1, yyleng-2); return 'tk_cadena2'; %}
-([a-zA-ZáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*     %{ return 'tk_identificador'; %}
-[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_!@#$%\+\^\'\`\"&\*()/¡:;.,~-]+     %{ return 'tk_texto'; %}
+([a-zA-ZäëïöüÄËÏÖÜáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9äëïöüÄËÏÖÜáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*     %{ return 'tk_identificador'; %}
+[a-zA-Z0-9äëïöüÄËÏÖÜáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_!@#$%\+\^\'\`\"&\*()/¡:;.,~-]+     %{ return 'tk_texto'; %}
 [']     %{ return 'tk_squote'; %}
 ["]      %{ return 'tk_dquote'; %}
 "["      %{ return 'tk_corchetea'; %}
@@ -224,35 +224,35 @@ TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   $$ = ["&",nodoAux]; }
                                   
         |    tk_apos            { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol("\'","texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("comilla","texto"));
                                   $$ = ["\'",nodoAux]; }
 
         |    tk_squote          { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("comilla","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_interrogacion   { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("interrogacion","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_dquote          { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("comilla doble","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_corchetea       { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("corcheteA","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_corchetec       { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("corcheteC","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_llavea          { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("llave abierta","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_llavec          { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("Llave cerrada","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_xml             { nodoAux = new NodoArbol("TEXTO","");
@@ -268,7 +268,7 @@ TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   $$ = [$1,nodoAux]; }
 
         |    tk_quot            { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol("\"","texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("&quot;","texto"));
                                   $$ = ["\"",nodoAux]; }
 
         |    tk_cadena1         { $1 = `"`+ $1 + `"`;
@@ -282,7 +282,7 @@ TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   $$ = [$1,nodoAux];  }
                                   
         |    tk_texto           { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol($1,"texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("texto","texto"));
                                   $$ = [$1,nodoAux];  };
 
 OBJETOS:   OBJETOS OBJETO        { RGxml.agregarElemento("ListaObjetos -> ListaObjetos Objeto","ListaObjetos.val := ListaObjetos.val.push(Objeto.val)");

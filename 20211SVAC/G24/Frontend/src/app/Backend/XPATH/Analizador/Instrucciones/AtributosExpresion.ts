@@ -2,7 +2,7 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 
@@ -17,12 +17,12 @@ export default class AtributoExpresion extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
-    getNodo(): nodoAST {
-        var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
+    getNodosAST(): nodoAST {
+        var nodo= new nodoAST("ATRIBUTO"); //PADRE SELECT
         if(this.expresion!=null){
-            var exp= new nodoAST("EXPRESION");
-            exp.agregarHijoAST(this.expresion.getNodo())
-            nodo.agregarHijoAST(exp);
+            nodo.agregarHijo(this.Operacion)
+            nodo.agregarHijoAST(this.expresion.getNodosAST())
+           
         }
         
         return nodo;

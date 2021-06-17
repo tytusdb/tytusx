@@ -1,8 +1,8 @@
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
-import Errores from '../Excepciones/Errores';
+import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class SelectRoot extends Instruccion {
@@ -17,14 +17,12 @@ export default class SelectRoot extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
-    getNodo(): nodoAST {
+    getNodosAST(): nodoAST {
         var nodo= new nodoAST("ALL"); //PADRE SELECT
-        var nodoselect= new nodoAST("SELECT")
-        nodoselect.agregarHijo(this.Operacion)
+        var nodoselect= new nodoAST(this.Operacion)
         nodo.agregarHijoAST(nodoselect)
         if(this.Operacion2!=null){
-            var nodohijo2= new nodoAST('SELECT'); //PADRE SELECT
-            nodohijo2.agregarHijo(this.Operacion2);
+            var nodohijo2= new nodoAST(this.Operacion2); //PADRE SELECT
             nodo.agregarHijoAST(nodohijo2)
         }
         

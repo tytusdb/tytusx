@@ -104,17 +104,87 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/biblioteca/@fechaNacimiento");
+let editorXPATH = (document.getElementById("editor").value = "/*");
 let editorXML = document.getElementById("consolaJS");
+let indiceAux=0;
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
+let globalencod;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<biblioteca fechaNacimiento="28/03/1936">
-  Hola MUNDO
-</biblioteca>
+let textoEntrada = `<?xml version="1.0" encoding="ASCII"?>
+<mundo>
+  <continente name="Europa">
+    <pais moneda="Euro">
+      <nombre>Monaco</nombre>
+      <capital>Ciudad de Monaco</capital>
+      <idioma>Frances</idioma>
+      <poblacion year="2019" unit="thousands">38.964</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Austria</nombre>
+      <capital>Viena</capital>
+      <idioma>Aleman</idioma>
+      <poblacion year="2019" unit="millions">8.859</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Portugal</nombre>
+      <capital>Lisboa</capital>
+      <idioma>Portugues</idioma>
+      <poblacion year="2019" unit="millions">10.28</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Francia</nombre>
+      <capital>Paris</capital>
+      <idioma>Frances</idioma>
+      <poblacion year="2019" unit="millions">67.06</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Alemania</nombre>
+      <capital>Berlin</capital>
+      <idioma>Aleman</idioma>
+      <poblacion year="2019" unit="millions">83.02</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>España</nombre>
+      <capital>Madrid</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">46.94</poblacion>
+    </pais>
+  </continente>
+  <continente name="America">
+    <pais moneda="Dolar">
+      <nombre>Estados unidos</nombre>
+      <capital>Washington DC</capital>
+      <poblacion year="2019" unit="millions">328.2</poblacion>
+    </pais>
+    <pais moneda="Quetzal">
+      <nombre>Guatemala</nombre>
+      <capital>Ciudad de Guatemala</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">16.6</poblacion>
+    </pais>
+    <pais moneda="Dolar">
+      <nombre>El Salvador</nombre>
+      <capital>San Salvador</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">6.454</poblacion>
+    </pais>
+    <pais moneda="Peso argentino">
+      <nombre>Argentina</nombre>
+      <capital>Buenos Aires</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">44.94</poblacion>
+    </pais>
+    <pais moneda="Real brasileño">
+      <nombre>Brasil</nombre>
+      <capital>Brasilia</capital>
+      <idioma>Portugues</idioma>
+      <poblacion year="2019" unit="millions">221</poblacion>
+    </pais>
+  </continente>
+</mundo>
 `
 editorXML.value = textoEntrada
 
@@ -131,7 +201,7 @@ botonCargar.addEventListener("click", () => {
     console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
     codificador.innerHTML = parserXML.tipoencoding;
-    
+    globalencod =parserXML.tipoencoding;
 
 })
 
@@ -147,27 +217,32 @@ botonCargar2.addEventListener("click", () => {
   console.log("tipo de encoding: " + parserXML.tipoencoding);    
 
   codificador.innerHTML = parserXML.tipoencoding;
-  
+  globalencod =parserXML.tipoencoding;
 
 
 })
 document.getElementById("ast").addEventListener("click", () => {
-  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+    let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
   
-  console.log("ingreso al CST de mercado");
+    // Se activa el modal
+    activarModal();
+
+    // Generar el arbol con Treant JS
+    graficarArbol(AST_xPath);
   
-  console.log(parserXML.json.nodo);
-
-  console.log("ingreso al AST");
-  
-  console.log(AST_xPath);
-
-  generarAST(AST_xPath);
-
-  //graficarArbol(AST_xPath.nodo);
-
-  //generarAST(AST_xPath);
 })
+
+document.getElementById("btnReporteXPATHcst").addEventListener("click", () => {
+  let AST_xPath2=analizador_xpath.parse(document.getElementById("editor").value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xPath2);
+
+})
+
 // ======================================
 // MODAL XML
 // ======================================
@@ -234,8 +309,8 @@ btnReporteXMLCST.addEventListener("click", () => {
 btnReporteGram.addEventListener('click', () => {
   tablaTituloCST.innerHTML = 'Reporte Gramatical XML ' + tipoAnalizadorXML;
 
-  contenidoModal2.innerHTML = `<textarea style="width: 38%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
-  <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramatical}</textarea>
+  contenidoModal2.innerHTML = `<textarea style="width: 38%; height: 700px; resize: none;">${parserXML.gramatical}</textarea>
+  <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
   `;
 });
 
@@ -246,6 +321,9 @@ btnReporteXMLErrores.addEventListener("click", () => {
 
   // Lista de errores
   listaErrores = parserXML.listaErrores;
+
+  console.log("ESTA ES LA LISTA DE ERRORES");
+  console.log(listaErrores);
 
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
@@ -285,18 +363,22 @@ function analizar_xpath_izq(){
   listaTokens = [];
   listaErrores = [];
 
-  console.log("Analizando XPATH...");
-  let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
+  parserXML = xmlDerecha.parse(editorXML.value);
 
-  // GENERANDO ARBOL AST
+  console.log("Analizando XPATH...");
+  let AST_xPathizq=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
+  
+  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+
   contenidoModal2.innerHTML = `
   <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
     <div id="graph" style="width: 100%;"></div>
   </div>
   `;
 
-  generarAST(AST_xPath);
-  
+  //generarAST(AST_xPathizq);
+  console.log("Interpretando");
+  interpretar(AST_xPath,parserXML.json);
 }
 
 
@@ -308,9 +390,12 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
+  parserXML = xmlDerecha.parse(editorXML.value);
+  console.log("Analizando XPATH por la derecha");
 
   
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+  console.log(AST_xPath);
 
   //GENERANDO ARBOL AST
   contenidoModal2.innerHTML = `
@@ -322,7 +407,7 @@ function analizar_xpath() {
   //generarAST(AST_xPath);
   
 
-  
+  //generarAST(AST_xPath);
   console.log("Interpretando");
   interpretar(AST_xPath,parserXML.json);
   //interpretar(AST_xPath,AST_xml);
@@ -330,10 +415,45 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+    // Original
+    function encode_utf8(s) {
+      return unescape(encodeURIComponent(s));
+    }
+
+    function decode_utf8(s) {
+      return decodeURIComponent(escape(s));
+    }
+
+    function codificarascci(t) {
+      var caracteres = [];
+      valor = t;
+      for (var i = 0; i < valor.length; i++) {
+        caracteres[i] = valor.charAt(i).charCodeAt(0);
+      }
+      return caracteres.toString().replaceAll(",",' ');
+    }
 
 function imprimiConsola(txt){
-    document.getElementById("consolaPython").value=txt+"\n";
-}
+  console.log("imprimir en consola");
+  console.log(globalencod);  
+  //console.log(encode_utf8(txt)+"\n");
+  // asi se imprime la salida
+  //  document.getElementById("consolaPython").value=txt+"\n";
+    if(globalencod.includes('ISO-8859-1')){
+      console.log("entre en iso");
+      document.getElementById("consolaPython").value=encode_utf8(txt)+"\n";
+    }
+//IMPLEMENTACION DEL CODIGO ASCII
+/*    else if(globalencod.includes('ASCII')){
+      console.log("entre en ASCII");
+      document.getElementById("consolaPython").value = codificarascci(txt)+"\n";
+    }
+*/
+    else{
+      console.log("entre en utf");
+      document.getElementById("consolaPython").value=txt+"\n";
+    }
+  }
 document.getElementById("msgError").style.display="none";
 
 

@@ -18,11 +18,13 @@ simple_chart_config = {
     }
 };
 
+
 new Treant(simple_chart_config);
 
 // FUNCION PARA GRAFICAR
 function generarArbol(nodoRaiz) {
     
+
     let rootNode = {
         text: {name: nodoRaiz.valor},
         children: []
@@ -30,6 +32,7 @@ function generarArbol(nodoRaiz) {
 
     if(nodoRaiz.hijos) {
         nodoRaiz.hijos.forEach(hijo => {
+            
             rootNode.children.push(generarArbol(hijo));
         });
     }
@@ -39,6 +42,7 @@ function generarArbol(nodoRaiz) {
 
 function graficarArbol(nodoRaiz) {
     let node = generarArbol(nodoRaiz);
+    console.log("DEVUELVE", node);
     simple_chart_config.nodeStructure = node;
     new Treant(simple_chart_config);
 }
