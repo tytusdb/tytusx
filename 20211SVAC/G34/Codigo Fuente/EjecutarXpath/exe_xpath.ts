@@ -5,21 +5,6 @@ function exepath1(listainstrucciones: []) {
 
 
     let p = tds_xml_persistente[0];
-<<<<<<< HEAD
-    //console.log(tds_xml_persistente);
-    for (let j: number = 0; j < listainstrucciones.length; j++) {
-
-        if (listainstrucciones[j].ruta2 === undefined) /////si vienen solo una ruta
-        {
-            for (let i: number = 0; i < p.length; i++) {
-
-                let auxiliar = [];
-                auxiliar = getrutasimple(listainstrucciones[j], p[i]);
-
-                if (auxiliar != undefined) {
-                    console.log(auxiliar);
-                }
-=======
         //console.log(p[i]);
     for(let j:number = 0; j < listainstrucciones.length; j++)
     {
@@ -33,13 +18,12 @@ function exepath1(listainstrucciones: []) {
             {
                 if(auxiliar.length>0)
                 {console.log(getrutasimple(listainstrucciones[j], p[i]));}
->>>>>>> 3ba4b1cdb54d542d00e596d85c3cc734b6cd9dd6
+
             }
         }
 
-        else //////mas de una ruta
+        }else //////mas de una ruta
         {
-<<<<<<< HEAD
             for (let i: number = 0; i < p.length; i++) {
                 //console.log(listainstrucciones[j]);
                 //console.log(p[i]);
@@ -120,7 +104,7 @@ function getInfoXpath(listainstrucciones: any, entorno: TablaSimbolos) {
                             aux.push(entorno[i].simbolos[j]);
                         }
                     }
-                    else {
+
 
                     else 
                     {
