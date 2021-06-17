@@ -1,59 +1,52 @@
+import Atributo from "../Expresiones/Atributo";
+import Objeto from "../Expresiones/Objeto";
+
 export class reporteTabla {
-  private identificador: String;
-  private forma: String;
-  private tipo: String;
-  private entorno: String;
-  private linea: String;
-  private columna: String;
-  private valor: String;
-  constructor(
-    identificador: String,
-    valor: String,
-    forma: String,
-    tipo: String,
-    entorno: String,
-    linea: String,
-    columna: String
-  ) {
-    this.identificador = identificador.toLowerCase();
-    this.forma = forma;
-    this.tipo = tipo;
-    this.entorno = entorno;
-    this.linea = linea;
-    this.columna = columna;
-    this.valor = valor;
+  public identificador: String;
+  public contenido: string;
+  public listaAtributos: String;
+  public listaObjetos: String;
+
+
+  constructor(identificador: String, contenido:string, listaAtributos: String,  listaObjetos: String) {
+    this.identificador = identificador;
+    this.contenido = contenido;
+    this.listaAtributos = listaAtributos;
+    this.listaObjetos = listaObjetos;
+  
   }
   public getIdentificador(): String {
     return this.identificador;
   }
-  public getForma(): String {
-    return this.forma;
+
+  public setIdentificador(identificador:string){
+    this.identificador=identificador;
   }
-  public getTipo(): String {
-    return this.tipo;
+
+  public getContenido(): String {
+    return this.identificador;
   }
-  public getEntorno(): String {
-    return this.entorno;
+
+  public setContenido(contenido:string){
+    this.contenido=contenido;
   }
-  public getLinea(): String {
-    return this.linea;
+
+  public getListaAtributos():String{
+    return this.listaAtributos;
   }
-  public getColumna(): String {
-    return this.columna;
+
+  public setListaAtributos(listaAtributos:String) {
+    this.listaAtributos = listaAtributos;
   }
-  public getValor(): String {
-    return this.valor;
+
+  public getListaObjetos():String{
+    return this.listaObjetos;
   }
-  public setLinea(linea: String) {
-    this.linea = linea;
+
+  public setListaObjetos(listaObjetos:String) {
+    this.listaObjetos = listaObjetos;
   }
-  public setColumna(col: String) {
-    this.columna = col;
-  }
-  public setValor(val: String) {
-    this.valor = val;
-  }
-  public setEntorno(ent: String) {
-    this.entorno = ent;
-  }
+
+
+
 }

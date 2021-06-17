@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link  rel = "stylesheet"  href = "../codemirror-5.61.1/lib/codemirror.css"> 
+    <meta name="viewport" content="width= device-width">
+    <link rel="stylesheet" href="../css/estiloBarra.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../css/estiloheader.css" MEDIA=screen>
+   
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Errores</title>
+</head>
+<body style="background-color: #D9FFF9">
+
+    <div id="portada">
+        <div>
+            <div class="contenedor">
+                <div class="objeto" style="width:80%; float:left; padding-top: 20px;">
+                    <h3 style="border-bottom: 60px;" class="tutulo2">Grupo 22 </h3>
+                    <h1 style="padding-top: 80px;" class="tutulo1">Analizador XPath</h1>
+                    <p></p>
+                </div>
+                <div style="padding-top: 250px;">
+                    <nav>
+                        <div class="navbar1">
+                            <a href="">Inicio</a>
+
+                            <!--<div class="dropdown3">
+                      <button class="dropbtn3">Archivo
+                        <i class="fa fa-caret-down"></i>
+                      </button>
+                      <div class="dropdown-content1">
+                        <a onclick="archivoNuevo()" id="nuevoArchivo">Nuevo</a>
+                        <a>Abrir <input id="abrir" type="file" name="file" accept=".cs" required></input></a>
+                        <a onclick="guardarDoc()">Guardar </a>
+                        <a>Guardar Como </a>
+                      </div>
+                    </div>-->
+                            <a href="">Tabla de Simbolos</a>
+                            <div class="dropdown3">
+                                <button class="dropbtn3">Reportes
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="dropdown-content1">
+                                    <a onclick="llenarTablaErrores()" id='erroresDoc'>Errores</a>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div  style="width: 100%; padding-top: 80px; padding-left: 15%;padding-right: 15%;" id="divTablaErrores" >
+
+    </div>
+</body>
+<script>
+    window.onload=llenarTablaErrores;
+    var url_string = window.location.href; //
+    var url = new URL(url_string);
+    var errores = url.searchParams.get("erroresV");
+    var divTabla1 = document.getElementById('divTablaErrores');
+    
+    function llenarTablaErrores(){
+        if (divTabla1 != null)
+            divTabla1.innerHTML = errores;
+            console.log(errores);
+    }
+    
+</script>

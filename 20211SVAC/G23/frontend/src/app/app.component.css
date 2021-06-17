@@ -1,0 +1,50 @@
+*:not(i) {
+    font-family: 'Varela Round', sans-serif;
+}
+
+.title {
+    background-color: #c1502e;
+    font-family: 'Varela Round', sans-serif;
+}
+
+.tbar {
+    height: 38px;
+}
+
+.file-editors {
+    height: 415px;
+}
+
+.file-console {
+    height: 375px;
+}
+
+.subtitulo {
+    font-size: large;
+}
+
+.foot {
+    color: lightgrey;
+}
+
+hr {
+    border-width: 0.13em;
+    border-color: gray;
+}
+
+.fc:first-letter {
+    text-transform: capitalize
+}
+
+.item:hover {
+    background-color: #292b2c;
+}
+
+.dropdown-menu {
+    padding: 0% !important;
+}
+
+.sel_g {
+    position: absolute;
+    right: 0%;
+}

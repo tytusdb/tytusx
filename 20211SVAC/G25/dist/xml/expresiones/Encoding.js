@@ -1,7 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Encoding = void 0;
-const Tipo_1 = require("../ast/Tipo");
 class Encoding {
     constructor(encoding, line, column) {
         this.encoding = encoding;
@@ -9,7 +6,7 @@ class Encoding {
         this.column = column;
     }
     getTipo(e) {
-        return Tipo_1.Tipo.ENCODING;
+        return Tipo.ENCODING;
     }
     ;
     getValorImplicito(e) {
@@ -25,4 +22,3 @@ class Encoding {
     }
     ;
 }
-exports.Encoding = Encoding;

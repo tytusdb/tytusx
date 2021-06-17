@@ -85,20 +85,48 @@ BSL                         "\\".
 %%
 
 /* Definición de la gramática */
-INICIO : SETS EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
+INICIO : LISTA_XPATH EOF     {  /*SELECT ES EL ARREGLO DE NODOS*/
                          /*Creamos una nueva instruccion y le mandamos los nodos que debe ir a buscar*/
-                        if ($1!=null){
-                          instruccion = new XPath(@1.first_line, @1.first_column, $1)
+                        if ($1!=null){                    
                           console.log("TODO CORRECTO :D XPATH ASC VERSION");
-                          $$ = instruccion;
+                          $$ = $1;
                           return $$;
                         }else {
-                          instruccion = new XPath(@1.first_line, @1.first_column, [])
                           console.log("TODO CORRECTO :D XPATH ASC VERSION");
-                          $$ = instruccion;
+                          $$ = [];
                           return $$;
                         }
                          } ;
+
+LISTA_XPATH: SETS OTRO_SET { if($1!=null){
+                              instruccion = new XPath(@1.first_line, @1.first_column, $1);
+                              arr = [instruccion];
+                              if($2!=null){
+                              arr = arr.concat($2);
+                              }                                   
+                              $$ = arr;
+                              }else {
+                                arr = null;
+                                if($2!=null){
+                                arr = $2;                                   
+                                } 
+                                $$ = arr;}};
+        
+OTRO_SET: tk_barra SETS OTRO_SET { if ($2!=null){
+                                    instruccion = new XPath(@1.first_line, @1.first_column, $2);
+                                    arr = [instruccion];
+                                    if($3!=null){
+                                    arr = arr.concat($3);
+                                    }                                   
+                                    $$ = arr;                                   
+                                  }else {
+                                    arr = null;
+                                    if($3!=null){
+                                    arr = $3;                                   
+                                    } 
+                                    $$ = arr;
+                                  }}
+        | {  $$ = null; };      
 
 SETS: SETS SET { if($1!=null && $2!=null){
                   $1.push($2);
@@ -189,13 +217,23 @@ EXPRESION : tk_identificador PREDICADO {
                                         nodoaux.agregarHijo($2[1]);
                                         $$ = [expresionAux,nodoaux];
                                         }
-        |  tk_punto {     
+        |  tk_punto PREDICADO {     
                                         expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.PUNTO, null);
                                         nodoaux = new NodoArbol($1,"");
                                         $$ = [expresionAux,nodoaux];
                                         }
-        |  tk_doblepunto {     
+        |  tk_doblepunto PREDICADO {     
                                         expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.DOBLEPUNTO, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
+        |  tk_arrobaasterisco PREDICADO {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.ARROBA, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];
+                                        }
+        |  tk_arroba tk_identificador PREDICADO {     
+                                        expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $2, TipoExpresionXPath.ARROBA_ID, null);
                                         nodoaux = new NodoArbol($1,"");
                                         $$ = [expresionAux,nodoaux];
                                         }
@@ -221,7 +259,7 @@ PREDICADO : tk_corchetea EXPRESION_FILTRO tk_corchetec {
                                         nodoaux = new NodoArbol("Predicado","");
                                         nodoaux.agregarHijo(new NodoArbol("[",""));
                                         nodoaux.agregarHijo(new NodoArbol("]",""));
-                                        $$ = [[],nodoaux];} ;
+                                        $$ = [null,nodoaux];} ;
 
 
 EXPRESION_FILTRO : EXPRESION_LOGICA {  $$ = $1;  };
@@ -349,19 +387,19 @@ EXPRESION_RELACIONAL :  EXPRESION_NUMERICA tk_mayor EXPRESION_NUMERICA { operaci
 
                 |       ATRIBUTO { $$ = $1; }
 
-                |       tk_asterisco {  expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, ExpresionDefinida.ASTERISCO);
+                |       tk_asterisco {  expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.ASTERISCO);
                                         nodoaux = new NodoArbol("*","");
                                         $$ = [expresionAux,nodoaux]; }
 
-                |       tk_arrobaasterisco {    expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, ExpresionDefinida.ARROBA);
+                |       tk_arrobaasterisco {    expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.ARROBA);
                                                 nodoaux = new NodoArbol("@*","");
                                                 $$ = [expresionAux,nodoaux]; }
 
-                |       tk_texto {      expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, ExpresionDefinida.TEXT);
+                |       tk_texto {      expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.TEXT);
                                         nodoaux = new NodoArbol($1,"");
                                         $$ = [expresionAux,nodoaux]; }        
 
-                |       tk_node {       expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, ExpresionDefinida.NODE);
+                |       tk_node {       expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.NODE);
                                         nodoaux = new NodoArbol($1,"");
                                         $$ = [expresionAux,nodoaux]; }  ;
 

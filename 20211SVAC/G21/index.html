@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ============================= MATERIALIZE ============================== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    
+    <!-- ============================= MATERIAL ICONS ============================== -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- ============================= DATA TABLE ============================== -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+    <!-- ============================= CODE MIRROR ============================== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous" />
+
+    <!-- ============================= CODE MIRROR THEME ============================== -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/theme/material-ocean.css">
+
+    
+    <!-- ============================= MY STYLE ============================== -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Tytus X</title>
+</head>
+<body>
+    <a href="" id="download" style="display: none" download=""></a>
+    <div class="row">
+        <div class="col s12 m12 l6">
+            <nav>
+                <div class="nav-wrapper">
+                    <ul id="nav-mobile" class="nav__options">
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Open File" id="btn__open__xml">
+                                <i class="tiny material-icons"> cloud_upload </i>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Save File" id="btn__save__xml">
+                                <i class="material-icons"> cloud_download </i>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Clear Editor" id="btn__clean__xml">
+                                <i class="material-icons"> clear </i>
+                            </button>
+                        </li>
+                    </ul>
+                    <div>
+                        <h3 class="title-editor">XML</h3>
+                    </div>
+
+                    <ul id="nav-mobile" class="nav__options">
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Desc Analysis" id="btn__descAnalysis__xml">
+                                <i class="material-icons"> arrow_downward </i>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Asc Analysis" id="btn__ascAnalysis__xml">
+                                <i class="material-icons"> arrow_upward </i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="" class="xml__editor">
+                <textarea id="xml__editor" class=""></textarea>
+            </div>
+        </div>
+        <div class="col s12 m12 l6">
+            <ul class="tabs tabs-fixed-width  z-depth-5">
+                <li class="tab"><a class="active" href="#console-tab"> Console </a></li>
+                <li class="tab"><a class="active" href="#error__table__xml"> Error Table </a></li>
+                <li class="tab"><a href="#symbol__table"> Symbol Table  </a></li>
+                <li class="tab"><a href="#cst"> CST </a></li>
+            </ul>
+
+            <div id="console-tab" class="col s12 tab__panel">
+                <textarea id="console__result"></textarea>
+            </div>
+
+            <div id="error__table__xml" class="col s12 tab__panel">
+                <table id="errorTableXml" class="display responsive nowrap ">
+                    <thead>
+                        <tr>
+                            <th>Error Typer</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Error Typer</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Description</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+           
+            <div id="symbol__table" class="col s12 tab__panel">
+                <table id="symbolTableXml" class="display responsive nowrap ">
+                    <thead>
+                        <tr>
+                            <th>Identifier</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Environment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Identifier</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Environment</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+           
+            <div id="cst" class="col s12 tab__panel">
+                <div class="tab__panel__btn">
+                    <a href="graph.html" target="blank" class="waves-effect waves-light btn-large red" id="showCST">
+                        <i class="material-icons right">timeline</i>
+                        Show CST 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 
+        *****************************************************************************************************************
+        * XPATH
+        *****************************************************************************************************************
+     -->
+
+    <div class="row">
+        <div class="col s12 m12 l6">
+            <nav>
+                <div class="nav-wrapper">
+                    <ul id="nav-mobile" class="nav__options">
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Open File" id="btn__open__xpath">
+                                <i class="tiny material-icons"> cloud_upload </i>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Save File" id="btn__save__xpath">
+                                <i class="material-icons"> cloud_download </i>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Clear Editor" id="btn__clean__xpath">
+                                <i class="material-icons"> clear </i>
+                            </button>
+                        </li>
+                    </ul>
+                    <div>
+                        <h3 class="title-editor">XPATH</h3>
+                    </div>
+
+                    <ul id="nav-mobile" class="nav__options">
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Desc Analysis" id="btn__descAnalysis__xpath">
+                                <i class="material-icons"> arrow_downward </i>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="btn-floating waves-effect waves-circle waves-light red  tooltipped" data-position="bottom" data-tooltip="Asc Analysis" id="btn__ascAnalysis__xpath">
+                                <i class="material-icons"> arrow_upward </i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="" class="xpath__editor">
+                <textarea id="xpath__editor"></textarea>
+            </div>
+        </div>
+        <div class="col s12 m12 l6">
+            <ul class="tabs tabs-fixed-width  z-depth-5">
+                <li class="tab"><a class="active" href="#error__table__xpath"> Error Table </a></li>
+                <li class="tab"><a href="#token__table"> Token Table </a></li>
+                <li class="tab"><a href="#grammar__report"> Grammar Report </a></li>
+                <li class="tab"><a href="#ast"> AST </a></li>
+            </ul>
+            
+            <div id="error__table__xpath" class="col s12 tab__panel">
+                <table id="errorTableXpath" class="display responsive nowrap highlight">
+                    <thead>
+                        <tr>
+                            <th>Error Typer</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                        <tr>
+                            <td>asf</td>
+                            <td>asfda</td>
+                            <td>safadf</td>
+                            <td>saddf</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Error Typer</th>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Description</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div id="token__table" class="col s12 tab__panel">
+                <table id="tokenTableXpath" class="display responsive nowrap ">
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Lexeme</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Row</th>
+                            <th>Column</th>
+                            <th>Lexeme</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div id="grammar__report" class="col s12 tab__panel">
+                <textarea id="grammar__report__editor"></textarea>
+            </div>
+
+            <div id="ast" class="col s12 tab__panel">
+                    <div class="tab__panel__btn">
+
+                        <a href="graph.html" target="blank" class="waves-effect waves-light btn-large red" id="showAST"">
+                            <i class="material-icons right">timeline</i>
+                            Show AST 
+                        </a>
+                    </div>
+            </div>
+        </div>
+    </div>
+ 
+      
+  
+     <!-- ========================== JQUERY ============================ -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+     <!-- ========================== MATERIALIZE ============================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+    
+    <!-- ========================== CODE MIRROR  ============================ -->
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.1/addon/selection/active-line.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/xml/xml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.61.0/mode/xquery/xquery.js"></script>
+
+    <!-- ============================= DATA TABLE ============================== -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    
+    <!-- ============================= SWEET ALERT ============================== -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+ 
+    <!-- ============================= MY SCRIPT ============================== -->
+    <script  src="js/main.js"></script>
+    
+    <!-- ============================= GRAMMAR ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Gramatica/gramasc.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Gramatica/gramdesc.js"></script>
+    <!-- <script type="text/javascript" src="analyzers/xml/Gramatica/gramxpath.js"></script> -->
+    
+    <!-- ============================= ENVIRONMENT ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Entornos/Raiz.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Entornos/Simbolo.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Entornos/Tabla_Simbolos.js"></script>
+
+    <!-- ============================= EXPRESSIONS ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Expresiones/Objeto.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Expresiones/Atributo.js"></script>
+
+    <!-- ============================= INSTRUCTIONS ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Instrucciones/Consulta.js"></script>
+
+</body>
+</html>
