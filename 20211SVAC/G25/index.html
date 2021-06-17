@@ -95,7 +95,7 @@
     <script src="dist/xml/reportes/Gramatica.js" ></script>
     <script src="dist/xml/reportes/ReporteXML.js" ></script>
     
-    <script src="dist/xpath/ast/ast_xpath.js" ></script>
+    <script src="dist/xpath/ast/AST_XPATH.js" ></script>
     <script src="dist/xpath/ast/tipox.js" ></script>
     <script src="dist/xpath/ast/TipoPrimitivo.js" ></script>
     <script src="dist/xpath/instrucciones/Axes.js" ></script>
@@ -180,7 +180,7 @@
         } else if(selectedValue == "3") {
           tablaSimboloXML()
         } else if(selectedValue == "4") {
-          erroresXML()
+          crear_tabla_errores_xml()//erroresXML()
         }
       }
 
@@ -191,7 +191,7 @@
         if (selectedValue == "1") {
           generarGrafoXPATH()
         } else if(selectedValue == "2") {
-          
+          crear_tabla_errores_xpaht()
         }
       }
     </script>
