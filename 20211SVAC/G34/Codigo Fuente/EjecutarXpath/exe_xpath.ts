@@ -1,28 +1,27 @@
+import { cachedDataVersionTag } from "v8";
+
 let etiquetas = [];
 let etiquetasdoble = [];
+let cadena = "";
 function exepath1(listainstrucciones: []) {
     etiquetas = [];
 
 
     let p = tds_xml_persistente[0];
-        //console.log(p[i]);
-    for(let j:number = 0; j < listainstrucciones.length; j++)
-    {
-        if(listainstrucciones[j].ruta2==undefined) /////si vienen solo una ruta
+    //console.log(p[i]);
+    for (let j: number = 0; j < listainstrucciones.length; j++) {
+        if (listainstrucciones[j].ruta2 == undefined) /////si vienen solo una ruta
         {
-            for(let i:number = 0; i < p.length; i++)
-        {            
-            let auxiliar=[];
-            auxiliar=getrutasimple(listainstrucciones[j], p[i]);
-            if(auxiliar!=undefined)
-            {
-                if(auxiliar.length>0)
-                {console.log(getrutasimple(listainstrucciones[j], p[i]));}
+            for (let i: number = 0; i < p.length; i++) {
+                let auxiliar = [];
+                auxiliar = getrutasimple(listainstrucciones[j], p[i]);
+                if (auxiliar != undefined) {
+                    if (auxiliar.length > 0) { console.log(getrutasimple(listainstrucciones[j], p[i])); }
 
+                }
             }
-        }
 
-        }else //////mas de una ruta
+        } else //////mas de una ruta
         {
             for (let i: number = 0; i < p.length; i++) {
                 //console.log(listainstrucciones[j]);
@@ -39,8 +38,8 @@ function exepath1(listainstrucciones: []) {
 
 function exepath(listainstrucciones: []) {
     etiquetas = [];
-
-
+    cadena="";
+    //let retorno="";
     let p = tds_xml_persistente[0];
     //console.log(tds_xml_persistente);
     for (let j: number = 0; j < listainstrucciones.length; j++) {
@@ -66,19 +65,15 @@ function exepath(listainstrucciones: []) {
 
         if (auxiliar != undefined) {
             console.log(auxiliar);
-            for(let i:number = 0; i < p.length; i++)
-            {
-                //console.log(listainstrucciones[j]);
-                //console.log(p[i]);
-                //if(listainstrucciones[j])
-                console.log(getInfoXpath(listainstrucciones[j], p[i]))
-                //break;
-            }
+            cadenaresultante(auxiliar)
+            console.log(cadena);
+
         }
 
         //}
 
     }
+    return cadena;
 }
 
 
@@ -106,8 +101,7 @@ function getInfoXpath(listainstrucciones: any, entorno: TablaSimbolos) {
                     }
 
 
-                    else 
-                    {
+                    else {
                         //console.log(listainstrucciones);
                         //console.log(entorno[i].simbolos[j].entorno);
                         aux.push(entorno[i].simbolos[j]);
@@ -142,7 +136,7 @@ function getInfoXpath1(listainstrucciones: any, entorno: TablaSimbolos) {
     if (listainstrucciones.ruta2 != undefined) {
         let auxiliar = [];
         auxiliar = getrutasimple(listainstrucciones, entorno);
-        console.log(auxiliar);
+
         if (auxiliar.length > 0) // se encontro ruta actual
         {
             return getInfoXpath1(listainstrucciones.ruta2, auxiliar)
@@ -188,13 +182,12 @@ function getrutasimple(listainstrucciones: any, entorno: TablaSimbolos) {
             if (tienedatos != undefined) {
                 if (tienedatos.length > 1)//si devuelve una lista de varias posiciones
                 {
-                    if(listainstrucciones.mostrar !=""){ 
+                    if (listainstrucciones.mostrar != "") {
                         let entornofiltrado = filtrarCondicion(tienedatos, tds_xml_persistente[0], listainstrucciones);
-                            return entornofiltrado;            
+                        return entornofiltrado;
                     }
-                    else
-                    {
-                    return tienedatos;
+                    else {
+                        return tienedatos;
                     }
                 }
             }
@@ -205,13 +198,12 @@ function getrutasimple(listainstrucciones: any, entorno: TablaSimbolos) {
             if (tienedatos != undefined) {
                 if (tienedatos.length > 0)//si devuelve una lista de varias posiciones
                 {
-                    if(listainstrucciones.mostrar !=""){ 
+                    if (listainstrucciones.mostrar != "") {
                         let entornofiltrado = filtrarCondicion(tienedatos, tds_xml_persistente[0], listainstrucciones);
-                            return entornofiltrado;            
+                        return entornofiltrado;
                     }
-                    else
-                    {
-                    return tienedatos;
+                    else {
+                        return tienedatos;
                     }
                 }
             }
@@ -226,24 +218,28 @@ function getrutasimple(listainstrucciones: any, entorno: TablaSimbolos) {
         etiquetasdoble = [];
         if (listainstrucciones.dato.tipo == 0) {
             buscaretiqueta(listainstrucciones.dato.valor, entorno);
-           
-            if (etiquetas.length == 1) ////si devuelve una lista de una posicion
+            if (etiquetasdoble.length == 1) ////si devuelve una lista de una posicion
             {
+                console.log("solo 1");
+                console.log(etiquetasdoble[0]);
                 retorno.push(etiquetasdoble[0]);
             }
-            else if (etiquetas.length > 1)//si devuelve una lista de varias posiciones
+            else if (etiquetasdoble.length > 1)//si devuelve una lista de varias posiciones
             {
-                retorno=etiquetasdoble;
+                console.log("muchos");
+                retorno = etiquetasdoble;
             }
         }
         else if (listainstrucciones.dato.tipo == 2) {
             buscaratributo(listainstrucciones.dato.valor.valor, entorno);
             if (etiquetas.length == 1)////si devuelve una lista de una posicion
             {
+                console.log("solo 1");
                 retorno.push(etiquetas[0]);
             }
             else if (etiquetas.length > 1)//si devuelve una lista de varias posiciones
             {
+                console.log("muchos");
                 retorno.push(etiquetas);
             }
         }
@@ -261,39 +257,36 @@ function getrutasimple(listainstrucciones: any, entorno: TablaSimbolos) {
     {
         return buscaretiquetaenhijos(listainstrucciones.dato.valor, entorno);
     }
-
-
 }
 
 
 /////////////busca etiquetas en hijos e hijos de hijos////
 function buscaretiqueta(etiqueta: string, entorno: TablaSimbolos) {
 
-    etiquetas=[];
+    etiquetas = [];
     for (let i: number = 0; i < entorno.length; i++) {
-       
+
         if (entorno[i].simbolos != undefined) {
-            if (entorno[i].entorno === etiqueta)    
-            {
-                for(let h:number=0;h<entorno[i].simbolos.length;h++)
-                {
+            if (entorno[i].entorno === etiqueta) {
+                for (let h: number = 0; h < entorno[i].simbolos.length; h++) {
                     etiquetas.push(entorno[i].simbolos[h]);
                 }
-                
+
             }
             else {
-                
-                    buscaretiqueta(etiqueta, entorno[i].simbolos);
+
+                buscaretiqueta(etiqueta, entorno[i].simbolos);
             }
         }
 
 
         else {
             if (entorno[i].entorno != undefined) {
-                if(entorno[i].entorno===etiqueta)
-                {
-                etiquetas.push(entorno[i]);
+                let eti = [];
+                if (entorno[i].entorno === etiqueta) {
+                    eti.push(entorno[i]);
                 }
+                etiquetas.push(eti);
             }
 
             else {
@@ -303,17 +296,16 @@ function buscaretiqueta(etiqueta: string, entorno: TablaSimbolos) {
                 for (let j: number = 0; j < auxilia.length; j++) {
 
                     if (auxilia[j].entorno === etiqueta && auxilia[j].simbolos != undefined) {
-                        
-                        for(let h:number=0;h<auxilia[j].simbolos.length;h++)
-                        {
+
+                        for (let h: number = 0; h < auxilia[j].simbolos.length; h++) {
                             eti.push(auxilia[j].simbolos[h]);
                         }
                     }
                     else if (auxilia[j].entorno != etiqueta && auxilia[j].simbolos != undefined) {
-                       
-                            buscaretiqueta(auxilia[j].simbolos);
+
+                        buscaretiqueta(auxilia[j].simbolos);
                     }
-                    else if (auxilia[j].entorno === etiqueta && auxilia[j].simbolos === undefined) {
+                    else if (auxilia[j].entorno === etiqueta) {
 
                         eti.push(auxilia[j]);
                     }
@@ -332,8 +324,7 @@ function buscaretiqueta(etiqueta: string, entorno: TablaSimbolos) {
         if (etiquetas.length > 0) {
             etiquetasdoble.push(etiquetas);
         }
-
-}
+    }
 }
 /////////////busca etiquetas en hijos e hijos de hijos////
 ///////////busca etiqueta en hijos//////////////
@@ -416,16 +407,15 @@ function buscaratributo(etiqueta: string, entorno: TablaSimbolos) {
 /////////busta atributo en hijos de etiqueta///////////////
 function buscaratributoenhijo(etiqueta: string, entorno: TablaSimbolos) {
     let retorno = [];
-  for(let i: number = 0; i < entorno.length; i++)
-  {
-    
+    for (let i: number = 0; i < entorno.length; i++) {
+
         let auxilia = entorno[i];
         let eti = [];
         for (let j: number = 0; j < auxilia.length; j++) {
 
-            if (auxilia[j].identificador === etiqueta ) {
-                
-                    eti.push(auxilia[j]);
+            if (auxilia[j].identificador === etiqueta) {
+
+                eti.push(auxilia[j]);
             }
 
         }
@@ -436,22 +426,20 @@ function buscaratributoenhijo(etiqueta: string, entorno: TablaSimbolos) {
         }
 
     }
-   
-        if (retorno.length > 0) {
-           return retorno;
-        }
-        else 
-        {return undefined;}
-    
 
-  }
+    if (retorno.length > 0) {
+        return retorno;
+    }
+    else { return undefined; }
+
+
+}
 
 
 
 /////////busca atributo en hijos de etiqueta////////////
 function filtrarCondicion(aux: any, entorno: any, listainstrucciones: any) {
-    console.log("metodo condicion");
-    console.log(aux);
+
     if (listainstrucciones.mostrar != "") {
         let entornofiltrado = [];
         let expresion = listainstrucciones.mostrar.exp;
@@ -464,28 +452,28 @@ function filtrarCondicion(aux: any, entorno: any, listainstrucciones: any) {
             rutaOperar = expresion.operandoDer.dato.valor;
             lado = false;
         }
-        for(let prueba of aux){
-        for (let actual of prueba) {
-            
-            if (actual.identificador == rutaOperar) {
-                let nuevaEXP, nuevaOP;
-                if (!isNaN(actual.valor)) {
-                    nuevaEXP = nodoDato(actual.valor, TIPO_PRIMITIVO.NUMERICO);
-                } else {
-                    nuevaEXP = nodoDato(actual.valor, TIPO_PRIMITIVO.CADENA);
-                }
-                if (lado) {
-                    nuevaOP = nodoOperacionBinaria(nuevaEXP, expresion.operandoDer, expresion.tipo_operacion, expresion.clase, expresion.fila, expresion.columna);
-                } else {
-                    nuevaOP = nodoOperacionBinaria(expresion.operandoIzq, nuevaEXP, expresion.tipo_operacion, expresion.clase, expresion.fila, expresion.columna);
-                }
+        for (let prueba of aux) {
+            for (let actual of prueba) {
 
-                let resultado = getValor(nuevaOP, entorno);
-                if (resultado) {
-                    entornofiltrado.push(prueba);
+                if (actual.identificador == rutaOperar) {
+                    let nuevaEXP, nuevaOP;
+                    if (!isNaN(actual.valor)) {
+                        nuevaEXP = nodoDato(actual.valor, TIPO_PRIMITIVO.NUMERICO);
+                    } else {
+                        nuevaEXP = nodoDato(actual.valor, TIPO_PRIMITIVO.CADENA);
+                    }
+                    if (lado) {
+                        nuevaOP = nodoOperacionBinaria(nuevaEXP, expresion.operandoDer, expresion.tipo_operacion, expresion.clase, expresion.fila, expresion.columna);
+                    } else {
+                        nuevaOP = nodoOperacionBinaria(expresion.operandoIzq, nuevaEXP, expresion.tipo_operacion, expresion.clase, expresion.fila, expresion.columna);
+                    }
+
+                    let resultado = getValor(nuevaOP, entorno);
+                    if (resultado) {
+                        entornofiltrado.push(prueba);
+                    }
                 }
             }
-        }
         }
 
 
@@ -499,4 +487,333 @@ function filtrarCondicion(aux: any, entorno: any, listainstrucciones: any) {
 
 
     }
+}
+
+
+/////////////busca atribujo en hijos e hijos de hijos////
+function cadenaresultante(entorno: TablaSimbolos) {
+
+    for (let i: number = 0; i < entorno.length; i++) {
+        
+        let auxilia = entorno[i];
+        if (auxilia.entorno ===undefined) {
+
+        for (let j: number = 0; j < auxilia.length; j++) {
+
+             if (auxilia[j].simbolos != undefined) {
+                     cadenaresultante(auxilia[j].simbolos);
+                }
+                else {
+
+                    cadena=cadena+"Mensaje Grupo34 >>"+ auxilia[j].valor + "\n";
+                }
+            }
+        }
+        else {
+            if (entorno[i].simbolos != undefined) {
+                 cadenaresultante(entorno[i].simbolos);
+            }
+            else {
+
+                cadena=cadena+"Mensaje Grupo34 >>"+ entorno[i].valor + "\n";
+            }
+        }
+    }
+
+}
+
+/////////////busca atribujo en hijos e hijos de hijos////
+
+
+//graficar xpath
+function graphXPathRuta(str:Array<string>, path:Array<any>, contador:Graficar) : number
+{
+    const NUMID = contador.incrementarContador();    
+    str.push(`
+    node${NUMID}[label="${path.dato.valor}",fillcolor="LightBlue", style ="filled", shape="box"];
+    `);
+    let ptr : number;
+    if(path.mostrar != "")
+    {
+        ptr = graphXPathExp(str, path.mostrar.exp, contador);
+        str.push(` node${NUMID} -> node${ptr};\n `);
+    }
+    if(path.ruta2 != undefined)
+    {
+        ptr = graphXPathRuta(str, path.ruta2, contador);
+        str.push(` node${NUMID} -> node${ptr};\n `);
+    }        
+    return NUMID;
+}
+
+function graphXPathExp(str:Array<string>, exp:Array<any>, contador:Graficar) : number
+{
+    const NUMID = contador.incrementarContador();    
+    
+    if(exp.clase===TIPO_EXPRESION.OP_ARITMETICA){
+        var exp1 = graphXPathExp(str, exp.operandoIzq, contador);
+		var exp2 = graphXPathExp(str, exp.operandoDer, contador);
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_SUMA){
+            str.push(`
+            node${NUMID}[label="+",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);                      
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_RESTA){
+            str.push(`
+            node${NUMID}[label="-",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MULTIPLICACION){
+            str.push(`
+            node${NUMID}[label="*",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_DIVISION){
+            str.push(`
+            node${NUMID}[label="div",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MODULAR){
+            str.push(`
+            node${NUMID}[label="%",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);
+        }
+    }else if(exp.clase===TIPO_EXPRESION.OP_RELACIONAL){
+        var exp1 = graphXPathExp(str, exp.operandoIzq, contador);
+		var exp2 = graphXPathExp(str, exp.operandoDer, contador);
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_QUE){
+            str.push(`
+            node${NUMID}[label=">",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_QUE){
+            str.push(`
+            node${NUMID}[label="<",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_IGUAL){
+            str.push(`
+            node${NUMID}[label=">=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_IGUAL){
+            str.push(`
+            node${NUMID}[label="<=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_NO_IGUAL){
+            str.push(`
+            node${NUMID}[label="!=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL){
+            str.push(`
+            node${NUMID}[label="=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }
+    }else if(exp.clase===TIPO_EXPRESION.OP_LOGICA){
+        var exp1 = graphXPathExp(str, exp.operandoIzq, contador);
+		var exp2 = graphXPathExp(str, exp.operandoDer, contador);
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_AND){
+            str.push(`
+            node${NUMID}[label="and",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_OR){
+            str.push(`
+            node${NUMID}[label="or",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${exp1};\n
+            node${NUMID} -> node${exp2};\n
+            `);   
+        }
+
+    }else if(exp.tipo_primitivo === TIPO_PRIMITIVO.NUMERICO || exp.tipo_primitivo === TIPO_PRIMITIVO.CADENA){
+		str.push(`
+        node${NUMID}[label="${exp.valor}",fillcolor="LightBlue", style ="filled", shape="box"];
+        `);
+	}
+    else if(exp.dato.tipo === 0 || exp.dato.tipo === 5)
+    {
+        str.push(`
+        node${NUMID}[label="${exp.dato.valor}",fillcolor="LightBlue", style ="filled", shape="box"];
+        `);
+    }
+    return NUMID;
+}
+
+function graphXPathRuta2(str:Array<string>, path:Array<any>, contador:Graficar) : number
+{
+    const NUMID = contador.incrementarContador();    
+    str.push(`
+    node${NUMID}[label="RUTA",fillcolor="LightBlue", style ="filled", shape="box"];
+    node${contador.getContador()}[label="${path.dato.valor}",fillcolor="LightBlue", style ="filled", shape="box"];
+    node${NUMID} -> node${contador.incrementarContador()};
+    `);
+    let ptr : number;
+    if(path.mostrar != "")
+    {
+        ptr = graphXPathExp2(str, path.mostrar.exp, contador);
+        str.push(` node${NUMID} -> node${ptr};\n `);
+    }
+    if(path.ruta2 != undefined)
+    {
+        ptr = graphXPathRuta2(str, path.ruta2, contador);
+        str.push(` node${NUMID} -> node${ptr};\n `);
+    }        
+    return NUMID;
+}
+
+function graphXPathExp2(str:Array<string>, exp:Array<any>, contador:Graficar) : number
+{
+    const NUMID = contador.incrementarContador();    
+    
+    if(exp.clase===TIPO_EXPRESION.OP_ARITMETICA){
+        var exp1 = graphXPathExp2(str, exp.operandoIzq, contador);
+        //let a = contador.getContador();
+        //let b = contador.incrementarContador();
+		var exp2 = graphXPathExp2(str, exp.operandoDer, contador);
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_SUMA){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="+",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);                      
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_RESTA){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="-",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MULTIPLICACION){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="*",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_DIVISION){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="div",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MODULAR){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="%",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);
+        }
+    }else if(exp.clase===TIPO_EXPRESION.OP_RELACIONAL){
+        var exp1 = graphXPathExp2(str, exp.operandoIzq, contador);
+		var exp2 = graphXPathExp2(str, exp.operandoDer, contador);
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_QUE){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label=">",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_QUE){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="<",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_IGUAL){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label=">=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_IGUAL){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="<=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_NO_IGUAL){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="!=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="=",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }
+    }else if(exp.clase===TIPO_EXPRESION.OP_LOGICA){
+        var exp1 = graphXPathExp2(str, exp.operandoIzq, contador);
+		var exp2 = graphXPathExp2(str, exp.operandoDer, contador);
+        if(exp.tipo_operacion === TIPO_OPERACION.OP_AND){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="and",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }else if(exp.tipo_operacion === TIPO_OPERACION.OP_OR){
+            str.push(`
+            node${NUMID}[label="EXP",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${contador.getContador()}[label="or",fillcolor="LightBlue", style ="filled", shape="box"];\n
+            node${NUMID} -> node${contador.incrementarContador()};\n
+            node${contador.getContador() - 1} -> node${exp1};\n
+            node${contador.getContador() - 1} -> node${exp2};\n
+            `);   
+        }
+
+    }else if(exp.tipo_primitivo === TIPO_PRIMITIVO.NUMERICO || exp.tipo_primitivo === TIPO_PRIMITIVO.CADENA){
+		str.push(`
+        node${NUMID}[label="VALOR",fillcolor="LightBlue", style ="filled", shape="box"];
+        node${contador.getContador()}[label="${exp.valor}",fillcolor="LightBlue", style ="filled", shape="box"];
+        node${NUMID} -> node${contador.incrementarContador()};
+        `);
+	}
+    else if(exp.dato.tipo === 0 || exp.dato.tipo === 5)
+    {
+        str.push(`
+        node${NUMID}[label="VALOR",fillcolor="LightBlue", style ="filled", shape="box"];
+        node${contador.getContador()}[label="${exp.dato.valor}",fillcolor="LightBlue", style ="filled", shape="box"];
+        node${NUMID} -> node${contador.incrementarContador()};
+        `);
+    }
+    return NUMID;
 }

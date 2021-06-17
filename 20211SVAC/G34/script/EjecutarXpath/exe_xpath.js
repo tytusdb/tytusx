@@ -1,6 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var etiquetas = [];
 var etiquetasdoble = [];
+var cadena = "";
 function exepath1(listainstrucciones) {
     etiquetas = [];
     var p = tds_xml_persistente[0];
@@ -32,6 +34,8 @@ function exepath1(listainstrucciones) {
 }
 function exepath(listainstrucciones) {
     etiquetas = [];
+    cadena = "";
+    //let retorno="";
     var p = tds_xml_persistente[0];
     //console.log(tds_xml_persistente);
     for (var j = 0; j < listainstrucciones.length; j++) {
@@ -54,16 +58,12 @@ function exepath(listainstrucciones) {
         auxiliar = getInfoXpath1(listainstrucciones[j], p);
         if (auxiliar != undefined) {
             console.log(auxiliar);
-            for (var i = 0; i < p.length; i++) {
-                //console.log(listainstrucciones[j]);
-                //console.log(p[i]);
-                //if(listainstrucciones[j])
-                console.log(getInfoXpath(listainstrucciones[j], p[i]));
-                //break;
-            }
+            cadenaresultante(auxiliar);
+            console.log(cadena);
         }
         //}
     }
+    return cadena;
 }
 //function getEntornos()
 //Funcion para recorrer con diagonal o sin diagonal 
@@ -107,7 +107,6 @@ function getInfoXpath1(listainstrucciones, entorno) {
     if (listainstrucciones.ruta2 != undefined) {
         var auxiliar = [];
         auxiliar = getrutasimple(listainstrucciones, entorno);
-        console.log(auxiliar);
         if (auxiliar.length > 0) // se encontro ruta actual
          {
             return getInfoXpath1(listainstrucciones.ruta2, auxiliar);
@@ -179,12 +178,15 @@ function getrutasimple(listainstrucciones, entorno) {
         etiquetasdoble = [];
         if (listainstrucciones.dato.tipo == 0) {
             buscaretiqueta(listainstrucciones.dato.valor, entorno);
-            if (etiquetas.length == 1) ////si devuelve una lista de una posicion
+            if (etiquetasdoble.length == 1) ////si devuelve una lista de una posicion
              {
+                console.log("solo 1");
+                console.log(etiquetasdoble[0]);
                 retorno.push(etiquetasdoble[0]);
             }
-            else if (etiquetas.length > 1) //si devuelve una lista de varias posiciones
+            else if (etiquetasdoble.length > 1) //si devuelve una lista de varias posiciones
              {
+                console.log("muchos");
                 retorno = etiquetasdoble;
             }
         }
@@ -192,10 +194,12 @@ function getrutasimple(listainstrucciones, entorno) {
             buscaratributo(listainstrucciones.dato.valor.valor, entorno);
             if (etiquetas.length == 1) ////si devuelve una lista de una posicion
              {
+                console.log("solo 1");
                 retorno.push(etiquetas[0]);
             }
             else if (etiquetas.length > 1) //si devuelve una lista de varias posiciones
              {
+                console.log("muchos");
                 retorno.push(etiquetas);
             }
         }
@@ -227,9 +231,11 @@ function buscaretiqueta(etiqueta, entorno) {
         }
         else {
             if (entorno[i].entorno != undefined) {
+                var eti = [];
                 if (entorno[i].entorno === etiqueta) {
-                    etiquetas.push(entorno[i]);
+                    eti.push(entorno[i]);
                 }
+                etiquetas.push(eti);
             }
             else {
                 var auxilia = entorno[i];
@@ -243,7 +249,7 @@ function buscaretiqueta(etiqueta, entorno) {
                     else if (auxilia[j].entorno != etiqueta && auxilia[j].simbolos != undefined) {
                         buscaretiqueta(auxilia[j].simbolos);
                     }
-                    else if (auxilia[j].entorno === etiqueta && auxilia[j].simbolos === undefined) {
+                    else if (auxilia[j].entorno === etiqueta) {
                         eti.push(auxilia[j]);
                     }
                 }
@@ -350,8 +356,6 @@ function buscaratributoenhijo(etiqueta, entorno) {
 }
 /////////busca atributo en hijos de etiqueta////////////
 function filtrarCondicion(aux, entorno, listainstrucciones) {
-    console.log("metodo condicion");
-    console.log(aux);
     if (listainstrucciones.mostrar != "") {
         var entornofiltrado = [];
         var expresion = listainstrucciones.mostrar.exp;
@@ -398,4 +402,182 @@ function filtrarCondicion(aux, entorno, listainstrucciones) {
         }
         return;
     }
+}
+/////////////busca atribujo en hijos e hijos de hijos////
+function cadenaresultante(entorno) {
+    for (var i = 0; i < entorno.length; i++) {
+        var auxilia = entorno[i];
+        if (auxilia.entorno === undefined) {
+            for (var j = 0; j < auxilia.length; j++) {
+                if (auxilia[j].simbolos != undefined) {
+                    cadenaresultante(auxilia[j].simbolos);
+                }
+                else {
+                    cadena = cadena + "Mensaje Grupo34 >>" + auxilia[j].valor + "\n";
+                }
+            }
+        }
+        else {
+            if (entorno[i].simbolos != undefined) {
+                cadenaresultante(entorno[i].simbolos);
+            }
+            else {
+                cadena = cadena + "Mensaje Grupo34 >>" + entorno[i].valor + "\n";
+            }
+        }
+    }
+}
+/////////////busca atribujo en hijos e hijos de hijos////
+//graficar xpath
+function graphXPathRuta(str, path, contador) {
+    var NUMID = contador.incrementarContador();
+    str.push("\n    node" + NUMID + "[label=\"" + path.dato.valor + "\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n    ");
+    var ptr;
+    if (path.mostrar != "") {
+        ptr = graphXPathExp(str, path.mostrar.exp, contador);
+        str.push(" node" + NUMID + " -> node" + ptr + ";\n ");
+    }
+    if (path.ruta2 != undefined) {
+        ptr = graphXPathRuta(str, path.ruta2, contador);
+        str.push(" node" + NUMID + " -> node" + ptr + ";\n ");
+    }
+    return NUMID;
+}
+function graphXPathExp(str, exp, contador) {
+    var NUMID = contador.incrementarContador();
+    if (exp.clase === TIPO_EXPRESION.OP_ARITMETICA) {
+        var exp1 = graphXPathExp(str, exp.operandoIzq, contador);
+        var exp2 = graphXPathExp(str, exp.operandoDer, contador);
+        if (exp.tipo_operacion === TIPO_OPERACION.OP_SUMA) {
+            str.push("\n            node" + NUMID + "[label=\"+\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_RESTA) {
+            str.push("\n            node" + NUMID + "[label=\"-\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MULTIPLICACION) {
+            str.push("\n            node" + NUMID + "[label=\"*\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_DIVISION) {
+            str.push("\n            node" + NUMID + "[label=\"div\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MODULAR) {
+            str.push("\n            node" + NUMID + "[label=\"%\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+    }
+    else if (exp.clase === TIPO_EXPRESION.OP_RELACIONAL) {
+        var exp1 = graphXPathExp(str, exp.operandoIzq, contador);
+        var exp2 = graphXPathExp(str, exp.operandoDer, contador);
+        if (exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_QUE) {
+            str.push("\n            node" + NUMID + "[label=\">\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_QUE) {
+            str.push("\n            node" + NUMID + "[label=\"<\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\">=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"<=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_NO_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"!=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+    }
+    else if (exp.clase === TIPO_EXPRESION.OP_LOGICA) {
+        var exp1 = graphXPathExp(str, exp.operandoIzq, contador);
+        var exp2 = graphXPathExp(str, exp.operandoDer, contador);
+        if (exp.tipo_operacion === TIPO_OPERACION.OP_AND) {
+            str.push("\n            node" + NUMID + "[label=\"and\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_OR) {
+            str.push("\n            node" + NUMID + "[label=\"or\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + exp1 + ";\n\n            node" + NUMID + " -> node" + exp2 + ";\n\n            ");
+        }
+    }
+    else if (exp.tipo_primitivo === TIPO_PRIMITIVO.NUMERICO || exp.tipo_primitivo === TIPO_PRIMITIVO.CADENA) {
+        str.push("\n        node" + NUMID + "[label=\"" + exp.valor + "\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n        ");
+    }
+    else if (exp.dato.tipo === 0 || exp.dato.tipo === 5) {
+        str.push("\n        node" + NUMID + "[label=\"" + exp.dato.valor + "\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n        ");
+    }
+    return NUMID;
+}
+function graphXPathRuta2(str, path, contador) {
+    var NUMID = contador.incrementarContador();
+    str.push("\n    node" + NUMID + "[label=\"RUTA\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n    node" + contador.getContador() + "[label=\"" + path.dato.valor + "\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n    node" + NUMID + " -> node" + contador.incrementarContador() + ";\n    ");
+    var ptr;
+    if (path.mostrar != "") {
+        ptr = graphXPathExp2(str, path.mostrar.exp, contador);
+        str.push(" node" + NUMID + " -> node" + ptr + ";\n ");
+    }
+    if (path.ruta2 != undefined) {
+        ptr = graphXPathRuta2(str, path.ruta2, contador);
+        str.push(" node" + NUMID + " -> node" + ptr + ";\n ");
+    }
+    return NUMID;
+}
+function graphXPathExp2(str, exp, contador) {
+    var NUMID = contador.incrementarContador();
+    if (exp.clase === TIPO_EXPRESION.OP_ARITMETICA) {
+        var exp1 = graphXPathExp2(str, exp.operandoIzq, contador);
+        //let a = contador.getContador();
+        //let b = contador.incrementarContador();
+        var exp2 = graphXPathExp2(str, exp.operandoDer, contador);
+        if (exp.tipo_operacion === TIPO_OPERACION.OP_SUMA) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"+\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_RESTA) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"-\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MULTIPLICACION) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"*\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_DIVISION) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"div\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MODULAR) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"%\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+    }
+    else if (exp.clase === TIPO_EXPRESION.OP_RELACIONAL) {
+        var exp1 = graphXPathExp2(str, exp.operandoIzq, contador);
+        var exp2 = graphXPathExp2(str, exp.operandoDer, contador);
+        if (exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_QUE) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\">\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_QUE) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"<\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MAYOR_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\">=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_MENOR_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"<=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_NO_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"!=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_IGUAL) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"=\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+    }
+    else if (exp.clase === TIPO_EXPRESION.OP_LOGICA) {
+        var exp1 = graphXPathExp2(str, exp.operandoIzq, contador);
+        var exp2 = graphXPathExp2(str, exp.operandoDer, contador);
+        if (exp.tipo_operacion === TIPO_OPERACION.OP_AND) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"and\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+        else if (exp.tipo_operacion === TIPO_OPERACION.OP_OR) {
+            str.push("\n            node" + NUMID + "[label=\"EXP\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + contador.getContador() + "[label=\"or\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n\n            node" + NUMID + " -> node" + contador.incrementarContador() + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp1 + ";\n\n            node" + (contador.getContador() - 1) + " -> node" + exp2 + ";\n\n            ");
+        }
+    }
+    else if (exp.tipo_primitivo === TIPO_PRIMITIVO.NUMERICO || exp.tipo_primitivo === TIPO_PRIMITIVO.CADENA) {
+        str.push("\n        node" + NUMID + "[label=\"VALOR\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n        node" + contador.getContador() + "[label=\"" + exp.valor + "\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n        node" + NUMID + " -> node" + contador.incrementarContador() + ";\n        ");
+    }
+    else if (exp.dato.tipo === 0 || exp.dato.tipo === 5) {
+        str.push("\n        node" + NUMID + "[label=\"VALOR\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n        node" + contador.getContador() + "[label=\"" + exp.dato.valor + "\",fillcolor=\"LightBlue\", style =\"filled\", shape=\"box\"];\n        node" + NUMID + " -> node" + contador.incrementarContador() + ";\n        ");
+    }
+    return NUMID;
 }
