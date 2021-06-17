@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = void 0;
 const Objeto_1 = require("./Expresiones/Objeto");
 const Atributo_1 = require("./Expresiones/Atributo");
+const Element_1 = require("./Instrucciones/Element/Element");
 const xmlAsc = require('./Gramatica/gramatica_XML_ASC');
 const xpathAsc = require('./Gramatica/xpathAsc');
 class Main {
@@ -10,19 +11,27 @@ class Main {
         this.lexicos = [];
         this.lista_objetos = [];
         this.lista_objetos_xpath = [];
+        this.listacst = [];
         this.nodos = [];
         this.edges = [];
+        this.nodoscst = [];
+        this.edgescst = [];
         this.nodoxpath = [];
         this.edgesxpath = [];
         this.tablaSimbolos = '';
         this.i = 1;
+        this.j = 1;
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
         window.localStorage.setItem('reporteGramatical', '');
         const objetos = xmlAsc.parse(entrada);
-        this.lista_objetos = objetos.objeto;
+        // console.log('**********');
         console.log(objetos);
+        // console.log('**********');
+        this.lista_objetos = objetos.objeto;
+        this.listacst = objetos.nodos;
+        console.log(this.listacst);
         if (this.lista_objetos.length > 1) {
             console.log(this.getXmlFormat(this.lista_objetos[1]));
         }
@@ -41,27 +50,36 @@ class Main {
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
         const objetos = xpathAsc.parse(entrada);
+        console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        console.log(this.lista_objetos_xpath);
+        // this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
-        let contenido = "";
-        let atributos = "";
-        let etiqueta = "";
+        let contenido = '';
+        let atributos = '';
+        let etiqueta = '';
         for (let i = 0, size = objeto.listaAtributos.length; i < size; i++) {
             if (Atributo_1.Comilla.SIMPLE === objeto.listaAtributos[i].comilla) {
-                atributos += objeto.listaAtributos[i].identificador + "='" + objeto.listaAtributos[i].textWithoutSpecial + "'";
+                atributos +=
+                    objeto.listaAtributos[i].identificador +
+                        "='" +
+                        objeto.listaAtributos[i].textWithoutSpecial +
+                        "'";
             }
             else {
-                atributos += objeto.listaAtributos[i].identificador + '="' + objeto.listaAtributos[i].textWithoutSpecial + '"';
+                atributos +=
+                    objeto.listaAtributos[i].identificador +
+                        '="' +
+                        objeto.listaAtributos[i].textWithoutSpecial +
+                        '"';
             }
             if (i !== size - 1) {
-                atributos += " ";
+                atributos += ' ';
             }
         }
         etiqueta += '\n<' + objeto.identificador;
-        if (atributos !== "") {
-            etiqueta += " " + atributos + " ";
+        if (atributos !== '') {
+            etiqueta += ' ' + atributos + ' ';
         }
         if (objeto.etiqueta === Objeto_1.Etiqueta.DOBLE) {
             etiqueta += '>';
@@ -81,7 +99,7 @@ class Main {
             else {
                 etiqueta += contenido;
             }
-            etiqueta += '</' + objeto.identificador + ">";
+            etiqueta += '</' + objeto.identificador + '>';
         }
         else if (objeto.etiqueta === Objeto_1.Etiqueta.UNICA) {
             etiqueta += '/>';
@@ -122,7 +140,6 @@ class Main {
             this.lexicos = JSON.parse(lex);
             console.log(this.lexicos);
             var tbodyRef = document.getElementById('keywords');
-            let i = 1;
             this.lexicos.forEach((element) => {
                 let newRow = tbodyRef.insertRow();
                 let newCell = newRow.insertCell();
@@ -147,7 +164,7 @@ class Main {
             this.tablaSimbolos = this.tablaSimbolos + aux;
             this.getObjetosTablaxml(element.listaObjetos, element.identificador);
             if (element.listaAtributos) {
-                this.getAtributos(element.listaAtributos, element.identificador);
+                this.getAtributosTablaxml(element.listaAtributos, element.identificador);
             }
         });
         window.localStorage.setItem('TablaSimbolosXML', this.tablaSimbolos);
@@ -324,11 +341,37 @@ class Main {
         console.log(this.nodoxpath);
         console.log(this.edgesxpath);
     }
+    graficarcst(nodos, padre) {
+        console.log('entra?');
+        this.getnodoscst(nodos, padre);
+        window.localStorage.setItem('nodoscst', JSON.stringify(this.nodoscst));
+        window.localStorage.setItem('edgescst', JSON.stringify(this.edgescst));
+    }
+    getnodoscst(nodos, papa) {
+        let aux = nodos;
+        let auxnodos = {
+            id: papa,
+            label: aux.nombre,
+        };
+        this.nodoscst.push(auxnodos);
+        let nodohijo = aux.hijos;
+        if (nodohijo && nodohijo.length > 0) {
+            nodohijo.forEach((element) => {
+                this.j++;
+                let hijo = this.j;
+                let auxedges = {
+                    from: papa,
+                    to: hijo,
+                };
+                this.edgescst.push(auxedges);
+                this.getnodoscst(element, hijo);
+            });
+        }
+    }
     getObjetosXpath(listaObjeto, padre) {
         listaObjeto.forEach((element) => {
             if (element != undefined) {
                 this.i++;
-                let hijo = this.i;
                 let aux = {
                     id: this.i,
                     label: element.val,
@@ -341,6 +384,134 @@ class Main {
                 this.edgesxpath.push(aux2);
                 this.getObjetosXpath(element.children, this.i);
             }
+        });
+    }
+    execPath_list(pathList) {
+        /** //root/message | //root/price | /@abc */
+        pathList.forEach((path) => {
+            console.log(`PATH LIST: ${path.length}`);
+            this.execNodes_list(path);
+        });
+    }
+    execNodes_list(nodeList) {
+        let rootXML = {
+            elements: this.lista_objetos.length > 1
+                ? [this.lista_objetos[1]]
+                : [this.lista_objetos[0]],
+            parent: undefined,
+        };
+        nodeList.forEach((node) => {
+            if (typeof node === 'string')
+                return;
+        });
+        this.searchElement(rootXML, nodeList, 0);
+    }
+    checkRoot(rootXML, nodeList) {
+        let root = rootXML.elements;
+        if (nodeList[0].type === Element_1.TypeElement.NODO) {
+            if (nodeList[0].slashes === 0 || nodeList[0].slashes === 1) {
+                // NODOS++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+                if (nodeList[0].name === root.identificador)
+                    return 1;
+            }
+            else if (nodeList[0].slashes === 2) {
+                // NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS HIJOS DE ROOT
+                if (nodeList[0].name === root.identificador)
+                    return 1;
+                // NODO++ & BUSCAR EN ELEMENTOS HIJOS DE ROOT
+                return 2;
+            }
+        }
+        else if (nodeList[0].type === Element_1.TypeElement.CURRENT) {
+            // NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+            if (nodeList[1].name === root.identificador ||
+                nodeList[1].type === Element_1.TypeElement.ALL)
+                return 3;
+        }
+        else if (nodeList[0].type === Element_1.TypeElement.ALL) {
+            // NODO++ & BUSCAR EN ELEMENTOS | ATRIBUTOS DE ROOT
+            return 1;
+        }
+        else if (nodeList[0].type === Element_1.TypeElement.ATRIBUTO) {
+            // NODO++ & BUSCAR EN ATRIBUTOS DE ROOT
+            if (nodeList[0].slashes === 2)
+                return 2;
+        }
+        // ROOT NO COINCIDE
+        return 0;
+    }
+    searchElement(rootXML, nodeList, index) {
+        // console.log(rootXML);
+        // VALIDAR ATRIBUTOS EN PROFUNDIDAD
+        let resXML = rootXML;
+        if (nodeList.length === index)
+            this.printElements(rootXML.elements);
+        rootXML.elements.forEach((element) => {
+            resXML.elements = element.listaObjetos;
+            resXML.parent = element;
+            if (nodeList[index].type === Element_1.TypeElement.ALL) {
+                if (nodeList.length > index + 1) {
+                    this.searchElement(resXML, nodeList, index + 1);
+                }
+                else {
+                    this.printElement(element);
+                }
+            }
+            else if (nodeList[index].type === Element_1.TypeElement.ATRIBUTO) {
+                if (this.searchAttributes(element.listaAtributos, nodeList[index].name)) {
+                    this.printElement(element);
+                }
+                else if (nodeList[index].slashes == 2) {
+                    this.searchElement(resXML, nodeList, index);
+                }
+            }
+            else if (nodeList[index].type === Element_1.TypeElement.NODO) {
+                if (nodeList[index].name === element.identificador) {
+                    if (nodeList.length > index + 1) {
+                        this.searchElement(resXML, nodeList, index + 1);
+                    }
+                    else {
+                        this.printElement(element);
+                    }
+                }
+                else if (nodeList[index].slashes == 2) {
+                    if (nodeList.length > index) {
+                        this.searchElement(resXML, nodeList, index);
+                    }
+                    else {
+                        this.printElement(element);
+                    }
+                }
+            }
+            else if (nodeList[index].type === Element_1.TypeElement.CURRENT) {
+                if (nodeList.length > index + 1 &&
+                    nodeList[index + 1].type === Element_1.TypeElement.CURRENT) {
+                    // PARENT
+                }
+                // CURRENT
+                if (nodeList.length > index + 1) {
+                    this.searchElement(rootXML, nodeList, index + 1);
+                }
+                else {
+                    this.printElement(element);
+                }
+            }
+        });
+    }
+    searchAttributes(attrs, attrName) {
+        let result = false;
+        attrs.forEach((attr) => {
+            if (attr.identificador === attrName)
+                result = true;
+        });
+        return result;
+    }
+    printElement(element) {
+        console.info(element);
+    }
+    printElements(elements) {
+        elements.forEach((element) => {
+            console.info(element);
         });
     }
     setListener() {
@@ -360,6 +531,8 @@ class Main {
                     : '';
                 this.ejecutarCodigoXmlAsc(content);
                 this.graficar();
+                this.j = 1;
+                this.graficarcst(this.listacst, this.j);
             });
         }
         let analizeXPathAsc = document.getElementById('analizeXPathAsc');
@@ -396,6 +569,11 @@ class Main {
             tablaSimbolosxml.addEventListener('click', () => {
                 this.TablaSimbolos();
             });
+        }
+        let xmlcst = document.getElementById('arbolcst');
+        if (xmlcst !== undefined && xmlcst !== null) {
+            console.log('btn arbol cst Activo');
+            xmlcst.addEventListener('click', () => { });
         }
     }
 }
