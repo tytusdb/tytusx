@@ -32,7 +32,7 @@
 - [Objetivos](#Objetivos)
 - [Requisitos_del_Sistema](#Requisitos_del_Sistema)
 - [Componentes](#Componentes)
-- [Análisis_Léxico_XML](#Análisis_Léxico_XML)
+- [Análisis_Léxico_XML](#Analisis Lexico - Gramatica - XML)
 - [Análisis_Sintáctico_XML_ASC](#Análisis_Sintáctico_XML_ASC)
 - [Análisis_Sintáctico_XML_DESC](#Análisis_Sintáctico_XML_DESC)
 - [Análisis_Léxico_XPATH](#Análisis_Léxico_XPATH)
@@ -89,10 +89,43 @@ El compilador de XML aparecera en la pantalla en la parte superior donde se ingr
   <img src="Imagenes/Arquitectura.png" width="800" alt="TytusX Architecture">
 </p>
 
-## Analisis_Lexico_XML
+## Analisis Lexico - Gramatica - XML
 
 ~~~
 
+inicio: raices
+    ;
+
+raices: raices raiz
+        | raiz
+        ;
+
+raiz: objeto
+    ;
+
+objeto:  '<' ID latributos '/' '>'
+       | '<' ID latributos '>'  texto_libre  '<' '/' ID '>'    
+       | '<' ID latributos '>'  objetos  '<' '/' ID '>'
+        ;
+
+objetos: objetos objeto
+         |objeto
+         ;
+
+latributos: atributos
+            |
+            ;
+
+atributos:   atributos atributo
+            |atributo
+            ;
+
+atributo: ID '=' CADENA
+        ;
+
+texto_libre : texto_libre TEXTO
+             | TEXTO
+             ;
 
 ~~~
 
