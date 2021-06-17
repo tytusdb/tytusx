@@ -72,12 +72,12 @@
   }
 */
 var gramaticaDesc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,4],$V1=[1,6],$V2=[1,11],$V3=[6,7],$V4=[14,22],$V5=[2,12],$V6=[1,15],$V7=[2,15],$V8=[1,30],$V9=[1,37],$Va=[1,28],$Vb=[1,27],$Vc=[1,35],$Vd=[1,25],$Ve=[1,26],$Vf=[1,29],$Vg=[1,32],$Vh=[1,33],$Vi=[1,34],$Vj=[1,36],$Vk=[1,38],$Vl=[1,39],$Vm=[1,40],$Vn=[1,41],$Vo=[1,42],$Vp=[1,43],$Vq=[1,44],$Vr=[1,45],$Vs=[1,46],$Vt=[1,47],$Vu=[1,48],$Vv=[1,49],$Vw=[1,50],$Vx=[1,51],$Vy=[1,52],$Vz=[1,53],$VA=[1,54],$VB=[1,55],$VC=[1,56],$VD=[7,9,11,12,17,22,25,26,27,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51],$VE=[1,64];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,5],$V1=[1,7],$V2=[1,13],$V3=[6,7],$V4=[2,14,22],$V5=[2,15],$V6=[1,17],$V7=[2,18],$V8=[1,33],$V9=[1,40],$Va=[1,31],$Vb=[1,30],$Vc=[1,38],$Vd=[1,28],$Ve=[1,29],$Vf=[1,32],$Vg=[1,35],$Vh=[1,36],$Vi=[1,37],$Vj=[1,39],$Vk=[1,41],$Vl=[1,42],$Vm=[1,43],$Vn=[1,44],$Vo=[1,45],$Vp=[1,46],$Vq=[1,47],$Vr=[1,48],$Vs=[1,49],$Vt=[1,50],$Vu=[1,51],$Vv=[1,52],$Vw=[1,53],$Vx=[1,54],$Vy=[1,55],$Vz=[1,56],$VA=[1,57],$VB=[1,58],$VC=[1,59],$VD=[7,9,11,12,17,22,25,26,27,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51],$VE=[1,70],$VF=[1,68];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"START":3,"ENCODING":4,"RAIZ":5,"EOF":6,"lt":7,"interC":8,"xml":9,"version":10,"asig":11,"StringLiteral":12,"encoding":13,"gt":14,"OBJETO":15,"OBJETOPRIN":16,"identifier":17,"LATRIBUTOS":18,"OBJETOSEC":19,"LISTA_ID_OBJETO":20,"OBJETOTER":21,"div":22,"ATRIBUTO":23,"LISTA_VALORES":24,"IntegerLiteral":25,"DoubleLiteral":26,"CharLiteral":27,"CARACTERES":28,"plus":29,"minus":30,"times":31,"mod":32,"equal":33,"nequal":34,"and":35,"or":36,"not":37,"semicolon":38,"lparen":39,"rparen":40,"lcurly":41,"rcurly":42,"lbracket":43,"rbracket":44,"period":45,"coma":46,"lesst":47,"greatert":48,"ampersand":49,"apostro":50,"quotation":51,"$accept":0,"$end":1},
 terminals_: {2:"error",6:"EOF",7:"lt",8:"interC",9:"xml",10:"version",11:"asig",12:"StringLiteral",13:"encoding",14:"gt",17:"identifier",22:"div",25:"IntegerLiteral",26:"DoubleLiteral",27:"CharLiteral",29:"plus",30:"minus",31:"times",32:"mod",33:"equal",34:"nequal",35:"and",36:"or",37:"not",38:"semicolon",39:"lparen",40:"rparen",41:"lcurly",42:"rcurly",43:"lbracket",44:"rbracket",45:"period",46:"coma",47:"lesst",48:"greatert",49:"ampersand",50:"apostro",51:"quotation"},
-productions_: [0,[3,3],[4,11],[5,2],[5,0],[15,2],[16,3],[19,4],[19,2],[21,3],[21,3],[18,2],[18,0],[23,3],[20,2],[20,0],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1]],
+productions_: [0,[3,3],[4,11],[4,2],[5,2],[5,0],[15,2],[16,3],[19,4],[19,2],[19,2],[21,3],[21,3],[21,2],[18,2],[18,0],[23,3],[20,2],[20,0],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -88,7 +88,7 @@ case 1:
             reportBNF.push(`<START> ::= <ENCODING> <RAIZ> EOF`);
             reportBNF2.push('Start.val = Raiz.val. // Fin del documento');
             this.$ = $$[$0-1];
-            return new SalidaGramatica(this.$, reportBNF, reportBNF2, $$[$0-2]);
+            return new SalidaGramatica(this.$, reportBNF, reportBNF2, $$[$0-2], listaErrores);
         
 break;
 case 2:
@@ -98,24 +98,29 @@ case 2:
             this.$ = $$[$0-2]; 
         
 break;
-case 3:
+case 3: case 10: case 13:
+
+            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,_$[$0-1].first_line,_$[$0-1].first_column));
+        
+break;
+case 4:
  
             reportBNF.push('<RAIZ> ::= <OBJETO> <RAIZ>');
             reportBNF2.push('Raiz.val = Objeto.val.Concatenar(Raiz.Val])');
             this.$ = $$[$0-1].concat($$[$0]);
         
 break;
-case 4:
+case 5:
  this.$ = [] 
 break;
-case 5:
+case 6:
  
             reportBNF.push('<OBJETO> ::= lt <OBJETOPRIN>');
             reportBNF2.push('OBJETO.val = [Objetoprin.val]');
             this.$ = [$$[$0]] 
         
 break;
-case 6:
+case 7:
 
             let nuevo = null;
             if ($$[$0].tipo === 0){
@@ -135,7 +140,7 @@ case 6:
             this.$ = nuevo
         
 break;
-case 7:
+case 8:
 
             reportBNF.push('<OBJETOSEC> ::= gt <LISTA_ID_OBJETO> lt <OBJETOTER>')
             reportBNF2.push('Objetosec.val = Objetoter.val')
@@ -145,21 +150,21 @@ case 7:
             }
         
 break;
-case 8:
+case 9:
 
             reportBNF.push('<OBJETOSEC> ::= div gt')
             reportBNF2.push('Objetosec.val = {texto: vacio, lista: vacia: id: vacio, tipo: simple}')
             this.$ = {texto: '', lista: null, id: '', tipo: 0}
         
 break;
-case 9:
+case 11:
 
             reportBNF.push('<OBJETOTER> ::= div identifier gt')
             reportBNF2.push('Objetoter = {texto: vacio, lista: vacia, id: identifier, tipo: doble}')
             this.$ = {texto: '', lista: null, id: $$[$0-1], tipo: 1}
         
 break;
-case 10:
+case 12:
 
             reportBNF.push('<OBJETOTER> ::= <OBJETOPRIN> lt <OBJETOTER>')
             if($$[$0].id !== ""){
@@ -179,252 +184,252 @@ case 10:
             }
         
 break;
-case 11:
+case 14:
  
             reportBNF.push('<LATRIBUTOS> ::= <ATRIBUTOS> <LATRIBUTOS>');
             reportBNF2.push('Latributos.val.agregar(Atributo.val)');
             this.$ = $$[$0-1].concat($$[$0])
         
 break;
-case 12:
+case 15:
  
             reportBNF.push('<LATRIBUTOS> ::= epsilon');
             reportBNF2.push('Latributos.val = [] ');
             this.$ = [];
         
 break;
-case 13:
+case 16:
    
             reportBNF.push('<ATRIBUTO> ::= identifier asig StringLiteral');
             reportBNF2.push('Atributo.val = [new Atributo(id, valor, fila, columna)]');
             this.$ = [new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column)]
         
 break;
-case 14:
+case 17:
 
             reportBNF.push('<LISTA_ID_OBJETO> ::= <LISTA_VALORES> <LISTA_ID_OBJETO>');
             reportBNF2.push('Lista_id_objeto.val = Lista_valores.val + \" \" + Lista_id_objeto.val');
             this.$ = $$[$0-1] + " " +  $$[$0];
         
 break;
-case 15:
+case 18:
    
             reportBNF.push('<LISTA_ID_OBJETO> ::= epsilon');
             reportBNF2.push('Lista_id_objeto.val = \"\"');
             this.$ = "";
         
 break;
-case 16:
+case 19:
 
             reportBNF.push('<LISTA_VALORES> ::= IntegerLiteral');
             reportBNF2.push('Lista_valores.val = IntegerLiteral');
             this.$ = $$[$0]; 
         
 break;
-case 17:
+case 20:
  
             reportBNF.push('<LISTA_VALORES> ::= DoubleLiteral');
             reportBNF2.push('Lista_valores.val = DoubleLiteral');
             this.$ = $$[$0]; 
         
 break;
-case 18:
+case 21:
  
             reportBNF.push('<LISTA_VALORES> ::= identifier');
             reportBNF2.push('Lista_valores.val = identifier');
             this.$ = $$[$0]; 
         
 break;
-case 19:
+case 22:
  
             reportBNF.push('<LISTA_VALORES> ::= StringLiteral');
             reportBNF2.push('Lista_valores.val = StringLiteral');
             this.$ = $$[$0]; 
         
 break;
-case 20:
+case 23:
  
             reportBNF.push('<LISTA_VALORES> ::= CharLiteral');
             reportBNF2.push('Lista_valores.val = CharLiteral');
             this.$ = $$[$0]; 
         
 break;
-case 21:
+case 24:
  
             reportBNF.push('<LISTA_VALORES> ::= xml');
             reportBNF2.push('Lista_valores.val = xml');
             this.$ = $$[$0]; 
         
 break;
-case 22:
+case 25:
  
             reportBNF.push('<LISTA_VALORES> ::= <CARACTERES>');
             reportBNF2.push('Lista_valores.val = Caracteres.val');
             this.$ = $$[$0]; 
         
 break;
-case 23: case 24:
+case 26: case 27:
  
             reportBNF.push('<CARACTERES> ::= plus');
             reportBNF2.push('Caracteres.val = plus');
             this.$ = $$[$0];
         
 break;
-case 25:
+case 28:
  
             reportBNF.push('<CARACTERES> ::= times');
             reportBNF2.push('Caracteres.val = times');
             this.$ = $$[$0];
         
 break;
-case 26:
+case 29:
  
             reportBNF.push('<CARACTERES> ::= div');
             reportBNF2.push('Caracteres.val = div');
             this.$ = $$[$0];
         
 break;
-case 27:
+case 30:
  
             reportBNF.push('<CARACTERES> ::= mod');
             reportBNF2.push('Caracteres.val = mod');
             this.$ = $$[$0];
         
 break;
-case 28:
+case 31:
  
             reportBNF.push('<CARACTERES> ::= asign');
             reportBNF2.push('Caracteres.val = asign');
             this.$ = $$[$0];
         
 break;
-case 29:
+case 32:
  
             reportBNF.push('<CARACTERES> ::= equal');
             reportBNF2.push('Caracteres.val = equal');
             this.$ = $$[$0];
         
 break;
-case 30:
+case 33:
  
             reportBNF.push('<CARACTERES> ::= nequal');
             reportBNF2.push('Caracteres.val = nequal');
             this.$ = $$[$0];
         
 break;
-case 31:
+case 34:
  
             reportBNF.push('<CARACTERES> ::= and');
             reportBNF2.push('Caracteres.val = and');
             this.$ = $$[$0];
         
 break;
-case 32:
+case 35:
  
             reportBNF.push('<CARACTERES> ::= or');
             reportBNF2.push('Caracteres.val = or');
             this.$ = $$[$0];
         
 break;
-case 33:
+case 36:
  
             reportBNF.push('<CARACTERES> ::= not');
             reportBNF2.push('Caracteres.val = not');
             this.$ = $$[$0];
         
 break;
-case 34:
+case 37:
  
             reportBNF.push('<CARACTERES> ::= semicolon');
             reportBNF2.push('Caracteres.val = semicolon');
             this.$ = $$[$0];
         
 break;
-case 35:
+case 38:
  
             reportBNF.push('<CARACTERES> ::= lparen');
             reportBNF2.push('Caracteres.val = lparen');
             this.$ = $$[$0];
         
 break;
-case 36:
+case 39:
  
             reportBNF.push('<CARACTERES> ::= rparen');
             reportBNF2.push('Caracteres.val = rparen');
             this.$ = $$[$0];
         
 break;
-case 37:
+case 40:
  
             reportBNF.push('<CARACTERES> ::= lcurly');
             reportBNF2.push('Caracteres.val = lcurly');
             this.$ = $$[$0];
         
 break;
-case 38:
+case 41:
  
             reportBNF.push('<CARACTERES> ::= rcurly');
             reportBNF2.push('Caracteres.val = rcurly');
             this.$ = $$[$0];
         
 break;
-case 39:
+case 42:
  
             reportBNF.push('<CARACTERES> ::= lbracket');
             reportBNF2.push('Caracteres.val = lbracket');
             this.$ = $$[$0];
         
 break;
-case 40:
+case 43:
  
             reportBNF.push('<CARACTERES> ::= rbracket');
             reportBNF2.push('Caracteres.val = rbracket');
             this.$ = $$[$0];
         
 break;
-case 41:
+case 44:
  
             reportBNF.push('<CARACTERES> ::= period');
             reportBNF2.push('Caracteres.val = period');
             this.$ = $$[$0];
         
 break;
-case 42:
+case 45:
  
             reportBNF.push('<CARACTERES> ::= coma');
             reportBNF2.push('Caracteres.val = coma');
             this.$ = $$[$0];
         
 break;
-case 43:
+case 46:
  
             reportBNF.push('<CARACTERES> ::= lesst');
             reportBNF2.push('Caracteres.val = >');
             this.$ = '<';
         
 break;
-case 44:
+case 47:
  
             reportBNF.push('<CARACTERES> ::= greatert');
             reportBNF2.push('Caracteres.val = >');
             this.$ = '>';
         
 break;
-case 45:
+case 48:
  
             reportBNF.push('<CARACTERES> ::= ampersand');
             reportBNF2.push('Caracteres.val = &');
             this.$ = '&';
         
 break;
-case 46:
+case 49:
  
             reportBNF.push('<CARACTERES> ::= apostro');
             reportBNF2.push('Caracteres.val = \'');
             this.$ = '\'';
         
 break;
-case 47:
+case 50:
  
             reportBNF.push('<CARACTERES> ::= quotation');
             reportBNF2.push('Caracteres.val = \"');
@@ -433,8 +438,8 @@ case 47:
 break;
 }
 },
-table: [{3:1,4:2,7:[1,3]},{1:[3]},{5:4,6:$V0,7:$V1,15:5},{8:[1,7]},{6:[1,8]},{5:9,6:$V0,7:$V1,15:5},{16:10,17:$V2},{9:[1,12]},{1:[2,1]},{6:[2,3]},o($V3,[2,5]),o($V4,$V5,{18:13,23:14,17:$V6}),{10:[1,16]},{14:[1,18],19:17,22:[1,19]},o($V4,$V5,{23:14,18:20,17:$V6}),{11:[1,21]},{11:[1,22]},o($V3,[2,6]),{7:$V7,9:$V8,11:$V9,12:$Va,17:$Vb,20:23,22:$Vc,24:24,25:$Vd,26:$Ve,27:$Vf,28:31,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,40:$Vr,41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC},{14:[1,57]},o($V4,[2,11]),{12:[1,58]},{12:[1,59]},{7:[1,60]},{7:$V7,9:$V8,11:$V9,12:$Va,17:$Vb,20:61,22:$Vc,24:24,25:$Vd,26:$Ve,27:$Vf,28:31,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,40:$Vr,41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC},o($VD,[2,16]),o($VD,[2,17]),o($VD,[2,18]),o($VD,[2,19]),o($VD,[2,20]),o($VD,[2,21]),o($VD,[2,22]),o($VD,[2,23]),o($VD,[2,24]),o($VD,[2,25]),o($VD,[2,26]),o($VD,[2,27]),o($VD,[2,28]),o($VD,[2,29]),o($VD,[2,30]),o($VD,[2,31]),o($VD,[2,32]),o($VD,[2,33]),o($VD,[2,34]),o($VD,[2,35]),o($VD,[2,36]),o($VD,[2,37]),o($VD,[2,38]),o($VD,[2,39]),o($VD,[2,40]),o($VD,[2,41]),o($VD,[2,42]),o($VD,[2,43]),o($VD,[2,44]),o($VD,[2,45]),o($VD,[2,46]),o($VD,[2,47]),o($V3,[2,8]),o([14,17,22],[2,13]),{13:[1,62]},{16:65,17:$V2,21:63,22:$VE},{7:[2,14]},{11:[1,66]},o($V3,[2,7]),{17:[1,67]},{7:[1,68]},{12:[1,69]},{14:[1,70]},{16:65,17:$V2,21:71,22:$VE},{8:[1,72]},o($V3,[2,9]),o($V3,[2,10]),{14:[1,73]},o($V3,[2,2])],
-defaultActions: {8:[2,1],9:[2,3],61:[2,14]},
+table: [{2:[1,4],3:1,4:2,7:[1,3]},{1:[3]},{5:5,6:$V0,7:$V1,15:6},{8:[1,8]},{14:[1,9]},{6:[1,10]},{5:11,6:$V0,7:$V1,15:6},{16:12,17:$V2},{9:[1,14]},o($V3,[2,3]),{1:[2,1]},{6:[2,4]},o($V3,[2,6]),o($V4,$V5,{18:15,23:16,17:$V6}),{10:[1,18]},{2:[1,22],14:[1,20],19:19,22:[1,21]},o($V4,$V5,{23:16,18:23,17:$V6}),{11:[1,24]},{11:[1,25]},o($V3,[2,7]),{7:$V7,9:$V8,11:$V9,12:$Va,17:$Vb,20:26,22:$Vc,24:27,25:$Vd,26:$Ve,27:$Vf,28:34,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,40:$Vr,41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC},{14:[1,60]},{14:[1,61]},o($V4,[2,14]),{12:[1,62]},{12:[1,63]},{7:[1,64]},{7:$V7,9:$V8,11:$V9,12:$Va,17:$Vb,20:65,22:$Vc,24:27,25:$Vd,26:$Ve,27:$Vf,28:34,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,40:$Vr,41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC},o($VD,[2,19]),o($VD,[2,20]),o($VD,[2,21]),o($VD,[2,22]),o($VD,[2,23]),o($VD,[2,24]),o($VD,[2,25]),o($VD,[2,26]),o($VD,[2,27]),o($VD,[2,28]),o($VD,[2,29]),o($VD,[2,30]),o($VD,[2,31]),o($VD,[2,32]),o($VD,[2,33]),o($VD,[2,34]),o($VD,[2,35]),o($VD,[2,36]),o($VD,[2,37]),o($VD,[2,38]),o($VD,[2,39]),o($VD,[2,40]),o($VD,[2,41]),o($VD,[2,42]),o($VD,[2,43]),o($VD,[2,44]),o($VD,[2,45]),o($VD,[2,46]),o($VD,[2,47]),o($VD,[2,48]),o($VD,[2,49]),o($VD,[2,50]),o($V3,[2,9]),o($V3,[2,10]),o([2,14,17,22],[2,16]),{13:[1,66]},{2:$VE,16:69,17:$V2,21:67,22:$VF},{7:[2,17]},{11:[1,71]},o($V3,[2,8]),{17:[1,72]},{7:[1,73]},{14:[1,74]},{12:[1,75]},{14:[1,76]},{2:$VE,16:69,17:$V2,21:77,22:$VF},o($V3,[2,13]),{8:[1,78]},o($V3,[2,11]),o($V3,[2,12]),{14:[1,79]},o($V3,[2,2])],
+defaultActions: {10:[2,1],11:[2,4],65:[2,17]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -444,16 +449,33 @@ parseError: function parseError (str, hash) {
         throw error;
     }
 },
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+parse: function parse (input) {
+    var self = this,
+        stack = [0],
+        tstack = [], // token stack
+        vstack = [null], // semantic value stack
+        lstack = [], // location stack
+        table = this.table,
+        yytext = '',
+        yylineno = 0,
+        yyleng = 0,
+        recovering = 0,
+        TERROR = 2,
+        EOF = 1;
+
     var args = lstack.slice.call(arguments, 1);
+
+    //this.reductionCount = this.shiftCount = 0;
+
     var lexer = Object.create(this.lexer);
     var sharedState = { yy: {} };
+    // copy state
     for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
+      if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+        sharedState.yy[k] = this.yy[k];
+      }
     }
+
     lexer.setInput(input, sharedState.yy);
     sharedState.yy.lexer = lexer;
     sharedState.yy.parser = this;
@@ -462,130 +484,216 @@ parse: function parse(input) {
     }
     var yyloc = lexer.yylloc;
     lstack.push(yyloc);
+
     var ranges = lexer.options && lexer.options.ranges;
+
     if (typeof sharedState.yy.parseError === 'function') {
         this.parseError = sharedState.yy.parseError;
     } else {
         this.parseError = Object.getPrototypeOf(this).parseError;
     }
-    function popStack(n) {
+
+    function popStack (n) {
         stack.length = stack.length - 2 * n;
         vstack.length = vstack.length - n;
         lstack.length = lstack.length - n;
     }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
+
+_token_stack:
+    var lex = function () {
+        var token;
+        token = lexer.lex() || EOF;
+        // if token isn't its numeric value, convert
+        if (typeof token !== 'number') {
+            token = self.symbols_[token] || token;
+        }
+        return token;
+    }
+
     var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
     while (true) {
+        // retreive state number from top of stack
         state = stack[stack.length - 1];
+
+        // use default actions if available
         if (this.defaultActions[state]) {
             action = this.defaultActions[state];
         } else {
             if (symbol === null || typeof symbol == 'undefined') {
                 symbol = lex();
             }
+            // read action for current state and first input
             action = table[state] && table[state][symbol];
         }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
+
+_handle_error:
+        // handle parse error
+        if (typeof action === 'undefined' || !action.length || !action[0]) {
+            var error_rule_depth;
+            var errStr = '';
+
+            // Return the rule stack depth where the nearest error rule can be found.
+            // Return FALSE when no error recovery rule was found.
+            function locateNearestErrorRecoveryRule(state) {
+                var stack_probe = stack.length - 1;
+                var depth = 0;
+
+                // try to recover from error
+                for(;;) {
+                    // check for error recovery rule in this state
+                    if ((TERROR.toString()) in table[state]) {
+                        return depth;
+                    }
+                    if (state === 0 || stack_probe < 2) {
+                        return false; // No suitable error recovery rule available.
+                    }
+                    stack_probe -= 2; // popStack(1): [symbol, action]
+                    state = stack[stack_probe];
+                    ++depth;
+                }
+            }
+
+            if (!recovering) {
+                // first see if there's any chance at hitting an error recovery rule:
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
+
+                // Report error
                 expected = [];
                 for (p in table[state]) {
                     if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
+                        expected.push("'"+this.terminals_[p]+"'");
                     }
                 }
                 if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                    errStr = 'Parse error on line '+(yylineno+1)+":\n"+lexer.showPosition()+"\nExpecting "+expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol)+ "'";
                 } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                    errStr = 'Parse error on line '+(yylineno+1)+": Unexpected " +
+                                  (symbol == EOF ? "end of input" :
+                                              ("'"+(this.terminals_[symbol] || symbol)+"'"));
                 }
                 this.parseError(errStr, {
                     text: lexer.match,
                     token: this.terminals_[symbol] || symbol,
                     line: lexer.yylineno,
                     loc: yyloc,
-                    expected: expected
+                    expected: expected,
+                    recoverable: (error_rule_depth !== false)
                 });
+            } else if (preErrorSymbol !== EOF) {
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
             }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
+
+            // just recovered from another error
+            if (recovering == 3) {
+                if (symbol === EOF || preErrorSymbol === EOF) {
+                    throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
+                }
+
+                // discard current lookahead and grab another
                 yyleng = lexer.yyleng;
                 yytext = lexer.yytext;
                 yylineno = lexer.yylineno;
                 yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
+                symbol = lex();
             }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
+
+            // try to recover from error
+            if (error_rule_depth === false) {
+                throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
             }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
+            popStack(error_rule_depth);
+
+            preErrorSymbol = (symbol == TERROR ? null : symbol); // save the lookahead token
+            symbol = TERROR;         // insert generic error symbol as new lookahead
+            state = stack[stack.length-1];
+            action = table[state] && table[state][TERROR];
+            recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
         }
+
+        // this shouldn't happen, unless resolve defaults are off
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: '+state+', token: '+symbol);
+        }
+
+        switch (action[0]) {
+            case 1: // shift
+                //this.shiftCount++;
+
+                stack.push(symbol);
+                vstack.push(lexer.yytext);
+                lstack.push(lexer.yylloc);
+                stack.push(action[1]); // push state
+                symbol = null;
+                if (!preErrorSymbol) { // normal execution/no error
+                    yyleng = lexer.yyleng;
+                    yytext = lexer.yytext;
+                    yylineno = lexer.yylineno;
+                    yyloc = lexer.yylloc;
+                    if (recovering > 0) {
+                        recovering--;
+                    }
+                } else {
+                    // error just occurred, resume old lookahead f/ before error
+                    symbol = preErrorSymbol;
+                    preErrorSymbol = null;
+                }
+                break;
+
+            case 2:
+                // reduce
+                //this.reductionCount++;
+
+                len = this.productions_[action[1]][1];
+
+                // perform semantic action
+                yyval.$ = vstack[vstack.length-len]; // default to $$ = $1
+                // default location, uses first token for firsts, last for lasts
+                yyval._$ = {
+                    first_line: lstack[lstack.length-(len||1)].first_line,
+                    last_line: lstack[lstack.length-1].last_line,
+                    first_column: lstack[lstack.length-(len||1)].first_column,
+                    last_column: lstack[lstack.length-1].last_column
+                };
+                if (ranges) {
+                  yyval._$.range = [lstack[lstack.length-(len||1)].range[0], lstack[lstack.length-1].range[1]];
+                }
+                r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+
+                if (typeof r !== 'undefined') {
+                    return r;
+                }
+
+                // pop off stack
+                if (len) {
+                    stack = stack.slice(0,-1*len*2);
+                    vstack = vstack.slice(0, -1*len);
+                    lstack = lstack.slice(0, -1*len);
+                }
+
+                stack.push(this.productions_[action[1]][0]);    // push nonterminal (reduce)
+                vstack.push(yyval.$);
+                lstack.push(yyval._$);
+                // goto new state = table[STATE][NONTERMINAL]
+                newState = table[stack[stack.length-2]][stack[stack.length-1]];
+                stack.push(newState);
+                break;
+
+            case 3:
+                // accept
+                return true;
+        }
+
     }
+
     return true;
 }};
 
     const {Objeto} = require("../Expresiones/Objeto");
     const {Atributo} = require("../Expresiones/Atributo");
     const {SalidaGramatica} = require("../AST/SalidaGramatica");
+    const {tError} = require("../Expresiones/tError");
 
+    var listaErrores = [];
     var reportBNF = [];
     var reportBNF2 = [];
 /* generated by jison-lex 0.3.4 */
@@ -1009,6 +1117,7 @@ break;
 case 45:return 27;
 break;
 case 46:
+        listaErrores.push(new tError('Léxico',`Simbolo inesperado: ${yy_.yytext}`,yy_.yylloc.first_line,yy_.yylloc.first_column ));
         console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
     
 break;

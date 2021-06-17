@@ -1,12 +1,19 @@
-
+import { ErrorHandler } from "@angular/core";
 import { tError } from "../Expresiones/tError";
 
-export class ListaErrores {
+interface errorIndividual {
+    no: number,
+    tipo: string,
+    valor: string,
+    linea: number,
+    columna: number,
+}
 
+export class ListaErrores {
+    contador: number = 1;
     public cuerpoHtml: any;
 
-    constructor() {
-    }
+    constructor() { this.contador = 1 }
 
     //LLAMARLO AL INICIO PARA VALIDAR LAS ETIQUETAS
     validateEtiquetas(listaO: any): Array<tError> {
@@ -36,38 +43,31 @@ export class ListaErrores {
         console.log(lError.generateHtmlBody(salidaG.lErrores, arrTmp));
     */
     //ARCHIVO .HTML
-    generateHtmlBody(erroresLS: any, erroresEtiquetas: any): string {
-        this.cuerpoHtml = `<TABLE BORDER> \n`;
-        this.cuerpoHtml += `    <thead> \n`;
-        this.cuerpoHtml += `        <tr> \n`;
-        this.cuerpoHtml += `        <th>Tipo</th> \n`;
-        this.cuerpoHtml += `        <th>Valor</th> \n`;
-        this.cuerpoHtml += `        <th>Fila</th> \n`;
-        this.cuerpoHtml += `        <th>Columna</th> \n`;
-        this.cuerpoHtml += `        </tr> \n`;
-        this.cuerpoHtml += `    </thead> \n`;
-        this.cuerpoHtml += `    <tbody> \n`;
+    generateHtmlBody(erroresLS: any, erroresEtiquetas: any):errorIndividual[] {
+        var arrayCuerpo: errorIndividual[] = [];
 
-        erroresLS.forEach((object: any) => {
-            this.cuerpoHtml += this.getHtmlBody(object);
-        });
+        if (erroresLS.length > 0) {
+            erroresLS.forEach((object: any) => {
+                arrayCuerpo.push(this.getHtmlBody(object));
+            });
+        }
 
-        erroresEtiquetas.forEach((object: any) => {
-            this.cuerpoHtml += this.getHtmlBody(object);
-        });
-
-        this.cuerpoHtml += `    </tbody> \n`;
-        this.cuerpoHtml += `</TABLE> \n`;
-        return this.cuerpoHtml;
+        if (erroresEtiquetas.length > 0) {
+            erroresEtiquetas.forEach((object: any) => {
+                arrayCuerpo.push(this.getHtmlBody(object));
+            });
+        }
+        return arrayCuerpo;
     }
 
-    getHtmlBody(error: any) {
-        var fila = `  <tr> \n`;
-        fila += `      <td class="text-left">${error.tipo}</td>\n`;
-        fila += `      <td>${error.texto}</td>\n`;
-        fila += `      <td>${error.linea}</td> \n`;
-        fila += `      <td>${error.columna}</td> \n`;
-        fila += `  </tr> \n`;
+    getHtmlBody(error: any):errorIndividual {
+        var fila:errorIndividual = {
+            no: this.contador,
+            tipo: error.tipo,
+            valor: error.texto,
+            linea: error.linea,
+            columna: error.columna
+        }; 
         return fila;
     }
 
