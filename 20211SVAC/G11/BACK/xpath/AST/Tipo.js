@@ -1,13 +1,13 @@
 "use strict";
 exports.__esModule = true;
-exports.Tipo = void 0;
-var Tipo;
-(function (Tipo) {
-    Tipo[Tipo["CADENA"] = 0] = "CADENA";
-    Tipo[Tipo["ENTERO"] = 1] = "ENTERO";
-    Tipo[Tipo["DECIMAL"] = 2] = "DECIMAL";
-    Tipo[Tipo["BOOL"] = 3] = "BOOL";
-    Tipo[Tipo["POSITION"] = 4] = "POSITION";
-    Tipo[Tipo["LAST"] = 5] = "LAST";
-    Tipo[Tipo["IDENTIFICADOR"] = 6] = "IDENTIFICADOR";
-})(Tipo = exports.Tipo || (exports.Tipo = {}));
+exports.TipoXpath = void 0;
+var TipoXpath;
+(function (TipoXpath) {
+    TipoXpath[TipoXpath["CADENA"] = 0] = "CADENA";
+    TipoXpath[TipoXpath["ENTERO"] = 1] = "ENTERO";
+    TipoXpath[TipoXpath["DECIMAL"] = 2] = "DECIMAL";
+    TipoXpath[TipoXpath["BOOL"] = 3] = "BOOL";
+    TipoXpath[TipoXpath["POSITION"] = 4] = "POSITION";
+    TipoXpath[TipoXpath["LAST"] = 5] = "LAST";
+    TipoXpath[TipoXpath["IDENTIFICADOR"] = 6] = "IDENTIFICADOR";
+})(TipoXpath = exports.TipoXpath || (exports.TipoXpath = {}));

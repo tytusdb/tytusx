@@ -180,19 +180,19 @@ case 39:
 this.$=[$$[$0]]; ReporteGA.agregar('L_ATRIBUTO::=ATRIBUTO1','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');
 break;
 case 40:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 41:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 42:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 43:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column); ReporteGA.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 44:
-this.$ = new Atributo('','',_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');
+this.$ = new AtributoXpath('','',_$[$0].first_line,_$[$0].first_column); ReporteGA.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');
 break;
 case 45:
 this.$ = new Conca('!',$$[$0-4],$$[$0-3],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column); ReporteGA.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');
@@ -390,16 +390,16 @@ case 113:
 this.$=[$$[$0]];  ReporteGA.agregar('ATRI1::=ATRI1','L_ATRI.VAL = ATRI1.VAL','');
 break;
 case 114:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');
 break;
 case 115:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');
 break;
 case 116:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');
 break;
 case 117:
-this.$ = new Atributo($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');
+this.$ = new AtributoXpath($$[$0-1],$$[$0],_$[$0-1].first_line,_$[$0-1].first_column);  ReporteGA.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');
 break;
 case 118:
  ReporteGA.agregar('ATRI1::=ε','ATRI1.VAL = EPSILON','');
