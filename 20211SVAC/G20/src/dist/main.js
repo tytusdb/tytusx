@@ -82,7 +82,7 @@ class Main {
         const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        // this.execPath_list(objetos.XPath);
+        this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
         let contenido = '';
@@ -578,7 +578,7 @@ class Main {
     printElement(element) {
         let text = this.applyCodification(this.getXmlFormat(element));
         console.log(text);
-        // console.textContent(text);
+        document.getElementById('console').value += text;
     }
     printElements(elements) {
         elements.forEach((element) => {
