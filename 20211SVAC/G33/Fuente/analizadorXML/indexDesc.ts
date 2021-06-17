@@ -4,17 +4,17 @@ import { Entorno } from './AST/Entorno';
 import { GramaticaBNF } from './AST/GramaticaBNF';
 import { TablaSimbolos } from './AST/TablaSimbolos';
 import { SalidaGramatica } from './AST/SalidaGramatica';
+import { ListaErrores } from './Errores/ListaErrores';
 
 import * as gramatica from './Gramatica/gramaticaDesc';
-import { RepositionScrollStrategy } from '@angular/cdk/overlay';
-import { emitWarning } from 'process';
 
 interface retorno {
     tablaRep: any,
     bnfRep: any,
     cstRep: any,
     encoding: any,
-    objetos: any
+    objetos: any,
+    errores: any
 }
 
 export class AnalizadorASCXML  {
@@ -23,6 +23,7 @@ export class AnalizadorASCXML  {
         const tabla: TablaSimbolos = new TablaSimbolos();
         const salidaG = gramatica.parse(entrada);
         const arbolCST = new CST(salidaG.objetos);
+        const Listaerrores = new ListaErrores();
 
         // TABLA SIMBOLOS
         let reporteTabla = tabla.generarReporteTablaObjetos(salidaG.objetos); 
@@ -31,13 +32,16 @@ export class AnalizadorASCXML  {
         let reporteBNF = gramBnf.getBNFReport();
         // DOT CST
         let reporteCST = arbolCST.generarArbolCST(salidaG.objetos); 
+        //Errores
+        let errores = Listaerrores.generateHtmlBody(salidaG.lErrores, Listaerrores.validateEtiquetas(salidaG.objetos));
 
         let ret: retorno = {
             tablaRep: reporteTabla,
             bnfRep: reporteBNF,
             cstRep: reporteCST,
             encoding: salidaG.encoding,
-            objetos: salidaG.objetos
+            objetos: salidaG.objetos,
+            errores: errores
         };
 
         return ret;

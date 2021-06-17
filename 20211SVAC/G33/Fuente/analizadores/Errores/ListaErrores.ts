@@ -46,19 +46,20 @@ export class ListaErrores {
     generateHtmlBody(erroresLS: any, erroresEtiquetas: any):errorIndividual[] {
         var arrayCuerpo: errorIndividual[] = [];
 
-        if (erroresLS.length > 0) {
-            erroresLS.forEach((object: any) => {
-                arrayCuerpo.push(this.getHtmlBody(object));
-            });
-        }
-
-        if (erroresEtiquetas.length > 0) {
-            erroresEtiquetas.forEach((object: any) => {
-                arrayCuerpo.push(this.getHtmlBody(object));
-            });
-        }
-        return arrayCuerpo;
+        if (erroresLS.length > 0){
+        erroresLS.forEach((object: any) => {
+            arrayCuerpo.push(this.getHtmlBody(object));
+        });
     }
+    
+    if (erroresEtiquetas.length >  0){
+    erroresEtiquetas.forEach((object: any) => {
+            arrayCuerpo.push(this.getHtmlBody(object));
+        });
+    }
+        return arrayCuerpo;
+    
+}
 
     getHtmlBody(error: any):errorIndividual {
         var fila:errorIndividual = {
