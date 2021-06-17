@@ -72,12 +72,12 @@
   }
 */
 var gramasc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,9],$V1=[1,11],$V2=[2,10],$V3=[1,16],$V4=[9,12,13,15],$V5=[8,13,21],$V6=[5,8];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,9],$V1=[1,11],$V2=[2,10],$V3=[1,16],$V4=[9,12,13,15],$V5=[8,13,21,22],$V6=[5,8];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"ENC":6,"OBJETO":7,"menor":8,"quest":9,"xml":10,"LATRIBUTOS":11,"mayor":12,"identificador":13,"OBJETOS":14,"div":15,"LISTA_ID_OBJETO":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"StringLiteral":20,"any":21,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"menor",9:"quest",10:"xml",12:"mayor",13:"identificador",15:"div",19:"asig",20:"StringLiteral",21:"any"},
-productions_: [0,[3,2],[4,2],[4,1],[4,1],[6,6],[7,9],[7,9],[7,5],[11,1],[11,0],[17,2],[17,1],[18,3],[16,2],[16,2],[16,1],[16,1],[14,2],[14,1]],
+symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"ENC":6,"OBJETO":7,"menor":8,"quest":9,"xml":10,"LATRIBUTOS":11,"mayor":12,"identificador":13,"OBJETOS":14,"div":15,"LISTA_ID_OBJETO":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"StringLiteral":20,"any":21,"numero":22,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"menor",9:"quest",10:"xml",12:"mayor",13:"identificador",15:"div",19:"asig",20:"StringLiteral",21:"any",22:"numero"},
+productions_: [0,[3,2],[4,2],[4,1],[4,1],[6,6],[7,9],[7,9],[7,5],[11,1],[11,0],[17,2],[17,1],[18,3],[16,2],[16,2],[16,2],[16,1],[16,1],[16,1],[14,2],[14,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -89,15 +89,14 @@ case 1:
                             encoding = [];
                             return this.$;
 break;
-case 2: case 3: case 16: case 17:
+case 2: case 3: case 17: case 18: case 19:
  this.$ = $$[$0] 
 break;
 case 4:
  
                         console.error('Error sintáctico: ' + yytext + ', linea: ' + this._$.first_line + ', columna: ' + this._$.first_column); 
-                        // errores.push({error: 'No se esperaba el caracter '+yytext, tipo: 'Sintactico', linea: _$[$0].first_line, columna: _$[$0].first_column});
-                           errores.push({'Error Type': 'Sintactico', 'Row': _$[$0].first_line, 'Column': _$[$0].first_column, 'Description': 'No se esperaba el caracter: '+yytext });
-                         
+                            errores.push({'Error Type': 'Sintactico', 'Row': _$[$0].first_line, 'Column': _$[$0].first_column, 'Description': 'No se esperaba el caracter: '+yytext });
+                          
 break;
 case 5:
  encoding = $$[$0-2]; 
@@ -127,22 +126,22 @@ break;
 case 10:
  this.$ = []; 
 break;
-case 11: case 18:
+case 11: case 20:
  $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
 break;
-case 12: case 19:
+case 12: case 21:
  this.$ = [$$[$0]]; 
 break;
 case 13:
  this.$ = new Atributo($$[$0-2], $$[$0].replace(/['"]+/g, ''), _$[$0-2].first_line, _$[$0-2].first_column);
 break;
-case 14: case 15:
+case 14: case 15: case 16:
  $$[$0-1]=$$[$0-1] + ' ' +$$[$0] ; this.$ = $$[$0-1];
 break;
 }
 },
-table: [{2:[1,5],3:1,4:2,6:3,7:4,8:[1,6]},{1:[3]},{5:[1,7]},{7:8,8:$V0},{5:[2,3]},{5:[2,4]},{9:[1,10],13:$V1},{1:[2,1]},{5:[2,2]},{13:$V1},{10:[1,12]},o([12,15],$V2,{11:13,17:14,18:15,13:$V3}),{9:$V2,11:17,13:$V3,17:14,18:15},{12:[1,18],15:[1,19]},o([9,12,15],[2,9],{18:20,13:$V3}),o($V4,[2,12]),{19:[1,21]},{9:[1,22]},{7:25,8:$V0,13:[1,26],14:23,16:24,21:[1,27]},{12:[1,28]},o($V4,[2,11]),{20:[1,29]},{12:[1,30]},{7:32,8:[1,31]},{8:[1,33],13:[1,35],21:[1,34]},{8:[2,19]},o($V5,[2,16]),o($V5,[2,17]),o($V6,[2,8]),o($V4,[2,13]),{8:[2,5]},{13:$V1,15:[1,36]},{8:[2,18]},{15:[1,37]},o($V5,[2,14]),o($V5,[2,15]),{13:[1,38]},{13:[1,39]},{12:[1,40]},{12:[1,41]},o($V6,[2,6]),o($V6,[2,7])],
-defaultActions: {4:[2,3],5:[2,4],7:[2,1],8:[2,2],25:[2,19],30:[2,5],32:[2,18]},
+table: [{2:[1,5],3:1,4:2,6:3,7:4,8:[1,6]},{1:[3]},{5:[1,7]},{7:8,8:$V0},{5:[2,3]},{5:[2,4]},{9:[1,10],13:$V1},{1:[2,1]},{5:[2,2]},{13:$V1},{10:[1,12]},o([12,15],$V2,{11:13,17:14,18:15,13:$V3}),{9:$V2,11:17,13:$V3,17:14,18:15},{12:[1,18],15:[1,19]},o([9,12,15],[2,9],{18:20,13:$V3}),o($V4,[2,12]),{19:[1,21]},{9:[1,22]},{7:25,8:$V0,13:[1,26],14:23,16:24,21:[1,28],22:[1,27]},{12:[1,29]},o($V4,[2,11]),{20:[1,30]},{12:[1,31]},{7:33,8:[1,32]},{8:[1,34],13:[1,36],21:[1,35],22:[1,37]},{8:[2,21]},o($V5,[2,17]),o($V5,[2,18]),o($V5,[2,19]),o($V6,[2,8]),o($V4,[2,13]),{8:[2,5]},{13:$V1,15:[1,38]},{8:[2,20]},{15:[1,39]},o($V5,[2,14]),o($V5,[2,15]),o($V5,[2,16]),{13:[1,40]},{13:[1,41]},{12:[1,42]},{12:[1,43]},o($V6,[2,6]),o($V6,[2,7])],
+defaultActions: {4:[2,3],5:[2,4],7:[2,1],8:[2,2],25:[2,21],31:[2,5],33:[2,20]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -740,37 +739,35 @@ case 4:return 8;
 break;
 case 5:return 12;
 break;
-case 6:return 'min';
+case 6:return 15;
 break;
-case 7:return 15;
+case 7:return 9;
 break;
-case 8:return 9;
+case 8:return 19;
 break;
-case 9:return 19;
+case 9:return 10;
 break;
-case 10:return 10;
+case 10:return 22;
 break;
-case 11:return 'numero';
+case 11:return 13;
 break;
-case 12:return 13;
+case 12:return 20
 break;
-case 13:return 20
+case 13:return 'CharLiteral'
 break;
-case 14:return 'CharLiteral'
+case 14:return 21
 break;
-case 15:return 21
-break;
-case 16:  
+case 15:  
     console.error('Error léxico: ' + yy_.yytext + ', linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column);
     errores.push({'Error Type': 'Lexico', 'Row': yy_.yylloc.first_line, 'Column': yy_.yylloc.first_column, 'Description': 'El caracter: '+yy_.yytext+' no pertenece al lenguaje' });
 
 break;
-case 17:return 5
+case 16:return 5
 break;
 }
 },
-rules: [/^(?:<!--)/,/^(?:-->)/,/^(?:.)/,/^(?:\s+)/,/^(?:<)/,/^(?:>)/,/^(?:-)/,/^(?:\/)/,/^(?:\?)/,/^(?:=)/,/^(?:xml\b)/,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+))|[0-9]+)/,/^(?:[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ0-9_ñÑ]*)/,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/,/^(?:(.))/,/^(?:.)/,/^(?:$)/],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],"inclusive":true},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],"inclusive":true}}
+rules: [/^(?:<!--)/,/^(?:-->)/,/^(?:.)/,/^(?:\s+)/,/^(?:<)/,/^(?:>)/,/^(?:\/)/,/^(?:\?)/,/^(?:=)/,/^(?:xml\b)/,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+))|[0-9]+)/,/^(?:[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ0-9_ñÑ]*)/,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/,/^(?:(.))/,/^(?:.)/,/^(?:$)/],
+conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":true},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16],"inclusive":true}}
 });
 return lexer;
 })();

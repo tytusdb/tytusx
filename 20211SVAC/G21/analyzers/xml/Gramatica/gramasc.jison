@@ -37,7 +37,6 @@ BSL                                 "\\".
 
 "<"                         return 'menor';
 ">"                         return 'mayor';
-"-"                         return 'min';
 "/"                         return 'div';
 "?"                         return 'quest';
 "="                         return 'asig';
@@ -62,7 +61,6 @@ BSL                                 "\\".
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
 %left 'menor' 'mayor'
-%left 'min'
 %left 'div'
 
 // %left 'lparen' 'rparen'
@@ -86,9 +84,8 @@ RAIZ : ENC OBJETO        { $$ = $2 }
     | OBJETO             { $$ = $1 }
     | error              { 
                         console.error('Error sintáctico: ' + yytext + ', linea: ' + this._$.first_line + ', columna: ' + this._$.first_column); 
-                        // errores.push({error: 'No se esperaba el caracter '+yytext, tipo: 'Sintactico', linea: @1.first_line, columna: @1.first_column});
-                           errores.push({'Error Type': 'Sintactico', 'Row': @1.first_line, 'Column': @1.first_column, 'Description': 'No se esperaba el caracter: '+yytext });
-                         }   
+                            errores.push({'Error Type': 'Sintactico', 'Row': @1.first_line, 'Column': @1.first_column, 'Description': 'No se esperaba el caracter: '+yytext });
+                          }   
 ;
  
 ENC : menor quest xml LATRIBUTOS quest mayor { encoding = $4; }
@@ -122,7 +119,9 @@ ATRIBUTO: identificador asig StringLiteral          { $$ = new Atributo($1, $3.r
 
 LISTA_ID_OBJETO: LISTA_ID_OBJETO any          { $1=$1 + ' ' +$2 ; $$ = $1;}
         | LISTA_ID_OBJETO identificador       { $1=$1 + ' ' +$2 ; $$ = $1;}
+        | LISTA_ID_OBJETO numero              { $1=$1 + ' ' +$2 ; $$ = $1;}
         | identificador                       { $$ = $1 }
+        | numero                              { $$ = $1 }
         | any                                 { $$ = $1 }
 ;
 
