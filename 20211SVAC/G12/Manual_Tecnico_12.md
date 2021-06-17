@@ -32,15 +32,9 @@
 - [Objetivos](#Objetivos)
 - [Requisitos_del_Sistema](#Requisitos_del_Sistema)
 - [Componentes](#Componentes)
-- [Análisis_Léxico_XML](#Analisis Lexico - Gramatica - XML)
-- [Análisis_Sintáctico_XML_ASC](#Análisis_Sintáctico_XML_ASC)
-- [Análisis_Sintáctico_XML_DESC](#Análisis_Sintáctico_XML_DESC)
-- [Análisis_Léxico_XPATH](#Análisis_Léxico_XPATH)
-- [Análisis_Sintáctico_XPATH_DESC](#Análisis_Sintáctico_XPATH_DESC)
-- [Análisis_Sintáctico_XPATH_ASC](#Análisis_Sintáctico_XPATH_ASC)
-- [Archivo_Entrada_XML](#Archivo_Entrada_XML)
-- [Archivo_Entrada_XPATH](#Archivo_Entrada_XPATH)
-- [Salida](#Salida)
+- [Análisis_Léxico_XML](#Analisis_Lexico_Gramatica_XML)
+- [Análisis_Sintáctico_XML_DESC](#Gramatica_Descendente_XML)
+- [Análisis_Léxico_XPATH](#Analisis_XPATH)
 
 
 
@@ -89,7 +83,7 @@ El compilador de XML aparecera en la pantalla en la parte superior donde se ingr
   <img src="Imagenes/Arquitectura.png" width="800" alt="TytusX Architecture">
 </p>
 
-## Analisis Lexico - Gramatica - XML
+## Analisis_Sintactico_Gramatica_XML
 
 ~~~
 
@@ -129,121 +123,137 @@ texto_libre : texto_libre TEXTO
 
 ~~~
 
-## Análisis_Sintáctico_XML_ASC
-
-### Gramatica Ascendente
+### Gramatica_Descendente_XML
 
 ~~~
 
+inicio: raices
+    ;
 
-~~~
+raices: raiz raices
+        | raiz
+        ;
 
-## Análisis_Sintáctico_XML_DESC
+raiz: objeto
+    ;
 
-### Gramatica Descendente 
+objetos: objeto objetos
+         ;
     
-~~~
+
+objeto:  '<' ID latributos '/' '>'
+       | '<' ID latributos '>'
+       | '<' ID latributos '>'
+        ;
+
+latributos: atributos
+            |
+            ;
+
+atributos:   atributo atributos
+            |atributo
+            ;
+
+atributo: ID '=' CADENA
+        ;
+
+texto_libre :  TEXTO  texto_libre
+             | TEXTO
+             ;
 
 ~~~
 
+## Analisis_XPATH
 
-## Análisis_Léxico_XPATH
-
-### Palabras reservadas
+# Precedencia de Operadores
 ~~~
 
-~~~
+%right 'INTERROGACION'
+%left 'OR'
+%left 'AND'
+%right 'NOT'
+%left 'IGUAL' 'DIFERENTE' 'MENORQUE' 'MENORIGUAL' 'MAYORQUE'  'MAYORIGUAL' 
+%left 'MAS' 'MENOS'
+%left 'ASTERISCO' 'DIV' 'MODULO'
+%nonassoc 'POT'
+%right 'UNARIO'
+%right 'PARA' 'CORA'
 
-### Caracteres especiales
-
-~~~
-
-
-~~~
+inicio
+    : varias
 
 
-## Análisis_Sintáctico_XPATH_DESC
+varias: instrucciones SIGNOO
+        |instrucciones
+        ;
 
-### Gramatica Descendente 
+instrucciones : instruccion instrucciones
+            |   instruccion
+            ;
+
+instruccion : BARRA e
+            | BARRABARRA e
+            | RESERV DOSPUNTOS e
+            | BARRA RESERV DOSPUNTOS e
+            | BARRA PUNTOPUNTO
+            | BARRABARRA RESERV DOSPUNTOS e             
+            | ID
+            ;
+
+        RESERV :  LAST
+        |         POSITION
+        |         ANCESTOR RESERVLARGE
+        |         ATTRIBUTE
+        |         ANCESORSELF
+        |         CHILD
+        |         DESCENDANT RESERVLARGE
+        |         DESCENDANT
+        |         FOLLOWING  MENOS SIBLING
+        |         FOLLOWING
+        |         NAMESPACE
+        |         PARENT
+        |         PRECENDING
+        |         PRECENDING MENOS SIBLING
+        |         SELF
+        |         TEXT
+        |         NODE
+        |         SIBLING
+        ;
+
+RESERVLARGE :   MENOS OR MENOS SELF
+            |   MENOS SIBLING
+            ;
+
+e :   ID
+    | ARROBA ID
+    | ARROBA ASTERISCO
+    | ASTERISCO
+    | ID CORA OPERADORES CORC
+    ;
+ 
     
-~~~
 
 
-~~~
-
-## Análisis_Sintáctico_XPATH_ASC
-
-### Gramatica Ascendente
-
-~~~
-
-
-
-~~~
-
-## Archivo_Entrada_XML
-
-<h3>Ejemplo de Archivo Entrada:</h3>
-
-~~~
-<?xml version="1.0" encoding="UTF-8"?>
-<biblioteca>
-    <libro>
-        <titulo>La vida está en otra parte</titulo>
-        <autor>Milan Kundera</autor>
-        <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-        <titulo>Pantaleón y las visitadoras</titulo>
-        <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-        <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-        <titulo>Conversación en la catedral</titulo>
-        <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-        <fechaPublicacion año="1969"/>
-    </libro>
-</biblioteca>
-~~~
-
-## Archivo_Entrada_XPATH
-
-~~~
-
-/biblioteca/libro
-
-~~~
-
-## Salida
-
-~~~
-
-<libro >
-  <titulo >
-    La vida está en otra parte
-  </titulo>
-  <autor >
-    Milan Kundera
-  </autor>
-  <fechaPublicacion año="1973"/>
-</libro>
-<libro >
-  <titulo >
-    Pantaleón y las visitadoras
-  </titulo>
-  <autor fechaNacimiento="28/03/1936">
-    Mario Vargas Llosa
-  </autor>
-  <fechaPublicacion año="1973"/>
-</libro>
-<libro >
-  <titulo >
-    Conversación en la catedral
-  </titulo>
-  <autor fechaNacimiento="28/03/1936">
-    Mario Vargas Llosa
-  </autor>
-  <fechaPublicacion año="1969"/>
-</libro>
-
+OPERADORES :  OPERADORES MAS OPERADORES
+            | OPERADORES MENOS OPERADORES
+            | OPERADORES ASTERISCO OPERADORES
+            | OPERADORES DIV OPERADORES
+            | OPERADORES MODULO OPERADORES
+            | OPERADORES AND OPERADORES
+            | OPERADORES OR OPERADORES
+            | OPERADORES MAYORQUE OPERADORES
+            | OPERADORES MAYORIGUAL OPERADORES
+            | OPERADORES MENORQUE OPERADORES
+            | OPERADORES MENORIGUAL OPERADORES
+            | OPERADORES DIFERENTE OPERADORES
+            | OPERADORES IGUAL OPERADORES
+            | MENOS OPERADORES %prec UNARIO
+            | DECIMAL
+            | ENTERO
+            | ID
+            | LAST
+            | POSITION
+            | CADENA
+            | ARROBA ID
+            ;
 ~~~
