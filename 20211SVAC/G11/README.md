@@ -14,7 +14,13 @@ ORGANIZACION DE LENGUAJES Y COMPILADORES 2
 LINK GITHUB PAGES
 https://tytusdb.github.io/tytusx/20211SVAC/G11/
 
-## INTEGRANTES
+## Indice
+1. [Informacion](#general-info)
+2. [Integrantes](#integrantes)
+3. [Manuales](#installation)
+4. [Gramaticas en Notacion BNF](#gramaticas)
+
+#integrantes
   > Heidy Carolina Castellanos de Leon   - 201612282  
   > Claudia Iovana Miranda Alvarez       - 201700387  
   > Pablo José Oliva Bonilla             - 201700898  
