@@ -224,11 +224,11 @@ TEXTO :      tk_identificador   { nodoAux = new NodoArbol("TEXTO","");
                                   $$ = ["&",nodoAux]; }
                                   
         |    tk_apos            { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol("\'","texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("comilla","texto"));
                                   $$ = ["\'",nodoAux]; }
 
         |    tk_squote          { nodoAux = new NodoArbol("TEXTO","");
-                                  nodoAux.agregarHijo(new NodoArbol("\'","texto"));
+                                  nodoAux.agregarHijo(new NodoArbol("comilla","texto"));
                                   $$ = [$1,nodoAux]; }
 
         |    tk_interrogacion   { nodoAux = new NodoArbol("TEXTO","");

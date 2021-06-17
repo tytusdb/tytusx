@@ -963,52 +963,56 @@ case 8:
 break;
 case 9:
 break;
-case 10: return 28
+case 10:
 break;
-case 11: return 29
+case 11:
 break;
-case 12: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 30
+case 12: return 28
 break;
-case 13: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 13: return 29
 break;
-case 14: this.popState(); return 22
+case 14: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 30
 break;
-case 15: this.popState(); return 26
+case 15: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
-case 16: this.begin("Etiquetac"); return 24
+case 16: this.popState(); return 22
 break;
-case 17:
+case 17: this.popState(); return 26
 break;
-case 18:
+case 18: this.begin("Etiquetac"); return 24
 break;
-case 19: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 19:
 break;
-case 20: this.popState(); return 25
+case 20:
 break;
-case 21: this.begin("EtiquetaConf"); return 14
+case 21: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
-case 22: return 18
+case 22: this.popState(); return 25
 break;
-case 23: return 19
+case 23: this.begin("EtiquetaConf"); return 14
 break;
-case 24: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 20
+case 24: return 18
 break;
-case 25:
+case 25: return 19
 break;
-case 26: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 26: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); return 20
 break;
-case 27: this.popState(); return 16
+case 27:
 break;
-case 28:return 6;
+case 28: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
-case 29: yy_.yytext = ReemplazaTexto(yy_.yytext); return 11 
+case 29: this.popState(); return 16
 break;
-case 30: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
+case 30:return 6;
+break;
+case 31: yy_.yytext = ReemplazaTexto(yy_.yytext); return 11 
+break;
+case 32: ListaErrores.push({Error:'Este es un error léxico: ' + yy_.yytext,tipo:"Lexico", Linea: yy_.yylloc.first_line , columna:yy_.yylloc.first_column}) 
 break;
 }
 },
-rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">/]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
-conditions: {"EtiquetaComentario":{"rules":[4,5,6,7],"inclusive":false},"EtiquetaConf":{"rules":[22,23,24,25,26,27],"inclusive":false},"Etiquetac":{"rules":[17,18,19,20],"inclusive":false},"Etiquetai":{"rules":[8,9,10,11,12,13,14,15],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,16,21,28,29,30],"inclusive":true}}
+rules: [/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:<[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:<!--)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:-)/i,/^(?:>)/i,/^(?:[^-->]+)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[^A-ZÑa-zñ_=">/]+)/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[^>]+)/i,/^(?:>)/i,/^(?:<\?[A-ZÑa-zñ_][A-ZÑa-zñ0-9_-]*)/i,/^(?:[A-ZÑa-zñ][A-ZÑa-zñ0-9_-]*)/i,/^(?:=)/i,/^(?:"[^\n\"]*")/i,/^(?:[ \r\t]+)/i,/^(?:[^A-ZÑa-zñ_="?>]+)/i,/^(?:\?>)/i,/^(?:$)/i,/^(?:[^<]+)/i,/^(?:.)/i],
+conditions: {"EtiquetaComentario":{"rules":[4,5,6,7,8,9],"inclusive":false},"EtiquetaConf":{"rules":[24,25,26,27,28,29],"inclusive":false},"Etiquetac":{"rules":[19,20,21,22],"inclusive":false},"Etiquetai":{"rules":[10,11,12,13,14,15,16,17],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,18,23,30,31,32],"inclusive":true}}
 });
 return lexer;
 })();

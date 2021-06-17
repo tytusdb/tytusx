@@ -9,6 +9,7 @@ class AnyAtributeTimes {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent.findAllAtributesInObjectsRecursive();
+        let ts = ent.findAllAtributesInObjectsRecursive();
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }
