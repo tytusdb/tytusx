@@ -126,7 +126,7 @@ START :
             reportBNF.push(`<START> ::= <ENCODING> <RAIZ> EOF`);
             reportBNF2.push('Start.val = Raiz.val. // Fin del documento');
             $$ = $2;
-            return new SalidaGramatica($$, reportBNF, reportBNF2, $1,listaErrores);
+            return new SalidaGramatica($$, reportBNF, reportBNF2, $1, listaErrores);
         };
 
 ENCODING: 

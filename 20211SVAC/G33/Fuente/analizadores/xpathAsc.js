@@ -71,375 +71,368 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramaticaDesc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,5],$V1=[1,7],$V2=[1,13],$V3=[6,7],$V4=[2,14,22],$V5=[2,15],$V6=[1,17],$V7=[2,18],$V8=[1,33],$V9=[1,40],$Va=[1,31],$Vb=[1,30],$Vc=[1,38],$Vd=[1,28],$Ve=[1,29],$Vf=[1,32],$Vg=[1,35],$Vh=[1,36],$Vi=[1,37],$Vj=[1,39],$Vk=[1,41],$Vl=[1,42],$Vm=[1,43],$Vn=[1,44],$Vo=[1,45],$Vp=[1,46],$Vq=[1,47],$Vr=[1,48],$Vs=[1,49],$Vt=[1,50],$Vu=[1,51],$Vv=[1,52],$Vw=[1,53],$Vx=[1,54],$Vy=[1,55],$Vz=[1,56],$VA=[1,57],$VB=[1,58],$VC=[1,59],$VD=[7,9,11,12,17,22,25,26,27,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51],$VE=[1,70],$VF=[1,68];
+var xpathAsc = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[5,6],$V6=[1,13],$V7=[1,12],$V8=[2,5,6,14],$V9=[2,40],$Va=[1,15],$Vb=[1,18],$Vc=[1,20],$Vd=[1,21],$Ve=[1,22],$Vf=[1,23],$Vg=[1,25],$Vh=[1,26],$Vi=[1,27],$Vj=[1,28],$Vk=[1,29],$Vl=[1,30],$Vm=[1,31],$Vn=[1,32],$Vo=[1,33],$Vp=[1,34],$Vq=[1,35],$Vr=[1,36],$Vs=[8,12,16,17,20,23,26,27,28,29,30,31,32,33,34,35,36],$Vt=[2,14],$Vu=[1,49],$Vv=[1,53],$Vw=[1,48],$Vx=[1,46],$Vy=[1,47],$Vz=[1,50],$VA=[1,51],$VB=[1,52],$VC=[1,62],$VD=[1,61],$VE=[1,63],$VF=[1,83],$VG=[1,81],$VH=[1,82],$VI=[1,84],$VJ=[1,85],$VK=[1,86],$VL=[1,87],$VM=[1,88],$VN=[1,89],$VO=[1,90],$VP=[1,91],$VQ=[1,92],$VR=[1,93],$VS=[16,19,40,41,42,43,44,45,46,47,48,49,50,51,52],$VT=[2,5,6,14,16,19,40,41,42,43,44,45,46,47,48,49,50,51,52],$VU=[1,136],$VV=[1,134],$VW=[1,135],$VX=[1,137],$VY=[16,19,40,43,44,45,46,47,48,49,50,51,52],$VZ=[19,40,44,45,46,47,48,49,50,51,52],$V_=[19,40,44,49,50,51,52];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"ENCODING":4,"RAIZ":5,"EOF":6,"lt":7,"interC":8,"xml":9,"version":10,"asig":11,"StringLiteral":12,"encoding":13,"gt":14,"OBJETO":15,"OBJETOPRIN":16,"identifier":17,"LATRIBUTOS":18,"OBJETOSEC":19,"LISTA_ID_OBJETO":20,"OBJETOTER":21,"div":22,"ATRIBUTO":23,"LISTA_VALORES":24,"IntegerLiteral":25,"DoubleLiteral":26,"CharLiteral":27,"CARACTERES":28,"plus":29,"minus":30,"times":31,"mod":32,"equal":33,"nequal":34,"and":35,"or":36,"not":37,"semicolon":38,"lparen":39,"rparen":40,"lcurly":41,"rcurly":42,"lbracket":43,"rbracket":44,"period":45,"coma":46,"lesst":47,"greatert":48,"ampersand":49,"apostro":50,"quotation":51,"$accept":0,"$end":1},
-terminals_: {2:"error",6:"EOF",7:"lt",8:"interC",9:"xml",10:"version",11:"asig",12:"StringLiteral",13:"encoding",14:"gt",17:"identifier",22:"div",25:"IntegerLiteral",26:"DoubleLiteral",27:"CharLiteral",29:"plus",30:"minus",31:"times",32:"mod",33:"equal",34:"nequal",35:"and",36:"or",37:"not",38:"semicolon",39:"lparen",40:"rparen",41:"lcurly",42:"rcurly",43:"lbracket",44:"rbracket",45:"period",46:"coma",47:"lesst",48:"greatert",49:"ampersand",50:"apostro",51:"quotation"},
-productions_: [0,[3,3],[4,11],[4,2],[5,2],[5,0],[15,2],[16,3],[19,4],[19,2],[19,2],[21,3],[21,3],[21,2],[18,2],[18,0],[23,3],[20,2],[20,0],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1],[28,1]],
+symbols_: {"error":2,"INICIOPURO":3,"INICIO":4,"EOF":5,"tk_barra":6,"INICIALES":7,"tk_punto":8,"DIAGONALES":9,"DERIVADOSLIMITADO":10,"DERIVACIONDIAGONAL":11,"tk_identificador":12,"PREDICATE":13,"tk_diagonal":14,"DERIVADOS":15,"tk_asterisco":16,"tk_node":17,"tk_parA":18,"tk_parC":19,"tk_arroba":20,"ATRIBUTO":21,"AXES":22,"tk_child":23,"tk_dosPuntos":24,"NODETEST":25,"tk_descendant":26,"tk_descendatOr":27,"tk_ancestor":28,"tk_ancestorOr":29,"tk_attribute":30,"tk_following":31,"tk_followingSi":32,"tk_parent":33,"tk_preceding":34,"tk_precedingSi":35,"tk_self":36,"tk_text":37,"tk_llaveA":38,"EXPRESION":39,"tk_llaveC":40,"tk_mas":41,"tk_menos":42,"tk_div":43,"tk_mod":44,"tk_menor":45,"tk_mayor":46,"tk_menorIgual":47,"tk_mayorIgual":48,"tk_igual":49,"tk_distinto":50,"tk_or":51,"tk_and":52,"tk_entero":53,"tk_decimal":54,"tk_position":55,"tk_last":56,"tk_stringTexto":57,"tk_ParC":58,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"tk_barra",8:"tk_punto",12:"tk_identificador",14:"tk_diagonal",16:"tk_asterisco",17:"tk_node",18:"tk_parA",19:"tk_parC",20:"tk_arroba",23:"tk_child",24:"tk_dosPuntos",26:"tk_descendant",27:"tk_descendatOr",28:"tk_ancestor",29:"tk_ancestorOr",30:"tk_attribute",31:"tk_following",32:"tk_followingSi",33:"tk_parent",34:"tk_preceding",35:"tk_precedingSi",36:"tk_self",37:"tk_text",38:"tk_llaveA",40:"tk_llaveC",41:"tk_mas",42:"tk_menos",43:"tk_div",44:"tk_mod",45:"tk_menor",46:"tk_mayor",47:"tk_menorIgual",48:"tk_mayorIgual",49:"tk_igual",50:"tk_distinto",51:"tk_or",52:"tk_and",53:"tk_entero",54:"tk_decimal",55:"tk_position",56:"tk_last",57:"tk_stringTexto",58:"tk_ParC"},
+productions_: [0,[3,2],[4,3],[4,1],[7,4],[7,3],[7,3],[7,4],[7,3],[7,5],[9,1],[9,2],[9,2],[11,3],[11,0],[10,2],[10,2],[10,4],[10,2],[10,1],[15,1],[15,2],[15,1],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[22,4],[25,2],[25,4],[25,2],[25,3],[13,3],[13,0],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,3],[39,1],[39,1],[39,2],[39,1],[39,3],[39,3],[39,1],[39,3],[21,1],[21,1],[21,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-   
-            reportBNF.push(`<START> ::= <ENCODING> <RAIZ> EOF`);
-            reportBNF2.push('Start.val = Raiz.val. // Fin del documento');
-            this.$ = $$[$0-1];
-            return new SalidaGramatica(this.$, reportBNF, reportBNF2, $$[$0-2], listaErrores);
+
+            produccion.push('<INICIOPURO> ::= <INICIO> EOF');
+            accion.push('INICIOPURO.Val = INICIO.val //fin del documento');
+            return new SalidaGramatica($$[$0-1], produccion, accion,listaErrores);
         
 break;
 case 2:
-
-            reportBNF.push(`<ENCODING> ::= lt interC xml version asig StringLiteral encoding asig StringLiteral interC gt`);
-            reportBNF2.push('Encoding.val = StringLiteral'); 
-            this.$ = $$[$0-2]; 
+ 
+            produccion.push('<INICIO> ::= <INICIO> | <INICIALES>');
+            accion.push('INICIO.Val = INICIO.push(INICIALES)');
+            //this.$ = new Array();
+            this.$.push($$[$0]); 
         
 break;
-case 3: case 10: case 13:
+case 3:
 
-            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,_$[$0-1].first_line,_$[$0-1].first_column));
+            produccion.push('<INICIO> ::= <INICIALES>');
+            accion.push('INICIO.Val = INICIALES.Val');
+            this.$ = [$$[$0]]; 
         
 break;
 case 4:
- 
-            reportBNF.push('<RAIZ> ::= <OBJETO> <RAIZ>');
-            reportBNF2.push('Raiz.val = Objeto.val.Concatenar(Raiz.Val])');
-            this.$ = $$[$0-1].concat($$[$0]);
+
+            produccion.push(`<INICIALES> ::= punto <DIAGONALES> <DERIVADOSLIMITADO> <DERIVAIONDIAGONAL>`);
+            accion.push('INICIALES.Val = []; INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.push(DERIVACIONDIAGONAL)'); 
+            this.$ = new Nodo("", ".", null, [new Nodo($$[$0-2], $$[$0-1].val, $$[$0-1].pre, [...$$[$0]], _$[$0-3].first_line, _$[$0-3].first_column)], _$[$0-3].first_line, _$[$0-3].first_column);
         
 break;
 case 5:
- this.$ = [] 
+
+            produccion.push(`<INICIALES> ::= identificador <PREDICATE> <DERIVACIONDIAGONAL>`);
+            accion.push('INICIALES.Val = []; INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.push(DERIVACIONDIAGONAL)'); 
+            //this.$ = new Array();
+            this.$ = new Nodo("", $$[$0-2], $$[$0-1], [...$$[$0]], _$[$0-2].first_line, _$[$0-2].first_column)
+            //this.$.push(...$$[$0])
+        
 break;
 case 6:
- 
-            reportBNF.push('<OBJETO> ::= lt <OBJETOPRIN>');
-            reportBNF2.push('OBJETO.val = [Objetoprin.val]');
-            this.$ = [$$[$0]] 
+
+            produccion.push(`<INICIALES> ::= / <DERIVADOS> <DERIVACIONDIAGONAL>`);
+            accion.push('INICIALES.Val = []; INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.push(DERIVACIONDIAGONAL)'); 
+            //this.$ = new Array();
+            this.$ = new Nodo($$[$0-2], $$[$0-1].val, $$[$0-1].pre, [...$$[$0]], _$[$0-2].first_line, _$[$0-2].first_column)
+            //this.$.push(...$$[$0])
         
 break;
 case 7:
 
-            let nuevo = null;
-            if ($$[$0].tipo === 0){
-                nuevo = new Objeto($$[$0-2], '', _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-1], [], 0, $$[$0].id)
-            }else if ($$[$0].id !== ""){
-                if ($$[$0].lista !== null){
-                    nuevo = new Objeto($$[$0-2], '', _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-1], $$[$0].lista, 1, $$[$0].id)
-                }else if ($$[$0].texto !== ""){
-                    nuevo = new Objeto($$[$0-2], $$[$0].texto, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-1], [], 1, $$[$0].id)
-                }else{
-                    nuevo = new Objeto($$[$0-2], '', _$[$0-2].first_line, _$[$0-2].first_column, $$[$0-1], [], 1, $$[$0].id)
-                }
-                
-            }
-            reportBNF.push('<OBJETOPRIN> ::= identifier <LATRIBUTOS> <OBJETOSEC>')
-            reportBNF2.push('Objetoprin.val = new Objeto(id, texto, linea, columna, atributos, objetos, completo, cierre)')
-            this.$ = nuevo
+            produccion.push('<INICIALES> ::= // <DERIVADOS> <DERIVACIONDIAGONAL>');
+            accion.push('INICIALES.Val = []; INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.push(DERIVACIONDIAGONAL)'); 
+            //this.$ = new Array();
+            this.$ = new Nodo("//", $$[$0-1].val, $$[$0-1].pre, [...$$[$0]], _$[$0-3].first_line, _$[$0-3].first_column)
+            //this.$.push(...$$[$0])
         
 break;
 case 8:
 
-            reportBNF.push('<OBJETOSEC> ::= gt <LISTA_ID_OBJETO> lt <OBJETOTER>')
-            reportBNF2.push('Objetosec.val = Objetoter.val')
-            if ($$[$0].id !== ""){
-                if($$[$0-2] !== "") { $$[$0].texto = $$[$0-2] }
-                this.$ = $$[$0]
-            }
+            produccion.push(`<INICIALES> ::= asterisco <PREDICATE> <DERIVACIONDIAGONAL>`);
+            accion.push('INICIALES.Val = []; INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.push(DERIVACIONDIAGONAL)'); 
+            //this.$ = new Array();
+            this.$ = new Nodo("", $$[$0-2], $$[$0-1], [...$$[$0]], _$[$0-2].first_line, _$[$0-2].first_column)
+            //this.$.push(...$$[$0])
         
 break;
 case 9:
 
-            reportBNF.push('<OBJETOSEC> ::= div gt')
-            reportBNF2.push('Objetosec.val = {texto: vacio, lista: vacia: id: vacio, tipo: simple}')
-            this.$ = {texto: '', lista: null, id: '', tipo: 0}
+            produccion.push(`<INICIALES> ::= node() <PREDICATE> <DERIVACIONDIAGONAL>`);
+            accion.push('INICIALES.Val = []; INICIALES.Val.push(new Nodo(tipo, id, predicado, fila, columna)); INICIALES.push(DERIVACIONDIAGONAL)'); 
+            //this.$ = new Array();
+            this.$ = new Nodo("", "node()", $$[$0-1], [...$$[$0-2]], _$[$0-4].first_line, _$[$0-4].first_column)
+            //this.$.push(...$$[$0-2])
+        
+break;
+case 10:
+
+            produccion.push('<DIAGONALES> ::= /');
+            accion.push('DIAGONALES.Val = \"/\"'); 
+            this.$ = $$[$0] 
         
 break;
 case 11:
 
-            reportBNF.push('<OBJETOTER> ::= div identifier gt')
-            reportBNF2.push('Objetoter = {texto: vacio, lista: vacia, id: identifier, tipo: doble}')
-            this.$ = {texto: '', lista: null, id: $$[$0-1], tipo: 1}
+            produccion.push(`<DIAGONALES> ::= //`);
+            accion.push('DIAGONALES.Val = \"//\"'); 
+            this.$ = "//" 
         
 break;
 case 12:
 
-            reportBNF.push('<OBJETOTER> ::= <OBJETOPRIN> lt <OBJETOTER>')
-            if($$[$0].id !== ""){
-                if ($$[$0-2] instanceof Objeto){
-                    if ($$[$0].lista === null){
-                        reportBNF2.push('Objetoter.val = {texto: vacio, lista: [Objetoprin.val], id: Objetoter.val, tipo: doble}}')
-                        this.$ = {texto: '', lista: [$$[$0-2]], id: $$[$0].id, tipo: 1}
-                    }else{
-                        reportBNF2.push('Objetoter.lista.agregarAlInicio(Objetoprin.val); Objetoter.val = {texto: vacio, lista: Objetoter.val, id: Objetoter.val, tipo: doble}}')
-                        $$[$0].lista.unshift($$[$0-2])
-                        this.$ = {texto: '', lista: $$[$0].lista, id: $$[$0].id, tipo: 1}
-                    }
-                }else if($$[$0-2] === null) { 
-                    reportBNF2.push('Objetoter.val = Objetoter.val')
-                    this.$ === $$[$0] 
-                }
-            }
+            listaErrores.push(new tError('Sintactico',`Token inesperado: ${yytext}`,_$[$0-1].first_line,_$[$0-1].first_column));
+        
+break;
+case 13:
+
+            produccion.push(`<DERIVACIONDIAGONAL> ::= <DIAGONALES> <DERIVADOS> <DERIVACIONDIAGONAL>`);
+            accion.push('DERIVACIONDIAGONAL.Val = []; DERIVACIONDIAGONAL.Val.push(new Nodo(tipo, id, predicado, fila, columna)); DERIVACIONDIAGONAL.push(DERIVACIONDIAGONAL)'); 
+            this.$ = new Array();
+            this.$.push(new Nodo($$[$0-2], $$[$0-1].val, $$[$0-1].pre, [...$$[$0]], _$[$0-2].first_line, _$[$0-2].first_column)) 
+            //this.$.push(...$$[$0])
         
 break;
 case 14:
- 
-            reportBNF.push('<LATRIBUTOS> ::= <ATRIBUTOS> <LATRIBUTOS>');
-            reportBNF2.push('Latributos.val.agregar(Atributo.val)');
-            this.$ = $$[$0-1].concat($$[$0])
-        
-break;
-case 15:
- 
-            reportBNF.push('<LATRIBUTOS> ::= epsilon');
-            reportBNF2.push('Latributos.val = [] ');
+
+            produccion.push(`<DERIVACIONDIAGONAL> ::= epsilon`);
+            accion.push('DERIVACIONDIAGONAL.Val = [/*Vacio*/]');
             this.$ = [];
         
 break;
+case 15:
+
+            produccion.push(`<DERIVADOSLIMIADO> ::= identificador <PREDICATE>`);
+            accion.push('DERIVADOSLIMITADO.Val = identificador + PREDICATE.Val'); 
+            this.$ = {val: $$[$0-1], pre: $$[$0]};
+        
+break;
 case 16:
-   
-            reportBNF.push('<ATRIBUTO> ::= identifier asig StringLiteral');
-            reportBNF2.push('Atributo.val = [new Atributo(id, valor, fila, columna)]');
-            this.$ = [new Atributo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column)]
+
+            produccion.push(`<DERIVADOSLIMIADO> ::= asterisco <PREDICATE>`);
+            accion.push('DERIVADOSLIMITADO.Val = \"*\" + PREDICATE.Val'); 
+            this.$ = {val: $$[$0-1], pre: $$[$0]};
         
 break;
 case 17:
 
-            reportBNF.push('<LISTA_ID_OBJETO> ::= <LISTA_VALORES> <LISTA_ID_OBJETO>');
-            reportBNF2.push('Lista_id_objeto.val = Lista_valores.val + \" \" + Lista_id_objeto.val');
-            this.$ = $$[$0-1] + " " +  $$[$0];
+            produccion.push(`<DERIVADOSLIMIADO> ::= node() <PREDICATE>`);
+            accion.push('DERIVADOSLIMITADO.Val = \"@\" + ATRIBUTO.Val'); 
+            this.$ = {val: "node()", pre: $$[$0]}
         
 break;
 case 18:
-   
-            reportBNF.push('<LISTA_ID_OBJETO> ::= epsilon');
-            reportBNF2.push('Lista_id_objeto.val = \"\"');
-            this.$ = "";
+
+            produccion.push(`<DERIVADOSLIMIADO> ::= arroba <ATRIBUTO>`);
+            accion.push('DERIVADOSLIMITADO.Val = \"@\" + ATRIBUTO.Val'); 
+            this.$ = {val: $$[$0-1] + "" + $$[$0], pre: null}; 
         
 break;
 case 19:
 
-            reportBNF.push('<LISTA_VALORES> ::= IntegerLiteral');
-            reportBNF2.push('Lista_valores.val = IntegerLiteral');
-            this.$ = $$[$0]; 
+            produccion.push(`<DERIVADOSLIMITADO> ::= <AXES>`);
+            accion.push('DERIVADOSLIMITADO.Val = AXES.Val'); 
+            this.$ = {val: $$[$0], pre: null}
         
 break;
 case 20:
  
-            reportBNF.push('<LISTA_VALORES> ::= DoubleLiteral');
-            reportBNF2.push('Lista_valores.val = DoubleLiteral');
-            this.$ = $$[$0]; 
+            produccion.push(`<DERIVADOS> ::= punto`);
+            accion.push("DERIVADOS.Val = \".\" ");
+            this.$ = {val: $$[$0], pre: null}; 
         
 break;
 case 21:
- 
-            reportBNF.push('<LISTA_VALORES> ::= identifier');
-            reportBNF2.push('Lista_valores.val = identifier');
-            this.$ = $$[$0]; 
+
+            produccion.push(`<DERIVADOS> ::= doblePunto`);
+            accion.push('DERIVADOS.Val = \"..\"');
+            this.$ = {val: "..", pre: null}; 
         
 break;
 case 22:
  
-            reportBNF.push('<LISTA_VALORES> ::= StringLiteral');
-            reportBNF2.push('Lista_valores.val = StringLiteral');
+            produccion.push(`<DERIVADOS> ::= <DERIVADOSLIMITADO>`);
+            accion.push('DERIVADOS.Val = DERIVADOSLIMITADO.Val'); 
             this.$ = $$[$0]; 
-        
-break;
-case 23:
- 
-            reportBNF.push('<LISTA_VALORES> ::= CharLiteral');
-            reportBNF2.push('Lista_valores.val = CharLiteral');
-            this.$ = $$[$0]; 
-        
-break;
-case 24:
- 
-            reportBNF.push('<LISTA_VALORES> ::= xml');
-            reportBNF2.push('Lista_valores.val = xml');
-            this.$ = $$[$0]; 
-        
-break;
-case 25:
- 
-            reportBNF.push('<LISTA_VALORES> ::= <CARACTERES>');
-            reportBNF2.push('Lista_valores.val = Caracteres.val');
-            this.$ = $$[$0]; 
-        
-break;
-case 26: case 27:
- 
-            reportBNF.push('<CARACTERES> ::= plus');
-            reportBNF2.push('Caracteres.val = plus');
-            this.$ = $$[$0];
-        
-break;
-case 28:
- 
-            reportBNF.push('<CARACTERES> ::= times');
-            reportBNF2.push('Caracteres.val = times');
-            this.$ = $$[$0];
-        
-break;
-case 29:
- 
-            reportBNF.push('<CARACTERES> ::= div');
-            reportBNF2.push('Caracteres.val = div');
-            this.$ = $$[$0];
-        
-break;
-case 30:
- 
-            reportBNF.push('<CARACTERES> ::= mod');
-            reportBNF2.push('Caracteres.val = mod');
-            this.$ = $$[$0];
-        
-break;
-case 31:
- 
-            reportBNF.push('<CARACTERES> ::= asign');
-            reportBNF2.push('Caracteres.val = asign');
-            this.$ = $$[$0];
-        
-break;
-case 32:
- 
-            reportBNF.push('<CARACTERES> ::= equal');
-            reportBNF2.push('Caracteres.val = equal');
-            this.$ = $$[$0];
-        
-break;
-case 33:
- 
-            reportBNF.push('<CARACTERES> ::= nequal');
-            reportBNF2.push('Caracteres.val = nequal');
-            this.$ = $$[$0];
-        
-break;
-case 34:
- 
-            reportBNF.push('<CARACTERES> ::= and');
-            reportBNF2.push('Caracteres.val = and');
-            this.$ = $$[$0];
-        
-break;
-case 35:
- 
-            reportBNF.push('<CARACTERES> ::= or');
-            reportBNF2.push('Caracteres.val = or');
-            this.$ = $$[$0];
-        
-break;
-case 36:
- 
-            reportBNF.push('<CARACTERES> ::= not');
-            reportBNF2.push('Caracteres.val = not');
-            this.$ = $$[$0];
-        
-break;
-case 37:
- 
-            reportBNF.push('<CARACTERES> ::= semicolon');
-            reportBNF2.push('Caracteres.val = semicolon');
-            this.$ = $$[$0];
-        
-break;
-case 38:
- 
-            reportBNF.push('<CARACTERES> ::= lparen');
-            reportBNF2.push('Caracteres.val = lparen');
-            this.$ = $$[$0];
         
 break;
 case 39:
- 
-            reportBNF.push('<CARACTERES> ::= rparen');
-            reportBNF2.push('Caracteres.val = rparen');
-            this.$ = $$[$0];
+
+            produccion.push(`<PREDICATE> ::= llaveA <EXPRESION> llaveC`);
+            accion.push('PREDICATE.Val = EXPRESION.Val');
+            this.$ = new Predicate($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 40:
- 
-            reportBNF.push('<CARACTERES> ::= lcurly');
-            reportBNF2.push('Caracteres.val = lcurly');
-            this.$ = $$[$0];
+
+            produccion.push(`<PREDICATE> ::= epsilon`);
+            accion.push('PREDICATE.Val = /*vacio*/');
+            this.$ = null; 
         
 break;
 case 41:
- 
-            reportBNF.push('<CARACTERES> ::= rcurly');
-            reportBNF2.push('Caracteres.val = rcurly');
-            this.$ = $$[$0];
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> mas <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + EXPRESION.Val');
+            this.$ = new Aritmetica.default($$[$0-2], '+', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 42:
- 
-            reportBNF.push('<CARACTERES> ::= lbracket');
-            reportBNF2.push('Caracteres.val = lbracket');
-            this.$ = $$[$0];
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> menos <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val - EXPRESION.Val');
+            this.$ = new Aritmetica.default($$[$0-2], '-', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 43:
- 
-            reportBNF.push('<CARACTERES> ::= rbracket');
-            reportBNF2.push('Caracteres.val = rbracket');
-            this.$ = $$[$0];
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> asterisco <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val * EXPRESION.Val');
+            this.$ = new Aritmetica.default($$[$0-2], '*', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 44:
- 
-            reportBNF.push('<CARACTERES> ::= period');
-            reportBNF2.push('Caracteres.val = period');
-            this.$ = $$[$0];
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> div <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val / EXPRESION.Val');
+            this.$ = new Aritmetica.default($$[$0-2], '/', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 45:
- 
-            reportBNF.push('<CARACTERES> ::= coma');
-            reportBNF2.push('Caracteres.val = coma');
-            this.$ = $$[$0];
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> mod <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val % EXPRESION.Val');
+            this.$ = new Aritmetica.default($$[$0-2], '%', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 46:
- 
-            reportBNF.push('<CARACTERES> ::= lesst');
-            reportBNF2.push('Caracteres.val = >');
-            this.$ = '<';
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> menor <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \"<\" + EXPRESION.Val');
+            this.$ = new Relacional.default($$[$0-2], '<', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 47:
- 
-            reportBNF.push('<CARACTERES> ::= greatert');
-            reportBNF2.push('Caracteres.val = >');
-            this.$ = '>';
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> mayor <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \">\" + EXPRESION.Val');
+            this.$ = new Relacional.default($$[$0-2], '>', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 48:
- 
-            reportBNF.push('<CARACTERES> ::= ampersand');
-            reportBNF2.push('Caracteres.val = &');
-            this.$ = '&';
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> menorIgual <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \"<=\" + EXPRESION.Val');
+            this.$ = new Relacional.default($$[$0-2], '<=', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 49:
- 
-            reportBNF.push('<CARACTERES> ::= apostro');
-            reportBNF2.push('Caracteres.val = \'');
-            this.$ = '\'';
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> mayorIgual <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \">=\" + EXPRESION.Val');
+            this.$ = new Relacional.default($$[$0-2], '>=', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
         
 break;
 case 50:
- 
-            reportBNF.push('<CARACTERES> ::= quotation');
-            reportBNF2.push('Caracteres.val = \"');
-            this.$ = '"';
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> igual <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \"=\" + EXPRESION.Val');
+            this.$ = new Relacional.default($$[$0-2], '=', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+        
+break;
+case 51:
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> distinto <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + "" + EXPRESION.Val');
+            this.$ = new Relacional.default($$[$0-2], '!=', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+        
+break;
+case 52:
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> or <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \"or\" + EXPRESION.Val');
+            this.$ = new Logica.default($$[$0-2], 'or', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+        
+break;
+case 53:
+
+            produccion.push(`<EXPRESION> ::= <EXPRESION> and <EXPRESION>`);
+            accion.push('EXPRESION.Val = EXPRESION.Val + \"and\" + EXPRESION.Val');
+            this.$ = new Logica.default($$[$0-2], 'and', $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+        
+break;
+case 54:
+
+            produccion.push(`<EXPRESION> ::= entero`);
+            accion.push('EXPRESION.Val = \"entero\"');
+            this.$ = new Primitivo.default(Number(yytext), _$[$0].first_line, _$[$0].first_column)
+        
+break;
+case 55:
+
+            produccion.push(`<EXPRESION> ::= decimal`);
+            accion.push('EXPRESION.Val = \"decimal\"');
+            this.$ = new Primitivo.default(Number(yytext), _$[$0].first_line, _$[$0].first_column)
+        
+break;
+case 56:
+
+            produccion.push(`<EXPRESION> ::= arroba <ATRIBUTO>`);
+            accion.push('EXPRESION.Val = \"@\" + ATRIBUTO.Val');
+            this.$ = new Primitivo.default(`this._${$$[$0]}`, _$[$0-1].first_line, _$[$0-1].first_column)
+        
+break;
+case 57:
+
+            produccion.push(`<EXPRESION> ::= identificador`);
+            accion.push('EXPRESION.Val = \"identificador\"');
+            this.$ = new Primitivo.default($$[$0], _$[$0].first_line, _$[$0].first_column)
+        
+break;
+case 58:
+
+            produccion.push(`<EXPRESION> ::= position()`);
+            accion.push('EXPRESION.Val = \"position()\"');
+            this.$ = new Primitivo.default("position()", _$[$0-2].first_line, _$[$0-2].first_column)
+        
+break;
+case 59:
+
+            produccion.push(`<EXPRESION> ::= last()`);
+            accion.push('EXPRESION.Val = \"last()\"');
+            this.$ = new Primitivo.default("last()", _$[$0-2].first_line, _$[$0-2].first_column)
+        
+break;
+case 60:
+
+            produccion.push(`<EXPRESION> ::= texto`);
+            accion.push('EXPRESION.Val = \"texto\"');
+            this.$ = new Primitivo.default($$[$0], _$[$0].first_line, _$[$0].first_column)
+        
+break;
+case 61:
+
+            produccion.push(`<EXPRESION> ::= ( <EXPRESION> )`);
+            accion.push('EXPRESION.Val = EXPRESION1.Val');
+            this.$ = new Primitivo.default($$[$0-2], _$[$0-2].first_line, _$[$0-2].first_column)
+        
+break;
+case 62:
+
+            produccion.push(`<ATRIBUTO> ::= asterisco`);
+            accion.push('ATRIBUTO.Val = \"*\"'); 
+            this.$ = $$[$0]; 
+        
+break;
+case 63:
+
+            produccion.push(`<ATRIBUTO> ::= identificador`);
+            accion.push('ATRIBUTO.Val = identificador');  
+            this.$ = $$[$0] 
+break;
+case 64:
+
+            produccion.push(`<ATRIBUTO> ::= node`);
+            accion.push('ATRIBUTO.Val = \"node()\"'); 
+            this.$ = "node()"
         
 break;
 }
 },
-table: [{2:[1,4],3:1,4:2,7:[1,3]},{1:[3]},{5:5,6:$V0,7:$V1,15:6},{8:[1,8]},{14:[1,9]},{6:[1,10]},{5:11,6:$V0,7:$V1,15:6},{16:12,17:$V2},{9:[1,14]},o($V3,[2,3]),{1:[2,1]},{6:[2,4]},o($V3,[2,6]),o($V4,$V5,{18:15,23:16,17:$V6}),{10:[1,18]},{2:[1,22],14:[1,20],19:19,22:[1,21]},o($V4,$V5,{23:16,18:23,17:$V6}),{11:[1,24]},{11:[1,25]},o($V3,[2,7]),{7:$V7,9:$V8,11:$V9,12:$Va,17:$Vb,20:26,22:$Vc,24:27,25:$Vd,26:$Ve,27:$Vf,28:34,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,40:$Vr,41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC},{14:[1,60]},{14:[1,61]},o($V4,[2,14]),{12:[1,62]},{12:[1,63]},{7:[1,64]},{7:$V7,9:$V8,11:$V9,12:$Va,17:$Vb,20:65,22:$Vc,24:27,25:$Vd,26:$Ve,27:$Vf,28:34,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,40:$Vr,41:$Vs,42:$Vt,43:$Vu,44:$Vv,45:$Vw,46:$Vx,47:$Vy,48:$Vz,49:$VA,50:$VB,51:$VC},o($VD,[2,19]),o($VD,[2,20]),o($VD,[2,21]),o($VD,[2,22]),o($VD,[2,23]),o($VD,[2,24]),o($VD,[2,25]),o($VD,[2,26]),o($VD,[2,27]),o($VD,[2,28]),o($VD,[2,29]),o($VD,[2,30]),o($VD,[2,31]),o($VD,[2,32]),o($VD,[2,33]),o($VD,[2,34]),o($VD,[2,35]),o($VD,[2,36]),o($VD,[2,37]),o($VD,[2,38]),o($VD,[2,39]),o($VD,[2,40]),o($VD,[2,41]),o($VD,[2,42]),o($VD,[2,43]),o($VD,[2,44]),o($VD,[2,45]),o($VD,[2,46]),o($VD,[2,47]),o($VD,[2,48]),o($VD,[2,49]),o($VD,[2,50]),o($V3,[2,9]),o($V3,[2,10]),o([2,14,17,22],[2,16]),{13:[1,66]},{2:$VE,16:69,17:$V2,21:67,22:$VF},{7:[2,17]},{11:[1,71]},o($V3,[2,8]),{17:[1,72]},{7:[1,73]},{14:[1,74]},{12:[1,75]},{14:[1,76]},{2:$VE,16:69,17:$V2,21:77,22:$VF},o($V3,[2,13]),{8:[1,78]},o($V3,[2,11]),o($V3,[2,12]),{14:[1,79]},o($V3,[2,2])],
-defaultActions: {10:[2,1],11:[2,4],65:[2,17]},
+table: [{3:1,4:2,7:3,8:$V0,12:$V1,14:$V2,16:$V3,17:$V4},{1:[3]},{5:[1,9],6:[1,10]},o($V5,[2,3]),{2:$V6,9:11,14:$V7},o($V8,$V9,{13:14,38:$Va}),{8:$Vb,10:19,12:$Vc,14:[1,17],15:16,16:$Vd,17:$Ve,20:$Vf,22:24,23:$Vg,26:$Vh,27:$Vi,28:$Vj,29:$Vk,30:$Vl,31:$Vm,32:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr},o($V8,$V9,{13:37,38:$Va}),{18:[1,38]},{1:[2,1]},{7:39,8:$V0,12:$V1,14:$V2,16:$V3,17:$V4},{10:40,12:$Vc,16:$Vd,17:$Ve,20:$Vf,22:24,23:$Vg,26:$Vh,27:$Vi,28:$Vj,29:$Vk,30:$Vl,31:$Vm,32:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr},o($Vs,[2,10],{14:[1,41]}),{14:[1,42]},o($V5,$Vt,{11:43,9:44,2:$V6,14:$V7}),{12:$Vu,18:$Vv,20:$Vw,39:45,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},o($V5,$Vt,{9:44,11:54,2:$V6,14:$V7}),{8:$Vb,10:19,12:$Vc,15:55,16:$Vd,17:$Ve,20:$Vf,22:24,23:$Vg,26:$Vh,27:$Vi,28:$Vj,29:$Vk,30:$Vl,31:$Vm,32:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr},o($V8,[2,20],{8:[1,56]}),o($V8,[2,22]),o($V8,$V9,{13:57,38:$Va}),o($V8,$V9,{13:58,38:$Va}),{18:[1,59]},{12:$VC,16:$VD,17:$VE,21:60},o($V8,[2,19]),{24:[1,64]},{24:[1,65]},{24:[1,66]},{24:[1,67]},{24:[1,68]},{24:[1,69]},{24:[1,70]},{24:[1,71]},{24:[1,72]},{24:[1,73]},{24:[1,74]},{24:[1,75]},o($V5,$Vt,{9:44,11:76,2:$V6,14:$V7}),{19:[1,77]},o($V5,[2,2]),o($V5,$Vt,{9:44,11:78,2:$V6,14:$V7}),o($Vs,[2,11]),o($Vs,[2,12]),o($V5,[2,5]),{8:$Vb,10:19,12:$Vc,15:79,16:$Vd,17:$Ve,20:$Vf,22:24,23:$Vg,26:$Vh,27:$Vi,28:$Vj,29:$Vk,30:$Vl,31:$Vm,32:$Vn,33:$Vo,34:$Vp,35:$Vq,36:$Vr},{16:$VF,40:[1,80],41:$VG,42:$VH,43:$VI,44:$VJ,45:$VK,46:$VL,47:$VM,48:$VN,49:$VO,50:$VP,51:$VQ,52:$VR},o($VS,[2,54]),o($VS,[2,55]),{12:$VC,16:$VD,17:$VE,21:94},o($VS,[2,57]),{18:[1,95]},{18:[1,96]},o($VS,[2,60]),{12:$Vu,18:$Vv,20:$Vw,39:97,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},o($V5,[2,6]),o($V5,$Vt,{9:44,11:98,2:$V6,14:$V7}),o($V8,[2,21]),o($V8,[2,15]),o($V8,[2,16]),{19:[1,99]},o($V8,[2,18]),o($VT,[2,62]),o($VT,[2,63]),{18:[1,100]},{24:[1,101]},{24:[1,102]},{24:[1,103]},{24:[1,104]},{24:[1,105]},{24:[1,106]},{24:[1,107]},{24:[1,108]},{24:[1,109]},{24:[1,110]},{24:[1,111]},{24:[1,112]},o($V5,[2,8]),o($V8,$V9,{13:113,38:$Va}),o($V5,[2,4]),o($V5,$Vt,{9:44,11:114,2:$V6,14:$V7}),o($V8,[2,39]),{12:$Vu,18:$Vv,20:$Vw,39:115,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:116,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:117,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:118,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:119,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:120,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:121,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:122,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:123,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:124,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:125,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:126,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},{12:$Vu,18:$Vv,20:$Vw,39:127,53:$Vx,54:$Vy,55:$Vz,56:$VA,57:$VB},o($VS,[2,56]),{19:[1,128]},{19:[1,129]},{16:$VF,19:[1,130],41:$VG,42:$VH,43:$VI,44:$VJ,45:$VK,46:$VL,47:$VM,48:$VN,49:$VO,50:$VP,51:$VQ,52:$VR},o($V5,[2,7]),o($V8,$V9,{13:131,38:$Va}),{58:[1,132]},{12:$VU,16:$VV,17:$VW,25:133,37:$VX},{12:$VU,16:$VV,17:$VW,25:138,37:$VX},{12:$VU,16:$VV,17:$VW,25:139,37:$VX},{12:$VU,16:$VV,17:$VW,25:140,37:$VX},{12:$VU,16:$VV,17:$VW,25:141,37:$VX},{12:$VU,16:$VV,17:$VW,25:142,37:$VX},{12:$VU,16:$VV,17:$VW,25:143,37:$VX},{12:$VU,16:$VV,17:$VW,25:144,37:$VX},{12:$VU,16:$VV,17:$VW,25:145,37:$VX},{12:$VU,16:$VV,17:$VW,25:146,37:$VX},{12:$VU,16:$VV,17:$VW,25:147,37:$VX},{12:$VU,16:$VV,17:$VW,25:148,37:$VX},o($V5,$Vt,{9:44,11:149,2:$V6,14:$V7}),o($V5,[2,13]),o($VS,[2,41]),o($VS,[2,42]),o($VY,[2,43],{41:$VG,42:$VH}),o($VY,[2,44],{41:$VG,42:$VH}),o([19,40,44],[2,45],{16:$VF,41:$VG,42:$VH,43:$VI,45:$VK,46:$VL,47:$VM,48:$VN,49:$VO,50:$VP,51:$VQ,52:$VR}),o($VZ,[2,46],{16:$VF,41:$VG,42:$VH,43:$VI}),o($VZ,[2,47],{16:$VF,41:$VG,42:$VH,43:$VI}),o($VZ,[2,48],{16:$VF,41:$VG,42:$VH,43:$VI}),o($VZ,[2,49],{16:$VF,41:$VG,42:$VH,43:$VI}),o($V_,[2,50],{16:$VF,41:$VG,42:$VH,43:$VI,45:$VK,46:$VL,47:$VM,48:$VN}),o($V_,[2,51],{16:$VF,41:$VG,42:$VH,43:$VI,45:$VK,46:$VL,47:$VM,48:$VN}),o([19,40,44,51],[2,52],{16:$VF,41:$VG,42:$VH,43:$VI,45:$VK,46:$VL,47:$VM,48:$VN,49:$VO,50:$VP,52:$VR}),o([19,40,44,51,52],[2,53],{16:$VF,41:$VG,42:$VH,43:$VI,45:$VK,46:$VL,47:$VM,48:$VN,49:$VO,50:$VP}),o($VS,[2,58]),o($VS,[2,59]),o($VS,[2,61]),o($V8,[2,17]),o($VT,[2,64]),o($V8,[2,23]),o($V8,$V9,{13:150,38:$Va}),{18:[1,151]},o($V8,$V9,{13:152,38:$Va}),{18:[1,153]},o($V8,[2,24]),o($V8,[2,25]),o($V8,[2,26]),o($V8,[2,27]),o($V8,[2,28]),o($V8,[2,29]),o($V8,[2,30]),o($V8,[2,31]),o($V8,[2,32]),o($V8,[2,33]),o($V8,[2,34]),o($V5,[2,9]),o($V8,[2,35]),{19:[1,154]},o($V8,[2,37]),{19:[1,155]},o($V8,$V9,{13:156,38:$Va}),o($V8,[2,38]),o($V8,[2,36])],
+defaultActions: {9:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -688,14 +681,19 @@ _handle_error:
     return true;
 }};
 
-    const {Objeto} = require("../Expresiones/Objeto");
-    const {Atributo} = require("../Expresiones/Atributo");
-    const {SalidaGramatica} = require("../AST/SalidaGramatica");
-    const {tError} = require("../Expresiones/tError");
+    const { SalidaGramatica } = require("./AST/SalidaGramatica");
+    const { Nodo } = require('./Expresiones/Nodo');
+    const Primitivo = require('./Expresiones/Primitivo');
+    const Aritmetica = require('./Operaciones/Aritmeticas')
+    const Relacional = require('./Operaciones/Relacional');
+    const Logica = require('./Operaciones/Logica'); 
+    const { Predicate } = require('./Expresiones/Predicate');
+    //const { Atributo } = require('./Expresiones/Atributo');
+    const { tError } = require('./Expresiones/tError');
 
     var listaErrores = [];
-    var reportBNF = [];
-    var reportBNF2 = [];
+    var produccion = [];
+    var accion = [];
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -1020,113 +1018,112 @@ pushState:function pushState (condition) {
 stateStackSize:function stateStackSize() {
         return this.conditionStack.length;
     },
-options: {"case-insensitive":true},
+options: {},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:/* skip comments */
+case 0:return "tk_decimal";
 break;
-case 1:this.begin('comment');
+case 1:return "tk_entero";
 break;
-case 2:this.popState();
+case 2:return "tk_node";
 break;
-case 3:/* skip comment content*/
+case 3:return "tk_child";
 break;
-case 4:/* skip whitespace */
+case 4:return "tk_descendant";
 break;
-case 5:return 47
+case 5:return "tk_descendatOr"
 break;
-case 6:return 48
+case 6:return "tk_ancestor";
 break;
-case 7:return 49
+case 7:return "tk_ancestorOr";
 break;
-case 8:return 50
+case 8:return "tk_attribute";
 break;
-case 9:return 51
+case 9:return "tk_following";
 break;
-case 10:return 'null';
+case 10:return "tk_followingSi"
 break;
-case 11:return 'true';
+case 11:return "tk_parent"
 break;
-case 12:return 'false';
+case 12:return "tk_preceding"
 break;
-case 13:return 9;
+case 13:return "tk_precedingSi"
 break;
-case 14:return 10;
+case 14:return "tk_self"
 break;
-case 15:return 13;
+case 15:return "tk_text"
 break;
-case 16:return 29;
+case 16:return "tk_position"
 break;
-case 17:return 30;
+case 17:return "tk_last"
 break;
-case 18:return 31;
+case 18:return "tk_div"
 break;
-case 19:return 22;
+case 19:return "tk_and"
 break;
-case 20:return 32;
+case 20:return "tk_or"
 break;
-case 21:return 'lte';
+case 21:return "tk_mod"
 break;
-case 22:return 'gte';
+case 22:return "tk_barra"
 break;
-case 23:return 7;
+case 23:return "tk_punto"
 break;
-case 24:return 14;
+case 24:return "tk_diagonal"
 break;
-case 25:return 11;
+case 25:return "tk_asterisco"
 break;
-case 26:return 33;
+case 26:return "tk_dosPuntos"
 break;
-case 27:return 34;
+case 27:return "tk_mas"
 break;
-case 28:return 35;
+case 28:return "tk_menos"
 break;
-case 29:return 36;
+case 29:return "tk_menorIgual"
 break;
-case 30:return 37;
+case 30:return "tk_mayorIgual"
 break;
-case 31:return 8;
+case 31:return "tk_menor"
 break;
-case 32:return 38;
+case 32:return "tk_mayor"
 break;
-case 33:return 46;
+case 33:return "tk_distinto"
 break;
-case 34:return 45;
+case 34:return "tk_igual"
 break;
-case 35:return 39;
+case 35:return "tk_llaveA"
 break;
-case 36:return 40;
+case 36:return "tk_llaveC"
 break;
-case 37:return 41;
+case 37:return "tk_arroba"
 break;
-case 38:return 42;
+case 38:return "tk_parA"
 break;
-case 39:return 43;
+case 39:return "tk_parC"
 break;
-case 40:return 44;
+case 40:return "tk_stringTexto";
 break;
-case 41:return 26;
+case 41:return "tk_stringTexto";
 break;
-case 42:return 25;
+case 42:return "tk_stringTexto";
 break;
-case 43:return 17;
+case 43:return "tk_stringTexto";
 break;
-case 44:return 12;
+case 44:return "tk_identificador";
 break;
-case 45:return 27;
+case 45:return "EOF";
 break;
 case 46:
-        listaErrores.push(new tError('Léxico',`Simbolo inesperado: ${yy_.yytext}`,yy_.yylloc.first_line,yy_.yylloc.first_column ));
-        console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
-    
 break;
-case 47:return 6
+case 47:         
+    listaErrores.push(new tError('Léxico',`Simbolo inesperado: ${yy_.yytext}`,yy_.yylloc.first_line,yy_.yylloc.first_column ));
+
 break;
 }
 },
-rules: [/^(?:\/\/.*)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:\s+)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:null\b)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:&&)/i,/^(?:\|\|)/i,/^(?:!)/i,/^(?:\?)/i,/^(?:;)/i,/^(?:,)/i,/^(?:\.)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\[)/i,/^(?:\])/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:[a-zA-Z_áÁéÉíÍóÓ][a-zA-Z0-9_ñÑ]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/i,/^(?:.)/i,/^(?:$)/i],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true},"INITIAL":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
+rules: [/^(?:[0-9]+(\.[0-9]+)\b)/,/^(?:[0-9]+\b)/,/^(?:node\b)/,/^(?:child\b)/,/^(?:descendant\b)/,/^(?:descendant-or-self\b)/,/^(?:ancestor\b)/,/^(?:ancestor-or-self\b)/,/^(?:attribute\b)/,/^(?:following\b)/,/^(?:following-sibling\b)/,/^(?:parent\b)/,/^(?:preceding\b)/,/^(?:preceding-sibling\b)/,/^(?:self\b)/,/^(?:text\b)/,/^(?:position\b)/,/^(?:last\b)/,/^(?:div\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:mod\b)/,/^(?:\|)/,/^(?:\.)/,/^(?:\/)/,/^(?:\*)/,/^(?::)/,/^(?:\+)/,/^(?:-)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:!=)/,/^(?:=)/,/^(?:\[)/,/^(?:\])/,/^(?:@)/,/^(?:\()/,/^(?:\))/,/^(?:"[^\"]*")/,/^(?:“[^\“]*“)/,/^(?:'[^\']*')/,/^(?:‘[^\‘]*‘)/,/^(?:[a-zA-Z]([a-zA-Z0-9_])*)/,/^(?:$)/,/^(?:[ \t\r\n\f])/,/^(?:.)/],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
 });
 return lexer;
 })();
@@ -1140,9 +1137,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramaticaDesc;
-exports.Parser = gramaticaDesc.Parser;
-exports.parse = function () { return gramaticaDesc.parse.apply(gramaticaDesc, arguments); };
+exports.parser = xpathAsc;
+exports.Parser = xpathAsc.Parser;
+exports.parse = function () { return xpathAsc.parse.apply(xpathAsc, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
