@@ -52,6 +52,7 @@ export default class Objeto extends Instruccion {
         simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador,this.linea.toString(),this.columna.toString(), ts);
         arbol.actualizarTabla(simbolo,this.linea.toString(),this.columna.toString());
     } else if (this.contenido != null) {
+
       //if o switch buscando codificacion
       if (arbol.getEncoding() == "UTF-8") {
         this.contenido = (this.contenido);

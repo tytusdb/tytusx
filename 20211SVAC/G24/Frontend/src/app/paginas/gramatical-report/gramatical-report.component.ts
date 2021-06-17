@@ -11,7 +11,7 @@ export class GramaticalReportComponent implements OnInit {
 
   ngOnInit(): void {
     let info = window.localStorage.getItem('gramatica');
-    console.log(info);
+    
     let texto=document.getElementById("text2");
     if(texto!= null){
       texto.innerHTML+=info;

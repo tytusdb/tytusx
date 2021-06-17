@@ -78,7 +78,7 @@ export class ContenidoInicioComponent implements OnInit {
 
       var Tree: Arbol = new Arbol([objetos]);
       Tree.settablaGlobal(this.tablaGlobal);
-      console.log(this.tablaGlobal);
+      
 
 
       //  PARA GUARDAR DATOS
