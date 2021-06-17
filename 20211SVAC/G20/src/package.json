@@ -4,11 +4,11 @@
   "description": "Interprete básico para uso del laboratorio de Compiladores 2",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -w",
     "gramatica": "jison ./Gramatica/gramatica_XML_ASC.jison",
-    "xmlAsc": "jison ./Gramatica/gramatica_XML_ASC.jison && mv gramatica_XML_ASC.js ./dirt/Gramatica",
-    "xpathAsc": "jison ./Gramatica/xpathAsc.jison && mv xpathAsc.js ./dirt/Gramatica",
-    "browserify": "browserify ./dirt/main.js --standalone load > ./dirt/bundle.js"
+    "xmlAsc": "jison ./Gramatica/gramatica_XML_ASC.jison && mv gramatica_XML_ASC.js ./dist/Gramatica",
+    "xpathAsc": "jison ./Gramatica/xpathAsc.jison && mv xpathAsc.js ./dist/Gramatica",
+    "browserify": "browserify ./dist/main.js --standalone load > ../bundle.js"
   },
   "author": "Haroldo Pablo Arias Molina",
   "license": "ISC",

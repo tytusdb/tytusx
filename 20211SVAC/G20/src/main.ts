@@ -26,7 +26,9 @@ export class Main {
 	j: number = 1;
 
 	equalsIgnoringCase(text, other) {
-		return text.localeCompare(other, undefined, { sensitivity: 'base' }) === 0;
+		return (
+			text.localeCompare(other, undefined, { sensitivity: 'base' }) === 0
+		);
 	}
 
 	ejecutarCodigoXmlAsc(entrada: any) {
@@ -37,8 +39,11 @@ export class Main {
 		const objetos = xmlAsc.parse(entrada);
 		// console.log('**********');
 		console.log(objetos);
-		if(objetos !== undefined && objetos !== null){
-			if(objetos.erroresSemanticos.length > 0 || objetos.erroresSintacticos.length > 0){
+		if (objetos !== undefined && objetos !== null) {
+			if (
+				objetos.erroresSemanticos.length > 0 ||
+				objetos.erroresSintacticos.length > 0
+			) {
 				alert('Existen errores');
 			}
 		}
@@ -53,7 +58,9 @@ export class Main {
 				if (this.equalsIgnoringCase(item.identificador, 'encoding')) {
 					if (this.equalsIgnoringCase(item.valor, 'ASCII')) {
 						this.codificacion = 'ASCII';
-					} else if (this.equalsIgnoringCase(item.valor, 'ISO-8859-1')) {
+					} else if (
+						this.equalsIgnoringCase(item.valor, 'ISO-8859-1')
+					) {
 						this.codificacion = 'ISO-8859-1';
 					} else {
 						this.codificacion = 'utf-8';
@@ -65,9 +72,13 @@ export class Main {
 			if (!flag) {
 				this.codificacion = 'utf-8';
 			}
-			console.log(this.applyCodification(this.getXmlFormat(this.lista_objetos[1])));
+			console.log(
+				this.applyCodification(this.getXmlFormat(this.lista_objetos[1]))
+			);
 		} else {
-			console.log(this.applyCodification(this.getXmlFormat(this.lista_objetos[0])));
+			console.log(
+				this.applyCodification(this.getXmlFormat(this.lista_objetos[0]))
+			);
 		}
 
 		window.localStorage.setItem(
@@ -149,32 +160,38 @@ export class Main {
 		return etiqueta;
 	}
 
-	escapable = /[\\\"\x00-\x1f\x7f-\uffff]/g
+	escapable = /[\\\"\x00-\x1f\x7f-\uffff]/g;
 
 	quote(string) {
-
 		// If the string contains no control characters, no quote characters, and no
 		// backslash characters, then we can safely slap some quotes around it.
 		// Otherwise we must also replace the offending characters with safe escape
 		// sequences.
 
 		this.escapable.lastIndex = 0;
-		return this.escapable.test(string) ?
-			'"' + string.replace(this.escapable, function (a) {
-				let meta = {    // table of character substitutions
-					'\b': '\\b',
-					'\t': '\\t',
-					'\n': '\\n',
-					'\f': '\\f',
-					'\r': '\\r',
-					'"': '\\"',
-					'\\': '\\\\'
-			};
-				var c = meta[a];
-				return typeof c === 'string' ? c :
-					'\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-			}) + '"' :
-			'"' + string + '"';
+		return this.escapable.test(string)
+			? '"' +
+					string.replace(this.escapable, function (a) {
+						let meta = {
+							// table of character substitutions
+							'\b': '\\b',
+							'\t': '\\t',
+							'\n': '\\n',
+							'\f': '\\f',
+							'\r': '\\r',
+							'"': '\\"',
+							'\\': '\\\\',
+						};
+						var c = meta[a];
+						return typeof c === 'string'
+							? c
+							: '\\u' +
+									(
+										'0000' + a.charCodeAt(0).toString(16)
+									).slice(-4);
+					}) +
+					'"'
+			: '"' + string + '"';
 	}
 
 	applyCodification(text) {
@@ -650,12 +667,14 @@ export class Main {
 	}
 
 	printElement(element: Objeto) {
-		console.info(element);
+		let text = this.applyCodification(this.getXmlFormat(element));
+		console.log(text);
+		// console.textContent(text);
 	}
 
 	printElements(elements: Objeto[]) {
 		elements.forEach((element) => {
-			console.info(element);
+			this.printElement(element);
 		});
 	}
 
@@ -726,7 +745,7 @@ export class Main {
 		let xmlcst = document.getElementById('arbolcst');
 		if (xmlcst !== undefined && xmlcst !== null) {
 			console.log('btn arbol cst Activo');
-			xmlcst.addEventListener('click', () => { });
+			xmlcst.addEventListener('click', () => {});
 		}
 	}
 }
