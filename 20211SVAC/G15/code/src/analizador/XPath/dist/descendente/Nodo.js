@@ -1,4 +1,4 @@
-class NoditoAST{
+class NodoAST{
     constructor(Valor,Tipo){
         this.Valor=Valor;
         this.Tipo=Tipo;
@@ -12,4 +12,6 @@ class NoditoAST{
     }
 
 }
-export default NoditoAST;
+
+module.exports= NodoAST;
+//export default NoditoAST;
