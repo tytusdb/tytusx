@@ -28,7 +28,17 @@
 "&quot;"                                              {return '&quot';        }
 
 \"[^\"]*\"	                                          {return 'cadena';             } 
-(((\&\w+\;)|[^&<>])*\<\/)                             {yytext = yytext.substring(0, yyleng-2); return 'contenidoEtiqueta';  }
+
+//((("&"("lt"|"gt"|"amp"|"apos"|"quot")";")|[^&<>])*\<\/)                             {yytext = yytext.substring(0, yyleng-2); 
+//                                                       return 'contenidoEtiqueta';  }
+(((\&\w+\;)|[^&<>])*\<\/)                             {yytext = yytext.substring(0, yyleng-2);
+                                                      yytext = yytext.replace("&lt;", "<");
+                                                      yytext = yytext.replace("&gt;", ">");
+                                                      yytext = yytext.replace("&amp;", "&");
+                                                      yytext = yytext.replace("&apos;", "'");
+                                                      yytext = yytext.replace("&quot;", "\"");
+                                                      return 'contenidoEtiqueta';  }
+
 ([a-zA-Z_])[a-zA-Z0-9_]*                              {return 'identificador';      }
 [0-9]+                                                {return 'entero';             }
 [0-9]+("."[0-9]+)\b                                   {return 'decimal';            }
@@ -47,6 +57,7 @@
 %{
     const { Paquete } = require('src/app/models/CST/paquete.model');
     const { NodoCST } = require('src/app/models/CST/nodoCST.model');
+    var ambitoActual = "global";
 
 %}
 
@@ -66,6 +77,10 @@ INICIO
                                                             console.log("EmptyFile"); 
                                                             return info; 
                                                       }
+      /*| error                                         {
+                                                            listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));
+                                                            console.log(`Sintáctico: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                                      }*/
 ;
 
 PROBJ 
@@ -109,6 +124,21 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'tk_<' 'tk_/' 'identificador' 'tk_>'\n"
                                                                                           };
+                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
+                                                                                    }
+
+      | 'tk_<' 'identificador' 'tk_>' PRECONTENIDO 'contenidoEtiqueta' 'identificador' 'tk_>'    {     if($2 != $6){
+                                                                                                listaErroresJison.push( new Excepcion('Semántico', this._$.first_line, this._$.first_column, `Etiqueta no correspondiente`));
+                                                                                          }
+                                                                                          $$ = {
+                                                                                                nodos: new NodoCST('OBJETO', [
+                                                                                                      new NodoCST('<', []),                           new NodoCST('id', [new NodoCST($2, [])]), new NodoCST('>', []),
+                                                                                                      new NodoCST('contenidoE', [new NodoCST($4+$5, [])]),
+                                                                                                      new NodoCST('<', []),   new NodoCST('/', []),   new NodoCST('id', [new NodoCST($6, [])]), new NodoCST('>', [])
+                                                                                                ]),
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
+                                                                                          };
+                                                                                          console.log("OBJ\t"+$2+"\t"+$4+$5+"\t"+ambitoActual);
                                                                                     }
                                                                                     
       | 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'    {     if($2 != $5){
@@ -120,8 +150,10 @@ OBJETO
                                                                                                       new NodoCST('contenidoE', [new NodoCST($4, [])]),
                                                                                                       new NodoCST('<', []),   new NodoCST('/', []),   new NodoCST('id', [new NodoCST($5, [])]), new NodoCST('>', [])
                                                                                                 ]),
-                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n"
+                                                                                                producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n",
+                                                                                                simbolos: ["OBJ\t"+$2+"\t"+$4+"\t"+ambitoActual]
                                                                                           };
+                                                                                          console.log("OBJ\t"+$2+"\t"+$4+"\t"+ambitoActual);
                                                                                     }
 
       /*| 'tk_<' 'identificador' LATRIBUTOS 'tk_/' 'tk_>'                        {     $$ = {
@@ -156,6 +188,9 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' 'contenidoEtiqueta' 'identificador' 'tk_>'\n" + $3.producciones
                                                                                           };
+                                                                                          
+                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
+                                                                                          ambitoActual = $2;
                                                                                     }
       | 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'  
                                                                                     {     if($2 != $8){
@@ -169,6 +204,9 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' LATRIBUTOS 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $3.producciones + $5.producciones
                                                                                           };
+                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
+                                                                                          console.log($2);console.log([$2]);
+                                                                                          ambitoActual = $2;
                                                                                     }
       | 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'  {     if($2 != $7){
                                                                                                 listaErroresJison.push( new Excepcion('Semántico', this._$.first_line, this._$.first_column, `Etiqueta no correspondiente`));
@@ -181,11 +219,31 @@ OBJETO
                                                                                                 ]),
                                                                                                 producciones: "<OBJETO>\t\t::= 'tk_<' 'identificador' 'tk_>' OBJETOS 'tk_<' 'tk_/' 'identificador' 'tk_>'\n" + $4.producciones
                                                                                           };
+                                                                                          
+                                                                                          console.log("OBJ\t"+$2+"\t-\t"+ambitoActual);
+                                                                                          console.log($2);console.log([$2]);
+                                                                                          ambitoActual = $2;
                                                                                     }
-      /*| error RECUPERACION                            {
+      /*| error 'tk_<'                                  {
                                                       listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));
-                                                      console.log(`Sintáctico,Recuperacion: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                                      console.log(`Sintáctico: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                                      }
+      | error 'identificador'                         {
+                                                      listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));
+                                                      console.log(`Sintáctico: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                                      }
+      | error 'tk_>'                                  {
+                                                      listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));
+                                                      console.log(`Sintáctico: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                                      }
+      | error 'tk_/'                                  {
+                                                      listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));
+                                                      console.log(`Sintáctico: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
                                                       }*/
+      | error                                         {
+                                                      listaErroresJison.push(new Excepcion('Sintáctico', this._$.first_line, this._$.first_column, `No se esperaba: ${yytext}`));
+                                                      console.log(`Sintáctico: ${yytext} No corresponde en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                                      }
 ;
 
 OBJETOS 
@@ -211,7 +269,7 @@ ATRIBUTO
                                                             nodos: new NodoCST('ATRIBUTO', [
                                                                   new NodoCST('id', [new NodoCST($1, [])]), new NodoCST('=', []), new NodoCST('cadena', [new NodoCST($3, [])])
                                                             ]),
-                                                            producciones: "<ATRIBUTO>\t\t::= 'identificador' 'tk_=' 'cadena'"
+                                                            producciones: "<ATRIBUTO>\t\t::= 'identificador' 'tk_=' 'cadena'\n"
                                                       };
                                                 }
       /*| error RECUPERACION                            {
@@ -220,22 +278,25 @@ ATRIBUTO
                                                       }*/
 ;
 
-CONTENIDO
-      : 'contenidoEtiqueta' { $$ = $1 }
-      | '&lt'               { $$ = $1 }
-      | '&gt'               { $$ = $1 }
-      | '&amp'              { $$ = $1 }
-      | '&apos'             { $$ = $1 }
-      | '&quot'             { $$ = $1 }
+PRECONTENIDO: PRECONTENIDO ESPECIALES     { $$ = $1+$2;}
+| ESPECIALES                              { $$ = $1;}
+;
+
+ESPECIALES
+      : '&lt'               { $$ = "<"; }
+      | '&gt'               { $$ = ">"; }
+      | '&amp'              { $$ = "&"; }
+      | '&apos'             { $$ = "'"; }
+      | '&quot'             { $$ = '"'; }
 ;
 
 
-RECUPERACION
+/*RECUPERACION
       : 'tk_<'          {$$ = $1;}
       | 'tk_/'          {$$ = $1;}
       | 'tk_>'          {$$ = $1;}
       | 'cadena'        {$$ = $1;}
-;
+;*/
 
 
 
