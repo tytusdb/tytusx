@@ -4,11 +4,15 @@ const Tipo_js_1 = require("./Simbolo/Tipo.js");
 const Entorno_js_1 = require("./Simbolo/Entorno.js");
 const Simbolo_js_1 = require("./Simbolo/Simbolo.js");
 const GraficarAST_js_1 = require("./Graficador/GraficarAST.js");
+const GraficarCST_XML_1 = require("./Graficador/GraficarCST_XML");
 const TError_js_1 = require("./Interprete/Util/TError.js");
+const CST_XML = require('./Analizadores/CSTXML.js');
 const gramaticaXML = require('./Analizadores/gramaticaXML.js');
 const gramaticaXMLD = require('./Analizadores/gramaticaXMLDSC.js');
 const gramaticaXpath = require('./Analizadores/gramaticaXPath.js');
 let ObjetosXML;
+let ObjetosNode;
+var graficador = new GraficarCST_XML_1.GraficarCST_XML();
 let resultadoxpath = "";
 let contador;
 let cadenaReporteTS = ` <thead><tr><th scope="col">Nombre</th><th scope="col">Tipo</th><th scope="col">Ambito</th><th scope="col">Fila</th><th scope="col">Columna</th>
@@ -307,6 +311,13 @@ function reporteTablaErrores() {
     return cadenaReporteTE;
 }
 ;
+function realizarGraficaCST_XML(entrada) {
+    ObjetosNode = CST_XML.parse(entrada);
+    var cadena = graficador.graficar(ObjetosNode);
+    var direccion = encodeURI("https://dreampuf.github.io/GraphvizOnline/#" + cadena);
+    window.open(direccion, '_blank');
+}
+;
 /*ejecutarXML_DSC(`
 <?xml version="1.0" encoding="UTF-8" ?>
 
@@ -331,4 +342,4 @@ function reporteTablaErrores() {
     
 </hemeroteca>
 `);*/
-module.exports = { ejecutarXML, realizarGraficaAST, reporteTablaErrores, ejecutarXpath };
+module.exports = { ejecutarXML, realizarGraficaAST, reporteTablaErrores, ejecutarXpath, realizarGraficaCST_XML };
