@@ -26,7 +26,7 @@ export class AppComponent {
 
  
   title = 'proyecto1';
-  txtXpath = `/catalog/book[@id="bk101"]/./*/text()`;
+  txtXpath = `//book[publish_date/@cali="hola"]/title/.`;
   consoleValue = "";
   parser;
   retroceder = true;
@@ -38,24 +38,126 @@ export class AppComponent {
   arbol;
   rgxmlasc;
   tablaXML="";
-  xmlText = `<?xml version="1.0" encoding="UTF-8"?>
-  <biblioteca>
-    <libro>
-      <titulo>La vida esta en otra parte</titulo>
-      <autor>Milan Kundera</autor>
-      <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-      <titulo>Pantaleon y las visitadoras</titulo>
-      <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-      <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-      <titulo>Conversacion en la catedral</titulo>
-      <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-      <fechaPublicacion año="1969"/>
-    </libro>
-  </biblioteca>`;
+  xmlText = `<?xml version="1.0" encoding="ISO-8859-1"?>
+  <catalog>
+     <book id="bk101">
+        <author>GÃ¡mbardellÃ¤, MÃ¡tthew</author>
+        <title>XML Developer&apos;s Guide</title>
+        <genre>Computer</genre>
+        <price>44.95</price>
+        <publish_date>2000-10-01</publish_date>
+        <description>An in-depth look at creating applications 
+        with XML.</description>
+     </book>
+     <book id="bk102">
+        <author>Ralls, Kim</author>
+        <title>Midnight Rain</title>
+        <genre>Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2000-12-16</publish_date>
+        <description>A former architect battles corporate zombies, 
+        an evil sorceress, and her own childhood to become queen 
+        of the world.</description>
+     </book>
+     <book id="bk103">
+        <author>Corets, Eva</author>
+        <title>Maeve Ascendant</title>
+        <genre>Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2000-11-17</publish_date>
+        <description>After the collapse of a nanotechnology 
+        society in England, the young survivors lay the 
+        foundation for a new society.</description>
+     </book>
+     <book id="bk104">
+        <author>Corets, Eva</author>
+        <title>Oberon's Legacy</title>
+        <genre>Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2001-03-10</publish_date>
+        <description>In post-apocalypse England, the mysterious 
+        agent known only as Oberon helps to create a new life 
+        for the inhabitants of London. Sequel to Maeve 
+        Ascendant.</description>
+     </book>
+     <book id="bk105">
+        <author>Corets, Eva</author>
+        <title>The Sundered Grail</title>
+        <genre top="cali">Fantasy</genre>
+        <price>5.95</price>
+        <publish_date>2001-09-10</publish_date>
+        <description>The two daughters of Maeve, half-sisters, 
+        battle one another for control of England. Sequel to 
+        Oberon's Legacy.</description>
+     </book>
+     <book id="bk106">
+        <author>Randall, Cynthia</author>
+        <title>Lover Birds</title>
+        <genre top="cali">Romance</genre>
+        <price>4.95</price>
+        <publish_date>2000-09-02</publish_date>
+        <description>When Carla meets Paul at an ornithology 
+        conference, tempers fly as feathers get ruffled.</description>
+     </book>
+     <book id="bk107">
+        <author>Thurman, Paula</author>
+        <title>Splish Splash</title>
+        <genre>Romance</genre>
+        <price>4.95</price>
+        <publish_date>2000-11-02</publish_date>
+        <description>A deep sea diver finds true love twenty 
+        thousand leagues beneath the sea.</description>
+     </book>
+     <book id="bk108">
+        <author>Knorr, Stefan</author>
+        <title>Creepy Crawlies</title>
+        <genre>Horror</genre>
+        <price>4.95</price>
+        <publish_date>2000-12-06</publish_date>
+        <description>An anthology of horror stories about roaches,
+        centipedes, scorpions  and other insects.</description>
+     </book>
+     <book id="bk109">
+        <author>Kress, Peter</author>
+        <title>Paradox Lost</title>
+        <genre>Science Fiction</genre>
+        <price>6.95</price>
+        <publish_date>2000-11-02</publish_date>
+        <description>After an inadvertant trip through a Heisenberg
+        Uncertainty Device, James Salway discovers the problems 
+        of being quantum.</description>
+     </book>
+     <book id="bk110">
+        <author>O'Brien, Tim</author>
+        <title>Microsoft .NET: The Programming Bible</title>
+        <genre top="cali">Computer</genre>
+        <price>36.95</price>
+        <publish_date>2000-12-09</publish_date>
+        <description>Microsoft's .NET initiative is explored in 
+        detail in this deep programmer's reference.</description>
+     </book>
+     <book id="bk111">
+        <author>O'Brien, Tim</author>
+        <title>MSXML3: A Comprehensive Guide</title>
+        <genre>Computer</genre>
+        <price>36.95</price>
+        <publish_date>2000-12-01</publish_date>
+        <description>The Microsoft MSXML3 parser is covered in 
+        detail, with attention to XML DOM interfaces, XSLT processing, 
+        SAX and more.</description>
+     </book>
+     <book id="bk112">
+        <author>Galos, Mike</author>
+        <title>Visual Studio 7: A Comprehensive Guide</title>
+        <genre>Computer</genre>
+        <price>49.95</price>
+        <publish_date cali="hola">2001-04-16</publish_date>
+        <description>Microsoft Visual Studio 7 is explored in depth,
+        looking at how Visual Basic, Visual C++, C#, and ASP+ are 
+        integrated into a comprehensive development 
+        environment.</description>
+     </book>
+  </catalog>`;
   
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
@@ -69,16 +171,17 @@ export class AppComponent {
 
   Compilar() {
     this.consoleValue ="";
-    var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
+    var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
     console.log('parseando: ' + this.txtXpath);
     var xPathObject = this.parser.parse(this.txtXpath) as sentenciaXpath[];
     //console.log('xPathObject');
     //console.log(xPathObject);
     //Agregamos para cada sentencia su sentencia hija para simular lista doblemente enlazada (padre,hijo)
     var elementoActual:sentenciaXpath; 
-    this.xmlOriginal = xmlObject;
-    var lista = [];
+   
+    var lista:Objeto[] = [];
     lista.push(xmlObject);
+    this.xmlOriginal = lista;
     console.log(xmlObject);
     this.consoleValue = '';
     xPathObject.forEach(element => {
@@ -247,31 +350,43 @@ export class AppComponent {
       {
         switch(raiz.Tipo.Valor){
           case 'ancestor':{
-            //result += this.BuscarAncestros(xml,);
+            if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
+              this.listaDescendientes.push(raiz);
+            }
+            xml = this.GetXmlEtiqueta(xml,raiz);
           }break;
           case 'ancestor-or-self':{
-            
+            if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
+              this.listaDescendientes.push(raiz);
+            }
+            xml = this.GetXmlEtiqueta(xml,raiz);
           }break;
           case 'attribute':{
             if(raiz.Tipo.AxisNodo.Tipo == TipoNodo.ID){
-              padre.forEach(element => {
+              padre = xml;
+              xml = this.GetAllAtributos(xml);
+              var temp:Objeto[] =[];
+              console.log('attribute');
+              console.log(xml);
+              xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
                   if(atr.identificador == raiz.Tipo.AxisNodo.Valor){
-                    result += atr.identificador + ' = ' + atr.valor + '\n';
+                    temp.push(element);
                   }
                 });
               });
+              xml = temp;
             }
             
           }break;
           case 'child':{
-            if(raiz.Tipo.AxisNodo.Tipo == TipoNodo.ID){
-              xml.forEach(element => {
-                if(element.identificador == raiz.Tipo.AxisNodo.Valor){
-                  result += this.GetXmlText(element);
-                }
-              });
-            }
+              if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
+                this.listaDescendientes.push(raiz);
+              }
+              xml = this.GetXmlEtiqueta(xml,raiz);
+              console.log('xml child');
+              console.log(xml);
+             
           }break;
           case 'descendant':{
             if(raiz.Tipo.AxisNodo.Tipo == TipoNodo.ID){
@@ -312,9 +427,18 @@ export class AppComponent {
           }break;
         }
         if(raiz.Hijo ==null){
-          xml.forEach(element => {
-            result += this.GetXmlText(element);
-          });
+         
+          if(raiz.Tipo.Valor == 'attribute'){
+            xml.forEach(element => {
+             element.listaAtributos.forEach(atr => {
+              result += atr.identificador + '=' + atr.valor;
+             });
+            });
+          }else{
+            xml.forEach(element => {
+              result += this.GetXmlText(element);
+            });
+          }
         }else{
           result += this.ProcesarNodoRaiz(raiz.Hijo,xml,padre);
         }
@@ -364,6 +488,8 @@ export class AppComponent {
   }
   GetXmlEtiqueta(xml:Objeto[],etiqueta:sentenciaXpath):Objeto[]
   { 
+    console.log('GetXmlEtiqueta');
+    console.log(xml);
     var result:Objeto[] = [];
     if(this.listaDescendientes.length > 0){
       result = this.BuscarValorDescendiente(xml);
@@ -389,12 +515,10 @@ export class AppComponent {
      
     }
     if(etiqueta.Parametro!=null){
-      console.log('item con operacion');
-      console.log(etiqueta);
-      console.log(result);
       result = this.FiltrarOperacion(result,etiqueta);
-      console.log(result);
     }
+    console.log('result GetXmlEtiqueta');
+    console.log(result);
     return result;
   }
 
@@ -1312,7 +1436,10 @@ export class AppComponent {
     this.listaDescendientes.forEach(item => {
       var aux:Objeto[] = [];
       if(temp!=undefined)
-      {
+      { 
+        console.log('BuscarValorDescendiente');
+        console.log(xml);
+        console.log(item);
         temp.forEach(element => {
           if(item.Tipo.Tipo == TipoNodo.Atributo){
             element.listaAtributos.forEach(atr => {
@@ -1321,7 +1448,24 @@ export class AppComponent {
               }
             });
             aux = aux.concat(this.BuscarEtiqueta(element.listaObjetos,item));
-          }else{
+          }else if(item.Tipo.Tipo == TipoNodo.Axis){
+            if(item.Tipo.AxisNodo.Tipo == TipoNodo.Atributo){
+              element.listaAtributos.forEach(atr => {
+                if(atr.identificador == item.Tipo.AxisNodo.Valor){
+                  aux.push(element);
+                }
+              });
+              aux = aux.concat(this.BuscarEtiqueta(element.listaObjetos,item));
+            }else{
+              if(element.identificador == item.Tipo.AxisNodo.Valor){
+                aux.push(element);
+              }else{
+                aux = aux.concat(this.BuscarEtiqueta(element.listaObjetos,item));
+              }
+            }
+            
+          }
+          else{
             if(element.identificador == item.Tipo.Valor){
               aux.push(element);
             }else{
@@ -1331,12 +1475,12 @@ export class AppComponent {
         });
       }
       temp = aux;
-      if(item.Parametro!=null){
-        console.log('item con operacion');
-        console.log(temp);
-        temp = this.FiltrarOperacion(temp,item);
-        console.log(temp);
-      }
+      // if(item.Parametro!=null){
+      //   console.log('item con operacion');
+      //   console.log(temp);
+      //   temp = this.FiltrarOperacion(temp,item);
+      //   console.log(temp);
+      // }
     });
 
     //result = this.BuscarValorEtiqueta(temp,this.listaDescendientes[this.listaDescendientes.length -1],onlyParamas);
@@ -1358,7 +1502,27 @@ export class AppComponent {
         { 
           ret = ret.concat( this.BuscarEtiqueta(element.listaObjetos,etiqueta));
         }
-      }else{
+      }else if(etiqueta.Tipo.Tipo == TipoNodo.Axis){
+        if(etiqueta.Tipo.AxisNodo.Tipo == TipoNodo.Atributo){
+          element.listaAtributos.forEach(atr => {
+            if(atr.identificador == etiqueta.Tipo.AxisNodo.Valor){
+              ret.push(element);
+            }
+          });
+          if(element.listaObjetos.length > 0)
+          { 
+            ret = ret.concat( this.BuscarEtiqueta(element.listaObjetos,etiqueta));
+          }
+        }else{
+          if(element.identificador == etiqueta.Tipo.AxisNodo.Valor){
+            ret.push(element);
+          }else{
+            if(element.listaObjetos.length > 0)
+            ret = ret.concat( this.BuscarEtiqueta(element.listaObjetos,etiqueta));
+          }
+        }
+      }
+      else{
         if(element.identificador == etiqueta.Tipo.Valor){
           ret.push(element);
         }else{
@@ -1564,9 +1728,23 @@ export class AppComponent {
                   switch(ret[2]){
                     case "=":{
                       element.listaObjetos.forEach(obj => {
-                        if(obj.texto.replace(re,'').replace(ra,'') == ret[1].toString().replace(re,'').replace(ra,''))
-                        {
-                          result .push(element);
+                        if(ret[0].includes('@')){
+                          var arr = ret[0].split('@');
+                          if(obj.identificador == arr[0]){
+                            obj.listaAtributos.forEach(atr => {
+                              if(atr.identificador == arr[1]){
+                                if(atr.valor.replace(re,'').replace(ra,'') == ret[1].toString().replace(re,'').replace(ra,''))
+                                {
+                                  result .push(element);
+                                }
+                              }
+                            });
+                          }
+                        }else{
+                          if(obj.texto.replace(re,'').replace(ra,'') == ret[1].toString().replace(re,'').replace(ra,''))
+                          {
+                            result .push(element);
+                          }
                         }
                       });
                     }break;
@@ -1670,9 +1848,38 @@ export class AppComponent {
           }
         }break;
         case TipoParametro.Nodo:{
+          console.log('Nodo')
+          console.log(xml)
+          console.log(etiqueta)
           xml.forEach(element => {
             element.listaObjetos.forEach(obj => {
-              if(obj.identificador == etiqueta.Tipo.Valor){
+              if(etiqueta.Parametro.Valor.includes('@')){
+                var arr = etiqueta.Parametro.Valor.split('@');
+                if(obj.identificador == arr[0]){
+                  obj.listaAtributos.forEach(atr => {
+                    if(atr.identificador == arr[1]){
+                      result.push(element);
+                    }
+                  });
+                }
+              }else{
+                if(obj.identificador == etiqueta.Parametro.Valor){
+                  result.push(element);
+                }
+              }
+
+              
+            });
+          });
+          
+        }break;
+        case TipoParametro.Ruta:{
+          console.log('Ruta perro')
+          console.log(xml)
+          console.log(etiqueta)
+          xml.forEach(element => {
+            element.listaObjetos.forEach(obj => {
+              if(obj.identificador == etiqueta.Parametro.Valor){
                 result.push(element);
               }
             });
