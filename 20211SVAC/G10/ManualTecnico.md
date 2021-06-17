@@ -16,4 +16,4 @@ ___
 - Hosting: Github pages
 
 ##### Flujo
-![Imagen 6](/images/img6.png)
+![Imagen 6](tytusx/20211SVAC/G10//images/img6.png)
