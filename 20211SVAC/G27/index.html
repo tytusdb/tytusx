@@ -23,6 +23,8 @@
     <script src="Instrucciones/Primitivas/Print.js"></script>
     <script src="Expresiones/Atributo.js"></script>
     <script src="Expresiones/Objeto.js"></script>
+    <script src="Instrucciones/Elemento.js"></script>
+    <script src="Instrucciones/Ejecutar.js"></script>
     <script src="Expresiones/Operacion.js"></script>
     <script src="Expresiones/Primitivo.js"></script>
     <script src="Arbol/Nodo.js"></script>
@@ -160,7 +162,7 @@
 </body>
 <script>
     function AnalyzeXML() {
-        alert('prueba');
+        //alert('prueba');
         //let entrada = document.getElementById("Entrada").value;
         let entrada = showCode();
         
@@ -168,9 +170,9 @@
         //resultado: ObjetoXML
         if (resultado){
             //alert('Se obtuvo resultado');
-            document.getElementById("EntradaXPath").value = resultado.identificador;//+" "+ resultado.listaObjetos[1].identificador;
+            document.getElementById("EntradaXPath").value = resultado.identificador ;//+" "+ resultado.listaObjetos[1].identificador;
             //document.getElementById("Entrada").value = resultado.identificador +" "+ resultado.listaObjetos[1].identificador;
-            alert('Resultado: '+ resultado.listaObjetos[0].identificador);
+            //alert('Resultado: '+ resultado.identificador);
             //document.getElementById("Salida").innerHTML = construyeGraficaTS(resultado);
 
             /*
@@ -188,8 +190,20 @@
     }
 
     function AnalyzeXPath() {
-        let entrada = document.getElementById("EntradaXPath").value;
-        parseXPath(entrada);
+        var cadenaResultado="";
+        let entradaXML = showCode();        
+        let entradaXpath = document.getElementById("EntradaXPath").value;        
+        let arrayObjetos = parseXML(entradaXML);        
+        let arrayElementos = parseXPath(entradaXpath);                                                
+        if (arrayElementos && arrayObjetos){      
+            var e = new Ejecutar(arrayElementos,arrayObjetos);   
+            let arrayResultado = e.ejecutar(arrayObjetos);   
+            for (var i = 0; i < arrayResultado.length; i+=1) {                
+                cadenaResultado+=arrayResultado[i].texto+"\n";
+            }            
+            document.getElementById("Salida").innerHTML = cadenaResultado;
+        }        
+        return true;
     }
 
     function NewDocument(){
@@ -212,4 +226,5 @@
 <script src="js/viz.js"></script>
 <script src="js/full.render.js"></script>
 <script src="Gramatica/gramaticaXML.js"></script>
+<script src="Gramatica/gramaticaXPATH.js"></script>
 </html>
