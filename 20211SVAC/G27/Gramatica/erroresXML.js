@@ -71,7 +71,7 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramaticaXML = (function(){
+var erroresXML = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,18],$V1=[1,23],$V2=[14,16],$V3=[1,28];
 var parser = {trace: function trace () { },
 yy: {},
@@ -88,14 +88,28 @@ case 1:
     var nodo = new Objeto('RAIZ','',0, 0,null,null); 
     nodo.agregarObjeto($$[$0-1]);
     var arreglo =[nodo];
+    if($$[$0-6] == null){var error = new Error('Sintáctico','Se debe indicar el valor de versión.', _$[$0-10].first_line, _$[$0-10].first_column);insertarErrorXML(error);}
+    if($$[$0-3] == null){var error = new Error('Sintáctico','Se esperaba StringLiteral y se obtuvo vacío.', _$[$0-10].first_line, _$[$0-10].first_column);insertarErrorXML(error);}
     return arreglo;
 
 break;
-case 2: case 6:
- this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
+case 2:
+ 
+        if ($$[$0-7] != $$[$0-1]){
+                var error = new Error('Sintáctico','Se esperaba la etiqueta &lt;/' + $$[$0-7] + '&gt; y se obtuvo la etiqueta &lt;/'+$$[$0-1]+'&gt;.', _$[$0-8].first_line, _$[$0-8].first_column);
+                insertarErrorXML(error);
+        }
+        this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
+        
 break;
-case 3: case 8:
-this.$= new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,null,$$[$0-4]);
+case 3:
+
+        if ($$[$0-6] != $$[$0-1]){
+                var error = new Error('Sintáctico','Se esperaba la etiqueta &lt;/' + $$[$0-6] + '&gt; y se obtuvo la etiqueta &lt;/'+$$[$0-1]+'&gt;.', _$[$0-7].first_line, _$[$0-7].first_column);
+                insertarErrorXML(error);
+            }
+        this.$= new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,null,$$[$0-4]);
+        
 break;
 case 4:
 this.$= $$[$0-1];  this.$.push($$[$0]);  alert($$[$0].texto);
@@ -103,11 +117,41 @@ break;
 case 5:
 this.$= [];  this.$.push($$[$0]); alert($$[$0].texto);
 break;
+case 6:
+ 
+               if ($$[$0-7] != $$[$0-1]){
+                var error = new Error('Sintáctico','Se esperaba la etiqueta &lt;/' + $$[$0-7] + '&gt; y se obtuvo la etiqueta &lt;/'+$$[$0-1]+'&gt;.', _$[$0-8].first_line, _$[$0-8].first_column);
+                insertarErrorXML(error);
+                }
+               this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
+               
+break;
 case 7:
- this.$= new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],null); 
+ 
+            if ($$[$0-7] != $$[$0-1]){
+                var error = new Error('Sintáctico','Se esperaba la etiqueta &lt;/' + $$[$0-7] + '&gt; y se obtuvo la etiqueta &lt;/'+$$[$0-1]+'&gt;.', _$[$0-8].first_line, _$[$0-8].first_column);
+                insertarErrorXML(error);
+            }
+            this.$= new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],null); 
+            
+break;
+case 8:
+
+            if ($$[$0-6] != $$[$0-1]){
+                var error = new Error('Sintáctico','Se esperaba la etiqueta &lt;/' + $$[$0-6] + '&gt; y se obtuvo la etiqueta lt;/'+$$[$0-1]+'&gt;.', _$[$0-7].first_line, _$[$0-7].first_column);
+                insertarErrorXML(error);
+            }
+            this.$= new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,null,$$[$0-4]);
+            
 break;
 case 9:
- this.$= new Objeto($$[$0-6],$$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column,null,null);
+
+            if ($$[$0-6] != $$[$0-1]){
+                var error = new Error('Sintáctico','Se esperaba la etiqueta &lt;/' + $$[$0-6] + '&gt; y se obtuvo la etiqueta &lt;/'+$$[$0-1]+'&gt;.', _$[$0-7].first_line, _$[$0-7].first_column);
+                insertarErrorXML(error);
+            } 
+            this.$= new Objeto($$[$0-6],$$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column,null,null);
+        
 break;
 case 10:
 this.$=$$[$0-1]; this.$.push($$[$0]);
@@ -116,7 +160,11 @@ case 11:
 this.$=[]; this.$.push($$[$0]);
 break;
 case 12:
-this.$= new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
+
+        if($$[$0] == null){var error = new Error('Sintáctico', 'Se esperaba un StringLiteral y se obtuvo vacío.'); insertarErrorXML(error);}
+        if($$[$0-1] == null){var error = new Error('Sintáctico', 'se esperaba signo = y se obtuvo vacío.'); insertarErrorXML(error);}
+        this.$= new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
+        
 break;
 }
 },
@@ -638,6 +686,9 @@ case 19:return 'CharLiteral'
 break;
 case 20:
                                         console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+                                        var error1 = new Error('Léxico', 'Este es un error léxico: ' + yy_.yytext, yy_.yylloc.first_line,yy_.yylloc.first_column);
+                                        insertarErrorXML(error1);
+                                        return 2;
                                     
 break;
 case 21:return 12
@@ -659,9 +710,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramaticaXML;
-exports.Parser = gramaticaXML.Parser;
-exports.parse = function () { return gramaticaXML.parse.apply(gramaticaXML, arguments); };
+exports.parser = erroresXML;
+exports.Parser = erroresXML.Parser;
+exports.parse = function () { return erroresXML.parse.apply(erroresXML, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
