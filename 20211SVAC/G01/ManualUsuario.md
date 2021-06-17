@@ -1,5 +1,13 @@
 # Manual de usuario
 
+## Funcionalidades de la aplicación 
+* Nos permite realizar busqueda por Id y busquedas por nombre de etiqueta.
+* Tiene la funcionalidad nativa text para visualizar el texto de la etiqueta.
+* Tiene la funcionalidad nativa node para realizar una busqueda de los nodos internos de una de las clases.
+* Consultas básicas de busqueda de informacion en archivos con formato XML.
+* Tiene la funcionalidad nativa position para realizar una comparación de la posicion actual un nodo.
+* Tiene la funcionalidad nativa last para obtener el ultimo nodo de una busqueda.
+
 ## Descripción de las opciones con imagenes
 
 **Interfaz grafica:** En esta pantalla se podra ver lo siguiente:
