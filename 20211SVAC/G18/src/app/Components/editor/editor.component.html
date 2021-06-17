@@ -1,0 +1,234 @@
+<!-- Body -->
+<div class="content" role="main">
+  <div class="container-fluid">
+    <!-- Botones de Accion -->
+    <div class="row">
+      <div class="col-md-12">
+        <div ngbDropdown class="d-inline-block">
+          <button
+            class="btn btn-dark"
+            style="background-color: rgb(8, 101, 104)"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            <fa-icon [icon]="faList"></fa-icon>
+            XML
+          </button>
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownBasic1"
+            style="background-color: rgb(8, 101, 104)"
+            class="btn btn-info dropdown-toggle"
+          >
+            <button
+              (click)="ejecutarXmlAsc()"
+              type="button"
+              class="dropdown-item"
+            >
+              <fa-icon [icon]="faPlay"></fa-icon>
+              Ejecutar Ascendente
+            </button>
+            <button
+              (click)="ejecutarXmlDesc()"
+              type="button"
+              class="dropdown-item"
+            >
+              <fa-icon [icon]="faPlay"></fa-icon>
+              Ejecutar Descendente
+            </button>
+            <button (click)="newXML()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faFile"></fa-icon>
+              Nuevo
+            </button>
+            <button (click)="openXML()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+              Abrir
+            </button>
+            <button (click)="saveXML()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faFileDownload"></fa-icon>
+              Guardar
+            </button>
+          </div>
+        </div>
+        &nbsp;
+        <div ngbDropdown class="d-inline-block">
+          <button
+            class="btn btn-dark"
+            style="background-color: rgb(8, 101, 104)"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            <fa-icon [icon]="faList"></fa-icon>
+            XPath
+          </button>
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownBasic1"
+            style="background-color: rgb(8, 101, 104)"
+            class="btn btn-info dropdown-toggle"
+          >
+            <button
+              (click)="ejecutarXPathAsc()"
+              type="button"
+              class="dropdown-item"
+            >
+              <fa-icon [icon]="faPlay"></fa-icon>
+              Ejecutar Ascendente
+            </button>
+            <button
+              (click)="ejecutarXPathDesc()"
+              type="button"
+              class="dropdown-item"
+            >
+              <fa-icon [icon]="faPlay"></fa-icon>
+              Ejecutar Descendente
+            </button>
+            <button (click)="newXPath()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faFile"></fa-icon>
+              Nuevo
+            </button>
+            <button (click)="openXPath()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+              Abrir
+            </button>
+            <button (click)="saveXPath()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faFileDownload"></fa-icon>
+              Guardar
+            </button>
+          </div>
+        </div>
+        &nbsp;
+        <button
+          (click)="translate()"
+          type="button"
+          class="btn btn-dark"
+          style="background-color: rgb(8, 101, 104)"
+        >
+          <fa-icon [icon]="faGlobe"></fa-icon>
+          XQuery
+        </button>
+        &nbsp;
+        <button
+          (click)="optimizar()"
+          type="button"
+          class="btn btn-dark"
+          style="background-color: rgb(8, 101, 104)"
+        >
+          <fa-icon [icon]="faSpinner"></fa-icon>
+          Optimizar
+        </button>
+        &nbsp;
+        <div ngbDropdown class="d-inline-block">
+          <button
+            class="btn btn-dark"
+            style="background-color: rgb(8, 101, 104)"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            <fa-icon [icon]="faFileAlt"></fa-icon>
+            Reportes
+          </button>
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownBasic1"
+            style="background-color: rgb(8, 101, 104)"
+            class="btn btn-info dropdown-toggle"
+          >
+            <button (click)="printAst()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faPencilRuler"></fa-icon>
+              AST
+            </button>
+            <button (click)="printAst()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faPencilRuler"></fa-icon>
+              CST
+            </button>
+            <button (click)="printAst()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faPencilRuler"></fa-icon>
+              DAG
+            </button>
+            <button (click)="tokenTable()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faLanguage"></fa-icon>
+              Tabla de Simbolos
+            </button>
+            <button
+              (click)="xmlTokenTable()"
+              type="button"
+              class="dropdown-item"
+            >
+              <fa-icon [icon]="faLanguage"></fa-icon>
+              Tabla de SimbolosXML
+            </button>
+            <button (click)="errorTable()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faEraser"></fa-icon>
+              Tabla de Errores
+            </button>
+            <button (click)="optTable()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faSpinner"></fa-icon>
+              Tabla de Optimizacion
+            </button>
+          </div>
+        </div>
+        &nbsp;
+        <button
+          (click)="clearConsole()"
+          type="button"
+          class="btn btn-dark"
+          style="background-color: rgb(8, 101, 104)"
+        >
+          <fa-icon [icon]="faEraser"></fa-icon>
+          Limpiar Consola
+        </button>
+        &nbsp;
+      </div>
+    </div>
+    <!-- Editores -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="terminal">
+          <h2 class="term-title">XML</h2>
+          <ngx-codemirror
+            [(ngModel)]="entradaXml"
+            [options]="{
+              lineNumbers: true,
+              theme: 'material-ocean',
+              mode: 'xml'
+            }"
+          ></ngx-codemirror>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="terminal" id="output">
+          <h2 class="term-title">XPath</h2>
+          <ngx-codemirror
+            [(ngModel)]="entradaXpath"
+            [options]="{
+              lineNumbers: true,
+              theme: 'material-ocean'
+            }"
+          ></ngx-codemirror>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="terminal">
+          <h2 class="term-title">Result</h2>
+          <ngx-codemirror
+            disabled
+            [(ngModel)]="salida"
+            [options]="{
+              lineNumbers: false,
+              theme: 'blackboard'
+            }"
+          ></ngx-codemirror>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center" id="graph"></div>
+    </div>
+  </div>
+</div>
+
+<div id="temporal" style="display: none"></div>
+<div id="reportes" class="container overflow-auto"></div>

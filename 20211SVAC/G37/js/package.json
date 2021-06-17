@@ -1,0 +1,13 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "funciones.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/xml/index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Estrada",
+  "license": "ISC"
+}

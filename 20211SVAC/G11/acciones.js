@@ -3,12 +3,18 @@ var errores_xml =[];
 var objetc_tree_xml={};
 var table_global={};
 
+var arbol_xpath_ast_d={};
+var arbol_xpath_cst_a={};
+var arbol_xpath_ast_a={};
+var arbol_xpath_cst_d={};
+
+
 function analisis_asc(){
     analisis_xml_asc();
     fill_gramar_asc();
     fill_error();
     grafica_xml_asc();
-    analisis_ascXpath();
+    //nalisis_ascXpath();
     alert('succes','Analisis completado');
 }
 
@@ -17,7 +23,17 @@ function analisis_desc(){
     fill_gramar_desc();
     fill_error();
     grafica_xml_desc();
-    analisis_descXpath();
+    //analisis_descXpath();
+    alert('succes','Analisis completado');
+}
+
+function analisis_asc_xpath(){
+    analisis_ascXpath();
+    alert('succes','Analisis completado');
+}
+
+function analisis_desc_xpath(){
+    analisis_descXpath()
     alert('succes','Analisis completado');
 }
 
@@ -37,6 +53,7 @@ function analisis_xml_desc(){
     objetc_tree_xml = gramar_des_cy.parse(context);
     errores_xml = getError();
     table_global = setTable(objets_xml.objast);
+    
 }
 
 function getError() {
@@ -51,10 +68,14 @@ function getError() {
 function analisis_ascXpath() {
     let text = document.getElementById('txtxpath').value
     var objetos = Gramatica1.parse(text);
+    arbol_xpath_ast_a = Gramatica1A.parse(text);
+    arbol_xpath_cst_a = Gramatica1C.parse(text);
     var entornoGlobal = new Entorno(null);
     var ast = new AST(objetos);
     // console.log(objetos);
     // console.log('');
+    graficando_ast_a();
+    graficando_cst_a();
     GenerarTablaGA();
     GenerarError();
     objetos.forEach(function (element) {
@@ -70,10 +91,14 @@ function analisis_ascXpath() {
   function analisis_descXpath() {
     let text = document.getElementById('txtxpath').value
     var objetos = Gramatica2.parse(text);
+    arbol_xpath_ast_d = Gramatica2A.parse(text);
+    arbol_xpath_cst_d = Gramatica2C.parse(text);
     var entornoGlobal = new Entorno(null);
     var ast = new AST(objetos);
     // console.log(objetos);
     // console.log('');
+    graficando_ast_d();
+    graficando_cst_d();
     GenerarTablaGD();
     GenerarError();
     objetos.forEach(function (element) {
@@ -142,6 +167,7 @@ function pilitatablaSimbolos(element, padreEntorno) {
       return ;
     }
 }
+
 function setTable(objetos) {
     var entornoGlobal = new Entorno(null);
     objetos.forEach(function (element) {
@@ -152,8 +178,6 @@ function setTable(objetos) {
     });
     return entornoGlobal;
 }
-
-
 
 function fill_gramar_asc(){
     var tabla = document.getElementById('gram_asc'); 
@@ -271,3 +295,158 @@ function grafica_xml_desc(){
 
      var network = new vis.Network(container, dataDOT, options);
 }
+
+function obtener_arbol_ast_a(){
+    var rast = new Tree_tour();
+    var contenido = rast.tour(arbol_xpath_ast_a);
+    var grafo = `digraph {
+        node [shape=circle fontsize=15]
+        edge [length=150, color=#ad85e4, fontcolor=black]
+        `+contenido+`}`;
+    return grafo;
+}
+
+function obtener_arbol_ast_d(){
+    var rast = new Tree_tour();
+    var contenido = rast.tour(arbol_xpath_ast_d);
+    var grafo = `digraph {
+        node [shape=circle fontsize=15]
+        edge [length=150, color=#ad85e4, fontcolor=black]
+        `+contenido+`}`;
+    return grafo;
+}
+
+function obtener_arbol_cst_a(){
+    var rast = new Tree_tour();
+    var contenido = rast.tour(arbol_xpath_cst_a);
+    var grafo = `digraph {
+        node [shape=circle fontsize=15]
+        edge [length=150, color=#ad85e4, fontcolor=black]
+        `+contenido+`}`;
+    return grafo;
+}
+
+function obtener_arbol_cst_d(){
+    var rast = new Tree_tour();
+    var contenido = rast.tour(arbol_xpath_cst_d);
+    var grafo = `digraph {
+        node [shape=circle fontsize=15]
+        edge [length=150, color=#ad85e4, fontcolor=black]
+        `+contenido+`}`;
+    return grafo;
+}
+
+
+function graficando_ast_a(){
+    var DOTstring = obtener_arbol_ast_a();
+    var container = document.getElementById('xpath_asc_ast');
+    var parsedData = vis.network.convertDot(DOTstring);
+    var dataDOT = {
+         nodes: parsedData.nodes,
+         edges: parsedData.edges
+         }
+
+     var options = {
+     autoResize: true,
+     physics:{
+     stabilization:false
+     },
+     layout: {
+             hierarchical:{
+                 levelSeparation: 150,
+                 nodeSpacing: 150,
+                 parentCentralization: true,
+                 direction: 'UD',
+                 sortMethod: 'directed' 
+             },
+         }
+     };
+
+     var network = new vis.Network(container, dataDOT, options);
+}
+
+function graficando_ast_d(){
+    var DOTstring = obtener_arbol_ast_d();
+    var container = document.getElementById('xpath_desc_ast');
+    var parsedData = vis.network.convertDot(DOTstring);
+    var dataDOT = {
+         nodes: parsedData.nodes,
+         edges: parsedData.edges
+         }
+
+     var options = {
+     autoResize: true,
+     physics:{
+     stabilization:false
+     },
+     layout: {
+             hierarchical:{
+                 levelSeparation: 150,
+                 nodeSpacing: 150,
+                 parentCentralization: true,
+                 direction: 'UD',
+                 sortMethod: 'directed' 
+             },
+         }
+     };
+
+     var network = new vis.Network(container, dataDOT, options);
+}
+
+function graficando_cst_a(){
+    var DOTstring = obtener_arbol_cst_a();
+    var container = document.getElementById('xpath_asc_cst');
+    var parsedData = vis.network.convertDot(DOTstring);
+    var dataDOT = {
+         nodes: parsedData.nodes,
+         edges: parsedData.edges
+         }
+
+     var options = {
+     autoResize: true,
+     physics:{
+     stabilization:false
+     },
+     layout: {
+             hierarchical:{
+                 levelSeparation: 150,
+                 nodeSpacing: 150,
+                 parentCentralization: true,
+                 direction: 'UD',
+                 sortMethod: 'directed' 
+             },
+         }
+     };
+
+     var network = new vis.Network(container, dataDOT, options);
+}
+
+function graficando_cst_d(){
+    var DOTstring = obtener_arbol_cst_d();
+    var container = document.getElementById('xpath_desc_cst');
+    var parsedData = vis.network.convertDot(DOTstring);
+    var dataDOT = {
+         nodes: parsedData.nodes,
+         edges: parsedData.edges
+         }
+
+     var options = {
+     autoResize: true,
+     physics:{
+     stabilization:false
+     },
+     layout: {
+             hierarchical:{
+                 levelSeparation: 150,
+                 nodeSpacing: 150,
+                 parentCentralization: true,
+                 direction: 'UD',
+                 sortMethod: 'directed' 
+             },
+         }
+     };
+
+     var network = new vis.Network(container, dataDOT, options);
+}
+
+
