@@ -1,4 +1,10 @@
-class ConsultaDescendente2 extends ConsultaSimple {
+class ConsultaDescOrSelf implements Consulta {
+
+    private id: string;
+
+    constructor(id: string) {
+        this.id = id;
+    }
 
     run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
@@ -10,11 +16,11 @@ class ConsultaDescendente2 extends ConsultaSimple {
         return newEntornos;
     }
 
-    private busquedaDescendente(entorno: Entorno, newEntornos: Array<Entorno>) {
+    public busquedaDescendente(entorno: Entorno, newEntornos: Array<Entorno>): void {
         let flag: boolean = false;
         let nuevoEntorno: Entorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
-            if (s instanceof Nodo && s.getNombre() === super.getIdentificador()) {
+            if (s instanceof Nodo && s.getNombre() === this.id) {
                 flag = true;
                 nuevoEntorno.add(s);
             }

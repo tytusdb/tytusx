@@ -1,4 +1,4 @@
-class ConsultaDescAllAttr extends ConsultaSimple {
+class ConsultaDescAttribute extends ConsultaSimple {
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
@@ -16,16 +16,12 @@ class ConsultaDescAllAttr extends ConsultaSimple {
         entorno.getTable().forEach((s: Simbolo) => {
             //Recorro los simbolos buscando el atributo
             if (s instanceof Atributo) {
-                //recorro los simbolos de el entorno anterior
-                entorno.getAnterior().getTable().forEach((s: Simbolo) => {
-                    if (s instanceof Nodo) {
-                        //Si el el entorno del nodo actual es igual al entorno del atributo lo agergo al nuevo entorno
-                        if (s.getEntorno() == entorno) {
-                            flag = true;
-                            nuevoEntorno.add(s);
-                        }
-                    }
-                });
+
+                if (super.getIdentificador() === "*") {
+                    flag = this.addSimbolo(entorno, nuevoEntorno);
+                } else if (s.getNombre() === super.getIdentificador()) {
+                    flag = this.addSimbolo(entorno, nuevoEntorno);
+                }
             }
         });
         if (flag) {
@@ -37,5 +33,18 @@ class ConsultaDescAllAttr extends ConsultaSimple {
                 this.busquedaDescendente(s.getEntorno(), newEntornos);
             }
         });
+    }
+
+    private addSimbolo(entorno: Entorno, nuevoEntorno: Entorno): boolean {
+        let flag: boolean = false;
+        entorno.getAnterior().getTable().forEach((s: Simbolo) => {
+            if (s instanceof Nodo) {
+                if (s.getEntorno() == entorno) {
+                    flag = true;
+                    nuevoEntorno.add(s);
+                }
+            }
+        });
+        return flag;
     }
 }

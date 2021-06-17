@@ -54,11 +54,6 @@
      return 'ancestor';
 }
 
-"ancestor-or-self" {
-    //console.log('Detecto ancestor-or-self');
-     return 'ancestor-or-self';
-}
-
 "attribute" {
     //console.log('Detecto attribute');
      return 'attribute';
@@ -74,9 +69,9 @@
      return 'descendant';
 }
 
-"descendant-or-self" {
+"-or-self" {
     //console.log('Detecto descendant-or-self');
-     return 'descendant-or-self';
+     return 'or-self';
 }
 
 "following" {
@@ -84,9 +79,9 @@
      return 'following';
 }
 
-"following-sibling" {
+"-sibling" {
     //console.log('Detecto following-sibling');
-     return 'following-sibling';
+     return 'sibling';
 }
 
 "parent" {
@@ -97,11 +92,6 @@
 "preceding" {
     //console.log('Detecto preceding');
      return 'preceding';
-}
-
-"preceding-sibling" {
-    //console.log('Detecto preceding-sibling');
-     return 'preceding-sibling';
 }
 
 "self" {
@@ -240,9 +230,7 @@
 <<EOF>>   return 'eof';
 
 .					{
-    //errores.push(['Lexico','dato: '+yytext,'Linea '+yylloc.first_line,'columna '+yylloc.first_column+1]);
     agregarErrorLexico("Lexico",yytext,yylloc.first_line,yylloc.first_column+1);
-    //console.log('     error lexico '+yytext);
     }
 /lex
 %{
@@ -307,55 +295,7 @@ EXPRESION_RUTA
             if (!($1 === "")) {
                 $$.push(new ConsultaSimple($1));
             }
-            if ($2 === "doble"){
-                if ($3 === "punto") {
-                    $$.push(new ConsultaPunto());
-                }else if ($3 === "puntos") {
-                    $$.push(new ConsultaPuntos());
-                } else {
-                    if ($3.startsWith('@')) {
-                        if ($3 === "@all") {
-                            $$.push(new ConsultaDescAllAttr($3.replace('@', '')));
-                        } else {
-                            $$.push(new ConsultaDescAttr($3.replace('@', '')));
-                        }
-                    } else {
-                        if ($3 === "all") {
-                            $$.push(new ConsultaDescAllNodes($3));
-                        } else if ($3 === "text()") {
-                            $$.push(new ConsultaDescText($3));
-                        } else if ($3 === "node()") {
-                            $$.push(new ConsultaDescNode($3));
-                        } else {
-                            $$.push(new ConsultaDescendente2($3));
-                        }
-                    }
-                }
-            } else {
-                if ($3 === "punto") {
-                    $$.push(new ConsultaPunto());
-                }else if ($3 === "puntos") {
-                    $$.push(new ConsultaPuntos());
-                } else {
-                    if ($3.startsWith('@')) {
-                        if ($3 === "@all") {
-                            $$.push(new ConsultaAllAttribs($3.replace('@', '')));
-                        } else {
-                            $$.push(new ConsultaAtributo($3.replace('@', '')));
-                        }
-                    } else {
-                        if ($3 === "all") {
-                            $$.push(new ConsultaAllNodes($3));
-                        } else if ($3 === "text()") {
-                            $$.push(new ConsultaText($3));
-                        } else if ($3 === "node()") {
-                            $$.push(new ConsultaNode($3));
-                        } else {
-                            $$.push(new ConsultaSimple($3));
-                        }
-                    }
-                }
-            }
+            $$.push(FabricaConsulta.fabricar($2, $3.id, $3.eje));
     }
     | error identificador {
         errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
@@ -377,11 +317,11 @@ PUNTOS : punto              {$$ = "punto";}
 
 ACCESORES
     : ID OPCIONAL_PREDICADO             {$$ = $1;}
-    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = $1;}
-    | PUNTOS OPCIONAL_PREDICADO         {$$ = $1;}
-    | multiplicacion                    {$$ = "all";}
-    | NODE                              {$$ = $1;}
-    | TEXT                              {$$ = $1;}
+    | ATRIBUTO OPCIONAL_PREDICADO       {$$ = {id: $1, eje: ""};}
+    | PUNTOS OPCIONAL_PREDICADO         {$$ = {id: $1, eje: ""};}
+    | multiplicacion                    {$$ = {id: $1, eje: ""};}
+    | NODE                              {$$ = {id: $1, eje: ""};}
+    | TEXT                              {$$ = {id: $1, eje: ""};}
 ;
 
 TEXT
@@ -393,34 +333,36 @@ NODE : node parentesis_abierto parentesis_cerrado {$$ = $1 + "()";}
 
 ATRIBUTO
     : arroba identificador          {$$ = $1 + $2;}
-    | arroba multiplicacion         {$$ = $1 + "all";}
+    | arroba multiplicacion         {$$ = $1 + $2;}
 ;
 
-ID : identificador      {$$ = $1;}
-    | EJE
+ID : identificador      {$$ = {id: $1, eje: ""};}
+    | EJE               {$$ = $1;}
 ;
 
-EJE : EJES dos_puntos dos_puntos ACCESORES_EJE
+EJE : EJES dos_puntos dos_puntos ACCESORES_EJE  {$$ = {id: $4, eje: $1}}
 ;
 
-ACCESORES_EJE : identificador
-    | NODE
-    | TEXT
-    | multiplicacion
+ACCESORES_EJE
+    : identificador               {$$ = $1;}
+    | NODE                        {$$ = $1;}
+    | TEXT                        {$$ = $1;}
+    | multiplicacion              {$$ = $1;}
 ;
 
-EJES : ancestor
-    | ancestor-or-self
-    | attribute
-    | child
-    | descendant
-    | descendant-or-self
-    | following
-    | following-sibling
-    | parent
-    | preceding
-    | preceding-sibling
-    | self
+EJES
+    : ancestor                  {$$ = $1;}
+    | ancestor or-self          {$$ = $1+$2;}
+    | attribute                 {$$ = $1;}
+    | child                     {$$ = $1;}
+    | descendant or-self        {$$ = $1+$2;}
+    | descendant                {$$ = $1;}
+    | following                 {$$ = $1;}
+    | following sibling         {$$ = $1+$2;}
+    | parent                    {$$ = $1;}
+    | preceding                 {$$ = $1;}
+    | preceding sibling         {$$ = $1+$2;}
+    | self                      {$$ = $1;}
 ;
 
 OPCIONAL_PREDICADO : | PREDICADOS
