@@ -27,14 +27,14 @@ function ejecutarXML(instrucciones:any){
     
     agregarLinea("Finaliza analisis XML");
 
-    var simbolo:Simbolo = entornoGlobal.getSimbolo('xmlEncoding');    
+   /* var simbolo:Simbolo = entornoGlobal.getSimbolo('xmlEncoding');    
     var entornoEncoding: Entorno = simbolo.valor == null ? null : simbolo.valor.entorno
     var version:Atributo = entornoEncoding.getSimbolo("version") == null ? null : entornoEncoding.getSimbolo("version");
     var encoding:Atributo = entornoEncoding.getSimbolo("encoding") == null ? null : entornoEncoding.getSimbolo("encoding");
     agregarLinea("\n=====Informacion de XML=====");
     agregarLinea("Version " + (version == null ? "No se encontro version" : version.valor))
     agregarLinea("Encoding " + (encoding == null ? "No se encontro encoding" : encoding.valor));
-    agregarLinea("============================");
+    agregarLinea("============================");*/
 }
 
 function ejecutarXPath(instrucciones:any){

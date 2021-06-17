@@ -9,7 +9,7 @@ class Entorno{
 
     agregar(id:string, simbolo:Simbolo){
         simbolo.identificador = simbolo.identificador;
-        this.tabla[id] = simbolo;
+        this.tabla[id+simbolo.linea+simbolo.columna] = simbolo;
     }
 
     eliminar(id:string):boolean{
