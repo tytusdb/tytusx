@@ -60,7 +60,7 @@ function recorrerHijos(Nodo){
 
 /*********************GRAFICA ARBOL **********************************************/
 function probandoArbol(){
-    alert('Aquí se graficará el CST');
+    //alert('Aquí se graficará el CST');
     /*
     var Raiz = new Nodo('Raiz','Raiz'); //Se crea un primer nodo para la raíz del Arbol
     var Tree = new Arbol('CST',Raiz); //Se crea el arbol indicando ID y Raiz
@@ -116,7 +116,7 @@ function pruebaGraficarViz(grafica){
     viz.renderSVGElement(grafica)
     .then(function(element) {
         //document.body.appendChild(element);
-        alert('entro a la funcion elemento');
+        //alert('entro a la funcion elemento');
         let elemento = document.getElementById('grafica');
         elemento.appendChild(element);
     })
