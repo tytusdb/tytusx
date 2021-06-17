@@ -72,12 +72,12 @@
   }
 */
 var XML = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,13],$V1=[1,9],$V2=[1,8],$V3=[15,16],$V4=[1,15],$V5=[1,14],$V6=[1,17],$V7=[1,16],$V8=[2,9,15,16],$V9=[2,5,13,18],$Va=[1,33],$Vb=[1,32],$Vc=[2,13,18],$Vd=[2,9,18,24],$Ve=[1,41];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,13],$V1=[1,9],$V2=[1,8],$V3=[15,16],$V4=[1,15],$V5=[1,14],$V6=[2,9,15,16],$V7=[2,5,13,18],$V8=[1,33],$V9=[1,32],$Va=[2,13,18],$Vb=[9,18,24];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"S":3,"ROOT":4,"EOF":5,"ENCODING":6,"ELEMENTO":7,"StartP":8,"Name":9,"Igual":10,"Value":11,"ENDDEF":12,"Start":13,"ATRIBUTOS":14,"Slash":15,"Close":16,"CONTENIDO":17,"End":18,"ELEMENTOS":19,"LISTA_ATRIBUTOS":20,"ATRIBUTO":21,"LISTA_DATOS":22,"DATOS":23,"Data":24,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",8:"StartP",9:"Name",10:"Igual",11:"Value",12:"ENDDEF",13:"Start",15:"Slash",16:"Close",18:"End",24:"Data"},
-productions_: [0,[3,2],[3,1],[4,2],[6,6],[6,0],[7,4],[7,7],[7,7],[7,2],[7,2],[14,1],[14,0],[20,2],[20,1],[21,3],[21,2],[19,2],[19,1],[17,1],[17,0],[22,2],[22,1],[23,1],[23,1],[23,2]],
+productions_: [0,[3,2],[3,1],[4,2],[6,6],[6,0],[7,4],[7,7],[7,7],[7,2],[7,2],[7,2],[14,1],[14,0],[20,2],[20,1],[21,3],[21,2],[19,2],[19,1],[17,1],[17,0],[22,2],[22,1],[23,1],[23,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -85,7 +85,7 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-        //console.log("Se inicia el analisis Lexico/Sintactico 'Ascendente'");        
+        console.log("Se inicia el analisis Lexico/Sintactico 'Ascendente'");        
         let cst = new Nodo(0,'S',[$$[$0-1].nodo]);
         cst.setProdu(new FilaGrammar(getGrammar('S')));
         let gramaticaRep = cst.getGrammar();
@@ -121,16 +121,16 @@ case 4:
         this.$.nodo = new Nodo(setid(),"ENCODING");
         this.$.nodo.setProdu(new FilaGrammar(getGrammar('ENCODING1')));
 
-        if((codificacion==='utf-8') 
-        | (codificacion==='iso 88591') 
-        | (codificacion==='hex')
-        | (codificacion==='ascii')){
+        if((codificacion ==='utf-8')
+        | (codificacion ==='iso 88591' | codificacion ==='iso 88591-1')
+        | (codificacion ==='ascii')){
             this.$.nodo.addNodo(new Nodo(setid(),'<?'));
             this.$.nodo.addNodo(new Nodo(setid(),'xml'));
             this.$.nodo.addNodo(new Nodo(setid(),'encoding'));
             this.$.nodo.addNodo(new Nodo(setid(),'='));
             this.$.nodo.addNodo(new Nodo(setid(),'Value',[],codificacion));
             this.$.nodo.addNodo(new Nodo(setid(),'?>'));
+            setCoding();
         }else{
             errores.push(new Error('semantico',codificacion,_$[$0-1].first_line,_$[$0-1].first_column,'codificacion invalida'));
         }        
@@ -149,7 +149,9 @@ case 6:
         tgs = setTag($$[$0-3]);
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-2].nodo);
         aux.addNodo(new Nodo(setid(),'Slash'));
         aux.addNodo(new Nodo(setid(),'>'));
@@ -168,13 +170,17 @@ case 7:
         
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-5].nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.addNodo($$[$0-3].nodo);
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO2')));
 
@@ -185,7 +191,7 @@ case 7:
 
         if(tgs != tgc){
             let mensaje = ('las etiquetas de inicio y fin no coindicen!');            
-            errores.push(new Error('semantico',tgc,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
+            errores.push(new Error('Semantico',tgc,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
         }
     
 break;
@@ -196,7 +202,9 @@ case 8:
 
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($$[$0-5].nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         if($$[$0-3]!=undefined){
@@ -204,7 +212,9 @@ case 8:
         }
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO3')));
 
@@ -219,14 +229,14 @@ case 8:
 
         if(tgs != tgc){
             let mensaje = ('las etiquetas de inicio y fin no coindicen!');            
-            errores.push(new Error('semantico',tgs,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
+            errores.push(new Error('Semantico',tgs,_$[$0-1].first_line,_$[$0-1].first_column,mensaje));
         } 
     
 break;
-case 9: case 10:
-  addErr($$[$0-1],_$[$0-1],'Se esperaba '); this.$ = undefined; 
+case 9: case 10: case 11:
+  addErr($$[$0-1],_$[$0-1],'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,">","<",contenido]'); this.$ = undefined; 
 break;
-case 11:
+case 12:
 
         aux = new Nodo(setid(),'ATRIBUTOS');
         aux.addNodo($$[$0].nodo);
@@ -236,7 +246,7 @@ case 11:
         this.$.nodo = aux;
     
 break;
-case 12:
+case 13:
 
         this.$ = [];
         this.$.nodo = new Nodo(setid(),"ATRIBUTOS");
@@ -244,7 +254,7 @@ case 12:
         this.$.nodo.setProdu(new FilaGrammar(getGrammar('ATRIBUTOS2')));
     
 break;
-case 13:
+case 14:
 
         aux = new Nodo(setid(),'LISTA_ATRIBUTOS');
         aux.setProdu(new FilaGrammar(getGrammar('LISTA_ATRIBUTOS1')));
@@ -259,7 +269,7 @@ case 13:
         this.$.nodo = aux;
     
 break;
-case 14:
+case 15:
 
         if($$[$0]!=undefined){
             aux = new Nodo(setid(),'LISTA_ATRIBUTOS');
@@ -273,23 +283,27 @@ case 14:
         }
     
 break;
-case 15:
+case 16:
 
         this.$ = new AtributoXML($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);
         this.$.nodo = new Nodo(setid(),'ATRIBUTO');
-        this.$.nodo.addNodo(new Nodo(setid(),'Name',[],$$[$0-2]));
+        aux = new Nodo(setid(),'Name');
+        aux.addNodo(new Nodo(setid(),$$[$0-2]));
+        this.$.nodo.addNodo(aux);
         this.$.nodo.addNodo(new Nodo(setid(),'='));
-        this.$.nodo.addNodo(new Nodo(setid(),'Value',[],$$[$0]));
+        aux = new Nodo(setid(),'Value');
+        aux.addNodo(new Nodo(setid(),$$[$0].replace(/"/g,'')));
+        this.$.nodo.addNodo(aux);
         this.$.nodo.setProdu(new FilaGrammar(getGrammar('ATRIBUTO')));
     
 break;
-case 16:
+case 17:
 
-        addErr($$[$0-1],_$[$0-1],'Se esperaba "="');
+        addErr($$[$0-1],_$[$0-1],'Caracteres inseperados se han encontrado, se esperaba ["=",atributo,id]');
         this.$ = undefined;
     
 break;
-case 17:
+case 18:
 
         aux = new Nodo(setid(),'ELEMENTOS');
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTOS1')));
@@ -304,7 +318,7 @@ case 17:
         this.$.nodo = aux;
     
 break;
-case 18:
+case 19:
 
         if($$[$0]!=undefined){
             
@@ -319,7 +333,7 @@ case 18:
         }
     
 break;
-case 19:
+case 20:
 
         aux = new Nodo(setid(),'CONTENIDO');
         aux.addNodo($$[$0].nodo);
@@ -329,7 +343,7 @@ case 19:
         this.$.nodo = aux;
     
 break;
-case 20:
+case 21:
 
         aux = new Nodo(setid(),'CONTENIDO');
         aux.addNodo(new Nodo(setid(),'Epsilon'))
@@ -339,7 +353,7 @@ case 20:
         this.$.nodo = aux;
     
 break;
-case 21:
+case 22:
 
         aux = new Nodo(setid(),'LISTA_DATOS');
         aux.addNodo($$[$0-1].nodo);
@@ -350,7 +364,7 @@ case 21:
         this.$.nodo = aux;
     
 break;
-case 22:
+case 23:
 
         aux = new Nodo(setid(),'LISTA_DATOS');
         aux.addNodo($$[$0].nodo);
@@ -360,32 +374,33 @@ case 22:
         this.$.nodo = aux;
     
 break;
-case 23:
+case 24:
 
-        aux = new Nodo(setid(),'DATOS');
-        aux.addNodo(new Nodo(setid(),'Data',[],$$[$0]));
+        aux = new Nodo(setid(),'DATOS');        
         aux.setProdu(new FilaGrammar(getGrammar('DATOS1')));
+        aux1 = new Nodo(setid(),'Data');
+        aux1.addNodo(new Nodo(setid(),$$[$0]));
+        aux.addNodo(aux1);
 
         this.$ = new String($$[$0]);
         this.$.nodo = aux;
     
 break;
-case 24:
+case 25:
 
         aux = new Nodo(setid(),'DATOS');
-        aux.addNodo(new Nodo(setid(),'Name',[],$$[$0]));
         aux.setProdu(new FilaGrammar(getGrammar('DATOS2')));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),$$[$0]));
+        aux.addNodo(aux1);
 
         this.$ = new String(' ' + $$[$0]);
         this.$.nodo = aux;
     
 break;
-case 25:
-  addErr($$[$0-1],_$[$0-1],'Se esperaba '); this.$ = []; 
-break;
 }
 },
-table: [o($V0,[2,5],{3:1,4:2,6:4,5:[1,3],8:[1,5]}),{1:[3]},{5:[1,6]},{1:[2,2]},{2:$V1,7:7,13:$V2},{9:[1,10]},{1:[2,1]},{5:[2,3]},o($V3,[2,12],{14:11,20:12,21:13,2:$V4,9:$V5}),{13:$V6,16:$V7},{9:[1,18]},{15:[1,19],16:[1,20]},o($V3,[2,11],{21:21,2:$V4,9:$V5}),o($V8,[2,14]),{10:[1,22]},{11:[1,23]},o($V9,[2,9]),o($V9,[2,10]),{10:[1,24]},{16:[1,25]},{2:[1,31],7:29,9:$Va,13:$V2,17:26,18:[2,20],19:27,22:28,23:30,24:$Vb},o($V8,$V0),{11:[1,34]},o($V8,[2,16]),{11:[1,35]},o($V9,[2,6]),{18:[1,36]},{2:$V1,7:38,13:$V2,18:[1,37]},{2:[1,40],9:$Va,18:[2,19],23:39,24:$Vb},o($Vc,[2,18]),o($Vd,[2,22]),{13:$V6,16:$V7,18:$Ve},o($Vd,[2,23]),o($Vd,[2,24]),o($V8,[2,15]),{12:[1,42]},{9:[1,43]},{9:[1,44]},o($Vc,[2,17]),o($Vd,[2,21]),{18:$Ve},o($Vd,[2,25]),o($V0,[2,4]),{16:[1,45]},{16:[1,46]},o($V9,[2,7]),o($V9,[2,8])],
+table: [o($V0,[2,5],{3:1,4:2,6:4,5:[1,3],8:[1,5]}),{1:[3]},{5:[1,6]},{1:[2,2]},{2:$V1,7:7,13:$V2},{9:[1,10]},{1:[2,1]},{5:[2,3]},o($V3,$V0,{14:11,20:12,21:13,2:$V4,9:$V5}),{13:[1,18],16:[1,17],18:[1,16]},{9:[1,19]},{15:[1,20],16:[1,21]},o($V3,[2,12],{21:22,2:$V4,9:$V5}),o($V6,[2,15]),{10:[1,23]},{11:[1,24]},o($V7,[2,9]),o($V7,[2,10]),o($V7,[2,11]),{10:[1,25]},{16:[1,26]},{2:$V1,7:30,9:$V8,13:$V2,17:27,18:[2,21],19:28,22:29,23:31,24:$V9},o($V6,[2,14]),{11:[1,34]},o($V6,[2,17]),{11:[1,35]},o($V7,[2,6]),{18:[1,36]},{2:$V1,7:38,13:$V2,18:[1,37]},{9:$V8,18:[2,20],23:39,24:$V9},o($Va,[2,19]),o($Vb,[2,23]),o($Vb,[2,24]),o($Vb,[2,25]),o($V6,[2,16]),{12:[1,40]},{9:[1,41]},{9:[1,42]},o($Va,[2,18]),o($Vb,[2,22]),o($V0,[2,4]),{16:[1,43]},{16:[1,44]},o($V7,[2,7]),o($V7,[2,8])],
 defaultActions: {3:[2,2],6:[2,1],7:[2,3]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -642,7 +657,7 @@ _handle_error:
     const { Nodo } = require('./Nodo.js');
     const {FilaGrammar} = require('./FilaGrammar.js');
 
-    let codificacion = 'UTF-8'
+    let codificacion = 'utf8';
     let errores = [];
     let gramatica = [];
     
@@ -770,8 +785,20 @@ _handle_error:
 
     const addErr = (err,loc,msj) => {
         //tipo,linea,columna,mensaje
-        errores.push(new Error('semantico',err,loc.first_line,loc.first_column,msj));
-    }    
+        errores.push(new Error('Sintactico',err,loc.first_line,loc.first_column,msj));
+    }
+
+    const setCoding = () => {
+        if(codificacion === 'utf-8'){
+            codificacion = 'utf8';
+        }else if(codificacion === 'iso 88591' | codificacion === 'iso 88591-1'){
+            codificacion = 'iso';
+        }else if(codificacion === 'ascii'){
+            codificacion = 'ascii';
+        }else{
+            codificacion = 'utf8';
+        }
+    }
 
     const fixObject = (xmlobj) =>{
         let nuevo = Object.assign({},xmlobj);
@@ -780,7 +807,7 @@ _handle_error:
     
     let tgs = '';
     let tgc = '';
-    let aux;
+    let aux,axu1;
  
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -1141,7 +1168,7 @@ break;
 case 14:  return 5;   
 break;
 case 15: console.log('Se ha encontrado un error lexico: " ' + yy_.yytext + ' "  [linea: ' + yy_.yylloc.first_line + ', columna: ' + yy_.yylloc.first_column+']'); 
-        errores.push(new Error('semantico',yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column,'Se ha encontrado un error lexico')); 
+        errores.push(new Error('lexico',yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column,'Se ha encontrado un error lexico')); 
     
 break;
 }
