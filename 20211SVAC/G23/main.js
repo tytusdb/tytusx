@@ -13,6 +13,28 @@ module.exports = __webpack_require__(/*! /home/ldecast/JUNIO 2021/Compiladores 2
 /***/ }),
 
 /***/ 1:
+/*!***************************!*\
+  !*** ./streams (ignored) ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 2:
+/*!*******************************!*\
+  !*** ./extend-node (ignored) ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 3:
 /*!********************!*\
   !*** fs (ignored) ***!
   \********************/
@@ -23,7 +45,7 @@ module.exports = __webpack_require__(/*! /home/ldecast/JUNIO 2021/Compiladores 2
 
 /***/ }),
 
-/***/ 2:
+/***/ 4:
 /*!**********************!*\
   !*** path (ignored) ***!
   \**********************/
@@ -49,59 +71,89 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
 var Expresion_1 = __importDefault(__webpack_require__(/*! ../../Expresion/Expresion */ "gajf"));
 var Predicate_1 = __webpack_require__(/*! ./Predicate */ "Iysv");
+var Axis_1 = __importDefault(__webpack_require__(/*! ./Axis/Axis */ "pW4W"));
 function DobleEje(_instruccion, _ambito, _contexto) {
-    var retorno = { cadena: Enum_1.Tipos.NONE, retorno: Array() };
-    var err = { err: "No se encontraron elementos.\n", linea: _instruccion.linea, columna: _instruccion.columna };
-    var contexto = (_contexto.retorno) ? (_contexto.retorno) : null;
-    var expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
-    if (expresion.err)
+    var _404 = { notFound: "No se encontraron elementos." };
+    var contexto = (_contexto.elementos) ? (_contexto) : null;
+    var expresion;
+    if (_instruccion.expresion.expresion)
+        expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
+    else
+        expresion = Expresion_1.default(_instruccion.expresion, _ambito, contexto);
+    if (expresion.error)
         return expresion;
     var predicate = _instruccion.expresion.predicate;
     var root;
     if (expresion.tipo === Enum_1.Tipos.ELEMENTOS) {
         root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
-        root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
+        root = getAllSymbolFromCurrent({ id: expresion.valor, tipo: "@" }, contexto, _ambito, predicate);
+        if (root.atributos.error)
+            return root.atributos;
         if (root.atributos.length === 0)
-            return err;
-        retorno.cadena = Enum_1.Tipos.ATRIBUTOS;
+            return _404;
+        return root;
     }
     else if (expresion.tipo === Enum_1.Tipos.ASTERISCO) {
         root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.FUNCION_NODE) {
         root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
+        if (root.nodos.error)
+            return root.nodos;
         if (root.nodos.length === 0)
-            return err;
-        retorno.cadena = root.tipo;
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+        root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
+        if (root.texto.error)
+            return root.texto;
+        if (root.texto.length === 0)
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.SELECT_AXIS) {
+        root = Axis_1.default.GetAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, true);
+        if (root.error)
+            return root;
+        return root;
     }
     else {
-        return { err: "Expresión no válida.\n", linea: _instruccion.linea, columna: _instruccion.columna };
+        return { error: "Expresión no válida.", tipo: "Semántico", origen: "Query", linea: _instruccion.linea, columna: _instruccion.columna };
     }
-    if (root.err)
-        return root;
-    if (root.length === 0 || root === null)
-        return err;
-    retorno.retorno = root;
-    return retorno;
+    if (root === null || root.error || root.elementos.error || root.elementos.length === 0)
+        return _404;
+    return root;
 }
 function getAllSymbolFromCurrent(_nodename, _contexto, _ambito, _condicion) {
     if (_contexto)
         return getFromCurrent(_nodename, _contexto, _ambito, _condicion);
     else
-        return getFromRoot(_nodename, _ambito, _condicion);
+        return { error: "Indstrucción no procesada.", tipo: "Semántico", origen: "Query", linea: 1, columna: 1 };
 }
 function getFromCurrent(_id, _contexto, _ambito, _condicion) {
     var elements = Array();
     var attributes = Array();
     var nodes = Array();
+    // Selecciona únicamente el texto contenido en el nodo y todos sus descendientes
+    if (_id === "text()") {
+        var text = Array();
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
+            text = _ambito.searchAnyText(element, text);
+            elements.push(element);
+        }
+        if (_condicion) {
+            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+            text = filter.filterElements(text);
+            elements = filter.contexto;
+        }
+        return { texto: text, elementos: elements, cadena: Enum_1.Tipos.TEXTOS };
+    }
     // Selecciona todos los descencientes (elementos y/o texto)
-    if (_id === "node()") {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+    else if (_id === "node()") {
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs) {
                 element.childs.forEach(function (child) {
                     nodes = _ambito.nodesFunction(child, nodes);
@@ -109,35 +161,28 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
             }
             else if (element.value)
                 nodes.push({ textos: element.value });
+            elements.push(element);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes = filter.filterNodes(nodes);
+            nodes = filter.filterElements(nodes);
+            elements = filter.contexto;
         }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes };
+        return { cadena: Enum_1.Tipos.COMBINADO, nodos: nodes, elementos: _contexto.elementos };
     }
     // Selecciona todos los atributos a partir del contexto
     else if (_id.tipo === "@") {
-        var a = { atributos: attributes, elementos: elements };
-        if (_id.id === "*") {
-            for (var i = 0; i < _contexto.length; i++) {
-                var element = _contexto[i];
-                a = _ambito.searchAnyAttributes(element, attributes, elements);
-            }
-        }
-        else {
-            for (var i = 0; i < _contexto.length; i++) {
-                var element = _contexto[i];
-                a = _ambito.searchAttributesFromCurrent(element, _id.id, attributes, elements);
-            }
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
+            attributes = _ambito.searchAnyAttributes(_id.id, element, attributes);
         }
         if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, a.elementos);
-            a.elementos = filter.filterElements();
-            a.atributos = filter.filterAttributes(a.atributos);
+            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+            attributes = filter.filterAttributes(attributes);
         }
-        return a;
+        return { atributos: attributes, elementos: [], cadena: Enum_1.Tipos.ATRIBUTOS };
     }
+    // Selecciona el padre
     else if (_id === "..") {
         if (_contexto.atributos) {
             var _loop_1 = function (i) {
@@ -151,12 +196,12 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
             }
             if (_condicion) {
                 var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-                elements = filter.filterElements();
+                elements = filter.filterElements(elements);
             }
-            return elements;
+            return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
         }
         var _loop_2 = function (i) {
-            var element = _contexto[i];
+            var element = _contexto.elementos[i];
             var dad = element.father;
             if (dad) {
                 _ambito.tablaSimbolos.forEach(function (elm) {
@@ -169,19 +214,19 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
                 });
             }
         };
-        for (var i = 0; i < _contexto.length; i++) {
+        for (var i = 0; i < _contexto.elementos.length; i++) {
             _loop_2(i);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
-    // Selecciona todos los descendientes con el id
+    // Selecciona todos los descendientes con el id o en el caso que sea //*
     else {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs)
                 element.childs.forEach(function (child) {
                     elements = _ambito.searchNodes(_id, child, elements);
@@ -189,57 +234,9 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
-    }
-}
-function getFromRoot(_id, _ambito, _condicion) {
-    var elements = Array();
-    var attributes = Array();
-    // Selecciona todos los descencientes (elementos y/o texto)
-    if (_id === "node()") {
-        var nodes_1 = Array();
-        _ambito.tablaSimbolos.forEach(function (element) {
-            nodes_1 = _ambito.nodesFunction(element, nodes_1);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes_1 = filter.filterNodes(nodes_1);
-        }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes_1 };
-    }
-    // Selecciona todos los atributos a partir de la raíz
-    else if (_id.tipo === "@") {
-        var a_1 = { atributos: attributes, elementos: elements };
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (_id.id === "*")
-                a_1 = _ambito.searchAnyAttributes(element, attributes, elements);
-            else
-                a_1 = _ambito.searchAttributesFromCurrent(element, _id.id, attributes, elements);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, a_1.elementos);
-            a_1.elementos = filter.filterElements();
-            a_1.atributos = filter.filterAttributes(a_1.atributos);
-        }
-        return a_1;
-    }
-    // Selecciona todos los descendientes con el id o si es un *
-    else {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.id_open === _id || _id === "*")
-                elements.push(element);
-            if (element.childs)
-                element.childs.forEach(function (child) {
-                    elements = _ambito.searchNodes(_id, child, elements);
-                });
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
 }
 module.exports = DobleEje;
@@ -262,72 +259,110 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Enum_1 = __webpack_require__(/*! ../../../model/xpath/Enum */ "MEUw");
 var DobleEje_1 = __importDefault(__webpack_require__(/*! ./Selecting/DobleEje */ "67Yu"));
 var Eje_1 = __importDefault(__webpack_require__(/*! ./Selecting/Eje */ "CG7/"));
-function Bloque(_instruccion, _ambito) {
-    var retorno = { cadena: "", retorno: null };
+var Axis_1 = __importDefault(__webpack_require__(/*! ./Selecting/Axis/Axis */ "pW4W"));
+var reset;
+var output = [];
+function Bloque(_instruccion, _ambito, _retorno) {
     var tmp;
-    // console.log(_instruccion, 888888);
+    reset = _retorno;
     for (var i = 0; i < _instruccion.length; i++) {
         var camino = _instruccion[i]; // En caso de tener varios caminos
         for (var j = 0; j < camino.length; j++) {
             var instr = camino[j];
-            console.log(instr, 7777777);
-            switch (instr.tipo) {
-                case Enum_1.Tipos.SELECT_FROM_ROOT:
-                    tmp = Eje_1.default(instr, _ambito, retorno);
-                    if (tmp.err)
-                        return tmp;
-                    retorno = tmp;
+            if (instr.tipo === Enum_1.Tipos.SELECT_FROM_ROOT) {
+                tmp = Eje_1.default(instr, _ambito, _retorno);
+                if (tmp.notFound) {
+                    _retorno = reset;
                     break;
-                case Enum_1.Tipos.SELECT_FROM_CURRENT:
-                    tmp = DobleEje_1.default(instr, _ambito, retorno);
-                    if (tmp.err)
-                        return tmp;
-                    retorno = tmp;
+                }
+                if (tmp.error)
+                    return tmp;
+                _retorno = tmp;
+            }
+            else if (instr.tipo === Enum_1.Tipos.SELECT_FROM_CURRENT) {
+                tmp = DobleEje_1.default(instr, _ambito, _retorno);
+                if (tmp.notFound) {
+                    _retorno = reset;
                     break;
-                default:
-                    return { err: "Instrucción no procesada.\n", linea: instr.linea, columna: instr.columna };
+                }
+                if (tmp.error)
+                    return tmp;
+                _retorno = tmp;
+            }
+            else if (instr.tipo === Enum_1.Tipos.SELECT_AXIS) {
+                tmp = Axis_1.default.SA(instr, _ambito, _retorno);
+                if (tmp.notFound) {
+                    _retorno = reset;
+                    break;
+                }
+                if (tmp.error)
+                    return tmp;
+                _retorno = tmp;
+            }
+            else {
+                return { error: "Error: Instrucción no procesada.", tipo: "Semántico", origen: "Query", linea: instr.linea, columna: instr.columna };
             }
         }
+        output.push(_retorno);
+        _retorno = reset;
     }
-    // console.log(retorno, 888888888)
-    if (retorno.retorno) {
-        var cadena_1 = "";
-        if (retorno.cadena === Enum_1.Tipos.TEXTOS) {
-            var root = retorno.retorno;
+    return writeOutput();
+}
+function writeOutput() {
+    var cadena = "";
+    for (var i = 0; i < output.length; i++) {
+        var path = output[i];
+        if (path.cadena === Enum_1.Tipos.TEXTOS) {
+            var root = (path.texto) ? (path.texto) : (path.elementos);
             root.forEach(function (txt) {
-                cadena_1 += concatText(txt);
+                cadena += concatText(txt);
             });
         }
-        else if (retorno.cadena === Enum_1.Tipos.ELEMENTOS) {
-            var root = retorno.retorno;
+        else if (path.cadena === Enum_1.Tipos.ELEMENTOS) {
+            var root = path.elementos;
             root.forEach(function (element) {
-                cadena_1 += concatChilds(element, "");
+                cadena += concatChilds(element, "");
             });
         }
-        else if (retorno.cadena === Enum_1.Tipos.ATRIBUTOS) {
-            // let root: Array<Atributo> = attr; // <-- muestra sólo el atributo
-            // root.forEach(attribute => {
-            //     cadena += concatAttributes(attribute);
-            // });
-            var root = retorno.retorno.elementos; // <-- muestra toda la etiqueta
-            root.forEach(function (element) {
-                cadena_1 += extractAttributes(element, "");
-            });
+        else if (path.cadena === Enum_1.Tipos.ATRIBUTOS) {
+            if (path.atributos) {
+                var root = path.atributos; // <-- muestra sólo el atributo
+                root.forEach(function (attr) {
+                    cadena += concatAttributes(attr);
+                });
+            }
+            else {
+                var root = path.elementos; // <-- muestra toda la etiqueta
+                root.forEach(function (element) {
+                    cadena += extractAttributes(element, "");
+                });
+            }
         }
-        else if (retorno.cadena === Enum_1.Tipos.COMBINADO) {
-            var root = retorno.retorno.nodos;
+        else if (path.cadena === Enum_1.Tipos.COMBINADO) {
+            var root = path.nodos;
             root.forEach(function (elemento) {
                 if (elemento.elementos) {
-                    cadena_1 += concatChilds(elemento.elementos, "");
+                    cadena += concatChilds(elemento.elementos, "");
                 }
                 else if (elemento.textos) {
-                    cadena_1 += concatText(elemento.textos);
+                    cadena += concatText(elemento.textos);
                 }
             });
         }
-        retorno.cadena = cadena_1.substring(1);
     }
-    return retorno;
+    output = [];
+    if (cadena)
+        return replaceEntity(cadena.substring(1));
+    return "No se encontraron elementos.";
+}
+function replaceEntity(cadena) {
+    var _lessThan = /&lt;/gi;
+    var _greaterThan = /&gt;/gi;
+    var _ampersand = /&amp;/gi;
+    var _apostrophe = /&apos;/gi;
+    var _quotation = /&quot;/gi;
+    var salida = cadena.replace(_lessThan, "<").replace(_greaterThan, ">").replace(_ampersand, "&").replace(_apostrophe, "\'").replace(_quotation, "\"");
+    return salida;
 }
 function concatChilds(_element, cadena) {
     cadena = ("\n<" + _element.id_open);
@@ -465,7 +500,7 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- console.log($$[$0-1],999); ast = { ast: $$[$0-1], errors: errors }; errors = []; return ast; 
+ ast = { ast: $$[$0-1], errors: errors }; errors = []; return ast; 
 break;
 case 2:
  $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
@@ -1271,7 +1306,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -1325,60 +1360,90 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
 var Expresion_1 = __importDefault(__webpack_require__(/*! ../../Expresion/Expresion */ "gajf"));
 var Predicate_1 = __webpack_require__(/*! ./Predicate */ "Iysv");
+var Axis_1 = __importDefault(__webpack_require__(/*! ./Axis/Axis */ "pW4W"));
 function Eje(_instruccion, _ambito, _contexto) {
-    var retorno = { cadena: Enum_1.Tipos.NONE, retorno: null };
-    var err = { err: "No se encontraron elementos.\n", linea: _instruccion.linea, columna: _instruccion.columna };
-    var contexto = (_contexto.retorno) ? (_contexto.retorno) : null;
-    var expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
-    if (expresion.err)
+    var _404 = { notFound: "No se encontraron elementos." };
+    var contexto = (_contexto.elementos) ? (_contexto) : null;
+    var expresion;
+    if (_instruccion.expresion.expresion)
+        expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
+    else
+        expresion = Expresion_1.default(_instruccion.expresion, _ambito, contexto);
+    if (expresion.error)
         return expresion;
     var predicate = _instruccion.expresion.predicate;
     var root;
     if (expresion.tipo === Enum_1.Tipos.ELEMENTOS) {
         root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
-        root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
+        root = getSymbolFromRoot({ id: expresion.valor, tipo: "@" }, contexto, _ambito, predicate);
+        if (root.atributos.error)
+            return root.atributos;
         if (root.atributos.length === 0)
-            return err;
-        retorno.cadena = Enum_1.Tipos.ATRIBUTOS;
+            return _404;
+        return root;
     }
     else if (expresion.tipo === Enum_1.Tipos.ASTERISCO) {
         root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.FUNCION_NODE) {
         root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
+        if (root.nodos.error)
+            return root.nodos;
         if (root.nodos.length === 0)
-            return err;
-        retorno.cadena = root.tipo;
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+        root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
+        if (root.texto.error)
+            return root.texto;
+        if (root.texto.length === 0)
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.SELECT_AXIS) {
+        root = Axis_1.default.GetAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, false);
+        return root;
     }
     else {
-        return { err: "Expresión no válida.\n", linea: _instruccion.linea, columna: _instruccion.columna };
+        return { error: "Expresión no válida.", tipo: "Semántico", origen: "Query", linea: _instruccion.linea, columna: _instruccion.columna };
     }
-    if (root.err)
-        return root;
-    if (root.length === 0 || root === null)
-        return err;
-    retorno.retorno = root;
-    return retorno;
+    if (root === null || root.error || root.elementos.error || root.elementos.length === 0)
+        return _404;
+    return root;
 }
 function getSymbolFromRoot(_nodename, _contexto, _ambito, _condicion) {
     if (_contexto)
         return getFromCurrent(_nodename, _contexto, _ambito, _condicion);
     else
-        return getFromRoot(_nodename, _ambito, _condicion);
+        return { error: "Indstrucción no procesada.", tipo: "Semántico", origen: "Query", linea: 1, columna: 1 };
 }
 // Desde el ámbito actual
 function getFromCurrent(_id, _contexto, _ambito, _condicion) {
     var elements = Array();
     var attributes = Array();
+    // Selecciona el texto contenido únicamente en el nodo
+    if (_id === "text()") {
+        var text = Array();
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
+            if (element.value) {
+                text.push(element.value);
+                elements.push(element);
+            }
+        }
+        if (_condicion) {
+            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+            text = filter.filterElements(text);
+            elements = filter.contexto;
+        }
+        return { texto: text, elementos: elements, cadena: Enum_1.Tipos.TEXTOS };
+    }
     // Selecciona todos los hijos (elementos o texto)
-    if (_id === "node()") {
+    else if (_id === "node()") {
         var nodes_1 = Array();
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs)
                 element.childs.forEach(function (child) {
                     nodes_1.push({ elementos: child });
@@ -1388,14 +1453,15 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes_1 = filter.filterNodes(nodes_1);
+            nodes_1 = filter.filterElements(nodes_1);
+            elements = filter.contexto;
         }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes_1 };
+        return { cadena: Enum_1.Tipos.COMBINADO, nodos: nodes_1, elementos: _contexto.elementos };
     }
     // Selecciona todos los hijos (elementos)
     else if (_id === "*") {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs) {
                 element.childs.forEach(function (child) {
                     elements.push(child);
@@ -1404,36 +1470,29 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
     // Selecciona los atributos
     else if (_id.tipo === "@") {
-        var flag_1 = false;
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.attributes)
                 element.attributes.forEach(function (attribute) {
-                    if ((_id.id === attribute.id) || (_id.id === "*")) { // En caso de que sea un id ó @*
+                    if ((_id.id == attribute.id) || (_id.id === "*")) { // En caso de que sea un id ó @*
                         attributes.push(attribute);
-                        flag_1 = true;
                     }
                 });
-            if (flag_1) {
-                elements.push(element);
-                flag_1 = false;
-            }
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
             attributes = filter.filterAttributes(attributes);
         }
-        return { atributos: attributes, elementos: elements };
+        return { atributos: attributes, elementos: [], cadena: Enum_1.Tipos.ATRIBUTOS };
     }
     // Selecciona el padre
-    else if (_id === "..") {
+    else if (_id === "..") { // Manejar el regreso de atributos a su padre como la etiqueta misma !
         if (_contexto.atributos) {
             var _loop_1 = function (i) {
                 var attribute = _contexto.atributos[i];
@@ -1444,10 +1503,14 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
             for (var i = 0; i < _contexto.atributos.length; i++) {
                 _loop_1(i);
             }
-            return elements;
+            if (_condicion) {
+                var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+                elements = filter.filterElements(elements);
+            }
+            return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
         }
         var _loop_2 = function (i) {
-            var element = _contexto[i];
+            var element = _contexto.elementos[i];
             var dad = element.father;
             if (dad) {
                 _ambito.tablaSimbolos.forEach(function (elm) {
@@ -1460,31 +1523,34 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
                 });
             }
         };
-        for (var i = 0; i < _contexto.length; i++) {
+        for (var i = 0; i < _contexto.elementos.length; i++) {
             _loop_2(i);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
     // Selecciona el nodo actual
     else if (_id === ".") {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        if (_contexto.atributos) {
+            return { elementos: [], atributos: _contexto.atributos, cadena: Enum_1.Tipos.ATRIBUTOS };
+        }
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             elements.push(element);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
     // Búsqueda en los hijos por id
     else {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs) {
                 element.childs.forEach(function (child) {
                     elements = _ambito.searchSingleNode(_id, child, elements);
@@ -1493,92 +1559,87 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
-    }
-}
-// Desde la raíz
-function getFromRoot(_id, _ambito, _condicion) {
-    var elements = Array();
-    var attributes = Array();
-    var text = Array();
-    // Selecciona todos los hijos (elementos o texto)
-    if (_id === "node()") {
-        var nodes_2 = Array();
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.childs)
-                // element.childs.forEach(child => {
-                nodes_2.push({ elementos: element });
-            // });
-            else if (element.value)
-                nodes_2.push({ textos: element.value });
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes_2 = filter.filterNodes(nodes_2);
-        }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes_2 };
-    }
-    // Selecciona todos los hijos (elementos)
-    else if (_id === "*") {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            elements.push(element);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
-    }
-    // Selecciona los atributos
-    else if (_id.tipo === "@") {
-        var flag_2 = false;
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.attributes)
-                element.attributes.forEach(function (attribute) {
-                    if ((_id.id === attribute.id) || (_id.id === "*")) {
-                        flag_2 = true;
-                        attributes.push(attribute);
-                    }
-                });
-            if (flag_2) {
-                elements.push(element);
-                flag_2 = false;
-            }
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-            attributes = filter.filterAttributes(attributes);
-        }
-        return { atributos: attributes, elementos: elements };
-    }
-    // Selecciona el nodo actual
-    else if (_id === ".") {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            elements.push(element);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
-    }
-    // Búsqueda por id
-    else {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.id_open === _id)
-                elements.push(element);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
 }
 module.exports = Eje;
+
+
+/***/ }),
+
+/***/ "Dbnh":
+/*!*************************************************************************!*\
+  !*** ./src/js/controller/xpath/Instruccion/Selecting/Axis/Funciones.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var Enum_1 = __webpack_require__(/*! ../../../../../model/xpath/Enum */ "MEUw");
+// Revisa el nodetest y busca hacer match
+function f1(_element, _elements, _text, isDoubleBar) {
+    if (_element.value) {
+        _text.push(_element.value);
+        _elements.push(_element);
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f1(child, _elements, _text, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, texto: _text };
+}
+function f2(_element, _elements, _attributes, valor, isDoubleBar) {
+    for (var j = 0; j < _element.attributes.length; j++) {
+        var attribute = _element.attributes[j];
+        if (attribute.id == valor || valor === "*") {
+            _elements.push(_element);
+            _attributes.push(attribute);
+            break; // Sale del ciclo de atributos para pasar al siguiente elemento
+        }
+        if (attribute.value == valor) {
+            _elements.push(_element);
+            _attributes.push(attribute);
+            break;
+        }
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f2(child, _elements, _attributes, valor, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, atributos: _attributes };
+}
+function f3(_element, _elements, _text, valor, tipo, isDoubleBar) {
+    if (_element.id_open == valor || valor == "*") {
+        if (tipo === Enum_1.Tipos.FUNCION_TEXT)
+            _text.push(_element.value);
+        _elements.push(_element);
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f3(child, _elements, _text, valor, tipo, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, texto: _text };
+}
+function f4(_element, _elements, _text, valor, tipo, isDoubleBar) {
+    if (_element.value == valor || valor == "*") {
+        if (tipo === Enum_1.Tipos.FUNCION_TEXT)
+            _text.push(_element.value);
+        _elements.push(_element);
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f4(child, _elements, _text, valor, tipo, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, texto: _text };
+}
+module.exports = { f1: f1, f2: f2, f3: f3, f4: f4 };
 
 
 /***/ }),
@@ -1698,7 +1759,6 @@ var Global = /** @class */ (function () {
     function Global(expresiones, ambito) {
         this.expresiones = expresiones;
         this.ambito = ambito;
-        console.log(expresiones, 89999);
         Hijos_1.default.exec(expresiones, this.ambito);
     }
     return Global;
@@ -1737,124 +1797,325 @@ var Predicate = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Predicate.prototype.filterElements = function () {
+    Predicate.prototype.filterElements = function (_resultado) {
+        var _this = this;
         var expresion;
-        for (var i = 0; i < this.predicado.length; i++) {
-            var e = this.predicado[i];
-            console.log(e, 8277237281);
-            expresion = Expresion_1.default(e.condicion, this.ambito, this.contexto);
-            if (expresion.err)
-                return expresion;
-            // En caso de ser una posición en los elementos
+        var _loop_1 = function (i) {
+            var e = this_1.predicado[i]; // En caso de tener varios predicados seguidos
+            console.log(e, "Predicado");
+            expresion = Expresion_1.default(e.condicion, this_1.ambito, this_1.contexto);
+            console.log(expresion, "Expresion predicado");
+            if (expresion.error)
+                return { value: expresion };
             if (expresion.tipo === Enum_1.Tipos.NUMBER) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= this.contexto.length)
-                    this.contexto = [];
+                if (index < 0 || index >= _resultado.length)
+                    _resultado = [];
                 else
-                    this.contexto = [this.contexto[index]];
+                    _resultado = [_resultado[index]];
+            }
+            else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                var tmp_1 = [];
+                this_1.contexto = [];
+                _resultado.forEach(function (element) {
+                    if (element.attributes)
+                        for (var i_1 = 0; i_1 < element.attributes.length; i_1++) {
+                            var attribute = element.attributes[i_1];
+                            if (expresion.atributo) { // Es una comparación
+                                if (expresion.desigualdad) { // (<,<=,>,>=)
+                                    if (expresion.atributo == attribute.id && _this.operarDesigualdad(expresion.desigualdad, expresion.condicion, attribute.value)) {
+                                        tmp_1.push(element);
+                                        _this.contexto.push(element);
+                                        break;
+                                    }
+                                }
+                                else if (expresion.exclude) { // (!=)
+                                    if (expresion.atributo == attribute.id && expresion.condicion != attribute.value) {
+                                        tmp_1.push(element);
+                                        _this.contexto.push(element);
+                                        break;
+                                    }
+                                }
+                                else if (expresion.atributo == attribute.id && expresion.condicion == attribute.value) { // (==)
+                                    tmp_1.push(element);
+                                    _this.contexto.push(element);
+                                    break;
+                                }
+                            }
+                            else if (expresion.valor == attribute.id || expresion.valor == "*") { // No compara valor, sólo apila
+                                tmp_1.push(element);
+                                _this.contexto.push(element);
+                                break;
+                            }
+                        }
+                });
+                _resultado = tmp_1;
+                return { value: _resultado };
+            }
+            else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+                this_1.contexto = [];
+                for (var i_2 = 0; i_2 < _resultado.length; i_2++) {
+                    var element = _resultado[i_2];
+                    var text = element.value;
+                    if (text) {
+                        if (expresion.exclude) {
+                            if (text != expresion.condicion) // text() != 'x'
+                                this_1.contexto.push(element);
+                        }
+                        else if (text == expresion.condicion) // text() == 'x'
+                            this_1.contexto.push(element);
+                    }
+                }
+                return { value: this_1.contexto };
             }
             else if (expresion.tipo === Enum_1.Tipos.FUNCION_LAST) {
-                var index = this.contexto.length - 1;
-                this.contexto = [this.contexto[index]];
+                var index = _resultado.length - 1;
+                _resultado = [_resultado[index]];
             }
             else if (expresion.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-                return this.contexto;
+                return { value: _resultado };
             }
             else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MENOR) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index >= this.contexto.length)
-                    index = this.contexto.length - 1;
+                if (index >= _resultado.length)
+                    index = _resultado.length - 1;
                 var tmp = [];
-                for (var i_1 = index; i_1 <= this.contexto.length && i_1 >= 0; i_1--) {
-                    var element = this.contexto[i_1];
+                for (var i_3 = index; i_3 <= _resultado.length && i_3 >= 0; i_3--) {
+                    var element = _resultado[i_3];
                     tmp.push(element);
                 }
-                this.contexto = tmp;
+                _resultado = tmp;
             }
             else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYOR) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index >= this.contexto.length) {
-                    this.contexto = [];
-                    return this.contexto;
+                if (index >= _resultado.length) {
+                    _resultado = [];
+                    return { value: _resultado };
                 }
                 if (index <= 0)
                     index = 0;
                 var tmp = [];
-                for (var i_2 = index; i_2 < this.contexto.length; i_2++) {
-                    var element = this.contexto[i_2];
+                for (var i_4 = index; i_4 < _resultado.length; i_4++) {
+                    var element = _resultado[i_4];
                     tmp.push(element);
                 }
-                this.contexto = tmp;
+                _resultado = tmp;
             }
-            else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_IGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_DIFERENTE) {
-                var flag = expresion.valor;
-                if (!flag)
-                    this.contexto = [];
+            else if (expresion.tipo === Enum_1.Tipos.ELEMENTOS && expresion.e1 && expresion.e2) {
+                var e1 = expresion.e1;
+                var e2 = expresion.e2;
+                var condition = false;
+                var tmp = [];
+                for (var i_5 = 0; i_5 < this_1.contexto.length; i_5++) {
+                    var element = this_1.contexto[i_5];
+                    if (element.attributes) { // Hace match con un atributo
+                        for (var j = 0; j < element.attributes.length; j++) {
+                            var attribute = element.attributes[j];
+                            condition = this_1.verificarDesigualdad(expresion.desigualdad, attribute.id, e1, attribute.value, e2);
+                            if (condition) {
+                                tmp.push(element);
+                                break; // Sale del ciclo de atributos para pasar al siguiente elemento
+                            }
+                        }
+                    }
+                    if (element.childs) { // Hace match con algún hijo
+                        for (var j = 0; j < element.childs.length; j++) {
+                            var child = element.childs[j];
+                            condition = this_1.verificarDesigualdad(expresion.desigualdad, child.id_open, e1, child.value, e2);
+                            if (condition) {
+                                tmp.push(element);
+                                break;
+                            }
+                        }
+                    }
+                    // Hace match con el elemento
+                    condition = this_1.verificarDesigualdad(expresion.desigualdad, element.id_open, e1, element.value, e2);
+                    if (condition)
+                        tmp.push(element);
+                }
+                _resultado = tmp;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.LOGICA_OR || expresion.tipo === Enum_1.Tipos.LOGICA_AND) {
+                _resultado = expresion.elementos;
             }
             else if (expresion.tipo === Enum_1.Tipos.EXCLUDE) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index >= 0 && index < this.contexto.length) {
+                if (index >= 0 && index < _resultado.length) {
                     var tmp = [];
-                    for (var i_3 = 0; i_3 < this.contexto.length; i_3++) {
-                        var element = this.contexto[i_3];
-                        if (i_3 != index)
+                    for (var i_6 = 0; i_6 < _resultado.length; i_6++) {
+                        var element = _resultado[i_6];
+                        if (i_6 != index)
                             tmp.push(element);
                     }
-                    this.contexto = tmp;
+                    _resultado = tmp;
                 }
             }
+        };
+        var this_1 = this;
+        for (var i = 0; i < this.predicado.length; i++) {
+            var state_1 = _loop_1(i);
+            if (typeof state_1 === "object")
+                return state_1.value;
         }
+        this.contexto = _resultado;
         return this.contexto;
     };
-    Predicate.prototype.filterAttributes = function (_attributes) {
+    Predicate.prototype.filterAttributes = function (_resultado) {
+        var _this = this;
         var expresion;
-        for (var i = 0; i < this.predicado.length; i++) {
-            var e = this.predicado[i];
-            expresion = Expresion_1.default(e.condicion, this.ambito, this.contexto);
-            if (expresion.err)
-                return expresion;
-            // En caso de ser una posición en los elementos
+        var _loop_2 = function (i) {
+            var e = this_2.predicado[i]; // En caso de tener varios predicados seguidos
+            console.log(e, "Predicado");
+            expresion = Expresion_1.default(e.condicion, this_2.ambito, this_2.contexto);
+            console.log(expresion, "Expresion predicado");
+            if (expresion.error)
+                return { value: expresion };
             if (expresion.tipo === Enum_1.Tipos.NUMBER) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= _attributes.length)
-                    _attributes = [];
+                if (index < 0 || index >= _resultado.length)
+                    _resultado = [];
                 else
-                    _attributes = [_attributes[index]];
+                    _resultado = [_resultado[index]];
+            }
+            else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                var tmp_2 = [];
+                this_2.contexto = [];
+                _resultado.forEach(function (attribute) {
+                    if (expresion.atributo) { // Es una comparación
+                        if (expresion.desigualdad) { // (<,<=,>,>=)
+                            if (expresion.atributo == attribute.id && _this.operarDesigualdad(expresion.desigualdad, expresion.condicion, attribute.value)) {
+                                tmp_2.push(attribute);
+                            }
+                        }
+                        else if (expresion.exclude) { // (!=)
+                            if (expresion.atributo == attribute.id && expresion.condicion != attribute.value) {
+                                tmp_2.push(attribute);
+                            }
+                        }
+                        else if (expresion.atributo == attribute.id && expresion.condicion == attribute.value) { // (==)
+                            tmp_2.push(attribute);
+                        }
+                    }
+                    else if (expresion.valor == attribute.id || expresion.valor == "*") { // No compara valor, sólo apila
+                        tmp_2.push(attribute);
+                    }
+                });
+                _resultado = tmp_2;
+                return { value: _resultado };
+            }
+            else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+                var tmp = [];
+                for (var i_7 = 0; i_7 < _resultado.length; i_7++) {
+                    var attribute = _resultado[i_7];
+                    var text = attribute.value;
+                    if (expresion.exclude) {
+                        if (text != expresion.condicion) // text() != 'x'
+                            tmp.push(attribute);
+                    }
+                    else if (text == expresion.condicion) // text() == 'x'
+                        tmp.push(attribute);
+                }
+                return { value: tmp };
             }
             else if (expresion.tipo === Enum_1.Tipos.FUNCION_LAST) {
-                var index = _attributes.length - 1;
-                _attributes = [_attributes[index]];
+                var index = _resultado.length - 1;
+                _resultado = [_resultado[index]];
             }
-            else if (expresion.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-                return _attributes;
+            else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MENOR) {
+                var index = parseInt(expresion.valor) - 1;
+                if (index >= _resultado.length)
+                    index = _resultado.length - 1;
+                var tmp = [];
+                for (var i_8 = index; i_8 <= _resultado.length && i_8 >= 0; i_8--) {
+                    var attribute = _resultado[i_8];
+                    tmp.push(attribute);
+                }
+                _resultado = tmp;
             }
+            else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYOR) {
+                var index = parseInt(expresion.valor) - 1;
+                if (index >= _resultado.length) {
+                    _resultado = [];
+                    return { value: _resultado };
+                }
+                if (index <= 0)
+                    index = 0;
+                var tmp = [];
+                for (var i_9 = index; i_9 < _resultado.length; i_9++) {
+                    var attribute = _resultado[i_9];
+                    tmp.push(attribute);
+                }
+                _resultado = tmp;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.ELEMENTOS && expresion.e1 && expresion.e2) {
+                var e1 = expresion.e1;
+                var e2 = expresion.e2;
+                var condition = false;
+                var tmp = [];
+                for (var i_10 = 0; i_10 < _resultado.length; i_10++) {
+                    var attribute = _resultado[i_10]; // Hace match con un atributo
+                    condition = this_2.verificarDesigualdad(expresion.desigualdad, attribute.id, e1, attribute.value, e2);
+                    if (condition) {
+                        tmp.push(attribute);
+                    }
+                }
+                _resultado = tmp;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.LOGICA_OR || expresion.tipo === Enum_1.Tipos.LOGICA_AND) {
+                _resultado = expresion.elementos;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.EXCLUDE) {
+                var index = parseInt(expresion.valor) - 1;
+                if (index >= 0 && index < _resultado.length) {
+                    var tmp = [];
+                    for (var i_11 = 0; i_11 < _resultado.length; i_11++) {
+                        var attribute = _resultado[i_11];
+                        if (i_11 != index)
+                            tmp.push(attribute);
+                    }
+                    _resultado = tmp;
+                }
+            }
+        };
+        var this_2 = this;
+        for (var i = 0; i < this.predicado.length; i++) {
+            var state_2 = _loop_2(i);
+            if (typeof state_2 === "object")
+                return state_2.value;
         }
-        return _attributes;
+        return _resultado;
     };
-    Predicate.prototype.filterNodes = function (_nodes) {
-        var expresion;
-        for (var i = 0; i < this.predicado.length; i++) {
-            var e = this.predicado[i];
-            expresion = Expresion_1.default(e.condicion, this.ambito, this.contexto);
-            if (expresion.err)
-                return expresion;
-            // En caso de ser una posición en los elementos
-            if (expresion.tipo === Enum_1.Tipos.NUMBER) {
-                var index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= _nodes.length)
-                    _nodes = [];
-                else
-                    _nodes = [_nodes[index]];
-            }
-            else if (expresion.tipo === Enum_1.Tipos.FUNCION_LAST) {
-                var index = _nodes.length - 1;
-                _nodes = [_nodes[index]];
-            }
-            else if (expresion.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-                return _nodes;
-            }
+    Predicate.prototype.operarDesigualdad = function (_tipo, _condicion, _valor) {
+        switch (_tipo) {
+            case Enum_1.Tipos.RELACIONAL_MAYOR:
+                return _valor > _condicion;
+            case Enum_1.Tipos.RELACIONAL_MAYORIGUAL:
+                return _valor >= _condicion;
+            case Enum_1.Tipos.RELACIONAL_MENOR:
+                return _valor < _condicion;
+            case Enum_1.Tipos.RELACIONAL_MENORIGUAL:
+                return _valor <= _condicion;
+            default:
+                return false;
         }
-        return _nodes;
+    };
+    Predicate.prototype.verificarDesigualdad = function (_tipo, v1, e1, v2, e2) {
+        switch (_tipo) {
+            case Enum_1.Tipos.RELACIONAL_MAYOR:
+                return (v1 == e1 && v2 > e2);
+            case Enum_1.Tipos.RELACIONAL_MAYORIGUAL:
+                return (v1 == e1 && v2 >= e2);
+            case Enum_1.Tipos.RELACIONAL_MENOR:
+                return (v1 == e1 && v2 < e2);
+            case Enum_1.Tipos.RELACIONAL_MENORIGUAL:
+                return (v1 == e1 && v2 <= e2);
+            case Enum_1.Tipos.RELACIONAL_IGUAL:
+                return (v1 == e1 && v2 == e2);
+            case Enum_1.Tipos.RELACIONAL_DIFERENTE:
+                return (v1 == e1 && v2 != e2);
+            default:
+                return false;
+        }
     };
     return Predicate;
 }());
@@ -2122,6 +2383,7 @@ var Tipos;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ambito = void 0;
+var Enum_1 = __webpack_require__(/*! ../../xpath/Enum */ "MEUw");
 var Ambito = /** @class */ (function () {
     function Ambito(_anterior, _tipo) {
         this.anterior = _anterior;
@@ -2175,42 +2437,32 @@ var Ambito = /** @class */ (function () {
         }
         return _elements;
     };
-    Ambito.prototype.searchAnyAttributes = function (_element, _array, _elements) {
+    Ambito.prototype.searchAnyAttributes = function (_id, _element, _array) {
         var _this = this;
         if (_element.attributes) {
             _element.attributes.forEach(function (attribute) {
-                _array.push(attribute);
-            });
-            _elements.push(_element);
-        }
-        if (_element.childs) {
-            _element.childs.forEach(function (child) {
-                _array = _this.searchAnyAttributes(child, _array, _elements).atributos;
-            });
-        }
-        return { atributos: _array, elementos: _elements };
-    };
-    Ambito.prototype.searchAttributesFromCurrent = function (_element, _id, _array, _elements) {
-        var _this = this;
-        var flag = false;
-        if (_element.attributes) {
-            _element.attributes.forEach(function (attribute) {
-                if (attribute.id === _id) {
+                if (attribute.id === _id || _id === "*")
                     _array.push(attribute);
-                    flag = true;
-                }
             });
-            if (flag) {
-                _elements.push(_element);
-                flag = false;
-            }
         }
         if (_element.childs) {
             _element.childs.forEach(function (child) {
-                _array = _this.searchAttributesFromCurrent(child, _id, _array, _elements).atributos;
+                _array = _this.searchAnyAttributes(_id, child, _array);
             });
         }
-        return { atributos: _array, elementos: _elements };
+        return _array;
+    };
+    Ambito.prototype.searchAnyText = function (_element, _array) {
+        var _this = this;
+        if (_element.childs) {
+            _element.childs.forEach(function (child) {
+                _array = _this.searchAnyText(child, _array);
+            });
+        }
+        if (_element.value) {
+            _array.push(_element.value);
+        }
+        return _array;
     };
     Ambito.prototype.searchSingleNode = function (_nodename, _element, _array) {
         if (_nodename === _element.id_open) {
@@ -2228,6 +2480,75 @@ var Ambito = /** @class */ (function () {
                 _array = _this.searchNodes(_nodename, child, _array);
             });
         }
+        return _array;
+    };
+    Ambito.prototype.compareCurrent = function (_currentNode, _array, _axisname) {
+        switch (_axisname) {
+            case Enum_1.Tipos.AXIS_ANCESTOR:
+            case Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, true, false, false);
+            case Enum_1.Tipos.AXIS_PRECEDING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, false);
+            case Enum_1.Tipos.AXIS_PRECEDING_SIBLING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, true);
+            case Enum_1.Tipos.AXIS_FOLLOWING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, false);
+            case Enum_1.Tipos.AXIS_FOLLOWING_SIBLING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, true);
+        }
+        return _array;
+    };
+    Ambito.prototype.getBefore = function (_element, _currentNode, _array, isAncestor, isPreceding, isSibling) {
+        if (_element == _currentNode)
+            return false;
+        if (_element.childs) {
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                if (isPreceding && isSibling)
+                    _array.push(child);
+                var a = this.getBefore(child, _currentNode, _array, isAncestor, isPreceding, isSibling);
+                if (a === false)
+                    return _array;
+            }
+            if (isPreceding && !isSibling)
+                _array.push(_element);
+        }
+        if (isAncestor)
+            _array.push(_element);
+        return _array;
+    };
+    Ambito.prototype.getFollowings = function (_element, _currentNode, _array, _found, isSibling) {
+        if (_element == _currentNode)
+            _found = true;
+        if (_element.childs) {
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                this.getFollowings(child, _currentNode, _array, _found, isSibling);
+                return _array;
+            }
+            if (_found && !isSibling)
+                _array.push(_element);
+        }
+        if (_found && isSibling)
+            _array.push(_element);
+        return _array;
+    };
+    Ambito.prototype.searchAncestors = function (_element, _currentNode, _array) {
+        if (_element == _currentNode) { // for hasta que se acaben los elementos
+            return { found: _array };
+        }
+        if (_element.childs) {
+            var a = void 0;
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                a = this.searchAncestors(child, _currentNode, _array);
+                if (a.found)
+                    return a.found;
+                else
+                    _array = a;
+            }
+        }
+        _array.push(_element);
         return _array;
     };
     Ambito.prototype.getGlobal = function () {
@@ -2430,7 +2751,7 @@ class AppComponent {
             theme: "vs-dark",
             automaticLayout: true,
             scrollBeyondLastLine: false,
-            fontSize: 16,
+            fontSize: 14,
             minimap: {
                 enabled: true
             },
@@ -2441,13 +2762,223 @@ class AppComponent {
             readOnly: true,
             automaticLayout: true,
             scrollBeyondLastLine: false,
-            fontSize: 16,
+            fontSize: 14,
             minimap: {
                 enabled: true
             },
             language: 'xml'
         };
-        this.entrada = '';
+        this.entrada = `<?xml version="1.0" encoding="UTF-8"?>
+  <CATALOG>
+  <CD>
+  <TITLE>Empire Burlesque</TITLE>
+  <ARTIST>Bob Dylan</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>Columbia</COMPANY>
+  <PRICE>10.90</PRICE>
+  <YEAR>1985</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Hide your heart</TITLE>
+  <ARTIST>Bonnie Tyler</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>CBS Records</COMPANY>
+  <PRICE>9.90</PRICE>
+  <YEAR>1988</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Greatest Hits</TITLE>
+  <ARTIST>Dolly Parton</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>RCA</COMPANY>
+  <PRICE>9.90</PRICE>
+  <YEAR>1982</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Still got the blues</TITLE>
+  <ARTIST>Gary Moore</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Virgin records</COMPANY>
+  <PRICE>10.20</PRICE>
+  <YEAR>1990</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Eros &amp; Eros</TITLE>
+  <ARTIST>Eros Ramazzotti</ARTIST>
+  <COUNTRY>EU</COUNTRY>
+  <COMPANY>BMG</COMPANY>
+  <PRICE>9.90</PRICE>
+  <YEAR>1997</YEAR>
+  </CD>
+  <CD>
+  <TITLE>&quot;Esto tiene que salir bien&quot;</TITLE>
+  <ARTIST>Bee Gees</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Polydor</COMPANY>
+  <PRICE>10.90</PRICE>
+  <YEAR>1998</YEAR>
+  </CD>
+  <CD>
+  <TITLE>&apos;Esto tiene que salir muy bien tambien&apos;</TITLE>
+  <ARTIST>Dr.Hook</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>CBS</COMPANY>
+  <PRICE>8.10</PRICE>
+  <YEAR>1973</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Maggie May</TITLE>
+  <ARTIST>Rod Stewart</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Pickwick</COMPANY>
+  <PRICE>8.50</PRICE>
+  <YEAR>1990</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Romanza</TITLE>
+  <ARTIST>Andrea Bocelli</ARTIST>
+  <COUNTRY>EU</COUNTRY>
+  <COMPANY>Polydor</COMPANY>
+  <PRICE calificacion="hola">10.80</PRICE>
+  <YEAR>1996</YEAR>
+  </CD>
+  <CD>
+  <TITLE>When a man loves a woman</TITLE>
+  <ARTIST>Percy Sledge</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>Atlantic</COMPANY>
+  <PRICE>8.70</PRICE>
+  <YEAR>1987</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Black angel</TITLE>
+  <ARTIST>Savage Rose</ARTIST>
+  <COUNTRY>EU</COUNTRY>
+  <COMPANY>Mega</COMPANY>
+  <PRICE>10.90</PRICE>
+  <YEAR>1995</YEAR>
+  </CD>
+  <CD>
+  <TITLE>1999 Grammy Nominees</TITLE>
+  <ARTIST>Many</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>Grammy</COMPANY>
+  <PRICE>10.20</PRICE>
+  <YEAR>1999</YEAR>
+  </CD>
+  <CD>
+  <TITLE>For the good times</TITLE>
+  <ARTIST>Kenny Rogers</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Mucik Master</COMPANY>
+  <PRICE>8.70</PRICE>
+  <YEAR>1995</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Big Willie style</TITLE>
+  <ARTIST>Will Smith</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>Columbia</COMPANY>
+  <PRICE>9.90</PRICE>
+  <YEAR>1997</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Tupelo Honey</TITLE>
+  <ARTIST>Van Morrison</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Polydor</COMPANY>
+  <PRICE>8.20</PRICE>
+  <YEAR>1971</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Soulsville</TITLE>
+  <ARTIST>Jorn Hoel</ARTIST>
+  <COUNTRY>Norway</COUNTRY>
+  <COMPANY>WEA</COMPANY>
+  <PRICE>7.90</PRICE>
+  <YEAR>1996</YEAR>
+  </CD>
+  <CD>
+  <TITLE>The very best of</TITLE>
+  <ARTIST>Cat Stevens</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Island</COMPANY>
+  <PRICE>8.90</PRICE>
+  <YEAR>1990</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Stop</TITLE>
+  <ARTIST>Sam Brown</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>A and M</COMPANY>
+  <PRICE>8.90</PRICE>
+  <YEAR>1988</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Bridge of Spies</TITLE>
+  <ARTIST>T'Pau</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Siren</COMPANY>
+  <PRICE>7.90</PRICE>
+  <YEAR>1987</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Private Dancer</TITLE>
+  <ARTIST>Tina Turner</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>Capitol</COMPANY>
+  <PRICE>8.90</PRICE>
+  <YEAR>1983</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Midt om natten</TITLE>
+  <ARTIST>Kim Larsen</ARTIST>
+  <COUNTRY>EU</COUNTRY>
+  <COMPANY>Medley</COMPANY>
+  <PRICE>7.80</PRICE>
+  <YEAR>1983</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Pavarotti Gala Concert</TITLE>
+  <ARTIST>Luciano Pavarotti</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>DECCA</COMPANY>
+  <PRICE>9.90</PRICE>
+  <YEAR>1991</YEAR>
+  </CD>
+  <CD>
+  <TITLE>The dock of the bay</TITLE>
+  <ARTIST>Otis Redding</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>Stax Records</COMPANY>
+  <PRICE>7.90</PRICE>
+  <YEAR>1968</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Picture book</TITLE>
+  <ARTIST>Simply Red</ARTIST>
+  <COUNTRY>EU</COUNTRY>
+  <COMPANY>Elektra</COMPANY>
+  <PRICE>7.20</PRICE>
+  <YEAR>1985</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Red</TITLE>
+  <ARTIST>The Communards</ARTIST>
+  <COUNTRY>UK</COUNTRY>
+  <COMPANY>London</COMPANY>
+  <PRICE>7.80</PRICE>
+  <YEAR>1987</YEAR>
+  </CD>
+  <CD>
+  <TITLE>Unchain my heart</TITLE>
+  <ARTIST>Joe Cocker</ARTIST>
+  <COUNTRY>USA</COUNTRY>
+  <COMPANY>EMI</COMPANY>
+  <PRICE>8.20</PRICE>
+  <YEAR>1987</YEAR>
+  </CD>
+  </CATALOG>`;
         this.consulta = '';
         this.salida = '';
         this.fname = '';
@@ -2461,6 +2992,7 @@ class AppComponent {
         window.close();
     }
     onSubmit() {
+        var iconvlite = __webpack_require__(/*! iconv-lite */ "rPnE");
         let grammar_value = document.getElementById('grammar_selector').value;
         if (this.entrada != "" && this.consulta != "") {
             const x = {
@@ -2470,7 +3002,10 @@ class AppComponent {
             };
             // llamo a la función compile que devuelve un objeto de retorno
             let data = __webpack_require__(/*! ../js/routes/compile */ "i+6F").compile(x);
-            this.salida = data.output;
+            if (data.encoding == "ascii" || data.encoding == "latin1")
+                this.salida = iconvlite.decode(data.output, data.encoding);
+            else
+                this.salida = data.output;
             this.errores = data.arreglo_errores;
             this.simbolos = data.arreglo_simbolos;
             console.log('Data received!');
@@ -2840,27 +3375,114 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCompo
 "use strict";
 
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
-function Logica(_expresion, _ambito) {
-    switch (_expresion.tipo) {
+function Logica(_expresion, _ambito, _contexto) {
+    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _contexto, _expresion.tipo);
+    if (operators.error)
+        return operators;
+    switch (operators.tipo) {
         case Enum_1.Tipos.LOGICA_AND:
-            return and(_expresion.opIzq, _expresion.opDer, _ambito);
+            return and(operators.op1, operators.op2, _contexto);
         case Enum_1.Tipos.LOGICA_OR:
-            return or(_expresion.opIzq, _expresion.opDer, _ambito);
+            return or(operators.op1, operators.op2, _contexto);
         default:
-            break;
+            return null;
     }
 }
-function and(_opIzq, _opDer, _ambito) {
+function init(_opIzq, _opDer, _ambito, _contexto, _tipo) {
     var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
-    var tipo;
+    var op1 = Expresion(_opIzq, _ambito, _contexto);
+    if (op1.error)
+        return op1;
+    var op2 = Expresion(_opDer, _ambito, _contexto);
+    if (op2.error)
+        return op2;
+    var tipo = _tipo;
+    console.log(op1, 888, op2);
+    if (op1.tipo === Enum_1.Tipos.ELEMENTOS && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+        return { op1: op1, op2: op2, tipo: tipo };
+    }
+    if (op1.tipo === Enum_1.Tipos.ATRIBUTOS && op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+        return { op1: op1, op2: op2, tipo: tipo };
+    }
+    else
+        return { error: "Relación lógica no aceptable.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
 }
-function or(_opIzq, _opDer, _ambito) {
-    var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
-    var tipo;
+function and(_opIzq, _opDer, _contexto) {
+    var op1 = _opIzq; // Tiene sus dos operadores y desigualdad
+    var op2 = _opDer;
+    var context1 = filterElements(op1.e1, op1.e2, op1.desigualdad, _contexto);
+    var context2 = filterElements(op2.e1, op2.e2, op2.desigualdad, _contexto);
+    var tmp = [];
+    for (var i = 0; i < context1.length; i++) {
+        var element1 = context1[i];
+        for (var j = 0; j < context2.length; j++) {
+            var element2 = context2[j];
+            if (element1 == element2) {
+                tmp.push(element1);
+                break;
+            }
+        }
+    }
+    return { tipo: Enum_1.Tipos.LOGICA_AND, elementos: tmp };
+}
+function or(_opIzq, _opDer, _contexto) {
+    var op1 = _opIzq; // Tiene sus dos operadores y desigualdad
+    var op2 = _opDer;
+    var context1 = filterElements(op1.e1, op1.e2, op1.desigualdad, _contexto);
+    var context2 = filterElements(op2.e1, op2.e2, op2.desigualdad, _contexto);
+    var tmp = context1.concat(context2.filter(function (item) { return context1.indexOf(item) < 0; }));
+    return { tipo: Enum_1.Tipos.LOGICA_OR, elementos: tmp };
+}
+function filterElements(e1, e2, desigualdad, _contexto) {
+    var condition = false;
+    var tmp = [];
+    for (var i = 0; i < _contexto.length; i++) {
+        var element = _contexto[i];
+        if (element.attributes) { // Hace match con un atributo
+            for (var j = 0; j < element.attributes.length; j++) {
+                var attribute = element.attributes[j];
+                condition = verificarDesigualdad(desigualdad, attribute.id, e1, attribute.value, e2);
+                if (condition) {
+                    tmp.push(element);
+                    break; // Sale del ciclo de atributos para pasar al siguiente elemento
+                }
+            }
+        }
+        if (element.childs && tmp.length === 0) { // Hace match con algún hijo
+            for (var j = 0; j < element.childs.length; j++) {
+                var child = element.childs[j];
+                condition = verificarDesigualdad(desigualdad, child.id_open, e1, child.value, e2);
+                if (condition) {
+                    tmp.push(element);
+                    break;
+                }
+            }
+        }
+        if (tmp.length === 0) { // Hace match con el elemento
+            condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2);
+            if (condition)
+                tmp.push(element);
+        }
+    }
+    return tmp;
+}
+function verificarDesigualdad(_tipo, v1, e1, v2, e2) {
+    switch (_tipo) {
+        case Enum_1.Tipos.RELACIONAL_MAYOR:
+            return (v1 == e1 && v2 > e2);
+        case Enum_1.Tipos.RELACIONAL_MAYORIGUAL:
+            return (v1 == e1 && v2 >= e2);
+        case Enum_1.Tipos.RELACIONAL_MENOR:
+            return (v1 == e1 && v2 < e2);
+        case Enum_1.Tipos.RELACIONAL_MENORIGUAL:
+            return (v1 == e1 && v2 <= e2);
+        case Enum_1.Tipos.RELACIONAL_IGUAL:
+            return (v1 == e1 && v2 == e2);
+        case Enum_1.Tipos.RELACIONAL_DIFERENTE:
+            return (v1 == e1 && v2 != e2);
+        default:
+            return false;
+    }
 }
 module.exports = Logica;
 
@@ -2880,10 +3502,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Codes = void 0;
 var Codes;
 (function (Codes) {
-    Codes[Codes["UTF8"] = 0] = "UTF8";
-    Codes[Codes["ASCII"] = 1] = "ASCII";
-    Codes[Codes["ISO8859_1"] = 2] = "ISO8859_1";
-    Codes[Codes["INVALID"] = 3] = "INVALID";
+    Codes["UTF8"] = "utf-8";
+    Codes["ASCII"] = "ascii";
+    Codes["ISO8859_1"] = "latin1";
+    Codes["INVALID"] = "invalid";
 })(Codes = exports.Codes || (exports.Codes = {}));
 
 
@@ -3950,7 +4572,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -3973,7 +4595,11 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 var Enum_1 = __webpack_require__(/*! ../../../model/xpath/Enum */ "MEUw");
 function Expresion(_expresion, _ambito, _contexto) {
     var tipo = _expresion.tipo;
-    if (tipo === Enum_1.Tipos.NODENAME) {
+    // console.log(_expresion, 1111111) // Agregar el caso de que sea una instrucción y abrir un bloque
+    if (tipo === Enum_1.Tipos.EXPRESION) {
+        return Expresion(_expresion.expresion, _ambito, _contexto);
+    }
+    else if (tipo === Enum_1.Tipos.NODENAME) {
         return { valor: _expresion.nodename, tipo: Enum_1.Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.STRING || tipo === Enum_1.Tipos.NUMBER) {
@@ -3986,8 +4612,13 @@ function Expresion(_expresion, _ambito, _contexto) {
         return { valor: "..", tipo: Enum_1.Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.SELECT_ATTRIBUTES) {
-        var valor = { id: _expresion.expresion, tipo: "@" };
-        return { valor: valor, tipo: Enum_1.Tipos.ATRIBUTOS, linea: _expresion.linea, columna: _expresion.columna };
+        return { valor: _expresion.expresion, tipo: Enum_1.Tipos.ATRIBUTOS, linea: _expresion.linea, columna: _expresion.columna };
+    }
+    else if (tipo === Enum_1.Tipos.SELECT_AXIS) {
+        var nodetest = Expresion(_expresion.nodetest.expresion, _ambito, _contexto);
+        if (nodetest.error)
+            return nodetest;
+        return { axisname: _expresion.axisname, nodetest: nodetest, predicate: _expresion.nodetest.predicate, tipo: Enum_1.Tipos.SELECT_AXIS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.ASTERISCO) {
         return { valor: "*", tipo: Enum_1.Tipos.ASTERISCO, linea: _expresion.linea, columna: _expresion.columna };
@@ -4001,27 +4632,29 @@ function Expresion(_expresion, _ambito, _contexto) {
     else if (tipo === Enum_1.Tipos.FUNCION_POSITION) {
         return { valor: "position()", tipo: Enum_1.Tipos.FUNCION_POSITION, linea: _expresion.linea, columna: _expresion.columna };
     }
-    if (tipo === Enum_1.Tipos.EXPRESION) {
-        return Expresion(_expresion.expresion, _ambito, _contexto);
+    else if (tipo === Enum_1.Tipos.FUNCION_TEXT) {
+        return { valor: "text()", tipo: Enum_1.Tipos.FUNCION_TEXT, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.OPERACION_SUMA || tipo === Enum_1.Tipos.OPERACION_RESTA || tipo === Enum_1.Tipos.OPERACION_MULTIPLICACION
         || tipo === Enum_1.Tipos.OPERACION_DIVISION || tipo === Enum_1.Tipos.OPERACION_MODULO || tipo === Enum_1.Tipos.OPERACION_NEGACION_UNARIA) {
         var Aritmetica = __webpack_require__(/*! ./Operators/Aritmetica */ "qbRd");
-        return Aritmetica(_expresion, _contexto);
+        return Aritmetica(_expresion, _ambito, _contexto);
     }
     else if (tipo === Enum_1.Tipos.RELACIONAL_MAYOR || tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL
         || tipo === Enum_1.Tipos.RELACIONAL_MENOR || tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL
         || tipo === Enum_1.Tipos.RELACIONAL_IGUAL || tipo === Enum_1.Tipos.RELACIONAL_DIFERENTE) {
         var Relacional = __webpack_require__(/*! ./Operators/Relacional */ "r8U1");
-        return Relacional(_expresion, _contexto);
+        return Relacional(_expresion, _ambito, _contexto);
     }
     else if (tipo === Enum_1.Tipos.LOGICA_AND || tipo === Enum_1.Tipos.LOGICA_OR) {
         var Logica = __webpack_require__(/*! ./Operators/Logica */ "TxV8");
-        return Logica(_expresion, _contexto);
+        return Logica(_expresion, _ambito, _contexto);
     }
     else {
         console.log(_expresion, "SSSSSSSS");
-        return { err: "Error: Expresi\u00F3n no procesada.\n", linea: _expresion.linea, columna: _expresion.columna };
+        // const Bloque = require("../Instruccion/Bloque");
+        // return Bloque([_expresion], _ambito, _contexto);
+        // return { error: "Error: Expresión no procesada.", tipo: "Semántico", origen: "Query", linea: _expresion.linea, columna: _expresion.columna };
     }
 }
 module.exports = Expresion;
@@ -4044,6 +4677,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Bloque_1 = __importDefault(__webpack_require__(/*! ../controller/xpath/Instruccion/Bloque */ "8Ym7"));
 var Ambito_1 = __webpack_require__(/*! ../model/xml/Ambito/Ambito */ "QFP7");
 var Global_1 = __webpack_require__(/*! ../model/xml/Ambito/Global */ "IRxg");
+var Element_1 = __webpack_require__(/*! ../model/xml/Element */ "Kypw");
 function compile(req) {
     var errors = [];
     try {
@@ -4065,11 +4699,15 @@ function compile(req) {
         }
         // Análisis de XML
         var xml_ast = parser_xml.parse(xml);
+        var encoding = xml_ast.encoding; // Encoding del documento XML
+        if (encoding.encoding === encoding.codes.INVALID) {
+            errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: "1", columna: "1" });
+        }
         if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
             if (xml_ast.errors.length > 0)
                 errors = xml_ast.errors;
             if (xml_ast.ast === null || xml_ast === true) {
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XPath", linea: 1, columna: 1 });
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
                 return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
             }
         }
@@ -4082,20 +4720,26 @@ function compile(req) {
         if (xPath_ast.errors.length > 0 || xPath_ast.ast === null || xPath_ast === true) {
             if (xPath_ast.errors.length > 0)
                 errors = xPath_ast.errors;
-            else
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta.", origen: "XPath", linea: 1, columna: 1 });
-            // output: "La consulta contiene errores para analizar.\nIntente de nuevo."
+            if (xPath_ast.ast === null || xPath_ast === true) {
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta digitada.", origen: "XPath", linea: 1, columna: 1 });
+                return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+            }
         }
+        var root = new Element_1.Element("[object XMLDocument]", [], "", cadena.ambito.tablaSimbolos, "0", "0", "[object XMLDocument]");
+        var output = { cadena: "", elementos: [root], atributos: null };
         var xPath_parse = xPath_ast.ast; // AST que genera Jison
-        var bloque = Bloque_1.default(xPath_parse, cadena.ambito); // Procesa la secuencia de accesos (instrucciones)
-        if (bloque.err) {
-            errors.push({ error: bloque.err, tipo: "Semántico", origen: "XPath", linea: bloque.linea, columna: bloque.columna });
+        var bloque = Bloque_1.default(xPath_parse, cadena.ambito, output); // Procesa la secuencia de accesos (instrucciones)
+        if (bloque.error) {
+            errors.push(bloque);
+            return { arreglo_errores: errors, output: bloque.error };
         }
-        var output = {
+        output = {
             arreglo_simbolos: simbolos,
             arreglo_errores: errors,
-            output: bloque.cadena ? bloque.cadena : bloque.err
+            output: bloque,
+            encoding: encoding
         };
+        errors = [];
         return output;
     }
     catch (error) {
@@ -4104,8 +4748,10 @@ function compile(req) {
         var output = {
             arreglo_simbolos: [],
             arreglo_errores: errors,
-            output: (error.message) ? String(error.message) : String(error)
+            output: (error.message) ? String(error.message) : String(error),
+            encoding: "utf-8"
         };
+        errors = [];
         return output;
     }
 }
@@ -4877,7 +5523,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -4987,12 +5633,8 @@ case 1:
                                             grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF': [prod_2, prod_1, 'EOF' ]});
                                             printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
                                             // console.log(printHtml(grammar_stack));
-
                                             if($$[$0-2]!= null){
                                                 encoding = new Encoding($$[$0-2]);
-                                                if (encoding.encoding === encoding.codes.INVALID ) {
-                                                    errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
-                                                }
                                                 ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst:"<p>TEST CST </p>", grammar_report: "<p>grammar report test</p>"};
                                             } else{
                                                 ast = { ast: $$[$0-1], encoding: null, cst: null, grammar_report: null, errors: errors };
@@ -5624,38 +6266,38 @@ _handle_error:
 	function printstrack(obj, lines){
 	return;
 
-        if(Array.isArray(obj)){ //IS ARRAY
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            obj.forEach((value)=>{
-                if(typeof value === 'string' ){
-                     str = ""
-                     for(let i = 0; i < lines; i++){str = str + "- ";}
-                     // console.log(str + value);
-                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-                    str = ""
-                    for(let i = 0; i < lines; i++){ str = str + "- ";}
-                    for(let key in value){
-                       // console.log(`${str}${key}`);
-                       printstrack(value[key], lines + 1);
-                    }
-                }
+        // if(Array.isArray(obj)){ //IS ARRAY
+        //     str = ""
+        //     for(let i = 0; i < lines; i++){str = str + "- ";}
+        //     obj.forEach((value)=>{
+        //         if(typeof value === 'string' ){
+        //              str = ""
+        //              for(let i = 0; i < lines; i++){str = str + "- ";}
+        //              // console.log(str + value);
+        //         }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+        //             str = ""
+        //             for(let i = 0; i < lines; i++){ str = str + "- ";}
+        //             for(let key in value){
+        //                // console.log(`${str}${key}`);
+        //                printstrack(value[key], lines + 1);
+        //             }
+        //         }
 
-                //printstrack(value, lines +1);
-            });
-        }else if(typeof obj === 'string' ){ // IS STRING
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            // console.log(str + obj);
-        }else{// IS OBJECT
-            str = ""
-            for(let i = 0; i < lines; i++){ str = str + "- ";}
-            for(let key in obj){
-                // console.log(`${str}Key: ${key}`);
-                //console.log(obj[key]);
-                printstrack(obj[key], lines + 1);
-            }
-        }
+        //         //printstrack(value, lines +1);
+        //     });
+        // }else if(typeof obj === 'string' ){ // IS STRING
+        //     str = ""
+        //     for(let i = 0; i < lines; i++){str = str + "- ";}
+        //     // console.log(str + obj);
+        // }else{// IS OBJECT
+        //     str = ""
+        //     for(let i = 0; i < lines; i++){ str = str + "- ";}
+        //     for(let key in obj){
+        //         // console.log(`${str}Key: ${key}`);
+        //         //console.log(obj[key]);
+        //         printstrack(obj[key], lines + 1);
+        //     }
+        // }
 	}
 
 
@@ -6039,7 +6681,7 @@ case 21: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea:
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:[<][!][-][-][\s\S\n]*?[-][-][>])/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:(([^<>&\"]|&alt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:\s+)/i,/^(?:[<][!][-][-][\s\S\n]*?[-][-][>])/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:(([^<>&\"]|&lt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"content":{"rules":[14,15,16,17,18,19],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,20,21],"inclusive":true}}
 });
 return lexer;
@@ -6062,7 +6704,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -6070,6 +6712,220 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 }
 }
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "YuTi")(module)))
+
+/***/ }),
+
+/***/ "pW4W":
+/*!********************************************************************!*\
+  !*** ./src/js/controller/xpath/Instruccion/Selecting/Axis/Axis.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var Enum_1 = __webpack_require__(/*! ../../../../../model/xpath/Enum */ "MEUw");
+var Expresion_1 = __importDefault(__webpack_require__(/*! ../../../Expresion/Expresion */ "gajf"));
+var Funciones_1 = __importDefault(__webpack_require__(/*! ./Funciones */ "Dbnh"));
+var Predicate_1 = __webpack_require__(/*! ../Predicate */ "Iysv");
+function SelectAxis(_instruccion, _ambito, _contexto) {
+    var _404 = { notFound: "No se encontraron elementos." };
+    var contexto = (_contexto.elementos) ? (_contexto) : null;
+    var expresion = Expresion_1.default(_instruccion, _ambito, contexto);
+    if (expresion.error)
+        return expresion;
+    var root = getAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, false);
+    if (root === null || root.error || root.elementos.error || root.elementos.length === 0)
+        return _404;
+    return root;
+}
+function getAxis(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDoubleBar) {
+    if (_contexto)
+        return firstFiler(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDoubleBar);
+    else
+        return { error: "Indstrucción no procesada.", tipo: "Semántico", origen: "Query", linea: 1, columna: 1 };
+}
+// Revisa el axisname y extrae los elementos
+function firstFiler(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDoubleBar) {
+    var elements = Array();
+    var attributes = Array();
+    var cadena = Enum_1.Tipos.ELEMENTOS;
+    switch (_axisname) {
+        case Enum_1.Tipos.AXIS_ANCESTOR: // Selects all ancestors (parent, grandparent, etc.) of the current node
+        case Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF: // Selects all ancestors (parent, grandparent, etc.) of the current node and the current node itself
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                if (_axisname === Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF) {
+                    if (element.father)
+                        elements.push(element);
+                    else
+                        elements.push(element.childs[0]);
+                }
+                var dad = element.father;
+                if (dad) {
+                    elements = _ambito.compareCurrent(element, elements, _axisname);
+                }
+            }
+            break;
+        case Enum_1.Tipos.AXIS_ATTRIBUTE: // Selects all attributes of the current node
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                if (_isDoubleBar) {
+                    attributes = _ambito.searchAnyAttributes("*", element, attributes);
+                }
+                else if (element.attributes)
+                    element.attributes.forEach(function (attribute) {
+                        attributes.push(attribute);
+                    });
+            }
+            cadena = Enum_1.Tipos.ATRIBUTOS;
+            break;
+        case Enum_1.Tipos.AXIS_CHILD: // Selects all children of the current node
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                // if (_isDoubleBar) {
+                //     elements = _ambito.searchNodes("*", element, elements);
+                // }
+                if (element.childs)
+                    element.childs.forEach(function (child) {
+                        elements.push(child);
+                    });
+            }
+            break;
+        case Enum_1.Tipos.AXIS_DESCENDANT: // Selects all descendants (children, grandchildren, etc.) of the current node
+        case Enum_1.Tipos.AXIS_DESCENDANT_OR_SELF: // Selects all descendants (children, grandchildren, etc.) of the current node and the current node itself
+            console.log(_contexto.elementos, 8989);
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                if (_axisname === Enum_1.Tipos.AXIS_DESCENDANT_OR_SELF) {
+                    if (element.father)
+                        elements.push(element);
+                    // else elements.push(element.childs[0]);
+                }
+                if (element.father)
+                    elements = _ambito.searchNodes("*", element, elements);
+                else
+                    elements = _ambito.searchNodes("*", element.childs[0], elements);
+            }
+            break;
+        case Enum_1.Tipos.AXIS_FOLLOWING: // Selects everything in the document after the closing tag of the current node
+        case Enum_1.Tipos.AXIS_PRECEDING: // Selects all nodes that appear before the current node in the document
+        case Enum_1.Tipos.AXIS_FOLLOWING_SIBLING: // Selects all siblings after the current node:
+        case Enum_1.Tipos.AXIS_PRECEDING_SIBLING: // Selects all siblings before the current node
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                var dad = element.father;
+                if (dad && (_axisname === Enum_1.Tipos.AXIS_PRECEDING || _axisname === Enum_1.Tipos.AXIS_PRECEDING_SIBLING)) {
+                    elements = _ambito.compareCurrent(element, elements, _axisname);
+                }
+                else if (_axisname === Enum_1.Tipos.AXIS_FOLLOWING || _axisname === Enum_1.Tipos.AXIS_FOLLOWING_SIBLING) {
+                    elements = _ambito.compareCurrent(element, elements, _axisname);
+                }
+            }
+            break;
+        case Enum_1.Tipos.AXIS_NAMESPACE: // Selects all namespace nodes of the current node
+            return { error: "Error: la funcionalidad 'namespace' no está disponible.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
+        case Enum_1.Tipos.AXIS_PARENT: // Selects the parent of the current node
+            var _loop_1 = function (i) {
+                var element = _contexto.elementos[i];
+                var dad = element.father;
+                if (dad)
+                    _ambito.tablaSimbolos.forEach(function (elm) {
+                        if (elm.id_open === dad.id && elm.line == dad.line && elm.column == dad.column)
+                            elements.push(elm);
+                        if (elm.childs)
+                            elm.childs.forEach(function (child) {
+                                elements = _ambito.searchDad(child, dad.id, dad.line, dad.column, elements);
+                            });
+                    });
+            };
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                _loop_1(i);
+            }
+            break;
+        case Enum_1.Tipos.AXIS_SELF: // Selects the current node
+            if (_contexto.atributos)
+                attributes = _contexto.atributos;
+            else
+                elements = _contexto.elementos;
+            break;
+        default:
+            return { error: "Error: axisname no válido.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
+    }
+    console.log(attributes, 9999, elements);
+    // return { elementos: elements, atributos: attributes, cadena: cadena };
+    return secondFilter(elements, attributes, _nodetest, _predicate, cadena, _ambito, _isDoubleBar);
+}
+// Revisa el nodetest y busca hacer match
+function secondFilter(_elements, _atributos, _nodetest, _predicate, _cadena, _ambito, _isDoubleBar) {
+    var elements = Array();
+    var attributes = Array();
+    var text = Array();
+    var valor = _nodetest.valor;
+    switch (_nodetest.tipo) {
+        case Enum_1.Tipos.ELEMENTOS:
+        case Enum_1.Tipos.ASTERISCO:
+        case Enum_1.Tipos.FUNCION_TEXT:
+            if (_atributos.length > 0) {
+                for (var i = 0; i < _atributos.length; i++) {
+                    var attribute = _atributos[i];
+                    if (attribute.id == valor || valor === "*") {
+                        attributes.push(attribute);
+                    }
+                    if (attribute.value == valor) {
+                        attributes.push(attribute);
+                    }
+                }
+            }
+            for (var i = 0; i < _elements.length; i++) {
+                var element = _elements[i];
+                if (_nodetest.tipo === Enum_1.Tipos.FUNCION_TEXT && element.value) {
+                    var x_1 = Funciones_1.default.f1(element, elements, text, _isDoubleBar);
+                    elements.concat(x_1.elementos);
+                    text.concat(x_1.texto);
+                    _cadena = Enum_1.Tipos.TEXTOS;
+                    continue;
+                }
+                else if (_atributos.length > 0 && element.attributes) {
+                    var x_2 = Funciones_1.default.f2(element, elements, attributes, valor, _isDoubleBar);
+                    elements.concat(x_2.elementos);
+                    attributes = attributes.concat(x_2.atributos);
+                    _cadena = Enum_1.Tipos.ATRIBUTOS;
+                    continue;
+                }
+                var x = Funciones_1.default.f3(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
+                if (x.elementos.length > 0 || x.texto.length > 0) {
+                    elements.concat(x.elementos);
+                    text.concat(x.texto);
+                    break;
+                }
+                x = Funciones_1.default.f4(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
+                if (x.elementos.length > 0 || x.texto.length > 0) {
+                    elements.concat(x.elementos);
+                    text.concat(x.texto);
+                    break;
+                }
+            }
+            break;
+        default:
+            return { error: "Error: nodetest no válido.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
+    }
+    // En caso de tener algún predicado
+    if (_predicate) {
+        var filter = new Predicate_1.Predicate(_predicate, _ambito, elements);
+        if (attributes.length > 0) {
+            attributes = filter.filterAttributes(attributes);
+            return { elementos: [], atributos: attributes, cadena: _cadena };
+        }
+        elements = filter.filterElements(elements);
+    }
+    return { elementos: elements, atributos: attributes, texto: text, cadena: _cadena };
+}
+module.exports = { SA: SelectAxis, GetAxis: getAxis };
+
 
 /***/ }),
 
@@ -6083,9 +6939,9 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 "use strict";
 
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
-function Aritmetica(_expresion, _ambito) {
-    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo);
-    if (operators.err)
+function Aritmetica(_expresion, _ambito, _contexto) {
+    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo, _contexto);
+    if (operators.error)
         return operators;
     switch (operators.tipo) {
         case Enum_1.Tipos.OPERACION_SUMA:
@@ -6104,33 +6960,37 @@ function Aritmetica(_expresion, _ambito) {
             return null;
     }
 }
-function init(_opIzq, _opDer, _ambito, _tipo) {
+function init(_opIzq, _opDer, _ambito, _tipo, _contexto) {
     var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
+    var op1 = Expresion(_opIzq, _ambito, _contexto);
+    if (op1.error)
+        return op1;
+    var op2 = Expresion(_opDer, _ambito, _contexto);
+    if (op2.error)
+        return op2;
     var tipo = _tipo;
     if (op1.tipo === Enum_1.Tipos.FUNCION_LAST && op2.tipo === Enum_1.Tipos.NUMBER) {
-        op1 = _ambito.length;
+        op1 = _contexto.length;
         op2 = Number(op2.valor);
     }
     else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_LAST) {
         op1 = Number(op1.valor);
-        op2 = _ambito.length;
+        op2 = _contexto.length;
     }
     else if (op1.tipo === Enum_1.Tipos.FUNCION_POSITION && op2.tipo === Enum_1.Tipos.NUMBER) {
-        op1 = _ambito.length;
+        op1 = _contexto.length;
         op2 = Number(op2.valor);
     }
     else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_POSITION) {
         op1 = Number(op1.valor);
-        op2 = _ambito.length;
+        op2 = _contexto.length;
     }
     else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.NUMBER) {
         op1 = Number(op1.valor);
         op2 = Number(op2.valor);
     }
     else
-        return { err: "Solamente se pueden operar aritméticamente valores numéricos.\n", linea: _opIzq.linea, columna: _opIzq.columna };
+        return { error: "Solamente se pueden operar aritméticamente valores numéricos.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
     return { op1: op1, op2: op2, tipo: tipo };
 }
 function suma(_opIzq, _opDer) {
@@ -6184,9 +7044,9 @@ module.exports = Aritmetica;
 "use strict";
 
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
-function Relacional(_expresion, _ambito) {
-    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo);
-    if (operators.err)
+function Relacional(_expresion, _ambito, _contexto) {
+    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo, _contexto);
+    if (operators.error)
         return operators;
     switch (operators.tipo) {
         case Enum_1.Tipos.RELACIONAL_MAYOR:
@@ -6205,20 +7065,25 @@ function Relacional(_expresion, _ambito) {
             return null;
     }
 }
-function init(_opIzq, _opDer, _ambito, _tipo) {
+function init(_opIzq, _opDer, _ambito, _tipo, _contexto) {
     var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
+    var op1 = Expresion(_opIzq, _ambito, _contexto);
+    if (op1.error)
+        return op1;
+    var op2 = Expresion(_opDer, _ambito, _contexto);
+    if (op2.error)
+        return op2;
     var tipo = _tipo;
+    // Numéricas
     if (tipo === Enum_1.Tipos.RELACIONAL_MAYOR || tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL ||
         tipo === Enum_1.Tipos.RELACIONAL_MENOR || tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL) {
-        if (op1.tipo === Enum_1.Tipos.FUNCION_LAST && op2.tipo === Enum_1.Tipos.NUMBER) {
-            op1 = _ambito.length;
+        if ((op1.tipo === Enum_1.Tipos.FUNCION_POSITION || op1.tipo === Enum_1.Tipos.FUNCION_LAST) && op2.tipo === Enum_1.Tipos.NUMBER) {
+            op1 = _contexto.length;
             op2 = Number(op2.valor);
         }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_LAST) {
+        else if (op1.tipo === Enum_1.Tipos.NUMBER && (op2.tipo === Enum_1.Tipos.FUNCION_POSITION || op2.tipo === Enum_1.Tipos.FUNCION_LAST)) {
             op2 = Number(op1.valor);
-            op1 = _ambito.length;
+            op1 = _contexto.length;
             if (_tipo === Enum_1.Tipos.RELACIONAL_MAYOR)
                 tipo = Enum_1.Tipos.RELACIONAL_MENOR;
             if (_tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL)
@@ -6228,107 +7093,184 @@ function init(_opIzq, _opDer, _ambito, _tipo) {
             if (_tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL)
                 tipo = Enum_1.Tipos.RELACIONAL_MAYORIGUAL;
         }
-        else if (op1.tipo === Enum_1.Tipos.FUNCION_POSITION && op2.tipo === Enum_1.Tipos.NUMBER) {
-            op1 = _ambito.length;
-            op2 = Number(op2.valor);
-        }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-            op2 = Number(op1.valor);
-            op1 = _ambito.length;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MAYOR)
-                tipo = Enum_1.Tipos.RELACIONAL_MENOR;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL)
-                tipo = Enum_1.Tipos.RELACIONAL_MENORIGUAL;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MENOR)
-                tipo = Enum_1.Tipos.RELACIONAL_MAYOR;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL)
-                tipo = Enum_1.Tipos.RELACIONAL_MAYORIGUAL;
+        else if (op1.tipo === Enum_1.Tipos.ATRIBUTOS || op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+            var opIzq = { valor: 0, tipo: op1.tipo };
+            var opDer = { valor: 0, tipo: op2.tipo };
+            opIzq.tipo = Enum_1.Tipos.ATRIBUTOS;
+            opDer.tipo = (op1.tipo === Enum_1.Tipos.ATRIBUTOS) ? (op2.tipo) : (op1.tipo);
+            if (op1.tipo === Enum_1.Tipos.ATRIBUTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                opIzq.valor = op1.valor;
+                opDer.valor = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                opIzq.valor = op2.valor;
+                opDer.valor = op1.valor;
+            }
+            else
+                return { error: "Desigualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { op1: opIzq, op2: opDer, tipo: tipo };
         }
         else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.NUMBER) {
             op1 = Number(op1.valor);
             op2 = Number(op2.valor);
         }
+        else if (op1.tipo === Enum_1.Tipos.ELEMENTOS || op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+            if (op1.tipo === Enum_1.Tipos.ELEMENTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                var tmp = op1.valor;
+                op1 = op2.valor;
+                op2 = tmp;
+            }
+            else if (op1.tipo === Enum_1.Tipos.ELEMENTOS && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+            return { op1: { valor: op1, id: true }, op2: op2, tipo: tipo };
+        }
         else
-            return { err: "Solamente se pueden comparar desigualdades entre valores numéricos.\n", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { error: "Solamente se pueden comparar desigualdades entre valores numéricos.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+        return { op1: op1, op2: op2, tipo: tipo };
     }
+    // Numéricas o texto
     if (tipo === Enum_1.Tipos.RELACIONAL_IGUAL || tipo === Enum_1.Tipos.RELACIONAL_DIFERENTE) {
         var opIzq = { valor: 0, tipo: op1.tipo };
         var opDer = { valor: 0, tipo: op2.tipo };
-        if (op1.tipo === Enum_1.Tipos.FUNCION_LAST && op2.tipo === Enum_1.Tipos.NUMBER) {
-            opIzq.valor = _ambito.length;
+        if ((op1.tipo === Enum_1.Tipos.FUNCION_POSITION || op1.tipo === Enum_1.Tipos.FUNCION_LAST) && op2.tipo === Enum_1.Tipos.NUMBER) {
+            opIzq.valor = _contexto.length;
             opDer.valor = Number(op2.valor);
         }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_LAST) {
+        else if (op1.tipo === Enum_1.Tipos.NUMBER && (op2.tipo === Enum_1.Tipos.FUNCION_POSITION || op2.tipo === Enum_1.Tipos.FUNCION_LAST)) {
             opIzq.valor = Number(op1.valor);
-            opDer.valor = _ambito.length;
+            opDer.valor = _contexto.length;
         }
-        else if (op1.tipo === Enum_1.Tipos.FUNCION_POSITION && op2.tipo === Enum_1.Tipos.NUMBER) {
-            opIzq.valor = _ambito.length;
-            opDer.valor = Number(op2.valor);
+        else if (op1.tipo === Enum_1.Tipos.ATRIBUTOS || op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+            opIzq.tipo = Enum_1.Tipos.ATRIBUTOS;
+            opDer.tipo = (op1.tipo === Enum_1.Tipos.ATRIBUTOS) ? (op2.tipo) : (op1.tipo);
+            if (op1.tipo === Enum_1.Tipos.ATRIBUTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                opIzq.valor = op1.valor;
+                opDer.valor = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                opIzq.valor = op2.valor;
+                opDer.valor = op1.valor;
+            }
+            else
+                return { error: "Igualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { op1: opIzq, op2: opDer, tipo: tipo };
         }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-            opIzq.valor = Number(op1.valor);
-            opDer.valor = _ambito.length;
+        else if (op1.tipo === Enum_1.Tipos.FUNCION_TEXT || op2.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+            opIzq.tipo = Enum_1.Tipos.FUNCION_TEXT;
+            opDer.tipo = (op1.tipo === Enum_1.Tipos.FUNCION_TEXT) ? (op2.tipo) : (op1.tipo);
+            if (op1.tipo === Enum_1.Tipos.FUNCION_TEXT && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                opIzq.valor = op1.valor;
+                opDer.valor = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+                opIzq.valor = op2.valor;
+                opDer.valor = op1.valor;
+            }
+            else
+                return { error: "Igualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { op1: opIzq, op2: opDer, tipo: tipo };
         }
-        // else { // Falta
-        // op1 = { valor: op1, tipo: tipo };
-        // op2 = { valor: op2, tipo: tipo };
-        // }
-        return { op1: opIzq, op2: opDer, tipo: tipo };
+        else if (op1.tipo === Enum_1.Tipos.ELEMENTOS || op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+            if (op1.tipo === Enum_1.Tipos.ELEMENTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                var tmp = op1.valor;
+                op1 = op2.valor;
+                op2 = tmp;
+            }
+            else if (op1.tipo === Enum_1.Tipos.ELEMENTOS && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+        }
+        else {
+            return { error: "Igualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+        }
+        return { op1: op1, op2: op2, tipo: tipo };
     }
-    return { op1: op1, op2: op2, tipo: tipo };
+    return { error: "Relación no procesada.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
 }
 function mayor(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MAYOR };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYOR, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYOR, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: (_opDer + 1),
         tipo: Enum_1.Tipos.RELACIONAL_MAYOR
     };
 }
 function mayorigual(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MAYORIGUAL };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYORIGUAL, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYORIGUAL, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: _opDer,
         tipo: Enum_1.Tipos.RELACIONAL_MAYORIGUAL
     };
 }
 function menor(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MENOR };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENOR, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENOR, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: (_opDer - 1),
         tipo: Enum_1.Tipos.RELACIONAL_MENOR
     };
 }
 function menorigual(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MENORIGUAL };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENORIGUAL, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENORIGUAL, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: _opDer,
         tipo: Enum_1.Tipos.RELACIONAL_MENORIGUAL
     };
 }
 function igual(_opIzq, _opDer) {
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_IGUAL };
     if (_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION || _opDer.tipo === Enum_1.Tipos.FUNCION_POSITION)
         return { valor: ((_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION) ? (_opDer.valor) : (_opIzq.valor)), tipo: Enum_1.Tipos.NUMBER };
     if (_opIzq.tipo === Enum_1.Tipos.FUNCION_LAST || _opDer.tipo === Enum_1.Tipos.FUNCION_LAST)
         return { valor: ((_opIzq.valor == _opDer.valor) ? (_opDer.valor) : (-1)), tipo: Enum_1.Tipos.NUMBER };
-    return {
-        valor: (_opIzq == _opDer),
-        tipo: Enum_1.Tipos.RELACIONAL_IGUAL
-    };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_TEXT)
+        return { condicion: _opDer.valor, tipo: Enum_1.Tipos.FUNCION_TEXT };
+    return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_IGUAL };
 }
 function diferente(_opIzq, _opDer) {
-    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION || _opDer.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-        return {
-            valor: ((_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION) ? (_opDer.valor) : (_opIzq.valor)),
-            tipo: Enum_1.Tipos.EXCLUDE
-        };
-    }
-    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_LAST || _opDer.tipo === Enum_1.Tipos.FUNCION_LAST) {
-        return {
-            valor: ((_opIzq.valor == _opDer.valor) ? (_opDer.valor) : (-1)),
-            tipo: Enum_1.Tipos.EXCLUDE
-        };
-    }
-    return {
-        valor: (_opIzq != _opDer),
-        tipo: Enum_1.Tipos.RELACIONAL_DIFERENTE
-    };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_DIFERENTE };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION || _opDer.tipo === Enum_1.Tipos.FUNCION_POSITION)
+        return { valor: ((_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION) ? (_opDer.valor) : (_opIzq.valor)), tipo: Enum_1.Tipos.EXCLUDE };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_LAST || _opDer.tipo === Enum_1.Tipos.FUNCION_LAST)
+        return { valor: ((_opIzq.valor == _opDer.valor) ? (_opDer.valor) : (-1)), tipo: Enum_1.Tipos.EXCLUDE };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, exclude: true, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_TEXT)
+        return { condicion: _opDer.valor, exclude: true, tipo: Enum_1.Tipos.FUNCION_TEXT };
+    return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_DIFERENTE };
 }
 module.exports = Relacional;
 

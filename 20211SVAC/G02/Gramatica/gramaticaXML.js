@@ -740,52 +740,50 @@ options: {"case-sensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0:/* skip comments */
+case 0:this.begin('comment');
 break;
-case 1:this.begin('comment');
+case 1:this.popState();
 break;
-case 2:this.popState();
+case 2:/* skip comment content*/
 break;
-case 3:/* skip comment content*/
+case 3:/* skip whitespace */
 break;
-case 4:/* skip whitespace */
+case 4:return 9;
 break;
-case 5:return 9;
+case 5:return 10;
 break;
-case 6:return 10;
+case 6:return 13;
 break;
-case 7:return 13;
+case 7:return 7;
 break;
-case 8:return 7;
+case 8:return 14;
 break;
-case 9:return 14;
+case 9:return 11;
 break;
-case 10:return 11;
+case 10:return 20;
 break;
-case 11:return 20;
+case 11:return 8;
 break;
-case 12:return 8;
+case 12:return 26;
 break;
-case 13:return 26;
+case 13:return 25;
 break;
-case 14:return 25;
+case 14:return 17;
 break;
-case 15:return 17;
+case 15:return 12
 break;
-case 16:return 12
+case 16:return 'CharLiteral'
 break;
-case 17:return 'CharLiteral'
-break;
-case 18:
+case 17:
                                         erroresXML.push(new ErrorCapturado(TipoError.ERROR_LEXICO, yy_.yytext, 'Error lexico detectado',yy_.yylloc.first_line, yy_.yylloc.first_column));
                                     
 break;
-case 19:return 6
+case 18:return 6
 break;
 }
 },
-rules: [/^(?:\/\/.*)/,/^(?:\/\*)/,/^(?:\*\/)/,/^(?:.)/,/^(?:\s+)/,/^(?:xml\b)/,/^(?:version\b)/,/^(?:encoding\b)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:\/)/,/^(?:\?)/,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/,/^(?:[0-9]+)/,/^(?:((([a-zA-Z0-9_]|(['+'|'*'|'?'|'^'|'$'|'('|')'|'['|'\]'|'{'|'}'|'|'|'.'|'&'|'#'|'\''|'!'|':'|';'|'/'|'¿'|'¡'|','])|([[\u003F-\u0040]|[\u00A1-\u00AC]|[\u007B-\u007E]|[\u00AE-\uD7F0]|[\u0028-\u002F]|[\u005B-\u0060]|[\u003A-\u003B]|[\u0023-\u0025]|[\u0021])))([a-zA-Z0-9_]|(['+'|'*'|'?'|'^'|'$'|'('|')'|'['|'\]'|'{'|'}'|'|'|'.'|'&'|'#'|'\''|'!'|':'|';'|'/'|'¿'|'¡'|','])|([[\u003F-\u0040]|[\u00A1-\u00AC]|[\u007B-\u007E]|[\u00AE-\uD7F0]|[\u0028-\u002F]|[\u005B-\u0060]|[\u003A-\u003B]|[\u0023-\u0025]|[\u0021]))*))/,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+)|(['+'|'*'|'?'|'^'|'$'|'('|')'|'['|'\]'|'{'|'}'|'|'|'.'|'&'|'#'|'\''|'!'|':'|';'|'/'|'¿'|'¡'|',']))*"))/,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/,/^(?:.)/,/^(?:$)/],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true},"INITIAL":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true}}
+rules: [/^(?:<!--)/,/^(?:-->)/,/^(?:.)/,/^(?:\s+)/,/^(?:xml\b)/,/^(?:version\b)/,/^(?:encoding\b)/,/^(?:<)/,/^(?:>)/,/^(?:=)/,/^(?:\/)/,/^(?:\?)/,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/,/^(?:[0-9]+)/,/^(?:((([a-zA-Z0-9_]|(['+'|'*'|'?'|'^'|'$'|'('|')'|'['|'\]'|'{'|'}'|'|'|'.'|'&'|'#'|'\''|'!'|':'|';'|'/'|'¿'|'¡'|','])|([[\u003F-\u0040]|[\u00A1-\u00AC]|[\u007B-\u007E]|[\u00AE-\uD7F0]|[\u0028-\u002F]|[\u005B-\u0060]|[\u003A-\u003B]|[\u0023-\u0025]|[\u0021])))([a-zA-Z0-9_]|(['+'|'*'|'?'|'^'|'$'|'('|')'|'['|'\]'|'{'|'}'|'|'|'.'|'&'|'#'|'\''|'!'|':'|';'|'/'|'¿'|'¡'|','])|([[\u003F-\u0040]|[\u00A1-\u00AC]|[\u007B-\u007E]|[\u00AE-\uD7F0]|[\u0028-\u002F]|[\u005B-\u0060]|[\u003A-\u003B]|[\u0023-\u0025]|[\u0021]))*))/,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+)|(['+'|'*'|'?'|'^'|'$'|'('|')'|'['|'\]'|'{'|'}'|'|'|'.'|'&'|'#'|'\''|'!'|':'|';'|'/'|'¿'|'¡'|',']))*"))/,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/,/^(?:.)/,/^(?:$)/],
+conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true},"INITIAL":{"rules":[0,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true}}
 });
 return lexer;
 })();

@@ -72,12 +72,12 @@
   }
 */
 var GramaticaXML = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,11],$V1=[1,3],$V2=[1,4],$V3=[1,10],$V4=[2,14],$V5=[10,12,14,15],$V6=[5,10,16],$V7=[1,20],$V8=[1,18],$V9=[5,9,10,13,16];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,3],$V1=[1,4],$V2=[1,10],$V3=[2,13],$V4=[10,12,14,15],$V5=[1,20],$V6=[1,18],$V7=[5,9,10,13,16];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"START":3,"OBJETO":4,"EOF":5,"INSTRUCCION":6,"CUERPO":7,"OBJETOS":8,"MENORQUEESPECIAL":9,"IDENTIFICADOR":10,"L_ATRIBUTOS":11,"MAYORQUEESPECIAL":12,"MENORQUE":13,"SELFCLOSE":14,"MAYORQUE":15,"SALIDA":16,"ATRIBUTO":17,"IGUAL":18,"CADENA":19,"QUOTE":20,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",7:"CUERPO",9:"MENORQUEESPECIAL",10:"IDENTIFICADOR",12:"MAYORQUEESPECIAL",13:"MENORQUE",14:"SELFCLOSE",15:"MAYORQUE",16:"SALIDA",18:"IGUAL",19:"CADENA",20:"QUOTE"},
-productions_: [0,[3,2],[6,1],[6,1],[6,1],[8,2],[8,1],[4,5],[4,5],[4,8],[4,7],[4,0],[11,2],[11,1],[11,0],[17,3],[17,3]],
+productions_: [0,[3,2],[6,1],[6,1],[6,1],[8,2],[8,1],[4,5],[4,5],[4,8],[4,7],[11,2],[11,1],[11,0],[17,3],[17,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -108,23 +108,20 @@ case 10:
 this.$ = new objeto.default($$[$0-5],$$[$0-2],$$[$0-4],null,_$[$0-6].first_line,_$[$0-6].first_column);
 break;
 case 11:
-this.$=""
-break;
-case 12:
 $$[$0-1].push($$[$0]);this.$=$$[$0-1];
 break;
-case 13:
+case 12:
 this.$=[$$[$0]];
 break;
-case 14:
+case 13:
 this.$=[];
 break;
-case 15: case 16:
+case 14: case 15:
 this.$=new atributo.default($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column);
 break;
 }
 },
-table: [{3:1,4:2,5:$V0,9:$V1,13:$V2},{1:[3]},{5:[1,5]},{10:[1,6]},{10:[1,7]},{1:[2,1]},{10:$V3,11:8,12:$V4,17:9},o([14,15],$V4,{17:9,11:11,10:$V3}),{10:$V3,12:[1,12],17:13},o($V5,[2,13]),{18:[1,14]},{10:$V3,14:[1,15],15:[1,16],17:13},o($V6,$V0,{6:17,8:19,4:21,2:$V7,7:$V8,9:$V1,13:$V2}),o($V5,[2,12]),{19:[1,22],20:[1,23]},o($V6,$V0,{8:19,4:21,6:24,2:$V7,7:$V8,9:$V1,13:$V2}),o([10,16],$V0,{8:19,4:21,6:25,2:$V7,7:$V8,9:$V1,13:$V2}),o($V9,[2,7]),o($V9,[2,2]),o($V6,[2,3],{4:26,9:$V1,13:$V2}),o($V9,[2,4]),o($V9,[2,6]),o($V5,[2,15]),o($V5,[2,16]),o($V9,[2,8]),{10:[1,28],16:[1,27]},o($V9,[2,5]),{10:[1,29]},{15:[1,30]},{15:[1,31]},o($V9,[2,10]),o($V9,[2,9])],
+table: [{3:1,4:2,9:$V0,13:$V1},{1:[3]},{5:[1,5]},{10:[1,6]},{10:[1,7]},{1:[2,1]},{10:$V2,11:8,12:$V3,17:9},o([14,15],$V3,{17:9,11:11,10:$V2}),{10:$V2,12:[1,12],17:13},o($V4,[2,12]),{18:[1,14]},{10:$V2,14:[1,15],15:[1,16],17:13},{2:$V5,4:21,6:17,7:$V6,8:19,9:$V0,13:$V1},o($V4,[2,11]),{19:[1,22],20:[1,23]},{2:$V5,4:21,6:24,7:$V6,8:19,9:$V0,13:$V1},{2:$V5,4:21,6:25,7:$V6,8:19,9:$V0,13:$V1},o($V7,[2,7]),o($V7,[2,2]),o([5,10,16],[2,3],{4:26,9:$V0,13:$V1}),o($V7,[2,4]),o($V7,[2,6]),o($V4,[2,14]),o($V4,[2,15]),o($V7,[2,8]),{10:[1,28],16:[1,27]},o($V7,[2,5]),{10:[1,29]},{15:[1,30]},{15:[1,31]},o($V7,[2,10]),o($V7,[2,9])],
 defaultActions: {5:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -714,54 +711,48 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:
 break;
-case 1:this.begin('comment');
+case 1:this.begin('cuerpo'); return 15
 break;
-case 2:this.popState();
+case 2:this.begin('INITIAL'); if(palabra.replaceAll(" ","") == "")  return 16; yy_.yytext = palabra; palabra = "";if(palabra=="<!--") return 'COMENTARIOS'; if(palabra.replaceAll(" ","") == "") return 7;
 break;
-case 3:/* skip comment content*/
+case 3:this.begin('INITIAL');  return 13; yy_.yytext = palabra; palabra = ""; return 7;
 break;
-case 4:this.begin('cuerpo'); return 15
+case 4:this.begin('INITIAL');  return 14; yy_.yytext = palabra; palabra = ""; return 7;
 break;
-case 5:this.begin('INITIAL'); if(palabra.replaceAll(" ","") == "")  return 16; yy_.yytext = palabra; palabra = "";if(palabra=="<!--") return 'COMENTARIOS'; if(palabra.replaceAll(" ","") == "") return 7;
+case 5:palabra += yy_.yytext;
 break;
-case 6:this.begin('INITIAL');  return 13; yy_.yytext = palabra; palabra = ""; return 7;
+case 6:return 12
 break;
-case 7:this.begin('INITIAL');  return 14; yy_.yytext = palabra; palabra = ""; return 7;
+case 7:return 16
 break;
-case 8:palabra += yy_.yytext;
+case 8:return 14
 break;
-case 9:return 12
+case 9:return 9
 break;
-case 10:return 16
+case 10:return 13
 break;
-case 11:return 14
+case 11:return 18;
 break;
-case 12:return 9
+case 12: yy_.yytext=yy_.yytext.substr(1,yy_.yyleng-2); return 19; 
 break;
-case 13:return 13
+case 13: yy_.yytext=yy_.yytext.substr(1,yy_.yyleng-2); return 20; 
 break;
-case 14:return 18;
+case 14:return 10;
 break;
-case 15: yy_.yytext=yy_.yytext.substr(1,yy_.yyleng-2); return 19; 
+case 15:return 5
 break;
-case 16: yy_.yytext=yy_.yytext.substr(1,yy_.yyleng-2); return 20; 
+case 16:
 break;
-case 17:return 10;
+case 17:
 break;
-case 18:return 5
+case 18:
 break;
-case 19:
-break;
-case 20:
-break;
-case 21:
-break;
-case 22:inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yy_.yytext +" Linea: "+ yy_.yylloc.first_line + "Columna: " + yy_.yylloc.first_column);
+case 19:inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yy_.yytext,yy_.yylloc.first_line,yy_.yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yy_.yytext +" Linea: "+ yy_.yylloc.first_line + "Columna: " + yy_.yylloc.first_column);
 break;
 }
 },
-rules: [/^(?:\/\/.*)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:<)/i,/^(?:.)/i,/^(?:\?>)/i,/^(?:<\/)/i,/^(?:\/>)/i,/^(?:<\?)/i,/^(?:<)/i,/^(?:=)/i,/^(?:"[^\"]*")/i,/^(?:'[^\']*')/i,/^(?:([a-zA-Z_À-ÿ])[a-zA-Z0-9_^ÑñÀ-ÿ]*)/i,/^(?:$)/i,/^(?:[ \r\t]+)/i,/^(?:\n+)/i,/^(?:\s+)/i,/^(?:.)/i],
-conditions: {"comment":{"rules":[2,3],"inclusive":false},"xml":{"rules":[0,1,4,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true},"cuerpo":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true},"INITIAL":{"rules":[0,1,4,9,10,11,12,13,14,15,16,17,18,19,20,21,22],"inclusive":true}}
+rules: [/^(?:[<][!][-][-][^>]*[-][-]+[>])/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:<)/i,/^(?:.)/i,/^(?:\?>)/i,/^(?:<\/)/i,/^(?:\/>)/i,/^(?:<\?)/i,/^(?:<)/i,/^(?:=)/i,/^(?:"[^\"]*")/i,/^(?:'[^\']*')/i,/^(?:([a-zA-Z_À-ÿ])[a-zA-Z0-9_^ÑñÀ-ÿ]*)/i,/^(?:$)/i,/^(?:[ \r\t]+)/i,/^(?:\n+)/i,/^(?:\s+)/i,/^(?:.)/i],
+conditions: {"comment":{"rules":[],"inclusive":false},"xml":{"rules":[0,1,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true},"cuerpo":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true},"INITIAL":{"rules":[0,1,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true}}
 });
 return lexer;
 })();

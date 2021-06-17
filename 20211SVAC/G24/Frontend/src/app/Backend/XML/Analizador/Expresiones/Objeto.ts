@@ -35,7 +35,6 @@ export default class Objeto extends Instruccion {
       for (let i of this.listaAtributos) {
         var s = i.interpretar(arbol, tabla);
         if (s.identificador == "encoding") {
-          console.log(s.valor);
           arbol.setEncoding(s.valor);
         }
       }
@@ -50,11 +49,9 @@ export default class Objeto extends Instruccion {
           var r = i.interpretar(arbol, tabla); /* Obtiene el objeto hijo */
           ts.setVariable(r);
         }
-        simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, ts);
-        //arbol.listaSimbolos.push(simbolo);
-
+        simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador,this.linea.toString(),this.columna.toString(), ts);
+        arbol.actualizarTabla(simbolo,this.linea.toString(),this.columna.toString());
     } else if (this.contenido != null) {
-      console.log(arbol.getEncoding());
       //if o switch buscando codificacion
       if (arbol.getEncoding() == "UTF-8") {
         this.contenido = (this.contenido);
@@ -68,8 +65,8 @@ export default class Objeto extends Instruccion {
       } else {
         this.contenido = this.contenido;
       }
-  
-      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.contenido);
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador,this.linea.toString(),this.columna.toString(), this.contenido);
+
     } else {
       listaErrores.push(new NodoErrores('SEMANTICO', this.identificador + ' Datos nulos', this.fila, this.columna));
     }

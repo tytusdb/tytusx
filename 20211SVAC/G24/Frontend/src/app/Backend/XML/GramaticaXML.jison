@@ -17,10 +17,9 @@ const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.c
 
 %%                
 /* Espacios en blanco */
-"//".*            	  {}
-"<!--"                              this.begin('comment');
-<comment>"-->"                      this.popState();
-<comment>.                          /* skip comment content*/
+
+[<][!][-][-][^>]*[-][-]+[>]                        {}
+
 
 ">"                     this.begin('cuerpo'); return 'MAYORQUE'
 
@@ -86,7 +85,6 @@ OBJETO
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS SELFCLOSE INSTRUCCION      {$$ = new objeto.default($2,null,$3,$5,@1.first_line,@1.first_column);}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS MAYORQUE INSTRUCCION SALIDA IDENTIFICADOR MAYORQUE {$$ = new objeto.default($2,null,$3,$5,@1.first_line,@1.first_column);}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS MAYORQUE INSTRUCCION IDENTIFICADOR MAYORQUE {$$ = new objeto.default($2,$5,$3,null,@1.first_line,@1.first_column);}
-        |       {$$=""}
         ;
 
 

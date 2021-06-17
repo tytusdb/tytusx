@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DataServiceProvider } from 'src/data-service';
 import * as saveAs from 'file-saver';
 import { NgxXml2jsonService } from 'ngx-xml2json';
+import { xml2json } from 'xml-js';
 
 
 @Component({
@@ -76,10 +77,33 @@ fileChanged2(e) {
 
 
   parseValueXML(){
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(this.dat.Cod_tab1, 'text/xml');
-    const obj = this.ngxXml2jsonService.xmlToJson(xml);
-    console.log(obj);
+    var result2 = xml2json(this.dat.Cod_tab1, {compact: true, spaces: 0,alwaysArray:true,attributesKey:"AtributoJSON",textKey:"TextoNodoJson"});
+    console.log((result2));
+    console.log(JSON.parse(result2));
+    this.dat.Cod_tab3 = "";
+    this.printValues(JSON.parse(result2));
   }
 
+  printValues(obj) {
+    for(var k in obj) {
+        if(obj[k] instanceof Object) {
+            this.printValues(obj[k]);
+        } else {
+            console.log(obj[k]);
+            this.dat.Cod_tab3 = this.dat.Cod_tab3 + "\n" + (obj[k])
+        }
+    }
+}
+
+
+  
+ recorrerJSON(JsonObject:Object){
+   var nombres =Object.keys(JsonObject) 
+    console.log(nombres)
+    for (var name in nombres) {
+      if (JsonObject.hasOwnProperty(name.toString())) {
+          console.log(JsonObject[name.toString()])
+      }
+    }
+ }
 }

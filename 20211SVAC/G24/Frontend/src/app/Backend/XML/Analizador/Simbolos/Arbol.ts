@@ -12,34 +12,30 @@ export default class Arbol {
   private NodoErrores: Array<NodoErrores>;
 
   public listaSimbolos: Array<reporteTabla>;
-  private dot:string;
-  private c:number;
-  private encoding:String;
+  private dot: string;
+  private c: number;
+  private encoding: String;
 
 
 
-  public getEncoding():String{
+  public getEncoding(): String {
     return this.encoding;
   }
 
-  public setEncoding(encoding:String){
-    this.encoding=encoding;
+  public setEncoding(encoding: String) {
+    this.encoding = encoding;
   }
- 
+
   public getSimbolos(): Array<reporteTabla> {
     return this.listaSimbolos;
   }
 
+ 
 
-   /* public actualizarTabla(identificador: string,contenido: string, listaAtributos: Atributo[] = [], listaObjetos: Objeto[], entorno:String,linea: string, columna: string): boolean {
+  public actualizarTabla(identificador: string, linea: string, columna: string): boolean {
     for (var elemento of this.listaSimbolos) {
-      if (
-        elemento.getIdentificador().toString() == identificador &&
-        elemento.getEntorno().toString() == entorno.toString()
-      ) {
-        elemento.setContenido(contenido);
-        elemento.setListaAtributos(listaAtributos);
-        elemento.setListaObjetos(listaObjetos);
+      if (elemento.getIdentificador().toString() == identificador) 
+      {
         elemento.setLinea(linea);
         elemento.setColumna(linea);
 
@@ -47,7 +43,7 @@ export default class Arbol {
       }
     }
     return false;
-  }
+  }/*
 public BuscarTipo(identificador: string): string {
     for (var elemento of this.listaSimbolos) {
       if (elemento.getIdentificador() == identificador.toLowerCase()) {
@@ -58,39 +54,39 @@ public BuscarTipo(identificador: string): string {
   }*/
 
 
- /* public getFuncion(identificador: String) {
-    for (let f of this.instrucciones) {
-      if (f instanceof Objeto) {
-        if (
-          identificador.toLowerCase() ==
-          (<Objeto>f).identificador.toLowerCase()
-        ) {
-          if (
-            !this.actualizarTabla(
-              f.identificador.toString(),
-              '',
-              f.fila.toString(),
-              '',
-              f.columna.toString()
-            )
-          ) {
-            let nuevoSimbolo = new reporteTabla(
-              f.identificador,
-              '',
-              'MetodoCreacion',
-              'void',
-              '',
-              f.fila.toString(),
-              f.columna.toString()
-            );
-            this.listaSimbolos.push(nuevoSimbolo);
-          }
-
-          return f;
-        }
-      }
-    }
-  }*/
+  /* public getFuncion(identificador: String) {
+     for (let f of this.instrucciones) {
+       if (f instanceof Objeto) {
+         if (
+           identificador.toLowerCase() ==
+           (<Objeto>f).identificador.toLowerCase()
+         ) {
+           if (
+             !this.actualizarTabla(
+               f.identificador.toString(),
+               '',
+               f.fila.toString(),
+               '',
+               f.columna.toString()
+             )
+           ) {
+             let nuevoSimbolo = new reporteTabla(
+               f.identificador,
+               '',
+               'MetodoCreacion',
+               'void',
+               '',
+               f.fila.toString(),
+               f.columna.toString()
+             );
+             this.listaSimbolos.push(nuevoSimbolo);
+           }
+ 
+           return f;
+         }
+       }
+     }
+   }*/
 
   public getNodoErrores(): Array<NodoErrores> {
     return this.NodoErrores;
@@ -135,26 +131,23 @@ public BuscarTipo(identificador: string): string {
     this.c = 0
   }
 
-  public getDot(raiz:nodoAST)
-    {
-        this.dot = "";
-        this.dot += "digraph {\n";
-        this.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n";
-        this.c = 1;
-        this.recorrerAST("n0",raiz);
-        this.dot += "}";
-        return this.dot;
-    }
+  public getDot(raiz: nodoAST) {
+    this.dot = "";
+    this.dot += "digraph {\n";
+    this.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n";
+    this.c = 1;
+    this.recorrerAST("n0", raiz);
+    this.dot += "}";
+    return this.dot;
+  }
 
-    public recorrerAST(padre:String, nPadre:nodoAST)
-    {
-        for(let hijo of nPadre.getHijos())
-        {
-            var nombreHijo = "n" + this.c;
-            this.dot += nombreHijo + "[label=\"" + hijo.getValor().replace("\"", "\\\"") + "\"];\n";
-            this.dot += padre + "->" + nombreHijo + ";\n";
-            this.c++;
-            this.recorrerAST(nombreHijo,hijo);
-        }
+  public recorrerAST(padre: String, nPadre: nodoAST) {
+    for (let hijo of nPadre.getHijos()) {
+      var nombreHijo = "n" + this.c;
+      this.dot += nombreHijo + "[label=\"" + hijo.getValor().replace("\"", "\\\"") + "\"];\n";
+      this.dot += padre + "->" + nombreHijo + ";\n";
+      this.c++;
+      this.recorrerAST(nombreHijo, hijo);
     }
+  }
 }

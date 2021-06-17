@@ -2,21 +2,24 @@
 
 <head>
     <title>CST</title>
-    <script type="text/javascript" src="js/vis-network.min.js"></script>
-    <script type="text/javascript" src="../js/gramatica.js"></script>
-    <script type="text/javascript" src="../js/interprete.js"></script>
-    <script type="text/javascript" src="../js/index.js"></script>
+    <script type="text/javascript" src="./js/vis-network.min.js"></script>
+    <script src="../xpath/Gramatica/gramaticaV2.js"></script>
+    <script src="../js/interprete.js"></script>
+    <script src="../xpath/MISPRUEBAS/index.js"></script>
 
 </head>
 
 <body>
     <p id="log"></p>
     <div id="mynetwork"></div>
+
     <script type="text/javascript">
+
+        //var hol = ejecutarCodigo(localStorage.getItem("xpath"))
         // create a network
         var container = document.getElementById("mynetwork");
         var DOTstring = localStorage.getItem("cst")
-        console.table(DOTstring)
+        //console.table(DOTstring)
         var parsedData = vis.parseDOTNetwork(DOTstring);
         var data = {
             nodes: parsedData.nodes,
