@@ -3,5 +3,5 @@
 
 #### Grupo 10
 
-https://lnmrcloud.github.io/compi2vacas21/
+https://tytusdb.github.io/tytusx/20211SVAC/G10/index.html
 
