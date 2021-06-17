@@ -196,6 +196,7 @@ const analysDescXml = () => {
 
   console.log('Analizador Descendente')
   var texto = xmlEditor.getValue();
+  var path = xpathEditor.getValue();
 
   //creacion del arbol
   const raiz_arbol = gramdesc.parse(texto);
@@ -205,18 +206,21 @@ const analysDescXml = () => {
   const tabla_simbolos = new Tabla_Simbolos(CrearTabla(raiz_arbol.objeto));
   console.log(tabla_simbolos);
 
-  //test consulta
-  let entrada = ['biblioteca', 'libro', 'autor'];
-  const consulta = new Consulta(entrada, 1, 1);
-  console.log('Entrada: ' + entrada);
-  consulta.ejecutar(tabla_simbolos.simbolos, {});
-
   //generacion del arbol 
   dotStringCst = CST_XML(raiz_arbol.objeto);
 
   //generacion reporte tabla de simbolos
   const TablaSimbolos = ReporteTabla(tabla_simbolos.simbolos, 'Global', []);
   console.log(TablaSimbolos);
+
+  //test consulta
+  let entrada = path.split('/')
+  entrada.splice(0, 1);
+  const consulta = new Consulta(entrada, 1, 1);
+  console.log('Entrada: ' + entrada);
+  consulta.ejecutar(tabla_simbolos.simbolos, {});
+
+
 
   //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
@@ -241,6 +245,7 @@ const analysAscXml = () => {
 
   console.log('Analizador Ascendente')
   var texto = xmlEditor.getValue();
+  var path = xpathEditor.getValue();
 
   //creacion del arbol
   const raiz_arbol = gramasc.parse(texto);
@@ -250,18 +255,20 @@ const analysAscXml = () => {
   const tabla_simbolos = new Tabla_Simbolos(CrearTabla(raiz_arbol.objeto));
   console.log(tabla_simbolos);
 
-  //test consulta
-  let entrada = ['biblioteca', 'libro', 'autor'];
-  const consulta = new Consulta(entrada, 1, 1);
-  console.log('Entrada: ' + entrada);
-  consulta.ejecutar(tabla_simbolos.simbolos, {});
-
   //generacion del arbol
   dotStringCst = CST_XML(raiz_arbol.objeto);
 
   //generacion reporte tabla de simbolos
   const TablaSimbolos = ReporteTabla(tabla_simbolos.simbolos, 'Global', []);
   console.log(TablaSimbolos);
+
+  //test consulta
+  let entrada = path.split('/')
+  entrada.splice(0, 1);
+  const consulta = new Consulta(entrada, 1, 1);
+  console.log('Entrada: ' + entrada);
+  consulta.ejecutar(tabla_simbolos.simbolos, {});
+
 
   //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
@@ -383,6 +390,17 @@ function CrearCST(objeto, count, node) {
  */
 const analysDescXpath = () => {
 
+  console.log('Analizador XPath desc')
+  var path = xpathEditor.getValue();
+
+  //ParserXPath
+  const xpath_in = gram_xpath_desc.parse(path);
+  console.log(xpath_in);
+
+
+
+
+
   errorTableXpath.destroy();
   errorTableXpath = newDataTable('#errorTableXpath',
     [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
@@ -396,7 +414,15 @@ const analysDescXpath = () => {
  * Perform bottom-up parsing of XPATH
  */
 const analysAscXpath = () => {
-  console.log("ASC XPATH FINISHED");
+
+  console.log('Analizador XPath desc')
+  var path = xpathEditor.getValue();
+
+  //ParserXPath
+  const xpath_in = gram_xpath_asc.parse(path);
+  console.log(xpath_in);
+
+
 
   errorTableXpath.destroy();
   errorTableXpath = newDataTable('#errorTableXpath',
