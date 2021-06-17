@@ -82,6 +82,7 @@
                             </div>
                             <form action="./Frontend/tablaSimbolos.html" method="get">
                                 <input hidden id="tabErrores" name="simbolostb"/>
+                                <input hidden id="tabSimbolosXML" name="tabSimbolosXML"/>
                                     <a><input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla de Simbolos"></a>
                             </form>
                             <form action="./Frontend/tabGramatical.html" method="get">
@@ -158,7 +159,7 @@
     <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
     <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
     <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
-    <script type="text/javascript" src="Gramaticas/xml/gramarxml.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
     <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
     <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
     <script src="./Gramaticas/xml/funcionesParseo.js"></script>
@@ -180,6 +181,7 @@
                             var xmlAST = grammarXMLAsc.getParser().parse(entrada);
                             llenarTablaErrores();
                             llenarTablaGramatical();
+                            document.getElementById('tabSimbolosXML').setAttribute('value',JSON.stringify(xmlAST));
                         } else {
                             alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
                         }
