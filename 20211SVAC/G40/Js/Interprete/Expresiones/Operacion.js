@@ -10,109 +10,162 @@ var Operacion = /** @class */ (function () {
         this.op_derecha = op_derecha;
         this.operador = operacion;
         this.operadores = tipo_op;
+        this.tipo = 666;
     }
-    Operacion.prototype.getTipo = function (ent, arbol) {
-        var valor = this.getValorImplicito(ent, arbol);
-        if (typeof (valor) === 'boolean') {
-            return Tipo.BOOL;
-        }
-        else if (typeof (valor) === 'string') {
-            return Tipo.STRING;
-        }
-        else if (typeof (valor) === 'number') {
-            if (this.isInt(Number(valor))) {
-                return Tipo.INT;
-            }
-            return Tipo.DOUBLE;
-        }
-        else if (valor === null) {
-            return Tipo.NULL;
-        }
-        return Tipo.VOID;
+    Operacion.prototype.getTipo = function (ent, arbol) {     
+        return this.tipo;
     };
-    Operacion.prototype.getValorImplicito = function (ent, arbol) {
-        if (this.operador !== Operador.MENOS_UNARIO && this.operador !== Operador.NOT) {
-            var op1 = this.op_izquierda.getValorImplicito(ent, arbol);
-            var op2 = this.op_derecha.getValorImplicito(ent, arbol);
-            //suma
-            if (this.operador == Operador.SUMA) {
-                if (typeof (op1 === "number") && typeof (op2 === "number")) {
-                    return op1 + op2;
-                }
-                else if (op1 === "string" || op2 === "string") {
-                    if (op1 == null)
-                        op1 = "null";
-                    if (op2 == null)
-                        op2 = "null";
-                    return op1.ToString() + op2.ToString();
-                }
-                else {
-                    console.log("Error de tipos de datos no permitidos realizando una suma");
-                    return null;
-                }
+
+    Operacion.prototype.getOperador = function(){
+        return this.operador;
+    };
+
+    Operacion.prototype.getValorImplicito = function (objetos, entornos) {
+
+        var objetosAux = [];
+        var entornosAux = [];
+        
+        if (this.operador==Operador.IGUAL){
+
+            
+            if(this.operadores==TipoOperadores.ATRIBUTOS){
+
+                
+
+                var idAux = this.op_izquierda.getValorImplicito(objetos, entornos);
+                var valorAux = this.op_derecha.getValorImplicito(objetos,entornos);
+
+                objetos.forEach(function (objeto){
+
+                    objeto.getAtributos().forEach(function (atributo){
+        
+                        if(atributo.getID()==idAux && atributo.getValor()==valorAux){
+        
+                            if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                objetosAux.push(objeto);
+                                if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                    entornosAux.push(objeto.getEntorno());
+                                } 
+                            }  
+        
+                        }
+                                                 
+                    });
+                    });            
+                
+                objetosGlobal = objetosAux;
+                entornosGlobal = entornosAux;                                         
+                return [entornosAux, objetosAux];
+           } else if (this.operadores==TipoOperadores.ELEMENTOS) {
+
+            var idAux = this.op_izquierda.getValorImplicito(objetos, entornos).toString();
+            var valorAux = this.op_derecha.getValorImplicito(objetos,entornos).toString();
+
+                objetos.forEach(function (objeto){
+
+                    objeto.getObjetos().forEach(function (obj){
+        
+                        if(obj.getID()==idAux && obj.getTexto()==valorAux){
+        
+                            if(ObjetoYaExiste(objetosAux,objeto.LeerID())==false){
+                                objetosAux.push(objeto);
+                                if(EntornoYaExiste(entornosAux,objeto.getEntorno().getID())==false){
+                                    entornosAux.push(objeto.getEntorno());
+                                } 
+                            }  
+        
+                        }
+                                                 
+                    });
+                    });            
+                
+                objetosGlobal = objetosAux;
+                entornosGlobal = entornosAux;                                         
+                return [entornosAux, objetosAux];
+           }
+
+        } else if  (this.operador==Operador.SUMA) {
+
+            var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+            var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+            if (typeof (valor1 === "number") && typeof (valor2 === "number")) {
+                return valor1+valor2;
+            } else {
+                objetosGlobal = objetos;
+                entornosGlobal = entornos;                                         
+                return [entornos, objetos];
             }
-            //resta
-            else if (this.operador == Operador.RESTA) {
-                if (typeof (op1 === "number") && typeof (op2 === "number")) {
-                    return op1 - op2;
-                }
-                else {
-                    console.log("Error de tipos de datos no permitidos realizando una suma");
-                    return null;
-                }
+
+
+
+        } else if  (this.operador==Operador.RESTA) {
+
+            var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+            var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+            if (typeof (valor1 === "number") && typeof (valor2 === "number")) {
+                return valor1-valor2;
+            } else {
+                objetosGlobal = objetos;
+                entornosGlobal = entornos;                                         
+                return [entornos, objetos];
             }
-            //multiplicación
-            else if (this.operador == Operador.MULTIPLICACION) {
-                if (typeof (op1 === "number") && typeof (op2 === "number")) {
-                    return op1 * op2;
-                }
-                else {
-                    console.log("Error de tipos de datos no permitidos realizando una suma");
-                    return null;
-                }
+
+
+
+        }   else if  (this.operador==Operador.MULTIPLICACION) {
+
+            var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+            var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+            if (typeof (valor1 === "number") && typeof (valor2 === "number")) {
+                return valor1*valor2;
+            } else {
+                objetosGlobal = objetos;
+                entornosGlobal = entornos;                                         
+                return [entornos, objetos];
             }
-            //division
-            else if (this.operador == Operador.DIVISION) {
-                if (typeof (op1 === "number") && typeof (op2 === "number")) {
-                    if (op2 === 0) {
-                        console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
-                        return null;
-                    }
-                    return op1 / op2;
-                }
-                else {
-                    console.log("Error de tipos de datos no permitidos realizando una suma");
-                    return null;
-                }
+
+
+
+        } else if  (this.operador==Operador.DIVISION) {
+
+            var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+            var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+            if (typeof (valor1 === "number") && typeof (valor2 === "number")) {
+                return valor1/valor2;
+            } else {
+                objetosGlobal = objetos;
+                entornosGlobal = entornos;                                         
+                return [entornos, objetos];
             }
-            //modulo
-            else if (this.operador == Operador.MODULO) {
-                if (typeof (op1 === "number") && typeof (op2 === "number")) {
-                    if (op2 === 0) {
-                        console.log("Resultado indefinido, no puede ejecutarse operación sobre cero.");
-                        return null;
-                    }
-                    return op1 % op2;
-                }
-                else {
-                    console.log("Error de tipos de datos no permitidos realizando una suma");
-                    return null;
-                }
+
+
+
+        } else if  (this.operador==Operador.MODULO) {
+
+            var valor1 = this.op_izquierda.getValorImplicito(objetos, entornos);
+            var valor2 = this.op_derecha.getValorImplicito(objetos,entornos);
+
+            if (typeof (valor1 === "number") && typeof (valor2 === "number")) {
+                return valor1%valor2;
+            } else {
+                objetosGlobal = objetos;
+                entornosGlobal = entornos;                                         
+                return [entornos, objetos];
             }
+
+
+
+        }else{
+            objetosGlobal = objetos;
+            entornosGlobal = entornos;                                         
+            return [entornos, objetos];
         }
-        else {
-            var op1 = this.op_izquierda.getValorImplicito(ent, arbol);
-            if (this.operador == Operador.MENOS_UNARIO) {
-                if (typeof (op1 === "number")) {
-                    return -1 * op1;
-                }
-                else {
-                    console.log("Error de tipos de datos no permitidos realizando una operación unaria");
-                    return null;
-                }
-            }
-        }
-        return null;
+
+     
     };
     Operacion.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;

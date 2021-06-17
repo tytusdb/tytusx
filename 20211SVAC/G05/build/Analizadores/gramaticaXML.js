@@ -84,66 +84,134 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- this.$=$$[$0-1]; return this.$; 
+ this.$ = $$[$0-1]; 
+                         gramatical.agregar('Start->Roots','$$=$$[$0-1]');
+                         return {
+                              result: this.$,
+                              reporteGram: gramatical
+                         }; 
 break;
-case 2: case 12:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+case 2:
+ $$[$0-1].push($$[$0]);
+                         gramatical.agregar('Roots->Roots Root','$$[$0-1].push($$[$0])');
+                         this.$ = $$[$0-1]; 
 break;
-case 3: case 13:
- this.$=[$$[$0]]; 
+case 3:
+ this.$ = [$$[$0]]; 
+                          gramatical.agregar('Roots->Root','$$=Array($$[$0])');
+                         
 break;
 case 4:
  this.$ = new Objeto($$[$0-7],'',_$[$0-7].first_line,_$[$0-7].first_column,[],[],$$[$0-1]); 
+                                                                                      gramatical.agregar('ROOT -> prologo RVERSION asig StringLiteral1 RENCODING asig StringLiteral1 prologc','$$ = new Objeto()');
+                                                                                     
 break;
 case 5:
  this.$ = new Objeto($$[$0-6],'',_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-5],$$[$0-3],$$[$0-1]); 
+                                                                                      gramatical.agregar('ROOT -> lt identifier LIST_ATRIBUTOS gt ROOTS etiqca identifier gt','$$= new Objeto()');
+                                                                                     
 break;
 case 6:
- this.$ = new Objeto($$[$0-6],$$[$0-3],_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-5],[],$$[$0-1]) ; console.log('S' + $$[$0-3] + 'G')
+ this.$ = new Objeto($$[$0-6],$$[$0-3],_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-5],[],$$[$0-1]); 
+                                                                                      gramatical.agregar('ROOT -> lt identifier LIST_ATRIBUTOS gt CONTENTS etiqca identifier gt','$$ = new Objeto()');
+                                                                                     
 break;
 case 7:
- this.$ = new Objeto($$[$0-5],'',_$[$0-6].first_line,_$[$0-6].first_column,$$[$0-4],[],$$[$0]) ; 
+ this.$ = new Objeto($$[$0-5],'',_$[$0-6].first_line,_$[$0-6].first_column,$$[$0-4],[],$$[$0]); 
+                                                                                      gramatical.agregar('ROOT -> lt identifier LIST_ATRIBUTOS gt etiqca identifier gt','$$ = new Objeto();');
+                                                                                     
 break;
 case 8:
  this.$ = new Objeto($$[$0-2],'',_$[$0-3].first_line,_$[$0-3].first_column,$$[$0-1],[],''); 
+                                                                                      gramatical.agregar('ROOT ->  lt identifier LIST_ATRIBUTOS etiqcc ','$$ = new Objeto()');
+                                                                                     
 break;
-case 9: case 16:
-   console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
-					new ESintactico("Sintactico", "No se esperaba: "+yytext,"XML Asc", this._$.first_line , this._$.first_column);
-				
+case 9:
+ console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                                                                                      new ESintactico("Sintactico", "No se esperaba: "+yytext,"XML Asc", this._$.first_line , this._$.first_column);
+                                                                                    
 break;
 case 10:
- this.$=$$[$0]; 
+ this.$ = $$[$0];
+                                                        gramatical.agregar('LIST_ATRIBUTOS -> ATRIBUTOS','$$=$$[$0]');
+                                                        
 break;
 case 11:
- this.$=[]; 
+ this.$ = []; 
+                                                        gramatical.agregar('LIST_ATRIBUTOS -> ','$$ = [];');
+                                                       
 break;
-case 14: case 15:
+case 12:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+                                                             gramatical.agregar('ATRIBUTOS -> ATRIBUTOS ATRIBUTO','$$[$0-1].push($$[$0]); this.$ = $$[$0-1]');
+                                                       
+break;
+case 13:
+ this.$ = [$$[$0]]; 
+                                                        gramatical.agregar('ATRIBUTOS -> ATRIBUTO','$$=Array($$[$0])');
+                                                       
+break;
+case 14:
  this.$ = new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
+                                                       gramatical.agregar('ATRIBUTO -> id asig StringLiteral1','$$ = new Atributo()');
+                                                  
+break;
+case 15:
+ this.$ = new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column); 
+                                                        gramatical.agregar('ATRIBUTO -> id asig StringLiteral2','$$ = new Atributo()');
+                                                  
+break;
+case 16:
+ console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                                                      new ESintactico("Sintactico", "No se esperaba: "+yytext,"XML Asc", this._$.first_line , this._$.first_column);
+                                                    
 break;
 case 17:
- $$[$0-1] = $$[$0-1] + ' ' + $$[$0]; this.$=$$[$0-1];
+ $$[$0-1] = $$[$0-1] + ' ' + $$[$0]; this.$ = $$[$0-1];
+                                                       gramatical.agregar('Contents -> Contents Body','ConcatenarCaracteres()');
+                                                  
 break;
 case 18:
- this.$ = $$[$0];
-break;
-case 19: case 20: case 26: case 27:
  this.$ = $$[$0]; 
+                                                       gramatical.agregar('Contents -> Body','$$=$$[$0]');        
+                                                  
+break;
+case 19:
+ this.$ = $$[$0];  
+                                                       gramatical.agregar('Body -> Id','$$=$$[$0]');        
+                                                  
+break;
+case 20:
+ this.$ = $$[$0]; 
+                                                       gramatical.agregar('Body -> DoubleLiteral','$$=$$[$0]');
 break;
 case 21:
  this.$ = '<'; 
+                                                       gramatical.agregar('Body -> <','$$=$$[$0]');
 break;
 case 22:
  this.$ = '>'; 
+                                                       gramatical.agregar('Body -> >','$$=$$[$0]');
 break;
 case 23:
  this.$ = '&'; 
+                                                       gramatical.agregar('Body -> &','$$=$$[$0]');
 break;
 case 24:
  this.$ = "'"; 
+                                                       gramatical.agregar("Body -> '",'$$=$$[$0]');
 break;
 case 25:
  this.$ = '"'; 
+                                                       gramatical.agregar('Body -> "','$$=$$[$0]');
+break;
+case 26:
+ this.$ = $$[$0]; 
+                                                       gramatical.agregar('Body -> simbolos1','$$=$$[$0]');
+break;
+case 27:
+ this.$ = $$[$0]; 
+                                                       gramatical.agregar('Body -> asig','$$=$$[$0]');
 break;
 }
 },
@@ -401,6 +469,8 @@ _handle_error:
 const { Objeto } = require('../Interprete/Expresion/Objeto');
 const { Atributo } = require('../Interprete/Expresion/Atributo');
 const {ELexico, ESintactico} = require('../Interprete/Util/TError')
+const {Gramatical} = require('../Simbolo/Gramatical')
+ var gramatical = new Gramatical(); 
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){

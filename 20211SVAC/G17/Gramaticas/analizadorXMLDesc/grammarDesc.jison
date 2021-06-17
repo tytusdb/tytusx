@@ -62,7 +62,9 @@
 <EtiquetaComentario>[ \r\t]+  {}
 <EtiquetaComentario>\n        {}
 <EtiquetaComentario>"-->"     {this.popState(); }
-<EtiquetaComentario>[^"-->"]+ {} 
+<EtiquetaComentario>"-"       {}
+<EtiquetaComentario>">"       {}
+<EtiquetaComentario>[^-->]+   {} 
 
 <Etiquetai>[ \r\t]+  {}
 <Etiquetai>\n        {}

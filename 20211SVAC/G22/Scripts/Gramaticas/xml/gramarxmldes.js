@@ -573,7 +573,7 @@ var gramarxmldes = (function(){
         
     
         
-        define(function () {
+        define('grammarXMLDesc',function () {
         return {
             getParser: function () {
                 return gramarxmldes;

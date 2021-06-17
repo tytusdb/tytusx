@@ -21,11 +21,11 @@ function generarAST_gramatical(intruccion){
     graphviz_code="";
     graphviz_code+='digraph  { ';
     Padre=0;
+    
     graficarNodo_g(intruccion,null);
 
     graphviz_code+='}';
     d3.select("#graph").graphviz().renderDot(graphviz_code);
-    console.log(graphviz_code);
     
 }
 
@@ -37,8 +37,10 @@ function  graficarNodo(AST_xPath,Padre){
     if(AST_xPath.valor){
         if (AST_xPath.valor === `"`) {
             let escaparCaracter = AST_xPath.replaceAll(`"`,`\"`);
+            
             graphviz_code+=etiqueta+'[label= "'+ escaparCaracter +'" fillcolor="#d62728" shape="circle"];\n';
         } else {
+            
             graphviz_code+=etiqueta+'[label= "'+AST_xPath.valor+'" fillcolor="#d62728" shape="circle"];\n';
         }
         
@@ -47,6 +49,7 @@ function  graficarNodo(AST_xPath,Padre){
             let escaparCaracter = AST_xPath.replaceAll(`"`,`\"`);
             graphviz_code+=etiqueta+'[label= "'+ escaparCaracter +'" fillcolor="#d62728" shape="circle"];\n';
         } else {
+            
             graphviz_code+=etiqueta+'[label= "'+AST_xPath+'" fillcolor="#d62728" shape="circle"];\n';
         }
         
@@ -69,7 +72,7 @@ function  graficarNodo_g(AST_xPath,Padre){
    
     if(AST_xPath.hijos==null){
         ++etiqueta;
-        console.log(AST_xPath);
+        
         graphviz_code+=etiqueta+'[label= "'+AST_xPath+'" fillcolor="#d62728" shape="circle"];\n';
         if(Padre!=null&&Padre>0){
             graphviz_code+=Padre+"->"+etiqueta+";\n";
