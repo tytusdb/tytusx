@@ -5,6 +5,8 @@ import { Instruccion } from "../Interfaz/instruccion";
 import { Atributo } from "../XML/Atributo";
 import { Objeto } from "../XML/Objeto";
 import { Nodo, TipoAxis, TipoNodo } from "./Nodo";
+import { Predicate } from "./Predicate";
+import { TipoPrim } from "../Expresiones/Primitiva";
 
 export class Consulta implements Instruccion {
   linea: number;
@@ -50,48 +52,57 @@ export class Consulta implements Instruccion {
     let actualNode: Nodo = this.listaNodos[pos];
     switch (actualNode.getTipo()) {
       case TipoNodo.IDENTIFIER:
-        //Buscar si este id existe en el entorno.
-        //Antes de entrar al foreach revisar si se debe hacer para cada elemento  o no.
-        for (let i = 0; i < ent.tsimbolos.length; i++) {
-          //Ver si este simbolo es igual a actualNode.getNombre()
-          let elem = ent.tsimbolos[i].valor;
-          if (elem.getNombre() === actualNode.getNombre()) {
-            //Si existe este simbolo en el entorno.
-            //1. Revisar si es el ultimo nodo a buscar
-            if (pos + 1 < this.listaNodos.length) {
-              //Aun existen mas nodos en la consulta, ir a buscar eso
-              let auxSal;
-              [auxSal, rompeCiclo] = this.obtenerSalida(
-                pos + 1,
-                elem.valor,
-                elem,
-                rompeCiclo
-              );
-              salida += auxSal;
-            } else {
-              //Es el ultimo nodo en la consulta, escribir su informacion de objeto
-              if (elem.getTipo() === Tipo.STRING) {
-                salida += this.concatHijoTexto(elem, 0);
+        //Revisar Si tiene predicado este nodo.
+        let predicado: Predicate | undefined = actualNode.getPredicado();
+        if (predicado != undefined) {
+         let auxSal;
+          [auxSal, rompeCiclo] = this.obtenerConsultaPredicado(predicado, pos, ent, elemAux, rompeCiclo);
+          salida += auxSal;
+
+        } else {
+          //Buscar si este id existe en el entorno.
+          //Antes de entrar al foreach revisar si se debe hacer para cada elemento  o no.
+          for (let i = 0; i < ent.tsimbolos.length; i++) {
+            //Ver si este simbolo es igual a actualNode.getNombre()
+            let elem = ent.tsimbolos[i].valor;
+            if (elem.getNombre() === actualNode.getNombre()) {
+              //Si existe este simbolo en el entorno.
+              //1. Revisar si es el ultimo nodo a buscar
+              if (pos + 1 < this.listaNodos.length) {
+                //Aun existen mas nodos en la consulta, ir a buscar eso
+                let auxSal;
+                [auxSal, rompeCiclo] = this.obtenerSalida(
+                  pos + 1,
+                  elem.valor,
+                  elem,
+                  rompeCiclo
+                );
+                salida += auxSal;
               } else {
-                salida += this.getConsultaObjeto(elem, 0);
+                //Es el ultimo nodo en la consulta, escribir su informacion de objeto
+                if (elem.getTipo() === Tipo.STRING) {
+                  salida += this.concatHijoTexto(elem, 0);
+                } else {
+                  salida += this.getConsultaObjeto(elem, 0);
+                }
+              }
+            } else if (!actualNode.isFromRoot()) {
+              //Este nodo es de tipo //, entonces entrar a buscar de todos modos.
+              if (elem.getTipo() === Tipo.ETIQUETA) {
+                let auxSal;
+                [auxSal, rompeCiclo] = this.obtenerSalida(
+                  pos,
+                  elem.valor,
+                  elem,
+                  rompeCiclo
+                );
+                salida += auxSal;
               }
             }
-          } else if (!actualNode.isFromRoot()) {
-            //Este nodo es de tipo //, entonces entrar a buscar de todos modos.
-            if (elem.getTipo() === Tipo.ETIQUETA) {
-              let auxSal;
-              [auxSal, rompeCiclo] = this.obtenerSalida(
-                pos,
-                elem.valor,
-                elem,
-                rompeCiclo
-              );
-              salida += auxSal;
+            if (rompeCiclo) {
+              //Salir del ciclo del for.
+              break;
             }
-          }
-          if (rompeCiclo) {
-            //Salir del ciclo del for.
-            break;
           }
         }
         break;
@@ -1023,16 +1034,104 @@ export class Consulta implements Instruccion {
             break;
         }
         break;
-        case TipoNodo.NODOERROR:
-          if(pos + 1 < this.listaNodos.length){
-            //Ignorar este y moverme hacia el siguiente nodo.
-            salida += this.obtenerSalida(pos+1, ent, elemAux, rompeCiclo);
-          }else{
-            salida += "";
-          }
+      case TipoNodo.NODOERROR:
+        if (pos + 1 < this.listaNodos.length) {
+          //Ignorar este y moverme hacia el siguiente nodo.
+          salida += this.obtenerSalida(pos + 1, ent, elemAux, rompeCiclo);
+        } else {
+          salida += "";
+        }
     }
     return [salida, rompeCiclo];
   }
+
+  encontrarEntorno(padre: Entorno, entBuscar: string): Entorno | null {
+    for(let i = 0; i < padre.tsimbolos.length; i++){
+      let elem = padre.tsimbolos[i].valor;
+
+      if(elem.getTipo() == Tipo.ETIQUETA && elem.getNombre() == entBuscar){
+        return elem.valor;
+      }
+    }
+    return null;
+  }
+
+  obtenerConsultaPredicado(predicado: Predicate, pos: number, ent: Entorno, elemAux: any, rompeCiclo: boolean): [String, boolean] {
+    let salida = "";
+    //0. Obtener entorno sobre quien quiero obtener el predicado.
+    let actualNode: Nodo = this.listaNodos[pos];    
+    let auxEnt = this.encontrarEntorno(ent, actualNode.getNombre());
+    if(auxEnt == null){
+      return [salida, rompeCiclo];
+    }else{
+      ent = auxEnt;
+    }
+    //1. Obtener el valor del predicado. (Para que se le asigne tipo tambien)
+    let predValue = predicado.getValor(ent);
+    //2. Obtener el tipo del predicado. 
+    console.log("predValue: ",predValue);
+    let predTipo = predicado.getTipo();
+    switch(predTipo){
+      case TipoPrim.INTEGER:
+        //Ver si el numero es coherente (mayor a 0);
+        if(predValue < 1){
+          return [salida, rompeCiclo];
+        }
+        //Contar las veces que sean necesarias para obtener el nodo requerido
+        //Buscar actualNode n veces.
+        let veces = 1;
+        console.log(ent.nombre);
+        ent.tsimbolos.forEach((e: any) => {
+          let elem = e.valor;
+          
+          if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === actualNode.getNombre()){
+            if(veces == predValue){
+              //Ya, devolver el nodo.
+              //Ver si es la ultima posicion o no
+              if(pos+ 1 < this.listaNodos.length){
+                let auxSal;
+                [auxSal, rompeCiclo] = this.obtenerSalida(pos+1, elem.valor, elemAux, rompeCiclo)
+                salida += auxSal;
+              }else{
+                //Es el ultimo, devolver la consulta sobre este entorno.
+                salida += this.getConsultaObjeto(elem, 0);
+              }
+            }
+            veces++;
+          }
+        })
+        break;
+      case TipoPrim.DOUBLE:
+        //Retornar vacio "";
+        break;
+      
+      case TipoPrim.BOOLEAN:
+        break;
+      
+      case TipoPrim.FUNCION:
+        //Un TipoPrim.Funcion devuelve un Entorno temporal que contiene
+        //Todas las etiquetas a escribir.
+        predValue.tsimbolos.forEach((e: any) => {
+            let elem = e.valor;
+            //Ver si es el ultimo nodo
+            if(pos+ 1 < this.listaNodos.length){
+              //Aun faltan mas nodos, para cada elemento continuar la consulta con su entorno respectivo
+              let auxSal: String = "";
+
+              [auxSal, rompeCiclo] = this.obtenerSalida(pos+1, elem.valor, elemAux, rompeCiclo);
+              salida += auxSal;
+            }else{
+              //Es el ultimo nodo, devolver la consulta sobre este elemento
+              salida += this.getConsultaObjeto(elem, 0);
+            }
+          });
+        
+        break;
+    }
+    return [salida, rompeCiclo];
+
+  }
+
 
   addTabs(nTabs: number) {
     let tabs = "";

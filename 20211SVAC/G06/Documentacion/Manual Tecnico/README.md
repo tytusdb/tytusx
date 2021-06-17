@@ -1,3 +1,32 @@
+# Clases para tabla de simbolos XML
+
+## Clase entorno
+La clase entorno tiene la capacidad de albergar mas entornos dentro de el ademas de atributos
+para sus etiquetas, tambien resguarda el nombre de las etiquetas xml de apertura y cierre.
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/entornoXml.png)
+
+## Clase simbolo
+Esta clase tiene dentro de ella un estructura en la cual se se guarda un id y un valor asociado
+a este id, por el tipo del lenguaje este valor solo puede ser de tipo string.
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/simboloXml.png)
+
+## Interfaz expresion
+Esta interfaz da los para metros que debe llevar las clases siguientes de los nodos ast
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/d1.png)
+
+## Clase Path
+Esta clase ejecuta los querys de xpath
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/d2.png)
+
+## Clase Aritmetico
+Esta clase implementa la interfaz expresion para hacer las consultas
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/d3.png)
+
 # Métodos y clases para los reportes
 
 ## crearTextoGraphvizRepGram

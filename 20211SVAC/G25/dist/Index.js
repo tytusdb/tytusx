@@ -87,20 +87,51 @@ function ambito_objeto(listO, entornoAnterior) {
 let texto = ``;
 var text = ``;
 var entorno_actual = [];
+var instruccionesXPATH;
 function ejecutarXPATH(query) {
     text = ``;
     texto = ``;
     entorno_actual = [];
-    let ast = Grammar_xpath.parse(query);
+    instruccionesXPATH = G_xpath.parse(query);
     let list_entorno = [];
-    //console.log(entornoGlobal)
-    ast.getValorImplicito().valor.forEach((id) => {
-        if (id.toString()[0] == "/" && id.toString()[1] == "/") {
-            list_entorno = getEntornoActual(entornoGlobal, id.toString().substring(2, id.toString().length));
-            console.log(id.toString().substring(2, id.toString().length));
-            //console.log(descendiente(entornoGlobal, "autor"))
-        }
+    let list_entorno2 = [];
+    instruccionesXPATH.getInstrucciones().forEach((or) => {
+        or.forEach((o) => {
+            if (list_entorno.length == 0) {
+                if (o.getNode() == "//") {
+                    list_entorno = getEntornoActual(entornoGlobal, o.getPredicado());
+                    //console.log(descendiente(entornoGlobal, "autor"))
+                }
+                else if (o.getNode() == "/") {
+                    list_entorno = getEntornoActualSinDescendite(entornoGlobal, o.getPredicado());
+                }
+            }
+            else {
+                entorno_actual = [];
+                if (o.getNode() == "//") {
+                    list_entorno.forEach(e => {
+                        list_entorno2 = getEntornoActual(e.entorno, o.getPredicado());
+                    });
+                    list_entorno = list_entorno2;
+                }
+                else if (o.getNode() == "/") {
+                    list_entorno.forEach(e => {
+                        list_entorno2 = getEntornoActualSinDescendite(e.entorno, o.getPredicado());
+                    });
+                    list_entorno = list_entorno2;
+                }
+            }
+            /*if (entorno_actual.length == 0) {
+              editor2.setValue("Error!!!");
+              return;
+            } */
+            console.log("efe");
+        });
+        console.log("for | ");
     });
+    if (list_entorno2.length != 0) {
+        list_entorno = list_entorno2;
+    }
     list_entorno.forEach((e) => {
         //console.log(e)
         print_entorno(e);
@@ -133,7 +164,33 @@ function print_entorno(o) {
     }
     return text;
 }
+//Busca el entorno descendiente "//"
 function getEntornoActual(entornoG, id) {
+    for (let key in entornoG.getTabla()) {
+        if (entornoG.getSimbolo(key).id === id) {
+            entorno_actual.push(entornoG.getSimbolo(key).getValorImplicito());
+        }
+        let siguienteEntorno = entornoG.getSimbolo(key).getValorImplicito().entorno;
+        if (siguienteEntorno != null) {
+            getEntornoActual(siguienteEntorno, id);
+        }
+    }
+    return entorno_actual;
+}
+//Busca el entorno descendiente "//"
+function getEntornoActualSinDescendite(entornoG, id) {
+    for (let key in entornoG.getTabla()) {
+        if (entornoG.getSimbolo(key).id === id) {
+            entorno_actual.push(entornoG.getSimbolo(key).getValorImplicito());
+        }
+        /*let siguienteEntorno = entornoG.getSimbolo(key).getValorImplicito().entorno;
+          if (siguienteEntorno != null) {
+            getEntornoActual(siguienteEntorno, id)
+          }*/
+    }
+    return entorno_actual;
+}
+function getEntorno(entornoG, id) {
     for (let key in entornoG.getTabla()) {
         if (entornoG.getSimbolo(key).id === id) {
             //console.log(entornoG)
@@ -158,21 +215,23 @@ function descendiente(entornoG, id) {
 }
 //ejecutarXML();
 //ejecutarXPATH();
-//entorno.getSimbolo("libro").getValorImplicito().entorno.getSimbolo('autor').getValorImplicito().text );
-/*
-//REPORTE GRAMATICAL
-console.log(instrucciones.getProducciones())
-
-//REPORTE
-const reporte = new ReporteXML();
-console.log(reporte.tablaSimbolos(entornoGlobal,"0"));
-
-//PRODUCIONES
-console.log(instrucciones.getProducciones());
-
-*/
+function getTablaSimboloXML() {
+    const reporte = new ReporteXML();
+    return reporte.tablaSimbolos(entornoGlobal, "0");
+}
+function getReporteErrorXMLASC() {
+    return instrucciones.getErrores();
+}
+function getReporteGramaticalXMLASC() {
+    return instrucciones.getProducciones();
+}
 function getGrafoAscXML() {
     //GRAFO
     let graph = new GraphAST(instrucciones);
+    return graph.getGrafo();
+}
+function getGrafoAscXPATH() {
+    //GRAFO
+    let graph = new GraphASTXPATH(instruccionesXPATH);
     return graph.getGrafo();
 }

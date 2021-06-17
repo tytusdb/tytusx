@@ -14,7 +14,7 @@ const parseXML = function (entrada) {
 
                 //Si la entrada fue parseada correctamente, se procede a generar el reporte de Tabla de Símbolos
                 console.log("\n\n\n################################################################");
-                var codigoTablaSimbolos = construyeGraficaTS(resultado);
+                var codigoTablaSimbolos = construyeGraficaTS(resultado[0].listaObjetos[0]);
                 console.log("\n################################################################");
                 document.getElementById("hiddenTablaSimbolos").value = codigoTablaSimbolos;
 
@@ -54,8 +54,8 @@ const parseXMLTS = function (raiz){
     raiz.agregarObjeto(Nodo1);
     raiz.agregarObjeto(Nodo2);
     Nodo1.agregarObjeto(Nodo3);
-    alert("Cantidad objetos Raiz: "+raiz.listaObjetos.length);
-    alert("Cantidad objetos Nodo1: "+Nodo1.listaObjetos.length);
+    //alert("Cantidad objetos Raiz: "+raiz.listaObjetos.length);
+    //alert("Cantidad objetos Nodo1: "+Nodo1.listaObjetos.length);
     //alert("Raiz ID: " + raiz.identificador);
     //alert("Hijo ID: " + raiz.listaObjetos[0].identificador +"\nHijo2 ID: "+raiz.listaObjetos[1].identificador);
     
@@ -143,7 +143,7 @@ function probandoArbol(){
     var Raiz = new Nodo('Raiz','Raiz'); //Se crea un primer nodo para la raíz del Arbol
     var Tree = new Arbol('CST',Raiz); //Se crea el arbol indicando ID y Raiz
     
-    alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
+    //alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
     Raiz.insertHijo('A','Hijo1');
     Raiz.insertHijo('B','Hijo2');
     Raiz.insertHijo('C','Hijo3');
@@ -190,7 +190,7 @@ function probandoArbolAST(){
     var Raiz = new Nodo('Raiz','+'); //Se crea un primer nodo para la raíz del Arbol
     var Tree = new Arbol('AST',Raiz); //Se crea el arbol indicando ID y Raiz
     
-    alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
+    //alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
     Raiz.insertHijo('A','*');
     Raiz.insertHijo('B','*');
 
@@ -226,7 +226,7 @@ function pruebaGraficarViz(grafica){
     viz.renderSVGElement(grafica)
     .then(function(element) {
         //document.body.appendChild(element);
-        alert('entro a la funcion elemento');
+        //alert('entro a la funcion elemento');
         let elemento = document.getElementById('grafica');
         elemento.appendChild(element);
     })
@@ -258,3 +258,5 @@ function showCode(){
     var text = editor.getValue();
     return text;
 }
+
+
