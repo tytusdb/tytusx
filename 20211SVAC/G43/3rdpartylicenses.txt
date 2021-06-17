@@ -54,9 +54,6 @@ THE SOFTWARE.
 @angular/common
 MIT
 
-@angular/compiler
-MIT
-
 @angular/core
 MIT
 
@@ -88,10 +85,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
-@angular/platform-browser
-MIT
+@angular/material/button
 
-@angular/platform-browser-dynamic
+@angular/material/toolbar
+
+@angular/platform-browser
 MIT
 
 @angular/router
