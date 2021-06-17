@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DataServiceProvider } from 'src/data-service';
 import * as saveAs from 'file-saver';
 import { NgxXml2jsonService } from 'ngx-xml2json';
+import { xml2json } from 'xml-js';
 
 
 @Component({
@@ -76,10 +77,35 @@ fileChanged2(e) {
 
 
   parseValueXML(){
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(this.dat.Cod_tab1, 'text/xml');
-    const obj = this.ngxXml2jsonService.xmlToJson(xml);
-    console.log(obj);
+    var result2 = xml2json(this.dat.Cod_tab1, {compact: true, spaces: 0,alwaysArray:true,attributesKey:"AtributoJSON",textKey:"TextoNodoJson"});
+    console.log((result2));
+    console.log(JSON.parse(result2));
+    this.recorrerJSON(JSON.parse(result2));
   }
 
+ process(key,value) {
+    console.log(key + " : "+value);
+}
+
+ traverse(o,func) {
+    for (var i in o) {
+        func.apply(this,[i,o[i]]);  
+        if (o[i] !== null && typeof(o[i])=="object") {
+            //going one step down in the object tree!!
+            this.traverse(o[i],func);
+        }
+    }
+}
+
+//that's all... no magic, no bloated framework
+
+
+
+ recorrerJSON(JsonObject:Object){
+  Object.entries(JsonObject).forEach(([key, value]) => {
+    // do something with key and val
+    console.log(value);
+    this.recorrerJSON(value);
+});
+ }
 }
