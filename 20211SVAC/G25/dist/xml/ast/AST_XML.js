@@ -48,12 +48,7 @@ class AST_XML {
     getProducciones() {
         let count = 1;
         let text = `
-        <table class="default">
-            <tr>
-            <td>No.</td>
-            <td>Produccion</td>
-            <td>Regla semántica</td>
-            </tr>
+        
         `;
         this.list_grammar.forEach((e) => {
             text += `
@@ -65,9 +60,6 @@ class AST_XML {
             `;
             count++;
         });
-        text += `
-            </table>
-        `;
         return text;
     }
     getTipo(e) {
