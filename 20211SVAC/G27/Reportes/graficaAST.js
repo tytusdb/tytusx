@@ -7,8 +7,9 @@ function graficarArbolAST(Arbol){
         console.log("\n>>>Reconoció la Raíz del Arbol: "+Arbol.id);
         if (Raiz){
             script = "digraph G {\n";
+            script += "graph[label=\"Gráfica Arbol AST\", labelloc=t, fontsize=30];\n";
             script += "node [shape = record, height = 0.1];\n";
-            script += recorrerHijos(Raiz);
+            script += recorrerHijosAST(Raiz);
             script += "}"; 
         }
 
@@ -18,7 +19,7 @@ function graficarArbolAST(Arbol){
     return script;
 }
 
-function recorrerHijos(Nodo){
+function recorrerHijosAST(Nodo){
     console.log("\n>>>Ingresó a función recorrerHijos...");
     var script = "";
     contNodos++;
@@ -44,7 +45,7 @@ function recorrerHijos(Nodo){
             var cantidadHijos2 = Hijo.getCantidadHijos();
             if (cantidadHijos2 > 0){
                 script += Padre + "->";
-                script += recorrerHijos(Hijo);
+                script += recorrerHijosAST(Hijo);
             }else{
                 script += Padre + "->" + hoja + ";\n";
                 script += hoja+"[label = \"" + Hijo.valor +"\"];\n";
@@ -98,13 +99,13 @@ function probandoArbolAST(){
 
 }
 
-function pruebaGraficarViz(grafica){
+function pruebaGraficarVizAST(grafica){
     var viz = new Viz();
     viz.renderSVGElement(grafica)
     .then(function(element) {
         //document.body.appendChild(element);
         //alert('entro a la funcion elemento');
-        let elemento = document.getElementById('grafica');
+        let elemento = document.getElementById('reporteASTGrafica');
         elemento.appendChild(element);
     })
     .catch(error => {

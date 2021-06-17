@@ -29,6 +29,7 @@
     <script src="Expresiones/Primitivo.js"></script>
     <script src="Arbol/Nodo.js"></script>
     <script src="Arbol/Arbol.js"></script>
+    <script src="Errores/Error.js"></script>
 
 </head>
 
@@ -131,11 +132,11 @@
         <br>
         <!--***************************area para reportes******************************-->
         <!--Area para reporte de AST-->
-        <div id="reporteASTGrafica" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <div id="reporteASTGrafica" style="width:100%; height:100%; overflow: scroll; align-content: center; text-align: center;"></div>
         <input type="hidden" id="hiddenAST" Text="">
 
         <!--Area para reporte de Tabla de Símbolos-->
-        <div id="reporteCSTGrafica" class="table-responsive table-bordered" style="text-align: center; align-content: center; align-items: center; width: 100%; justify-content: center;"></div>
+        <div id="reporteCSTGrafica" style="width:100%; height:100%; overflow: scroll; align-content: center; text-align: center;"></div>
         <input type="hidden" id="hiddenCST" Text="">
 
         <!--Area para reporte de Tabla de Símbolos-->
@@ -223,8 +224,12 @@
 <script src="Reportes/graficaCST.js"></script>
 <script src="Reportes/graficaAST.js"></script>
 <script src="Reportes/reporteTS.js"></script>
+<script src="Reportes/reporteErrores.js"></script>
 <script src="js/viz.js"></script>
 <script src="js/full.render.js"></script>
 <script src="Gramatica/gramaticaXML.js"></script>
 <script src="Gramatica/gramaticaXPATH.js"></script>
+<script src="Gramatica/gramaticaXMLArbol.js"></script>
+<script src="Gramatica/gramaticaXMLArbolCST.js"></script>
+<script src="Gramatica/erroresXML.js"></script>
 </html>
