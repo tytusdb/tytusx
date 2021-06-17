@@ -15,6 +15,8 @@ function reconocerCaso(arreglo, tabla) {
         }
         else {
             if (arreglo[index].toString() == '/' && arreglo[index + 1] != '/') {
+                faltantes.shift();
+                faltantes.shift();
                 consumidas.push('/');
                 consumidas.push(arreglo[index + 1]);
                 //console.log(index)
@@ -33,11 +35,9 @@ function retornarTabla(objeto, tabla) {
         tabla.forEach(function (element) {
             if (element.id == objeto) { //SI LO ENCUENTRA
                 recorrido.push(element);
-                pruebaDeQuery.shift();
-                pruebaDeQuery.shift();
-                //console.log(recorrido)
+                //console.log(faltantes)
                 // console.log("consumidas")
-                // reconocerCaso(pruebaDeQuery, element.tablaEntornos)
+                reconocerCaso(faltantes, element.tablaEntornos);
             }
             else { //SI NO LO ENCUENTRA PASA AL SIGUIENTE ENTORNO
                 //console.log(element.tablaEntornos)

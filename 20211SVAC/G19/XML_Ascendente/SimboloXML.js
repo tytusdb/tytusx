@@ -1,13 +1,12 @@
 "use strict";
 var SimboloXML = /** @class */ (function () {
-    function SimboloXML(tipo, id, linea, columna, valor, Entorno, entornoAnterior) {
+    function SimboloXML(tipo, id, linea, columna, valor, Entorno) {
         this.id = id;
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
         this.valor = valor;
         this.Entorno = Entorno;
-        this.entornoAnterior = entornoAnterior;
     }
     SimboloXML.prototype.getTipo = function (ent, arbol) {
         return this.tipo;

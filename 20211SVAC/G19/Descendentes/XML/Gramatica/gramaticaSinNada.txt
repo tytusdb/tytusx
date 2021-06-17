@@ -23,7 +23,7 @@
 //TagConfiguracion
 "<?xml"                                 { this.begin("TagApertura"); return 'AbreTagConf'; }
 <TagApertura>[\s\r\t\n]+                {}
-<TagApertura>[a-zA-Z_][a-zA-Z0-9_]*     { return 'NombreAtributo'; }
+<TagApertura>[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+     { return 'NombreAtributo'; }
 <TagApertura>"="                        { return 'IgualAtributo' }
 <TagApertura>\"[^\"\n]*\"               { return 'ValorAtributo'; }
 <TagApertura>"?>"                       { this.popState(); return 'CierreTagConf'; }
