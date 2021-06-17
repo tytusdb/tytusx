@@ -809,6 +809,313 @@ parse: function parse(input) {
 
 	var attribute = '';
 	var errors = [];
+	let grammar_stack = [];
+	function printstrack(obj, lines){
+        if(Array.isArray(obj)){ //IS ARRAY
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            obj.forEach((value)=>{
+                if(typeof value === 'string' ){
+                     str = ""
+                     for(let i = 0; i < lines; i++){str = str + "- ";}
+                     console.log(str + value);
+                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+                    str = ""
+                    for(let i = 0; i < lines; i++){ str = str + "- ";}
+                    for(let key in value){
+                       console.log(`${str}${key}`);
+                       printstrack(value[key], lines + 1);
+                    }
+                }
+
+                //printstrack(value, lines +1);
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            console.log(str + obj);
+        }else{// IS OBJECT
+            str = ""
+            for(let i = 0; i < lines; i++){ str = str + "- ";}
+            for(let key in obj){
+                console.log(`${str}Key: ${key}`);
+                //console.log(obj[key]);
+                printstrack(obj[key], lines + 1);
+            }
+        }
+	}
+	
+function getASTTree(obj){
+    let str = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <!-- Bootstrap CSS -->
+  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+  <title>Title</title>
+  <style>
+    #divheight{
+      height: 400px;
+      width: 1050px;
+    }
+    .nav-tabs > li .close {
+      margin: -2px 0 0 10px;
+      font-size: 18px;
+    }
+    .nav-tabs2 > li .close {
+      margin: -2px 0 0 10px;
+      font-size: 18px;
+    }
+
+  </style>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 15px;
+    }
+
+    .tree ul {
+      position: relative;
+      padding: 1em 0;
+      white-space: nowrap;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .tree ul::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .tree li {
+      display: inline-block;
+      vertical-align: top;
+      text-align: center;
+      list-style-type: none;
+      position: relative;
+      padding: 1em 0.5em 0 0.5em;
+    }
+    .tree li::before, .tree li::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top: 1px solid #ccc;
+      width: 50%;
+      height: 1em;
+    }
+    .tree li::after {
+      right: auto;
+      left: 50%;
+      border-left: 1px solid #ccc;
+    }
+    /*
+    ul:hover::after  {
+        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+    }*/
+
+    .tree li:only-child::after, .tree li:only-child::before {
+      display: none;
+    }
+    .tree li:only-child {
+      padding-top: 0;
+    }
+    .tree li:first-child::before, .tree li:last-child::after {
+      border: 0 none;
+    }
+    .tree li:last-child::before {
+      border-right: 1px solid #ccc;
+      border-radius: 0 5px 0 0;
+    }
+    .tree li:first-child::after {
+      border-radius: 5px 0 0 0;
+    }
+
+    .tree ul ul::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      border-left: 1px solid #ccc;
+      width: 0;
+      height: 1em;
+    }
+
+    .tree li a {
+      border: 1px solid #ccc;
+      padding: 0.5em 0.75em;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      color: #333;
+      position: relative;
+      top: 1px;
+    }
+
+    .tree li a:hover,
+    .tree li a:hover + ul li a {
+      background: #e9453f;
+      color: #fff;
+      border: 1px solid #e9453f;
+    }
+
+    .tree li a:hover + ul li::after,
+    .tree li a:hover + ul li::before,
+    .tree li a:hover + ul::before,
+    .tree li a:hover + ul ul::before {
+      border-color: #e9453f;
+    }
+
+    /*# sourceMappingURL=sytle_.css.map */
+
+
+  </style>
+</head>
+<body>
+
+
+
+<div class="tree">
+  <ul id="tree-list">
+
+    <!--AQUI-->
+    `
+
+    str = str +printObj(obj, 0, "")
+    str =  str + `</ul>
+
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+`
+    return str;
+}
+
+
+function printObj(obj, lines, name){
+    console.log(obj)
+    let str = "";
+    let str_ = "";
+    if(Array.isArray(obj)) { //IS ARRAY
+        for (let i = 0; i < obj.length; i++){
+            str = str +printObj(obj[i], lines, "");
+        }
+    }else if (typeof obj === 'object' ){// IS OBJECT
+        if(obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT'){ // TODO select Parent
+            str = `<li>`;
+            str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT'? "/": "//" ));
+            str = str + getPredicados(obj.expresion);
+            str = str + `</li>`
+            console.log(str);
+        }else if(obj.tipo === 'EXPRESION'){
+            if (typeof obj.expresion === 'object'){
+                str = `<a>` + name + getName(obj.expresion) + `</a>`;
+            }
+        }
+    } else { // IS STRING
+        for (let i = 0; i < lines; i++) {
+
+            str_ = str_ + "- ";
+        }
+    }
+    return str;
+}
+
+
+
+function getName(obj){
+
+    let str = "";
+    if (obj.tipo ==='NODENAME'){
+        //console.log(obj)
+        return obj.nodename;
+    }else if(obj.tipo === 'SELECT_PARENT'){
+        return  obj.expresion;
+    }else if(obj.tipo === 'SELECT_CURRENT'){
+        return obj.expresion;
+    }else if(obj.tipo === 'ASTERISCO'){
+        return obj.valor;
+    }else if(obj.tipo === 'FUNCION_TEXT'){
+        return obj.valor;
+    }else if(obj.tipo === 'FUNCION_NODE'){
+        return obj.valor;
+    }else if(obj.tipo === 'SELECT_ATTRIBUTES'){
+        return obj.expresion;
+    }else {
+        console.log("Error 1")
+        console.log(obj)
+    }
+    return str
+}
+
+function getPredicados(obj){
+    let str = "";
+    console.log(obj)
+    if (obj.predicate !== null && obj.predicate !== undefined){
+
+        str = `<ul>\n`;
+        for (let i = 0; i < obj.predicate.length;i++){
+            str = str + getPredicado(obj.predicate[i]);
+        }
+        str = str + `</ul>`;
+    }
+    return str;
+}
+
+
+function getPredicado(obj){
+    let str = ""
+    if(obj.tipo === 'PREDICATE'){
+        //str = `<li><a> ` + obj.condicion.tipo + `</a>
+        //<ul>`
+        str = str + getPredicado(obj.condicion);
+        //str = str + `
+        //</ul></li>`;
+    }else if(obj.tipo === 'EXPRESION'){ //TODO to check
+        if('valor' in obj.expresion){
+            str = `<li><a>` + obj.expresion.valor + `</a></li>
+            `;
+
+        }else if('nodename' in obj.expresion){
+            str = `<li><a>` + obj.expresion.nodename + `</a></li>
+            `;
+
+        }else if(obj.expresion.tipo === 'SELECT_ATTRIBUTES'){
+            str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
+            `;
+
+        }else {
+            console.log("error 2")
+            console.log(obj)
+        }
+
+
+    }else{
+        str = `<li><a>` + obj.tipo + `</a>
+                <ul>`
+        str = str + getPredicado(obj.opIzq);
+        str = str + getPredicado(obj.opDer);
+        str = str + `</ul></li>`
+    }
+
+    return str;
+}
+
+
+
+
+
 
 	const { Objeto } = __webpack_require__(/*! ../model/xpath/Objeto */ "YKiq");
 	const { Tipos } = __webpack_require__(/*! ../model/xpath/Enum */ "MEUw");
@@ -1277,14 +1584,12 @@ case 66: yy_.yytext = attribute; this.popState(); return 37;
 break;
 case 67:return 5
 break;
-case 68:return 'anything'
-break;
-case 69: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 68: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^><\/]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68,69],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68],"inclusive":true}}
 });
 return lexer;
 })();
@@ -2534,7 +2839,7 @@ var Ambito = /** @class */ (function () {
         return _array;
     };
     Ambito.prototype.searchAncestors = function (_element, _currentNode, _array) {
-        if (_element == _currentNode) { // for hasta que se acaben los elementos
+        if (_element == _currentNode) {
             return { found: _array };
         }
         if (_element.childs) {
@@ -2652,97 +2957,94 @@ exports.Ambito = Ambito;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! file-saver */ "Iab2");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app.service */ "F5nt");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
-/* harmony import */ var _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @materia-ui/ngx-monaco-editor */ "0LvA");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "ofXK");
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.service */ "F5nt");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+/* harmony import */ var _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @materia-ui/ngx-monaco-editor */ "0LvA");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
 
 
 
 
 
 function AppComponent_tr_99_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "th", 40);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](6);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](7, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](10);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](13, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](14);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "tr");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "th", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](12);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](13, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](14);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const item_r3 = ctx.$implicit;
     const i_r4 = ctx.index;
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](i_r4 + 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.id);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.tipo);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.value);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.entorno);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.linea);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.columna);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r4 + 1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.id);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.tipo);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.value);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.entorno);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.linea);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.columna);
 } }
 function AppComponent_tr_121_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "th", 40);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](6);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](7, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](10);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "tr");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "th", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](12);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const item_r5 = ctx.$implicit;
     const i_r6 = ctx.index;
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](i_r6 + 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.tipo);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.error);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.origen);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.linea);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.columna);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r6 + 1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.tipo);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.error);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.origen);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.linea);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.columna);
 } }
 class AppComponent {
     constructor(appService) {
@@ -2751,7 +3053,7 @@ class AppComponent {
             theme: "vs-dark",
             automaticLayout: true,
             scrollBeyondLastLine: false,
-            fontSize: 14,
+            fontSize: 13,
             minimap: {
                 enabled: true
             },
@@ -2768,217 +3070,7 @@ class AppComponent {
             },
             language: 'xml'
         };
-        this.entrada = `<?xml version="1.0" encoding="UTF-8"?>
-  <CATALOG>
-  <CD>
-  <TITLE>Empire Burlesque</TITLE>
-  <ARTIST>Bob Dylan</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>Columbia</COMPANY>
-  <PRICE>10.90</PRICE>
-  <YEAR>1985</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Hide your heart</TITLE>
-  <ARTIST>Bonnie Tyler</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>CBS Records</COMPANY>
-  <PRICE>9.90</PRICE>
-  <YEAR>1988</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Greatest Hits</TITLE>
-  <ARTIST>Dolly Parton</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>RCA</COMPANY>
-  <PRICE>9.90</PRICE>
-  <YEAR>1982</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Still got the blues</TITLE>
-  <ARTIST>Gary Moore</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Virgin records</COMPANY>
-  <PRICE>10.20</PRICE>
-  <YEAR>1990</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Eros &amp; Eros</TITLE>
-  <ARTIST>Eros Ramazzotti</ARTIST>
-  <COUNTRY>EU</COUNTRY>
-  <COMPANY>BMG</COMPANY>
-  <PRICE>9.90</PRICE>
-  <YEAR>1997</YEAR>
-  </CD>
-  <CD>
-  <TITLE>&quot;Esto tiene que salir bien&quot;</TITLE>
-  <ARTIST>Bee Gees</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Polydor</COMPANY>
-  <PRICE>10.90</PRICE>
-  <YEAR>1998</YEAR>
-  </CD>
-  <CD>
-  <TITLE>&apos;Esto tiene que salir muy bien tambien&apos;</TITLE>
-  <ARTIST>Dr.Hook</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>CBS</COMPANY>
-  <PRICE>8.10</PRICE>
-  <YEAR>1973</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Maggie May</TITLE>
-  <ARTIST>Rod Stewart</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Pickwick</COMPANY>
-  <PRICE>8.50</PRICE>
-  <YEAR>1990</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Romanza</TITLE>
-  <ARTIST>Andrea Bocelli</ARTIST>
-  <COUNTRY>EU</COUNTRY>
-  <COMPANY>Polydor</COMPANY>
-  <PRICE calificacion="hola">10.80</PRICE>
-  <YEAR>1996</YEAR>
-  </CD>
-  <CD>
-  <TITLE>When a man loves a woman</TITLE>
-  <ARTIST>Percy Sledge</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>Atlantic</COMPANY>
-  <PRICE>8.70</PRICE>
-  <YEAR>1987</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Black angel</TITLE>
-  <ARTIST>Savage Rose</ARTIST>
-  <COUNTRY>EU</COUNTRY>
-  <COMPANY>Mega</COMPANY>
-  <PRICE>10.90</PRICE>
-  <YEAR>1995</YEAR>
-  </CD>
-  <CD>
-  <TITLE>1999 Grammy Nominees</TITLE>
-  <ARTIST>Many</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>Grammy</COMPANY>
-  <PRICE>10.20</PRICE>
-  <YEAR>1999</YEAR>
-  </CD>
-  <CD>
-  <TITLE>For the good times</TITLE>
-  <ARTIST>Kenny Rogers</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Mucik Master</COMPANY>
-  <PRICE>8.70</PRICE>
-  <YEAR>1995</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Big Willie style</TITLE>
-  <ARTIST>Will Smith</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>Columbia</COMPANY>
-  <PRICE>9.90</PRICE>
-  <YEAR>1997</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Tupelo Honey</TITLE>
-  <ARTIST>Van Morrison</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Polydor</COMPANY>
-  <PRICE>8.20</PRICE>
-  <YEAR>1971</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Soulsville</TITLE>
-  <ARTIST>Jorn Hoel</ARTIST>
-  <COUNTRY>Norway</COUNTRY>
-  <COMPANY>WEA</COMPANY>
-  <PRICE>7.90</PRICE>
-  <YEAR>1996</YEAR>
-  </CD>
-  <CD>
-  <TITLE>The very best of</TITLE>
-  <ARTIST>Cat Stevens</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Island</COMPANY>
-  <PRICE>8.90</PRICE>
-  <YEAR>1990</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Stop</TITLE>
-  <ARTIST>Sam Brown</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>A and M</COMPANY>
-  <PRICE>8.90</PRICE>
-  <YEAR>1988</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Bridge of Spies</TITLE>
-  <ARTIST>T'Pau</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Siren</COMPANY>
-  <PRICE>7.90</PRICE>
-  <YEAR>1987</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Private Dancer</TITLE>
-  <ARTIST>Tina Turner</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>Capitol</COMPANY>
-  <PRICE>8.90</PRICE>
-  <YEAR>1983</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Midt om natten</TITLE>
-  <ARTIST>Kim Larsen</ARTIST>
-  <COUNTRY>EU</COUNTRY>
-  <COMPANY>Medley</COMPANY>
-  <PRICE>7.80</PRICE>
-  <YEAR>1983</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Pavarotti Gala Concert</TITLE>
-  <ARTIST>Luciano Pavarotti</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>DECCA</COMPANY>
-  <PRICE>9.90</PRICE>
-  <YEAR>1991</YEAR>
-  </CD>
-  <CD>
-  <TITLE>The dock of the bay</TITLE>
-  <ARTIST>Otis Redding</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>Stax Records</COMPANY>
-  <PRICE>7.90</PRICE>
-  <YEAR>1968</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Picture book</TITLE>
-  <ARTIST>Simply Red</ARTIST>
-  <COUNTRY>EU</COUNTRY>
-  <COMPANY>Elektra</COMPANY>
-  <PRICE>7.20</PRICE>
-  <YEAR>1985</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Red</TITLE>
-  <ARTIST>The Communards</ARTIST>
-  <COUNTRY>UK</COUNTRY>
-  <COMPANY>London</COMPANY>
-  <PRICE>7.80</PRICE>
-  <YEAR>1987</YEAR>
-  </CD>
-  <CD>
-  <TITLE>Unchain my heart</TITLE>
-  <ARTIST>Joe Cocker</ARTIST>
-  <COUNTRY>USA</COUNTRY>
-  <COMPANY>EMI</COMPANY>
-  <PRICE>8.20</PRICE>
-  <YEAR>1987</YEAR>
-  </CD>
-  </CATALOG>`;
+        this.entrada = `<?xml version="1.0" encoding="UTF-8"?>`;
         this.consulta = '';
         this.salida = '';
         this.fname = '';
@@ -2986,7 +3078,7 @@ class AppComponent {
         this.errores = [];
     }
     newTab() {
-        window.open("/tytusx-G23", "_blank");
+        window.open("/tytusx/20211SVAC/G23", "_blank");
     }
     closeTab() {
         window.close();
@@ -3016,53 +3108,76 @@ class AppComponent {
     getAST() {
         this.simbolos = [];
         this.errores = [];
-        if (this.entrada != "") {
-            const x = { "input": this.entrada };
-            this.appService.getAST(x).subscribe(data => {
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_0__["saveAs"])(data, "AST");
-                this.salida = "AST has been generated!";
-                console.log('AST received!');
-            }, error => {
-                console.log('There was an error :(', error);
-                this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el AST.";
-            });
+        if (this.consulta != "") {
+            let grammar_value = document.getElementById('grammar_selector').value;
+            const x = {
+                xml: this.entrada,
+                query: this.consulta,
+                grammar: Number(grammar_value),
+                report: "XPATH-AST",
+            };
+            let data = __webpack_require__(/*! ../js/routes/reports */ "ieEo").generateReport(x);
+            this.salida = data.output;
+            this.errores = data.arreglo_errores;
+            this.exportFile(data.ast, "AST");
+            console.log('AST received!');
         }
         else
-            alert("Entrada vacía. No se puede generar el AST.");
+            alert("Entrada vacía. No se puede generar el reporte AST.");
     }
     getCST() {
         this.simbolos = [];
         this.errores = [];
         if (this.entrada != "") {
-            const x = { "input": this.entrada };
-            this.appService.getCST(x).subscribe(data => {
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_0__["saveAs"])(data, "CST");
-                this.salida = "CST has been generated!";
-                console.log('CST received!');
-            }, error => {
-                console.log('There was an error :(', error);
-                this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el CST.";
-            });
+            let grammar_value = document.getElementById('grammar_selector').value;
+            const x = {
+                xml: this.entrada,
+                query: this.consulta,
+                grammar: Number(grammar_value),
+                report: "XML-CST",
+            };
+            let data = __webpack_require__(/*! ../js/routes/reports */ "ieEo").generateReport(x);
+            this.salida = data.output;
+            this.errores = data.arreglo_errores;
+            this.exportFile(data.cst, "CST");
+            console.log('CST received!');
         }
         else
-            alert("Entrada vacía. No se puede generar el CST.");
+            alert("Entrada vacía. No se puede generar el reporte CST.");
     }
-    getDAG() {
+    getGrammarReport() {
         this.simbolos = [];
         this.errores = [];
         if (this.entrada != "") {
-            const x = { "input": this.entrada };
-            this.appService.getDAG(x).subscribe(data => {
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_0__["saveAs"])(data, "DAG");
-                this.salida = "DAG has been generated!";
-                console.log('DAG received!');
-            }, error => {
-                console.log('There was an error :(', error);
-                this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el DAG.";
-            });
+            let grammar_value = document.getElementById('grammar_selector').value;
+            const x = {
+                xml: this.entrada,
+                query: this.consulta,
+                grammar: Number(grammar_value),
+                report: "XML-GRAMMAR",
+            };
+            let data = __webpack_require__(/*! ../js/routes/reports */ "ieEo").generateReport(x);
+            this.salida = data.output;
+            this.errores = data.arreglo_errores;
+            this.exportFile(data.grammar_report, "Grammar report");
+            console.log('Grammar report received!');
         }
         else
-            alert("Entrada vacía. No se puede generar el DAG.");
+            alert("Entrada vacía. No se puede generar el reporte gramatical.");
+    }
+    exportFile(data, fname) {
+        var f = document.createElement('a');
+        f.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+        f.setAttribute('download', fname + '.html');
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            f.dispatchEvent(event);
+        }
+        else {
+            f.click();
+        }
+        console.log('File exported!');
     }
     saveFile(id) {
         var f = document.createElement('a');
@@ -3121,246 +3236,246 @@ class AppComponent {
         this.salida = "";
     }
 }
-AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_app_service__WEBPACK_IMPORTED_MODULE_2__["AppService"])); };
-AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 126, vars: 10, consts: [[1, "container-fluid", "title", "pt-2", "pb-1"], ["role", "toolbar", 1, "btn-toolbar"], [1, "mb-2", "btn-group"], [1, "dropdown"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "flase", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0"], [1, "dropdown-menu", "rounded-0", "bg-dark"], ["type", "button", 1, "dropdown-item", "text-white", "item", 3, "click"], ["id", "fileInput1", "type", "file", "accept", ".xml", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["id", "fileInput2", "type", "file", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["type", "button", 1, "btn", "btn-dark", "rounded-0", 3, "click"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0", "dropdown-toggle"], ["role", "group", 1, "btn-group", "sel_g"], ["id", "grammar_selector", 1, "form-select", "btn", "btn-dark", "rounded-0"], ["disabled", ""], ["selected", "", "value", "1"], ["value", "2"], [1, "container-fluid", "px-5", "pt-2"], ["novalidate", "", 1, "mb-4", 3, "ngSubmit"], ["iForm", "ngForm"], [1, "row", "mb-5", "file-editors"], [1, "col-lg-6", "col-sm-12"], [1, "my-0", "text-white", "subtitulo"], ["id", "entrada", "name", "entrada", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], ["id", "consulta", "name", "consulta", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], [1, "row", "text-center"], [1, "col-12"], ["type", "submit", 1, "btn", "btn-outline-light", "btn-lg"], [1, "fas", "fa-play-circle"], [1, "row", "mb-5", "file-console"], ["id", "salida", "name", "salida", 1, "console", 3, "options", "ngModel", "ngModelChange"], [1, "row", "my-5"], [1, "my-1", "text-white", "subtitulo"], [1, "table", "table-striped", "table-dark"], ["scope", "col"], ["scope", "col", 1, "text-center"], [4, "ngFor", "ngForOf"], [1, "mt-2", "mb-1", "text-white", "subtitulo"], [1, "text-center", "text-lg-start"], [1, "text-center", "p-3", 2, "background-color", "rgba(0, 0, 0, 0.2)"], [1, "foot", "my-0"], ["scope", "row"], [1, "text-center"]], template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "h2");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "TytusX");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](7, " Abrir ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_9_listener() { return ctx.openDialog(1); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](10, "XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "input", 7);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function AppComponent_Template_input_change_11_listener($event) { return ctx.readFile($event, 1); })("ngModelChange", function AppComponent_Template_input_ngModelChange_11_listener($event) { return ctx.fname = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](12, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_12_listener() { return ctx.openDialog(2); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](13, "XPath");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](14, "input", 8);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function AppComponent_Template_input_change_14_listener($event) { return ctx.readFile($event, 2); })("ngModelChange", function AppComponent_Template_input_ngModelChange_14_listener($event) { return ctx.fname = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](15, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](16, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](17, " Guardar ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](18, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](19, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_19_listener() { return ctx.saveFile(1); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](20, "XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](21, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_21_listener() { return ctx.saveFile(2); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](22, "XPath");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](23, "button", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_23_listener() { return ctx.newTab(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](24, "Nueva pesta\u00F1a");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](25, "button", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_25_listener() { return ctx.closeTab(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](26, "Cerrar pesta\u00F1a");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](27, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](28, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](29, " Limpiar ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](30, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](31, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_31_listener() { return ctx.cleanEditor(1); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](32, "XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](33, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_33_listener() { return ctx.cleanEditor(2); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](34, "XPath");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](35, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](36, "button", 10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](37, " Reportes ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](38, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](39, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_39_listener() { return ctx.getAST(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](40, "AST");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](41, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_41_listener() { return ctx.getCST(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](42, "CST");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](43, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_43_listener() { return ctx.getDAG(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](44, "DAG");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](45, "div", 11);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](46, "select", 12);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](47, "option", 13);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](48, "Seleccione gram\u00E1tica");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](49, "option", 14);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](50, "Ascendente");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](51, "option", 15);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](52, "Descendente");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](53, "div", 16);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](54, "form", 17, 18);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngSubmit", function AppComponent_Template_form_ngSubmit_54_listener() { return ctx.onSubmit(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](56, "div", 19);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](57, "div", 20);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](58, "p", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](59, "Entrada XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](60, "ngx-monaco-editor", 22);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_60_listener($event) { return ctx.entrada = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](61, "div", 20);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](62, "p", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](63, "Editor de consultas");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](64, "ngx-monaco-editor", 23);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_64_listener($event) { return ctx.consulta = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](65, "div", 24);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](66, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](67, "button", 26);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](68, "i", 27);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](69, " COMPILAR");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](70, "div", 28);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](71, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](72, "p", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](73, "Consola de salida");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](74, "ngx-monaco-editor", 29);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_74_listener($event) { return ctx.salida = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](75, "br");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](76, "hr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](77, "div", 30);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](78, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](79, "p", 31);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](80, "Tabla de s\u00EDmbolos");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](81, "table", 32);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](82, "thead");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](83, "tr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](84, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](85, "#");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](86, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](87, "Id");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](88, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](89, "Tipo");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](90, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](91, "Contenido");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](92, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](93, "\u00C1mbito");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](94, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](95, "Fila");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](96, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](97, "Columna");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](98, "tbody");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](99, AppComponent_tr_99_Template, 15, 7, "tr", 35);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](100, "hr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](101, "div", 30);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](102, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](103, "p", 36);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](104, "Tabla de errores");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](105, "table", 32);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](106, "thead");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](107, "tr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](108, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](109, "#");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](110, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](111, "Tipo");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](112, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](113, "Error");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](114, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](115, "Origen");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](116, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](117, "Fila");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](118, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](119, "Columna");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](120, "tbody");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](121, AppComponent_tr_121_Template, 13, 6, "tr", 35);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](122, "footer", 37);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](123, "div", 38);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](124, "p", 39);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](125, " \u00A9 2021 Grupo 23 - Organizaci\u00F3n de Lenguajes y Compiladores 2 - TytusX ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_app_service__WEBPACK_IMPORTED_MODULE_1__["AppService"])); };
+AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 126, vars: 10, consts: [[1, "container-fluid", "title", "pt-2", "pb-1"], ["role", "toolbar", 1, "btn-toolbar"], [1, "mb-2", "btn-group"], [1, "dropdown"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "flase", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0"], [1, "dropdown-menu", "rounded-0", "bg-dark"], ["type", "button", 1, "dropdown-item", "text-white", "item", 3, "click"], ["id", "fileInput1", "type", "file", "accept", ".xml", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["id", "fileInput2", "type", "file", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["type", "button", 1, "btn", "btn-dark", "rounded-0", 3, "click"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0", "dropdown-toggle"], ["role", "group", 1, "btn-group", "sel_g"], ["id", "grammar_selector", 1, "form-select", "btn", "btn-dark", "rounded-0"], ["disabled", ""], ["selected", "", "value", "1"], ["value", "2"], [1, "container-fluid", "px-5", "pt-2"], ["novalidate", "", 1, "mb-4", 3, "ngSubmit"], ["iForm", "ngForm"], [1, "row", "mb-5", "file-editors"], [1, "col-lg-6", "col-sm-12"], [1, "my-0", "text-white", "subtitulo"], ["id", "entrada", "name", "entrada", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], ["id", "consulta", "name", "consulta", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], [1, "row", "text-center"], [1, "col-12"], ["type", "submit", 1, "btn", "btn-outline-light", "btn-lg"], [1, "fas", "fa-play-circle"], [1, "row", "mb-5", "file-console"], ["id", "salida", "name", "salida", 1, "console", 3, "options", "ngModel", "ngModelChange"], [1, "row", "my-5"], [1, "my-1", "text-white", "subtitulo"], [1, "table", "table-striped", "table-dark"], ["scope", "col"], ["scope", "col", 1, "text-center"], [4, "ngFor", "ngForOf"], [1, "mt-2", "mb-1", "text-white", "subtitulo"], [1, "text-center", "text-lg-start"], [1, "text-center", "p-3", 2, "background-color", "rgba(0, 0, 0, 0.2)"], [1, "foot", "my-0"], ["scope", "row"], [1, "text-center"]], template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "h2");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, "TytusX");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "div", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](7, " Abrir ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_9_listener() { return ctx.openDialog(1); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10, "XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "input", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("change", function AppComponent_Template_input_change_11_listener($event) { return ctx.readFile($event, 1); })("ngModelChange", function AppComponent_Template_input_ngModelChange_11_listener($event) { return ctx.fname = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_12_listener() { return ctx.openDialog(2); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "XPath");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "input", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("change", function AppComponent_Template_input_change_14_listener($event) { return ctx.readFile($event, 2); })("ngModelChange", function AppComponent_Template_input_ngModelChange_14_listener($event) { return ctx.fname = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, " Guardar ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](18, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](19, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_19_listener() { return ctx.saveFile(1); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](20, "XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](21, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_21_listener() { return ctx.saveFile(2); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](22, "XPath");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](23, "button", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_23_listener() { return ctx.newTab(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](24, "Nueva pesta\u00F1a");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](25, "button", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_25_listener() { return ctx.closeTab(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](26, "Cerrar pesta\u00F1a");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](27, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](28, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](29, " Limpiar ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](30, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](31, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_31_listener() { return ctx.cleanEditor(1); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](32, "XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](33, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_33_listener() { return ctx.cleanEditor(2); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](34, "XPath");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](35, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](36, "button", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](37, " Reportes ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](38, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](39, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_39_listener() { return ctx.getAST(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](40, "AST");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](41, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_41_listener() { return ctx.getCST(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](42, "CST");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](43, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_43_listener() { return ctx.getGrammarReport(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](44, "Gramatical");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](45, "div", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](46, "select", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](47, "option", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](48, "Seleccione gram\u00E1tica");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](49, "option", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](50, "Ascendente");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](51, "option", 15);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](52, "Descendente");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](53, "div", 16);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](54, "form", 17, 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngSubmit", function AppComponent_Template_form_ngSubmit_54_listener() { return ctx.onSubmit(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](56, "div", 19);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](57, "div", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](58, "p", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](59, "Entrada XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](60, "ngx-monaco-editor", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_60_listener($event) { return ctx.entrada = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](61, "div", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](62, "p", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](63, "Editor de consultas");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](64, "ngx-monaco-editor", 23);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_64_listener($event) { return ctx.consulta = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](65, "div", 24);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](66, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](67, "button", 26);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](68, "i", 27);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](69, " COMPILAR");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](70, "div", 28);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](71, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](72, "p", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](73, "Consola de salida");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](74, "ngx-monaco-editor", 29);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_74_listener($event) { return ctx.salida = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](75, "br");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](76, "hr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](77, "div", 30);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](78, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](79, "p", 31);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](80, "Tabla de s\u00EDmbolos");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](81, "table", 32);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](82, "thead");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](83, "tr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](84, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](85, "#");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](86, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](87, "Id");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](88, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](89, "Tipo");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](90, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](91, "Contenido");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](92, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](93, "\u00C1mbito");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](94, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](95, "Fila");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](96, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](97, "Columna");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](98, "tbody");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](99, AppComponent_tr_99_Template, 15, 7, "tr", 35);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](100, "hr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](101, "div", 30);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](102, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](103, "p", 36);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](104, "Tabla de errores");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](105, "table", 32);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](106, "thead");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](107, "tr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](108, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](109, "#");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](110, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](111, "Tipo");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](112, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](113, "Error");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](114, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](115, "Origen");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](116, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](117, "Fila");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](118, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](119, "Columna");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](120, "tbody");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](121, AppComponent_tr_121_Template, 13, 6, "tr", 35);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](122, "footer", 37);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](123, "div", 38);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](124, "p", 39);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](125, " \u00A9 2021 Grupo 23 - Organizaci\u00F3n de Lenguajes y Compiladores 2 - TytusX ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](11);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx.fname);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx.fname);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](46);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.entrada);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.consulta);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("options", ctx.ConsoleOptions)("ngModel", ctx.salida);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.simbolos);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](22);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.errores);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgModel"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ɵangular_packages_forms_forms_z"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgForm"], _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_4__["MonacoEditorComponent"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["NgForOf"]], styles: ["*[_ngcontent-%COMP%]:not(i) {\n    font-family: 'Varela Round', sans-serif;\n}\n\n.title[_ngcontent-%COMP%] {\n    background-color: #c1502e;\n    font-family: 'Varela Round', sans-serif;\n}\n\n.tbar[_ngcontent-%COMP%] {\n    height: 38px;\n}\n\n.file-editors[_ngcontent-%COMP%] {\n    height: 415px;\n}\n\n.file-console[_ngcontent-%COMP%] {\n    height: 375px;\n}\n\n.subtitulo[_ngcontent-%COMP%] {\n    font-size: large;\n}\n\n.foot[_ngcontent-%COMP%] {\n    color: lightgrey;\n}\n\nhr[_ngcontent-%COMP%] {\n    border-width: 0.13em;\n    border-color: gray;\n}\n\n.fc[_ngcontent-%COMP%]:first-letter {\n    text-transform: capitalize\n}\n\n.item[_ngcontent-%COMP%]:hover {\n    background-color: #292b2c;\n}\n\n.dropdown-menu[_ngcontent-%COMP%] {\n    padding: 0% !important;\n}\n\n.sel_g[_ngcontent-%COMP%] {\n    position: absolute;\n    right: 0%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksdUNBQXVDO0FBQzNDOztBQUVBO0lBQ0kseUJBQXlCO0lBQ3pCLHVDQUF1QztBQUMzQzs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxhQUFhO0FBQ2pCOztBQUVBO0lBQ0ksYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLG9CQUFvQjtJQUNwQixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSTtBQUNKOztBQUVBO0lBQ0kseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksa0JBQWtCO0lBQ2xCLFNBQVM7QUFDYiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIio6bm90KGkpIHtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50aXRsZSB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2MxNTAyZTtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50YmFyIHtcbiAgICBoZWlnaHQ6IDM4cHg7XG59XG5cbi5maWxlLWVkaXRvcnMge1xuICAgIGhlaWdodDogNDE1cHg7XG59XG5cbi5maWxlLWNvbnNvbGUge1xuICAgIGhlaWdodDogMzc1cHg7XG59XG5cbi5zdWJ0aXR1bG8ge1xuICAgIGZvbnQtc2l6ZTogbGFyZ2U7XG59XG5cbi5mb290IHtcbiAgICBjb2xvcjogbGlnaHRncmV5O1xufVxuXG5ociB7XG4gICAgYm9yZGVyLXdpZHRoOiAwLjEzZW07XG4gICAgYm9yZGVyLWNvbG9yOiBncmF5O1xufVxuXG4uZmM6Zmlyc3QtbGV0dGVyIHtcbiAgICB0ZXh0LXRyYW5zZm9ybTogY2FwaXRhbGl6ZVxufVxuXG4uaXRlbTpob3ZlciB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogIzI5MmIyYztcbn1cblxuLmRyb3Bkb3duLW1lbnUge1xuICAgIHBhZGRpbmc6IDAlICFpbXBvcnRhbnQ7XG59XG5cbi5zZWxfZyB7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHJpZ2h0OiAwJTtcbn0iXX0= */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", ctx.fname);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", ctx.fname);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](46);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.entrada);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.consulta);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("options", ctx.ConsoleOptions)("ngModel", ctx.salida);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.simbolos);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.errores);
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgModel"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵangular_packages_forms_forms_z"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgForm"], _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_3__["MonacoEditorComponent"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgForOf"]], styles: ["*[_ngcontent-%COMP%]:not(i) {\n    font-family: 'Varela Round', sans-serif;\n}\n\n.title[_ngcontent-%COMP%] {\n    background-color: #c1502e;\n    font-family: 'Varela Round', sans-serif;\n}\n\n.tbar[_ngcontent-%COMP%] {\n    height: 38px;\n}\n\n.file-editors[_ngcontent-%COMP%] {\n    height: 415px;\n}\n\n.file-console[_ngcontent-%COMP%] {\n    height: 375px;\n}\n\n.subtitulo[_ngcontent-%COMP%] {\n    font-size: large;\n}\n\n.foot[_ngcontent-%COMP%] {\n    color: lightgrey;\n}\n\nhr[_ngcontent-%COMP%] {\n    border-width: 0.13em;\n    border-color: gray;\n}\n\n.fc[_ngcontent-%COMP%]:first-letter {\n    text-transform: capitalize\n}\n\n.item[_ngcontent-%COMP%]:hover {\n    background-color: #292b2c;\n}\n\n.dropdown-menu[_ngcontent-%COMP%] {\n    padding: 0% !important;\n}\n\n.sel_g[_ngcontent-%COMP%] {\n    position: absolute;\n    right: 0%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksdUNBQXVDO0FBQzNDOztBQUVBO0lBQ0kseUJBQXlCO0lBQ3pCLHVDQUF1QztBQUMzQzs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxhQUFhO0FBQ2pCOztBQUVBO0lBQ0ksYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLG9CQUFvQjtJQUNwQixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSTtBQUNKOztBQUVBO0lBQ0kseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksa0JBQWtCO0lBQ2xCLFNBQVM7QUFDYiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIio6bm90KGkpIHtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50aXRsZSB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2MxNTAyZTtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50YmFyIHtcbiAgICBoZWlnaHQ6IDM4cHg7XG59XG5cbi5maWxlLWVkaXRvcnMge1xuICAgIGhlaWdodDogNDE1cHg7XG59XG5cbi5maWxlLWNvbnNvbGUge1xuICAgIGhlaWdodDogMzc1cHg7XG59XG5cbi5zdWJ0aXR1bG8ge1xuICAgIGZvbnQtc2l6ZTogbGFyZ2U7XG59XG5cbi5mb290IHtcbiAgICBjb2xvcjogbGlnaHRncmV5O1xufVxuXG5ociB7XG4gICAgYm9yZGVyLXdpZHRoOiAwLjEzZW07XG4gICAgYm9yZGVyLWNvbG9yOiBncmF5O1xufVxuXG4uZmM6Zmlyc3QtbGV0dGVyIHtcbiAgICB0ZXh0LXRyYW5zZm9ybTogY2FwaXRhbGl6ZVxufVxuXG4uaXRlbTpob3ZlciB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogIzI5MmIyYztcbn1cblxuLmRyb3Bkb3duLW1lbnUge1xuICAgIHBhZGRpbmc6IDAlICFpbXBvcnRhbnQ7XG59XG5cbi5zZWxfZyB7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHJpZ2h0OiAwJTtcbn0iXX0= */"] });
 
 
 /***/ }),
@@ -3753,152 +3868,362 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineInjector
   }
 */
 var xml_down = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,6],$V2=[1,11],$V3=[11,13],$V4=[1,16],$V5=[2,6,8],$V6=[1,25],$V7=[1,27],$V8=[1,28],$V9=[1,29],$Va=[1,26],$Vb=[2,8],$Vc=[8,9,13,18,19,21],$Vd=[9,11,13];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,9],$V1=[1,12],$V2=[1,17],$V3=[1,15],$V4=[1,16],$V5=[2,13],$V6=[1,20],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[2,21,22,23],$Vb=[2,6,21,23],$Vc=[2,11,12,21,22,23,24],$Vd=[2,11,12,14,16,17,18,21,22,23,24],$Ve=[2,6,23];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"tk_declaration_xml":4,"ROOT":5,"EOF":6,"XML":7,"tk_open":8,"tk_id":9,"ATTR":10,"tk_close":11,"CHILD":12,"tk_bar":13,"CONTENT":14,"ATTR_P":15,"tk_equal":16,"TK_ATTR":17,"tk_attribute_d":18,"tk_attribute_s":19,"PROP":20,"anything":21,"$accept":0,"$end":1},
-terminals_: {2:"error",4:"tk_declaration_xml",6:"EOF",8:"tk_open",9:"tk_id",11:"tk_close",13:"tk_bar",16:"tk_equal",18:"tk_attribute_d",19:"tk_attribute_s",21:"anything"},
-productions_: [0,[3,3],[3,2],[5,2],[5,1],[7,9],[7,9],[7,5],[7,8],[7,2],[7,2],[10,1],[10,0],[15,4],[15,3],[17,1],[17,1],[12,2],[12,1],[14,2],[14,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+symbols_: {"error":2,"INI":3,"XML_DECLARATION":4,"ROOT":5,"EOF":6,"XML":7,"tk_open_declaration":8,"ATTRIBUTE_LIST":9,"XML_CLOSE_DECLARATION":10,"tk_close_delcaraton":11,"tk_close":12,"ATTRIBUTE":13,"tk_attribute_name":14,"tk_string":15,"tk_equal":16,"tk_tag_name":17,"cadena_err":18,"XML_OPEN":19,"CHILDREN":20,"tk_open_end_tag":21,"tk_content":22,"tk_open":23,"tk_bar":24,"$accept":0,"$end":1},
+terminals_: {2:"error",6:"EOF",8:"tk_open_declaration",11:"tk_close_delcaraton",12:"tk_close",14:"tk_attribute_name",15:"tk_string",16:"tk_equal",17:"tk_tag_name",18:"cadena_err",21:"tk_open_end_tag",22:"tk_content",23:"tk_open",24:"tk_bar"},
+productions_: [0,[3,3],[3,2],[3,2],[3,1],[3,2],[5,2],[5,1],[4,3],[10,1],[10,1],[10,2],[9,2],[9,0],[13,2],[13,1],[13,2],[13,1],[13,2],[13,1],[7,5],[7,5],[7,5],[7,4],[7,3],[7,3],[7,4],[7,4],[7,6],[7,4],[7,4],[7,4],[7,3],[7,3],[7,2],[19,4],[19,3],[19,1],[19,2],[20,2],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
+/*$$[$0-2][0].printTest(0);console.log($$[$0-2][0].getTree());*/
+                                            prod_1 = grammar_stack.pop();
+                                            prod_2 = grammar_stack.pop();
+                                            grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF {﹩ = [﹩1, ﹩2]}': [prod_2, prod_1, 'EOF' ]});
+                                            //printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            cst = getCST(grammar_stack);
 
-		encoding = new Encoding($$[$0-2]);
-		if (encoding.encoding === encoding.codes.INVALID ) {
-			errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
-		}
-		ast = { ast: $$[$0-1], encoding: encoding,  errors: errors };
-		errors = [];
-		return ast;
-	
+                                            if($$[$0-2]!= null){
+                                                encoding = new Encoding($$[$0-2]);
+                                                ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst: cst, grammar_report: grammar_report};
+                                            } else{
+                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
+                                                ast = { ast: $$[$0-1], encoding: null,  errors: errors, cst: cst, grammar_report: grammar_report};
+                                            }
+                                            errors = [];
+                                            return ast;
+                                            
 break;
 case 2:
- errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors }; 
+
+                                            prod_1 = grammar_stack.pop();
+                                            grammar_stack.push({'INI -> XML_DECLARATION  EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            errors = [];
+                                            return ast;
+                                            
 break;
 case 3:
- if ($$[$0-1]!==null) { $$[$0].push($$[$0-1]); this.$=$$[$0]; } else { this.$=null; } 
+
+                                            prod_1 = grammar_stack.pop();
+                                            grammar_stack.push({'INI -> ROOT EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+
+                                            errors.push({ tipo: "Sintáctico", error: "Falta declaracion del XML", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            errors = [];
+                                            return ast;
+                                            
 break;
-case 4: case 18:
- if ($$[$0]!==null) { this.$=[$$[$0]]; } else { this.$=[]; } 
+case 4:
+
+                                            grammar_stack.push({'INI -> EOF {	errors.add(new Error()); ﹩﹩ = null;}': [ 'EOF']});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            errors.push({ tipo: "Sintáctico", error: "El archivo viene vacio.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+	                                        ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report }
+	                                        errors = [];
+	                                        return ast;
+	                                        
 break;
 case 5:
 
-			tag = new Element($$[$0-7], $$[$0-6], null, $$[$0-4], this._$.first_line, this._$.first_column+1, $$[$0-1]);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				tag.childs.forEach(child => {
-					child.father = $$[$0-7];
-            	});
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-				this.$ = null;
-			}
-		
+	                                        grammar_stack.push({'INI -> error EOF {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ', 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+
+                                            errors.push({ tipo: "Sintáctico", error: "Token no esperado.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            errors = [];
+                                            return ast;
+                                            
 break;
 case 6:
-
-			tag = new Element($$[$0-7], $$[$0-6], $$[$0-4].val, null, this._$.first_line, this._$.first_column+1, $$[$0-1]);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-				this.$ = null;
-			}
-		
+if($$[$0-1] != null && $$[$0] != null){ $$[$0].push($$[$0-1]); this.$ = $$[$0]; } else if($$[$0] == null){this.$ = []; this.$.push($$[$0-1]); }else{this.$ = null;}
+                                                prod_1 = grammar_stack.pop();
+                                                prod_2 = grammar_stack.pop();
+                                                grammar_stack.push({'ROOT ->  XML ROOT  {﹩﹩ = ﹩2.push(﹩1);}': [prod_2, prod_1 ]});
+                                                
 break;
 case 7:
-
-			tag = new Element($$[$0-3], $$[$0-2], null, null, this._$.first_line, this._$.first_column+1, null);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-3].first_line, columna: _$[$0-3].first_column+1 });
-				this.$ = null;
-			}
-		
+this.$ = []; this.$.push($$[$0]);
+	                                            prod_1 = grammar_stack.pop();
+	                                            grammar_stack.push({'ROOT -> XML {﹩﹩ = []; ﹩﹩.push(﹩1);}': [prod_1 ]});
+	                                            
 break;
 case 8:
+if($$[$0-1] == null || $$[$0] == null){
+                                                                            this.$ = null}else{
+                                                                            let str = "";
+                                                                           $$[$0-1].forEach((value)=>{
+                                                                           str = str + value.id+value.value;
+                                                                           });
+                                                                           this.$=str;
+                                                                           }
 
-			tag = new Element($$[$0-6], $$[$0-5], null, null, this._$.first_line, this._$.first_column+1, $$[$0-1]);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-				this.$ = null;
-			}
-		
+                                                                           prod_3 = grammar_stack.pop();
+                                                                           prod_2 = grammar_stack.pop();
+                                                                           grammar_stack.push({'XML_DECLARATION -> tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION {﹩﹩ = ﹩2}': ['Token: tk_open_declaration\t Lexema: ' + '&lt;?', prod_2, prod_3]} );
+                                                                           
 break;
-case 9: case 10:
- errors.push({ tipo: "Sintáctico", error: "La etiqueta no fue declarada correctamente.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); this.$ = null; 
+case 9:
+  this.$ = "?>"
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close_delcaraton { ﹩﹩= ﹩1}': ['Token: tk_close_delcaraton\t Lexema: ' + '?&gt;']});
+                                                
 break;
-case 11: case 15: case 16:
- this.$=$$[$0]; 
+case 10:
+this.$ = null;
+                                                 errors.push({ tipo: "Sintáctico", error: "Se esperaba token /", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close {errors.add(new Error()); ﹩﹩ = null;}': ['Token: tk_close\t Lexema: ' + '&gt;']});
+                                                
+break;
+case 11:
+ this.$ = null;
+                                                 errors.push({ tipo: "Sintáctico", error: "Token no esperado. " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                 grammar_stack.push({'XML_CLOSE_DECLARATION -> error tk_close {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                 
 break;
 case 12:
- this.$=null; 
+if($$[$0-1] != null && $$[$0] != null){$$[$0].push($$[$0-1]); this.$ = $$[$0]}else if($$[$0] == null){this.$ = []; this.$.push($$[$0-1]);}else{this.$ = null;}
+                                            prod_1 = grammar_stack.pop();
+                                            prod_2 = grammar_stack.pop();
+                                            grammar_stack.push({'ATTRIBUTE_LIST -> ATTRIBUTE ATTRIBUTE_LIST {if(﹩2 == null){﹩﹩=[]; ﹩﹩.push(﹩1)}else{﹩2.push(﹩1)}}': [ prod_2, prod_1 ] });
+                                          
 break;
 case 13:
-
-		attr = new Atributo($$[$0-3], $$[$0-1], this._$.first_line, this._$.first_column+1);
-		$$[$0].push(attr);
-		this.$=$$[$0];
-	
+this.$ = null;             grammar_stack.push({'ATTRIBUTE_LIST -> Empty {﹩﹩ = null}': ['EMPTY'] });      
 break;
 case 14:
-
-		attr = new Atributo($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
-		this.$=[attr];
-	
+attr = new Atributo($$[$0-1].slice(0, -1), $$[$0].slice(1,-1), this._$.first_line, this._$.first_column+1);
+                                            attr.Cst= `<li><a href=''>ATTRIBUTE</a>
+                                            <ul>
+                                            <li><a href=''>tk_attribute_name</a><ul>\n<li><a href=''>${$$[$0-1]}</a></li></ul></li>
+                                            <li><a href=''>tk_string</a><ul>\n<li><a href=''>${$$[$0]}</a></li></ul></li>
+                                            </ul>
+                                            </li>`;
+                                            this.$ = attr;
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name tk_string {	﹩﹩ = new Attribute(﹩1, ﹩2)}': ['Token: tk_attribute_name\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0] ]});
+                                            
+break;
+case 15:
+ this.$ = null;
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un atributo despues de =.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_attribute_name\t Lexema: ' + $$[$0]]});
+                                            
+break;
+case 16:
+ this.$ = null;
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un nombre para atributo antes de =.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_equal tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_equal\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            
 break;
 case 17:
- if ($$[$0]!==null) { $$[$0-1].push($$[$0]); } this.$=$$[$0-1]; 
+ this.$ = null;
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba signo =", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_tag_name {	errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                            
+break;
+case 18:
+ this.$ = null;
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con digitos.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            
 break;
 case 19:
-
-		if ($$[$0-1].tipo !== $$[$0].tipo) {
-			$$[$0].val=$$[$0-1].val+$$[$0].val;
-		}
-		else {
-			$$[$0].val=$$[$0-1].val+' '+$$[$0].val;
-		}
-		this.$={tipo:$$[$0-1].tipo, val:$$[$0].val};
-	
+ this.$ = null;
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con digitos, y debe tener signo = y atributo a continuacion.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err {	errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0]]});
+                                            
 break;
 case 20:
-
-		this.$={tipo:$$[$0].tipo, val:$$[$0].val};
-	
+if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
+                                                                                let hasConflict = $$[$0-4].verificateNames();
+                                                                                if(hasConflict === "") {
+																					$$[$0-4].childs.forEach(child => {
+																					child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
+																					});
+																					this.$ = $$[$0-4];
+																				}
+                                                                                else {
+																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                                                    this.$ = null;
+																				}
+                                                                                 }else{this.$ = null;}
+                                                                                 prod_1 = grammar_stack.pop();
+                                                                                 prod_2 = grammar_stack.pop();
+                                                                                 grammar_stack.push({'XML-> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩1.children = ﹩2}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                                                 
 break;
 case 21:
- this.$={tipo:1, val:$$[$0]}; 
+if($$[$0-4] != null){$$[$0-4].Value = $$[$0-3]; $$[$0-4].Close = $$[$0-1];  this.$ = $$[$0-4];
+                                                                                let hasConflict = $$[$0-4].verificateNames();
+                                                                                if(hasConflict !== ""){
+                                                                                 errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                                                 this.$ = null;
+                                                                                 }
+	                                                                             }else{this.$ = null;}
+	                                                                             prod_1 = grammar_stack.pop();
+	                                                                             grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩﹩.content = ﹩2}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                             
 break;
 case 22:
- this.$={tipo:2, val:$$[$0]}; 
+this.$ = new Element($$[$0-3], $$[$0-2], null, null, _$[$0-4].first_line, _$[$0-4].first_column+1, null);
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                grammar_stack.push({'XML -> tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-3], prod_1, 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                            
 break;
 case 23:
- this.$={tipo:3, val:$$[$0]}; 
+if($$[$0-3] != null){$$[$0-3].Close = $$[$0-1]; this.$ = $$[$0-3];
+	                                                                            let hasConflict = $$[$0-3].verificateNames();
+	                                                                             if(hasConflict !== ""){
+                                                                                errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                                                this.$ = null;
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                }
+	                                                                            }else{this.$ = null;}
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close {	﹩﹩ = ﹩1;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
+	                                                                            
 break;
 case 24:
- this.$={tipo:4, val:$$[$0]}; 
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
+	                                                                            
 break;
 case 25:
- this.$={tipo:5, val:$$[$0]}; 
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                            
+break;
+case 26:
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            
+break;
+case 27:
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + $$[$0]  ]});
+                                                                            	
+break;
+case 28:
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Se esperaba etiqueta de cierre. ", origen: "XML", linea: _$[$0-4].first_line, columna: _$[$0-4].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                prod_2 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, 'Token: tk_content\t Lexema: ' + $$[$0-4],  'Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                            
+break;
+case 29:
+this.$ =null;
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                prod_2 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            
+break;
+case 30:
+this.$ =null;
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                prod_2 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: '  + '&gt;']});
+	                                                                            
+break;
+case 31:
+this.$ =null;
+	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-3], origen: "XML", linea: _$[$0-3].first_line, columna: _$[$0-3].first_column+1 });
+
+                                                                             grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
+                                                                             
+break;
+case 32:
+this.$ =null;
+    	                                                                    errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
+
+                                                                            grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                                                            
+break;
+case 33:
+this.$ =null;
+	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
+
+	                                                                        grammar_stack.push({'XML -> error tk_bar tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                        
+break;
+case 34:
+this.$ =null;
+	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+	                                                                        grammar_stack.push({'XML -> error  tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                        
+break;
+case 35:
+ this.$ = new Element($$[$0-2], $$[$0-1], null, null,  _$[$0-3].first_line,  _$[$0-3].first_column+1);
+
+                                                        prod_1 = grammar_stack.pop();
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                         
+break;
+case 36:
+
+                                                        this.$ = null;
+                                                        errors.push({ tipo: "Sintáctico", error: "Se esperaba \">\" despues de la cadena de atributos.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                        prod_1 = grammar_stack.pop();
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], prod_1]});
+                                                        
+break;
+case 37:
+ this.$ = null;
+                                                        errors.push({ tipo: "Sintáctico", error: "", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                        grammar_stack.push({'XML_OPEN -> tk_open {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;']});
+                                                        
+break;
+case 38:
+ this.$ = null;
+                                                         errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador para la etiqueta", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                         grammar_stack.push({'XML_OPEN -> tk_open tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                         
+break;
+case 39:
+if($$[$0-1] != null && $$[$0] != null){ $$[$0].push($$[$0-1]); this.$ = $$[$0]; } else if($$[$0] == null){this.$ = []; this.$.push($$[$0-1]); }else{this.$ = null;}
+                                                            prod_1 = grammar_stack.pop();
+                                                            prod_2 = grammar_stack.pop();
+                                                             grammar_stack.push({'CHILDREN -> XML CHILDREN {﹩2.push(﹩1); ﹩﹩ = ﹩2;}':[prod_2,  prod_1]});
+                                                            
+break;
+case 40:
+this.$ = []; this.$.push($$[$0]);
+	                                                        prod_1 = grammar_stack.pop();
+	                                                        grammar_stack.push({'CHILDREN -> XML {﹩﹩ = [﹩1]}': [prod_1] });
+	                                                        
 break;
 }
 },
-table: [{2:[1,3],3:1,4:[1,2]},{1:[3]},{2:$V0,5:4,7:5,8:$V1},{6:[1,8]},{6:[1,9]},{2:$V0,5:10,6:[2,4],7:5,8:$V1},{9:$V2},{8:[1,13],11:[1,12]},{1:[2,2]},{1:[2,1]},{6:[2,3]},o($V3,[2,12],{10:14,15:15,9:$V4}),o($V5,[2,9]),o($V5,[2,10]),{11:[1,17],13:[1,18]},o($V3,[2,11]),{16:[1,19]},{2:$V0,7:23,8:[1,22],9:$V6,12:20,13:$V7,14:21,18:$V8,19:$V9,20:24,21:$Va},{11:[1,30]},{17:31,18:[1,32],19:[1,33]},{2:$V0,7:35,8:[1,34]},{8:[1,36]},{9:$V2,13:[1,37]},o($Vb,[2,18]),{8:[2,20],9:$V6,13:$V7,14:38,18:$V8,19:$V9,20:24,21:$Va},o($Vc,[2,21]),o($Vc,[2,22]),o($Vc,[2,23]),o($Vc,[2,24]),o($Vc,[2,25]),o($V5,[2,7]),o($V3,[2,14],{15:39,9:$V4}),o($Vd,[2,15]),o($Vd,[2,16]),{9:$V2,13:[1,40]},o($Vb,[2,17]),{13:[1,41]},{9:[1,42]},{8:[2,19]},o($V3,[2,13]),{9:[1,43]},{9:[1,44]},{11:[1,45]},{11:[1,46]},{11:[1,47]},o($V5,$Vb),o($V5,[2,5]),o($V5,[2,6])],
-defaultActions: {8:[2,2],9:[2,1],10:[2,3],38:[2,19]},
+table: [{2:[1,5],3:1,4:2,5:3,6:[1,4],7:7,8:[1,6],19:8,23:$V0},{1:[3]},{2:$V1,5:10,6:[1,11],7:7,19:8,23:$V0},{6:[1,13]},{1:[2,4]},{6:[1,14],12:$V2,21:$V3,24:$V4},o([2,11,12],$V5,{9:18,13:19,14:$V6,16:$V7,17:$V8,18:$V9}),{2:$V1,5:24,6:[2,7],7:7,19:8,23:$V0},{2:$V1,7:28,19:8,20:25,21:[1,27],22:[1,26],23:$V0},o($Va,[2,37],{12:[1,30],17:[1,29]}),{6:[1,31]},{1:[2,2]},{12:$V2,21:$V3,24:$V4},{1:[2,3]},{1:[2,5]},{17:[1,32]},{12:[1,33]},o($Vb,[2,34]),{2:[1,37],10:34,11:[1,35],12:[1,36]},o($Vc,$V5,{13:19,9:38,14:$V6,16:$V7,17:$V8,18:$V9}),o($Vd,[2,15],{15:[1,39]}),{15:[1,40]},o($Vd,[2,17]),o($Vd,[2,19],{15:[1,41]}),{6:[2,6]},{21:[1,42]},{21:[1,43],23:[1,44]},{12:[1,46],17:[1,45]},{2:$V1,7:28,19:8,20:47,21:[2,40],23:$V0},o([2,12,21,22,23,24],$V5,{13:19,9:48,14:$V6,16:$V7,17:$V8,18:$V9}),o($Va,[2,38]),{1:[2,1]},o($Vb,[2,32],{12:[1,49]}),o($Vb,[2,33]),o($Ve,[2,8]),o($Ve,[2,9]),o($Ve,[2,10]),{12:[1,50]},o($Vc,[2,12]),o($Vd,[2,14]),o($Vd,[2,16]),o($Vd,[2,18]),{12:[1,52],17:[1,51]},{12:[1,54],17:[1,53]},{17:[1,55]},o($Vb,[2,24],{12:[1,56]}),o($Vb,[2,25]),{21:[2,39]},o($Va,[2,36],{12:[1,58],24:[1,57]}),o($Vb,[2,31]),o($Ve,[2,11]),o($Vb,[2,29],{12:[1,59]}),o($Vb,[2,30]),o($Vb,[2,26],{12:[1,60]}),o($Vb,[2,27]),{9:61,12:$V5,13:19,14:$V6,16:$V7,17:$V8,18:$V9},o($Vb,[2,23]),{12:[1,62]},o($Va,[2,35]),o($Vb,[2,20]),o($Vb,[2,21]),{12:[1,63]},o($Vb,[2,22]),o($Vb,[2,28])],
+defaultActions: {4:[2,4],11:[2,2],13:[2,3],14:[2,5],24:[2,6],31:[2,1],47:[2,39]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -4153,6 +4478,814 @@ _handle_error:
 
 	var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
+	let grammar_stack = [];
+
+
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Reporte gramatical</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+
+        str = str + buildGrammarReport(obj);
+
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+
+                     <div id="div-table">
+                     <table style="width:100%">
+                         <tr>
+                         <th>Produccion</th>
+                         <th>Cuerpo</th>
+                         <th>Accion</th>
+                         </tr>
+
+                         <tr>
+                         <th>INI-&gt;</th>
+                         <td>XML_DECLARATION ROOT EOF</td>
+                         <td>$$ = [$1, $2] </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_DECLARATION  EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>ROOT EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>error EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ROOT-&gt;</th>
+                         <td>XML ROOT</td>
+                         <td>$$ = $2.push($1);</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = []; $$.push($1);</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML_DECLARATION-&gt;</th>
+                         <td>tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION</td>
+                         <td>$$ = $2</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+
+
+                         <tr>
+                         <th>XML_CLOSE_DECLARATION-&gt;</th>
+                         <td>tk_close_delcaraton</td>
+                         <td>$$ = $1</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>ATTRIBUTE_LIST-&gt;</th>
+                         <td>ATTRIBUTE ATTRIBUTE_LIST </td>
+                         <td>if($2 == null){$$=[]; $$.push($1)}else{$2.push($1)}</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>Empty</td>
+                         <td>$$ = null</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ATTRIBUTE-&gt;</th>
+                         <td>tk_attribute_name tk_string  </td>
+                         <td>$$ = new Attribute($1, $2)</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_attribute_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_equal tk_string   </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_tag_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err tk_string </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML-&gt;</th>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close   </td>
+                         <td>$$ = $1; $1.children = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close  </td>
+                         <td>$$ = $1; $$.content = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>$$ = $1; </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag  tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_bar tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>XML_OPEN-&gt;</th>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open   tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>CHILDREN-&gt;</th>
+                         <td>XML CHILDREN</td>
+                         <td>$2.push($1); $$ = $2;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = [$1]</td>
+                         </tr>
+
+                     </table>
+
+                     </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                    function fun1() {
+                                                                                if ($("#tree-root").length > 0) {
+
+                                                                                    $("#tree-root").find("li").each
+                                                                                    (
+                                                                                        function () {
+                                                                                            var $span = $("<span></span>");
+                                                                                            //$(this).toggleClass("expanded");
+                                                                                            if ($(this).find("ul:first").length > 0) {
+                                                                                                $span.removeAttr("class");
+                                                                                                $span.attr("class", "expanded");
+                                                                                                $(this).find("ul:first").css("display", "block");
+                                                                                                $(this).append($span);
+                                                                                            }
+
+                                                                                        }
+                                                                                    )
+                                                                                }
+
+                                                                            }
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+
+    function buildGrammarReport(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                str = str + `<li class= "string">
+                ${value}
+                </li>
+                `;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildGrammarReport(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                str = `<li><span class="caret">
+                ${key}
+                </span>
+                <ul class="nested">
+                `;
+                str = str + buildGrammarReport(obj[key]);
+                str = str + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+
+
+//just for testing purposes
+	function printstrack(obj, lines){
+	return;
+
+        if(Array.isArray(obj)){ //IS ARRAY
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            obj.forEach((value)=>{
+                if(typeof value === 'string' ){
+                     str = ""
+                     for(let i = 0; i < lines; i++){str = str + "- ";}
+                     console.log(str + value);
+                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+                    str = ""
+                    for(let i = 0; i < lines; i++){ str = str + "- ";}
+                    for(let key in value){
+                       console.log(`${str}${key}`);
+                       printstrack(value[key], lines + 1);
+                    }
+                }
+
+                //printstrack(value, lines +1);
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            console.log(str + obj);
+        }else{// IS OBJECT
+            str = ""
+            for(let i = 0; i < lines; i++){ str = str + "- ";}
+            for(let key in obj){
+                console.log(`${str}Key: ${key}`);
+                //console.log(obj[key]);
+                printstrack(obj[key], lines + 1);
+            }
+        }
+	}
+
+
+
+
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>CST</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+
+            </style>
+        </head>
+        <body>
+
+
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+
+
+
+
 
 	const { Atributo } = __webpack_require__(/*! ../model/xml/Atributo */ "tSns");
 	const { Element } = __webpack_require__(/*! ../model/xml/Element */ "Kypw");
@@ -4487,70 +5620,57 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1:// MultiLineComment
+case 1:/* MultiLineComment*/
 break;
-case 2:return 4
+case 2:return 8;
 break;
-case 3:return 8
+case 3:return 11;
 break;
-case 4:return 11
+case 4:return 14;
 break;
-case 5:return 13
+case 5:return 17;
 break;
-case 6:return 16
+case 6:return 21
 break;
-case 7:return 9
+case 7:return 23;
 break;
-case 8: attribute = ''; this.begin("string_doubleq"); 
+case 8: this.pushState('content');  return 12;
 break;
-case 9: attribute += yy_.yytext; 
+case 9:return 24;
 break;
-case 10: attribute += "\""; 
+case 10:return 16;
 break;
-case 11: attribute += "\n"; 
+case 11:return 15;
 break;
-case 12: attribute += " ";  
+case 12:return cadena_err;
 break;
-case 13: attribute += "\t"; 
+case 13:return id_err;
 break;
-case 14: attribute += "\\"; 
+case 14:/* MultiLineComment*/
 break;
-case 15: attribute += "\'"; 
+case 15:
+                                    if(yy_.yytext.match(re)){return 22;}
+                                 
 break;
-case 16: attribute += "\r"; 
+case 16:return 6
 break;
-case 17: yy_.yytext = attribute; this.popState(); return 18; 
+case 17:this.popState(); return 12;
 break;
-case 18: attribute = ''; this.begin("string_singleq"); 
+case 18: this.popState(); return 21
 break;
-case 19: attribute += yy_.yytext; 
+case 19:  this.popState();
+                                    return 23;
 break;
-case 20: attribute += "\""; 
+case 20: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
-case 21: attribute += "\n"; 
+case 21:return 6
 break;
-case 22: attribute += " ";  
-break;
-case 23: attribute += "\t"; 
-break;
-case 24: attribute += "\\"; 
-break;
-case 25: attribute += "\'"; 
-break;
-case 26: attribute += "\r"; 
-break;
-case 27: yy_.yytext = attribute; this.popState(); return 19; 
-break;
-case 28:return 6
-break;
-case 29:return 21
-break;
-case 30: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 22: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^><]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[19,20,21,22,23,24,25,26,27],"inclusive":false},"string_doubleq":{"rules":[9,10,11,12,13,14,15,16,17],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,18,28,29,30],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:(([^<>&\"]|&lt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"content":{"rules":[14,15,16,17,18,19,20],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,21,22],"inclusive":true}}
 });
 return lexer;
 })();
@@ -4651,10 +5771,10 @@ function Expresion(_expresion, _ambito, _contexto) {
         return Logica(_expresion, _ambito, _contexto);
     }
     else {
-        console.log(_expresion, "SSSSSSSS");
+        console.log(_expresion, "Expresión no reconocida.");
         // const Bloque = require("../Instruccion/Bloque");
         // return Bloque([_expresion], _ambito, _contexto);
-        // return { error: "Error: Expresión no procesada.", tipo: "Semántico", origen: "Query", linea: _expresion.linea, columna: _expresion.columna };
+        return { error: "Error: Expresión no procesada.", tipo: "Semántico", origen: "Query", linea: _expresion.linea, columna: _expresion.columna };
     }
 }
 module.exports = Expresion;
@@ -4693,8 +5813,8 @@ function compile(req) {
                 parser_xPath = __webpack_require__(/*! ../analyzers/xpath_up */ "9ArA");
                 break;
             case 2:
-                parser_xml = __webpack_require__(/*! ../analyzers/xml_down */ "cW0F");
-                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_down */ "jiUV");
+                parser_xml = __webpack_require__(/*! ../analyzers/xml_up */ "nxic");
+                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_up */ "9ArA");
                 break;
         }
         // Análisis de XML
@@ -4748,7 +5868,7 @@ function compile(req) {
         var output = {
             arreglo_simbolos: [],
             arreglo_errores: errors,
-            output: (error.message) ? String(error.message) : String(error),
+            output: (error.message) ? ("Error sintáctico:\n" + String(error.message)) : String(error),
             encoding: "utf-8"
         };
         errors = [];
@@ -4784,6 +5904,124 @@ module.exports = { exec: exec };
 
 /***/ }),
 
+/***/ "ieEo":
+/*!**********************************!*\
+  !*** ./src/js/routes/reports.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function generateReport(req) {
+    var errors = [];
+    try {
+        // Datos de la petición desde Angular
+        var xml = req.xml;
+        var xPath = req.query;
+        var grammar_selected = req.grammar;
+        var report = req.report;
+        // Gramáticas a usarse según la selección: 1=ascendente, 2=descendente
+        var parser_xml = void 0, parser_xPath = void 0;
+        switch (grammar_selected) {
+            case 1:
+                parser_xml = __webpack_require__(/*! ../analyzers/xml_up */ "nxic");
+                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_up */ "9ArA");
+                break;
+            case 2:
+                parser_xml = __webpack_require__(/*! ../analyzers/xml_down */ "cW0F");
+                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_down */ "jiUV");
+                break;
+        }
+        // Puede ser uno de los tres descritos
+        switch (report) {
+            case "XML-CST":
+                return CST_xml(parser_xml, xml);
+            case "XML-GRAMMAR":
+                return GrammarReport_xml(parser_xml, xml);
+            case "XPATH-AST":
+                return AST_xpath(parser_xPath, xPath);
+            default:
+                return { output: "Algo salió mal." };
+        }
+    }
+    catch (error) {
+        console.log(error);
+        errors.push({ tipo: "Desconocido", error: "Error en tiempo de ejecución.", origen: "", linea: "", columna: "" });
+        var output = {
+            arreglo_errores: errors,
+            output: (error.message) ? String(error.message) : String(error),
+            cst: ""
+        };
+        errors = [];
+        return output;
+    }
+}
+function CST_xml(parser_xml, xml) {
+    var errors = [];
+    // Análisis de XML
+    var xml_ast = parser_xml.parse(xml);
+    var _cst = xml_ast.cst;
+    if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
+        if (xml_ast.errors.length > 0)
+            errors = xml_ast.errors;
+        if (xml_ast.ast === null || xml_ast === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var output = {
+        arreglo_errores: errors,
+        output: "CST generado.",
+        cst: _cst
+    };
+    return output;
+}
+function GrammarReport_xml(parser_xml, xml) {
+    var errors = [];
+    // Análisis de XML
+    var xml_ast = parser_xml.parse(xml);
+    var _grammar = xml_ast.grammar_report;
+    if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
+        if (xml_ast.errors.length > 0)
+            errors = xml_ast.errors;
+        if (xml_ast.ast === null || xml_ast === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var output = {
+        arreglo_errores: errors,
+        output: "Reporte gramatical generado.",
+        grammar_report: _grammar
+    };
+    return output;
+}
+function AST_xpath(parser_xpath, xpath) {
+    var errors = [];
+    // Análisis de XPath
+    var xpath_ast = parser_xpath.parse(xpath);
+    var _ast = xpath_ast.ast_report; //Confirmar nombre de propiedad
+    if (xpath_ast.errors.length > 0 || xpath_ast.ast === null || xpath_ast === true) {
+        if (xpath_ast.errors.length > 0)
+            errors = xpath_ast.errors;
+        if (xpath_ast.ast === null || xpath_ast === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var output = {
+        arreglo_errores: errors,
+        output: "AST generado.",
+        ast: _ast
+    };
+    return output;
+}
+module.exports = { generateReport: generateReport };
+
+
+/***/ }),
+
 /***/ "jiUV":
 /*!****************************************!*\
   !*** ./src/js/analyzers/xpath_down.js ***!
@@ -4791,7 +6029,7 @@ module.exports = { exec: exec };
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {/* parser generated by jison 0.4.18 */
+/* WEBPACK VAR INJECTION */(function(module) {/* parser generated by jison 0.4.17 */
 /*
   Returns a Parser object of the following structure:
 
@@ -4865,31 +6103,334 @@ module.exports = { exec: exec };
   }
 */
 var xpath_down = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,11],$V4=[1,12],$V5=[1,13],$V6=[1,14],$V7=[1,15],$V8=[1,16],$V9=[1,17],$Va=[1,18],$Vb=[1,19],$Vc=[1,20],$Vd=[1,21],$Ve=[1,22],$Vf=[1,23],$Vg=[1,24],$Vh=[1,25],$Vi=[1,26],$Vj=[5,6,9,10,12,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,60,61,62],$Vk=[2,18],$Vl=[1,29],$Vm=[1,30],$Vn=[1,31],$Vo=[1,32],$Vp=[1,34],$Vq=[5,6,9,10,12,13,15,16,17,19,21,25,26,27,28,29,30,33,34,35,36,37,38,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,60,61,62],$Vr=[2,12],$Vs=[1,44],$Vt=[1,45],$Vu=[1,46],$Vv=[1,48],$Vw=[2,22],$Vx=[1,50],$Vy=[1,51],$Vz=[9,10,12,13,21,25,26,27,28,29,30,33,34,35,36,37,38],$VA=[2,51],$VB=[1,59],$VC=[1,57],$VD=[1,58],$VE=[1,84],$VF=[1,85],$VG=[1,83],$VH=[2,36],$VI=[1,77],$VJ=[1,78],$VK=[1,79],$VL=[1,80],$VM=[1,81],$VN=[1,82],$VO=[9,10,12,21,25,26,27,28,29,30],$VP=[2,45],$VQ=[1,89],$VR=[1,87],$VS=[1,88],$VT=[1,90],$VU=[1,91],$VV=[1,92],$VW=[1,93],$VX=[5,6,9,10,12,13,21,25,26,27,28,29,30,33,34,35,36,37,38,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,60,61,62],$VY=[2,25],$VZ=[1,105];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[2,4],$Vs=[1,39],$Vt=[5,8],$Vu=[2,7],$Vv=[5,8,11,12,18,21,22,23,24,25,26,27,28,29,31,32,33,34,35,38,39,40,41,42,43,44,45,46,47,48,51,52,53,54,55,56,57,58,59,60,61,62,63],$Vw=[2,16],$Vx=[1,46],$Vy=[5,8,11,12,16,18,21,22,23,24,25,26,27,28,29,31,32,33,34,35,38,39,40,41,42,43,44,45,46,47,48,51,52,53,54,55,56,57,58,59,60,61,62,63],$Vz=[1,58],$VA=[1,59],$VB=[1,68],$VC=[1,69],$VD=[1,70],$VE=[1,71],$VF=[1,72],$VG=[1,73],$VH=[1,74],$VI=[1,75],$VJ=[1,76],$VK=[1,77],$VL=[1,78],$VM=[1,79],$VN=[1,80],$VO=[18,21,22,23,24,25,26,27,28,29,31,32,33,34,35],$VP=[2,14],$VQ=[1,84],$VR=[18,21,22,23,24,31,32,33,34,35],$VS=[18,21,22,23,24,25,26,31,32,33,34,35];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"CONTI":4,"EOF":5,"tk_punto":6,"AXES":7,"CONTIp":8,"tk_bar":9,"tk_2bar":10,"PAL":11,"tk_4puntos":12,"tk_por":13,"SUBAX":14,"tk_arroba":15,"tk_line":16,"tk_2puntos":17,"CORCHET":18,"tk_corA":19,"E":20,"tk_corC":21,"CORCHETp":22,"T":23,"Ep":24,"tk_menorigual":25,"tk_menor":26,"tk_mayor":27,"tk_mayorigual":28,"tk_or":29,"tk_and":30,"F":31,"Tp":32,"tk_mas":33,"tk_menos":34,"tk_div":35,"tk_mod":36,"tk_diferent":37,"tk_equal":38,"O":39,"num":40,"Q":41,"tk_id":42,"tk_ancestor":43,"tk_ancestor2":44,"tk_attribute_d":45,"tk_attribute_s":46,"tk_child":47,"tk_descendant":48,"tk_descendant2":49,"tk_following":50,"tk_following2":51,"tk_namespace":52,"tk_parent":53,"tk_preceding":54,"tk_preceding2":55,"tk_self":56,"tk_node":57,"tk_ParA":58,"tk_ParC":59,"tk_last":60,"tk_text":61,"tk_position":62,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"tk_punto",9:"tk_bar",10:"tk_2bar",12:"tk_4puntos",13:"tk_por",15:"tk_arroba",16:"tk_line",17:"tk_2puntos",19:"tk_corA",21:"tk_corC",25:"tk_menorigual",26:"tk_menor",27:"tk_mayor",28:"tk_mayorigual",29:"tk_or",30:"tk_and",33:"tk_mas",34:"tk_menos",35:"tk_div",36:"tk_mod",37:"tk_diferent",38:"tk_equal",40:"num",42:"tk_id",43:"tk_ancestor",44:"tk_ancestor2",45:"tk_attribute_d",46:"tk_attribute_s",47:"tk_child",48:"tk_descendant",49:"tk_descendant2",50:"tk_following",51:"tk_following2",52:"tk_namespace",53:"tk_parent",54:"tk_preceding",55:"tk_preceding2",56:"tk_self",57:"tk_node",58:"tk_ParA",59:"tk_ParC",60:"tk_last",61:"tk_text",62:"tk_position"},
-productions_: [0,[3,2],[4,3],[4,3],[4,3],[4,3],[4,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,0],[7,2],[7,2],[7,1],[7,1],[7,1],[7,0],[14,1],[14,1],[14,1],[14,0],[18,4],[22,4],[22,0],[20,2],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,0],[23,2],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,0],[31,2],[31,1],[31,1],[31,2],[31,1],[31,0],[39,1],[39,1],[41,1],[41,0],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,3],[11,3],[11,3],[11,3]],
+symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"XPATH":6,"XPATH_Up":7,"tk_line":8,"QUERY":9,"XPATHp":10,"tk_2bar":11,"tk_bar":12,"EXP_PR":13,"AXIS":14,"CORCHET":15,"tk_corA":16,"E":17,"tk_corC":18,"CORCHETpp":19,"CORCHETP":20,"tk_menorigual":21,"tk_menor":22,"tk_mayorigual":23,"tk_mayor":24,"tk_mas":25,"tk_menos":26,"tk_asterisco":27,"tk_div":28,"tk_mod":29,"tk_ParA":30,"tk_ParC":31,"tk_or":32,"tk_and":33,"tk_equal":34,"tk_diferent":35,"FUNC":36,"PRIMITIVO":37,"tk_id":38,"tk_attribute_d":39,"tk_attribute_s":40,"num":41,"tk_punto":42,"tk_2puntos":43,"tk_arroba":44,"tk_text":45,"tk_last":46,"tk_position":47,"tk_node":48,"AXISNAME":49,"tk_4puntos":50,"tk_ancestor":51,"tk_ancestor2":52,"tk_attribute":53,"tk_child":54,"tk_descendant":55,"tk_descendant2":56,"tk_following":57,"tk_following2":58,"tk_namespace":59,"tk_parent":60,"tk_preceding":61,"tk_preceding2":62,"tk_self":63,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"tk_line",11:"tk_2bar",12:"tk_bar",16:"tk_corA",18:"tk_corC",21:"tk_menorigual",22:"tk_menor",23:"tk_mayorigual",24:"tk_mayor",25:"tk_mas",26:"tk_menos",27:"tk_asterisco",28:"tk_div",29:"tk_mod",30:"tk_ParA",31:"tk_ParC",32:"tk_or",33:"tk_and",34:"tk_equal",35:"tk_diferent",38:"tk_id",39:"tk_attribute_d",40:"tk_attribute_s",41:"num",42:"tk_punto",43:"tk_2puntos",44:"tk_arroba",45:"tk_text",46:"tk_last",47:"tk_position",48:"tk_node",50:"tk_4puntos",51:"tk_ancestor",52:"tk_ancestor2",53:"tk_attribute",54:"tk_child",55:"tk_descendant",56:"tk_descendant2",57:"tk_following",58:"tk_following2",59:"tk_namespace",60:"tk_parent",61:"tk_preceding",62:"tk_preceding2",63:"tk_self"},
+productions_: [0,[3,2],[4,2],[7,3],[7,0],[6,2],[10,2],[10,0],[9,2],[9,2],[9,1],[9,1],[15,4],[19,4],[19,0],[20,1],[20,0],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,1],[13,2],[13,2],[37,1],[37,1],[37,1],[37,1],[37,1],[37,1],[37,1],[37,2],[37,2],[36,3],[36,3],[36,3],[36,3],[14,3],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-console.log("fin del archivo descendente");
+
+	prod_1 = grammar_stack.pop();
+	prod_2 = grammar_stack.pop();
+	grammar_stack.push({'ini -: XPATH_U EOF ':[prod_2, prod_1]});
+	printstrack(grammar_stack, 0);
+	console.log('gramatica descendente');
+	
+break;
+case 2:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATH_U -: XPATH XPATH_Up ':[prod_2, prod_1]});
+
+break;
+case 3:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATH_Up -: tk_line XPATH XPATH_Up ':['token: tk_line\t Lexema: ' + $$[$0-2], prod_2, prod_1]});
+
+break;
+case 4:
+ grammar_stack.push({'XPATH_Up -: Empty': ['EMPTY']}); 
+break;
+case 5:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATH -: QUERY XPATHp ':[prod_2, prod_1]});
+
+break;
+case 6:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATHp -: QUERY XPATHp ':[prod_2, prod_1]});
+
+break;
+case 7:
+ grammar_stack.push({'XPATHp -: Empty': ['EMPTY']}); 
+break;
+case 8:
+ //this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					   prod_1 = grammar_stack.pop();
+			 		   grammar_stack.push({'QUERY -: tk_2bar QUERY': ['token: tk_2bar\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 9:
+ //this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+			 		 grammar_stack.push({'QUERY -: tk_bar QUERY': ['token: tk_bar\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 10:
+ //this.$=$$[$0];
+			   prod_1 = grammar_stack.pop();
+			   grammar_stack.push({'QUERY -: EXP_PR': [prod_1]}); 
+break;
+case 11:
+ //this.$=$$[$0];
+			 prod_1 = grammar_stack.pop();
+			 grammar_stack.push({'QUERY -: AXIS': [prod_1]}); 
+break;
+case 12:
+
+			prod_1 = grammar_stack.pop();
+			prod_2 = grammar_stack.pop();
+			grammar_stack.push({'CORCHET -: tk_corA E tk_corC CORCHETpp': ['token: tk_menorigual\t Lexema: ' + $$[$0-3], prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]});	
+
+break;
+case 13:
+
+										prod_1 = grammar_stack.pop();
+										prod_2 = grammar_stack.pop();
+										grammar_stack.push({'CORCHETpp -: tk_corA E tk_corC CORCHETpp ':['token: tk_menorigual\t Lexema: ' + $$[$0-3], prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]});	
+
+break;
+case 14:
+ grammar_stack.push({'CORCHETpp -: Empty': ['EMPTY']}); 
+break;
+case 15:
+ prod_1 = grammar_stack.pop();
+					grammar_stack.push({'CORCHETP -: CORCHET': [prod_1]}) 
+break;
+case 16:
+ grammar_stack.push({'CORCHETP -: Empty': ['EMPTY']}); 
+break;
+case 17:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+				 		prod_2 = grammar_stack.pop();
+					    grammar_stack.push({'E -: E tk_menorigual E': [prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 18:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -: E tk_menor E': [prod_2, 'token: tk_menor\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 19:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1);
+						  prod_1 = grammar_stack.pop();
+				 		  prod_2 = grammar_stack.pop();
+						  grammar_stack.push({'E -: E tk_mayorigual E': [prod_2, 'token: tk_mayorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 20:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -: E tk_mayor E': [prod_2, 'token: tk_mayor\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 21:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_mas E': [prod_2, 'token: tk_mas\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 22:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				  	 grammar_stack.push({'E -: E tk_menos E': [prod_2, 'token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 23:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1);
+						 prod_1 = grammar_stack.pop();
+				 		 prod_2 = grammar_stack.pop();
+				  		 grammar_stack.push({'E -: E tk_asterisco E': [prod_2, 'token: tk_asterisco\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 24:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_div E': [prod_2, 'token: tk_div\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 25:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_mod E': [prod_2, 'token: tk_mod\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 26:
+ //this.$=builder.newOperation($$[$0], null, Tipos.OPERACION_NEGACION_UNARIA, this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+						  		grammar_stack.push({'E -: tk_menos E': ['token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]});
+break;
+case 27:
+ //this.$=$$[$0-1];
+						  prod_1 = grammar_stack.pop();
+						  grammar_stack.push({'E -: tk_ParA E tk_ParC': ['token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 28:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1);
+				  prod_1 = grammar_stack.pop();
+				  prod_2 = grammar_stack.pop();
+				  grammar_stack.push({'E -: E tk_or E': [prod_2, 'token: tk_or\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 29:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_and E': [prod_2, 'token: tk_and\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 30:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+					 prod_1 = grammar_stack.pop();
+					 prod_2 = grammar_stack.pop();
+					 grammar_stack.push({'E -: E tk_equal E': [prod_2, 'token: tk_equal\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 31:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'E -: E tk_diferent E': [prod_2, 'token: tk_diferent\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 32:
+ //this.$=$$[$0];
+			  prod_1 = grammar_stack.pop();
+			  grammar_stack.push({'E -: QUERY': [prod_1]}); 
+break;
+case 33:
+ //this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'EXP_PR -: FUNC CORCHETP': [prod_2, prod_1]}); 
+break;
+case 34:
+ //this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'EXP_PR -: PRIMITIVO CORCHETP': [prod_2, prod_1]}); 
+break;
+case 35:
+ //this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -: tk_id':['token: tk_text\t Lexema: ' + $$[$0]]}); 
+break;
+case 36:
+ //this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1);
+						   grammar_stack.push({'PRIMITIVO -: tk_attribute_d':['token: tk_attribute_d\t Lexema: ' + $$[$0]]}); 
+break;
+case 37:
+ //this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+						   grammar_stack.push({'PRIMITIVO -: tk_attribute_s':['token: tk_attribute_s\t Lexema: ' + $$[$0]]}); 
+break;
+case 38:
+ //this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
+				grammar_stack.push({'PRIMITIVO -: num':['token: num\t Lexema: ' + $$[$0]]}); 
+break;
+case 39:
+ //this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -: tk_asterisco':['token: tk_asterisco\t Lexema: ' + $$[$0]]}); 
+break;
+case 40:
+ //this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+					 grammar_stack.push({'PRIMITIVO -: tk_punto':['token: tk_punto\t Lexema: ' + $$[$0]]}); 
+break;
+case 41:
+ //this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1);
+					   grammar_stack.push({'PRIMITIVO -: tk_2puntos':['token: tk_2puntos\t Lexema: ' + $$[$0]]}); 
+break;
+case 42:
+ //this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1);
+							grammar_stack.push({'PRIMITIVO -: tk_arroba tk_id':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_id\t Lexema: ' + $$[$0]]}); 
+break;
+case 43:
+ //this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+							 grammar_stack.push({'PRIMITIVO -: tk_arroba tk_asterisco':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_asterisco\t Lexema: ' + $$[$0]]});
+break;
+case 44:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -: tk_text tk_ParA tk_ParC':['token: tk_text\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 45:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -: tk_last tk_ParA tk_ParC':['token: tk_last\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 46:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+									grammar_stack.push({'FUNC -: tk_position tk_ParA tk_ParC':['token: tk_position\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
+break;
+case 47:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+								grammar_stack.push({'FUNC -: tk_node tk_ParA tk_ParC':['token: tk_node\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
+break;
+case 48:
+ //this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'AXIS -: AXISNAME tk_4puntos QUERY':[prod_2, 'token: tk_4puntos\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 49:
+ //this.$ = Tipos.AXIS_ANCESTOR;
+						grammar_stack.push({'AXISNAME -: tk_ancestor':['token: tk_ancestor\t Lexema: ' + $$[$0]]}); 
+break;
+case 50:
+ //this.$ = Tipos.AXIS_ANCESTOR_OR_SELF;
+						grammar_stack.push({'AXISNAME -: tk_ancestor2':['token: tk_ancestor2\t Lexema: ' + $$[$0]]}); 
+break;
+case 51:
+ //this.$ = Tipos.AXIS_ATTRIBUTE;
+						grammar_stack.push({'AXISNAME -: tk_attribute':['token: tk_attribute\t Lexema: ' + $$[$0]]}); 
+break;
+case 52:
+ //this.$ = Tipos.AXIS_CHILD;
+						grammar_stack.push({'AXISNAME -: tk_child':['token: tk_child\t Lexema: ' + $$[$0]]}); 
+break;
+case 53:
+ //this.$ = Tipos.AXIS_DESCENDANT;
+						grammar_stack.push({'AXISNAME -: tk_descendant':['token: tk_descendant\t Lexema: ' + $$[$0]]}); 
+break;
+case 54:
+ //this.$ = Tipos.AXIS_DESCENDANT_OR_SELF;
+						grammar_stack.push({'AXISNAME -: tk_descendant2':['token: tk_descendant2\t Lexema: ' + $$[$0]]}); 
+break;
+case 55:
+ //this.$ = Tipos.AXIS_FOLLOWING;
+						grammar_stack.push({'AXISNAME -: tk_following':['token: tk_following\t Lexema: ' + $$[$0]]}); 
+break;
+case 56:
+ //this.$ = Tipos.AXIS_FOLLOWING_SIBLING;
+						grammar_stack.push({'AXISNAME -: tk_following2':['token: tk_follownig2\t Lexema: ' + $$[$0]]}); 
+break;
+case 57:
+ //this.$ = Tipos.AXIS_NAMESPACE;
+						grammar_stack.push({'AXISNAME -: tk_namespace':['token: tk_namespace\t Lexema: ' + $$[$0]]}); 
+break;
+case 58:
+ //this.$ = Tipos.AXIS_PARENT;
+						grammar_stack.push({'AXISNAME -: tk_parent':['token: tk_parent\t Lexema: ' + $$[$0]]}); 
+break;
+case 59:
+ //this.$ = Tipos.AXIS_PRECEDING;
+						grammar_stack.push({'AXISNAME -: tk_preceding':['token: tk_preceding\t Lexema: ' + $$[$0]]}); 
+break;
+case 60:
+ //this.$ = Tipos.AXIS_PRECEDING_SIBLING;
+						grammar_stack.push({'AXISNAME -: tk_preceding2':['token: tk_preceding2\t Lexema: ' + $$[$0]]}); 
+break;
+case 61:
+ //this.$ = Tipos.AXIS_SELF;
+						grammar_stack.push({'AXISNAME -: tk_self':['token: tk_self\t Lexema: ' + $$[$0]]}); 
 break;
 }
 },
-table: [{3:1,4:2,6:[1,3],9:[1,4],10:[1,5],11:6,12:[1,7],42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{1:[3]},{5:[1,27]},o($Vj,$Vk,{7:28,18:33,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:35,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:36,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:37,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:38,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vq,[2,56]),o($Vq,[2,57]),o($Vq,[2,58]),o($Vq,[2,59]),o($Vq,[2,60]),o($Vq,[2,61]),o($Vq,[2,62]),o($Vq,[2,63]),o($Vq,[2,64]),o($Vq,[2,65]),o($Vq,[2,66]),o($Vq,[2,67]),o($Vq,[2,68]),o($Vq,[2,69]),o($Vq,[2,70]),{58:[1,39]},{58:[1,40]},{58:[1,41]},{58:[1,42]},{1:[2,1]},{5:$Vr,6:$Vs,8:43,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},o($Vj,$Vw,{14:49,18:52,13:$Vx,15:$Vy,19:$Vp}),o($Vj,$Vw,{18:52,14:53,13:$Vx,15:$Vy,19:$Vp}),o($Vj,[2,15]),o($Vj,[2,16]),o($Vj,[2,17]),o($Vz,$VA,{20:54,23:55,31:56,11:60,18:61,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),{5:$Vr,6:$Vs,8:62,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:63,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:64,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:65,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{59:[1,66]},{59:[1,67]},{59:[1,68]},{59:[1,69]},{5:[2,2]},o($Vj,$Vk,{18:33,7:70,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:71,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:72,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:73,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:74,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,[2,13]),o($Vj,[2,19]),o($Vj,[2,20]),o($Vj,[2,21]),o($Vj,[2,14]),{21:[1,75]},{9:$VE,10:$VF,12:$VG,21:$VH,24:76,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},o($VO,$VP,{32:86,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),{13:[1,96],39:94,42:[1,95]},o($Vz,[2,47]),o($Vz,[2,48]),o($Vz,[2,55],{41:97,18:98,19:$Vp}),o($Vz,[2,50]),{5:[2,3]},{5:[2,4]},{5:[2,5]},{5:[2,6]},o($Vq,[2,71]),o($Vq,[2,72]),o($Vq,[2,73]),o($Vq,[2,74]),{5:$Vr,6:$Vs,8:99,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:100,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:101,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:102,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:103,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},o($VX,$VY,{22:104,19:$VZ}),{21:[2,26]},o($Vz,$VA,{31:56,11:60,18:61,23:106,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:107,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:108,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:109,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:110,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:111,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:112,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:113,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:114,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($VO,[2,37]),o($Vz,$VA,{11:60,18:61,31:115,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:116,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:117,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:118,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:119,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:120,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:121,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,[2,46]),o($Vz,[2,52]),o($Vz,[2,53]),o($Vz,[2,49]),o($Vz,[2,54]),{5:[2,7]},{5:[2,8]},{5:[2,9]},{5:[2,10]},{5:[2,11]},o($VX,[2,23]),o($Vz,$VA,{23:55,31:56,11:60,18:61,20:122,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),{9:$VE,10:$VF,12:$VG,21:$VH,24:123,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:124,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:125,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:126,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:127,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:128,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:129,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:130,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:131,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},o($VO,$VP,{32:132,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:133,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:134,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:135,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:136,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:137,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:138,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),{21:[1,139]},{21:[2,27]},{21:[2,28]},{21:[2,29]},{21:[2,30]},{21:[2,31]},{21:[2,32]},{21:[2,33]},{21:[2,34]},{21:[2,35]},o($VO,[2,38]),o($VO,[2,39]),o($VO,[2,40]),o($VO,[2,41]),o($VO,[2,42]),o($VO,[2,43]),o($VO,[2,44]),o($VX,$VY,{22:140,19:$VZ}),o($VX,[2,24])],
-defaultActions: {27:[2,1],43:[2,2],62:[2,3],63:[2,4],64:[2,5],65:[2,6],76:[2,26],99:[2,7],100:[2,8],101:[2,9],102:[2,10],103:[2,11],123:[2,27],124:[2,28],125:[2,29],126:[2,30],127:[2,31],128:[2,32],129:[2,33],130:[2,34],131:[2,35]},
+table: [{3:1,4:2,6:3,9:4,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{1:[3]},{5:[1,37]},{5:$Vr,7:38,8:$Vs},o($Vt,$Vu,{13:7,14:8,36:9,37:10,49:11,10:40,9:41,11:$V0,12:$V1,27:$V2,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq}),{9:42,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:43,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($Vv,[2,10]),o($Vv,[2,11]),o($Vv,$Vw,{20:44,15:45,16:$Vx}),o($Vv,$Vw,{15:45,20:47,16:$Vx}),{50:[1,48]},{30:[1,49]},{30:[1,50]},{30:[1,51]},{30:[1,52]},o($Vy,[2,35]),o($Vy,[2,36]),o($Vy,[2,37]),o($Vy,[2,38]),o($Vy,[2,39]),o($Vy,[2,40]),o($Vy,[2,41]),{27:[1,54],38:[1,53]},{50:[2,49]},{50:[2,50]},{50:[2,51]},{50:[2,52]},{50:[2,53]},{50:[2,54]},{50:[2,55]},{50:[2,56]},{50:[2,57]},{50:[2,58]},{50:[2,59]},{50:[2,60]},{50:[2,61]},{1:[2,1]},{5:[2,2]},{6:55,9:4,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($Vt,[2,5]),o($Vt,$Vu,{13:7,14:8,36:9,37:10,49:11,9:41,10:56,11:$V0,12:$V1,27:$V2,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq}),o($Vv,[2,8]),o($Vv,[2,9]),o($Vv,[2,33]),o($Vv,[2,15]),{9:60,11:$V0,12:$V1,13:7,14:8,17:57,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($Vv,[2,34]),{9:61,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{31:[1,62]},{31:[1,63]},{31:[1,64]},{31:[1,65]},o($Vy,[2,42]),o($Vy,[2,43]),{5:$Vr,7:66,8:$Vs},o($Vt,[2,6]),{18:[1,67],21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,32:$VK,33:$VL,34:$VM,35:$VN},{9:60,11:$V0,12:$V1,13:7,14:8,17:81,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:82,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($VO,[2,32]),o($Vv,[2,48]),o($Vy,[2,44]),o($Vy,[2,45]),o($Vy,[2,46]),o($Vy,[2,47]),{5:[2,3]},o($Vv,$VP,{19:83,16:$VQ}),{9:60,11:$V0,12:$V1,13:7,14:8,17:85,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:86,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:87,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:88,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:89,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:90,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:91,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:92,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:93,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:94,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:95,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:96,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:97,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($VO,[2,26]),{21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,31:[1,98],32:$VK,33:$VL,34:$VM,35:$VN},o($Vv,[2,12]),{9:60,11:$V0,12:$V1,13:7,14:8,17:99,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($VR,[2,17],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,18],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,19],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,20],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VS,[2,21],{27:$VH,28:$VI,29:$VJ}),o($VS,[2,22],{27:$VH,28:$VI,29:$VJ}),o($VO,[2,23]),o($VO,[2,24]),o($VO,[2,25]),o([18,31,32],[2,28],{21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,33:$VL,34:$VM,35:$VN}),o([18,31,32,33],[2,29],{21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,34:$VM,35:$VN}),o($VR,[2,30],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,31],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VO,[2,27]),{18:[1,100],21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,32:$VK,33:$VL,34:$VM,35:$VN},o($Vv,$VP,{19:101,16:$VQ}),o($Vv,[2,13])],
+defaultActions: {24:[2,49],25:[2,50],26:[2,51],27:[2,52],28:[2,53],29:[2,54],30:[2,55],31:[2,56],32:[2,57],33:[2,58],34:[2,59],35:[2,60],36:[2,61],37:[2,1],38:[2,2],66:[2,3]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
     } else {
-        var error = new Error(str);
-        error.hash = hash;
-        throw error;
+        function _parseError (msg, hash) {
+            this.message = msg;
+            this.hash = hash;
+        }
+        _parseError.prototype = Error;
+
+        throw new _parseError(str, hash);
     }
 },
 parse: function parse(input) {
@@ -5032,6 +6573,315 @@ parse: function parse(input) {
 
 	var attribute = '';
 	var errors = [];
+	let grammar_stack = [];
+	function printstrack(obj, lines){
+        if(Array.isArray(obj)){ //IS ARRAY
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            obj.forEach((value)=>{
+                if(typeof value === 'string' ){
+                     str = ""
+                     for(let i = 0; i < lines; i++){str = str + "- ";}
+                     console.log(str + value);
+                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+                    str = ""
+                    for(let i = 0; i < lines; i++){ str = str + "- ";}
+                    for(let key in value){
+                       console.log(`${str}${key}`);
+                       printstrack(value[key], lines + 1);
+                    }
+                }
+
+                //printstrack(value, lines +1);
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            console.log(str + obj);
+        }else{// IS OBJECT
+            str = ""
+            for(let i = 0; i < lines; i++){ str = str + "- ";}
+            for(let key in obj){
+                console.log(`${str}Key: ${key}`);
+                //console.log(obj[key]);
+                printstrack(obj[key], lines + 1);
+            }
+        }
+	}
+
+function getASTTree(obj){
+    let str = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <!-- Bootstrap CSS -->
+  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+  <title>Title</title>
+  <style>
+    #divheight{
+      height: 400px;
+      width: 1050px;
+    }
+    .nav-tabs > li .close {
+      margin: -2px 0 0 10px;
+      font-size: 18px;
+    }
+    .nav-tabs2 > li .close {
+      margin: -2px 0 0 10px;
+      font-size: 18px;
+    }
+
+  </style>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 15px;
+    }
+
+    .tree ul {
+      position: relative;
+      padding: 1em 0;
+      white-space: nowrap;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .tree ul::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .tree li {
+      display: inline-block;
+      vertical-align: top;
+      text-align: center;
+      list-style-type: none;
+      position: relative;
+      padding: 1em 0.5em 0 0.5em;
+    }
+    .tree li::before, .tree li::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top: 1px solid #ccc;
+      width: 50%;
+      height: 1em;
+    }
+    .tree li::after {
+      right: auto;
+      left: 50%;
+      border-left: 1px solid #ccc;
+    }
+    /*
+    ul:hover::after  {
+        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+    }*/
+
+    .tree li:only-child::after, .tree li:only-child::before {
+      display: none;
+    }
+    .tree li:only-child {
+      padding-top: 0;
+    }
+    .tree li:first-child::before, .tree li:last-child::after {
+      border: 0 none;
+    }
+    .tree li:last-child::before {
+      border-right: 1px solid #ccc;
+      border-radius: 0 5px 0 0;
+    }
+    .tree li:first-child::after {
+      border-radius: 5px 0 0 0;
+    }
+
+    .tree ul ul::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      border-left: 1px solid #ccc;
+      width: 0;
+      height: 1em;
+    }
+
+    .tree li a {
+      border: 1px solid #ccc;
+      padding: 0.5em 0.75em;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      color: #333;
+      position: relative;
+      top: 1px;
+    }
+
+    .tree li a:hover,
+    .tree li a:hover + ul li a {
+      background: #e9453f;
+      color: #fff;
+      border: 1px solid #e9453f;
+    }
+
+    .tree li a:hover + ul li::after,
+    .tree li a:hover + ul li::before,
+    .tree li a:hover + ul::before,
+    .tree li a:hover + ul ul::before {
+      border-color: #e9453f;
+    }
+
+    /*# sourceMappingURL=sytle_.css.map */
+
+
+  </style>
+</head>
+<body>
+
+
+
+<div class="tree">
+  <ul id="tree-list">
+
+    <!--AQUI-->
+    `
+
+    str = str +printObj(obj, 0, "")
+    str =  str + `</ul>
+
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+`
+    return str;
+}
+
+
+function printObj(obj, lines, name){
+    console.log(obj)
+    let str = "";
+    let str_ = "";
+    if(Array.isArray(obj)) { //IS ARRAY
+        for (let i = 0; i < obj.length; i++){
+            str = str +printObj(obj[i], lines, "");
+        }
+    }else if (typeof obj === 'object' ){// IS OBJECT
+        if(obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT'){ // TODO select Parent
+            str = `<li>`;
+            str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT'? "/": "//" ));
+            str = str + getPredicados(obj.expresion);
+            str = str + `</li>`
+            console.log(str);
+        }else if(obj.tipo === 'EXPRESION'){
+            if (typeof obj.expresion === 'object'){
+                str = `<a>` + name + getName(obj.expresion) + `</a>`;
+            }
+        }
+    } else { // IS STRING
+        for (let i = 0; i < lines; i++) {
+
+            str_ = str_ + "- ";
+        }
+    }
+    return str;
+}
+
+
+
+function getName(obj){
+
+    let str = "";
+    if (obj.tipo ==='NODENAME'){
+        //console.log(obj)
+        return obj.nodename;
+    }else if(obj.tipo === 'SELECT_PARENT'){
+        return  obj.expresion;
+    }else if(obj.tipo === 'SELECT_CURRENT'){
+        return obj.expresion;
+    }else if(obj.tipo === 'ASTERISCO'){
+        return obj.valor;
+    }else if(obj.tipo === 'FUNCION_TEXT'){
+        return obj.valor;
+    }else if(obj.tipo === 'FUNCION_NODE'){
+        return obj.valor;
+    }else if(obj.tipo === 'SELECT_ATTRIBUTES'){
+        return obj.expresion;
+    }else {
+        console.log("Error 1")
+        console.log(obj)
+    }
+    return str
+}
+
+function getPredicados(obj){
+    let str = "";
+    console.log(obj)
+    if (obj.predicate !== null && obj.predicate !== undefined){
+
+        str = `<ul>\n`;
+        for (let i = 0; i < obj.predicate.length;i++){
+            str = str + getPredicado(obj.predicate[i]);
+        }
+        str = str + `</ul>`;
+    }
+    return str;
+}
+
+
+function getPredicado(obj){
+    let str = ""
+    if(obj.tipo === 'PREDICATE'){
+        //str = `<li><a> ` + obj.condicion.tipo + `</a>
+        //<ul>`
+        str = str + getPredicado(obj.condicion);
+        //str = str + `
+        //</ul></li>`;
+    }else if(obj.tipo === 'EXPRESION'){ //TODO to check
+        if('valor' in obj.expresion){
+            str = `<li><a>` + obj.expresion.valor + `</a></li>
+            `;
+
+        }else if('nodename' in obj.expresion){
+            str = `<li><a>` + obj.expresion.nodename + `</a></li>
+            `;
+
+        }else if(obj.expresion.tipo === 'SELECT_ATTRIBUTES'){
+            str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
+            `;
+
+        }else {
+            console.log("error 2")
+            console.log(obj)
+        }
+
+
+    }else{
+        str = `<li><a>` + obj.tipo + `</a>
+                <ul>`
+        str = str + getPredicado(obj.opIzq);
+        str = str + getPredicado(obj.opDer);
+        str = str + `</ul></li>`
+    }
+
+    return str;
+}
+
+
+
+
+	const { Objeto } = __webpack_require__(/*! ../model/xpath/Objeto */ "YKiq");
+	const { Tipos } = __webpack_require__(/*! ../model/xpath/Enum */ "MEUw");
+	var builder = new Objeto();
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -5362,146 +7212,148 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1:// MultiLineComment
+case 1:// XPATHComment
 break;
-case 2:// Declaration XML
+case 2:// MultiLineComment
 break;
-case 3:return 40
+case 3:// Declaration XML
 break;
-case 4:return 26
+case 4:return 28
 break;
-case 5:return 27
+case 5:return 41
 break;
-case 6:return 10
+case 6:return 21
 break;
-case 7:return 9
+case 7:return 23
 break;
-case 8:return 38
+case 8:return 22
 break;
-case 9:return 17
+case 9:return 24
 break;
-case 10:return 6
+case 10:return 11
 break;
 case 11:return 12
 break;
-case 12:return 15
+case 12:return 34
 break;
-case 13:return 19
+case 13:return 43
 break;
-case 14:return 21
+case 14:return 42
 break;
-case 15:return 58
+case 15:return 50
 break;
-case 16:return 59
+case 16:return 44
 break;
-case 17:return 13
+case 17:return 16
 break;
-case 18:return 43
+case 18:return 18
 break;
-case 19:return 44
+case 19:return 30
 break;
-case 20:return 'tk_attribute'
+case 20:return 31
 break;
-case 21:return 47
+case 21:return 27
 break;
-case 22:return 48
+case 22:return 52
 break;
-case 23:return 49
+case 23:return 51
 break;
-case 24:return 50
+case 24:return 53
 break;
-case 25:return 51
+case 25:return 54
 break;
-case 26:return 52 //no se si namespace se refiere al propio nombre de un nodo o si es una palabra reservada. asi que lo agrego por si acaso
+case 26:return 56
 break;
-case 27:return 53
+case 27:return 55
 break;
-case 28:return 54
+case 28:return 58
 break;
-case 29:return 55
+case 29:return 57
 break;
-case 30:return 56
+case 30:return 59
 break;
-case 31:return 57
+case 31:return 60
 break;
-case 32:return 60
+case 32:return 62
 break;
 case 33:return 61
 break;
-case 34:return 62
+case 34:return 63
 break;
-case 35:return 16
+case 35:return 48
 break;
-case 36:return 33
+case 36:return 46
 break;
-case 37:return 34
+case 37:return 45
 break;
-case 38:return 35
+case 38:return 47
 break;
-case 39:return 37
+case 39:return 8
 break;
 case 40:return 25
 break;
-case 41:return 28
+case 41:return 26
 break;
-case 42:return 29
+case 42:return 35
 break;
-case 43:return 30
+case 43:return 32
 break;
-case 44:return 36
+case 44:return 33
 break;
-case 45:return 42
+case 45:return 29
 break;
-case 46: attribute = ''; this.begin("string_doubleq"); 
+case 46:return 38
 break;
-case 47: attribute += yy_.yytext; 
+case 47: attribute = ''; this.begin("string_doubleq"); 
 break;
-case 48: attribute += "\""; 
+case 48: attribute += yy_.yytext; 
 break;
-case 49: attribute += "\n"; 
+case 49: attribute += "\""; 
 break;
-case 50: attribute += " ";  
+case 50: attribute += "\n"; 
 break;
-case 51: attribute += "\t"; 
+case 51: attribute += " ";  
 break;
-case 52: attribute += "\\"; 
+case 52: attribute += "\t"; 
 break;
-case 53: attribute += "\'"; 
+case 53: attribute += "\\"; 
 break;
-case 54: attribute += "\r"; 
+case 54: attribute += "\'"; 
 break;
-case 55: yy_.yytext = attribute; this.popState(); return 45; 
+case 55: attribute += "\r"; 
 break;
-case 56: attribute = ''; this.begin("string_singleq"); 
+case 56: yy_.yytext = attribute; this.popState(); return 39; 
 break;
-case 57: attribute += yy_.yytext; 
+case 57: attribute = ''; this.begin("string_singleq"); 
 break;
-case 58: attribute += "\""; 
+case 58: attribute += yy_.yytext; 
 break;
-case 59: attribute += "\n"; 
+case 59: attribute += "\""; 
 break;
-case 60: attribute += " ";  
+case 60: attribute += "\n"; 
 break;
-case 61: attribute += "\t"; 
+case 61: attribute += " ";  
 break;
-case 62: attribute += "\\"; 
+case 62: attribute += "\t"; 
 break;
-case 63: attribute += "\'"; 
+case 63: attribute += "\\"; 
 break;
-case 64: attribute += "\r"; 
+case 64: attribute += "\'"; 
 break;
-case 65: yy_.yytext = attribute; this.popState(); return 46; 
+case 65: attribute += "\r"; 
 break;
-case 66:return 5
+case 66: yy_.yytext = attribute; this.popState(); return 40; 
 break;
-case 67:return 'anything'
+case 67:return 5
 break;
-case 68: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 68:return 'anything'
+break;
+case 69: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:following\b)/i,/^(?:following-sibling\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:div\b)/i,/^(?:!=)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^></]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[57,58,59,60,61,62,63,64,65],"inclusive":false},"string_doubleq":{"rules":[47,48,49,50,51,52,53,54,55],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,56,66,67,68],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^><\/]+)/i,/^(?:.)/i],
+conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68,69],"inclusive":true}}
 });
 return lexer;
 })();
@@ -5630,14 +7482,17 @@ case 1:
 /*$$[$0-2][0].printTest(0);console.log($$[$0-2][0].getTree());*/
                                             prod_1 = grammar_stack.pop();
                                             prod_2 = grammar_stack.pop();
-                                            grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF': [prod_2, prod_1, 'EOF' ]});
-                                            printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF {﹩ = [﹩1, ﹩2]}': [prod_2, prod_1, 'EOF' ]});
+                                            //printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            cst = getCST(grammar_stack);
+
                                             if($$[$0-2]!= null){
                                                 encoding = new Encoding($$[$0-2]);
-                                                ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst:"<p>TEST CST </p>", grammar_report: "<p>grammar report test</p>"};
+                                                ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst: cst, grammar_report: grammar_report};
                                             } else{
-                                                ast = { ast: $$[$0-1], encoding: null, cst: null, grammar_report: null, errors: errors };
+                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
+                                                ast = { ast: $$[$0-1], encoding: null,  errors: errors, cst: cst, grammar_report: grammar_report};
                                             }
                                             errors = [];
                                             return ast;
@@ -5646,11 +7501,10 @@ break;
 case 2:
 
                                             prod_1 = grammar_stack.pop();
-                                            grammar_stack.push({'INI -> XML_DECLARATION  EOF': [prod_1, 'EOF' ]});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI -> XML_DECLARATION  EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
 
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" };
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
@@ -5658,35 +7512,33 @@ break;
 case 3:
 
                                             prod_1 = grammar_stack.pop();
-                                            grammar_stack.push({'INI -> ROOT EOF': [prod_1, 'EOF' ]});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI -> ROOT EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
 
-                                            errors.push({ tipo: "Sintáctico", error: "Falta declaracion del XML", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" };
+                                            errors.push({ tipo: "Sintáctico", error: "Falta declaración del XML", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
 break;
 case 4:
 
-                                            grammar_stack.push({'INI -> EOF': [ 'EOF']});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI -> EOF {	errors.add(new Error()); ﹩﹩ = null;}': [ 'EOF']});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            errors.push({ tipo: "Sintáctico", error: "El archivo viene vacío.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
-	                                        ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" }
+	                                        ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report }
 	                                        errors = [];
 	                                        return ast;
 	                                        
 break;
 case 5:
 
-	                                        grammar_stack.push({'INI -> error EOF': ['Token: error\t Lexema: ', 'EOF' ]});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+	                                        grammar_stack.push({'INI -> error EOF {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ', 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
 
                                             errors.push({ tipo: "Sintáctico", error: "Token no esperado.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" };
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
@@ -5695,13 +7547,13 @@ case 6:
 $$[$0-1].push($$[$0]);
                                                 prod_1 = grammar_stack.pop();
                                                 prod_2 = grammar_stack.pop();
-                                                grammar_stack.push({'ROOT -> ROOT XML': [prod_2, prod_1 ]});
+                                                grammar_stack.push({'ROOT -> ROOT XML {﹩﹩ = ﹩1.push(₤2);}': [prod_2, prod_1 ]});
                                                 
 break;
 case 7:
 this.$ = [$$[$0]];
 	                                            prod_1 = grammar_stack.pop();
-	                                            grammar_stack.push({'ROOT -> XML': [prod_1 ]});
+	                                            grammar_stack.push({'ROOT -> XML{﹩﹩ = []; ﹩﹩.push($$[$0]);}': [prod_1 ]});
 	                                            
 break;
 case 8:
@@ -5716,35 +7568,35 @@ if($$[$0-1] == null || $$[$0] == null){
 
                                                                            prod_3 = grammar_stack.pop();
                                                                            prod_2 = grammar_stack.pop();
-                                                                           grammar_stack.push({'XML_DECLARATION': ['Token: tk_open_declaration\t Lexema: ' + $$[$0-2], prod_2, prod_3]} );
+                                                                           grammar_stack.push({'XML_DECLARATION -> tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION {﹩﹩ = ﹩2}': ['Token: tk_open_declaration\t Lexema: ' + '&lt;?', prod_2, prod_3]} );
                                                                            
 break;
 case 9:
   this.$ = "?>"
-                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close_delcaraton': ['Token: tk_close_delcaraton\t Lexema: ' + $$[$0]]});
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close_delcaraton { ﹩﹩= ﹩1}': ['Token: tk_close_delcaraton\t Lexema: ' + '?&gt;']});
                                                 
 break;
 case 10:
 this.$ = null;
                                                  errors.push({ tipo: "Sintáctico", error: "Se esperaba token /", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close': ['Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close {errors.add(new Error()); ﹩﹩ = null;}': ['Token: tk_close\t Lexema: ' + '&gt;']});
                                                 
 break;
 case 11:
  this.$ = null;
                                                  errors.push({ tipo: "Sintáctico", error: "Token no esperado. " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                                 grammar_stack.push({'XML_CLOSE_DECLARATION -> error tk_close': ['Token: error\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                 grammar_stack.push({'XML_CLOSE_DECLARATION -> error tk_close {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                  
 break;
 case 12:
 if($$[$0] == null){this.$ = null}else if($$[$0-1] == null){this.$ = [$$[$0]]}else{$$[$0-1].push($$[$0]); this.$ = $$[$0-1]}
                                             prod_1 = grammar_stack.pop();
                                             prod_2 = grammar_stack.pop();
-                                            grammar_stack.push({'ATTRIBUTE_LIST -> ATTRIBUTE_LIST ATTRIBUTE': [ prod_2, prod_1 ] });
+                                            grammar_stack.push({'ATTRIBUTE_LIST -> ATTRIBUTE_LIST ATTRIBUTE {if(﹩1 == null){﹩﹩=[]; ﹩﹩.push(﹩2)}else{﹩1.push(﹩2)}}': [ prod_2, prod_1 ] });
                                           
 break;
 case 13:
-this.$ = null;             grammar_stack.push({'ATTRIBUTE_LIST -> Empty': ['EMPTY'] });      
+this.$ = null;             grammar_stack.push({'ATTRIBUTE_LIST -> Empty {﹩﹩ = null}': ['EMPTY'] });      
 break;
 case 14:
 attr = new Atributo($$[$0-1].slice(0, -1), $$[$0].slice(1,-1), this._$.first_line, this._$.first_column+1);
@@ -5755,56 +7607,56 @@ attr = new Atributo($$[$0-1].slice(0, -1), $$[$0].slice(1,-1), this._$.first_lin
                                             </ul>
                                             </li>`;
                                             this.$ = attr;
-                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name tk_string': ['Token: tk_attribute_name\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0] ]});
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name tk_string {	﹩﹩ = new Attribute(﹩1, ﹩2)}': ['Token: tk_attribute_name\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0] ]});
                                             
 break;
 case 15:
  this.$ = null;
-                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un atributo después de =.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name':['Token: tk_attribute_name\t Lexema: ' + $$[$0]]});
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un atributo despues de =.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_attribute_name\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 16:
  this.$ = null;
                                             errors.push({ tipo: "Sintáctico", error: "Se esperaba un nombre para atributo antes de =.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> tk_equal tk_string':['Token: tk_equal\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            grammar_stack.push({'ATTRIBUTE -> tk_equal tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_equal\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 17:
  this.$ = null;
                                             errors.push({ tipo: "Sintáctico", error: "Se esperaba signo =", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> tk_tag_name':['Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                            grammar_stack.push({'ATTRIBUTE -> tk_tag_name {	errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_tag_name\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 18:
  this.$ = null;
-                                            errors.push({ tipo: "Léxico", error: "Nombre del atributo no puede empezar con dígitos.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> cadena_err tk_string':['Token: cadena_err\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con dígitos.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 19:
  this.$ = null;
-                                            errors.push({ tipo: "Léxico", error: "Nombre del atributo no puede empezar con dígitos, y debe tener signo = y atributo a continuación.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> cadena_err':['Token: cadena_err\t Lexema: ' + $$[$0]]});
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con dígitos, y debe tener signo = y atributo a continuación.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err {	errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 20:
 if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
                                                                                 let hasConflict = $$[$0-4].verificateNames();
-																				if(hasConflict === "") {
+                                                                                if(hasConflict === "") {
 																					$$[$0-4].childs.forEach(child => {
 																					child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
 																					});
 																					this.$ = $$[$0-4];
 																				}
-																				 else {
+                                                                                 else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
                                                                                     this.$ = null;
 																				 }
-                                                                                 }else{this.$ = null;}
+                                                                                } else{this.$ = null;}
                                                                                  prod_1 = grammar_stack.pop();
                                                                                  prod_2 = grammar_stack.pop();
-                                                                                 grammar_stack.push({'XML-> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' +$$[$0]]});
+                                                                                 grammar_stack.push({'XML-> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩1.children = ﹩2}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                                                  
 break;
 case 21:
@@ -5816,14 +7668,14 @@ if($$[$0-4] != null){$$[$0-4].Value = $$[$0-3]; $$[$0-4].Close = $$[$0-1];  this
                                                                                  }
 	                                                                             }else{this.$ = null;}
 	                                                                             prod_1 = grammar_stack.pop();
-	                                                                             grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                             grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩﹩.content = ﹩2}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                             
 break;
 case 22:
 this.$ = new Element($$[$0-3], $$[$0-2], null, null, _$[$0-4].first_line, _$[$0-4].first_column+1, null);
 
                                                                                 prod_1 = grammar_stack.pop();
-                                                                                grammar_stack.push({'XML -> tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close':['Token: tk_open\t Lexema: ' + $$[$0-4], 'Token: tk_tag_name\t Lexema: ' + $$[$0-3], prod_1, 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                                                grammar_stack.push({'XML -> tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-3], prod_1, 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            
 break;
 case 23:
@@ -5836,7 +7688,7 @@ if($$[$0-3] != null){$$[$0-3].Close = $$[$0-1]; this.$ = $$[$0-3];
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 }
 	                                                                            }else{this.$ = null;}
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close {	﹩﹩ = ﹩1;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
 	                                                                            
 break;
 case 24:
@@ -5844,7 +7696,7 @@ this.$ =null;
                                                                                 errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
 	                                                                            
 break;
 case 25:
@@ -5852,7 +7704,7 @@ this.$ =null;
                                                                                 errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            
 break;
 case 26:
@@ -5860,7 +7712,7 @@ this.$ =null;
                                                                                 errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
 	                                                                            
 break;
 case 27:
@@ -5868,7 +7720,7 @@ this.$ =null;
                                                                                 errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-                                                                                grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag  tk_close':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + $$[$0]  ]});
+                                                                                grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + $$[$0]  ]});
                                                                             	
 break;
 case 28:
@@ -5877,7 +7729,7 @@ this.$ =null;
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close':[prod_2, 'Token: tk_content\t Lexema: ' + $$[$0-4],  'Token: tk_open\t Lexema: ' + $$[$0-3], 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, 'Token: tk_content\t Lexema: ' + $$[$0-4],  'Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            
 break;
 case 29:
@@ -5886,7 +7738,7 @@ this.$ =null;
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
 	                                                                            
 break;
 case 30:
@@ -5895,76 +7747,76 @@ this.$ =null;
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag  tk_close':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: '  + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: '  + '&gt;']});
 	                                                                            
 break;
 case 31:
 this.$ =null;
 	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-3], origen: "XML", linea: _$[$0-3].first_line, columna: _$[$0-3].first_column+1 });
 
-                                                                             grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name tk_close':['Token: error\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + $$[$0]]});
+                                                                             grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
                                                                              
 break;
 case 32:
 this.$ =null;
     	                                                                    errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
 
-                                                                            grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                                                            grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
                                                                             
 break;
 case 33:
 this.$ =null;
 	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
 
-	                                                                        grammar_stack.push({'XML -> error tk_bar tk_close':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                        grammar_stack.push({'XML -> error tk_bar tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                        
 break;
 case 34:
 this.$ =null;
 	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
 
-	                                                                        grammar_stack.push({'XML -> error  tk_close':['Token: error\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                        grammar_stack.push({'XML -> error  tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                        
 break;
 case 35:
  this.$ = new Element($$[$0-2], $$[$0-1], null, null,  _$[$0-3].first_line,  _$[$0-3].first_column+1);
 
                                                         prod_1 = grammar_stack.pop();
-                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST tk_close':['Token: tk_open\t Lexema: ' + $$[$0-3], 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                          
 break;
 case 36:
 
                                                         this.$ = null;
-                                                        errors.push({ tipo: "Sintáctico", error: "Se esperaba \">\" después de la cadena de atributos.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                        errors.push({ tipo: "Sintáctico", error: "Se esperaba \">\" despues de la cadena de atributos.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                         prod_1 = grammar_stack.pop();
-                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST':['Token: tk_open\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], prod_1]});
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], prod_1]});
                                                         
 break;
 case 37:
  this.$ = null;
                                                         errors.push({ tipo: "Sintáctico", error: "", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                                        grammar_stack.push({'XML_OPEN -> tk_open':['Token: tk_open\t Lexema: ' + $$[$0]]});
+                                                        grammar_stack.push({'XML_OPEN -> tk_open {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;']});
                                                         
 break;
 case 38:
  this.$ = null;
                                                          errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador para la etiqueta", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                                         grammar_stack.push({'XML_OPEN -> tk_open tk_close':['Token: tk_open\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                         grammar_stack.push({'XML_OPEN -> tk_open tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                          
 break;
 case 39:
 if($$[$0-1] != null && $$[$0] != null){ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; } else{this.$ = null;}
                                                             prod_1 = grammar_stack.pop();
                                                             prod_2 = grammar_stack.pop();
-                                                             grammar_stack.push({'CHILDREN -> CHILDREN XML':[prod_2,  prod_1]});
+                                                             grammar_stack.push({'CHILDREN -> CHILDREN XML {﹩1.push(﹩2); ﹩﹩ = $$[$0-1];}':[prod_2,  prod_1]});
                                                             
 break;
 case 40:
  if($$[$0]!=null ){this.$ = [$$[$0]];}else{this.$ = null;}
 	                                                        prod_1 = grammar_stack.pop();
-                                                            grammar_stack.push({'CHILDREN -> XML':[prod_1]});
+                                                            grammar_stack.push({'CHILDREN -> XML {﹩﹩ = [﹩1]}':[prod_1]});
 	                                                        
 break;
 }
@@ -6230,34 +8082,561 @@ _handle_error:
 	let grammar_stack = [];
 
 
-    function printHtml(obj){
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Reporte gramatical</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+
+        str = str + buildGrammarReport(obj);
+
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+                     <div id="div-table">
+                     <table style="width:100%">
+                         <tr>
+                         <th>Produccion</th>
+                         <th>Cuerpo</th>
+                         <th>Accion</th>
+                         </tr>
+
+                         <tr>
+                         <th>INI-&gt;</th>
+                         <td>XML_DECLARATION ROOT EOF</td>
+                         <td>$$ = [$1, $2] </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_DECLARATION  EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>ROOT EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>error EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ROOT-&gt;</th>
+                         <td>ROOT XML</td>
+                         <td>$$ = $1.push($2);</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = []; $$.push($1);</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML_DECLARATION-&gt;</th>
+                         <td>tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION</td>
+                         <td>$$ = $2</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+
+
+                         <tr>
+                         <th>XML_CLOSE_DECLARATION-&gt;</th>
+                         <td>tk_close_delcaraton</td>
+                         <td>$$ = $1</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>ATTRIBUTE_LIST-&gt;</th>
+                         <td>ATTRIBUTE_LIST ATTRIBUTE </td>
+                         <td>if($1 == null){$$=[]; $$.push($2)}else{$1.push($2)}</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>Empty</td>
+                         <td>$$ = null</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ATTRIBUTE-&gt;</th>
+                         <td>tk_attribute_name tk_string  </td>
+                         <td>$$ = new Attribute($1, $2)</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_attribute_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_equal tk_string   </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_tag_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err tk_string </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML-&gt;</th>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close   </td>
+                         <td>$$ = $1; $1.children = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close  </td>
+                         <td>$$ = $1; $$.content = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>$$ = $1; </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag  tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_bar tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>XML_OPEN-&gt;</th>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open   tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>CHILDREN-&gt;</th>
+                         <td>CHILDREN XML </td>
+                         <td>$1.push($2); $$ = $1;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = [$1]</td>
+                         </tr>
+
+                     </table>
+
+                     </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                        function fun1() {
+                                            if ($("#tree-root").length > 0) {
+
+                                                $("#tree-root").find("li").each
+                                                (
+                                                    function () {
+                                                        var $span = $("<span></span>");
+                                                        //$(this).toggleClass("expanded");
+                                                        if ($(this).find("ul:first").length > 0) {
+                                                            $span.removeAttr("class");
+                                                            $span.attr("class", "expanded");
+                                                            $(this).find("ul:first").css("display", "block");
+                                                            $(this).append($span);
+                                                        }
+
+                                                    }
+                                                )
+                                            }
+
+                                        }
+
+
+
+
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+    // .replace("₤","$")
+    function buildGrammarReport(obj){
         if(obj == null){return "";}
         let str = "";
         if(Array.isArray(obj)){ //IS ARRAY
             obj.forEach((value)=>{
             if(typeof value === 'string' ){
-                str = str + `<li class= "string">${value}</li>
+                str = str + `<li class= "string">
+                ${value}
+                </li>
                 `;
             }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
                 for(let key in value){
-                    str = str + printHtml(value);
+                    str = str + buildGrammarReport(value);
                 }
             }
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
+            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
-                str = `<li><span class="caret">${key}</span>
+
+                str = `<li class="grammar-tree"><span class="caret">
+                ${key}
+                </span>
                 <ul class="nested">
                 `;
-                str = str + printHtml(obj[key]);
+                str = str + buildGrammarReport(obj[key]);
                 str = str + `
                 </ul>
                 </li>`;
             }
         }
-                return str;
+        return str;
     }
 
 
@@ -6266,39 +8645,248 @@ _handle_error:
 	function printstrack(obj, lines){
 	return;
 
-        // if(Array.isArray(obj)){ //IS ARRAY
-        //     str = ""
-        //     for(let i = 0; i < lines; i++){str = str + "- ";}
-        //     obj.forEach((value)=>{
-        //         if(typeof value === 'string' ){
-        //              str = ""
-        //              for(let i = 0; i < lines; i++){str = str + "- ";}
-        //              // console.log(str + value);
-        //         }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-        //             str = ""
-        //             for(let i = 0; i < lines; i++){ str = str + "- ";}
-        //             for(let key in value){
-        //                // console.log(`${str}${key}`);
-        //                printstrack(value[key], lines + 1);
-        //             }
-        //         }
+        if(Array.isArray(obj)){ //IS ARRAY
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            obj.forEach((value)=>{
+                if(typeof value === 'string' ){
+                     str = ""
+                     for(let i = 0; i < lines; i++){str = str + "- ";}
+                     console.log(str + value);
+                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+                    str = ""
+                    for(let i = 0; i < lines; i++){ str = str + "- ";}
+                    for(let key in value){
+                       console.log(`${str}${key}`);
+                       printstrack(value[key], lines + 1);
+                    }
+                }
 
-        //         //printstrack(value, lines +1);
-        //     });
-        // }else if(typeof obj === 'string' ){ // IS STRING
-        //     str = ""
-        //     for(let i = 0; i < lines; i++){str = str + "- ";}
-        //     // console.log(str + obj);
-        // }else{// IS OBJECT
-        //     str = ""
-        //     for(let i = 0; i < lines; i++){ str = str + "- ";}
-        //     for(let key in obj){
-        //         // console.log(`${str}Key: ${key}`);
-        //         //console.log(obj[key]);
-        //         printstrack(obj[key], lines + 1);
-        //     }
-        // }
+                //printstrack(value, lines +1);
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            console.log(str + obj);
+        }else{// IS OBJECT
+            str = ""
+            for(let i = 0; i < lines; i++){ str = str + "- ";}
+            for(let key in obj){
+                console.log(`${str}Key: ${key}`);
+                //console.log(obj[key]);
+                printstrack(obj[key], lines + 1);
+            }
+        }
 	}
+
+
+
+
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>CST</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+
+            </style>
+        </head>
+        <body>
+
+
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+
+
 
 
 
@@ -6635,7 +9223,7 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1://MultiLineComment 
+case 1:/* MultiLineComment*/
 break;
 case 2:return 8;
 break;
@@ -6661,28 +9249,31 @@ case 12:return cadena_err;
 break;
 case 13:return id_err;
 break;
-case 14:
+case 14:/* MultiLineComment*/
+break;
+case 15:
                                     if(yy_.yytext.match(re)){return 22;}
                                  
 break;
-case 15:return 6
+case 16:return 6
 break;
-case 16:this.popState(); return 12;
+case 17:this.popState(); return 12;
 break;
-case 17: this.popState(); return 21
+case 18: this.popState(); return 21
 break;
-case 18:  this.popState(); return 23;
+case 19:  this.popState();
+                                    return 23;
 break;
-case 19: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 20: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
-case 20:return 6
+case 21:return 6
 break;
-case 21: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 22: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:[<][!][-][-][\s\S\n]*?[-][-][>])/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:(([^<>&\"]|&lt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"content":{"rules":[14,15,16,17,18,19],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,20,21],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:(([^<>&\"]|&lt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"content":{"rules":[14,15,16,17,18,19,20],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,21,22],"inclusive":true}}
 });
 return lexer;
 })();
@@ -6738,7 +9329,7 @@ function SelectAxis(_instruccion, _ambito, _contexto) {
     if (expresion.error)
         return expresion;
     var root = getAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, false);
-    if (root === null || root.error || root.elementos.error || root.elementos.length === 0)
+    if (root === null || root.error || root.elementos.error || (root.elementos.length === 0 && root.atributos.length === 0))
         return _404;
     return root;
 }
@@ -6855,7 +9446,6 @@ function firstFiler(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDou
         default:
             return { error: "Error: axisname no válido.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
     }
-    console.log(attributes, 9999, elements);
     // return { elementos: elements, atributos: attributes, cadena: cadena };
     return secondFilter(elements, attributes, _nodetest, _predicate, cadena, _ambito, _isDoubleBar);
 }
@@ -6900,7 +9490,7 @@ function secondFilter(_elements, _atributos, _nodetest, _predicate, _cadena, _am
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    break;
+                    continue;
                 }
                 x = Funciones_1.default.f4(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
                 if (x.elementos.length > 0 || x.texto.length > 0) {
