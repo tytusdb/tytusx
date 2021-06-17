@@ -120,7 +120,30 @@ class Ejecucion {
                 return 'No se encontró por algun error';
             }
             //console.log(this.atributoIdentificacion);
-            return this.traducir();
+            if (this.atributoIdentificacion.length > 0) {
+                var buf = new Buffer(this.traducir());
+                var buf2 = 'ay :(';
+                console.log(JSON.stringify(this.prologoXml));
+                if (JSON.stringify(this.prologoXml).includes("UTF-8")) {
+                    console.log(buf.toString("utf8"));
+                    buf2 = (buf.toString("utf8"));
+                }
+                else if (JSON.stringify(this.prologoXml).includes("ISO-8859-1")) {
+                    try {
+                        buf2 = (this.traducir());
+                    }
+                    catch (error) {
+                        buf2 = 'ay :( iso-8859-1';
+                    }
+                }
+                else if (JSON.stringify(this.prologoXml).includes("ASCII")) {
+                    console.log(buf.toString("ascii"));
+                    buf2 = (buf.toString("ascii"));
+                }
+                return buf2;
+            }
+            else
+                return 'No se encontró';
         }
         return 'no se pudo';
     }
@@ -237,6 +260,136 @@ class Ejecucion {
                     let val = null;
                     val = this.calcular(nodo, null, 0);
                     this.consultaXML = this.reducir(this.consultaXML, val.getValorImplicito(val), 'INSTRUCCIONES');
+                }
+            }
+            if (this.identificar('RELACIONALES', nodo)) {
+                let val = null;
+                let cons = [];
+                let es = '';
+                nodo.hijos.forEach((element) => {
+                    if (element instanceof Object) {
+                        if (this.identificar('ATRIBUTO_PREDICADO', element)) {
+                            es = 'es@';
+                        }
+                        else if (this.identificar('id', element)) {
+                            es = 'esID';
+                        }
+                        else if (this.identificar('punto', element)) {
+                            es = 'esPunto';
+                        }
+                        else if (this.identificar('PATH', element)) {
+                            es = 'esPath';
+                            //console.log(es);
+                            this.pathh = this.consultaXML;
+                            this.pathhCount = 0;
+                            this.path(element);
+                        }
+                    }
+                });
+                if (es === 'esPath') {
+                    this.pathh.forEach((element, index) => {
+                        if (this.atributo) {
+                            if (element.listaAtributos.length > 0) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    console.log(element);
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                        else {
+                            if (element) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                    });
+                    this.atributo = false;
+                    this.pathh = [];
+                    for (let index = 0; index < this.pathhCount; index++) {
+                        cons.forEach(element => {
+                            this.ts.tabla.forEach(padre => {
+                                if (padre[0] === element.identificador && padre[4] === element.linea && padre[5] === element.columna) {
+                                    let a = padre[6];
+                                    let b = false;
+                                    cons.forEach(element => {
+                                        if (element == a) {
+                                            b = true;
+                                        }
+                                    });
+                                    if (!b) {
+                                        cons.push(a);
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    if (cons.length > 0) {
+                        this.consultaXML.forEach((element) => {
+                            cons.forEach(y => {
+                                if (element.identificador === y.identificador && element.linea === y.linea && element.columna === y.columna) {
+                                    this.pathh.push(element);
+                                }
+                                else if (y.listaObjetos.length > 0) {
+                                    y.listaObjetos.forEach(yy => {
+                                        if (element.identificador === yy.identificador && element.linea === yy.linea && element.columna === yy.columna) {
+                                            this.pathh.push(element);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    }
+                    cons = this.pathh;
+                }
+                else
+                    this.consultaXML.forEach((element, index) => {
+                        if (es === 'es@') {
+                            if (element.listaAtributos.length > 0) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                        else if (es === 'esID') {
+                            //console.log("entró esID");
+                            if (element.listaObjetos.length > 0) {
+                                val = this.calcular(nodo, element, index);
+                                if (val.getValorImplicito(val)) {
+                                    cons.push(element);
+                                }
+                            }
+                        }
+                        else if (es === "esPunto") {
+                            if (this.atributo) {
+                                if (element.listaAtributos.length > 0) {
+                                    val = this.calcular(nodo, element, index);
+                                    if (val.getValorImplicito(val)) {
+                                        cons.push(element);
+                                    }
+                                }
+                            }
+                            else {
+                                if (element) {
+                                    val = this.calcular(nodo, element, index);
+                                    if (val.getValorImplicito(val)) {
+                                        cons.push(element);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                //console.log(cons.length)
+                if (cons.length > 0) {
+                    this.consultaXML = cons;
+                }
+                else {
+                    this.consultaXML = [];
+                    const er = new error_1.Error({ tipo: 'Semántico', linea: '0', descripcion: 'No existe ese atributo.' });
+                    errores_1.Errores.getInstance().push(er);
                 }
             }
             if (this.identificar('HIJOS', nodo)) {
@@ -1013,10 +1166,16 @@ class Ejecucion {
                 let texto = "";
                 //console.log("texto: " + element.identificador);
                 for (var i = 0; i < element.cons.texto.length; i++) {
-                    if (this.tildes.includes(element.cons.texto[i])) {
+                    if (Number.isInteger(parseInt(element.cons.texto[i]))) {
                         texto += element.cons.texto[i];
                     }
-                    else if (this.tildes.includes(element.cons.texto[i - 1])) {
+                    else if (Number.isInteger(parseInt(element.cons.texto[i - 1]))) {
+                        texto += element.cons.texto[i];
+                    }
+                    else if (element.cons.texto[i] === '.' || element.cons.texto[i] === '!' || element.cons.texto[i] === '?' || element.cons.texto[i] === ',' || element.cons.texto[i] === "'") {
+                        texto += element.cons.texto[i];
+                    }
+                    else if (element.cons.texto[i - 1] === "'") {
                         texto += element.cons.texto[i];
                     }
                     else {
@@ -1053,7 +1212,7 @@ class Ejecucion {
                 else if (this.atributo_nodo) {
                     if (element.cons.listaAtributos.length > 0) {
                         element.cons.listaAtributos.forEach(atributos => {
-                            cadena += ' ' + atributos.identificador + '=' + atributos.valor;
+                            cadena += ' ' + atributos.identificador + '=' + atributos.valor + '\n';
                         });
                     }
                 }
@@ -1088,7 +1247,6 @@ class Ejecucion {
                         cadena += texto + '\n';
                     }
                 }
-                
                 else {
                     cadena += '<' + element.cons.identificador;
                     if (element.cons.listaAtributos.length > 0) {
@@ -1129,10 +1287,16 @@ class Ejecucion {
         elemento.forEach(element => {
             let texto = "";
             for (var i = 0; i < element.texto.length; i++) {
-                if (this.tildes.includes(element.texto[i])) {
+                if (Number.isInteger(parseInt(element.texto[i]))) {
                     texto += element.texto[i];
                 }
-                else if (this.tildes.includes(element.texto[i - 1])) {
+                else if (Number.isInteger(parseInt(element.texto[i - 1]))) {
+                    texto += element.texto[i];
+                }
+                else if (element.texto[i] === '.' || element.texto[i] === '!' || element.texto[i] === '?' || element.texto[i] === ',' || element.texto[i] === "'") {
+                    texto += element.texto[i];
+                }
+                else if (element.texto[i - 1] === "'") {
                     texto += element.texto[i];
                 }
                 else {
