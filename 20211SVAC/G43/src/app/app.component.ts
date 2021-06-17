@@ -80,32 +80,30 @@ fileChanged2(e) {
     var result2 = xml2json(this.dat.Cod_tab1, {compact: true, spaces: 0,alwaysArray:true,attributesKey:"AtributoJSON",textKey:"TextoNodoJson"});
     console.log((result2));
     console.log(JSON.parse(result2));
-    this.recorrerJSON(JSON.parse(result2));
+    this.dat.Cod_tab3 = "";
+    this.printValues(JSON.parse(result2));
   }
 
- process(key,value) {
-    console.log(key + " : "+value);
-}
-
- traverse(o,func) {
-    for (var i in o) {
-        func.apply(this,[i,o[i]]);  
-        if (o[i] !== null && typeof(o[i])=="object") {
-            //going one step down in the object tree!!
-            this.traverse(o[i],func);
+  printValues(obj) {
+    for(var k in obj) {
+        if(obj[k] instanceof Object) {
+            this.printValues(obj[k]);
+        } else {
+            console.log(obj[k]);
+            this.dat.Cod_tab3 = this.dat.Cod_tab3 + "\n" + (obj[k])
         }
     }
 }
 
-//that's all... no magic, no bloated framework
 
-
-
+  
  recorrerJSON(JsonObject:Object){
-  Object.entries(JsonObject).forEach(([key, value]) => {
-    // do something with key and val
-    console.log(value);
-    this.recorrerJSON(value);
-});
+   var nombres =Object.keys(JsonObject) 
+    console.log(nombres)
+    for (var name in nombres) {
+      if (JsonObject.hasOwnProperty(name.toString())) {
+          console.log(JsonObject[name.toString()])
+      }
+    }
  }
 }

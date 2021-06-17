@@ -1,0 +1,409 @@
+/*definición léxica*/
+%{
+
+%}
+
+%lex
+%options case-insensitive
+
+%%
+"*"         return 'asterisk';
+".."        return 'twoPoint';
+"."         return 'point';
+"("         return 'parIzq';
+")"         return 'parDer';
+"{"         return 'llaIzq';
+"}"         return 'llaDer';
+"::"        return 'doubleColon';
+":"         return 'colon';
+"|"         return 'barra';
+"["         return 'corcheteIzq';
+"]"         return 'corcheteDer';
+";"         return 'ptcoma';
+"+"         return 'add';
+","         return 'comma';
+"-"         return 'minus';
+"=>"        return 'arrow';
+"="         return 'equal';
+"/""/"      return 'doubleSlash';
+"/"         return 'slash';
+
+"!="        return 'diferent';
+"<"         return 'menor';
+"<="        return 'menorIgual';
+">"         return 'mayor';
+">="        return 'mayorIgual';
+"@"         return 'at';
+"or"        return 'or';
+"let"       return 'let';
+"last"      return 'last';
+"and"       return 'and';
+"div"       return 'div';
+"mod"       return 'mod';
+"text"      return 'text';
+"node"      return 'node';
+"child"     return 'child';
+"self"      return 'self';
+"parent"    return 'parent';
+"comment"   return 'comment';
+"element"   return 'element';
+"ancestor"  return 'ancestor';
+"namespace" return 'namespace';
+"attribute" return 'attribute';
+"preceding" return 'preceding';
+"following" return 'following';
+"ancestor_or_self"   return 'ancestor_or_self';
+"descendant_or_self" return 'descendant_or_self';
+"following_sibling"  return 'following_sibling';
+"preceding_sibling"  return 'preceding_sibling';
+"processing_instruction" return 'processing_instruction';
+/*Espacios en blanco*/
+[ \r\t]+     {}
+\n           {}
+[0-9]+                      return  'digits';
+[0-9]+("."[0-9]+)?  return  'decimal';
+(\"({EscapeQuot}|[^"])*\")|("'""({EscapeApos}|[^'])*""'") return 'cadena';
+[A-Za-z_][A-Za-z_0-9]*	    return 'id';
+
+
+<<EOF>>                 return 'EOF';
+.       {
+        console.error('Error');
+}
+/lex
+
+/* Asociación de operadores y precedencia */
+%right 'equal'
+%left 'or', 'barra'
+%left 'and'
+%left 'mayor', 'menor', 'mayorIgual', 'menorIgual', 'diferent'
+
+
+
+%left 'add', 'minus' /*binary*/
+%left 'asterisk', 'slash', 'mod'
+
+
+%left 'doubleSlash'
+%left 'parIzq', 'parDer', 'corcheteIzq', 'corcheteDer'
+
+
+
+
+
+%start ini
+%% /*definicion de gramática*/
+
+ini
+        :XPATH EOF {
+
+        }
+;
+XPATH:
+        ENTRY LIST_STEP{
+
+
+        }
+    |   LIST_STEP {
+
+
+    }
+;
+ENTRY
+        :slash{
+
+
+        }
+        |doubleSlash{
+
+
+        }
+;
+
+LIST_STEP: STEP LIST_STEPP {
+
+
+
+
+};
+
+LIST_STEPP: SEPARATE STEP LIST_STEPP {
+
+
+
+
+}
+| {};
+
+SEPARATE
+        :barra ENTRY {
+
+
+
+        }
+        |barra {
+
+
+        }
+        |slash {
+
+
+        }
+        |doubleSlash {
+
+
+        }
+;
+
+STEP
+        :id LIST_PREDICATE {
+
+
+
+        }
+        |id {
+
+
+        }
+        |AXIS {
+
+
+        }
+        |WILDCARD {
+
+
+        }
+
+;
+
+
+LIST_PREDICATE: PREDICATE LIST_PREDICATEP { 
+
+
+
+};
+LIST_PREDICATEP: PREDICATE LIST_PREDICATEP {
+
+
+
+}
+            |;
+
+PREDICATE:
+    corcheteIzq LIST_E corcheteDer {
+
+
+
+    }
+;
+
+LIST_E: E LIST_EP {
+
+
+
+};
+
+LIST_EP: OP E LIST_EP{
+
+
+
+
+}
+    |;
+
+OP
+        :add {
+
+
+        }
+        |minus {
+
+
+        }
+        |asterisk{
+
+
+        }
+        |slash{
+
+
+        }
+        |equal{
+
+
+        }
+        |diferent{
+
+
+        }
+        |menor{
+
+
+        }
+        |menorIgual{
+
+
+        }
+        |mayorIgual{
+
+
+        }
+        |mayor{
+
+
+        }
+        |or{
+
+
+        }
+        |barra{
+
+
+        }
+        |and{
+
+
+        }
+        |mod{
+
+
+        }
+
+;
+
+E:
+    STEP{
+
+
+    }
+    |ENTRY{
+
+
+    }
+    |decimal{
+
+
+    }
+    |digits{
+
+
+    }
+    |cadena{
+
+
+    }
+
+;
+AXIS
+        :AXIS_NAME doubleColon STEP {
+
+
+
+
+        }
+        |AXIS_NAME{
+
+
+        }
+;
+AXIS_NAME
+        :ancestor{
+
+
+        }
+        |ancestor_or_self{
+
+
+        }
+        |attribute{
+
+
+        }
+        |child{
+
+
+        }
+        |descendant{
+
+
+        }
+        |descendant_or_self{
+
+
+        }
+        |following{
+
+
+        }
+        |following_sibling{
+
+
+        }
+        |namespace{
+
+
+        }
+        |parent{
+
+
+        }
+        |preceding{
+
+
+        }
+        |preceding_sibling{
+
+
+        }
+        |self{
+
+
+        }
+;
+WILDCARD
+        :asterisk{
+
+
+        }
+        |twoPoint{
+
+
+        }
+        |point{
+
+
+        }
+        |at asterisk{
+
+
+
+        }
+        |at id PREDICATE{
+
+
+
+
+        }
+        |at id{
+
+
+
+        }
+        |node parIzq parDer{
+
+
+
+
+        }
+        |text parIzq parDer{
+
+
+
+
+        }
+        |last parIzq parDer{
+
+
+
+        }
+;
