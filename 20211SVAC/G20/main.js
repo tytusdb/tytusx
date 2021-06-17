@@ -49,11 +49,10 @@ class Main {
     }
     ejecutarCodigoXpathAsc(entrada) {
         console.log('ejecutando xpathAsc ...');
-        console.value = '';
         const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        this.execPath_list(objetos.XPath);
+        // this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
         let contenido = '';
@@ -141,7 +140,6 @@ class Main {
             this.lexicos = JSON.parse(lex);
             console.log(this.lexicos);
             var tbodyRef = document.getElementById('keywords');
-            let i = 1;
             this.lexicos.forEach((element) => {
                 let newRow = tbodyRef.insertRow();
                 let newCell = newRow.insertCell();
@@ -374,7 +372,6 @@ class Main {
         listaObjeto.forEach((element) => {
             if (element != undefined) {
                 this.i++;
-                let hijo = this.i;
                 let aux = {
                     id: this.i,
                     label: element.val,
@@ -407,78 +404,7 @@ class Main {
             if (typeof node === 'string')
                 return;
         });
-        // console.log(rootXML);
-        if (nodeList[0].type === Element_1.TypeElement.ATRIBUTO) {
-            rootXML.elements = rootXML.elements[0].listaAtributos;
-            if (nodeList[0].slashes === 2)
-                this.searchElement(rootXML, nodeList, 0);
-        }
-        else {
-            this.searchElement(rootXML, nodeList, 0);
-        }
-        // switch (this.checkRoot(rootXML, nodeList)) {
-        // 	case 1: {
-        // 		/* ENCONTRADO */
-        // 		let index = 1;
-        // 		if (nodeList.length === index) {
-        // 			/* FIN DE RUTAS */
-        // 			console.info(rootXML);
-        // 		} else {
-        // 			if (nodeList[index].type === TypeElement.ATRIBUTO) {
-        // 				rootXML = {
-        // 					elements: rootXML.elements.listaAtributos,
-        // 					parent: rootXML.elements,
-        // 				};
-        // 				console.log('A buscar atributos!!');
-        // 				this.searchElement(rootXML, nodeList, index);
-        // 			} else if (nodeList[index].type === TypeElement.NODO) {
-        // 				rootXML = {
-        // 					elements: rootXML.elements.listaObjetos,
-        // 					parent: rootXML.elements,
-        // 				};
-        // 				console.log('A buscar elementos!!');
-        // 				this.searchElement(rootXML, nodeList, index);
-        // 			}
-        // 		}
-        // 		break;
-        // 	}
-        // 	case 2: {
-        // 		/* PROFUNDIDAD */
-        // 		let index = 0;
-        // 		rootXML = {
-        // 			elements: this.lista_objetos.listaObjetos,
-        // 			parent: undefined,
-        // 		};
-        // 		console.log('A seguir buscando');
-        // 		this.searchElement(rootXML, nodeList, index);
-        // 		break;
-        // 	}
-        // 	case 3: {
-        // 		/* ENCONTRADO */
-        // 		let index = 2;
-        // 		if (nodeList.length === index) {
-        // 			/* FIN DE RUTAS */
-        // 			console.info(rootXML);
-        // 		} else {
-        // 			if (nodeList[index].type === TypeElement.ATRIBUTO) {
-        // 				rootXML = {
-        // 					elements: this.lista_objetos.listaAtributos,
-        // 					parent: rootXML.elements,
-        // 				};
-        // 				this.searchElement(rootXML, nodeList, index);
-        // 			} else if (nodeList[index].type === TypeElement.ATRIBUTO) {
-        // 				rootXML = {
-        // 					elements: this.lista_objetos.listaObjetos,
-        // 					parent: rootXML.elements,
-        // 				};
-        // 				this.searchElement(rootXML, nodeList, index);
-        // 			}
-        // 		}
-        // 		break;
-        // 	}
-        // 	default:
-        // 		console.warn('No coincide con nodo raiz');
-        // }
+        this.searchElement(rootXML, nodeList, 0);
     }
     checkRoot(rootXML, nodeList) {
         let root = rootXML.elements;
@@ -516,63 +442,69 @@ class Main {
     }
     searchElement(rootXML, nodeList, index) {
         // console.log(rootXML);
+        // VALIDAR ATRIBUTOS EN PROFUNDIDAD
         let resXML = rootXML;
-        let flag = false;
         if (nodeList.length === index)
             this.printElements(rootXML.elements);
-        // FLAG = 1: NEXT IS NODE | 0: NEXT IS ATTR
-        if (nodeList.length > index + 1)
-            flag = nodeList[index + 1].type === Element_1.TypeElement.NODO ? true : false;
         rootXML.elements.forEach((element) => {
+            resXML.elements = element.listaObjetos;
+            resXML.parent = element;
             if (nodeList[index].type === Element_1.TypeElement.ALL) {
                 if (nodeList.length > index + 1) {
-                    resXML.elements = flag
-                        ? element.listaObjetos
-                        : element.listaAtributos;
-                    resXML.parent = rootXML.parent;
                     this.searchElement(resXML, nodeList, index + 1);
                 }
-                else
+                else {
                     this.printElement(element);
+                }
             }
             else if (nodeList[index].type === Element_1.TypeElement.ATRIBUTO) {
-                if (nodeList[index].name === element.identificador &&
-                    nodeList.length - 1 === index)
+                if (this.searchAttributes(element.listaAtributos, nodeList[index].name)) {
                     this.printElement(element);
+                }
+                else if (nodeList[index].slashes == 2) {
+                    this.searchElement(resXML, nodeList, index);
+                }
             }
             else if (nodeList[index].type === Element_1.TypeElement.NODO) {
                 if (nodeList[index].name === element.identificador) {
                     if (nodeList.length > index + 1) {
-                        resXML.elements = flag
-                            ? element.listaObjetos
-                            : element.listaAtributos;
-                        resXML.parent = element;
                         this.searchElement(resXML, nodeList, index + 1);
                     }
-                    else
+                    else {
                         this.printElement(element);
+                    }
                 }
                 else if (nodeList[index].slashes == 2) {
-                    if (nodeList.length > index + 1) {
-                        resXML.elements = flag
-                            ? element.listaObjetos
-                            : element.listaAtributos;
-                        resXML.parent = element;
+                    if (nodeList.length > index) {
                         this.searchElement(resXML, nodeList, index);
                     }
-                    else
+                    else {
                         this.printElement(element);
+                    }
                 }
             }
             else if (nodeList[index].type === Element_1.TypeElement.CURRENT) {
-                if (nodeList.length > index + 1)
+                if (nodeList.length > index + 1 &&
+                    nodeList[index + 1].type === Element_1.TypeElement.CURRENT) {
+                    // PARENT
+                }
+                // CURRENT
+                if (nodeList.length > index + 1) {
                     this.searchElement(rootXML, nodeList, index + 1);
-                else
+                }
+                else {
                     this.printElement(element);
-            }
-            else if (nodeList[index].type === Element_1.TypeElement.PARENT) {
+                }
             }
         });
+    }
+    searchAttributes(attrs, attrName) {
+        let result = false;
+        attrs.forEach((attr) => {
+            if (attr.identificador === attrName)
+                result = true;
+        });
+        return result;
     }
     printElement(element) {
         console.info(element);

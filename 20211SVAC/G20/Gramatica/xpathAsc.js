@@ -72,12 +72,12 @@
   }
 */
 var xpathAsc = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,12,14,15,17],$V1=[2,9],$V2=[1,6],$V3=[5,6],$V4=[2,4],$V5=[1,15],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[1,16],$Va=[2,5,6,11,12,14,15,17],$Vb=[1,31],$Vc=[1,27],$Vd=[1,28],$Ve=[1,29],$Vf=[1,30],$Vg=[1,32],$Vh=[1,33],$Vi=[1,34],$Vj=[1,35],$Vk=[2,5,6,11,12,14,15,17,21,22,23,24,25,26,27,28,29,30,31,32,33,35],$Vl=[1,40],$Vm=[1,38],$Vn=[1,39],$Vo=[1,41],$Vp=[1,42],$Vq=[1,43],$Vr=[1,44],$Vs=[1,45],$Vt=[1,46],$Vu=[1,47],$Vv=[1,48],$Vw=[1,49],$Vx=[1,50],$Vy=[14,21,22,23,24,25,26,27,28,29,30,31,32,33,35],$Vz=[21,22,23,25,26,27,28,29,30,31,32,35],$VA=[21,25,26,27,28,29,30,31,32,35];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,12,14,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31],$V1=[2,9],$V2=[1,6],$V3=[5,6],$V4=[2,4],$V5=[1,28],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[1,14],$Va=[1,15],$Vb=[1,16],$Vc=[1,17],$Vd=[1,18],$Ve=[1,19],$Vf=[1,20],$Vg=[1,21],$Vh=[1,22],$Vi=[1,23],$Vj=[1,24],$Vk=[1,25],$Vl=[1,26],$Vm=[1,29],$Vn=[2,5,6,11,12,14,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31],$Vo=[1,55],$Vp=[1,51],$Vq=[1,52],$Vr=[1,53],$Vs=[1,54],$Vt=[1,56],$Vu=[1,57],$Vv=[1,58],$Vw=[1,59],$Vx=[2,5,6,11,12,14,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,35,36,37,38,39,40,41,42,43,44,45,46,47,49],$Vy=[1,76],$Vz=[1,74],$VA=[1,75],$VB=[1,77],$VC=[1,78],$VD=[1,79],$VE=[1,80],$VF=[1,81],$VG=[1,82],$VH=[1,83],$VI=[1,84],$VJ=[1,85],$VK=[1,86],$VL=[27,35,36,37,38,39,40,41,42,43,44,45,46,47,49],$VM=[35,36,37,39,40,41,42,43,44,45,46,49],$VN=[35,39,40,41,42,43,44,45,46,49];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"PATHS":4,"EOF":5,"|":6,"PATH":7,"NODES":8,"SLASH":9,"EL":10,"div":11,"id":12,"PRE":13,"*":14,".":15,"ATTR":16,"@":17,"ATTR_P":18,"[":19,"E":20,"]":21,"+":22,"-":23,"opDiv":24,"=":25,"!=":26,"<":27,">":28,"<=":29,">=":30,"opOr":31,"opAnd":32,"opMod":33,"(":34,")":35,"double":36,"integer":37,"StringLiteral":38,"resLast":39,"resPosition":40,"resText":41,"resNode":42,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"|",11:"div",12:"id",14:"*",15:".",17:"@",19:"[",21:"]",22:"+",23:"-",24:"opDiv",25:"=",26:"!=",27:"<",28:">",29:"<=",30:">=",31:"opOr",32:"opAnd",33:"opMod",34:"(",35:")",36:"double",37:"integer",38:"StringLiteral",39:"resLast",40:"resPosition",41:"resText",42:"resNode"},
-productions_: [0,[3,2],[4,3],[4,1],[7,1],[8,3],[8,2],[9,2],[9,1],[9,0],[10,2],[10,1],[10,2],[10,1],[10,1],[10,1],[16,2],[18,1],[18,1],[13,3],[13,0],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,3],[20,1],[20,1],[20,1],[20,1],[20,3],[20,3],[20,3],[20,3],[20,1]],
+symbols_: {"error":2,"START":3,"PATHS":4,"EOF":5,"|":6,"PATH":7,"NODES":8,"SLASH":9,"EL":10,"div":11,"id":12,"PRE":13,"resParent":14,"::":15,"resChild":16,"resSelf":17,"resPrec":18,"resPrecSibling":19,"resAttribute":20,"resDesc":21,"resDescSelf":22,"resAnc":23,"resAncSelf":24,"resFollow":25,"resFollowSibling":26,"*":27,"..":28,".":29,"ATTR":30,"@":31,"ATTR_P":32,"[":33,"E":34,"]":35,"+":36,"-":37,"opDiv":38,"=":39,"!=":40,"<":41,">":42,"<=":43,">=":44,"opOr":45,"opAnd":46,"opMod":47,"(":48,")":49,"double":50,"integer":51,"StringLiteral":52,"resLast":53,"resPosition":54,"resText":55,"resNode":56,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"|",11:"div",12:"id",14:"resParent",15:"::",16:"resChild",17:"resSelf",18:"resPrec",19:"resPrecSibling",20:"resAttribute",21:"resDesc",22:"resDescSelf",23:"resAnc",24:"resAncSelf",25:"resFollow",26:"resFollowSibling",27:"*",28:"..",29:".",31:"@",33:"[",35:"]",36:"+",37:"-",38:"opDiv",39:"=",40:"!=",41:"<",42:">",43:"<=",44:">=",45:"opOr",46:"opAnd",47:"opMod",48:"(",49:")",50:"double",51:"integer",52:"StringLiteral",53:"resLast",54:"resPosition",55:"resText",56:"resNode"},
+productions_: [0,[3,2],[4,3],[4,1],[7,1],[8,3],[8,2],[9,2],[9,1],[9,0],[10,1],[10,2],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,3],[10,1],[10,1],[10,1],[10,1],[10,1],[30,2],[32,1],[32,1],[13,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,1],[34,1],[34,1],[34,1],[34,3],[34,3],[34,3],[34,3],[34,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -203,19 +203,195 @@ case 9:
 break;
 case 10:
  
-                                    this.$ = new Element($$[$0-1], TypeElement.NODO, $$[$0], 1, _$[$0-1].first_column) 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0].first_column) 
                                     var nodo = {
                                         name: 'EL',
                                         val: 'EL',
-                                        children: [
-                                            {name: 'id', val: $$[$0-1], children: []},
-                                            $$[$0].Nodo
-                                        ]
+                                        children: [{name: 'id', val: $$[$0], children: []},]
                                     }
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
 case 11:
+ 
+                                    this.$ = new Element($$[$0-1], TypeElement.NODO, $$[$0], 1, _$[$0-1].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [{name: 'id', val: $$[$0-1], children: []},{name: 'PRE', val: $$[$0], children: []}]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 12:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resParent', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 13:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resChild', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 14:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resSelf', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 15:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resPrec', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 16:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resPrecSibling', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 17:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resAttribute', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 18:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resDesc', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 19:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resDescSelf', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 20:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resAnc', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 21:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resAncSelf', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 22:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resFollow', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 23:
+ 
+                                    this.$ = new Element($$[$0], TypeElement.NODO, undefined, 1, _$[$0-2].first_column) 
+                                    var nodo = {
+                                        name: 'EL',
+                                        val: 'EL',
+                                        children: [
+                                            {name: 'resFollowSibling', val: $$[$0-2], children: []}, 
+                                            {name: 'id', val: $$[$0], children: []}
+                                        ]
+                                    }
+                                    this.$ = {...this.$, Nodo: nodo}
+                                
+break;
+case 24:
  
                                     this.$ = new Element('', TypeElement.ALL, [], 1, _$[$0].first_column) 
                                     var nodo = {
@@ -226,9 +402,9 @@ case 11:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 12:
+case 25:
  
-                                    this.$ = new Element('', TypeElement.PARENT, [], 1, _$[$0-1].first_column) 
+                                    this.$ = new Element('', TypeElement.PARENT, [], 1, _$[$0].first_column) 
                                     var nodo = {
                                         name: 'EL',
                                         val: 'EL',
@@ -237,7 +413,7 @@ case 12:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 13:
+case 26:
  
                                     this.$ = new Element('', TypeElement.CURRENT, [], 1, _$[$0].first_column) 
                                     var nodo = {
@@ -248,7 +424,7 @@ case 13:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 14:
+case 27:
  
                                     this.$ = $$[$0] 
                                     var nodo = {
@@ -259,7 +435,7 @@ case 14:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 15:
+case 28:
  
                                     var xPathSyntaxAscError = new Error(
                                         yytext,
@@ -270,7 +446,7 @@ case 15:
                                     xPathAscSyntaxErrors.push(xPathSyntaxAscError) 
                                 
 break;
-case 16:
+case 29:
  
                                     this.$ = $$[$0] 
                                     var nodo = {
@@ -284,7 +460,7 @@ case 16:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 17:
+case 30:
  
                                     this.$ = new Element($$[$0], TypeElement.ATRIBUTO, [], 1, _$[$0].first_column)
                                     var nodo = {
@@ -295,9 +471,9 @@ case 17:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 18:
+case 31:
  
-                                    this.$ = new Element($$[$0], TypeElement.ALL, [], 1, _$[$0].first_column)
+                                    this.$ = new Element($$[$0], TypeElement.ALL_ATRIBUTO, [], 1, _$[$0].first_column)
                                     var nodo = {
                                         name: 'ATTR_P',
                                         val: 'ATTR_P',
@@ -306,7 +482,7 @@ case 18:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 19:
+case 32:
  
                                     this.$ = $$[$0-1] 
                                     var nodo = {
@@ -321,18 +497,7 @@ case 19:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 20:
- 
-                                    this.$ = []
-                                    var nodo = {
-                                        name: 'PRE',
-                                        val: 'PRE',
-                                        children: []
-                                    }
-                                    this.$ = {...this.$, Nodo: nodo} 
-                                
-break;
-case 21:
+case 33:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.SUMA)
@@ -350,7 +515,7 @@ case 21:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 22:
+case 34:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.RESTA)
@@ -368,7 +533,7 @@ case 22:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 23:
+case 35:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MULTIPLICACION)
@@ -386,7 +551,7 @@ case 23:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 24:
+case 36:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.DIVISION)
@@ -404,7 +569,7 @@ case 24:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 25:
+case 37:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.IGUAL)
@@ -422,7 +587,7 @@ case 25:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 26:
+case 38:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.DIFERENTE)
@@ -440,7 +605,7 @@ case 26:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 27:
+case 39:
  
                                     console.log({E1: $$[$0-2], op: $$[$0-1], E2: $$[$0]})
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MENOR)
@@ -458,7 +623,7 @@ case 27:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 28:
+case 40:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MAYOR)
@@ -476,7 +641,7 @@ case 28:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 29:
+case 41:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MENOR_IGUAL)
@@ -494,7 +659,7 @@ case 29:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 30:
+case 42:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MAYOR_IGUAL)
@@ -512,7 +677,7 @@ case 30:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 31:
+case 43:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.OR)
@@ -530,7 +695,7 @@ case 31:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 32:
+case 44:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.AND)
@@ -548,7 +713,7 @@ case 32:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 33:
+case 45:
  
                                     
                                     var op = new Operation(1, _$[$0-2].first_column, TypeOperation.MOD)
@@ -566,7 +731,7 @@ case 33:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 34:
+case 46:
  
                                     this.$ = $$[$0-1] 
                                     var nodo = {
@@ -581,7 +746,7 @@ case 34:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 35:
+case 47:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.DOUBLE)
                                     op.savePrimitiveOp($$[$0])
@@ -594,7 +759,7 @@ case 35:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 36:
+case 48:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.INTEGER)
                                     op.savePrimitiveOp($$[$0])
@@ -607,7 +772,7 @@ case 36:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 37:
+case 49:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.STRING)
                                     op.savePrimitiveOp($$[$0])
@@ -620,7 +785,7 @@ case 37:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 38:
+case 50:
  
                                     var op = new Operation(1, _$[$0].first_column, TypeOperation.ID)
                                     op.savePrimitiveOp($$[$0])
@@ -633,7 +798,7 @@ case 38:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 39:
+case 51:
  
                                     this.$ = new Operation('LAST'.first_line, _$[$0-2].first_column, TypeOperation.LAST) 
                                     var nodo = {
@@ -644,7 +809,7 @@ case 39:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 40:
+case 52:
  
                                     this.$ = new Operation('POSITION'.first_line, _$[$0-2].first_column, TypeOperation.POSITION) 
                                     var nodo = {
@@ -655,7 +820,7 @@ case 40:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 41:
+case 53:
  
                                     this.$ = new Operation('TEXT'.first_line, _$[$0-2].first_column, TypeOperation.TEXT) 
                                     var nodo = {
@@ -666,7 +831,7 @@ case 41:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 42:
+case 54:
  
                                     this.$ = new Operation('NODE'.first_line, _$[$0-2].first_column, TypeOperation.NODE) 
                                     var nodo = {
@@ -677,7 +842,7 @@ case 42:
                                     this.$ = {...this.$, Nodo: nodo}
                                 
 break;
-case 43:
+case 55:
  
                                     this.$ = new Operation($$[$0].name, $$[$0].linea, $$[$0].columna, TypeOperation.ATRIBUTO) 
                                     var nodo = {
@@ -690,7 +855,7 @@ case 43:
 break;
 }
 },
-table: [o($V0,$V1,{3:1,4:2,7:3,8:4,9:5,11:$V2}),{1:[3]},{5:[1,7],6:[1,8]},o($V3,[2,3]),o($V0,$V1,{9:9,5:$V4,6:$V4,11:$V2}),{2:$V5,10:10,12:$V6,14:$V7,15:$V8,16:14,17:$V9},o($V0,[2,8],{11:[1,17]}),{1:[2,1]},o($V0,$V1,{8:4,9:5,7:18,11:$V2}),{2:$V5,10:19,12:$V6,14:$V7,15:$V8,16:14,17:$V9},o($Va,[2,6]),o($Va,[2,20],{13:20,19:[1,21]}),o($Va,[2,11]),o([2,5,6,11,12,14,17],[2,13],{15:[1,22]}),o($Va,[2,14]),o($Va,[2,15]),{12:[1,24],14:[1,25],18:23},o($V0,[2,7]),o($V3,[2,2]),o($Va,[2,5]),o($Va,[2,10]),{12:$Vb,16:36,17:$V9,20:26,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},o($Va,[2,12]),o($Vk,[2,16]),o($Vk,[2,17]),o($Vk,[2,18]),{14:$Vl,21:[1,37],22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,32:$Vw,33:$Vx},{12:$Vb,16:36,17:$V9,20:51,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},o($Vy,[2,35]),o($Vy,[2,36]),o($Vy,[2,37]),o($Vy,[2,38]),{34:[1,52]},{34:[1,53]},{34:[1,54]},{34:[1,55]},o($Vy,[2,43]),o($Va,[2,19]),{12:$Vb,16:36,17:$V9,20:56,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:57,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:58,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:59,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:60,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:61,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:62,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:63,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:64,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:65,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:66,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:67,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{12:$Vb,16:36,17:$V9,20:68,34:$Vc,36:$Vd,37:$Ve,38:$Vf,39:$Vg,40:$Vh,41:$Vi,42:$Vj},{14:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,31:$Vv,32:$Vw,33:$Vx,35:[1,69]},{35:[1,70]},{35:[1,71]},{35:[1,72]},{35:[1,73]},o($Vz,[2,21],{14:$Vl,24:$Vo,33:$Vx}),o($Vz,[2,22],{14:$Vl,24:$Vo,33:$Vx}),o($Vy,[2,23]),o($Vy,[2,24]),o($VA,[2,25],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,33:$Vx}),o($VA,[2,26],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,33:$Vx}),o($VA,[2,27],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,33:$Vx}),o($VA,[2,28],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,33:$Vx}),o($VA,[2,29],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,33:$Vx}),o($VA,[2,30],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,33:$Vx}),o([21,31,35],[2,31],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,32:$Vw,33:$Vx}),o([21,31,32,35],[2,32],{14:$Vl,22:$Vm,23:$Vn,24:$Vo,25:$Vp,26:$Vq,27:$Vr,28:$Vs,29:$Vt,30:$Vu,33:$Vx}),o($Vy,[2,33]),o($Vy,[2,34]),o($Vy,[2,39]),o($Vy,[2,40]),o($Vy,[2,41]),o($Vy,[2,42])],
+table: [o($V0,$V1,{3:1,4:2,7:3,8:4,9:5,11:$V2}),{1:[3]},{5:[1,7],6:[1,8]},o($V3,[2,3]),o($V0,$V1,{9:9,5:$V4,6:$V4,11:$V2}),{2:$V5,10:10,12:$V6,14:$V7,16:$V8,17:$V9,18:$Va,19:$Vb,20:$Vc,21:$Vd,22:$Ve,23:$Vf,24:$Vg,25:$Vh,26:$Vi,27:$Vj,28:$Vk,29:$Vl,30:27,31:$Vm},o($V0,[2,8],{11:[1,30]}),{1:[2,1]},o($V0,$V1,{8:4,9:5,7:31,11:$V2}),{2:$V5,10:32,12:$V6,14:$V7,16:$V8,17:$V9,18:$Va,19:$Vb,20:$Vc,21:$Vd,22:$Ve,23:$Vf,24:$Vg,25:$Vh,26:$Vi,27:$Vj,28:$Vk,29:$Vl,30:27,31:$Vm},o($Vn,[2,6]),o($Vn,[2,10],{13:33,33:[1,34]}),{15:[1,35]},{15:[1,36]},{15:[1,37]},{15:[1,38]},{15:[1,39]},{15:[1,40]},{15:[1,41]},{15:[1,42]},{15:[1,43]},{15:[1,44]},{15:[1,45]},{15:[1,46]},o($Vn,[2,24]),o($Vn,[2,25]),o($Vn,[2,26]),o($Vn,[2,27]),o($Vn,[2,28]),{12:[1,48],27:[1,49],32:47},o($V0,[2,7]),o($V3,[2,2]),o($Vn,[2,5]),o($Vn,[2,11]),{12:$Vo,30:60,31:$Vm,34:50,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:[1,61]},{12:[1,62]},{12:[1,63]},{12:[1,64]},{12:[1,65]},{12:[1,66]},{12:[1,67]},{12:[1,68]},{12:[1,69]},{12:[1,70]},{12:[1,71]},{12:[1,72]},o($Vx,[2,29]),o($Vx,[2,30]),o($Vx,[2,31]),{27:$Vy,35:[1,73],36:$Vz,37:$VA,38:$VB,39:$VC,40:$VD,41:$VE,42:$VF,43:$VG,44:$VH,45:$VI,46:$VJ,47:$VK},{12:$Vo,30:60,31:$Vm,34:87,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},o($VL,[2,47]),o($VL,[2,48]),o($VL,[2,49]),o($VL,[2,50]),{48:[1,88]},{48:[1,89]},{48:[1,90]},{48:[1,91]},o($VL,[2,55]),o($Vn,[2,12]),o($Vn,[2,13]),o($Vn,[2,14]),o($Vn,[2,15]),o($Vn,[2,16]),o($Vn,[2,17]),o($Vn,[2,18]),o($Vn,[2,19]),o($Vn,[2,20]),o($Vn,[2,21]),o($Vn,[2,22]),o($Vn,[2,23]),o($Vn,[2,32]),{12:$Vo,30:60,31:$Vm,34:92,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:93,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:94,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:95,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:96,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:97,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:98,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:99,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:100,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:101,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:102,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:103,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{12:$Vo,30:60,31:$Vm,34:104,48:$Vp,50:$Vq,51:$Vr,52:$Vs,53:$Vt,54:$Vu,55:$Vv,56:$Vw},{27:$Vy,36:$Vz,37:$VA,38:$VB,39:$VC,40:$VD,41:$VE,42:$VF,43:$VG,44:$VH,45:$VI,46:$VJ,47:$VK,49:[1,105]},{49:[1,106]},{49:[1,107]},{49:[1,108]},{49:[1,109]},o($VM,[2,33],{27:$Vy,38:$VB,47:$VK}),o($VM,[2,34],{27:$Vy,38:$VB,47:$VK}),o($VL,[2,35]),o($VL,[2,36]),o($VN,[2,37],{27:$Vy,36:$Vz,37:$VA,38:$VB,47:$VK}),o($VN,[2,38],{27:$Vy,36:$Vz,37:$VA,38:$VB,47:$VK}),o($VN,[2,39],{27:$Vy,36:$Vz,37:$VA,38:$VB,47:$VK}),o($VN,[2,40],{27:$Vy,36:$Vz,37:$VA,38:$VB,47:$VK}),o($VN,[2,41],{27:$Vy,36:$Vz,37:$VA,38:$VB,47:$VK}),o($VN,[2,42],{27:$Vy,36:$Vz,37:$VA,38:$VB,47:$VK}),o([35,45,49],[2,43],{27:$Vy,36:$Vz,37:$VA,38:$VB,39:$VC,40:$VD,41:$VE,42:$VF,43:$VG,44:$VH,46:$VJ,47:$VK}),o([35,45,46,49],[2,44],{27:$Vy,36:$Vz,37:$VA,38:$VB,39:$VC,40:$VD,41:$VE,42:$VF,43:$VG,44:$VH,47:$VK}),o($VL,[2,45]),o($VL,[2,46]),o($VL,[2,51]),o($VL,[2,52]),o($VL,[2,53]),o($VL,[2,54])],
 defaultActions: {7:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -1278,81 +1443,99 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 39
+case 1:return 53
 break;
 case 2:return 'resAttr'
 break;
-case 3:return 42
+case 3:return 56
 break;
-case 4:return 41
+case 4:return 55
 break;
-case 5:return 40
+case 5:return 54
 break;
-case 6:return 'resChild'
+case 6:return 14
 break;
-case 7:return 'resAttribute'
+case 7:return 16
 break;
-case 8:return 'resDescendant'
+case 8:return 17
 break;
-case 9:return 'resAncestor'
+case 9:return 18
 break;
-case 10:return 'resAncestorSelf'
+case 10:return 19
 break;
-case 11:return 24
+case 11:return 20
 break;
-case 12:return 33
+case 12:return 21
 break;
-case 13:return 'oPor'
+case 13:return 22
 break;
-case 14:return 32
+case 14:return 23
 break;
-case 15:return 22
+case 15:return 24
 break;
-case 16:return 23
+case 16:return 25
 break;
-case 17:return 14
+case 17:return 26
 break;
-case 18:return 25
+case 18:return 38
 break;
-case 19:return 26
+case 19:return 47
 break;
-case 20:return 27
+case 20:return 'oPor'
 break;
-case 21:return 28
+case 21:return 46
 break;
-case 22:return 29
+case 22:return 36
 break;
-case 23:return 30
+case 23:return 37
 break;
-case 24:return 11
+case 24:return 27
 break;
-case 25:return 6
+case 25:return 39
 break;
-case 26:return 15
+case 26:return 40
 break;
-case 27:return 17
+case 27:return 41
 break;
-case 28:return 19
+case 28:return 42
 break;
-case 29:return 21
+case 29:return 43
 break;
-case 30:return 34
+case 30:return 44
 break;
-case 31:return 35
+case 31:return 11
 break;
-case 32:return 36;
+case 32:return 6
 break;
-case 33:return 37;
+case 33:return 29
 break;
-case 34:return 'string';
+case 34:return 28
 break;
-case 35:return 12;
+case 35:return 15
 break;
-case 36:return 38
+case 36:return 31
 break;
-case 37:return 5
+case 37:return 33
 break;
-case 38:
+case 38:return 35
+break;
+case 39:return 48
+break;
+case 40:return 49
+break;
+case 41:return 50;
+break;
+case 42:return 51;
+break;
+case 43:return 'string';
+break;
+case 44:return 12;
+break;
+case 45:return 52
+break;
+case 46:return 5
+break;
+case 47:
                                                             var lexerAscError = new Error(
                                                                 yy_.yytext, 
                                                                 yy_.yylloc.first_line, 
@@ -1364,8 +1547,8 @@ case 38:
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:last\b)/i,/^(?:attr\b)/i,/^(?:node\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:child\b)/i,/^(?:attribute\b)/i,/^(?:descendant\b)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:\/)/i,/^(?:\|)/i,/^(?:\.)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:"[^\"]*")/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:last\b)/i,/^(?:attr\b)/i,/^(?:node\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:parent\b)/i,/^(?:child\b)/i,/^(?:self\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:attribute\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:folowing\b)/i,/^(?:folowing-sibling\b)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:\/)/i,/^(?:\|)/i,/^(?:\.)/i,/^(?:\.\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:"[^\"]*")/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
 });
 return lexer;
 })();
