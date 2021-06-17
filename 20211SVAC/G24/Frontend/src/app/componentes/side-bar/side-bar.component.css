@@ -1,11 +1,12 @@
 .example-container {
-  display: flex;
+  display:flex;
   flex-direction: column;
-  position: absolute;
+  position:absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  font-family: "Century Gothic";
 }
 
 .example-is-mobile .example-toolbar {
@@ -14,19 +15,21 @@
   z-index: 2;
 }
 .example-toolbar {
-  background-color: #67676f;
+  background-color: #000057; /*bara*/
 }
 h1.example-app-name {
   margin-left: 30%;
-  color: #f9faf7;
-  font-size: 50px;
+  color: #c5e3f5;
+  font-size: 65px;
+  font-family:"Century Gothic"; 
+  font-weight: bold;
 }
-.matsnv {
-  background-color: #a97061;
+  .matsnv {
+  background-color: #109e8b;
   color: #f9faf7;
 }
 #btn {
-  background-color: #67676f;
+  background-color: #000057;
   border: none;
   text-decoration: none;
   width: 100px;
@@ -40,7 +43,8 @@ h1.example-app-name {
   /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
          causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
   flex: 1;
-  background-color: #efc2a8;
+  background: #5d5dbb;
+  background: linear-gradient(to right, #59daeb, #5ff16b);
 }
 
 .example-is-mobile .example-sidenav-container {

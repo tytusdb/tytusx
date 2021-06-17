@@ -1,6 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReporteXML = void 0;
 class ReporteXML {
     constructor() {
         this.reporteTabla = `
@@ -66,4 +64,3 @@ class ReporteXML {
         return this.reporteTabla;
     }
 }
-exports.ReporteXML = ReporteXML;

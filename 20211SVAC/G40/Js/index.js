@@ -5,11 +5,14 @@ function CargarXML(){
     var contenido = editor.getValue();
     var contenidoXpath = EntradaXPath.getValue();
 
+
     if (contenido == ""){
         SalidaXPath.setValue("No hay entrada XML para analizar.");
         SalidaXPath.refresh();
     } else {
 
+        contenido = ReemplazarEspeciales(contenido);
+        console.log(contenido.toString());
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
@@ -63,8 +66,28 @@ function CargarXML(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN (ASCENDENTE) :D!!");
+                    
+                    salidaGlobal = "";
+                    var contador = 1;
+                    resultadoXPath.forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        //console.log(salidaXPath);
+                        GenerarSalidaXPath(salidaXPath);
+
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
+
+                        contador++;
+                    } );
+                    
+                    SetSalida(salidaGlobal);
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -86,6 +109,7 @@ function CargarXMLDesc(){
         SalidaXPath.refresh();
     } else {
 
+        contenido = ReemplazarEspeciales(contenido);
         analisisCorrecto = EjecutarXMLDesc(contenido);
         
         if (analisisCorrecto) {
@@ -139,8 +163,27 @@ function CargarXMLDesc(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    resultadoXPath.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    SetSalida("TODO SALIO BIEN (DESCENDENTE ):D!!");
+                    
+                    salidaGlobal = "";
+                    var contador = 1;
+                    resultadoXPath.forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        GenerarSalidaXPath(salidaXPath);
+
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
+
+                        contador++;
+                    } );
+                    salidaGlobal = salidaGlobal.replaceAll(" =\"\"", "");
+                    SetSalida(salidaGlobal);
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
                 }
@@ -236,8 +279,9 @@ function ExtraerCodificacion(objetos){
         } else {
 
             if (objetos[i].identificador1 == "version" && objetos[i].identificador2 == "version"){
-                codificacion = objetos[i].texto;
-                console.log("La nueva codificacion es: "+codificacion);
+                //codificacionGlobal = objetos[i].texto;
+                DefinirCodificacion(objetos[i].texto);
+                console.log("La nueva codificacion es: "+codificacionGlobal);
             }         
             objetos.splice(i,1);
             i--; 
@@ -314,10 +358,146 @@ function ObjetoYaExiste(arreglo, id){
 
 }
 
+function AtributoYaExiste(arreglo, id){
+
+    var existe = false;
+
+    arreglo.forEach(function (atributo){
+
+        if(atributo.getID()==id){
+            existe = true;
+        }
+    });
+
+    return existe;
+
+}
+
+function BuscarObjeto(arreglo, id){
+
+    var existe = null;
+
+    arreglo.forEach(function (objeto){
+
+        if(objeto.getID().toLowerCase()==id.toLowerCase()){
+            existe = objeto;
+        }
+    });
+
+    return existe;
+
+}
+
+function GenerarSalidaXPath(objetos){
+
+    if(objetos!=null){
+        if(objetos!=[]){
+            objetos.forEach(function (objeto){
+
+                if(objeto.getAgregar()==1){
+        
+                    salidaRecursiva+='<'+objeto.getID();
+                    
+                    if (objeto.getAtributos().length > 0) {
+                        objeto.getAtributos().forEach(function (atributo) {
+                        salidaRecursiva+=" "+atributo.getID()+"="+`"`+atributo.getValor()+`"`;
+                        });
+                    }
+                    salidaRecursiva+=">";
+                    if (objeto.getObjetos().length > 0) {
+                        salidaRecursiva+="\n"
+                        GenerarSalidaXPath(objeto.getObjetos());
+                    }
+        
+                    if(objeto.getTexto()!=""){
+                        salidaRecursiva+= CambiarCodificacion(objeto.getTexto());
+                    }
+        
+                    salidaRecursiva+='</'+objeto.getID()+'>'+"\n";
+                } else if(objeto.getAgregar()==2){
+        
+                    salidaRecursiva+='<'+objeto.getID();
+                    
+                    if (objeto.getAtributos().length > 0) {
+                        objeto.getAtributos().forEach(function (atributo) {
+                        salidaRecursiva+=" "+atributo.getID()+"="+`"`+atributo.getValor()+`"`;
+                        });
+                    }
+                    salidaRecursiva+=" />"+"\n";
+                    }
+        
+            });
+        } else {
+            salidaRecursiva = "No se encontraron coincidencias. :(";
+        }
+    } else {
+        salidaRecursiva = "No se encontraron coincidencias. :(";
+    }
+
+}
 function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();
 }
 
+function ReemplazarEspeciales(cadena){
 
+    var pattern = /(?<=[a-zA-ZñÑ]+)'/gi;
+    var aposPattern = /&apos;/gi;
+    var ampPattern = /&amp;/gi;
+    var ltPattern = /&lt;/gi;
+    var gtPattern = /&gt;/gi;
+    var quotPattern = /&quot;/gi;
+    cadena = cadena.replace(pattern, " &apos; ");
+    cadena = cadena.replace(aposPattern, " &apos; ");
+    cadena = cadena.replace(ampPattern, " &amp; ");
+    cadena = cadena.replace(ltPattern, " &lt; ");
+    cadena = cadena.replace(gtPattern, " &gt; ");
+    cadena = cadena.replace(quotPattern, " &quot; ");
+    return cadena
+}
 
+function DefinirCodificacion(codificacion){
+
+    switch(codificacion.toLowerCase()) {
+        case "utf-8":
+        case "utf8":
+            codificacionGlobal = "UTF-8";
+          break;
+        case "iso-8859-1":
+        case "iso8859-1":
+        case "iso-88591":
+        case "iso88591": 
+            codificacionGlobal = "ISO-8859-1";
+          break;
+        default:
+            codificacionGlobal = "UTF-8";
+      }
+}
+
+function CambiarCodificacion(cadena){
+ try {
+    var cadenaAux = cadena;
+    var cadenaUTF8 = "";
+    var cadenaISO = "";
+    switch(codificacionGlobal) {
+        case "UTF-8":
+            cadenaUTF8 = decodeURIComponent(cadenaAux);
+            cadenaISO = decodeURIComponent(escape(cadenaUTF8));
+            cadenaAux = cadenaISO;
+          break;
+        case "ISO-8859-1": 
+            cadenaUTF8 = unescape(encodeURIComponent(cadenaAux));
+            cadenaAux = cadenaUTF8;
+          break;
+        default:
+            cadenaUTF8 = decodeURIComponent(cadenaAux);
+            cadenaISO = decodeURIComponent(escape(cadenaUTF8));
+            cadenaAux = cadenaISO;
+      }
+    return cadenaAux;
+ } catch (error) {
+     console.log(error);
+     return cadena
+ }
+}

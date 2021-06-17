@@ -1,2 +1,2 @@
-# TytusX
-Open Source Native XML Database with Query Languages XPath and XQuery in JavaScript
+# compi2vacas21
+Repositorio privado de compi 2

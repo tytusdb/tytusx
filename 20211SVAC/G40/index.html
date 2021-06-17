@@ -43,7 +43,7 @@
         <script>
 
 
-            var codificacion = "UTF-8";
+            var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();
             var GenerarDOT = new GenerarArbol();
             var tablaSimbolosXML = null;
@@ -66,6 +66,9 @@
             var IDobj = 1;
             var objetosGlobal = null;
             var entornosGlobal = null;
+            var salidaXPath = null;
+            var salidaRecursiva = "";
+            var salidaGlobal = "";
         </script>
         <title> Compi 2 - Proyecto 1 | By Oscar Llamas</title>
         <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
@@ -92,6 +95,8 @@
                             <a class="dropitem" id="guardar-xpath" onclick="GenerarDescargaXPath()">Guardar XPath como...</a>
                             <a class="dropitem" onclick="LimpiarXML()">Limpiar editor XML</a>
                             <a class="dropitem" onclick="LimpiarXPath()">Limpiar editor XPath</a>
+                            <a class="dropitem" onclick="LimpiarSalida()">Limpiar salida</a>
+                            <a class="dropitem" onclick="LimpiarTodo()">Limpiar todo</a>
                         </div>
                     </div> 
                 </div>

@@ -1,4 +1,7 @@
 
+var resultXML = 0;
+var Pxml = false;
+var dot = "";
 
 window.addEventListener('load', function(event) { 
     createXpathArea();
@@ -268,14 +271,64 @@ function openXpath(files){
 var resultJs = {};
 
 function compile(){
-
+    var ta=document.getElementById(get_vent());
+    var contenido=ta.value;//texto de vent actual
+    resultXML = xmlA.parse(contenido);
     alert("Ejecucion realizada");
     document.getElementById("xml-output").innerHTML  = `=> Su compilacion ha sido exitosa ,
 => Puede descargar sus archivos`;
 }   
 
-
-
+function reporteTabla(){
+    if(resultXML.Lobjetos!=undefined || resultXML.Lobjetos!=null ){
+        var global = new Simbolo("global","",4,0,0,null); 
+        resultXML.Lobjetos.forEach(element => {
+            element.ejecutar(global.entorno, resultXML.errores);
+        });
+        var rep = reporteTS(global);
+        saveReport('TablaSimbolosXML',rep,'html','text/html')
+    }
+    else{
+        alert('Analice una entrada primero')
+    }
+}
+function reporteTS(entorno){
+    var dot = ` <!DOCTYPE html>
+    <html>
+        <head>
+            <style> table.GeneratedTable { width: 100%;
+                                           background-color: #ffffff;
+                                           border-collapse: collapse;
+                                           border-width: 2px; 
+                                           font-family: ARIAL;
+                                           border-color:#f1d152;
+                                           border-style: solid;
+                                           color: #000000;
+                                        }
+                   table.GeneratedTable td, table.GeneratedTable th {
+                                                                        border-width: 2px; 
+                                                                        border-color: #f1d152; 
+                                                                        border-style: solid;padding: 3px;
+                                                                    } 
+                    table.GeneratedTable thead  {background-color: #f1d152;}
+                    </style>
+        <title>"Tabla de Simbolos"</title>
+        </head>
+    <body>
+        <table class="GeneratedTable">
+            <thead>`
+    dot+="<tr>"
+    dot+="<td>Nombre</td>"
+    dot+="<td>Tipo</td>"
+    dot+="<td>Valor</td>"
+    dot+="<td>Ambito</td>"
+    dot+="<td>fila</td>"
+    dot+="<td>columna</td>"
+    dot+="</tr></thead>\n<tbody>"
+    dot+= entorno.getTabla();
+    dot += "</tbody></table></body></html>"
+    return dot;
+  }
 
 // -----------------------------------
 //Hay que hacer todos los metodos para validar quese estab trabajando sobre un editor especifico 
@@ -314,13 +367,13 @@ function getReportHtml(result, type, lenguaje){
         //Error
         console.log("%c Se esta generando su reporte html ...","color:green;");
         if(type == 0 ){                 
-                const a = gettHtml(result.errores,type, '#f1d152',`Lista de errores ${lenguaje}`);
+                const a = gettHtml(result,type, '#f1d152',`Lista de errores ${lenguaje}`);
                 saveReport('Errores', a,'html','text/html');
         }
         //Gramatica
         else{
-                const a = gettHtml(result.reglasGramatica,type, "#3b90ff",`Gramatica ${lenguaje}`);
-                saveReport('Tokens', a, 'html','text/html');
+                const a = gettHtml(result,type, "#3b90ff",`Gramatica ${lenguaje}`);
+                saveReport('Gramatical', a, 'html','text/html');
         }
 }
 
@@ -378,68 +431,84 @@ function gettHtml(list,type,col,tit){
         return htmlBody;
 }
 
-
-function getJsCode(){
-
-    if(resultJs.jsCode.length != 0){
-        saveReport('jsCode', resultJs.jsCode, 'js','text/js');
-    }else{
-        console.log("%c No se genero js  file", "color: red;");
-    }
-
-}
-
-
 function ReportXml(opcion){
 
-    //Reporte de errores 
-    if(resultXml.errores.length != 0  && opcion == 0){
-        getReportHtml(resultXml.errores,0,"xml");
+    if(resultXML.errores!=undefined || resultXML.errores!=null){
+        //Reporte de errores 
+        if(opcion == 0){
+            getReportHtml(resultXML.errores,0,"xml");
+        }
+        //Reporte de gramatica 
+        else if(opcion == 1) 
+            getReportHtml(resultXML.repA,1,"xml");
     }
-    //Reporte de gramatica 
-    else if(resultXml.tokens != undefined && opcion == 1) 
-        getReportHtml(resultXml.gramatica,1,"xml");
+    else{
+        alert('Analice una entrada primero')
+    }
 }
 
-function saveAST(){
+function showDot(){
+    console.log(dot);
+    const container = document.getElementById("grafo");
+    var parsedData = vis.network.convertDot(dot);
 
-    if(resultJs.tree != undefined || result.tree.length != 0)
-      getAST();
+    var data = {
+    nodes: parsedData.nodes,
+    edges: parsedData.edges
+    };
+
+    var options = parsedData.options;
+    options.nodes = {
+    color: "blue"
+    };
+    var network = new vis.Network(container, data, options);
+     
 }
 
 
-function getAST(){
-
-  var Dot = `digraph Ast {
-    ${resultJs.tree}
-  }`;
- 
-  const treeCode = {
-    graph: Dot,
-    layout: "dot",
-    format: "svg"
-  }
-
-  var xhr = new XMLHttpRequest();
-  xhr.onload = function () {
-  // do something to response
-  if (xhr.readyState === xhr.DONE) {
-      if (xhr.status === 200) {
-           var a = this.responseText;
-           console.log("%c Se obtubo su imagen del arbol: ",'color: blue;');
-           saveReport('AST', a, 'html','text/html');
-           alert("Se genero su arbol ya puede descargarlo");
+function getArbolXML(tipo) {
+    if(resultXML.Lobjetos!= undefined || resultXML.Lobjetos!=null){
+        try {
+            var raiz = new NodoAST("S");
+            resultXML.Lobjetos.forEach(element => {
+              if(tipo){
+                  raiz.addHijo(element.getAST());
+              }else{
+                  raiz.addHijo(element.getCST());
+              }
+            });
+            getDot(raiz);
+            showDot();
+          } catch (error) {
+             dot=""
+             showDot();
           }
-      }
-  };
-  
-  
-  xhr.open('POST', 'http://localhost:3000/api/getDot', true);
-  xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-  xhr.send(JSON.stringify(treeCode));
+    }
+}
 
+function getDot(raiz) {
+    try {
+        dot = "";
+        dot += "digraph {\n";
+        dot += 'n0[label="' + raiz.getDato() + '"];\n';
+        this.contador = 1;
+        getNodos("n0", raiz);
+        dot += "}";
+    } catch (error) {
+        dot = " ";
+    }
+}
+function getNodos(number,nodo) {
+    try {
+        for (let hoja of nodo.getHojas()) {
+            if (hoja != undefined) {
+                var nombreHijo = "n" + this.contador; this.contador++;
+                dot += nombreHijo + '[label="' + hoja.getDato() + '"];\n';
+                dot += number + "->" + nombreHijo + ";\n";
+                getNodos(nombreHijo, hoja);
+            }
+        }
+    } catch (error) {
 
-
-
-
+    }
 }

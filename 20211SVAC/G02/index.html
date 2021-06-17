@@ -15,7 +15,6 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="./Utilidad/codemirror/lib/codemirror.css">
-    <script src="./Utilidad/general.js"></script>
     <script  src="./Gramatica/gramaticaXML.js"></script>
     <script  src="./Gramatica/gramaticaXPath.js"></script>
     <script  src="./AST/AST.js"></script>
@@ -23,6 +22,8 @@
     <script  src="./AST/Simbolo.js"></script>
     <script  src="./AST/Tipo.js"></script>
     <script  src="./Expresiones/Primitivo.js"></script>
+    <script  src="./Instrucciones/Busqueda.js"></script>
+    <script  src="./Instrucciones/Nodo.js"></script>
     <script  src="./Instrucciones/Primitivas/Print.js"></script>
     <script  src="./Interfaces/Expresion.js"></script>
     <script  src="./Interfaces/Instruccion.js"></script>
@@ -31,6 +32,12 @@
     <script  src="./Expresiones/Objeto.js"></script>
     <script src="./Utilidad/TipoError.js"></script>
     <script src="./Utilidad/ErrorCapturado.js"></script>    
+    <script src="./Utilidad/ReglaGramatical.js"></script>        
+    <script src="./Graficadora/GraficadoraTS.js"></script>    
+    <script src="./Graficadora/GraficadoraErrores.js"></script>    
+    <script src="./Graficadora/GraficadoraGramatical.js"></script>    
+    <script src="./Graficadora/UtilidadGrafica.js"></script>
+    <script src="./Expresiones/Predicados.js"></script>
     <script src="./index.js"></script>
     <h1>Compi 2 - GRUPO 2 GHP</h1>
 </head>
@@ -75,7 +82,22 @@
             </tr>
             <tr>
                 <td>
-                    <button onclick="analizar()">Analizar Archivos</button>
+                    <table>
+                        <tr>
+                            <td>
+                                <button onclick="analizar()">Analizar Archivos</button>
+                            </td>
+                            <td>
+                                <button onclick="graficarTS()">Tabla de Simbolos</button>
+                            </td>
+                            <td>
+                                <button onclick="generarReporteErrores()">Reporte de Errores</button>
+                            </td>
+                            <td>
+                                <button onclick="generarReporteGramatical()">Reporte Gramatical</button>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             <tr>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XPath</title>
+    <link href="../styles/styleIde.css" rel="stylesheet"/>
+    <script src="../../errores/TokenError.js"></script>
+    <script src="../../errores/ListaErrores.js"></script>
+    <script src="../../errores/CrearError.js"></script>
+    <script src="../../reportes/ReporteGramatical.js"></script>
+
+    <script src="../../ejecucion/xpath/ast/expresion/Expresion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Division.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Modulo.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Multiplicacion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Resta.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Suma.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/logica/AndLogica.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/logica/OrLogica.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/relacional/RelationalOperators.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/relacional/Comparison.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/relacional/Relational.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/AxeType.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Ancestor.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Atribute.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Child.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Descendant.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Following.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Parent.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Preceding.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/Self.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/root_axe/AxeFabric.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyAncestor.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyAxeAtribute.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyChild.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyDescendant.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyFollowing.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyAxeParent.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyPreceding.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnySelf.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/axe_expresion/any_axe/AnyAxeFabric.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/native_function/NativeFunction.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/primitive/Primitive.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyCurrent.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyIdentifier.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyNode.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyParent.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyText.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyTimes.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyAtributeIdentifier.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/AnyExpresion/AnyAtributeTimes.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootCurrent.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootIdentifier.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootNode.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootParent.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootText.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootTimes.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootAtributeIdentifier.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/RootExpresion/RootAtributeTimes.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/ListaXpathExpresion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/xpath_expresion/XpathExpresion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/PredicateExpresion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/NodoError.js"></script>
+    <script src="../js/ide.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="../../gramaticas/xml/xmlAnalyzer.js"></script>
+    <script src="../../ejecucion/xml/ast/XmlObjectInt.js"></script>
+    <script src="../../ejecucion/xml/ast/XmlObjectAncestor.js"></script>
+    <script src="../../ejecucion/xml/ast/xmlObjects/XmlAttribute.js"></script>
+    <script src="../../ejecucion/xml/ast/xmlObjects/XmlContent.js"></script>
+    <script src="../../ejecucion/xml/ast/xmlObjects/XmlElement.js"></script>
+    <script src="../../ejecucion/xml/ast/xmlObjects/XmlRoot.js"></script>
+    <script src="../../ejecucion/TsRow.js"></script>
+    <script src="../../ejecucion/TsRowAttribute.js"></script>
+    <script src="../../ejecucion/TablaSimbolos.js"></script>
+    <script src="../../gramaticas/xpath/XpathAnalyzer.js"></script>
+    <script src="../../gramaticas/xpath/XpathAnalyzerDescendant.js"></script>
+    <script src="../../ejecucion/Tipo.js"></script>
+    <script src="../../utils/XpathUtil.js"></script>
+    <!--
+
+    -->
+    <!-- VARIABLES GLOBALES -->
+    <script type="text/javascript">
+    </script>
+</head>
+<body background="../images/fondo-azul.jpg">
+
+
+<table class="tablaEntradas" align="center">
+    <tr align="center">
+        <td>
+            <div id="divEntradaXML" align="center">
+                <textarea id="txtEntradaXML" cols="80" rows="28" style="background-color:#CCC;font-style:italic">
+<?xml version="1.0" encoding="UTF-8"?>
+<CATALOG>
+<CD>
+<TITLE>Empire Burlesque</TITLE>
+<ARTIST>Bob Dylan</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>Columbia</COMPANY>
+<PRICE>10.90</PRICE>
+<YEAR>1985</YEAR>
+</CD>
+<CD>
+<TITLE>Hide your heart</TITLE>
+<ARTIST>Bonnie Tyler</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>CBS Records</COMPANY>
+<PRICE>9.90</PRICE>
+<YEAR>1988</YEAR>
+</CD>
+<CD>
+<TITLE>Greatest Hits</TITLE>
+<ARTIST>Dolly Parton</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>RCA</COMPANY>
+<PRICE>9.90</PRICE>
+<YEAR>1982</YEAR>
+</CD>
+<CD>
+<TITLE>Still got the blues</TITLE>
+<ARTIST>Gary Moore</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Virgin records</COMPANY>
+<PRICE>10.20</PRICE>
+<YEAR>1990</YEAR>
+</CD>
+<CD>
+<TITLE>Eros &amp; Eros</TITLE>
+<ARTIST>Eros Ramazzotti</ARTIST>
+<COUNTRY>EU</COUNTRY>
+<COMPANY>BMG</COMPANY>
+<PRICE>9.90</PRICE>
+<YEAR>1997</YEAR>
+</CD>
+<CD>
+<TITLE>&quot;Esto tiene que salir bien&quot;</TITLE>
+<ARTIST>Bee Gees</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Polydor</COMPANY>
+<PRICE>10.90</PRICE>
+<YEAR>1998</YEAR>
+</CD>
+<CD>
+<TITLE>&apos;Esto tiene que salir muy bien tambien&apos;</TITLE>
+<ARTIST>Dr.Hook</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>CBS</COMPANY>
+<PRICE>8.10</PRICE>
+<YEAR>1973</YEAR>
+</CD>
+<CD>
+<TITLE>Maggie May</TITLE>
+<ARTIST>Rod Stewart</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Pickwick</COMPANY>
+<PRICE>8.50</PRICE>
+<YEAR>1990</YEAR>
+</CD>
+<CD>
+<TITLE>Romanza</TITLE>
+<ARTIST>Andrea Bocelli</ARTIST>
+<COUNTRY>EU</COUNTRY>
+<COMPANY>Polydor</COMPANY>
+<PRICE calificacion="hola">10.80</PRICE>
+<YEAR>1996</YEAR>
+</CD>
+<CD>
+<TITLE>When a man loves a woman</TITLE>
+<ARTIST>Percy Sledge</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>Atlantic</COMPANY>
+<PRICE>8.70</PRICE>
+<YEAR>1987</YEAR>
+</CD>
+<CD>
+<TITLE>Black angel</TITLE>
+<ARTIST>Savage Rose</ARTIST>
+<COUNTRY>EU</COUNTRY>
+<COMPANY>Mega</COMPANY>
+<PRICE>10.90</PRICE>
+<YEAR>1995</YEAR>
+</CD>
+<CD>
+<TITLE>1999 Grammy Nominees</TITLE>
+<ARTIST>Many</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>Grammy</COMPANY>
+<PRICE>10.20</PRICE>
+<YEAR>1999</YEAR>
+</CD>
+<CD>
+<TITLE>For the good times</TITLE>
+<ARTIST>Kenny Rogers</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Mucik Master</COMPANY>
+<PRICE>8.70</PRICE>
+<YEAR>1995</YEAR>
+</CD>
+<CD>
+<TITLE>Big Willie style</TITLE>
+<ARTIST>Will Smith</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>Columbia</COMPANY>
+<PRICE>9.90</PRICE>
+<YEAR>1997</YEAR>
+</CD>
+<CD>
+<TITLE>Tupelo Honey</TITLE>
+<ARTIST>Van Morrison</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Polydor</COMPANY>
+<PRICE>8.20</PRICE>
+<YEAR>1971</YEAR>
+</CD>
+<CD>
+<TITLE>Soulsville</TITLE>
+<ARTIST>Jorn Hoel</ARTIST>
+<COUNTRY>Norway</COUNTRY>
+<COMPANY>WEA</COMPANY>
+<PRICE>7.90</PRICE>
+<YEAR>1996</YEAR>
+</CD>
+<CD>
+<TITLE>The very best of</TITLE>
+<ARTIST>Cat Stevens</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Island</COMPANY>
+<PRICE>8.90</PRICE>
+<YEAR>1990</YEAR>
+</CD>
+<CD>
+<TITLE>Stop</TITLE>
+<ARTIST>Sam Brown</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>A and M</COMPANY>
+<PRICE>8.90</PRICE>
+<YEAR>1988</YEAR>
+</CD>
+<CD>
+<TITLE>Bridge of Spies</TITLE>
+<ARTIST>T'Pau</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Siren</COMPANY>
+<PRICE>7.90</PRICE>
+<YEAR>1987</YEAR>
+</CD>
+<CD>
+<TITLE>Private Dancer</TITLE>
+<ARTIST>Tina Turner</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>Capitol</COMPANY>
+<PRICE>8.90</PRICE>
+<YEAR>1983</YEAR>
+</CD>
+<CD>
+<TITLE>Midt om natten</TITLE>
+<ARTIST>Kim Larsen</ARTIST>
+<COUNTRY>EU</COUNTRY>
+<COMPANY>Medley</COMPANY>
+<PRICE>7.80</PRICE>
+<YEAR>1983</YEAR>
+</CD>
+<CD>
+<TITLE>Pavarotti Gala Concert</TITLE>
+<ARTIST>Luciano Pavarotti</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>DECCA</COMPANY>
+<PRICE>9.90</PRICE>
+<YEAR>1991</YEAR>
+</CD>
+<CD>
+<TITLE>The dock of the bay</TITLE>
+<ARTIST>Otis Redding</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>Stax Records</COMPANY>
+<PRICE>7.90</PRICE>
+<YEAR>1968</YEAR>
+</CD>
+<CD>
+<TITLE>Picture book</TITLE>
+<ARTIST>Simply Red</ARTIST>
+<COUNTRY>EU</COUNTRY>
+<COMPANY>Elektra</COMPANY>
+<PRICE>7.20</PRICE>
+<YEAR>1985</YEAR>
+</CD>
+<CD>
+<TITLE>Red</TITLE>
+<ARTIST>The Communards</ARTIST>
+<COUNTRY>UK</COUNTRY>
+<COMPANY>London</COMPANY>
+<PRICE>7.80</PRICE>
+<YEAR>1987</YEAR>
+</CD>
+<CD>
+<TITLE>Unchain my heart</TITLE>
+<ARTIST>Joe Cocker</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>EMI</COMPANY>
+<PRICE>8.20</PRICE>
+<YEAR>1987</YEAR>
+</CD>
+</CATALOG>
+                </textarea>
+            </div>
+
+        </td>
+        <td>
+            <div id="divEntradaXPath" align="center" >
+                <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
+/CATALOG/CD//ancestor-or-self::CD[YEAR=1998]
+                </textarea>
+            </div>
+        </td>
+    </tr>
+</table>
+
+
+<div id="divBotones" align="center" >
+    <button id="btnAnalizarXML" class="button">Analizar XML</button>
+    <button id="btnAnalizarXMLDescendente" class="button">Analizar XML TD</button>
+    <button id="btnRGXML" class="button">Reporte G. XML</button>
+    <button id="btnTablaSimbolos" class="button">Ver Tabla Simbolos</button>
+    <button id="btnTablaErroresXML" class="button">Errores XML</button>
+    <button id="btnAnalizarXPATH" class="button">Analizar XPATH</button>
+    <button id="btnAnalizarXPATHDescendente" class="button">Analizar XPATH TD</button>
+    <button id="btnRGXPath" class="button">Reporte G. Xpath</button>
+    <button id="btnTablaErroresXPath" class="button">Errores XPath</button>
+</div>
+<div  id="divBotones2" align="center" >
+    <button id="btnEjecutar" class="button">Ejecutar código</button>
+    <button id="btnGraficarAstXmlAscendente" class="button">Graficar AST XML Ascendente</button>
+    <button id="btnGraficarCstXmlAscendente" class="button">Graficar CST XML Ascendente</button>
+    <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
+    <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
+    <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
+</div>
+
+<div id="consola" align="center">
+<textarea id="txtConsola" disabled="disabled" cols="175" rows="10" style="background-color:#000000;font-style:inherit;color: chartreuse">
+</textarea>
+</div>
+    <script type="text/javascript">
+        /**
+         * Metodos del Front
+         */
+        $(document).ready(function(){
+
+            //PASAMOS EL OBJETO DE CONSOLA
+            _txtConsola = $("#txtConsola");
+            $("#txtConsola").val(CONSOLE_LINE_MARK);
+            /**
+            * Ejecucion
+            * */
+            $("#btnEjecutar").click(function(){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                ejecutar(entradaXml,entradaXpath);
+            });
+            /**
+             * AnalizarXML
+             */
+            $("#btnAnalizarXML").click(function(){
+                entrada = $("#txtEntradaXML").val();
+                analizarXML(entrada);
+            });
+
+            /**
+             * Reporte gramtical xml
+             */
+
+            $("#btnRGXML").click(function(){
+
+                print("Renderizando Reporte gramtical.  "+new Date());
+                if(ReporteGramatical._reporteXML==undefined){
+                    print("No existen datos para reporte gramatical xml");
+                    return;
+                }
+                XpathUtil.printTabHtml(ReporteGramatical.getHtmlTableXml());
+                print("Reporte gramatical XML OK");
+
+
+            });
+
+
+            /**
+             * AnalizarXPATH
+             */
+            $("#btnAnalizarXPATH").click(function(){
+                entrada = $("#txtEntradaXPath").val();
+                analizarXPATH(entrada);
+            });
+
+            /**
+             * AnalizarXPATHDescendente
+             */
+            $("#btnAnalizarXPATHDescendente").click(function(){
+                entrada = $("#txtEntradaXPath").val();
+                analizarXPATHDescendente(entrada);
+            });
+
+            /**
+             * Reporte gramtical XPath
+             */
+
+            $("#btnRGXPath").click(function(){
+
+                print("Renderizando Reporte gramtical.  "+new Date());
+                if(ReporteGramatical._reporteXpath==undefined){
+                    print("No existen datos para reporte gramatical XPath");
+                    return;
+                }
+                XpathUtil.printTabHtml(ReporteGramatical.getHtmlTableXPath());
+                print("Reporte gramatical XPath OK");
+
+
+            });
+
+
+
+            /**
+             * Ejecutar código
+             */
+            $("#btnGenerar").click(function(){
+                entrada = $("#txtEntradaXML").val();
+                ejecutar(entrada);
+            });
+
+            /**
+             * Graficar AST Ascendente
+             */
+            $("#btnGraficarAstXmlAscendente").click(function(){
+                let cadAst=getStringAst();
+                let pagina = "https://dreampuf.github.io/GraphvizOnline/#"+cadAst;
+                let url=encodeURI(pagina);
+                window.open(url);
+            });
+
+            /**
+             * Ver Tabla de Simbolos
+             */
+            $("#btnTablaSimbolos").click(function(){
+                print("Renderizando tabla de Simbolos.  "+new Date());
+                if(_tsXml==undefined || _tsXml == null){
+                    print("No hay tabla de simbolos que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(_tsXml.getHtmlTable());
+                print("OK");
+            });
+
+            /**
+             * Ver Tabla Errores XML
+             */
+            $("#btnTablaErroresXML").click(function(){
+                print("Renderizando tabla de errores XML.  "+new Date());
+                if(ListaErrores==undefined){
+                    print("No hay tabla de errores que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(ListaErrores.getHtmlTableXml());
+                print("Tabla Errores XML OK");
+            });
+
+
+            /**
+             * Ver Tabla Errores XPath
+             */
+            $("#btnTablaErroresXPath").click(function(){
+                print("Renderizando tabla de errores XPath.  "+new Date());
+                if(ListaErrores==undefined){
+                    print("No hay tabla de errores que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(ListaErrores.getHtmlTableXPath());
+                print("Tabla Errores XPath OK");
+            });
+
+            /**
+             * Limpiar Consola
+             */
+            $("#btnLimpiarConsola").click(function(){
+                $("#txtConsola").val(CONSOLE_LINE_MARK);
+            });
+
+
+
+        });
+    </script>
+</body>
+</html>
