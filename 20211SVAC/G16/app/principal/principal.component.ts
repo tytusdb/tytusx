@@ -27,7 +27,7 @@ const defaults = {
 
 export class PrincipalComponent implements OnInit {
 
-  nodoraiz: Nodo;
+  nodoraiz:any;
   tablaSimbolo: Crear = null;
   salida: string = ""
   errores: string = ""
@@ -104,16 +104,21 @@ export class PrincipalComponent implements OnInit {
 
 
   compilar(){
+    ListaGramatica.ReporteGramatical.clear()
+    errores.Errores.clear();
+    let cadena =this.archivo;
     try{
-      errores.Errores.clear();
-      Estado.Estado.Cambio(1)
-      const CST = parser.parse(this.archivo);
-      this.GenerarTablaSimbolos(CST)
-      Estado.Estado.Cambio(2)
-      this.Xmlasc(this.archivo);
-      console.log("analizador ascendente")
+    Estado.Estado.Cambio(1)
+    const CST = parser.parse(cadena);
+    this.GenerarTablaSimbolos(CST.list)
+    Estado.Estado.Cambio(2)
+    this.nodoraiz = parser.parse(cadena);
+    localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz.list))
+    localStorage.setItem("encoding",CST.encoding)
+    console.log(CST.encoding)
+    localStorage.setItem("TIPO", "Ascendente")
     }catch(Error){
-      this.toastr.error("Hay errores en la cadena de entrada")
+      this.toastr.error("No se ha podido generar correctamente el análisis")
     }
   }
 
@@ -124,43 +129,34 @@ export class PrincipalComponent implements OnInit {
     try{
       Estado.Estado.Cambio(1)
       const CST = parserDesc.parse(this.archivo);
-      this.GenerarTablaSimbolos(CST)
+      this.GenerarTablaSimbolos(CST.list)
       Estado.Estado.Cambio(2)
       this.nodoraiz = parserDesc.parse(this.archivo);
-      localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz))
+      localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz.list))
       localStorage.setItem("TIPO", "Descendente")
-    }catch(Error){
-      this.toastr.error("No se ha podido generar correctamente el análisis");
-    }
-  }
-
-
-  Xmlasc(cadena:string) {
-    try{
-      ListaGramatica.ReporteGramatical.clear()
-      this.nodoraiz = parser.parse(cadena);
-      localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz))
-      localStorage.setItem("TIPO", "Ascendente")
     }catch(Error){
       this.toastr.error("No se ha podido generar correctamente el análisis")
     }
   }
 
+
   xpathASC() {
-   try{
+  // try{
     const AST = parserXpathAsc.parse(this.xpath);
 
     localStorage.setItem("ASTXPATH",JSON.stringify(AST));
-    if(this.tablaSimbolo.getTabla().length!=0){
+    let tabla=[]
+    tabla=JSON.parse(localStorage.getItem("tablaSimbolo"));
+    if(tabla.length!=0){
     let buscar=new Buscar(this.toastr);
     this.toastr.success("Análisis completado")
     this.salida=buscar.darFormato()
     }else{
       this.toastr.warning("Se debe ingresar un archivo XML primero");
     }
-   }catch(Error){
+   /*}catch(Error){
     this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
-    }
+    }*/
   }
 
   xpathDESC() {
