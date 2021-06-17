@@ -24,6 +24,6 @@ class Multiplicacion {
         if (!tipo.esError()) {
             valor = this.izquierda.getValor(ent) * this.derecha.getValor(ent);
         }
-        return new Primitive(valor, tipo, this.linea, this.columna);
+        return valor;
     }
 }

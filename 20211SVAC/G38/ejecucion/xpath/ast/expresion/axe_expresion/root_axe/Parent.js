@@ -9,7 +9,7 @@ class Parent {
         this.columna = columna;
     }
     getTipo(ent) {
-        return new Tipo(TipoDato.err);
+        return new Tipo(TipoDato.xpathValue);
     }
     getValor(ent) {
         let ts = new TablaSimbolos(null);
@@ -22,7 +22,7 @@ class Parent {
                 ts = ent.getElementsParents();
                 break;
             case AxeOperation.text:
-                throw Error("No se puede devolver texto de un nodo padre");
+                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("No se puede pedir un nodo texto para el axe parent", this.linea, this.columna));
                 break;
         }
         return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);

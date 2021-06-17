@@ -14,9 +14,7 @@ class ListaXpathExpresion {
             let nuevoResultado = ts.listaSimbolos.concat(expresion.getValor(ent).listaSimbolos);
             ts.listaSimbolos = nuevoResultado;
         });
-        ts.replaceAtributesWithObjects();
-        ts.eliminarDuplicados();
-        return ts.toStr();
+        return ts;
     }
     validarMerge(listaAntigua, listaNueva) {
         var tsAntigua = XpathUtil.crearTablaSimbolos(listaAntigua);

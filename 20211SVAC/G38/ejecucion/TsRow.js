@@ -23,9 +23,26 @@ class TsRow {
         }
         return contieneTexto;
     }
+    obtenerTexto() {
+        let primitivo;
+        if (this.tipo.esAtributo() && this.nodo instanceof XmlAttribute) {
+            primitivo = new Primitive(this.nodo.value, this.nodo.type, 0, 0);
+        }
+        else if (this.tipo.esObjeto()) {
+            if (this._sub_entorno !== undefined && this._sub_entorno !== null) {
+                for (let row of this.sub_entorno) {
+                    if (row.tipo.esPrimitivo()) {
+                        primitivo = new Primitive(row.nodo.getValueString(), row.tipo, 0, 0);
+                        break;
+                    }
+                }
+            }
+        }
+        return primitivo;
+    }
     toStr(tab) {
         if (this._nodo.isContent()) {
-            return tab + "\t" + this.nodo.getValueString();
+            return tab + "\t" + this.nodo.getValueString() + "\n";
         }
         else if (this._nodo.isAttribute()) {
             return "";
@@ -116,6 +133,35 @@ class TsRow {
         }
         return result;
     }
+    getAllSubTextInRow() {
+        let result = [];
+        if (this._sub_entorno == undefined || this._sub_entorno == null || this._sub_entorno.length == 0) {
+            return result;
+        }
+        for (let sub_row of this._sub_entorno) {
+            if (sub_row._nodo instanceof XmlContent) {
+                result.push(sub_row);
+            }
+            else if (sub_row._nodo instanceof XmlElement) {
+                var subText = sub_row.getAllSubTextInRow();
+                result = result.concat(subText);
+            }
+        }
+        return result;
+    }
+    getSubTextInRow() {
+        let result = [];
+        if (this._sub_entorno == undefined || this._sub_entorno == null
+            || this._sub_entorno.length == 0) {
+            return result;
+        }
+        for (let sub_row of this._sub_entorno) {
+            if (sub_row._nodo instanceof XmlContent) {
+                result.push(sub_row);
+            }
+        }
+        return result;
+    }
     getSubObjectsInRow() {
         let result = [];
         if (!(this._nodo instanceof XmlElement)) {
@@ -126,7 +172,7 @@ class TsRow {
         }
         for (let sub_row of this._sub_entorno) {
             if (sub_row._nodo instanceof XmlContent || sub_row._nodo instanceof XmlAttribute) {
-                return result;
+                continue;
             }
             result.push(sub_row);
             result = result.concat(sub_row.getSubObjectsInRow());

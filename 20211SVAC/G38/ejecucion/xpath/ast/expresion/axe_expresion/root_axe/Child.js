@@ -18,6 +18,8 @@ class Child {
                 ts = ent.findObjectsByNombreElemento(this.identifier);
                 break;
             case AxeOperation.node:
+                ts = ent.findAllObjects();
+                break;
             case AxeOperation.times:
                 ts = ent.findAllObjects();
                 break;

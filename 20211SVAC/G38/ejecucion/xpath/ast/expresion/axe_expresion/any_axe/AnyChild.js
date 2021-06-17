@@ -12,5 +12,21 @@ class AnyChild {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
+        var ts = new TablaSimbolos(null);
+        switch (this.axeOperation) {
+            case AxeOperation.identifier:
+                ts = ent.findAllObjectsByNombreElemento(this.identifier);
+                break;
+            case AxeOperation.node:
+                ts = ent.findAllNodes();
+                break;
+            case AxeOperation.times:
+                ts = ent.findAllSubObjects();
+                break;
+            case AxeOperation.text:
+                ts = ent.findAllSubTextInTS();
+                break;
+        }
+        return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
     }
 }
