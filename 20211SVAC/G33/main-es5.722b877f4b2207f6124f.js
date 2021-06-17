@@ -83,7 +83,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\r\n\r\n    <!--- Note that these columns can be defined in any order.\r\n    The actual rendered columns are set as a property on the row definition\" -->\r\n    <!-- Position Column -->\r\n    <ng-container matColumnDef=\"no\">\r\n      <th mat-header-cell *matHeaderCellDef> No. </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Name Column -->\r\n    <ng-container matColumnDef=\"produccion\">\r\n      <th mat-header-cell *matHeaderCellDef> Produccion </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.produccion}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Weight Column -->\r\n    <ng-container matColumnDef=\"accion\">\r\n      <th mat-header-cell *matHeaderCellDef> Accion </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.accion}} </td>\r\n    </ng-container>\r\n\r\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n</table>";
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"produccion\">\n      <th mat-header-cell *matHeaderCellDef> Produccion </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.produccion}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"accion\">\n      <th mat-header-cell *matHeaderCellDef> Accion </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.accion}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
     /***/
   },
 
@@ -123,7 +123,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div id = \"barra\">\r\n  <mat-toolbar color = \"warn\">\r\n    <span>Tytus X</span>\r\n\r\n    <div class = \"spacer\"></div>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\r\n    <mat-menu #archivo = \"matMenu\">\r\n        <button mat-menu-item>\r\n            <mat-icon>attach_file</mat-icon>\r\n            <label for = \"file\">Abrir XML</label>\r\n            <input type = \"file\"\r\n            id = \"file\"\r\n            class = \"hidend\"\r\n            (change) = \"abrirXML($event.target.files)\">\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>attach_file</mat-icon>\r\n            <span>Abrir XPath</span>\r\n        </button>\r\n        <button mat-menu-item>\r\n            <mat-icon>delete</mat-icon>\r\n            <span>Limpiar</span>\r\n        </button>\r\n    </mat-menu>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\r\n    <mat-menu #ejecutar = \"matMenu\">\r\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\r\n            <mat-icon>keyboard_arrow_up</mat-icon>\r\n            <span>Ascendete</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"ejecutarDescendente()\"> \r\n            <mat-icon>keyboard_arrow_down</mat-icon>\r\n            <span>Descendente</span>\r\n        </button>\r\n    </mat-menu>\r\n\r\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\r\n    <mat-menu #reporte = \"matMenu\">\r\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\r\n            <span>Tabla de simbolos XML</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\r\n          <span>CST XML</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteASTXPATH()\">\r\n          <span>AST XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteCSTXPATH()\">\r\n          <span>CST XPATH</span>\r\n        </button>\r\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\r\n          <span>BNF XML</span>\r\n        </button>  \r\n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\r\n          <span>BNF XPATH</span>\r\n        </button>  \r\n      </mat-menu>\r\n</mat-toolbar>\r\n</div>\r\n\r\n<div id = \"superior\">\r\n  <ngx-codemirror\r\n    [options] = \"editorQueryOptions\"\r\n    [(ngModel)] = \"querys\">\r\n  </ngx-codemirror>\r\n</div>\r\n\r\n<div id = \"separador1\"></div>\r\n\r\n<div id = \"inferior\">\r\n  <div id = \"izquierda\">\r\n    <ngx-codemirror\r\n      [options] = \"editorXMLEntradaOptions\"\r\n      [(ngModel)] = \"xmlEntrada\">\r\n    </ngx-codemirror>\r\n  </div>\r\n  <div id = \"separador2\"></div>\r\n  <div id = \"derecha\">\r\n    <ngx-codemirror\r\n      [options] = \"editorXMLSalidaOptions\"\r\n      [(ngModel)] = \"xmlSalida\">\r\n    </ngx-codemirror>\r\n  </div> \r\n</div>\r\n\r\n<div id = \"grafo\" *ngIf=\"grafo == true\">\r\n  <app-grafico></app-grafico>\r\n</div>\r\n\r\n<div id = \"tablaS\" *ngIf = \"tabla == true\">\r\n  <app-tabla-xml></app-tabla-xml>\r\n</div>\r\n\r\n<div id = \"bnf\" *ngIf = \"bnf == true\">\r\n  <app-bnf></app-bnf>\r\n</div>";
+    __webpack_exports__["default"] = "<div id = \"barra\">\n  <mat-toolbar color = \"warn\">\n    <span>Tytus X</span>\n\n    <div class = \"spacer\"></div>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"archivo\">Archivo</button>\n    <mat-menu #archivo = \"matMenu\">\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <label for = \"file\">Abrir XML</label>\n            <input type = \"file\"\n            id = \"file\"\n            class = \"hidend\"\n            (change) = \"abrirXML($event.target.files)\">\n        </button>\n        <button mat-menu-item>\n            <mat-icon>attach_file</mat-icon>\n            <span>Abrir XPath</span>\n        </button>\n        <button mat-menu-item>\n            <mat-icon>delete</mat-icon>\n            <span>Limpiar</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"ejecutar\">Ejecutar</button>\n    <mat-menu #ejecutar = \"matMenu\">\n        <button mat-menu-item (click) = \"ejecutarAscendente()\">\n            <mat-icon>keyboard_arrow_up</mat-icon>\n            <span>Ascendete</span>\n        </button>\n        <button mat-menu-item (click) = \"ejecutarDescendente()\"> \n            <mat-icon>keyboard_arrow_down</mat-icon>\n            <span>Descendente</span>\n        </button>\n    </mat-menu>\n\n    <button mat-raised-button color = \"accent\" [matMenuTriggerFor] = \"reporte\">Reportes</button>\n    <mat-menu #reporte = \"matMenu\">\n        <button mat-menu-item (click) = \"reporteTablaSimbolosXML()\">\n            <span>Tabla de simbolos XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXML()\">\n          <span>CST XML</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteASTXPATH()\">\n          <span>AST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteCSTXPATH()\">\n          <span>CST XPATH</span>\n        </button>\n        <button mat-menu-item (click) = \"reporteBNFXML()\">\n          <span>BNF XML</span>\n        </button>  \n        <button mat-menu-item (click) = \"reporteBNFXPATH()\">\n          <span>BNF XPATH</span>\n        </button>  \n      </mat-menu>\n</mat-toolbar>\n</div>\n\n<div id = \"superior\">\n  <ngx-codemirror\n    [options] = \"editorQueryOptions\"\n    [(ngModel)] = \"querys\">\n  </ngx-codemirror>\n</div>\n\n<div id = \"separador1\"></div>\n\n<div id = \"inferior\">\n  <div id = \"izquierda\">\n    <ngx-codemirror\n      [options] = \"editorXMLEntradaOptions\"\n      [(ngModel)] = \"xmlEntrada\">\n    </ngx-codemirror>\n  </div>\n  <div id = \"separador2\"></div>\n  <div id = \"derecha\">\n    <ngx-codemirror\n      [options] = \"editorXMLSalidaOptions\"\n      [(ngModel)] = \"xmlSalida\">\n    </ngx-codemirror>\n  </div> \n</div>\n\n<div id = \"grafo\" *ngIf=\"grafo == true\">\n  <app-grafico></app-grafico>\n</div>\n\n<div id = \"tablaS\" *ngIf = \"tabla == true\">\n  <app-tabla-xml></app-tabla-xml>\n</div>\n\n<div id = \"bnf\" *ngIf = \"bnf == true\">\n  <app-bnf></app-bnf>\n</div>";
     /***/
   },
 
@@ -143,7 +143,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\r\n\r\n    <!--- Note that these columns can be defined in any order.\r\n    The actual rendered columns are set as a property on the row definition\" -->\r\n    <!-- Position Column -->\r\n    <ng-container matColumnDef=\"no\">\r\n      <th mat-header-cell *matHeaderCellDef> No. </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Name Column -->\r\n    <ng-container matColumnDef=\"nombre\">\r\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.nombre}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Weight Column -->\r\n    <ng-container matColumnDef=\"tipo\">\r\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\r\n    </ng-container>\r\n\r\n    <!-- Symbol Column -->\r\n    <ng-container matColumnDef=\"valor\">\r\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"ambito\">\r\n        <th mat-header-cell *matHeaderCellDef> Ambito </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.ambito}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"tipoEtiqueta\">\r\n      <th mat-header-cell *matHeaderCellDef> Tipo de etiqueta </th>\r\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipoEtiqueta}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"fila\">\r\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\r\n    </ng-container>\r\n\r\n    <ng-container matColumnDef=\"columna\">\r\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\r\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\r\n    </ng-container>\r\n\r\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\r\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\r\n</table>";
+    __webpack_exports__["default"] = "<table mat-table [dataSource]=\"simbolos\" class=\"mat-elevation-z8\">\n\n    <!--- Note that these columns can be defined in any order.\n    The actual rendered columns are set as a property on the row definition\" -->\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"no\">\n      <th mat-header-cell *matHeaderCellDef> No. </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.no}} </td>\n    </ng-container>\n\n    <!-- Name Column -->\n    <ng-container matColumnDef=\"nombre\">\n      <th mat-header-cell *matHeaderCellDef> Nombre </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.nombre}} </td>\n    </ng-container>\n\n    <!-- Weight Column -->\n    <ng-container matColumnDef=\"tipo\">\n      <th mat-header-cell *matHeaderCellDef> Tipo </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipo}} </td>\n    </ng-container>\n\n    <!-- Symbol Column -->\n    <ng-container matColumnDef=\"valor\">\n      <th mat-header-cell *matHeaderCellDef> Valor </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.valor}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"ambito\">\n        <th mat-header-cell *matHeaderCellDef> Ambito </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.ambito}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"tipoEtiqueta\">\n      <th mat-header-cell *matHeaderCellDef> Tipo de etiqueta </th>\n      <td mat-cell *matCellDef=\"let element\"> {{element.tipoEtiqueta}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"fila\">\n        <th mat-header-cell *matHeaderCellDef> Fila </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.linea}} </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"columna\">\n        <th mat-header-cell *matHeaderCellDef> Columna </th>\n        <td mat-cell *matCellDef=\"let element\"> {{element.columna}} </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>";
     /***/
   },
 
@@ -3658,6 +3658,287 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   },
 
   /***/
+  "./src/analizadorXML/Instrucciones/Busqueda/xpathBusqueda.ts":
+  /*!*******************************************************************!*\
+    !*** ./src/analizadorXML/Instrucciones/Busqueda/xpathBusqueda.ts ***!
+    \*******************************************************************/
+
+  /*! exports provided: xpathBusqueda */
+
+  /***/
+  function srcAnalizadorXMLInstruccionesBusquedaXpathBusquedaTs(module, __webpack_exports__, __webpack_require__) {
+    "use strict";
+
+    __webpack_require__.r(__webpack_exports__);
+    /* harmony export (binding) */
+
+
+    __webpack_require__.d(__webpack_exports__, "xpathBusqueda", function () {
+      return xpathBusqueda;
+    });
+
+    var xpathBusqueda = /*#__PURE__*/function () {
+      function xpathBusqueda() {
+        _classCallCheck(this, xpathBusqueda);
+      }
+
+      _createClass(xpathBusqueda, [{
+        key: "getNodesByFilters",
+        value: function getNodesByFilters(filter, param, objects) {
+          var salida; // solo el nombre del root ej: mundo
+
+          if (filter === '1') {
+            salida = this.findByRootName(param, objects);
+          } // rutas 
+
+
+          if (filter === '2') {
+            salida = this.startTypeSearch(param, objects);
+          } //multiples rutas ej. /mundo/continente/pais1/nombre|/mundo/continente/pais/nombre
+
+
+          if (filter === '3') {
+            salida = [];
+
+            if (param.includes('|')) {
+              var parameters = param.split('|'); //console.log('val nodo m ', parameters);
+
+              for (var i = 0; i < parameters.length; i++) {
+                salida.push(this.startTypeSearch(parameters[i], objects));
+              }
+            }
+          }
+
+          return salida;
+        }
+      }, {
+        key: "startTypeSearch",
+        value: function startTypeSearch(param, objects) {
+          // console.log('param ', param);
+          param = param.replace('//', '/-'); // console.log('param replace ', param);
+          //ruta relativa, inicia con /        
+
+          if (param.startsWith('/')) {
+            /*console.log('val nodo\n\t', */
+            return this.initSearchMethod(param.substring(1), objects); //);
+          } else {
+            /*console.log('val nodo\n\t',*/
+            return this.initSearchMethod(param, objects); //);
+          }
+        } // 1. Obtener cuando solo se escribe el nombre
+
+      }, {
+        key: "findByRootName",
+        value: function findByRootName(param, objects) {
+          var _this5 = this;
+
+          var valorNodo = '';
+          objects.forEach(function (obj) {
+            if (obj.identificador === param) {
+              valorNodo += '\n - ';
+
+              if (obj.listaObjetos.length !== 0) {
+                valorNodo += _this5.findValuesNodes(obj);
+              } else {
+                valorNodo += obj.text;
+              }
+            }
+          });
+          return valorNodo;
+        } // 2. Obtener cuando la ruta empiza por el root '/'
+
+      }, {
+        key: "initSearchMethod",
+        value: function initSearchMethod(param, objects) {
+          var qryValue = '';
+          var parameters = param.split('/');
+
+          for (var i = 0; i < objects.length; i++) {
+            qryValue = this.findByRootNode(parameters, objects[i]);
+          }
+
+          return qryValue;
+        }
+      }, {
+        key: "findByRootNode",
+        value: function findByRootNode(param, nodeObject) {
+          var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+          var parent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+          // console.log('\nNODE: ', nodeObject.identificador);
+          // console.log('PARAM: ', index);
+          // console.log('TMP ROOT: ', param[index]);
+          var valueQry = '';
+          var tmp = index + 1;
+          var root = param[index];
+          var hasDoubleSlash = false;
+
+          if (root.startsWith('-')) {
+            hasDoubleSlash = true;
+          }
+
+          if (nodeObject.identificador === root && tmp === param.length) {
+            //console.log('FINAL NODE ', nodeObject.identificador);
+            valueQry += this.findValuesNodes(nodeObject);
+          } else if (nodeObject.identificador === root && param.length > tmp) {
+            var arr = nodeObject.listaObjetos;
+            var secondR = param[tmp]; // console.log('SECOND ROOT', secondR);
+
+            var hasPassedDot = false;
+            var hasAtribute = false;
+
+            for (var i = 0; i < arr.length; i++) {
+              var tmpParam = param;
+
+              if (arr[i].identificador === secondR) {
+                valueQry += "".concat(this.findByRootNode(tmpParam, arr[i], tmp, nodeObject), "\n");
+              } else if (secondR.startsWith('-')) {
+                valueQry += "".concat(this.findByRootNode(tmpParam, arr[i], tmp, nodeObject), "\n");
+              } else if (secondR === '.' && !hasPassedDot) {
+                hasPassedDot = true;
+                valueQry += this.findValuesNodes(nodeObject);
+              } else if (secondR === '..' && !hasPassedDot) {
+                hasPassedDot = true;
+                valueQry += this.findValuesNodes(parent);
+              } else if (secondR.startsWith('@*') && !hasAtribute) {
+                hasAtribute = true;
+                valueQry += this.findAllAtribute(nodeObject);
+              } else if (secondR.startsWith('@') && !hasAtribute) {
+                hasAtribute = true;
+                valueQry += this.findAtribute(nodeObject, secondR);
+              }
+            }
+
+            if (arr.length === 0 && secondR === '.') {
+              valueQry += this.findValuesNodes(nodeObject);
+            } else if (arr.length === 0 && secondR === '..') {
+              valueQry += this.findValuesNodes(parent);
+            } else if (arr.length === 0 && secondR.startsWith('@*')) {
+              valueQry += this.findAllAtribute(nodeObject);
+            } else if (arr.length === 0 && secondR.startsWith('@')) {
+              valueQry += this.findAtribute(nodeObject, secondR);
+            }
+          } else if (hasDoubleSlash) {
+            //  console.log('TIENE SLASH');
+            var tmpName = param[index].substring(1);
+
+            if (tmpName === nodeObject.identificador && tmp === param.length) {
+              valueQry += this.findValuesNodes(nodeObject);
+            } else if (tmpName === nodeObject.identificador) {
+              var arr = nodeObject.listaObjetos;
+              var secondR = param[tmp]; // console.log('SECOND ROOT+', secondR);
+
+              var hasPassedDot = false;
+              var hasAtribute = false;
+
+              for (var _i = 0; _i < arr.length; _i++) {
+                var tmpParam = param;
+
+                if (arr[_i].identificador === secondR) {
+                  valueQry += "".concat(this.findByRootNode(tmpParam, arr[_i], tmp, nodeObject), "\n");
+                } else if (secondR.startsWith('-')) {
+                  valueQry += "".concat(this.findByRootNode(tmpParam, arr[_i], tmp, nodeObject), "\n");
+                } else if (secondR === '.' && !hasPassedDot) {
+                  hasPassedDot = true;
+                  valueQry += this.findValuesNodes(nodeObject);
+                } else if (secondR === '..' && !hasPassedDot) {
+                  hasPassedDot = true;
+                  valueQry += this.findValuesNodes(parent);
+                } else if (secondR.startsWith('@*') && !hasAtribute) {
+                  hasAtribute = true;
+                  valueQry += this.findAllAtribute(nodeObject);
+                } else if (secondR.startsWith('@') && !hasAtribute) {
+                  hasAtribute = true;
+                  valueQry += this.findAtribute(nodeObject, secondR);
+                }
+              }
+
+              if (arr.length === 0 && secondR === '.') {
+                valueQry += this.findValuesNodes(nodeObject);
+              } else if (arr.length === 0 && secondR === '..') {
+                valueQry += this.findValuesNodes(parent);
+              } else if (arr.length === 0 && secondR.startsWith('@*')) {
+                valueQry += this.findAllAtribute(nodeObject);
+              } else if (arr.length === 0 && secondR.startsWith('@')) {
+                valueQry += this.findAtribute(nodeObject, secondR);
+              }
+            } else {
+              if (param[index].startsWith('-@*')) {
+                valueQry += this.findAllAtribute(nodeObject);
+              } else if (param[index].startsWith('-@')) {
+                valueQry += this.findAtribute(nodeObject, param[index].substring(1));
+              } else if (param[index].startsWith('-*')) {
+                valueQry += "NODOS: \n\t ".concat(this.findValuesNodes(nodeObject)); // valueQry += `ATRIBUTOS: \n\t ${this.findAllAtribute(nodeObject)}`;
+              }
+
+              var arr1 = nodeObject.listaObjetos;
+
+              for (var _i2 = 0; _i2 < arr1.length; _i2++) {
+                var tmpParam = param;
+                valueQry += "".concat(this.findByRootNode(tmpParam, arr1[_i2], index));
+              }
+            }
+          } else {
+            console.log('ELSEEEEEEEEEEE', nodeObject.identificador, '-', param);
+          }
+
+          return valueQry;
+        } // Obtener el valor de los nodos
+
+      }, {
+        key: "findValuesNodes",
+        value: function findValuesNodes(nodeList) {
+          var _this6 = this;
+
+          var texto = ' ';
+
+          if (nodeList.listaObjetos.length !== 0) {
+            nodeList.listaObjetos.forEach(function (obj) {
+              texto += _this6.findValuesNodes(obj);
+            });
+          } else {
+            texto += "<".concat(nodeList.identificador, ">").concat(nodeList.texto, "</").concat(nodeList.cierre, ">\n");
+          } // console.log('TEXTO ', texto);
+
+
+          return texto;
+        }
+      }, {
+        key: "findAtribute",
+        value: function findAtribute(nodeList, param) {
+          var texto = ' ';
+
+          if (nodeList.listaAtributos.length !== 0) {
+            nodeList.listaAtributos.forEach(function (obj) {
+              if (obj.identificador === param.substring(1)) {
+                texto += "- ".concat(obj.valor, "\n");
+              }
+            });
+          }
+
+          return texto;
+        }
+      }, {
+        key: "findAllAtribute",
+        value: function findAllAtribute(nodeList) {
+          var texto = ' ';
+
+          if (nodeList.listaAtributos.length !== 0) {
+            nodeList.listaAtributos.forEach(function (obj) {
+              texto += "- ".concat(obj.valor, "\n");
+            });
+          }
+
+          return texto;
+        }
+      }]);
+
+      return xpathBusqueda;
+    }();
+    /***/
+
+  },
+
+  /***/
   "./src/analizadorXML/index.ts":
   /*!************************************!*\
     !*** ./src/analizadorXML/index.ts ***!
@@ -3729,7 +4010,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             tablaRep: reporteTabla,
             bnfRep: reporteBNF,
             cstRep: reporteCST,
-            encoding: salidaG.encoding
+            encoding: salidaG.encoding,
+            objetos: salidaG.objetos
           };
           return ret;
         }
@@ -3813,7 +4095,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             tablaRep: reporteTabla,
             bnfRep: reporteBNF,
             cstRep: reporteCST,
-            encoding: salidaG.encoding
+            encoding: salidaG.encoding,
+            objetos: salidaG.objetos
           };
           return ret;
         }
@@ -3858,7 +4141,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       _createClass(Arbol, [{
         key: "crearGrafoAST",
         value: function crearGrafoAST() {
-          var _this5 = this;
+          var _this7 = this;
 
           this.dot = "digraph AST{\n";
           this.dot += "\"raiz\" [label = \"Raiz\"]\n";
@@ -3879,7 +4162,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             }
           } else {
             this.objetos.forEach(function (objeto) {
-              _this5.dot += _this5.generarNodoAST(objeto, 'raiz');
+              _this7.dot += _this7.generarNodoAST(objeto, 'raiz');
             });
           }
 
@@ -3907,7 +4190,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "crearGrafoCST",
         value: function crearGrafoCST() {
-          var _this6 = this;
+          var _this8 = this;
 
           this.dot = "digraph AST {\n";
           this.dot += "\"raiz\" [label = \"Raiz\"]\n";
@@ -3930,7 +4213,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             }
           } else {
             this.objetos.forEach(function (objeto) {
-              _this6.dot += _this6.generarNodoCST(objeto, 'raiz');
+              _this8.dot += _this8.generarNodoCST(objeto, 'raiz');
             });
           }
 
@@ -8947,7 +9230,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ibmYvYm5mLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL2JuZi9ibmYuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG59Il19 */";
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ibmYvYm5mLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL2JuZi9ibmYuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -9030,7 +9313,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "#vis {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiN2aXMge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbn0iXX0= */";
+    __webpack_exports__["default"] = "#vis {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9ncmFmaWNvL2dyYWZpY28uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiN2aXMge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -9145,7 +9428,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "#barra {\r\n    height: 06vh;\r\n}\r\n\r\n.spacer {\r\n    flex: 1 1 auto;\r\n}\r\n\r\n#superior { \r\n    height: 24vh;\r\n}\r\n\r\n#separador1 {\r\n    height: 01vh;\r\n    background-color: #f44336;\r\n}\r\n\r\n#inferior {\r\n    height: 69vh;\r\n    width: 100vw;\r\n    display: flex;\r\n}\r\n\r\n#izquierda {\r\n    width: 49.50vw;\r\n}\r\n\r\n#separador2 {\r\n    width: 01vw;\r\n    background-color: #f44336;\r\n}\r\n\r\n#derecha {\r\n    width: 49.50vw;\r\n}\r\n\r\n#grafo {\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI2JhcnJhIHtcclxuICAgIGhlaWdodDogMDZ2aDtcclxufVxyXG5cclxuLnNwYWNlciB7XHJcbiAgICBmbGV4OiAxIDEgYXV0bztcclxufVxyXG5cclxuI3N1cGVyaW9yIHsgXHJcbiAgICBoZWlnaHQ6IDI0dmg7XHJcbn1cclxuXHJcbiNzZXBhcmFkb3IxIHtcclxuICAgIGhlaWdodDogMDF2aDtcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XHJcbn1cclxuXHJcbiNpbmZlcmlvciB7XHJcbiAgICBoZWlnaHQ6IDY5dmg7XHJcbiAgICB3aWR0aDogMTAwdnc7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG4jaXpxdWllcmRhIHtcclxuICAgIHdpZHRoOiA0OS41MHZ3O1xyXG59XHJcblxyXG4jc2VwYXJhZG9yMiB7XHJcbiAgICB3aWR0aDogMDF2dztcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICNmNDQzMzY7XHJcbn1cclxuXHJcbiNkZXJlY2hhIHtcclxuICAgIHdpZHRoOiA0OS41MHZ3O1xyXG59XHJcblxyXG4jZ3JhZm8ge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbn0iXX0= */";
+    __webpack_exports__["default"] = "#barra {\n    height: 06vh;\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\n#superior { \n    height: 24vh;\n}\n\n#separador1 {\n    height: 01vh;\n    background-color: #f44336;\n}\n\n#inferior {\n    height: 69vh;\n    width: 100vw;\n    display: flex;\n}\n\n#izquierda {\n    width: 49.50vw;\n}\n\n#separador2 {\n    width: 01vw;\n    background-color: #f44336;\n}\n\n#derecha {\n    width: 49.50vw;\n}\n\n#grafo {\n    width: 100%;\n    height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxZQUFZO0FBQ2hCOztBQUVBO0lBQ0ksWUFBWTtJQUNaLHlCQUF5QjtBQUM3Qjs7QUFFQTtJQUNJLFlBQVk7SUFDWixZQUFZO0lBQ1osYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGNBQWM7QUFDbEI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcGFnaW5hcy9wcmluY2lwYWwvaG9tZS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI2JhcnJhIHtcbiAgICBoZWlnaHQ6IDA2dmg7XG59XG5cbi5zcGFjZXIge1xuICAgIGZsZXg6IDEgMSBhdXRvO1xufVxuXG4jc3VwZXJpb3IgeyBcbiAgICBoZWlnaHQ6IDI0dmg7XG59XG5cbiNzZXBhcmFkb3IxIHtcbiAgICBoZWlnaHQ6IDAxdmg7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2Y0NDMzNjtcbn1cblxuI2luZmVyaW9yIHtcbiAgICBoZWlnaHQ6IDY5dmg7XG4gICAgd2lkdGg6IDEwMHZ3O1xuICAgIGRpc3BsYXk6IGZsZXg7XG59XG5cbiNpenF1aWVyZGEge1xuICAgIHdpZHRoOiA0OS41MHZ3O1xufVxuXG4jc2VwYXJhZG9yMiB7XG4gICAgd2lkdGg6IDAxdnc7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2Y0NDMzNjtcbn1cblxuI2RlcmVjaGEge1xuICAgIHdpZHRoOiA0OS41MHZ3O1xufVxuXG4jZ3JhZm8ge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGhlaWdodDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -9216,6 +9499,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
     /*! @angular/router */
     "./node_modules/@angular/router/__ivy_ngcc__/fesm2015/router.js");
+    /* harmony import */
+
+
+    var _analizadorXML_Instrucciones_Busqueda_xpathBusqueda__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
+    /*! ../../../analizadorXML/Instrucciones/Busqueda/xpathBusqueda */
+    "./src/analizadorXML/Instrucciones/Busqueda/xpathBusqueda.ts");
 
     var HomeComponent = /*#__PURE__*/function () {
       function HomeComponent(_servicio, _router) {
@@ -9286,13 +9575,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
       }, {
         key: "abrirXML",
         value: function abrirXML(files) {
-          var _this7 = this;
+          var _this9 = this;
 
           this.xmlEntrada = files.item(0);
           var fileReader = new FileReader();
 
           fileReader.onload = function (e) {
-            _this7.xmlEntrada = fileReader.result;
+            _this9.xmlEntrada = fileReader.result;
             console.log(fileReader.result);
           };
 
@@ -9307,6 +9596,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var ascXpath = new _analizadores_index__WEBPACK_IMPORTED_MODULE_4__["AnalizadosAscXpath"]();
           var ret = ascXML.ejecutarCodigo(this.xmlEntrada);
           var ret1 = ascXpath.ejecutarCodigo(this.querys);
+          this.simbolos = ret.objetos;
           this.tablaXML = ret.tablaRep;
           this.cstXML = ret.cstRep;
           this.bnfXML = ret.bnfRep;
@@ -9315,7 +9605,27 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           this.bnfXpath = ret1.bnfRep;
           this.astXpath = ret1.astRep;
           this.cstXpath = ret1.cstRep;
+          this.obtenerConsulta(this.queryMod, this.simbolos);
           alert("Analisis concluido");
+        }
+      }, {
+        key: "obtenerConsulta",
+        value: function obtenerConsulta(query, tabla) {
+          var buscador = new _analizadorXML_Instrucciones_Busqueda_xpathBusqueda__WEBPACK_IMPORTED_MODULE_8__["xpathBusqueda"]();
+
+          if (query.includes("|")) {
+            var multiple = buscador.getNodesByFilters("3", query, tabla);
+            this.xmlSalida = "";
+
+            for (var i = 0; i < multiple.length; i++) {
+              this.xmlSalida += multiple[i];
+              this.xmlSalida += "\n";
+            }
+          } else if (query[0] !== "/" && query[0] !== "//") {
+            this.xmlSalida = buscador.getNodesByFilters("1", query, tabla);
+          } else {
+            this.xmlSalida = buscador.getNodesByFilters("2", query, tabla);
+          }
         }
       }, {
         key: "ejecutarDescendente",
@@ -9326,6 +9636,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           var descXPATH = new _analizadores_indexDesc__WEBPACK_IMPORTED_MODULE_5__["AnalizadosAscXpath"]();
           var ret = descXML.ejecutarCodigo(this.xmlEntrada);
           var ret1 = descXPATH.ejecutarCodigo(this.querys);
+          this.simbolos = ret.objetos;
           this.tablaXML = ret.tablaRep;
           this.cstXML = ret.cstRep;
           this.bnfXML = ret.bnfRep;
@@ -9333,6 +9644,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           this.bnfXpath = ret1.bnfRep;
           this.astXpath = ret1.astRep;
           this.cstXpath = ret1.cstRep;
+          this.obtenerConsulta(this.queryMod, this.simbolos);
           alert("Analisis concluido");
         }
       }, {
@@ -9429,7 +9741,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "table {\r\n    width: 100%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14bWwvdGFibGEteG1sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhtbC90YWJsYS14bWwuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG59Il19 */";
+    __webpack_exports__["default"] = "table {\n    width: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcGFnaW5hcy90YWJsYS14bWwvdGFibGEteG1sLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0FBQ2YiLCJmaWxlIjoic3JjL2FwcC9wYWdpbmFzL3RhYmxhLXhtbC90YWJsYS14bWwuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbn0iXX0= */";
     /***/
   },
 
@@ -9754,7 +10066,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
   /***/
   function _(module, exports, __webpack_require__) {
     module.exports = __webpack_require__(
-    /*! D:\Documents\Compiladores2\OLC2_Proyecto\src\main.ts */
+    /*! /home/chepe/OLC2_Proyecto/src/main.ts */
     "./src/main.ts");
     /***/
   },
@@ -9819,4 +10131,4 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /***/
   }
 }, [[0, "runtime", "vendor"]]]);
-//# sourceMappingURL=main-es5.a9c8f33e6581095371c5.js.map
+//# sourceMappingURL=main-es5.722b877f4b2207f6124f.js.map
