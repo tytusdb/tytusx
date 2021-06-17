@@ -10,6 +10,7 @@ class RootAtributeIdentifier {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent.findAtributesByNombreElemento(this.identifier);
+        let ts = ent.findAtributesByNombreElemento(this.identifier);
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }
