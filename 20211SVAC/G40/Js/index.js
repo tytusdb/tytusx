@@ -73,6 +73,7 @@ function CargarXML(){
                         salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
                         salidaRecursiva = "";
                         salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        //console.log(salidaXPath);
                         GenerarSalidaXPath(salidaXPath);
 
                         if(salidaRecursiva!=""){
@@ -83,8 +84,9 @@ function CargarXML(){
 
                         contador++;
                     } );
-             
+                    
                     SetSalida(salidaGlobal);
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -180,7 +182,7 @@ function CargarXMLDesc(){
                     } );
                     salidaGlobal = salidaGlobal.replaceAll(" =\"\"", "");
                     SetSalida(salidaGlobal);
-
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
                 }
@@ -276,7 +278,8 @@ function ExtraerCodificacion(objetos){
         } else {
 
             if (objetos[i].identificador1 == "version" && objetos[i].identificador2 == "version"){
-                codificacionGlobal = objetos[i].texto;
+                //codificacionGlobal = objetos[i].texto;
+                DefinirCodificacion(objetos[i].texto);
                 console.log("La nueva codificacion es: "+codificacionGlobal);
             }         
             objetos.splice(i,1);

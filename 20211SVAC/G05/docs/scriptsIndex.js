@@ -101,6 +101,13 @@ document.getElementById("btnGraficaAST").addEventListener('click', function() {
     myBundle.realizarGraficaAST();
 });
 
+document.getElementById("btnBuscar").addEventListener('click', function() {
+    var texto= document.getElementById("busqueda").value;
+    var variable= myBundle.ejecutarXpath(texto);
+    document.getElementById("textAreaSalida").value=variable;
+});
+
+
 
 let tituloReporte="Tabla de Reporte"
 

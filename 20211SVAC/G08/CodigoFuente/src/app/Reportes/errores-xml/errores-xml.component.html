@@ -1,0 +1,32 @@
+<mat-card>
+</mat-card>
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>Lista Errores en XML</mat-card-title>
+  </mat-card-header>
+  <div mat-card-image></div>
+  <mat-card-content>
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fila</th>
+            <th scope="col">Columna</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Descripcion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of source;index as i;">
+            <th scope="row">{{i}}</th>
+            <td>{{item.Fila}}</td>
+            <td>{{item.Columna}}</td>
+            <td>{{item.Tipo}}</td>
+            <td>{{item.Descripcion}}</td>
+          </tr>          
+        </tbody>
+      </table>
+  </mat-card-content>
+ 
+</mat-card>

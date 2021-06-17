@@ -111,10 +111,12 @@
                 <table id="symbolTableXml" class="display responsive nowrap ">
                     <thead>
                         <tr>
-                            <th>Error Typer</th>
+                            <th>Identifier</th>
+                            <th>Type</th>
+                            <th>Value</th>
                             <th>Row</th>
                             <th>Column</th>
-                            <th>Description</th>
+                            <th>Environment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,10 +124,12 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Error Typer</th>
+                            <th>Identifier</th>
+                            <th>Type</th>
+                            <th>Value</th>
                             <th>Row</th>
                             <th>Column</th>
-                            <th>Description</th>
+                            <th>Environment</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -368,7 +372,22 @@
     <!-- ============================= MY SCRIPT ============================== -->
     <script  src="js/main.js"></script>
     
+    <!-- ============================= GRAMMAR ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Gramatica/gramasc.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Gramatica/gramdesc.js"></script>
+    <!-- <script type="text/javascript" src="analyzers/xml/Gramatica/gramxpath.js"></script> -->
     
+    <!-- ============================= ENVIRONMENT ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Entornos/Raiz.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Entornos/Simbolo.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Entornos/Tabla_Simbolos.js"></script>
+
+    <!-- ============================= EXPRESSIONS ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Expresiones/Objeto.js"></script>
+    <script type="text/javascript" src="analyzers/xml/Expresiones/Atributo.js"></script>
+
+    <!-- ============================= INSTRUCTIONS ============================== -->
+    <script type="text/javascript" src="analyzers/xml/Instrucciones/Consulta.js"></script>
 
 </body>
 </html>
