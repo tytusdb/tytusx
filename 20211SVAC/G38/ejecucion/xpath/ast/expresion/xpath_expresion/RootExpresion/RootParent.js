@@ -9,6 +9,7 @@ class RootParent {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent.findAllParents();
+        let ts = ent.findAllParents();
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

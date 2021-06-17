@@ -169,7 +169,6 @@ ng deploy --base-href "https://tytusdb.github.io/tytusx/20211SVAC/G31/"
 | 'decimal'
 | 'digito'
 
-
 ``` 
 ## Gramática Descendente XML <a name="idDescXML"></a>
 
@@ -206,14 +205,346 @@ ng deploy --base-href "https://tytusdb.github.io/tytusx/20211SVAC/G31/"
 <ATRIBUTO> ::= 'id' '=' 'cadena'
 
 <TEXTO>: 'dentro'
+
 ```
 
 ## Gramática Ascendente XPATH <a name="idAscXPATH"></a>
 
 ```bash
+
+<RAIZ> ::= <QUERIES> EOF  
+    | EOF           
+    
+
+<QUERIES> ::= <QUERIES> '|' <QUERY>   
+        | <QUERY>              
+        
+
+<QUERY> ::= '/'                   
+      | '/' <PATH_EXPR>         
+      | '//' <PATH_EXPR>        
+      | <PATH_EXPR>             
+      
+
+<PATH_EXPR> ::= <PATH_EXPR> '/' <STEP_EXPR>   
+          | <PATH_EXPR> '//' <STEP_EXPR>  
+          | <STEP_EXPR>                 
+          
+
+<STEP_EXPR> ::= <POST_FIX_EXPR>  
+          | <AXIS_STEP>       
+          
+
+<AXIS_STEP> ::= <REVERSE_STEP>                    
+          | <REVERSE_STEP> <PREDICATE_LIST>     
+          | <FORWARD_STEP>                    
+          | <FORWARD_STEP> <PREDICATE_LIST>     
+          
+
+<FORWARD_STEP> ::= 'attribute' '::' <NODE_TEST>             
+             | 'child' '::' <NODE_TEST>                 
+             | 'descendant' '::' <NODE_TEST>            
+             | 'descendant-or-self' '::' <NODE_TEST>    
+             | 'following' '::' <NODE_TEST>             
+             | 'following-sibling' '::' <NODE_TEST>     
+             | 'namespace' '::' <NODE_TEST>             
+             | 'self' '::' <NODE_TEST>                  
+             | '@' <NODE_TEST>                          
+             | <NODE_TEST>                              
+             
+
+<REVERSE_STEP> ::= 'ancestor' '::' <NODE_TEST>              
+             | 'ancestor-or-self' '::' <NODE_TEST>      
+             | 'parent' '::' <NODE_TEST>                
+             | 'preceding' '::' <NODE_TEST>             
+             | 'preceding-sibling' '::' <NODE_TEST>     
+             | '..'                                   
+             
+
+<NODE_TEST> ::= <KIND_TEST>  
+          | <EQNAME>      
+          | '*'         
+          
+
+<POST_FIX_EXPR> ::= <PRIMARY_EXPR>                  
+              | <PRIMARY_EXPR> <PREDICATE_LIST>   
+              
+
+<PREDICATE_LIST> ::= <PREDICATE_LIST> <PREDICATE>   
+               | <PREDICATE>                  
+               
+
+<PREDICATE> ::= '[' <EXPR> ']'    
+          
+
+<PRIMARY_EXPR> ::= <PARENTHESIZED_EXPR>   
+             | '.'                  
+             | 'cadena'             
+             | 'digito'             
+             | 'decimal'            
+             | '[' ']'             
+             | '[' <QUERY_LIST> ']'   
+             
+
+<PARENTHESIZED_EXPR> ::= '(' ')'        
+                   | '(' <EXPR> ')'   
+                   
+
+<QUERY_LIST> ::= <QUERY_LIST> ',' <QUERY>   
+           | <QUERY>                  
+           
+
+<KIND_TEST> ::= 'text' '(' ')'  
+          | 'node' '(' ')'  
+          | 'last' '(' ')'  
+          | 'position' '(' ')'  
+          
+
+<EQNAME> ::= 'nodename'               
+       | 'ancestor-or-self'       
+       | 'ancestor'               
+       | 'attribute'              
+       | 'child'                  
+       | 'descendant-or-self'     
+       | 'descendant'             
+       | 'following-sibling'      
+       | 'following'              
+       | 'last'                   
+       | 'namespace'              
+       | 'node'                   
+       | 'parent'                 
+       | 'position'               
+       | 'preceding-sibling'      
+       | 'preceding'              
+       | 'self'                   
+       | 'text'                  
+       | 'and'                    
+       | 'or'                     
+       | 'div'                   
+       | 'mod'                    
+       
+
+<EXPR> ::= <EXPR> ',' <EXPR_SINGLE>   
+     | <EXPR_SINGLE>            
+     
+
+<EXPR_SINGLE> ::= <OR_EXPR> 
+            
+
+<OR_EXPR> ::= <AND_EXPR>                  
+        | <OR_EXPR> 'or' <AND_EXPR>     
+        
+
+<AND_EXPR> ::= <COMPARISON_EXPR>                         
+         | <AND_EXPR> 'and' <COMPARISON_EXPR>           
+         
+
+<COMPARISON_EXPR> ::= <ADDITIVE_EXPR>                       
+                | <ADDITIVE_EXPR> '<' <ADDITIVE_EXPR>     
+                | <ADDITIVE_EXPR> '>' <ADDITIVE_EXPR>     
+                | <ADDITIVE_EXPR> '<=' <ADDITIVE_EXPR>    
+                | <ADDITIVE_EXPR> '>=' <ADDITIVE_EXPR>    
+                | <ADDITIVE_EXPR> '=' <ADDITIVE_EXPR>     
+                | <ADDITIVE_EXPR> '!=' <ADDITIVE_EXPR>    
+                
+
+<ADDITIVE_EXPR> ::= <MULTIPLICATIVE_EXPR>                          
+              | <ADDITIVE_EXPR> '+' <MULTIPLICATIVE_EXPR>        
+              | <ADDITIVE_EXPR> '-' <MULTIPLICATIVE_EXPR>         
+              
+
+<MULTIPLICATIVE_EXPR> ::= <UNARY_EXPR>                            
+                    | <MULTIPLICATIVE_EXPR> '*' <UNARY_EXPR>      
+                    | <MULTIPLICATIVE_EXPR> 'div' <UNARY_EXPR>    
+                    
+
+<UNARY_EXPR>  ::= <QUERY>                        
+            | '-' <UNARY_EXPR> %prec UMINUS     
+            | '+' <UNARY_EXPR> %prec UPLUS     
+                  
 ```
 
 ## Gramática Descendente XPATH <a name="idDescXPATH"></a>
 
 ```bash
+
+<RAIZ> ::= <QUERIES> EOF  
+    | EOF           
+    
+
+<QUERIES> ::= <QUERY> <QUERIES_PRIMA> 
+        
+
+<QUERIES_PRIMA> ::= '|' <QUERY> <QUERIES_PRIMA> 
+              |                         
+              
+
+<QUERY> ::= '/'                   
+      | '/' <PATH_EXPR>         
+      | '//' <PATH_EXPR>        
+      | <PATH_EXPR>             
+      
+
+<PATH_EXPR> ::= <STEP_EXPR> <PATH_EXPR_PRIMA> 
+          
+
+<PATH_EXPR_PRIMA> ::= '/' <STEP_EXPR> <PATH_EXPR_PRIMA>   
+                | '//' <STEP_EXPR> <PATH_EXPR_PRIMA>  
+                |                                 
+                
+
+<STEP_EXPR> ::= <POST_FIX_EXPR>   
+          | <AXIS_STEP>      
+          
+
+<AXIS_STEP> ::= <REVERSE_STEP>                    
+          | <REVERSE_STEP> <PREDICATE_LIST>     
+          | <FORWARD_STEP>                    
+          | <FORWARD_STEP> <PREDICATE_LIST>     
+          
+
+<FORWARD_STEP> ::= 'attribute' '::' <NODE_TEST>            
+             | 'child' '::' <NODE_TEST>                 
+             | 'descendant' '::' <NODE_TEST>            
+             | 'descendant-or-self' '::' <NODE_TEST>    
+             | 'following' '::' <NODE_TEST>             
+             | 'following-sibling' '::' <NODE_TEST>     
+             | 'namespace' '::' <NODE_TEST>             
+             | 'self' '::' <NODE_TEST>                  
+             | '@' <NODE_TEST>                          
+             | <NODE_TEST>                              
+             
+
+<REVERSE_STEP> ::= 'ancestor' '::' <NODE_TEST>              
+             | 'ancestor-or-self' '::' <NODE_TEST>      
+             | 'parent' '::' <NODE_TEST>                
+             | 'preceding' '::' <NODE_TEST>            
+             | 'preceding-sibling' '::' <NODE_TEST>     
+             | '..'                                  
+             
+
+<NODE_TEST> ::= <KIND_TEST>   
+          | <EQNAME>     
+          | '*'        
+          
+
+<POST_FIX_EXPR> ::= <PRIMARY_EXPR>                  
+              | <PRIMARY_EXPR> <PREDICATE_LIST>   
+              
+
+<PREDICATE_LIST> ::= <PREDICATE> <PREDICATE_LIST_PRIMA>
+               
+
+<PREDICATE_LIST_PRIMA> ::= <PREDICATE> <PREDICATE_LIST_PRIMA> 
+                     |                                
+                     
+
+<PREDICATE> ::= '[' <EXPR> ']'    
+          
+
+<PRIMARY_EXPR> ::= <PARENTHESIZED_EXPR>   
+             | '.'                  
+             | 'cadena'             
+             | 'digito'             
+             | 'decimal'            
+             | '[' ']'              
+             | '[' <PARENTHESIZED_EXPR> ']'   
+             
+
+<PARENTHESIZED_EXPR> ::= '(' ')'       
+                   | '(' <EXPR> ')'   
+                   
+
+<PARENTHESIZED_EXPR> ::= <QUERY> <QUERY_LIST_PRIMA> 
+           
+
+<QUERY_LIST_PRIMA> ::= ',' <QUERY> <QUERY_LIST_PRIMA> 
+                 |                            
+
+                 
+
+<KIND_TEST> ::= 'text' '(' ')'  
+          | 'node' '(' ')'  
+          | 'last' '(' ')'  
+          | 'position' '(' ')'  
+          
+
+<EQNAME> ::= 'nodename'               
+       | 'ancestor-or-self'       
+       | 'ancestor'               
+       | 'attribute'              
+       | 'child'                
+       | 'descendant-or-self'     
+       | 'descendant'            
+       | 'following-sibling'      
+       | 'following'             
+       | 'last'                   
+       | 'namespace'             
+       | 'node'                   
+       | 'parent'                 
+       | 'position'               
+       | 'preceding-sibling'      
+       | 'preceding'              
+       | 'self'                 
+       | 'text'                  
+       | 'and'                  
+       | 'or'                     
+       | 'div'                   
+       | 'mod'                    
+       
+
+<EXPR> ::= <EXPR_SINGLE> <EXPR_PRIMA>  
+     
+
+<EXPR_PRIMA> ::= ',' <EXPR_SINGLE> <EXPR_PRIMA>   
+           |                           
+           
+
+<EXPR_SINGLE> ::= <OR_EXPR> 
+            
+
+<OR_EXPR> ::= <AND_EXPR> <OR_EXPR_PRIMA>  
+        
+
+<OR_EXPR_PRIMA> ::= 'or' <AND_EXPR> <OR_EXPR_PRIMA>   
+              |                               
+              
+
+<AND_EXPR> ::= <COMPARISON_EXPR> <AND_EXPR_PRIMA>   
+         
+
+<AND_EXPR_PRIMA> ::= 'and' <COMPARISON_EXPR> <AND_EXPR_PRIMA>   
+               |                                        
+               
+
+<COMPARISON_EXPR> ::= <ADDITIVE_EXPR>                      
+                | <ADDITIVE_EXPR> '<' <ADDITIVE_EXPR>     
+                | <ADDITIVE_EXPR> '>' <ADDITIVE_EXPR>    
+                | <ADDITIVE_EXPR> '<=' <ADDITIVE_EXPR>    
+                | <ADDITIVE_EXPR> '>=' <ADDITIVE_EXPR>    
+                | <ADDITIVE_EXPR> '=' <ADDITIVE_EXPR>     
+                | <ADDITIVE_EXPR> '!=' <ADDITIVE_EXPR>   
+                
+
+<ADDITIVE_EXPR> ::= <MULTIPLICATIVE_EXPR> <ADDITIVE_EXPR_PRIMA>   
+              
+
+<ADDITIVE_EXPR_PRIMA> ::= '+' <MULTIPLICATIVE_EXPR> <ADDITIVE_EXPR_PRIMA>   
+                    | '-' <MULTIPLICATIVE_EXPR> <ADDITIVE_EXPR_PRIMA>   
+                    |                                               
+                    
+
+<MULTIPLICATIVE_EXPR> ::= <UNARY_EXPR> <MULTIPLICATIVE_EXPR_PRIMA>    
+                    
+
+
+<MULTIPLICATIVE_EXPR_PRIMA> ::= '*' <UNARY_EXPR> <MULTIPLICATIVE_EXPR_PRIMA>   
+                          | 'div' <UNARY_EXPR> <MULTIPLICATIVE_EXPR_PRIMA>  
+                          |                                             
+                          
+
+<UNARY_EXPR>  ::= <QUERY>                           
+            | '-' <UNARY_EXPR> %prec UMINUS     
+            | '+' <UNARY_EXPR> %prec UPLUS        
+
 ```

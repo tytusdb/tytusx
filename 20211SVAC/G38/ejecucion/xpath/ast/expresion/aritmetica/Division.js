@@ -19,6 +19,18 @@ class Division {
         return tipo;
     }
     getValor(ent) {
-        return null;
+        let tipo = this.getTipo(ent);
+        let valor;
+        if (!tipo.esError()) {
+            let valorDerecha = this.derecha.getValor(ent);
+            if (valorDerecha == 0 || valorDerecha == "0") {
+                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("División dentro de cero", this.linea, this.columna));
+                tipo = new Tipo(TipoDato.err);
+            }
+            else {
+                valor = this.izquierda.getValor(ent) / this.derecha.getValor(ent);
+            }
+        }
+        return valor;
     }
 }

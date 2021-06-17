@@ -24,157 +24,53 @@
   </mat-toolbar>
 </p>
 
+<div class="row"> 
+  <div class="col-md-1">
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <p>XPATH</p>
+  </div>
+  <div class="col-md-4">
+    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="parseValueXML()">NUEVO</button>
+    <input type="file" id="file" (change)="fileChanged($event,1)" /> 
+    <label for="file" style="width: 100px; padding-top: 8px;margin-right: 2px;">ABRIR</label>
+    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="SaveDemo1()">GUARDAR</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="CleanEditor1()">LIMPIAR</button>
+  </div>
 
-      <div class="col-md-12">
-        <mat-card class="mcardH">
-          <div class="row">
-            <div  class = "col-md-3" >
-              <input type="file" id="file" (change)="fileChanged($event)" /> 
-              <label for="file" style="width: 100px; padding-top: 6px;">NUEVO</label>
-            </div>
-            <div class = "col-md-3">
-              <button mat-raised-button color="#E1E8EC" (click)="myFunc()">ABRIR</button>
-            </div>
-            <div class = "col-md-3" >
-              <button mat-raised-button color="#E1E8EC">GUARDAR</button>
-            </div>
-            <div class = "col-md-3" >
-              <button mat-raised-button color="#E1E8EC" (click)="CleanEditors()">LIMPIAR</button>
-            </div>
-          </div>
-        </mat-card>
-        </div>
-
-        <br/>
-
-      <td-code-editor 
-      style="height: 400px" 
-      [(ngModel)]='this.dat.Cod_tab1' 
-      theme="vs" 
-      flex language="xml"
-      (ngModelChange)="onCodeChanged1($event)"
-      ></td-code-editor>
-    </div>
-
-    <div class="col-md-6">
-
-      <p>XQUERY</p>
-
-      <div class="col-md-12">
-        <mat-card class="mcardH">
-          <div class="row">
-            <div  class = "col-md-3" >
-              <input type="file" id="file" (change)="fileChanged($event)" /> 
-              <label for="file" style="width: 100px; padding-top: 6px;">NUEVO</label>
-            </div>
-            <div class = "col-md-3">
-              <button mat-raised-button color="#E1E8EC" (click)="myFunc()">ABRIR</button>
-            </div>
-            <div class = "col-md-3" >
-              <button mat-raised-button color="#E1E8EC">GUARDAR</button>
-            </div>
-            <div class = "col-md-3" >
-              <button mat-raised-button color="#E1E8EC" (click)="CleanEditors()">LIMPIAR</button>
-            </div>
-          </div>
-        </mat-card>
-        </div>
-
-        <br/>
-
-      <td-code-editor 
-      style="height: 400px" 
-      [(ngModel)]='this.dat.Cod_tab2' 
-      theme="vs" 
-      flex language="XQUERY"
-      (ngModelChange)="onCodeChanged2($event)"
-      ></td-code-editor>
-    </div>
-
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-4">
+    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="CleanEditor2()">NUEVO</button>
+    <input type="file" id="file2" (change)="fileChanged($event,2)" /> 
+    <label for="file2" style="width: 100px; padding-top: 8px;margin-right: 2px;">ABRIR</label>
+    <button mat-raised-button color="primary" style="margin-right: 2px;" (click)="SaveDemo2()">GUARDAR</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;" (click)="CleanEditor2()">LIMPIAR</button>
   </div>
 </div>
 
 <br/>
 <br/>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <td-code-editor 
-      style="height: 400px" 
-      [(ngModel)]='this.dat.Cod_tab3' 
-      theme="vs" 
-      flex language="xquery"
-      (ngModelChange)="onCodeChanged3($event)"
-      ></td-code-editor>
-    </div>
+<div class="row"> 
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-4">
+    <textarea matInput placeholder="XPATH CODE HERE" [(ngModel)]="this.dat.Cod_tab1"  cols="70" rows="30" style="resize: none;"></textarea>
+  </div>
+
+  <div class="col-md-1">
+  </div>
+  <div class="col-md-4">
+    <textarea matInput placeholder="XQUERY CODE HERE" [(ngModel)]="this.dat.Cod_tab2" cols="70" rows="30" style="resize: none;"></textarea>
   </div>
 </div>
 
+<br/>
+<div class="row"> 
+  
+  <div class="col-md-1">
+  </div>
 
-<div class="container" hidden>
-  <div class="row">
-    <div class="col-md-3">
-    <mat-card class="mcardH">
-      <div class="row">
-        <div  class = "col-md-12" >
-          <input type="file" id="file" (change)="fileChanged($event)" /> 
-          <label for="file" style="padding-top: 8px;">Cargar Documento</label>
-        </div>
-      </div>
-      <br/>
-      <div class="row">
-        <div class = "col-md-12">
-          <button mat-raised-button color="primary" (click)="myFunc()">Traducir</button>
-        </div>
-      </div>
-    <br/>
-        <div class="row">
-        <div class = "col-md-12" >
-          <button mat-raised-button color="primary">Ejecutar</button>
-        </div>
-      </div>
-      <br/>
-      <div class="row">
-      <div class = "col-md-12" >
-        <button mat-raised-button color="primary" (click)="CleanEditors()">Limpiar</button>
-      </div>
-    </div>
-    </mat-card>
-    </div>
-
-
-    <div class="col-md-9" hidden>
-      <mat-tab-group class="mcard" mat-align-tabs="center" style="width: 1000px;">
-        <mat-tab  label="CODIGO" >
-        
-          <p>CODE TAB 1</p>
-          <td-code-editor 
-          style="height: 400px" 
-          [(ngModel)]='this.dat.Cod_tab1' 
-          theme="vs" 
-          flex language="typescript"
-          (ngModelChange)="onCodeChanged1($event)"
-          ></td-code-editor>
-
-
-          <app-code-tab style="width: 100%;"></app-code-tab>
-
-          
-        
-
-        </mat-tab>
-        <mat-tab label="AST">
-          
-        </mat-tab>
-        <mat-tab label="REPORTES">
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-</div>
+  <div class="col-md-10">
+    <textarea matInput placeholder="" [(ngModel)]="this.dat.Cod_tab3" cols="151" rows="20" style="resize: none;"></textarea>
+  </div>
 </div>

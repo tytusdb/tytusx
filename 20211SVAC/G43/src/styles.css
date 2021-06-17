@@ -53,9 +53,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   
   [type="file"] + label {
     box-shadow:0 1px 1px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 2px 2px 0 rgba(0,0,0,.12);
-    background-color: #E1E8EC;
+    background-color: #3F51B5;
     border-radius: 4px;
-    color: #000;
+    color: #fff;
     text-align: center;
     cursor: pointer;
     display: inline-block;
@@ -66,11 +66,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   
   [type="file"]:focus + label,
   [type="file"] + label:hover {
-      background-color: #E1E8EC;
+      background-color: #3F51B5;
   }
   
   [type="file"]:focus + label {
-    outline: 1px dotted #E1E8EC;
+    outline: 1px dotted #3F51B5;
   }
 
 

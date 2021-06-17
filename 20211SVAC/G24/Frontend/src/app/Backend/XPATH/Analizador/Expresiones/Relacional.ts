@@ -105,4 +105,5 @@ export enum Relacionales {
   MENOR,
   MAYORIGUAL,
   MENORIGUAL,
+  NOIGUAL
 }
