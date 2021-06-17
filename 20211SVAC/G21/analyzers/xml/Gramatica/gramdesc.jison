@@ -39,7 +39,6 @@ BSL                                 "\\".
 "?>"                         return 'maxquest';
 "<"                         return 'menor';
 ">"                         return 'mayor';
-"-"                         return 'min';
 "/"                         return 'div';
 
 "="                         return 'asig';
@@ -84,7 +83,7 @@ RAIZ : ENC OBJETO { $$ = $2 }
     | error              { console.error('Error sintáctico: ' + yytext + ', linea: ' + this._$.first_line + ', columna: ' + this._$.first_column); 
                             errores.push({'Error Type': 'Sintactico', 'Row': @1.first_line, 'Column': @1.first_column, 'Description': 'No se esperaba el caracter: '+yytext });
 
-                         } 
+                          } 
 ;
 
 ENC : minquest  xml LATRIBUTOS maxquest { encoding = $3; }
@@ -117,10 +116,12 @@ ATRIBUTO: identificador asig StringLiteral       { $$ = new Atributo($1, $3.repl
 ;
 
 LISTA_ID_OBJETO: identificador LIOP     { $$ = $1+' '+$2; }
-                | any LIOP              { $$ = $1+' '+$2; }
+                | numero LIOP           { $$ = $1+' '+$2; }
+                | any LIOP              { $$ = $1+' '+$2; } 
 ;
 
 LIOP : identificador LIOP               { $$ = $1+' '+$2; }
+    | numero LIOP                       { $$ = $1+' '+$2; }
     | any LIOP                          { $$ = $1+' '+$2; }
     |                                   { $$ = ''; }
 ;
