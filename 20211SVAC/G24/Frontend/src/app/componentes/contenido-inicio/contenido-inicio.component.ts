@@ -251,9 +251,7 @@ export class ContenidoInicioComponent implements OnInit {
 
   EjecutarAsc(texto: string) {
 
-
-
-    if (texto == null) return document.write('Error');
+   // if (texto == null) return document.write('Error');
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion

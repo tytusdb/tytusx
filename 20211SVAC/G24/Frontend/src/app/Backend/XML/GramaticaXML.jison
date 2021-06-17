@@ -13,21 +13,18 @@ const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.c
 
 %s cuerpo
 %s xml
-%x Comentario
+%x comment
 
 %%                
 /* Espacios en blanco */
 "//".*            	  {}
-"<!--"                { this.begin("Comentario"); }
-<Comentario>[ \r\t]+  {}
-<Comentario>\n+       {}
-
-<Comentario>"-->"     { this.popState();}
-<Comentario>[^"-->"]+ { return 'COMENTARIOS'} 
+"<!--"                              this.begin('comment');
+<comment>"-->"                      this.popState();
+<comment>.                          /* skip comment content*/
 
 ">"                     this.begin('cuerpo'); return 'MAYORQUE'
 
-<cuerpo>"</"           this.begin('INITIAL'); if(palabra.replaceAll(" ","") == "")  return 'SALIDA'; yytext = palabra; palabra = "";if(palabra.replaceAll(" ","") == "") return 'CUERPO';
+<cuerpo>"</"           this.begin('INITIAL'); if(palabra.replaceAll(" ","") == "")  return 'SALIDA'; yytext = palabra; palabra = "";if(palabra=="<!--") return 'COMENTARIOS'; if(palabra.replaceAll(" ","") == "") return 'CUERPO';
 <cuerpo>"<"           this.begin('INITIAL');  return 'MENORQUE'; yytext = palabra; palabra = ""; return 'CUERPO';
 <cuerpo>"<"           this.begin('INITIAL');  return 'SELFCLOSE'; yytext = palabra; palabra = ""; return 'CUERPO';
 
@@ -78,7 +75,6 @@ INSTRUCCION
         : CUERPO { $$ = $1;}
         | OBJETOS { $$ = $1;}
         | error {inicio.listaErrores.push(new CNodoErrores.default("Error Sintactico","Se esperaba un token, error en : "+yytext,@1.first_line,@1.first_column));console.log("Error Sintactico, Se esperaba un token en esta linea " + "Linea: "+ @1.first_line + " Columna: "+ @1.first_column); $$=false;}
-        | COMENTARIOS {$$="<!-- "+$1+" --!>"}
         ;
 
 OBJETOS
@@ -90,7 +86,6 @@ OBJETO
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS SELFCLOSE INSTRUCCION      {$$ = new objeto.default($2,null,$3,$5,@1.first_line,@1.first_column);}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS MAYORQUE INSTRUCCION SALIDA IDENTIFICADOR MAYORQUE {$$ = new objeto.default($2,null,$3,$5,@1.first_line,@1.first_column);}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS MAYORQUE INSTRUCCION IDENTIFICADOR MAYORQUE {$$ = new objeto.default($2,$5,$3,null,@1.first_line,@1.first_column);}
-        | COMENTARIOS {$$="<!-- "+$1+" --!>"}
         |       {$$=""}
         ;
 
