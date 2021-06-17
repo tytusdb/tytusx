@@ -29,6 +29,8 @@ class FabricaConsulta {
                                 case "descendant-or-self": return new ConsultaDescOrSelf(id);
                                 case "descendant": return new ConsultaDescendente2(id);
                                 case "following": return new ConsultaFollowing(id);
+                                case "preceding": return new ConsultaPreceding(id);
+                                case "preceding-sibling": return new ConsultaPrecSibling(id);
                             }
                         }
                     }
@@ -65,6 +67,8 @@ class FabricaConsulta {
                                 case "descendant": return new ConsultaDescendente2(id);
                                 case "following": return new ConsultaFollowing(id);
                                 case "following-sibling": return new ConsultaFollowSibling(id);
+                                case "preceding": return new ConsultaPreceding(id);
+                                case "preceding-sibling": return new ConsultaPrecSibling(id);
                             }
                         }
                     }

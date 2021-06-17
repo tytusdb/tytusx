@@ -6,8 +6,8 @@ var ReporteGD = /** @class */ (function () {
     function ReporteGD() {
         ReporteGD.r_gramaticad = new Array();
     }
-    ReporteGD.agregar = function (b, p) {
-        var nuevo = new NodoReporte_1.NodoReporte(b, p);
+    ReporteGD.agregar = function (b, p,g) {
+        var nuevo = new NodoReporte(b, p,g);
         ReporteGD.r_gramaticad.unshift(nuevo);
     };
     ReporteGD.recorrer = function () {
