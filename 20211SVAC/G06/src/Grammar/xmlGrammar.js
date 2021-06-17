@@ -98,58 +98,58 @@ case 2:
     
 break;
 case 3:
-$$[$0-1].setPos($$[$0-2].length);$$[$0-2].push($$[$0-1]); this.$ = $$[$0-2];
+this.$ = $$[$0-2];
 break;
 case 4:
-$$[$0-1].setPos(0);this.$ = [$$[$0-1]];
+this.$ = [$$[$0-1]];
 break;
 case 7:
 
-        if($$[$0-7]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-7]+' no esta cerrada',_$[$0-8].first_line, _$[$0-8].first_column));}
-        this.$ = new Entorno($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]);
-    
+            if($$[$0-7]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-7]+' no esta cerrada',_$[$0-8].first_line, _$[$0-8].first_column));}
+            this.$ = new Entorno($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],true);
+        
 break;
 case 8:
 
-        if($$[$0-7]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-7]+' no esta cerrada',_$[$0-8].first_line, _$[$0-8].first_column));}
-        this.$ = new Entorno($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[]);
-    
+            if($$[$0-7]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-7]+' no esta cerrada',_$[$0-8].first_line, _$[$0-8].first_column));}
+            this.$ = new Entorno($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],true);
+        
 break;
 case 9:
-this.$ = new Entorno($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[]);
+
+            this.$ = new Entorno($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],true);
+        
 break;
 case 10:
 
-        if($$[$0-6]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-6]+' no esta cerrada',_$[$0-7].first_line, _$[$0-7].first_column))}
-        this.$ = new Entorno($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,[],$$[$0-4]);
-    
+            if($$[$0-6]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-6]+' no esta cerrada',_$[$0-7].first_line, _$[$0-7].first_column))}
+            this.$ = new Entorno($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,[],$$[$0-4],true);
+        
 break;
 case 11:
 
-        if($$[$0-6]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-6]+' no esta cerrada',_$[$0-7].first_line, _$[$0-7].first_column))}
-        this.$ = new Entorno($$[$0-6],$$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column,[],[]);
-    
+            if($$[$0-6]!==$$[$0-1]){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$$[$0-6]+' no esta cerrada',_$[$0-7].first_line, _$[$0-7].first_column))}
+            this.$ = new Entorno($$[$0-6],$$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column,[],[],true);
+        
 break;
 case 12:
-this.$ = new Entorno($$[$0-2],'',_$[$0-3].first_line, _$[$0-3].first_column,[],[]);
+
+            this.$ = new Entorno($$[$0-2],'',_$[$0-3].first_line, _$[$0-3].first_column,[],[],true);
+        
 break;
 case 13:
-listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',_$[$0-1].first_line, _$[$0-1].first_column))
+
+            listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',_$[$0-1].first_line, _$[$0-1].first_column))
+        
 break;
-case 15:
+case 15: case 17:
 $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
 break;
-case 16:
+case 16: case 18:
 this.$ = [$$[$0]];
 break;
-case 17:
-$$[$0].setPos($$[$0-1].length); $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
-break;
-case 18:
-$$[$0].setPos(0);this.$ = [$$[$0]];
-break;
 case 19: case 20:
-this.$ = new Simbolo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
+this.$ = new Simbolo($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column,true);
 break;
 case 21: case 22: case 23: case 29: case 30: case 31: case 32:
 this.$ = $$[$0-1] +" "+ $$[$0]
