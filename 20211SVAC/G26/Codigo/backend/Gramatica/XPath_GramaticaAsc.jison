@@ -221,7 +221,7 @@ NODETEST: identifier PREDICATE
                 }        
         | nodeFunc PREDICATE 
                 { 
-                        if($$.length === 0){
+                        if($2 instanceof Predicate){
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
                         }else{
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column, $2);
@@ -229,7 +229,7 @@ NODETEST: identifier PREDICATE
                 }        
         | asterisco PREDICATE
                 { 
-                        if($$.length === 0){
+                        if($2 instanceof Predicate){
                                 $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column);
                         }else{
                                 $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column, $2);
@@ -242,10 +242,10 @@ LISTAEXPRESIONES: LISTAEXPRESIONES EXPRESION { $1.push($2); $$ = $1}
                     ;
 
 EXPRESION:  PRIMITIVA { $$ = $1; }
-            | Operacion { $$ = $1;}
+            | OPERACION { $$ = $1;}
 ;
 
-Operacion: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column);}
+OPERACION: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column);}
         | EXPRESION mas EXPRESION { $$ = new Operacion(TipoOperacion.SUMA, $1, $3, @1.first_line, @1.first_column);}
         | EXPRESION menos EXPRESION { $$ = new Operacion(TipoOperacion.RESTA, $1, $3, @1.first_line, @1.first_column);}
         | EXPRESION div EXPRESION { $$ = new Operacion(TipoOperacion.DIVISION, $1, $3, @1.first_line, @1.first_column);}

@@ -6,6 +6,7 @@ import * as XMLGramDesc from './Gramatica/XML_GramaticaDesc';
 import errores from './Global/ListaError';
 import mierror from './Global/Error';
 import * as XPathGramAsc from './Gramatica/XPath_GramaticaAsc';
+import * as XPathGramDesc from "./Gramatica/XPath_GramaticaDesc";
 import { Consulta } from './XPath/Consulta';
 
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
@@ -15,10 +16,12 @@ class Analizador{
 
   private static _instance: Analizador;
   global:Entorno;
+  indice:number;
 
   constructor(){
     this.global = new Entorno('global', null, null);
     errores.limpiar();
+    this.indice = 0;
 
     if (typeof Analizador._instance === "object"){
       return Analizador._instance;
@@ -80,6 +83,19 @@ class Analizador{
     });  
   }
 
+  XPathDescendente(entrada: string) {
+    console.log("-- XPATH DESCENDENTE -- ");
+    const consultas = XPathGramDesc.parse(entrada);
+    console.log("---------------------------------------");
+    consultas.forEach((elem: Consulta) => {
+      console.log("CONSULTA: " + elem.ToString());
+      let resultado = elem.ejecutar(this.global);
+      console.log("-----------RESULTADO----------------");
+      console.log(resultado);
+      console.log("---------------FIN---------------------");
+    });
+  }
+
   getTablaSimbolos(){
     return this.global;
   }
@@ -91,7 +107,111 @@ class Analizador{
     })
     return err;
   }
+  
+  getRepTablaSimbolos():string{
+    let cadenaDot:string = '';
+    let tabla:Array<any> = this.global.tsimbolos;
+    this.indice = 0;
+    cadenaDot = 'digraph {'
+                +  'tbl ['
+                +    'shape=plaintext,'
+                +    'label=<'
+                +      '<table border="0" cellborder="1" color="#ddd" cellspacing="0">'
+                +        '<tr bgcolor="#04AA6D">'
+                +            '<td><b>NO.</b></td>'
+                +            '<td><b>NOMBRE</b></td>'
+                +            '<td><b>TIPO</b></td>'
+                +            '<td><b>AMBITO</b></td>'
+                +            '<td><b>NODO</b></td>'
+                +            '<td><b>VALOR</b></td>'
+                +            '<td><b>FILA</b></td><td><b>COLUMNA</b></td>'
+                +        '</tr>';
+    cadenaDot = cadenaDot + this.getSimbolosEntorno(this.global);
+    cadenaDot = cadenaDot +      '</table>'
+                          +    '>];'
+                          +'}';
+    return cadenaDot;
+  }
 
+  getSimbolosEntorno(entrada:Entorno):string{
+    let simbolos:string = '';
+    entrada.tsimbolos.forEach((elem: any) => {
+      if(elem.valor.valor instanceof Entorno){
+        this.indice++;
+        simbolos = simbolos
+                +        '<tr>'
+                +            '<td>'+this.indice+'</td>'
+                +            '<td>'+elem.valor.nombre+'</td>'
+                +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
+                +            '<td>'+entrada.nombre+'</td>'
+                +            '<td>'+elem.nombre+'</td>'
+                +            '<td>'+elem.valor.valor.toString().replace('&','and')+'</td>'
+                +            '<td>'+elem.valor.linea+'</td>'
+                +            '<td>'+elem.valor.columna+'</td>'
+                +        '</tr>';
+        simbolos = simbolos + this.getSimbolosEntorno(elem.valor.valor);
+      }else{
+        if(elem.valor.valor !== false){
+          this.indice++;
+          simbolos = simbolos
+                  +        '<tr>'
+                  +            '<td>'+this.indice+'</td>'
+                  +            '<td>'+elem.valor.nombre+'</td>'
+                  +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
+                  +            '<td>'+entrada.nombre+'</td>'
+                  +            '<td>'+elem.nombre+'</td>'
+                  +            '<td>'+elem.valor.valor.toString().replace('&','and')+'</td>'
+                  +            '<td>'+elem.valor.linea+'</td>'
+                  +            '<td>'+elem.valor.columna+'</td>'
+                  +        '</tr>';
+        }
+      }
+    });
+    return simbolos;
+  }
+
+  getTipoDato(t: number):string{
+    switch(t){
+        case 0: 
+            return 'Texto';
+        case 1:
+            return 'Cadena';
+        case 2:
+            return 'Etiqueta';
+        case 3:
+            return 'Atributo';
+    };
+    return '';
+  }
+
+  getRepErrores():string{
+    let cadenaDot:string = '';
+    let indice:number = 0;
+    cadenaDot = 'digraph {'
+                +  'tbl ['
+                +    'shape=plaintext,'
+                +    'label=<'
+                +      '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+                +        '<tr>'
+                +            '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Fila</td><td>Columna</td>'
+                +        '</tr>';
+    errores.listaError.forEach((elem:mierror) => {
+      indice++;
+      cadenaDot = cadenaDot
+                +        '<tr>'
+                +            '<td>'+indice+'</td>'
+                +            '<td>'+elem.getTipo()+'</td>'
+                +            '<td>'+elem.getDescripcion()+'</td>'
+                +            '<td>'+elem.getLinea()+'</td>'
+                +            '<td>'+elem.getColumna()+'</td>'
+                +        '</tr>';
+    });
+    cadenaDot = cadenaDot +      '</table>'
+                          +    '>];'
+                          +'}';
+
+    return cadenaDot;
+  }
 }
 
 const analizador = new Analizador();

@@ -56,7 +56,8 @@ Para el proyecto, se opto por implementar una gramatica descendente. Las gramati
 
 
 ## ESTRUCTURA
-
+### Archivo gramatica.jison
+* En este archivo se encuentra definido lo que es la gramatica a implementar para el proyecto
 
 
 ## REQUERIMIENTOS TECNICOS
