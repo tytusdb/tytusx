@@ -104,7 +104,7 @@ function abrirArchivo(archivos) {
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "//PRICE[9]/@calificacion");
+let editorXPATH = (document.getElementById("editor").value = "/*");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
@@ -113,220 +113,78 @@ let listaTokens=[];
 let parserXML;
 let globalencod;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<CATALOG>
-<CD>
-<TITLE>Empire Burlesque</TITLE>
-<ARTIST>Bob Dylan</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>Columbia</COMPANY>
-<PRICE>10.90</PRICE>
-<YEAR>1985</YEAR>
-</CD>
-<CD>
-<TITLE>Hide your heart</TITLE>
-<ARTIST>Bonnie Tyler</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>CBS Records</COMPANY>
-<PRICE>9.90</PRICE>
-<YEAR>1988</YEAR>
-</CD>
-<CD>
-<TITLE>Greatest Hits</TITLE>
-<ARTIST>Dolly Parton</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>RCA</COMPANY>
-<PRICE>9.90</PRICE>
-<YEAR>1982</YEAR>
-</CD>
-<CD>
-<TITLE>Still got the blues</TITLE>
-<ARTIST>Gary Moore</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Virgin records</COMPANY>
-<PRICE>10.20</PRICE>
-<YEAR>1990</YEAR>
-</CD>
-<CD>
-<!-- Este titulo tiene un & -->
-<TITLE>Eros &amp; Eros</TITLE>
-<ARTIST>Eros Ramazzotti</ARTIST>
-<COUNTRY>EU</COUNTRY>
-<COMPANY>BMG</COMPANY>
-<PRICE>9.90</PRICE>
-<YEAR>1997</YEAR>
-</CD>
-<CD>
-<!-- Este titulo estará entre comillas dobles  -->
-<TITLE>&quot;Esto tiene que salir bien&quot;</TITLE>
-<ARTIST>Bee Gees</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Polydor</COMPANY>
-<PRICE>10.90</PRICE>
-<YEAR>1998</YEAR>
-</CD>
-<CD>
-<!-- Este titulo estará entre comilla simples -->
-<TITLE>&apos;Esto tiene que salir muy bien tambien&apos;</TITLE>
-<ARTIST>Dr.Hook</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>CBS</COMPANY>
-<PRICE>8.10</PRICE>
-<YEAR>1973</YEAR>
-</CD>
-<CD>
-<TITLE>Maggie May</TITLE>
-<ARTIST>Rod Stewart</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Pickwick</COMPANY>
-<PRICE>8.50</PRICE>
-<YEAR>1990</YEAR>
-</CD>
-<CD>
-<TITLE>Romanza</TITLE>
-<ARTIST>Andrea Bocelli</ARTIST>
-<COUNTRY>EU</COUNTRY>
-<COMPANY>Polydor</COMPANY>
-<PRICE calificacion="hola">10.80</PRICE>
-<YEAR>1996</YEAR>
-</CD>
-<CD>
-<TITLE>When a man loves a woman</TITLE>
-<ARTIST>Percy Sledge</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>Atlantic</COMPANY>
-<PRICE>8.70</PRICE>
-<YEAR>1987</YEAR>
-</CD>
-<CD>
-<TITLE>Black angel</TITLE>
-<ARTIST>Savage Rose</ARTIST>
-<COUNTRY>EU</COUNTRY>
-<COMPANY>Mega</COMPANY>
-<PRICE>10.90</PRICE>
-<YEAR>1995</YEAR>
-</CD>
-<CD>
-<TITLE>1999 Grammy Nominees</TITLE>
-<ARTIST>Many</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>Grammy</COMPANY>
-<PRICE>10.20</PRICE>
-<YEAR>1999</YEAR>
-</CD>
-<CD>
-<TITLE>For the good times</TITLE>
-<ARTIST>Kenny Rogers</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Mucik Master</COMPANY>
-<PRICE>8.70</PRICE>
-<YEAR>1995</YEAR>
-</CD>
-<CD>
-<TITLE>Big Willie style</TITLE>
-<ARTIST>Will Smith</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>Columbia</COMPANY>
-<PRICE>9.90</PRICE>
-<YEAR>1997</YEAR>
-</CD>
-<CD>
-<TITLE>Tupelo Honey</TITLE>
-<ARTIST>Van Morrison</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Polydor</COMPANY>
-<PRICE>8.20</PRICE>
-<YEAR>1971</YEAR>
-</CD>
-<CD>
-<TITLE>Soulsville</TITLE>
-<ARTIST>Jorn Hoel</ARTIST>
-<COUNTRY>Norway</COUNTRY>
-<COMPANY>WEA</COMPANY>
-<PRICE>7.90</PRICE>
-<YEAR>1996</YEAR>
-</CD>
-<CD>
-<TITLE>The very best of</TITLE>
-<ARTIST>Cat Stevens</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Island</COMPANY>
-<PRICE>8.90</PRICE>
-<YEAR>1990</YEAR>
-</CD>
-<CD>
-<TITLE>Stop</TITLE>
-<ARTIST>Sam Brown</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>A and M</COMPANY>
-<PRICE>8.90</PRICE>
-<YEAR>1988</YEAR>
-</CD>
-<CD>
-<TITLE>Bridge of Spies</TITLE>
-<ARTIST>T'Pau</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Siren</COMPANY>
-<PRICE>7.90</PRICE>
-<YEAR>1987</YEAR>
-</CD>
-<CD>
-<TITLE>Private Dancer</TITLE>
-<ARTIST>Tina Turner</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>Capitol</COMPANY>
-<PRICE>8.90</PRICE>
-<YEAR>1983</YEAR>
-</CD>
-<CD>
-<TITLE>Midt om natten</TITLE>
-<ARTIST>Kim Larsen</ARTIST>
-<COUNTRY>EU</COUNTRY>
-<COMPANY>Medley</COMPANY>
-<PRICE>7.80</PRICE>
-<YEAR>1983</YEAR>
-</CD>
-<CD>
-<TITLE>Pavarotti Gala Concert</TITLE>
-<ARTIST>Luciano Pavarotti</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>DECCA</COMPANY>
-<PRICE>9.90</PRICE>
-<YEAR>1991</YEAR>
-</CD>
-<CD>
-<TITLE>The dock of the bay</TITLE>
-<ARTIST>Otis Redding</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>Stax Records</COMPANY>
-<PRICE>7.90</PRICE>
-<YEAR>1968</YEAR>
-</CD>
-<CD>
-<TITLE>Picture book</TITLE>
-<ARTIST>Simply Red</ARTIST>
-<COUNTRY>EU</COUNTRY>
-<COMPANY>Elektra</COMPANY>
-<PRICE>7.20</PRICE>
-<YEAR>1985</YEAR>
-</CD>
-<CD>
-<TITLE>Red</TITLE>
-<ARTIST>The Communards</ARTIST>
-<COUNTRY>UK</COUNTRY>
-<COMPANY>London</COMPANY>
-<PRICE>7.80</PRICE>
-<YEAR>1987</YEAR>
-</CD>
-<CD>
-<TITLE>Unchain my heart</TITLE>
-<ARTIST>Joe Cocker</ARTIST>
-<COUNTRY>USA</COUNTRY>
-<COMPANY>EMI</COMPANY>
-<PRICE>8.20</PRICE>
-<YEAR>1987</YEAR>
-</CD>
-</CATALOG>
+let textoEntrada = `<?xml version="1.0" encoding="ASCII"?>
+<mundo>
+  <continente name="Europa">
+    <pais moneda="Euro">
+      <nombre>Monaco</nombre>
+      <capital>Ciudad de Monaco</capital>
+      <idioma>Frances</idioma>
+      <poblacion year="2019" unit="thousands">38.964</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Austria</nombre>
+      <capital>Viena</capital>
+      <idioma>Aleman</idioma>
+      <poblacion year="2019" unit="millions">8.859</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Portugal</nombre>
+      <capital>Lisboa</capital>
+      <idioma>Portugues</idioma>
+      <poblacion year="2019" unit="millions">10.28</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Francia</nombre>
+      <capital>Paris</capital>
+      <idioma>Frances</idioma>
+      <poblacion year="2019" unit="millions">67.06</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Alemania</nombre>
+      <capital>Berlin</capital>
+      <idioma>Aleman</idioma>
+      <poblacion year="2019" unit="millions">83.02</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>España</nombre>
+      <capital>Madrid</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">46.94</poblacion>
+    </pais>
+  </continente>
+  <continente name="America">
+    <pais moneda="Dolar">
+      <nombre>Estados unidos</nombre>
+      <capital>Washington DC</capital>
+      <poblacion year="2019" unit="millions">328.2</poblacion>
+    </pais>
+    <pais moneda="Quetzal">
+      <nombre>Guatemala</nombre>
+      <capital>Ciudad de Guatemala</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">16.6</poblacion>
+    </pais>
+    <pais moneda="Dolar">
+      <nombre>El Salvador</nombre>
+      <capital>San Salvador</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">6.454</poblacion>
+    </pais>
+    <pais moneda="Peso argentino">
+      <nombre>Argentina</nombre>
+      <capital>Buenos Aires</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">44.94</poblacion>
+    </pais>
+    <pais moneda="Real brasileño">
+      <nombre>Brasil</nombre>
+      <capital>Brasilia</capital>
+      <idioma>Portugues</idioma>
+      <poblacion year="2019" unit="millions">221</poblacion>
+    </pais>
+  </continente>
+</mundo>
 `
 editorXML.value = textoEntrada
 
@@ -464,7 +322,7 @@ btnReporteXMLErrores.addEventListener("click", () => {
   // Lista de errores
   listaErrores = parserXML.listaErrores;
 
-  console.log("ESTA ES LA LISTA DE ERROES");
+  console.log("ESTA ES LA LISTA DE ERRORES");
   console.log(listaErrores);
 
   // Agregar las cabeceras
@@ -505,9 +363,22 @@ function analizar_xpath_izq(){
   listaTokens = [];
   listaErrores = [];
 
+  parserXML = xmlDerecha.parse(editorXML.value);
+
   console.log("Analizando XPATH...");
-  let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
+  let AST_xPathizq=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
   
+  let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
+
+  contenidoModal2.innerHTML = `
+  <div style="background: #eee; width: 100%; max-width: 100%; max-height: 700px; overflow: hidden;">
+    <div id="graph" style="width: 100%;"></div>
+  </div>
+  `;
+
+  //generarAST(AST_xPathizq);
+  console.log("Interpretando");
+  interpretar(AST_xPath,parserXML.json);
 }
 
 
@@ -519,6 +390,7 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
+  parserXML = xmlDerecha.parse(editorXML.value);
   console.log("Analizando XPATH por la derecha");
 
   
@@ -535,7 +407,7 @@ function analizar_xpath() {
   //generarAST(AST_xPath);
   
 
-  generarAST(AST_xPath);
+  //generarAST(AST_xPath);
   console.log("Interpretando");
   interpretar(AST_xPath,parserXML.json);
   //interpretar(AST_xPath,AST_xml);
