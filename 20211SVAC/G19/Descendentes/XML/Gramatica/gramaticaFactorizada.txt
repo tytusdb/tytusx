@@ -1,0 +1,63 @@
+OBJETO:
+    lt identifier LATRIBUTOS gt OBJETOS           lt div identifier gt
+    | lt identifier LATRIBUTOS gt LISTA_ID_OBJETO   lt div identifier gt
+    | lt identifier LATRIBUTOS div gt
+    | lt identifier LATRIBUTOS gt  lt div identifier gt
+
+
+OBJETO:
+      lt identifier LALATRIBUTOS OBJETOP;
+
+OBJETOP:
+    gt OBJETOS lt div identifier gt
+    | gt LISTA_ID_OBJETO lt div identifier gt
+    | div gt
+    | gt  lt div identifier gt
+
+
+// OBJETO antiguo
+OBJETO:
+      lt identifier LATRIBUTOS gt OBJETOS           lt div identifier gt       {
+            $$ = new NodeDescXML("OBJETO");
+            $$.childList.push($1);
+            $$.childList.push($2);
+            $$.childList.push($3);
+            $$.childList.push($4);
+            $$.childList.push($5);
+            $$.childList.push($6);
+            $$.childList.push($7);
+            $$.childList.push($8);
+            $$.childList.push($9);
+       }
+    | lt identifier LATRIBUTOS gt LISTA_ID_OBJETO   lt div identifier gt       {
+            $$ = new NodeDescXML("OBJETO");
+            $$.childList.push($1);
+            $$.childList.push($2);
+            $$.childList.push($3);
+            $$.childList.push($4);
+            $$.childList.push($5);
+            $$.childList.push($6);
+            $$.childList.push($7);
+            $$.childList.push($8);
+            $$.childList.push($9);
+     }
+    | lt identifier LATRIBUTOS div gt{
+            $$ = new NodeDescXML("OBJETO");
+            $$.childList.push($1);
+            $$.childList.push($2);
+            $$.childList.push($3);
+            $$.childList.push($4);
+            $$.childList.push($5);
+     }
+    | lt identifier LATRIBUTOS gt  lt div identifier gt    {
+            $$ = new NodeDescXML("OBJETO");
+            $$.childList.push($1);
+            $$.childList.push($2);
+            $$.childList.push($3);
+            $$.childList.push($4);
+            $$.childList.push($5);
+            $$.childList.push($6);
+            $$.childList.push($7);
+            $$.childList.push($8);
+        }
+;
