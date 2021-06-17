@@ -1,5 +1,5 @@
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo from '../Simbolos/Tipo';
 import nodoAST from './nodoAST';
 export abstract class Instruccion {

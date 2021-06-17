@@ -25,6 +25,7 @@ import { table } from 'console';
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
 import { type } from 'os';
+import { parser } from 'GramaticaXML';
 
 
 export let listaErrores: Array<NodoErrores>;
@@ -38,13 +39,13 @@ export class ContenidoInicioComponent implements OnInit {
   constructor(private inicioSrv: InicioService, private dialog: MatDialog) {
     this.code = 'asd';
   }
+  tablaGlobal: tablaSimbolos = new tablaSimbolos();
   code = '';
   contenido = '';
   ngOnInit(): void { }
   ngAfterViewInit(): void {
     this.data = JSON.parse(localStorage.getItem('contenido'));
     if (this.data != '' || this.data != undefined) {
-      this.mostrarContenido(this.data.text, 'contenido');
       this.mostrarContenido(this.data.console, 'consolas');
     }
   }
@@ -55,7 +56,7 @@ export class ContenidoInicioComponent implements OnInit {
       text: 'asd',
       console: 'res',
     };
-    localStorage.setItem('contenido', JSON.stringify(dataObject));
+    localStorage.setItem('consulta', JSON.stringify(dataObject));
   }
   getConsola() {
     this.data = JSON.parse(localStorage.getItem('contenido'));
@@ -72,11 +73,11 @@ export class ContenidoInicioComponent implements OnInit {
     try {
       const analizador = Analizador;
       const objetos = analizador.parse(texto);
-      const tablaGlobal: tablaSimbolos = new tablaSimbolos();
+
       var Tree: Arbol = new Arbol([objetos]);
-      Tree.settablaGlobal(tablaGlobal);
-      console.log(tablaGlobal);
-      
+      Tree.settablaGlobal(this.tablaGlobal);
+      console.log(this.tablaGlobal);
+
 
       //  PARA GUARDAR DATOS
 
@@ -84,40 +85,41 @@ export class ContenidoInicioComponent implements OnInit {
       // TODO FOR INTERPRETAR
       for (let i of Tree.getinstrucciones()) {
         if (i instanceof Objeto) {
-          var objetito = i.interpretar(Tree, tablaGlobal); //retorna simbolo
-          tablaGlobal.setVariable(objetito);
+          var objetito = i.interpretar(Tree, this.tablaGlobal); //retorna simbolo
+          this.tablaGlobal.setVariable(objetito);
         }
       }
-      console.log(tablaGlobal);
+      console.log(this.tablaGlobal);
 
 
-      for (var [key, value] of tablaGlobal.tablaActual) {
+      for (var key of this.tablaGlobal.tablaActual) {
         //alert(key + " = " + value);
         var atributos = "";
-        var listaobjetitos="";
-        var contenido="";
-        var nombre = key;
-        for (var [key2, value2] of value.getAtributo()) {
+        var listaobjetitos = "";
+        var contenido = "";
+        var nombre = key.getidentificador();
+        for (var [key2, value2] of key.getAtributo()) {
           //alert(key + " = " + value);
-          atributos+=`${key2}=>${value2}, `
+          atributos += `${key2}=>${value2}, `
         }
-        let objetos=value.getvalor();
-        if(objetos instanceof tablaSimbolos){
-          for (var [key3, value3] of objetos.tablaActual) {
+        let objetos = key.getvalor();
+        if (objetos instanceof tablaSimbolos) {
+          for (var key3 of objetos.tablaActual) {
             //alert(key + " = " + value);
-            listaobjetitos+=`${key3}, `
+            listaobjetitos += `${key3.getidentificador()}, `
+
           }
-         
-            this.llenarTablaSimbolos(objetos,Tree);
-          
-        }else{
-          contenido=objetos.replaceAll("%20"," ").replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&").replaceAll("&apos;","'").replaceAll("&quot;","\"");
+
+          this.llenarTablaSimbolos(objetos, Tree);
+
+        } else {
+          contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         }
-        var Reporte = new reporteTabla(nombre,contenido,atributos,listaobjetitos);
+        var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos);
         Tree.listaSimbolos.push(Reporte);
-        
+
       }
-   
+
       // TERMINA FOR 
 
 
@@ -173,32 +175,32 @@ export class ContenidoInicioComponent implements OnInit {
     //console.log(gramar);
   }
 
-  llenarTablaSimbolos(t:tablaSimbolos,tri:Arbol){
-    for (var [key, value] of t.tablaActual) {
+  llenarTablaSimbolos(t: tablaSimbolos, tri: Arbol) {
+    for (var key of t.tablaActual) {
       //alert(key + " = " + value);
       var atributos = "";
-      var listaobjetitos="";
-      var contenido="";
-      var nombre = key;
-      for (var [key2, value2] of value.getAtributo()) {
+      var listaobjetitos = "";
+      var contenido = "";
+      var nombre = key.getidentificador();
+      for (var [key2, value2] of key.getAtributo()) {
         //alert(key + " = " + value);
-        atributos+=`${key2}=>${value2}, `
+        atributos += `${key2}=>${value2}, `
       }
-      let objetos=value.getvalor();
-      if(objetos instanceof tablaSimbolos){
-        for (var [key3, value3] of objetos.tablaActual) {
+      let objetos = key.getvalor();
+      if (objetos instanceof tablaSimbolos) {
+        for (var key3 of objetos.tablaActual) {
           //alert(key + " = " + value);
-          listaobjetitos+=`${key3}, `
+          listaobjetitos += `${key3.getidentificador()}, `
         }
-      
-          this.llenarTablaSimbolos(objetos,tri);
-        
-      }else{
-        contenido=objetos.replaceAll("%20"," ").replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&amp;","&").replaceAll("&apos;","'").replaceAll("&quot;","\"");
+
+        this.llenarTablaSimbolos(objetos, tri);
+
+      } else {
+        contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
       }
-      var Reporte = new reporteTabla(nombre,contenido,atributos,listaobjetitos);
+      var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos);
       tri.listaSimbolos.push(Reporte);
-      
+
     }
   }
 
@@ -240,39 +242,70 @@ export class ContenidoInicioComponent implements OnInit {
 
     //console.log(gramar);
   }
-/*********************************************************************************************************/
-/***********************************************XPATH ASCENDENTE******************************************/
-/*********************************************************************************************************/
-  EjecutarAsc(texto: string){
+  /*********************************************************************************************************/
+  /***********************************************XPATH ASCENDENTE******************************************/
+  /*********************************************************************************************************/
+  EjecutarAsc(texto: string) {
+
     if (texto == null) return document.write('Error');
     const analizador = AnalizarAscXpath;
-    const objetos = analizador.parse(texto);
-    var Tree:ArbolXpath = new ArbolXpath([objetos]);
-    
+    let objetos = analizador.parse(texto);
+    let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
+    var Tree: ArbolXpath = new ArbolXpath([objetos]);
+    var tabla = new tablaSimbolos();                    //ejecucion
+    ast.settablaGlobal(tabla);                        //ejecucion
+    var tablita = this.tablaGlobal;
+    var c = 0;
+    var consolita=''
 
-   
-    var instrucciones = new nodoAst("INSTRUCCIONES");
-    var contador=0;
-  
-    
-    for(let i of Tree.getinstrucciones()){
-      this.ciclo(i,contador,instrucciones)
+    for (var key of tablita.getTabla()) {//SIMBOLOS
+      if(key.getidentificador() == 'xml'){
+        tablita = key.getvalor()
+      } 
     }
-    
-    
+    for (let i of ast.getinstrucciones()) {             //ejecucion  
+      c++;
+      if (i instanceof BarrasNodo) {
+        var resultador = i.interpretar(Tree, tablita);
+        console.log(resultador);
+        console.log("estamos en barra nodo")
+        if (resultador instanceof tablaSimbolos) {
+          tablita = resultador
+          if (c == ast.getinstrucciones().length) {
+            consolita = this.recorrerTabla(tablita);
+          }
+        }
+        else { //VIENE STRING
+          consolita = resultador
+        }
+        //var consolita = localStorage.getItem('consulta');
+      }
+    }
+
+    this.mostrarContenido(consolita, 'resultado');
+
+    var instrucciones = new nodoAst("INSTRUCCIONES");
+    var contador = 0;
+
+
+    for (let i of Tree.getinstrucciones()) {
+      this.ciclo(i, contador, instrucciones)
+    }
+
+
     let sim_string = JSON.stringify(instrucciones);
     localStorage.setItem("astpath", sim_string);
   }
 
-  ciclo(i:any, numero:number, instruc:nodoAst){
-    if(i[numero]!=null){
-     
-      if(i[numero] instanceof BarrasNodo){
-        let temp:BarrasNodo= i[numero]
+  ciclo(i: any, numero: number, instruc: nodoAst) {
+    if (i[numero] != null) {
+
+      if (i[numero] instanceof BarrasNodo) {
+        let temp: BarrasNodo = i[numero]
         instruc.agregarHijoAST(temp.getNodosAST())
       }
       numero++
-      this.ciclo(i,numero,instruc);
+      this.ciclo(i, numero, instruc);
     }
   }
   textoEsperado = '';
@@ -288,6 +321,8 @@ export class ContenidoInicioComponent implements OnInit {
     };
     lector.readAsText(archivo);
   }
+
+
   mostrarContenido(contenido, identificador) {
     var elemento = document.getElementById(identificador);
     elemento.innerHTML = contenido;
@@ -306,7 +341,30 @@ export class ContenidoInicioComponent implements OnInit {
     // #docregion focus-restoration
     this.dialog.open(Pruebas, {});
   }
+  recorrerTabla(t: tablaSimbolos) {
+    var salida = ''
+    for (var key of t.tablaActual) {
+      
+      var listaobjetitos = "";
+
+      let objetos = key.getvalor();
+      if (objetos instanceof tablaSimbolos) {
+        for (var key3 of objetos.tablaActual) {
+          listaobjetitos += `${key3.getidentificador()}, `
+        }
+
+        salida += this.recorrerTabla(objetos);
+
+      } else {
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+      }
+    }
+    return salida;
+
+  }
 }
+
+
 
 @Component({
   selector: 'contenido-dialog',
