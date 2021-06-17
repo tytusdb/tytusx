@@ -5,6 +5,8 @@ var erroresXML = [];
 var erroresXPath = [];
 var reglasGramaticalesXML;
 var reglasGramaticalesXPath;
+var instruccionesXML;
+var instruccionesXPath;
 function procesarProyecto(instruccionesXML, instruccionesXPath) {
     consola = "Iniciando analisis";
     entornoGlobal = new Entorno(null);

@@ -13,6 +13,8 @@ const parserReportDesc = require('../Reportes/xmlReportDesc');
 const parseXPATH = require('../Grammar/XPATHparser');
 const parseXPATHDesc = require('../Grammar/XPATHparserDesc');
 
+const utf8 = require('utf8');
+
 export default class Main extends Component {
 
     state = {
@@ -22,6 +24,7 @@ export default class Main extends Component {
         repcsttxt: '',
         repgramtxt: '',
         repErrorXML: '',
+        repErrorXPATH: '',
         repTablaSimbolos: '',
         repAstXpath: '',
         graphvizContent: ''
@@ -31,22 +34,22 @@ export default class Main extends Component {
         let ast;
         let listaErrores = [];
         let TablaSimbolos = [];
-
         let repcsttxt2 = '';
         let repgramtxt2 = '';
         let repErrorXML2 = '';
         let repTablaSimbolos2 = '';
-
+        let RepErrorXPATHASC = '';
         let texto = "";
         let indice = 1;
         let entornoGlobal;
         let encoding = "";
+        //XML
         try {
             const result = parser.parse(this.state.xml)
             ast = result.ast;
             encoding = result.encoding;
             listaErrores = result.listaErrores;
-            entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
+            entornoGlobal = new Entorno('Global', '', 0, 0, [], ast, true);
             var buf = new Buffer("Hello World");
             console.log(buf.toString("ascii"));
             console.log("---------------------");
@@ -67,60 +70,60 @@ export default class Main extends Component {
             console.log(error)
             alert("Irrecoverable Xml Syntax Error")
         }
-
-
-        console.log(ast);
-        console.log(encoding)
-        console.log(listaErrores);
-
-
+        //XPATH
         try {
             const querys = parseXPATH.parse(this.state.xpath)
-            console.log(querys)
-            for (const key in querys) {
-                texto = querys[key].GraficarAST(texto);
-                if (indice < querys.length) {
-                    texto += "nodo" + key.toString() + "[label=\"|\"];\n"
-                    texto += "nodo" + querys[key].line.toString() + "_" + querys[key].column.toString() + "->nodo" + key.toString() + ";\n";
-                    texto += "nodo" + key.toString() + "->nodo" + querys[indice].line.toString() + "_" + querys[indice].column.toString() + ";\n";
-                    indice++;
+            var querysXpath = querys.xpath;
+            var erroresXpath = querys.listaErrores;
+            //REPORTE AST y ERRORES PARA XPATH************************************************************
+            if (erroresXpath.length === 0) {
+                for (const key in querysXpath) {
+                    texto = querysXpath[key].GraficarAST(texto);
+                    if (indice < querysXpath.length) {
+                        texto += "nodo" + key.toString() + "[label=\"|\"];\n"
+                        texto += "nodo" + querysXpath[key].line.toString() + "_" + querysXpath[key].column.toString() + "->nodo" + key.toString() + ";\n";
+                        texto += "nodo" + key.toString() + "->nodo" + querysXpath[indice].line.toString() + "_" + querysXpath[indice].column.toString() + ";\n";
+                        indice++;
+                    }
                 }
+                this.setState({
+                    repAstXpath: "digraph G {" +texto +"}",
+                });
+            } else {
+                console.log(erroresXpath.length)
+                this.setState({
+                    repErrorXPATH: "digraph G {" + crearTextoReporteErrorXML(erroresXpath, RepErrorXPATHASC) + "}"
+                })
             }
 
 
             console.log(texto);
 
             this.setState({
-                repAstXpath: "digraph G {" +texto +"}",
+                repAstXpath: "digraph G {" + texto + "}",
             });
+
             var erroresSemanticos: string[] = [];
             var salida = "";
-
-            for (const query of querys) {
+            for (const query of querysXpath) {
                 try {
                     salida += query.execute(ast[0]).value;
-
                 } catch (error) {
                     erroresSemanticos.push(error)
                 }
             }
-            console.log(salida);
-
             this.setState({
                 consoleResult: salida,
             });
-
         } catch (error) {
             console.log(error);
         }
-
     }
-
     parseDesc = () => {
         let ast;
         let listaErrores = [];
         let TablaSimbolos = [];
-
+        let RepErrorXPATHDESC = '';
         let repcsttxt2 = '';
         let repgramtxt2 = '';
         let repErrorXML2 = '';
@@ -129,14 +132,13 @@ export default class Main extends Component {
         let texto = "";
         let indice = 1;
         let entornoGlobal;
-
         try {
             const result = parserXmlDesc.parse(this.state.xml)
             ast = result.ast;
             encoding = result.encoding;
             listaErrores = result.listaErrores;
-            entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
-            
+            entornoGlobal = new Entorno('Global', '', 0, 0, [], ast, true);
+
             if (listaErrores.length === 0) {
                 var xmlResRep = parserReportDesc.parse(this.state.xml);
                 this.setState({
@@ -153,46 +155,51 @@ export default class Main extends Component {
             console.log(error)
             alert("Irrecoverable Xml Syntax Error")
         }
-        //console.log(ast)
-        //console.log(listaErrores)
         try {
-            const querysDesc = parseXPATHDesc.parse(this.state.xpath)
-            console.log(querysDesc);
-            for (const key in querysDesc) {
-                texto = querysDesc[key].GraficarAST(texto);
-                if (indice < querysDesc.length) {
-                    texto += "nodo" + key.toString() + "[label=\"|\"];\n"
-                    texto += "nodo" + querysDesc[key].line.toString() + "_" + querysDesc[key].column.toString() + "->nodo" + key.toString() + ";\n";
-                    texto += "nodo" + key.toString() + "->nodo" + querysDesc[indice].line.toString() + "_" + querysDesc[indice].column.toString() + ";\n";
-                    indice++;
+            const querys2 = parseXPATH.parse(this.state.xpath);
+            var querysXpath2 = querys2.xpath;
+            var erroresXpath2 = querys2.listaErrores;
+            //XPATH AST Y ERROR**********************************************************
+            if (erroresXpath2.length === 0) {
+                const querysDesc = parseXPATHDesc.parse(this.state.xpath)
+                for (const key in querysDesc) {
+                    texto = querysDesc[key].GraficarAST(texto);
+                    if (indice < querysDesc.length) {
+                        texto += "nodo" + key.toString() + "[label=\"|\"];\n"
+                        texto += "nodo" + querysDesc[key].line.toString() + "_" + querysDesc[key].column.toString() + "->nodo" + key.toString() + ";\n";
+                        texto += "nodo" + key.toString() + "->nodo" + querysDesc[indice].line.toString() + "_" + querysDesc[indice].column.toString() + ";\n";
+                        indice++;
+                    }
                 }
+                this.setState({
+                    repAstXpath: "digraph G {" +texto +"}",
+                });
+            } else {
+                this.setState({
+                    repErrorXPATH: "digraph G {" + crearTextoReporteErrorXML(erroresXpath2, RepErrorXPATHDESC) + "}"
+                })
             }
-            const querys2 = parseXPATH.parse(this.state.xpath)
             this.setState({
-                repAstXpath: "digraph G {" +texto +"}",
+                repAstXpath: "digraph G {" + texto + "}",
             });
             var erroresSemanticos: string[] = [];
             var salida = "";
-            for (const query of querys2) {
+            for (const query of querysXpath2) {
                 try {
                     salida += query.execute(ast[0]).value;
                 } catch (error) {
                     erroresSemanticos.push(error)
                 }
             }
-            console.log(salida);
-
             this.setState({
                 consoleResult: salida
             });
-
         } catch (error) {
             console.log(error);
         }
 
-        
-    }
 
+    }
 
 
     handleFileChange = file => {
@@ -209,7 +216,6 @@ export default class Main extends Component {
             }
         };
     };
-
     handleFileChangeXpath = file => {
 
         const reader = new FileReader();
@@ -225,7 +231,6 @@ export default class Main extends Component {
             }
         };
     };
-
     onChangeReports = e => {
         //console.log(this.state.graphvizContent)
         if (e.target.value === "Ocultar") {
@@ -248,13 +253,16 @@ export default class Main extends Component {
             this.setState({
                 graphvizContent: this.state.repTablaSimbolos
             })
-        } else if (e.target.value === "AST Xpath") {
+        } else if (e.target.value === "AST XPath") {
             this.setState({
                 graphvizContent: this.state.repAstXpath
             })
+        } else if (e.target.value === "Reporte de errores XPath") {
+            this.setState({
+                graphvizContent: this.state.repErrorXPATH
+            })
         }
     }
-
     render() {
         return (
             <>
@@ -318,6 +326,16 @@ export default class Main extends Component {
                         </Col>
                     </Row>
                     <br />
+                    <Button variant="primary" onClick={() => {
+                        var cadena = "Hola como% estasñ434";
+                        var result = utf8.encode(cadena)
+                        console.log(cadena)
+                        console.log(result);
+
+                        
+                        
+                    }}>encoding</Button>
+                    <br />
                     <Form.Control as="textarea" placeholder="XML AREA" rows={15} value={this.state.xml} onChange={(e: any) => {
                         this.setState({
                             xml: e.target.value
@@ -333,7 +351,8 @@ export default class Main extends Component {
                             <option>Reporte de errores XML</option>
                             <option>CST XML</option>
                             <option>Reporte gramatical XML</option>
-                            <option>AST Xpath</option>
+                            <option>AST XPath</option>
+                            <option>Reporte de errores XPath</option>
                         </Form.Control>
                     </Form.Group>
                 </div>
