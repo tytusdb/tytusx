@@ -16,10 +16,12 @@ class Analizador{
 
   private static _instance: Analizador;
   global:Entorno;
+  indice:number;
 
   constructor(){
     this.global = new Entorno('global', null, null);
     errores.limpiar();
+    this.indice = 0;
 
     if (typeof Analizador._instance === "object"){
       return Analizador._instance;
@@ -109,37 +111,69 @@ class Analizador{
   getRepTablaSimbolos():string{
     let cadenaDot:string = '';
     let tabla:Array<any> = this.global.tsimbolos;
-    let indice:number = 0;
-    
+    this.indice = 0;
     cadenaDot = 'digraph {'
                 +  'tbl ['
                 +    'shape=plaintext,'
                 +    'label=<'
-                +      '<table border="0" cellborder="1" color="blue" cellspacing="0">'
-                +        '<tr>'
-                +            '<td>No.</td><td>Nombre</td><td>Tipo</td><td>Ambito</td><td>Nodo</td><td>Fila</td><td>Columna</td>'
+                +      '<table border="0" cellborder="1" color="#ddd" cellspacing="0">'
+                +        '<tr bgcolor="#04AA6D">'
+                +            '<td><b>NO.</b></td>'
+                +            '<td><b>NOMBRE</b></td>'
+                +            '<td><b>TIPO</b></td>'
+                +            '<td><b>AMBITO</b></td>'
+                +            '<td><b>NODO</b></td>'
+                +            '<td><b>VALOR</b></td>'
+                +            '<td><b>FILA</b></td><td><b>COLUMNA</b></td>'
                 +        '</tr>';
-    tabla.forEach((elem: any) => {
-      indice++;
-      cadenaDot = cadenaDot
-                +        '<tr>'
-                +            '<td>'+indice+'</td>'
-                +            '<td>'+elem.valor.nombre+'</td>'
-                +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
-                +            '<td>'+elem.nombre+'</td>'
-                +            '<td>'+elem.nombre+'</td>'
-                +            '<td>'+elem.valor.linea+'</td>'
-                +            '<td>'+elem.valor.columna+'</td>'
-                +        '</tr>';
-    });
+    cadenaDot = cadenaDot + this.getSimbolosEntorno(this.global);
     cadenaDot = cadenaDot +      '</table>'
                           +    '>];'
                           +'}';
     return cadenaDot;
   }
 
+  getSimbolosEntorno(entrada:Entorno):string{
+    let simbolos:string = '';
+    entrada.tsimbolos.forEach((elem: any) => {
+      if(elem.valor.valor instanceof Entorno){
+        this.indice++;
+        simbolos = simbolos
+                +        '<tr>'
+                +            '<td>'+this.indice+'</td>'
+                +            '<td>'+elem.valor.nombre+'</td>'
+                +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
+                +            '<td>'+entrada.nombre+'</td>'
+                +            '<td>'+elem.nombre+'</td>'
+                +            '<td>'+elem.valor.valor.toString().replace('&','and')+'</td>'
+                +            '<td>'+elem.valor.linea+'</td>'
+                +            '<td>'+elem.valor.columna+'</td>'
+                +        '</tr>';
+        simbolos = simbolos + this.getSimbolosEntorno(elem.valor.valor);
+      }else{
+        if(elem.valor.valor !== false){
+          this.indice++;
+          simbolos = simbolos
+                  +        '<tr>'
+                  +            '<td>'+this.indice+'</td>'
+                  +            '<td>'+elem.valor.nombre+'</td>'
+                  +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
+                  +            '<td>'+entrada.nombre+'</td>'
+                  +            '<td>'+elem.nombre+'</td>'
+                  +            '<td>'+elem.valor.valor.toString().replace('&','and')+'</td>'
+                  +            '<td>'+elem.valor.linea+'</td>'
+                  +            '<td>'+elem.valor.columna+'</td>'
+                  +        '</tr>';
+        }
+      }
+    });
+    return simbolos;
+  }
+
   getTipoDato(t: number):string{
     switch(t){
+        case 0: 
+            return 'Texto';
         case 1:
             return 'Cadena';
         case 2:
