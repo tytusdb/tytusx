@@ -1,6 +1,5 @@
 // IMPORTS ERRORES Y FUNCIONES
 %{
-     
      function change_especials(etiqueta){
           if(etiqueta.includes("&lt;")){
                return etiqueta.replace(/&lt;/g,'<');
@@ -150,7 +149,7 @@ tipo : TEXTO                                            { $$ = new Node_tree('ti
      ;
 
 elementos : elementos elemento                          { $$ = new Node_tree('elementos',''); $$.addChild($1); $$.addChild($2); }
-	      | elemento                                    { $$ = new Node_tree('elementos',''); $$.addChild($1); } 
+	      | elemento                                    { $$ = new Node_tree('elementos',''); $$.addChild($1); }
           ;
 %%
 

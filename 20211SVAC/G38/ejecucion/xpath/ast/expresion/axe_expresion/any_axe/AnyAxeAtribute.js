@@ -24,6 +24,6 @@ class AnyAxeAtribute {
             case AxeOperation.text:
                 break;
         }
-        return ts;
+        return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);
     }
 }

@@ -76,22 +76,22 @@ START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RA
   
 
 RAIZ:
-    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); }
-    | lt identifier  gt RAICES  lt div identifier gt {$$= new Objeto($2,'',0,0,null);}    
+    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
+    | lt identifier  gt RAICES  lt div identifier gt {$$= new Objeto($2,'',@1.first_line, @1.first_column,null,$4);}    
              
 ;
 
 RAICES:
-    RAICES OBJETO {$$= $1;  $$.push($2);}
-	| OBJETO  {$$= [];  $$.push($1);}
+    RAICES OBJETO {$$= $1;  $$.push($2);  alert($2.texto);}
+	| OBJETO  {$$= [];  $$.push($1); alert($1.texto);}
 ;        
 
   
 OBJETO:
-           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); } 
-        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,0,0,$3,null); } 
-        |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}       
-        |  lt identifier  gt identifier  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}    
+           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); } 
+        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,@1.first_line, @1.first_column,$3,null); } 
+        |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',@1.first_line, @1.first_column,null,$4);}       
+        |  lt identifier  gt identifier  lt div identifier gt  { $$= new Objeto($2,$4,@1.first_line, @1.first_column,null,null);}    
            
 ;
 
@@ -103,5 +103,5 @@ ATRIBUTOS:
 ;
 
 ATRIBUTO: 
-    identifier asig StringLiteral {$$= new Atributo($1,$3);}                 
+    identifier asig StringLiteral {$$= new Atributo($1,$3,@1.first_line, @1.first_column);}                 
 ;

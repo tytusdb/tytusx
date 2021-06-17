@@ -1,0 +1,38 @@
+<mat-card>
+</mat-card>
+<mat-card>
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>Tabla de simbolos</mat-card-title>
+  </mat-card-header>
+  <div mat-card-image></div>
+  <mat-card-content>
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Fila</th>
+            <th scope="col">Columna</th>
+            <th scope="col">Padre</th>
+            <th scope="col">TipoEtiqueta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of source;index as i;">
+            <th scope="row">{{i}}</th>
+            <td>{{item.Nombre}}</td>
+            <td>{{item.Tipo}}</td>
+            <td>{{item.Fila}}</td>
+            <td>{{item.Columna}}</td>
+            <td>{{item.Padre}}</td>
+            <td>{{item.TipoEtiqueta}}</td>
+          </tr>
+          
+        </tbody>
+      </table>
+  </mat-card-content>
+ 
+</mat-card>
+

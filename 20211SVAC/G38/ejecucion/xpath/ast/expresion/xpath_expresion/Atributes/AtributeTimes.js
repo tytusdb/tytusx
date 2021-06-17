@@ -5,7 +5,8 @@ class AtributeTimes {
         this.columna = columna;
     }
     getTipo(ent) {
-        return new Tipo(TipoDato.err);
+        return new Tipo(TipoDato.xpathValue);
+
     }
     getValor(ent) {
     }

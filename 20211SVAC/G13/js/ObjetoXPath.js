@@ -6,8 +6,19 @@ var ObjetoXPath = /** @class */ (function () {
         this.valor = v;
         this.atributo = false;
         this.ambito = "local";
-        //this.exp = new Literal(69,'Error',-1,-1);
     }
+    ObjetoXPath.prototype.copiarValor = function () {
+        var nuevo = new ObjetoXPath(this.valor);
+        nuevo.atributo = this.atributo;
+        nuevo.ambito = this.ambito;
+        if (this.exp != undefined) {
+            nuevo.exp = this.exp.copiarValor();
+        }
+        else {
+            nuevo.exp = undefined;
+        }
+        return nuevo;
+    };
     ObjetoXPath.prototype.setExpresion = function (E) {
         this.exp = E;
     };

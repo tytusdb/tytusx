@@ -72,30 +72,63 @@
   }
 */
 var Xpath2 = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[5,9];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,22],$V2=[1,23],$V3=[1,9],$V4=[1,10],$V5=[1,12],$V6=[1,13],$V7=[1,14],$V8=[1,15],$V9=[1,16],$Va=[1,17],$Vb=[1,18],$Vc=[1,19],$Vd=[1,20],$Ve=[1,21],$Vf=[1,26],$Vg=[5,10,12,14,15],$Vh=[1,32],$Vi=[1,33],$Vj=[2,27],$Vk=[10,12,14,15],$Vl=[2,17],$Vm=[1,35],$Vn=[5,18],$Vo=[1,46];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"INICIO":4,"EOF":5,"INICIONODO":6,"INICIOAXIS":7,"INICIORAIZ":8,"raiz":9,"IDEN":10,"identifier":11,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"INICIONODO",7:"INICIOAXIS",9:"raiz",11:"identifier"},
-productions_: [0,[3,2],[3,2],[3,2],[4,2],[4,1],[8,2],[8,2],[10,2],[10,1]],
+symbols_: {"error":2,"START":3,"INICIO":4,"EOF":5,"INICIONODO":6,"INICIOAXIS":7,"INICIORAIZ":8,"IDEN":9,"identifier":10,"POSIBLES":11,"attribute":12,"PREDICADO":13,"todos":14,"METODOS":15,"llaveabierta":16,"VAL":17,"llavecerrada":18,"RESERVADA":19,"axis":20,"AXISRESTO":21,"raiz":22,"fnodo":23,"ftexto":24,"ancestor":25,"ancestororself":26,"child":27,"descendant":28,"descendantorself":29,"following":30,"followingsibling":31,"namespace":32,"parent":33,"preceding":34,"precedingsibling":35,"self":36,"Number_Literal":37,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"INICIONODO",10:"identifier",12:"attribute",14:"todos",15:"METODOS",16:"llaveabierta",18:"llavecerrada",20:"axis",22:"raiz",23:"fnodo",24:"ftexto",25:"ancestor",26:"ancestororself",27:"child",28:"descendant",29:"descendantorself",30:"following",31:"followingsibling",32:"namespace",33:"parent",34:"preceding",35:"precedingsibling",36:"self",37:"Number_Literal"},
+productions_: [0,[3,2],[3,2],[3,2],[4,2],[4,1],[9,2],[9,1],[8,1],[8,2],[8,2],[11,3],[11,3],[11,2],[11,1],[13,3],[13,3],[13,0],[7,3],[21,0],[21,3],[21,1],[21,1],[21,1],[21,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[17,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 1: case 2: case 3: case 6: case 7: case 8:
+case 1: case 2: case 3: case 6:
  this.$ = $$[$0-1]; return this.$; 
 break;
 case 4:
  $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; return this.$; 
 break;
-case 5: case 9:
+case 5: case 7: case 21: case 22: case 23: case 24: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37:
  this.$ = $$[$0]; return this.$; 
+break;
+case 8:
+ this.$ = [new Nodo($$[$0], Tipo.STRING, _$[$0].first_line, _$[$0].first_column)]
+break;
+case 9:
+this.$ = [new Nodo($$[$0-1], Tipo.STRING, _$[$0-1].first_line, _$[$0-1].first_column)]; this.$ = this.$.concat($$[$0]); 
+break;
+case 10:
+ this.$ = [$$[$0-1]]; this.$ = this.$.concat($$[$0])
+break;
+case 11: case 12:
+ this.$ = new Nodo($$[$0-1], Tipo.ATRIBUTO, _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 13:
+  this.$ = new Nodo($$[$0-1], Tipo.TODOS, _$[$0-1].first_line, _$[$0-1].first_column);
+break;
+case 14:
+ this.$ = new Nodo($$[$0], Tipo.METODO, _$[$0].first_line, _$[$0].first_column);
+break;
+case 15:
+ this.$ = new Nodo($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 16: case 18:
+ this.$ = new Nodo($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column);
+break;
+case 17:
+ this.$ = [];
+break;
+case 20:
+ $$[$0-2].push($$[$0-1]); this.$ = $$[$0-2]; return this.$; 
+break;
+case 38:
+ this.$ = Number($$[$0]); 
 break;
 }
 },
-table: [{3:1,4:2,6:[1,3],7:[1,4],8:5,9:$V0},{1:[3]},{5:[1,7],8:8,9:$V0},{5:[1,9]},{5:[1,10]},o($V1,[2,5]),{10:11,11:[1,12]},{1:[2,1]},o($V1,[2,4]),{1:[2,2]},{1:[2,3]},o($V1,[2,6]),{4:13,5:[2,9],8:5,9:$V0},{5:[2,8],8:8,9:$V0}],
-defaultActions: {7:[2,1],9:[2,2],10:[2,3]},
+table: [{3:1,4:2,6:[1,3],7:4,8:5,10:$V0,11:8,12:[1,11],14:$V1,15:$V2,19:6,25:$V3,26:$V4,27:$V5,28:$V6,29:$V7,30:$V8,31:$V9,32:$Va,33:$Vb,34:$Vc,35:$Vd,36:$Ve},{1:[3]},{5:[1,24],8:25,10:$V0,11:8,12:$Vf,14:$V1,15:$V2},{5:[1,27]},{5:[1,28]},o($Vg,[2,5]),{20:[1,29]},{4:30,5:[2,8],8:5,10:$V0,11:8,12:$Vf,14:$V1,15:$V2},{4:31,8:5,10:$V0,11:8,12:$Vf,14:$V1,15:$V2},{20:[2,25]},{20:[2,26]},{10:$Vh,14:$Vi,20:$Vj},{20:[2,28]},{20:[2,29]},{20:[2,30]},{20:[2,31]},{20:[2,32]},{20:[2,33]},{20:[2,34]},{20:[2,35]},{20:[2,36]},{20:[2,37]},o($Vk,$Vl,{13:34,16:$Vm}),o($Vk,[2,14]),{1:[2,1]},o($Vg,[2,4]),{10:$Vh,14:$Vi},{1:[2,2]},{1:[2,3]},o($Vn,[2,19],{21:36,10:[1,38],14:[1,37],23:[1,39],24:[1,40]}),{5:[2,9],8:25,10:$V0,11:8,12:$Vf,14:$V1,15:$V2},{5:[2,10],8:25,10:$V0,11:8,12:$Vf,14:$V1,15:$V2},o($Vk,$Vl,{13:41,16:$Vm}),o($Vk,$Vl,{13:42,16:$Vm}),o($Vk,[2,13]),{7:44,12:$Vo,17:43,19:6,25:$V3,26:$V4,27:$V5,28:$V6,29:$V7,30:$V8,31:$V9,32:$Va,33:$Vb,34:$Vc,35:$Vd,36:$Ve,37:[1,45]},o($Vn,[2,18]),o($Vn,[2,21],{22:[1,47]}),o($Vn,[2,22]),o($Vn,[2,23]),o($Vn,[2,24]),o($Vk,[2,11]),o($Vk,[2,12]),{18:[1,48]},{18:[1,49]},{18:[2,38]},{20:$Vj},{7:50,12:$Vo,19:6,25:$V3,26:$V4,27:$V5,28:$V6,29:$V7,30:$V8,31:$V9,32:$Va,33:$Vb,34:$Vc,35:$Vd,36:$Ve},o($Vk,[2,15]),o($Vk,[2,16]),o($Vn,[2,20])],
+defaultActions: {9:[2,25],10:[2,26],12:[2,28],13:[2,29],14:[2,30],15:[2,31],16:[2,32],17:[2,33],18:[2,34],19:[2,35],20:[2,36],21:[2,37],24:[2,1],27:[2,2],28:[2,3],45:[2,38],46:[2,27]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -573,13 +606,13 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:return 'Number_Literal'
+case 1:return 37
 break;
-case 2:return 'Number_Literal'
+case 2:return 37
 break;
-case 3:return 'todos'
+case 3:return 14
 break;
-case 4:return 9
+case 4:return 22
 break;
 case 5:return 'mas'
 break;
@@ -615,58 +648,71 @@ case 20:return 'mod'
 break;
 case 21:return 'arroba'
 break;
-case 22:return 'llaveabierta'
+case 22:return 16
 break;
-case 23:return 'llavecerrada'
+case 23:return 18
 break;
-case 24:return 'axis'
+case 24:return 20
 break;
 case 25:return 'nodoactual'
 break;
 case 26:return 'nodopadre'
 break;
-case 27:return 'ancestor'
+case 27:return 25
 break;
-case 28:return 'ancestororself'
+case 28:return 26
 break;
-case 29:return 'attribute'
+case 29:return 12
 break;
-case 30:return 'child'
+case 30:return 27
 break;
-case 31:return 'descendant'
+case 31:return 28
 break;
-case 32:return 'descendantorself'
+case 32:return 29
 break;
-case 33:return 'following'
+case 33:return 30
 break;
-case 34:return 'followingsibling'
+case 34:return 31
 break;
-case 35:return 'namespace'
+case 35:return 32
 break;
-case 36:return 'parent'
+case 36:return 33
 break;
-case 37:return 'preceding'
+case 37:return 34
 break;
-case 38:return 'precedingsibling'
+case 38:return 35
 break;
-case 39:return 'self'
+case 39:return 36
 break;
-case 40:return 'ftexto'
+case 40:return 24
 break;
-case 41:return 'fnodo'
+case 41:return 23
 break;
-case 42:return 11;
+case 42:return 10;
 break;
 case 43:return 'StringLiteral'
 break;
 case 44:return 'CharLiteral'
 break;
-case 45:return 5
+case 45:
+                                        console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
+                                    
+break;
+case 46:return 5
+break;
+case 47:
+    const {Print} = require("../Instrucciones/Primitivas/Print");
+    const {Primitivo} = require("../Expresiones/Primitivo");
+    const {Operacion, Operador} = require("../Expresiones/Operacion");
+    const {Objeto} = require("../Expresiones/Objeto");
+    const {Atributo} = require("../Expresiones/Atributo");
+    const {Nodo} =require("../ArbolST/Nodo");
+
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:(([0-9]+)\.([0-9]+)))/i,/^(?:([0-9]+))/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:\+)/i,/^(?:\/\\\/)/i,/^(?:-)/i,/^(?:\()/i,/^(?:\))/i,/^(?:<)/i,/^(?:>)/i,/^(?:\|)/i,/^(?:div\b)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:::)/i,/^(?:\.)/i,/^(?:\.\.)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:following\b)/i,/^(?:following-sibling\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:self\b)/i,/^(?:text\(\))/i,/^(?:node\(\))/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/i,/^(?:$)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:(([0-9]+)\.([0-9]+)))/i,/^(?:([0-9]+))/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:\+)/i,/^(?:\/\\\/)/i,/^(?:-)/i,/^(?:\()/i,/^(?:\))/i,/^(?:<)/i,/^(?:>)/i,/^(?:\|)/i,/^(?:div\b)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:::)/i,/^(?:\.)/i,/^(?:\.\.)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:following\b)/i,/^(?:following-sibling\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:self\b)/i,/^(?:text\(\))/i,/^(?:node\(\))/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/i,/^(?:.)/i,/^(?:$)/i,/^(?:)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
 });
 return lexer;
 })();
