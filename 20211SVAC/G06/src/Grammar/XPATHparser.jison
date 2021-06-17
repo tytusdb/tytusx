@@ -4,7 +4,9 @@
     const {Logica, operacionLogica} = require("../xpathAST/Expresiones/Logica");
     const {Path} = require("../xpathAST/Expresiones/Path");
     const {Primitivo, tipoPrimitivo} = require("../xpathAST/Expresiones/Primitivo");
-    const {Relacional, operacionRelacional} = require("../xpathAST/Expresiones/Relacional")   
+    const {Relacional, operacionRelacional} = require("../xpathAST/Expresiones/Relacional")
+    const {ClaseError} = require("../xmlAST/ClaseError");
+    var listaErrores = [];
     var tmp="";
 %}
 
@@ -96,48 +98,67 @@
 %% 
 
 INIT
-    : '/' 'EOF'                 {return $1;}
-    | MULTIPATH 'EOF'           {return $1;}
-    | 'EOF'                     {return [];}
+    : '/' 'EOF'                                     {
+                                                    var listaErroresTemp = listaErrores;
+                                                    listaErrores = [];
+                                                    return {xpath: $1,listaErrores:listaErroresTemp}
+                                                    }
+    | MULTIPATH 'EOF'                               {
+                                                    var listaErroresTemp = listaErrores;
+                                                    listaErrores = [];
+                                                    return {xpath: $1,listaErrores:listaErroresTemp}
+                                                    }
+    | 'EOF'                                         {
+                                                    var listaErroresTemp = listaErrores;
+                                                    listaErrores = [];
+                                                    return {xpath: [],listaErrores:listaErroresTemp}
+                                                    }
     ;
 
 MULTIPATH
-    : MULTIPATH '|' PATH       {$1.push($3); $$ = $1;}
-    | PATH                     {$$ = [$1];}
+    : MULTIPATH '|' PATH                            {$1.push($3); $$ = $1;}
+    | PATH                                          {$$ = [$1];}
     ;
 
 PATH
-    : '/' LACCESOS              {$2[0].setipoQuery('relativa'); $$ = new Path(@1.first_line, @1.first_column, $2, 'relativa');}
-    | '//' LACCESOS             {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'absoluta');}
+    : '/' LACCESOS                                  {$2[0].setipoQuery('relativa'); $$ = new Path(@1.first_line, @1.first_column, $2, 'relativa');}
+    | '//' LACCESOS                                 {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'absoluta');}
     ;
 
 LACCESOS
-    : LACCESOS '/' ACCESO       {$3.setipoQuery('relativa'); $1.push($3); $$ = $1;}//abosoluta
-    | LACCESOS '//' ACCESO      {$3.setipoQuery('absoluta'); $1.push($3); $$ = $1;}//relativa
-    | LACCESOS '/' 'descendant' '::' id  {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'relativa');}
-    | LACCESOS '//' 'descendant' '::' id {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'absoluta');}
-    | ACCESO                    {$$ = [$1];}
+    : LACCESOS '/' ACCESO                           {$3.setipoQuery('relativa'); $1.push($3); $$ = $1;}//abosoluta
+    | LACCESOS '//' ACCESO                          {$3.setipoQuery('absoluta'); $1.push($3); $$ = $1;}//relativa
+    | LACCESOS '/' 'descendant' '::' id             {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', [], 'absoluta');}
+    | LACCESOS '//' 'descendant' '::' id            {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', [], 'absoluta');}
+    | LACCESOS '/' 'descendant' '::' id PREDICADOS  {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', $6, 'absoluta');}
+    | LACCESOS '//' 'descendant' '::' id PREDICADOS {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', $6, 'absoluta');}
+    | ACCESO                                        {$$ = [$1];}
     ;
 
 ACCESO 
 //nodos
-    : id                        {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', []);}
-    | '*'                       {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
-    | '.'                       {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'actual', []);}
-    | '..'                      {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'padre', []);}
-    | child '::' id             {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', []);}
-    | child '::' '*'            {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', []);}
-    | id PREDICADOS             {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', $2);}
-    | '*' PREDICADOS            {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', $2);}
-    | child '::' id PREDICADOS  {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', $4);}
-    | child '::' '*' PREDICADOS {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', $4);}
+    : id                                            {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', []);}
+    | '*'                                           {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
+    | '.'                                           {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'actual', []);}
+    | '..'                                          {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'padre', []);}
+    | id PREDICADOS                                 {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', $2);}
+    | '*' PREDICADOS                                {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', $2);}
+    | child '::' id                                 {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', []);}
+    | child '::' '*'                                {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', []);}
+    | child '::' id PREDICADOS                      {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', $4);}
+    | child '::' '*' PREDICADOS                     {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', $4);}
 //atributos
-    | '@' id                    {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', []);}
-    | '@' '*'                   {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', []);}
-    | '@' id PREDICADOS         {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', $3);}
-    | '@' '*' PREDICADOS        {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', $3);}
-    |  attribute '::' id PREDICADOS         {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'atributo', $4);}
-    |  attribute '::' '*' PREDICADOS        {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'todosAtributos', $4);}
+    | '@' id                                        {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', []);}
+    | '@' '*'                                       {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', []);}
+    | '@' id PREDICADOS                             {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', $3);}
+    | '@' '*' PREDICADOS                            {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', $3);}
+    |  attribute '::' id PREDICADOS                 {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'atributo', $4);}
+    |  attribute '::' '*' PREDICADOS                {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'todosAtributos', $4);}
+    |  error FINDERROR                              {listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',@1.first_line, @1.first_column))}
+    ;
+
+FINDERROR
+    : '/' {}
     ;
 
 PREDICADOS
@@ -171,12 +192,12 @@ VALOR
     : '(' EXP ')'               {$$ = $2;}
     | cadena                    {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
     | scadena                   {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
-    | number                    {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.NUMBER);} 
+    | number                    {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.NUMBER);}
+    | 'position' '(' ')'        {$$ = new Primitivo(@1.first_line, @1.first_column, $1);}
+    | 'last' '(' ')'            {$$ = new Primitivo(@1.first_line, @1.first_column, $1);}
 //sub consultas
     | LACCESOS                  {$1[0].setipoQuery('relativa'); $$ = new Path(@1.first_line, @1.first_column, $1, 'sub');}
     | '//' LACCESOS             {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'sub');}
-    | 'position' '(' ')'        {}
-    | 'last' '(' ')'            {}
     ;
 
 
