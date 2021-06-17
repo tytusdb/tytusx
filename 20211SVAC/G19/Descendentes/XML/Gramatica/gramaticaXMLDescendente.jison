@@ -23,7 +23,7 @@
 //TagConfiguracion
 "<?xml"                                 { this.begin("TagApertura"); return 't_congOp'; }
 <TagApertura>[\s\r\t\n]+                {}
-<TagApertura>[a-zA-Z_][a-zA-Z0-9_]*     { return 'atName'; }
+<TagApertura>[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+     { return 'atName'; }
 <TagApertura>"="                        { return 'atAsi' }
 <TagApertura>\"[^\"\n]*\"               { return 'atValue'; }
 <TagApertura>"?>"                       { this.popState(); return 't_congClose'; }
@@ -44,7 +44,11 @@
 [\s\r\t\n]+           {}
 [^<]+                 { return 'cadena_letras'; }
 <<EOF>>               { return 'EOF'; }
-.                     { };
+.                     {
+    console.error('Error léxico: ' + yytext + ', linea: ' + yylloc.first_line + ',  columna: ' + yylloc.first_column);
+                                         var er =new NodoError("Error Lexico","No se esperaba el caracter: "+ yytext, yylloc.first_line,yylloc.first_column);
+                                        Errores.add(er);
+};
 /lex
 
 //_______________________________
@@ -130,6 +134,7 @@ TAG_OP:
             $$.childList.push($1);
     }
 
+
 ;
 
 
@@ -157,6 +162,9 @@ OP_AP: LISTA_ATRIBUTOS close_gatap
         $$ = new NodeDescXML('OP_AP', '');
         $$.childList.push(new NodeDescXML($1, 'close_gatap'));
     }
+    | |error close_gatap {console.error('Error Sintactico: ' + yytext + ', linea: ' + @1.first_line + ',  columna: ' + @1.first_column);
+                               var er =new NodoError("Error Sintatico","XML Descendente","No se esperaba el caracter: "+ $1+"Se esperaba: CLOSE_TAG ", @1.first_line,@1.first_column);
+                               Errores.add(er);}
 ;
 
 
