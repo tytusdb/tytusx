@@ -67,6 +67,15 @@ function analizarXPath(){
     return cadena;
 }
 
+function analizarXML(){ // Esta funcion esta depricated XD
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
+    //console.log(entrada);
+    var tabla = gramatica1.parse(entrada);
+    return tabla;
+}
+
+
 /* FUNCIONES GRAMATICA DESCENDENTE DEL XML*/
 function analizarDescXML(){ // Utilizar la gramatica descendente para analizar la entrada
     
@@ -108,6 +117,10 @@ function erroresParserXml(arrErrores){
     return continuar;
 }
 
+
+
+
+
 function analizarAscXML(){
 
     var editor = $('.CodeMirror')[0].CodeMirror;
@@ -117,6 +130,7 @@ function analizarAscXML(){
     localStorage.setItem('cst-xml', res['DOTCST']);
     console.log(res['DOTCST']);
 }
+
 
 function getXPath(){
     return document.getElementById("txtQuery").value;
