@@ -57,7 +57,7 @@ function init() {
             console.log(tree);
             dotXMLDesc = newTree.graphXMLDescendente(tree);
             dotXMLDesc += '}';
-
+            console.log(dotXMLDesc);
             let parsedData = vis.network.convertDot(dotXMLDesc);
 
             let data = {

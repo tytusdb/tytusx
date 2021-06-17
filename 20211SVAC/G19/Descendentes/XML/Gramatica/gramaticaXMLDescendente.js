@@ -72,12 +72,12 @@
   }
 */
 var gramaticaXMLDescendente = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,15],$V4=[6,19],$V5=[2,5],$V6=[1,22],$V7=[2,6,15,19,21],$V8=[18,23,25],$V9=[2,22],$Va=[2,14,15,19,21];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,14],$V3=[6,18],$V4=[2,5],$V5=[1,21],$V6=[2,6,12,18],$V7=[17,21,23],$V8=[2,22],$V9=[2,12,14,18],$Va=[2,12];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"XML":3,"T_CONF":4,"TAGS_LIST":5,"EOF":6,"TAG":7,"TAG_LIST":8,"TAG_APERTURA":9,"TAG_OP":10,"U_TAG":11,"OPEN_TAG":12,"TAG_CIERRE":13,"cadena_letras":14,"openTagAp":15,"TAG_AP_MEN":16,"LISTA_ATRIBUTOS":17,"cierra_tagap":18,"openTag":19,"closingTag":20,"openTagOp":21,"TAG_SELEC":22,"close_tag_u":23,"t_congOp":24,"t_congClose":25,"ATRIBUTO":26,"LA":27,"atName":28,"atAsi":29,"atValue":30,"$accept":0,"$end":1},
-terminals_: {2:"error",6:"EOF",12:"OPEN_TAG",14:"cadena_letras",15:"openTagAp",18:"cierra_tagap",19:"openTag",20:"closingTag",21:"openTagOp",23:"close_tag_u",24:"t_congOp",25:"t_congClose",28:"atName",29:"atAsi",30:"atValue"},
-productions_: [0,[3,3],[3,2],[5,2],[8,2],[8,0],[7,2],[7,1],[7,2],[10,2],[10,2],[10,1],[9,2],[16,2],[16,1],[13,2],[11,2],[22,2],[22,1],[4,3],[17,2],[27,2],[27,0],[26,3]],
+symbols_: {"error":2,"XML":3,"T_CONF":4,"TAGS_LIST":5,"EOF":6,"TAG":7,"TAG_LIST":8,"TAG_APERTURA":9,"TAG_OP":10,"U_TAG":11,"tag_open":12,"TAG_CIERRE":13,"cadena_letras":14,"OP_AP":15,"LISTA_ATRIBUTOS":16,"close_gatap":17,"openTag":18,"closingTag":19,"TAG_SELEC":20,"close_tag":21,"t_congOp":22,"t_congClose":23,"ATRIBUTO":24,"LA":25,"atName":26,"atAsi":27,"atValue":28,"$accept":0,"$end":1},
+terminals_: {2:"error",6:"EOF",12:"tag_open",14:"cadena_letras",17:"close_gatap",18:"openTag",19:"closingTag",21:"close_tag",22:"t_congOp",23:"t_congClose",26:"atName",27:"atAsi",28:"atValue"},
+productions_: [0,[3,3],[3,2],[5,2],[8,2],[8,0],[7,2],[7,1],[7,2],[10,2],[10,2],[10,1],[9,2],[15,2],[15,1],[13,2],[11,2],[20,2],[20,1],[4,3],[16,2],[25,2],[25,0],[24,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -88,7 +88,6 @@ case 1:
             this.$ = new NodeDescXML('XML', '');
             this.$.childList.push($$[$0-2]);
             this.$.childList.push($$[$0-1]);
-
             return this.$;
          
 break;
@@ -98,7 +97,6 @@ case 2:
 
             this.$ = new NodeDescXML('XML', '');
             this.$.childList.push($$[$0-1]);
-
             return this.$;
         
 break;
@@ -106,8 +104,11 @@ case 3:
 
     this.$ = new NodeDescXML('TAGS_LIST', '');
     this.$.childList.push($$[$0-1]);
-    this.$.childList.push($$[$0]);
-
+    if($$[$0] === undefined || !$$[$0]) {
+        this.$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        this.$.setChild($$[$0]);
+    }
 
 
 break;
@@ -115,7 +116,11 @@ case 4:
 
         this.$ = new NodeDescXML('TAG_LIST', '');
         this.$.childList.push($$[$0-1]);
-        this.$.childList.push($$[$0]);
+        if($$[$0] === undefined || !$$[$0]) {
+        this.$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        this.$.setChild($$[$0]);
+    }
     
 break;
 case 5:
@@ -127,7 +132,7 @@ case 6:
 
             this.$ = new NodeDescXML('TAG', '');
             this.$.childList.push($$[$0-1]);
-            this.$.childList.push(new NodeDescXML($$[$0], 'TAG_OP'));
+            this.$.childList.push($$[$0]);
         
 break;
 case 7:
@@ -164,26 +169,26 @@ break;
 case 12:
 
         this.$ = new NodeDescXML('TAG_APERTURA', '');
-        this.$.childList.push(new NodeDescXML($$[$0-1], 'openTagAp'));
+        this.$.childList.push(new NodeDescXML($$[$0-1], 'TAG_OPEN'));
         this.$.childList.push($$[$0]);
     
 break;
 case 13:
 
-        this.$ = new NodeDescXML('TAG_AP_MEN', '');
-        this.$.childList.push(new NodeDescXML($$[$0-1], 'cierra_tagap'));
-        this.$.childList.push($$[$0]);
+        this.$ = new NodeDescXML('OP_AP', '');
+        this.$.childList.push($$[$0-1]);
+        this.$.childList.push(new NodeDescXML($$[$0], 'close_gatap'));
     
 break;
 case 14:
 
-        this.$ = new NodeDescXML('TAG_AP_MEN', '');
-        this.$.childList.push(new NodeDescXML($$[$0], 'cierra_tagap'));
+        this.$ = new NodeDescXML('OP_AP', '');
+        this.$.childList.push(new NodeDescXML($$[$0], 'close_gatap'));
     
 break;
 case 15:
 
-        this.$ = new NodeDescXML('TAG_AP_MEN', '');
+        this.$ = new NodeDescXML('OP_AP', '');
         this.$.childList.push(new NodeDescXML($$[$0-1], 'openTag'));
         this.$.childList.push(new NodeDescXML($$[$0], 'CLOSING_TAG'));
     
@@ -191,7 +196,7 @@ break;
 case 16:
 
         this.$ = new NodeDescXML('U_TAG', '');
-        this.$.childList.push(new NodeDescXML($$[$0-1], 'openTagOp'));
+        this.$.childList.push(new NodeDescXML($$[$0-1], 'TAG_OPEN'));
         this.$.childList.push($$[$0]);
     
 break;
@@ -199,61 +204,60 @@ case 17:
 
         this.$ = new NodeDescXML('TAG_SELEC', '');
         this.$.childList.push($$[$0-1]);
-        this.$.childList.push(new NodeDescXML($$[$0], 'close_tag_u'));
+        this.$.childList.push(new NodeDescXML($$[$0], 'CLOSE_TAG'));
     
 break;
 case 18:
 
         this.$ = new NodeDescXML('TAG_SELEC', '');
-        this.$.childList.push(new NodeDescXML($$[$0], 'close_tag_u'));
+        this.$.childList.push(new NodeDescXML($$[$0], 'CLOSE_TAG'));
 
     
 break;
 case 19:
 
             this.$ = new NodeDescXML('T_CONF', '');
-            this.$.childList.push(new NodeDescXML($$[$0-2], 't_congOp'));
+            this.$.childList.push(new NodeDescXML($$[$0-2], 'openTag'));
             this.$.childList.push($$[$0-1]);
-            this.$.childList.push(new NodeDescXML($$[$0-1], 't_congClose'));
+            this.$.childList.push(new NodeDescXML($$[$0-1], 'CLOSING_TAG'));
         
 break;
 case 20:
 
-        this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
-        this.$.childList.push($$[$0-1]);
+    this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+    this.$.childList.push($$[$0-1]);
 
-        if($$[$0] === undefined || !$$[$0]) {
-            this.$.setChild(new NodeDescXML('LA', ''));
-        } else {
-            this.$.setChild($$[$0]);
-            this.$.setChild(new NodeDescXML("EPSILON", ''));
-        }
+    if($$[$0] === undefined || !$$[$0]) {
+        this.$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        this.$.setChild($$[$0]);
+    }
+
 
 break;
 case 21:
 
-    this.$ = new NodeDescXML('LA', '');
+    this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
     this.$.childList.push($$[$0-1]);
     if($$[$0] === undefined || !$$[$0]) {
-        this.$.setChild(new NodeDescXML('LA', ''));
+        this.$.setChild(new NodeDescXML("EPSILON", ''));
     } else {
         this.$.setChild($$[$0]);
-        this.$.setChild(new NodeDescXML("EPSILON", ''));
     }
-
+ 
 break;
 case 23:
 
-        this.$ = new NodeDescXML('ATRIBUTO', '');
-        this.$.childList.push(new NodeDescXML($$[$0-2], 'atName'));
-        this.$.childList.push(new NodeDescXML($$[$0-1], 'atAsi'));
-        this.$.childList.push(new NodeDescXML($$[$0], 'atValue'));
+            this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+            this.$.childList.push(new NodeDescXML($$[$0-2], 'ATNAME'));
+            this.$.childList.push(new NodeDescXML($$[$0-2], 'ATASI'));
+            this.$.childList.push(new NodeDescXML($$[$0-2], 'ATVALUE'));
         
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,5:3,7:5,9:6,11:7,15:$V1,21:$V2,24:[1,4]},{1:[3]},{2:$V0,5:11,7:5,9:6,11:7,15:$V1,21:$V2},{6:[1,12]},{17:13,26:14,28:$V3},o($V4,$V5,{9:6,11:7,8:16,7:17,2:$V0,15:$V1,21:$V2}),{2:$V0,5:19,7:5,9:6,10:18,11:7,13:21,14:[1,20],15:$V1,19:$V6,21:$V2},o($V7,[2,7]),{12:[1,23]},{16:24,17:25,18:[1,26],26:14,28:$V3},{17:28,22:27,23:[1,29],26:14,28:$V3},{6:[1,30]},{1:[2,2]},{25:[1,31]},o($V8,$V9,{27:32,26:33,28:$V3}),{29:[1,34]},o($V4,[2,3]),o($V4,$V5,{9:6,11:7,7:17,8:35,2:$V0,15:$V1,21:$V2}),o($V7,[2,6]),{13:36,19:$V6},{13:37,19:$V6},o($V7,[2,11]),{20:[1,38]},o($V7,[2,8]),o($Va,[2,12]),{18:[1,39]},o($Va,[2,14]),o($V7,[2,16]),{23:[1,40]},o($V7,[2,18]),{1:[2,1]},o([2,15,21],[2,19]),o($V8,[2,20]),o($V8,$V9,{26:33,27:41,28:$V3}),{30:[1,42]},o($V4,[2,4]),o($V7,[2,9]),o($V7,[2,10]),o($V7,[2,15]),o($Va,[2,13]),o($V7,[2,17]),o($V8,[2,21]),o([18,23,25,28],[2,23])],
-defaultActions: {12:[2,2],30:[2,1]},
+table: [{2:$V0,3:1,4:2,5:3,7:5,9:6,11:7,12:$V1,22:[1,4]},{1:[3]},{2:$V0,5:10,7:5,9:6,11:7,12:$V1},{6:[1,11]},{16:12,24:13,26:$V2},o($V3,$V4,{9:6,11:7,8:15,7:16,2:$V0,12:$V1}),{2:$V0,5:18,7:5,9:6,10:17,11:7,12:$V1,13:20,14:[1,19],18:$V5},o($V6,[2,7]),{12:[1,22]},{15:23,16:25,17:[1,26],20:24,21:[1,27],24:13,26:$V2},{6:[1,28]},{1:[2,2]},{23:[1,29]},o($V7,$V8,{25:30,24:31,26:$V2}),{27:[1,32]},o($V3,[2,3]),o($V3,$V4,{9:6,11:7,7:16,8:33,2:$V0,12:$V1}),o($V6,[2,6]),{13:34,18:$V5},{13:35,18:$V5},o($V6,[2,11]),{19:[1,36]},o($V6,[2,8]),o($V9,$Va),o($V6,[2,16]),{17:[1,37],21:[1,38]},o($V9,[2,14]),o($V6,[2,18]),{1:[2,1]},o($Va,[2,19]),o($V7,[2,20]),o($V7,$V8,{24:31,25:39,26:$V2}),{28:[1,40]},o($V3,[2,4]),o($V6,[2,9]),o($V6,[2,10]),o($V6,[2,15]),o($V9,[2,13]),o($V6,[2,17]),o($V7,[2,21]),o([17,21,23,26],[2,23])],
+defaultActions: {11:[2,2],28:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -503,7 +507,7 @@ _handle_error:
 }};
 
 
-    const listaGramatical = [];
+
 
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -843,35 +847,35 @@ case 3:this.popState();
 break;
 case 4:
 break;
-case 5: this.begin("TagApertura"); return 24; 
+case 5: this.begin("TagApertura"); return 22; 
 break;
 case 6:
 break;
-case 7: return 28; 
+case 7: return 26; 
 break;
-case 8: return 29 
+case 8: return 27 
 break;
-case 9: return 30; 
+case 9: return 28; 
 break;
-case 10: this.popState(); return 25; 
+case 10: this.popState(); return 23; 
 break;
 case 11: this.begin("TagApertura"); return 12; 
 break;
 case 12:
 break;
-case 13: return 28; 
+case 13: return 26; 
 break;
-case 14: return 29 
+case 14: return 27 
 break;
-case 15: return 30; 
+case 15: return 28; 
 break;
-case 16: this.popState(); return 'CIERRA_TAGAP'; 
+case 16: this.popState(); return 17; 
 break;
-case 17: this.popState();  return 23; 
+case 17: this.popState();  return 21; 
 break;
-case 18: this.begin("TagCierre"); return 19 
+case 18: this.begin("TagCierre"); return 18 
 break;
-case 19: this.popState(); return 20 
+case 19: this.popState(); return 19 
 break;
 case 20:
 break;

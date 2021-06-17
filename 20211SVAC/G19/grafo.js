@@ -63,7 +63,7 @@ function RecorrerChildren(actual,padre_id){
             }
             else{
                 newArista(padre_id,i)//no tiene hijos solo se crea la arista hacia la hoja
-                newNodo(i,actual.children[child]); //se crea el nodo hoja
+                newNodo(i,actual.children[child].value); //se crea el nodo hoja
             }
         }
     }

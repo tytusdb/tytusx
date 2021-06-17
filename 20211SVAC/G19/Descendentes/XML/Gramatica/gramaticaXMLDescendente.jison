@@ -1,6 +1,6 @@
 %{
 
-    const listaGramatical = [];
+
 
 %}
 
@@ -29,13 +29,13 @@
 <TagApertura>"?>"                       { this.popState(); return 't_congClose'; }
 
 //TagApertura
-"<"[a-zA-Z_][a-zA-Z0-9_]*               { this.begin("TagApertura"); return 'OPEN_TAG'; }
+"<"[a-zA-Z_][a-zA-Z0-9_]*               { this.begin("TagApertura"); return 'tag_open'; }
 <TagApertura>[\s\r\t\n]+                {}
 <TagApertura>[a-zA-Z_][a-zA-Z0-9_]*     { return 'atName'; }
 <TagApertura>"="                        { return 'atAsi' }
 <TagApertura>\"[^\"\n]*\"               { return 'atValue'; }
-<TagApertura>">"                        { this.popState(); return 'CIERRA_TAGAP'; }
-<TagApertura>"/>"                       { this.popState();  return 'close_tag_u'; }
+<TagApertura>">"                        { this.popState(); return 'close_gatap'; }
+<TagApertura>"/>"                       { this.popState();  return 'close_tag'; }
 
 //TagCierre
 "</"[a-zA-Z_][a-zA-Z0-9_]*        { this.begin("TagCierre"); return 'openTag' }
@@ -57,7 +57,6 @@ XML:
             $$ = new NodeDescXML('XML', '');
             $$.childList.push($1);
             $$.childList.push($2);
-
             return $$;
          }
         |TAGS_LIST EOF                    {
@@ -65,7 +64,6 @@ XML:
 
             $$ = new NodeDescXML('XML', '');
             $$.childList.push($1);
-
             return $$;
         }
 ;
@@ -73,8 +71,11 @@ XML:
 TAGS_LIST:    TAG TAG_LIST {
     $$ = new NodeDescXML('TAGS_LIST', '');
     $$.childList.push($1);
-    $$.childList.push($2);
-
+    if($2 === undefined || !$2) {
+        $$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        $$.setChild($2);
+    }
 
 }
 ;
@@ -82,7 +83,11 @@ TAGS_LIST:    TAG TAG_LIST {
 TAG_LIST : TAG TAG_LIST  {
         $$ = new NodeDescXML('TAG_LIST', '');
         $$.childList.push($1);
-        $$.childList.push($2);
+        if($2 === undefined || !$2) {
+        $$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        $$.setChild($2);
+    }
     }
 | {
 
@@ -92,7 +97,7 @@ TAG:
         TAG_APERTURA TAG_OP {
             $$ = new NodeDescXML('TAG', '');
             $$.childList.push($1);
-            $$.childList.push(new NodeDescXML($2, 'TAG_OP'));
+            $$.childList.push($2);
         }
         |U_TAG                              {
             $$ = new NodeDescXML('TAG', '');
@@ -100,7 +105,7 @@ TAG:
          }
 
 
-        | error  OPEN_TAG                     {
+        | error  tag_open                     {
 
         }
 
@@ -129,9 +134,9 @@ TAG_OP:
 
 
 TAG_APERTURA:
-    openTagAp TAG_AP_MEN {
+    tag_open OP_AP {
         $$ = new NodeDescXML('TAG_APERTURA', '');
-        $$.childList.push(new NodeDescXML($1, 'openTagAp'));
+        $$.childList.push(new NodeDescXML($1, 'TAG_OPEN'));
         $$.childList.push($2);
     }
 
@@ -139,18 +144,18 @@ TAG_APERTURA:
 
 ;
 
-TAG_AP_MEN: LISTA_ATRIBUTOS cierra_tagap
+OP_AP: LISTA_ATRIBUTOS close_gatap
     {
-        $$ = new NodeDescXML('TAG_AP_MEN', '');
-        $$.childList.push(new NodeDescXML($1, 'cierra_tagap'));
-        $$.childList.push($2);
+        $$ = new NodeDescXML('OP_AP', '');
+        $$.childList.push($1);
+        $$.childList.push(new NodeDescXML($2, 'close_gatap'));
     }
 
 
 
-    | cierra_tagap {
-        $$ = new NodeDescXML('TAG_AP_MEN', '');
-        $$.childList.push(new NodeDescXML($1, 'cierra_tagap'));
+    | close_gatap {
+        $$ = new NodeDescXML('OP_AP', '');
+        $$.childList.push(new NodeDescXML($1, 'close_gatap'));
     }
 ;
 
@@ -164,16 +169,16 @@ TAG_AP_MEN: LISTA_ATRIBUTOS cierra_tagap
 TAG_CIERRE:
     openTag closingTag
     {
-        $$ = new NodeDescXML('TAG_AP_MEN', '');
+        $$ = new NodeDescXML('OP_AP', '');
         $$.childList.push(new NodeDescXML($1, 'openTag'));
         $$.childList.push(new NodeDescXML($2, 'CLOSING_TAG'));
     }
 ;
 
 U_TAG:
-    openTagOp TAG_SELEC  {
+    tag_open TAG_SELEC  {
         $$ = new NodeDescXML('U_TAG', '');
-        $$.childList.push(new NodeDescXML($1, 'openTagOp'));
+        $$.childList.push(new NodeDescXML($1, 'TAG_OPEN'));
         $$.childList.push($2);
     }
 
@@ -183,20 +188,20 @@ U_TAG:
 TAG_SELEC:
 
 
-    LISTA_ATRIBUTOS close_tag_u
+    LISTA_ATRIBUTOS close_tag
     {
         $$ = new NodeDescXML('TAG_SELEC', '');
         $$.childList.push($1);
-        $$.childList.push(new NodeDescXML($2, 'close_tag_u'));
+        $$.childList.push(new NodeDescXML($2, 'CLOSE_TAG'));
     }
 
 
 
 
-    |  close_tag_u
+    |  close_tag
     {
         $$ = new NodeDescXML('TAG_SELEC', '');
-        $$.childList.push(new NodeDescXML($1, 'close_tag_u'));
+        $$.childList.push(new NodeDescXML($1, 'CLOSE_TAG'));
 
     }
 
@@ -207,35 +212,34 @@ TAG_SELEC:
 T_CONF:
         t_congOp LISTA_ATRIBUTOS t_congClose   {
             $$ = new NodeDescXML('T_CONF', '');
-            $$.childList.push(new NodeDescXML($1, 't_congOp'));
+            $$.childList.push(new NodeDescXML($1, 'openTag'));
             $$.childList.push($2);
-            $$.childList.push(new NodeDescXML($2, 't_congClose'));
+            $$.childList.push(new NodeDescXML($2, 'CLOSING_TAG'));
         }
 ;
 
 LISTA_ATRIBUTOS: ATRIBUTO LA  {
-        $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
-        $$.childList.push($1);
+    $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+    $$.childList.push($1);
 
-        if($2 === undefined || !$2) {
-            $$.setChild(new NodeDescXML('LA', ''));
-        } else {
-            $$.setChild($2);
-            $$.setChild(new NodeDescXML("EPSILON", ''));
-        }
+    if($2 === undefined || !$2) {
+        $$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        $$.setChild($2);
+    }
+
 }
 
 ;
 LA: ATRIBUTO LA {
-    $$ = new NodeDescXML('LA', '');
+    $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
     $$.childList.push($1);
     if($2 === undefined || !$2) {
-        $$.setChild(new NodeDescXML('LA', ''));
+        $$.setChild(new NodeDescXML("EPSILON", ''));
     } else {
         $$.setChild($2);
-        $$.setChild(new NodeDescXML("EPSILON", ''));
     }
-}
+ }
 |{}
 
 ;
@@ -243,10 +247,10 @@ LA: ATRIBUTO LA {
 
 ATRIBUTO:
         atName atAsi atValue    {
-        $$ = new NodeDescXML('ATRIBUTO', '');
-        $$.childList.push(new NodeDescXML($1, 'atName'));
-        $$.childList.push(new NodeDescXML($2, 'atAsi'));
-        $$.childList.push(new NodeDescXML($3, 'atValue'));
+            $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+            $$.childList.push(new NodeDescXML($1, 'ATNAME'));
+            $$.childList.push(new NodeDescXML($1, 'ATASI'));
+            $$.childList.push(new NodeDescXML($1, 'ATVALUE'));
         }
 
 

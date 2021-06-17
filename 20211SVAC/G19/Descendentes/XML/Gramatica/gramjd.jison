@@ -1,26 +1,10 @@
 %{
-        const { EtiquetaDoble } = require('../Xml/EtiquetaDoble')
-        const { EtiquetaSimple } = require('../Xml/EtiquetaSimple')
-        const { EtiquetaInicio } = require('../Xml/EtiquetaInicio')
-        const { Atributo } = require('../Xml/Atributo')
-        const { XmlResultado } = require('../Xml/XmlResultado')
-        const { ControlError } = require('../Xpath/ControlError')
-            const {ReporteGramatica }= require('../Reportes/ReporteGramatica')
-        let idSent = 1;
 
-        function getId() {
-                idSent += 100
-                return idSent
-        }
 
-        function formatTagName(AbreTagApertura) {
-                return AbreTagApertura.substring(1, AbreTagApertura.length)
-        }
-        listaError = []
 
 %}
 
-//___________
+//_______________________________
 
 %lex
 %options case-insensitive
@@ -50,8 +34,8 @@
 <TagApertura>[a-zA-Z_][a-zA-Z0-9_]*     { return 'NombreAtributo'; }
 <TagApertura>"="                        { return 'IgualAtributo' }
 <TagApertura>\"[^\"\n]*\"               { return 'ValorAtributo'; }
-<TagApertura>">"                        { this.popState(); return 'CierreTagApertura'; }
-<TagApertura>"/>"                       { this.popState();  return 'CierreTagUnico'; }
+<TagApertura>">"                        { this.popState(); return 'CIERRA_TAGAP'; }
+<TagApertura>"/>"                       { this.popState();  return 'TAG_CIERRE_U'; }
 
 //TagCierre
 "</"[a-zA-Z_][a-zA-Z0-9_]*        { this.begin("TagCierre"); return 'AbreTagCierre' }
@@ -60,194 +44,112 @@
 [\s\r\t\n]+           {}
 [^<]+                 { return 'CadenaValores'; }
 <<EOF>>               { return 'EOF'; }
-.                     { new ControlError(yytext, TipoSeleccion.ERROR_LEXICO, yylloc.first_line,yylloc.first_column,"XmlDescendente")};
+.                     { };
 /lex
 
-//___________
+//_______________________________
 
 %start XML
 %%
 
 XML:
-        TAG_CONFIGURACION LISTA_ETIQUETAS EOF   { $$ = new XmlResultado($1, $2); return $$;
+        T_CONF TAGS_LIST EOF   {
 
-         new ReporteGramatica("XML -> TAG_CONFIGURACION LISTA_ETIQUETAS EOF",  "XML.val = TAG_CONFIGURACION.val+LISTA_ETIQUETAS.val"      )
+
+        $$ = new NodeDescXML('XML', '');
+            $$.childList.push($1);
+            $$.childList.push($2);
+            return $$;
 
          }
-        |LISTA_ETIQUETAS EOF                    { $$ = new XmlResultado(null, $2); return $$ ;
-         new ReporteGramatica("XML -> N LISTA_ETIQUETAS EOF",  "XML.val = LISTA_ETIQUETAS.val"      )
+        |TAGS_LIST EOF                    {
 
+                $$ = new NodeDescXML('XML', '');
+            $$.childList.push($1);
+            return $$;
 
         }
 ;
 
-LISTA_ETIQUETAS:    ETIQUETA ListaEtiqueta {
+TAGS_LIST:    TAG TAG_LIST {
 
-   $2.push($1);
-    $$=$2 ;
-
-       new ReporteGramatica("LISTA_ETIQUETAS -> ETIQUETA ListaEtiqueta ",  "LISTA_ETIQUETAS.val=ListaEtiqueta.val--- ListaEtiqueta = new Array(ETIQUETA)     ////    ListaEtiqueta.push(ETIQUETA.val)"      )
-
-
-
+$$ = new NodeDescXML('TAGS_LIST', '');
+    $$.childList.push($1);
+    $$.childList.push($2);
 }
 ;
 
-ListaEtiqueta : ETIQUETA ListaEtiqueta  {
-
-   $2.push($1);
-
-    $$=$2 ;
-    new ReporteGramatica("ListaEtiqueta -> ETIQUETA ListaEtiqueta ",  "    ListaEtiqueta.push(ETIQUETA.val)"      )
-
-
-
-
+TAG_LIST : TAG TAG_LIST  {
+        $$ = new NodeDescXML('TAG_LIST', '');
+        $$.childList.push($1);
+        $$.childList.push($2);
     }
-| { $$ = [];
- new ReporteGramatica("ListaEtiqueta -> epsilon ",  "  ListaEtiqueta.val = []"      )
-
+| {
 
   }
 ;
-ETIQUETA:
-        TAG_APERTURA MenuEtiqueta { $$ = new EtiquetaDoble($1.nombreTagApertura, $2.nombreTagCierre,
-        $1.listaAtributos, $2.cadena, $2.listaEtiqueta, @1.first_line, @1.first_column, getId()) ;
-         new ReporteGramatica("ETIQUETA -> TAG_APERTURA MenuEtiqueta ",
-           " ETIQUTA.val= new EtiquetaDoble(TAG_APERTURA.val, MenuEtiqueta.val)"      ) ;
-
-
+TAG:
+        TAG_APERTURA MenuEtiqueta {
+$$ = new NodeDescXML('TAG', '');
+            $$.childList.push($1);
+            $$.childList.push(new NodeDescXML($2, 'TAG_OP'));
         }
-        |TAG_UNICO                              { $$ = $1;
-
-             new ReporteGramatica("ETIQUETA -> TAG_UNICO    ",
-           " ETIQUTA.val= TAG_UNICO.val"      ) ;
-
+        |U_TAG                              {
+$$ = new NodeDescXML('TAG', '');
+            $$.childList.push($1);
          }
 
 
-        | error  AbreTagApertura                     { $$ = new ControlError(yytext, TipoSeleccion.ERROR_SINTACTICO, this.$.first_line, this.$.first_column,"XmlDEscendiente")}
+        | error  AbreTagApertura                     { }
 
 ;
-DELIMITADOR: AbreTagApertura {$$=$1;}
-| CierreTagApertura { $$=$1}
 
-;
 MenuEtiqueta:
-        LISTA_ETIQUETAS TAG_CIERRE
-
+    TAGS_LIST TAG_CIERRE
+    {
+            $$ = new NodeDescXML('TAG_OP', '');
+            $$.childList.push($1);
+            $$.childList.push($2);
+    }
+    | CadenaValores TAG_CIERRE
         {
-
-
-
-
-
-                $$ = {
-                nombreTagCierre:$2,
-                listaEtiqueta: $1,
-                cadena:''
-
-
-        };
-
-             new ReporteGramatica("MenuEtiqueta -> LISTA_ETIQUETAS TAG_CIERRE    ",
-           " MenuEtiqueta.val= LISTA_ETIQUETAS.val +TAG_CIERRE.val"      ) ;
-
-
-
-
-
-        }
-        | CadenaValores TAG_CIERRE
-
-
-
-
-             {
-
-                     $$ = {
-                nombreTagCierre: $2,
-                listaEtiqueta: [],
-                cadena:$1
-        };
-
-         new ReporteGramatica("MenuEtiqueta ->  CadenaValores TAG_CIERRE  ",
-           " MenuEtiqueta.val= CadenaValores.lexval +TAG_CIERRE.val"      ) ;
-
-        }
-        | TAG_CIERRE
-             {
-
-
-
-                     $$ = {
-                nombreTagCierre: $1,
-                listaEtiqueta: [],
-                cadena:''
-
-        };
-
-                new ReporteGramatica("MenuEtiqueta ->   TAG_CIERRE  ",
-           " MenuEtiqueta.val=TAG_CIERRE.val"      ) ;
-
-        }
+                $$ = new NodeDescXML('TAG_OP', '');
+            $$.childList.push(new NodeDescXML($1, 'cadena_letras'));
+            $$.childList.push($2);
+    }
+    | TAG_CIERRE
+        {
+                $$ = new NodeDescXML('TAG_OP', '');
+            $$.childList.push($1);
+    }
 
 ;
 
 
 TAG_APERTURA:
-        AbreTagApertura MENU_TAG_APERTURA {
-
-
-
-
-
-                 $$ = {
-                nombreTagApertura: formatTagName($1),
-                listaAtributos: $2.listaAtributos_
-        };
-
-
-             new ReporteGramatica("TAG_APERTURA ->   AbreTagApertura MENU_TAG_APERTURA ",
-           " TAG_APERTURA.val=  AbreTagApertura.lexval+ MENU_TAG_APERTURA.val"      ) ;
-
-        }
+    AbreTagApertura MENU_TAG_APERTURA {
+            $$ = new NodeDescXML('TAG_APERTURA', '');
+        $$.childList.push(new NodeDescXML($1, 'TAG_OPEN'));
+        $$.childList.push($2);
+    }
 
 
 
 ;
 
-MENU_TAG_APERTURA: LISTA_ATRIBUTOS CierreTagApertura
-         {
+MENU_TAG_APERTURA: LISTA_ATRIBUTOS CIERRA_TAGAP
+    {
+            $$ = new NodeDescXML('OP_AP', '');
+        $$.childList.push($1);
+        $$.childList.push(new NodeDescXML($2, 'close_gatap'));
+    }
 
 
 
-                  $$ = {
-
-                listaAtributos_: $1
-        };
-                    new ReporteGramatica("MENU_TAG_APERTURA: ->   LISTA_ATRIBUTOS CierreTagApertura ",
-           " MENU_TAG_APERTURA.val=  LISTA_ATRIBUTOS.val+ CierreTagApertura.lexval"      ) ;
-
-
-        }
-
-
-
-        | CierreTagApertura {
-
-
-
-                $$ = {
-
-                listaAtributos_: []
-        };
-
-                             new ReporteGramatica("MENU_TAG_APERTURA: ->    CierreTagApertura ",
-           " MENU_TAG_APERTURA.val=   CierreTagApertura.lexval"      ) ;
-
-
-        }
+    | CIERRA_TAGAP {
+$$ = new NodeDescXML('OP_AP', '');
+        $$.childList.push(new NodeDescXML($1, 'close_gatap'));
+    }
 ;
 
 
@@ -258,140 +160,88 @@ MENU_TAG_APERTURA: LISTA_ATRIBUTOS CierreTagApertura
 
 
 TAG_CIERRE:
-        AbreTagCierre CierreTagCierre { $$ = formatTagName(formatTagName($1));
-
-        new ReporteGramatica("TAG_CIERRE ->AbreTagApertura CierreTagApertura ",  "TAG_CIERRE.val =AbreTagApertura.lexval  + CierreTagApertura.lexval "  );
-
-
-
-
-
-
-         }
+    AbreTagCierre CierreTagCierre
+    {
+            $$ = new NodeDescXML('OP_AP', '');
+        $$.childList.push(new NodeDescXML($1, 'openTag'));
+        $$.childList.push(new NodeDescXML($2, 'CLOSING_TAG'));
+    }
 ;
 
-TAG_UNICO:
-        AbreTagApertura MENU_TAG_UNICO  {
-
-
-                $$ = new EtiquetaSimple(formatTagName($1), $2.listaAtributos_unico, @1.first_line, @1.first_column, getId()) ;
-
-
-
-                                    new ReporteGramatica("TAG_UNICO: ->    AbreTagApertura MENU_TAG_UNICO",
-           " TAG_UNICO.val=   AbreTagApertura.lexval+ MENU_TAG_UNICO.val"      ) ;
-
-
-
-                }
+U_TAG:
+    AbreTagApertura TAG_SELEC  {
+$$ = new NodeDescXML('U_TAG', '');
+        $$.childList.push(new NodeDescXML($1, 'TAG_OPEN'));
+        $$.childList.push($2);
+    }
 
 ;
 
 
-MENU_TAG_UNICO:
+TAG_SELEC:
 
 
- LISTA_ATRIBUTOS CierreTagUnico
-
-
-  {
-
-
-
-
-           $$ = {
-
-                listaAtributos_unico: $1
-        };
-                                  new ReporteGramatica("MENU_TAG_UNICO: ->    LISTA_ATRIBUTOS CierreTagUnico",
-           " MENU_TAG_UNICO.val=   LISTA_ATRIBUTOS.val +CierreTagUnico.lexval"      ) ;
-
-
-
-        }
+    LISTA_ATRIBUTOS TAG_CIERRE_U
+    {
+ $$ = new NodeDescXML('TAG_SELEC', '');
+        $$.childList.push($1);
+        $$.childList.push(new NodeDescXML($2, 'CLOSE_TAG'));
+    }
 
 
 
 
- | CierreTagUnico
-  {
-
-           $$ = {
-
-                listaAtributos_unico: []
-        };
-
-
-                          new ReporteGramatica("MENU_TAG_UNICO: ->    CierreTagUnico",
-           " MENU_TAG_UNICO.val=   CierreTagUnico.lexval"      ) ;
-
-        }
+    |  TAG_CIERRE_U
+    {
+                $$ = new NodeDescXML('TAG_SELEC', '');
+        $$.childList.push(new NodeDescXML($1, 'CLOSE_TAG'));
+    }
 
 
 
 ;
 
-TAG_CONFIGURACION:
+T_CONF:
         AbreTagConf LISTA_ATRIBUTOS CierreTagConf   {
-
-
-
-
-
-
-                $$ = new EtiquetaInicio($2, @1.first_line, @1.first_column, getId());
-
-
-
-                          new ReporteGramatica("TAG_CONFIGURACION: ->    AbreTagConf LISTA_ATRIBUTOS CierreTagConf ",
-           " TAG_CONFIGURACION.val=     AbreTagConf.lexval LISTA_ATRIBUTOS.val CierreTagConf.lexval "      ) ;
-
-
-                 }
-;
-
-LISTA_ATRIBUTOS: ATRIBUTO ListaA  {
-
-     $2.push($1);  $$=$2;
-
-          new ReporteGramatica("LISTA_ATRIBUTOS -> ATRIBUTO ListaA ",  "LISTA_ATRIBUTOS.val=ListaA.val--- ListaA = new Array(ATRIBUTO)     ////    ListaA.push(ATRIBUTO.val)"      ) ;
-
-
-     }
-
-;
-ListaA: ATRIBUTO ListaA {
-
-
-
-         $2.push($1);  $$=$2;
-              new ReporteGramatica("ListaA -> ATRIBUTO ListaA ",  "    ListaA.push(ATRIBUTO.val)"      ) ;
-
-
+                $$ = new NodeDescXML('T_CONF', '');
+            $$.childList.push(new NodeDescXML($1, 'openTag'));
+            $$.childList.push($2);
+            $$.childList.push(new NodeDescXML($2, 'CLOSING_TAG'));
          }
-|{
+;
 
+LISTA_ATRIBUTOS: ATRIBUTO LA  {
+        $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+    $$.childList.push($1);
 
-         $$ = [ ];
+    if($2 === undefined || !$2) {
+        $$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        $$.setChild($2);
+    }
+}
 
-             new ReporteGramatica("ListaA -> epsilon ",  "  ListaA.val = []"      ) ;
-
-
+;
+LA: ATRIBUTO LA {
+        $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+    $$.childList.push($1);
+    if($2 === undefined || !$2) {
+        $$.setChild(new NodeDescXML("EPSILON", ''));
+    } else {
+        $$.setChild($2);
+    }
  }
+|{}
 
 ;
 
 
 ATRIBUTO:
         NombreAtributo IgualAtributo ValorAtributo    {
-
-
-
-                 $$ = new Atributo($1, $3, @1.first_line, @1.first_column, getId()) ;
-
-                  new ReporteGramatica("ATRIBUTO -> NombreAtributo IgualAtributo ValorAtributo  ",  "ATRIBUTO.val=new Atributo (NombreAtributo.lexval,IgualAtributo.lexval,ValorAtributo.lexval)"      ) ;
-
-         }
+                $$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
+            $$.childList.push($1);
+            $$.childList.push($2);
+        }
 
 
 
