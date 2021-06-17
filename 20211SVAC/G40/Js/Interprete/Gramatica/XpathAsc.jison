@@ -467,10 +467,12 @@ EXPRESION_NUMERICA : tk_menos EXPRESION_NUMERICA %prec UMENOS	{   negativo = new
                         $$ = [primitivoAux,nodoaux];};
 
 CADENA :         tk_cadena1 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($1,"");
                               $$ = [primitivoAux,nodoaux];   }
 
         |        tk_cadena2 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($1,"");
                               $$ = [primitivoAux,nodoaux];   };
 

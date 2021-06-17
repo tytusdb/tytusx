@@ -20,6 +20,7 @@ import { CodeTabComponent } from './code-tab/code-tab.component';
 import { CodeTab2Component } from './code-tab2/code-tab2.component';
 
 import { NgxXml2jsonService } from 'ngx-xml2json';
+import { xml2json } from 'xml-js';
 
 import * as saveAs from 'file-saver';
 

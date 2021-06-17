@@ -2,13 +2,13 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class AtributoSimple extends Instruccion {
     public Operacion: string;
-    public tipoAtributo: Tipo
-    constructor(select: string,tipo:Tipo, fila: number, columna: number){
+    public tipoAtributo: string
+    constructor(select: string,tipo:string, fila: number, columna: number){
         super(new Tipo(tipoDato.CADENA), fila, columna);
         this.Operacion = select
         this.tipoAtributo=tipo
@@ -19,15 +19,15 @@ export default class AtributoSimple extends Instruccion {
     }
     
     getNodosAST(): nodoAST {
-        var nodo= new nodoAST("ATRIBUTOS"); //PADRE SELECT
-        if(tipoDato.SELECT ===this.tipoAtributo.getTipo()){
-            var nodoselect= new nodoAST("SELECT");
-            nodoselect.agregarHijo(this.Operacion)
+        var nodo= new nodoAST("ATRIBUTO"); //PADRE SELECT
+        if(this.tipoAtributo==="."){
+            var nodoselect= new nodoAST(this.Operacion);
             nodo.agregarHijoAST(nodoselect)
-        }else if(tipoDato.OBJETO==this.tipoAtributo.getTipo()){
-            var nodoselect= new nodoAST("MULTIPLICACION");
-            nodoselect.agregarHijo(this.Operacion)
+            nodo.agregarHijo(this.tipoAtributo)
+        }else if(this.tipoAtributo==="*"){
+            var nodoselect= new nodoAST(this.Operacion);
             nodo.agregarHijoAST(nodoselect)
+            nodo.agregarHijo(this.tipoAtributo)
         }
         
 

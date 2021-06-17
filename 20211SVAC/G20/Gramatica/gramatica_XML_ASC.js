@@ -72,12 +72,12 @@
   }
 */
 var gramatica_XML_ASC = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[2,12],$V2=[1,15],$V3=[9,12,13,15],$V4=[1,37],$V5=[1,38],$V6=[1,33],$V7=[1,30],$V8=[1,32],$V9=[1,34],$Va=[1,28],$Vb=[1,29],$Vc=[1,31],$Vd=[1,35],$Ve=[1,36],$Vf=[1,39],$Vg=[1,40],$Vh=[8,9,10,12,13,15,19,21,23,31,32,33,34,35],$Vi=[5,8],$Vj=[1,55],$Vk=[1,56],$Vl=[1,61],$Vm=[1,62];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,10],$V1=[1,9],$V2=[1,13],$V3=[1,16],$V4=[1,17],$V5=[12,15],$V6=[2,40],$V7=[1,22],$V8=[2,9,12,13,15],$V9=[1,33],$Va=[1,32],$Vb=[2,9],$Vc=[1,47],$Vd=[1,59],$Ve=[1,60],$Vf=[1,55],$Vg=[1,52],$Vh=[1,54],$Vi=[1,56],$Vj=[1,50],$Vk=[1,51],$Vl=[1,53],$Vm=[1,57],$Vn=[1,58],$Vo=[1,61],$Vp=[1,62],$Vq=[1,67],$Vr=[1,65],$Vs=[1,66],$Vt=[2,8],$Vu=[8,9,10,12,13,15,19,21,23,31,32,33,34,35],$Vv=[2,8,9,10,12,13,15,19,21,23,31,32,33,34,35],$Vw=[2,5,8],$Vx=[2,21],$Vy=[2,56],$Vz=[1,95],$VA=[1,96],$VB=[2,23],$VC=[1,101],$VD=[1,102];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"START":3,"RAIZ":4,"EOF":5,"HEAD":6,"OBJETO":7,"lt":8,"qst":9,"xml":10,"LATRIBUTOS":11,"gt":12,"identifier":13,"OBJETOS":14,"div":15,"CONTENIDO_OBJ":16,"ATRIBUTOS":17,"ATRIBUTO":18,"asig":19,"FIN_ATRIBUTO":20,"qmrk":21,"CONTENIDO_ATRB":22,"apost":23,"CONTENIDO_ATRB_SMPL":24,"VALUES_CONT_OBJ":25,"VALUE":26,"LISTA_CONT_ATRB":27,"VALUES_CONT_ATRB":28,"LISTA_CONT_ATRB_SMPL":29,"VALUES_CONT_ATRB_SMPL":30,"contentH":31,"double":32,"integer":33,"minus":34,"Escape":35,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"EOF",8:"lt",9:"qst",10:"xml",12:"gt",13:"identifier",15:"div",19:"asig",21:"qmrk",23:"apost",31:"contentH",32:"double",33:"integer",34:"minus",35:"Escape"},
-productions_: [0,[3,2],[4,2],[4,1],[6,6],[7,9],[7,8],[7,9],[7,5],[14,2],[14,1],[11,1],[11,0],[17,2],[17,1],[18,3],[20,3],[20,3],[16,2],[16,1],[25,1],[25,1],[25,1],[22,1],[22,0],[27,2],[27,1],[28,1],[28,1],[28,1],[24,1],[24,0],[29,2],[29,1],[30,1],[30,1],[30,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1]],
+productions_: [0,[3,2],[4,2],[4,1],[4,2],[6,6],[6,6],[6,6],[6,6],[6,6],[6,6],[7,9],[7,8],[7,9],[7,5],[7,9],[7,9],[7,9],[7,9],[7,9],[7,9],[7,8],[7,8],[7,8],[7,8],[7,8],[7,8],[7,9],[7,9],[7,9],[7,9],[7,9],[7,9],[7,5],[7,5],[7,5],[14,2],[14,1],[14,1],[11,1],[11,0],[17,2],[17,1],[18,3],[18,3],[20,3],[20,3],[20,3],[20,3],[20,3],[16,2],[16,1],[25,1],[25,1],[25,1],[22,1],[22,0],[27,2],[27,1],[28,1],[28,1],[28,1],[24,1],[24,0],[29,2],[29,1],[30,1],[30,1],[30,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -90,9 +90,11 @@ case 1:
                                                                                         nodos: $$[$0-1].nodo,
                                                                                         erroresSemanticos: erroresSemanticos,
                                                                                         erroresLexicos: erroresLexicos,
+                                                                                        erroresSintacticos: erroresSintacticos,
                                                                                         reporteGramatical: reporteGramatical
                                                                                         };
                                                                                     erroresLexicos = [];
+                                                                                    erroresSintacticos = [];
                                                                                     erroresSemanticos = [];
                                                                                     reporteGramatical = [];
                                                                                     return this.$;
@@ -112,11 +114,53 @@ case 3:
 break;
 case 4:
 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-1].first_line + ' y columna: ' + _$[$0-1].first_column + ': No se pudo recuperar el encabezado'));
+                                                                                    this.$ = { nodo: new Nodo('RAIZ',[$$[$0].nodo]), objeto: [$$[$0].objeto]};
+                                                                                    reporteGramatical.push('<tr> <td>RAIZ</td> <td>ERROR OBJETO</td> </tr>');
+                                                                               
+break;
+case 5:
+
                                                                                     this.$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('xml',[]),$$[$0-2].nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2].objeto,[],Etiqueta.HEADER)};
                                                                                     reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS qst gt</td> </tr>');
                                                                                
 break;
-case 5:
+case 6:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-5].first_line + ' y columna: ' + _$[$0-5].first_column + ': Falta < del head'));
+                                                                                    this.$ = { nodo: new Nodo('HEAD',[new Nodo('ERROR',[]),new Nodo('qst',[]),new Nodo('xml',[]),$$[$0-2].nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2].objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>ERROR qst xml LATRIBUTOS qst gt</td> </tr>');
+                                                                               
+break;
+case 7:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-5].first_line + ' y columna: ' + _$[$0-5].first_column + ': Falta ? inicial del head'));
+                                                                                    this.$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('xml',[]),$$[$0-2].nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2].objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt ERROR xml LATRIBUTOS qst gt</td> </tr>');
+                                                                               
+break;
+case 8:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-5].first_line + ' y columna: ' + _$[$0-5].first_column + ': Falta id xml del head'));
+                                                                                    this.$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('ERROR',[]),$$[$0-2].nodo,new Nodo('qst',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2].objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst ERROR LATRIBUTOS qst gt</td> </tr>');
+                                                                               
+break;
+case 9:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-5].first_line + ' y columna: ' + _$[$0-5].first_column + ': Falta ? final del head'));
+                                                                                    this.$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('xml',[]),$$[$0-2].nodo,new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2].objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS ERROR gt</td> </tr>');
+                                                                               
+break;
+case 10:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-5].first_line + ' y columna: ' + _$[$0-5].first_column + ': Falta > final del head'));
+                                                                                    this.$ = { nodo: new Nodo('HEAD',[new Nodo('lt',[]),new Nodo('qst',[]),new Nodo('xml',[]),$$[$0-2].nodo,new Nodo('qst',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-5].first_line, _$[$0-5].first_column,$$[$0-2].objeto,[],Etiqueta.HEADER)};
+                                                                                    reporteGramatical.push('<tr> <td>HEAD</td> <td>lt qst xml LATRIBUTOS qst ERROR</td> </tr>');
+                                                                               
+break;
+case 11:
 
                                                                                     this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
                                                                                     if($$[$0-7] !== $$[$0-1]){
@@ -125,7 +169,7 @@ case 5:
                                                                                     reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt div identifier gt</td> </tr>');
                                                                                
 break;
-case 6:
+case 12:
  
                                                                                     this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-5].nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
                                                                                     if($$[$0-6] !== $$[$0-1]){
@@ -134,7 +178,7 @@ case 6:
                                                                                     reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt div identifier gt</td> </tr>');
                                                                                
 break;
-case 7:
+case 13:
  
                                                                                     this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
                                                                                     if($$[$0-7] !== $$[$0-1]){
@@ -143,69 +187,286 @@ case 7:
                                                                                     reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt div identifier gt</td> </tr>');
                                                                                
 break;
-case 8:
+case 14:
 
                                                                                     this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-2].nodo,new Nodo('div',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2].objeto,[],Etiqueta.UNICA)};
                                                                                     reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS div gt</td> </tr>');
                                                                                
 break;
-case 9:
+case 15:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta < etiqueta de inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS gt OBJETOS lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 16:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-1],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS gt OBJETOS lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 17:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta > etiqueta de inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('ERROR',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS ERROR OBJETOS lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 18:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta / cierre de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt ERROR identifier gt</td> </tr>');
+                                                                               
+break;
+case 19:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta id cierre de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt div ERROR gt</td> </tr>');
+                                                                               
+break;
+case 20:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta > cierre de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6].objeto,$$[$0-4].objeto,Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt OBJETOS lt div identifier ERROR</td> </tr>');
+                                                                               
+break;
+case 21:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ': Falta etiqueta < de inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$$[$0-5].nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-6] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-6] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS gt lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 22:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$$[$0-5].nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-1],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS gt lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 23:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ': Falta > etiqueta inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-5].nodo,new Nodo('ERROR',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-6] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-6] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS ERROR lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 24:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ': Falta / fin de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-5].nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-6] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-6] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt ERROR identifier gt</td> </tr>');
+                                                                               
+break;
+case 25:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ': Falta id fin de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-5].nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt div ERROR gt</td> </tr>');
+                                                                               
+break;
+case 26:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ': Falta > fin de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-5].nodo,new Nodo('gt',[]),new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,$$[$0-5].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-6] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-7].first_line + ' y columna: ' + _$[$0-7].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-6] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt lt div identifier ERROR</td> </tr>');
+                                                                               
+break;
+case 27:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta etiqueta < de inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS gt CONTENIDO_OBJ lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 28:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-1],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS gt CONTENIDO_OBJ lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 29:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta > etiqueta de inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('ERROR',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS ERROR CONTENIDO_OBJ lt div identifier gt</td> </tr>');
+                                                                               
+break;
+case 30:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta / etiqueta fin'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('ERROR',[]),new Nodo('identifier',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt ERROR identifier gt</td> </tr>');
+                                                                               
+break;
+case 31:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta id etiqueta fin'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('ERROR',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-7],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt div ERROR gt</td> </tr>');
+                                                                               
+break;
+case 32:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ': Falta > etiqueta fin'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-6].nodo,new Nodo('gt',[]),$$[$0-4].nodo,new Nodo('lt',[]),new Nodo('div',[]),new Nodo('identifier',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($$[$0-7],$$[$0-4].objeto,_$[$0-8].first_line,_$[$0-8].first_column,$$[$0-6].objeto,[],Etiqueta.DOBLE)};
+                                                                                    if($$[$0-7] !== $$[$0-1]){
+                                                                                        erroresSemanticos.push(new Error('Error Semantico en linea ' + _$[$0-8].first_line + ' y columna: ' + _$[$0-8].first_column + ':  No coinciden las etiquetas de apertura y final. ' + $$[$0-7] + ' y ' + $$[$0-1] ));
+                                                                                    }
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS gt CONTENIDO_OBJ lt div identifier ERROR</td> </tr>');
+                                                                               
+break;
+case 33:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-4].first_line + ' y columna: ' + _$[$0-4].first_column + ': Falta etiqueta < de inicio'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('ERROR',[]),new Nodo('identifier',[]),$$[$0-2].nodo,new Nodo('div',[]),new Nodo('gt',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2].objeto,[],Etiqueta.UNICA)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>ERROR identifier LATRIBUTOS div gt</td> </tr>');
+                                                                               
+break;
+case 34:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-4].first_line + ' y columna: ' + _$[$0-4].first_column + ': Falta id de inicio de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('ERROR',[]),$$[$0-2].nodo,new Nodo('div',[]),new Nodo('gt',[]) ]), objeto: new Objeto('ERROR','',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2].objeto,[],Etiqueta.UNICA)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt ERROR LATRIBUTOS div gt</td> </tr>');
+                                                                               
+break;
+case 35:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-4].first_line + ' y columna: ' + _$[$0-4].first_column + ': Falta > de cierre de etiqueta'));
+                                                                                    this.$ = { nodo: new Nodo('OBJETO',[new Nodo('lt',[]),new Nodo('identifier',[]),$$[$0-2].nodo,new Nodo('div',[]),new Nodo('ERROR',[]) ]), objeto: new Objeto($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2].objeto,[],Etiqueta.UNICA)};
+                                                                                    reporteGramatical.push('<tr style="background:' + getClr() + ';"> <td>OBJETO</td> <td>lt identifier LATRIBUTOS div ERROR</td> </tr>');
+                                                                               
+break;
+case 36:
 
                                                                                     $$[$0-1].objeto.push($$[$0].objeto);
                                                                                     this.$ = { nodo: new Nodo('OBJETOS',[$$[$0-1].nodo,$$[$0].nodo]), objeto: $$[$0-1].objeto};
                                                                                     reporteGramatical.push('<tr> <td>OBJETOS</td> <td>OBJETOS OBJETO</td> </tr>');
                                                                                
 break;
-case 10:
+case 37:
 
                                                                                     this.$ = { nodo: new Nodo('OBJETOS',[$$[$0].nodo]), objeto: [$$[$0].objeto]};
                                                                                     reporteGramatical.push('<tr> <td>OBJETOS</td> <td>OBJETO</td> </tr>');
                                                                                
 break;
-case 11:
+case 38:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0].first_line + ' y columna: ' + _$[$0].first_column + ': No se pudo recuperar el objeto'));
+                                                                                    this.$ = { nodo: new Nodo('ERROR',[]), objeto: undefined};
+                                                                               
+break;
+case 39:
 
                                                                                     this.$ = { nodo: new Nodo('LATRIBUTOS',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>LATRIBUTOS</td> <td>ATRIBUTOS</td> </tr>');
                                                                                
 break;
-case 12:
+case 40:
 
                                                                                     this.$ = { nodo: new Nodo('LATRIBUTOS',[new Nodo('EpSiLoN',[])]), objeto: []};
                                                                                     reporteGramatical.push('<tr> <td>LATRIBUTOS</td> <td>Epsilon</td> </tr>');
                                                                                
 break;
-case 13:
+case 41:
 
                                                                                     $$[$0-1].objeto.push($$[$0].objeto);
                                                                                     this.$ = { nodo: new Nodo('ATRIBUTOS',[$$[$0-1].nodo,$$[$0].nodo]), objeto: $$[$0-1].objeto};
                                                                                     reporteGramatical.push('<tr> <td>ATRIBUTOS</td> <td>ATRIBUTOS ATRIBUTO</td> </tr>');
                                                                                
 break;
-case 14:
+case 42:
 
                                                                                     this.$ = { nodo: new Nodo('ATRIBUTOS',[$$[$0].nodo]), objeto: [$$[$0].objeto]};
                                                                                     reporteGramatical.push('<tr> <td>ATRIBUTOS</td> <td>ATRIBUTO</td> </tr>');
                                                                                
 break;
-case 15:
+case 43:
 
                                                                                     this.$ = { nodo: new Nodo('ATRIBUTO',[new Nodo('identifier',[]),new Nodo('asig',[]),$$[$0].nodo]), objeto: new Atributo($$[$0-2], $$[$0].objeto.valor, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0].objeto.comilla)};
                                                                                     reporteGramatical.push('<tr> <td>ATRIBUTO</td> <td>identifier asig FIN_ATRIBUTO</td> </tr>');
                                                                                
 break;
-case 16:
+case 44:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-2].first_line + ' y columna: ' + _$[$0-2].first_column + ': El atributo falta ='));
+                                                                                    this.$ = { nodo: new Nodo('ATRIBUTO',[new Nodo('identifier',[]),new Nodo('ERROR',[]),$$[$0].nodo]), objeto: new Atributo($$[$0-2], $$[$0].objeto.valor, _$[$0-2].first_line, _$[$0-2].first_column, $$[$0].objeto.comilla)};
+                                                                                    reporteGramatical.push('<tr> <td>ATRIBUTO</td> <td>identifier ERROR FIN_ATRIBUTO</td> </tr>');
+                                                                               
+break;
+case 45:
 
                                                                                     this.$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('qmrk',[]),$$[$0-1].nodo,new Nodo('qmrk',[])]), objeto: new Atributo('', $$[$0-1].objeto, _$[$0-2].first_line, _$[$0-2].first_column, Comilla.DOBLE)};
                                                                                     reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>qmrk CONTENIDO_ATRB qmrk</td> </tr>');
                                                                                
 break;
-case 17:
+case 46:
  
                                                                                     this.$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('apost',[]),$$[$0-1].nodo,new Nodo('apost',[])]), objeto: new Atributo('', $$[$0-1].objeto, _$[$0-2].first_line, _$[$0-2].first_column, Comilla.SIMPLE)};
                                                                                     reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>apost CONTENIDO_ATRB_SMPL apost</td> </tr>');
                                                                                
 break;
-case 18:
+case 47:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-2].first_line + ' y columna: ' + _$[$0-2].first_column + ': El atributo falta doble comilla inicial'));
+                                                                                    this.$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('ERROR',[]),$$[$0-1].nodo,new Nodo('qmrk',[])]), objeto: new Atributo('', $$[$0-1].objeto, _$[$0-2].first_line, _$[$0-2].first_column, Comilla.DOBLE)};
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>ERROR CONTENIDO_ATRB qmrk</td> </tr>');
+                                                                               
+break;
+case 48:
+
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-2].first_line + ' y columna: ' + _$[$0-2].first_column + ': El atributo falta doble comilla final'));
+                                                                                    this.$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('qmrk',[]),$$[$0-1].nodo,new Nodo('ERROR',[])]), objeto: new Atributo('', $$[$0-1].objeto, _$[$0-2].first_line, _$[$0-2].first_column, Comilla.DOBLE)};
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>qmrk CONTENIDO_ATRB ERROR</td> </tr>');
+                                                                               
+break;
+case 49:
+ 
+                                                                                    erroresSintacticos.push(new Error('Error Sintactico en linea ' + _$[$0-2].first_line + ' y columna: ' + _$[$0-2].first_column + ': El atributo falta comilla simple final'));
+                                                                                    this.$ = { nodo: new Nodo('FIN_ATRIBUTO',[new Nodo('apost',[]),$$[$0-1].nodo,new Nodo('ERROR',[])]), objeto: new Atributo('', $$[$0-1].objeto, _$[$0-2].first_line, _$[$0-2].first_column, Comilla.SIMPLE)};
+                                                                                    reporteGramatical.push('<tr> <td>FIN_ATRIBUTO</td> <td>apost CONTENIDO_ATRB_SMPL ERROR</td> </tr>');
+                                                                               
+break;
+case 50:
 
                                                                                     if(_$[$0-1].last_line == _$[$0].first_line){ 
                                                                                         if(_$[$0-1].last_column < _$[$0].first_column ){
@@ -223,43 +484,43 @@ case 18:
                                                                                     reporteGramatical.push('<tr> <td>CONTENIDO_OBJ</td> <td>CONTENIDO_OBJ VALUES_CONT_OBJ</td> </tr>');
                                                                                
 break;
-case 19:
+case 51:
 
                                                                                     this.$ = { nodo: new Nodo('CONTENIDO_OBJ',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>CONTENIDO_OBJ</td> <td>VALUES_CONT_OBJ</td> </tr>');
                                                                                
 break;
-case 20:
+case 52:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_OBJ',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_OBJ</td> <td>VALUE</td> </tr>');
                                                                                
 break;
-case 21:
+case 53:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_OBJ',[new Nodo('qmrk',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_OBJ</td> <td>qmrk</td> </tr>');
                                                                                
 break;
-case 22:
+case 54:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_OBJ',[new Nodo('apost',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_OBJ</td> <td>apost</td> </tr>');
                                                                                
 break;
-case 23:
+case 55:
 
                                                                                     this.$ = { nodo: new Nodo('CONTENIDO_ATRB',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>CONTENIDO_ATRB</td> <td>LISTA_CONT_ATRB</td> </tr>');
                                                                                
 break;
-case 24:
+case 56:
 
                                                                                     this.$ = { nodo: new Nodo('CONTENIDO_ATRB',[new Nodo('EpSiLoN',[])]), objeto: ''};
                                                                                     reporteGramatical.push('<tr> <td>CONTENIDO_ATRB</td> <td>Epsilon</td> </tr>');
                                                                                
 break;
-case 25:
+case 57:
 
                                                                                     if(_$[$0-1].last_line == _$[$0].first_line){ 
                                                                                         if(_$[$0-1].last_column < _$[$0].first_column ){
@@ -277,43 +538,43 @@ case 25:
                                                                                     reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB</td> <td>LISTA_CONT_ATRB VALUES_CONT_ATRB</td> </tr>');
                                                                                
 break;
-case 26:
+case 58:
 
                                                                                     this.$ = { nodo: new Nodo('LISTA_CONT_ATRB',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB</td> <td>VALUES_CONT_ATRB</td> </tr>');
                                                                                
 break;
-case 27:
+case 59:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_ATRB',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB</td> <td>VALUE</td> </tr>');
                                                                                
 break;
-case 28:
+case 60:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_ATRB',[new Nodo('lt',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB</td> <td>lt</td> </tr>');
                                                                                
 break;
-case 29:
+case 61:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_ATRB',[new Nodo('apost',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB</td> <td>apost</td> </tr>');
                                                                                
 break;
-case 30:
+case 62:
 
                                                                                     this.$ = { nodo: new Nodo('CONTENIDO_ATRB_SMPL',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>CONTENIDO_ATRB_SMPL</td> <td>LISTA_CONT_ATRB_SMPL</td> </tr>');
                                                                                
 break;
-case 31:
+case 63:
 
                                                                                     this.$ = { nodo: new Nodo('CONTENIDO_ATRB_SMPL',[new Nodo('EpSiLoN',[])]), objeto: ''};
                                                                                     reporteGramatical.push('<tr> <td>CONTENIDO_ATRB_SMPL</td> <td>Epsilon</td> </tr>');
                                                                                
 break;
-case 32:
+case 64:
 
                                                                                     if(_$[$0-1].last_line == _$[$0].first_line){ 
                                                                                         if(_$[$0-1].last_column < _$[$0].first_column ){
@@ -331,91 +592,91 @@ case 32:
                                                                                     reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB_SMPL</td> <td>LISTA_CONT_ATRB_SMPL VALUES_CONT_ATRB_SMPL</td> </tr>');
                                                                                
 break;
-case 33:
+case 65:
 
                                                                                     this.$ = { nodo: new Nodo('LISTA_CONT_ATRB_SMPL',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>LISTA_CONT_ATRB_SMPL</td> <td>VALUES_CONT_ATRB_SMPL</td> </tr>');
                                                                                
 break;
-case 34:
+case 66:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_ATRB_SMPL',[$$[$0].nodo]), objeto: $$[$0].objeto};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB_SMPL</td> <td>VALUE</td> </tr>');
                                                                                
 break;
-case 35:
+case 67:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_ATRB_SMPL',[new Nodo('lt',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB_SMPL</td> <td>lt</td> </tr>');
                                                                                
 break;
-case 36:
+case 68:
 
                                                                                     this.$ = { nodo: new Nodo('VALUES_CONT_ATRB_SMPL',[new Nodo('qmrk',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUES_CONT_ATRB_SMPL</td> <td>qmrk</td> </tr>');
                                                                                
 break;
-case 37:
+case 69:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('identifier',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>identifier</td> </tr>');
                                                                                
 break;
-case 38:
+case 70:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('contentH',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>contentH</td> </tr>');
                                                                                
 break;
-case 39:
+case 71:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('div',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>div</td> </tr>');
                                                                                
 break;
-case 40:
+case 72:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('gt',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>gt</td> </tr>');
                                                                                
 break;
-case 41:
+case 73:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('asig',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>asig</td> </tr>');
                                                                                
 break;
-case 42:
+case 74:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('double',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>double</td> </tr>');
                                                                                
 break;
-case 43:
+case 75:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('integer',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>integer</td> </tr>');
                                                                                
 break;
-case 44:
+case 76:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('qst',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>qst</td> </tr>');
                                                                                
 break;
-case 45:
+case 77:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('xml',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>xml</td> </tr>');
                                                                                
 break;
-case 46:
+case 78:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('minus',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>minus</td> </tr>');
                                                                                
 break;
-case 47:
+case 79:
 
                                                                                     this.$ = { nodo: new Nodo('VALUE',[new Nodo('Escape',[])]), objeto: $$[$0]};
                                                                                     reporteGramatical.push('<tr> <td>VALUE</td> <td>Escape</td> </tr>');
@@ -423,8 +684,8 @@ case 47:
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:[1,5]},{1:[3]},{5:[1,6]},{7:7,8:[1,8]},{5:[2,3]},{9:[1,9],13:$V0},{1:[2,1]},{5:[2,2]},{13:$V0},{10:[1,11]},o([12,15],$V1,{11:12,17:13,18:14,13:$V2}),{9:$V1,11:16,13:$V2,17:13,18:14},{12:[1,17],15:[1,18]},o([9,12,15],[2,11],{18:19,13:$V2}),o($V3,[2,14]),{19:[1,20]},{9:[1,21]},{7:25,8:[1,23],9:$V4,10:$V5,12:$V6,13:$V7,14:22,15:$V8,16:24,19:$V9,21:$Va,23:$Vb,25:26,26:27,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{12:[1,41]},o($V3,[2,13]),{20:42,21:[1,43],23:[1,44]},{12:[1,45]},{7:47,8:[1,46]},{13:$V0,15:[1,48]},{8:[1,49],9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:$Va,23:$Vb,25:50,26:27,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{8:[2,10]},o($Vh,[2,19]),o($Vh,[2,20]),o($Vh,[2,21]),o($Vh,[2,22]),o($Vh,[2,37]),o($Vh,[2,38]),o($Vh,[2,39]),o($Vh,[2,40]),o($Vh,[2,41]),o($Vh,[2,42]),o($Vh,[2,43]),o($Vh,[2,44]),o($Vh,[2,45]),o($Vh,[2,46]),o($Vh,[2,47]),o($Vi,[2,8]),o($V3,[2,15]),{8:$Vj,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:[2,24],22:51,23:$Vk,26:54,27:52,28:53,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{8:$Vl,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:$Vm,23:[2,31],24:57,26:60,29:58,30:59,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},{8:[2,4]},{13:$V0,15:[1,63]},{8:[2,9]},{13:[1,64]},{15:[1,65]},o($Vh,[2,18]),{21:[1,66]},{8:$Vj,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:[2,23],23:$Vk,26:54,28:67,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},o($Vh,[2,26]),o($Vh,[2,27]),o($Vh,[2,28]),o($Vh,[2,29]),{23:[1,68]},{8:$Vl,9:$V4,10:$V5,12:$V6,13:$V7,15:$V8,19:$V9,21:$Vm,23:[2,30],26:60,30:69,31:$Vc,32:$Vd,33:$Ve,34:$Vf,35:$Vg},o($Vh,[2,33]),o($Vh,[2,34]),o($Vh,[2,35]),o($Vh,[2,36]),{13:[1,70]},{12:[1,71]},{13:[1,72]},o($V3,[2,16]),o($Vh,[2,25]),o($V3,[2,17]),o($Vh,[2,32]),{12:[1,73]},o($Vi,[2,6]),{12:[1,74]},o($Vi,[2,5]),o($Vi,[2,7])],
-defaultActions: {4:[2,3],6:[2,1],7:[2,2],25:[2,10],45:[2,4],47:[2,9]},
+table: [{2:[1,5],3:1,4:2,6:3,7:4,8:[1,6]},{1:[3]},{5:[1,7]},{2:$V0,7:8,8:$V1},{5:[2,3]},{2:$V0,7:11,8:$V1,9:[1,12],13:$V2},{2:[1,15],9:[1,14],13:$V3},{1:[2,1]},{5:[2,2]},{2:$V4,13:$V3},{13:$V2},{5:[2,4]},{10:[1,18]},o($V5,$V6,{11:19,17:20,18:21,13:$V7}),{2:[1,24],10:[1,23]},o($V5,$V6,{17:20,18:21,11:26,10:[1,25],13:$V7}),o([2,12,15],$V6,{17:20,18:21,11:27,13:$V7}),o($V5,$V6,{17:20,18:21,11:26,13:$V7}),{9:$V6,11:28,13:$V7,17:20,18:21},{12:[1,29],15:[1,30]},o([2,9,12,15],[2,39],{18:31,13:$V7}),o($V8,[2,42]),{2:$V9,19:$Va},o($Vb,$V6,{17:20,18:21,11:34,13:$V7}),{9:$V6,11:35,13:$V7,17:20,18:21},{9:$V6,11:36,13:$V7,17:20,18:21},{12:[1,37],15:[1,38]},{2:[1,41],12:[1,39],15:[1,40]},{9:[1,42]},{2:$Vc,7:46,8:[1,44],9:$Vd,10:$Ve,12:$Vf,13:$Vg,14:43,15:$Vh,16:45,19:$Vi,21:$Vj,23:$Vk,25:48,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},{12:[1,63]},o($V8,[2,41]),{2:$Vq,20:64,21:$Vr,23:$Vs},{2:$Vq,20:68,21:$Vr,23:$Vs},{2:[1,70],9:[1,69]},{9:[1,71]},{9:[1,72]},{2:$Vc,7:46,8:[1,74],9:$Vd,10:$Ve,12:$Vf,13:$Vg,14:73,15:$Vh,16:75,19:$Vi,21:$Vj,23:$Vk,25:48,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},{12:[1,76]},{2:$Vc,7:46,8:[1,78],9:$Vd,10:$Ve,12:$Vf,13:$Vg,14:77,15:$Vh,16:79,19:$Vi,21:$Vj,23:$Vk,25:48,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},{2:[1,81],12:[1,80]},{2:$Vc,7:46,8:[1,83],9:$Vd,10:$Ve,12:$Vf,13:$Vg,14:82,15:$Vh,16:84,19:$Vi,21:$Vj,23:$Vk,25:48,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},{12:[1,85]},{2:$V0,7:87,8:[1,86]},{2:$V4,13:$V3,15:[1,88]},{8:[1,89],9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$Vj,23:$Vk,25:90,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},o($Vt,[2,37]),o($Vt,[2,38],{13:$V2}),o($Vu,[2,51]),o($Vu,[2,52]),o($Vu,[2,53]),o($Vu,[2,54]),o($Vv,[2,69]),o($Vv,[2,70]),o($Vv,[2,71]),o($Vv,[2,72]),o($Vv,[2,73]),o($Vv,[2,74]),o($Vv,[2,75]),o($Vv,[2,76]),o($Vv,[2,77]),o($Vv,[2,78]),o($Vv,[2,79]),o($Vw,[2,33]),o($V8,[2,43]),o($Vx,$Vy,{22:91,27:92,28:93,26:94,8:$Vz,9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,23:$VA,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp}),o($VB,[2,63],{24:97,29:98,30:99,26:100,8:$VC,9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$VD,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp}),{8:$Vz,9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$Vy,22:103,23:$VA,26:94,27:92,28:93,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},o($V8,[2,44]),{2:[1,105],12:[1,104]},{12:[1,106]},{12:[1,107]},{12:[1,108]},{2:$V0,7:87,8:[1,109]},{2:$V4,13:$V3,15:[1,110]},{8:[1,111],9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$Vj,23:$Vk,25:90,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},o($Vw,[2,34]),{2:$V0,7:87,8:[1,112]},{2:[1,114],13:$V3,15:[1,113]},{8:[1,115],9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$Vj,23:$Vk,25:90,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},o($Vw,[2,14]),o($Vw,[2,35]),{2:$V0,7:87,8:[1,116]},{2:$V4,13:$V3,15:[1,117]},{8:[1,118],9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$Vj,23:$Vk,25:90,26:49,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp},o($Vt,[2,6]),{2:$V4,13:$V3,15:[1,119]},o($Vt,[2,36]),{13:[1,120]},{15:[1,121]},o($Vu,[2,50]),{2:[1,123],21:[1,122]},o($Vx,[2,55],{26:94,28:124,8:$Vz,9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,23:$VA,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp}),o($Vv,[2,58]),o($Vv,[2,59]),o($Vv,[2,60]),o($Vv,[2,61]),{2:[1,126],23:[1,125]},o($VB,[2,62],{26:100,30:127,8:$VC,9:$Vd,10:$Ve,12:$Vf,13:$Vg,15:$Vh,19:$Vi,21:$VD,31:$Vl,32:$Vm,33:$Vn,34:$Vo,35:$Vp}),o($Vv,[2,65]),o($Vv,[2,66]),o($Vv,[2,67]),o($Vv,[2,68]),{21:[1,128]},o($Vt,[2,5]),o($Vt,[2,10]),o($Vt,$Vb),o($Vt,$Vt),o($Vt,[2,7]),{2:$V4,13:$V3,15:[1,129]},{13:[1,130]},{15:[1,131]},{2:[1,133],13:$V3,15:[1,132]},{2:[1,135],13:[1,134]},o($V5,$V6,{17:20,18:21,11:26,13:[1,136]}),{2:[1,138],15:[1,137]},{2:$V4,13:$V3,15:[1,139]},{13:[1,140]},{15:[1,141]},{13:[1,142]},{12:[1,143]},{13:[1,144]},o($V8,[2,45]),o($V8,[2,48]),o($Vv,[2,57]),o($V8,[2,46]),o($V8,[2,49]),o($Vv,[2,64]),o($V8,[2,47]),{13:[1,145]},{12:[1,146]},{13:[1,147]},{2:[1,149],13:[1,148]},o($V5,$V6,{17:20,18:21,11:26,13:[1,150]}),{2:[1,152],12:[1,151]},{12:[1,153]},{2:$V9,12:[1,154],19:$Va},{2:[1,156],13:[1,155]},{13:[1,157]},{13:[1,158]},{12:[1,159]},{13:[1,160]},{12:[1,161]},o($Vw,$Vx),{12:[1,162]},{12:[1,163]},o($Vw,[2,22]),{12:[1,164]},{2:[1,166],12:[1,165]},{12:[1,167]},{2:$V9,12:[1,168],19:$Va},o($Vw,[2,12]),o($Vw,[2,26]),o($Vw,[2,25]),o($Vw,[2,24]),{2:[1,170],12:[1,169]},{12:[1,171]},{12:[1,172]},{12:[1,173]},o($Vw,$VB),{12:[1,174]},o($Vw,[2,15]),o($Vw,[2,27]),o($Vw,[2,16]),o($Vw,[2,28]),o($Vw,[2,11]),o($Vw,[2,20]),o($Vw,[2,19]),o($Vw,[2,18]),o($Vw,[2,13]),o($Vw,[2,32]),o($Vw,[2,31]),o($Vw,[2,30]),o($Vw,[2,17]),o($Vw,[2,29])],
+defaultActions: {4:[2,3],7:[2,1],8:[2,2],11:[2,4]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -434,16 +695,33 @@ parseError: function parseError (str, hash) {
         throw error;
     }
 },
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+parse: function parse (input) {
+    var self = this,
+        stack = [0],
+        tstack = [], // token stack
+        vstack = [null], // semantic value stack
+        lstack = [], // location stack
+        table = this.table,
+        yytext = '',
+        yylineno = 0,
+        yyleng = 0,
+        recovering = 0,
+        TERROR = 2,
+        EOF = 1;
+
     var args = lstack.slice.call(arguments, 1);
+
+    //this.reductionCount = this.shiftCount = 0;
+
     var lexer = Object.create(this.lexer);
     var sharedState = { yy: {} };
+    // copy state
     for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
+      if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+        sharedState.yy[k] = this.yy[k];
+      }
     }
+
     lexer.setInput(input, sharedState.yy);
     sharedState.yy.lexer = lexer;
     sharedState.yy.parser = this;
@@ -452,123 +730,207 @@ parse: function parse(input) {
     }
     var yyloc = lexer.yylloc;
     lstack.push(yyloc);
+
     var ranges = lexer.options && lexer.options.ranges;
+
     if (typeof sharedState.yy.parseError === 'function') {
         this.parseError = sharedState.yy.parseError;
     } else {
         this.parseError = Object.getPrototypeOf(this).parseError;
     }
-    function popStack(n) {
+
+    function popStack (n) {
         stack.length = stack.length - 2 * n;
         vstack.length = vstack.length - n;
         lstack.length = lstack.length - n;
     }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
+
+_token_stack:
+    var lex = function () {
+        var token;
+        token = lexer.lex() || EOF;
+        // if token isn't its numeric value, convert
+        if (typeof token !== 'number') {
+            token = self.symbols_[token] || token;
+        }
+        return token;
+    }
+
     var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
     while (true) {
+        // retreive state number from top of stack
         state = stack[stack.length - 1];
+
+        // use default actions if available
         if (this.defaultActions[state]) {
             action = this.defaultActions[state];
         } else {
             if (symbol === null || typeof symbol == 'undefined') {
                 symbol = lex();
             }
+            // read action for current state and first input
             action = table[state] && table[state][symbol];
         }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
+
+_handle_error:
+        // handle parse error
+        if (typeof action === 'undefined' || !action.length || !action[0]) {
+            var error_rule_depth;
+            var errStr = '';
+
+            // Return the rule stack depth where the nearest error rule can be found.
+            // Return FALSE when no error recovery rule was found.
+            function locateNearestErrorRecoveryRule(state) {
+                var stack_probe = stack.length - 1;
+                var depth = 0;
+
+                // try to recover from error
+                for(;;) {
+                    // check for error recovery rule in this state
+                    if ((TERROR.toString()) in table[state]) {
+                        return depth;
+                    }
+                    if (state === 0 || stack_probe < 2) {
+                        return false; // No suitable error recovery rule available.
+                    }
+                    stack_probe -= 2; // popStack(1): [symbol, action]
+                    state = stack[stack_probe];
+                    ++depth;
+                }
+            }
+
+            if (!recovering) {
+                // first see if there's any chance at hitting an error recovery rule:
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
+
+                // Report error
                 expected = [];
                 for (p in table[state]) {
                     if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
+                        expected.push("'"+this.terminals_[p]+"'");
                     }
                 }
                 if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                    errStr = 'Parse error on line '+(yylineno+1)+":\n"+lexer.showPosition()+"\nExpecting "+expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol)+ "'";
                 } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                    errStr = 'Parse error on line '+(yylineno+1)+": Unexpected " +
+                                  (symbol == EOF ? "end of input" :
+                                              ("'"+(this.terminals_[symbol] || symbol)+"'"));
                 }
                 this.parseError(errStr, {
                     text: lexer.match,
                     token: this.terminals_[symbol] || symbol,
                     line: lexer.yylineno,
                     loc: yyloc,
-                    expected: expected
+                    expected: expected,
+                    recoverable: (error_rule_depth !== false)
                 });
+            } else if (preErrorSymbol !== EOF) {
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
             }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
+
+            // just recovered from another error
+            if (recovering == 3) {
+                if (symbol === EOF || preErrorSymbol === EOF) {
+                    throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
+                }
+
+                // discard current lookahead and grab another
                 yyleng = lexer.yyleng;
                 yytext = lexer.yytext;
                 yylineno = lexer.yylineno;
                 yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
+                symbol = lex();
             }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
+
+            // try to recover from error
+            if (error_rule_depth === false) {
+                throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
             }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
+            popStack(error_rule_depth);
+
+            preErrorSymbol = (symbol == TERROR ? null : symbol); // save the lookahead token
+            symbol = TERROR;         // insert generic error symbol as new lookahead
+            state = stack[stack.length-1];
+            action = table[state] && table[state][TERROR];
+            recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
         }
+
+        // this shouldn't happen, unless resolve defaults are off
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: '+state+', token: '+symbol);
+        }
+
+        switch (action[0]) {
+            case 1: // shift
+                //this.shiftCount++;
+
+                stack.push(symbol);
+                vstack.push(lexer.yytext);
+                lstack.push(lexer.yylloc);
+                stack.push(action[1]); // push state
+                symbol = null;
+                if (!preErrorSymbol) { // normal execution/no error
+                    yyleng = lexer.yyleng;
+                    yytext = lexer.yytext;
+                    yylineno = lexer.yylineno;
+                    yyloc = lexer.yylloc;
+                    if (recovering > 0) {
+                        recovering--;
+                    }
+                } else {
+                    // error just occurred, resume old lookahead f/ before error
+                    symbol = preErrorSymbol;
+                    preErrorSymbol = null;
+                }
+                break;
+
+            case 2:
+                // reduce
+                //this.reductionCount++;
+
+                len = this.productions_[action[1]][1];
+
+                // perform semantic action
+                yyval.$ = vstack[vstack.length-len]; // default to $$ = $1
+                // default location, uses first token for firsts, last for lasts
+                yyval._$ = {
+                    first_line: lstack[lstack.length-(len||1)].first_line,
+                    last_line: lstack[lstack.length-1].last_line,
+                    first_column: lstack[lstack.length-(len||1)].first_column,
+                    last_column: lstack[lstack.length-1].last_column
+                };
+                if (ranges) {
+                  yyval._$.range = [lstack[lstack.length-(len||1)].range[0], lstack[lstack.length-1].range[1]];
+                }
+                r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+
+                if (typeof r !== 'undefined') {
+                    return r;
+                }
+
+                // pop off stack
+                if (len) {
+                    stack = stack.slice(0,-1*len*2);
+                    vstack = vstack.slice(0, -1*len);
+                    lstack = lstack.slice(0, -1*len);
+                }
+
+                stack.push(this.productions_[action[1]][0]);    // push nonterminal (reduce)
+                vstack.push(yyval.$);
+                lstack.push(yyval._$);
+                // goto new state = table[STATE][NONTERMINAL]
+                newState = table[stack[stack.length-2]][stack[stack.length-1]];
+                stack.push(newState);
+                break;
+
+            case 3:
+                // accept
+                return true;
+        }
+
     }
+
     return true;
 }};
 
@@ -578,6 +940,7 @@ parse: function parse(input) {
     const {Atributo, Comilla} = require("../Expresiones/Atributo");
 
     var erroresSemanticos = [];
+    var erroresSintacticos = [];
     var erroresLexicos = [];
     var reporteGramatical = [];
 
