@@ -12,16 +12,16 @@
     <th>Carnet</th>
   </tr>
   <tr>
+    <td>Jonnathan Antonio Castillo Avendaño    (Coordinador)</td>
+    <td>201314340</td>
+  </tr>
+  <tr>
     <td>Hilbert Josue Perucho Ramirez</td>
     <td>201313889</td>
   </tr>
   <tr>
-    <td>Nombre</td>
-    <td>Carne</td>
-  </tr>
-  <tr>
-    <td>Nombre</td>
-    <td>Carne</td>
+    <td>Ricardo Humberto Fuentes Garcia</td>
+    <td>201513747</td>
   </tr>
 </table>
 </div>
