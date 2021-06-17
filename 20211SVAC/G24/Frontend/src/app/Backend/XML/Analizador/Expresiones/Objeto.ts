@@ -54,7 +54,7 @@ export default class Objeto extends Instruccion {
         //arbol.listaSimbolos.push(simbolo);
 
     } else if (this.contenido != null) {
-      console.log(arbol.getEncoding());
+      
       //if o switch buscando codificacion
       if (arbol.getEncoding() == "UTF-8") {
         this.contenido = (this.contenido);
