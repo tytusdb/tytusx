@@ -38,4 +38,10 @@ class XmlContent extends XmlObjectAncestor {
     isContent() {
         return true;
     }
+    getStrAst(nodoPadre) {
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot = nombreRoot + "[" + 'label="' + this._value + '",' + 'color="greenyellow",' + "];\n ";
+        var cad = cadenaRoot + nodoPadre + "->" + nombreRoot + ";\n";
+        return cad;
+    }
 }

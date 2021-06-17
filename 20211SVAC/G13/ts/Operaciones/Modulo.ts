@@ -32,7 +32,7 @@ export class Modulo extends Expresion {
         if(e1.tipo == 0) {
             if(e2.tipo == 0) {
                 if(parseInt(e2.valor.toString()) != 0) {
-                    res.tipo = 1;
+                    res.tipo = 0;
                     res.valor = parseInt(e1.valor.toString()) % parseInt(e2.valor.toString());
                     return res;
                 } else {
@@ -40,7 +40,7 @@ export class Modulo extends Expresion {
                 }
             } else if(e2.tipo == 1) {
                 if(parseInt(e2.valor.toString()) != 0) {
-                    res.tipo = 1;
+                    res.tipo = 0;
                     res.valor = parseInt(e1.valor.toString()) % parseFloat(e2.valor.toString());
                     return res;
                 } else {

@@ -61,4 +61,7 @@ class XmlObjectAncestor {
     isAttribute() {
         return false;
     }
+    getStrAst(nodoPadre) {
+        return "";
+    }
 }

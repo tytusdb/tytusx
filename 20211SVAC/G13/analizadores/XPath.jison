@@ -185,5 +185,4 @@ PRIMITIVO:
 	| TKstring                  { $$ = new Literal(3,$1.toString()); }
     | Rlast lparen rparen       { $$ = new Literal(6,$1.toString()+'()'); }
     | Rposition lparen rparen   { $$ = new Literal(6,$1.toString()+'()'); } //Pendiente de ver el position :v
-    | TKid                      { $$ = new Id(5,$1.toString()); } //Pendiente de ver la busqueda de nodos
 ;

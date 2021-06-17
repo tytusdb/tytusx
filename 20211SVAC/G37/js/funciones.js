@@ -63,6 +63,86 @@ function limpiarXPath(){
 
 function analizarXPath(){
     var entrada = document.getElementById("txtQuery").value;
+    var cadena = gramatica.parse(entrada);
+    return cadena;
+}
+
+function analizarXML(){ // Esta funcion esta depricated XD
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
+    //console.log(entrada);
+    var tabla = gramatica1.parse(entrada);
+    return tabla;
+}
+
+
+/* FUNCIONES GRAMATICA DESCENDENTE DEL XML*/
+function analizarDescXML(){ // Utilizar la gramatica descendente para analizar la entrada
+    
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
+    console.log("Texto enviado", entrada);
+    var objetos = gdesc.parse(entrada);
+    let elementoRaiz = objetos['elemento']; // retorna {"elemento": [elementos] , "errores":[array]}
+    let arrErrores = objetos['errores'];
+    // Verificar si existen errores 
+    console.log(arrErrores);
+    let continuar =  true;
+    if(arrErrores.length > 0)
+         continuar = erroresParserXml(arrErrores);
+    if(!continuar) {
+        console.log("No se puede continuar, ya que el XML contiene errores, ver reporte de errores para mayor informacion");
+        return null;
+    }
+    // 2) Construir la tabla de simbolos de la entrada Podemos seguir analizando ya que no hubieron errores
+    localStorage.removeItem('terrdescxml');
+    const ambitoGlobal = elementoRaiz.construirTablaSimbolos(null); // construirTablaSimbolos es funcion recursiva
+    console.log(ambitoGlobal);
+
+    return ambitoGlobal;
+}
+
+function erroresParserXml(arrErrores){
+    let continuar = true;
+    let char = '.';
+    arrErrores.forEach(element => {
+        if(char != element['texto']) // Si hay error y no debe proceguir 
+            continuar = false;
+    });
+    if(!continuar){
+        let strHtml = generarTablaErroresHtml(arrErrores); // metodo de js/prod/index.js
+        localStorage.setItem('terrdescxml', strHtml);
+        
+    } 
+    return continuar;
+}
+
+
+
+
+
+function analizarAscXML(){
+
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
+    console.log("Texto enviado y soy otra funcion", entrada);
+    let res = analizadorAsc(entrada); // funcion de js/prod/index.js 
+    localStorage.setItem('cst-xml', res['DOTCST']);
+    console.log(res['DOTCST']);
+}
+
+
+function getXPath(){
+    return document.getElementById("txtQuery").value;
+}
+
+function setConsola(texto){
+    document.getElementById("txtConsola").value = texto;
+}
+
+function getXML(){
+    var editor = $('.CodeMirror')[0].CodeMirror;
+    var entrada = editor.getValue();
     console.log(entrada);
-    gramatica.parse(entrada);
+    return entrada;
 }

@@ -1,5 +1,5 @@
-class Objeto {
-    constructor(id, texto, linea, columna, listaAtributos, listaObjetos) {
+var Objeto = /** @class */ (function () {
+    function Objeto(id, texto, linea, columna, listaAtributos, listaObjetos) {
         this.identificador = id;
         this.texto = texto;
         this.linea = linea;
@@ -18,21 +18,21 @@ class Objeto {
         }
         this.tipo = 'Etiqueta';
     }
-    agregarObjeto(obj) {
+    Objeto.prototype.agregarObjeto = function (obj) {
         this.listaObjetos.push(obj);
         return true;
-    }
-    obtenerBarraSimple(busqueda) {
-        let listaRetorno = [];
+    };
+    Objeto.prototype.obtenerBarraSimple = function (busqueda) {
+        var listaRetorno = [];
         this.listaObjetos.forEach(function (value) {
             if (value.identificador == busqueda) {
                 listaRetorno.push(value);
             }
         });
         return listaRetorno;
-    }
-    obtenerBarraDoble(busqueda) {
-        let listaRetorno = [];
+    };
+    Objeto.prototype.obtenerBarraDoble = function (busqueda) {
+        var listaRetorno = [];
         this.listaObjetos.forEach(function (value) {
             if (value.identificador == busqueda) {
                 listaRetorno.push(value);
@@ -42,9 +42,9 @@ class Objeto {
             }
         });
         return listaRetorno;
-    }
-    obtenerBarraDoblePred(busqueda, pos) {
-        let listaRetorno = [];
+    };
+    Objeto.prototype.obtenerBarraDoblePred = function (busqueda, pos) {
+        var listaRetorno = [];
         listaRetorno.push(this.listaObjetos[pos - 1]);
         this.listaObjetos.forEach(function (value) {
             if (value.identificador == busqueda) {
@@ -55,5 +55,6 @@ class Objeto {
             }
         });
         return listaRetorno;
-    }
-}
+    };
+    return Objeto;
+}());

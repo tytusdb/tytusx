@@ -78,7 +78,7 @@ export class ContenidoInicioComponent implements OnInit {
 
       var Tree: Arbol = new Arbol([objetos]);
       Tree.settablaGlobal(this.tablaGlobal);
-      console.log(this.tablaGlobal);
+      
 
 
       //  PARA GUARDAR DATOS
@@ -99,16 +99,21 @@ export class ContenidoInicioComponent implements OnInit {
         var atributos = "";
         var listaobjetitos = "";
         var contenido = "";
+        var linea = key.getLinea();
+        var columna = key.getColumna();
         var nombre = key.getidentificador();
         for (var [key2, value2] of key.getAtributo()) {
           //alert(key + " = " + value);
           atributos += `${key2}=>${value2}, `
+
         }
         let objetos = key.getvalor();
         if (objetos instanceof tablaSimbolos) {
           for (var key3 of objetos.tablaActual) {
             //alert(key + " = " + value);
             listaobjetitos += `${key3.getidentificador()}, `
+            //linea=`${key3.getLinea()} `
+            // columna=`${key3.getColumna()} `
 
           }
 
@@ -116,9 +121,12 @@ export class ContenidoInicioComponent implements OnInit {
 
         } else {
           contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
+
+          //Tree.actualizarTabla(contenido,linea,columna);
+
         }
-        var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos);
-        Tree.listaSimbolos.push(Reporte);
+        var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos, linea, columna);
+        //Tree.listaSimbolos.push(Reporte);
 
       }
 
@@ -183,24 +191,28 @@ export class ContenidoInicioComponent implements OnInit {
       var atributos = "";
       var listaobjetitos = "";
       var contenido = "";
+      var linea = key.getLinea();
+      var columna = key.getColumna();
       var nombre = key.getidentificador();
-      for (var [key2, value2] of key.getAtributo()) {
+      for (var [key2, value2,] of key.getAtributo()) {
         //alert(key + " = " + value);
-        atributos += `${key2}=>${value2}, `
+        atributos += `${key2}=>${value2}, `;
       }
       let objetos = key.getvalor();
       if (objetos instanceof tablaSimbolos) {
         for (var key3 of objetos.tablaActual) {
           //alert(key + " = " + value);
           listaobjetitos += `${key3.getidentificador()}, `
+
         }
 
         this.llenarTablaSimbolos(objetos, tri);
 
       } else {
         contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
+        tri.actualizarTabla(contenido, linea.toString(), columna.toString());
       }
-      var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos);
+      var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos, linea, columna);
       tri.listaSimbolos.push(Reporte);
 
     }
@@ -247,9 +259,11 @@ export class ContenidoInicioComponent implements OnInit {
   /*********************************************************************************************************/
   /***********************************************XPATH ASCENDENTE******************************************/
   /*********************************************************************************************************/
+
+
   EjecutarAsc(texto: string) {
 
-    if (texto == null) return document.write('Error');
+    // if (texto == null) return document.write('Error');
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
@@ -258,19 +272,17 @@ export class ContenidoInicioComponent implements OnInit {
     ast.settablaGlobal(tabla);                        //ejecucion
     var tablita = this.tablaGlobal;
     var c = 0;
-    var consolita=''
+    var consolita = ''
 
     for (var key of tablita.getTabla()) {//SIMBOLOS
-      if(key.getidentificador() == 'xml'){
+      if (key.getidentificador() == 'xml') {
         tablita = key.getvalor()
-      } 
+      }
     }
     for (let i of ast.getinstrucciones()) {             //ejecucion  
       c++;
       if (i instanceof BarrasNodo) {
         var resultador = i.interpretar(Tree, tablita);
-        console.log(resultador);
-        console.log("estamos en barra nodo")
         if (resultador instanceof tablaSimbolos) {
           tablita = resultador
           if (c == ast.getinstrucciones().length) {
@@ -286,6 +298,55 @@ export class ContenidoInicioComponent implements OnInit {
 
     this.mostrarContenido(consolita, 'resultado');
 
+
+  }
+
+  ArbolAscAST(texto: string) {
+    if (texto == null) return document.write('Error');
+    const analizador = AnalizarDscXpath;
+    const objetos = analizador.parse(texto);
+    var Tree: ArbolXpath = new ArbolXpath([objetos]);
+    //GRAFICAS
+    var instrucciones = new nodoAst("INSTRUCCIONES");
+    var contador = 0;
+
+    for (let i of Tree.getinstrucciones()) {
+      this.ciclo(i, contador, instrucciones)
+    }
+
+    let sim_string = JSON.stringify(instrucciones);
+    localStorage.setItem("astpath", sim_string);
+    //TERMINA GRAFICAS
+  }
+
+  /*ESTE MUESTRA LOS CICLOS PARA COLOCAR EL ARBOL AST CON GETNODO*/
+  ciclo(i: any, numero: number, instruc: nodoAst) {
+    if (i[numero] != null) {
+
+      if (i[numero] instanceof BarrasNodo) {
+        let temp: BarrasNodo = i[numero]
+
+        instruc.agregarHijoAST(temp.getNodosAST())
+      }
+      if (i[numero] instanceof Axes) {
+        let temp: Axes = i[numero]
+        instruc.agregarHijoAST(temp.getNodosAST())
+      }
+      numero++
+      this.ciclo(i, numero, instruc);
+    }
+  }
+  /*********************************************************************************************************/
+  /***********************************************XPATH DESCENDENTE*****************************************/
+  /*********************************************************************************************************/
+  EjecutarDesc(texto: string) {
+    if (texto == null) return document.write('Error');
+    const analizador = AnalizarDscXpath;
+    const objetos = analizador.parse(texto);
+    var Tree: ArbolXpath = new ArbolXpath([objetos]);
+
+
+
     var instrucciones = new nodoAst("INSTRUCCIONES");
     var contador = 0;
 
@@ -298,48 +359,7 @@ export class ContenidoInicioComponent implements OnInit {
     let sim_string = JSON.stringify(instrucciones);
     localStorage.setItem("astpath", sim_string);
   }
-
-/*ESTE MUESTRA LOS CICLOS PARA COLOCAR EL ARBOL AST CON GETNODO*/
-  ciclo(i:any, numero:number, instruc:nodoAst){
-    if(i[numero]!=null){
-     
-      if(i[numero] instanceof BarrasNodo){
-        let temp:BarrasNodo= i[numero]
-
-        instruc.agregarHijoAST(temp.getNodosAST())
-      }
-      if(i[numero] instanceof Axes){
-        let temp:Axes= i[numero]
-        instruc.agregarHijoAST(temp.getNodosAST())
-      }
-      numero++
-      this.ciclo(i, numero, instruc);
-    }
-  }
-/*********************************************************************************************************/
-/***********************************************XPATH DESCENDENTE*****************************************/
-/*********************************************************************************************************/
-EjecutarDesc(texto: string){
-  if (texto == null) return document.write('Error');
-  const analizador = AnalizarDscXpath;
-  const objetos = analizador.parse(texto);
-  var Tree:ArbolXpath = new ArbolXpath([objetos]);
-  
-
- 
-  var instrucciones = new nodoAst("INSTRUCCIONES");
-  var contador=0;
-
-  
-  for(let i of Tree.getinstrucciones()){
-    this.ciclo(i,contador,instrucciones)
-  }
-  
-  
-  let sim_string = JSON.stringify(instrucciones);
-  localStorage.setItem("astpath", sim_string);
-}
-/****************************************************************************************************************/
+  /****************************************************************************************************************/
 
   textoEsperado = '';
   textInputChange(fileInputEvent: any) {
@@ -377,7 +397,7 @@ EjecutarDesc(texto: string){
   recorrerTabla(t: tablaSimbolos) {
     var salida = ''
     for (var key of t.tablaActual) {
-      
+
       var listaobjetitos = "";
 
       let objetos = key.getvalor();

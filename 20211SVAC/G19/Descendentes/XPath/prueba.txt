@@ -1,0 +1,19 @@
+//libro[autor="Mario vargas"]
+CHILD::*//BOOL/tew
+CHILD::*//BOOL/tew
+//BOO/TI
+//BOL |/BFD
+//@*
+/*
+/bookstore/book[1]/title |CHILD::*
+//autor/@*
+/bookstore/book[price>35]/price
+//libro[fechaPublicacion/@ano=1973]/titulo
+/bookstore/book/price[text()]
+//autor[.="Mario Vargas Llosa"]/..
+//.
+//title[@*]
+//libro[autor=//libro[titulo="Pantaleón y las visitoras"]/autor/text()]/titulo
+//libro[titulo="La vida está en otra parte"]/fechaPublicacion/@ano
+//@ano[.="1970"]
+//libro[autor="Mario Vargas Llosa" and fechaPublicacion/@ano="1973"]a
