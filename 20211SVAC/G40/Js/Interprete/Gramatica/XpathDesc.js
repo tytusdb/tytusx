@@ -486,6 +486,7 @@ case 62:
 break;
 case 65: case 66:
  primitivoAux = new Primitivo($$[$0], _$[$0].first_line, _$[$0].first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($$[$0],"");
                               this.$ = [primitivoAux,nodoaux];   
 break;
