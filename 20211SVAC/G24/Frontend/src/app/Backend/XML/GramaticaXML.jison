@@ -18,13 +18,12 @@ const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.c
 %%                
 /* Espacios en blanco */
 "//".*            	  {}
-"<!--"                {console.log("Comenzo el comentario"); this.begin("Comentario"); }
+"<!--"                { this.begin("Comentario"); }
 <Comentario>[ \r\t]+  {}
 <Comentario>\n+       {}
-<Comentario>\s+       {}
 
-<Comentario>"-->"     {console.log("Termino el comentario"); this.popState();}
-<Comentario>[^"-->"]+ {console.log("Texto dentro del comentario: "+yytext+" :("); return 'COMENTARIOS'} 
+<Comentario>"-->"     { this.popState();}
+<Comentario>[^"-->"]+ { return 'COMENTARIOS'} 
 
 ">"                     this.begin('cuerpo'); return 'MAYORQUE'
 
@@ -79,6 +78,7 @@ INSTRUCCION
         : CUERPO { $$ = $1;}
         | OBJETOS { $$ = $1;}
         | error {inicio.listaErrores.push(new CNodoErrores.default("Error Sintactico","Se esperaba un token, error en : "+yytext,@1.first_line,@1.first_column));console.log("Error Sintactico, Se esperaba un token en esta linea " + "Linea: "+ @1.first_line + " Columna: "+ @1.first_column); $$=false;}
+        | COMENTARIOS {$$="<!-- "+$1+" --!>"}
         ;
 
 OBJETOS

@@ -112,15 +112,15 @@ INSTRUCCIONES:
                                                                                                                             $$ = $1;
                                                                                                                         }
 	| INSTRUCCION                                                                                                       {
-                                                                                                                            $$ = [$1];
+                                                                                                                            $$ = $1;
                                                                                                                         } ;
 
 INSTRUCCION:
     PRINT semicolon {
                         $$ = $1
                     }
-    |  PATHEXPR {}
-    | NODEXPR {};
+    |  PATHEXPR {$$=$1;}
+    | NODEXPR {$$=$1;};
 
     
 
@@ -131,16 +131,17 @@ PRINT:
 
 PATHEXPR:
     diagonal STEPEXPR PATHEXPR{
-        $$ = $1
+        $$ = [];
+
     }
     | diagonal diagonal STEPEXPR PATHEXPR{
-        $$ = $1
+        $$ = [];
     }
-    | {};
+    | {$$=[]};
 
 NODEXPR:
-    EXPR PATHEXPR{}
-    | times PATHEXPR{};
+    EXPR PATHEXPR{var nodo1=new Nodo([$1],@1.first_line,@2.first_column); var lista=[nodo1]; $$=lista;}
+    | times PATHEXPR{ $$= [$2];};
 
 
 STEPEXPR:
@@ -162,7 +163,7 @@ AXISSTEP:
 
 FORWARDSTEP:
     FORWARDAXIS EXPR {
-
+            $$=$1
     };
 
 FORWARDAXIS:
@@ -225,13 +226,13 @@ ABBREVREVERSESTEP:
     };
 
 
-PREDICATELIST: PREDICATELISTP {}
-    |{};
+PREDICATELIST: PREDICATELISTP {$$=$1;}
+    |{$$=[]};
 
-PREDICATELISTP: PREDICATELIST PREDICATE   {}
-    ;
+PREDICATELISTP: PREDICATELISTP PREDICATE   {$1.push($2); $$=$1;}
+    | PREDICATE {$$=[$1];};
 
-PREDICATE: lKey EXPR rKey {};
+PREDICATE: lKey EXPR rKey {$$=$2;};
 
 FILTEREXPR: EXPR PREDICATELIST {};
 
@@ -272,63 +273,51 @@ EXPR:
         } 
         | EXPR plus EXPR   
         {
-            
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);
         }   
         | EXPR minus EXPR  
         {
-            
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);
         }  
         | EXPR times EXPR  
         {
-           
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);
         }  
         | EXPR division EXPR
         {
-           
-        }        
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }        
         | EXPR pow EXPR
         {
-            
-        } 
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        } 
         | EXPR equal EXPR 
         {
-
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR greaterThan EXPR 
         {
-               
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR minusThan EXPR 
         {
-              
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR greaterEqual EXPR 
         {
-                
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR minusEqual EXPR 
         {
-                
-        }      
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }      
         | EXPR and EXPR 
         {
-                
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR or EXPR 
         {
-            
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR mod EXPR
         {
-
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | EXPR notEqual EXPR {
-
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | lparen EXPR rparen       
         {
-            $$ =$2;
-        }
+            $$=new Predicados($1,$3,$2,@1.first_line,@1.first_column);        }
         | last lparen rparen EXPR 
         {
 

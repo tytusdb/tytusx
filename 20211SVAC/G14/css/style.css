@@ -1,0 +1,50 @@
+body {
+  background-image: radial-gradient(
+    circle at -14.09% 79.88%,
+    #783a59 0,
+    #723359 12.5%,
+    #6b2d59 25%,
+    #632659 37.5%,
+    #591f59 50%,
+    #4e195a 62.5%,
+    #42155a 75%,
+    #33135c 87.5%,
+    #21125d 100%
+  );
+}
+
+.bgcolor {
+  background-color: rgba(253, 254, 254, .15);
+}
+
+.navbar-dropdown {
+    background-color: #4e195a;
+}
+
+button:hover {
+    background-color: #399672;
+}
+
+.navbar-item {
+    color: white;
+}
+
+.button {
+    background-color: #783a59;
+}
+
+.table {
+  width: 100%;
+}
+
+thead tr th { 
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #282a36;
+}
+
+.table-responsive { 
+  height:450px;
+  overflow-x:auto;
+}

@@ -15,6 +15,8 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="./Utilidad/codemirror/lib/codemirror.css">
+    <script  src="./Utilidad/viz/viz.js"></script>
+    <script  src="./Utilidad/viz/lite.render.js"></script>
     <script  src="./Gramatica/gramaticaXML.js"></script>
     <script  src="./Gramatica/gramaticaXPath.js"></script>
     <script  src="./AST/AST.js"></script>
@@ -36,7 +38,9 @@
     <script src="./Graficadora/GraficadoraTS.js"></script>    
     <script src="./Graficadora/GraficadoraErrores.js"></script>    
     <script src="./Graficadora/GraficadoraGramatical.js"></script>    
-    <script src="./Graficadora/UtilidadGrafica.js"></script>    
+    <script src="./Graficadora/UtilidadGrafica.js"></script>
+    <script src="./Graficadora/GraficadoraAST.js"></script>
+    <script src="./Expresiones/Predicados.js"></script>
     <script src="./index.js"></script>
     <h1>Compi 2 - GRUPO 2 GHP</h1>
 </head>
@@ -95,6 +99,9 @@
                             <td>
                                 <button onclick="generarReporteGramatical()">Reporte Gramatical</button>
                             </td>
+                            <td>
+                                <button onclick="graficarASTXML()">Graficar AST XML</button>
+                            </td>
                         </tr>
                     </table>
                 </td>
@@ -106,7 +113,10 @@
             </tr>
         </table>
     </div>
-
+    <div>
+        <h2>AST XML</h2>
+        <div id="image"></div>
+    </div>
 
     <!-- JAVASCRIPT -->
     <script type="text/javascript" src="./Utilidad/jquery.min.js"></script>
