@@ -118,3 +118,123 @@ Genera y luego copia ambias gramáticas hacia la carpeta build
 npm run full-build
 ```
 Genera una compilación completa del código typescript, así como la generación y posterior copia hacia la carpeta build de ambas gramáticas.
+
+# Gramaticas realizadas
+
+##XPath
+
+```
+<start> ::= <instrucciones> <eof>
+
+<instrucciones> ::= <instrucciones> "|" <instruccion>
+    |             | <instruccion>
+
+<instruccion> ::= <pathexpr>
+                | <nodeexpr>
+   
+
+<pathexpr> ::= "/" <stepexpr> <pathexpr>
+            |  "/" "/" <stepexpr> <pathexpr>
+            | ""
+<nodexpr> ::= <expr> <pathexpr>
+            | "*" <pathexpr>
+
+<stepexpr> ::= "*"
+             | <filterexpr>
+             | <axisstep>
+
+<axisstep> ::= <forwardstep> <predicatelist>
+             | <reversestep> <predicatelist>
+             
+<forwardstep> ::= <forwardaxis> <expr>
+
+<forwardaxis> ::= "child::"
+                | "descendant::"
+                | "attribute::"
+                | "self::"
+                | "descendant-or-self::"
+                | "following::"
+                | "following-sibling::"
+                | "namespace::"
+<reversestep> ::= <reverseaxis> <expr>
+                | <abbrevreversestep>
+
+<reverseaxis> ::= "parent::"
+                | "ancestor::"
+                | "preceding-sibling::"
+                | "preceding::"
+                | "ancestor-or-self:"   
+<abbrevreversestep> ::= "."
+                      | ".."
+
+<predicatelist> ::= <predicatelistp>
+                  | ""
+<predicatelistp> ::= <predicatelist> <predicate>
+
+<predicate> ::= "[" <expr> "]"
+
+<filterexpr> ::= <expr> <predicatelist>
+
+<expr> ::= <IntegerLiteral>
+         | <DoubleLiteral>
+         | <StringLiteral>
+         | <CharLiteral>
+         | <identifier>
+         | "-" <expr>
+         | <expr> "+" <expr>
+         | <expr> "-" <expr>
+         | <expr> "*" <expr>
+         | <expr> "div" <expr>
+         | <expr> "^^" <expr>
+         | <expr> "=" <expr>
+         | <expr> ">" <expr>
+         | <expr> "<" <expr>
+         | <expr> ">=" <expr>
+         | <expr> "<=" <expr>
+         | <expr> "+" <expr>
+         | <expr> "and" <expr>
+         | <expr> "or" <expr>
+         | <expr> "mod" <expr>
+         | <expr> "!=" <expr>
+         | "(" <expr> ")"
+         | "last" "(" ")"
+         | "text" "(" ")"
+         | "@" <expr>
+         | "position" "(" ")"
+         | "node" "(" ")"
+```
+
+## XML
+
+```
+<start> ::= <reconocimientoutf> <raices> <eof>
+
+<reconocimientoutf> ::= "<" "?" "xml version=" <StringLiteral> "encoding=" <StringLiteral> "?>"   
+
+<raices> ::= <raices> <raiz>
+            | <raiz>
+
+<raiz> ::= <objeto>
+
+<objeto> ::= "<" <identifier> <latributos> ">" <objetos> "<" "/" <identifier> ">" 
+           | "<" <identifier> <latributos> ">" "<" <lista_id_objeto> ">" "<" "/" <identifier> ">" 
+           | "<" <identifier> <latributos> "/" ">" 
+
+<latributos> ::= <atributos>
+
+<atributos> ::= <atributos> <atributo>
+              | <atributo>
+
+<atributo> ::= <identifier> "=" <StringLiteral>
+
+<lista_id_objeto> ::= <lista_id_objeto> <valor>
+                    | <valor>
+
+<valor> ::= <identifier>
+          | <IntegerLiteral>
+          | <DoubleLiteral>
+
+<objetos> ::= <objetos> <objeto>
+            | <objeto>
+
+```

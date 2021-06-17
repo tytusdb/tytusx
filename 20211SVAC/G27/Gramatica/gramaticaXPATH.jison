@@ -4,9 +4,11 @@
 %options case-insensitive
 
 %%
+\s+                                 /* skip whitespace */
 /* PALABRAS RESERVADAS */
 "last"                     return  'last';
 "position"                 return  'position';
+"text"                     return  'text';
 "ancestor"                 return  'ancestor'; 
 "attribute"                return  'attribute'
 "child"                    return  'child'
@@ -18,6 +20,7 @@
 "sibling"                  return  'sibling'
 "self"                     return  'self'
 "node"                     return  'node'
+\"[^"]+\"                   yytext = yytext.slice(1,-1); return 'STRING';
 
 /* SIMBOLOS PARA OPERACIONES ARITMÉTICAS */
 "+"                         return 'mas';
@@ -46,21 +49,21 @@
 "&&"                        return 'and';
 "||"                        return 'or';
 "!"                         return 'not';
+"|"                         return 'union';
 
 
-"["                         return 'cora'
-"]"                         return 'corc'
-"."                         return 'punto'
-".."                        return 'dpunto'
-"::"                        return 'ddpuntos'
-"@"                         return 'arroba'
+"["                         return 'cora';
+"]"                         return 'corc';
+"."                         return 'punto';
+"::"                        return 'ddpuntos';
+"@"                         return 'arroba';
 
 /* Number literals */
 (([0-9]+"."[0-9]*)|("."[0-9]+))     return 'decimal';
 [0-9]+                              return 'entero';
-[a-zA-Z0-9_]+                       return 'nodoid';
-\/\/                                return 'ddoble'
-\/                                  return 'dsimple'
+[a-zA-Z0-9_nÑ]+                       return 'nodoid';
+\/\/                                return 'ddoble';
+\/                                  return 'dsimple';
 
 
 //error lexico
@@ -68,26 +71,28 @@
                                         console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
                                     }
 
+
 <<EOF>>                     return 'EOF'
 
 /lex
 
 //SECCION DE IMPORTS
-
+/*%{
+       const {Elemento} = require("../Expresiones/Elemento");
+%}*/
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
 %left 'or'
 %left 'and'
-%left 'menor' 'mayor' 
-%left 'menorigual' 'mayorigual' 
-%left 'igual' 'noigual'
-%left 'mas' 'menos'
-%left 'por' 'div' 'mod' 
 %left 'not'
-%left UMINUS
-
+%left 'union'
+%left 'igual' 'noigual'
+%left 'menor' 'mayor' 'menorigual' 'mayorigual' 
+%left 'ddoble' 'dsimple'
+%left 'cora' 'corc'
 %left 'parentesisa' 'parentesisc'
-
+%left 'por' 'div' 'mod'
+%left 'mas' 'menos'
 
 // DEFINIMOS PRODUCCIÓN INICIAL
 %start START
@@ -95,78 +100,99 @@
 %%
 
 /* Definición de la gramática */
-START : INSTRUCCIONES  {return $1;};
+START : LISTA_NODOS EOF{
+       return $1;
+};
 
-INSTRUCCIONES : NODOS EOF {$$=$1;};
+LISTA_NODOS : LISTA_NODOS OPERADOR NODO{
+                     $1.push($3);
+                     $$=$1;
+              }
+              |NODO{
+                     $$=[$1];
+              };
 
-NODOS : NODOS NODO {$$ = $1;}
-       |NODO {$$=$1;};
+OPERADOR : union
+              |or
+              |;
 
-NODO : ddoble NODO_F {$$ = $2;}
-       |dsimple NODO_F {$$ = $2;}
-       |NODO_F {$$ = $1;};
+NODO : ddoble VALOR_NODO{
+              $$=new Elemento($2,tipoElemento.DOBLE_DIAGONAL);
+       }
+      |dsimple VALOR_NODO{
+              $$=new Elemento($2,tipoElemento.DIAGONAL);
+       }
+      |VALOR_NODO;
 
-NODO_F : nodoid  PREDICADO {$$=$2;}
-        |atributo PREDICADO {$$=$1;}
-        |AXES {$$=$1;}
-        |WILDCARD {$$=$1;};
+VALOR_NODO : nodoid NODO_COMPLEMENTO{
+              $$ = $1;              
+              }
+            |FUNCION
+            |SELECT
+            |EJE
+            |arroba nodoid NODO_COMPLEMENTO;
 
-AXES : ancestor AXES_F3 {$$=$1;}       
-       |attribute AXES_F {$$=$1;}
-       |child AXES_F {$$=$1;}
-       |descendant AXES_F3 {$$=$1;}       
-       |following AXES_F2 {$$=$1;}       
-       |namespace AXES_F {$$=$1;}
-       |parent AXES_F {$$=$1;}
-       |preceding AXES_F2 {$$=$1;}       
-       |self AXES_F {$$=$1;};
+NODO_COMPLEMENTO :cora EXPRESION corc    
+                 |punto punto               
+                 |;
 
-WILDCARD :  por PREDICADO {$$=$1;}           
-          | node parentesisa parentesisc {$$=$1;};
-       
-AXES_F : ddpuntos PREDICADO {$$=$1;};
+SELECT : ddoble SELECT_ARGUMENTO
+        |dsimple SELECT_ARGUMENTO;
 
-AXES_F2 : menos sibling AXES_F {$$=$1;}
-         |;
+SELECT_ARGUMENTO : arroba por
+                  |por
+                  |punto
+                  |punto punto;
 
-AXES_F3 : menos or menos self AXES_F {$$=$1;}
-         |;
+EJE: ancestor OR_SELF
+       |attribute ddpuntos EJE_COMPLEMENTO
+       |child ddpuntos EJE_COMPLEMENTO
+       |descendant OR_SELF
+       |following SIBLING
+       |namespace ddpuntos EJE_COMPLEMENTO
+       |parent ddpuntos EJE_COMPLEMENTO
+       |preceding SIBLING 
+       |self ddpuntos EJE_COMPLEMENTO;
 
-PREDICADO : cora EXPRESION corc{$$=$2;}
+OR_SELF : menos or menos self ddpuntos EJE_COMPLEMENTO
+       | ddpuntos EJE_COMPLEMENTO;
+
+SIBLING : menos sibling ddpuntos EJE_COMPLEMENTO
+       | ddpuntos EJE_COMPLEMENTO;
+
+EJE_COMPLEMENTO:  FUNCION
+                | nodoid EJE_COMPLEMENTO_2
+                | SELECT_ARGUMENTO;
+
+EJE_COMPLEMENTO_2:cora EXPRESION corc
                 |;
 
-EXPRESION : ARITMETICA {$$=$1;}
-            |LOGICA {$$=$1;}
-            |VAL_TERMINAL{$$=$1;}
-            |WILDCARD {$$=$1;}
-            |FUNCIONES {$$=$1;};
+FUNCION : position parentesisa parentesisc
+         |last parentesisa parentesisc
+         |text parentesisa parentesisc
+         |node parentesisa parentesisc;
 
-ARITMETICA : EXPRESION mas EXPRESION {$$=$1+$3;}
-            |EXPRESION menos EXPRESION {$$=$1-$3;}
-            |EXPRESION por EXPRESION {$$=$1*$3;}
-            |EXPRESION div EXPRESION {$$=$1*$3;}
-            |parentesisa EXPRESION parentesisc {$$=$2;};
+EXPRESION : ARITMETICA
+            |LOGICA
+            |PRIMITIVO
+            |FUNCION;
+
+ARITMETICA : EXPRESION mas EXPRESION
+            |EXPRESION menos EXPRESION
+            |EXPRESION por EXPRESION
+            |EXPRESION div EXPRESION
+            |parentesisa EXPRESION parentesisc;
             
-VAL_TERMINAL :  entero {$$=$1;}
-                |decimal{$$=$1;}
-                |nodoid {$$=$1;}                
-                |atributo {$$=$1;};
+PRIMITIVO :  entero
+             |decimal
+             |nodoid
+             |punto
+             |STRING
+             |arroba nodoid
+             |por;
 
-WILDCARD : arroba WILDCARD_F {$$=$1;};
-
-WILDCARD_F: por {$$=$1;}
-           |nodoid {$$=$1;};
-
-FUNCIONES : last parentesisa parentesisc {$$=$1;}
-            |position parentesisa parentesisc {$$=$1;};
-
-
-LOGICA : EXPRESION menor  EXPRESION { $$='true';}
-        |EXPRESION mayor  EXPRESION { $$='false';}
-        |EXPRESION igual EXPRESION { $$='false';}
-        |EXPRESION menorigual EXPRESION { $$='false';}
-        |EXPRESION mayorigual EXPRESION { $$='false';};
-                 
-                
-
-               
+LOGICA : EXPRESION menor  EXPRESION
+        |EXPRESION mayor  EXPRESION
+        |EXPRESION igual EXPRESION
+        |EXPRESION menorigual EXPRESION
+        |EXPRESION mayorigual EXPRESION;

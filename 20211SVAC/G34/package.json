@@ -1,0 +1,15 @@
+{
+  "name": "interprete-jison",
+  "version": "1.0.0",
+  "description": "Proyecto 1 - Compiladores 2 - Grupo 34",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "gramatica": "jison ./Gramatica/gramatica.jison"
+  },
+  "author": "Grupo 34",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^15.6.1"
+  }
+}

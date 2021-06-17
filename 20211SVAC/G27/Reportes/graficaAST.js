@@ -58,7 +58,7 @@ function recorrerHijos(Nodo){
 
 /*********************GRAFICA ARBOL **********************************************/
 function probandoArbolAST(){
-    alert('Aqui se graficará el arbol');
+    //alert('Aqui se graficará el arbol');
 
     /*
     var Raiz = new Nodo('Raiz','+'); //Se crea un primer nodo para la raíz del Arbol
@@ -103,7 +103,7 @@ function pruebaGraficarViz(grafica){
     viz.renderSVGElement(grafica)
     .then(function(element) {
         //document.body.appendChild(element);
-        alert('entro a la funcion elemento');
+        //alert('entro a la funcion elemento');
         let elemento = document.getElementById('grafica');
         elemento.appendChild(element);
     })
