@@ -112,16 +112,17 @@ case 7:
 break;
 case 8:
 
-        this.$ = $$[$0-1];
+        this.$ = [];
+
     
 break;
 case 9:
 
-        this.$ = $$[$0-3];
+        this.$ = [];
     
 break;
-case 10:
-this.$=''
+case 10: case 37:
+this.$=[]
 break;
 case 11:
 var nodo1=new Nodo([$$[$0-1]],_$[$0-1].first_line,_$[$0].first_column); var lista=[nodo1]; this.$=lista;
@@ -153,9 +154,6 @@ case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28:
 
 
     
-break;
-case 37:
-this.$=[]
 break;
 case 38:
 $$[$0-1].push($$[$0]); this.$=$$[$0-1];

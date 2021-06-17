@@ -131,12 +131,13 @@ PRINT:
 
 PATHEXPR:
     diagonal STEPEXPR PATHEXPR{
-        $$ = $2;
+        $$ = [];
+
     }
     | diagonal diagonal STEPEXPR PATHEXPR{
-        $$ = $1;
+        $$ = [];
     }
-    | {$$=''};
+    | {$$=[]};
 
 NODEXPR:
     EXPR PATHEXPR{var nodo1=new Nodo([$1],@1.first_line,@2.first_column); var lista=[nodo1]; $$=lista;}

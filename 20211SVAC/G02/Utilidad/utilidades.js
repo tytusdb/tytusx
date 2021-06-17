@@ -95,26 +95,14 @@ function analizar() {
 
 function graficarASTXML() {
     procesarASTXML();
-    console.log(cadenaASTXML);
-    let svgXml = new Viz(cadenaASTXML, { format: "svg"});
-    console.log(svgXml);
-    console.log([svgXml]);
-    document.body.innerHtml = svgXml;
-    /*let imgelement = Viz(digraph, { format: "png-image-element"});
-    document.body.append(img-element);*/
-
-    var textFileAsBlob = new Blob([svgXml], { type: 'image/svg+xml' });
-    var fileNameToSaveAs = "imagen.svg";
-
-    var downloadLink = document.createElement("a");
-    downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "LINKTITLE";
-    window.URL = window.URL || window.webkitURL;
-
-    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-
-    downloadLink.onclick = destroyClickedElement;
-    downloadLink.style.display = "none";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
+    var viz = new Viz();
+    viz.renderSVGElement(cadenaASTXML)
+        .then(function (element) {
+            let elemento = document.getElementById('image');
+            elemento.appendChild(element);
+        })
+        .catch(error => {
+            viz = new Viz();
+            console.error(error);
+        });
 }
