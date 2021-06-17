@@ -1,33 +1,51 @@
+let erroresXpath = new Errores();
 function analizarXpath(entornoGlobal) {
+    erroresXpath = new Errores();
     const textoAnalizar = document.getElementById('inputXPath');
     const result = document.getElementById('result');
-    // @ts-ignore
-    let matrizConsultas = jisonXpaht.parse(textoAnalizar.value);
-    if (errores.getSize > 0) {
-        errores.agregarEncabezadoFinal("XPATH");
-        agregarContenidoErrores();
+    let matrizConsultas;
+    try {
+        // @ts-ignore
+        matrizConsultas = jisonXpaht.parse(textoAnalizar.value);
     }
-    else {
-        let i = 1;
-        let resultConsulta = new Array();
-        matrizConsultas.forEach(listC => {
-            let entornos = [entornoGlobal];
-            entornos = recorrer(listC, entornos, 0);
-            entornos.forEach(e => {
-                e.getTable().forEach(s => {
-                    if (s instanceof Nodo) {
-                        if (s.justShowTextOnly()) {
-                            resultConsulta.push((i++) + ". " + s.toText());
-                        }
-                        else {
-                            resultConsulta.push((i++) + ". " + s.toTag());
-                        }
+    catch (err) {
+        erroresXpath.agregarError("Error fatal", "error sin recuperacion", 0, 0);
+        matrizConsultas = [];
+    }
+    let idBoton = document.getElementById('idTablaBoton');
+    if (erroresXpath.getSize > 0) {
+        if (erroresXpath.getErrores().length > 0) {
+            erroresXpath.agregarEncabezado("<br>XML");
+            erroresXpath.getErrores().forEach(e => {
+                errores.agregarError1(e);
+            });
+            idBoton.textContent = "Tabla errores";
+            matrizConsultas = [];
+        }
+    }
+    if (errores.getErrores().length > 0) {
+        agregarContenidoErrores();
+        idBoton.textContent = "Tabla errores";
+    }
+    let i = 1;
+    let resultConsulta = new Array();
+    matrizConsultas.forEach(listC => {
+        let entornos = [entornoGlobal];
+        entornos = recorrer(listC, entornos, 0);
+        entornos.forEach(e => {
+            e.getTable().forEach(s => {
+                if (s instanceof Nodo) {
+                    if (s.justShowTextOnly()) {
+                        resultConsulta.push((i++) + ". " + s.toText());
                     }
-                });
+                    else {
+                        resultConsulta.push((i++) + ". " + s.toTag());
+                    }
+                }
             });
         });
-        result.value = resultConsulta.join("\n");
-    }
+    });
+    result.value = resultConsulta.join("\n");
 }
 function recorrer(consultas, entornos, index) {
     let newEntornos = new Array();

@@ -3,6 +3,7 @@ let errores = new Errores();
 function analizar() {
     const texto = document.getElementById('inputXML');
     const consola = document.getElementById('result');
+    errores = new Errores();
     let auxResultado;
     try {
         // @ts-ignore
@@ -21,6 +22,7 @@ function analizar() {
     raizCST = auxResultado.raizCST;
     if (errores.getErrores().length > 0) {
         errores.agregarEncabezado("XML");
+        document.getElementById('idTablaBoton').textContent = "Tabla de errores";
     }
     analizarXpath(entornoGlobal);
 }
