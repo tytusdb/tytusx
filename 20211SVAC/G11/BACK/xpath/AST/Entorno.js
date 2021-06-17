@@ -1,17 +1,17 @@
 "use strict";
 exports.__esModule = true;
-exports.Entorno = void 0;
-var Entorno = /** @class */ (function () {
-    function Entorno(anterior) {
+exports.EntornoXpath = void 0;
+var EntornoXpath = /** @class */ (function () {
+    function EntornoXpath(anterior) {
         this.tabla = {};
         this.anterior = anterior;
     }
-    Entorno.prototype.agregar = function (id, simbolo) {
+    EntornoXpath.prototype.agregar = function (id, simbolo) {
         id = id.toLowerCase();
         simbolo.indentificador = simbolo.indentificador.toLowerCase();
         this.tabla[id] = simbolo;
     };
-    Entorno.prototype.eliminar = function (id) {
+    EntornoXpath.prototype.eliminar = function (id) {
         id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             var value = e.tabla[id];
@@ -22,7 +22,7 @@ var Entorno = /** @class */ (function () {
         }
         return false;
     };
-    Entorno.prototype.existe = function (id) {
+    EntornoXpath.prototype.existe = function (id) {
         id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             var value = e.tabla[id];
@@ -32,14 +32,14 @@ var Entorno = /** @class */ (function () {
         }
         return false;
     };
-    Entorno.prototype.existeEnActual = function (id) {
+    EntornoXpath.prototype.existeEnActual = function (id) {
         id = id.toLowerCase();
         if (this.tabla[id] !== undefined) {
             return true;
         }
         return false;
     };
-    Entorno.prototype.getSimbolo = function (id) {
+    EntornoXpath.prototype.getSimbolo = function (id) {
         id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             if (e.tabla[id] !== undefined) {
@@ -48,7 +48,7 @@ var Entorno = /** @class */ (function () {
         }
         return null;
     };
-    Entorno.prototype.reemplazar = function (id, nuevoValor) {
+    EntornoXpath.prototype.reemplazar = function (id, nuevoValor) {
         id = id.toLowerCase();
         for (var e = this; e != null; e = e.anterior) {
             var value = e.tabla[id];
@@ -57,6 +57,6 @@ var Entorno = /** @class */ (function () {
             }
         }
     };
-    return Entorno;
+    return EntornoXpath;
 }());
-exports.Entorno = Entorno;
+exports.EntornoXpath = EntornoXpath;

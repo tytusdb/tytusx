@@ -155,11 +155,11 @@ L_ATRIBUTO: ATRIBUTO1 L_ATRIBUTO   {$2.push($1); $$=$2; ReporteGD.agregar('L_ATR
     |ATRIBUTO1                      {$$=[$1]; ReporteGD.agregar('L_ATRIBUTO::=ATRIBUTO1','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');}
     ;
 
-ATRIBUTO1: TK_DBARRA  TK_DPUNTO     {$$ = new Atributo($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
-    |TK_DBARRA TK_PUNTO             {$$ = new Atributo($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
-    |TK_BARRA TK_DPUNTO             {$$ = new Atributo($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');}
-    |TK_BARRA TK_PUNTO              {$$ = new Atributo($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');}
-    |                               {$$ = new Atributo('','',@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');}
+ATRIBUTO1: TK_DBARRA  TK_DPUNTO     {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
+    |TK_DBARRA TK_PUNTO             {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
+    |TK_BARRA TK_DPUNTO             {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');}
+    |TK_BARRA TK_PUNTO              {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');}
+    |                               {$$ = new AtributoXpath('','',@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');}
     ;
 
 PALABRAS_R: TK_DBARRA PR TK_DDP OPCION ASTERISCO1{$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
@@ -262,10 +262,10 @@ L_ATRI: ATRI1 L_ATRI {$2.push($1); $$=$2;  ReporteGD.agregar('L_ATRI::= ATRI1 L_
     |ATRI1          {$$=[$1];  ReporteGD.agregar('ATRI1::=ATRI1','L_ATRI.VAL = ATRI1.VAL','');}
     ;
 
-ATRI1: TK_DBARRA TK_DPUNTO      {$$ = new Atributo($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
-    |TK_DBARRA TK_PUNTO         {$$ = new Atributo($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
-    |TK_BARRA TK_DPUNTO         {$$ = new Atributo($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');}
-    |TK_BARRA TK_PUNTO          {$$ = new Atributo($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');}
+ATRI1: TK_DBARRA TK_DPUNTO      {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
+    |TK_DBARRA TK_PUNTO         {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
+    |TK_BARRA TK_DPUNTO         {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');}
+    |TK_BARRA TK_PUNTO          {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');}
     |                           { ReporteGD.agregar('ATRI1::=ε','ATRI1.VAL = EPSILON','');}         
     ;
 
