@@ -207,7 +207,7 @@ AXES:    ancestor dospuntos NODETEST { $$ = new Nodo($1, TipoNodo.AXIS, @1.first
 
 NODETEST: identifier PREDICATE
                 { 
-                        if($$.length === 0){
+                        if($2 instanceof Predicate){
                                 $$ = new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column);
                         }else{
                                 $$ = new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column, $2);
@@ -215,7 +215,7 @@ NODETEST: identifier PREDICATE
                 }
         |  textFunc PREDICATE
                 { 
-                        if($$.length === 0){
+                        if($2 instanceof Predicate){
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
                         }else{
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column, $2);
@@ -223,7 +223,7 @@ NODETEST: identifier PREDICATE
                 }        
         | nodeFunc PREDICATE 
                 { 
-                        if($$.length === 0){
+                        if($2 instanceof Predicate){
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
                         }else{
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column, $2);
@@ -231,7 +231,7 @@ NODETEST: identifier PREDICATE
                 }        
         | asterisco PREDICATE
                 { 
-                        if($$.length === 0){
+                        if($2 instanceof Predicate){
                                 $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column);
                         }else{
                                 $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column, $2);
@@ -248,21 +248,21 @@ EXPRESION:  PRIMITIVA { $$ = $1; }
             | OPERACION { $$ = $1 ;}
         ;
 
-OPERACION: EXPRESION asterisco EXPRESION { $$ = new OPERACION(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION mas EXPRESION { $$ = new OPERACION(TipoOperacion.SUMA, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION menos EXPRESION { $$ = new OPERACION(TipoOperacion.RESTA, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION div EXPRESION { $$ = new OPERACION(TipoOperacion.DIVISION, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION lte EXPRESION { $$ = new OPERACION(TipoOperacion.MENORIGUALQUE, $1, $3, @1.first_line, @1.first_column);}  
-        | EXPRESION lt EXPRESION { $$ = new OPERACION(TipoOperacion.MENORQUE, $1, $3, @1.first_line, @1.first_column);} 
-        | EXPRESION gte EXPRESION { $$ = new OPERACION(TipoOperacion.MAYORIGUALQUE, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION gt EXPRESION { $$ = new OPERACION(TipoOperacion.MAYORQUE, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION igual EXPRESION { $$ = new OPERACION(TipoOperacion.IGUAL, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION nequal EXPRESION { $$ = new OPERACION(TipoOperacion.DIFERENTEQUE, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION or EXPRESION { $$ = new OPERACION(TipoOperacion.OR, $1, $3, @1.first_line, @1.first_column);}
-        | EXPRESION and EXPRESION { $$ = new OPERACION(TipoOperacion.AND, $1, $3, @1.first_line, @1.first_column);}  
-        | EXPRESION mod EXPRESION { $$ = new OPERACION(TipoOperacion.MOD, $1, $3, @1.first_line, @1.first_column);}                                 
+OPERACION: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULTIPLICACION, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION mas EXPRESION { $$ = new Operacion(TipoOperacion.SUMA, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION menos EXPRESION { $$ = new Operacion(TipoOperacion.RESTA, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION div EXPRESION { $$ = new Operacion(TipoOperacion.DIVISION, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION lte EXPRESION { $$ = new Operacion(TipoOperacion.MENORIGUALQUE, $1, $3, @1.first_line, @1.first_column);}  
+        | EXPRESION lt EXPRESION { $$ = new Operacion(TipoOperacion.MENORQUE, $1, $3, @1.first_line, @1.first_column);} 
+        | EXPRESION gte EXPRESION { $$ = new Operacion(TipoOperacion.MAYORIGUALQUE, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION gt EXPRESION { $$ = new Operacion(TipoOperacion.MAYORQUE, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION igual EXPRESION { $$ = new Operacion(TipoOperacion.IGUAL, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION nequal EXPRESION { $$ = new Operacion(TipoOperacion.DIFERENTEQUE, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION or EXPRESION { $$ = new Operacion(TipoOperacion.OR, $1, $3, @1.first_line, @1.first_column);}
+        | EXPRESION and EXPRESION { $$ = new Operacion(TipoOperacion.AND, $1, $3, @1.first_line, @1.first_column);}  
+        | EXPRESION mod EXPRESION { $$ = new Operacion(TipoOperacion.MOD, $1, $3, @1.first_line, @1.first_column);}                                 
         //| menos EXPRESION %prec UMINUS { $$ = "-"+$2;}
-        | parA EXPRESION parC { $$ = new OPERACION(TipoOperacion.PAR, $1, null, @1.first_line, @1.first_column);}     
+        | parA EXPRESION parC { $$ = new Operacion(TipoOperacion.PAR, $2, null, @1.first_line, @1.first_column);}     
 ;
 
 PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line, @1.first_column); }

@@ -6,6 +6,7 @@ import * as XMLGramDesc from './Gramatica/XML_GramaticaDesc';
 import errores from './Global/ListaError';
 import mierror from './Global/Error';
 import * as XPathGramAsc from './Gramatica/XPath_GramaticaAsc';
+import * as XPathGramDesc from "./Gramatica/XPath_GramaticaDesc";
 import { Consulta } from './XPath/Consulta';
 
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
@@ -80,6 +81,19 @@ class Analizador{
     });  
   }
 
+  XPathDescendente(entrada: string) {
+    console.log("-- XPATH DESCENDENTE -- ");
+    const consultas = XPathGramDesc.parse(entrada);
+    console.log("---------------------------------------");
+    consultas.forEach((elem: Consulta) => {
+      console.log("CONSULTA: " + elem.ToString());
+      let resultado = elem.ejecutar(this.global);
+      console.log("-----------RESULTADO----------------");
+      console.log(resultado);
+      console.log("---------------FIN---------------------");
+    });
+  }
+
   getTablaSimbolos(){
     return this.global;
   }
@@ -91,7 +105,79 @@ class Analizador{
     })
     return err;
   }
+  
+  getRepTablaSimbolos():string{
+    let cadenaDot:string = '';
+    let tabla:Array<any> = this.global.tsimbolos;
+    let indice:number = 0;
+    
+    cadenaDot = 'digraph {'
+                +  'tbl ['
+                +    'shape=plaintext,'
+                +    'label=<'
+                +      '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+                +        '<tr>'
+                +            '<td>No.</td><td>Nombre</td><td>Tipo</td><td>Ambito</td><td>Nodo</td><td>Fila</td><td>Columna</td>'
+                +        '</tr>';
+    tabla.forEach((elem: any) => {
+      indice++;
+      cadenaDot = cadenaDot
+                +        '<tr>'
+                +            '<td>'+indice+'</td>'
+                +            '<td>'+elem.valor.nombre+'</td>'
+                +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
+                +            '<td>'+elem.nombre+'</td>'
+                +            '<td>'+elem.nombre+'</td>'
+                +            '<td>'+elem.valor.linea+'</td>'
+                +            '<td>'+elem.valor.columna+'</td>'
+                +        '</tr>';
+    });
+    cadenaDot = cadenaDot +      '</table>'
+                          +    '>];'
+                          +'}';
+    return cadenaDot;
+  }
 
+  getTipoDato(t: number):string{
+    switch(t){
+        case 1:
+            return 'Cadena';
+        case 2:
+            return 'Etiqueta';
+        case 3:
+            return 'Atributo';
+    };
+    return '';
+  }
+
+  getRepErrores():string{
+    let cadenaDot:string = '';
+    let indice:number = 0;
+    cadenaDot = 'digraph {'
+                +  'tbl ['
+                +    'shape=plaintext,'
+                +    'label=<'
+                +      '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+                +        '<tr>'
+                +            '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Fila</td><td>Columna</td>'
+                +        '</tr>';
+    errores.listaError.forEach((elem:mierror) => {
+      indice++;
+      cadenaDot = cadenaDot
+                +        '<tr>'
+                +            '<td>'+indice+'</td>'
+                +            '<td>'+elem.getTipo()+'</td>'
+                +            '<td>'+elem.getDescripcion()+'</td>'
+                +            '<td>'+elem.getLinea()+'</td>'
+                +            '<td>'+elem.getColumna()+'</td>'
+                +        '</tr>';
+    });
+    cadenaDot = cadenaDot +      '</table>'
+                          +    '>];'
+                          +'}';
+
+    return cadenaDot;
+  }
 }
 
 const analizador = new Analizador();
