@@ -1,3 +1,19 @@
+// IMPORTS
+%{
+    const { ObjetoXPath } = require('./ObjetoXPath');
+    const { Suma } = require('./Suma');
+    const { Resta } = require('./Resta');
+    const { Multiplicacion } = require('./Multiplicacion');
+    const { Division } = require('./Division');
+    const { Modulo } = require('./Modulo');
+    const { Literal } = require('./Literal');
+    const { Id } = require('./Id');
+
+    const { Error } = require('./Error');
+    //var erroresXPath = require('./indexXPath').erroresXPath;
+    var erroresXPath = [];
+%}
+
 /* ANALIZADOR LEXICO */
 %lex
 
@@ -71,7 +87,8 @@ charliteral                         \'{stringsingle}\'
 
 //ERROR LEXICO
 .   {
-        console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+        //console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
+        erroresXPath.push(new Error('Lexico'), yytext, yylloc.first_line, yylloc.first_column, `${yytext} no pertenece al lengaje XPath`);
     }
 
 <<EOF>>                     return 'EOF'
@@ -80,20 +97,13 @@ charliteral                         \'{stringsingle}\'
 
 /* ANALIZADOR LEXICO */
 
-// IMPORTS
-%{
-    const { ObjetoXPath } = require('./ObjetoXPath');
-%}
-
-// PRECEDENCIA DE OPERADORES
-%left 'vertical'
+// PRECEDENCIA DE OPERADORES ??
 %left 'or'
 %left 'and'
 %left 'igual' 'noigual' 'menor' 'menorigual' 'mayor' 'mayorigual'
 %left 'mas' 'menos'
-%left UPOR 'div' 'mod'
+%left 'por' 'div' 'mod'
 %left UMINUS
-%left 'lparen' 'rparen'
 
 // PRODUCCIÓN INICIAL
 %start START
@@ -101,7 +111,10 @@ charliteral                         \'{stringsingle}\'
 
 /* GRAMATICA */
 START:
-    LCONSULTAS EOF          { console.log('Todo bien todo correcto'); $$ = $1; return $$; }
+    LCONSULTAS EOF          { 
+                                console.log('Analisis XPath Descendente Finalizado'); 
+                                $$ = $1; return $$;
+                            }
 ;
 
 LCONSULTAS:
@@ -118,7 +131,6 @@ OPPATH:
     | slash             { $$ = 'local'; }
 ;
 
-/*VERIFY*/
 CONSULTA:
     OPPATH RUTA                 { $2[0].ambito = $1; $$ = $2; }
     | RUTA                      { $$ = $1; }
@@ -141,8 +153,9 @@ ENODO:
 
 NODO:
     TKid lcorchete E rcorchete  { 
-                                    console.log($3); 
-                                    $$ = new ObjetoXPath($1);
+                                    var aux = new ObjetoXPath($1.toString());
+                                    aux.setExpresion($3);
+                                    $$ = aux;
                                 }
     | TKid                      { $$ = new ObjetoXPath($1); }
     | Rnode lparen rparen       { $$ = new ObjetoXPath($1+'()'); }
@@ -150,29 +163,70 @@ NODO:
     | dot                       { $$ = new ObjetoXPath($1); }
     | dobledot                  { $$ = new ObjetoXPath($1); }
 ;
-
+/*
+E: T EP                 {};
+EP: or T EP             {}
+    |                   {};
+T: F TP                 {};
+TP: and F TP            {}
+    |                   {};
+F: G FP                 {};
+FP: igual G FP          {}
+    | noigual G FP      {}
+    | menor G FP        {}
+    | menorigual G FP   {}
+    | mayor G FP        {}
+    | mayorigual G FP   {}
+    |                   {};
+G: H GP                 {};
+GP: mas H GP            {}
+    | menos H GP        {}
+    |                   {};
+H: I HP                 {};
+HP: por I HP            {}
+    | div I HP          {}
+    | mod I HP          {}
+    |                   {};
+I: menos E              { var men = new Literal(0,'0');
+                          $$ = new Resta(men,$2,@1.first_line,@1.first_column);}
+    | lparen E rparen   { $$ = $2; }
+    | PRIMITIVO         { $$ = $1; };
+PRIMITIVO: TKinteger    { $$ = new Literal(0,$1.toString()); }
+	| TKdouble          { $$ = new Literal(1,$1.toString()); }
+    | TKchar            { $$ = new Literal(2,$1.toString()); }
+	| TKstring          { $$ = new Literal(3,$1.toString()); }
+    | Rlast lparen rparen { $$ = new Literal(6,$1.toString()+'()'); }
+    | Rposition lparen rparen   { $$ = new Literal(6,$1.toString()+'()'); } //Pendiente de ver el position :v
+    | TKid               { $$ = new Id(5,$1.toString()); } //Pendiente de ver la busqueda de nodos;
+*/
 E: 
-    E mas E                     { $$ =  $1 + $3; }
-	| E menos E                 { $$ =  $1 - $3; }
-	| E por E %prec UPOR        { $$ =  $1 * $3; }
-	| E div E                   { $$ =  $1 / $3; }
-	| E mod E                   { $$ =  $1 % $3; }
-	| E menor E                 {  }
-	| E menorigual E            {  }
-	| E mayor E                 {  }
-	| E mayorigual E            {  }
-	| E igual E                 {  }
-	| E noigual E               {  }
-	| menos E %prec UMINUS      { $$ = $2 * -1; }
+    E mas E                     { $$ = new Suma($1,$3,@2.first_line,@2.first_column); }
+	| E menos E                 { $$ = new Resta($1,$3,@2.first_line,@2.first_column); }
+	| E por E                   { $$ = new Multiplicacion($1,$3,@2.first_line,@2.first_column); }
+	| E div E                   { $$ = new Division($1,$3,@2.first_line,@2.first_column); }
+	| E mod E                   { $$ = new Modulo($1,$3,@2.first_line,@2.first_column); }
+    | E menor E                 {}
+	| E menorigual E            {}
+	| E mayor E                 {}
+	| E mayorigual E            {}
+	| E igual E                 {}
+	| E noigual E               {}
+    | E and E                   {}
+    | E or E                    {}
+	| menos E %prec UMINUS      { 
+                                    var men = new Literal(0,'0');
+                                    $$ = new Resta(men,$2,@1.first_line,@1.first_column);
+                                }
 	| lparen E rparen           { $$ = $2; }
-	| TKid lparen rparen        {  }
     | PRIMITIVO                 { $$ = $1; }
 ;
 
 PRIMITIVO:
-    TKinteger                   { $$ = parseInt($1); }
-	| TKdouble                  { $$ = parseFloat($1); }
-    | TKchar                    { $$ = $1 }
-	| TKstring                  { $$ = $1 }
-    | TKid                      { $$ = $1 }
+    TKinteger                   { $$ = new Literal(0,$1.toString()); }
+	| TKdouble                  { $$ = new Literal(1,$1.toString()); }
+    | TKchar                    { $$ = new Literal(2,$1.toString()); }
+	| TKstring                  { $$ = new Literal(3,$1.toString()); }
+    | Rlast lparen rparen       { $$ = new Literal(6,$1.toString()+'()'); }
+    | Rposition lparen rparen   { $$ = new Literal(6,$1.toString()+'()'); } //Pendiente de ver el position :v
+    | TKid                      { $$ = new Id(5,$1.toString()); } //Pendiente de ver la busqueda de nodos
 ;

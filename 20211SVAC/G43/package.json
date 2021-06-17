@@ -25,6 +25,7 @@
     "@ngstack/code-editor": "^2.0.0",
     "file-saver": "^2.0.5",
     "ngx-monaco-editor": "^9.0.0",
+    "ngx-xml2json": "^1.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
