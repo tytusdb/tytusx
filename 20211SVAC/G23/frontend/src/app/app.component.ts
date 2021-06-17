@@ -14,7 +14,7 @@ export class AppComponent {
     theme: "vs-dark",
     automaticLayout: true,
     scrollBeyondLastLine: false,
-    fontSize: 16,
+    fontSize: 13,
     minimap: {
       enabled: true
     },
@@ -26,30 +26,14 @@ export class AppComponent {
     readOnly: true,
     automaticLayout: true,
     scrollBeyondLastLine: false,
-    fontSize: 16,
+    fontSize: 14,
     minimap: {
       enabled: true
     },
     language: 'xml'
   }
 
-  entrada: string = `
-  <?xml version="1.0" encoding="UTF-8"?>
-  <bookstore f="false">
-  <book>
-    <title lang="en">Harry Potter</title>
-    <price>29.99</price>
-  </book>
-  <book>
-    <title lang="en">Learning XML</title>
-    <price>39.95</price>
-  </book>
-  <book id="5">
-    <title lang="en">Harry Potter</title>
-    <price>29.99</price>
-  </book>
-  
-  </bookstore>`;
+  entrada: string = `<?xml version="1.0" encoding="UTF-8"?>`;
   consulta: string = '';
   salida: string = '';
 
@@ -58,7 +42,7 @@ export class AppComponent {
   errores: any = [];
 
   newTab() {
-    window.open("/tytusx-G23", "_blank");
+    window.open("/tytusx/20211SVAC/G23", "_blank");
   }
 
   closeTab() {
@@ -66,6 +50,7 @@ export class AppComponent {
   }
 
   onSubmit() {
+    var iconvlite = require('iconv-lite');
     let grammar_value = (<HTMLSelectElement>document.getElementById('grammar_selector')).value;
     if (this.entrada != "" && this.consulta != "") {
       const x = {
@@ -75,7 +60,8 @@ export class AppComponent {
       }
       // llamo a la función compile que devuelve un objeto de retorno
       let data = require('../js/routes/compile').compile(x);
-      this.salida = data.output;
+      if (data.encoding == "ascii" || data.encoding == "latin1") this.salida = iconvlite.decode(data.output, data.encoding);
+      else this.salida = data.output;
       this.errores = data.arreglo_errores;
       this.simbolos = data.arreglo_simbolos;
       console.log('Data received!');
@@ -86,61 +72,76 @@ export class AppComponent {
   getAST() {
     this.simbolos = [];
     this.errores = [];
-    if (this.entrada != "") {
-      const x = { "input": this.entrada }
-      this.appService.getAST(x).subscribe(
-        data => {
-          saveAs(data, "AST");
-          this.salida = "AST has been generated!";
-          console.log('AST received!');
-        },
-        error => {
-          console.log('There was an error :(', error);
-          this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el AST."
-        }
-      );
+    if (this.consulta != "") {
+      let grammar_value = (<HTMLSelectElement>document.getElementById('grammar_selector')).value;
+      const x = {
+        xml: this.entrada, // documento XML
+        query: this.consulta, // consultas
+        grammar: Number(grammar_value), // gramática 1=ascendente, 2=descendente
+        report: "XPATH-AST",
+      }
+      let data = require('../js/routes/reports').generateReport(x);
+      this.salida = data.output;
+      this.errores = data.arreglo_errores;
+      this.exportFile(data.ast, "AST");
+      console.log('AST received!');
     } else
-      alert("Entrada vacía. No se puede generar el AST.");
+      alert("Entrada vacía. No se puede generar el reporte AST.");
   }
 
   getCST() {
     this.simbolos = [];
     this.errores = [];
     if (this.entrada != "") {
-      const x = { "input": this.entrada }
-      this.appService.getCST(x).subscribe(
-        data => {
-          saveAs(data, "CST");
-          this.salida = "CST has been generated!";
-          console.log('CST received!');
-        },
-        error => {
-          console.log('There was an error :(', error);
-          this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el CST."
-        }
-      );
+      let grammar_value = (<HTMLSelectElement>document.getElementById('grammar_selector')).value;
+      const x = {
+        xml: this.entrada, // documento XML
+        query: this.consulta, // consultas
+        grammar: Number(grammar_value), // gramática 1=ascendente, 2=descendente
+        report: "XML-CST",
+      }
+      let data = require('../js/routes/reports').generateReport(x);
+      this.salida = data.output;
+      this.errores = data.arreglo_errores;
+      this.exportFile(data.cst, "CST");
+      console.log('CST received!');
     } else
-      alert("Entrada vacía. No se puede generar el CST.");
+      alert("Entrada vacía. No se puede generar el reporte CST.");
   }
 
-  getDAG() {
+  getGrammarReport() {
     this.simbolos = [];
     this.errores = [];
     if (this.entrada != "") {
-      const x = { "input": this.entrada }
-      this.appService.getDAG(x).subscribe(
-        data => {
-          saveAs(data, "DAG");
-          this.salida = "DAG has been generated!";
-          console.log('DAG received!');
-        },
-        error => {
-          console.log('There was an error :(', error);
-          this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el DAG."
-        }
-      );
+      let grammar_value = (<HTMLSelectElement>document.getElementById('grammar_selector')).value;
+      const x = {
+        xml: this.entrada, // documento XML
+        query: this.consulta, // consultas
+        grammar: Number(grammar_value), // gramática 1=ascendente, 2=descendente
+        report: "XML-GRAMMAR",
+      }
+      let data = require('../js/routes/reports').generateReport(x);
+      this.salida = data.output;
+      this.errores = data.arreglo_errores;
+      this.exportFile(data.grammar_report, "Grammar report");
+      console.log('Grammar report received!');
     } else
-      alert("Entrada vacía. No se puede generar el DAG.");
+      alert("Entrada vacía. No se puede generar el reporte gramatical.");
+  }
+
+  exportFile(data: string, fname: string) {
+    var f = document.createElement('a');
+    f.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+    f.setAttribute('download', fname + '.html');
+    if (document.createEvent) {
+      var event = document.createEvent('MouseEvents');
+      event.initEvent('click', true, true);
+      f.dispatchEvent(event);
+    }
+    else {
+      f.click();
+    }
+    console.log('File exported!');
   }
 
 

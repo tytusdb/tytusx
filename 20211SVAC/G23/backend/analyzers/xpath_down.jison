@@ -1,303 +1,8 @@
 %{
 	var attribute = '';
 	var errors = [];
-	let re = /[^\n\t\r ]+/g
-	//let ast = null;
 	let grammar_stack = [];
-
-    function getGrammarReport(obj){
-        let str = `<!DOCTYPE html>
-                     <html lang="en" xmlns="http://www.w3.org/1999/html">
-                     <head>
-                         <meta charset="UTF-8">
-                         <meta
-                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                         name="viewport">
-                         <!-- Bootstrap CSS -->
-                         <link
-                         crossorigin="anonymous"
-                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-                               rel="stylesheet">
-                         <title>Title</title>
-                         <style>
-                             table, th, td {
-                                 border: 1px solid black;
-                             }
-                             ul, .ul-tree-view {
-                                 list-style-type: none;
-                             }
-
-                             #div-table{
-                                 width: 1200px;
-                                 margin: 100px;
-                                 border: 3px solid #73AD21;
-                             }
-
-                             .ul-tree-view {
-                                 margin: 0;
-                                 padding: 0;
-                             }
-
-                             .caret {
-                                 cursor: pointer;
-                                 -webkit-user-select: none; /* Safari 3.1+ */
-                                 -moz-user-select: none; /* Firefox 2+ */
-                                 -ms-user-select: none; /* IE 10+ */
-                                 user-select: none;
-                             }
-
-                             .caret::before {
-                                 content: "\u25B6";
-                                 color: black;
-                                 display: inline-block;
-                                 margin-right: 6px;
-                             }
-
-                             .caret-down::before {
-                                 -ms-transform: rotate(90deg); /* IE 9 */
-                                 -webkit-transform: rotate(90deg); /* Safari */'
-                             transform: rotate(90deg);
-                             }
-
-                             .nested {
-                                 display: none;
-                             }
-
-                             .active {
-                                 display: block;
-                             }
-
-                             li span:hover {
-                                 font-weight: bold;
-                                 color : white;
-                                 background-color: #dc5b27;
-                             }
-
-                             li span:hover + ul li  {
-                                 font-weight: bold;
-                                 color : white;
-                                 background-color: #dc5b27;
-                             }
-
-                             .tree-view{
-                                 display: inline-block;
-                             }
-
-                             li.string {
-                                 list-style-type: square;
-                             }
-                             li.string:hover {
-                                 color : white;
-                                 background-color: #dc5b27;
-                             }
-                             .center {
-                                margin: auto;
-                                width: 50%;
-                                border: 3px solid green;
-                                padding-left: 15%;
-                             }
-                         </style>
-                     </head>
-                     <body>
-                     <h1 class="center">Reporte Gramatical</h1>
-                     <div class="tree-view">
-                     <ul class="ul-tree-view" id="tree-root">`;
-
-        str = str + buildGrammarReport(obj);
-
-        str = str + `
-                    </ul>
-                    </ul>
-                    </div>
-                             <br>
-                             <br>
-                             <br>
-                             <br>
-                             <br>
-                             <br>
-                        <button onclick="fun1()">Expand Grammar Tree</button>
-
-                    <div id="div-table">
-                    <table style="width:100%">
-
-                    <tr><th>produccion</th><th>Cuerpo</th><th>Accion</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>ini</th><th>XPATH_U EOF</th><th>SS= S1</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>XPATH_U</th><th>XPATH XPATH_Up</th><th>S1.push(S3); SS = S1;</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>XPATH_Up</th><th>QUERY XPATHp</th><th>S1.push(S2); SS = S1;</th></tr>
-                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>XPATH</th><th>QUERY XPATHp</th><th></th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>XPATHp</th><th>QUERY XPATHp</th><th>S1.push(S2); SS = S1;</th></tr>
-                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>QUERY</th><th>tk_2bar QUERY</th><th>SS=builder.newDoubleAxis(Param);</th></tr>
-                    <tr><th></th><th>tk_bar QUERY</th><th>SS=builder.newAxis(Param);</th></tr>
-                    <tr><th></th><th>EXP_PR</th><th>SS=S1</th></tr>
-                    <tr><th></th><th>AXIS</th><th>SS=S1</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>CORCHET</th><th>tk_corA E tk_corC CORCHETpp</th><th>SS=builder.newPredicate(Param)</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>CORCHETpp</th><th>tk_corA E tk_corC CORCHETpp</th><th>S1.push(builder.NewPredicate(Param))</th></tr>
-                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>CORCHETP</th><th>CORCHET</th><th>SS=S1</th></tr>
-                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>E</th><th>E tk_menorigual E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_menor E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_mayorigual E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_mayor E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_mas E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_menos E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_asterisco E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_div E </th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_mod E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>tk_ParA E tk_ParC</th><th>SS=S2</th></tr>
-                    <tr><th></th><th>E tk_or E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_and E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_equal E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>E tk_diferent E</th><th>SS=builder.newOperation(Param)</th></tr>
-                    <tr><th></th><th>QUERY</th><th>SS = [S1]</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>EXP_PR</th><th>FUNC CORCHETP</th><th>SS=builder.newExpression(Param)</th></tr>
-                    <tr><th></th><th>PRIMITIVO CORCHETP</th><th>SS=builder.newExpression(Param)</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>PRIMITIVO</th><th>tk_id</th><th>SS=builder.newNodename(Param)</th></tr>
-                    <tr><th></th><th>tk_attribute_d</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>tk_attribute_s</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>num</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>tk_asterisco</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>tk_punto</th><th>SS=builder.newCurrent(Param)</th></tr>
-                    <tr><th></th><th>tk_2puntos</th><th>SS=builder.newParent(Param)</th></tr>
-                    <tr><th></th><th>tk_arroba tk_id</th><th>SS=builder.newAttribute(Param)</th></tr>
-                    <tr><th></th><th>tk_arroba tk_asterisco</th><th>SS=builder.newAttribute(Param)</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>FUNC</th><th>tk_text tk_ParA tk_tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>tk_last tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>tk_position tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><th></th><th>tk_node tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>AXIS</th><th>AXISNAME tk_4puntos QUERY</th><th>SS=builder.newAxisObject(Param)</th></tr>
-                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
-                    <tr><th>AXISNAME</th><th>tk_ancestor</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_ancestor2</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_attribute</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_child</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_descendant</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_descendant2</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_following</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_following2</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_namespace</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_parent</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_preceding</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_preceding2</th><th>SS = Tipos.'AxisTipo'</th></tr>
-                    <tr><th></th><th>tk_self</th><th>SS = Tipos.'AxisTipo'</th></tr>
-
-                        </table>
-                    </div>
-
-                     <script
-                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
-                     </script>
-                     <script
-                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
-                             </script>
-                     <script
-                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
-                             </script>
-
-                             <script>
-                                 var toggler = document.getElementsByClassName("caret");
-                                 var i;
-
-                                 for (i = 0; i < toggler.length; i++) {
-                                     toggler[i].addEventListener("click", function() {
-                                         this.parentElement
-                                         .querySelector(".nested")
-                                         .classList.toggle("active");
-                                         this.classList.toggle("caret-down");
-                                     });
-                                 }
-
-
-                                        function fun1() {
-                                            if ($("#tree-root").length > 0) {
-
-                                                $("#tree-root").find("li").each
-                                                (
-                                                    function () {
-                                                        var $span = $("<span></span>");
-                                                        //$(this).toggleClass("expanded");
-                                                        if ($(this).find("ul:first").length > 0) {
-                                                            $span.removeAttr("class");
-                                                            $span.attr("class", "expanded");
-                                                            $(this).find("ul:first").css("display", "block");
-                                                            $(this).append($span);
-                                                        }
-
-                                                    }
-                                                )
-                                            }
-
-                                        }
-
-
-
-
-                             </script>
-
-                     </body>
-                     </html>`;
-                     return str;
-    }
-    // .replace("₤","$")
-    function buildGrammarReport(obj){
-        if(obj == null){return "";}
-        let str = "";
-        if(Array.isArray(obj)){ //IS ARRAY
-            obj.forEach((value)=>{
-            if(typeof value === 'string' ){
-                str = str + `<li class= "string">
-                ${value}
-                </li>
-                `;
-            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
-                for(let key in value){
-                    str = str + buildGrammarReport(value);
-                }
-            }
-            });
-        }else if(typeof obj === 'string' ){ // IS STRING
-            return "";
-            console.log("ERROR**************************");
-        }else{// IS OBJECT
-            for(let key in obj){
-
-                str = `<li class="grammar-tree"><span class="caret">
-                ${key}
-                </span>
-                <ul class="nested">
-                `;
-                str = str + buildGrammarReport(obj[key]);
-                str = str + `
-                </ul>
-                </li>`;
-            }
-        }
-        return str;
-    }
-
-//just for testing purposes
 	function printstrack(obj, lines){
-	return;
-
         if(Array.isArray(obj)){ //IS ARRAY
             str = ""
             for(let i = 0; i < lines; i++){str = str + "- ";}
@@ -332,205 +37,275 @@
         }
 	}
 
-    function getCST(obj){
-        let str = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-            <!-- Bootstrap CSS -->
-            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
-            <title>Title</title>
-            <style>
-
-                #divheight{
-                    height: 400px;
-                    width: 1050px;
-                }
-
-                .nav-tabs > li .close {
-                    margin: -2px 0 0 10px;
-                    font-size: 18px;
-                }
-
-                .nav-tabs2 > li .close {
-                    margin: -2px 0 0 10px;
-                    font-size: 18px;
-                }
-
-            </style>
-
-            <style>
-                body {
-                    font-family: sans-serif;
-                    font-size: 15px;
-                }
-
-                .tree ul {
-                    position: relative;
-                    padding: 1em 0;
-                    white-space: nowrap;
-                    margin: 0 auto;
-                    text-align: center;
-                }
-                .tree ul::after {
-                    content: "";
-                    display: table;
-                    clear: both;
-                }
-
-                .tree li {
-                    display: inline-block;
-                    vertical-align: top;
-                    text-align: center;
-                    list-style-type: none;
-                    position: relative;
-                    padding: 1em 0.5em 0 0.5em;
-                }
-                .tree li::before, .tree li::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    right: 50%;
-                    border-top: 1px solid #ccc;
-                    width: 50%;
-                    height: 1em;
-                }
-                .tree li::after {
-                    right: auto;
-                    left: 50%;
-                    border-left: 1px solid #ccc;
-                }
-                /*
-                ul:hover::after  {
-                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
-                }*/
-
-                .tree li:only-child::after, .tree li:only-child::before {
-                    display: none;
-                }
-                .tree li:only-child {
-                    padding-top: 0;
-                }
-                .tree li:first-child::before, .tree li:last-child::after {
-                    border: 0 none;
-                }
-                .tree li:last-child::before {
-                    border-right: 1px solid #ccc;
-                    border-radius: 0 5px 0 0;
-                }
-                .tree li:first-child::after {
-                    border-radius: 5px 0 0 0;
-                }
-
-                .tree ul ul::before {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 50%;
-                    border-left: 1px solid #ccc;
-                    width: 0;
-                    height: 1em;
-                }
-
-                .tree li a {
-                    border: 1px solid #ccc;
-                    padding: 0.5em 0.75em;
-                    text-decoration: none;
-                    display: inline-block;
-                    border-radius: 5px;
-                    color: #333;
-                    position: relative;
-                    top: 1px;
-                }
-
-                .tree li a:hover,
-                .tree li a:hover + ul li a {
-                    background: #e9453f;
-                    color: #fff;
-                    border: 1px solid #e9453f;
-                }
-
-                .tree li a:hover + ul li::after,
-                .tree li a:hover + ul li::before,
-                .tree li a:hover + ul::before,
-                .tree li a:hover + ul ul::before {
-                    border-color: #e9453f;
-                }
-
-                /*# sourceMappingURL=sytle_.css.map */
-
-            </style>
-        </head>
-        <body>
-
-        <div class="tree">
-            <ul id="tree-list">
-
-            <!--AQUI-->
-        `;
-        str = str + buildCSTTree(obj);
-        str = str + `
-        </ul>
-        </div>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
-        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-        </body>
-        </html>
-        `;
-        return str;
+function getASTTree(obj){
+    let str = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <!-- Bootstrap CSS -->
+  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+  <title>Title</title>
+  <style>
+    #divheight{
+      height: 400px;
+      width: 1050px;
+    }
+    .nav-tabs > li .close {
+      margin: -2px 0 0 10px;
+      font-size: 18px;
+    }
+    .nav-tabs2 > li .close {
+      margin: -2px 0 0 10px;
+      font-size: 18px;
     }
 
-    function buildCSTTree(obj){
-        if(obj == null){return "";}
-        let str = "";
-        if(Array.isArray(obj)){ //IS ARRAY
-            obj.forEach((value)=>{
-            if(typeof value === 'string' ){
-                let words = value.split('Lexema:');
-                if(words.length == 2){
-                    let lex = words[1];     //TODO check not go out of bounds
-                    let token = words[0];
-                    str = str + `<li><a href="">${token}</a><ul>
-                    <li><a href="">${lex}
-                    </a></li>
-                    </ul></li>
-                    `;
-                }else{
-                    str = str + `<li><a href="">${value}</a></li>
-                    `;
-                }
+  </style>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 15px;
+    }
+
+    .tree ul {
+      position: relative;
+      padding: 1em 0;
+      white-space: nowrap;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .tree ul::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .tree li {
+      display: inline-block;
+      vertical-align: top;
+      text-align: center;
+      list-style-type: none;
+      position: relative;
+      padding: 1em 0.5em 0 0.5em;
+    }
+    .tree li::before, .tree li::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top: 1px solid #ccc;
+      width: 50%;
+      height: 1em;
+    }
+    .tree li::after {
+      right: auto;
+      left: 50%;
+      border-left: 1px solid #ccc;
+    }
+    /*
+    ul:hover::after  {
+        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+    }*/
+
+    .tree li:only-child::after, .tree li:only-child::before {
+      display: none;
+    }
+    .tree li:only-child {
+      padding-top: 0;
+    }
+    .tree li:first-child::before, .tree li:last-child::after {
+      border: 0 none;
+    }
+    .tree li:last-child::before {
+      border-right: 1px solid #ccc;
+      border-radius: 0 5px 0 0;
+    }
+    .tree li:first-child::after {
+      border-radius: 5px 0 0 0;
+    }
+
+    .tree ul ul::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      border-left: 1px solid #ccc;
+      width: 0;
+      height: 1em;
+    }
+
+    .tree li a {
+      border: 1px solid #ccc;
+      padding: 0.5em 0.75em;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 5px;
+      color: #333;
+      position: relative;
+      top: 1px;
+    }
+
+    .tree li a:hover,
+    .tree li a:hover + ul li a {
+      background: #e9453f;
+      color: #fff;
+      border: 1px solid #e9453f;
+    }
+
+    .tree li a:hover + ul li::after,
+    .tree li a:hover + ul li::before,
+    .tree li a:hover + ul::before,
+    .tree li a:hover + ul ul::before {
+      border-color: #e9453f;
+    }
+
+    /*# sourceMappingURL=sytle_.css.map */
 
 
-            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
-                for(let key in value){
-                    str = str + buildCSTTree(value);
-                }
-            }
-            });
-        }else if(typeof obj === 'string' ){ // IS STRING
-            return "";
-            console.log("ERROR**************************");
-        }else{// IS OBJECT
-            for(let key in obj){
-                const words = key.split('->');
-                //console.log(words[3]);
-                str = `<li><a href="">${words[0]}</a>
-                <ul>
-                `;
-                str = str + buildCSTTree(obj[key]) + `
-                </ul>
-                </li>`;
+  </style>
+</head>
+<body>
+
+
+
+<div class="tree">
+  <ul id="tree-list">
+
+    <!--AQUI-->
+    `
+
+    str = str +printObj(obj, 0, "")
+    str =  str + `</ul>
+
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+`
+    return str;
+}
+
+
+function printObj(obj, lines, name){
+    console.log(obj)
+    let str = "";
+    let str_ = "";
+    if(Array.isArray(obj)) { //IS ARRAY
+        for (let i = 0; i < obj.length; i++){
+            str = str +printObj(obj[i], lines, "");
+        }
+    }else if (typeof obj === 'object' ){// IS OBJECT
+        if(obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT'){ // TODO select Parent
+            str = `<li>`;
+            str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT'? "/": "//" ));
+            str = str + getPredicados(obj.expresion);
+            str = str + `</li>`
+            console.log(str);
+        }else if(obj.tipo === 'EXPRESION'){
+            if (typeof obj.expresion === 'object'){
+                str = `<a>` + name + getName(obj.expresion) + `</a>`;
             }
         }
-        return str;
+    } else { // IS STRING
+        for (let i = 0; i < lines; i++) {
+
+            str_ = str_ + "- ";
+        }
     }
+    return str;
+}
+
+
+
+function getName(obj){
+
+    let str = "";
+    if (obj.tipo ==='NODENAME'){
+        //console.log(obj)
+        return obj.nodename;
+    }else if(obj.tipo === 'SELECT_PARENT'){
+        return  obj.expresion;
+    }else if(obj.tipo === 'SELECT_CURRENT'){
+        return obj.expresion;
+    }else if(obj.tipo === 'ASTERISCO'){
+        return obj.valor;
+    }else if(obj.tipo === 'FUNCION_TEXT'){
+        return obj.valor;
+    }else if(obj.tipo === 'FUNCION_NODE'){
+        return obj.valor;
+    }else if(obj.tipo === 'SELECT_ATTRIBUTES'){
+        return obj.expresion;
+    }else {
+        console.log("Error 1")
+        console.log(obj)
+    }
+    return str
+}
+
+function getPredicados(obj){
+    let str = "";
+    console.log(obj)
+    if (obj.predicate !== null && obj.predicate !== undefined){
+
+        str = `<ul>\n`;
+        for (let i = 0; i < obj.predicate.length;i++){
+            str = str + getPredicado(obj.predicate[i]);
+        }
+        str = str + `</ul>`;
+    }
+    return str;
+}
+
+
+function getPredicado(obj){
+    let str = ""
+    if(obj.tipo === 'PREDICATE'){
+        //str = `<li><a> ` + obj.condicion.tipo + `</a>
+        //<ul>`
+        str = str + getPredicado(obj.condicion);
+        //str = str + `
+        //</ul></li>`;
+    }else if(obj.tipo === 'EXPRESION'){ //TODO to check
+        if('valor' in obj.expresion){
+            str = `<li><a>` + obj.expresion.valor + `</a></li>
+            `;
+
+        }else if('nodename' in obj.expresion){
+            str = `<li><a>` + obj.expresion.nodename + `</a></li>
+            `;
+
+        }else if(obj.expresion.tipo === 'SELECT_ATTRIBUTES'){
+            str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
+            `;
+
+        }else {
+            console.log("error 2")
+            console.log(obj)
+        }
+
+
+    }else{
+        str = `<li><a>` + obj.tipo + `</a>
+                <ul>`
+        str = str + getPredicado(obj.opIzq);
+        str = str + getPredicado(obj.opDer);
+        str = str + `</ul></li>`
+    }
+
+    return str;
+}
+
+
+
 %}
 %lex
 
@@ -617,8 +392,16 @@
 [^></]+					return 'anything'
 .                     	{ errors.push({ tipo: "Léxico", error: yytext, origen: "XPath", linea: yylloc.first_line, columna: yylloc.first_column+1 }); return 'INVALID'; }
 
-/* operator associations and precedence */
+
 /lex
+
+%{
+	const { Objeto } = require('../model/xpath/Objeto');
+	const { Tipos } = require('../model/xpath/Enum');
+	var builder = new Objeto();
+%}
+
+/* operator associations and precedence */
 %left 'tk_or' 'tk_line'
 %left 'tk_and'
 %left 'tk_equal' 'tk_diferent' 'tk_menor' 'tk_menorigual' 'tk_mayor' 'tk_mayorigual'
