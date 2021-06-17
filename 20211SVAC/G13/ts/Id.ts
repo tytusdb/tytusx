@@ -2,19 +2,19 @@ import { Expresion } from "./Expresion";
 
 export class Id extends Expresion {
     id: string;
+    tipo: any;
 
-    constructor(iden: string, l: number, c: number) {
+    constructor(t:any, iden: string) {
         super();
         this.id = iden;
-        this.linea = l;
-        this.columna = c;
+        this.tipo = t;
     }
     
-    getValor(): Expresion {
+    getValor(entorno: any): Expresion {
         //Buscar en el entorno (Objeto XML) lo que deba de ser
         throw new Error("Method not implemented.");
     }
     copiarValor(): Expresion {
-        return new Id(this.id, this.linea, this.columna);
+        return new Id(this.tipo, this.id);
     }
 }
