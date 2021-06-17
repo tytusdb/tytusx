@@ -4,6 +4,8 @@ import Entorno from "./Entorno";
 import Simbolo from "./Simbolo";
 import Valor from "./Valor";
 import Raiz from "../Models/Raiz";
+const errores=require('../Models/ListaError.js')
+const nodoError=require('../Models/Errores.js')
 
 export default class Crear{
 
@@ -20,6 +22,10 @@ export default class Crear{
           if(element.texto!=undefined){
 
             let elementos=element;
+            if(elementos.nombreInit!=elementos.nombreFin && elementos.unica==false){
+              errores.Errores.add(new nodoError.Error("Semántico","Las etiquetas de apertura y "+
+              "cierre son diferentes: "+elementos.nombreInit+", "+elementos.nombreFin,elementos.linea,elementos.columna,"XML"));
+            }
             if(elementos.texto!=""){
               const valor:Valor=new Valor("Texto",elementos);
               const simbolo:Simbolo=new Simbolo(elementos.nombreInit,valor,ambito,elementos.linea,elementos.columna);

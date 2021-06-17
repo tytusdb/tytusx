@@ -423,10 +423,12 @@ EXPRESION_CADENA :     CADENA { $$ = $1; }
                 |      EXPRESION_NUMERICA { $$ = $1; };
 
 CADENA :         tk_cadena1 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($1,"");
                               $$ = [primitivoAux,nodoaux];   }
 
         |        tk_cadena2 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($1,"");
                               $$ = [primitivoAux,nodoaux];   };
 

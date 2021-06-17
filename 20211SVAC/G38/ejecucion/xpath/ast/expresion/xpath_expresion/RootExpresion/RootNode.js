@@ -9,6 +9,7 @@ class RootNode {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent.findAllObjects();
+        let ts = ent.findAllObjects();
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

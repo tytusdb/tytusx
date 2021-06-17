@@ -19,19 +19,18 @@ exports.Id = void 0;
 var Expresion_1 = require("./Expresion");
 var Id = /** @class */ (function (_super) {
     __extends(Id, _super);
-    function Id(iden, l, c) {
+    function Id(t, iden) {
         var _this = _super.call(this) || this;
         _this.id = iden;
-        _this.linea = l;
-        _this.columna = c;
+        _this.tipo = t;
         return _this;
     }
-    Id.prototype.getValor = function () {
+    Id.prototype.getValor = function (entorno) {
         //Buscar en el entorno (Objeto XML) lo que deba de ser
         throw new Error("Method not implemented.");
     };
     Id.prototype.copiarValor = function () {
-        return new Id(this.id, this.linea, this.columna);
+        return new Id(this.tipo, this.id);
     };
     return Id;
 }(Expresion_1.Expresion));

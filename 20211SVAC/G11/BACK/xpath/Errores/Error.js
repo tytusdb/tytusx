@@ -24,6 +24,29 @@ var Error = /** @class */ (function (_super) {
     Error.add = function (err) {
         this.prototype.push(err);
     };
+    Error.verificarerror = function () {
+        if (this.prototype.length > 0) {
+            return "Se Detectaron Errores de Compilacion";
+        }
+        return "Compilacion Sin Errores";
+    };
+    Error.geterror = function () {
+        var cad = "";
+        cad += "<table class = \"table\"";
+        cad += "<tr>\n";
+        cad += "<th scope=\"col\">TIPO DE ERROR</th><th scope=\"col\">DESCRIPCION</th><th scope=\"col\">LINEA</th>";
+        cad += "</tr>";
+        for (var i = 0; i < this.prototype.length; i++) {
+            cad += "<tr>\n";
+            cad += "<th scope=\"col\">" + this.prototype[i].getToken() + "</th><th scope=\"col\">" +
+                this.prototype[i].getdescripcion() + "</th><th scope=\"col\">" +
+                this.prototype[i].getFila() + "</th>\n";
+            cad += "</tr>\n";
+        }
+        cad += "</table>\n";
+
+        return cad;
+    };
     Error.clear = function () {
         while (this.prototype.length > 0) {
             this.prototype.pop();

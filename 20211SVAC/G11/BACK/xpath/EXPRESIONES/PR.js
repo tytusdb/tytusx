@@ -9,7 +9,7 @@ var PR = /** @class */ (function () {
         this.columna = col;
     }
     PR.prototype.getTipo = function (ent, arbol) {
-        return Tipo_1.Tipo.CADENA;
+        return TipoXpath.CADENA;
     };
     PR.prototype.getValorImplicito = function (ent, arbol) {
         return this.valor;
