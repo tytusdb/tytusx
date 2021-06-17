@@ -1,0 +1,4 @@
+enum Tipo {
+    OBJETO,
+    ATRIBUTO
+ }
