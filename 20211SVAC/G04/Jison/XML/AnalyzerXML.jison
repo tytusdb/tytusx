@@ -42,7 +42,11 @@
 \w+                             {return 'identifier';}
 
 <<EOF>>                         { return 'EOF'; }
-.                               { console.log('Error lexico en: ' + yytext + ', linea: ' + yylloc.first_line + ', columna: ' + (yylloc.first_column + 1)); }
+
+.                               {
+                                agregarErrorLexico("Lexico",yytext,yylloc.first_line,yylloc.first_column+1);
+                                //console.log('     error lexico '+yytext);
+                                }
 
 
 /lex
@@ -66,6 +70,17 @@ START
             );            
         return {nodos:$1.nodos,raizCST:auxRetorno};
         }
+    | EOF {        
+        return {nodos:[new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)]
+            ,raizCST:new NodoPadre(getId(),"XML_STRUCTURE","EOF","",[])
+            };
+    }
+    | error EOF {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        return {nodos:[new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)]
+            ,raizCST:new NodoPadre(getId(),"START","error EOF","",[])
+            };
+    }
 ;
 
 XML_STRUCTURE
@@ -85,6 +100,12 @@ XML_STRUCTURE
             ]
         };
         }
+    | error greater_than TEXTTAG NODES {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        $$ = {nodos:[new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)]
+            ,hijos:[new NodoPadre(getId(),"XML_STRUCTURE","error sintactico","",[])]
+            };
+    }
 ;
 
 PROLOG
@@ -120,6 +141,12 @@ PROLOG
             new NodoPadre(getId(),"TEXTTAG","","",$12.hijos),
         ]};
     }
+    | less_than error greater_than TEXTTAG {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        $$ = {nodos:[new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)]
+            ,hijos:[new NodoPadre(getId(),"PROLOG","error sintactico","",[])]
+            };
+    }
 ;
 
 NODES
@@ -143,21 +170,36 @@ NODES
 
 NODE
     : OPENING_TAG NODES CLOSING_TAG         {        
-        $$ = {nodo:new Nodo($1.identificador, $1.atributos, $2.nodos, Type.DOUBLE_TAG,  $1.textoEtiqueta, @1.first_line, (@1.first_column + 1))
-        ,hijos:[
-                new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG NODES CLOSING_TAG","NODE.valor = nuevoNodo(NODES.listado)",$1.hijos),
-                new NodoPadre(getId(),"NODES","","",$2.hijos),
-                new NodoPadre(getId(),"CLOSING_TAG","","",$3.hijos)
-            ]
-        };
+        if($1.identificador === $3.identificador){
+            $$ = {nodo:new Nodo($1.identificador, $1.atributos, $2.nodos, Type.DOUBLE_TAG,  $1.textoEtiqueta, @1.first_line, (@1.first_column + 1))
+            ,hijos:[
+                    new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG NODES CLOSING_TAG","NODE.valor = nuevoNodo(NODES.listado)",$1.hijos),
+                    new NodoPadre(getId(),"NODES","","",$2.hijos),
+                    new NodoPadre(getId(),"CLOSING_TAG","","",$3.hijos)
+                ]
+            };
+        }else{
+            errores.agregarError("Semantico","El id de etiqueta no coincide:<br>&lt;"+$1.identificador+"&gt;&lt;/"+$3.identificador+"&gt;",this._$.first_line,(this._$.first_column+1));
+            $$ = {nodo:new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)
+                ,hijos:[new NodoPadre(getId(),"NODE","error semantico","",[])]
+                };
+        }
+        
         }
     | OPENING_TAG CLOSING_TAG               {
-        $$ = {nodo:new Nodo($1.identificador, $1.atributos, [], Type.DOUBLE_TAG,  $1.textoEtiqueta, @1.first_line, (@1.first_column + 1))
-        ,hijos:[
-                new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG CLOSING_TAG","NODE.valor = nuevoNodo()",$1.hijos),
-                new NodoPadre(getId(),"CLOSING_TAG","","",$2.hijos)
-            ]
-        };
+        if($1.identificador === $2.identificador){
+            $$ = {nodo:new Nodo($1.identificador, $1.atributos, [], Type.DOUBLE_TAG,  $1.textoEtiqueta, @1.first_line, (@1.first_column + 1))
+            ,hijos:[
+                    new NodoPadre(getId(),"OPENING_TAG","NODE -> OPENING_TAG CLOSING_TAG","NODE.valor = nuevoNodo()",$1.hijos),
+                    new NodoPadre(getId(),"CLOSING_TAG","","",$2.hijos)
+                ]
+            };
+        }else{
+            errores.agregarError("Semantico","El id de etiqueta no coincide:<br>&lt;"+$1.identificador+"&gt;&lt;/"+$2.identificador+"&gt;",this._$.first_line,(this._$.first_column+1));
+            $$ = {nodo:new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)
+                ,hijos:[new NodoPadre(getId(),"NODE","error sematico","",[])]
+                };
+        }
         }
     | EMPTY_TAG                             {
         $$ = {nodo:new Nodo($1.identificador, $1.atributos, [], Type.EMPTY,       $1.textoEtiqueta, @1.first_line, (@1.first_column + 1))
@@ -172,10 +214,22 @@ NODE
         };
 
         }
+    | less_than error greater_than TEXTTAG {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        $$ = {nodo:new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)
+            ,hijos:[new NodoPadre(getId(),"NODE","error sintactico","",[])]
+            };
+    }
+    | OPENING_TAG error CLOSING_TAG EOF {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        $$ = {nodo:new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)
+            ,hijos:[new NodoPadre(getId(),"NODE","error sintactico","",[])]
+            };
+    }
 ;
 
 OPENING_TAG
-    : less_than IDENTIFIER greater_than TEXTTAG             {        
+    : less_than IDENTIFIER greater_than TEXTTAG             {
         $$={identificador:$2.contenido
             ,textoEtiqueta:$4.contenido
             ,atributos:[]
@@ -215,6 +269,18 @@ CLOSING_TAG
             ]
             };
         }
+    | error OPENING_TAG {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        $$ = {nodos:new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)
+            ,hijos:[new NodoPadre(getId(),"CLOSING_TAG","error sintactico","",[])]
+            };
+    }
+    | less_than error slash greater_than TEXTTAG {
+        errores.agregarError("Sintactico","error: "+yytext,this._$.first_line,(this._$.first_column+1));
+        $$ = {nodos:new new Nodo("",    [],    [], Type.COMMENT,     "",    0,             0)
+            ,hijos:[new NodoPadre(getId(),"CLOSING_TAG","error sintactico","",[])]
+            };
+    }
 ;
 
 EMPTY_TAG

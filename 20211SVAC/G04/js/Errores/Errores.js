@@ -8,6 +8,12 @@ class Errores {
     agregarError1(errorEntrada) {
         this.errores1.push(errorEntrada);
     }
+    agregarEncabezado(tipo) {
+        this.errores1.unshift(new Erro("Listado de errores del lenguaje: " + tipo, "----------------------------------------", 0, 0));
+    }
+    agregarEncabezadoFinal(tipo) {
+        this.errores1.push(new Erro("Listado de errores del lenguaje: " + tipo, "----------------------------------------", 0, 0));
+    }
     getErrores() {
         return this.errores1;
     }
