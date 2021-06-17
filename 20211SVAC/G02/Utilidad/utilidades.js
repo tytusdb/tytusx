@@ -74,15 +74,15 @@ function destroyClickedElement(event) {
     document.body.removeChild(event.target);
 }
 
-function analizar(){
+function analizar() {
     erroresXML = [];
     erroresXPath = [];
     reglasGramaticalesXML = [];
     reglasGramaticalesXPath = [];
-    if(editorXML.getValue() == ""){
+    if (editorXML.getValue() == "") {
         editorXML.setValue('<?xml version="1.0" encoding="UTF-8"?><note><head><to letra="soyLetra">Person+^&^@</to><CC /><HC /></head><from>Jani@</from><heading>Reminder</heading><body>Dont forget me this weekend</body></note>');
     }
-    if(editorXPath.getValue() == ""){
+    if (editorXPath.getValue() == "") {
         editorXPath.setValue('note');
     }
     instruccionesXML = gramaticaXML.parse(editorXML.getValue());
@@ -91,4 +91,30 @@ function analizar(){
     procesarProyecto(instruccionesXML, instruccionesXPath);
     agregarErroresXMLConsola(erroresXML);
     editorConsola.setValue(consola);
+}
+
+function graficarASTXML() {
+    procesarASTXML();
+    console.log(cadenaASTXML);
+    let svgXml = new Viz(cadenaASTXML, { format: "svg"});
+    console.log(svgXml);
+    console.log([svgXml]);
+    document.body.innerHtml = svgXml;
+    /*let imgelement = Viz(digraph, { format: "png-image-element"});
+    document.body.append(img-element);*/
+
+    var textFileAsBlob = new Blob([svgXml], { type: 'image/svg+xml' });
+    var fileNameToSaveAs = "imagen.svg";
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "LINKTITLE";
+    window.URL = window.URL || window.webkitURL;
+
+    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
 }
