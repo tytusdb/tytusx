@@ -163,12 +163,14 @@
                 </tr>
               </thead>
             <tbody>
-              <!-- <tr *ngFor="let symbol of symbols">
-                <td>{{exception.sTipo}} </td>
-                <td>{{exception.sFila}} </td>
-                <td>{{exception.sColumna}} </td>
-                <td>{{exception.sDescripcion}} </td>
-              </tr> -->
+              <tr *ngFor="let symbol of simbolosXML">
+                <td>{{symbol.sTipo}}           </td>
+                <td>{{symbol.sIdentificador}}  </td>
+                <td>{{symbol.sValor}}          </td>
+                <td>{{symbol.sAmbito}}         </td>
+                <td>{{symbol.sFila}}           </td>
+                <td>{{symbol.sColumna}}        </td>
+              </tr>
             </tbody>
           </table>
       </div>
