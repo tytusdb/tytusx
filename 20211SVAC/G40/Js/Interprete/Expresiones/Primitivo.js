@@ -7,6 +7,7 @@ var Primitivo = /** @class */ (function () {
         this.linea = linea;
         this.columna = columna;
         this.valor = valor;
+        this.cadena = false;
     }
     Primitivo.prototype.getTipo = function (ent, arbol) {
         var valor = this.getValorImplicito(ent, arbol);
@@ -30,6 +31,15 @@ var Primitivo = /** @class */ (function () {
     Primitivo.prototype.getValorImplicito = function (ent, arbol) {
         return this.valor;
     };
+
+    Primitivo.prototype.esCadena = function () {
+        return this.cadena;
+    };
+
+    Primitivo.prototype.setCadena = function (cadena) {
+        this.cadena = cadena;
+    };
+
     Primitivo.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
     };
