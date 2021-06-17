@@ -34,7 +34,13 @@ export class Relacional implements Expression{
             for (const valIzq of valorIzq.value ) {
                 for (const valDer of valorDer.value) {
                     
-                    if (valIzq.type != tipoPrimitivo.NODO && valDer.type != tipoPrimitivo.NODO){
+                    if (valIzq.type !== tipoPrimitivo.NODO && valDer.type !== tipoPrimitivo.NODO){
+
+                        if (this.validar(valIzq, valDer)){
+                            return {value: true, type: tipoPrimitivo.BOOL}
+                        }
+                    }
+                    else if (valIzq.type === tipoPrimitivo.NODO && valDer.type === tipoPrimitivo.NODO){
 
                         if (this.validar(valIzq, valDer)){
                             return {value: true, type: tipoPrimitivo.BOOL}
@@ -52,7 +58,7 @@ export class Relacional implements Expression{
         }else if (valorIzq.type === tipoPrimitivo.RESP){
 
             for (const valIzq of valorIzq.value) {
-                if (valIzq.type != tipoPrimitivo.NODO){
+                if (valIzq.type !== tipoPrimitivo.NODO){
                     if (this.validar(valIzq, valorDer)){
                         return {value: true, type: tipoPrimitivo.BOOL}
                     }
@@ -63,7 +69,7 @@ export class Relacional implements Expression{
         }else if (valorDer.type === tipoPrimitivo.RESP){
 
             for (const valDer of valorDer.value) {
-                if (valDer.type != tipoPrimitivo.NODO){
+                if (valDer.type !== tipoPrimitivo.NODO){
                     if (this.validar(valorIzq, valDer)){
                         return {value: true, type: tipoPrimitivo.BOOL}
                     }
@@ -80,10 +86,10 @@ export class Relacional implements Expression{
     private validar(valorIzq : Retorno, valorDer: Retorno): boolean{
         
         if (this.tipoOperacion === operacionRelacional.IGUAL) {
-            const result = valorIzq.value === valorDer.value;
+            const result = valorIzq.value == valorDer.value;
             return result
         } else if (this.tipoOperacion === operacionRelacional.DIFERENCIACION) {
-            const result = valorIzq.value !== valorDer.value;
+            const result = valorIzq.value != valorDer.value;
             return result
         }else if (this.tipoOperacion === operacionRelacional.MENOR) { 
             const result = valorIzq.value < valorDer.value;

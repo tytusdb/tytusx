@@ -1,26 +1,29 @@
-# TytusX
-Open Source Native XML Database with Query Languages XPath and XQuery in JavaScript
-
-<https://tytusdb.github.io/tytusx/20211SVAC/G32/#/>
-
+# OLC2-Proyecto1-G32
+ 
+# OLC2-Proyecto1-G32
+ 
+##  Universidad de San Carlos de Guatemala
+##  Facultad de Ingeniería
+##  Escuela de Ciencias y Sistemas
+##  Organización de Lenguajes y Compiladores 2
 <br>
 
-###  Universidad de San Carlos de Guatemala
-###  Facultad de Ingeniería
-###  Escuela de Ciencias y Sistemas
-###  Organización de Lenguajes y Compiladores 2
 ### Ing. Luis Fernando Espino Barrios
 ### Aux. Haroldo Pablo Arias Molina
 
+<h1>
 <br>
+ <div style="text-align: center">TytusX</div>
+ <br>
+</h1>
 
-## Grupo 32
+<h4>
+<div style="text-align: right"> <h3>Grupo 32</h3> </div>
+<div style="text-align: right">  José Pablo Colindres Orellana - 201602713 </div>
+<div style="text-align: right"> Yaiza Estefanía Pineda González - 201610673</div>
+<div style="text-align: right"> Pablo César Pacheco Fuentes - 201602730</div>
+</h4>
 
 ---
-### José Pablo Colindres Orellana - 201602713
-### Yaiza Estefanía Pineda González - 201610673
-### Pablo César Pacheco Fuentes - 201602730
----
-
 * [Manual de Usuario](./Manuales/Manual%20de%20Usuario.md)
 * [Manual Técnico](./Manuales/Manual%20Técnico.md)

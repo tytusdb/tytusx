@@ -14,6 +14,7 @@ export class Formato{
   darFormato():string{
     let cadena="";
    //recorre el contenido del arreglo
+
     if(this.contenido.length!=0){
 
       this.contenido.forEach(element => {
@@ -27,10 +28,12 @@ export class Formato{
               let array=[];
               array.push(element.valor.atributos)
               this.armar(array)
-              cadena+=this.cadenita;
+              cadena+=" "+this.cadenita;
               this.cadenita=""
             }
+
             if(element.valor.nombreFin!=""){
+
               if(element.valor.texto!=""){
 
                 const cad=this.convertir(element.valor.texto);
@@ -75,11 +78,11 @@ export class Formato{
           this.armar(element.lista);
         }else{
           if(element.texto!=undefined){
-
             let elementos=element;
             this.cadenita+="<"+elementos.nombreInit;
             if(elementos.atributos!=undefined && elementos.atributos!=null){
               if(elementos.atributos.lista!=undefined){
+               // console.log(this.cadenita)
                 this.armar(elementos.atributos.lista);
               }else{
                 let el=elementos.atributos[0];
@@ -99,10 +102,11 @@ export class Formato{
               this.armar(elementos.elementos.lista);
               this.cadenita+="</"+elementos.nombreFin+">\n";
             }else{
+
               if(elementos.nombreFin!=""){
                 this.cadenita+="</"+elementos.nombreFin+">\n";
               }else{
-                this.cadenita+="<"+elementos.nombreInit+"/>\n";
+                this.cadenita+="/>\n";
               }
             }
         }
@@ -110,6 +114,7 @@ export class Formato{
         if(element.identificador!=undefined){
           let elementos=element;
           this.cadenita+=" "+elementos.identificador+"="+elementos.valor+" ";
+
         }
 
       }

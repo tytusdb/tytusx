@@ -47,9 +47,11 @@ export default class BarrasNodo extends Instruccion {
     let variable = this.Operacion.interpretar(arbol, tabla);
     console.log(this.Operacion)
     //if (variable != null) {
+    if (this.Barra2 == null) {
       console.log("Aqui esta el arbol");
       let salidas = new tablaSimbolos();
       let cadena = ''
+      let error = ''
       for (var key of tabla.getTabla()) {//SIMBOLOS
         /*let objetos = key.getvalor();
         if (objetos instanceof tablaSimbolos) { // BUSCAR UNA RAMA HIJA
@@ -64,36 +66,73 @@ export default class BarrasNodo extends Instruccion {
           //this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ","\n");
           //MANDA ERROR
         }*/
-        if(key.getidentificador() == variable){
-          if(key.getvalor() instanceof tablaSimbolos){
-            for(let sim of key.getvalor().getTabla()){
+        if (key.getidentificador() == variable) {
+          console.log(key.getidentificador())
+          if (key.getvalor() instanceof tablaSimbolos) {
+            for (let sim of key.getvalor().getTabla()) {
               salidas.setVariable(sim)
             }
-            
+
           }
-          else{
-            cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ","\n");
+          else {
+            cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
           }
+        } else {
+          error = "Nodo no encontrado ";
+          console.log(error);
         }
-          
+
       }
-      if(cadena != ''){
+      if (cadena != '') {
         return cadena
+      } else if (error != '') {
+        return error
       }
       console.log("OBJETOSSALIDA")
       console.log(salidas)
       return salidas
-      //localStorage.setItem("consulta", this.contenido);
+    } else {
+      console.log("entro doble barra")
+      //DOBLE BARRA
+      let salidas = new tablaSimbolos();
+      let cadena = ''
 
-    /*} else {
-      return new NodoErrores(
-        'SEMANTICO',
-        'VARIABLE ' + this.Operacion + ' NO EXISTE',
-        this.fila,
-        this.columna
-      );
-    }*/
+      for (var key of tabla.getTabla()) {
+        if (key.getidentificador() == variable) {
+          console.log(key.getidentificador())
+          if (key.getvalor() instanceof tablaSimbolos) {
+            for (let sim of key.getvalor().getTabla()) {
+              salidas.setVariable(sim)
+            }
+
+          }
+          else {
+            cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+          }
+        }
+
+
+        if (cadena != '') {
+          return cadena
+        }
+        console.log("OBJETOSSALIDA")
+        console.log(salidas)
+        return salidas
+      }
+    }
+
   }
+  //localStorage.setItem("consulta", this.contenido);
+
+  /*} else {
+    return new NodoErrores(
+      'SEMANTICO',
+      'VARIABLE ' + this.Operacion + ' NO EXISTE',
+      this.fila,
+      this.columna
+    );
+  }*/
+
 
   buscarTablaSimbolos(t: tablaSimbolos, tri: Arbol): string {
     for (var key of t.tablaActual) {
@@ -110,10 +149,10 @@ export default class BarrasNodo extends Instruccion {
         this.buscarTablaSimbolos(objetos, tri);
 
       } else {
-        this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ","\n");
+        this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
       }
 
-     
+
     }
     return this.contenido;
     console.log(this.contenido);

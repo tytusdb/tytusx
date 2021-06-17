@@ -85,9 +85,9 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
    
-                     this.$= new Nodo("INICIO","Xpath");
-		       this.$.addHijos($$[$0-1]);
-                     return { ErrorLexico:arreglolexico,msj:"Analisis XPath Ascendenete Finalizado.\n.",diagramaAST:this.$};
+                                   this.$= new Nodo("INICIO","Xpath");
+		                     this.$.addHijos($$[$0-1]);
+                                   return { ErrorLexico:arreglolexico,msj:"Analisis XPath Ascendenete Finalizado.\n.",diagramaAST:this.$};
                      
 break;
 case 2:
@@ -102,9 +102,16 @@ case 3:
                                    this.$ =$$[$0]; 
                                    
 break;
-case 4: case 5:
+case 4:
  
                                                  this.$ = new Nodo($$[$0-1],"PATHRELL1:sdiagonal");
+                                                 this.$.addHijos($$[$0-2]); 
+                                                 this.$.addHijos($$[$0]); 
+                                              
+break;
+case 5:
+ 
+                                                 this.$ = new Nodo($$[$0-1],"PATHRELL1:ddiagonal");
                                                  this.$.addHijos($$[$0-2]); 
                                                  this.$.addHijos($$[$0]); 
                                               
@@ -378,14 +385,16 @@ this.$ = new Nodo($$[$0-2],"METODO:posicion");
                             
 break;
 case 55:
-this.$ = new Nodo($$[$0-4]+$$[$0-3],"METODO:atributo");
-                                                        this.$.addHijos(new Nodo($$[$0-3],"METODO:lcorchete"));
-                                                        this.$.addHijos($$[$0-2]);
-                                                        this.$.addHijos(new Nodo($$[$0-1],"METODO:rcorchete"));
+      
+                                                               this.$ = new Nodo($$[$0-4]+$$[$0-3],"METODO:atributo");
+                                                               this.$.addHijos(new Nodo($$[$0-3],"METODO:lcorchete"));
+                                                               this.$.addHijos($$[$0-2]);
+                                                               this.$.addHijos(new Nodo($$[$0-1],"METODO:rcorchete"));
                                                         
 break;
 case 56:
-this.$ = new Nodo($$[$0-3],"METODO:etiqueta");
+
+                                                        this.$ = new Nodo($$[$0-3],"METODO:etiqueta");
                                                         this.$.addHijos(new Nodo($$[$0-2],"METODO:lcorchete"));
                                                         this.$.addHijos($$[$0-1]);
                                                         this.$.addHijos(new Nodo($$[$0],"METODO:rcorchete"));
@@ -542,7 +551,7 @@ parse: function parse(input) {
     return true;
 }};
 
-    const Nodo = require('./Nodo').default;
+    const Nodo = require('./Nodo');
     var arreglolexico = "Codigo:";
 
 
@@ -986,7 +995,7 @@ case 52:return 5;
 break;
 }
 },
-rules: [/^(?:ancestor-or-self\b)/i,/^(?:descendant-or-self\b)/i,/^(?:following-sibling\b)/i,/^(?:namespace-node\b)/i,/^(?:preceding-sibling\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:following\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:null\b)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:node\b)/i,/^(?:text\b)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:div\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:<=)/i,/^(?:>)/i,/^(?:>=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:@)/i,/^(?:::)/i,/^(?:(\(:((\\([\'\"\\bfnrtv]))|([^\:)\\]+)):\)))/i,/^(?:\s+)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:([0-9]+))/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]+))*'))/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:.)/i,/^(?:$)/i],
+rules: [/^(?:ancestor-or-self\b)/i,/^(?:descendant-or-self\b)/i,/^(?:following-sibling\b)/i,/^(?:namespace-node\b)/i,/^(?:preceding-sibling\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:following\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:null\b)/i,/^(?:true\b)/i,/^(?:false\b)/i,/^(?:node\b)/i,/^(?:text\b)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:div\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:<=)/i,/^(?:>)/i,/^(?:>=)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:@)/i,/^(?:::)/i,/^(?:(\(:((\\([\'\"\\bfnrtv]))|([^\:)\\]+)):\)))/i,/^(?:\s+)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:([0-9]+))/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]+))*'))/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑá-ü]*)/i,/^(?:.)/i,/^(?:$)/i],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52],"inclusive":true}}
 });
 return lexer;

@@ -48,7 +48,7 @@ export default class Crear{
                 this.agregar(elementos.atributos.lista,elementos.nombreInit);
               }else{
                 let el=elementos.atributos[0];
-                const valor:Valor=new Valor("Cadena de texto",el.valor);
+                const valor:Valor=new Valor("Atributo",el.valor);
                 const simbolo:Simbolo=new Simbolo(el.identificador,valor,elementos.nombreInit,el.linea,el.columna);
                 this.global.Add(simbolo);
 
@@ -58,7 +58,7 @@ export default class Crear{
         }
         if(element.identificador!=undefined){
           let elementos=element;
-          const valor:Valor=new Valor("Cadena de texto",elementos);
+          const valor:Valor=new Valor("Atributo",elementos);
           const simbolo:Simbolo=new Simbolo(element.identificador,valor,ambito,elementos.linea,elementos.columna);
           this.global.Add(simbolo);
 

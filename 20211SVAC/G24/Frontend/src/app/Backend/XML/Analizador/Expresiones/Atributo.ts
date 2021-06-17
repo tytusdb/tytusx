@@ -18,10 +18,12 @@ export default class Atributo extends Instruccion{
     super(new Tipo(tipoDato.CADENA), linea, columna);
     this.identificador = identificador;
     this.valor = valor;
+    linea=this.linea;
+    columna=this.columna;
   }
 
   public interpretar(arbol:Arbol, tabla:tablaSimbolos){
-    return {identificador:this.identificador,valor:this.valor}
+    return {identificador:this.identificador,valor:this.valor,linea:this.fila,columna:this.columna}
   }
 
   public getNodo(): nodoAST {
