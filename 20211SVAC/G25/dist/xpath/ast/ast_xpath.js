@@ -1,24 +1,24 @@
-"use strict";
-class AST_XPATH {
-    constructor(instrucciones) {
+var AST_XPATH = /** @class */ (function () {
+    function AST_XPATH(instrucciones) {
         this.instrucciones = instrucciones;
         this.columna = 0;
         this.linea = 0;
+        this.list_error = new Array();
     }
-    getInstrucciones() {
+    AST_XPATH.prototype.getInstrucciones = function () {
         return this.instrucciones;
-    }
-    getValorImplicito() {
+    };
+    AST_XPATH.prototype.getValorImplicito = function () {
         return this.instrucciones;
-    }
-    generarGrafo(g, padre) {
-        let nombreHijo = "nodo" + g.count;
+    };
+    AST_XPATH.prototype.generarGrafo = function (g, padre) {
+        var nombreHijo = "nodo" + g.count;
         g.graph += "    " + nombreHijo + "[label=\"INICIO\"];\n";
         g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
         g.count++;
         padre = nombreHijo;
-        this.instrucciones.forEach((or) => {
-            or.forEach((o) => {
+        this.instrucciones.forEach(function (or) {
+            or.forEach(function (o) {
                 /*nombreHijo = "nodo" + g.count;
                 g.graph += "    " + nombreHijo + "[label=\""+ o.getNombreHijo() +"\"];\n";
                 g.graph += "    " + padre + " -> " + nombreHijo + ";\n";
@@ -27,8 +27,16 @@ class AST_XPATH {
             });
         });
         return null;
-    }
-    getNombreHijo() {
+    };
+    AST_XPATH.prototype.getNombreHijo = function () {
         return "";
-    }
-}
+    };
+    AST_XPATH.prototype.setErrores = function (lista_error) {
+        this.list_error = lista_error;
+    };
+    AST_XPATH.prototype.getErrores = function () {
+        var lista_errores = this.list_error;
+        return lista_errores;
+    };
+    return AST_XPATH;
+}());
