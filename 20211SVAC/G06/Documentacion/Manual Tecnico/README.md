@@ -1,3 +1,17 @@
+# Clases para tabla de simbolos XML
+
+## Clase entorno
+La clase entorno tiene la capacidad de albergar mas entornos dentro de el ademas de atributos
+para sus etiquetas, tambien resguarda el nombre de las etiquetas xml de apertura y cierre.
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/entornoXml.png)
+
+## Clase simbolo
+Esta clase tiene dentro de ella un estructura en la cual se se guarda un id y un valor asociado
+a este id, por el tipo del lenguaje este valor solo puede ser de tipo string.
+
+![alt text](https://github.com/201709309/py_compi2/blob/main/Documentacion/Manual%20Tecnico/imagenes/simboloXml.png)
+
 # Métodos y clases para los reportes
 
 ## crearTextoGraphvizRepGram
