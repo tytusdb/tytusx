@@ -31,9 +31,9 @@ function compile(req: any) {
             errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: "1", columna: "1" });
         }
         if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
-            if (xml_ast.errors.length > 0) errors = xml_ast.errors;
+            if (xml_ast.errors.length > 0) errors = errors.concat(xml_ast.errors);
             if (xml_ast.ast === null || xml_ast === true) {
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: "1", columna: "1" });
                 return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
             }
         }
@@ -48,7 +48,7 @@ function compile(req: any) {
         if (xPath_ast.errors.length > 0 || xPath_ast.ast === null || xPath_ast === true) {
             if (xPath_ast.errors.length > 0) errors = xPath_ast.errors;
             if (xPath_ast.ast === null || xPath_ast === true) {
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta digitada.", origen: "XPath", linea: 1, columna: 1 });
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta digitada.", origen: "XPath", linea: "1", columna: "1" });
                 return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
             }
         }
@@ -77,7 +77,7 @@ function compile(req: any) {
         let output = {
             arreglo_simbolos: [],
             arreglo_errores: errors,
-            output: (error.message) ? ("Error sintáctico:\n" + String(error.message)) : String(error),
+            output: (error.message) ? String(error.message) : String(error),
             encoding: "utf-8"
         }
         errors = [];

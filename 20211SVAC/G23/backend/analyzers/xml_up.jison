@@ -842,8 +842,8 @@ cadena_err                              [0-9]+("."[0-9]+)?([a-zA-Z0-9_.-]|{unico
 "/"						    {return 'tk_bar';}
 "="						    {return 'tk_equal';}
 {string}                    {return 'tk_string';}
-{cadena_err}                 {return cadena_err;}    /*USED FOR ERROR*/
-{id_err}                     {return id_err;}     /*USED FOR ERROR*/
+{cadena_err}                {return cadena_err;}    /*USED FOR ERROR*/
+{id_err}                    {return id_err;}     /*USED FOR ERROR*/
 
 
 <content>"<!--"([^-]|\-[^-])*"-->"	    /* MultiLineComment*/
@@ -899,8 +899,8 @@ INI: XML_DECLARATION ROOT EOF               {/*$1[0].printTest(0);console.log($1
                                             prod_1 = grammar_stack.pop();
                                             grammar_stack.push({'INI -> XML_DECLARATION  EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
                                             grammar_report =  getGrammarReport(grammar_stack);
-
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            encoding = new Encoding($1);
+                                            ast = { ast: null, encoding: encoding,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             }
@@ -1020,10 +1020,12 @@ ATTRIBUTE : tk_attribute_name tk_string     {attr = new Atributo($1.slice(0, -1)
 XML: XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close                     {if($1 != null){  $1.Children = $2; $1.Close = $4; $$ = $1;
                                                                                 let hasConflict = $1.verificateNames();
                                                                                 if(hasConflict === "") {
-																					$1.childs.forEach(child => {
-																					child.Father = {id: $1.id_open, line: $1.line, column: $1.column};
-																					});
-																					$$ = $1;
+                                                                                    if($1.childs){
+                                                                                        $1.childs.forEach(child => {
+                                                                                        child.Father = {id: $1.id_open, line: $1.line, column: $1.column};
+                                                                                        });
+                                                                                        $$ = $1;
+                                                                                    }
 																				}
                                                                                  else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: @4.first_line, columna: @4.first_column+1 });
@@ -1061,7 +1063,7 @@ XML: XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close                     
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close {	﹩﹩ = ﹩1;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $3, 'Token: tk_close\t Lexema: '  + '&gt;']});
 	                                                                            }
 	| XML_OPEN tk_open_end_tag tk_tag_name                                      {$$ =null;
-                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: @3.first_line, columna: @3.first_column+1 });
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: @3.first_line, columna: @3.first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: '  + $3]});
@@ -1073,7 +1075,7 @@ XML: XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close                     
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            }
 	| XML_OPEN tk_content tk_open_end_tag tk_tag_name                           {$$ =null;
-                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: @4.first_line, columna: @4.first_column+1 });
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: @4.first_line, columna: @4.first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $2, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $4]});
@@ -1092,7 +1094,7 @@ XML: XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close                     
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, 'Token: tk_content\t Lexema: ' + $2,  'Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $4, prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            }
 	| XML_OPEN CHILDREN tk_open_end_tag tk_tag_name                             {$$ =null;
-	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: @4.first_line, columna: @4.first_column+1 });
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: @4.first_line, columna: @4.first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();

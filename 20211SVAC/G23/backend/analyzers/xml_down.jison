@@ -1023,10 +1023,12 @@ ATTRIBUTE : tk_attribute_name tk_string     {attr = new Atributo($1.slice(0, -1)
 XML: XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close                     {if($1 != null){  $1.Children = $2; $1.Close = $4; $$ = $1;
                                                                                 let hasConflict = $1.verificateNames();
                                                                                 if(hasConflict === "") {
-																					$1.childs.forEach(child => {
-																					child.Father = {id: $1.id_open, line: $1.line, column: $1.column};
-																					});
-																					$$ = $1;
+                                                                                    if($1.childs){
+                                                                                        $1.childs.forEach(child => {
+                                                                                        child.Father = {id: $1.id_open, line: $1.line, column: $1.column};
+                                                                                        });
+                                                                                        $$ = $1;
+                                                                                    }
 																				}
                                                                                 else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: @4.first_line, columna: @4.first_column+1 });
