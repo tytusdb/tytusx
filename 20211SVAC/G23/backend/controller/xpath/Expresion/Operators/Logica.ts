@@ -75,21 +75,20 @@ function filterElements(e1: any, e2: any, desigualdad: Tipos, _contexto: Array<E
                 }
             }
         }
-        if (element.childs && tmp.length === 0) { // Hace match con algún hijo
+        if (element.childs) { // Hace match con algún hijo
             for (let j = 0; j < element.childs.length; j++) {
                 const child = element.childs[j];
                 condition = verificarDesigualdad(desigualdad, child.id_open, e1, child.value, e2);
+                console.log(desigualdad, child.id_open, e1, child.value, e2);
                 if (condition) {
                     tmp.push(element);
                     break;
                 }
             }
         }
-        if (tmp.length === 0) { // Hace match con el elemento
-            condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2);
-            if (condition)
-                tmp.push(element);
-        }
+        condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2); // Hace match con el elemento
+        if (condition)
+            tmp.push(element);
     }
     return tmp;
 }

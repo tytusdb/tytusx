@@ -84,9 +84,6 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-<<<<<<< Updated upstream
- ast = { ast: $$[$0-1], errors: errors }; errors = []; return ast; 
-=======
  	prod_1 = grammar_stack.pop();
 					prod_2 = grammar_stack.pop();
 			 		grammar_stack.push({'ini -> XPATH_U EOF': [prod_2, prod_1]});
@@ -94,78 +91,15 @@ case 1:
                     cst = getCST(grammar_stack);
                     console.log(grammar_report);
                     let arbol_ast = getASTTree($$[$0-1]);
-					//printstrack(grammar_stack, 0);
-					console.log($$[$0-1],999); ast = { ast: $$[$0-1], errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : arbol_ast }; return ast;
+					ast = { ast: $$[$0-1], errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : arbol_ast }; return ast;
 					
->>>>>>> Stashed changes
 break;
 case 2:
- $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
+ $$[$0-2].push($$[$0]); this.$=$$[$0-2];
+								 prod_1 = grammar_stack.pop();
+								 prod_2 = grammar_stack.pop();
+			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_line\t Lexema: ' + $$[$0-2], prod_1]}); 
 break;
-<<<<<<< Updated upstream
-case 3: case 5:
- this.$=[$$[$0]]; 
-break;
-case 4:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
-break;
-case 6:
- this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1); 
-break;
-case 7:
- this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1); 
-break;
-case 8: case 9: case 12: case 29:
- this.$=$$[$0]; 
-break;
-case 10:
- $$[$0-3].push(builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)); this.$=$$[$0-3]; 
-break;
-case 11:
- this.$=[builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)]; 
-break;
-case 13:
- this.$=null; 
-break;
-case 14:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1); 
-break;
-case 15:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1); 
-break;
-case 16:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1); 
-break;
-case 17:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1); 
-break;
-case 18:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1); 
-break;
-case 19:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1); 
-break;
-case 20:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1); 
-break;
-case 21:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1); 
-break;
-case 22:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1); 
-break;
-case 23:
- this.$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this._$.first_line, this._$.first_column+1), $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1); 
-break;
-case 24:
- this.$=$$[$0-1] 
-break;
-case 25:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1); 
-break;
-case 26:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1); 
-=======
 case 3:
  $$[$0-2].push($$[$0]); this.$=$$[$0-2];
 								 prod_1 = grammar_stack.pop();
@@ -303,17 +237,15 @@ case 27:
 				   prod_1 = grammar_stack.pop();
 				   prod_2 = grammar_stack.pop();
 				   grammar_stack.push({'E -> E tk_and E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_and\t Lexema: ' + $$[$0-1], prod_1]}); 
->>>>>>> Stashed changes
 break;
 case 28:
  this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+					 prod_1 = grammar_stack.pop();
+					 prod_2 = grammar_stack.pop();
+					 grammar_stack.push({'E -> E tk_equal E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_equal\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 29:
  this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
-<<<<<<< Updated upstream
-break;
-case 30: case 31:
-=======
 						prod_1 = grammar_stack.pop();
 						prod_2 = grammar_stack.pop();
 						grammar_stack.push({'E -> E tk_diferent E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_diferent\t Lexema: ' + $$[$0-1], prod_1]}); 
@@ -330,15 +262,11 @@ case 31:
 						grammar_stack.push({'EXP_PR -> FUNC CORCHETP {SS=builder.newExpression(Param)}': [prod_2, prod_1]}); 
 break;
 case 32:
->>>>>>> Stashed changes
  this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'EXP_PR -> PRIMITIVO CORCHETP {SS=builder.newExpression(Param)}': [prod_2, prod_1]}); 
 break;
-<<<<<<< Updated upstream
-case 32:
- this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1); 
-break;
-case 33: case 34:
-=======
 case 33:
  this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1);
 				   grammar_stack.push({'PRIMITIVO -> tk_id {SS=builder.newNodename(Param)}':['token: tk_text\t Lexema: ' + $$[$0]]}); 
@@ -348,16 +276,9 @@ case 34:
 						   grammar_stack.push({'PRIMITIVO -> tk_attribute_d {SS=builder.newValue(Param)}':['token: tk_attribute_d\t Lexema: ' + $$[$0]]}); 
 break;
 case 35:
->>>>>>> Stashed changes
  this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+						   grammar_stack.push({'PRIMITIVO -> tk_attribute_s {SS=builder.newValue(Param)}':['token: tk_attribute_s\t Lexema: ' + $$[$0]]}); 
 break;
-<<<<<<< Updated upstream
-case 35:
- this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1); 
-break;
-case 36:
- this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1); 
-=======
 case 36:
  this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
 				grammar_stack.push({'PRIMITIVO -> num {SS=builder.newValue(Param)}':['token: num\t Lexema: ' + $$[$0]]}); 
@@ -365,17 +286,11 @@ break;
 case 37:
  this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
 				   grammar_stack.push({'PRIMITIVO -> tk_asterisco {SS=builder.newValue(Param)}':['token: tk_asterisco\t Lexema: ' + $$[$0]]}); 
->>>>>>> Stashed changes
 break;
 case 38:
  this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+					 grammar_stack.push({'PRIMITIVO -> tk_punto {SS=builder.newCurrent(Param)}':['token: tk_punto\t Lexema: ' + $$[$0]]}); 
 break;
-<<<<<<< Updated upstream
-case 38:
- this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1); 
-break;
-case 39: case 40:
-=======
 case 39:
  this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1);
 					   grammar_stack.push({'PRIMITIVO -> tk_2puntos {SS=builder.newParent(Param)}':['token: tk_2puntos\t Lexema: ' + $$[$0]]}); 
@@ -385,16 +300,9 @@ case 40:
 							grammar_stack.push({'PRIMITIVO -> tk_arroba tk_id {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_id\t Lexema: ' + $$[$0]]}); 
 break;
 case 41:
->>>>>>> Stashed changes
  this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+							 grammar_stack.push({'PRIMITIVO -> tk_arroba tk_asterisco {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_asterisco\t Lexema: ' + $$[$0]]});
 break;
-<<<<<<< Updated upstream
-case 41:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1); 
-break;
-case 42:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1); 
-=======
 case 42:
  this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1);
 								grammar_stack.push({'FUNC -> tk_text tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_text\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
@@ -402,57 +310,15 @@ break;
 case 43:
  this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1);
 								grammar_stack.push({'FUNC -> tk_last tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_last\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
->>>>>>> Stashed changes
 break;
 case 44:
  this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+									grammar_stack.push({'FUNC -> tk_position tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_position\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
 case 45:
  this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+								grammar_stack.push({'FUNC -> tk_node tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_node\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
-<<<<<<< Updated upstream
-case 45:
- this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1); 
-break;
-case 46:
- this.$ = Tipos.AXIS_ANCESTOR 
-break;
-case 47:
- this.$ = Tipos.AXIS_ANCESTOR_OR_SELF 
-break;
-case 48:
- this.$ = Tipos.AXIS_ATTRIBUTE 
-break;
-case 49:
- this.$ = Tipos.AXIS_CHILD 
-break;
-case 50:
- this.$ = Tipos.AXIS_DESCENDANT 
-break;
-case 51:
- this.$ = Tipos.AXIS_DESCENDANT_OR_SELF 
-break;
-case 52:
- this.$ = Tipos.AXIS_FOLLOWING 
-break;
-case 53:
- this.$ = Tipos.AXIS_FOLLOWING_SIBLING 
-break;
-case 54:
- this.$ = Tipos.AXIS_NAMESPACE 
-break;
-case 55:
- this.$ = Tipos.AXIS_PARENT 
-break;
-case 56:
- this.$ = Tipos.AXIS_PRECEDING 
-break;
-case 57:
- this.$ = Tipos.AXIS_PRECEDING_SIBLING 
-break;
-case 58:
- this.$ = Tipos.AXIS_SELF 
-=======
 case 46:
  this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
 								prod_1 = grammar_stack.pop();
@@ -510,7 +376,6 @@ break;
 case 59:
  this.$ = Tipos.AXIS_SELF;
 						grammar_stack.push({'AXISNAME -> tk_self {SS = Tipos.AxisTipo}':['token: tk_self\t Lexema: ' + $$[$0]]}); 
->>>>>>> Stashed changes
 break;
 }
 },
@@ -667,11 +532,11 @@ parse: function parse(input) {
     return true;
 }};
 
-	var attribute = '';
+  var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
 	let grammar_stack = [];
-<<<<<<< Updated upstream
-=======
 
     function getGrammarReport(obj){
         let str = `<!DOCTYPE html>
@@ -920,7 +785,6 @@ parse: function parse(input) {
                      </html>`;
                      return str;
     }
-    // .replace("₤","$")
     function buildGrammarReport(obj){
         if(obj == null){return "";}
         let str = "";
@@ -939,7 +803,6 @@ parse: function parse(input) {
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
 
@@ -957,317 +820,207 @@ parse: function parse(input) {
         return str;
     }
 
-//just for testing purposes
->>>>>>> Stashed changes
-	function printstrack(obj, lines){
-        if(Array.isArray(obj)){ //IS ARRAY
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            obj.forEach((value)=>{
-                if(typeof value === 'string' ){
-                     str = ""
-                     for(let i = 0; i < lines; i++){str = str + "- ";}
-                     console.log(str + value);
-                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-                    str = ""
-                    for(let i = 0; i < lines; i++){ str = str + "- ";}
-                    for(let key in value){
-                       console.log(`${str}${key}`);
-                       printstrack(value[key], lines + 1);
-                    }
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>Title</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
                 }
 
-                //printstrack(value, lines +1);
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+            </style>
+        </head>
+        <body>
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
             });
         }else if(typeof obj === 'string' ){ // IS STRING
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            console.log(str + obj);
+            return "";
         }else{// IS OBJECT
-            str = ""
-            for(let i = 0; i < lines; i++){ str = str + "- ";}
             for(let key in obj){
-                console.log(`${str}Key: ${key}`);
-                //console.log(obj[key]);
-                printstrack(obj[key], lines + 1);
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
             }
         }
-	}
-	
-function getASTTree(obj){
-    let str = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-  <!-- Bootstrap CSS -->
-  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
-  <title>Title</title>
-  <style>
-    #divheight{
-      height: 400px;
-      width: 1050px;
+        return str;
     }
-    .nav-tabs > li .close {
-      margin: -2px 0 0 10px;
-      font-size: 18px;
-    }
-    .nav-tabs2 > li .close {
-      margin: -2px 0 0 10px;
-      font-size: 18px;
-    }
-
-  </style>
-
-  <style>
-    body {
-      font-family: sans-serif;
-      font-size: 15px;
-    }
-
-    .tree ul {
-      position: relative;
-      padding: 1em 0;
-      white-space: nowrap;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .tree ul::after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    .tree li {
-      display: inline-block;
-      vertical-align: top;
-      text-align: center;
-      list-style-type: none;
-      position: relative;
-      padding: 1em 0.5em 0 0.5em;
-    }
-    .tree li::before, .tree li::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 50%;
-      border-top: 1px solid #ccc;
-      width: 50%;
-      height: 1em;
-    }
-    .tree li::after {
-      right: auto;
-      left: 50%;
-      border-left: 1px solid #ccc;
-    }
-    /*
-    ul:hover::after  {
-        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
-    }*/
-
-    .tree li:only-child::after, .tree li:only-child::before {
-      display: none;
-    }
-    .tree li:only-child {
-      padding-top: 0;
-    }
-    .tree li:first-child::before, .tree li:last-child::after {
-      border: 0 none;
-    }
-    .tree li:last-child::before {
-      border-right: 1px solid #ccc;
-      border-radius: 0 5px 0 0;
-    }
-    .tree li:first-child::after {
-      border-radius: 5px 0 0 0;
-    }
-
-    .tree ul ul::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 50%;
-      border-left: 1px solid #ccc;
-      width: 0;
-      height: 1em;
-    }
-
-    .tree li a {
-      border: 1px solid #ccc;
-      padding: 0.5em 0.75em;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 5px;
-      color: #333;
-      position: relative;
-      top: 1px;
-    }
-
-    .tree li a:hover,
-    .tree li a:hover + ul li a {
-      background: #e9453f;
-      color: #fff;
-      border: 1px solid #e9453f;
-    }
-
-    .tree li a:hover + ul li::after,
-    .tree li a:hover + ul li::before,
-    .tree li a:hover + ul::before,
-    .tree li a:hover + ul ul::before {
-      border-color: #e9453f;
-    }
-
-    /*# sourceMappingURL=sytle_.css.map */
-
-
-  </style>
-</head>
-<body>
-
-
-
-<div class="tree">
-  <ul id="tree-list">
-
-    <!--AQUI-->
-    `
-
-    str = str +printObj(obj, 0, "")
-    str =  str + `</ul>
-
-
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
-<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-</body>
-</html>
-`
-    return str;
-}
-
-
-function printObj(obj, lines, name){
-    console.log(obj)
-    let str = "";
-    let str_ = "";
-    if(Array.isArray(obj)) { //IS ARRAY
-        for (let i = 0; i < obj.length; i++){
-            str = str +printObj(obj[i], lines, "");
-        }
-    }else if (typeof obj === 'object' ){// IS OBJECT
-        if(obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT'){ // TODO select Parent
-            str = `<li>`;
-            str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT'? "/": "//" ));
-            str = str + getPredicados(obj.expresion);
-            str = str + `</li>`
-            console.log(str);
-        }else if(obj.tipo === 'EXPRESION'){
-            if (typeof obj.expresion === 'object'){
-                str = `<a>` + name + getName(obj.expresion) + `</a>`;
-            }
-        }
-    } else { // IS STRING
-        for (let i = 0; i < lines; i++) {
-
-            str_ = str_ + "- ";
-        }
-    }
-    return str;
-}
-
-
-
-function getName(obj){
-
-    let str = "";
-    if (obj.tipo ==='NODENAME'){
-        //console.log(obj)
-        return obj.nodename;
-    }else if(obj.tipo === 'SELECT_PARENT'){
-        return  obj.expresion;
-    }else if(obj.tipo === 'SELECT_CURRENT'){
-        return obj.expresion;
-    }else if(obj.tipo === 'ASTERISCO'){
-        return obj.valor;
-    }else if(obj.tipo === 'FUNCION_TEXT'){
-        return obj.valor;
-    }else if(obj.tipo === 'FUNCION_NODE'){
-        return obj.valor;
-    }else if(obj.tipo === 'SELECT_ATTRIBUTES'){
-        return obj.expresion;
-    }else {
-        console.log("Error 1")
-        console.log(obj)
-    }
-    return str
-}
-
-function getPredicados(obj){
-    let str = "";
-    console.log(obj)
-    if (obj.predicate !== null && obj.predicate !== undefined){
-
-        str = `<ul>\n`;
-        for (let i = 0; i < obj.predicate.length;i++){
-            str = str + getPredicado(obj.predicate[i]);
-        }
-        str = str + `</ul>`;
-    }
-    return str;
-}
-
-
-function getPredicado(obj){
-    let str = ""
-    if(obj.tipo === 'PREDICATE'){
-        //str = `<li><a> ` + obj.condicion.tipo + `</a>
-        //<ul>`
-        str = str + getPredicado(obj.condicion);
-        //str = str + `
-        //</ul></li>`;
-    }else if(obj.tipo === 'EXPRESION'){ //TODO to check
-        if('valor' in obj.expresion){
-            str = `<li><a>` + obj.expresion.valor + `</a></li>
-            `;
-
-        }else if('nodename' in obj.expresion){
-            str = `<li><a>` + obj.expresion.nodename + `</a></li>
-            `;
-
-        }else if(obj.expresion.tipo === 'SELECT_ATTRIBUTES'){
-            str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
-            `;
-
-        }else {
-            console.log("error 2")
-            console.log(obj)
-        }
-
-
-    }else{
-        str = `<li><a>` + obj.tipo + `</a>
-                <ul>`
-        str = str + getPredicado(obj.opIzq);
-        str = str + getPredicado(obj.opDer);
-        str = str + `</ul></li>`
-    }
-
-    return str;
-}
-
-
-
-
-
 
 	const { Objeto } = require('../model/xpath/Objeto');
 	const { Tipos } = require('../model/xpath/Enum');
+  const getASTTree = require('./ast_xpath');
 	var builder = new Objeto();
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -1677,81 +1430,68 @@ case 38:return 45
 break;
 case 39:return 6
 break;
-case 40:return 8
+case 40:return 23
 break;
-case 41:return 23
+case 41:return 24
 break;
-case 42:return 24
+case 42:return 33
 break;
-case 43:return 33
+case 43:return 30
 break;
-case 44:return 30
+case 44:return 31
 break;
-case 45:return 31
+case 45:return 27
 break;
-case 46:return 27
+case 46:return 36
 break;
-case 47:return 36
+case 47: attribute = ''; this.begin("string_doubleq"); 
 break;
-case 48: attribute = ''; this.begin("string_doubleq"); 
+case 48: attribute += yy_.yytext; 
 break;
-case 49: attribute += yy_.yytext; 
+case 49: attribute += "\""; 
 break;
-case 50: attribute += "\""; 
+case 50: attribute += "\n"; 
 break;
-case 51: attribute += "\n"; 
+case 51: attribute += " ";  
 break;
-case 52: attribute += " ";  
+case 52: attribute += "\t"; 
 break;
-case 53: attribute += "\t"; 
+case 53: attribute += "\\"; 
 break;
-case 54: attribute += "\\"; 
+case 54: attribute += "\'"; 
 break;
-case 55: attribute += "\'"; 
+case 55: attribute += "\r"; 
 break;
-case 56: attribute += "\r"; 
+case 56: yy_.yytext = attribute; this.popState(); return 37; 
 break;
-case 57: yy_.yytext = attribute; this.popState(); return 37; 
+case 57: attribute = ''; this.begin("string_singleq"); 
 break;
-case 58: attribute = ''; this.begin("string_singleq"); 
+case 58: attribute += yy_.yytext; 
 break;
-case 59: attribute += yy_.yytext; 
+case 59: attribute += "\""; 
 break;
-case 60: attribute += "\""; 
+case 60: attribute += "\n"; 
 break;
-case 61: attribute += "\n"; 
+case 61: attribute += " ";  
 break;
-case 62: attribute += " ";  
+case 62: attribute += "\t"; 
 break;
-case 63: attribute += "\t"; 
+case 63: attribute += "\\"; 
 break;
-case 64: attribute += "\\"; 
+case 64: attribute += "\'"; 
 break;
-case 65: attribute += "\'"; 
+case 65: attribute += "\r"; 
 break;
-case 66: attribute += "\r"; 
+case 66: yy_.yytext = attribute; this.popState(); return 38; 
 break;
-case 67: yy_.yytext = attribute; this.popState(); return 38; 
+case 67:return 5
 break;
-case 68:return 5
-break;
-<<<<<<< Updated upstream
 case 68: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
 rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68],"inclusive":true}}
-=======
-case 69:return 'anything'
-break;
-case 70: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
-break;
-}
-},
-rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\|\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^></]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[59,60,61,62,63,64,65,66,67],"inclusive":false},"string_doubleq":{"rules":[49,50,51,52,53,54,55,56,57],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,58,68,69,70],"inclusive":true}}
->>>>>>> Stashed changes
 });
 return lexer;
 })();

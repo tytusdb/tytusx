@@ -174,13 +174,13 @@ function secondFilter(_elements, _atributos, _nodetest, _predicate, _cadena, _am
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    continue;
+                    continue; // break;
                 }
                 x = Funciones_1.default.f4(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    break;
+                    break; //continue;
                 }
             }
             break;

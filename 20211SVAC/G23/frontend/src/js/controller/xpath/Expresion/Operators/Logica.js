@@ -73,21 +73,20 @@ function filterElements(e1, e2, desigualdad, _contexto) {
                 }
             }
         }
-        if (element.childs && tmp.length === 0) { // Hace match con algún hijo
+        if (element.childs) { // Hace match con algún hijo
             for (var j = 0; j < element.childs.length; j++) {
                 var child = element.childs[j];
                 condition = verificarDesigualdad(desigualdad, child.id_open, e1, child.value, e2);
+                console.log(desigualdad, child.id_open, e1, child.value, e2);
                 if (condition) {
                     tmp.push(element);
                     break;
                 }
             }
         }
-        if (tmp.length === 0) { // Hace match con el elemento
-            condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2);
-            if (condition)
-                tmp.push(element);
-        }
+        condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2); // Hace match con el elemento
+        if (condition)
+            tmp.push(element);
     }
     return tmp;
 }

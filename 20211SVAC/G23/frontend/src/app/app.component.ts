@@ -52,7 +52,7 @@ export class AppComponent {
   onSubmit() {
     var iconvlite = require('iconv-lite');
     let grammar_value = (<HTMLSelectElement>document.getElementById('grammar_selector')).value;
-    if (this.entrada != "" && this.consulta != "") {
+    if (this.entrada != "" && this.consulta != "" && this.entrada != '<?xml version="1.0" encoding="UTF-8"?>') {
       const x = {
         xml: this.entrada, // documento XML
         query: this.consulta, // consultas
