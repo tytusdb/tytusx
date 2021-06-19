@@ -42,6 +42,7 @@ export class Consulta implements Instruccion {
     return salida;
   }
 
+
   obtenerSalida(
     pos: number,
     ent: Entorno,
@@ -52,21 +53,22 @@ export class Consulta implements Instruccion {
     let actualNode: Nodo = this.listaNodos[pos];
     switch (actualNode.getTipo()) {
       case TipoNodo.IDENTIFIER:
-        //Revisar Si tiene predicado este nodo.
-        let predicado: Predicate | undefined = actualNode.getPredicado();
-        if (predicado != undefined) {
-         let auxSal;
-          [auxSal, rompeCiclo] = this.obtenerConsultaPredicado(predicado, pos, ent, elemAux, rompeCiclo);
-          salida += auxSal;
-
-        } else {
           //Buscar si este id existe en el entorno.
           //Antes de entrar al foreach revisar si se debe hacer para cada elemento  o no.
           for (let i = 0; i < ent.tsimbolos.length; i++) {
+            
             //Ver si este simbolo es igual a actualNode.getNombre()
             let elem = ent.tsimbolos[i].valor;
             if (elem.getNombre() === actualNode.getNombre()) {
               //Si existe este simbolo en el entorno.
+              //Revisar Si tiene predicado este nodo.
+              let predicado: Predicate | undefined = actualNode.getPredicado();
+              if (predicado != undefined) {
+                let auxSal;
+                [auxSal, rompeCiclo] = this.obtenerConsultaPredicado(predicado, pos, ent, elemAux, rompeCiclo);
+                salida += auxSal;
+                break;
+              }              
               //1. Revisar si es el ultimo nodo a buscar
               if (pos + 1 < this.listaNodos.length) {
                 //Aun existen mas nodos en la consulta, ir a buscar eso
@@ -104,7 +106,7 @@ export class Consulta implements Instruccion {
               break;
             }
           }
-        }
+        
         break;
       case TipoNodo.ATRIBUTO:
         //Ver si es @algo o @*
@@ -283,7 +285,7 @@ export class Consulta implements Instruccion {
               let elem = e.valor;
               if (elem.getTipo() === Tipo.STRING) {
                 //Es texto, entonces devolver.
-                salida += elem.valor;
+                salida += elem.valor+"\n";
               }
               //Ver si el nodo es de tipo //
               if (!actualNode.isFromRoot() && elem.getTipo() == Tipo.ETIQUETA) {
@@ -300,13 +302,12 @@ export class Consulta implements Instruccion {
             break;
           case "node()":
             //Todo lo que tenga adentro el nodo en el entorno actual
-            console.log(actualNode.getValor());
             ent.tsimbolos.forEach((e: any) => {
               let elem = e.valor;
               if (elem.getTipo() === Tipo.ETIQUETA) {
                 salida += this.getConsultaObjeto(elem, 0);
               } else if (elem.getTipo() == Tipo.STRING) {
-                salida += elem.valor;
+                salida += elem.valor+"\n";
               }
             });
             break;
@@ -1069,18 +1070,20 @@ export class Consulta implements Instruccion {
     //1. Obtener el valor del predicado. (Para que se le asigne tipo tambien)
     let predValue = predicado.getValor(ent);
     //2. Obtener el tipo del predicado. 
-    console.log("predValue: ",predValue);
     let predTipo = predicado.getTipo();
+    if(predValue === null || predValue === undefined){
+      return [salida, rompeCiclo];      
+    }
     switch(predTipo){
       case TipoPrim.INTEGER:
         //Ver si el numero es coherente (mayor a 0);
+        ent = ent.padre;
         if(predValue < 1){
           return [salida, rompeCiclo];
         }
         //Contar las veces que sean necesarias para obtener el nodo requerido
         //Buscar actualNode n veces.
         let veces = 1;
-        console.log(ent.nombre);
         ent.tsimbolos.forEach((e: any) => {
           let elem = e.valor;
           
@@ -1111,13 +1114,14 @@ export class Consulta implements Instruccion {
       case TipoPrim.FUNCION:
         //Un TipoPrim.Funcion devuelve un Entorno temporal que contiene
         //Todas las etiquetas a escribir.
+        console.log("predValue: ",predValue);
         predValue.tsimbolos.forEach((e: any) => {
             let elem = e.valor;
             //Ver si es el ultimo nodo
             if(pos+ 1 < this.listaNodos.length){
               //Aun faltan mas nodos, para cada elemento continuar la consulta con su entorno respectivo
+              console.log("TEHRES MORE: ", elem.getNombre())
               let auxSal: String = "";
-
               [auxSal, rompeCiclo] = this.obtenerSalida(pos+1, elem.valor, elemAux, rompeCiclo);
               salida += auxSal;
             }else{

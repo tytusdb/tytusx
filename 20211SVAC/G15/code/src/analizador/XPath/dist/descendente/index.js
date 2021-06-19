@@ -6,11 +6,9 @@ function AnalisisXPath(texto){
     var Raiz = new AST();
     var CodigoGraphvizRecuperado= Raiz.RecorrerAST(analisis.diagramaAST);
     Raiz.LimpiarVariableGraph();
-    console.log(CodigoGraphvizRecuperado);
     
-    return {msj:analisis.msj};
+    return {objeto:analisis,DotAst:CodigoGraphvizRecuperado,msj:'Analisis Descendente XPath finalizado.',nodo:analisis.diagramaAST};
     
-   // return {objeto:analisis,DotAst:CodigoGraphvizRecuperado,msj:'Analisis Ascendente XPath finalizado.'};
 
 }
 //AnalisisXPath('//bookstore[7+3 or 4*3 or price=12] | //racknack//braith//caicul[7+3 and price>32 or price=12]| //totis//chel[7+3 and price>32 or price=12]');

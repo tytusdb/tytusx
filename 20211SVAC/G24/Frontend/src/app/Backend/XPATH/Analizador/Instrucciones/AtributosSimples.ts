@@ -15,7 +15,27 @@ export default class AtributoSimple extends Instruccion {
 
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+
+        let salidas = new tablaSimbolos();
+
+        if(this.tipoAtributo==="*"){
+            for (var key of tabla.getTabla()) {
+                if(key.getidentificador() == this.Operacion){
+                    if(key.getvalor() instanceof tablaSimbolos){
+                      for(let sim of key.getvalor().getTabla()){
+                        salidas.setVariable(sim)
+                      }
+                      
+                    }
+                    else{
+                      
+                    }
+                }
+            }
+        }else if(this.tipoAtributo==="."){
+
+        }
+        
     }
     
     getNodosAST(): nodoAST {

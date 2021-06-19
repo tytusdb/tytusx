@@ -31,6 +31,11 @@ export class Nodo implements Expresion{
         this.fromRoot = fromRoot;
     }
 
+    public getValorInicial(){
+        return this.nombre;
+    }
+
+
     public getValor(){
         if(this.NodeTest != undefined){
             return this.NodeTest.getNombre();

@@ -12,4 +12,6 @@ class NodoAST{
     }
 
 }
-export default NodoAST;
+//export default NodoAST;
+module.exports = NodoAST
+//exports.NodoAST = NodoAST;

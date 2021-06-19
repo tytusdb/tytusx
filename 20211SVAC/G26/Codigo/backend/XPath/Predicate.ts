@@ -16,7 +16,7 @@ export class Predicate implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(entorno:Entorno){
+    getTipo(){
         return this.tipo;
     }
 
@@ -24,6 +24,10 @@ export class Predicate implements Expresion{
         let resultado = this.expresion.getValor(ent);
         this.tipo = this.expresion.getTipo(ent);
         return resultado;
+    }
+
+    getValorInicial(ent: Entorno){
+
     }
 
 

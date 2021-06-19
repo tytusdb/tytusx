@@ -2,6 +2,7 @@ import { Entorno } from "../AST/Entorno";
 import { Tipo } from "../AST/Tipo";
 import errores from "../Global/ListaError";
 import { Expresion} from "../Interfaz/expresion";
+import { Consulta } from "../XPath/Consulta";
 
 export class Primitiva implements Expresion {
     linea: number;
@@ -19,8 +20,11 @@ export class Primitiva implements Expresion {
         return this.tipo;
     }
 
+    getValorInicial(ent: Entorno){
+        return this.valor;
+    }
+
     getValor(ent: Entorno){
-        console.log(this.tipo)
         if (this.tipo === TipoPrim.IDENTIFIER){
             /* SE BUSCAN LAS ETIQUETAS CON ESTE NOMBRE */
             if (ent.existeSimbolo(this.valor)){
@@ -70,11 +74,11 @@ export class Primitiva implements Expresion {
                             indice++;
                         }
                     })
-                    //3. al terminar devolver indice + 1
+                    //3. al terminar devolver indice
                     //4. Cambiar su tipo a tipo INTEGER
                     this.tipo = TipoPrim.INTEGER
                     if(indice > 0){
-                        return indice + 1;
+                        return indice;
                     }else{
                         return 0;
                     }
@@ -83,7 +87,30 @@ export class Primitiva implements Expresion {
                     return this.valor;
             }
 
-        }else
+        }else if(this.tipo == TipoPrim.CONSULTA){
+            this.tipo = TipoPrim.FUNCION
+            //Consulta devuelve TRUE si la ruta existe
+            //Es una lista de nodos. entonces crear una consulta 
+            let tempConsulta: Consulta = new Consulta(this.valor, this.linea, this.columna)
+            //Obtener padre, porque se deben buscar en todos los que tengan ent.nombre
+            let entTemporal: Entorno = new Entorno("Temporal", null, null)
+
+            let padre = ent.padre;
+            padre.tsimbolos.forEach((e: any) => {
+                let elem = e.valor;
+                if(elem.getNombre() === ent.nombre){
+                    //Sobre este entorno ejecutar la consulta para ver si existe la ruta.
+                    let result = tempConsulta.ejecutar(elem.valor);
+                    if(result.length > 0 ){
+                        //La consulta si existe
+                        entTemporal.agregarSimbolo(elem.getNombre(), elem)
+                    }else{
+                    }
+                }
+            });
+            return entTemporal;
+        }
+        else
             return this.valor;
     }
 }
@@ -97,5 +124,6 @@ export enum TipoPrim{
     DOT,
     FUNCION,
     BOOLEAN,
+    CONSULTA,
     ERROR,
 }

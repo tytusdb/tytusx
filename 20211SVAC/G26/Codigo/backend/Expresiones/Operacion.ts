@@ -3,6 +3,7 @@ import { Tipo } from "../AST/Tipo";
 import { Expresion } from "../Interfaz/expresion";
 import { TipoPrim } from "./Primitiva";
 import errores from '../Global/ListaError';
+import { Nodo, TipoNodo } from "../XPath/Nodo";
 
 export class Operacion implements Expresion{
 
@@ -23,26 +24,36 @@ export class Operacion implements Expresion{
     getTipo(ent: Entorno){
         return this.tipo;
     }
+    
+    getValorInicial(ent: Entorno){
+        return "";
+    }
 
     getValor(entorno: Entorno){
+        if(this.operacion === TipoOperacion.PAR){
+            //Devolver la expresion del parentesis
+            let res = this.op_izq.getValor(entorno);
+            this.tipo = this.op_izq.getTipo(entorno);
+            return res;
+        }
+
         let opIzq;
         let opDer;
         let resultado;
         let aux;
-        let valIzq;
+        let valIzq: any;
         let typeIzq;
-        let valDer;
+        let valDer: any;
         let typeDer;
-
-        if(this.op_izq.getTipo(entorno) != TipoPrim.ATRIBUTO){
+        if(this.op_izq.getTipo(entorno) != TipoPrim.ATRIBUTO && this.op_izq.getTipo(entorno) != TipoPrim.CONSULTA){
             valIzq = this.op_izq.getValor(entorno);
-            typeIzq = this.op_izq.getTipo(entorno);
         }
+        typeIzq = this.op_izq.getTipo(entorno);
+
         if(this.op_der.getTipo(entorno) != TipoPrim.ATRIBUTO){
             valDer = this.op_der.getValor(entorno);
-            typeDer = this.op_der.getTipo(entorno);
         }
-        
+        typeDer = this.op_der.getTipo(entorno);
         switch(this.operacion){
             case TipoOperacion.SUMA:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
@@ -899,13 +910,115 @@ export class Operacion implements Expresion{
                     case TipoPrim.CADENA:
                         switch(typeDer){
                             case TipoPrim.ATRIBUTO:
-                                console.log("CADENA = ATRIBUTO");
+                                this.tipo = TipoPrim.FUNCION
                                 valIzq = this.op_izq.getValor(entorno);
-                                
-                                break;
+                                valDer = this.op_der.getValorInicial(entorno);
+                                //Esta operacion devuelve un entorno temporan con los elementos encontrados
+                                let entTemporal: Entorno = new Entorno("Temporal", null, null);
+                                //Obtener entorno padre.
+                                let padre = entorno.padre;
+                                //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
+                                padre.tsimbolos.forEach((e: any) => {
+                                    let elem = e.valor;
+                                    if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
+                                        //Se encontro, ver si este elemento tiene el atributo
+                                        //  que se encuentre en valDer
+                                        let flag = false;
+                                        elem.valor.tsimbolos.forEach((c2: any) => {
+                                            let tmp = c2.valor;
+
+                                            if(tmp.getTipo() === Tipo.ATRIBUTO && (valDer === "*" || tmp.getNombre() === valDer)){
+                                                //Por ultimo comparar, si el valor del atributo
+                                                //Es igual a la cadena
+                                                if(valIzq === tmp.getValor()){
+                                                    //Cadena === valoratributo
+                                                    //Se agrega el simbolo. (elem)
+                                                    if(!flag){
+                                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                                        flag = true;
+                                                    }
+                                                }
+                                            }
+
+                                        })
+                                    }
+                                })
+                                return entTemporal;
                         }
                         break;
                     case TipoPrim.ATRIBUTO:
+                        switch(typeDer){
+                            case TipoPrim.CADENA:
+                                this.tipo = TipoPrim.FUNCION
+                                valDer = this.op_der.getValor(entorno);
+                                //ValIzq es el nombre del atributo que se quiere buscar.
+                                valIzq = this.op_izq.getValorInicial(entorno);
+                                //Esta operacion devuelve un entorno temporan con los elementos encontrados
+                                let entTemporal: Entorno = new Entorno("Temporal", null, null);
+                                //Obtener entorno padre.
+                                let padre = entorno.padre;
+                                //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
+                                padre.tsimbolos.forEach((e: any) => {
+                                    let elem = e.valor;
+                                    if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
+                                        //Se encontro, ver si este elemento tiene el atributo
+                                        //  que se encuentre en valDer
+                                        let flag = false;
+                                        elem.valor.tsimbolos.forEach((c2: any) => {
+                                            let tmp = c2.valor;
+                                            if(tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)){
+                                                //Por ultimo comparar, si el valor del atributo
+                                                //Es igual a la cadena
+                                                if(valDer === tmp.getValor()){
+                                                    //Cadena === valoratributo
+                                                    //Se agrega el simbolo. (elem)
+                                                    if(!flag){
+                                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                                        flag = true;
+                                                    }
+                                                }
+                                            }
+
+                                        })
+                                    }
+                                })
+                                return entTemporal;
+                            case TipoPrim.ATRIBUTO:
+                                    //Atributo con Atributo:
+                                    this.tipo = TipoPrim.FUNCION
+                                    valDer = this.op_der.getValorInicial(entorno);
+                                    //ValIzq es el nombre del atributo que se quiere buscar.
+                                    valIzq = this.op_izq.getValorInicial(entorno);
+                                    //Esta operacion devuelve un entorno temporan con los elementos encontrados
+                                    let entTemporalAT: Entorno = new Entorno("Temporal", null, null);
+                                    //Obtener entorno padre.
+                                    let padreAT = entorno.padre;
+                                    //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
+                                    padreAT.tsimbolos.forEach((e: any) => {
+                                        let elem = e.valor;
+                                        if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
+                                            //Se encontro, ver si este elemento tiene el atributo
+                                            //  que se encuentre en valDer
+                                            let flag = false;
+                                            elem.valor.tsimbolos.forEach((c2: any) => {
+                                                let tmp = c2.valor;
+                                                if(tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)){
+                                                    //Por ultimo comparar, si el valor del atributo
+                                                    //Es igual a la cadena
+                                                    if(valDer === valIzq){
+                                                        //Cadena === valoratributo
+                                                        //Se agrega el simbolo. (elem)
+                                                        if(!flag){
+                                                            entTemporalAT.agregarSimbolo(elem.getNombre(), elem);
+                                                            flag = true;
+                                                        }
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    })
+                                    return entTemporalAT;                                   
+                        }                        
                         break;
 
 
@@ -925,9 +1038,7 @@ export class Operacion implements Expresion{
                                     let indice = 1;
                                     padre.tsimbolos.forEach((e: any) => {
                                         let elem = e.valor;
-                                        console.log("indice: "+indice, " = ", der)                                        
                                         if(indice === der && elem.getNombre() === entorno.nombre){
-                                            console.log("WOWYES")
                                             //Si son iguales, meter al array de entornos.
                                             entTemporal.agregarSimbolo(entorno.nombre, elem);
                                         }
@@ -950,6 +1061,7 @@ export class Operacion implements Expresion{
                         break;
 
                     case TipoPrim.IDENTIFIER:
+                        console.log("OK ID")
                         this.tipo = TipoPrim.FUNCION
                         switch(typeDer){
                             case TipoPrim.INTEGER :
@@ -958,13 +1070,35 @@ export class Operacion implements Expresion{
                             case TipoPrim.DOUBLE :
                                 return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE)
                                    
-                            
+                            case TipoPrim.CADENA:
+                                console.log("Hmmm")
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUALQUE);
+                                
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }                        
                         break;
+                    case TipoPrim.CONSULTA:
+                        //Merge /hola/@hola = "asd" <-- 
+                        this.tipo = TipoPrim.FUNCION;
+                        let entTemporal: Entorno = new Entorno("Temporal", null, null)
+                        switch(typeDer){
+                            case TipoPrim.CADENA:
+                            let l: Array<Nodo> = this.op_izq.getValorInicial(entorno)
+                            let fromR = l[l.length-1].isFromRoot()
+                            let lastNodeName = l[l.length-1].getNombre()
+                            let entConsultaTemp = this.op_izq.getValor(entorno);                            
+                           entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUALQUE  )
+                            return entTemporal;
+                            
+                            default:
+                                return null;
+                                
+
+                        }                               
                     default: 
                         break;
+                
                 }
                 break;
             case TipoOperacion.DIFERENTEQUE:
@@ -1025,10 +1159,81 @@ export class Operacion implements Expresion{
                             break;
                         
                         }
-                    case TipoPrim.CADENA:
-                        break;
-                    case TipoPrim.ATRIBUTO:
-                        break;
+                        case TipoPrim.CADENA:
+                            switch(typeDer){
+                                case TipoPrim.ATRIBUTO:
+                                    this.tipo = TipoPrim.FUNCION
+                                    valIzq = this.op_izq.getValor(entorno);
+                                    valDer = this.op_der.getValorInicial(entorno);
+                                    //Esta operacion devuelve un entorno temporan con los elementos encontrados
+                                    let entTemporal: Entorno = new Entorno("Temporal", null, null);
+                                    //Obtener entorno padre.
+                                    let padre = entorno.padre;
+                                    //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
+                                    padre.tsimbolos.forEach((e: any) => {
+                                        let elem = e.valor;
+                                        if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
+                                            //Se encontro, ver si este elemento tiene el atributo
+                                            //  que se encuentre en valDer
+                                            elem.valor.tsimbolos.forEach((c2: any) => {
+                                                let tmp = c2.valor;
+    
+                                                if(tmp.getTipo() === Tipo.ATRIBUTO && (valDer === "*" || tmp.getNombre() === valDer)){
+                                                    //Por ultimo comparar, si el valor del atributo
+                                                    //Es igual a la cadena
+                                                    if(valIzq != tmp.getValor()){
+                                                        //Cadena === valoratributo
+                                                        //Se agrega el simbolo. (elem)
+                                                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                                    }
+                                                }
+    
+                                            })
+                                        }
+                                    })
+                                    return entTemporal;
+                            }
+                            break;
+                        case TipoPrim.ATRIBUTO:
+                            switch(typeDer){
+                                case TipoPrim.CADENA:
+                                    this.tipo = TipoPrim.FUNCION
+                                    valDer = this.op_der.getValor(entorno);
+                                    //ValIzq es el nombre del atributo que se quiere buscar.
+                                    valIzq = this.op_izq.getValorInicial(entorno);
+                                    //Esta operacion devuelve un entorno temporan con los elementos encontrados
+                                    let entTemporal: Entorno = new Entorno("Temporal", null, null);
+                                    //Obtener entorno padre.
+                                    let padre = entorno.padre;
+                                    //Con el padre buscar todos las etiquetas que tengan nombre entorno.nombre
+                                    padre.tsimbolos.forEach((e: any) => {
+                                        let elem = e.valor;
+                                        if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
+                                            //Se encontro, ver si este elemento tiene el atributo
+                                            //  que se encuentre en valDer
+                                            let flag = false;
+                                            elem.valor.tsimbolos.forEach((c2: any) => {
+                                                let tmp = c2.valor;
+                                                if(tmp.getTipo() === Tipo.ATRIBUTO && (valIzq === "*" || tmp.getNombre() === valIzq)){
+                                                    //Por ultimo comparar, si el valor del atributo
+                                                    //Es igual a la cadena
+                                                    if(valDer != tmp.getValor()){
+                                                        //Cadena === valoratributo
+                                                        //Se agrega el simbolo. (elem)
+                                                        if(!flag){
+                                                            entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                                                            flag = true;
+                                                        }
+                                                    }
+                                                }
+    
+                                            })
+                                        }
+                                    })
+                                    return entTemporal;
+                         
+                            }                        
+                            break;
 
 
                     case TipoPrim.FUNCION:
@@ -1215,6 +1420,162 @@ export class Operacion implements Expresion{
             }
         })
         return entTemporal;        
+    }
+
+    resolverOperacionIdCadena(valIzq: any, valDer: any, entorno: Entorno, relacional: TipoOperacion): Entorno{
+        let der: string = valDer;
+        let izq = valIzq.getNombre()
+        //Devolver un entorno con los simbolos encontrados
+        let entTemporal: Entorno = new Entorno("Temporal", null, null);
+        //1. Obtener entorno padre.
+        let padre = entorno.padre;
+        //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
+        console.log("LIONG: ", entorno.padre.tsimbolos.length);
+        padre.tsimbolos.forEach((e: any) => {
+            console.log("wat: ",e.valor.nombre)
+            let elem = e.valor;
+            if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
+                //Se encontro, ahora buscar en los simbolos de este elem
+                //si se encuentra el identificador (valIzq)
+                console.log("WOAH: ",elem.valor.tsimbolos.length)
+                elem.valor.tsimbolos.forEach((insd: any) => {
+                    let elin = insd.valor;
+                    if(elin.getNombre() === izq ){
+                        //Buscar el texto de este elemento.
+                        let texto = this.buscarTexto(elin)
+                        der = der.replace("\"", "")
+                        console.log("TEXTO : ", texto + " == ", der)
+                        if(texto != null){
+                            //Comparar los textos
+                            switch(relacional){
+                                case TipoOperacion.MAYORQUE:
+                                    if(texto > der){
+                                        //Si lo es, meter al entorno temporal.
+                                        entTemporal.agregarSimbolo(elem.nombre, elem);
+                                    }                                    
+                                    break;
+                                case TipoOperacion.MENORQUE:
+                                    if(texto < der){
+                                        //Si lo es, meter al entorno temporal.
+                                        entTemporal.agregarSimbolo(elem.nombre, elem);
+                                    }                                    
+                                    break;
+                                case TipoOperacion.MAYORIGUALQUE:
+                                    if(texto >= der){
+                                        //Si lo es, meter al entorno temporal.
+                                        entTemporal.agregarSimbolo(elem.nombre, elem);
+                                    }                                    
+                                    break;
+                                case TipoOperacion.MENORIGUALQUE:
+                                    if(texto <= der){
+                                        //Si lo es, meter al entorno temporal.
+                                        entTemporal.agregarSimbolo(elem.nombre, elem);
+                                    }                                    
+                                    break;
+                                case TipoOperacion.IGUALQUE:
+                                    if(texto === der){
+                                        //Si lo es, meter al entorno temporal.
+                                        entTemporal.agregarSimbolo(elem.nombre, elem);
+                                    }                                    
+                                    break;
+                                case TipoOperacion.DIFERENTEQUE:
+                                    if(texto != der){
+                                        //Si lo es, meter al entorno temporal.
+                                        entTemporal.agregarSimbolo(elem.nombre, elem);
+                                    }                                    
+                                    break;
+                                
+                            }
+                        }
+                    }
+                });
+            }
+        })
+        return entTemporal;        
+    }    
+
+    resolverConsultaRecursiva(entConsultaTemp:any, valDer: any, lastNodeName: String, isFromRoot: Boolean, op: TipoOperacion){
+        let entTemporal: Entorno = new Entorno("Temporal", null, null)
+        //Sobre estos ver quienes tienen valDer
+        let flag = false;
+        entConsultaTemp.tsimbolos.forEach((e: any) => {
+            let elemEnt = e.valor;
+            flag = false;
+            elemEnt.valor.tsimbolos.forEach((c1: any) => {
+                let elem = c1.valor;
+                if(elem.getTipo() === Tipo.ETIQUETA){
+                    elem.valor.tsimbolos.forEach((c2: any) => {
+                        let elemfinal = c2.valor;
+                        if(op === TipoOperacion.IGUALQUE){
+                            if(elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() === valDer){
+                                if(!flag){
+                                    entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
+                                    flag = true;
+                                }
+                            }
+                            else if(elem.getTipo() === Tipo.ETIQUETA && !isFromRoot){
+                                //Buscar recursivamente atributos.
+                                let found = this.buscarAtributosRecursivamente(elem, valDer, lastNodeName, op);
+                                if(found){
+                                    if(!flag){
+                                        entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
+                                        flag = true;
+                                    }
+                                }
+                            }                        
+                        }else if(op === TipoOperacion.DIFERENTEQUE){
+                            if(elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() !== valDer){
+                                if(!flag){
+                                    entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
+                                }
+                            }
+                            else if(elem.getTipo() === Tipo.ETIQUETA && !isFromRoot){
+                                //Buscar recursivamente atributos.
+                                let found = this.buscarAtributosRecursivamente(elem, valDer, lastNodeName, op);
+                                if(found){
+                                    if(!flag){
+                                        entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
+                                        flag = true;
+                                    }
+                                }
+                            }                        
+                        }
+                    });
+
+            }
+            });
+        })
+    return entTemporal;     
+    }
+
+    buscarAtributosRecursivamente(elem: any, valDer: any, lastNodeName: String, op: TipoOperacion): boolean{
+        for(let i = 0; i < elem.valor.tsimbolos.length; i++){
+            let at = elem.valor.tsimbolos[i].valor;
+            if(op === TipoOperacion.IGUALQUE){
+                if(at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() === valDer){
+                    return true;
+                }
+                else if(at.getTipo() === Tipo.ETIQUETA){
+                    //Buscar recursivamente atributos.
+                    let found = this.buscarAtributosRecursivamente(at, valDer, lastNodeName, op);
+                    if(found){
+                            return true;
+                    }
+                }                        
+            }else if(op === TipoOperacion.DIFERENTEQUE){
+                if(at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() !== valDer){
+                    return true
+                }
+                else if(at.getTipo() === Tipo.ETIQUETA){
+                    //Buscar recursivamente atributos.
+                    let found = this.buscarAtributosRecursivamente(at, valDer, lastNodeName, op);
+                    if(found){
+                        return true;
+                    }
+                }                        
+            }
+        }
+        return false;
     }
 
     resolverOperacionNumeroId(valIzq: any, valDer: any, entorno: Entorno, relacional: TipoOperacion, TipoNumero: TipoPrim): Entorno{

@@ -84,7 +84,12 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- return $$[$0-1];
+ 
+    var nodo = new Objeto('RAIZ','',0, 0,null,null); 
+    nodo.agregarObjeto($$[$0-1]);
+    var arreglo =[nodo];
+    return arreglo;
+
 break;
 case 2: case 6:
  this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
