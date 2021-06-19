@@ -150,7 +150,8 @@ ESTRUCTURAHTML:
 ;
 
 CONTENIDO:
-            ENCABEZADO ELEMENTO ACCIONWHE ACCIONOBY 
+            ENCABEZADO ELEMENTO ACCIONWHE ACCIONOBY
+            |ENCABEZADO ELEMENTO ACCIONRET 
 ;
 
 ENCABEZADO:
@@ -287,6 +288,16 @@ EXPRESIONXPA:
         | tk_identificador                                       {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $tk_identificador ] );} 
         | tk_asterisco CAJETIN                                   {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $tk_asterisco, $CAJETIN ] );} 
 ;
+     //   | tk_identificador PRODUCT COMPARACION
+
+COMPARACION:
+         ITEMSXPA 
+;
+
+ITEMSXPA:
+         tk_identificador
+        |tk_numero
+;
 
 SIMBOLOS:
           tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_diagonal ,$CONTENIDODOS] );}
@@ -356,10 +367,11 @@ CONTENIDOXPA:
 
 CONTENIDODOS:
          tk_arroba ARROPROD                                     {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_arroba, $ARROPROD] );}
-         |tk_identificador                                      {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_identificador] );}
+//         |tk_identificador                                      {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_identificador] );}
          |tk_asterisco                                          {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_asterisco] );}        
          | tk_puntos_seguidos                                   {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_puntos_seguidos] );}
          | RESERVA                                              {$$= new Nodo("Porduccion","CONTENIDODOS",[ $RESERVA] );}
+         | EXTRA
 ;
 
 CONTENIDO_P:
@@ -370,6 +382,21 @@ CONTENIDO_P:
 CAJETIN:
         tk_corchete_izq PREDICADO tk_corchete_der               {$$= new Nodo("Porduccion","CAJETIN",[$tk_corchete_izq, $PREDICADO, $tk_corchete_der ] );}
         |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}
+;
+
+EXTRA:
+         tk_numero                                               {$$= $tk_numero;}   
+        |tk_identificador                                        {$$= new Nodo("Porduccion","ID",[$tk_identificador]);}
+        |tk_hilera                                               {$$= new Nodo("Porduccion","CADENA",[$tk_hilera.slice(1,-1)]);}
+        |EXTRA tk_mas EXTRA                                        {$$= new Nodo("Porduccion","SUM",[$1,$tk_mas,$3]);}  
+        |EXTRA tk_menos EXTRA                                      {$$= new Nodo("Porduccion","RES",[ $1,$2,$3]);} 
+        |EXTRA tk_div EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |EXTRA tk_igual EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |EXTRA tk_indiferente EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |EXTRA tk_menor_igual EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |EXTRA tk_mayor_igual EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |EXTRA tk_mod EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
+        |EXTRA tk_mayor EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
 ;
 
 PREDICADO:
