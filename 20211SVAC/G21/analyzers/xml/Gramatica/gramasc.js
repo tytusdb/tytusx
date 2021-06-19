@@ -94,8 +94,11 @@ case 2: case 3: case 17: case 18: case 19:
 break;
 case 4:
  
-                        console.error('Error sintáctico: ' + yytext + ', linea: ' + this._$.first_line + ', columna: ' + this._$.first_column); 
                             errores.push({'Error Type': 'Sintactico', 'Row': _$[$0].first_line, 'Column': _$[$0].first_column, 'Description': 'No se esperaba el caracter: '+yytext });
+                            this.$ = new Raiz({},encoding, errores ); 
+                            errores = [];
+                            encoding = [];
+                            return this.$;
                           
 break;
 case 5:
@@ -105,7 +108,7 @@ case 6:
  this.$ = new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]);
                                                                                                 if($$[$0-7] != $$[$0-1]) {
                                                                                                     //errores.push({error: 'Las etiquetas '+$$[$0-7]+' y '+$$[$0-1]+' no coinciden', tipo: 'Semantico', linea: this._$.first_line, columna: this._$.first_column});
-                                                                                                    errores.push({'Error Type': 'Sintactico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$$[$0-7]+' y '+$$[$0-1]+' no coinciden' });
+                                                                                                    errores.push({'Error Type': 'Semantico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$$[$0-7]+' y '+$$[$0-1]+' no coinciden' });
                                                                                                 };
                                                                                             
 break;
@@ -113,7 +116,7 @@ case 7:
  this.$ = new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[]); 
                                                                                                 if($$[$0-7] != $$[$0-1]) {
                                                                                                     //errores.push({error: 'Las etiquetas '+$$[$0-7]+' y '+$$[$0-1]+' no coinciden', tipo: 'Semantico', linea: this._$.first_line, columna: this._$.first_column})
-                                                                                                    errores.push({'Error Type': 'Sintactico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$$[$0-7]+' y '+$$[$0-1]+' no coinciden' });
+                                                                                                    errores.push({'Error Type': 'Semantico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$$[$0-7]+' y '+$$[$0-1]+' no coinciden' });
                                                                                                 };
                                                                                             
 break;
