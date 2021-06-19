@@ -113,6 +113,12 @@ let listaTokens=[];
 let parserXML;
 let globalencod;
 let codificador = document.getElementById("codencod");
+
+let btnCargarxquery = document.getElementById("btnCargarxquery");
+let parserXQUERY;
+let editorXQUERY = document.getElementById("consolaXQUERY");
+
+
 let textoEntrada = `<?xml version="1.0" encoding="ASCII"?>
 <mundo>
   <continente name="Europa">
@@ -221,6 +227,19 @@ botonCargar2.addEventListener("click", () => {
 
 
 })
+btnCargarxquery.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "ASCENDENTE";
+
+  // Analizador XML por la izquierda
+  parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  console.log(parserXQUERY);
+
+
+})
+
 document.getElementById("ast").addEventListener("click", () => {
     let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
   
