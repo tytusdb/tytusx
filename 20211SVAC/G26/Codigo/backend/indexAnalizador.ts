@@ -8,6 +8,8 @@ import mierror from './Global/Error';
 import * as XPathGramAsc from './Gramatica/XPath_GramaticaAsc';
 import * as XPathGramDesc from "./Gramatica/XPath_GramaticaDesc";
 import { Consulta } from './XPath/Consulta';
+import {cstXmlAsc, cstXmlDesc, cstXpathAsc, cstXpathDesc} from './Reporte/CST';
+import {Nodo} from './Reporte/Nodo';
 
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
@@ -41,6 +43,7 @@ class Analizador{
 
   xmlDescendente(entrada:string){    
     console.log("---GRAMATICA DESCENDENTE---");
+    cstXmlDesc.id = 0;
     const objetos = XMLGramDesc.parse(entrada);
     objetos.forEach((elem: any) => {
       if (elem instanceof Objeto || elem instanceof Atributo){
@@ -53,6 +56,7 @@ class Analizador{
 
   xmlAscendente(entrada:string){
     console.log("---GRAMATICA ASCENDENTE---")
+    cstXmlAsc.id = 0;
     const objetos = XMLGramAsc.parse(entrada);
     this.global = new Entorno('global', null, null);  
     if(objetos !== null){    
@@ -70,30 +74,36 @@ class Analizador{
     });*/
   }
 
-  XPathAscendente(entrada: string) {
+  XPathAscendente(entrada: string): String {
     console.log("-- XPATH ASCENDENTE -- ")
     const consultas = XPathGramAsc.parse(entrada);
+    let salida = "";
     console.log("---------------------------------------")
     consultas.forEach((elem: Consulta) => {
         console.log("CONSULTA: "+ elem.ToString());
         let resultado = elem.ejecutar(this.global);
+        salida += resultado;
         console.log("-----------RESULTADO----------------");
         console.log(resultado);
         console.log("---------------FIN---------------------")
-    });  
+    });
+    return salida;
   }
 
-  XPathDescendente(entrada: string) {
+  XPathDescendente(entrada: string): String {
     console.log("-- XPATH DESCENDENTE -- ");
     const consultas = XPathGramDesc.parse(entrada);
+    let salida = "";
     console.log("---------------------------------------");
     consultas.forEach((elem: Consulta) => {
       console.log("CONSULTA: " + elem.ToString());
       let resultado = elem.ejecutar(this.global);
+      salida += resultado;
       console.log("-----------RESULTADO----------------");
       console.log(resultado);
       console.log("---------------FIN---------------------");
     });
+    return salida
   }
 
   getTablaSimbolos(){
@@ -193,7 +203,7 @@ class Analizador{
                 +    'label=<'
                 +      '<table border="0" cellborder="1" color="blue" cellspacing="0">'
                 +        '<tr>'
-                +            '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Fila</td><td>Columna</td>'
+                +            '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Linea</td><td>Columna</td>'
                 +        '</tr>';
     errores.listaError.forEach((elem:mierror) => {
       indice++;
@@ -211,6 +221,32 @@ class Analizador{
                           +'}';
 
     return cadenaDot;
+  }
+
+  getCSTXmlAsc():string{
+    let cadenaDot:string = 'digraph {';
+    cadenaDot = cadenaDot + this.recorridoCst(cstXmlAsc.getRaiz());
+    cadenaDot = cadenaDot + '}';
+    return cadenaDot;
+  }
+
+  getCSTXmlDesc():string{
+    let cadenaDot:string = 'digraph {';
+    cadenaDot += this.recorridoCst(cstXmlDesc.getRaiz());
+    cadenaDot += '}';
+    return cadenaDot;
+  }
+
+  private recorridoCst(nodo: Nodo | null):string{
+    let concatena: string = '';
+    if (nodo !== null){
+      concatena += nodo.id + '[label="' + nodo.valor + '"];\n';
+      nodo.hijos.forEach((hijo: Nodo) => {
+        concatena += this.recorridoCst(hijo);
+        concatena += nodo.id + ' -> ' + hijo.id + ';\n';
+      });
+    }
+    return concatena;
   }
 }
 

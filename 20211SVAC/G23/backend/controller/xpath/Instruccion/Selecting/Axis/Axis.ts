@@ -12,7 +12,7 @@ function SelectAxis(_instruccion: any, _ambito: Ambito, _contexto: any): any {
     let expresion = Expresion(_instruccion, _ambito, contexto);
     if (expresion.error) return expresion;
     let root: any = getAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, false);
-    if (root === null || root.error || root.elementos.error || root.elementos.length === 0) return _404;
+    if (root === null || root.error || root.elementos.error || (root.elementos.length === 0 && root.atributos.length === 0)) return _404;
     return root;
 }
 
@@ -75,21 +75,11 @@ function firstFiler(_axisname: Tipos, _nodetest: any, _predicate: any, _contexto
                 const element: Element = _contexto.elementos[i];
                 if (_axisname === Tipos.AXIS_DESCENDANT_OR_SELF) {
                     if (element.father) elements.push(element);
-                    else elements.push(element.childs[0]);
+                    // else elements.push(element.childs[0]);
                 }
-                else {
-                    if (element.father) elements.push(element.childs[0])
-                    else elements.push(element);
-                }
-                // if (element.father) elements = _ambito.searchNodes("*", element, elements);
-                // else elements = _ambito.searchNodes("*", element.childs[0], elements);
-
-                // if ( element.childs)
-                //     element.childs.forEach((child: Element) => {
-                //         elements = _ambito.searchNodes("*", child, elements);
-                //     });
+                if (element.father) elements = _ambito.searchNodes("*", element, elements);
+                else elements = _ambito.searchNodes("*", element.childs[0], elements);
             }
-            console.log(elements, 8989);
             break;
         case Tipos.AXIS_FOLLOWING: // Selects everything in the document after the closing tag of the current node
         case Tipos.AXIS_PRECEDING: // Selects all nodes that appear before the current node in the document
@@ -132,8 +122,7 @@ function firstFiler(_axisname: Tipos, _nodetest: any, _predicate: any, _contexto
         default:
             return { error: "Error: axisname no válido.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
     }
-    console.log(attributes, 9999, elements)
-    return { elementos: elements, atributos: attributes, cadena: cadena };
+    // return { elementos: elements, atributos: attributes, cadena: cadena };
     return secondFilter(elements, attributes, _nodetest, _predicate, cadena, _ambito, _isDoubleBar);
 }
 
@@ -178,14 +167,13 @@ function secondFilter(_elements: Array<Element>, _atributos: Array<Atributo>, _n
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    console.log(elements, 111)
-                    continue;
+                    continue; // break;
                 }
                 x = Funciones.f4(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    continue;
+                    break; //continue;
                 }
             }
             break;

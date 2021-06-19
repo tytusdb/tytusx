@@ -6,7 +6,7 @@ class Entorno {
     }
     agregar(id, simbolo) {
         simbolo.identificador = simbolo.identificador;
-        this.tabla[id] = simbolo;
+        this.tabla[id + simbolo.linea + simbolo.columna] = simbolo;
     }
     eliminar(id) {
         for (let e = this; e != null; e = e.anterior) {

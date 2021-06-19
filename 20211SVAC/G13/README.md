@@ -1,5 +1,5 @@
 # **TytusX**
-## _Grupo 15 | Escuela de Vacaciones Junio 2021_
+## _Grupo 13 | Escuela de Vacaciones Junio 2021_
 Universidad de San Carlos de Guatemala
 Faculta de Ingenieria
 Escuela de Ciencias y Sistemas

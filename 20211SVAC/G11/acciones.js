@@ -14,7 +14,6 @@ function analisis_asc(){
     fill_gramar_asc();
     fill_error();
     grafica_xml_asc();
-    //nalisis_ascXpath();
     alert('succes','Analisis completado');
 }
 
@@ -23,7 +22,6 @@ function analisis_desc(){
     fill_gramar_desc();
     fill_error();
     grafica_xml_desc();
-    //analisis_descXpath();
     alert('succes','Analisis completado');
 }
 
@@ -66,17 +64,16 @@ function getError() {
 }
 
 function analisis_ascXpath() {
-    let text = document.getElementById('txtxpath').value
+    let text = document.getElementById('txtxpath').value;
     var objetos = Gramatica1.parse(text);
     arbol_xpath_ast_a = Gramatica1A.parse(text);
     arbol_xpath_cst_a = Gramatica1C.parse(text);
     var entornoGlobal = new Entorno(null);
-    var ast = new AST(objetos);
-    // console.log(objetos);
+    //console.log(arbolito);
     // console.log('');
     graficando_ast_a();
     graficando_cst_a();
-    GenerarTablaGA();
+    //GenerarTablaGA();
     GenerarError();
     objetos.forEach(function (element) {
       try {
@@ -94,9 +91,7 @@ function analisis_ascXpath() {
     arbol_xpath_ast_d = Gramatica2A.parse(text);
     arbol_xpath_cst_d = Gramatica2C.parse(text);
     var entornoGlobal = new Entorno(null);
-    var ast = new AST(objetos);
-    // console.log(objetos);
-    // console.log('');
+    
     graficando_ast_d();
     graficando_cst_d();
     GenerarTablaGD();
@@ -447,6 +442,4 @@ function graficando_cst_d(){
      };
 
      var network = new vis.Network(container, dataDOT, options);
-}
-
-
+    }

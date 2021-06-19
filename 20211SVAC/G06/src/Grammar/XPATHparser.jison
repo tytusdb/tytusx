@@ -43,7 +43,7 @@
                     tmp = "";
                     return 'scadena';
                   }
-\s+     
+
 "//"                  return '//'
 "/"                   return '/'
 '..'                  return '..'
@@ -53,7 +53,7 @@
 "]"                   return ']'
 "("                   return '('
 ")"                   return ')'
-" "                   {}
+[" "]+                {}
 "|"                   return '|'
 "+"                   return '+'
 "-"                   return '-'
@@ -77,7 +77,7 @@
 "last"                return 'last' 
 "position"            return 'position'
         
-[0-9]+                return 'number'
+[0-9]+                                      return 'number'
 [a-zA-Z_][a-zA-Z0-9_ñÑ]*                    return 'id'
 <<EOF>>                                     return 'EOF'
 .             {console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);}
@@ -98,21 +98,12 @@
 %% 
 
 INIT
-    : '/' 'EOF'                                     {
+    : MULTIPATH 'EOF'                               {
                                                     var listaErroresTemp = listaErrores;
                                                     listaErrores = [];
                                                     return {xpath: $1,listaErrores:listaErroresTemp}
                                                     }
-    | MULTIPATH 'EOF'                               {
-                                                    var listaErroresTemp = listaErrores;
-                                                    listaErrores = [];
-                                                    return {xpath: $1,listaErrores:listaErroresTemp}
-                                                    }
-    | 'EOF'                                         {
-                                                    var listaErroresTemp = listaErrores;
-                                                    listaErrores = [];
-                                                    return {xpath: [],listaErrores:listaErroresTemp}
-                                                    }
+   
     ;
 
 MULTIPATH
@@ -121,17 +112,15 @@ MULTIPATH
     ;
 
 PATH
-    : '/' LACCESOS                                  {$2[0].setipoQuery('relativa'); $$ = new Path(@1.first_line, @1.first_column, $2, 'relativa');}
-    | '//' LACCESOS                                 {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'absoluta');}
+    : '/' LACCESOS                                  {if($2[0].tipoQuery === undefined){$2[0].tipoQuery = 'relativa';}
+                                                     $$ = new Path(@1.first_line, @1.first_column, $2);}
+    | '//' LACCESOS                                 {if($2[0].tipoQuery === undefined){$2[0].tipoQuery = 'absoluta';}  
+                                                     $$ = new Path(@1.first_line, @1.first_column, $2);}
     ;
 
 LACCESOS
-    : LACCESOS '/' ACCESO                           {$3.setipoQuery('relativa'); $1.push($3); $$ = $1;}//abosoluta
-    | LACCESOS '//' ACCESO                          {$3.setipoQuery('absoluta'); $1.push($3); $$ = $1;}//relativa
-    | LACCESOS '/' 'descendant' '::' id             {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', [], 'absoluta');}
-    | LACCESOS '//' 'descendant' '::' id            {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', [], 'absoluta');}
-    | LACCESOS '/' 'descendant' '::' id PREDICADOS  {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', $6, 'absoluta');}
-    | LACCESOS '//' 'descendant' '::' id PREDICADOS {$$ = new Acceso(@1.first_line, @1.first_column, $5, 'nodo', $6, 'absoluta');}
+    : LACCESOS '/' ACCESO                           {if($3.tipoQuery === undefined){$3.tipoQuery = 'relativa'} $1.push($3); $$ = $1;}
+    | LACCESOS '//' ACCESO                          {if($3.tipoQuery === undefined){$3.tipoQuery = 'absoluta'} $1.push($3); $$ = $1;}
     | ACCESO                                        {$$ = [$1];}
     ;
 
@@ -141,25 +130,33 @@ ACCESO
     | '*'                                           {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
     | '.'                                           {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'actual', []);}
     | '..'                                          {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'padre', []);}
-    | id PREDICADOS                                 {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', $2);}
-    | '*' PREDICADOS                                {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', $2);}
+    | text '(' ')'                                  {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'texto', []);}
+    | node '(' ')'                                  {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
     | child '::' id                                 {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', []);}
     | child '::' '*'                                {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', []);}
+    | descendant '::' id                            {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', [], 'absoluta');}
+    | descendant '::' '*'                           {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', [], 'absoluta');}
+//nodos con predicados
+    | id PREDICADOS                                 {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', $2);}
+    | '*' PREDICADOS                                {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', $2);}
     | child '::' id PREDICADOS                      {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', $4);}
     | child '::' '*' PREDICADOS                     {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', $4);}
+    | descendant '::' id PREDICADOS                 {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', $4, 'absoluta');}
+    | descendant '::' '*' PREDICADOS                {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', $4, 'absoluta');}
 //atributos
     | '@' id                                        {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', []);}
     | '@' '*'                                       {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', []);}
+    |  attribute '::' id                            {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'atributo', []);}
+    |  attribute '::' '*'                           {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'todosAtributos', []);}
+//atributos con predicados
     | '@' id PREDICADOS                             {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', $3);}
     | '@' '*' PREDICADOS                            {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', $3);}
     |  attribute '::' id PREDICADOS                 {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'atributo', $4);}
     |  attribute '::' '*' PREDICADOS                {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'todosAtributos', $4);}
-    |  error FINDERROR                              {listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',@1.first_line, @1.first_column))}
+    |  error                                        {listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',@1.first_line, @1.first_column))}
     ;
 
-FINDERROR
-    : '/' {}
-    ;
+
 
 PREDICADOS
     : PREDICADOS PREDI          {$1.push($2); $$ = $1;}
@@ -196,39 +193,8 @@ VALOR
     | 'position' '(' ')'        {$$ = new Primitivo(@1.first_line, @1.first_column, $1);}
     | 'last' '(' ')'            {$$ = new Primitivo(@1.first_line, @1.first_column, $1);}
 //sub consultas
-    | LACCESOS                  {$1[0].setipoQuery('relativa'); $$ = new Path(@1.first_line, @1.first_column, $1, 'sub');}
-    | '//' LACCESOS             {$2[0].setipoQuery('absoluta'); $$ = new Path(@1.first_line, @1.first_column, $2, 'sub');}
+    | LACCESOS                  {if($1[0].tipoQuery === undefined){$1[0].tipoQuery = 'relativa';}
+                                 $$ = new Path(@1.first_line, @1.first_column, $1, 'sub');}
+    | '//' LACCESOS             {if($2[0].tipoQuery === undefined){$2[0].tipoQuery ='relativa';}
+                                 $$ = new Path(@1.first_line, @1.first_column, $2, 'sub');}
     ;
-
-
-/*  
-/biblioteca/libro/autor
-/biblioteca/libro/autor/@fechaNacimiento
-/biblioteca//autor
-//autor//libro
-/biblioteca/libro/autor/@fechaNacimiento/..
-//@fechaNacimiento/../..
-//autor|//titulo|//@año
-//autor[@fechaNacimiento]
-//fechaPublicacion[@año>1970]
-//libro[autor="Mario Vargas Llosa"]
-//@año[.>1970]
-//libro[autor="Mario Vargas Llosa" and fechaPublicacion/@año="1973"]
-//libro[autor="Mario Vargas Llosa" or fechaPublicacion/@año="1973"]
-//libro[autor="Mario Vargas Llosa" or fechaPublicacion/@año="1973"]
-/biblioteca//*
-//@*
-//autor/@*
-//fechaPublicacion[@año>1970]/../titulo
-//@año[.=1969]/../../autor
-//libro[autor="Mario Vargas Llosa"][/fechaPublicacion/@año="1973"]
-
-//libro[autor=//libro[titulo="Pantaleón y las visitadoras"]/autor]/titulo
-
-
-/biblio/libro[//nombre = autores/nombre]
-
-//libro/autor   //libro[autor=//libro/autor]
-
-
-*/

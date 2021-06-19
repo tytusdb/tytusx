@@ -22,14 +22,14 @@ function ejecutarXML(instrucciones) {
         entornoGlobal.registrarObjetoEnTS(element, entornoGlobal);
     });
     agregarLinea("Finaliza analisis XML");
-    var simbolo = entornoGlobal.getSimbolo('xmlEncoding');
-    var entornoEncoding = simbolo.valor == null ? null : simbolo.valor.entorno;
-    var version = entornoEncoding.getSimbolo("version") == null ? null : entornoEncoding.getSimbolo("version");
-    var encoding = entornoEncoding.getSimbolo("encoding") == null ? null : entornoEncoding.getSimbolo("encoding");
-    agregarLinea("\n=====Informacion de XML=====");
-    agregarLinea("Version " + (version == null ? "No se encontro version" : version.valor));
-    agregarLinea("Encoding " + (encoding == null ? "No se encontro encoding" : encoding.valor));
-    agregarLinea("============================");
+    /* var simbolo:Simbolo = entornoGlobal.getSimbolo('xmlEncoding');
+     var entornoEncoding: Entorno = simbolo.valor == null ? null : simbolo.valor.entorno
+     var version:Atributo = entornoEncoding.getSimbolo("version") == null ? null : entornoEncoding.getSimbolo("version");
+     var encoding:Atributo = entornoEncoding.getSimbolo("encoding") == null ? null : entornoEncoding.getSimbolo("encoding");
+     agregarLinea("\n=====Informacion de XML=====");
+     agregarLinea("Version " + (version == null ? "No se encontro version" : version.valor))
+     agregarLinea("Encoding " + (encoding == null ? "No se encontro encoding" : encoding.valor));
+     agregarLinea("============================");*/
 }
 function ejecutarXPath(instrucciones) {
     agregarLinea("Analizando XPath");

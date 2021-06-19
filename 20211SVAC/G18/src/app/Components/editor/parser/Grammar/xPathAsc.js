@@ -84,7 +84,9 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-
+		
+			reglas.push(new Regla_("Init -> Exp EOF"," Init.val = Exp.val"));
+			
 			var init = new NodoXML("Init","Init",_$[$0-1].first_line+1,_$[$0-1].first_column+1);
 			init.addHijo($$[$0-1]);
 			return init;
@@ -92,6 +94,8 @@ case 1:
 break;
 case 2:
 
+			reglas.push(new Regla_("Exp -> DIVSIGN Lexp","exp.val=array(DIVSIGN.val, Lexp.val)"));
+		
 			var exp = new NodoXML("Exp","Exp",_$[$0-1].first_line+1,_$[$0-1].first_column+1);
 			var val = new NodoXML($$[$0-1],"Exp",_$[$0-1].first_line+1,_$[$0-1].first_column+1);
 			exp.addHijo(val);
@@ -101,6 +105,8 @@ case 2:
 break;
 case 3:
 
+			reglas.push(new Regla_("Exp -> Lexp"," Exp.val = Lexp.val"));
+			
 			var exp = new NodoXML("Exp","Exp",_$[$0].first_line+1,_$[$0].first_column+1);			
 			exp.addHijo($$[$0]);
 			this.$ = exp;
@@ -116,6 +122,8 @@ case 4:
 break;
 case 5:
 
+			reglas.push(new Regla_("Lexp -> Lexp ORSIGN DIVSIGN Syntfin"," Lexp.val = array( Lexp.val,ORSIGN.val,DIVSIGN.val,Syntfin.val)"));
+		
 			var lexp = new NodoXML("Lexp","Lexp",_$[$0-3].first_line+1,_$[$0-3].first_column+1);
 			var val1 = new NodoXML($$[$0-2],"Lexp",_$[$0-3].first_line+1,_$[$0-3].first_column+1);
 			var val2 = new NodoXML($$[$0-1],"Lexp",_$[$0-3].first_line+1,_$[$0-3].first_column+1);
@@ -128,6 +136,8 @@ case 5:
 break;
 case 6:
 
+			reglas.push(new Regla_("Lexp -> Lexp DIVSIGN Syntfin"," Lexp.val = array( Lexp.val,DIVSIGN.val,Syntfin.val)"));
+			
 			var lexp = new NodoXML("Lexp","Lexp",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 			var val1 = new NodoXML($$[$0-1],"Lexp",_$[$0-2].first_line+1,_$[$0-2].first_column+1);			
 			lexp.addHijo($$[$0-2]);
@@ -138,6 +148,9 @@ case 6:
 break;
 case 7:
 
+			
+			reglas.push(new Regla_("Lexp -> Syntfin"," Lexp.val = Syntfin.val"));
+			
 			var lexp = new NodoXML("Lexp","Lexp",_$[$0].first_line+1,_$[$0].first_column+1);			
 			lexp.addHijo($$[$0]);
 			this.$ = lexp;
@@ -145,13 +158,17 @@ case 7:
 break;
 case 8:
 
+					reglas.push(new Regla_("Syntfin -> Fin"," Syntfin.val = Fin.val"));
+					
 					var syntfin = new NodoXML("Syntfin","Syntfin",_$[$0].first_line+1,_$[$0].first_column+1);		
 					syntfin.addHijo($$[$0]);
 					this.$ = syntfin;
 				
 break;
-case 9: case 11:
+case 9:
 
+					reglas.push(new Regla_("Syntfin -> @ Valor Opc"," Syntfin.val = array( @, valor.val, opc.val)"));
+					
 					var syntfin = new NodoXML("Syntfin","Syntfin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 					var val1 = new NodoXML($$[$0-2],"Syntfin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);								
 					syntfin.addHijo(val1);
@@ -162,6 +179,8 @@ case 9: case 11:
 break;
 case 10:
 
+					reglas.push(new Regla_("Syntfin -> Preservada :: Fin"," Syntfin.val = array( Preservada.val, ::, Fin.val)"));
+					
 					var syntfin = new NodoXML("Syntfin","Syntfin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 					var val1 = new NodoXML($$[$0-1],"Syntfin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);													
 					syntfin.addHijo($$[$0-2]);			
@@ -170,8 +189,22 @@ case 10:
 					this.$ = syntfin;
 				
 break;
+case 11:
+
+					reglas.push(new Regla_("Syntfin -> @ Preservada Opc"," Syntfin.val = array(@, Preservada.val, Opc.val)"));
+					
+					var syntfin = new NodoXML("Syntfin","Syntfin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+					var val1 = new NodoXML($$[$0-2],"Syntfin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);								
+					syntfin.addHijo(val1);
+					syntfin.addHijo($$[$0-1]);			
+					syntfin.addHijo($$[$0]);										
+					this.$ = syntfin;
+				
+break;
 case 12:
 
+					reglas.push(new Regla_("Syntfin ->@ *"," Syntfin.val = @*"));
+					
 					var syntfin = new NodoXML("Syntfin","Syntfin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);
 					var val1 = new NodoXML($$[$0-1],"Syntfin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);								
 					var val2 = new NodoXML($$[$0],"Syntfin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);								
@@ -182,6 +215,8 @@ case 12:
 break;
 case 13:
 
+			reglas.push(new Regla_("Fin ->  Valor Opc "," Fin.val = array(Valor.val,Opc.val)"));
+		
 			var fin = new NodoXML("Fin","Fin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);			
 			fin.addHijo($$[$0-1]);			
 			fin.addHijo($$[$0]);										
@@ -190,6 +225,8 @@ case 13:
 break;
 case 14:
 
+			reglas.push(new Regla_("Fin ->  DIR Opc "," Fin.val = array(Dir.val,Opc.val)"));
+		
 			var fin = new NodoXML("Fin","Fin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);
 			var val1 = new NodoXML($$[$0-1],"Fin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);								
 			fin.addHijo(val1);		
@@ -197,8 +234,38 @@ case 14:
 			this.$ = fin;
 		
 break;
-case 15: case 16: case 17: case 18:
+case 15:
 
+			reglas.push(new Regla_("Fin ->  TEXT  (   ) "," Fin.val = TEXT.val"));
+		
+			var fin = new NodoXML("Fin","Fin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+			var val1 = new NodoXML($$[$0-2],"Funcion",_$[$0-2].first_line+1,_$[$0-2].first_column+1);								
+			fin.addHijo(val1);									
+			this.$ = fin;
+		
+break;
+case 16:
+
+			reglas.push(new Regla_("Fin ->  NODE  (   ) "," Fin.val = NODE.val"));
+			var fin = new NodoXML("Fin","Fin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+			var val1 = new NodoXML($$[$0-2],"Funcion",_$[$0-2].first_line+1,_$[$0-2].first_column+1);								
+			fin.addHijo(val1);									
+			this.$ = fin;
+		
+break;
+case 17:
+
+			reglas.push(new Regla_("Fin ->  POSITION  (   ) "," Fin.val = POSITION.val"));
+			var fin = new NodoXML("Fin","Fin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+			var val1 = new NodoXML($$[$0-2],"Funcion",_$[$0-2].first_line+1,_$[$0-2].first_column+1);								
+			fin.addHijo(val1);									
+			this.$ = fin;
+		
+break;
+case 18:
+	
+			reglas.push(new Regla_("Fin ->  LAST  (   ) "," Fin.val = LAST.val"));
+			
 			var fin = new NodoXML("Fin","Fin",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 			var val1 = new NodoXML($$[$0-2],"Funcion",_$[$0-2].first_line+1,_$[$0-2].first_column+1);								
 			fin.addHijo(val1);									
@@ -207,6 +274,8 @@ case 15: case 16: case 17: case 18:
 break;
 case 19:
 
+			reglas.push(new Regla_("Fin -> Preservada Opc "," Fin.val = array(Preservada.val,Opc.val)"));
+			
 			var fin = new NodoXML("Fin","Fin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);			
 			fin.addHijo($$[$0-1]);
 			fin.addHijo($$[$0]);												
@@ -215,6 +284,9 @@ case 19:
 break;
 case 20:
 
+		
+			reglas.push(new Regla_("Fin -> '*' Opc "," Fin.val = array(*,Opc.val)"));
+			
 			var fin = new NodoXML("Fin","Fin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);
 			var val1 = new NodoXML($$[$0-1],"Fin",_$[$0-1].first_line+1,_$[$0-1].first_column+1);								
 			fin.addHijo(val1);	
@@ -222,20 +294,122 @@ case 20:
 			this.$ = fin;
 		
 break;
-case 21: case 22: case 23: case 24: case 25:
+case 21:
 
+				reglas.push(new Regla_("Valor -> ID"," Valor.val = ID.val"));
+			
 				var val = new NodoXML($$[$0],"Valor",_$[$0].first_line+1,_$[$0].first_column+1);				
 				this.$ = val;
 			
 break;
-case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34:
+case 22:
 
+				reglas.push(new Regla_("Valor -> NUMBER"," Valor.val = NUMBER.val"));
+				
+				var val = new NodoXML($$[$0],"Valor",_$[$0].first_line+1,_$[$0].first_column+1);				
+				this.$ = val;
+			
+break;
+case 23:
+
+				reglas.push(new Regla_("Valor -> STRING"," Valor.val = STRING.val"));
+				
+				var val = new NodoXML($$[$0],"Valor",_$[$0].first_line+1,_$[$0].first_column+1);				
+				this.$ = val;
+			
+break;
+case 24:
+
+				reglas.push(new Regla_("Valor -> STRING2"," Valor.val = STRING2.val"));
+				
+				var val = new NodoXML($$[$0],"Valor",_$[$0].first_line+1,_$[$0].first_column+1);				
+				this.$ = val;
+			
+break;
+case 25:
+
+				reglas.push(new Regla_("Valor -> DECIMAL"," Valor.val = DECIMAL.val"));
+				
+				var val = new NodoXML($$[$0],"Valor",_$[$0].first_line+1,_$[$0].first_column+1);				
+				this.$ = val;
+			
+break;
+case 26:
+
+						reglas.push(new Regla_("Preservada -> CHILD"," Preservada.val = CHILD.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 27:
+
+						reglas.push(new Regla_("Preservada -> DESCENDANT"," Preservada.val = DESCENDANT.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 28:
+
+						reglas.push(new Regla_("Preservada -> ANCESTOR"," Preservada.val = ANCESTOR.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 29:
+
+						reglas.push(new Regla_("Preservada -> PRECEDING"," Preservada.val = PRECEDING.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 30:
+
+						reglas.push(new Regla_("Preservada -> FOLLOWING"," Preservada.val = FOLLOWING.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 31:
+
+						reglas.push(new Regla_("Preservada -> NAMESPACE"," Preservada.val = NAMESPACE.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 32:
+
+						reglas.push(new Regla_("Preservada -> SELF"," Preservada.val = SELF.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 33:
+
+						reglas.push(new Regla_("Preservada -> PARENT"," Preservada.val = PARENT.val"));
+						
+						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
+						this.$ = val;
+					
+break;
+case 34:
+
+						reglas.push(new Regla_("Preservada -> ATTR"," Preservada.val = ATTR.val"));
+						
 						var val = new NodoXML($$[$0],"Axes",_$[$0].first_line+1,_$[$0].first_column+1);				
 						this.$ = val;
 					
 break;
 case 35:
 
+				reglas.push(new Regla_("Opc -> LPredicado"," Opc.val = LPredicado.val"));
+				
 				var opc = new NodoXML("Opc","Opc",_$[$0].first_line+1,_$[$0].first_column+1);				
 				opc.addHijo($$[$0]);				
 				this.$ = opc;
@@ -243,12 +417,16 @@ case 35:
 break;
 case 36:
 
+				reglas.push(new Regla_("Opc -> epsilon"," epsilon"));
+				
 				var opc = new NodoXML("Opc","Opc",_$[$0].first_line+1,_$[$0].first_column+1);									
 				this.$ = opc;
 			
 break;
 case 37:
 
+							reglas.push(new Regla_("LPredicado ->LPredicado Predicado"," LPredicado.val =array(LPredicado.val,Predicado.val)"));
+							
 							var lpredicado = new NodoXML("LPredicado","LPredicado",_$[$0-1].first_line+1,_$[$0-1].first_column+1);				
 							lpredicado.addHijo($$[$0-1]);	
 							lpredicado.addHijo($$[$0]);
@@ -257,6 +435,8 @@ case 37:
 break;
 case 38:
 
+							reglas.push(new Regla_("LPredicado -> Predicado"," LPredicado.val = Predicado.val"));
+							
 							var lpredicado = new NodoXML("LPredicado","LPredicado",_$[$0].first_line+1,_$[$0].first_column+1);				
 							lpredicado.addHijo($$[$0]);
 							this.$ = lpredicado;
@@ -264,6 +444,10 @@ case 38:
 break;
 case 39:
 
+			
+			
+				reglas.push(new Regla_("Predicado ->[ ExprLogica]"," Predicado.val =ExprLogica.val"));
+			
 				var predicado = new NodoXML("Predicado","Predicado",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 				var val1 = new NodoXML($$[$0-2],"Predicado",_$[$0-2].first_line+1,_$[$0-2].first_column+1);	
 				var val2 = new NodoXML($$[$0],"Predicado",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
@@ -273,8 +457,70 @@ case 39:
 				this.$ = predicado;
 			
 break;
-case 40: case 41: case 42: case 43: case 44: case 45:
+case 40:
 
+				reglas.push(new Regla_("ExprLogica ->Expr <= Expr"," ExprLogica.val =array(Expr1.val,<=,Expr2.val)"));
+				
+				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				exprLogica.addHijo($$[$0-2]);	
+				exprLogica.addHijo(val1);	
+				exprLogica.addHijo($$[$0]);					
+				this.$ = exprLogica;
+			
+break;
+case 41:
+
+				reglas.push(new Regla_("ExprLogica ->Expr >= Expr"," ExprLogica.val =array(Expr1.val,>=,Expr2.val)"));
+				
+				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				exprLogica.addHijo($$[$0-2]);	
+				exprLogica.addHijo(val1);	
+				exprLogica.addHijo($$[$0]);					
+				this.$ = exprLogica;
+			
+break;
+case 42:
+
+				reglas.push(new Regla_("ExprLogica ->Expr = Expr"," ExprLogica.val =array(Expr1.val,=,Expr2.val)"));
+				
+				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				exprLogica.addHijo($$[$0-2]);	
+				exprLogica.addHijo(val1);	
+				exprLogica.addHijo($$[$0]);					
+				this.$ = exprLogica;
+			
+break;
+case 43:
+	
+				reglas.push(new Regla_("ExprLogica ->Expr != Expr"," ExprLogica.val =array(Expr1.val,!=,Expr2.val)"));
+				
+				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				exprLogica.addHijo($$[$0-2]);	
+				exprLogica.addHijo(val1);	
+				exprLogica.addHijo($$[$0]);					
+				this.$ = exprLogica;
+			
+break;
+case 44:
+
+				reglas.push(new Regla_("ExprLogica ->Expr > Expr"," ExprLogica.val =array(Expr1.val,>,Expr2.val)"));
+			
+				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				exprLogica.addHijo($$[$0-2]);	
+				exprLogica.addHijo(val1);	
+				exprLogica.addHijo($$[$0]);					
+				this.$ = exprLogica;
+			
+break;
+case 45:
+
+				reglas.push(new Regla_("ExprLogica ->Expr <Expr"," ExprLogica.val =array(Expr1.val,<,Expr2.val)"));
+				
 				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
 				exprLogica.addHijo($$[$0-2]);	
@@ -285,13 +531,89 @@ case 40: case 41: case 42: case 43: case 44: case 45:
 break;
 case 46:
 
+				reglas.push(new Regla_("ExprLogica ->Expr <= Expr"," ExprLogica.val =Expr.val"));
+			
 				var exprLogica = new NodoXML("ExprLogica","ExprLogica",_$[$0].first_line+1,_$[$0].first_column+1);
 				exprLogica.addHijo($$[$0]);					
 				this.$ = exprLogica;
 			
 break;
-case 47: case 48: case 49: case 50: case 51: case 52: case 53:
+case 47:
 
+				reglas.push(new Regla_("Expr ->Expr + Expr"," Expr.val =array(Expr1.val,+,Expr2.val)"));
+			
+				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				expr.addHijo($$[$0-2]);	
+				expr.addHijo(val1);	
+				expr.addHijo($$[$0]);					
+				this.$ = expr;
+			
+break;
+case 48:
+
+				reglas.push(new Regla_("Expr ->Expr - Expr"," Expr.val =array(Expr1.val,-,Expr2.val)"));
+				
+				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				expr.addHijo($$[$0-2]);	
+				expr.addHijo(val1);	
+				expr.addHijo($$[$0]);					
+				this.$ = expr;
+			
+break;
+case 49:
+
+				reglas.push(new Regla_("Expr ->Expr * Expr"," Expr.val =array(Expr1.val,*,Expr2.val)"));
+				
+				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				expr.addHijo($$[$0-2]);	
+				expr.addHijo(val1);	
+				expr.addHijo($$[$0]);					
+				this.$ = expr;
+			
+break;
+case 50:
+
+				reglas.push(new Regla_("Expr ->Expr DIV Expr"," Expr.val =array(Expr1.val,DIV,Expr2.val)"));
+				
+				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				expr.addHijo($$[$0-2]);	
+				expr.addHijo(val1);	
+				expr.addHijo($$[$0]);					
+				this.$ = expr;
+			
+break;
+case 51:
+
+				reglas.push(new Regla_("Expr ->Expr MOD Expr"," Expr.val =array(Expr1.val,MOD,Expr2.val)"));
+				
+				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				expr.addHijo($$[$0-2]);	
+				expr.addHijo(val1);	
+				expr.addHijo($$[$0]);					
+				this.$ = expr;
+			
+break;
+case 52:
+
+				reglas.push(new Regla_("Expr ->Expr OR Expr"," Expr.val =array(Expr1.val,OR,Expr2.val)"));
+				
+				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
+				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
+				expr.addHijo($$[$0-2]);	
+				expr.addHijo(val1);	
+				expr.addHijo($$[$0]);					
+				this.$ = expr;
+			
+break;
+case 53:
+
+				reglas.push(new Regla_("Expr ->Expr AND Expr"," Expr.val =array(Expr1.val,AND,Expr2.val)"));
+				
 				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 				var val1 = new NodoXML($$[$0-1],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
 				expr.addHijo($$[$0-2]);	
@@ -302,6 +624,8 @@ case 47: case 48: case 49: case 50: case 51: case 52: case 53:
 break;
 case 54:
 
+				reglas.push(new Regla_("Expr ->( Expr )"," Expr.val =Exp.val"));
+			
 				var expr = new NodoXML("Expr","Expr",_$[$0-2].first_line+1,_$[$0-2].first_column+1);
 				var val1 = new NodoXML($$[$0-2],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);					
 				var val2 = new NodoXML($$[$0],"Operador",_$[$0-2].first_line+1,_$[$0-2].first_column+1);										
@@ -313,6 +637,8 @@ case 54:
 break;
 case 55:
 
+			reglas.push(new Regla_("Expr ->Expr"," Expr.val =Exp.val"));
+		 
 			var expr = new NodoXML("Expr","Expr",_$[$0].first_line+1,_$[$0].first_column+1);
 			expr.addHijo($$[$0]);
 			this.$ = expr;
@@ -573,8 +899,13 @@ _handle_error:
     let valDeclaration = '';
     let valTag = '';
     let valInside = '';
+	
     const {Error_} = require('../Error');
     const {errores} = require('../Errores');
+	
+	const {Regla_} = require('../Regla');
+    const {reglas} = require('../Reglas');
+	
     const {NodoXML} = require('../Nodes/NodoXml')
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -1015,8 +1346,8 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-   // var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
-   // return exports.parser.parse(source);
+    //var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+    //return exports.parser.parse(source);
 };
 if (typeof module !== 'undefined' && require.main === module) {
   exports.main(process.argv.slice(1));

@@ -2,7 +2,18 @@
 
 function CargarXML(){
 
-    var contenido = editor.getValue();
+    var contenido = "";
+
+    if(tab==1){
+        contenido = editor.getValue();
+    } else if (tab==2){
+        contenido = editor2.getValue();
+    } else if (tab==3){
+        contenido = editor3.getValue();
+    } else if (tab==4){
+        contenido = editor4.getValue();
+    } 
+
     var contenidoXpath = EntradaXPath.getValue();
 
 
@@ -101,7 +112,18 @@ function CargarXML(){
 
 function CargarXMLDesc(){
 
-    var contenido = editor.getValue();
+    var contenido = "";
+
+    if(tab==1){
+        contenido = editor.getValue();
+    } else if (tab==2){
+        contenido = editor2.getValue();
+    } else if (tab==3){
+        contenido = editor3.getValue();
+    } else if (tab==4){
+        contenido = editor4.getValue();
+    } 
+    
     var contenidoXpath = EntradaXPath.getValue();
 
     if (contenido == ""){

@@ -28,6 +28,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { errores } from './parser/Errores';
+import { reglas } from './parser/Reglas';
+
 import { _Optimizer } from './parser/Optimizer/Optimizer';
 import { Rule } from './parser/Optimizer/Rule';
 
@@ -55,7 +57,7 @@ export class EditorComponent {
   entradaXpath = '/helloworld';
   salida = 'TytusX Output: \n\n';
   ast: any;
-  reglas: Array<Rule>;
+  reglas_: Array<Rule>;
   env: Environment;
   flag: boolean;
   envXML = new EnvironmentXML('global');
@@ -124,13 +126,13 @@ export class EditorComponent {
     this.clean();
     try {
       this.ast = parserXMLASC.parse(this.entradaXml.toString());
-      console.log(this.ast);
-      console.log('ejecutando');
+      // console.log(this.ast);
+      // console.log('ejecutando');
       this.envXML = new EnvironmentXML('global');
       let ejecutor = new EjecutorXML();
       ejecutor.ejecutar(this.ast, this.envXML);
       this.envXML.printEntornos();
-      console.log(this.envXML.getTablaSimbolos());
+      // console.log(this.envXML.getTablaSimbolos());
     } catch (e) {
       console.error(e.message);
     }
@@ -214,7 +216,7 @@ export class EditorComponent {
     this.flag = false;
   }
 
-  printAst() {
+  printAST() {
     if (this.flag) {
       Swal.fire({
         title: 'Oops...',
@@ -234,14 +236,87 @@ export class EditorComponent {
         background: 'black',
       });
     } else {
-      let dot = new Plotter().makeDot(this.ast);
+      let dot = new Plotter().makeDotAST(this.ast);
       let viz = new Viz({ Module, render });
       viz
         .renderSVGElement(dot)
         .then(function (element) {
-          document.getElementById('reportes').innerHTML =
-            '<h3>Reporte AST</h3>';
-          document.getElementById('reportes').appendChild(element);
+          document.getElementById('reporteAST').innerHTML = '';
+          document.getElementById('reporteAST').appendChild(element);
+        })
+        .catch((error) => {
+          viz = new Viz({ Module, render });
+          console.error(error);
+        });
+
+      return;
+    }
+  }
+
+  printCST() {
+    if (this.flag) {
+      Swal.fire({
+        title: 'Oops...',
+        text: 'No se ha analizado el codigo aun',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+      });
+    } else if (errores.length != 0) {
+      Swal.fire({
+        title: 'Oops...!',
+        text: 'Se encontraron errores en su codigo, no puede graficar',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+      });
+    } else {
+      let dot = new Plotter().makeDotCST(this.ast);
+      let viz = new Viz({ Module, render });
+      viz
+        .renderSVGElement(dot)
+        .then(function (element) {
+          document.getElementById('reporteCST').innerHTML = '';
+          document.getElementById('reporteCST').appendChild(element);
+        })
+        .catch((error) => {
+          viz = new Viz({ Module, render });
+          console.error(error);
+        });
+
+      return;
+    }
+  }
+
+  printArbolXML() {
+    if (this.flag) {
+      Swal.fire({
+        title: 'Oops...',
+        text: 'No se ha analizado el codigo aun',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+      });
+    } else if (errores.length != 0) {
+      Swal.fire({
+        title: 'Oops...!',
+        text: 'Se encontraron errores en su codigo, no puede graficar',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+      });
+    } else {
+      let dot = new Plotter().makeDotXML(this.envXML);
+      let viz = new Viz({ Module, render });
+      viz
+        .renderSVGElement(dot)
+        .then(function (element) {
+          document.getElementById('reporteXML').innerHTML = '';
+          document.getElementById('reporteXML').appendChild(element);
         })
         .catch((error) => {
           viz = new Viz({ Module, render });
@@ -333,7 +408,7 @@ export class EditorComponent {
   }
 
   optTable() {
-    if (this.reglas == undefined) {
+    if (this.reglas_ == undefined) {
       Swal.fire({
         title: 'Oops...',
         text: 'No se ha analizado el codigo aun',
@@ -342,7 +417,7 @@ export class EditorComponent {
         confirmButtonColor: 'rgb(8, 101, 104)',
         background: 'black',
       });
-    } else if (this.reglas.length == 0) {
+    } else if (this.reglas_.length == 0) {
       Swal.fire({
         title: 'Cool!',
         text: 'No se encontraron optimizaciones en su codigo',
@@ -354,7 +429,7 @@ export class EditorComponent {
     } else {
       Swal.fire({
         title: 'Tabla de Reglas',
-        html: new Table().rules(this.reglas),
+        html: new Table().rules(this.reglas_),
         confirmButtonText: 'Entendido',
         confirmButtonColor: 'rgb(8, 101, 104)',
         background: 'black',
@@ -386,6 +461,37 @@ export class EditorComponent {
       Swal.fire({
         title: 'Tabla de Errores',
         html: new Table().errors(errores),
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+        width: 800,
+      });
+    }
+  }
+
+  RGTable() {
+    if (this.flag) {
+      Swal.fire({
+        title: 'Oops...',
+        text: 'No se ha analizado el codigo aun',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+      });
+    } else if (reglas.length == 0) {
+      Swal.fire({
+        title: 'Oops!',
+        text: 'No se entro a ninguna regla gramatical',
+        icon: 'error',
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: 'rgb(8, 101, 104)',
+        background: 'black',
+      });
+    } else {
+      Swal.fire({
+        title: 'Reporte Gramatical',
+        html: new Table().reglas(reglas),
         confirmButtonText: 'Entendido',
         confirmButtonColor: 'rgb(8, 101, 104)',
         background: 'black',

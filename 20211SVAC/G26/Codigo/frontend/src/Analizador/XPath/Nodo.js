@@ -1,37 +1,52 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoNodo = exports.Nodo = void 0;
-var Nodo = /** @class */ (function () {
-    function Nodo(nombre, tipo, linea, columna, predicado) {
+export class Nodo {
+    constructor(nombre, tipo, linea, columna, predicado, tipoAxis, nodeTest) {
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
         this.nombre = nombre;
         this.predicado = predicado;
         this.fromRoot = true;
+        this.tipoAxis = tipoAxis;
+        this.NodeTest = nodeTest;
     }
-    Nodo.prototype.isFromRoot = function () {
+    isFromRoot() {
         return this.fromRoot;
-    };
-    Nodo.prototype.setFromRoot = function (fromRoot) {
+    }
+    setFromRoot(fromRoot) {
         this.fromRoot = fromRoot;
-    };
-    Nodo.prototype.getValor = function (Ent) {
+    }
+    getValorInicial() {
         return this.nombre;
-    };
-    Nodo.prototype.getNombre = function () {
+    }
+    getValor() {
+        if (this.NodeTest != undefined) {
+            return this.NodeTest.getNombre();
+        }
         return this.nombre;
-    };
-    Nodo.prototype.getPredicado = function () {
+    }
+    getNombre() {
+        return this.nombre;
+    }
+    getPredicado() {
+        if (this.NodeTest != undefined) {
+            return this.NodeTest.getPredicado();
+        }
         return this.predicado;
-    };
-    Nodo.prototype.getTipo = function () {
+    }
+    getTipo() {
         return this.tipo;
-    };
-    return Nodo;
-}());
-exports.Nodo = Nodo;
-var TipoNodo;
+    }
+    isAxis() {
+        if (this.tipoAxis != undefined) {
+            return true;
+        }
+        return false;
+    }
+    getTipoAxis() {
+        return this.tipoAxis;
+    }
+}
+export var TipoNodo;
 (function (TipoNodo) {
     TipoNodo[TipoNodo["IDENTIFIER"] = 0] = "IDENTIFIER";
     TipoNodo[TipoNodo["ATRIBUTO"] = 1] = "ATRIBUTO";
@@ -40,4 +55,21 @@ var TipoNodo;
     TipoNodo[TipoNodo["ASTERISCO"] = 4] = "ASTERISCO";
     TipoNodo[TipoNodo["AXIS"] = 5] = "AXIS";
     TipoNodo[TipoNodo["FUNCION"] = 6] = "FUNCION";
-})(TipoNodo = exports.TipoNodo || (exports.TipoNodo = {}));
+    TipoNodo[TipoNodo["NODOERROR"] = 7] = "NODOERROR";
+})(TipoNodo || (TipoNodo = {}));
+export var TipoAxis;
+(function (TipoAxis) {
+    TipoAxis[TipoAxis["ANCESTOR"] = 0] = "ANCESTOR";
+    TipoAxis[TipoAxis["ANCESTORORSELF"] = 1] = "ANCESTORORSELF";
+    TipoAxis[TipoAxis["ATTRIBUTE"] = 2] = "ATTRIBUTE";
+    TipoAxis[TipoAxis["CHILD"] = 3] = "CHILD";
+    TipoAxis[TipoAxis["DESCENDANT"] = 4] = "DESCENDANT";
+    TipoAxis[TipoAxis["DESCENDANTORSELF"] = 5] = "DESCENDANTORSELF";
+    TipoAxis[TipoAxis["FOLLOWING"] = 6] = "FOLLOWING";
+    TipoAxis[TipoAxis["FOLLOWINGSIBLING"] = 7] = "FOLLOWINGSIBLING";
+    TipoAxis[TipoAxis["PARENT"] = 8] = "PARENT";
+    TipoAxis[TipoAxis["PRECEDING"] = 9] = "PRECEDING";
+    TipoAxis[TipoAxis["PRECEDINGSIBLING"] = 10] = "PRECEDINGSIBLING";
+    TipoAxis[TipoAxis["SELF"] = 11] = "SELF";
+    TipoAxis[TipoAxis["NAMESPACE"] = 12] = "NAMESPACE";
+})(TipoAxis || (TipoAxis = {}));

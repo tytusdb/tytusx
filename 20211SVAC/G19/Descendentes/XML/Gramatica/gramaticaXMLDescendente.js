@@ -72,12 +72,12 @@
   }
 */
 var gramaticaXMLDescendente = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,14],$V3=[6,18],$V4=[2,5],$V5=[1,21],$V6=[2,6,12,18],$V7=[17,21,23],$V8=[2,22],$V9=[2,12,14,18],$Va=[2,12];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,14],$V3=[6,18],$V4=[2,5],$V5=[1,21],$V6=[2,6,12,18],$V7=[17,21,23],$V8=[2,24],$V9=[2,12,14,18],$Va=[2,12];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"XML":3,"T_CONF":4,"TAGS_LIST":5,"EOF":6,"TAG":7,"TAG_LIST":8,"TAG_APERTURA":9,"TAG_OP":10,"U_TAG":11,"tag_open":12,"TAG_CIERRE":13,"cadena_letras":14,"OP_AP":15,"LISTA_ATRIBUTOS":16,"close_gatap":17,"openTag":18,"closingTag":19,"TAG_SELEC":20,"close_tag":21,"t_congOp":22,"t_congClose":23,"ATRIBUTO":24,"LA":25,"atName":26,"atAsi":27,"atValue":28,"$accept":0,"$end":1},
 terminals_: {2:"error",6:"EOF",12:"tag_open",14:"cadena_letras",17:"close_gatap",18:"openTag",19:"closingTag",21:"close_tag",22:"t_congOp",23:"t_congClose",26:"atName",27:"atAsi",28:"atValue"},
-productions_: [0,[3,3],[3,2],[5,2],[8,2],[8,0],[7,2],[7,1],[7,2],[10,2],[10,2],[10,1],[9,2],[15,2],[15,1],[13,2],[11,2],[20,2],[20,1],[4,3],[16,2],[25,2],[25,0],[24,3]],
+productions_: [0,[3,3],[3,2],[5,2],[8,2],[8,0],[7,2],[7,1],[7,2],[10,2],[10,2],[10,1],[9,2],[15,2],[15,1],[15,0],[15,2],[13,2],[11,2],[20,2],[20,1],[4,3],[16,2],[25,2],[25,0],[24,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -186,35 +186,40 @@ case 14:
         this.$.childList.push(new NodeDescXML($$[$0], 'close_gatap'));
     
 break;
-case 15:
+case 16:
+console.error('Error Sintactico: ' + yytext + ', linea: ' + _$[$0-1].first_line + ',  columna: ' + _$[$0-1].first_column);
+                               var er =new NodoError("Error Sintatico","XML Descendente","No se esperaba el caracter: "+ $$[$0-1]+"Se esperaba: CLOSE_TAG ", _$[$0-1].first_line,_$[$0-1].first_column);
+                               Errores.add(er);
+break;
+case 17:
 
         this.$ = new NodeDescXML('OP_AP', '');
         this.$.childList.push(new NodeDescXML($$[$0-1], 'openTag'));
         this.$.childList.push(new NodeDescXML($$[$0], 'CLOSING_TAG'));
     
 break;
-case 16:
+case 18:
 
         this.$ = new NodeDescXML('U_TAG', '');
         this.$.childList.push(new NodeDescXML($$[$0-1], 'TAG_OPEN'));
         this.$.childList.push($$[$0]);
     
 break;
-case 17:
+case 19:
 
         this.$ = new NodeDescXML('TAG_SELEC', '');
         this.$.childList.push($$[$0-1]);
         this.$.childList.push(new NodeDescXML($$[$0], 'CLOSE_TAG'));
     
 break;
-case 18:
+case 20:
 
         this.$ = new NodeDescXML('TAG_SELEC', '');
         this.$.childList.push(new NodeDescXML($$[$0], 'CLOSE_TAG'));
 
     
 break;
-case 19:
+case 21:
 
             this.$ = new NodeDescXML('T_CONF', '');
             this.$.childList.push(new NodeDescXML($$[$0-2], 'openTag'));
@@ -222,7 +227,7 @@ case 19:
             this.$.childList.push(new NodeDescXML($$[$0-1], 'CLOSING_TAG'));
         
 break;
-case 20:
+case 22:
 
     this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
     this.$.childList.push($$[$0-1]);
@@ -235,7 +240,7 @@ case 20:
 
 
 break;
-case 21:
+case 23:
 
     this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
     this.$.childList.push($$[$0-1]);
@@ -246,7 +251,7 @@ case 21:
     }
  
 break;
-case 23:
+case 25:
 
             this.$ = new NodeDescXML('LISTA_ATRIBUTOS', '');
             this.$.childList.push(new NodeDescXML($$[$0-2], 'ATNAME'));
@@ -256,8 +261,8 @@ case 23:
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,5:3,7:5,9:6,11:7,12:$V1,22:[1,4]},{1:[3]},{2:$V0,5:10,7:5,9:6,11:7,12:$V1},{6:[1,11]},{16:12,24:13,26:$V2},o($V3,$V4,{9:6,11:7,8:15,7:16,2:$V0,12:$V1}),{2:$V0,5:18,7:5,9:6,10:17,11:7,12:$V1,13:20,14:[1,19],18:$V5},o($V6,[2,7]),{12:[1,22]},{15:23,16:25,17:[1,26],20:24,21:[1,27],24:13,26:$V2},{6:[1,28]},{1:[2,2]},{23:[1,29]},o($V7,$V8,{25:30,24:31,26:$V2}),{27:[1,32]},o($V3,[2,3]),o($V3,$V4,{9:6,11:7,7:16,8:33,2:$V0,12:$V1}),o($V6,[2,6]),{13:34,18:$V5},{13:35,18:$V5},o($V6,[2,11]),{19:[1,36]},o($V6,[2,8]),o($V9,$Va),o($V6,[2,16]),{17:[1,37],21:[1,38]},o($V9,[2,14]),o($V6,[2,18]),{1:[2,1]},o($Va,[2,19]),o($V7,[2,20]),o($V7,$V8,{24:31,25:39,26:$V2}),{28:[1,40]},o($V3,[2,4]),o($V6,[2,9]),o($V6,[2,10]),o($V6,[2,15]),o($V9,[2,13]),o($V6,[2,17]),o($V7,[2,21]),o([17,21,23,26],[2,23])],
-defaultActions: {11:[2,2],28:[2,1]},
+table: [{2:$V0,3:1,4:2,5:3,7:5,9:6,11:7,12:$V1,22:[1,4]},{1:[3]},{2:$V0,5:10,7:5,9:6,11:7,12:$V1},{6:[1,11]},{16:12,24:13,26:$V2},o($V3,$V4,{9:6,11:7,8:15,7:16,2:$V0,12:$V1}),{2:$V0,5:18,7:5,9:6,10:17,11:7,12:$V1,13:20,14:[1,19],18:$V5},o($V6,[2,7]),{12:[1,22]},o([12,14,18],[2,15],{24:13,15:23,20:24,16:25,2:[1,27],17:[1,26],21:[1,28],26:$V2}),{6:[1,29]},{1:[2,2]},{23:[1,30]},o($V7,$V8,{25:31,24:32,26:$V2}),{27:[1,33]},o($V3,[2,3]),o($V3,$V4,{9:6,11:7,7:16,8:34,2:$V0,12:$V1}),o($V6,[2,6]),{13:35,18:$V5},{13:36,18:$V5},o($V6,[2,11]),{19:[1,37]},o($V6,[2,8]),o($V9,$Va),o($V6,[2,18]),{17:[1,38],21:[1,39]},o($V9,[2,14]),{17:[1,40]},o($V6,[2,20]),{1:[2,1]},o($Va,[2,21]),o($V7,[2,22]),o($V7,$V8,{24:32,25:41,26:$V2}),{28:[1,42]},o($V3,[2,4]),o($V6,[2,9]),o($V6,[2,10]),o($V6,[2,17]),o($V9,[2,13]),o($V6,[2,19]),o($V9,[2,16]),o($V7,[2,23]),o([17,21,23,26],[2,25])],
+defaultActions: {11:[2,2],29:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -883,11 +888,15 @@ case 21: return 14;
 break;
 case 22: return 6; 
 break;
-case 23: 
+case 23:
+    console.error('Error léxico: ' + yy_.yytext + ', linea: ' + yy_.yylloc.first_line + ',  columna: ' + yy_.yylloc.first_column);
+                                         var er =new NodoError("Error Lexico","No se esperaba el caracter: "+ yy_.yytext, yy_.yylloc.first_line,yy_.yylloc.first_column);
+                                        Errores.add(er);
+
 break;
 }
 },
-rules: [/^(?:<!--)/i,/^(?:[\r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:<\?xml\b)/i,/^(?:[\s\r\t\n]+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:=)/i,/^(?:"[^\"\n]*")/i,/^(?:\?>)/i,/^(?:<[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:[\s\r\t\n]+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:=)/i,/^(?:"[^\"\n]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:>)/i,/^(?:[\s\r\t\n]+)/i,/^(?:[^<]+)/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:<!--)/i,/^(?:[\r\t]+)/i,/^(?:\n)/i,/^(?:-->)/i,/^(?:[^"-->"]+)/i,/^(?:<\?xml\b)/i,/^(?:[\s\r\t\n]+)/i,/^(?:[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+)/i,/^(?:=)/i,/^(?:"[^\"\n]*")/i,/^(?:\?>)/i,/^(?:<[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:[\s\r\t\n]+)/i,/^(?:[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:=)/i,/^(?:"[^\"\n]*")/i,/^(?:>)/i,/^(?:\/>)/i,/^(?:<\/[a-zA-Z_][a-zA-Z0-9_]*)/i,/^(?:>)/i,/^(?:[\s\r\t\n]+)/i,/^(?:[^<]+)/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"TagCierre":{"rules":[19],"inclusive":false},"TagApertura":{"rules":[6,7,8,9,10,12,13,14,15,16,17],"inclusive":false},"Comentario":{"rules":[1,2,3,4],"inclusive":false},"INITIAL":{"rules":[0,5,11,18,20,21,22,23],"inclusive":true}}
 });
 return lexer;
