@@ -42,6 +42,7 @@
 "t""h""e""n"                                return 'then';
 "e""l""s""e"                                return 'else';
 "d""a""t""a"                                return 'data';
+"a""t"                                      return 'at';
 
 "a""n""d"                                   return 'and';
 "o""r"                                      return 'or';
@@ -77,7 +78,8 @@ INIT
     ;
 
 FOR 
-    :   for dolar id in doc parea dstring parec PATH             {} 
+    :   for RETVAR in doc parea dstring parec PATH                {} 
+    |   for RETVAR at RETVAR in doc parea dstring parec PATH    {}
     ;
 
 PATH 
@@ -93,7 +95,8 @@ LET
     ;
 
 WHERE 
-    :   where WHERE2         {}
+    :   where WHERE2            {}
+    |                           {}
     ;
 
 WHERE2
@@ -103,10 +106,10 @@ WHERE2
     ;
 
 WHERE3
-    :   dolar id barra id COMPARISON id         {}
-    |   dolar id barra id COMPARISON number     {}
-    |   dolar id barra id COMPARISON sstring    {}
-    |   dolar id barra id COMPARISON dstring    {}
+    :   RETVAR COMPARISON id         {}
+    |   RETVAR COMPARISON number     {}
+    |   RETVAR COMPARISON sstring    {}
+    |   RETVAR COMPARISON dstring    {}
     ;
 
 COMPARISON
@@ -119,74 +122,69 @@ COMPARISON
     ;
 
 ORDERBY 
-    : order by ORDERBY2             {}
-    |                               {}
+    :   order by ORDERBY2               {}
+    |                                   {}
     ;
 
 ORDERBY2
-    :   ORDERBY2 coma ORDERBY3        {}
-    |   ORDERBY3                      {}
-    ;
-
-ORDERBY3
-    :   dolar id barra id   {}
-    |   dolar id            {}
+    :   ORDERBY2 coma RETVAR        {}
+    |   RETVAR                      {}
     ;
 
 RETURN 
-    : return RETURN2        {}
-    |                       {}
+    :   return RETURN2          {}
     ;
 
-RETURN2: RETURN3            {}
-    |    IFTHENELSE         {}
-    |    HTML               {}
-;
-
-RETURN3: RETURN3 coma RETURN4   {}
-    |    RETURN4                {}
+RETURN2
+    :   RETURN3            {}
+    |   IFTHENELSE         {}
+    |   HTML               {}
     ;
 
-RETURN4: dolar id barra id  {}
-    | dolar id           {}
+RETURN3
+    :   RETURN3 coma RETVAR   {}
+    |   RETVAR                {}
     ;
 
-HTML: menor id mayor CONTENIDOHTML  menor id mayor  {}
-    | menor id LISTAATRIBUTOSHTML mayor CONTENIDOHTML  menor id mayor  {}  
-;
+HTML
+    : menor id mayor CONTENIDOHTML menor barra id mayor  {}
+    | menor id LISTAATRIBUTOSHTML mayor CONTENIDOHTML  menor barra id mayor  {}  
+    ;
 
-LISTAATRIBUTOSHTML: LISTAATRIBUTOSHTML ATRIBUTOHTML     {}
-                | ATRIBUTOHTML                          {}
-;
+LISTAATRIBUTOSHTML
+    : LISTAATRIBUTOSHTML ATRIBUTOHTML       {}
+    | ATRIBUTOHTML                          {}
+    ;
 
 ATRIBUTOHTML
     : id '=' sstring                {}
     | id '=' dstring                {}
     ;
 
-CONTENIDOHTML:  {}
-;
+CONTENIDOHTML
+    :   corchetea RETVAR corchetec  {}
+    ;
 
 IFTHENELSE
     :   IF THEN ELSE    {}
     ;
 
 IF
-    :   if  parea dolar id barra arroba id COMPARISON dstring parec  {}
-    |   if  parea dolar id barra arroba id COMPARISON sstring parec  {}
+    :   if  parea RETVAR COMPARISON dstring parec  {}
+    |   if  parea RETVAR COMPARISON sstring parec  {}
     ;
 
 THEN
-    :   then menor id mayor corchetea RETVAR corchetec menor barra id mayor {}
-    |   then menor id mayor corchetea data parea RETVAR parec corchetec menor barra id mayor {}
+    :   then HTML   {}
     ;
 
 ELSE
-    :   else menor id mayor corchetea RETVAR corchetec menor barra id mayor {}
-    |   else menor id mayor corchetea data parea RETVAR parec corchetec menor barra id mayor {}
+    :   else HTML   {}
     ;
 
 RETVAR
-    :   dolar id barra id   {}
-    |   dolar id    {}
+    :   dolar id barra id           {}
+    |   dolar id                    {}
+    |   dolar id barra arroba id    {}
+    |   data parea RETVAR parec     {}
     ;
