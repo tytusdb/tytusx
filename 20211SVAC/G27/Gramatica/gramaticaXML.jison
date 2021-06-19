@@ -88,8 +88,8 @@ RAIZ:
 ;
 
 RAICES:
-    RAICES OBJETO {$$= $1;  $$.push($2);  alert($2.texto);}
-	| OBJETO  {$$= [];  $$.push($1); alert($1.texto);}
+    RAICES OBJETO {$$= $1;  $$.push($2);}
+	| OBJETO  {$$= [];  $$.push($1);}
 ;        
 
   

@@ -22,6 +22,7 @@ class Elemento implements Instruccion{
                 }
                 else if(elementoABuscar.tipo==tipoElemento.DOBLE_DIAGONAL)
                 {
+                    alert("Diagonal doble");
                     listaRetorno = listaRetorno.concat(value.obtenerBarraDoble(elementoABuscar.valor));
                 }
                 
