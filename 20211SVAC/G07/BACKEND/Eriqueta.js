@@ -20,7 +20,7 @@ class Etiqueta {
         this.cuerpo += this.texto + "";
       }
       if (this.contenido != "" && this.contenido != undefined) {
-        this.cuerpo += "\n"+this.contenido + "\n";
+        this.cuerpo += "\n"+this.contenido + "";
       }
 
       this.cuerpo += "</" + this.nombre + ">\n";
