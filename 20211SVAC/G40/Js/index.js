@@ -23,7 +23,6 @@ function CargarXML(){
     } else {
 
         contenido = ReemplazarEspeciales(contenido);
-        console.log(contenido.toString());
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
