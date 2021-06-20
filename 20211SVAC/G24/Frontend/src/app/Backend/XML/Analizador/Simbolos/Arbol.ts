@@ -30,15 +30,28 @@ export default class Arbol {
     return this.listaSimbolos;
   }
 
+
+  public BuscarTipo(identificador:String):String{
+    for(var elemento of this.listaSimbolos){
+      if(elemento.getIdentificador()==identificador){
+        return elemento.getTipo().toString();
+      }
+    }
+    
+    return 'as';
+  }
+
  
 
   public actualizarTabla(identificador: string, linea: string, columna: string): boolean {
     for (var elemento of this.listaSimbolos) {
       if (elemento.getIdentificador().toString() == identificador) 
       {
+        elemento.setContenido(linea);
         elemento.setLinea(linea);
         elemento.setColumna(linea);
-
+        elemento.setEntorno(identificador);
+        
         return true;
       }
     }

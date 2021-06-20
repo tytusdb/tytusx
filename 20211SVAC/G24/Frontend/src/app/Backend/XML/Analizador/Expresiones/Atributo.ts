@@ -15,7 +15,7 @@ export default class Atributo extends Instruccion{
 
   constructor(identificador: string, valor: string, linea: number,columna: number)
   {
-    super(new Tipo(tipoDato.CADENA), linea, columna);
+    super(new Tipo(tipoDato.ATRIBUTO), linea, columna);
     this.identificador = identificador;
     this.valor = valor;
     linea=this.linea;

@@ -81,11 +81,7 @@ export class ContenidoInicioComponent implements OnInit {
       var Tree: Arbol = new Arbol([objetos]);
       Tree.settablaGlobal(this.tablaGlobal);
 
-
-
       //  PARA GUARDAR DATOS
-
-
       // TODO FOR INTERPRETAR
       for (let i of Tree.getinstrucciones()) {
         if (i instanceof Objeto) {
@@ -95,41 +91,71 @@ export class ContenidoInicioComponent implements OnInit {
       }
       console.log(this.tablaGlobal);
 
+      var atributos = "";
+
+
+
+      /* L L E N A D O    T A B L A    D E    S I M B O L O S */
 
       for (var key of this.tablaGlobal.tablaActual) {
-        //alert(key + " = " + value);
-        var atributos = "";
+        var entorno =this.tablaGlobal.getAnterior().getidentificador();
         var listaobjetitos = "";
         var contenido = "";
+        var tipo = "";
+        var posicion = ""; //stack y heap
         var linea = key.getLinea();
         var columna = key.getColumna();
         var nombre = key.getidentificador();
-        for (var [key2, value2] of key.getAtributo()) {
-          //alert(key + " = " + value);
-          atributos += `${key2}=>${value2}, `
+        var atri = key.getAtributo();
 
+       /* if(nombre!=null){
+          let objetos = key.getvalor();
+        if (objetos instanceof tablaSimbolos) {
+          for (var key3 of objetos.tablaActual) {
+            listaobjetitos += `${key3.}, `
+            if(listaobjetitos!=null){
+              entorno=listaobjetitos;
+              console.log(entorno);
+            }
+          }
+        }*/
+
+        for (var [key2, value2,] of key.getAtributo()) {
+          nombre = key.getidentificador();
+          if (key.getAtributo() != null) {
+            nombre = nombre;
+            atributos += ` ${key2}=>${value2}, `;
+            if (nombre != null) {
+              if (nombre == key.getidentificador()) {
+                nombre += atributos;
+              } else {
+                nombre = atributos;
+              }
+            }
+          }
         }
+
+        let idEntorno=key.getidentificador();
         let objetos = key.getvalor();
         if (objetos instanceof tablaSimbolos) {
           for (var key3 of objetos.tablaActual) {
-            //alert(key + " = " + value);
             listaobjetitos += `${key3.getidentificador()}, `
-            //linea=`${key3.getLinea()} `
-            // columna=`${key3.getColumna()} `
-
+           
           }
 
           this.llenarTablaSimbolos(objetos, Tree);
 
         } else {
           contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
-
-          //Tree.actualizarTabla(contenido,linea,columna);
-
         }
-        var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos, linea, columna);
-        //Tree.listaSimbolos.push(Reporte);
+        if (key.gettipo().getTipo() == 1) {
+          tipo = "Objeto";
+        } else {
+          tipo = "Atributo";
+        }
 
+        var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
+        //Tree.listaSimbolos.push(Reporte);
       }
 
       // TERMINA FOR 
@@ -188,33 +214,50 @@ export class ContenidoInicioComponent implements OnInit {
   }
 
   llenarTablaSimbolos(t: tablaSimbolos, tri: Arbol) {
+
     for (var key of t.tablaActual) {
-      //alert(key + " = " + value);
       var atributos = "";
+      var entorno = this.tablaGlobal.getAnterior().getidentificador();
       var listaobjetitos = "";
       var contenido = "";
+      var tipo = "";
       var linea = key.getLinea();
       var columna = key.getColumna();
       var nombre = key.getidentificador();
       for (var [key2, value2,] of key.getAtributo()) {
-        //alert(key + " = " + value);
-        atributos += `${key2}=>${value2}, `;
+        nombre = key.getidentificador();
+        if (key.getAtributo() != null) {
+          atributos += ` ${key2}=>${value2}, `;
+          if (nombre != null) {
+            if (nombre == key.getidentificador()) {
+              nombre += atributos;
+            } else {
+              nombre = atributos;
+            }
+          }
+        }
       }
       let objetos = key.getvalor();
       if (objetos instanceof tablaSimbolos) {
         for (var key3 of objetos.tablaActual) {
-          //alert(key + " = " + value);
           listaobjetitos += `${key3.getidentificador()}, `
-
+          if(listaobjetitos!=null){
+            //entorno=listaobjetitos;
+           // console.log(entorno);
+          }
         }
-
         this.llenarTablaSimbolos(objetos, tri);
-
       } else {
         contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         tri.actualizarTabla(contenido, linea.toString(), columna.toString());
       }
-      var Reporte = new reporteTabla(nombre, contenido, atributos, listaobjetitos, linea, columna);
+      if (key.gettipo().getTipo() == 1) {
+        tipo = "Objeto";
+      } else {
+        tipo = "Atributo";
+      }
+
+      var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
       tri.listaSimbolos.push(Reporte);
 
     }
@@ -296,11 +339,11 @@ export class ContenidoInicioComponent implements OnInit {
             tablita = resultador
             if (c == instructions.length) {
               consolita += this.recorrerTabla(tablita);
-              consolita+="\n"
+              consolita += "\n"
             }
           }
           else { //VIENE STRING
-            consolita += resultador+"\n"
+            consolita += resultador + "\n"
           }
         }
       });
@@ -308,11 +351,11 @@ export class ContenidoInicioComponent implements OnInit {
       console.log("SIGUIENTE")
     }
 
-    
+
 
     this.mostrarContenido(consolita, 'resultado');
 
-    
+
   }
 
 
