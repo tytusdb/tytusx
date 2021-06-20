@@ -28,10 +28,12 @@ import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNod
 import { type } from 'os';
 import { parser } from 'GramaticaXML';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
+import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
+import { WebElementPromise } from 'protractor';
 
 
 export let listaErrores: Array<NodoErrores>;
-
+export let listainstrucciones: Array<Instruccion[]>
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -78,7 +80,7 @@ export class ContenidoInicioComponent implements OnInit {
 
       var Tree: Arbol = new Arbol([objetos]);
       Tree.settablaGlobal(this.tablaGlobal);
-      
+
 
 
       //  PARA GUARDAR DATOS
@@ -267,6 +269,7 @@ export class ContenidoInicioComponent implements OnInit {
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
+    console.log(listainstrucciones)
     var Tree: ArbolXpath = new ArbolXpath([objetos]);
     var tabla = new tablaSimbolos();                    //ejecucion
     ast.settablaGlobal(tabla);                        //ejecucion
@@ -279,26 +282,58 @@ export class ContenidoInicioComponent implements OnInit {
         tablita = key.getvalor()
       }
     }
-    for (let i of ast.getinstrucciones()) {             //ejecucion  
-      c++;
-      if (i instanceof BarrasNodo) {
-        var resultador = i.interpretar(Tree, tablita);
+    console.log(ast.getinstrucciones().length)
+    for (let index = 0; index < ast.getinstrucciones().length; index++) {
+      const instructions = ast.getinstrucciones()[index];
+
+      instructions.forEach(element => {
+        c++
+        console.log(element)
+        if (element instanceof BarrasNodo) {
+          console.log("es barranodo")
+          var resultador = element.interpretar(Tree, tablita);
+          if (resultador instanceof tablaSimbolos) {
+            tablita = resultador
+            if (c == instructions.length) {
+              consolita += this.recorrerTabla(tablita);
+              consolita+="\n"
+            }
+          }
+          else { //VIENE STRING
+            consolita += resultador+"\n"
+          }
+        }
+      });
+      c = 0;
+      console.log("SIGUIENTE")
+    }
+
+    
+
+    this.mostrarContenido(consolita, 'resultado');
+
+    
+  }
+
+
+  ciclogetInstuciones(i: any, numero: number, Tree: ArbolXpath, tablita: tablaSimbolos, ast: ArbolXpath, consolita: string) {
+    if (i[numero] != null) {
+
+      if (i[numero] instanceof BarrasNodo) {
+        let temp: BarrasNodo = i[numero]
+        var resultador = temp.interpretar(Tree, tablita)
         if (resultador instanceof tablaSimbolos) {
           tablita = resultador
-          if (c == ast.getinstrucciones().length) {
+          if (numero == ast.getinstrucciones().length) {
             consolita = this.recorrerTabla(tablita);
+          } else {
           }
         }
         else { //VIENE STRING
           consolita = resultador
         }
-        //var consolita = localStorage.getItem('consulta');
       }
     }
-
-    this.mostrarContenido(consolita, 'resultado');
-
-
   }
 
   ArbolAscAST(texto: string) {
