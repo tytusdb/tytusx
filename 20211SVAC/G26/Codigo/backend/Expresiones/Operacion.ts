@@ -18,6 +18,7 @@ export class Operacion implements Expresion{
         this.columna = columna;
         this.op_izq = op_izq;
         this.op_der = op_der;
+
         this.operacion = operacion;
     }
 
@@ -54,6 +55,13 @@ export class Operacion implements Expresion{
             valDer = this.op_der.getValor(entorno);
         }
         typeDer = this.op_der.getTipo(entorno);
+        if(valIzq === null){
+            if(this.op_izq.getValorInicial(entorno) === entorno.nombre){
+                valIzq = entorno.obtenerSimbolo(this.op_izq.getValorInicial(entorno));
+            }else{
+                return;
+            }
+        }
         switch(this.operacion){
             case TipoOperacion.SUMA:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
@@ -849,7 +857,7 @@ export class Operacion implements Expresion{
                         break;
                 }
                 break;
-            case TipoOperacion.IGUALQUE:
+            case TipoOperacion.IGUAL:
                 switch(typeIzq) {
                     case TipoPrim.INTEGER:
                         switch(typeDer){
@@ -892,7 +900,7 @@ export class Operacion implements Expresion{
                                 }                                       
                               case TipoPrim.IDENTIFIER:
                                 this.tipo = TipoPrim.FUNCION
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.INTEGER)                                                                
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER)                                                                
                             default: 
                                 break; 
                         }
@@ -901,7 +909,7 @@ export class Operacion implements Expresion{
                         switch(typeIzq){
                         case TipoPrim.IDENTIFIER:
                             this.tipo = TipoPrim.FUNCION;
-                            return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE);
+                            return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
                         
                         default:
                             break;
@@ -1061,18 +1069,16 @@ export class Operacion implements Expresion{
                         break;
 
                     case TipoPrim.IDENTIFIER:
-                        console.log("OK ID")
                         this.tipo = TipoPrim.FUNCION
                         switch(typeDer){
                             case TipoPrim.INTEGER :
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.INTEGER)
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER)
 
                             case TipoPrim.DOUBLE :
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE)
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE)
                                    
                             case TipoPrim.CADENA:
-                                console.log("Hmmm")
-                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUALQUE);
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUAL);
                                 
                             case TipoPrim.IDENTIFIER:
                                 break;
@@ -1088,7 +1094,7 @@ export class Operacion implements Expresion{
                             let fromR = l[l.length-1].isFromRoot()
                             let lastNodeName = l[l.length-1].getNombre()
                             let entConsultaTemp = this.op_izq.getValor(entorno);                            
-                           entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUALQUE  )
+                           entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUAL  )
                             return entTemporal;
                             
                             default:
@@ -1314,8 +1320,15 @@ export class Operacion implements Expresion{
                 return 'atributo';
             case TipoPrim.DOT:
                 return 'dot';
+            case TipoPrim.BOOLEAN:
+                return 'boolean';
+            case TipoPrim.FUNCION:
+                return "Funcion mae"
+            case TipoPrim.CONSULTA:
+                return "Consulta"
+            default:
+                return "ERROR"
         }
-        return '';
     }
 
     buscarTexto(elem: any): String | null{
@@ -1400,7 +1413,7 @@ export class Operacion implements Expresion{
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }                                    
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if(numCompare === der){
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1430,21 +1443,17 @@ export class Operacion implements Expresion{
         //1. Obtener entorno padre.
         let padre = entorno.padre;
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
-        console.log("LIONG: ", entorno.padre.tsimbolos.length);
         padre.tsimbolos.forEach((e: any) => {
-            console.log("wat: ",e.valor.nombre)
             let elem = e.valor;
             if(elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre){
                 //Se encontro, ahora buscar en los simbolos de este elem
                 //si se encuentra el identificador (valIzq)
-                console.log("WOAH: ",elem.valor.tsimbolos.length)
                 elem.valor.tsimbolos.forEach((insd: any) => {
                     let elin = insd.valor;
                     if(elin.getNombre() === izq ){
                         //Buscar el texto de este elemento.
                         let texto = this.buscarTexto(elin)
                         der = der.replace("\"", "")
-                        console.log("TEXTO : ", texto + " == ", der)
                         if(texto != null){
                             //Comparar los textos
                             switch(relacional){
@@ -1472,7 +1481,7 @@ export class Operacion implements Expresion{
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }                                    
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if(texto === der){
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1506,7 +1515,7 @@ export class Operacion implements Expresion{
                 if(elem.getTipo() === Tipo.ETIQUETA){
                     elem.valor.tsimbolos.forEach((c2: any) => {
                         let elemfinal = c2.valor;
-                        if(op === TipoOperacion.IGUALQUE){
+                        if(op === TipoOperacion.IGUAL){
                             if(elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() === valDer){
                                 if(!flag){
                                     entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
@@ -1551,7 +1560,7 @@ export class Operacion implements Expresion{
     buscarAtributosRecursivamente(elem: any, valDer: any, lastNodeName: String, op: TipoOperacion): boolean{
         for(let i = 0; i < elem.valor.tsimbolos.length; i++){
             let at = elem.valor.tsimbolos[i].valor;
-            if(op === TipoOperacion.IGUALQUE){
+            if(op === TipoOperacion.IGUAL){
                 if(at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() === valDer){
                     return true;
                 }
@@ -1630,7 +1639,7 @@ export class Operacion implements Expresion{
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }                                    
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if(izq === numCompare){
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1663,7 +1672,7 @@ export enum TipoOperacion{
     MENORQUE,
     MAYORIGUALQUE,
     MENORIGUALQUE,
-    IGUALQUE,
+    IGUAL,
     DIFERENTEQUE,
     OR,
     AND,

@@ -27,8 +27,9 @@ export class Entorno {
     obtenerSimbolo(nombre) {
         for (let a = this; a != null; a = a.padre) {
             for (let i = 0; i < a.tsimbolos.length; i++) {
-                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase())
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
                     return a.tsimbolos[i].valor;
+                }
             }
         }
         errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);

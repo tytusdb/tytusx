@@ -43,7 +43,7 @@ export class Nodo implements Expresion{
         return this.nombre;
     }
 
-    public getNombre(){
+    public getNombre(){        
         return this.nombre;
     }
     public getPredicado(): Predicate | undefined{

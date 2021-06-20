@@ -31,7 +31,7 @@ class Analizador{
     Analizador._instance = this;
     return this;
   }
-  
+
   public static getInstance() {
     return this._instance;
   }
@@ -276,27 +276,9 @@ bookstore/book
 |
 //@category
 `);
+*/
 
-xmlDescendente(`
-<?xml version="1.0" encoding="UTF-8"?>
-
-<bookstore>
-  <book category="children">
-  	<title>Harry Potter</title>
-    <author>J K. Rowlin</author>
-    <price at="asd"></price>
-    <hola> </Hola>
-  </book>
-  <!-- HOLAAA -->
-  <book category="web">
-    <title>Learning XML</title>
-    <author>Erik T. Ray</author>
-    <year>2003</year>
-    <price>39.95 &lt 30</price>
-  </book>
-</bookstore>
-`);
-
+/*
 xmlAscendente(`
 <?xml version="1.0" encoding="UTF-8"?>
 
