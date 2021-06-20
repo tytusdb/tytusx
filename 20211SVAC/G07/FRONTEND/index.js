@@ -194,6 +194,7 @@ let textoEntrada = `<?xml version="1.0" encoding="ASCII"?>
 `
 editorXML.value = textoEntrada
 
+
 // Analizar la entrada XML al hacer CLICK al boton
 botonCargar.addEventListener("click", () => {
     console.log("Analizando XML DES ...")
@@ -208,7 +209,8 @@ botonCargar.addEventListener("click", () => {
 
     codificador.innerHTML = parserXML.tipoencoding;
     globalencod =parserXML.tipoencoding;
-
+    console.error("Aqui");
+    console.log(consulta_xml.parse("<price>5.95</price>"));
 })
 
 botonCargar2.addEventListener("click", () => {
