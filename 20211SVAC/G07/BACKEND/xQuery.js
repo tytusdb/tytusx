@@ -20,13 +20,16 @@ function getConsultaXQuery(instruccion, entorno,padre){
 
 function ejecutarForIn(instruccion,entorno,padre){
     console.error("ejecutarForIn");
-    let entorno= new Entorno(padre);
+    
     let consulta=instruccion.iterador.consulta;
     let entornos=procesarXpath(consulta,entorno,padre);
+    entornos=procesarEtorno(entornos);
     let respuesta="";
     for (const x of entornos) {
-        let variable={nombre:instruccion.iterador.variable,valor:x};
-        let retorno=procesarReturn(instruccion.retorno,variable);
+        let var_= new Entorno(padre);
+        console.log(x);
+        var_.agregar(instruccion.iterador.variable,x);
+        let retorno=procesarReturn(instruccion.retorno,var_);
         if(retorno){
             respuesta+=retorno;
         }
@@ -39,8 +42,23 @@ function ejecutarForIn(instruccion,entorno,padre){
     return null;
     
 }
-function procesarReturn(instruccion,entorno){
+function procesarReturn(instruccion,variables){
+    let variable=variables.getSimbolo(instruccion.variable);
 
+    console.log(instruccion.consulta);
+    if(variable){
+        if(instruccion.consulta){
+            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variables);
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            let txt="";
+            for (const iterator of arregloEntornos) {
+                txt+=imprimirEntorno(iterator);
+            }
+            return txt;
+        }
+        return imprimirEntorno(variable);
+    }
+    return null;
 }
 
 //Regresa un arreglo de entornos
@@ -144,4 +162,20 @@ function getConsultaXPath(arreglo){
     }
     return retorno;
 }
+let regreso_=[];
+function procesarEtorno(entorno){
+    regreso_=[];
+    procesarArreglo(entorno);
+    return regreso_;
+}
 
+function procesarArreglo(entorno){
+   if(!entorno.etiqueta){
+        for (const iterator of entorno) {
+            procesarArreglo(iterator);
+        }   
+    }else{
+        regreso_.push(entorno);
+    }
+    
+}
