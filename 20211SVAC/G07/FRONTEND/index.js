@@ -119,79 +119,49 @@ let parserXQUERY;
 let editorXQUERY = document.getElementById("consolaXQUERY");
 
 
-let textoEntrada = `<?xml version="1.0" encoding="ASCII"?>
-<mundo>
-  <continente name="Europa">
-    <pais moneda="Euro">
-      <nombre>Monaco</nombre>
-      <capital>Ciudad de Monaco</capital>
-      <idioma>Frances</idioma>
-      <poblacion year="2019" unit="thousands">38.964</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Austria</nombre>
-      <capital>Viena</capital>
-      <idioma>Aleman</idioma>
-      <poblacion year="2019" unit="millions">8.859</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Portugal</nombre>
-      <capital>Lisboa</capital>
-      <idioma>Portugues</idioma>
-      <poblacion year="2019" unit="millions">10.28</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Francia</nombre>
-      <capital>Paris</capital>
-      <idioma>Frances</idioma>
-      <poblacion year="2019" unit="millions">67.06</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Alemania</nombre>
-      <capital>Berlin</capital>
-      <idioma>Aleman</idioma>
-      <poblacion year="2019" unit="millions">83.02</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>España</nombre>
-      <capital>Madrid</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">46.94</poblacion>
-    </pais>
-  </continente>
-  <continente name="America">
-    <pais moneda="Dolar">
-      <nombre>Estados unidos</nombre>
-      <capital>Washington DC</capital>
-      <poblacion year="2019" unit="millions">328.2</poblacion>
-    </pais>
-    <pais moneda="Quetzal">
-      <nombre>Guatemala</nombre>
-      <capital>Ciudad de Guatemala</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">16.6</poblacion>
-    </pais>
-    <pais moneda="Dolar">
-      <nombre>El Salvador</nombre>
-      <capital>San Salvador</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">6.454</poblacion>
-    </pais>
-    <pais moneda="Peso argentino">
-      <nombre>Argentina</nombre>
-      <capital>Buenos Aires</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">44.94</poblacion>
-    </pais>
-    <pais moneda="Real brasileño">
-      <nombre>Brasil</nombre>
-      <capital>Brasilia</capital>
-      <idioma>Portugues</idioma>
-      <poblacion year="2019" unit="millions">221</poblacion>
-    </pais>
-  </continente>
-</mundo>
+let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
+
+<bookstore>
+
+<book category="COOKING">
+  <title lang="en">Everyday Italian</title>
+  <author>Giada De Laurentiis</author>
+  <year>2005</year>
+  <price>30.00</price>
+</book>
+
+<book category="CHILDREN">
+  <title lang="en">Harry Potter</title>
+  <author>J K. Rowling</author>
+  <year>2005</year>
+  <price>29.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">XQuery Kick Start</title>
+  <author>James McGovern</author>
+  <author>Per Bothner</author>
+  <author>Kurt Cagle</author>
+  <author>James Linn</author>
+  <author>Vaidyanathan Nagarajan</author>
+  <year>2003</year>
+  <price>49.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">Learning XML</title>
+  <author>Erik T. Ray</author>
+  <year>2003</year>
+  <price>39.95</price>
+</book>
+
+</bookstore>
 `
+let XQuery = `
+for $x in /bookstore/book
+return $x/title
+`
+editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada
 
 
@@ -237,7 +207,9 @@ btnCargarxquery.addEventListener("click", () => {
   parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
 
   console.log("EL ANALIZADOR REGRESA");
-  console.log(parserXQUERY);
+  parserXML = xmlDerecha.parse(editorXML.value);
+  globalencod =parserXML.tipoencoding;
+  ejecutarXQuery(parserXQUERY,parserXML.json);
 
 
 })

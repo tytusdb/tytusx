@@ -155,289 +155,84 @@
 
 /* Definición de la gramática */
 INICIO : 
-        CONSTRUCCION EOF                {return $CONSTRUCCION;}  
+        XQUERYGRA EOF                                                                   {return $1;}  
 ;
-
-CONSTRUCCION:
-        ELEMENTO            
-        |ESTRUCTURAHTML
-        |CONTENIDO     
-        ;
-
-ESTRUCTURAHTML:
-        tk_html_abre ESTRUCTURAHTMLBD tk_html_cierra
-        |
+XQUERYGRA
+        :FOR_IN RETURN                                                                  {$$={instr:"FOR_IN",iterador:$1,retorno:$2};}
+        |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
 ;
-
-ESTRUCTURAHTMLBD:
-        tk_body_abre ESTRUCTURAHTMLH1 tk_body_cierra
-        |
+FOR_IN
+        :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
 ;
-
-ESTRUCTURAHTMLH1:
-        tk_h1_abre LISTAID tk_h1_cierra ESTRUCTURAHTMLUL
-        |
+RETURN
+        :tk_return VARIABLE                                                             {$$={variable:$VARIABLE,consulta:null}}
+        |tk_return VARIABLE XPATHGRA                                                    {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
 ;
-
-LISTAID:
-        LISTAID tk_identificador
-        |tk_identificador
+LLAMADA
+        :tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der XPATHGRA                  {}
+        |XPATHGRA                                                                       {$$=$1;}
 ;
-
-ESTRUCTURAHTMLUL:
-        CONTENIDO  // COMPLETA 
-        | tk_ul_abre tk_llave_izq CONTENIDO tk_llave_der tk_ul_cierra
-        {console.log($1);
-        console.log($2);
-        console.log($4);
-        console.log($5);}
+VARIABLE
+        :tk_dolar tk_identificador                                                      {$$=$tk_identificador;}
 ;
-
-CONTENIDO:
-            ENCABEZADO ELEMENTO ACCIONWHE ACCIONOBY
-            |ENCABEZADO ELEMENTO ACCIONRET 
-;
-
-ENCABEZADO:
-        tk_for EXPRESION tk_at EXPRESION tk_in
-        {console.log($1);
-        console.log($3);}
-        |tk_for EXPRESION tk_in
-        |tk_let EXPRESION tk_let_igual 
-;
-
-ELEMENTO:
-         PRODUCCION XPATHGRA //produccion doc("cadena") expresion xpath
-        | LISTAELEMENTO
-;  
-
-LISTAELEMENTO:
-        LISTAELEMENTO tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
-        | tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
-        |LISTAELEMENTO tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der
-        | tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der
-;
-
-//XPATHGRA -> Aqui deben ir todas las instrucciones de XPATH pueden venir cualesquiera
-
-PRODUCCION:
-        tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der 
-        {console.log($1);
-        console.log($2);
-        console.log($3);
-        console.log($4);}
-;
-
-EXPRESION:
-        tk_dolar XPATHGRA
-        {console.log($1);}
-;
- 
-ACCIONWHE:
-        tk_where LISTAWHE ACCIONRET
-        {console.log($1);} 
-        |tk_where LISTAWHE     
-        |
-;
-
-LISTAWHE:
-        LISTAWHE ESTIMACIONAND EXPRESION 
-        |EXPRESION
-;
-
-ESTIMACIONAND:
-        tk_and
-        |tk_or
-        |tk_coma
-;
-
-ACCIONOBY:
-        tk_order_by LISTAOBY ACCIONRET
-        {console.log($1);} 
-        |tk_order_by LISTAOBY     
-        |
-;
-
-LISTAOBY:
-        LISTAOBY ESTIMACIONAND EXPRESION 
-        |EXPRESION
-;
-
-ACCIONRET:
-        tk_return VALORRETURN
-        {console.log($1);}
-;
-
-VALORRETURN:
-        EXPRESION
-        |tk_li_abre LISTARET tk_li_cierra
-        {console.log($1);
-        console.log($3);} 
-        | ESTRUCTURAIF ESTRUCTURATHEN ESTRUCTURAELSE
-        | ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
-;
-
-LISTARET:
-        LISTARET  LISTAOPHT 
-        | LISTAOPHT 
-;
-
-LISTAOPHT:
-        LISTAOPHT AGREGACION tk_llave_izq OPCIONHTML tk_llave_der
-        |LISTAOPHT AGREGACION tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der
-        |tk_llave_izq OPCIONHTML tk_llave_der
-        |tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der
-;
-
-AGREGACION:
-        tk_punto
-        | tk_and
-        | tk_or
-;
-
-OPCIONHTML:
-        tk_llave_izq EXPRESION tk_llave_der
-        | EXPRESION
-        | tk_llave_izq OPCIONDATA tk_llave_der
-        | OPCIONDATA
-;
-
-OPCIONDATA:
-         tk_data tk_parentesis_izq EXPRESION tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($4);} 
-;
-
-ESTRUCTURAIF:
-        tk_if tk_parentesis_izq EXPRESION tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($4);} 
-;
-
-ESTRUCTURATHEN:
-        tk_then ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
-        {console.log($1);} 
-        |tk_then tk_parentesis_izq EXPRESION tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($4);} 
-        |
-;
-
-ESTRUCTURAELSE:
-        tk_else ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
-        {console.log($1);} 
-        | tk_else tk_parentesis_izq EXPRESION tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($4);}             
-        | tk_else tk_parentesis_izq tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($3);} 
-;
-
-ETIQUETAABRE:
-        tk_menor tk_identificador tk_mayor
-        {console.log($1);
-        console.log($2);
-        console.log($3);}             
-;
-
-ETIQUETACIERRA:
-        tk_menor tk_diagonal tk_identificador tk_mayor
-        {console.log($1);
-        console.log($2);
-        console.log($3);
-        console.log($4);} 
-;
-
 // FINALIZA GRAMATICA DE XQUERY
 // INICIA GRAMATICA DE XPATH
 
 XPATHGRA:
-     EXPRESIONXPA ELEMENTO_P                                     
+     CONSULTA_                                                                          {$$=$1;}             
 ;  
+CONSULTA_
+        :tk_identificador CONSULTA                                                      {$2.unshift({instr:"NODO",valor:$1}); $$=$2;}
+        |CONSULTA                                                                       {$$=$1;}
+;
+CONSULTA
+        :CONSULTA NODO                                                                  {$1.push($2); $$=$1;}
+        |NODO                                                                           {$$=[$1];}
+;  
+NODO
+        :tk_diagonal tk_identificador PREDICADO                                         {$$= {instr:"ACCESO",valor:$2,index:$3};}
+        |tk_diagonal_doble tk_identificador  PREDICADO                                  {$$= {instr:"ACCESODOBLE",valor:$2,index:$3};}
+        |tk_diagonal tk_puntos_seguidos                                                 {$$= {instr:"RETROCESO"};}
+        |tk_diagonal tk_arroba tk_identificador                                         {$$= {instr:"ATRIBUTO",valor:$3};}
+        |tk_diagonal tk_punto                                                           {$$= {instr:"ACTUAL"};}
 
-ELEMENTO_P:
-         tk_barra_or EXPRESIONXPA ELEMENTO_P
-                 {console.log($1);}                  
-        |                                                       
+        |tk_diagonal tk_asterisco PREDICADO                                             {$$= {instr:"ACCESO",valor:$2,index:$3};}
+        |tk_diagonal_doble tk_asterisco  PREDICADO                                      {$$= {instr:"ACCESODOBLE",valor:$2,index:$3};}
+
+        |tk_diagonal tk_arroba tk_asterisco                                             {$$= {instr:"ATRIBUTO",valor:$3};}
+
+        |tk_diagonal tk_node tk_parentesis_der tk_parentesis_izq PREDICADO              {$$= {instr:"ACCESO",valor:"*",index:$5};}
+        |tk_diagonal_doble tk_node tk_parentesis_der tk_parentesis_izq  PREDICADO       {$$= {instr:"ACCESODOBLE",valor:"*",index:$5};}
+
+        |tk_diagonal_doble tk_arroba tk_identificador                                   {$$= {instr:"ATRIBUTODOBLE",valor:$3};}
+        |tk_diagonal_doble tk_arroba tk_asterisco                                       {$$= {instr:"ATRIBUTODOBLE",valor:$3};}
+
 ;
 
-EXPRESIONXPA:
-         SIMBOLOS CAJETIN SIMBOLOS_P                            
-        | CAJETIN SIMBOLOS_P                                      
+PREDICADO
+        :tk_corchete_izq DATO  tk_corchete_der                                          {$$= $DATO;}
+        |                                                                               {$$= null;}
 ;
 
-SIMBOLOS:
-          tk_diagonal                             
-           {console.log($1);}    
-        | tk_diagonal_doble     
-         {console.log($1);}                       
-        | tk_arroba ARROPROD  
-         {console.log($1);}                                 
-        | tk_puntos_seguidos PRODUCT 
-         {console.log($1);}                 
-        | tk_punto PRODUCT    
-         {console.log($1);}                        
-        | tk_asterisco tk_identificador                            
-         {console.log($1);
-         console.log($2);}   
+DATO
+//Tipos de datos
+        :tk_numero                                                                      {$$= {tipo:"NUMERO",valor:$1}}  
+        |tk_identificador                                                               {$$= {tipo:"ID",valor:$1}}                                                         
+        |tk_hilera                                                                      {$$= {tipo:"CADENA",valor:$1}}                                                                   
+        |tk_arroba tk_identificador                                                     {$$= {tipo:"ATRIBUTO",valor:$2}}                                                
+        |tk_last tk_parentesis_izq tk_parentesis_der                                    {$$= {tipo:"LAST"}} 
+//Operaciones aritmeticas                      
+        |DATO tk_mas DATO                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
+        |DATO tk_menos DATO                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
+        |DATO tk_asterisco DATO                                                         {$$= {tipo:"OP_MUL",valor1:$1,valor2:$3}}                                                 
+        |DATO tk_div DATO                                                               {$$= {tipo:"OP_DIV",valor1:$1,valor2:$3}}  
+        |DATO tk_mod DATO                                                               {$$= {tipo:"OP_MOD",valor1:$1,valor2:$3}}                                                                                                          
+        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$1}}
+//Operaciones Logicas
+        |DATO tk_igual DATO       	                                                {$$= {tipo:"OP_IGUAL",valor1:$1,valor2:$3}}                                   
+        |DATO tk_indiferente DATO                                                       {$$= {tipo:"OP_DIFERENTE",valor1:$1,valor2:$3}}                   
+        |DATO tk_menor_igual DATO                                                       {$$= {tipo:"OP_MENOR_IGUAL",valor1:$1,valor2:$3}}
+        |DATO tk_mayor_igual DATO                                                       {$$= {tipo:"OP_MAYOR_IGUAL",valor1:$1,valor2:$3}}
+        |DATO tk_mayor DATO                                                             {$$= {tipo:"OP_MAYOR",valor1:$1,valor2:$3}}
+        |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}                  
 ;
-
-SIMBOLOS_P:
-         EXPRESIONXPA                                                        
-        |                                                          
-;
-
-CAJETIN:
-        tk_corchete_izq DATO tk_corchete_der 
-        | DATO                           
-;
-
-DATO:
-         tk_numero   
-         {console.log($1);}                                           
-        |tk_identificador   
-        {console.log($1);}                                     
-        |tk_hilera         
-        {console.log($1);}                                      
-        |tk_arroba tk_identificador
-        {console.log($1);
-        console.log($2);}                              
-        |tk_last tk_parentesis_izq tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($3);}                              
-	|DATO tk_mas DATO
-        {console.log($2);}                                       
-        |DATO tk_menos DATO
-        {console.log($2);}                                    
-        |DATO tk_div DATO 
-        {console.log($2);}                                  
-        |DATO tk_igual DATO
-        {console.log($2);}                                    
-        |DATO tk_indiferente DATO
-        {console.log($2);}                                              
-        |DATO tk_menor_igual DATO
-        {console.log($2);}                                                           
-        |DATO tk_mayor_igual DATO
-        {console.log($2);}                                      
-        |DATO tk_mayor DATO
-        {console.log($2);}                                      
-        |DATO tk_mod DATO 
-        {console.log($2);}                                             
-;
-
-
-/*
-        |tk_menos DATO %prec UMENOS	
-        {console.log($1);}
-        |DATO tk_asterisco DATO
-        {console.log($2);} 
-        |DATO tk_menor DATO
-        {console.log($2);}
-*/
