@@ -195,10 +195,12 @@ ELEMENTO:
 ;  
 
 LISTAELEMENTO:
-         tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der LISTAELEMENTO
+         tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der LISTAELEMENTO
         | tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
-        | tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der LISTAELEMENTO
+        | tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
+        | tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der LISTAELEMENTO
         | tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der
+        | tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der
 ;
 
 //XPATHGRA -> Aqui deben ir todas las instrucciones de XPATH pueden venir cualesquiera
@@ -253,7 +255,7 @@ VALORRETURN:
         {console.log($1);
         console.log($3);} 
         | ESTRUCTURAIF ESTRUCTURATHEN ESTRUCTURAELSE
-        | ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
+        | ETIQUETAABRE LISTARET ETIQUETACIERRA
 ;
 
 LISTARET:
@@ -262,10 +264,10 @@ LISTARET:
 ;
 
 LISTAOPHT:
-         AGREGACION tk_llave_izq OPCIONHTML tk_llave_der LISTAOPHT
-        |AGREGACION tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der LISTAOPHT
-        |tk_llave_izq OPCIONHTML tk_llave_der
-        |tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der
+        tk_llave_izq OPCIONHTML tk_llave_der  
+        |tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der  
+        | AGREGACION tk_llave_izq OPCIONHTML tk_llave_der
+        | AGREGACION tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der
 ;
 
 AGREGACION:
@@ -391,7 +393,7 @@ DATO:
         {console.log($1);
         console.log($2);
         console.log($3);}                              
-	|DATO tk_mas DATO
+	    |DATO tk_mas DATO
         {console.log($2);}                                       
         |DATO tk_menos DATO
         {console.log($2);}                                    

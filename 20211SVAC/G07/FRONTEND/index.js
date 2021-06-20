@@ -114,10 +114,14 @@ let parserXML;
 let globalencod;
 let codificador = document.getElementById("codencod");
 
+//botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
 let parserXQUERY;
 let editorXQUERY = document.getElementById("consolaXQUERY");
 
+//variables para boton a la derecha de xquery
+let btnCargarxqueryder = document.getElementById("btnCargarxqueryder");
+let parserXQUERYder;
 
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 
@@ -203,13 +207,26 @@ btnCargarxquery.addEventListener("click", () => {
   console.log("Analizando XQUERY ")
   tipoAnalizadorXML = "ASCENDENTE";
 
-  // Analizador XML por la izquierda
+  // Analizador XQUERY por la izquierda
   parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
 
   console.log("EL ANALIZADOR REGRESA");
   parserXML = xmlDerecha.parse(editorXML.value);
   globalencod =parserXML.tipoencoding;
   ejecutarXQuery(parserXQUERY,parserXML.json);
+
+
+})
+
+btnCargarxqueryder.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "DESCENDENTE";
+
+  // Analizador XQUERY por la DERECHA
+  parserXQUERYder = analizador_xqueryder.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  console.log(parserXQUERYder);
 
 
 })
