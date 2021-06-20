@@ -30,6 +30,9 @@
 //PALABRAS RESERVADAS
 "doc"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_doc';%}
 "for"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_for';%}
+
+"let"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_let';%}
+
 "where"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_where';%}
 "order by"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_order_by';%}
 "return"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_return';%}
@@ -41,10 +44,27 @@
 "to"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_to';%}
 "at"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_at';%}
 
+"eq"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_eq';%}
+"ne"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ne';%}
+"lt"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_lt';%}
+"le"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_le';%}
+"gt"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_gt';%}
+"ge"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ge';%}
+
+
+
+"<html>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_html_abre';%}
+"</html>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_html_cierra';%}
+"<body>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_body_abre';%}
+"</body>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_body_cierra';%}
+
+"<h1>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_h1_abre';%}
+"</h1>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_h1_cierra';%}
 "<ul>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ul_abre';%}
 "</ul>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ul_cierra';%}
 "<li>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_li_abre';%}
 "</li>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_li_cierra';%}
+
 
 "$"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_dolar';%}
 
@@ -77,6 +97,7 @@
 
 
 // SIMBOLOS
+":="                   %{ listaTokens.push(new Token("ComparacionLet", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_let_igual';%}
 "|"                    %{ listaTokens.push(new Token("Barra", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_barra_or';%}
 "+"                    %{ listaTokens.push(new Token("Suma", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_mas';%}
 "-"                    %{ listaTokens.push(new Token("Resta", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_menos';%} 
@@ -98,6 +119,8 @@
 "]"                    %{ listaTokens.push(new Token("Corchete_Der", yytext, yylloc.first_line, yylloc.first_column)); return "tk_corchete_der";%}
 "{"                    %{ listaTokens.push(new Token("Llave_Izq", yytext, yylloc.first_line, yylloc.first_column)); return "tk_llave_izq";%}
 "}"                    %{ listaTokens.push(new Token("Llave_Der", yytext, yylloc.first_line, yylloc.first_column)); return "tk_llave_der";%}
+","                    %{ listaTokens.push(new Token("Coma", yytext, yylloc.first_line, yylloc.first_column)); return "tk_coma";%}
+
 
 "."                    %{ listaTokens.push(new Token("Punto", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_punto';%}
 
@@ -137,10 +160,31 @@ INICIO :
 
 CONSTRUCCION:
         ELEMENTO            
-        |ESTRUCTURAHTML     
+        |ESTRUCTURAHTML
+        |CONTENIDO     
         ;
 
 ESTRUCTURAHTML:
+        tk_html_abre ESTRUCTURAHTMLBD tk_html_cierra
+        |
+;
+
+ESTRUCTURAHTMLBD:
+        tk_body_abre ESTRUCTURAHTMLH1 tk_body_cierra
+        |
+;
+
+ESTRUCTURAHTMLH1:
+        tk_h1_abre LISTAID tk_h1_cierra ESTRUCTURAHTMLUL
+        |
+;
+
+LISTAID:
+        LISTAID tk_identificador
+        |tk_identificador
+;
+
+ESTRUCTURAHTMLUL:
         CONTENIDO  // COMPLETA 
         | tk_ul_abre tk_llave_izq CONTENIDO tk_llave_der tk_ul_cierra
         {console.log($1);
@@ -155,20 +199,24 @@ CONTENIDO:
 ;
 
 ENCABEZADO:
-        tk_for EXPRESION tk_in
+        tk_for EXPRESION tk_at EXPRESION tk_in
         {console.log($1);
         console.log($3);}
+        |tk_for EXPRESION tk_in
+        |tk_let EXPRESION tk_let_igual 
 ;
 
 ELEMENTO:
          PRODUCCION XPATHGRA //produccion doc("cadena") expresion xpath
-        | tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($3);
-        console.log($4);
-        console.log($5);}
+        | LISTAELEMENTO
 ;  
+
+LISTAELEMENTO:
+        LISTAELEMENTO tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
+        | tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der
+        |LISTAELEMENTO tk_coma EXPRESION tk_in tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der
+        | tk_parentesis_izq tk_numero tk_coma tk_numero tk_parentesis_der
+;
 
 //XPATHGRA -> Aqui deben ir todas las instrucciones de XPATH pueden venir cualesquiera
 
@@ -184,21 +232,35 @@ EXPRESION:
         tk_dolar XPATHGRA
         {console.log($1);}
 ;
-
+ 
 ACCIONWHE:
-        tk_where EXPRESION ACCIONRET
-        {console.log($1);}
-        |tk_where EXPRESION 
-        {console.log($1);}
-        | 
-;  
+        tk_where LISTAWHE ACCIONRET
+        {console.log($1);} 
+        |tk_where LISTAWHE     
+        |
+;
+
+LISTAWHE:
+        LISTAWHE ESTIMACIONAND EXPRESION 
+        |EXPRESION
+;
+
+ESTIMACIONAND:
+        tk_and
+        |tk_or
+        |tk_coma
+;
 
 ACCIONOBY:
-        tk_order_by EXPRESION ACCIONRET
-        {console.log($1);}
-        |tk_order_by EXPRESION 
-        {console.log($1);}        
+        tk_order_by LISTAOBY ACCIONRET
+        {console.log($1);} 
+        |tk_order_by LISTAOBY     
         |
+;
+
+LISTAOBY:
+        LISTAOBY ESTIMACIONAND EXPRESION 
+        |EXPRESION
 ;
 
 ACCIONRET:
@@ -208,17 +270,40 @@ ACCIONRET:
 
 VALORRETURN:
         EXPRESION
-        |tk_li_abre tk_llave_izq OPCIONHTML tk_llave_der tk_li_cierra
+        |tk_li_abre LISTARET tk_li_cierra
         {console.log($1);
-        console.log($2);
-        console.log($4);
-        console.log($5);} 
+        console.log($3);} 
         | ESTRUCTURAIF ESTRUCTURATHEN ESTRUCTURAELSE
+        | ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
+;
+
+LISTARET:
+        LISTARET  LISTAOPHT 
+        | LISTAOPHT 
+;
+
+LISTAOPHT:
+        LISTAOPHT AGREGACION tk_llave_izq OPCIONHTML tk_llave_der
+        |LISTAOPHT AGREGACION tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der
+        |tk_llave_izq OPCIONHTML tk_llave_der
+        |tk_identificador tk_igual tk_llave_izq OPCIONHTML tk_llave_der
+;
+
+AGREGACION:
+        tk_punto
+        | tk_and
+        | tk_or
 ;
 
 OPCIONHTML:
-        EXPRESION
-        | tk_data tk_parentesis_izq EXPRESION tk_parentesis_der
+        tk_llave_izq EXPRESION tk_llave_der
+        | EXPRESION
+        | tk_llave_izq OPCIONDATA tk_llave_der
+        | OPCIONDATA
+;
+
+OPCIONDATA:
+         tk_data tk_parentesis_izq EXPRESION tk_parentesis_der
         {console.log($1);
         console.log($2);
         console.log($4);} 
@@ -232,7 +317,7 @@ ESTRUCTURAIF:
 ;
 
 ESTRUCTURATHEN:
-        tk_then ETIQUETAABRE OPCIONHTML ETIQUETACIERRA
+        tk_then ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
         {console.log($1);} 
         |tk_then tk_parentesis_izq EXPRESION tk_parentesis_der
         {console.log($1);
@@ -242,7 +327,7 @@ ESTRUCTURATHEN:
 ;
 
 ESTRUCTURAELSE:
-        tk_else ETIQUETAABRE OPCIONHTML ETIQUETACIERRA
+        tk_else ETIQUETAABRE LISTAOPHT ETIQUETACIERRA
         {console.log($1);} 
         | tk_else tk_parentesis_izq EXPRESION tk_parentesis_der
         {console.log($1);
@@ -273,204 +358,86 @@ ETIQUETACIERRA:
 // INICIA GRAMATICA DE XPATH
 
 XPATHGRA:
-     EXPRESIONXPA ELEMENTO_P                                       {$$= new Nodo("Porduccion","ELEMENTO",[ $EXPRESIONXPA ,$ELEMENTO_P] );}
+     EXPRESIONXPA ELEMENTO_P                                     
 ;  
 
 ELEMENTO_P:
-         tk_barra_or EXPRESIONXPA ELEMENTO_P                       {$$= new Nodo("Porduccion","ELEMENTO_P",[ $tk_barra_or ,$EXPRESIONXPA,$ELEMENTO_P] );}
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}
+         tk_barra_or EXPRESIONXPA ELEMENTO_P
+                 {console.log($1);}                  
+        |                                                       
 ;
 
 EXPRESIONXPA:
-          RESERVA RESERVA_P                                      {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $RESERVA ,$RESERVA_P] );}
-        | SIMBOLOS CAJETIN SIMBOLOS_P                            {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $SIMBOLOS, $CAJETIN ,$SIMBOLOS_P] );}
-        | tk_identificador CAJETIN  SIMBOLOSSECU SIMBOLOSSECU_P  {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $tk_identificador ,$CAJETIN, $SIMBOLOSSECU, $SIMBOLOSSECU_P] );}
-        | tk_identificador                                       {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $tk_identificador ] );} 
-        | tk_asterisco CAJETIN                                   {$$= new Nodo("Porduccion","EXPRESIONXPA",[ $tk_asterisco, $CAJETIN ] );} 
-;
-     //   | tk_identificador PRODUCT COMPARACION
-
-COMPARACION:
-         ITEMSXPA 
-;
-
-ITEMSXPA:
-         tk_identificador
-        |tk_numero
+         SIMBOLOS CAJETIN SIMBOLOS_P                            
+        | CAJETIN SIMBOLOS_P                                      
 ;
 
 SIMBOLOS:
-          tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_diagonal ,$CONTENIDODOS] );}
-        | tk_diagonal_doble CONTENIDODOS                        {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_diagonal_doble ,$CONTENIDODOS] );}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_arroba,$ARROPROD ] );}
-        | tk_puntos_seguidos PRODUCT CONTENIDODOS               {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_puntos_seguidos, $PRODUCT ,$CONTENIDODOS] );}
-        | tk_punto PRODUCT CONTENIDODOS                         {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_punto,$PRODUCT ,$CONTENIDODOS] );}
-        | tk_asterisco CONTENIDOXPA                                {$$= new Nodo("Porduccion","SIMBOLOS",[ $tk_asterisco ,$CONTENIDOXPA] );}
+          tk_diagonal                             
+           {console.log($1);}    
+        | tk_diagonal_doble     
+         {console.log($1);}                       
+        | tk_arroba ARROPROD  
+         {console.log($1);}                                 
+        | tk_puntos_seguidos PRODUCT 
+         {console.log($1);}                 
+        | tk_punto PRODUCT    
+         {console.log($1);}                        
+        | tk_asterisco tk_identificador                            
+         {console.log($1);
+         console.log($2);}   
 ;
 
 SIMBOLOS_P:
-         EXPRESIONXPA                                              {$$= $EXPRESIONXPA;}                             
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}       
-;
-
-SIMBOLOSSECU:
-          tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_diagonal, $CONTENIDODOS ] );}
-        | tk_diagonal_doble CONTENIDODOS                        {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_diagonal_doble, $CONTENIDODOS ] );}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_arroba, $ARROPROD ] );}
-        | tk_puntos_seguidos                                    {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_puntos_seguidos ] );}
-        | tk_asterisco CONTENIDOXPA                                {$$= new Nodo("Porduccion","SIMBOLOSSECU",[ $tk_asterisco, $CONTENIDOXPA ] );}
-        ;
-
-SIMBOLOSSECU_P:
-         EXPRESIONXPA                                              {$$= $EXPRESIONXPA;}                             
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}       
-;
-
-RESERVA:
-        tk_ancestor           ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_ancestor, $ITEMRESERVA ] );} 
-        | tk_ancestor_or_self ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_ancestor_or_self, $ITEMRESERVA ] );}
-        | tk_attribute        ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_attribute, $ITEMRESERVA ] );}
-        | tk_child            ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_child, $ITEMRESERVA ] );}
-        | tk_descendant       ITEMRESERVA    {$$= new Nodo("Porduccion","RESERVA",[$tk_descendant, $ITEMRESERVA ] );}
-        | tk_descendant_or_self ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_descendant_or_self, $ITEMRESERVA ] );}
-        | tk_following          ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_following, $ITEMRESERVA ] );}
-        | tk_following_sibling  ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_following_sibling, $ITEMRESERVA ] );}
-        | tk_namespace          ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_namespace, $ITEMRESERVA ] );}
-        | tk_parent             ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_parent, $ITEMRESERVA ] );}
-        | tk_preceding          ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_preceding, $ITEMRESERVA ] );}
-        | tk_preceding_sibling  ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_preceding_sibling, $ITEMRESERVA ] );}
-        | tk_self               ITEMRESERVA  {$$= new Nodo("Porduccion","RESERVA",[$tk_self, $ITEMRESERVA ] );}
-        | tk_node tk_parentesis_izq tk_parentesis_der  {$$= new Nodo("Porduccion","RESERVA",[$tk_node, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        | tk_last tk_parentesis_izq tk_parentesis_der  {$$= new Nodo("Porduccion","RESERVA",[$tk_last, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        | tk_position tk_parentesis_izq tk_parentesis_der {$$= new Nodo("Porduccion","RESERVA",[$tk_position, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        | tk_text tk_parentesis_izq tk_parentesis_der {$$= new Nodo("Porduccion","RESERVA",[$tk_text, $tk_parentesis_izq, $tk_parentesis_der ] );}
-        ;
-
-RESERVA_P:
-        EXPRESIONXPA                                                                 {$$= $EXPRESIONXPA;}
-        |                                                                         {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );} 
-;
-
-PRODUCT:
-        tk_diagonal                                                               {$$= new Nodo("Porduccion","PRODUCT",[$tk_diagonal ] );}       
-        |tk_diagonal_doble                                                        {$$= new Nodo("Porduccion","PRODUCT",[$tk_diagonal_doble ] );}
-;
-
-ARROPROD:
-        tk_asterisco                                                              {$$= new Nodo("Porduccion","ARROPROD",[$tk_asterisco ] );}
-        |tk_identificador                                                         {$$= new Nodo("Porduccion","ARROPROD",[$tk_identificador ] );}
-;
-
-CONTENIDOXPA:
-         tk_identificador                                                         {$$= new Nodo("Porduccion","CONTENIDOXPA",[$tk_identificador ] );}
-;
-
-CONTENIDODOS:
-         tk_arroba ARROPROD                                     {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_arroba, $ARROPROD] );}
-//         |tk_identificador                                      {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_identificador] );}
-         |tk_asterisco                                          {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_asterisco] );}        
-         | tk_puntos_seguidos                                   {$$= new Nodo("Porduccion","CONTENIDODOS",[ $tk_puntos_seguidos] );}
-         | RESERVA                                              {$$= new Nodo("Porduccion","CONTENIDODOS",[ $RESERVA] );}
-         | EXTRA
-;
-
-CONTENIDO_P:
-        EXPRESIONXPA                                               {$$= $EXPRESIONXPA;}
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}
+         EXPRESIONXPA                                                        
+        |                                                          
 ;
 
 CAJETIN:
-        tk_corchete_izq PREDICADO tk_corchete_der               {$$= new Nodo("Porduccion","CAJETIN",[$tk_corchete_izq, $PREDICADO, $tk_corchete_der ] );}
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}
-;
-
-EXTRA:
-         tk_numero                                               {$$= $tk_numero;}   
-        |tk_identificador                                        {$$= new Nodo("Porduccion","ID",[$tk_identificador]);}
-        |tk_hilera                                               {$$= new Nodo("Porduccion","CADENA",[$tk_hilera.slice(1,-1)]);}
-        |EXTRA tk_mas EXTRA                                        {$$= new Nodo("Porduccion","SUM",[$1,$tk_mas,$3]);}  
-        |EXTRA tk_menos EXTRA                                      {$$= new Nodo("Porduccion","RES",[ $1,$2,$3]);} 
-        |EXTRA tk_div EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |EXTRA tk_igual EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |EXTRA tk_indiferente EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |EXTRA tk_menor_igual EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |EXTRA tk_mayor_igual EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |EXTRA tk_mod EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |EXTRA tk_mayor EXTRA                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-;
-
-PREDICADO:
-        DATO                                                  {$$= $DATO;}
+        tk_corchete_izq DATO tk_corchete_der 
+        | DATO                           
 ;
 
 DATO:
-         tk_numero                                               {$$= $tk_numero;}   
-        |tk_identificador                                        {$$= new Nodo("Porduccion","ID",[$tk_identificador]);}
-        |tk_hilera                                               {$$= new Nodo("Porduccion","CADENA",[$tk_hilera.slice(1,-1)]);}
-        |tk_arroba tk_identificador                              {$$= new Nodo("Porduccion","ATRIBUTO",[$tk_identificador]);}
-        |tk_last tk_parentesis_izq tk_parentesis_der             {$$= new Nodo("Porduccion","LAST",[]);} 
-        |DATO tk_mas DATO                                        {$$= new Nodo("Porduccion","SUM",[$1,$tk_mas,$3]);}  
-        |DATO tk_menos DATO                                      {$$= new Nodo("Porduccion","RES",[ $1,$2,$3]);} 
-        |DATO tk_asterisco DATO                                  {$$= new Nodo("Porduccion","MUL",[ $1,$2,$3]);} 
-        |DATO tk_div DATO                                        {$$= new Nodo("Porduccion","DIV",[ $1,$2,$3]);}
-        |DATO tk_igual DATO                                      {$$= new Nodo("Porduccion","IGUAL",[ $1,$2,$3]);}
-        |tk_menos DATO %prec UMENOS		                 {$$= new Nodo("Porduccion","NEG",[ $1,$2]); }
+         tk_numero   
+         {console.log($1);}                                           
+        |tk_identificador   
+        {console.log($1);}                                     
+        |tk_hilera         
+        {console.log($1);}                                      
+        |tk_arroba tk_identificador
+        {console.log($1);
+        console.log($2);}                              
+        |tk_last tk_parentesis_izq tk_parentesis_der
+        {console.log($1);
+        console.log($2);
+        console.log($3);}                              
+	|DATO tk_mas DATO
+        {console.log($2);}                                       
+        |DATO tk_menos DATO
+        {console.log($2);}                                    
+        |DATO tk_div DATO 
+        {console.log($2);}                                  
+        |DATO tk_igual DATO
+        {console.log($2);}                                    
+        |DATO tk_indiferente DATO
+        {console.log($2);}                                              
+        |DATO tk_menor_igual DATO
+        {console.log($2);}                                                           
+        |DATO tk_mayor_igual DATO
+        {console.log($2);}                                      
+        |DATO tk_mayor DATO
+        {console.log($2);}                                      
+        |DATO tk_mod DATO 
+        {console.log($2);}                                             
 ;
 
-OPERACIONES:
-        ITEMINICIO OPERADOR ITEMFINAL OPERACIONES_L             {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO, $OPERADOR, $ITEMFINAL, $OPERACIONES_L ] );}
-        | ITEMINICIO                                            {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO ] );}
-;
 
-ITEMINICIO:
-          RESERVA                                               {$$= $RESERVA;}
-        | tk_identificador                                      {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_identificador ] );}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_arroba, $ARROPROD ] );}
-        | tk_numero                                             {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_numero ] );}
-        | tk_punto                                              {$$= new Nodo("Porduccion","ITEMINICIO",[$tk_punto ] );}
-;
-
-OPERADOR:
-        tk_mas                                                  {$$= new Nodo("Porduccion","OPERADOR",[$tk_mas ] );}
-        | tk_menos                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_menos ] );}        
-        | tk_asterisco                                          {$$= new Nodo("Porduccion","OPERADOR",[$tk_asterisco ] );}
-        | tk_div                                                {$$= new Nodo("Porduccion","OPERADOR",[$tk_div ] );}        
-        | tk_igual                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_igual ] );}
-        | tk_indiferente                                        {$$= new Nodo("Porduccion","OPERADOR",[$tk_indiferente ] );}
-        | tk_menor_igual                                        {$$= new Nodo("Porduccion","OPERADOR",[$tk_menor_igual ] );}
-        | tk_menor                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_menor ] );}
-        | tk_mayor_igual                                        {$$= new Nodo("Porduccion","OPERADOR",[$tk_mayor_igual ] );}
-        | tk_mayor                                              {$$= new Nodo("Porduccion","OPERADOR",[$tk_mayor ] );}
-        | tk_mod                                                {$$= new Nodo("Porduccion","OPERADOR",[$tk_mod ] );}
-        ;
-
-ITEMFINAL:
-          RESERVA                                               {$$= $RESERVA;}
-        | tk_caracter                                           {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_caracter] );}}
-        | tk_hilera                                             {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_hilera.slice(1,-1)] );}}
-        | tk_identificador                                      {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_identificador] );}}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_arroba, $ARROPROD] );}}
-        | tk_numero                                             {$$= new Nodo("Porduccion","ITEMFINAL",[ $tk_numero] );}}
-;
-
-OPERACIONES_L:
-          tk_or OPERACIONES                                     {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_or, $OPERACIONES] );}
-        | tk_and OPERACIONES                                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $tk_and, $OPERACIONES] );}
-        | OPERADOR ITEMFINAL   OPERACIONES_L                    {$$= new Nodo("Porduccion","OPERACIONES_L",[ $OPERADOR, $ITEMFINAL, $OPERACIONES_L] );}        
-        |                                                       {$$= new Nodo("Porduccion","OPERACIONES_L",[ "ε" ] );}
-;
-
-ITEMRESERVA:
-        tk_cuatro_puntos SIMBOLOSTERC                           {$$= new Nodo("Porduccion","ITEMRESERVA",[ $tk_cuatro_puntos, $SIMBOLOSTERC] );}
-        |                                                       {$$= new Nodo("Porduccion","ITEMRESERVA",[ "ε" ] );}
-;       
-
-SIMBOLOSTERC:
-          tk_identificador                                      {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_identificador] );}
-        | tk_asterisco                                          {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_asterisco] );}
-        | RESERVA                                               {$$= $RESERVA;}
-        | tk_diagonal CONTENIDODOS                              {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_diagonal, $CONTENIDODOS] );}
-        | tk_diagonal_doble CONTENIDODOS                        {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_diagonal_doble, $CONTENIDODOS]);}
-        | tk_arroba ARROPROD                                    {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_arroba, $ARROPROD] );}
-        | tk_puntos_seguidos                                    {$$= new Nodo("Porduccion","SIMBOLOSTERC",[ $tk_puntos_seguidos] );}
-;
+/*
+        |tk_menos DATO %prec UMENOS	
+        {console.log($1);}
+        |DATO tk_asterisco DATO
+        {console.log($2);} 
+        |DATO tk_menor DATO
+        {console.log($2);}
+*/
