@@ -49,7 +49,7 @@ function CargarXML(){
             T1 = 0;      
             xmlC3D = "";
             xmlC3D = C3DXML.traducir(resultadoXML[0]);
-            localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
+            localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));          
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
             tablaSimbolosXML = tablaSimbolosXMLAux;          
@@ -148,7 +148,7 @@ function CargarXML(){
     } 
 
  SetearTraduccion();
- //console.log(stack);
+ console.log(stack);
     
 }
 
@@ -636,14 +636,12 @@ function SetearTraduccion(){
         globalC3D += `stack[(int)0] = -1;
         
         `;
-        stack.push(-1);
-        stack.push(-1);
+        encodingXML = -1;
     } else {
         globalC3D += `stack[(int)0] = -2;
         
         `;
-        stack.push(-2);
-        stack.push(-1);
+        encodingXML = -1;
     }
 
     
@@ -661,4 +659,7 @@ function SetearTraduccion(){
     SalidaTraduccion.setValue(globalC3D);
     SalidaTraduccion.refresh();
 
+    stack.unshift(encodingXML,finalXML);
+    localStorage.setItem('stackJSON',JSON.stringify(stack, null, 2));
+    window.alert("Traduccion XML a C3D exitosa, scrollee hacia abajo para ver resultado. :D");
 }
