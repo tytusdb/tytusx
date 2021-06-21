@@ -163,6 +163,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 `
 let XQuery = `
 for $x in /bookstore/book
+where $x/price>30
 return $x/title
 `
 editorXQUERY.value=XQuery;

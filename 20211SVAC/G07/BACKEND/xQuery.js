@@ -20,13 +20,19 @@ function getConsultaXQuery(instruccion, entorno,padre){
 
 function ejecutarForIn(instruccion,entorno,padre){
     console.error("ejecutarForIn");
-    let entorno= new Entorno(padre);
+    
     let consulta=instruccion.iterador.consulta;
     let entornos=procesarXpath(consulta,entorno,padre);
+    entornos=procesarEtorno(entornos);
+    let where=instruccion.where;
     let respuesta="";
     for (const x of entornos) {
-        let variable={nombre:instruccion.iterador.variable,valor:x};
-        let retorno=procesarReturn(instruccion.retorno,variable);
+        let var_= new Entorno(padre);
+        var_.agregar(instruccion.iterador.variable,x);
+        let retorno=null;
+        if(where==null||validarWhere(where.condicion,var_)){
+            retorno=procesarReturn(instruccion.retorno,var_);
+        }
         if(retorno){
             respuesta+=retorno;
         }
@@ -39,8 +45,72 @@ function ejecutarForIn(instruccion,entorno,padre){
     return null;
     
 }
-function procesarReturn(instruccion,entorno){
+function validarWhere(instruccion,tabla){
 
+    let valor1;
+    let valor2;
+    switch (instruccion.tipo) {
+        case "MAYOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 > valor2;
+        case "MAYOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 >= valor2;
+        case "MENOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 < valor2;
+        case "MENOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 <= valor2;
+        case "IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 == valor2;
+        case "DIFERENTE":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 != valor2;
+        case "NUMERO":
+            return parseInt(instruccion.valor)
+        case "CADENA":
+            console.log(instruccion);
+            return instruccion.valor
+        case "VARIABLE":
+            let variable=tabla.getSimbolo(instruccion.variable);
+            
+            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            for (const iterator of arregloEntornos) {
+                return iterator.texto
+            }
+
+        default:
+            return false;
+           
+    }
+}
+
+
+function procesarReturn(instruccion,variables){
+    let variable=variables.getSimbolo(instruccion.variable);
+
+    if(variable){
+        if(instruccion.consulta){
+            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variables);
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            let txt="";
+            for (const iterator of arregloEntornos) {
+                txt+=imprimirEntorno(iterator);
+            }
+            return txt;
+        }
+        return imprimirEntorno(variable);
+    }
+    return null;
 }
 
 //Regresa un arreglo de entornos
@@ -144,4 +214,20 @@ function getConsultaXPath(arreglo){
     }
     return retorno;
 }
+let regreso_=[];
+function procesarEtorno(entorno){
+    regreso_=[];
+    procesarArreglo(entorno);
+    return regreso_;
+}
 
+function procesarArreglo(entorno){
+   if(!entorno.etiqueta){
+        for (const iterator of entorno) {
+            procesarArreglo(iterator);
+        }   
+    }else{
+        regreso_.push(entorno);
+    }
+    
+}
