@@ -46,16 +46,39 @@ function ejecutarForIn(instruccion,entorno,padre){
     
 }
 function validarWhere(instruccion,tabla){
-    console.log(instruccion);
+
+    let valor1;
+    let valor2;
     switch (instruccion.tipo) {
         case "MAYOR":
-            let valor1=validarWhere(instruccion.valor1,tabla);
-            let valor2=validarWhere(instruccion.valor2,tabla);
-            console.log(valor1);
-            console.log(valor2);
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
             return valor1 > valor2;
+        case "MAYOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 >= valor2;
+        case "MENOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 < valor2;
+        case "MENOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 <= valor2;
+        case "IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 == valor2;
+        case "DIFERENTE":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 != valor2;
         case "NUMERO":
             return parseInt(instruccion.valor)
+        case "CADENA":
+            console.log(instruccion);
+            return instruccion.valor
         case "VARIABLE":
             let variable=tabla.getSimbolo(instruccion.variable);
             

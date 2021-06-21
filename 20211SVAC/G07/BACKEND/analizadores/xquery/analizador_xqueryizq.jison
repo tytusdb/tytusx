@@ -144,7 +144,7 @@
 %left 'tk_or'
 %left 'tk_and'
 %left 'tk_indiferente'
-%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual'
+%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual' 'tk_gt' 'tk_lt' 'tk_ge' 'tk_le'
 %left 'tk_mas' 'tk_menos'
 %left 'tk_asterisco' 'tk_div' 'tk_mod'
 %left unmenos
@@ -158,11 +158,14 @@ INICIO :
         XQUERYGRA EOF                                                                   {return $1;}  
 ;
 XQUERYGRA
-        :FOR_IN WHERE RETURN                                                            {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE};}
+        :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
+;
+ORDEN
+        :                                                                               {$$=null;}                                                                     
 ;
 WHERE
         :tk_where CONDICIONAL                                                           {$$={instr:"WHERE",condicion:$CONDICIONAL};}       
@@ -172,7 +175,18 @@ CONDICIONAL
         :VARIABLE XPATHGRA                                                              {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:$XPATHGRA}}
         |VARIABLE                                                                       {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:null}}
         |tk_numero                                                                      {$$={tipo:"NUMERO",valor:$tk_numero}}
+        |tk_hilera                                                                      {$$={tipo:"CADENA",valor:$1.slice(1,-1)}}
         |CONDICIONAL tk_mayor CONDICIONAL                                               {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_menor CONDICIONAL                                               {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_mayor_igual CONDICIONAL                                         {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_menor_igual CONDICIONAL                                         {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_igual CONDICIONAL                                               {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_indiferente CONDICIONAL                                         {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}
+        //
+        |CONDICIONAL tk_gt CONDICIONAL                                                  {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_lt CONDICIONAL                                                  {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_ge CONDICIONAL                                                  {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_le CONDICIONAL                                                  {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
 ;
 RETURN
         :tk_return VARIABLE                                                             {$$={variable:$VARIABLE,consulta:null}}
