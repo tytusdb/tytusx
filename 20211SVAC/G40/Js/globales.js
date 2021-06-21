@@ -73,6 +73,13 @@ const init = function(e){
         window.open('./reportes/heap.html','_blank');
     });
 
+    let btn_stack = document.querySelector("#stack");
+
+    btn_stack.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/stack.html','_blank');
+    });
+
 };
 
 
