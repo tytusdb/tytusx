@@ -1194,13 +1194,23 @@
       /* harmony import */
 
 
-      var _Controlador__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../Analizadores/XMLDescendente */
+      "EViG");
+      /* harmony import */
+
+
+      var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__);
+      /* harmony import */
+
+
+      var _Controlador__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ./Controlador */
       "mXYb");
       /* harmony import */
 
 
-      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
       /*! ./TablaSimbolos/TablaSimbolos */
       "arwD");
       /* let error_html = controlador.graficar_Semantico (controlador,ts_globla);  Metodos para lo errores*/
@@ -1218,9 +1228,32 @@
 
             var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
 
-            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_2__["default"]();
-            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_3__["TablaSimbolos"](null, "Global");
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_3__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__["TablaSimbolos"](null, "Global");
             astxml.ejecutar(controlador, ts_globla); //Ejecutar xpath
+
+            var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+
+            console.log(astxpaht);
+            astxml.ejecutarXPath(controlador, ts_globla, astxpaht); // console.log("aa");
+
+            var ts_html = controlador.graficar_ts(controlador, ts_globla);
+            var retorno = {
+              "ts": ts_html,
+              "consola": controlador.consola
+            };
+            return retorno;
+          }
+        }, {
+          key: "ejecutarDes",
+          value: function ejecutarDes(entradaxml, entradaxpath) {
+            console.log("vamos a analizar la entrada"); //Ejecutar xml 
+
+            var astxml = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](entradaxml);
+
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_3__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__["TablaSimbolos"](null, "Global");
+            astxml.ejecutarDescendente(controlador, ts_globla); //Ejecutar xpath
 
             var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
 
@@ -1244,6 +1277,29 @@
               return nodo_ast;
             } catch (error) {}
           }
+        }, {
+          key: "recorrerDes",
+          value: function recorrerDes(input) {
+            try {
+              var ast = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](input);
+
+              console.log(ast);
+              var nodo_ast = ast.recorrer();
+              return nodo_ast;
+            } catch (error) {}
+          }
+        }, {
+          key: "recorrerDesxpath",
+          value: function recorrerDesxpath(input) {
+            try {
+              var ast = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](input);
+
+              console.log(ast);
+              console.log(ast);
+              var nodo_ast = ast.recorrer();
+              return nodo_ast;
+            } catch (error) {}
+          }
         }]);
 
         return Analizador;
@@ -1263,11 +1319,7 @@
     /***/
     function _(module, exports, __webpack_require__) {
       module.exports = __webpack_require__(
-<<<<<<< Updated upstream
       /*! C:\Users\h\Documents\GitHub\Compi2\Compiladores2Proyecto1\src\main.ts */
-=======
-      /*! C:\Users\fuent\Desktop\Compiladores 2 Proyecto 1 final\Compiladores2Proyecto1\src\main.ts */
->>>>>>> Stashed changes
       "zUnb");
       /***/
     },
@@ -1529,6 +1581,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return instrucciondoble;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var instrucciondoble = /*#__PURE__*/function () {
         function instrucciondoble(i1, i2) {
@@ -1553,7 +1611,10 @@
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("|", "");
+            padre.AddHijo(this.i1.recorrer());
+            padre.AddHijo(this.i2.recorrer());
+            return padre;
           }
         }]);
 
@@ -2554,6 +2615,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return barrabarra;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var barrabarra = /*#__PURE__*/function () {
         function barrabarra(exprecion, sig) {
@@ -2658,6 +2725,8 @@
 
             if (typeof valor == 'number') {
               this.isNumero(controlador, ts, valor);
+            } else {
+              this.esbool(controlador, ts);
             }
           }
         }, {
@@ -2667,6 +2736,15 @@
               this.siguienteNumero(controlador, ts, valor);
             } else {
               this.obtenerallNumero(controlador, ts, valor);
+            }
+          }
+        }, {
+          key: "esbool",
+          value: function esbool(controlador, ts) {
+            if (this.sig != null) {
+              this.siguienteBool(controlador, ts);
+            } else {
+              this.obtenerBool(controlador, ts);
             }
           }
         }, {
@@ -2746,9 +2824,106 @@
             }
           }
         }, {
+          key: "siguienteBool",
+          value: function siguienteBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator7 = _createForOfIteratorHelper(ts.sig),
+                  _step7;
+
+              try {
+                for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+                  var tssig = _step7.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  } else {
+                    this.siguienteBool(controlador, tssig.sig);
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator7.e(err);
+              } finally {
+                _iterator7.f();
+              }
+            }
+          }
+        }, {
+          key: "obtenerBool",
+          value: function obtenerBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator8 = _createForOfIteratorHelper(ts.tabla),
+                  _step8;
+
+              try {
+                for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+                  var informacion = _step8.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator8.e(err);
+              } finally {
+                _iterator8.f();
+              }
+
+              var _iterator9 = _createForOfIteratorHelper(ts.sig),
+                  _step9;
+
+              try {
+                for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+                  var tssig = _step9.value;
+                  this.obtenerBool(controlador, tssig.sig);
+                }
+              } catch (err) {
+                _iterator9.e(err);
+              } finally {
+                _iterator9.f();
+              }
+            }
+          }
+        }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("//", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -2923,12 +3098,12 @@
             var ts = this;
             console.log("-----------------");
 
-            var _iterator7 = _createForOfIteratorHelper(ts.tabla),
-                _step7;
+            var _iterator10 = _createForOfIteratorHelper(ts.tabla),
+                _step10;
 
             try {
-              for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-                var informacion = _step7.value;
+              for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+                var informacion = _step10.value;
                 console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
 
                 if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
@@ -2936,9 +3111,9 @@
                 }
               }
             } catch (err) {
-              _iterator7.e(err);
+              _iterator10.e(err);
             } finally {
-              _iterator7.f();
+              _iterator10.f();
             }
 
             return null;
@@ -3039,12 +3214,12 @@
             var existe_id;
             var contador = 1;
 
-            var _iterator8 = _createForOfIteratorHelper(ts.sig),
-                _step8;
+            var _iterator11 = _createForOfIteratorHelper(ts.sig),
+                _step11;
 
             try {
-              for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-                var tssig = _step8.value;
+              for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+                var tssig = _step11.value;
 
                 if (contador == controlador.posicionid) {
                   existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
@@ -3053,9 +3228,9 @@
                 contador++;
               }
             } catch (err) {
-              _iterator8.e(err);
+              _iterator11.e(err);
             } finally {
-              _iterator8.f();
+              _iterator11.f();
             }
 
             if (existe_id != null) {
@@ -3151,12 +3326,12 @@
               do {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator9 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step9;
+                var _iterator12 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step12;
 
                 try {
-                  for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-                    var ins = _step9.value;
+                  for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+                    var ins = _step12.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -3174,9 +3349,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator9.e(err);
+                  _iterator12.e(err);
                 } finally {
-                  _iterator9.f();
+                  _iterator12.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (doWhile)");
@@ -3190,18 +3365,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("do", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator10 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step10;
+            var _iterator13 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step13;
 
             try {
-              for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-                var ins = _step10.value;
+              for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+                var ins = _step13.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator10.e(err);
+              _iterator13.e(err);
             } finally {
-              _iterator10.f();
+              _iterator13.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -3283,12 +3458,12 @@
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
             if (this.valor_sw == this.valor_case.getValor(controlador, ts)) {
-              var _iterator11 = _createForOfIteratorHelper(this.lista_instrucciones),
-                  _step11;
+              var _iterator14 = _createForOfIteratorHelper(this.lista_instrucciones),
+                  _step14;
 
               try {
-                for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-                  var res = _step11.value;
+                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+                  var res = _step14.value;
                   var ins = res.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -3307,9 +3482,9 @@
                   }
                 }
               } catch (err) {
-                _iterator11.e(err);
+                _iterator14.e(err);
               } finally {
-                _iterator11.f();
+                _iterator14.f();
               }
             }
 
@@ -3323,18 +3498,18 @@
             padre.AddHijo(this.valor_case.recorrer());
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](":", ""));
 
-            var _iterator12 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step12;
+            var _iterator15 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step15;
 
             try {
-              for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                var ins = _step12.value;
+              for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
+                var ins = _step15.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator12.e(err);
+              _iterator15.e(err);
             } finally {
-              _iterator12.f();
+              _iterator15.f();
             }
 
             return padre;
@@ -3345,6 +3520,997 @@
       }();
       /***/
 
+    },
+
+    /***/
+    "EViG":
+    /*!********************************************!*\
+      !*** ./src/Analizadores/XMLDescendente.js ***!
+      \********************************************/
+
+    /*! no static exports found */
+
+    /***/
+    function EViG(module, exports, __webpack_require__) {
+      /* WEBPACK VAR INJECTION */
+      (function (module) {
+        /* parser generated by jison 0.4.18 */
+
+        /*
+          Returns a Parser object of the following structure:
+        
+          Parser: {
+            yy: {}
+          }
+        
+          Parser.prototype: {
+            yy: {},
+            trace: function(),
+            symbols_: {associative list: name ==> number},
+            terminals_: {associative list: number ==> name},
+            productions_: [...],
+            performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$),
+            table: [...],
+            defaultActions: {...},
+            parseError: function(str, hash),
+            parse: function(input),
+        
+            lexer: {
+                EOF: 1,
+                parseError: function(str, hash),
+                setInput: function(input),
+                input: function(),
+                unput: function(str),
+                more: function(),
+                less: function(n),
+                pastInput: function(),
+                upcomingInput: function(),
+                showPosition: function(),
+                test_match: function(regex_match_array, rule_index),
+                next: function(),
+                lex: function(),
+                begin: function(condition),
+                popState: function(),
+                _currentRules: function(),
+                topState: function(),
+                pushState: function(condition),
+        
+                options: {
+                    ranges: boolean           (optional: true ==> token location info will include a .range[] member)
+                    flex: boolean             (optional: true ==> flex-like lexing behaviour where the rules are tested exhaustively to find the longest match)
+                    backtrack_lexer: boolean  (optional: true ==> lexer regexes are tested in order and for each matching regex the action code is invoked; the lexer terminates the scan when a token is returned by the action code)
+                },
+        
+                performAction: function(yy, yy_, $avoiding_name_collisions, YY_START),
+                rules: [...],
+                conditions: {associative list: name ==> set},
+            }
+          }
+        
+        
+          token location info (@$, _$, etc.): {
+            first_line: n,
+            last_line: n,
+            first_column: n,
+            last_column: n,
+            range: [start_number, end_number]       (where the numbers are indexes into the input string, regular zero-based)
+          }
+        
+        
+          the parseError function receives a 'hash' object with these members for lexer and parser errors: {
+            text:        (matched text)
+            token:       (the produced terminal token, if any)
+            line:        (yylineno)
+          }
+          while parser (grammar) errors will also provide these members, i.e. parser errors deliver a superset of attributes: {
+            loc:         (yylloc)
+            expected:    (string describing the set of expected tokens)
+            recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
+          }
+        */
+        var XMLDescendente = function () {
+          var o = function o(k, v, _o3, l) {
+            for (_o3 = _o3 || {}, l = k.length; l--; _o3[k[l]] = v) {
+              ;
+            }
+
+            return _o3;
+          },
+              $V0 = [1, 5],
+              $V1 = [5, 9],
+              $V2 = [1, 8],
+              $V3 = [12, 13],
+              $V4 = [1, 12],
+              $V5 = [1, 20];
+
+          var parser = {
+            trace: function trace() {},
+            yy: {},
+            symbols_: {
+              "error": 2,
+              "inicio": 3,
+              "raices": 4,
+              "EOF": 5,
+              "raiz": 6,
+              "objeto": 7,
+              "objetos": 8,
+              "<": 9,
+              "ID": 10,
+              "latributos": 11,
+              "/": 12,
+              ">": 13,
+              "texto_libre": 14,
+              "atributos": 15,
+              "atributo": 16,
+              "=": 17,
+              "CADENA": 18,
+              "TEXTO": 19,
+              "$accept": 0,
+              "$end": 1
+            },
+            terminals_: {
+              2: "error",
+              5: "EOF",
+              9: "<",
+              10: "ID",
+              12: "/",
+              13: ">",
+              17: "=",
+              18: "CADENA",
+              19: "TEXTO"
+            },
+            productions_: [0, [3, 2], [4, 2], [4, 1], [6, 1], [8, 2], [8, 1], [7, 5], [7, 9], [7, 9], [11, 1], [11, 0], [15, 2], [15, 1], [16, 3], [14, 2], [14, 1]],
+            performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
+            /* action[1] */
+            , $$
+            /* vstack */
+            , _$
+            /* lstack */
+            ) {
+              /* this == yyval */
+              var $0 = $$.length - 1;
+
+              switch (yystate) {
+                case 1:
+                  console.log($$[$0 - 1]);
+                  this.$ = new ast["default"]($$[$0 - 1]);
+                  return this.$;
+                  break;
+
+                case 2:
+                case 12:
+                  $$[$0].push($$[$0 - 1]);
+                  this.$ = $$[$0];
+                  break;
+
+                case 3:
+                case 13:
+                  this.$ = [$$[$0]];
+                  break;
+
+                case 4:
+                  this.$ = $$[$0];
+                  break;
+
+                case 5:
+                  $$[$0 - 1].push($$[$0]);
+                  this.$ = $$[$0 - 1];
+                  break;
+
+                case 6:
+                  this.$ = [$$[$0]];
+                  break;
+
+                case 7:
+                  this.$ = new Objeto["default"]($$[$0 - 3], '', _$[$0 - 4].first_line, _$[$0 - 4].first_column, $$[$0 - 2], [], 1);
+                  break;
+
+                case 8:
+                  this.$ = new Objeto["default"]($$[$0 - 7], $$[$0 - 4], _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], [], 2);
+                  break;
+
+                case 9:
+                  this.$ = new Objeto["default"]($$[$0 - 7], '', _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], $$[$0 - 4], 2);
+                  break;
+
+                case 10:
+                case 16:
+                  this.$ = $$[$0];
+                  break;
+
+                case 11:
+                  this.$ = [];
+                  break;
+
+                case 14:
+                  $$[$0] = $$[$0].slice(1, $$[$0].length - 1);
+                  this.$ = new Atributo["default"]($$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
+                  break;
+
+                case 15:
+                  this.$ = $$[$0 - 1] + $$[$0];
+                  break;
+              }
+            },
+            table: [{
+              3: 1,
+              4: 2,
+              6: 3,
+              7: 4,
+              9: $V0
+            }, {
+              1: [3]
+            }, {
+              5: [1, 6]
+            }, {
+              4: 7,
+              5: [2, 3],
+              6: 3,
+              7: 4,
+              9: $V0
+            }, o($V1, [2, 4]), {
+              10: $V2
+            }, {
+              1: [2, 1]
+            }, {
+              5: [2, 2]
+            }, o($V3, [2, 11], {
+              11: 9,
+              15: 10,
+              16: 11,
+              10: $V4
+            }), {
+              12: [1, 13],
+              13: [1, 14]
+            }, o($V3, [2, 10]), o($V3, [2, 13], {
+              16: 11,
+              15: 15,
+              10: $V4
+            }), {
+              17: [1, 16]
+            }, {
+              13: [1, 17]
+            }, {
+              7: 21,
+              8: 19,
+              9: $V0,
+              14: 18,
+              19: $V5
+            }, o($V3, [2, 12]), {
+              18: [1, 22]
+            }, o($V1, [2, 7]), {
+              9: [1, 23]
+            }, {
+              7: 25,
+              9: [1, 24]
+            }, {
+              9: [2, 16],
+              14: 26,
+              19: $V5
+            }, {
+              9: [2, 6]
+            }, o([10, 12, 13], [2, 14]), {
+              12: [1, 27]
+            }, {
+              10: $V2,
+              12: [1, 28]
+            }, {
+              9: [2, 5]
+            }, {
+              9: [2, 15]
+            }, {
+              10: [1, 29]
+            }, {
+              10: [1, 30]
+            }, {
+              13: [1, 31]
+            }, {
+              13: [1, 32]
+            }, o($V1, [2, 8]), o($V1, [2, 9])],
+            defaultActions: {
+              6: [2, 1],
+              7: [2, 2],
+              21: [2, 6],
+              25: [2, 5],
+              26: [2, 15]
+            },
+            parseError: function parseError(str, hash) {
+              if (hash.recoverable) {
+                this.trace(str);
+              } else {
+                var error = new Error(str);
+                error.hash = hash;
+                throw error;
+              }
+            },
+            parse: function parse(input) {
+              var self = this,
+                  stack = [0],
+                  tstack = [],
+                  vstack = [null],
+                  lstack = [],
+                  table = this.table,
+                  yytext = '',
+                  yylineno = 0,
+                  yyleng = 0,
+                  recovering = 0,
+                  TERROR = 2,
+                  EOF = 1;
+              var args = lstack.slice.call(arguments, 1);
+              var lexer = Object.create(this.lexer);
+              var sharedState = {
+                yy: {}
+              };
+
+              for (var k in this.yy) {
+                if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+                  sharedState.yy[k] = this.yy[k];
+                }
+              }
+
+              lexer.setInput(input, sharedState.yy);
+              sharedState.yy.lexer = lexer;
+              sharedState.yy.parser = this;
+
+              if (typeof lexer.yylloc == 'undefined') {
+                lexer.yylloc = {};
+              }
+
+              var yyloc = lexer.yylloc;
+              lstack.push(yyloc);
+              var ranges = lexer.options && lexer.options.ranges;
+
+              if (typeof sharedState.yy.parseError === 'function') {
+                this.parseError = sharedState.yy.parseError;
+              } else {
+                this.parseError = Object.getPrototypeOf(this).parseError;
+              }
+
+              function popStack(n) {
+                stack.length = stack.length - 2 * n;
+                vstack.length = vstack.length - n;
+                lstack.length = lstack.length - n;
+              }
+
+              _token_stack: var lex = function lex() {
+                var token;
+                token = lexer.lex() || EOF;
+
+                if (typeof token !== 'number') {
+                  token = self.symbols_[token] || token;
+                }
+
+                return token;
+              };
+
+              var symbol,
+                  preErrorSymbol,
+                  state,
+                  action,
+                  a,
+                  r,
+                  yyval = {},
+                  p,
+                  len,
+                  newState,
+                  expected;
+
+              while (true) {
+                state = stack[stack.length - 1];
+
+                if (this.defaultActions[state]) {
+                  action = this.defaultActions[state];
+                } else {
+                  if (symbol === null || typeof symbol == 'undefined') {
+                    symbol = lex();
+                  }
+
+                  action = table[state] && table[state][symbol];
+                }
+
+                if (typeof action === 'undefined' || !action.length || !action[0]) {
+                  var errStr = '';
+                  expected = [];
+
+                  for (p in table[state]) {
+                    if (this.terminals_[p] && p > TERROR) {
+                      expected.push('\'' + this.terminals_[p] + '\'');
+                    }
+                  }
+
+                  if (lexer.showPosition) {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                  } else {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                  }
+
+                  this.parseError(errStr, {
+                    text: lexer.match,
+                    token: this.terminals_[symbol] || symbol,
+                    line: lexer.yylineno,
+                    loc: yyloc,
+                    expected: expected
+                  });
+                }
+
+                if (action[0] instanceof Array && action.length > 1) {
+                  throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+                }
+
+                switch (action[0]) {
+                  case 1:
+                    stack.push(symbol);
+                    vstack.push(lexer.yytext);
+                    lstack.push(lexer.yylloc);
+                    stack.push(action[1]);
+                    symbol = null;
+
+                    if (!preErrorSymbol) {
+                      yyleng = lexer.yyleng;
+                      yytext = lexer.yytext;
+                      yylineno = lexer.yylineno;
+                      yyloc = lexer.yylloc;
+
+                      if (recovering > 0) {
+                        recovering--;
+                      }
+                    } else {
+                      symbol = preErrorSymbol;
+                      preErrorSymbol = null;
+                    }
+
+                    break;
+
+                  case 2:
+                    len = this.productions_[action[1]][1];
+                    yyval.$ = vstack[vstack.length - len];
+                    yyval._$ = {
+                      first_line: lstack[lstack.length - (len || 1)].first_line,
+                      last_line: lstack[lstack.length - 1].last_line,
+                      first_column: lstack[lstack.length - (len || 1)].first_column,
+                      last_column: lstack[lstack.length - 1].last_column
+                    };
+
+                    if (ranges) {
+                      yyval._$.range = [lstack[lstack.length - (len || 1)].range[0], lstack[lstack.length - 1].range[1]];
+                    }
+
+                    r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+
+                    if (typeof r !== 'undefined') {
+                      return r;
+                    }
+
+                    if (len) {
+                      stack = stack.slice(0, -1 * len * 2);
+                      vstack = vstack.slice(0, -1 * len);
+                      lstack = lstack.slice(0, -1 * len);
+                    }
+
+                    stack.push(this.productions_[action[1]][0]);
+                    vstack.push(yyval.$);
+                    lstack.push(yyval._$);
+                    newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+                    stack.push(newState);
+                    break;
+
+                  case 3:
+                    return true;
+                }
+              }
+
+              return true;
+            }
+          };
+          var $ESPACIOS = "";
+
+          var Atributo = __webpack_require__(
+          /*! ../Clases/xml/atributo */
+          "Ab3f");
+
+          var Objeto = __webpack_require__(
+          /*! ../Clases/xml/objeto */
+          "bzrv");
+
+          var ast = __webpack_require__(
+          /*! ../Clases/AST/Ast */
+          "ZSbs");
+          /* generated by jison-lex 0.3.4 */
+
+
+          var lexer = function () {
+            var lexer = {
+              EOF: 1,
+              parseError: function parseError(str, hash) {
+                if (this.yy.parser) {
+                  this.yy.parser.parseError(str, hash);
+                } else {
+                  throw new Error(str);
+                }
+              },
+              // resets the lexer, sets new input
+              setInput: function setInput(input, yy) {
+                this.yy = yy || this.yy || {};
+                this._input = input;
+                this._more = this._backtrack = this.done = false;
+                this.yylineno = this.yyleng = 0;
+                this.yytext = this.matched = this.match = '';
+                this.conditionStack = ['INITIAL'];
+                this.yylloc = {
+                  first_line: 1,
+                  first_column: 0,
+                  last_line: 1,
+                  last_column: 0
+                };
+
+                if (this.options.ranges) {
+                  this.yylloc.range = [0, 0];
+                }
+
+                this.offset = 0;
+                return this;
+              },
+              // consumes and returns one char from the input
+              input: function input() {
+                var ch = this._input[0];
+                this.yytext += ch;
+                this.yyleng++;
+                this.offset++;
+                this.match += ch;
+                this.matched += ch;
+                var lines = ch.match(/(?:\r\n?|\n).*/g);
+
+                if (lines) {
+                  this.yylineno++;
+                  this.yylloc.last_line++;
+                } else {
+                  this.yylloc.last_column++;
+                }
+
+                if (this.options.ranges) {
+                  this.yylloc.range[1]++;
+                }
+
+                this._input = this._input.slice(1);
+                return ch;
+              },
+              // unshifts one char (or a string) into the input
+              unput: function unput(ch) {
+                var len = ch.length;
+                var lines = ch.split(/(?:\r\n?|\n)/g);
+                this._input = ch + this._input;
+                this.yytext = this.yytext.substr(0, this.yytext.length - len); //this.yyleng -= len;
+
+                this.offset -= len;
+                var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+                this.match = this.match.substr(0, this.match.length - 1);
+                this.matched = this.matched.substr(0, this.matched.length - 1);
+
+                if (lines.length - 1) {
+                  this.yylineno -= lines.length - 1;
+                }
+
+                var r = this.yylloc.range;
+                this.yylloc = {
+                  first_line: this.yylloc.first_line,
+                  last_line: this.yylineno + 1,
+                  first_column: this.yylloc.first_column,
+                  last_column: lines ? (lines.length === oldLines.length ? this.yylloc.first_column : 0) + oldLines[oldLines.length - lines.length].length - lines[0].length : this.yylloc.first_column - len
+                };
+
+                if (this.options.ranges) {
+                  this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+                }
+
+                this.yyleng = this.yytext.length;
+                return this;
+              },
+              // When called from action, caches matched text and appends it on next action
+              more: function more() {
+                this._more = true;
+                return this;
+              },
+              // When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+              reject: function reject() {
+                if (this.options.backtrack_lexer) {
+                  this._backtrack = true;
+                } else {
+                  return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                    text: "",
+                    token: null,
+                    line: this.yylineno
+                  });
+                }
+
+                return this;
+              },
+              // retain first n characters of the match
+              less: function less(n) {
+                this.unput(this.match.slice(n));
+              },
+              // displays already matched input, i.e. for error messages
+              pastInput: function pastInput() {
+                var past = this.matched.substr(0, this.matched.length - this.match.length);
+                return (past.length > 20 ? '...' : '') + past.substr(-20).replace(/\n/g, "");
+              },
+              // displays upcoming input, i.e. for error messages
+              upcomingInput: function upcomingInput() {
+                var next = this.match;
+
+                if (next.length < 20) {
+                  next += this._input.substr(0, 20 - next.length);
+                }
+
+                return (next.substr(0, 20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+              },
+              // displays the character position where the lexing error occurred, i.e. for error messages
+              showPosition: function showPosition() {
+                var pre = this.pastInput();
+                var c = new Array(pre.length + 1).join("-");
+                return pre + this.upcomingInput() + "\n" + c + "^";
+              },
+              // test the lexed token: return FALSE when not a match, otherwise return token
+              test_match: function test_match(match, indexed_rule) {
+                var token, lines, backup;
+
+                if (this.options.backtrack_lexer) {
+                  // save context
+                  backup = {
+                    yylineno: this.yylineno,
+                    yylloc: {
+                      first_line: this.yylloc.first_line,
+                      last_line: this.last_line,
+                      first_column: this.yylloc.first_column,
+                      last_column: this.yylloc.last_column
+                    },
+                    yytext: this.yytext,
+                    match: this.match,
+                    matches: this.matches,
+                    matched: this.matched,
+                    yyleng: this.yyleng,
+                    offset: this.offset,
+                    _more: this._more,
+                    _input: this._input,
+                    yy: this.yy,
+                    conditionStack: this.conditionStack.slice(0),
+                    done: this.done
+                  };
+
+                  if (this.options.ranges) {
+                    backup.yylloc.range = this.yylloc.range.slice(0);
+                  }
+                }
+
+                lines = match[0].match(/(?:\r\n?|\n).*/g);
+
+                if (lines) {
+                  this.yylineno += lines.length;
+                }
+
+                this.yylloc = {
+                  first_line: this.yylloc.last_line,
+                  last_line: this.yylineno + 1,
+                  first_column: this.yylloc.last_column,
+                  last_column: lines ? lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length : this.yylloc.last_column + match[0].length
+                };
+                this.yytext += match[0];
+                this.match += match[0];
+                this.matches = match;
+                this.yyleng = this.yytext.length;
+
+                if (this.options.ranges) {
+                  this.yylloc.range = [this.offset, this.offset += this.yyleng];
+                }
+
+                this._more = false;
+                this._backtrack = false;
+                this._input = this._input.slice(match[0].length);
+                this.matched += match[0];
+                token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+
+                if (this.done && this._input) {
+                  this.done = false;
+                }
+
+                if (token) {
+                  return token;
+                } else if (this._backtrack) {
+                  // recover context
+                  for (var k in backup) {
+                    this[k] = backup[k];
+                  }
+
+                  return false; // rule action called reject() implying the next rule should be tested instead.
+                }
+
+                return false;
+              },
+              // return next match in input
+              next: function next() {
+                if (this.done) {
+                  return this.EOF;
+                }
+
+                if (!this._input) {
+                  this.done = true;
+                }
+
+                var token, match, tempMatch, index;
+
+                if (!this._more) {
+                  this.yytext = '';
+                  this.match = '';
+                }
+
+                var rules = this._currentRules();
+
+                for (var i = 0; i < rules.length; i++) {
+                  tempMatch = this._input.match(this.rules[rules[i]]);
+
+                  if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                    match = tempMatch;
+                    index = i;
+
+                    if (this.options.backtrack_lexer) {
+                      token = this.test_match(tempMatch, rules[i]);
+
+                      if (token !== false) {
+                        return token;
+                      } else if (this._backtrack) {
+                        match = false;
+                        continue; // rule action called reject() implying a rule MISmatch.
+                      } else {
+                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                        return false;
+                      }
+                    } else if (!this.options.flex) {
+                      break;
+                    }
+                  }
+                }
+
+                if (match) {
+                  token = this.test_match(match, rules[index]);
+
+                  if (token !== false) {
+                    return token;
+                  } // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+
+
+                  return false;
+                }
+
+                if (this._input === "") {
+                  return this.EOF;
+                } else {
+                  return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                    text: "",
+                    token: null,
+                    line: this.yylineno
+                  });
+                }
+              },
+              // return next match that has a token
+              lex: function lex() {
+                var r = this.next();
+
+                if (r) {
+                  return r;
+                } else {
+                  return this.lex();
+                }
+              },
+              // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+              begin: function begin(condition) {
+                this.conditionStack.push(condition);
+              },
+              // pop the previously active lexer condition state off the condition stack
+              popState: function popState() {
+                var n = this.conditionStack.length - 1;
+
+                if (n > 0) {
+                  return this.conditionStack.pop();
+                } else {
+                  return this.conditionStack[0];
+                }
+              },
+              // produce the lexer rule set which is active for the currently active lexer condition state
+              _currentRules: function _currentRules() {
+                if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+                  return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+                } else {
+                  return this.conditions["INITIAL"].rules;
+                }
+              },
+              // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+              topState: function topState(n) {
+                n = this.conditionStack.length - 1 - Math.abs(n || 0);
+
+                if (n >= 0) {
+                  return this.conditionStack[n];
+                } else {
+                  return "INITIAL";
+                }
+              },
+              // alias for begin(condition)
+              pushState: function pushState(condition) {
+                this.begin(condition);
+              },
+              // return the number of states currently on the stack
+              stateStackSize: function stateStackSize() {
+                return this.conditionStack.length;
+              },
+              options: {
+                "case-insensitive": true
+              },
+              performAction: function anonymous(yy, yy_, $avoiding_name_collisions, YY_START) {
+                var YYSTATE = YY_START;
+
+                switch ($avoiding_name_collisions) {
+                  case 0:
+                    /* Ignoro los comentarios simples */
+                    break;
+
+                  case 1:
+                    /* skip whitespace */
+                    break;
+
+                  case 2:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 18;
+                    break;
+
+                  case 3:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 10;
+                    break;
+
+                  case 4:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 9;
+                    break;
+
+                  case 5:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 17;
+                    break;
+
+                  case 6:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 12;
+                    break;
+
+                  case 7:
+                    this.begin("S1");
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return ">";
+                    break;
+
+                  case 8:
+                    yy_.yytext = $ESPACIOS + "<";
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 19;
+                    break;
+
+                  case 9:
+                    yy_.yytext = $ESPACIOS + ">";
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 19;
+                    break;
+
+                  case 10:
+                    yy_.yytext = $ESPACIOS + "&";
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 19;
+                    break;
+
+                  case 11:
+                    yy_.yytext = $ESPACIOS + "\'";
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 19;
+                    break;
+
+                  case 12:
+                    yy_.yytext = $ESPACIOS + "\"";
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 19;
+                    break;
+
+                  case 13:
+                    /* Ignoro los comentarios simples */
+                    break;
+
+                  case 14:
+                    $ESPACIOS += yy.lexer.match;
+                    break;
+
+                  case 15:
+                    this.begin("INITIAL");
+                    console.log("Reconocio : " + yy_.yytext);
+                    return "<";
+                    break;
+
+                  case 16:
+                    yy_.yytext = $ESPACIOS + yy_.yytext;
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 19;
+                    break;
+
+                  case 17:
+                    return 5;
+                    break;
+
+                  case 18:
+                    console.log("Error Lexico " + yy_.yytext + " linea " + yy_.yylineno + " columna " + (yy_.yylloc.last_column + 1));
+                    break;
+                }
+              },
+              rules: [/^(?:<!--(.|\n)*-->)/i, /^(?:\s+)/i, /^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i, /^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i, /^(?:<)/i, /^(?:=)/i, /^(?:\/)/i, /^(?:>)/i, /^(?:&lt;)/i, /^(?:&gt;)/i, /^(?:&amp;)/i, /^(?:&apos;)/i, /^(?:&quot;)/i, /^(?:<!--(.|\n)*-->)/i, /^(?:\s)/i, /^(?:<)/i, /^(?:.)/i, /^(?:$)/i, /^(?:.)/i],
+              conditions: {
+                "S1": {
+                  "rules": [0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                  "inclusive": true
+                },
+                "INITIAL": {
+                  "rules": [0, 1, 2, 3, 4, 5, 6, 7, 13, 17, 18],
+                  "inclusive": true
+                }
+              }
+            };
+            return lexer;
+          }();
+
+          parser.lexer = lexer;
+
+          function Parser() {
+            this.yy = {};
+          }
+
+          Parser.prototype = parser;
+          parser.Parser = Parser;
+          return new Parser();
+        }();
+
+        if (true) {
+          exports.parser = XMLDescendente;
+          exports.Parser = XMLDescendente.Parser;
+
+          exports.parse = function () {
+            return XMLDescendente.parse.apply(XMLDescendente, arguments);
+          };
+
+          exports.main = function commonjsMain(args) {
+            if (!args[1]) {
+              console.log('Usage: ' + args[0] + ' FILE');
+              process.exit(1);
+            }
+
+            var source = __webpack_require__(
+            /*! fs */
+            1).readFileSync(__webpack_require__(
+            /*! path */
+            2).normalize(args[1]), "utf8");
+
+            return exports.parser.parse(source);
+          };
+
+          if (true && __webpack_require__.c[__webpack_require__.s] === module) {
+            exports.main(process.argv.slice(1));
+          }
+        }
+        /* WEBPACK VAR INJECTION */
+
+      }).call(this, __webpack_require__(
+      /*! ./../../node_modules/webpack/buildin/module.js */
+      "YuTi")(module));
+      /***/
     },
 
     /***/
@@ -3461,6 +4627,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return axesbarrabarra;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var axesbarrabarra = /*#__PURE__*/function () {
         function axesbarrabarra(tipo, exprecion, sig) {
@@ -3497,35 +4669,49 @@
           key: "obtenerall",
           value: function obtenerall(controlador, ts) {
             if (ts != null) {
-              var _iterator13 = _createForOfIteratorHelper(ts.tabla),
-                  _step13;
+              var _iterator16 = _createForOfIteratorHelper(ts.tabla),
+                  _step16;
 
               try {
-                for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-                  var informacion = _step13.value;
+                for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
+                  var informacion = _step16.value;
 
-                  if (informacion.identificador == this.exprecion.id) {
-                    controlador.append(informacion.sim.objeto.gethtml(""));
+                  if (this.exprecion.tipo == 1) {
+                    if (this.exprecion.id == "*" && informacion.sim.simbolo == 1) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    } else {
+                      if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 1) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                      }
+                    }
+                  } else {
+                    if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 2) {
+                      controlador.append(informacion.sim.valor + "\n");
+                    } else {
+                      if (this.exprecion.id == "*" && informacion.sim.simbolo == 2) {
+                        controlador.append(informacion.sim.valor);
+                      }
+                    }
                   }
                 }
               } catch (err) {
-                _iterator13.e(err);
+                _iterator16.e(err);
               } finally {
-                _iterator13.f();
+                _iterator16.f();
               }
 
-              var _iterator14 = _createForOfIteratorHelper(ts.sig),
-                  _step14;
+              var _iterator17 = _createForOfIteratorHelper(ts.sig),
+                  _step17;
 
               try {
-                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
-                  var tssig = _step14.value;
+                for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
+                  var tssig = _step17.value;
                   this.obtenerall(controlador, tssig.sig);
                 }
               } catch (err) {
-                _iterator14.e(err);
+                _iterator17.e(err);
               } finally {
-                _iterator14.f();
+                _iterator17.f();
               }
             }
           }
@@ -3533,24 +4719,23 @@
           key: "siguiente",
           value: function siguiente(controlador, ts) {
             if (ts != null) {
-              var _iterator15 = _createForOfIteratorHelper(ts.sig),
-                  _step15;
+              var _iterator18 = _createForOfIteratorHelper(ts.sig),
+                  _step18;
 
               try {
-                for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
-                  var tssig = _step15.value;
+                for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
+                  var tssig = _step18.value;
 
-                  if (this.exprecion.id == tssig.identificador) {
-                    console.log(this.exprecion.id);
+                  if (this.exprecion.id == tssig.identificador || this.exprecion.id == "*") {
                     this.sig.ejecutar(controlador, tssig.sig);
                   } else {
                     this.siguiente(controlador, tssig.sig);
                   }
                 }
               } catch (err) {
-                _iterator15.e(err);
+                _iterator18.e(err);
               } finally {
-                _iterator15.f();
+                _iterator18.f();
               }
             }
           }
@@ -3562,6 +4747,8 @@
 
             if (typeof valor == 'number') {
               this.isNumero(controlador, ts, valor);
+            } else {
+              this.esbool(controlador, ts);
             }
           }
         }, {
@@ -3574,17 +4761,26 @@
             }
           }
         }, {
+          key: "esbool",
+          value: function esbool(controlador, ts) {
+            if (this.sig != null) {
+              this.siguienteBool(controlador, ts);
+            } else {
+              this.obtenerBool(controlador, ts);
+            }
+          }
+        }, {
           key: "siguienteNumero",
           value: function siguienteNumero(controlador, ts, valor) {
             var cont = 1;
 
             if (ts != null) {
-              var _iterator16 = _createForOfIteratorHelper(ts.sig),
-                  _step16;
+              var _iterator19 = _createForOfIteratorHelper(ts.sig),
+                  _step19;
 
               try {
-                for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-                  var tssig = _step16.value;
+                for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
+                  var tssig = _step19.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     valor = this.exprecion.exprecion.getValor(controlador, ts);
@@ -3599,9 +4795,9 @@
                   }
                 }
               } catch (err) {
-                _iterator16.e(err);
+                _iterator19.e(err);
               } finally {
-                _iterator16.f();
+                _iterator19.f();
               }
             }
           }
@@ -3611,12 +4807,12 @@
             var cont = 1;
 
             if (ts != null) {
-              var _iterator17 = _createForOfIteratorHelper(ts.tabla),
-                  _step17;
+              var _iterator20 = _createForOfIteratorHelper(ts.tabla),
+                  _step20;
 
               try {
-                for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
-                  var informacion = _step17.value;
+                for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
+                  var informacion = _step20.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     valor = this.exprecion.exprecion.getValor(controlador, ts);
@@ -3629,30 +4825,127 @@
                   }
                 }
               } catch (err) {
-                _iterator17.e(err);
+                _iterator20.e(err);
               } finally {
-                _iterator17.f();
+                _iterator20.f();
               }
 
-              var _iterator18 = _createForOfIteratorHelper(ts.sig),
-                  _step18;
+              var _iterator21 = _createForOfIteratorHelper(ts.sig),
+                  _step21;
 
               try {
-                for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
-                  var tssig = _step18.value;
+                for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
+                  var tssig = _step21.value;
                   this.obtenerallNumero(controlador, tssig.sig, valor);
                 }
               } catch (err) {
-                _iterator18.e(err);
+                _iterator21.e(err);
               } finally {
-                _iterator18.f();
+                _iterator21.f();
+              }
+            }
+          }
+        }, {
+          key: "siguienteBool",
+          value: function siguienteBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator22 = _createForOfIteratorHelper(ts.sig),
+                  _step22;
+
+              try {
+                for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
+                  var tssig = _step22.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  } else {
+                    this.siguienteBool(controlador, tssig.sig);
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator22.e(err);
+              } finally {
+                _iterator22.f();
+              }
+            }
+          }
+        }, {
+          key: "obtenerBool",
+          value: function obtenerBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator23 = _createForOfIteratorHelper(ts.tabla),
+                  _step23;
+
+              try {
+                for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
+                  var informacion = _step23.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator23.e(err);
+              } finally {
+                _iterator23.f();
+              }
+
+              var _iterator24 = _createForOfIteratorHelper(ts.sig),
+                  _step24;
+
+              try {
+                for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
+                  var tssig = _step24.value;
+                  this.obtenerBool(controlador, tssig.sig);
+                }
+              } catch (err) {
+                _iterator24.e(err);
+              } finally {
+                _iterator24.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("//", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Child::" + this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -3731,6 +5024,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return acceso;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var acceso = /*#__PURE__*/function () {
         function acceso(exprecion, sig) {
@@ -3747,12 +5046,12 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator19 = _createForOfIteratorHelper(ts.sig),
-                    _step19;
+                var _iterator25 = _createForOfIteratorHelper(ts.sig),
+                    _step25;
 
                 try {
-                  for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
-                    var tssig = _step19.value;
+                  for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
+                    var tssig = _step25.value;
 
                     if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
@@ -3763,17 +5062,17 @@
                     }
                   }
                 } catch (err) {
-                  _iterator19.e(err);
+                  _iterator25.e(err);
                 } finally {
-                  _iterator19.f();
+                  _iterator25.f();
                 }
               } else {
-                var _iterator20 = _createForOfIteratorHelper(ts.tabla),
-                    _step20;
+                var _iterator26 = _createForOfIteratorHelper(ts.tabla),
+                    _step26;
 
                 try {
-                  for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
-                    var informacion = _step20.value;
+                  for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
+                    var informacion = _step26.value;
 
                     if (this.exprecion.tipo == 1) {
                       if (this.exprecion.id == "*") {
@@ -3794,9 +5093,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator20.e(err);
+                  _iterator26.e(err);
                 } finally {
-                  _iterator20.f();
+                  _iterator26.f();
                 }
               }
             }
@@ -3819,12 +5118,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator21 = _createForOfIteratorHelper(ts.sig),
-                  _step21;
+              var _iterator27 = _createForOfIteratorHelper(ts.sig),
+                  _step27;
 
               try {
-                for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
-                  var tssig = _step21.value;
+                for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
+                  var tssig = _step27.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -3835,17 +5134,17 @@
                   }
                 }
               } catch (err) {
-                _iterator21.e(err);
+                _iterator27.e(err);
               } finally {
-                _iterator21.f();
+                _iterator27.f();
               }
             } else {
-              var _iterator22 = _createForOfIteratorHelper(ts.tabla),
-                  _step22;
+              var _iterator28 = _createForOfIteratorHelper(ts.tabla),
+                  _step28;
 
               try {
-                for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
-                  var informacion = _step22.value;
+                for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
+                  var informacion = _step28.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
@@ -3856,9 +5155,9 @@
                   }
                 }
               } catch (err) {
-                _iterator22.e(err);
+                _iterator28.e(err);
               } finally {
-                _iterator22.f();
+                _iterator28.f();
               }
             }
           }
@@ -3870,12 +5169,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator23 = _createForOfIteratorHelper(ts.sig),
-                  _step23;
+              var _iterator29 = _createForOfIteratorHelper(ts.sig),
+                  _step29;
 
               try {
-                for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
-                  var tssig = _step23.value;
+                for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
+                  var tssig = _step29.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     controlador.position = cont;
@@ -3891,17 +5190,17 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator23.e(err);
+                _iterator29.e(err);
               } finally {
-                _iterator23.f();
+                _iterator29.f();
               }
             } else {
-              var _iterator24 = _createForOfIteratorHelper(ts.tabla),
-                  _step24;
+              var _iterator30 = _createForOfIteratorHelper(ts.tabla),
+                  _step30;
 
               try {
-                for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
-                  var informacion = _step24.value;
+                for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
+                  var informacion = _step30.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
@@ -3917,16 +5216,29 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator24.e(err);
+                _iterator30.e(err);
               } finally {
-                _iterator24.f();
+                _iterator30.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -4048,31 +5360,37 @@
 
       function AppComponent_div_8_Template(rf, ctx) {
         if (rf & 1) {
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 21);
+          var _r4 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 22);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Crear archivos");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_1_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](3, "a", 22);
+            var ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](4, "Abrir archivos");
+            return ctx_r3.ejecutar();
+          });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](5, "a", 22);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, "Guardar el archivo");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Ejecutar Ascendente");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](7, "div", 23);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](8, "a", 22);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](9, "Eliminar pesta\xF1a");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_4_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+
+            var ctx_r5 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r5.ejecutarDescendente();
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Ejecutar Descendente");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -4082,35 +5400,113 @@
 
       function AppComponent_div_13_Template(rf, ctx) {
         if (rf & 1) {
-          var _r3 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+          var _r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 22);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Errores l\xE9xico");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            var ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](3, "a", 22);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](4, "Errores sint\xE1ctico");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](5, "a", 24);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_5_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r3);
-
-            var ctx_r2 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
-
-            return ctx_r2.openPage("TablaSim", 2);
+            return ctx_r6.recorrer();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, "Errores el sem\xE1ntico");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente XML");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7);
+
+            var ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r8.ejecutarDescendente();
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente XML");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7);
+
+            var ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r9.xprecorrerDes();
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+        }
+      }
+
+      function AppComponent_div_18_Template(rf, ctx) {
+        if (rf & 1) {
+          var _r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r11);
+
+            var ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r10.imprimirTabla();
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Gramatical");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 22);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Errores l\xE9xico");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 22);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Errores sint\xE1ctico");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 23);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r11);
+
+            var ctx_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r12.openPage("TablaSim", 2);
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\xE1ntico");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         }
@@ -4159,6 +5555,62 @@
                 "hierarchical": true
               };
               options.nodes = {
+                shape: "box",
+                color: "#97C2FC",
+                arrows: "to"
+              };
+              var network = new vis__WEBPACK_IMPORTED_MODULE_3__["Network"](container, data, options);
+            }
+          }
+        }, {
+          key: "recorrerDes",
+          value: function recorrerDes() {
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+
+            if (this.entradaxml != "") {
+              console.log("Vamos a graficar");
+              var nodo_ast = ana.recorrerDes(this.entradaxml);
+              var grafo = nodo_ast.GraficarSintactico(); //Aqui tenemos la cadena de graphviz para graficar
+
+              console.log(grafo);
+              var container = document.getElementById("app");
+              var parsedData = vis__WEBPACK_IMPORTED_MODULE_3__["network"].convertDot(grafo);
+              var data = {
+                nodes: parsedData.nodes,
+                edges: parsedData.edges
+              };
+              var options = parsedData.options;
+              options.layout = {
+                "hierarchical": true
+              };
+              options.nodes = {
+                color: "cyan"
+              };
+              var network = new vis__WEBPACK_IMPORTED_MODULE_3__["Network"](container, data, options);
+            }
+          }
+        }, {
+          key: "xprecorrerDes",
+          value: function xprecorrerDes() {
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+
+            if (this.entradaxpath != "") {
+              console.log("Vamos a graficar");
+              var nodo_ast = ana.recorrerDesxpath(this.entradaxpath);
+              var grafo = nodo_ast.GraficarSintactico(); //Aqui tenemos la cadena de graphviz para graficar
+
+              console.log(grafo);
+              var container = document.getElementById("app");
+              var parsedData = vis__WEBPACK_IMPORTED_MODULE_3__["network"].convertDot(grafo);
+              var data = {
+                nodes: parsedData.nodes,
+                edges: parsedData.edges
+              };
+              var options = parsedData.options;
+              options.layout = {
+                "hierarchical": true
+              };
+              options.nodes = {
                 color: "cyan"
               };
               var network = new vis__WEBPACK_IMPORTED_MODULE_3__["Network"](container, data, options);
@@ -4189,6 +5641,19 @@
 
               this.xpathRG = ast1;
               this.reporteGramatical = ast;
+            }
+          }
+        }, {
+          key: "ejecutarDescendente",
+          value: function ejecutarDescendente() {
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+            this.consola = "";
+
+            if (this.entradaxml != "") {
+              var ejecutar = ana.ejecutarDes(this.entradaxml, this.entradaxpath);
+              this.consola = ejecutar.consola;
+              this.htmlts = ejecutar.ts;
+              /* this.htmlerrores = ejecutar.errores;*/
             }
           }
         }, {
@@ -4231,9 +5696,9 @@
       AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({
         type: AppComponent,
         selectors: [["app-root"]],
-        decls: 84,
+        decls: 80,
         vars: 15,
-        consts: [[1, "nav", "grey", "lighten-4", "py-4"], [1, "nav-item"], ["href", "#!", 1, "nav-link", "disabled"], ["dropdown", "", 1, "nav-item", "dropdown"], ["dropdownToggle", "", "mdbWavesEffect", "", "type", "button", "mdbWavesEffect", "", 1, "nav-link", "dropdown-toggle", "waves-light"], [1, "caret"], ["class", "dropdown-menu dropdown dropdown-primary", "role", "menu", 4, "dropdownMenu"], ["mdbBtn", "", "type", "button", "color", "success", "rounded", "true", "outline", "true", "mdbWavesEffect", "", 3, "click"], ["mdbBtn", "", "type", "button", "color", "info", "rounded", "true", "outline", "true", "mdbWavesEffect", "", 3, "click"], ["mdbBtn", "", "type", "button", "color", "default", "rounded", "true", "outline", "true", "mdbWavesEffect", "", 3, "click"], [1, "container-fluid"], [1, "col"], [3, "ngModel", "options", "ngModelChange"], [1, "row"], [1, "col-sm-6", "mb-3", "mb-md-0"], [1, "col-sm-6"], ["id", "TablaSim", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["mdbTable", "", "id", "tablasimbols", "bordered", "true", 2, "width", "100%"], ["id", "ast", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["id", "graph", 1, "overflow-auto", 2, "text-align", "center"], ["id", "app"], ["role", "menu", 1, "dropdown-menu", "dropdown", "dropdown-primary"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light"], [1, "divider", "dropdown-divider"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light", 3, "click"]],
+        consts: [[1, "nav", "grey", "lighten-4", "py-4"], [1, "nav-item"], ["href", "#!", 1, "nav-link", "disabled"], ["dropdown", "", 1, "nav-item", "dropdown"], ["dropdownToggle", "", "mdbWavesEffect", "", "type", "button", "mdbWavesEffect", "", 1, "nav-link", "dropdown-toggle", "waves-light"], [1, "caret"], ["class", "dropdown-menu dropdown dropdown-primary", "role", "menu", 4, "dropdownMenu"], ["mdbBtn", "", "type", "button", "color", "default", "rounded", "true", "outline", "true", "mdbWavesEffect", "", 3, "click"], [1, "container-fluid"], [1, "col"], [3, "ngModel", "options", "ngModelChange"], [1, "row"], [1, "col-sm-6", "mb-3", "mb-md-0"], [1, "col-sm-6"], ["id", "TablaSim", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["mdbTable", "", "id", "tablasimbols", "bordered", "true", 2, "width", "100%"], ["id", "ast", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["id", "graph", 1, "overflow-auto", 2, "text-align", "center"], ["id", "app"], ["role", "menu", 1, "dropdown-menu", "dropdown", "dropdown-primary"], ["mdbWavesEffect", "", 1, "dropdown-item", "waves-light", 3, "click"], [1, "divider", "dropdown-divider"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light", 3, "click"]],
         template: function AppComponent_Template(rf, ctx) {
           if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "ul", 0);
@@ -4252,13 +5717,13 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](5, "a", 4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, " Funcionalidades");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, " Ejecutar ");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](7, "span", 5);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 10, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 6, 0, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -4266,67 +5731,39 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, " Reporte de Errores");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, " Arbol ");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "span", 5);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 7, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 9, 0, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](14, "li", 1);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](14, "li", 3);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](15, "button", 7);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](15, "a", 4);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_Template_button_click_15_listener() {
-              return ctx.ejecutar();
-            });
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](16, " Reportes");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](16, "Ejecutar");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](17, "span", 5);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](17, "li", 1);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](18, "button", 8);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_Template_button_click_18_listener() {
-              return ctx.recorrer();
-            });
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](19, "Generar \xC1rbol AST");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](18, AppComponent_div_18_Template, 13, 0, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](19, "li", 1);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](20, "li", 1);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](20, "button", 7);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](21, "button", 8);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_Template_button_click_21_listener() {
-              return ctx.imprimirTabla();
-            });
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](22, "Reporte Gramatical");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](23, "li", 1);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](24, "button", 9);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_Template_button_click_24_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_Template_button_click_20_listener() {
               return ctx.openPage("TablaSim", 1);
             });
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](25, "Tabla de S\xEDmbolos");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](21, "Tabla de S\xEDmbolos");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -4334,29 +5771,29 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](26, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](22, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](27, "div", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](23, "div", 8);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](28, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](24, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](29, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](25, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](30, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](26, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](31, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](27, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](32, "XPAHT");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](28, "XPAHT");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](33, "div", 11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](34, "ngx-codemirror", 12);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](29, "div", 9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_34_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](30, "ngx-codemirror", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_30_listener($event) {
               return ctx.entradaxpath = $event;
             });
 
@@ -4368,35 +5805,35 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](35, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](31, "br");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](36, "div", 10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](32, "div", 8);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](37, "div", 13);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](33, "div", 11);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](38, "div", 14);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](34, "div", 12);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](39, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](35, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](40, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](36, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](41, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](37, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](42, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](38, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](43, "XML");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](39, "XML");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](44, "div", 11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](45, "ngx-codemirror", 12);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](40, "div", 9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_45_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](41, "ngx-codemirror", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_41_listener($event) {
               return ctx.entradaxml = $event;
             });
 
@@ -4410,27 +5847,27 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](46, "div", 15);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](42, "div", 13);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](47, "mdb-card");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](43, "mdb-card");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](48, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](44, "mdb-card-body");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](49, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](45, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](50, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](46, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](51, "Consola");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](47, "Consola");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](52, "div", 11);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](53, "ngx-codemirror", 12);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](48, "div", 9);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_53_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](49, "ngx-codemirror", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_49_listener($event) {
               return ctx.consola = $event;
             });
 
@@ -4446,81 +5883,55 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](54, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](50, "br");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](55, "div", 16);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](51, "div", 14);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](56, "table", 17);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](52, "table", 15);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](53, "br");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](54, "div", 16);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](55, "div", 17);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](56, "mdb-card");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](57, "mdb-card-body");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](58, "mdb-card-title");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](59, "h5");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](60, "REPORTE GRAMATICAL");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](57, "br");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](61, "div", 11);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](58, "div", 18);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](59, "div", 19);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](60, "div", 10);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](61, "mdb-card");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](62, "mdb-card-body");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](62, "div", 12);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](63, "mdb-card-title");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](64, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](65, "Arbol");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](65, "XML");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](66, "div", 20);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](66, "ngx-codemirror", 10);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](67, "br");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](68, "mdb-card");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](69, "mdb-card-body");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](70, "mdb-card-title");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](71, "h5");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](72, "REPORTE GRAMATICAL");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](73, "div", 13);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](74, "div", 14);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](75, "mdb-card-title");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](76, "h5");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](77, "XML");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](78, "ngx-codemirror", 12);
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_78_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_66_listener($event) {
               return ctx.reporteGramatical = $event;
             });
 
@@ -4528,21 +5939,21 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](79, "div", 15);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](67, "div", 13);
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](80, "mdb-card-title");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](68, "mdb-card-title");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](81, "h5");
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](69, "h5");
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](82, "XPATH");
-
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](70, "XPATH");
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](83, "ngx-codemirror", 12);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_83_listener($event) {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](71, "ngx-codemirror", 10);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_codemirror_ngModelChange_71_listener($event) {
               return ctx.xpathRG = $event;
             });
 
@@ -4555,10 +5966,34 @@
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](72, "br");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](73, "mdb-card");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](74, "mdb-card-body");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](75, "mdb-card-title");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](76, "h5");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](77, "Arbol");
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](78, "div", 18);
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](79, "br");
           }
 
           if (rf & 2) {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](34);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](30);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.entradaxpath)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](10, _c0));
 
@@ -4570,7 +6005,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.consola)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](12, _c0));
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](25);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵadvance"](17);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵproperty"]("ngModel", ctx.reporteGramatical)("options", _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵpureFunction0"](13, _c0));
 
@@ -4580,7 +6015,7 @@
           }
         },
         directives: [angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["BsDropdownDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["BsDropdownToggleDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["WavesDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["BsDropdownMenuDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbBtnDirective"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbCardComponent"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbCardBodyComponent"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbCardTitleComponent"], _ctrl_ngx_codemirror__WEBPACK_IMPORTED_MODULE_6__["CodemirrorComponent"], _angular_forms__WEBPACK_IMPORTED_MODULE_7__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_7__["NgModel"], angular_bootstrap_md__WEBPACK_IMPORTED_MODULE_5__["MdbTableDirective"]],
-        styles: [".column[_ngcontent-%COMP%] {\n  float: left;\n  width: 33.33%;\n  padding: 15px;\n}\n\n.row[_ngcontent-%COMP%]:after {\n  content: \"\";\n  display: table;\n  clear: both;\n}\n.ui-tabs[_ngcontent-%COMP%] {\n  position: relative;\n  \n  padding: 0.2em;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%] {\n  margin: 0;\n  padding: 0.2em 0.2em 0;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  list-style: none;\n  float: left;\n  position: relative;\n  top: 0;\n  margin: 1px 0.2em 0 0;\n  border-bottom-width: 0;\n  padding: 0;\n  white-space: nowrap;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  float: left;\n  padding: 0.5em 1em;\n  text-decoration: none;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%] {\n  margin-bottom: -1px;\n  padding-bottom: 1px;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-state-disabled[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-loading[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  cursor: text;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs-collapsible[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  cursor: pointer;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-panel[_ngcontent-%COMP%] {\n  display: block;\n  border-width: 0;\n  padding: 1em 1.4em;\n  background: none;\n}\n\nbody[_ngcontent-%COMP%], html[_ngcontent-%COMP%] {\n  height: 100%;\n  margin: 0;\n  font-family: Arial;\n}\n\n.tablink[_ngcontent-%COMP%] {\n  background-color: #555;\n  color: white;\n  float: left;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 14px 16px;\n  font-size: 17px;\n  width: 25%;\n}\n.tablink[_ngcontent-%COMP%]:hover {\n  background-color: #777;\n}\n\n.tabcontent[_ngcontent-%COMP%] {\n  color: white;\n  display: none;\n  padding: 100px 20px;\n  height: 100%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uXFwuLlxcYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGtEQUFBO0FBQ0E7RUFDQyxXQUFBO0VBQ0EsYUFBQTtFQUNBLGFBQUE7QUFDRDtBQUVFLG1DQUFBO0FBQ0E7RUFDRCxXQUFBO0VBQ0EsY0FBQTtFQUNBLFdBQUE7QUFDRDtBQUVFO0VBQ0Qsa0JBQUE7RUFBbUIsdUlBQUE7RUFDbkIsY0FBQTtBQUVEO0FBQUE7RUFDQyxTQUFBO0VBQ0Esc0JBQUE7QUFHRDtBQURBO0VBQ0MsZ0JBQUE7RUFDQSxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxNQUFBO0VBQ0EscUJBQUE7RUFDQSxzQkFBQTtFQUNBLFVBQUE7RUFDQSxtQkFBQTtBQUlEO0FBRkE7RUFDQyxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxxQkFBQTtBQUtEO0FBSEE7RUFDQyxtQkFBQTtFQUNBLG1CQUFBO0FBTUQ7QUFKQTs7O0VBR0MsWUFBQTtBQU9EO0FBTEE7O0VBRUMsZUFBQTtBQVFEO0FBTkE7RUFDQyxjQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7QUFTRDtBQU5BLDJFQUFBO0FBQ0E7RUFDQyxZQUFBO0VBQ0EsU0FBQTtFQUNBLGtCQUFBO0FBU0Q7QUFORSxvQkFBQTtBQUNBO0VBQ0Qsc0JBQUE7RUFDQSxZQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EsZUFBQTtFQUNBLFVBQUE7QUFTRDtBQU5FO0VBQ0Qsc0JBQUE7QUFTRDtBQU5FLHNFQUFBO0FBQ0E7RUFDRCxZQUFBO0VBQ0EsYUFBQTtFQUNBLG1CQUFBO0VBQ0EsWUFBQTtBQVNEIiwiZmlsZSI6ImFwcC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIENyZWF0ZSBjb2x1bW5zIHRoYXQgZmxvYXRzIG5leHQgdG8gZWFjaCBvdGhlciAqL1xyXG4uY29sdW1uIHtcclxuXHRmbG9hdDogbGVmdDtcclxuXHR3aWR0aDogMzMuMzMlO1xyXG5cdHBhZGRpbmc6IDE1cHg7XHJcbiAgfVxyXG4gIFxyXG4gIC8qIENsZWFyIGZsb2F0cyBhZnRlciB0aGUgY29sdW1ucyAqL1xyXG4gIC5yb3c6YWZ0ZXIge1xyXG5cdGNvbnRlbnQ6IFwiXCI7XHJcblx0ZGlzcGxheTogdGFibGU7XHJcblx0Y2xlYXI6IGJvdGg7XHJcbiAgfVxyXG5cclxuICAudWktdGFicyB7XHJcblx0cG9zaXRpb246IHJlbGF0aXZlOy8qIHBvc2l0aW9uOiByZWxhdGl2ZSBwcmV2ZW50cyBJRSBzY3JvbGwgYnVnIChlbGVtZW50IHdpdGggcG9zaXRpb246IHJlbGF0aXZlIGluc2lkZSBjb250YWluZXIgd2l0aCBvdmVyZmxvdzogYXV0byBhcHBlYXIgYXMgXCJmaXhlZFwiKSAqL1xyXG5cdHBhZGRpbmc6IC4yZW07XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IHtcclxuXHRtYXJnaW46IDA7XHJcblx0cGFkZGluZzogLjJlbSAuMmVtIDA7XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpIHtcclxuXHRsaXN0LXN0eWxlOiBub25lO1xyXG5cdGZsb2F0OiBsZWZ0O1xyXG5cdHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuXHR0b3A6IDA7XHJcblx0bWFyZ2luOiAxcHggLjJlbSAwIDA7XHJcblx0Ym9yZGVyLWJvdHRvbS13aWR0aDogMDtcclxuXHRwYWRkaW5nOiAwO1xyXG5cdHdoaXRlLXNwYWNlOiBub3dyYXA7XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpIGEge1xyXG5cdGZsb2F0OiBsZWZ0O1xyXG5cdHBhZGRpbmc6IC41ZW0gMWVtO1xyXG5cdHRleHQtZGVjb3JhdGlvbjogbm9uZTtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkudWktdGFicy1hY3RpdmUge1xyXG5cdG1hcmdpbi1ib3R0b206IC0xcHg7XHJcblx0cGFkZGluZy1ib3R0b206IDFweDtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkudWktdGFicy1hY3RpdmUgYSxcclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpLnVpLXN0YXRlLWRpc2FibGVkIGEsXHJcbi51aS10YWJzIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWxvYWRpbmcgYSB7XHJcblx0Y3Vyc29yOiB0ZXh0O1xyXG59XHJcbi51aS10YWJzIC51aS10YWJzLW5hdiBsaSBhLCAvKiBmaXJzdCBzZWxlY3RvciBpbiBncm91cCBzZWVtcyBvYnNvbGV0ZSwgYnV0IHJlcXVpcmVkIHRvIG92ZXJjb21lIGJ1ZyBpbiBPcGVyYSBhcHBseWluZyBjdXJzb3I6IHRleHQgb3ZlcmFsbCBpZiBkZWZpbmVkIGVsc2V3aGVyZS4uLiAqL1xyXG4udWktdGFicy1jb2xsYXBzaWJsZSAudWktdGFicy1uYXYgbGkudWktdGFicy1hY3RpdmUgYSB7XHJcblx0Y3Vyc29yOiBwb2ludGVyO1xyXG59XHJcbi51aS10YWJzIC51aS10YWJzLXBhbmVsIHtcclxuXHRkaXNwbGF5OiBibG9jaztcclxuXHRib3JkZXItd2lkdGg6IDA7XHJcblx0cGFkZGluZzogMWVtIDEuNGVtO1xyXG5cdGJhY2tncm91bmQ6IG5vbmU7XHJcbn1cclxuXHJcbi8qIFNldCBoZWlnaHQgb2YgYm9keSBhbmQgdGhlIGRvY3VtZW50IHRvIDEwMCUgdG8gZW5hYmxlIFwiZnVsbCBwYWdlIHRhYnNcIiAqL1xyXG5ib2R5LCBodG1sIHtcclxuXHRoZWlnaHQ6IDEwMCU7XHJcblx0bWFyZ2luOiAwO1xyXG5cdGZvbnQtZmFtaWx5OiBBcmlhbDtcclxuICB9XHJcbiAgXHJcbiAgLyogU3R5bGUgdGFiIGxpbmtzICovXHJcbiAgLnRhYmxpbmsge1xyXG5cdGJhY2tncm91bmQtY29sb3I6ICM1NTU7XHJcblx0Y29sb3I6IHdoaXRlO1xyXG5cdGZsb2F0OiBsZWZ0O1xyXG5cdGJvcmRlcjogbm9uZTtcclxuXHRvdXRsaW5lOiBub25lO1xyXG5cdGN1cnNvcjogcG9pbnRlcjtcclxuXHRwYWRkaW5nOiAxNHB4IDE2cHg7XHJcblx0Zm9udC1zaXplOiAxN3B4O1xyXG5cdHdpZHRoOiAyNSU7XHJcbiAgfVxyXG4gIFxyXG4gIC50YWJsaW5rOmhvdmVyIHtcclxuXHRiYWNrZ3JvdW5kLWNvbG9yOiAjNzc3O1xyXG4gIH1cclxuICBcclxuICAvKiBTdHlsZSB0aGUgdGFiIGNvbnRlbnQgKGFuZCBhZGQgaGVpZ2h0OjEwMCUgZm9yIGZ1bGwgcGFnZSBjb250ZW50KSAqL1xyXG4gIC50YWJjb250ZW50IHtcclxuXHRjb2xvcjogd2hpdGU7XHJcblx0ZGlzcGxheTogbm9uZTtcclxuXHRwYWRkaW5nOiAxMDBweCAyMHB4O1xyXG5cdGhlaWdodDogMTAwJTtcclxuICB9XHJcbiAgXHJcbiAiXX0= */"]
+        styles: [".column[_ngcontent-%COMP%] {\n  float: left;\n  width: 33.33%;\n  padding: 15px;\n}\n\n.row[_ngcontent-%COMP%]:after {\n  content: \"\";\n  display: table;\n  clear: both;\n}\n.ui-tabs[_ngcontent-%COMP%] {\n  position: relative;\n  \n  padding: 0.2em;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%] {\n  margin: 0;\n  padding: 0.2em 0.2em 0;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%] {\n  list-style: none;\n  float: left;\n  position: relative;\n  top: 0;\n  margin: 1px 0.2em 0 0;\n  border-bottom-width: 0;\n  padding: 0;\n  white-space: nowrap;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  float: left;\n  padding: 0.5em 1em;\n  text-decoration: none;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%] {\n  margin-bottom: -1px;\n  padding-bottom: 1px;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-state-disabled[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-loading[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  cursor: text;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li[_ngcontent-%COMP%]   a[_ngcontent-%COMP%], .ui-tabs-collapsible[_ngcontent-%COMP%]   .ui-tabs-nav[_ngcontent-%COMP%]   li.ui-tabs-active[_ngcontent-%COMP%]   a[_ngcontent-%COMP%] {\n  cursor: pointer;\n}\n.ui-tabs[_ngcontent-%COMP%]   .ui-tabs-panel[_ngcontent-%COMP%] {\n  display: block;\n  border-width: 0;\n  padding: 1em 1.4em;\n  background: none;\n}\n\nbody[_ngcontent-%COMP%], html[_ngcontent-%COMP%] {\n  height: 100%;\n  margin: 0;\n  font-family: Arial;\n}\n\n.tablink[_ngcontent-%COMP%] {\n  background-color: #555;\n  color: white;\n  float: left;\n  border: none;\n  outline: none;\n  cursor: pointer;\n  padding: 14px 16px;\n  font-size: 17px;\n  width: 25%;\n}\n.tablink[_ngcontent-%COMP%]:hover {\n  background-color: #777;\n}\n\n.tabcontent[_ngcontent-%COMP%] {\n  color: white;\n  display: none;\n  padding: 100px 20px;\n  height: 100%;\n}\n#app[_ngcontent-%COMP%] {\n  height: 800px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uXFwuLlxcYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGtEQUFBO0FBQ0E7RUFDQyxXQUFBO0VBQ0EsYUFBQTtFQUNBLGFBQUE7QUFDRDtBQUVFLG1DQUFBO0FBQ0E7RUFDRCxXQUFBO0VBQ0EsY0FBQTtFQUNBLFdBQUE7QUFDRDtBQUVFO0VBQ0Qsa0JBQUE7RUFBbUIsdUlBQUE7RUFDbkIsY0FBQTtBQUVEO0FBQUE7RUFDQyxTQUFBO0VBQ0Esc0JBQUE7QUFHRDtBQURBO0VBQ0MsZ0JBQUE7RUFDQSxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxNQUFBO0VBQ0EscUJBQUE7RUFDQSxzQkFBQTtFQUNBLFVBQUE7RUFDQSxtQkFBQTtBQUlEO0FBRkE7RUFDQyxXQUFBO0VBQ0Esa0JBQUE7RUFDQSxxQkFBQTtBQUtEO0FBSEE7RUFDQyxtQkFBQTtFQUNBLG1CQUFBO0FBTUQ7QUFKQTs7O0VBR0MsWUFBQTtBQU9EO0FBTEE7O0VBRUMsZUFBQTtBQVFEO0FBTkE7RUFDQyxjQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7QUFTRDtBQU5BLDJFQUFBO0FBQ0E7RUFDQyxZQUFBO0VBQ0EsU0FBQTtFQUNBLGtCQUFBO0FBU0Q7QUFORSxvQkFBQTtBQUNBO0VBQ0Qsc0JBQUE7RUFDQSxZQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EsZUFBQTtFQUNBLFVBQUE7QUFTRDtBQU5FO0VBQ0Qsc0JBQUE7QUFTRDtBQU5FLHNFQUFBO0FBQ0E7RUFDRCxZQUFBO0VBQ0EsYUFBQTtFQUNBLG1CQUFBO0VBQ0EsWUFBQTtBQVNEO0FBTkU7RUFDRCxhQUFBO0FBU0QiLCJmaWxlIjoiYXBwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogQ3JlYXRlIGNvbHVtbnMgdGhhdCBmbG9hdHMgbmV4dCB0byBlYWNoIG90aGVyICovXHJcbi5jb2x1bW4ge1xyXG5cdGZsb2F0OiBsZWZ0O1xyXG5cdHdpZHRoOiAzMy4zMyU7XHJcblx0cGFkZGluZzogMTVweDtcclxuICB9XHJcbiAgXHJcbiAgLyogQ2xlYXIgZmxvYXRzIGFmdGVyIHRoZSBjb2x1bW5zICovXHJcbiAgLnJvdzphZnRlciB7XHJcblx0Y29udGVudDogXCJcIjtcclxuXHRkaXNwbGF5OiB0YWJsZTtcclxuXHRjbGVhcjogYm90aDtcclxuICB9XHJcblxyXG4gIC51aS10YWJzIHtcclxuXHRwb3NpdGlvbjogcmVsYXRpdmU7LyogcG9zaXRpb246IHJlbGF0aXZlIHByZXZlbnRzIElFIHNjcm9sbCBidWcgKGVsZW1lbnQgd2l0aCBwb3NpdGlvbjogcmVsYXRpdmUgaW5zaWRlIGNvbnRhaW5lciB3aXRoIG92ZXJmbG93OiBhdXRvIGFwcGVhciBhcyBcImZpeGVkXCIpICovXHJcblx0cGFkZGluZzogLjJlbTtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYge1xyXG5cdG1hcmdpbjogMDtcclxuXHRwYWRkaW5nOiAuMmVtIC4yZW0gMDtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkge1xyXG5cdGxpc3Qtc3R5bGU6IG5vbmU7XHJcblx0ZmxvYXQ6IGxlZnQ7XHJcblx0cG9zaXRpb246IHJlbGF0aXZlO1xyXG5cdHRvcDogMDtcclxuXHRtYXJnaW46IDFweCAuMmVtIDAgMDtcclxuXHRib3JkZXItYm90dG9tLXdpZHRoOiAwO1xyXG5cdHBhZGRpbmc6IDA7XHJcblx0d2hpdGUtc3BhY2U6IG5vd3JhcDtcclxufVxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkgYSB7XHJcblx0ZmxvYXQ6IGxlZnQ7XHJcblx0cGFkZGluZzogLjVlbSAxZW07XHJcblx0dGV4dC1kZWNvcmF0aW9uOiBub25lO1xyXG59XHJcbi51aS10YWJzIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWFjdGl2ZSB7XHJcblx0bWFyZ2luLWJvdHRvbTogLTFweDtcclxuXHRwYWRkaW5nLWJvdHRvbTogMXB4O1xyXG59XHJcbi51aS10YWJzIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWFjdGl2ZSBhLFxyXG4udWktdGFicyAudWktdGFicy1uYXYgbGkudWktc3RhdGUtZGlzYWJsZWQgYSxcclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpLnVpLXRhYnMtbG9hZGluZyBhIHtcclxuXHRjdXJzb3I6IHRleHQ7XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtbmF2IGxpIGEsIC8qIGZpcnN0IHNlbGVjdG9yIGluIGdyb3VwIHNlZW1zIG9ic29sZXRlLCBidXQgcmVxdWlyZWQgdG8gb3ZlcmNvbWUgYnVnIGluIE9wZXJhIGFwcGx5aW5nIGN1cnNvcjogdGV4dCBvdmVyYWxsIGlmIGRlZmluZWQgZWxzZXdoZXJlLi4uICovXHJcbi51aS10YWJzLWNvbGxhcHNpYmxlIC51aS10YWJzLW5hdiBsaS51aS10YWJzLWFjdGl2ZSBhIHtcclxuXHRjdXJzb3I6IHBvaW50ZXI7XHJcbn1cclxuLnVpLXRhYnMgLnVpLXRhYnMtcGFuZWwge1xyXG5cdGRpc3BsYXk6IGJsb2NrO1xyXG5cdGJvcmRlci13aWR0aDogMDtcclxuXHRwYWRkaW5nOiAxZW0gMS40ZW07XHJcblx0YmFja2dyb3VuZDogbm9uZTtcclxufVxyXG5cclxuLyogU2V0IGhlaWdodCBvZiBib2R5IGFuZCB0aGUgZG9jdW1lbnQgdG8gMTAwJSB0byBlbmFibGUgXCJmdWxsIHBhZ2UgdGFic1wiICovXHJcbmJvZHksIGh0bWwge1xyXG5cdGhlaWdodDogMTAwJTtcclxuXHRtYXJnaW46IDA7XHJcblx0Zm9udC1mYW1pbHk6IEFyaWFsO1xyXG4gIH1cclxuICBcclxuICAvKiBTdHlsZSB0YWIgbGlua3MgKi9cclxuICAudGFibGluayB7XHJcblx0YmFja2dyb3VuZC1jb2xvcjogIzU1NTtcclxuXHRjb2xvcjogd2hpdGU7XHJcblx0ZmxvYXQ6IGxlZnQ7XHJcblx0Ym9yZGVyOiBub25lO1xyXG5cdG91dGxpbmU6IG5vbmU7XHJcblx0Y3Vyc29yOiBwb2ludGVyO1xyXG5cdHBhZGRpbmc6IDE0cHggMTZweDtcclxuXHRmb250LXNpemU6IDE3cHg7XHJcblx0d2lkdGg6IDI1JTtcclxuICB9XHJcbiAgXHJcbiAgLnRhYmxpbms6aG92ZXIge1xyXG5cdGJhY2tncm91bmQtY29sb3I6ICM3Nzc7XHJcbiAgfVxyXG4gIFxyXG4gIC8qIFN0eWxlIHRoZSB0YWIgY29udGVudCAoYW5kIGFkZCBoZWlnaHQ6MTAwJSBmb3IgZnVsbCBwYWdlIGNvbnRlbnQpICovXHJcbiAgLnRhYmNvbnRlbnQge1xyXG5cdGNvbG9yOiB3aGl0ZTtcclxuXHRkaXNwbGF5OiBub25lO1xyXG5cdHBhZGRpbmc6IDEwMHB4IDIwcHg7XHJcblx0aGVpZ2h0OiAxMDAlO1xyXG4gIH1cclxuXHJcbiAgI2FwcCB7XHJcblx0aGVpZ2h0OiA4MDBweDtcclxuICB9XHJcbiAgXHJcbiAiXX0= */"]
       });
       /***/
     },
@@ -4604,6 +6039,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return position;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var position = /*#__PURE__*/function () {
         function position() {
@@ -4623,7 +6064,8 @@
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("position();", "");
+            return padre;
           }
         }]);
 
@@ -4646,7 +6088,6 @@
       /* WEBPACK VAR INJECTION */
       (function (module) {
         /* parser generated by jison 0.4.18 */
-<<<<<<< Updated upstream
 
         /*
           Returns a Parser object of the following structure:
@@ -4721,12 +6162,12 @@
           }
         */
         var xPathReporteGramatica = function () {
-          var o = function o(k, v, _o3, l) {
-            for (_o3 = _o3 || {}, l = k.length; l--; _o3[k[l]] = v) {
+          var o = function o(k, v, _o4, l) {
+            for (_o4 = _o4 || {}, l = k.length; l--; _o4[k[l]] = v) {
               ;
             }
 
-            return _o3;
+            return _o4;
           },
               $V0 = [1, 5],
               $V1 = [1, 6],
@@ -5118,479 +6559,6 @@
                   this.$ = 'OPERADORES -> CADENA; \n';
                   break;
 
-=======
-
-        /*
-          Returns a Parser object of the following structure:
-        
-          Parser: {
-            yy: {}
-          }
-        
-          Parser.prototype: {
-            yy: {},
-            trace: function(),
-            symbols_: {associative list: name ==> number},
-            terminals_: {associative list: number ==> name},
-            productions_: [...],
-            performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$),
-            table: [...],
-            defaultActions: {...},
-            parseError: function(str, hash),
-            parse: function(input),
-        
-            lexer: {
-                EOF: 1,
-                parseError: function(str, hash),
-                setInput: function(input),
-                input: function(),
-                unput: function(str),
-                more: function(),
-                less: function(n),
-                pastInput: function(),
-                upcomingInput: function(),
-                showPosition: function(),
-                test_match: function(regex_match_array, rule_index),
-                next: function(),
-                lex: function(),
-                begin: function(condition),
-                popState: function(),
-                _currentRules: function(),
-                topState: function(),
-                pushState: function(condition),
-        
-                options: {
-                    ranges: boolean           (optional: true ==> token location info will include a .range[] member)
-                    flex: boolean             (optional: true ==> flex-like lexing behaviour where the rules are tested exhaustively to find the longest match)
-                    backtrack_lexer: boolean  (optional: true ==> lexer regexes are tested in order and for each matching regex the action code is invoked; the lexer terminates the scan when a token is returned by the action code)
-                },
-        
-                performAction: function(yy, yy_, $avoiding_name_collisions, YY_START),
-                rules: [...],
-                conditions: {associative list: name ==> set},
-            }
-          }
-        
-        
-          token location info (@$, _$, etc.): {
-            first_line: n,
-            last_line: n,
-            first_column: n,
-            last_column: n,
-            range: [start_number, end_number]       (where the numbers are indexes into the input string, regular zero-based)
-          }
-        
-        
-          the parseError function receives a 'hash' object with these members for lexer and parser errors: {
-            text:        (matched text)
-            token:       (the produced terminal token, if any)
-            line:        (yylineno)
-          }
-          while parser (grammar) errors will also provide these members, i.e. parser errors deliver a superset of attributes: {
-            loc:         (yylloc)
-            expected:    (string describing the set of expected tokens)
-            recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
-          }
-        */
-        var xPathReporteGramatica = function () {
-          var o = function o(k, v, _o3, l) {
-            for (_o3 = _o3 || {}, l = k.length; l--; _o3[k[l]] = v) {
-              ;
-            }
-
-            return _o3;
-          },
-              $V0 = [1, 5],
-              $V1 = [1, 6],
-              $V2 = [1, 8],
-              $V3 = [1, 9],
-              $V4 = [1, 10],
-              $V5 = [1, 11],
-              $V6 = [1, 12],
-              $V7 = [1, 13],
-              $V8 = [1, 14],
-              $V9 = [1, 15],
-              $Va = [1, 16],
-              $Vb = [1, 17],
-              $Vc = [1, 18],
-              $Vd = [1, 19],
-              $Ve = [1, 20],
-              $Vf = [1, 21],
-              $Vg = [1, 22],
-              $Vh = [1, 23],
-              $Vi = [5, 7],
-              $Vj = [1, 30],
-              $Vk = [1, 31],
-              $Vl = [1, 32],
-              $Vm = [5, 7, 9, 11, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-              $Vn = [1, 37],
-              $Vo = [1, 55],
-              $Vp = [1, 56],
-              $Vq = [1, 57],
-              $Vr = [1, 52],
-              $Vs = [1, 59],
-              $Vt = [1, 53],
-              $Vu = [1, 54],
-              $Vv = [1, 58],
-              $Vw = [1, 64],
-              $Vx = [1, 65],
-              $Vy = [1, 63],
-              $Vz = [1, 66],
-              $VA = [1, 67],
-              $VB = [1, 68],
-              $VC = [1, 70],
-              $VD = [1, 71],
-              $VE = [1, 72],
-              $VF = [1, 73],
-              $VG = [1, 74],
-              $VH = [1, 75],
-              $VI = [32, 33, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48],
-              $VJ = [32, 33, 38, 39, 42, 43, 44, 45, 46, 47, 48],
-              $VK = [33, 38, 42, 43, 44, 45, 46, 47, 48];
-
-          var parser = {
-            trace: function trace() {},
-            yy: {},
-            symbols_: {
-              "error": 2,
-              "inicio": 3,
-              "varias": 4,
-              "EOF": 5,
-              "instrucciones": 6,
-              "SIGNOO": 7,
-              "instruccion": 8,
-              "BARRA": 9,
-              "e": 10,
-              "BARRABARRA": 11,
-              "RESERV": 12,
-              "DOSPUNTOS": 13,
-              "PUNTOPUNTO": 14,
-              "ID": 15,
-              "LAST": 16,
-              "POSITION": 17,
-              "ANCESTOR": 18,
-              "RESERVLARGE": 19,
-              "ATTRIBUTE": 20,
-              "ANCESORSELF": 21,
-              "CHILD": 22,
-              "DESCENDANT": 23,
-              "FOLLOWING": 24,
-              "NAMESPACE": 25,
-              "PARENT": 26,
-              "PRECENDING": 27,
-              "SELF": 28,
-              "TEXT": 29,
-              "NODE": 30,
-              "SIBLING": 31,
-              "MENOS": 32,
-              "OR": 33,
-              "ARROBA": 34,
-              "ASTERISCO": 35,
-              "CORA": 36,
-              "OPERADORES": 37,
-              "CORC": 38,
-              "MAS": 39,
-              "DIV": 40,
-              "MODULO": 41,
-              "AND": 42,
-              "MAYORQUE": 43,
-              "MAYORIGUAL": 44,
-              "MENORQUE": 45,
-              "MENORIGUAL": 46,
-              "DIFERENTE": 47,
-              "IGUAL": 48,
-              "DECIMAL": 49,
-              "ENTERO": 50,
-              "CADENA": 51,
-              "$accept": 0,
-              "$end": 1
-            },
-            terminals_: {
-              2: "error",
-              5: "EOF",
-              7: "SIGNOO",
-              9: "BARRA",
-              11: "BARRABARRA",
-              13: "DOSPUNTOS",
-              14: "PUNTOPUNTO",
-              15: "ID",
-              16: "LAST",
-              17: "POSITION",
-              18: "ANCESTOR",
-              20: "ATTRIBUTE",
-              21: "ANCESORSELF",
-              22: "CHILD",
-              23: "DESCENDANT",
-              24: "FOLLOWING",
-              25: "NAMESPACE",
-              26: "PARENT",
-              27: "PRECENDING",
-              28: "SELF",
-              29: "TEXT",
-              30: "NODE",
-              31: "SIBLING",
-              32: "MENOS",
-              33: "OR",
-              34: "ARROBA",
-              35: "ASTERISCO",
-              36: "CORA",
-              38: "CORC",
-              39: "MAS",
-              40: "DIV",
-              41: "MODULO",
-              42: "AND",
-              43: "MAYORQUE",
-              44: "MAYORIGUAL",
-              45: "MENORQUE",
-              46: "MENORIGUAL",
-              47: "DIFERENTE",
-              48: "IGUAL",
-              49: "DECIMAL",
-              50: "ENTERO",
-              51: "CADENA"
-            },
-            productions_: [0, [3, 2], [4, 3], [4, 1], [6, 2], [6, 1], [8, 2], [8, 2], [8, 3], [8, 4], [8, 2], [8, 4], [8, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 2], [12, 1], [12, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 1], [12, 1], [12, 1], [19, 4], [19, 2], [10, 1], [10, 2], [10, 2], [10, 1], [10, 4], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 2], [37, 1], [37, 1], [37, 1], [37, 1], [37, 1], [37, 1], [37, 2]],
-            performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
-            /* action[1] */
-            , $$
-            /* vstack */
-            , _$
-            /* lstack */
-            ) {
-              /* this == yyval */
-              var $0 = $$.length - 1;
-
-              switch (yystate) {
-                case 1:
-                  this.$ = "inicio -> varias \n" + $$[$0 - 1];
-                  return this.$;
-                  break;
-
-                case 2:
-                  this.$ = 'varias -> instrucciones SIGNOO instrucciones \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 3:
-                  this.$ = 'varias -> instrucciones \n' + $$[$0];
-                  break;
-
-                case 4:
-                  this.$ = 'instrucciones -> instruccion instrucciones \n' + $$[$0 - 1] + $$[$0];
-                  break;
-
-                case 5:
-                  this.$ = 'instrucciones -> instruccion \n' + $$[$0];
-                  break;
-
-                case 6:
-                  this.$ = 'instruccion -> BARRA e; \n' + $$[$0];
-                  break;
-
-                case 7:
-                  this.$ = 'instruccion -> BARRABARRA e; \n' + $$[$0];
-                  break;
-
-                case 8:
-                  this.$ = 'instruccion -> RESERV DOSPUNTOS e; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 9:
-                  this.$ = 'instruccion -> BARRA RESERV DOSPUNTOS e; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 10:
-                  this.$ = 'instruccion -> BARRA PUNTOPUNTO; \n';
-                  break;
-
-                case 11:
-                  this.$ = 'instruccion -> BARRABARRA RESERV DOSPUNTOS e; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 12:
-                  this.$ = 'instruccion -> ID; \n';
-                  break;
-
-                case 13:
-                  this.$ = 'RESERV -> LAST; \n';
-                  break;
-
-                case 14:
-                  this.$ = 'RESERV -> POSITION; \n';
-                  break;
-
-                case 15:
-                  this.$ = 'RESERV -> ANCESTOR RESERVLARGE; \n' + $$[$0];
-                  break;
-
-                case 16:
-                  this.$ = 'RESERV -> ATTRIBUTE; \n';
-                  break;
-
-                case 17:
-                  this.$ = 'RESERV -> ANCESORSELF; \n';
-                  break;
-
-                case 18:
-                  this.$ = 'RESERV -> CHILD; \n';
-                  break;
-
-                case 19:
-                  this.$ = 'RESERV -> DESCENDANT RESERVLARGE; \n' + $$[$0];
-                  break;
-
-                case 20:
-                  this.$ = 'RESERV -> DESCENDANT; \n';
-                  break;
-
-                case 21:
-                  this.$ = 'RESERV -> FOLLOWING RESERVLARGE; \n' + $$[$0];
-                  break;
-
-                case 22:
-                  this.$ = 'RESERV -> FOLLOWING; \n';
-                  break;
-
-                case 23:
-                  this.$ = 'RESERV -> NAMESPACE; \n';
-                  break;
-
-                case 24:
-                  this.$ = 'RESERV -> PARENT; \n';
-                  break;
-
-                case 25:
-                  this.$ = 'RESERV -> PRECENDING; \n';
-                  break;
-
-                case 26:
-                  this.$ = 'RESERV -> PRECENDING RESERVLARGE; \n' + $$[$0];
-                  break;
-
-                case 27:
-                  this.$ = 'RESERV -> SELF; \n';
-                  break;
-
-                case 28:
-                  this.$ = 'RESERV -> TEXT; \n';
-                  break;
-
-                case 29:
-                  this.$ = 'RESERV -> NODE; \n';
-                  break;
-
-                case 30:
-                  this.$ = 'RESERV -> SIBLING; \n';
-                  break;
-
-                case 31:
-                  this.$ = 'RESERVLARGE -> MENOS OR MENOS SELF; \n';
-                  break;
-
-                case 32:
-                  this.$ = 'RESERVLARGE -> MENOS SIBLING; \n';
-                  break;
-
-                case 33:
-                  this.$ = 'e -> ID; \n';
-                  break;
-
-                case 34:
-                  this.$ = 'e -> ARROBA ID; \n';
-                  break;
-
-                case 35:
-                  this.$ = 'e -> ARROBA ASTERISCO; \n';
-                  break;
-
-                case 36:
-                  this.$ = 'e -> ASTERISCO; \n';
-                  break;
-
-                case 37:
-                  this.$ = 'e -> ID CORA OPERADORES CORC; \n' + $$[$0 - 1];
-                  break;
-
-                case 38:
-                  this.$ = 'OPERADORES -> OPERADORES MAS OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 39:
-                  this.$ = 'OPERADORES -> OPERADORES MENOS OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 40:
-                  this.$ = 'OPERADORES -> OPERADORES ASTERISCO OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 41:
-                  this.$ = 'OPERADORES -> OPERADORES DIV OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 42:
-                  this.$ = 'OPERADORES -> OPERADORES MODULO OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 43:
-                  this.$ = 'OPERADORES -> OPERADORES AND OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 44:
-                  this.$ = 'OPERADORES -> OPERADORES OR OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 45:
-                  this.$ = 'OPERADORES -> OPERADORES MAYORQUE OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 46:
-                  this.$ = 'OPERADORES -> OPERADORES MAYORIGUAL OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 47:
-                  this.$ = 'OPERADORES -> OPERADORES MENORQUE OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 48:
-                  this.$ = 'OPERADORES -> OPERADORES MENORIGUAL OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 49:
-                  this.$ = 'OPERADORES -> OPERADORES DIFERENTE OPERADORES; \n' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 50:
-                  this.$ = 'OPERADORES -> OPERADORES IGUAL OPERADORES; \n ' + $$[$0 - 2] + $$[$0];
-                  break;
-
-                case 51:
-                  this.$ = 'OPERADORES -> MENOS OPERADORES %prec UNARIO; \n ' + $$[$0];
-                  break;
-
-                case 52:
-                  this.$ = 'OPERADORES -> DECIMAL; \n';
-                  break;
-
-                case 53:
-                  this.$ = 'OPERADORES -> ENTERO; \n';
-                  break;
-
-                case 54:
-                  this.$ = 'OPERADORES -> ID; \n';
-                  break;
-
-                case 55:
-                  this.$ = 'OPERADORES -> LAST; \n ';
-                  break;
-
-                case 56:
-                  this.$ = 'OPERADORES -> POSITION; \n';
-                  break;
-
-                case 57:
-                  this.$ = 'OPERADORES -> CADENA; \n';
-                  break;
-
->>>>>>> Stashed changes
                 case 58:
                   this.$ = 'OPERADORES ->ARROBA ID; \n';
                   break;
@@ -7291,12 +8259,12 @@
 
             if (this.condicion.getTipo(controlador, ts) == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].BOOLEANO) {
               if (valor_condicion) {
-                var _iterator25 = _createForOfIteratorHelper(this.lista_ifs),
-                    _step25;
+                var _iterator31 = _createForOfIteratorHelper(this.lista_ifs),
+                    _step31;
 
                 try {
-                  for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
-                    var ins = _step25.value;
+                  for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
+                    var ins = _step31.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"]) {
@@ -7316,19 +8284,19 @@
 
                   }
                 } catch (err) {
-                  _iterator25.e(err);
+                  _iterator31.e(err);
                 } finally {
-                  _iterator25.f();
+                  _iterator31.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
               } else {
-                var _iterator26 = _createForOfIteratorHelper(this.lista_elses),
-                    _step26;
+                var _iterator32 = _createForOfIteratorHelper(this.lista_elses),
+                    _step32;
 
                 try {
-                  for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
-                    var _ins = _step26.value;
+                  for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
+                    var _ins = _step32.value;
 
                     var _res = _ins.ejecutar(controlador, ts_local);
 
@@ -7349,9 +8317,9 @@
 
                   }
                 } catch (err) {
-                  _iterator26.e(err);
+                  _iterator32.e(err);
                 } finally {
-                  _iterator26.f();
+                  _iterator32.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
@@ -7370,18 +8338,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator27 = _createForOfIteratorHelper(this.lista_ifs),
-                _step27;
+            var _iterator33 = _createForOfIteratorHelper(this.lista_ifs),
+                _step33;
 
             try {
-              for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
-                var _ins2 = _step27.value;
+              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
+                var _ins2 = _step33.value;
                 padre.AddHijo(_ins2.recorrer());
               }
             } catch (err) {
-              _iterator27.e(err);
+              _iterator33.e(err);
             } finally {
-              _iterator27.f();
+              _iterator33.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -7391,18 +8359,18 @@
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("else", ""));
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-              var _iterator28 = _createForOfIteratorHelper(this.lista_elses),
-                  _step28;
+              var _iterator34 = _createForOfIteratorHelper(this.lista_elses),
+                  _step34;
 
               try {
-                for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
-                  var ins = _step28.value;
+                for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
+                  var ins = _step34.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator28.e(err);
+                _iterator34.e(err);
               } finally {
-                _iterator28.f();
+                _iterator34.f();
               }
 
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -7575,6 +8543,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return puntopunto;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var puntopunto = /*#__PURE__*/function () {
         function puntopunto(exprecion, sig) {
@@ -7595,36 +8569,40 @@
 
               this.contador = 1;
             } else {
-<<<<<<< Updated upstream
-=======
-              ts = ts.ant;
+              if (this.contador == 0) {
+                ts = ts.ant;
 
->>>>>>> Stashed changes
-              var _iterator29 = _createForOfIteratorHelper(ts.tabla),
-                  _step29;
+                var _iterator35 = _createForOfIteratorHelper(ts.tabla),
+                    _step35;
 
-              try {
-                for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
-                  var informacion = _step29.value;
-<<<<<<< Updated upstream
-=======
+                try {
+                  for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
+                    var informacion = _step35.value;
 
-                  if (informacion.sim.simbolo == 1) {
-                    controlador.append(informacion.sim.objeto.gethtml(""));
+                    if (informacion.sim.simbolo == 1) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
                   }
->>>>>>> Stashed changes
+                } catch (err) {
+                  _iterator35.e(err);
+                } finally {
+                  _iterator35.f();
                 }
-              } catch (err) {
-                _iterator29.e(err);
-              } finally {
-                _iterator29.f();
               }
+
+              this.contador = 1;
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/..", "");
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -7860,12 +8838,12 @@
           value: function ejecutar(controlador, ts) {
             console.log("vamos a compilar la entrada");
 
-            var _iterator30 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step30;
+            var _iterator36 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step36;
 
             try {
-              for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
-                var instruccion = _step30.value;
+              for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
+                var instruccion = _step36.value;
 
                 if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
                   var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
@@ -7875,9 +8853,37 @@
                 }
               }
             } catch (err) {
-              _iterator30.e(err);
+              _iterator36.e(err);
             } finally {
-              _iterator30.f();
+              _iterator36.f();
+            }
+
+            this.graficar(controlador, ts);
+            console.log(ts);
+          }
+        }, {
+          key: "ejecutarDescendente",
+          value: function ejecutarDescendente(controlador, ts) {
+            console.log("vamos a compilar la entrada");
+
+            var _iterator37 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step37;
+
+            try {
+              for (_iterator37.s(); !(_step37 = _iterator37.n()).done;) {
+                var instruccion = _step37.value;
+
+                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
+                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_0__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
+                  ts.agregar(instruccion.identificador, sim);
+                  ts.agregarSiguiente(instruccion.identificador, instruccion.ejecutar(controlador, ts));
+                }
+              }
+            } catch (err) {
+              _iterator37.e(err);
+            } finally {
+              _iterator37.f();
             }
 
             this.graficar(controlador, ts);
@@ -7896,18 +8902,18 @@
             if (ts != null) {
               controlador.graficarEntornos(controlador, ts, ts.ambito);
 
-              var _iterator31 = _createForOfIteratorHelper(ts.sig),
-                  _step31;
+              var _iterator38 = _createForOfIteratorHelper(ts.sig),
+                  _step38;
 
               try {
-                for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
-                  var tssig = _step31.value;
+                for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
+                  var tssig = _step38.value;
                   this.graficar(controlador, tssig.sig);
                 }
               } catch (err) {
-                _iterator31.e(err);
+                _iterator38.e(err);
               } finally {
-                _iterator31.f();
+                _iterator38.f();
               }
             }
           }
@@ -7916,18 +8922,18 @@
           value: function recorrer() {
             var raiz = new _Nodo__WEBPACK_IMPORTED_MODULE_3__["default"]("INICIO", "");
 
-            var _iterator32 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step32;
+            var _iterator39 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step39;
 
             try {
-              for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
-                var inst = _step32.value;
+              for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
+                var inst = _step39.value;
                 raiz.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator32.e(err);
+              _iterator39.e(err);
             } finally {
-              _iterator32.f();
+              _iterator39.f();
             }
 
             return raiz;
@@ -7962,7 +8968,6 @@
       /**
        * @class Clase para el manejo de nodos de la grafica del ast
        */
-<<<<<<< Updated upstream
 
 
       var Nodo = /*#__PURE__*/function () {
@@ -8162,12 +9167,12 @@
             var ts = this;
             console.log("-----------------");
 
-            var _iterator33 = _createForOfIteratorHelper(ts.tabla),
-                _step33;
+            var _iterator40 = _createForOfIteratorHelper(ts.tabla),
+                _step40;
 
             try {
-              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
-                var informacion = _step33.value;
+              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
+                var informacion = _step40.value;
                 console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
 
                 if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
@@ -8175,9 +9180,9 @@
                 }
               }
             } catch (err) {
-              _iterator33.e(err);
+              _iterator40.e(err);
             } finally {
-              _iterator33.f();
+              _iterator40.f();
             }
 
             return null;
@@ -8278,323 +9283,6 @@
         function Objeto(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta) {
           _classCallCheck(this, Objeto);
 
-=======
-
-
-      var Nodo = /*#__PURE__*/function () {
-        /**
-         * @constructor Crea un nuevo nodo a graficar del ast
-         * @param token guarda el token del nodo
-         * @param lexema guarda el lexema del nodo
-         */
-        function Nodo(token, lexema) {
-          _classCallCheck(this, Nodo);
-
-          this.token = token;
-          this.lexema = lexema;
-          this.hijos = new Array();
-        }
-        /**
-         * @method AddHijo agrega un nuevo hijo a la lista
-         * @param nuevo hace referencia al nuevo nodo
-         */
-
-
-        _createClass(Nodo, [{
-          key: "AddHijo",
-          value: function AddHijo(nuevo) {
-            this.hijos.push(nuevo);
-          }
-          /**
-           * @function getToken retorna el nombre del token
-           * @returns retorna el token
-           */
-
-        }, {
-          key: "getToken",
-          value: function getToken() {
-            return this.token;
-          }
-          /**
-           * @function GraficarSintactico Hace la estructura de la grafica
-           * @returns retorna la cadena total de la grafica
-           */
-
-        }, {
-          key: "GraficarSintactico",
-          value: function GraficarSintactico() {
-            var grafica = "dinetwork {\n\n".concat(this.GraficarNodos(this, "0"), " \n\n}");
-            return grafica;
-          }
-          /**
-           * @function GraficarNodos
-           * @param nodo indica el nodo donde nos posicionamos
-           * @param i hara referencia al numero o identificador del nodo a graficar
-           * @returns retorna la cadena de los nodos
-           */
-
-        }, {
-          key: "GraficarNodos",
-          value: function GraficarNodos(nodo, i) {
-            var k = 0;
-            var r = "";
-            var nodoTerm = nodo.token;
-            nodoTerm = nodoTerm.replace("\"", "");
-            r = "node".concat(i, "[label = \"").concat(nodoTerm, "\"];\n");
-
-            for (var j = 0; j <= nodo.hijos.length - 1; j++) {
-              r = "".concat(r, "node").concat(i, " -> node").concat(i).concat(k, "\n");
-              r = r + this.GraficarNodos(nodo.hijos[j], "" + i + k);
-              k = k + 1;
-            }
-
-            if (!nodo.lexema.match('') || !nodo.lexema.match("")) {
-              var nodoToken = nodo.lexema;
-              nodoToken = nodoToken.replace("\"", "");
-              r = r + "node".concat(i, "c[label = \"").concat(nodoToken, "\"];\n");
-              r = r + "node".concat(i, " -> node").concat(i, "c\n");
-            }
-
-            return r;
-          }
-        }]);
-
-        return Nodo;
-      }();
-      /***/
-
-    },
-
-    /***/
-    "ajoU":
-    /*!********************************************!*\
-      !*** ./src/Clases/TablaSimbolos/ambito.ts ***!
-      \********************************************/
-
-    /*! exports provided: default */
-
-    /***/
-    function ajoU(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "default", function () {
-        return ambito;
-      });
-
-      var ambito = function ambito(identificador, sig) {
-        _classCallCheck(this, ambito);
-
-        this.identificador = identificador;
-        this.sig = sig;
-      };
-      /***/
-
-    },
-
-    /***/
-    "arwD":
-    /*!***************************************************!*\
-      !*** ./src/clases/TablaSimbolos/TablaSimbolos.ts ***!
-      \***************************************************/
-
-    /*! exports provided: TablaSimbolos */
-
-    /***/
-    function arwD(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "TablaSimbolos", function () {
-        return TablaSimbolos;
-      });
-      /* harmony import */
-
-
-      var _ambito__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! ./ambito */
-      "z8/j");
-      /* harmony import */
-
-
-      var _contenido__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! ./contenido */
-      "XUFC");
-
-      var TablaSimbolos = /*#__PURE__*/function () {
-        function TablaSimbolos(ant, ambito) {
-          _classCallCheck(this, TablaSimbolos);
-
-          this.sig = [];
-          this.tabla = [];
-          this.ant = ant;
-          this.ambito = ambito;
-        }
-
-        _createClass(TablaSimbolos, [{
-          key: "agregar",
-          value: function agregar(id, simbolo) {
-            var cont = new _contenido__WEBPACK_IMPORTED_MODULE_1__["default"](id, simbolo);
-            this.tabla.push(cont); //this.tabla.set(id.toLowerCase(), simbolo); 
-          }
-        }, {
-          key: "agregarSiguiente",
-          value: function agregarSiguiente(id, sig) {
-            var amb = new _ambito__WEBPACK_IMPORTED_MODULE_0__["default"](id, sig);
-            this.sig.push(amb);
-          }
-        }, {
-          key: "existe",
-          value: function existe(id) {
-            /*  let ts : TablaSimbolos = this;
-                  while(ts != null){
-                  let existe = ts.tabla.get(id);
-                      if(existe != null){
-                      return true;
-                  }
-                  ts = ts.ant;
-              }*/
-            return false;
-          }
-        }, {
-          key: "existeEnActual",
-          value: function existeEnActual(id) {
-            /*  let ts : TablaSimbolos = this;
-                  let existe = ts.tabla.get(id);
-                  if(existe != null){
-                  return true;
-              }*/
-            return false;
-          }
-        }, {
-          key: "getSimbolo",
-          value: function getSimbolo(id, tipoval) {
-            var ts = this;
-            console.log("-----------------");
-
-            var _iterator33 = _createForOfIteratorHelper(ts.tabla),
-                _step33;
-
-            try {
-              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
-                var informacion = _step33.value;
-                console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
-
-                if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
-                  return informacion.sim;
-                }
-              }
-            } catch (err) {
-              _iterator33.e(err);
-            } finally {
-              _iterator33.f();
-            }
-
-            return null;
-          }
-        }]);
-
-        return TablaSimbolos;
-      }();
-      /***/
-
-    },
-
-    /***/
-    "bGwg":
-    /*!*******************************!*\
-      !*** ./src/Clases/Evaluar.ts ***!
-      \*******************************/
-
-    /*! exports provided: default */
-
-    /***/
-    function bGwg(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "default", function () {
-        return Evaluar;
-      });
-
-      var Evaluar = /*#__PURE__*/function () {
-        function Evaluar(resultado) {
-          _classCallCheck(this, Evaluar);
-
-          this.resultado = resultado;
-        }
-
-        _createClass(Evaluar, [{
-          key: "get_Resultado",
-          value: function get_Resultado() {
-            return this.resultado;
-          }
-        }]);
-
-        return Evaluar;
-      }();
-      /***/
-
-    },
-
-    /***/
-    "bzrv":
-    /*!**********************************!*\
-      !*** ./src/Clases/xml/objeto.ts ***!
-      \**********************************/
-
-    /*! exports provided: default */
-
-    /***/
-    function bzrv(module, __webpack_exports__, __webpack_require__) {
-      "use strict";
-
-      __webpack_require__.r(__webpack_exports__);
-      /* harmony export (binding) */
-
-
-      __webpack_require__.d(__webpack_exports__, "default", function () {
-        return Objeto;
-      });
-      /* harmony import */
-
-
-      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! ../AST/Nodo */
-      "Zr6O");
-      /* harmony import */
-
-
-      var _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
-      /*! ../TablaSimbolos/Simbolos */
-      "hADQ");
-      /* harmony import */
-
-
-      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! ../TablaSimbolos/TablaSimbolos */
-      "AviG");
-      /* harmony import */
-
-
-      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
-      /*! ../TablaSimbolos/Tipo */
-      "lKex");
-
-      var Objeto = /*#__PURE__*/function () {
-        function Objeto(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta) {
-          _classCallCheck(this, Objeto);
-
->>>>>>> Stashed changes
           this.identificador = id;
           this.texto = texto;
           this.linea = linea;
@@ -8609,28 +9297,28 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts, this.identificador);
 
-            var _iterator34 = _createForOfIteratorHelper(this.listaAtributos),
-                _step34;
+            var _iterator41 = _createForOfIteratorHelper(this.listaAtributos),
+                _step41;
 
             try {
-              for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
-                var at = _step34.value;
+              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
+                var at = _step41.value;
                 var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("IDENTIFICADOR");
                 var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](2, tipo, at.identificador, at.valor);
                 ts_local.agregar(at.identificador, sim);
               }
             } catch (err) {
-              _iterator34.e(err);
+              _iterator41.e(err);
             } finally {
-              _iterator34.f();
+              _iterator41.f();
             }
 
-            var _iterator35 = _createForOfIteratorHelper(this.listaObjetos),
-                _step35;
+            var _iterator42 = _createForOfIteratorHelper(this.listaObjetos),
+                _step42;
 
             try {
-              for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
-                var _at = _step35.value;
+              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
+                var _at = _step42.value;
 
                 var _tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("OBJETO");
 
@@ -8650,9 +9338,9 @@
                 ts_local.agregarSiguiente(_at.identificador, _at.ejecutar(controlador, ts_local));
               }
             } catch (err) {
-              _iterator35.e(err);
+              _iterator42.e(err);
             } finally {
-              _iterator35.f();
+              _iterator42.f();
             }
 
             return ts_local;
@@ -8662,18 +9350,18 @@
           value: function gethtml(tab) {
             var xml = tab + "<" + this.identificador;
 
-            var _iterator36 = _createForOfIteratorHelper(this.listaAtributos),
-                _step36;
+            var _iterator43 = _createForOfIteratorHelper(this.listaAtributos),
+                _step43;
 
             try {
-              for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
-                var _at2 = _step36.value;
+              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
+                var _at2 = _step43.value;
                 xml += " " + _at2.identificador + "=\"" + _at2.valor + "\" ";
               }
             } catch (err) {
-              _iterator36.e(err);
+              _iterator43.e(err);
             } finally {
-              _iterator36.f();
+              _iterator43.f();
             }
 
             if (this.tipoetiqueta == 1) {
@@ -8685,19 +9373,19 @@
                 tab = tab + "   ";
                 xml += ">";
 
-                var _iterator37 = _createForOfIteratorHelper(this.listaObjetos),
-                    _step37;
+                var _iterator44 = _createForOfIteratorHelper(this.listaObjetos),
+                    _step44;
 
                 try {
-                  for (_iterator37.s(); !(_step37 = _iterator37.n()).done;) {
-                    var at = _step37.value;
+                  for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
+                    var at = _step44.value;
                     xml += "\n";
                     xml += at.gethtml(tab);
                   }
                 } catch (err) {
-                  _iterator37.e(err);
+                  _iterator44.e(err);
                 } finally {
-                  _iterator37.f();
+                  _iterator44.f();
                 }
 
                 xml += tab + "\n<" + this.identificador + "/>";
@@ -8716,32 +9404,32 @@
               hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.texto, ""));
             }
 
-            var _iterator38 = _createForOfIteratorHelper(this.listaAtributos),
-                _step38;
+            var _iterator45 = _createForOfIteratorHelper(this.listaAtributos),
+                _step45;
 
             try {
-              for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
-                var at = _step38.value;
+              for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
+                var at = _step45.value;
                 hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](at.identificador, ""));
               }
             } catch (err) {
-              _iterator38.e(err);
+              _iterator45.e(err);
             } finally {
-              _iterator38.f();
+              _iterator45.f();
             }
 
-            var _iterator39 = _createForOfIteratorHelper(this.listaObjetos),
-                _step39;
+            var _iterator46 = _createForOfIteratorHelper(this.listaObjetos),
+                _step46;
 
             try {
-              for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
-                var _at3 = _step39.value;
+              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
+                var _at3 = _step46.value;
                 hijo.AddHijo(_at3.recorrer());
               }
             } catch (err) {
-              _iterator39.e(err);
+              _iterator46.e(err);
             } finally {
-              _iterator39.f();
+              _iterator46.f();
             }
 
             padre.AddHijo(hijo);
@@ -8813,28 +9501,28 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-            var _iterator40 = _createForOfIteratorHelper(this.Lista_case),
-                _step40;
+            var _iterator47 = _createForOfIteratorHelper(this.Lista_case),
+                _step47;
 
             try {
-              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
-                var sw = _step40.value;
+              for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
+                var sw = _step47.value;
                 sw.valor_sw = this.valor_sw.getValor(controlador, ts_local);
               }
             } catch (err) {
-              _iterator40.e(err);
+              _iterator47.e(err);
             } finally {
-              _iterator40.f();
+              _iterator47.f();
             }
 
             var x = 0;
 
-            var _iterator41 = _createForOfIteratorHelper(this.Lista_case),
-                _step41;
+            var _iterator48 = _createForOfIteratorHelper(this.Lista_case),
+                _step48;
 
             try {
-              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
-                var _ins3 = _step41.value;
+              for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
+                var _ins3 = _step48.value;
 
                 var _res2 = _ins3.ejecutar(controlador, ts_local);
 
@@ -8850,18 +9538,18 @@
                 }
               }
             } catch (err) {
-              _iterator41.e(err);
+              _iterator48.e(err);
             } finally {
-              _iterator41.f();
+              _iterator48.f();
             }
 
             if (x == 0) {
-              var _iterator42 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step42;
+              var _iterator49 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step49;
 
               try {
-                for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
-                  var ins = _step42.value;
+                for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
+                  var ins = _step49.value;
                   var res = ins.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -8875,9 +9563,9 @@
                   }
                 }
               } catch (err) {
-                _iterator42.e(err);
+                _iterator49.e(err);
               } finally {
-                _iterator42.f();
+                _iterator49.f();
               }
             }
 
@@ -8893,35 +9581,35 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator43 = _createForOfIteratorHelper(this.Lista_case),
-                _step43;
+            var _iterator50 = _createForOfIteratorHelper(this.Lista_case),
+                _step50;
 
             try {
-              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
-                var _ins4 = _step43.value;
+              for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
+                var _ins4 = _step50.value;
                 padre.AddHijo(_ins4.recorrer());
               }
             } catch (err) {
-              _iterator43.e(err);
+              _iterator50.e(err);
             } finally {
-              _iterator43.f();
+              _iterator50.f();
             }
 
             if (this.Lista_defaul.length > 0) {
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("default:", ""));
 
-              var _iterator44 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step44;
+              var _iterator51 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step51;
 
               try {
-                for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
-                  var ins = _step44.value;
+                for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
+                  var ins = _step51.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator44.e(err);
+                _iterator51.e(err);
               } finally {
-                _iterator44.f();
+                _iterator51.f();
               }
             }
 
@@ -9005,12 +9693,12 @@
               while (this.condicion.getValor(controlador, ts)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator45 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step45;
+                var _iterator52 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step52;
 
                 try {
-                  for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
-                    var ins = _step45.value;
+                  for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
+                    var ins = _step52.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -9028,9 +9716,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator45.e(err);
+                  _iterator52.e(err);
                 } finally {
-                  _iterator45.f();
+                  _iterator52.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (While)");
@@ -9047,18 +9735,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator46 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step46;
+            var _iterator53 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step53;
 
             try {
-              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
-                var ins = _step46.value;
+              for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
+                var ins = _step53.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator46.e(err);
+              _iterator53.e(err);
             } finally {
-              _iterator46.f();
+              _iterator53.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -9091,6 +9779,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return axes;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var axes = /*#__PURE__*/function () {
         function axes(tipo, exprecion, sig) {
@@ -9117,38 +9811,56 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator47 = _createForOfIteratorHelper(ts.sig),
-                    _step47;
+                var _iterator54 = _createForOfIteratorHelper(ts.sig),
+                    _step54;
 
                 try {
-                  for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
-                    var tssig = _step47.value;
+                  for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
+                    var tssig = _step54.value;
 
-                    if (this.exprecion.id == tssig.identificador) {
+                    if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
+                    } else {
+                      if (this.exprecion.id == tssig.identificador) {
+                        this.sig.ejecutar(controlador, tssig.sig);
+                      }
                     }
                   }
                 } catch (err) {
-                  _iterator47.e(err);
+                  _iterator54.e(err);
                 } finally {
-                  _iterator47.f();
+                  _iterator54.f();
                 }
               } else {
-                var _iterator48 = _createForOfIteratorHelper(ts.tabla),
-                    _step48;
+                var _iterator55 = _createForOfIteratorHelper(ts.tabla),
+                    _step55;
 
                 try {
-                  for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
-                    var informacion = _step48.value;
+                  for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
+                    var informacion = _step55.value;
 
-                    if (informacion.identificador == this.exprecion.id) {
-                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    if (this.exprecion.tipo == 1) {
+                      if (this.exprecion.id == "*") {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                      } else {
+                        if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 1) {
+                          controlador.append(informacion.sim.objeto.gethtml(""));
+                        }
+                      }
+                    } else {
+                      if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 2) {
+                        controlador.append(informacion.sim.valor + "\n");
+                      } else {
+                        if (this.exprecion.id == "*" && informacion.sim.simbolo == 2) {
+                          controlador.append(informacion.sim.valor);
+                        }
+                      }
                     }
                   }
                 } catch (err) {
-                  _iterator48.e(err);
+                  _iterator55.e(err);
                 } finally {
-                  _iterator48.f();
+                  _iterator55.f();
                 }
               }
             }
@@ -9161,6 +9873,8 @@
 
             if (typeof valor == 'number') {
               this.isNumero(controlador, ts, valor);
+            } else {
+              this.isboolean(controlador, ts);
             }
           }
         }, {
@@ -9169,12 +9883,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator49 = _createForOfIteratorHelper(ts.sig),
-                  _step49;
+              var _iterator56 = _createForOfIteratorHelper(ts.sig),
+                  _step56;
 
               try {
-                for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
-                  var tssig = _step49.value;
+                for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
+                  var tssig = _step56.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -9185,17 +9899,17 @@
                   }
                 }
               } catch (err) {
-                _iterator49.e(err);
+                _iterator56.e(err);
               } finally {
-                _iterator49.f();
+                _iterator56.f();
               }
             } else {
-              var _iterator50 = _createForOfIteratorHelper(ts.tabla),
-                  _step50;
+              var _iterator57 = _createForOfIteratorHelper(ts.tabla),
+                  _step57;
 
               try {
-                for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
-                  var informacion = _step50.value;
+                for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
+                  var informacion = _step57.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
@@ -9206,16 +9920,90 @@
                   }
                 }
               } catch (err) {
-                _iterator50.e(err);
+                _iterator57.e(err);
               } finally {
-                _iterator50.f();
+                _iterator57.f();
+              }
+            }
+          }
+        }, {
+          key: "isboolean",
+          value: function isboolean(controlador, ts) {
+            var posicion = 1;
+            console.log("entre");
+            var cont = 1;
+
+            if (this.sig != null) {
+              var _iterator58 = _createForOfIteratorHelper(ts.sig),
+                  _step58;
+
+              try {
+                for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
+                  var tssig = _step58.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator58.e(err);
+              } finally {
+                _iterator58.f();
+              }
+            } else {
+              var _iterator59 = _createForOfIteratorHelper(ts.tabla),
+                  _step59;
+
+              try {
+                for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
+                  var informacion = _step59.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator59.e(err);
+              } finally {
+                _iterator59.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Child::" + this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -9257,7 +10045,6 @@
       /*! ../TablaSimbolos/Simbolos */
       "hADQ");
       /* harmony import */
-<<<<<<< Updated upstream
 
 
       var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
@@ -9281,31 +10068,6 @@
           return _this;
         }
 
-=======
-
-
-      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
-      /*! ../TablaSimbolos/TablaSimbolos */
-      "AviG");
-
-      var Funcion = /*#__PURE__*/function (_TablaSimbolos_Simbol) {
-        _inherits(Funcion, _TablaSimbolos_Simbol);
-
-        var _super3 = _createSuper(Funcion);
-
-        function Funcion(simbolo, tipo, identificador, lista_params, metodo, lista_instrucciones, linea, columna) {
-          var _this;
-
-          _classCallCheck(this, Funcion);
-
-          _this = _super3.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
-          _this.lista_instrucciones = lista_instrucciones;
-          _this.linea = linea;
-          _this.columna = columna;
-          return _this;
-        }
-
->>>>>>> Stashed changes
         _createClass(Funcion, [{
           key: "agregarSimboloFuncion",
           value: function agregarSimboloFuncion(controlador, ts) {
@@ -9320,12 +10082,12 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts);
 
-            var _iterator51 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step51;
+            var _iterator60 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step60;
 
             try {
-              for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
-                var ins = _step51.value;
+              for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
+                var ins = _step60.value;
                 var r = ins.ejecutar(controlador, ts_local);
 
                 if (r != null) {
@@ -9335,9 +10097,9 @@
                 }
               }
             } catch (err) {
-              _iterator51.e(err);
+              _iterator60.e(err);
             } finally {
-              _iterator51.f();
+              _iterator60.f();
             }
 
             controlador.ambito = "Funcion: \n" + this.identificador;
@@ -9362,18 +10124,18 @@
             padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
             var hijo_instrucciones = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Instrucciones", "");
 
-            var _iterator52 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step52;
+            var _iterator61 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step61;
 
             try {
-              for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
-                var inst = _step52.value;
+              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
+                var inst = _step61.value;
                 hijo_instrucciones.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator52.e(err);
+              _iterator61.e(err);
             } finally {
-              _iterator52.f();
+              _iterator61.f();
             }
 
             padre.AddHijo(hijo_instrucciones);
@@ -10009,12 +10771,12 @@
           }
         */
         var gramatica = function () {
-          var o = function o(k, v, _o4, l) {
-            for (_o4 = _o4 || {}, l = k.length; l--; _o4[k[l]] = v) {
+          var o = function o(k, v, _o5, l) {
+            for (_o5 = _o5 || {}, l = k.length; l--; _o5[k[l]] = v) {
               ;
             }
 
-            return _o4;
+            return _o5;
           },
               $V0 = [1, 5],
               $V1 = [1, 6],
@@ -11814,18 +12576,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator53 = _createForOfIteratorHelper(ts.tabla),
-                _step53;
+            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
+                _step62;
 
             try {
-              for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
-                var sim = _step53.value;
+              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
+                var sim = _step62.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator53.e(err);
+              _iterator62.e(err);
             } finally {
-              _iterator53.f();
+              _iterator62.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -11835,19 +12597,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator54 = _createForOfIteratorHelper(controlador.errores),
-                _step54;
+            var _iterator63 = _createForOfIteratorHelper(controlador.errores),
+                _step63;
 
             try {
-              for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
-                var sim = _step54.value;
+              for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
+                var sim = _step63.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator54.e(err);
+              _iterator63.e(err);
             } finally {
-              _iterator54.f();
+              _iterator63.f();
             }
 
             return cuerpohtml;
@@ -12015,6 +12777,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return last;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var last = /*#__PURE__*/function () {
         function last() {
@@ -12029,21 +12797,21 @@
           value: function getValor(controlador, ts) {
             var cont = 0;
 
-            var _iterator55 = _createForOfIteratorHelper(ts.tabla),
-                _step55;
+            var _iterator64 = _createForOfIteratorHelper(ts.tabla),
+                _step64;
 
             try {
-              for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
-                var informacion = _step55.value;
+              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
+                var informacion = _step64.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator55.e(err);
+              _iterator64.e(err);
             } finally {
-              _iterator55.f();
+              _iterator64.f();
             }
 
             return cont;
@@ -12051,7 +12819,8 @@
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("LAST();", "");
+            return padre;
           }
         }]);
 
@@ -12222,12 +12991,12 @@
               while (this.condicion.getValor(controlador, ts_for)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts_for);
 
-                var _iterator56 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step56;
+                var _iterator65 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step65;
 
                 try {
-                  for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
-                    var ins = _step56.value;
+                  for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
+                    var ins = _step65.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -12246,9 +13015,9 @@
 
                   }
                 } catch (err) {
-                  _iterator56.e(err);
+                  _iterator65.e(err);
                 } finally {
-                  _iterator56.f();
+                  _iterator65.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (FOR)");
@@ -12272,18 +13041,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator57 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step57;
+            var _iterator66 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step66;
 
             try {
-              for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
-                var ins = _step57.value;
+              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
+                var ins = _step66.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator57.e(err);
+              _iterator66.e(err);
             } finally {
-              _iterator57.f();
+              _iterator66.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -12685,12 +13454,12 @@
         _createClass(Declaracion, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator58 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step58;
+            var _iterator67 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step67;
 
             try {
-              for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
-                var simbolo = _step58.value;
+              for (_iterator67.s(); !(_step67 = _iterator67.n()).done;) {
+                var simbolo = _step67.value;
                 var variable = simbolo;
 
                 if (ts.existeEnActual(variable.identificador)) {
@@ -12732,9 +13501,9 @@
                 }
               }
             } catch (err) {
-              _iterator58.e(err);
+              _iterator67.e(err);
             } finally {
-              _iterator58.f();
+              _iterator67.f();
             }
           }
         }, {
@@ -12742,21 +13511,21 @@
           value: function recorrer() {
             var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaraciones", "");
 
-            var _iterator59 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step59;
+            var _iterator68 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step68;
 
             try {
-              for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
-                var simbolo = _step59.value;
+              for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
+                var simbolo = _step68.value;
                 var p = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaracion", "");
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](simbolo.identificador, ""));
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](";", ""));
                 padre.AddHijo(p);
               }
             } catch (err) {
-              _iterator59.e(err);
+              _iterator68.e(err);
             } finally {
-              _iterator59.f();
+              _iterator68.f();
             }
 
             return padre;

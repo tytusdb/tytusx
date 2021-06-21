@@ -2,9 +2,22 @@
 
 function CargarXML(){
 
-    var contenido = editor.getValue();
-    var contenidoXpath = EntradaXPath.getValue();
 
+    var contenido = "";
+
+    if(tab==1){
+        contenido = editor.getValue();
+    } else if (tab==2){
+        contenido = editor2.getValue();
+    } else if (tab==3){
+        contenido = editor3.getValue();
+    } else if (tab==4){
+        contenido = editor4.getValue();
+    } 
+
+    
+    var contenidoXpath = EntradaXPath.getValue();
+    var contenidoXQuery = EntradaXQuery.getValue();
 
     if (contenido == ""){
         SalidaXPath.setValue("No hay entrada XML para analizar.");
@@ -12,7 +25,7 @@ function CargarXML(){
     } else {
 
         contenido = ReemplazarEspeciales(contenido);
-        console.log(contenido.toString());
+       //console.log(contenido);
         analisisCorrecto = EjecutarXMLAsc(contenido);
         
         if (analisisCorrecto) {
@@ -26,9 +39,11 @@ function CargarXML(){
             localStorage.setItem('cstXML',DOTxmlCSTasc);
             ExtraerCodificacion(resultadoXML[0]);       
             ErroresSemanticosXML(resultadoXML[0]);      
+            xmlC3D = "";
+            xmlC3D = C3DXML.traducir(resultadoXML[0]);
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
-            tablaSimbolosXML = tablaSimbolosXMLAux;
+            tablaSimbolosXML = tablaSimbolosXMLAux;          
             var ReportesTSXML = new ReporteTablaSimbolosXML();
             ReportesTSXML.limpiarArreglo();
             ReportesTSXML.GenerarArreglo(tablaSimbolosXML.entornoGlobal,"Global");
@@ -52,8 +67,8 @@ function CargarXML(){
         if (analisisCorrecto) {
 
             if (contenidoXpath == ""){
-                SalidaXPath.setValue("No hay entrada XPath para analizar pero se han generado reportes XML");
-                SalidaXPath.refresh();
+                EntradaXPath.setValue("No hay entrada XPath para analizar pero se han generado reportes XML");
+                EntradaXPath.refresh();
             } else {
 
                 analisisXpathCorrecto = EjecutarXpathAsc(contenidoXpath);
@@ -96,12 +111,51 @@ function CargarXML(){
 
         }
 
-    }        
+        if (analisisCorrecto) {
+
+            if (contenidoXQuery == ""){
+                EntradaXQuery.setValue("No hay entrada XQuery para analizar pero se han generado reportes XML");
+                EntradaXQuery.refresh();
+            } else {
+
+                analisisXqueryCorrecto = EjecutarXQueryAsc(contenidoXQuery);
+
+                if (analisisXqueryCorrecto){
+
+                    DOTXQUERYASTAsc = GenerarDOT.recorrerDOT(resultadoXQuery[1]);
+                    DOTXQUERYASTAsc = "digraph {" + DOTXQUERYASTAsc + "}";
+                    localStorage.setItem('astXQUERY', DOTXQUERYASTAsc);
+                    //localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+                    console.log("↓ Funcion XQuery ↓");
+                    console.log(resultadoXQuery[0]);
+
+                } else {                   
+                    SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
+                }
+
+            }
+
+        }
+    } 
+
+ SetearTraduccion();
+    
 }
 
 function CargarXMLDesc(){
 
-    var contenido = editor.getValue();
+    var contenido = "";
+
+    if(tab==1){
+        contenido = editor.getValue();
+    } else if (tab==2){
+        contenido = editor2.getValue();
+    } else if (tab==3){
+        contenido = editor3.getValue();
+    } else if (tab==4){
+        contenido = editor4.getValue();
+    } 
+    
     var contenidoXpath = EntradaXPath.getValue();
 
     if (contenido == ""){
@@ -122,7 +176,9 @@ function CargarXMLDesc(){
             DOTxmlCSTdesc = "digraph {" + DOTxmlCSTdesc + "}";
             localStorage.setItem('cstXMLDesc',DOTxmlCSTdesc);
             ExtraerCodificacion(resultadoXML[0]);       
-            ErroresSemanticosXML(resultadoXML[0]);      
+            ErroresSemanticosXML(resultadoXML[0]);  
+            xmlC3D = "";
+            xmlC3D = C3DXML.traducir(resultadoXML[0]);    
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
             tablaSimbolosXML = tablaSimbolosXMLAux;
@@ -149,8 +205,8 @@ function CargarXMLDesc(){
         if (analisisCorrecto) {
 
             if (contenidoXpath == ""){
-                SalidaXPath.setValue("No hay entrada XPath para analizar pero se han generado reportes XML");
-                SalidaXPath.refresh();
+                EntradaXPath.setValue("No hay entrada XPath para analizar pero se han generado reportes XML");
+                EntradaXPath.refresh();
             } else {
 
                 analisisXpathCorrecto = EjecutarXpathDesc(contenidoXpath);
@@ -192,7 +248,8 @@ function CargarXMLDesc(){
 
         }
 
-    }        
+    }
+    SetearTraduccion();        
 }
 
 function EjecutarXMLAsc(contenidoXML){
@@ -242,6 +299,20 @@ function EjecutarXpathDesc(contenidoXpath){
         nodoxPATHDESC = new NodoArbol("INICIO","");
         //Parser XPath ascendente
         resultadoXPath = XpathDesc.parse(contenidoXpath);
+        return true;
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+
+}
+
+function EjecutarXQueryAsc(contenidoXQuery){
+
+    try {
+        //Parser XPath ascendente
+        resultadoXQuery = XQueryAsc.parse(contenidoXQuery);
         return true;
         
     } catch (error) {
@@ -500,4 +571,76 @@ function CambiarCodificacion(cadena){
      console.log(error);
      return cadena
  }
+}
+
+function SetearTraduccion(){
+
+    globalC3D = "";
+    globalC3D += `/* ------ HEADERS ------ */
+    #include <stdio.h>
+    #include <math.h>
+    
+    double heap[30101999];
+    double stack[30101999];
+    double SP;
+    double HP;
+    
+    `;
+
+    for(var i = 0; i< contadorTemporales;i++ ){
+        if(i==0){
+            globalC3D += `double t`+i.toString();
+        } else{
+            globalC3D += `, t`+i.toString();
+        }
+    }
+
+    globalC3D += `;
+    
+    `;
+    
+    globalC3D += `void main(){
+        
+        //el stack pointer inicia en 2 porque en la posicion 0 guardamos el encoding
+        //y la posicion 1 indicara donde termina el xml en el heap
+        //El heap pointer inicia en cero.
+        SP = 2;
+        HP = 0;
+        
+        //guardamos el encoding en el stack en la posicion 0 (definida por default)
+        // -1 : utf8
+        // -2 : iso
+        // -3 : ascii
+        
+        `;
+
+    if(codificacionGlobal == "UTF-8"){
+        globalC3D += `stack[(int)0] = -1;
+        
+        `;
+        stack.push(-1);
+        stack.push(-1);
+    } else {
+        globalC3D += `stack[(int)0] = -2;
+        
+        `;
+        stack.push(-2);
+        stack.push(-1);
+    }
+
+    
+    globalC3D += xmlC3D;
+
+    globalC3D +=`
+    
+        for(int loop = 0; loop < stack[1]; loop++){
+            printf("%c", (char) heap[loop]);}
+    
+        return;
+
+    }`;    
+
+    SalidaTraduccion.setValue(globalC3D);
+    SalidaTraduccion.refresh();
+
 }

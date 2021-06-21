@@ -1,6 +1,6 @@
 %{
 
-    const Nodito= require('./Nodito');
+    const Nodo= require('./Nodito');
     var arreglolexico = "Codigo:";
 
  %}
@@ -99,7 +99,7 @@ commentliteral                        \(\: {commentdouble} \:\)
 //( ({digit}"."[0-9]*)|("."{digit})  (e|E)(+|-)? {digit} )    return 'DoubleLiteral';
 
 //Identificador
-[a-zA-Z_][a-zA-Z0-9_ñÑ]*            return 'identifier';
+[a-zA-Z_][a-zA-Z0-9_ñÑá-ü]*            return 'identifier';
 //String
 {stringliteral}                     return 'StringLiteral';
 //Char
@@ -135,208 +135,553 @@ commentliteral                        \(\: {commentdouble} \:\)
 /* Definición de la gramática de Alejandro */
 
 XPATH: EXPR EOF{
-                        $$= new Nodito("INICIO","Xpath");
-		       //$$.addHijos($1);
+                        $$= new Nodo("INICIO","Xpath");
+		        $$.addHijos($1);
                      return { ErrorLexico:arreglolexico,msj:"Analisis XPath Ascendenete Finalizado.\n.",diagramaAST:$$};
        
         };
 
-EXPR: EXPRESIONSIMPLE   {    
-                          
-                        };
+EXPR: EXPRESIONSIMPLE           {       
+                                $$ = new Nodo("EXPRESIONSIMPLE","PATHEXPRESION");
+                                $$.addHijos($1);
+                                } 
+                                 ;
 
-EXPRESIONSIMPLE: OREXPRESION;
+EXPRESIONSIMPLE: OREXPRESION                    {       
+                                                $$ = new Nodo("EXPRESIONSIMPLE","PATHEXPRESION");
+                                                $$.addHijos($1);
+                                                }             
+                                                ;
 //---------OR
-OREXPRESION: ANDEXPRESION OREXPRESIONL1
-        |ANDEXPRESION;
-
-
-OREXPRESIONL1:OREXPRESIONL1 OREXPRESIONL2
-                |OREXPRESIONL2;
-
-OREXPRESIONL2: or_ ANDEXPRESION;
-//--------AND
-ANDEXPRESION:COMPARACIONEXPRESION ANDEXPRESIONL1
-        |COMPARACIONEXPRESION
+OREXPRESION: ANDEXPRESION OREXPRESIONL1         {       
+                                                $$ = new Nodo("OREXPRESION","PATHEXPRESION");
+                                                $$.addHijos($1);
+                                                $$.addHijos($2);
+                                                }              
+        |ANDEXPRESION                           {       
+                                                $$ = new Nodo("OREXPRESION","PATHEXPRESION");
+                                                $$.addHijos($1);
+                                                }                   
         ;
-ANDEXPRESIONL1: ANDEXPRESIONL1 ANDEXPRESIONL2
-        |ANDEXPRESIONL2;
 
-ANDEXPRESIONL2:and_ COMPARACIONEXPRESION;
+
+OREXPRESIONL1:  OREXPRESIONL2 OREXPRESIONL1      {       
+                                                $$ = new Nodo("OREXPRESIONL1","PATHEXPRESION");
+                                                $$.addHijos($1);
+                                                $$.addHijos($2);
+                                                }
+                |OREXPRESIONL2          {       
+                                                $$ = new Nodo("OREXPRESIONL1","PATHEXPRESION");
+                                                $$.addHijos($1);
+                                        }
+                ;
+
+OREXPRESIONL2: or_ ANDEXPRESION         {       $$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                $$.addHijos(new Nodo($1,"or"));
+                                                $$.addHijos($2);
+                                        } 
+                                                
+                        ;
+//--------AND
+ANDEXPRESION:COMPARACIONEXPRESION ANDEXPRESIONL1{   
+                                                        $$ = new Nodo("ANDEXPRESION","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        $$.addHijos($2);
+                                                }
+        |COMPARACIONEXPRESION                   {   
+                                                        $$ = new Nodo("ANDEXPRESION","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                }
+        ;
+ANDEXPRESIONL1: ANDEXPRESIONL1 ANDEXPRESIONL2   {   
+                                                        $$ = new Nodo("ANDEXPRESIONL2","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        $$.addHijos($2);
+                                                }
+        |ANDEXPRESIONL2                         {       $$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                } 
+                        ;
 
 //COMPARACIONEXPRESION
-COMPARACIONEXPRESION: STRINGCONCATENA COMPARACIONGENERAL STRINGCONCATENA
-                     |STRINGCONCATENA  ;
+COMPARACIONEXPRESION: STRINGCONCATENA COMPARACIONGENERAL STRINGCONCATENA        {   
+                                                                                $$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                $$.addHijos($2);
+                                                                                $$.addHijos($3);
+                                                                                }  
+                     |STRINGCONCATENA                                           {   
+                                                                                $$ = new Nodo("COMPARACIONEXPRESION","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                }  
+                     ;
 
 //COMPARACION GENERAL
 
-COMPARACIONGENERAL:igual
-                |diferente
-                |menorq
-                |menorigual
-                |mayorq
-                |mayorigual
-                ;
+COMPARACIONGENERAL:igual                        {   
+                                                        $$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"igual"));
+                                                }
+                |diferente                      {   
+                                                        $$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"diferente"));
+                                                }
+                |menorq                         {   
+                                                        $$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"menorq"));
+                                                }
+                |menorigual                     {   
+                                                        $$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"menorigual"));
+                                                }
+                |mayorq                         {   
+                                                        $$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"mayorq"));
+                                                }
+                |mayorigual                     {   
+                                                        $$ = new Nodo("COMPARACIONGENERAL","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"mayorigual"));
+                                                };
+                
 
 //STRINGCONCATENA
 
-STRINGCONCATENA:SUMAEXPRESION;
+STRINGCONCATENA:SUMAEXPRESION                                                   {   
+                                                                                $$ = new Nodo("STRINGCONCATENA","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                };
 //SUMAEXPRESION
-SUMAEXPRESION:MULTIPLICACIONEXPRESION SUMAEXPRESIONL1
-        |MULTIPLICACIONEXPRESION;
+SUMAEXPRESION:MULTIPLICACIONEXPRESION SUMAEXPRESIONL1                           {   
+                                                                                $$ = new Nodo("SUMAEXPRESION","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                $$.addHijos($2);
+                                                                                }
+        |MULTIPLICACIONEXPRESION                                                {   
+                                                                                $$ = new Nodo("SUMAEXPRESION","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                }
+                                                                                ;
 
-SUMAEXPRESIONL1:SUMAEXPRESIONL1 SUMAEXPRESIONL2
-        |SUMAEXPRESIONL2
+SUMAEXPRESIONL1:SUMAEXPRESIONL1 SUMAEXPRESIONL2                                 {   
+                                                                                $$ = new Nodo("SUMAEXPRESIONL1","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                $$.addHijos($2);
+                                                                                }
+        |SUMAEXPRESIONL2                                                        {   
+                                                                                $$ = new Nodo("SUMAEXPRESIONL1","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                }
         ;
-SUMAEXPRESIONL2:mas MULTIPLICACIONEXPRESION
-                |menos MULTIPLICACIONEXPRESION
+SUMAEXPRESIONL2:mas MULTIPLICACIONEXPRESION                                     {   
+                                                                                $$ = new Nodo("SUMAEXPRESIONL2","PATHEXPRESION");
+                                                                                $$.addHijos(new Nodo($1,"mas"));
+                                                                                $$.addHijos($2);
+                                                                                }
+                |menos MULTIPLICACIONEXPRESION                                  {   
+                                                                                $$ = new Nodo("SUMAEXPRESIONL2","PATHEXPRESION");
+                                                                                $$.addHijos(new Nodo($1,"menos"));
+                                                                                $$.addHijos($2);
+                                                                                }
                 ;
 
 //MULTIPLICACION
-MULTIPLICACIONEXPRESION:UNIONEXPRESION MULTIPLICACIONEXPRESIONL1
-                        |UNIONEXPRESION
+MULTIPLICACIONEXPRESION:UNIONEXPRESION MULTIPLICACIONEXPRESIONL1                {   
+                                                                                $$ = new Nodo("MULTIPLICACIONEXPRESION","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                $$.addHijos($2);
+                                                                                }
+                        |UNIONEXPRESION                                         {   
+                                                                                $$ = new Nodo("MULTIPLICACIONEXPRESION","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                }
                         ;
 
-MULTIPLICACIONEXPRESIONL1:MULTIPLICACIONEXPRESIONL1 MULTIPLICACIONEXPRESIONL2
-                        |MULTIPLICACIONEXPRESIONL2;
+MULTIPLICACIONEXPRESIONL1:MULTIPLICACIONEXPRESIONL1 MULTIPLICACIONEXPRESIONL2   {   
+                                                                                $$ = new Nodo("MULTIPLICACIONEXPRESIONL1","PATHEXPRESION");
+                                                                                $$.addHijos($1);
+                                                                                $$.addHijos($2);
+                                                                                } 
+                        |MULTIPLICACIONEXPRESIONL2      {   
+                                                        $$ = new Nodo("MULTIPLICACIONEXPRESIONL1","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        } 
+                                                        ;
 
-MULTIPLICACIONEXPRESIONL2: mul UNIONEXPRESION 
-                        |div_ UNIONEXPRESION
-                        |mod_ UNIONEXPRESION
+MULTIPLICACIONEXPRESIONL2: mul UNIONEXPRESION           {   
+                                                        $$ = new Nodo("MULTIPLICACIONEXPRESIONL2","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"mul"));
+                                                        $$.addHijos($2);
+                                                        }  
+                        |div_ UNIONEXPRESION            {   
+                                                        $$ = new Nodo("MULTIPLICACIONEXPRESIONL2","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"div"));
+                                                        $$.addHijos($2);
+                                                        } 
+                        |mod_ UNIONEXPRESION            {   
+                                                        $$ = new Nodo("MULTIPLICACIONEXPRESIONL2","PATHEXPRESION");
+                                                        $$.addHijos(new Nodo($1,"mod"));
+                                                        $$.addHijos($2);
+                                                        }    
                         ;
 //UNION EXPRESION
 
-UNIONEXPRESION:INTERSECCINEXPRESION UNIONEXPRESIONL1
-                |INTERSECCINEXPRESION
-                |;
+UNIONEXPRESION:INTERSECCINEXPRESION UNIONEXPRESIONL1    {   
+                                                        $$ = new Nodo("UNIONEXPRESION","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        $$.addHijos($2);
+                                                        }
+                |INTERSECCINEXPRESION                   {   
+                                                        $$ = new Nodo("UNIONEXPRESION","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        }
+                |                               
+                ;
 
-UNIONEXPRESIONL1: UNIONEXPRESIONL1 UNIONEXPRESIONL2
-                |UNIONEXPRESIONL2;
+UNIONEXPRESIONL1: UNIONEXPRESIONL1 UNIONEXPRESIONL2     {   
+                                                        $$ = new Nodo("UNIONEXPRESIONL1","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        $$.addHijos($2);
+                                                        }
+                |UNIONEXPRESIONL2                       {   
+                                                        $$ = new Nodo("UNIONEXPRESIONL1","PATHEXPRESION");
+                                                        $$.addHijos($1);
+                                                        }
+                ;
 
-UNIONEXPRESIONL2: simpleor INTERSECCINEXPRESION;
+UNIONEXPRESIONL2: simpleor INTERSECCINEXPRESION {   
+                                                $$ = new Nodo("UNIONEXPRESIONL2","PATHEXPRESION");
+                                                $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                                };
 
 //INTERSECCION
-INTERSECCINEXPRESION:INSTACIAEXPRESION;
+INTERSECCINEXPRESION:PATHEXPRESION              {   
+                                                $$ = new Nodo("INTERSECCINEXPRESION","PATHEXPRESION");
+                                                $$.addHijos($1);	
+                                                }
+                                                ;
 
 //INSTACIAEXPRESION
-INSTACIAEXPRESION:EXPRESIONUNARIA;
+                                                
+                                
 //EXPRESION UNARIA FALTA SIGNO MAS Y MENOS
-EXPRESIONUNARIA: PATHEXPRESION;
+//EXPRESIONUNARIA: PATHEXPRESION                  
+                                
 
-PATHEXPRESION:ddiagonal RUTARELATIVA 
-        |sdiagonal RUTARELATIVA
-        |ddiagonal
-        |sdiagonal
-        |RUTARELATIVA
-        ;
+PATHEXPRESION:ddiagonal RUTARELATIVA            {   
+                                                $$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"ddiagonal"));
+                                                $$.addHijos($2);	
+                                                } 
+        |sdiagonal RUTARELATIVA                 {   
+                                                $$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"sdiagonal"));
+                                                $$.addHijos($2);	
+                                                } 
+        |ddiagonal                              {   
+                                                $$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"ddiagonal"));	
+                                                } 
+        |sdiagonal                              {   
+                                                $$ = new Nodo("PATHEXPRESION","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"sdiagonal"));	
+                                                } 
+        |RUTARELATIVA                           {   
+                                                $$ = new Nodo("PATHEXPRESION","POSTEXPRESION");
+			                        $$.addHijos($1);
+                                                }     
+                                                ;
 
 //RUTA RELATIVA
-RUTARELATIVA:PASOEXPRESION RUTARELATIVAL1
-        |PASOEXPRESION
-        ;
+RUTARELATIVA:PASOEXPRESION RUTARELATIVAL1       {   
+                                                $$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);
+                                                }                
+        |PASOEXPRESION                          {   
+                                                $$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        $$.addHijos($1);
+                                                } 
+                                                ;
 
-RUTARELATIVAL1:RUTARELATIVAL1 RUTARELATIVAL2
-        |RUTARELATIVAL2;
+RUTARELATIVAL1:RUTARELATIVAL1 RUTARELATIVAL2    {   
+                                                $$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                                } 
+        |RUTARELATIVAL2                         {   
+                                                $$ = new Nodo("RUTARELATIVAL1","POSTEXPRESION");
+			                        $$.addHijos($1);	
+                                                }                  
+                                                ;
 
-RUTARELATIVAL2:sdiagonal PASOEXPRESION
-                |ddiagonal PASOEXPRESION
-                ;
+RUTARELATIVAL2:sdiagonal PASOEXPRESION          {   
+                                                $$ = new Nodo("RUTARELATIVAL2","POSTEXPRESION");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                                } 
+                |ddiagonal PASOEXPRESION        {   
+                                                $$ = new Nodo("RUTARELATIVAL2","POSTEXPRESION");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                                } 
+                                                ;
 
 //PASO EXPRESION
 
-PASOEXPRESION:POSTEXPRESION
-        |AXISEXPRESION
-        ;
+PASOEXPRESION:POSTEXPRESION             {   
+                                                $$ = new Nodo("PASOEXPRESION","POSTEXPRESION");
+			                        $$.addHijos($1);	
+                                        }  
+        |AXISEXPRESION                  {   
+                                                $$ = new Nodo("PASOEXPRESION","AXISEXPRESION");
+			                        $$.addHijos($1);	
+                                        }          
+                                        ;
 
 //AXISEXPRESION
 
-AXISEXPRESION:REVERSOPASO PREDICADO //LISTADOPREDICADO
-        |DELANTEPASO PREDICADO // LISTADOPREDICADO
-        |REVERSOPASO //LISTADOPREDICADO
-        |DELANTEPASO  // LISTADOPREDICADO
-        ;
+AXISEXPRESION:REVERSOPASO PREDICADO     {   
+                                                $$ = new Nodo("AXISEXPRESION","REVERSOPASO");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                        } //LISTADOPREDICADO
+        |DELANTEPASO PREDICADO          {   
+                                                $$ = new Nodo("AXISEXPRESION","DELANTEPASO");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                        }  // LISTADOPREDICADO
+        |REVERSOPASO                    {   
+                                                $$ = new Nodo("AXISEXPRESION","REVERSOPASO");
+			                        $$.addHijos($1);	
+                                        } //LISTADOPREDICADO
+        |DELANTEPASO                    {   
+                                                $$ = new Nodo("AXISEXPRESION","DELANTEPASO");
+			                        $$.addHijos($1);	
+                                        }   // LISTADOPREDICADO
+                                        ;
 //DELANTEPASO
-DELANTEPASO:ABREVIATURADESPUESPASO
-        |DELANTEAXIS NODOPRUEBA
-        ;
+DELANTEPASO:ABREVIATURADESPUESPASO              {   
+                                                $$ = new Nodo("DELANTEPASO","ABREVIATURADESPUESPASO");
+			                        $$.addHijos($1);	
+                                                } 
+        |DELANTEAXIS NODOPRUEBA                  {   
+                                                $$ = new Nodo("DELANTEPASO","TERM");
+			                        $$.addHijos($1);
+                                                $$.addHijos($2);	
+                                                } 
+                                                ;
 //ABREVIATURADEPUES
-ABREVIATURADESPUESPASO:arroba NODOPRUEBA
-                |NODOPRUEBA
-                ;
+ABREVIATURADESPUESPASO:arroba NODOPRUEBA        {   
+                                                $$ = new Nodo("ABREVIATURADESPUESPASO","NODOPRUEBA-arroba");
+			                        $$.addHijos($1);	
+                                                } 
+                |NODOPRUEBA             {   
+                                                $$ = new Nodo("ABREVIATURADESPUESPASO","NODOPRUEBA");
+			                        $$.addHijos($1);	
+                                        } 
+                                        ;
 
 
-DELANTEAXIS: child ddospuntos
-        |descendant ddospuntos
-        |attribute ddospuntos
-        |self ddospuntos
-        |descendant_or_self ddospuntos
-        |following ddospuntos
-        |following_sibling ddospuntos
-        |namespace ddospuntos
-        ;
+DELANTEAXIS: child ddospuntos           {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"child"));	
+                                        }
+        |descendant ddospuntos          {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"descendant"));	
+                                        } 
+        |attribute ddospuntos           {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"attribute"));	
+                                        }           
+        |self ddospuntos                {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"self"));	
+                                        }
+        |descendant_or_self ddospuntos  {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"descendant_or_self"));	
+                                        }
+        |following ddospuntos           {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"following"));	
+                                        }
+        |following_sibling ddospuntos   {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"following_sibling"));	
+                                        }
+        |namespace ddospuntos           {   
+                                                $$ = new Nodo("DELANTEAXIS","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos(new Nodo($1,"namespace"));	
+                                        }  
+                                        ;
 
-NODOPRUEBA:NOMBRETEST   
-        |PRIMERTEST
-        ;
+NODOPRUEBA:NOMBRETEST                   {   
+                                                $$ = new Nodo("NODOPRUEBA","NOMBRETEST");
+			                        $$.addHijos($1);	
+                                        }   
+        |PRIMERTEST                     {   
+                                                $$ = new Nodo("NODOPRUEBA","NOMBREPRIMERTESTTEST");
+			                        $$.addHijos($1);	
+                                        }  
+                                        ;
 
 
-PRIMERTEST:METODONODO
-        |METODOTEXTO
-        |METODOLAST
-        |METODOPOSITION
-                ;
+PRIMERTEST:METODONODO                   {   
+                                                $$ = new Nodo("PRIMERTEST","METODONODO");
+			                        $$.addHijos($1);	
+                                        }
+        |METODOTEXTO                    {   
+                                                $$ = new Nodo("PRIMERTEST","METODOTEXTO");
+			                        $$.addHijos($1);	
+                                        }
+        |METODOLAST                     {   
+                                                $$ = new Nodo("PRIMERTEST","METODOLAST");
+			                        $$.addHijos($1);	
+                                        }
+        |METODOPOSITION                 {   
+                                                $$ = new Nodo("PRIMERTEST","METODOPOSITION");
+			                        $$.addHijos($1);	
+                                        }
+                                        ;
 
-METODONODO: node lparen rparen;
-METODOTEXTO: text lparen rparen;
-METODOLAST: last lparen rparen;
-METODOPOSITION: position lparen rparen;
+METODONODO: node lparen rparen          {   
+                                                $$ = new Nodo("METODONODO","TERM");
+			                        $$.addHijos(new Nodo($1,"node")); 	
+                                        };
+METODOTEXTO: text lparen rparen         {   
+                                                $$ = new Nodo("METODOLAST","TERM");
+			                        $$.addHijos(new Nodo($1,"position")); 	
+                                        };
+METODOLAST: last lparen rparen          {   
+                                                $$ = new Nodo("METODOLAST","TERM");
+			                        $$.addHijos(new Nodo($1,"last")); 	
+                                        };
+METODOPOSITION: position lparen rparen  {   
+                                                $$ = new Nodo("METODOPOSITION","TERM");
+			                        $$.addHijos(new Nodo($1,"position")); 	
+                                        }
+                                        ;
 
 //REVERSOPASO
-REVERSOPASO:REVERSOAXIS NODOPRUEBA
-        |ABREVIATURAREVERSEPASO
-        ;
+REVERSOPASO:REVERSOAXIS NODOPRUEBA      { 
+                                                $$ = new Nodo("REVERSOPASO","REVERSOAXIS");
+					        $$.addHijos($1);
+                                                $$.addHijos($2);
+					}   
+        |ABREVIATURAREVERSEPASO         { 
+                                                $$ = new Nodo("REVERSOPASO","ABREVIATURAREVERSEPASO");
+					        $$.addHijos($1);
+					}          
+                                        ;
 
 //REVERSOAXIS
-REVERSOAXIS: parent ddospuntos
-        |ancestor_or_self ddospuntos
-        |ancestor ddospuntos
-        |preceding_sibling ddospuntos
-        |preceding ddospuntos
-        ;
+REVERSOAXIS: parent ddospuntos          {   
+                                                $$ = new Nodo("REVERSOAXIS","TERM");
+			                        $$.addHijos(new Nodo($1,"parent")); 	
+                                        }
+        |ancestor_or_self ddospuntos    {   
+                                                $$ = new Nodo("REVERSOAXIS","TERM");
+			                        $$.addHijos(new Nodo($1,"ancestor_or_self")); 	
+                                        }
+        |ancestor ddospuntos            {   
+                                                $$ = new Nodo("REVERSOAXIS","TERM");
+			                        $$.addHijos(new Nodo($1,"ancestor")); 	
+                                        }
+        |preceding_sibling ddospuntos   {   
+                                                $$ = new Nodo("REVERSOAXIS","TERM");
+			                        $$.addHijos(new Nodo($1,"preceding_sibling")); 	
+                                        }  
+        |preceding ddospuntos           {   
+                                                $$ = new Nodo("REVERSOAXIS","TERM");
+			                        $$.addHijos(new Nodo($1,"preceding")); 	
+                                        }   
+                                        ;
 //ABREVIATURAPASO
-ABREVIATURAREVERSEPASO:dpunto;
+ABREVIATURAREVERSEPASO:dpunto    {   
+                                $$ = new Nodo("ABREVIATURAREVERSEPASO","TERM");
+			        $$.addHijos(new Nodo($1,"dpunto")); 	
+                                }
+                                ;
 
 //POSTEXPRESION
-POSTEXPRESION: EXPRESIONPRIMARIA PREDICADO
-        |EXPRESIONPRIMARIA
-        ;
-PREDICADO:lcorchete EXPR rcorchete;
+POSTEXPRESION: EXPRESIONPRIMARIA PREDICADO      { 
+                                                        $$ = new Nodo("POSTEXPRESION","EXPRESIONPRIMARIA2");
+					                $$.addHijos($1);
+                                                        $$.addHijos($2);
+					        } 
+        |EXPRESIONPRIMARIA                      { 
+                                                        $$ = new Nodo("POSTEXPRESION","EXPRESIONPRIMARIA");
+					                $$.addHijos($1);
+					        } 
+                                                ;
+PREDICADO:lcorchete EXPR rcorchete      { 
+                                                $$ = new Nodo("PREDICADO","LITERAL");
+					        $$.addHijos($1);
+                                                $$.addHijos($2);
+                                                $$.addHijos($3);
+					}      
+                                        ;
 
-EXPRESIONPRIMARIA:LITERAL
-                |ITEMEXPRESION;
+EXPRESIONPRIMARIA:LITERAL               { 
+                                                $$ = new Nodo("EXPRESIONPRIMARIA","LITERAL");
+					        $$.addHijos($1);
+					} 
+                |ITEMEXPRESION          { 
+                                                $$ = new Nodo("EXPRESIONPRIMARIA","LITERAL");
+					        $$.addHijos($1);
+					}          
+                                        ;
 
-LITERAL:EXPRESIONSTRING
-        |EXPRESIONNUMERICA
-        |EXPRESIONARROBA 
-        ;
+LITERAL:EXPRESIONSTRING                 { $$ = new Nodo("LITERAL","EXPRESIONSTRING");
+					        $$.addHijos($1);
+					}
+        |EXPRESIONNUMERICA              { $$ = new Nodo("LITERAL","EXPRESIONNUMERICA");
+					        $$.addHijos($1);
+					}
+        |EXPRESIONARROBA                { $$ = new Nodo("LITERAL","EXPRESIONARROBA");
+					        $$.addHijos($1);
+					} 
+                                        ;
 
-EXPRESIONARROBA:arroba identifier
-                |arroba mul
-                ;
+EXPRESIONARROBA:arroba identifier       {   
+                                        $$ = new Nodo("EXPRESIONARROBA","TERM");
+			                $$.addHijos(new Nodo($2,"identificador")); 	
+                                        }  
+                |arroba mul             {   
+                                        $$ = new Nodo("EXPRESIONARROBA","TERM");
+			                $$.addHijos(new Nodo($2,"mul")); 	
+                                        }  
+                                        ;
 
-EXPRESIONNUMERICA:DecimalLiteral
-                |IntegerLiteral
-                ;
-EXPRESIONSTRING:StringLiteral
-                |CharLiteral {    
-                               // $$ = new Nodo($1,"EXPRESIONSTRING:charliteral");
-                             }
-                |identifier {    
-                               // $$ = new Nodo($1,"EXPRESIONSTRING:identificador");
-                            }
-                ;
-ITEMEXPRESION:spunto
-        ;
+EXPRESIONNUMERICA:DecimalLiteral{   
+                                $$ = new Nodo("EXP","TERM");
+			        $$.addHijos(new Nodo($1,"decimal")); 	
+                                }  
+                |IntegerLiteral {   
+                                $$ = new Nodo("EXP","TERM");
+			        $$.addHijos(new Nodo($1,"entero")); 	
+                                }   
+                                ;
+EXPRESIONSTRING:StringLiteral   { 
+                                $$ = new Nodo("EXP","TERM");
+			        $$.addHijos(new Nodo($1,"identificador")); 	
+                                }
+                |CharLiteral    {   
+                                $$ = new Nodo("EXP","TERM");
+			        $$.addHijos(new Nodo($1,"char")); 	
+                                }
+                |identifier     {   
+                                $$ = new Nodo("EXP","TERM");
+			        $$.addHijos(new Nodo($1,"identificador")); 	
+                                }
+                                ;
+ITEMEXPRESION:spunto            {   
+                                $$ = new Nodo("ITEMEXPRESION","TERM");
+			        $$.addHijos(new Nodo($1,"spunto")); 	
+                                }
+                                ;
 
 /* Definición de la gramática de Horacio */
 

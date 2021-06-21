@@ -5,7 +5,7 @@ import { errores } from '../parser/Errores';
 import { XMLSymbol, TypeXml } from '../parser/Symbol/xmlSymbol';
 
 export class EjecutorXML {
-  encoding = 0;
+  encoding = 4;
   constructor() {}
 
   ejecutar(ast: NodoXML, env: EnvironmentXML) {
@@ -21,7 +21,13 @@ export class EjecutorXML {
           break;
         case 'DEC':
           let val = ast.getID();
-          let vals = val.replace(/["]/g, '').toLowerCase().split(' ');
+          let vals = val
+            .replace(/[ ]/g, '=')
+            .replace(/["]/g, '')
+            .replace(/[']/g, '')
+            .toLowerCase()
+            .split('=');
+          console.log(vals);
           if (vals.includes('utf-8')) {
             this.encoding = 0;
           } else if (vals.includes('ascii')) {
@@ -245,13 +251,14 @@ export class EjecutorXML {
   }
 
   encodeContent(str: any) {
+    console.log(this.encoding);
     switch (this.encoding) {
       case 0:
         //utf-8
         return encodeURIComponent(str);
       case 1:
         //ascii
-        return str;
+        return this.encodeToAscii(str);
       case 2:
         //iso
         return this.encodeISO(str);
@@ -259,6 +266,14 @@ export class EjecutorXML {
         //none
         return str;
     }
+  }
+
+  encodeToAscii(s) {
+    let buffer = [];
+    for (let ch of s) {
+      buffer.push(ch.charCodeAt());
+    }
+    return buffer.join(' ');
   }
 
   encodeISO(s) {

@@ -134,6 +134,39 @@ const generarCstXMLAscendnete= function (cadEntrada){
     }
 };
 
+
+/**
+ * Genera CstXmlAscendente
+ * @param entrada
+ */
+const generarCstXMLDescendente= function (cadEntrada){
+    try {
+        XpathUtil.contador_nodo = 1;
+        print("Generando CST: "+new Date());
+        try {
+            if(cadEntrada!=null){
+                cadEntrada = cadEntrada.replace(/\<\?xml.+\?\>|\<\!DOCTYPE.+]\>/g, ' ');
+            }
+            let catDot = xmlAnalyzerTopdown.parse(cadEntrada);
+            if(catDot){
+                console.info('Se genero correctamente el árbol. ');
+                let pagina = "https://dreampuf.github.io/GraphvizOnline/#"+catDot;
+                let url=encodeURI(pagina);
+                window.open(url);
+            }else{
+                throw "No se pudo generar correctamente el árbol. ";
+            }
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        print(CONSOLE_MESSAGE_SUCCESSFULL);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
+
+
 /**
  * Metodo que analiza el xpath
  * @param entrada

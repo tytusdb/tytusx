@@ -7,7 +7,7 @@
     const { Nodo } = require('./Nodo.js');
     const {FilaGrammar} = require('./FilaGrammar.js');
 
-    let codificacion = 'UTF-8'
+    let codificacion = 'utf8';
     let errores = [];
     let gramatica = [];
     
@@ -135,8 +135,20 @@
 
     const addErr = (err,loc,msj) => {
         //tipo,linea,columna,mensaje
-        errores.push(new Error('semantico',err,loc.first_line,loc.first_column,msj));
-    }    
+        errores.push(new Error('Sintactico',err,loc.first_line,loc.first_column,msj));
+    }
+
+    const setCoding = () => {
+        if(codificacion === 'utf-8'){
+            codificacion = 'utf8';
+        }else if(codificacion === 'iso 88591' | codificacion === 'iso 88591-1'){
+            codificacion = 'iso';
+        }else if(codificacion === 'ascii'){
+            codificacion = 'ascii';
+        }else{
+            codificacion = 'utf8';
+        }
+    }
 
     const fixObject = (xmlobj) =>{
         let nuevo = Object.assign({},xmlobj);
@@ -145,7 +157,7 @@
     
     let tgs = '';
     let tgc = '';
-    let aux;
+    let aux,axu1;
 %}
 
 /*-------------------------------------LEXICO----------------------------------*/
@@ -196,7 +208,7 @@ attdef		{open}"?ROOT-ATT"
 <<EOF>>             %{  return 'EOF';   %}
 
 .  %{ console.log('Se ha encontrado un error lexico: " ' + yytext + ' "  [linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column+']'); 
-        errores.push(new Error('semantico',yytext,yylloc.first_line,yylloc.first_column,'Se ha encontrado un error lexico')); 
+        errores.push(new Error('lexico',yytext,yylloc.first_line,yylloc.first_column,'Se ha encontrado un error lexico')); 
     %}
 
 
@@ -218,7 +230,7 @@ attdef		{open}"?ROOT-ATT"
 S
     : ROOT EOF 
     {
-        //console.log("Se inicia el analisis Lexico/Sintactico 'Ascendente'");        
+        console.log("Se inicia el analisis Lexico/Sintactico 'Ascendente'");        
         let cst = new Nodo(0,'S',[$1.nodo]);
         cst.setProdu(new FilaGrammar(getGrammar('S')));
         let gramaticaRep = cst.getGrammar();
@@ -258,16 +270,16 @@ ENCODING
         $$.nodo = new Nodo(setid(),"ENCODING");
         $$.nodo.setProdu(new FilaGrammar(getGrammar('ENCODING1')));
 
-        if((codificacion==='utf-8') 
-        | (codificacion==='iso 88591') 
-        | (codificacion==='hex')
-        | (codificacion==='ascii')){
+        if((codificacion ==='utf-8')
+        | (codificacion ==='iso 88591' | codificacion ==='iso 88591-1')
+        | (codificacion ==='ascii')){
             $$.nodo.addNodo(new Nodo(setid(),'<?'));
             $$.nodo.addNodo(new Nodo(setid(),'xml'));
             $$.nodo.addNodo(new Nodo(setid(),'encoding'));
             $$.nodo.addNodo(new Nodo(setid(),'='));
             $$.nodo.addNodo(new Nodo(setid(),'Value',[],codificacion));
             $$.nodo.addNodo(new Nodo(setid(),'?>'));
+            setCoding();
         }else{
             errores.push(new Error('semantico',codificacion,@5.first_line,@5.first_column,'codificacion invalida'));
         }        
@@ -288,7 +300,9 @@ ELEMENTO
         tgs = setTag($1);
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($2.nodo);
         aux.addNodo(new Nodo(setid(),'Slash'));
         aux.addNodo(new Nodo(setid(),'>'));
@@ -306,13 +320,17 @@ ELEMENTO
         
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($2.nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.addNodo($4.nodo);
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO2')));
 
@@ -323,7 +341,7 @@ ELEMENTO
 
         if(tgs != tgc){
             let mensaje = ('las etiquetas de inicio y fin no coindicen!');            
-            errores.push(new Error('semantico',tgc,@6.first_line,@6.first_column,mensaje));
+            errores.push(new Error('Semantico',tgc,@6.first_line,@6.first_column,mensaje));
         }
     }
     | Start ATRIBUTOS Close ELEMENTOS End Name Close 
@@ -333,7 +351,9 @@ ELEMENTO
 
         aux = new Nodo(setid(),'ELEMENTO');
         aux.addNodo(new Nodo(setid(),'<'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo($2.nodo);
         aux.addNodo(new Nodo(setid(),'>'));
         if($4!=undefined){
@@ -341,7 +361,9 @@ ELEMENTO
         }
         aux.addNodo(new Nodo(setid(),'<'));
         aux.addNodo(new Nodo(setid(),'Slash'));
-        aux.addNodo(new Nodo(setid(),'Name',[],tgs));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),tgs));
+        aux.addNodo(aux1);
         aux.addNodo(new Nodo(setid(),'>'));
         aux.setProdu(new FilaGrammar(getGrammar('ELEMENTO3')));
 
@@ -356,13 +378,12 @@ ELEMENTO
 
         if(tgs != tgc){
             let mensaje = ('las etiquetas de inicio y fin no coindicen!');            
-            errores.push(new Error('semantico',tgs,@6.first_line,@6.first_column,mensaje));
+            errores.push(new Error('Semantico',tgs,@6.first_line,@6.first_column,mensaje));
         } 
     }
-    //| error End {  addErr($error,@error,'Se esperaba '); $$ = undefined; }
-    | error Close {  addErr($error,@error,'Se esperaba '); $$ = undefined; }
-    | error Start {  addErr($error,@error,'Se esperaba '); $$ = undefined; }
-    //| error Close ">"  { errores.push(new Error('','',0,0,''));  $$ = undefined; }
+    | error End {  addErr($error,@error,'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,">","<",contenido]'); $$ = undefined; }
+    | error Close {  addErr($error,@error,'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,">","<",contenido]'); $$ = undefined; }
+    | error Start {  addErr($error,@error,'Caracteres inesperados han sido localizados, esperaba [Lista_elementos,">","<",contenido]'); $$ = undefined; }
 ;
 
 /* ATRIBUTOS: LISTA CON ATRIBUTOS DE UN OBJETO/ETIQUETA XML */
@@ -421,14 +442,18 @@ ATRIBUTO
     {
         $$ = new AtributoXML($1,$3,@1.first_line,@1.first_column);
         $$.nodo = new Nodo(setid(),'ATRIBUTO');
-        $$.nodo.addNodo(new Nodo(setid(),'Name',[],$1));
+        aux = new Nodo(setid(),'Name');
+        aux.addNodo(new Nodo(setid(),$1));
+        $$.nodo.addNodo(aux);
         $$.nodo.addNodo(new Nodo(setid(),'='));
-        $$.nodo.addNodo(new Nodo(setid(),'Value',[],$3));
+        aux = new Nodo(setid(),'Value');
+        aux.addNodo(new Nodo(setid(),$3.replace(/"/g,'')));
+        $$.nodo.addNodo(aux);
         $$.nodo.setProdu(new FilaGrammar(getGrammar('ATRIBUTO')));
     }
     | error Value
     {
-        addErr($error,@error,'Se esperaba "="');
+        addErr($error,@error,'Caracteres inseperados se han encontrado, se esperaba ["=",atributo,id]');
         $$ = undefined;
     }
 ;
@@ -514,9 +539,11 @@ LISTA_DATOS
 DATOS
     : Data
     {
-        aux = new Nodo(setid(),'DATOS');
-        aux.addNodo(new Nodo(setid(),'Data',[],$1));
+        aux = new Nodo(setid(),'DATOS');        
         aux.setProdu(new FilaGrammar(getGrammar('DATOS1')));
+        aux1 = new Nodo(setid(),'Data');
+        aux1.addNodo(new Nodo(setid(),$1));
+        aux.addNodo(aux1);
 
         $$ = new String($1);
         $$.nodo = aux;
@@ -524,13 +551,14 @@ DATOS
     | Name
     {
         aux = new Nodo(setid(),'DATOS');
-        aux.addNodo(new Nodo(setid(),'Name',[],$1));
         aux.setProdu(new FilaGrammar(getGrammar('DATOS2')));
+        aux1 = new Nodo(setid(),'Name');
+        aux1.addNodo(new Nodo(setid(),$1));
+        aux.addNodo(aux1);
 
         $$ = new String(' ' + $1);
         $$.nodo = aux;
     }
-    | error End {  addErr($error,@error,'Se esperaba '); $$ = []; }
 ;
 
 

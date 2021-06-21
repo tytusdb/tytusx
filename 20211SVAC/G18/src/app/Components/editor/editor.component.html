@@ -134,15 +134,23 @@
             style="background-color: rgb(8, 101, 104)"
             class="btn btn-info dropdown-toggle"
           >
-            <button (click)="printAst()" type="button" class="dropdown-item">
+            <button (click)="printAST()" type="button" class="dropdown-item">
               <fa-icon [icon]="faPencilRuler"></fa-icon>
               AST
             </button>
-            <button (click)="printAst()" type="button" class="dropdown-item">
+            <button (click)="printCST()" type="button" class="dropdown-item">
               <fa-icon [icon]="faPencilRuler"></fa-icon>
               CST
             </button>
-            <button (click)="printAst()" type="button" class="dropdown-item">
+            <button
+              (click)="printArbolXML()"
+              type="button"
+              class="dropdown-item"
+            >
+              <fa-icon [icon]="faPencilRuler"></fa-icon>
+              Arbol XML
+            </button>
+            <button (click)="printAST()" type="button" class="dropdown-item">
               <fa-icon [icon]="faPencilRuler"></fa-icon>
               DAG
             </button>
@@ -161,6 +169,10 @@
             <button (click)="errorTable()" type="button" class="dropdown-item">
               <fa-icon [icon]="faEraser"></fa-icon>
               Tabla de Errores
+            </button>
+            <button (click)="RGTable()" type="button" class="dropdown-item">
+              <fa-icon [icon]="faEraser"></fa-icon>
+              Reporte Gramatical
             </button>
             <button (click)="optTable()" type="button" class="dropdown-item">
               <fa-icon [icon]="faSpinner"></fa-icon>
@@ -231,4 +243,26 @@
 </div>
 
 <div id="temporal" style="display: none"></div>
-<div id="reportes" class="container overflow-auto"></div>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="card" style="width: 80%">
+      <div class="card-header">Reporte AST</div>
+      <div id="reporteAST" class="card-body overflow-auto reporte"></div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="card" style="width: 80%">
+      <div class="card-header">Reporte CST</div>
+      <div id="reporteCST" class="card-body overflow-auto reporte"></div>
+    </div>
+  </div>
+  <div class="row justify-content-md-center">
+    <div class="card" style="width: 80%">
+      <div class="card-header">Arbol XML</div>
+      <div id="reporteXML" class="card-body overflow-auto reporte"></div>
+    </div>
+  </div>
+</div>
+
+<!-- <div id="reportes" class="container overflow-auto"></div> -->

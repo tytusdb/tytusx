@@ -70,8 +70,14 @@ BSL                                 "\\".
 
 
 /* Definición de la gramática */
-START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF { return $10;}
-    ;
+START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF 
+{ 
+    var nodo = new Objeto('RAIZ','',0, 0,null,null); 
+    nodo.agregarObjeto($10);
+    var arreglo =[nodo];
+    return arreglo;
+}
+;
 
   
 
@@ -82,8 +88,8 @@ RAIZ:
 ;
 
 RAICES:
-    RAICES OBJETO {$$= $1;  $$.push($2);  alert($2.texto);}
-	| OBJETO  {$$= [];  $$.push($1); alert($1.texto);}
+    RAICES OBJETO {$$= $1;  $$.push($2);}
+	| OBJETO  {$$= [];  $$.push($1);}
 ;        
 
   

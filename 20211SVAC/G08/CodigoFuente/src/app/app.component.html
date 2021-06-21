@@ -76,7 +76,7 @@
     </mat-card-actions>
   </mat-card>
   <div>
-    <button (click)="dibujar()">Generar AST XML Ascendente</button>  
+    <button (click)="dibujar()">Generar CST XML Ascendente</button>  
     <button (click)="generarReporteGramaticalXML()">Generar Reporte Gramatical XML Ascendente</button> 
     <div id="graph"></div>
     <table  border="1">
@@ -84,6 +84,20 @@
       <tr> <TD>PRODUCCION</TD> <TD>ACCIONES</TD>  </tr>  
 
       <tr *ngFor="let fila of this.rgxmlasc">
+        <td>{{fila.Produccion}}</td>
+        <td>{{fila.Regla_}}</td>
+      </tr>
+      </table>
+  </div>
+  <div>
+    <button (click)="dibujarCSTDes()">Generar CST XML Descendente</button>  
+    <button (click)="generarReporteGramaticalXML()">Generar Reporte Gramatical XML Descendente</button> 
+    <div id="graph2"></div>
+    <table  border="1">
+      <tr>REPORTE GRAMATICAL XML Descendente</tr>
+      <tr> <TD>PRODUCCION</TD> <TD>ACCIONES</TD>  </tr>  
+
+      <tr *ngFor="let fila of this.rgxmldesc">
         <td>{{fila.Produccion}}</td>
         <td>{{fila.Regla_}}</td>
       </tr>

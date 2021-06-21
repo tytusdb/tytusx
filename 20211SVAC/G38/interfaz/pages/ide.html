@@ -62,9 +62,10 @@
     <script src="../../ejecucion/xpath/ast/expresion/PredicateExpresion.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/NodoError.js"></script>
     <script src="../js/ide.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="../js/jquery-3.4.1.min.js"></script>
     <script src="../../gramaticas/xml/xmlAnalyzer.js"></script>
     <script src="../../gramaticas/xml/xmlAnalyzerAst.js"></script>
+    <script src="../../gramaticas/xml/xmlAnalyzerTopdown.js"></script>
     <script src="../../ejecucion/xml/ast/XmlObjectInt.js"></script>
     <script src="../../ejecucion/xml/ast/XmlObjectAncestor.js"></script>
     <script src="../../ejecucion/xml/ast/xmlObjects/XmlAttribute.js"></script>
@@ -358,6 +359,23 @@
             });
 
 
+
+            /**
+             * AnalizarXML
+             */
+            $("#btnGraficarCstXmlDescendente").click(function(){
+                entrada = $("#txtEntradaXML").val();
+                generarCstXMLDescendente(entrada);
+            });
+
+
+            /**
+             * AnalizarXML
+             */
+            $("#btnGraficarAstXmlDescendente").click(function(){
+                entrada = $("#txtEntradaXML").val();
+                generarCstXMLAscendnete(entrada);
+            });
 
             /**
              * Ver Tabla de Simbolos

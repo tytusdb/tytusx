@@ -37,6 +37,8 @@ export class AppComponent {
   astXML;
   arbol;
   rgxmlasc;
+rgxmldesc;
+cstxml;
   tablaXML="";
   xmlText = `<?xml version="1.0" encoding="ISO-8859-1"?>
   <catalog>
@@ -167,6 +169,7 @@ export class AppComponent {
     this.parserXml = require("./Gramatica/gramatica");
     this.astXML= require("./Gramatica/gramaticaXMLAsc_Arbol");
     this.arbol=require("./AST/crearArbolDot");
+	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
   }
 
   Compilar() {
@@ -347,18 +350,17 @@ export class AppComponent {
           
         }break;
       case TipoNodo.Axis :
-      {
+      {  
+        if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
+          this.listaDescendientes.push(raiz);
+        }
         switch(raiz.Tipo.Valor){
           case 'ancestor':{
-            if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
-              this.listaDescendientes.push(raiz);
-            }
+          
             xml = this.GetXmlEtiqueta(xml,raiz);
           }break;
           case 'ancestor-or-self':{
-            if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
-              this.listaDescendientes.push(raiz);
-            }
+            
             xml = this.GetXmlEtiqueta(xml,raiz);
           }break;
           case 'attribute':{
@@ -380,9 +382,7 @@ export class AppComponent {
             
           }break;
           case 'child':{
-              if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
-                this.listaDescendientes.push(raiz);
-              }
+              
               xml = this.GetXmlEtiqueta(xml,raiz);
               console.log('xml child');
               console.log(xml);
@@ -401,16 +401,32 @@ export class AppComponent {
             }
           }break;
           case 'following':{
-            
+            var temp :Objeto[]=[];
+            xml.forEach(element => {
+              temp= temp.concat(element.listaObjetos);
+            });
+            xml = temp;
           }break;
           case 'following-sibling':{
-            
+            var temp :Objeto[]=[];
+            xml.forEach(element => {
+              temp= temp.concat(element.listaObjetos);
+            });
+            xml = temp;
           }break;
           case 'namespace':{
             
           }break;
           case 'parent':{
-            
+            var temp :Objeto[]=[];
+            xml.forEach(element => {
+              if(element.padre!= null){
+                if(!temp.includes(element)){
+                  temp.push(element);
+                }
+              }
+            });
+            xml = temp;
           }break;
           case 'preceding':{
             
@@ -453,10 +469,10 @@ export class AppComponent {
       }break;
       case TipoNodo.Funcion_Node :
       {
-        console.log('node');
-        console.log(xml);
-        xml = this.GetNodes(xml);
-        console.log(xml);
+        // console.log('node');
+        // console.log(xml);
+        // xml = this.GetNodes(xml);
+        // console.log(xml);
         if(raiz.Hijo ==null){
           xml.forEach(element => {
             result += this.GetXmlText(element);
@@ -2030,6 +2046,8 @@ console.log();
 		}
     this.tablaXML=table;*/
     }
+ 
+
     generarReporteErroresXML(){
       var xmlObject = this.astXML.parse(this.xmlText)[3] as ListaErrores;
       
@@ -2040,6 +2058,21 @@ console.log();
       maxHeight: '80%'
     });
 
+    }
+
+    dibujarCSTDes(){
+      graphviz('#graph2').width(500);
+    graphviz('#graph2').height(750);
+    
+    const objetos = this.cstxml.parse(this.xmlText);    
+    console.log('objetos almacenados--->', objetos);
+    const arbol = new this.arbol.CrearArbolDot();
+    //console.log(arbol);   
+    var recorrido=arbol.recorrerHijos(objetos[1]);
+    console.log(recorrido);
+    this.rgxmldesc=objetos[2].arreglo_elementos;
+    graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
+console.log();
     }
 
 }

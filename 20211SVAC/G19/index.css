@@ -18,21 +18,17 @@ body {
     transition: all 500ms ease;
 }
 
-.xpath_desc_graph {
-    height: 600px;
-}
-
-.contenedor {
+.contenedor{
     width: 1080px;
     margin: auto;
-    background: #009999;
+    background:#009999;
     color: rgb(0, 112, 163);
     padding: 20px 15px 50px 50px;
     border-radius: 10px;
     box-shadow: 0 10px 10px 0px rgba(0, 0, 0, 0.8);
 }
 
-.contenedor .titulo {
+.contenedor .titulo{
     font-size: 3.5ex;
     font-weight: bold;
     margin-left: 10px;
@@ -45,11 +41,11 @@ body {
     font-weight: bold;
 }
 
-#pestanas ul {
+#pestanas ul{
     margin-left: -40px;
 }
 
-#pestanas li {
+#pestanas li{
     list-style-type: none;
     float: left;
     text-align: center;
@@ -62,12 +58,12 @@ body {
     padding: 0px 20px 0px 20px;
 }
 
-#pestanas a:link {
+#pestanas a:link{
     text-decoration: none;
     color: #ffffff;
 }
 
-#contenidopestanas {
+#contenidopestanas{
     clear: both;
     background: #92f3b2;
     padding: 20px 0px 20px 20px;
@@ -76,8 +72,7 @@ body {
     border: 2px solid rgb(0, 112, 163);
     width: 1025px;
 }
-
-#grafo {
+#grafo{
     clear: both;
     background: #d8eedf;
     padding: 20px 0px 20px 20px;
@@ -86,18 +81,17 @@ body {
     border: 2px solid rgb(0, 112, 163);
     width: 1025px;
 }
-
 #pestanascon {
     float: top;
     font-size: 3ex;
     font-weight: bold;
 }
 
-#pestanascon ul {
+#pestanascon ul{
     margin-left: -40px;
 }
 
-#pestanascon li {
+#pestanascon li{
     list-style-type: none;
     float: left;
     text-align: center;
@@ -110,12 +104,12 @@ body {
     padding: 0px 20px 0px 20px;
 }
 
-#pestanascon a:link {
+#pestanascon a:link{
     text-decoration: none;
     color: #ffffff;
 }
 
-#contenidopestanascon {
+#contenidopestanascon{
     clear: both;
     background: dimgray;
     padding: 20px 0px 20px 20px;
@@ -125,6 +119,7 @@ body {
     width: 1025px;
 }
 
+
 .textarea {
     resize: none;
-}
+  }

@@ -84,7 +84,12 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- return $$[$0-1];
+ 
+    var nodo = new Objeto('RAIZ','',0, 0,null,null); 
+    nodo.agregarObjeto($$[$0-1]);
+    var arreglo =[nodo];
+    return arreglo;
+
 break;
 case 2: case 6:
  this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
@@ -93,10 +98,10 @@ case 3: case 8:
 this.$= new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,null,$$[$0-4]);
 break;
 case 4:
-this.$= $$[$0-1];  this.$.push($$[$0]);  alert($$[$0].texto);
+this.$= $$[$0-1];  this.$.push($$[$0]);
 break;
 case 5:
-this.$= [];  this.$.push($$[$0]); alert($$[$0].texto);
+this.$= [];  this.$.push($$[$0]);
 break;
 case 7:
  this.$= new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],null); 
