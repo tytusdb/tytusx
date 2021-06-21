@@ -48,7 +48,6 @@ class TraductorXML{
         //donde termina el xml en el heap
         stack[(int)1]= t0;`;
         stack[1] = T0;
-
         return xmlC3D;
 
     }

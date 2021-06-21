@@ -38,9 +38,18 @@ function CargarXML(){
             DOTxmlCSTasc = "digraph {" + DOTxmlCSTasc + "}";
             localStorage.setItem('cstXML',DOTxmlCSTasc);
             ExtraerCodificacion(resultadoXML[0]);       
-            ErroresSemanticosXML(resultadoXML[0]);      
+            ErroresSemanticosXML(resultadoXML[0]);
+            heap = [];
+            stack = [];
+            contadorStack = 0;
+            contadorTemporales = 0;
+            SP = 2;
+            HP = 0;
+            T0 = 0;
+            T1 = 0;      
             xmlC3D = "";
             xmlC3D = C3DXML.traducir(resultadoXML[0]);
+            localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
             tablaSimbolosXML = tablaSimbolosXMLAux;          
@@ -139,6 +148,7 @@ function CargarXML(){
     } 
 
  SetearTraduccion();
+ //console.log(stack);
     
 }
 
@@ -176,7 +186,15 @@ function CargarXMLDesc(){
             DOTxmlCSTdesc = "digraph {" + DOTxmlCSTdesc + "}";
             localStorage.setItem('cstXMLDesc',DOTxmlCSTdesc);
             ExtraerCodificacion(resultadoXML[0]);       
-            ErroresSemanticosXML(resultadoXML[0]);  
+            ErroresSemanticosXML(resultadoXML[0]);
+            heap = [];
+            stack = [];
+            contadorStack = 0;
+            contadorTemporales = 0;
+            SP = 2;
+            HP = 0;
+            T0 = 0;
+            T1 = 0;
             xmlC3D = "";
             xmlC3D = C3DXML.traducir(resultadoXML[0]);    
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     

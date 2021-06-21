@@ -66,6 +66,13 @@ const init = function(e){
         window.open('./reportes/astXQUERY.html','_blank');
     });
 
+    let btn_heap = document.querySelector("#heap");
+
+    btn_heap.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/heap.html','_blank');
+    });
+
 };
 
 

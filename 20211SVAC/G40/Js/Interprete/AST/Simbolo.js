@@ -14,9 +14,11 @@ var Simbolo = /** @class */ (function () {
     };
 
     Simbolo.prototype.SetearPosicion = function (pos) {
-        if(this.posicion==-1){
-            this.posicion = pos;
-        }    
+            this.posicion = pos;   
+    };
+
+    Simbolo.prototype.getPosicion = function () {
+        return this.posicion;
     };
 
     Simbolo.prototype.getID = function () {
