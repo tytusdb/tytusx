@@ -159,19 +159,16 @@ INICIO :
 ;
 
 CONSTRUCCION:
-        ELEMENTO            
-        |ESTRUCTURAHTMLUL
-        |CONTENIDO     
+        ELEMENTO                    
+        |ESTRUCTURAHTMLUL        
+        |CONTENIDO               
         ;
 
 
 ESTRUCTURAHTMLUL:
           // COMPLETA 
          tk_ul_abre tk_llave_izq CONTENIDO tk_llave_der tk_ul_cierra
-        {console.log($1);
-        console.log($2);
-        console.log($4);
-        console.log($5);}
+        
 ;
 
 CONTENIDO:
@@ -378,39 +375,24 @@ CAJETIN:
         tk_corchete_izq DATO tk_corchete_der 
         | DATO                           
 ;
-
-DATO:
-         tk_numero   
-         {console.log($1);}                                           
-        |tk_identificador   
-        {console.log($1);}                                     
-        |tk_hilera         
-        {console.log($1);}                                      
-        |tk_arroba tk_identificador
-        {console.log($1);
-        console.log($2);}                              
-        |tk_last tk_parentesis_izq tk_parentesis_der
-        {console.log($1);
-        console.log($2);
-        console.log($3);}                              
-	    |DATO tk_mas DATO
-        {console.log($2);}                                       
-        |DATO tk_menos DATO
-        {console.log($2);}                                    
-        |DATO tk_div DATO 
-        {console.log($2);}                                  
-        |DATO tk_igual DATO
-        {console.log($2);}                                    
-        |DATO tk_indiferente DATO
-        {console.log($2);}                                              
-        |DATO tk_menor_igual DATO
-        {console.log($2);}                                                           
-        |DATO tk_mayor_igual DATO
-        {console.log($2);}                                      
-        |DATO tk_mayor DATO
-        {console.log($2);}                                      
-        |DATO tk_mod DATO 
-        {console.log($2);}                                             
+DATO
+//Tipos de datos
+        :tk_numero                                                                     
+        |tk_identificador                                                                                                                  
+        |tk_hilera                                                                                                                                 
+        |tk_arroba tk_identificador                                                                                            
+        |tk_last tk_parentesis_izq tk_parentesis_der                                     
+//Operaciones aritmeticas                      
+        |DATO tk_mas DATO                                                                                                            
+        |DATO tk_menos DATO                                                             
+        |DATO tk_div DATO                                                            
+        |DATO tk_mod DATO                                                                                                                                                                     
+//Operaciones Logicas
+        |DATO tk_igual DATO       	                                                                              
+        |DATO tk_indiferente DATO                                                                       
+        |DATO tk_menor_igual DATO                                                     
+        |DATO tk_mayor_igual DATO                                                    
+        |DATO tk_mayor DATO                                                           
 ;
 
 
