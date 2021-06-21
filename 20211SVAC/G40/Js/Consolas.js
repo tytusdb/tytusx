@@ -1,10 +1,11 @@
 var EntradaXPath = CodeMirror.fromTextArea
 (document.getElementById('entrada_xpath'),{
-    mode: "text/x-java",
+    mode : "xquery",
+    htmlMode: true,
     theme: "ayu-dark",
     lineNumbers: false,
     fixedGutter: false,
-    autoRefresh: true
+    autoRefresh:true
 });
 
 EntradaXPath.setSize(null, 50);

@@ -12,11 +12,22 @@ var Objeto = /** @class */ (function () {
         this.agregar = agregar;
         this.entorno = null;
         this.id = 0;
+        this.posicion = -1;
     }
 
     Objeto.prototype.getAgregar = function () {
         return this.agregar;
     };
+
+    Objeto.prototype.SetearPosicion = function (pos) {
+        if(this.posicion==-1){
+            this.posicion = pos;
+        }    
+    };
+
+    Objeto.prototype.getPosicion = function () {
+        return this.posicion;
+    };   
 
     Objeto.prototype.getTexto = function () {
         return this.texto;

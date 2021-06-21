@@ -44,8 +44,21 @@
 
         <script>
 
+            var heap = [];
+            var stack = [];
+            var finalXML = 0;
+            var encodingXML = 0;
+            var contadorStack = 0;
+            var contadorTemporales = 0;
+            var SP = 2;
+            var HP = 0;
+            var T0 = 0;
+            var T1 = 0;
+            var temporal0 = "";
+            var temporal1 = "";
+            var globalC3D = "";
             var xpathC3D = "";
-            var xmlCD3 = "";
+            var xmlC3D = "";
             var C3DXML = new TraductorXML();
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
@@ -55,14 +68,18 @@
             var NumeroE = 1;
             var resultadoXML = null;
             var resultadoXPath = null;
+            var resultadoXQuery = null;
             var analisisCorrecto = true;
             var analisisXpathCorrecto = true;
+            var analisisXqueryCorrecto = true;
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
             var DOTxmlCSTdesc = "";
             var DOTxmlErrores = "";
             var DOTXPATHASTasc = "";
             var DOTXPATHASTDesc = "";
+            var DOTXQUERYASTAsc = "";
+            var DOTXQUERYASTDesc = "";
             var RGxml = new ReporteGramatical();
             var RGxmlDesc = new ReporteGramatical();
             var ListaDAG = [];
@@ -121,7 +138,10 @@
                         <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
                         <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
                         <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
-                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>                                
+                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>
+                        <a class="dropitem" id="heap">HEAP</a>  
+                        <a class="dropitem" id="stack">STACK</a>        
+                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
                         </div>
                     </div> 
                 </div>

@@ -85,7 +85,9 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
   console.log("TODO CORRECTO :D XQUERY ASC VERSION");
-                                this.$ =[$$[$0-1][0],$$[$0-1][1]];
+                                instruccion = $$[$0-1][0];
+                                nodo = $$[$0-1][1];
+                                this.$ =[instruccion,nodo];
                                 return this.$; 
 break;
 case 2: case 3: case 54: case 55: case 60: case 61: case 72: case 84: case 88: case 96: case 97: case 98:
@@ -183,7 +185,7 @@ case 24:
                                           this.$ = [null,nodoaux];
 break;
 case 25:
- nodoaux = new NodoArbol($$[$0-2],"");
+ nodoaux = new NodoArbol($$[$0-2]+""+$$[$0-1],"");
                                                   this.$ = [null,nodoaux]; 
 break;
 case 26:

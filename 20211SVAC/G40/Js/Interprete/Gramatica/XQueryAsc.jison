@@ -96,7 +96,9 @@ BSL                         "\\".
 
 /* Definición de la gramática */
 INICIO : INSTRUCCION EOF     {  console.log("TODO CORRECTO :D XQUERY ASC VERSION");
-                                $$ =[$1[0],$1[1]];
+                                instruccion = $1[0];
+                                nodo = $1[1];
+                                $$ =[instruccion,nodo];
                                 return $$; } ;
 
 INSTRUCCION: SETS { $$ = $1; }
@@ -178,7 +180,7 @@ EXPRESION : tk_identificador PREDICADO { nodoaux = new NodoArbol($1,"");
         |  tk_arrobaasterisco PREDICADO { nodoaux = new NodoArbol($1,"");
                                           $$ = [null,nodoaux];}
 
-        |  tk_arroba tk_identificador PREDICADO { nodoaux = new NodoArbol($1,"");
+        |  tk_arroba tk_identificador PREDICADO { nodoaux = new NodoArbol($1+""+$2,"");
                                                   $$ = [null,nodoaux]; }
 
         |  tk_texto PREDICADO { nodoaux = new NodoArbol($1,"");
