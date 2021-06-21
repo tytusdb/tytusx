@@ -92,7 +92,7 @@
 "attribute"            %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_attribute';%}
 "last"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_last';%}
 "position"             %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_position';%}
-"text"             %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_text';%}
+"text"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_text';%}
 
 
 
@@ -201,8 +201,8 @@ NODO
 
         |tk_diagonal tk_arroba tk_asterisco                                             {$$= {instr:"ATRIBUTO",valor:$3};}
 
-        |tk_diagonal tk_node tk_parentesis_der tk_parentesis_izq PREDICADO              {$$= {instr:"ACCESO",valor:"*",index:$5};}
-        |tk_diagonal_doble tk_node tk_parentesis_der tk_parentesis_izq  PREDICADO       {$$= {instr:"ACCESODOBLE",valor:"*",index:$5};}
+        |tk_diagonal tk_node tk_parentesis_izq tk_parentesis_der PREDICADO              {$$= {instr:"ACCESO",valor:"*",index:$5};}
+        |tk_diagonal_doble tk_node tk_parentesis_izq tk_parentesis_der  PREDICADO       {$$= {instr:"ACCESODOBLE",valor:"*",index:$5};}
 
         |tk_diagonal_doble tk_arroba tk_identificador                                   {$$= {instr:"ATRIBUTODOBLE",valor:$3};}
         |tk_diagonal_doble tk_arroba tk_asterisco                                       {$$= {instr:"ATRIBUTODOBLE",valor:$3};}

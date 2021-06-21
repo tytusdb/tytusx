@@ -71,7 +71,7 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var analizador_xqueryizq = (function(){
+var analizador_xquery_ast = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,9],$V2=[1,12],$V3=[1,13],$V4=[1,18],$V5=[5,12],$V6=[5,12,23,25],$V7=[2,28],$V8=[1,37],$V9=[1,53],$Va=[1,52],$Vb=[1,54],$Vc=[1,51],$Vd=[1,55],$Ve=[1,56],$Vf=[1,63],$Vg=[1,61],$Vh=[1,62],$Vi=[1,64],$Vj=[1,65],$Vk=[1,66],$Vl=[1,68],$Vm=[1,69],$Vn=[1,70],$Vo=[1,71],$Vp=[29,33,36,37,38,39,40,41,42,43,44,45],$Vq=[33,36,37,40,41,42,43,44,45],$Vr=[33,40,41,42,43,44,45];
 var parser = {trace: function trace () { },
 yy: {},
@@ -87,112 +87,70 @@ case 1:
 return $$[$0-1];
 break;
 case 2:
-this.$={instr:"FOR_IN",iterador:$$[$0-1],retorno:$$[$0]};
+this.$= new Nodo("Porduccion","XQUERYGRA",[ $$[$0-1] ,$$[$0]] );
 break;
 case 3:
-this.$={instr:"LLAMADA",valor:$$[$0]};
+this.$= new Nodo("Porduccion","XQUERYGRA",[ $$[$0]] );
 break;
 case 4:
-this.$={variable:$$[$0-2],consulta:$$[$0]}
+this.$= new Nodo("Porduccion","FOR_IN",[$$[$0-3], $$[$0-2], $$[$0-1], $$[$0] ] );
 break;
 case 5:
-this.$={variable:$$[$0],consulta:null}
+this.$= new Nodo("Porduccion","RETURN",[ $$[$0-1], $$[$0]] );
 break;
 case 6:
-this.$={variable:$$[$0-1],consulta:$$[$0]}
+this.$= new Nodo("Porduccion","RETURN",[ $$[$0-2], $$[$0-1], $$[$0]] );
 break;
-case 8: case 9: case 10: case 12:
-this.$=$$[$0];
+case 7:
+this.$= new Nodo("Porduccion","LLAMADA",[ $$[$0-4], $$[$0-3], $$[$0-2] , $$[$0-1] ,$$[$0]] );
+break;
+case 8:
+this.$= new Nodo("Porduccion","LLAMADA",[ $$[$0]] );
+break;
+case 9:
+this.$= new Nodo("Porduccion","VARIABLE",[ $$[$0-1], $$[$0]] );
+break;
+case 10:
+this.$= new Nodo("Porduccion","XPATHGRA",[ $$[$0]] );
 break;
 case 11:
-$$[$0].unshift({instr:"NODO",valor:$$[$0-1]}); this.$=$$[$0];
+this.$= new Nodo("Porduccion","CONSULTA_",[ $$[$0-1], $$[$0]] );
+break;
+case 12:
+this.$= new Nodo("Porduccion","CONSULTA_",[ $$[$0]] );
 break;
 case 13:
-$$[$0-1].push($$[$0]); this.$=$$[$0-1];
+this.$= new Nodo("Porduccion","CONSULTA",[ $$[$0-1], $$[$0]] );
 break;
 case 14:
-this.$=[$$[$0]];
+this.$= new Nodo("Porduccion","CONSULTA",[ $$[$0]] );
 break;
-case 15: case 20:
-this.$= {instr:"ACCESO",valor:$$[$0-1],index:$$[$0]};
+case 15: case 16: case 18: case 20: case 21: case 22: case 25: case 26:
+this.$= new Nodo("Porduccion","NODO",[ $$[$0-2], $$[$0-1], $$[$0]] );
 break;
-case 16: case 21:
-this.$= {instr:"ACCESODOBLE",valor:$$[$0-1],index:$$[$0]};
+case 17: case 19:
+this.$= new Nodo("Porduccion","NODO",[ $$[$0-1], $$[$0]] );
 break;
-case 17:
-this.$= {instr:"RETROCESO"};
-break;
-case 18: case 22:
-this.$= {instr:"ATRIBUTO",valor:$$[$0]};
-break;
-case 19:
-this.$= {instr:"ACTUAL"};
-break;
-case 23:
-this.$= {instr:"ACCESO",valor:"*",index:$$[$0]};
-break;
-case 24:
-this.$= {instr:"ACCESODOBLE",valor:"*",index:$$[$0]};
-break;
-case 25: case 26:
-this.$= {instr:"ATRIBUTODOBLE",valor:$$[$0]};
+case 23: case 24:
+this.$= new Nodo("Porduccion","NODO",[ $$[$0-4], $$[$0-3], $$[$0-2], $$[$0-1], $$[$0]] );
 break;
 case 27:
-this.$= $$[$0-1];
+this.$= new Nodo("Porduccion","PREDICADO",[ $$[$0-2], $$[$0-1], $$[$0]] );
 break;
 case 28:
-this.$= null;
+this.$= new Nodo("Porduccion","PREDICADO",[ "ε" ] );
 break;
-case 29:
-this.$= {tipo:"NUMERO",valor:$$[$0]}
+case 29: case 30: case 31:
+this.$= new Nodo("Porduccion","DATO",[ $$[$0]] );
 break;
-case 30:
-this.$= {tipo:"ID",valor:$$[$0]}
-break;
-case 31:
-this.$= {tipo:"CADENA",valor:$$[$0]}
-break;
-case 32:
-this.$= {tipo:"ATRIBUTO",valor:$$[$0]}
+case 32: case 39:
+this.$= new Nodo("Porduccion","DATO",[ $$[$0-1], $$[$0]] );
 break;
 case 33:
-this.$= {tipo:"LAST"}
+this.$= new Nodo("Porduccion","DATO",[ $$[$0-2], $$[$0-1], $$[$0]] );
 break;
-case 34:
-this.$= {tipo:"OP_MAS",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 35:
-this.$= {tipo:"OP_MENOS",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 36:
-this.$= {tipo:"OP_MUL",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 37:
-this.$= {tipo:"OP_DIV",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 38:
-this.$= {tipo:"OP_MOD",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 39:
-this.$= {tipo:"OP_NEG",valor1:$$[$0-1]}
-break;
-case 40:
-this.$= {tipo:"OP_IGUAL",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 41:
-this.$= {tipo:"OP_DIFERENTE",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 42:
-this.$= {tipo:"OP_MENOR_IGUAL",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 43:
-this.$= {tipo:"OP_MAYOR_IGUAL",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 44:
-this.$= {tipo:"OP_MAYOR",valor1:$$[$0-2],valor2:$$[$0]}
-break;
-case 45:
-this.$= {tipo:"OP_MENOR",valor1:$$[$0-2],valor2:$$[$0]}
+case 34: case 35: case 36: case 37: case 38: case 40: case 41: case 42: case 43: case 44: case 45:
+this.$= new Nodo("Porduccion","DATO",[ $$[$0-2], $$[$0-1], $$[$0-2]] );
 break;
 }
 },
@@ -868,9 +826,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = analizador_xqueryizq;
-exports.Parser = analizador_xqueryizq.Parser;
-exports.parse = function () { return analizador_xqueryizq.parse.apply(analizador_xqueryizq, arguments); };
+exports.parser = analizador_xquery_ast;
+exports.Parser = analizador_xquery_ast.Parser;
+exports.parse = function () { return analizador_xquery_ast.parse.apply(analizador_xquery_ast, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
