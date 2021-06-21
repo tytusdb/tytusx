@@ -158,11 +158,21 @@ INICIO :
         XQUERYGRA EOF                                                                   {return $1;}  
 ;
 XQUERYGRA
-        :FOR_IN RETURN                                                                  {$$={instr:"FOR_IN",iterador:$1,retorno:$2};}
+        :FOR_IN WHERE RETURN                                                            {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
+;
+WHERE
+        :tk_where CONDICIONAL                                                           {$$={instr:"WHERE",condicion:$CONDICIONAL};}       
+        |                                                                               {$$=null;}
+;
+CONDICIONAL
+        :VARIABLE XPATHGRA                                                              {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:$XPATHGRA}}
+        |VARIABLE                                                                       {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:null}}
+        |tk_numero                                                                      {$$={tipo:"NUMERO",valor:$tk_numero}}
+        |CONDICIONAL tk_mayor CONDICIONAL                                               {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
 ;
 RETURN
         :tk_return VARIABLE                                                             {$$={variable:$VARIABLE,consulta:null}}

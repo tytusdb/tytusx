@@ -24,12 +24,15 @@ function ejecutarForIn(instruccion,entorno,padre){
     let consulta=instruccion.iterador.consulta;
     let entornos=procesarXpath(consulta,entorno,padre);
     entornos=procesarEtorno(entornos);
+    let where=instruccion.where;
     let respuesta="";
     for (const x of entornos) {
         let var_= new Entorno(padre);
-        console.log(x);
         var_.agregar(instruccion.iterador.variable,x);
-        let retorno=procesarReturn(instruccion.retorno,var_);
+        let retorno=null;
+        if(where==null||validarWhere(where.condicion,var_)){
+            retorno=procesarReturn(instruccion.retorno,var_);
+        }
         if(retorno){
             respuesta+=retorno;
         }
@@ -42,10 +45,36 @@ function ejecutarForIn(instruccion,entorno,padre){
     return null;
     
 }
+function validarWhere(instruccion,tabla){
+    console.log(instruccion);
+    switch (instruccion.tipo) {
+        case "MAYOR":
+            let valor1=validarWhere(instruccion.valor1,tabla);
+            let valor2=validarWhere(instruccion.valor2,tabla);
+            console.log(valor1);
+            console.log(valor2);
+            return valor1 > valor2;
+        case "NUMERO":
+            return parseInt(instruccion.valor)
+        case "VARIABLE":
+            let variable=tabla.getSimbolo(instruccion.variable);
+            
+            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            for (const iterator of arregloEntornos) {
+                return iterator.texto
+            }
+
+        default:
+            return false;
+           
+    }
+}
+
+
 function procesarReturn(instruccion,variables){
     let variable=variables.getSimbolo(instruccion.variable);
 
-    console.log(instruccion.consulta);
     if(variable){
         if(instruccion.consulta){
             let arregloEntornos=procesarXpath(instruccion.consulta,variable,variables);
