@@ -41,6 +41,38 @@ export default class Arbol {
     return 'as';
   }
 
+  public getFuncion(identificador: String){
+    for (let f of this.instrucciones){
+      if(f instanceof Atributo){
+        if(identificador==(<Atributo>f).identificador){
+          let nuevoSimbolo = new reporteTabla(f.identificador,'',
+            'Atributo',
+            f.valor.toString(),
+            f.fila.toString(),
+            f.columna.toString(),
+            ''
+          );
+          this.listaSimbolos.push(nuevoSimbolo);
+
+        }
+        return f;
+      }else if(f instanceof Objeto){
+        if(identificador==(<Objeto>f).identificador){
+          let nuevoSimbolo = new reporteTabla(f.identificador,'',
+            'Objeto Etiqeuta',
+            f.contenido.toString(),
+            f.fila.toString(),
+            f.columna.toString(),
+            ''
+          );
+          this.listaSimbolos.push(nuevoSimbolo);
+
+        }
+        return f;
+      }
+    }
+  }
+
  
 
   public actualizarTabla(identificador: string, linea: string, columna: string): boolean {

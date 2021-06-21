@@ -7,6 +7,7 @@ export default class Simbolo {
   private linea: String;
   private columna: String;
   private valor: any; //este es el valor que va a recibir
+  private temporal:any;
 
   constructor(tipo: Tipo, identificador: String, linea: String, columna: String, valor?: any) {
     this.tipo = tipo;
@@ -60,4 +61,7 @@ export default class Simbolo {
     this.columna = col;
   }
 
+  public setAnteriorEntorno(ent:String){
+    this.temporal=ent;
+  }
 }

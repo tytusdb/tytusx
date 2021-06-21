@@ -30,6 +30,8 @@ import { parser } from 'GramaticaXML';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
 import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
 import { WebElementPromise } from 'protractor';
+import { AstDescComponent } from 'src/app/paginas/ast-desc/ast-desc.component';
+import Atributo from 'src/app/Backend/XML/Analizador/Expresiones/Atributo';
 
 
 export let listaErrores: Array<NodoErrores>;
@@ -87,6 +89,7 @@ export class ContenidoInicioComponent implements OnInit {
         if (i instanceof Objeto) {
           var objetito = i.interpretar(Tree, this.tablaGlobal); //retorna simbolo
           this.tablaGlobal.setVariable(objetito);
+          //Tree.getFuncion(objetito);
         }
       }
       console.log(this.tablaGlobal);
@@ -96,9 +99,9 @@ export class ContenidoInicioComponent implements OnInit {
 
 
       /* L L E N A D O    T A B L A    D E    S I M B O L O S */
-
+//Ambito="Global";
       for (var key of this.tablaGlobal.tablaActual) {
-        var entorno =this.tablaGlobal.getAnterior().getidentificador();
+        var entorno ="";
         var listaobjetitos = "";
         var contenido = "";
         var tipo = "";
@@ -106,7 +109,7 @@ export class ContenidoInicioComponent implements OnInit {
         var linea = key.getLinea();
         var columna = key.getColumna();
         var nombre = key.getidentificador();
-        var atri = key.getAtributo();
+        var atributos = "";
 
        /* if(nombre!=null){
           let objetos = key.getvalor();
@@ -121,17 +124,9 @@ export class ContenidoInicioComponent implements OnInit {
         }*/
 
         for (var [key2, value2,] of key.getAtributo()) {
-          nombre = key.getidentificador();
-          if (key.getAtributo() != null) {
-            nombre = nombre;
-            atributos += ` ${key2}=>${value2}, `;
-            if (nombre != null) {
-              if (nombre == key.getidentificador()) {
-                nombre += atributos;
-              } else {
-                nombre = atributos;
-              }
-            }
+          if (key.getAtributo() != null) {    
+            atributos+=` ${key2} => ${value2}, `; 
+           // break;
           }
         }
 
@@ -153,8 +148,11 @@ export class ContenidoInicioComponent implements OnInit {
         } else {
           tipo = "Atributo";
         }
+        
+          var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
+        
 
-        var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
+   
         //Tree.listaSimbolos.push(Reporte);
       }
 
@@ -217,33 +215,32 @@ export class ContenidoInicioComponent implements OnInit {
 
     for (var key of t.tablaActual) {
       var atributos = "";
-      var entorno = this.tablaGlobal.getAnterior().getidentificador();
+      var entorno = "";
       var listaobjetitos = "";
       var contenido = "";
       var tipo = "";
       var linea = key.getLinea();
       var columna = key.getColumna();
       var nombre = key.getidentificador();
+
       for (var [key2, value2,] of key.getAtributo()) {
-        nombre = key.getidentificador();
         if (key.getAtributo() != null) {
-          atributos += ` ${key2}=>${value2}, `;
-          if (nombre != null) {
-            if (nombre == key.getidentificador()) {
-              nombre += atributos;
-            } else {
-              nombre = atributos;
-            }
-          }
+          atributos+=` ${key2} => ${value2}, `; 
+         // break;
         }
       }
+
+
       let objetos = key.getvalor();
       if (objetos instanceof tablaSimbolos) {
         for (var key3 of objetos.tablaActual) {
           listaobjetitos += `${key3.getidentificador()}, `
           if(listaobjetitos!=null){
+
             //entorno=listaobjetitos;
            // console.log(entorno);
+          }else{
+           // Ambito=nombre;
           }
         }
         this.llenarTablaSimbolos(objetos, tri);
@@ -256,12 +253,17 @@ export class ContenidoInicioComponent implements OnInit {
       } else {
         tipo = "Atributo";
       }
+     
+        var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
+      
 
-      var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
       tri.listaSimbolos.push(Reporte);
 
     }
   }
+
+  
+
 
   /*A R B O L  D E S C E N D E N T E */
 
