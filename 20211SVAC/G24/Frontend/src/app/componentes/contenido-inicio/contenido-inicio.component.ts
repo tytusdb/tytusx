@@ -8,6 +8,7 @@ import * as AnalizadorD from 'src/app/Backend/XML/Analizador/GramaticaXMLDescPRU
 import * as AnalizarAscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPath'
 import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPathDesc'
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
+import * as GramaticalDes from 'src/app/Backend/XML/Analizador/XMLgraphDesc'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
@@ -15,46 +16,101 @@ import ArbolXpath from 'src/app/Backend/XPATH/Analizador/Simbolos/Arbol';
 import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
 import nodoAst from 'src/app/Backend/XPATH/Analizador/Abstracto/nodoAST'
 import { Instruccion } from 'src/app/Backend/XPATH/Analizador/Abstracto/Instruccion';
-
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import NodoErrores from 'src/app/Backend/XML/Analizador/Excepciones/NodoErrores';
 import Objeto from 'src/app/Backend/XML/Analizador/Expresiones/Objeto';
 
 import { reporteTabla } from 'src/app/Backend/XML/Analizador/Reportes/reporteTabla';
-import { table } from 'console';
-
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
-import { type } from 'os';
-import { parser } from 'GramaticaXML';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
-import { temporaryAllocator } from '@angular/compiler/src/render3/view/util';
-import { WebElementPromise } from 'protractor';
-
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import * as CodeMirror from 'codemirror';
+import { ViewChild } from '@angular/core';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
+export let Ambito:String;
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
+  template: `<codemirror [(ngModel)]="code" [config]="{...}" placeholder="Here is the code placeholder"></codemirror>`,
   styleUrls: ['./contenido-inicio.component.css'],
 })
+
 export class ContenidoInicioComponent implements OnInit {
+  public textoEntrada;
+  @ViewChild('editor') editor;
+  codeMirrorOptions: any = {
+    theme: '3024-night',
+    mode: 'application/xml',
+    lineNumbers: true,
+    lineWrapping: true,
+    foldGutter: false,
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
+    autoCloseBrackets: true,
+    color: "#fe3",
+    matchBrackets: true,
+    lint: true
+
+  };
+  codeMirrorOptions2: any = {
+    theme: '3024-night',
+    mode: 'application/typescript',
+    readOnly:true,
+    lineNumbers: true,
+    lineWrapping: true,
+    foldGutter: false,
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    lint: true
+
+  };
   constructor(private inicioSrv: InicioService, private dialog: MatDialog) {
     this.code = 'asd';
+    
   }
   tablaGlobal: tablaSimbolos = new tablaSimbolos();
   code = '';
   contenido = '';
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    console.log(document.querySelector('#codigo'))
+   /* var editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
+      mode: "javascript",
+      lineNumbers: true,
+  });
+  editor.save()*/
+  }
   ngAfterViewInit(): void {
+    
+    this.editor.getEditor().setOptions({
+      showLineNumbers: true,
+      tabSize: 2
+    });
+
+    this.editor.mode = 'javascript';
+    this.editor.value = `function testThis() {
+  console.log("it's working!")
+}`
+
+    this.editor.getEditor().commands.addCommand({
+      name: "showOtherCompletions",
+      bindKey: "Ctrl-.",
+      exec: function (editor) {
+
+      }
+    })
+
     this.data = JSON.parse(localStorage.getItem('contenido'));
     if (this.data != '' || this.data != undefined) {
       this.mostrarContenido(this.data.console, 'consolas');
     }
   }
   data;
-
+  getValue() {
+    console.log(this.editor.value)
+    console.log(eval(this.editor.value));
+  }
   colocarConsola(res, texto) {
     const dataObject = {
       text: 'asd',
@@ -94,11 +150,11 @@ export class ContenidoInicioComponent implements OnInit {
       var atributos = "";
 
 
-
+      
       /* L L E N A D O    T A B L A    D E    S I M B O L O S */
-
+      Ambito="Global"
       for (var key of this.tablaGlobal.tablaActual) {
-        var entorno =this.tablaGlobal.getAnterior().getidentificador();
+        var entorno= Ambito
         var listaobjetitos = "";
         var contenido = "";
         var tipo = "";
@@ -120,7 +176,7 @@ export class ContenidoInicioComponent implements OnInit {
           }
         }*/
 
-        for (var [key2, value2,] of key.getAtributo()) {
+        /*for (var [key2, value2,] of key.getAtributo()) {
           nombre = key.getidentificador();
           if (key.getAtributo() != null) {
             nombre = nombre;
@@ -133,14 +189,20 @@ export class ContenidoInicioComponent implements OnInit {
               }
             }
           }
-        }
+        }*/
 
         let idEntorno=key.getidentificador();
+        
         let objetos = key.getvalor();
         if (objetos instanceof tablaSimbolos) {
           for (var key3 of objetos.tablaActual) {
             listaobjetitos += `${key3.getidentificador()}, `
-           
+            if(listaobjetitos!=null){
+            
+              Ambito=nombre
+            }else{
+              Ambito=key3.getidentificador()
+            }
           }
 
           this.llenarTablaSimbolos(objetos, Tree);
@@ -154,8 +216,8 @@ export class ContenidoInicioComponent implements OnInit {
           tipo = "Atributo";
         }
 
-        var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
-        //Tree.listaSimbolos.push(Reporte);
+        var Reporte = new reporteTabla(nombre, tipo,entorno, contenido, linea, columna, 'pos');
+        Tree.listaSimbolos.push(Reporte);
       }
 
       // TERMINA FOR 
@@ -210,21 +272,55 @@ export class ContenidoInicioComponent implements OnInit {
       localStorage.setItem("errores", errores);
     }
 
-    //console.log(gramar);
+    /***************************************************************************************************
+     ************************* MANEJO DE CODIGO 3 DIRECCIONES ASCENDENTE *******************************
+     * *************************************************************************************************
+    */
+   
+    var contenidocd3="#include <stdio.h>\n#include<math.h>\n"
+    
+    Tree.codigo3d.push("int main(){\n");
+     
+
+    for (let i of Tree.getinstrucciones()) {
+      if (i instanceof Objeto) {
+        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
+        this.tablaGlobal.setVariable(lista);
+      }
+    }
+    //ES VARIABLES AL INICIO
+    for (let x = 0; x < Tree.contadort; x++) {
+      if(x==0){contenidocd3=contenidocd3+"double "}
+      else if(x%20==0){contenidocd3=contenidocd3+"\n"}
+     contenidocd3=contenidocd3+"t"+x;
+     if(Tree.contadort-1!==x){contenidocd3=contenidocd3+","}
+
+    }
+    if( Tree.contadort!==0){contenidocd3=contenidocd3+";\n"}
+    Tree.Encabezadocodigo3d.forEach(element => {
+      contenidocd3+=element+"\n"
+    });
+    //ITERA PARA EL CONTENIDO DEL MAIN
+    Tree.codigo3d.forEach(element => {
+      contenidocd3+=element+"\n"
+    });
+    contenidocd3+="return 1;\n}"
+    this.mostrarContenido(contenidocd3, 'cdirecciones');
   }
 
   llenarTablaSimbolos(t: tablaSimbolos, tri: Arbol) {
 
     for (var key of t.tablaActual) {
       var atributos = "";
-      var entorno = this.tablaGlobal.getAnterior().getidentificador();
+      var entorno = Ambito;
       var listaobjetitos = "";
       var contenido = "";
       var tipo = "";
       var linea = key.getLinea();
       var columna = key.getColumna();
       var nombre = key.getidentificador();
-      for (var [key2, value2,] of key.getAtributo()) {
+      
+      /*for (var [key2, value2,] of key.getAtributo()) {
         nombre = key.getidentificador();
         if (key.getAtributo() != null) {
           atributos += ` ${key2}=>${value2}, `;
@@ -236,20 +332,31 @@ export class ContenidoInicioComponent implements OnInit {
             }
           }
         }
-      }
+      }*/
       let objetos = key.getvalor();
       if (objetos instanceof tablaSimbolos) {
         for (var key3 of objetos.tablaActual) {
           listaobjetitos += `${key3.getidentificador()}, `
           if(listaobjetitos!=null){
+            
+            Ambito=nombre
+            
             //entorno=listaobjetitos;
            // console.log(entorno);
+          }else{
+            console.log("ENTRA AL ELSE")
+            Ambito=key3.getidentificador()
           }
         }
+        
+        Ambito=nombre
+        listaobjetitos=""
         this.llenarTablaSimbolos(objetos, tri);
       } else {
         contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
-        tri.actualizarTabla(contenido, linea.toString(), columna.toString());
+        
+  
+
       }
       if (key.gettipo().getTipo() == 1) {
         tipo = "Objeto";
@@ -294,7 +401,7 @@ export class ContenidoInicioComponent implements OnInit {
 
     let sim_string = JSON.stringify(init2);
     localStorage.setItem("simbolos1", sim_string);
-    const gramat = Gramatical;
+    const gramat = GramaticalDes;
     const gramar = gramat.parse(texto);
     localStorage.setItem("gramatica1", gramar);
 
