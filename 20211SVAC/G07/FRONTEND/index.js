@@ -163,9 +163,12 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 `
 let XQuery = `
 for $x in /bookstore/book
-where $x/price>30
 return $x/title
 `
+//for $x in /bookstore/book
+//where $x/price>30
+//return $x/title
+
 editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada
 
@@ -204,33 +207,7 @@ botonCargar2.addEventListener("click", () => {
 
 
 })
-btnCargarxquery.addEventListener("click", () => {
-  console.log("Analizando XQUERY ")
-  tipoAnalizadorXML = "ASCENDENTE";
 
-  // Analizador XQUERY por la izquierda
-  parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
-
-  console.log("EL ANALIZADOR REGRESA");
-  parserXML = xmlDerecha.parse(editorXML.value);
-  globalencod =parserXML.tipoencoding;
-  ejecutarXQuery(parserXQUERY,parserXML.json);
-
-
-})
-
-btnCargarxqueryder.addEventListener("click", () => {
-  console.log("Analizando XQUERY ")
-  tipoAnalizadorXML = "DESCENDENTE";
-
-  // Analizador XQUERY por la DERECHA
-  parserXQUERYder = analizador_xqueryder.parse(editorXQUERY.value);
-
-  console.log("EL ANALIZADOR REGRESA");
-  console.log(parserXQUERYder);
-
-
-})
 
 document.getElementById("ast").addEventListener("click", () => {
     let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
@@ -426,6 +403,51 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+
+/**
+ * ******************************************************
+ * XQUERY
+ * ******************************************************
+ */
+ btnCargarxquery.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "ASCENDENTE";
+
+  // Analizador XQUERY por la izquierda
+  parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  parserXML = xmlDerecha.parse(editorXML.value);
+  globalencod =parserXML.tipoencoding;
+  ejecutarXQuery(parserXQUERY,parserXML.json);
+
+
+})
+
+btnCargarxqueryder.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "DESCENDENTE";
+
+  // Analizador XQUERY por la DERECHA
+  parserXQUERYder = analizador_xqueryder.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  console.log(parserXQUERYder);
+
+
+})
+document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
+  let AST_xQuery=analizador_xquery_ast.parse(editorXQUERY.value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xQuery);
+
+})
+
+
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));
