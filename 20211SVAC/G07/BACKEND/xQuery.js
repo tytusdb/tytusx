@@ -77,7 +77,7 @@ function validarWhere(instruccion,tabla){
         case "NUMERO":
             return parseInt(instruccion.valor)
         case "CADENA":
-            console.log(instruccion);
+            
             return instruccion.valor
         case "VARIABLE":
             let variable=tabla.getSimbolo(instruccion.variable);

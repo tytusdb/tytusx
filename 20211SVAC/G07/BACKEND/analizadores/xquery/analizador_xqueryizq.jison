@@ -144,7 +144,7 @@
 %left 'tk_or'
 %left 'tk_and'
 %left 'tk_indiferente'
-%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual' 'tk_gt' 'tk_lt' 'tk_ge' 'tk_le'
+%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual' 'tk_gt' 'tk_lt' 'tk_ge' 'tk_le' 'tk_eq' 'tk_ne'
 %left 'tk_mas' 'tk_menos'
 %left 'tk_asterisco' 'tk_div' 'tk_mod'
 %left unmenos
@@ -187,6 +187,8 @@ CONDICIONAL
         |CONDICIONAL tk_lt CONDICIONAL                                                  {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_ge CONDICIONAL                                                  {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_le CONDICIONAL                                                  {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_eq CONDICIONAL                                                  {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
+        |CONDICIONAL tk_ne CONDICIONAL                                                  {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}
 ;
 RETURN
         :tk_return VARIABLE                                                             {$$={variable:$VARIABLE,consulta:null}}
