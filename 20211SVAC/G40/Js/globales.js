@@ -59,6 +59,13 @@ const init = function(e){
         window.open('./reportes/astXPATHDesc.html','_blank');
     });
 
+    let btn_astXQ = document.querySelector("#astXQ");
+
+    btn_astXQ.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/astXQUERY.html','_blank');
+    });
+
 };
 
 
