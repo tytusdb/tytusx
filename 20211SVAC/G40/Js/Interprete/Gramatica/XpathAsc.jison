@@ -456,6 +456,7 @@ EXPRESION_NUMERICA : tk_menos EXPRESION_NUMERICA %prec UMENOS	{   negativo = new
   | tk_last { expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.LAST);
               nodoaux = new NodoArbol($1,"");
               $$ = [expresionAux,nodoaux];   }
+              
   | AXES  { $$ = $1; }
 
   | tk_position   {   expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.POSITION);
