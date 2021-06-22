@@ -1,3 +1,5 @@
 let traductor = new Traduccion();
 
-traductor.traducirCadena('Cadena de prueba');
+console.log("Memoria", traductor.traducirCadena("hola"));
+console.log("Memoria", traductor.traducirCadena("Cadena"));
+console.log(traductor.obtenerCodigo());
