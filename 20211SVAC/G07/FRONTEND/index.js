@@ -124,41 +124,35 @@ let btnCargarxqueryder = document.getElementById("btnCargarxqueryder");
 let parserXQUERYder;
 
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-
 <bookstore>
-
-<book category="COOKING">
-  <title lang="en">Everyday Italian</title>
-  <author>Giada De Laurentiis</author>
-  <year>2005</year>
-  <price>30.00</price>
-</book>
-
-<book category="CHILDREN">
-  <title lang="en">Harry Potter</title>
-  <author>J K. Rowling</author>
-  <year>2005</year>
-  <price>29.99</price>
-</book>
-
-<book category="WEB">
-  <title lang="en">XQuery Kick Start</title>
-  <author>James McGovern</author>
-  <author>Per Bothner</author>
-  <author>Kurt Cagle</author>
-  <author>James Linn</author>
-  <author>Vaidyanathan Nagarajan</author>
-  <year>2003</year>
-  <price>49.99</price>
-</book>
-
-<book category="WEB">
-  <title lang="en">Learning XML</title>
-  <author>Erik T. Ray</author>
-  <year>2003</year>
-  <price>39.95</price>
-</book>
-
+   <book category="COOKING">
+      <title lang="en">Everyday Italian</title>
+      <author>Giada De Laurentiis</author>
+      <year>2005</year>
+      <price>30.00</price>
+   </book>
+   <book category="CHILDREN">
+      <title lang="en">Harry Potter</title>
+      <author>J K. Rowling</author>
+      <year>2005</year>
+      <price>29.99</price>
+   </book>
+   <book category="WEB">
+      <title lang="en">XQuery Kick Start</title>
+      <author>James McGovern</author>
+      <author>Per Bothner</author>
+      <author>Kurt Cagle</author>
+      <author>James Linn</author>
+      <author>Vaidyanathan Nagarajan</author>
+      <year>2003</year>
+      <price>49.99</price>
+   </book>
+   <book category="WEB">
+      <title lang="en">Learning XML</title>
+      <author>Erik T. Ray</author>
+      <year>2003</year>
+      <price>39.95</price>
+   </book>
 </bookstore>
 `
 let XQuery = `for $x in /bookstore/book
@@ -179,22 +173,69 @@ double heap[30101999];
 double stack[30101999];
 double P;
 double H;
-
-
-
+double t0,t1,t2,t3,t4,t5,t6,t7,t8,t9;
 /*------MAIN------*/
 void main() {
-    P = 0; H = 0;
+  P = 0; H = 0;
 
+  
+  t0 = H;
+  t1 = t0;
+  H = H + 1;
+  heap[(int) t1] = 65;
+  
+  t2 = H;
+  t3 = t2;
+  H = H + 4;
+  heap[(int) t3] = 65;
+  t3 = t3 + 1;
+  heap[(int) t3] = 104;
+  t3 = t3 + 1;
+  heap[(int) t3] = 106;
+  t3 = t3 + 1;
+  heap[(int) t3] = 107;
+  t3 = t3 + 1;
+  heap[(int) t3] = -1;
+  
+  t4 = H;
+  t5 = t4;
+  H = H + 1;
+  heap[(int) t5] = 12.4;
+  
+  t6 = H;
+  t7 = t6;
+  H = H + 6;
+  heap[(int) t7] = 67;
+  t7 = t7 + 1;
+  heap[(int) t7] = 97;
+  t7 = t7 + 1;
+  heap[(int) t7] = 100;
+  t7 = t7 + 1;
+  heap[(int) t7] = 101;
+  t7 = t7 + 1;
+  heap[(int) t7] = 110;
+  t7 = t7 + 1;
+  heap[(int) t7] = 97;
+  t7 = t7 + 1;
+  heap[(int) t7] = -1;
+  
+  t8 = H;
+  t9 = t8;
+  H = H + 1;
+  heap[(int) t9] = 30;
+  
 
-    return;
+  print("Hello World");
+
 }
+
 
 
 `
 
 editorXQUERY.value=XQuery;
-editorXML.value = textoEntrada
+editorXML.value = textoEntrada;
+consola3D.value=Encabezado3D;
 
 
 // Analizar la entrada XML al hacer CLICK al boton
@@ -438,9 +479,14 @@ function analizar_xpath() {
 btn3d.addEventListener("click", () => {
 
   console.log("Codigo en 3D");
-  consola3D.value=Encabezado3D;
-  //let AST_xPath=grammar.parse(document.getElementById("consola3D").value);//Decendente
-  //console.log(AST_xPath);
+  //consola3D.value=Encabezado3D;
+  let AST_xquery=grammar.parse(document.getElementById("consola3D").value);//Decendente
+  console.log(AST_xquery);
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xquery);
 
 })
 

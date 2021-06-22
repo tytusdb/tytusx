@@ -72,12 +72,12 @@
   }
 */
 var grammar = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,8],$V2=[1,11],$V3=[1,9],$V4=[1,10],$V5=[1,12],$V6=[1,13],$V7=[1,14],$V8=[1,16],$V9=[1,15],$Va=[5,11,17,18,19,21,23,25,35,37,40],$Vb=[1,31],$Vc=[1,29],$Vd=[1,30],$Ve=[1,32],$Vf=[9,16,29,30,31,32,33,34,39,43,44,45,46,47],$Vg=[9,14],$Vh=[18,27,28,44];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,8],$V2=[1,9],$V3=[1,12],$V4=[1,10],$V5=[1,11],$V6=[1,13],$V7=[1,14],$V8=[1,15],$V9=[1,16],$Va=[1,18],$Vb=[1,17],$Vc=[5,11,16,17,21,22,23,25,27,29,40,42,43,46],$Vd=[22,31,32,52],$Ve=[2,39],$Vf=[1,30],$Vg=[1,50],$Vh=[1,48],$Vi=[1,49],$Vj=[1,51],$Vk=[9,19],$Vl=[2,41],$Vm=[1,63],$Vn=[14,19],$Vo=[9,14,34,35,36,37,38,39,45,51,52,53,54,55];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INI":3,"INICIO":4,"EOF":5,"SENTENCIAS":6,"SENTENCIA":7,"DECLARACION":8,"tk_punto_coma":9,"ASIGNACION":10,"tk_print":11,"tk_parent_izq":12,"TIPO_PRINT":13,"tk_coma":14,"VALOR":15,"tk_parent_der":16,"tk_goto":17,"tk_identificador":18,"tk_if":19,"OP_REL":20,"tk_call":21,"tk_dos_puntos":22,"tk_proc":23,"tk_begin":24,"tk_end":25,"tk_caracter":26,"tk_entero":27,"tk_decimal":28,"tk_igualdad":29,"tk_desigual":30,"tk_menor_igual":31,"tk_menor":32,"tk_mayor_igual":33,"tk_mayor":34,"tk_var":35,"LISTA_IDS":36,"tk_stack":37,"tk_corchete_izq":38,"tk_corchete_der":39,"tk_heap":40,"tk_igual":41,"EXP":42,"tk_suma":43,"tk_resta":44,"tk_asterisco":45,"tk_diagonal":46,"tk_modulo":47,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",9:"tk_punto_coma",11:"tk_print",12:"tk_parent_izq",14:"tk_coma",16:"tk_parent_der",17:"tk_goto",18:"tk_identificador",19:"tk_if",21:"tk_call",22:"tk_dos_puntos",23:"tk_proc",24:"tk_begin",25:"tk_end",26:"tk_caracter",27:"tk_entero",28:"tk_decimal",29:"tk_igualdad",30:"tk_desigual",31:"tk_menor_igual",32:"tk_menor",33:"tk_mayor_igual",34:"tk_mayor",35:"tk_var",37:"tk_stack",38:"tk_corchete_izq",39:"tk_corchete_der",40:"tk_heap",41:"tk_igual",43:"tk_suma",44:"tk_resta",45:"tk_asterisco",46:"tk_diagonal",47:"tk_modulo"},
-productions_: [0,[3,2],[4,1],[4,0],[6,2],[6,1],[7,2],[7,2],[7,7],[7,3],[7,9],[7,3],[7,2],[7,3],[7,1],[13,1],[13,1],[13,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[8,2],[8,4],[8,4],[8,4],[36,3],[36,1],[10,2],[10,6],[10,6],[10,6],[10,6],[42,3],[42,3],[42,3],[42,3],[42,3],[42,1],[15,1],[15,1],[15,1],[15,2]],
+symbols_: {"error":2,"INI":3,"INICIO":4,"EOF":5,"SENTENCIAS":6,"SENTENCIA":7,"DECLARACION":8,"tk_punto_coma":9,"ASIGNACION":10,"tk_void":11,"tk_main":12,"tk_parent_izq":13,"tk_parent_der":14,"tk_llave_izq":15,"tk_llave_der":16,"tk_print":17,"TIPO_PRINT":18,"tk_coma":19,"VALOR":20,"tk_goto":21,"tk_identificador":22,"tk_if":23,"OP_REL":24,"tk_call":25,"tk_dos_puntos":26,"tk_proc":27,"tk_begin":28,"tk_end":29,"tk_caracter":30,"tk_entero":31,"tk_decimal":32,"tk_hilera":33,"tk_igualdad":34,"tk_desigual":35,"tk_menor_igual":36,"tk_menor":37,"tk_mayor_igual":38,"tk_mayor":39,"tk_double":40,"LISTA_IDS":41,"tk_var":42,"tk_stack":43,"tk_corchete_izq":44,"tk_corchete_der":45,"tk_heap":46,"tk_igual":47,"ASIGNACIONSIGNO":48,"EXP":49,"COMPLEMENTO":50,"tk_suma":51,"tk_resta":52,"tk_asterisco":53,"tk_diagonal":54,"tk_modulo":55,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",9:"tk_punto_coma",11:"tk_void",12:"tk_main",13:"tk_parent_izq",14:"tk_parent_der",15:"tk_llave_izq",16:"tk_llave_der",17:"tk_print",19:"tk_coma",21:"tk_goto",22:"tk_identificador",23:"tk_if",25:"tk_call",26:"tk_dos_puntos",27:"tk_proc",28:"tk_begin",29:"tk_end",30:"tk_caracter",31:"tk_entero",32:"tk_decimal",33:"tk_hilera",34:"tk_igualdad",35:"tk_desigual",36:"tk_menor_igual",37:"tk_menor",38:"tk_mayor_igual",39:"tk_mayor",40:"tk_double",42:"tk_var",43:"tk_stack",44:"tk_corchete_izq",45:"tk_corchete_der",46:"tk_heap",47:"tk_igual",51:"tk_suma",52:"tk_resta",53:"tk_asterisco",54:"tk_diagonal",55:"tk_modulo"},
+productions_: [0,[3,2],[4,1],[4,0],[6,2],[6,1],[7,2],[7,2],[7,7],[7,5],[7,7],[7,3],[7,9],[7,3],[7,2],[7,3],[7,1],[18,1],[18,1],[18,1],[18,1],[24,1],[24,1],[24,1],[24,1],[24,1],[24,1],[8,2],[8,4],[8,4],[8,4],[41,3],[41,1],[10,3],[10,6],[10,6],[10,7],[10,7],[48,1],[48,0],[50,3],[50,0],[49,3],[49,3],[49,3],[49,3],[49,3],[49,1],[20,1],[20,1],[20,1],[20,2]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -95,81 +95,230 @@ break;
 case 3:
 
     this.$= new Nodo("INIC","INIC");
-	console.log("ε");
+	//console.log("ε");
     this.$.agregarHijo(new Nodo("ε","ε"));
     
 break;
 case 4:
 
-    this.$= new Nodo("INIC","INIC");
-	//console.log($$[$0-1]);
-	//console.log($$[$0]);
+    this.$= new Nodo("SENS","SENS");
+	this.$.agregarHijo($$[$0-1]);
+    this.$.agregarHijo($$[$0]);
     
 break;
 case 5:
 
-    this.$= new Nodo("INIC","INIC");
-	//console.log($$[$0]);
+    this.$= new Nodo("SENS","SENS");
+	this.$.agregarHijo($$[$0]);
 	
 break;
-case 6: case 7: case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 29: case 41: case 42: case 43:
-console.log($$[$0]);
+case 6: case 7:
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo($$[$0-1]);
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 8:
-console.log($$[$0-6]);
-	console.log($$[$0-5]);
-	console.log($$[$0-3]);
-	console.log($$[$0-1]);
-	console.log($$[$0]);
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0-6],$$[$0-6]));
+	this.$.agregarHijo(new Nodo($$[$0-5],$$[$0-5]));
+	this.$.agregarHijo(new Nodo($$[$0-4],$$[$0-4]));
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo($$[$0-1]);
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
-case 9: case 11: case 13:
-console.log($$[$0-2]);
-	console.log($$[$0-1]);
-	console.log($$[$0]);
+case 9:
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0-4],$$[$0-4]));
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo($$[$0-2]);
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 10:
-console.log($$[$0-8]);
-	console.log($$[$0-7]);
-	console.log($$[$0-3]);
-	console.log($$[$0-2]);
-	console.log($$[$0-1]);
-	console.log($$[$0]);
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0-6],$$[$0-6]));
+	this.$.agregarHijo(new Nodo($$[$0-5],$$[$0-5]));
+	this.$.agregarHijo($$[$0-4]);
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo($$[$0-2]);
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
-case 12: case 28: case 30:
-console.log($$[$0-1]);
-	console.log($$[$0]);
+case 11: case 13: case 15:
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
-case 24: case 35: case 36: case 37: case 38: case 39: case 44:
-console.log($$[$0-1]);
+case 12:
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0-8],$$[$0-8]));
+	this.$.agregarHijo(new Nodo($$[$0-7],$$[$0-7]));
+	this.$.agregarHijo($$[$0-6]);
+	this.$.agregarHijo($$[$0-5]);
+	this.$.agregarHijo($$[$0-4]);
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
-case 25: case 26:
-console.log($$[$0-3]);
-	console.log($$[$0-2]);
-	console.log($$[$0-1]);
-	console.log($$[$0]);
+case 14:
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 16:
+
+    this.$= new Nodo("SEN","SEN");
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 17: case 18: case 19: case 20:
+
+    this.$= new Nodo("TPR","TPR");
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 21: case 22: case 23: case 24: case 25: case 26:
+
+    this.$= new Nodo("OPR","OPR");
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 27:
-console.log($$[$0-3]);
-	console.log($$[$0-2]);
-	console.log($$[$0-1]);
+
+    this.$= new Nodo("DEC","DEC");
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo($$[$0]);
+	
 break;
-case 31: case 32:
-console.log($$[$0-5]);
-	console.log($$[$0-4]);
-	console.log($$[$0-3]);
-	console.log($$[$0-2]);
-	console.log($$[$0]);
+case 28: case 29:
+
+    this.$= new Nodo("DEC","DEC");
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
-case 33: case 34:
-console.log($$[$0-5]);
-	console.log($$[$0-4]);
-	console.log($$[$0-2]);
-	console.log($$[$0-1]);
+case 30:
+
+    this.$= new Nodo("DEC","DEC");
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo($$[$0]);
+	
+break;
+case 31:
+
+    this.$= new Nodo("LID","LID");
+	this.$.agregarHijo($$[$0-2]);
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 32:
+
+    this.$= new Nodo("LID","LID");
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 33:
+
+    this.$= new Nodo("ASIG","ASIG");
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo($$[$0-1]);
+	this.$.agregarHijo($$[$0]);
+	
+break;
+case 34: case 35:
+
+    this.$= new Nodo("ASIG","ASIG");
+	this.$.agregarHijo(new Nodo($$[$0-5],$$[$0-5]));
+	this.$.agregarHijo($$[$0-4]);
+	this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo($$[$0-1]);
+	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 36: case 37:
+
+    this.$= new Nodo("ASIG","ASIG");
+	this.$.agregarHijo(new Nodo($$[$0-6],$$[$0-6]));
+	this.$.agregarHijo(new Nodo($$[$0-5],$$[$0-5]));
+	this.$.agregarHijo($$[$0-4]);
+	this.$.agregarHijo($$[$0-3]);
+	this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo($$[$0]);
+	
+break;
+case 38:
+this.$= new Nodo("ASIGS", "ASIGS" );
+        	this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+			
+break;
+case 39:
+this.$= new Nodo("ASIGS", "ASIGS" );
+        	this.$.agregarHijo(new Nodo("ε","ε"));
+			
+break;
+case 40:
+this.$= new Nodo("COMP", "COMP" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+		this.$.agregarHijo($$[$0-1]);
+		this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+		
+break;
+case 41:
+this.$= new Nodo("COMP", "COMP" );
+        this.$.agregarHijo(new Nodo("ε","ε"));
+		
+break;
+case 42: case 43: case 44: case 45: case 46:
+this.$= new Nodo("EXP", "EXP" );
+    this.$.agregarHijo($$[$0-2]);
+	this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo($$[$0]);
+	
+break;
+case 47:
+this.$= new Nodo("EXP", "EXP" );
+    this.$.agregarHijo($$[$0]);
+	
+break;
+case 48: case 49: case 50:
+this.$= new Nodo("VAL", "VAL" );
+    this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 51:
+this.$= new Nodo("VAL", "VAL" );
+    this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+	this.$.agregarHijo($$[$0]);
+	
 break;
 }
 },
-table: [{3:1,4:2,5:[2,3],6:3,7:4,8:5,10:6,11:$V0,17:$V1,18:$V2,19:$V3,21:$V4,23:$V5,25:$V6,35:$V7,37:$V8,40:$V9},{1:[3]},{5:[1,17]},{5:[2,2],7:18,8:5,10:6,11:$V0,17:$V1,18:$V2,19:$V3,21:$V4,23:$V5,25:$V6,35:$V7,37:$V8,40:$V9},o($Va,[2,5]),{9:[1,19]},{9:[1,20]},{12:[1,21]},{18:[1,22]},{12:[1,23]},{18:[1,24]},{15:28,18:$Vb,22:[1,25],27:$Vc,28:$Vd,41:[1,27],42:26,44:$Ve},{18:[1,33]},o($Va,[2,14]),{18:[1,37],36:34,37:[1,35],40:[1,36]},{38:[1,38]},{38:[1,39]},{1:[2,1]},o($Va,[2,4]),o($Va,[2,6]),o($Va,[2,7]),{13:40,26:[1,41],27:[1,42],28:[1,43]},{9:[1,44]},{15:45,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{9:[1,46]},o($Va,[2,12]),{9:[2,30]},{37:[1,48],40:[1,47]},{9:[2,40],43:[1,49],44:[1,50],45:[1,51],46:[1,52],47:[1,53]},o($Vf,[2,41]),o($Vf,[2,42]),o($Vf,[2,43]),{15:54,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{24:[1,55]},{9:[2,24],14:[1,56]},{38:[1,57]},{38:[1,58]},o($Vg,[2,29],{41:[1,59]}),{15:60,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:61,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{14:[1,62]},{14:[2,15]},{14:[2,16]},{14:[2,17]},o($Va,[2,9]),{20:63,29:[1,64],30:[1,65],31:[1,66],32:[1,67],33:[1,68],34:[1,69]},o($Va,[2,11]),{38:[1,70]},{38:[1,71]},{15:72,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:73,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:74,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:75,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:76,18:$Vb,27:$Vc,28:$Vd,44:$Ve},o($Vf,[2,44]),o($Va,[2,13]),{18:[1,77]},{39:[1,78]},{39:[1,79]},{15:80,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{39:[1,81]},{39:[1,82]},{15:83,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:84,18:$Vb,27:$Vc,28:$Vd,44:$Ve},o($Vh,[2,18]),o($Vh,[2,19]),o($Vh,[2,20]),o($Vh,[2,21]),o($Vh,[2,22]),o($Vh,[2,23]),{15:85,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:86,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{9:[2,35]},{9:[2,36]},{9:[2,37]},{9:[2,38]},{9:[2,39]},o($Vg,[2,28]),{9:[2,25]},{9:[2,26]},{9:[2,27]},{41:[1,87]},{41:[1,88]},{16:[1,89]},{16:[1,90]},{39:[1,91]},{39:[1,92]},{15:93,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{15:94,18:$Vb,27:$Vc,28:$Vd,44:$Ve},{9:[1,95]},{17:[1,96]},{9:[2,31]},{9:[2,32]},{9:[2,33]},{9:[2,34]},o($Va,[2,8]),{18:[1,97]},{9:[1,98]},o($Va,[2,10])],
-defaultActions: {17:[2,1],26:[2,30],41:[2,15],42:[2,16],43:[2,17],72:[2,35],73:[2,36],74:[2,37],75:[2,38],76:[2,39],78:[2,25],79:[2,26],80:[2,27],91:[2,31],92:[2,32],93:[2,33],94:[2,34]},
+table: [{3:1,4:2,5:[2,3],6:3,7:4,8:5,10:6,11:$V0,17:$V1,21:$V2,22:$V3,23:$V4,25:$V5,27:$V6,29:$V7,40:$V8,42:$V9,43:$Va,46:$Vb},{1:[3]},{5:[1,19]},{5:[2,2],7:20,8:5,10:6,11:$V0,17:$V1,21:$V2,22:$V3,23:$V4,25:$V5,27:$V6,29:$V7,40:$V8,42:$V9,43:$Va,46:$Vb},o($Vc,[2,5]),{9:[1,21]},{9:[1,22]},{12:[1,23]},{13:[1,24]},{22:[1,25]},{13:[1,26]},{22:[1,27]},o($Vd,$Ve,{48:29,26:[1,28],47:$Vf}),{22:[1,31]},o($Vc,[2,16]),o([43,46],$Ve,{41:32,48:33,22:[1,34],47:$Vf}),{22:[1,37],43:[1,35],46:[1,36]},{44:[1,38]},{44:[1,39]},{1:[2,1]},o($Vc,[2,4]),o($Vc,[2,6]),o($Vc,[2,7]),{13:[1,40]},{18:41,30:[1,42],31:[1,43],32:[1,44],33:[1,45]},{9:[1,46]},{20:47,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{9:[1,52]},o($Vc,[2,14]),{20:54,22:$Vg,31:$Vh,32:$Vi,49:53,52:$Vj},o([22,31,32,43,46,52],[2,38]),{28:[1,55]},{9:[2,27],19:[1,56]},{43:[1,58],46:[1,57]},o($Vk,[2,32]),{44:[1,59]},{44:[1,60]},{47:[1,61]},o($Vd,$Vl,{50:62,13:$Vm}),o($Vd,$Vl,{50:64,13:$Vm}),{14:[1,65]},{14:[1,66],19:[1,67]},o($Vn,[2,17]),o($Vn,[2,18]),o($Vn,[2,19]),o($Vn,[2,20]),o($Vc,[2,11]),{24:68,34:[1,69],35:[1,70],36:[1,71],37:[1,72],38:[1,73],39:[1,74]},o($Vo,[2,48]),o($Vo,[2,49]),o($Vo,[2,50]),{20:75,22:$Vg,31:$Vh,32:$Vi,52:$Vj},o($Vc,[2,13]),{9:[2,33]},{9:[2,47],51:[1,76],52:[1,77],53:[1,78],54:[1,79],55:[1,80]},o($Vc,[2,15]),{22:[1,81]},{44:[1,82]},{44:[1,83]},{45:[1,84]},{45:[1,85]},{20:86,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:87,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:88,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:89,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{15:[1,90]},{9:[1,91]},{20:92,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:93,22:$Vg,31:$Vh,32:$Vi,52:$Vj},o($Vd,[2,21]),o($Vd,[2,22]),o($Vd,[2,23]),o($Vd,[2,24]),o($Vd,[2,25]),o($Vd,[2,26]),o($Vo,[2,51]),{20:94,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:95,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:96,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:97,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:98,22:$Vg,31:$Vh,32:$Vi,52:$Vj},o($Vk,[2,31]),{20:99,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:100,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{9:[2,28]},{9:[2,29]},{9:[2,30]},{45:[1,101]},{14:[1,102]},{45:[1,103]},{6:104,7:4,8:5,10:6,11:$V0,17:$V1,21:$V2,22:$V3,23:$V4,25:$V5,27:$V6,29:$V7,40:$V8,42:$V9,43:$Va,46:$Vb},o($Vc,[2,9]),{14:[1,105]},{14:[1,106]},{9:[2,42]},{9:[2,43]},{9:[2,44]},{9:[2,45]},{9:[2,46]},{45:[1,107]},{45:[1,108]},{47:[1,109]},o($Vd,[2,40]),{47:[1,110]},{7:20,8:5,10:6,11:$V0,16:[1,111],17:$V1,21:$V2,22:$V3,23:$V4,25:$V5,27:$V6,29:$V7,40:$V8,42:$V9,43:$Va,46:$Vb},{9:[1,112]},{21:[1,113]},{9:[2,34]},{9:[2,35]},{20:114,22:$Vg,31:$Vh,32:$Vi,52:$Vj},{20:115,22:$Vg,31:$Vh,32:$Vi,52:$Vj},o($Vc,[2,8]),o($Vc,[2,10]),{22:[1,116]},{9:[2,36]},{9:[2,37]},{9:[1,117]},o($Vc,[2,12])],
+defaultActions: {19:[2,1],53:[2,33],84:[2,28],85:[2,29],86:[2,30],94:[2,42],95:[2,43],96:[2,44],97:[2,45],98:[2,46],107:[2,34],108:[2,35],114:[2,36],115:[2,37]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -657,84 +806,96 @@ case 3:
 break;
 case 4:/* IGNORE */
 break;
-case 5: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 35;
+case 5: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 11;
 break;
-case 6: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 40;
+case 6: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 12;
 break;
-case 7: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 37;
+case 7: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 42;
 break;
-case 8: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 17;
+case 8: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 40;
 break;
-case 9: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 23;
+case 9: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 46;
 break;
-case 10: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 24;
+case 10: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 43;
 break;
-case 11: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 25;
+case 11: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 21;
 break;
-case 12: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 21;
+case 12: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 27;
 break;
-case 13: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 11;
+case 13: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 28;
 break;
-case 14: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 19;
+case 14: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 29;
 break;
-case 15: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 26;
+case 15: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 25;
 break;
-case 16: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 27;
+case 16: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 17;
 break;
-case 17: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 28;
+case 17: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 23;
 break;
-case 18: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 9;
+case 18: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 30;
 break;
-case 19: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 22;
+case 19: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 31;
 break;
-case 20: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 14;
+case 20: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 32;
 break;
-case 21: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 12;
+case 21: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 9;
 break;
-case 22: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 16;
+case 22: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 26;
 break;
-case 23: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 38;
+case 23: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 19;
 break;
-case 24: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 39;
+case 24: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 13;
 break;
-case 25: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 43;
+case 25: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 14;
 break;
 case 26: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 44;
 break;
 case 27: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 45;
 break;
-case 28: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 46;
+case 28: listaTokens.push(new Token("LLave_izquierda", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 15;
 break;
-case 29: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 47;
+case 29: listaTokens.push(new Token("LLave_derecha", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 16;
 break;
-case 30: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 29;
+case 30: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 51;
 break;
-case 31: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 41;
+case 31: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 52;
 break;
-case 32: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 30;
+case 32: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 53;
 break;
-case 33: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 31;
+case 33: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 54;
 break;
-case 34: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 32;
+case 34: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 55;
 break;
-case 35: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 33;
+case 35: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 34;
 break;
-case 36: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 34;
+case 36: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 47;
 break;
-case 37: listaTokens.push(new Token("Identificador", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_identificador";
+case 37: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 35;
 break;
-case 38: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_decimal";
+case 38: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 36;
 break;
-case 39: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_entero";
+case 39: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 37;
 break;
-case 40: return "EOF"; 
+case 40: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 38;
 break;
-case 41: return "error"; 
+case 41: listaTokens.push(new Token("Palabra_Reservada", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return 39;
+break;
+case 42: listaTokens.push(new Token("Cadena", yy_.yytext.substr(1, yy_.yyleng-2), yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_hilera";
+break;
+case 43: listaTokens.push(new Token("Identificador", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_identificador";
+break;
+case 44: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_decimal";
+break;
+case 45: listaTokens.push(new Token("Numero", yy_.yytext, yy_.yylloc.first_line, yy_.yylloc.first_column)); return "tk_entero";
+break;
+case 46: return "EOF"; 
+break;
+case 47: return "error"; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:[\t\r]+)/i,/^(?:\n)/i,/^(?:((#[^\r\n]*[^\r\n])))/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:var\b)/i,/^(?:heap\b)/i,/^(?:stack\b)/i,/^(?:goto\b)/i,/^(?:proc\b)/i,/^(?:begin\b)/i,/^(?:end\b)/i,/^(?:call\b)/i,/^(?:print\b)/i,/^(?:if\b)/i,/^(?:"%c")/i,/^(?:"%i")/i,/^(?:"%d")/i,/^(?:;)/i,/^(?::)/i,/^(?:,)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:==)/i,/^(?:=)/i,/^(?:<>)/i,/^(?:<=)/i,/^(?:<)/i,/^(?:>=)/i,/^(?:>)/i,/^(?:[a-zA-Z_À-ÿ\u00F1\u00D1]([a-zA-ZÀ-ÿ\-\.\u00F1\u00D10-9_])*)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:[\t\r]+)/i,/^(?:\n)/i,/^(?:((#[^\r\n]*[^\r\n])))/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:void\b)/i,/^(?:main\b)/i,/^(?:var\b)/i,/^(?:double\b)/i,/^(?:heap\b)/i,/^(?:stack\b)/i,/^(?:goto\b)/i,/^(?:proc\b)/i,/^(?:begin\b)/i,/^(?:end\b)/i,/^(?:call\b)/i,/^(?:print\b)/i,/^(?:if\b)/i,/^(?:"%c")/i,/^(?:"%i")/i,/^(?:"%d")/i,/^(?:;)/i,/^(?::)/i,/^(?:,)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/)/i,/^(?:%)/i,/^(?:==)/i,/^(?:=)/i,/^(?:<>)/i,/^(?:<=)/i,/^(?:<)/i,/^(?:>=)/i,/^(?:>)/i,/^(?:"([^\\\"]|\\.)*")/i,/^(?:[a-zA-Z_À-ÿ\u00F1\u00D1]([a-zA-ZÀ-ÿ\-\.\u00F1\u00D10-9_])*)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:[0-9]+)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
 });
 return lexer;
 })();

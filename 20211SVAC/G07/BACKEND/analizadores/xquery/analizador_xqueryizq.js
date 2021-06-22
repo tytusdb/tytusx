@@ -242,13 +242,6 @@ break;
 case 70:
 this.$= {tipo:"OP_MENOR",valor1:$$[$0-2],valor2:$$[$0]}
 break;
-<<<<<<< HEAD
-case 71:
-this.$=$$[$0-2]+$$[$0-1];
-break;
-case 72:
-this.$=$$[$0-3];
-=======
 case 72: case 74:
 $$[$0-1].push($$[$0]);this.$=$$[$0-1];
 break;
@@ -263,7 +256,6 @@ this.$={tipo:"TXT",valor:$$[$0].toString()};
 break;
 case 79:
 this.$={tipo:"COD",valor:$$[$0-1]};
->>>>>>> 1f42ec16c789b60d715f62136903537bdfcbe2dd
 break;
 }
 },
