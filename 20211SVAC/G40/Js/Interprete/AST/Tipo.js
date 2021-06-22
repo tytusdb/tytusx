@@ -112,6 +112,8 @@ var TipoSentencia;
 (function (TipoSentencia) {
     TipoSentencia[TipoSentencia["WHERE"] = 67] = "WHERE";
     TipoSentencia[TipoSentencia["ORDERBY"] = 68] = "ORDERBY";
-    TipoSentencia[TipoSentencia["RETURN"] = 69] = "RETURN";
-    TipoSentencia[TipoSentencia["NULL"] = 79] = "NULL";
+    TipoSentencia[TipoSentencia["ORDERBY_ELEMENTO"] = 69] = "ORDERBY_ELEMENTO";
+    TipoSentencia[TipoSentencia["ORDERBY_ATRIBUTO"] = 70] = "ORDERBY_ATRIBUTO";
+    TipoSentencia[TipoSentencia["RETURN"] = 71] = "RETURN";
+    TipoSentencia[TipoSentencia["NULL"] = 72] = "NULL";
 })(TipoSentencia  || (TipoSentencia = {}));
