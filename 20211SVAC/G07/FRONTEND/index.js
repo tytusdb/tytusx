@@ -169,8 +169,7 @@ return $x/title
 //where $x/price>30
 //return $x/title
 
-let Encabezado3D = `/*------HEADER------*/
-#include <stdio.h>
+let Encabezado3D = `#include <stdio.h>
 #include <math.h>
 
 double heap[30101999];
@@ -179,8 +178,6 @@ double P;
 double H;
 
 
-
-/*------MAIN------*/
 void main() {
     P = 0; H = 0;
 
@@ -435,7 +432,8 @@ btn3d.addEventListener("click", () => {
 
   console.log("EL ANALIZADOR REGRESA");
   consola3D.value=Encabezado3D;
-
+  let AST_xPath=grammar.parse(document.getElementById("consola3D").value);//Decendente
+  console.log(AST_xPath);
 
 })
 
