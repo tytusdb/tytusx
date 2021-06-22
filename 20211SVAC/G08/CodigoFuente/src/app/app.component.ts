@@ -26,7 +26,7 @@ export class AppComponent {
 
  
   title = 'proyecto1';
-  txtXpath = `//book[publish_date/@cali="hola"]/title/.`;
+  txtXpath = `/bookstore/book/title`;
   consoleValue = "";
   parser;
   retroceder = true;
@@ -40,7 +40,59 @@ export class AppComponent {
 rgxmldesc;
 cstxml;
   tablaXML="";
-  xmlText = ``;
+  xmlText = `<?xml version="1.0" encoding="UTF-8"?>
+
+  <bookstore>
+  
+  <book category="COOKING">
+    <title lang="en">Everyday Italian</title>
+    <author>Giada De Laurentiis</author>
+    <year>2005</year>
+    <price>30.00</price>
+  </book>
+  
+  <book category="CHILDREN">
+    <title lang="en">Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">XQuery Kick Start</title>
+    <author>James McGovern</author>
+    <author>Per Bothner</author>
+    <author>Kurt Cagle</author>
+    <author>James Linn</author>
+    <author>Vaidyanathan Nagarajan</author>
+    <year>2003</year>
+    <price>49.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <year>2003</year>
+    <price>39.95</price>
+  </book>
+  
+  </bookstore>`;
+  c3dTextInicial = `/*------HEADER------*/
+  #include <stdio.h>
+  #include <math.h>
+  
+  double heap[30101999];
+  double stack[30101999];
+  double SP;
+  double HP;
+  
+  /*------MAIN------*/
+  void main() {
+    SP = 0; HP = 0;`;
+c3dText = '';
+c3dTextGenerado = '';
+c3dTextFinal = `    return;
+    }`;
   
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
@@ -83,7 +135,7 @@ cstxml;
     });
     //elementoActual en este momento es la raiz de la entrada Xpath
    
-    
+  this.c3dText = this.c3dTextInicial + '\n' + this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
   }
   openTablaSimbolos() {
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
