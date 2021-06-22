@@ -87,16 +87,13 @@ case 1:
 return $$[$0-1];
 break;
 case 2:
-inicio.listainstrucciones.push($$[$0]);this.$="nodo Option";
+if($$[$0]!=false)$$[$0-2].push($$[$0]);this.$=$$[$0-2];
 break;
-case 3:
-inicio.listainstrucciones.push($$[$0]);this.$="instrucciones";
+case 3: case 5: case 11:
+this.$=($$[$0]!=false) ?[$$[$0]]:[];
 break;
 case 4:
 if($$[$0]!=false)$$[$0-1].push($$[$0]);this.$=$$[$0-1];
-break;
-case 5: case 11:
-this.$=($$[$0]!=false) ?[$$[$0]]:[];
 break;
 case 6:
 this.$ = new barrasnodo.default($$[$0-2],$$[$0],_$[$0-2].first_line,_$[$0-2].first_column, $$[$0-1]);
