@@ -6,10 +6,8 @@ import { parser as ParserAscendente } from 'src/app/utils/gramatica-xpath/ascend
 import { parser as ParserDescendente } from 'src/app/utils/gramatica-xpath/descendente';
 
 import { Arbol } from 'src/app/models/arbol.model';
-import { Tabla } from 'src/app/models/tabla.model';
 
 import { ArbolXML } from 'src/app/models/xmlArbol.model';
-import { Entorno } from 'src/app/controllers/xml/entorno.controller';
 
 
 @Component({
@@ -72,7 +70,7 @@ export class QueryEditorComponent implements OnInit {
   }
 
   public guardar() {
-    this.guardarArchivo(this.content, 'text/xml', 'entradaXML.xml');
+    this.guardarArchivo(this.content, 'text/txt', 'entradaQUERY.txt');
   }
 
   private guardarArchivo(contenido: string, tipo: string, nombre: string): void {
