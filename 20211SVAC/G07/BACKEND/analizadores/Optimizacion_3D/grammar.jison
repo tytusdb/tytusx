@@ -5,11 +5,14 @@
 %lex
 %options case-insensitive
 
+comment ("#"[^\r\n]* [^\r\n])                   
 
 %%
-
-[/][*][*]+[/]                        {}
-
+\s+                                         %{ /* Omitir espacios en blanco */ %}
+[\t\r]+                                     %{ /* Omitir saltos de linea, tabs y retornos*/ %}
+\n					{}
+{comment} {} // comentario simple línea
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]   /* IGNORE */
 
 
 "var"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_var';%}
@@ -51,15 +54,15 @@
 
 
 /* Espacios en blanco */
-[ \r\t]+			{}
-\n					{}
+
+
 [a-zA-Z_À-ÿ\u00F1\u00D1]([a-zA-ZÀ-ÿ\-\.\u00F1\u00D10-9_])*    %{ listaTokens.push(new Token("Identificador", yytext, yylloc.first_line, yylloc.first_column)); return "tk_identificador";%}
 [0-9]+("."[0-9]+)?\b   %{ listaTokens.push(new Token("Numero", yytext, yylloc.first_line, yylloc.first_column)); return "tk_decimal";%}
 [0-9]+   %{ listaTokens.push(new Token("Numero", yytext, yylloc.first_line, yylloc.first_column)); return "tk_entero";%}
 
 <<EOF>>                                     %{ return "EOF"; %}
 
-.                                           %{ listaErrores.push(new TokenError("xPATH","ERROR LEXICO","Caracter no reconocido "+ yytext, yylloc.first_line, yylloc.first_column )); %}
+.                                            %{ return "error"; %}
 
 /lex
 
@@ -192,8 +195,9 @@ LISTA_IDS
 	| tk_identificador {console.log($1);}
 ;
 
-ASIGNACION
-	: tk_identificador tk_igual EXP
+ASIGNACION:
+//	 tk_identificador tk_igual EXP
+	 tk_identificador  EXP
 	{console.log($1);
 	console.log($2);}
 	| tk_identificador tk_igual tk_heap tk_corchete_izq VALOR tk_corchete_der
