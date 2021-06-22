@@ -80,8 +80,8 @@ export default class Objeto extends Instruccion {
       for (let i of this.listaAtributos) {
         var s = i.interpretar(arbol, tabla);
 
-        simbolo.agregarAtributo(s.identificador, s.valor);
-        simbolo= new Simbolo(new Tipo(tipoDato.ATRIBUTO), s.identificador, s.linea.toString(), s.columna.toString(),"", s.valor);
+        simbolo.agregarAtributo(s.identificador, s.valor, s.linea,s.columna);
+        
       }
     }
     }
@@ -245,8 +245,8 @@ export default class Objeto extends Instruccion {
       for (let i of this.listaAtributos) {
         var s = i.codigo3D(arbol, tabla);
         
-          simbolo.agregarAtributo(s.identificador, s.valor);
-        simbolo= new Simbolo(new Tipo(tipoDato.ATRIBUTO), s.identificador, s.linea.toString(), s.columna.toString(),"", s.valor, s.cd3script);
+          simbolo.agregarAtributo(s.identificador, s.valor, s.linea, s.columna, s.cd3script);
+        
         
       }
     }

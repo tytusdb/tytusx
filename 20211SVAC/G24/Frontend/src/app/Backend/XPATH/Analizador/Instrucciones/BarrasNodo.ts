@@ -134,7 +134,91 @@ export default class BarrasNodo extends Instruccion {
 
   }
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
-    throw new Error('Method not implemented.');
+    let variable = this.Operacion.codigo3D(arbol, tabla);
+    console.log(this.Operacion)
+    //if (variable != null) {
+    if (this.Barra2 == null) {
+      console.log("Aqui esta el arbol");
+      let salidas = new tablaSimbolos();
+      let cadena = ''
+      let error = ''
+
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          console.log(this.Operacion.cadena)
+          return this.Operacion.cadena
+        }
+        return variable
+      }else if(this.Operacion instanceof Aritmetica){
+        
+      } else {
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          } else {
+            error = "Nodo no encontrado ";
+            console.log(error);
+          }
+
+        }
+        if (cadena != '') {
+          return cadena
+        } else if (error != '') {
+          return error
+        }
+        console.log("OBJETOSSALIDA")
+        console.log(salidas)
+        return salidas
+
+      }
+
+    } else {
+      console.log("entro doble barra")
+      //DOBLE BARRA
+      let salidas = new tablaSimbolos();
+      let cadena = ''
+
+      /**ESTE SERVIRIA CUANDO ES TRIPO ATRIBUTO SIMPLE */
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          return this.Operacion.cadena
+        }
+        return variable
+      } else {
+
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          console.log("OBJETOSSALIDA")
+          console.log(salidas)
+          return salidas
+        }
+      }
+    }
   }
 
 
