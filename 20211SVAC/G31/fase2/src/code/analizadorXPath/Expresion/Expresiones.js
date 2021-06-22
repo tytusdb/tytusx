@@ -67,6 +67,7 @@ export class PathExp
     {
         var Retornos = Entorno
         for (const iterator of this.caminos) {
+            console.log(iterator)
             Retornos = iterator.getValor(Retornos)
         }
         if(Retornos.length>0)

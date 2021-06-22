@@ -86,13 +86,14 @@ export class Comando
     this.tablaGramatica = tablaGramatica
   }
 
-  Ejecutar(XML)
+  Ejecutar(XML)  // Aqui empieza la ejecucion del XPATH 
   {
     LimpiarErrores()
     var Salida = ""
     var retornos=[]
     for (const iterator of this.Instrucciones) {
       var {Nodo} = require('../Expresion/Expresiones')
+      console.log(iterator)                                  //new Nodo( Tipo, entorno (son los objetos), pila,  valor, posicion )
       retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
     }
     for (const retorno of retornos) {
