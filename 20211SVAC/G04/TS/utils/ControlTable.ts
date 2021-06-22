@@ -28,7 +28,7 @@ function agregarContenidoErrores(){
 }
 
 function setSymbolTable(entorno: Entorno) {
-    tablaEcabezado(["Identificador", "Valor", "Tipo", "Ambito", "Linea", "Columna"],"tableHead");
+    tablaEcabezado(["Identificador", "Valor", "Tipo", "Ambito", "Posicion", "Linea", "Columna"],"tableHead");
     let tableBody = document.querySelector('#tableBody');
 
     tableBody.innerHTML = "";
@@ -44,6 +44,7 @@ function symbolstToTable(content: Array<string>, entorno: Entorno) {
         content.push("\t<td>" + s.getValorImplicito() + "</td>");
         content.push("\t<td>" + s.getType() + "</td>");
         content.push("\t<td>" + s.getAmbito() + "</td>");
+        content.push("\t<td>" + s.getStackPointer() + "</td>");
         content.push("\t<td>" + s.getLinea() + "</td>");
         content.push("\t<td>" + s.getColumna() + "</td>");
         content.push("</tr>");

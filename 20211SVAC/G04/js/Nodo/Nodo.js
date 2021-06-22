@@ -81,4 +81,52 @@ class Nodo extends Simbolo {
         });
         return nodosText.join("");
     }
+    generateC3D(resultC3D) {
+        let codigo = resultC3D.getCodigo();
+        let i = resultC3D.getNextTemp();
+        let p = resultC3D.getSp();
+        super.setStackPointer(p);
+        codigo.push(`\n\t//C3D nodo ${super.getNombre()}`);
+        codigo.push(`\tt${i} = H;`);
+        codigo.push(`\tt${i + 1} = t${i};`);
+        codigo.push(`\tH = H + 3;`);
+        //Nombre
+        codigo.push(`\tt${i + 2} = H;`);
+        Array.from(super.getNombre()).forEach(s => {
+            codigo.push(`\theap[(int)H] = ${s.charCodeAt(0)};`);
+            codigo.push(`\tH = H + 1;`);
+        });
+        codigo.push(`\theap[(int)H] = -1;`);
+        codigo.push(`\tH = H + 1;`);
+        codigo.push(`\theap[(int)t${i + 1}] = t${i + 2};`);
+        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
+        //Texto
+        codigo.push(`\tt${i + 3} = H;`);
+        Array.from(this.texto).forEach(s => {
+            codigo.push(`\theap[(int)H] = ${s.charCodeAt(0)};`);
+            codigo.push(`\tH = H + 1;`);
+        });
+        codigo.push(`\theap[(int)H] = -1;`);
+        codigo.push(`\tH = H + 1;`);
+        codigo.push(`\theap[(int)t${i + 1}] = t${i + 3};`);
+        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
+        //Atributos
+        codigo.push(`\tt${i + 4} = H;`);
+        codigo.push(`\tt${i + 5} = t${i + 4} + 1;`);
+        codigo.push(`\theap[(int)H] = ${this.atributos.length};`);
+        codigo.push(`\tH = H + ${this.atributos.length + 1};`);
+        let iTemp = i + 5;
+        this.atributos.forEach(a => {
+            codigo.push(`\n\tt${iTemp + 1} = stack[(int)${a.getStackPointer()}];`);
+            codigo.push(`\theap[(int)t${i + 5}] = t${iTemp + 1};`);
+            codigo.push(`\tt${i + 5} = t${i + 5} + 1;`);
+            iTemp++;
+        });
+        codigo.push(`\n\theap[(int)t${i + 1}] = t${i + 4};`);
+        codigo.push(`\tstack[(int)${p++}] =  t${i};`);
+        resultC3D.setNextTemp(iTemp + 1);
+        resultC3D.setSp(p);
+        resultC3D.setCodigo(codigo);
+        return resultC3D;
+    }
 }
