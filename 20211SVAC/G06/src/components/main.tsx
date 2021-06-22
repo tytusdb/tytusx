@@ -20,7 +20,6 @@ const parseQuery = require('../Grammar/xQueryGrammar');
 const utf8 = require('utf8');
 
 export default class Main extends Component {
-
     state = {
         consoleResult: "",
         xpath: "",
@@ -33,7 +32,6 @@ export default class Main extends Component {
         repAstXpath: '',
         graphvizContent: ''
     }
-
     parse = () => {
         let ast;
         let listaErrores = [];
@@ -78,6 +76,7 @@ export default class Main extends Component {
         try {
             const querys = parseXPATH.parse(this.state.xpath)
             var querysXpath = querys.xpath;
+            console.log(querysXpath);
             var erroresXpath = querys.listaErrores;
             //REPORTE AST y ERRORES PARA XPATH************************************************************
             if (erroresXpath.length === 0) {
@@ -130,21 +129,16 @@ export default class Main extends Component {
             console.log(error);
         }
     }
-
     traducir = () => {
         if (this.state.xml==="") {
             return;
         }
         const result = parser.parse(this.state.xml)
         var ast = result.ast;
-        console.log(ast);
-        
         traducirXml(ast);
         console.log(traduccion.getTranslate());
         console.log(ast);
     }
-
-
     handleFileChange = file => {
 
         const reader = new FileReader();
@@ -160,7 +154,6 @@ export default class Main extends Component {
         };
     };
     handleFileChangeXpath = file => {
-
         const reader = new FileReader();
         reader.readAsText(file);
         reader.onload = (e: any) => {
