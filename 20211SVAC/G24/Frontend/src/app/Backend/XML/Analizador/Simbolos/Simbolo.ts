@@ -7,6 +7,7 @@ export default class Simbolo {
   private linea: String;
   private columna: String;
   private valor: any; //este es el valor que va a recibir
+
   private cd3variable:any;
   private temporal
   private ambito:String
@@ -63,6 +64,7 @@ export default class Simbolo {
   public setColumna(col: String) {
     this.columna = col;
   }
+
 
   public getcd3Value(etiqueta:String){
     this.cd3variable=etiqueta

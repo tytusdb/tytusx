@@ -23,6 +23,7 @@ import { reporteTabla } from 'src/app/Backend/XML/Analizador/Reportes/reporteTab
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
+
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import { ViewChild } from '@angular/core';
 
@@ -142,6 +143,7 @@ export class ContenidoInicioComponent implements OnInit {
         if (i instanceof Objeto) {
           var objetito = i.interpretar(Tree, this.tablaGlobal); //retorna simbolo
           this.tablaGlobal.setVariable(objetito);
+          //Tree.getFuncion(objetito);
         }
       }
       console.log(this.tablaGlobal);
@@ -184,6 +186,7 @@ export class ContenidoInicioComponent implements OnInit {
 
       
       /* **********************L L E N A D O    T A B L A    D E    S I M B O L O S************************* */
+
       Ambito="Global"
       for (var key of this.tablaGlobal.tablaActual) {
         var entorno= Ambito
@@ -197,6 +200,7 @@ export class ContenidoInicioComponent implements OnInit {
         var atri = key.getAtributo();
         var cd3direcciones= key.setcd3Value()
 
+
        /* if(nombre!=null){
           let objetos = key.getvalor();
         if (objetos instanceof tablaSimbolos) {
@@ -208,6 +212,7 @@ export class ContenidoInicioComponent implements OnInit {
             }
           }
         }*/
+
 
         /*for (var [key2, value2,] of key.getAtributo()) {
           nombre = key.getidentificador();
@@ -248,6 +253,10 @@ export class ContenidoInicioComponent implements OnInit {
         } else {
           tipo = "Atributo";
         }
+        
+          var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
+        
+
 
         var Reporte = new reporteTabla(nombre, tipo,entorno, contenido, linea, columna, cd3direcciones);
         Tree.listaSimbolos.push(Reporte);
@@ -312,6 +321,7 @@ export class ContenidoInicioComponent implements OnInit {
 
     for (var key of t.tablaActual) {
       var atributos = "";
+
       var entorno = Ambito;
       var listaobjetitos = "";
       var contenido = "";
@@ -320,24 +330,21 @@ export class ContenidoInicioComponent implements OnInit {
       var columna = key.getColumna();
       var nombre = key.getidentificador();
       var cd3direcciones= key.setcd3Value();
+
       /*for (var [key2, value2,] of key.getAtributo()) {
         nombre = key.getidentificador();
         if (key.getAtributo() != null) {
-          atributos += ` ${key2}=>${value2}, `;
-          if (nombre != null) {
-            if (nombre == key.getidentificador()) {
-              nombre += atributos;
-            } else {
-              nombre = atributos;
-            }
-          }
+          atributos+=` ${key2} => ${value2}, `; 
+         // break;
         }
+
       }*/
       let objetos = key.getvalor();
       if (objetos instanceof tablaSimbolos) {
         for (var key3 of objetos.tablaActual) {
           listaobjetitos += `${key3.getidentificador()}, `
           if(listaobjetitos!=null){
+
             
             Ambito=nombre
             
@@ -363,12 +370,18 @@ export class ContenidoInicioComponent implements OnInit {
       } else {
         tipo = "Atributo";
       }
+     
+      
 
       var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, cd3direcciones);
+
       tri.listaSimbolos.push(Reporte);
 
     }
   }
+
+  
+
 
   /*A R B O L  D E S C E N D E N T E */
 

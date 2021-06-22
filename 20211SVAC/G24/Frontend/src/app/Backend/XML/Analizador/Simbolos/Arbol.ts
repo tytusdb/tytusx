@@ -48,6 +48,7 @@ export default class Arbol {
 
 
 
+
   public actualizarTabla(identificador: string, linea: string, columna: string): boolean {
     for (var elemento of this.listaSimbolos) {
       if (elemento.getIdentificador().toString() == identificador) {

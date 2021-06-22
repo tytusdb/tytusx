@@ -3,6 +3,7 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import NodoErrores from '../Excepciones/NodoErrores';
 import { reporteTabla } from '../Reportes/reporteTabla';
 import obtenerValor from '../Reportes/cambiarTipo';
+import Atributo from 'src/app/Backend/XML/Analizador/Expresiones/Atributo';
 export default class Arbol {
   private instrucciones: Array<Instruccion[]>;
   private NodoErrores: Array<NodoErrores>;
@@ -40,6 +41,10 @@ export default class Arbol {
     }
     return 'as';
   }
+
+  
+
+ 
   public getfunciones(): Array<Instruccion> {
     return this.funciones;
   }
