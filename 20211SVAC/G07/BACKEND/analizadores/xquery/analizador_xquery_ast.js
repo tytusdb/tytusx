@@ -87,70 +87,163 @@ case 1:
 return $$[$0-1];
 break;
 case 2:
-this.$= new Nodo("Porduccion","XQUERYGRA",[ $$[$0-1] ,$$[$0]] );
+this.$= new Nodo("XQY", "XQY" );
+	this.$.agregarHijo($$[$0-1]);
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 3:
-this.$= new Nodo("Porduccion","XQUERYGRA",[ $$[$0]] );
+this.$= new Nodo("XQY", "XQY" );
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 4:
-this.$= new Nodo("Porduccion","FOR_IN",[$$[$0-3], $$[$0-2], $$[$0-1], $$[$0] ] );
+this.$= new Nodo("FOR", "FOR" );
+        this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+        this.$.agregarHijo($$[$0-2]);
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 5:
-this.$= new Nodo("Porduccion","RETURN",[ $$[$0-1], $$[$0]] );
+this.$= new Nodo("RET", "RET" );
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 6:
-this.$= new Nodo("Porduccion","RETURN",[ $$[$0-2], $$[$0-1], $$[$0]] );
+this.$= new Nodo("RET", "RET" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo($$[$0-1]);
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 7:
-this.$= new Nodo("Porduccion","LLAMADA",[ $$[$0-4], $$[$0-3], $$[$0-2] , $$[$0-1] ,$$[$0]] );
+this.$= new Nodo("LLA", "LLA" );
+        this.$.agregarHijo(new Nodo($$[$0-4],$$[$0-4]));
+        this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 8:
-this.$= new Nodo("Porduccion","LLAMADA",[ $$[$0]] );
+this.$= new Nodo("LLA","LLA");
+        this.$.agregarHijo($$[$0]);
+        
 break;
 case 9:
-this.$= new Nodo("Porduccion","VARIABLE",[ $$[$0-1], $$[$0]] );
+this.$= new Nodo("VAR", "VAR" );
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 10:
-this.$= new Nodo("Porduccion","XPATHGRA",[ $$[$0]] );
+this.$= new Nodo("XGRA", "XGRA" );
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 11:
-this.$= new Nodo("Porduccion","CONSULTA_",[ $$[$0-1], $$[$0]] );
+this.$= new Nodo("CONI", "CONI" );
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 12:
-this.$= new Nodo("Porduccion","CONSULTA_",[ $$[$0]] );
+this.$= new Nodo("CONI", "CONI" );
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 13:
-this.$= new Nodo("Porduccion","CONSULTA",[ $$[$0-1], $$[$0]] );
+this.$= new Nodo("CON", "CON" );
+        this.$.agregarHijo($$[$0-1]);
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 14:
-this.$= new Nodo("Porduccion","CONSULTA",[ $$[$0]] );
+this.$= new Nodo("CON", "CON" );
+        this.$.agregarHijo($$[$0]);
+	
 break;
-case 15: case 16: case 18: case 20: case 21: case 22: case 25: case 26:
-this.$= new Nodo("Porduccion","NODO",[ $$[$0-2], $$[$0-1], $$[$0]] );
+case 15: case 16: case 20: case 21:
+this.$= new Nodo("NODO", "NODO" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 17: case 19:
-this.$= new Nodo("Porduccion","NODO",[ $$[$0-1], $$[$0]] );
+this.$= new Nodo("NODO", "NODO" );
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
+break;
+case 18:
+this.$= new Nodo("NODO", "NODO" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+        
+break;
+case 22: case 25: case 26:
+this.$= new Nodo("NODO", "NODO" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 23: case 24:
-this.$= new Nodo("Porduccion","NODO",[ $$[$0-4], $$[$0-3], $$[$0-2], $$[$0-1], $$[$0]] );
+this.$= new Nodo("NODO", "NODO" );
+        this.$.agregarHijo(new Nodo($$[$0-4],$$[$0-4]));
+        this.$.agregarHijo(new Nodo($$[$0-3],$$[$0-3]));
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 case 27:
-this.$= new Nodo("Porduccion","PREDICADO",[ $$[$0-2], $$[$0-1], $$[$0]] );
+this.$= new Nodo("PRE", "PRE" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo($$[$0-1]);
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 28:
-this.$= new Nodo("Porduccion","PREDICADO",[ "ε" ] );
+
+        this.$= new Nodo("PRE","PRE");
+        this.$.agregarHijo(new Nodo("ε","ε"));
+        
 break;
 case 29: case 30: case 31:
-this.$= new Nodo("Porduccion","DATO",[ $$[$0]] );
+this.$= new Nodo("DATO", "DATO" );
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
-case 32: case 39:
-this.$= new Nodo("Porduccion","DATO",[ $$[$0-1], $$[$0]] );
+case 32:
+this.$= new Nodo("DATO", "DATO" );
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 33:
-this.$= new Nodo("Porduccion","DATO",[ $$[$0-2], $$[$0-1], $$[$0]] );
+this.$= new Nodo("DATO", "DATO" );
+        this.$.agregarHijo(new Nodo($$[$0-2],$$[$0-2]));
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo(new Nodo($$[$0],$$[$0]));
+	
 break;
 case 34: case 35: case 36: case 37: case 38: case 40: case 41: case 42: case 43: case 44: case 45:
-this.$= new Nodo("Porduccion","DATO",[ $$[$0-2], $$[$0-1], $$[$0-2]] );
+this.$= new Nodo("DATO", "DATO" );
+        this.$.agregarHijo($$[$0-2]);
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
+break;
+case 39:
+this.$= new Nodo("DATO", "DATO" );
+        this.$.agregarHijo(new Nodo($$[$0-1],$$[$0-1]));
+        this.$.agregarHijo($$[$0]);
+	
 break;
 }
 },

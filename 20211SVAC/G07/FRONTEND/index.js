@@ -161,12 +161,41 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 
 </bookstore>
 `
+<<<<<<< HEAD
 let XQuery = `for $x in /bookstore/book
 where $x/price>30
 order by $x/price
+=======
+let XQuery = `
+for $x in /bookstore/book
+>>>>>>> 6f9c9f7ee7662b3a30905850cbd5be937fb6c5d3
 return $x/title
 
 `
+//for $x in /bookstore/book
+//where $x/price>30
+//return $x/title
+
+let Encabezado3D = `/*------HEADER------*/
+#include <stdio.h>
+#include <math.h>
+
+double heap[30101999];
+double stack[30101999];
+double P;
+double H;
+
+
+
+/*------MAIN------*/
+void main() {
+    P = 0; H = 0;
+
+
+    return;
+}
+`
+
 editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada
 
@@ -205,33 +234,7 @@ botonCargar2.addEventListener("click", () => {
 
 
 })
-btnCargarxquery.addEventListener("click", () => {
-  console.log("Analizando XQUERY ")
-  tipoAnalizadorXML = "ASCENDENTE";
 
-  // Analizador XQUERY por la izquierda
-  parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
-
-  console.log("EL ANALIZADOR REGRESA");
-  parserXML = xmlDerecha.parse(editorXML.value);
-  globalencod =parserXML.tipoencoding;
-  ejecutarXQuery(parserXQUERY,parserXML.json);
-
-
-})
-
-btnCargarxqueryder.addEventListener("click", () => {
-  console.log("Analizando XQUERY ")
-  tipoAnalizadorXML = "DESCENDENTE";
-
-  // Analizador XQUERY por la DERECHA
-  parserXQUERYder = analizador_xqueryder.parse(editorXQUERY.value);
-
-  console.log("EL ANALIZADOR REGRESA");
-  console.log(parserXQUERYder);
-
-
-})
 
 document.getElementById("ast").addEventListener("click", () => {
     let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
@@ -427,6 +430,66 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+/**
+ * ******************************************************
+ * CONSOLA 3D
+ * ******************************************************
+ */
+
+    
+
+btn3d.addEventListener("click", () => {
+
+  console.log("EL ANALIZADOR REGRESA");
+  consola3D.value=Encabezado3D;
+
+
+})
+
+/**
+ * ******************************************************
+ * XQUERY
+ * ******************************************************
+ */
+ btnCargarxquery.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "ASCENDENTE";
+
+  // Analizador XQUERY por la izquierda
+  parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  parserXML = xmlDerecha.parse(editorXML.value);
+  globalencod =parserXML.tipoencoding;
+  ejecutarXQuery(parserXQUERY,parserXML.json);
+
+
+})
+
+btnCargarxqueryder.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "DESCENDENTE";
+
+  // Analizador XQUERY por la DERECHA
+  parserXQUERYder = analizador_xqueryder.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  console.log(parserXQUERYder);
+
+
+})
+document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
+  let AST_xQuery=analizador_xquery_ast.parse(editorXQUERY.value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xQuery);
+
+})
+
+
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));

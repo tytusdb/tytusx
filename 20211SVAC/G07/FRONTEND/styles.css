@@ -29,6 +29,12 @@ nav span {
     color: white;
     font-size: 30px;
 }
+.btnCargarx{
+    
+    width: 49%;
+    color: white;
+    font-size: 30px;
+}
 .menu {
     display: flex;
     list-style: none;
@@ -160,11 +166,29 @@ main {
     color: #fff;
     padding: 10px;
 }
+.consoladx textarea{
+    resize: none;
+    width: 100%;
+    height: 400px;
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    float:left;
+}
+.consoladx3d textarea{
+    resize: none;
+    width: 100%;
+    height: 400px;
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    float:left;
+}
 .editor{
     color:  white;
     background-color: black;
     width: 100%;
-    height: 750px;
+    height: 300px;
     padding: 5px;
 }
 .div_table{

@@ -60,6 +60,11 @@
                     <li class="subitem"><a id="btnReporteXQUERYcst">CST XQUERY</a></li>
                 </ul>
             </li>
+            <li class="menu-item" id="reportesPy">Traducir
+                <ul class="submenu">
+                    <li class="subitem"><a id="btn3d">XML 3D</a></li>
+                </ul>
+            </li>
         </ul>
         
         <span>Compiladores 2 -- Grupo 7</span>
@@ -75,6 +80,16 @@
             <div class="panels" id="panels">
                 <div class="panel active">
                     <textarea class="editor" id="editor"></textarea>
+                    <div class="consoladx">
+                        <h2>XQUERY </h2>
+                         <textarea id="consolaXQUERY"></textarea>
+                         <tr>
+                            <td><input class="subitem btnCargarx" id="btnCargarxquery" type="button" value="Xquery ASC"/></td>
+                            <td><input class="subitem btnCargarx" id="btnCargarxqueryder" type="button" value="Xquery DES"/></td>
+                    
+                            <!--     <td><input class="subitem btnCargar" id="btnCargarxquery" type="button" value="Cargar XQUERY" onclick="alert('Xquery Cargado')" /></td>-->
+                        </tr>
+                    </div>    
                 </div>
             </div>
         </div>
@@ -97,16 +112,11 @@
             </div>
         </aside>
     </main>
-    <div class="consola">
-        <h2>XQUERY </h2>
-        <textarea id="consolaXQUERY"></textarea>
+    <div class="consoladx3d">
+        <h3>CONSOLA 3D</h3>
+        <textarea id="consola3D"></textarea>
     </div>
-    <tr>
-        <td><input class="subitem btnCargar" id="btnCargarxquery" type="button" value="Xquery ASC"/></td>
-        <td><input class="subitem btnCargar" id="btnCargarxqueryder" type="button" value="Xquery DES"/></td>
-
-        <!--     <td><input class="subitem btnCargar" id="btnCargarxquery" type="button" value="Cargar XQUERY" onclick="alert('Xquery Cargado')" /></td>-->
-    </tr>
+   
     <div id="graph" style="width: 100%;"></div>
     
     

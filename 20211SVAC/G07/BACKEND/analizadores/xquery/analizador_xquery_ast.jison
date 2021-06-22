@@ -160,126 +160,287 @@ INICIO :
 ;
 XQUERYGRA
         :FOR_IN RETURN                                                                  
-        {$$= new Nodo("Porduccion","XQUERYGRA",[ $FOR_IN ,$RETURN] );}
-        |LLAMADA                                                                        
-        {$$= new Nodo("Porduccion","XQUERYGRA",[ $LLAMADA] );}
+        {$$= new Nodo("XQY", "XQY" );
+	$$.agregarHijo($1);
+        $$.agregarHijo($2);
+	}
+        |LLAMADA 
+        {$$= new Nodo("XQY", "XQY" );
+        $$.agregarHijo($1);
+	} 
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  
-        {$$= new Nodo("Porduccion","FOR_IN",[$tk_for, $VARIABLE, $tk_in, $LLAMADA ] );}
+        {$$= new Nodo("FOR", "FOR" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo($4);
+	} 
 ;
 RETURN
         :tk_return VARIABLE                                                             
-        {$$= new Nodo("Porduccion","RETURN",[ $tk_return, $VARIABLE] );}
+        {$$= new Nodo("RET", "RET" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	} 
         |tk_return VARIABLE XPATHGRA                                                    
-        {$$= new Nodo("Porduccion","RETURN",[ $tk_return, $VARIABLE, $XPATHGRA] );}
+        {$$= new Nodo("RET", "RET" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+	} 
 ;
 LLAMADA
         :tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der XPATHGRA                 
-         {$$= new Nodo("Porduccion","LLAMADA",[ $tk_doc, $tk_parentesis_izq, $tk_hilera , $tk_parentesis_der ,$XPATHGRA] );}
+        {$$= new Nodo("LLA", "LLA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+	}         
         |XPATHGRA                                                                       
-        {$$= new Nodo("Porduccion","LLAMADA",[ $XPATHGRA] );}
+        {$$= new Nodo("LLA","LLA");
+        $$.agregarHijo($1);
+        }
 ;
+
 VARIABLE
         :tk_dolar tk_identificador                                                      
-        {$$= new Nodo("Porduccion","VARIABLE",[ $tk_dolar, $tk_identificador] );}
+        {$$= new Nodo("VAR", "VAR" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+	}  
 ;
 // FINALIZA GRAMATICA DE XQUERY
 // INICIA GRAMATICA DE XPATH
 
 XPATHGRA:
      CONSULTA_                                                                          
-     {$$= new Nodo("Porduccion","XPATHGRA",[ $CONSULTA_] );}            
+        {$$= new Nodo("XGRA", "XGRA" );
+        $$.agregarHijo($1);
+	}           
 ;  
 CONSULTA_
         :tk_identificador CONSULTA                                                      
-        {$$= new Nodo("Porduccion","CONSULTA_",[ $tk_identificador, $CONSULTA] );} 
+        {$$= new Nodo("CONI", "CONI" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
         |CONSULTA                                                                       
-        {$$= new Nodo("Porduccion","CONSULTA_",[ $CONSULTA] );} 
+        {$$= new Nodo("CONI", "CONI" );
+        $$.agregarHijo($1);
+	}
 ;
 CONSULTA
         :CONSULTA NODO                                                                  
-        {$$= new Nodo("Porduccion","CONSULTA",[ $CONSULTA, $NODO] );}
+        {$$= new Nodo("CON", "CON" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+	}
         |NODO                                                                           
-        {$$= new Nodo("Porduccion","CONSULTA",[ $NODO] );}
+        {$$= new Nodo("CON", "CON" );
+        $$.agregarHijo($1);
+	}
 ;  
 NODO
         :tk_diagonal tk_identificador PREDICADO                                         
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_identificador, $PREDICADO] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |tk_diagonal_doble tk_identificador  PREDICADO                                  
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal_doble, $tk_identificador, $PREDICADO] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |tk_diagonal tk_puntos_seguidos                                                
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_puntos_seguidos] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+	}
         |tk_diagonal tk_arroba tk_identificador                                         
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_arroba, $tk_identificador] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        }
         |tk_diagonal tk_punto                                                          
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_punto] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+	}
 
         |tk_diagonal tk_asterisco PREDICADO                                             
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_asterisco, $PREDICADO] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |tk_diagonal_doble tk_asterisco  PREDICADO                                      
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal_doble, $tk_asterisco, $PREDICADO] );}
-
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}  
+  
         |tk_diagonal tk_arroba tk_asterisco                                             
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_arroba, $tk_asterisco] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+	}        
+        
 
         |tk_diagonal tk_node tk_parentesis_izq tk_parentesis_der PREDICADO              
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal, $tk_node, $tk_parentesis_izq, $tk_parentesis_der, $PREDICADO] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+	}        
         |tk_diagonal_doble tk_node tk_parentesis_izq tk_parentesis_der  PREDICADO       
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal_doble, $tk_node, $tk_parentesis_izq, $tk_parentesis_der, $PREDICADO] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+	} 
 
         |tk_diagonal_doble tk_arroba tk_identificador                                   
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal_doble, $tk_arroba, $tk_identificador] );}
-        |tk_diagonal_doble tk_arroba tk_asterisco                                       
-        {$$= new Nodo("Porduccion","NODO",[ $tk_diagonal_doble, $tk_arroba, $tk_asterisco] );}
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+	} 
 
+        |tk_diagonal_doble tk_arroba tk_asterisco                                       
+        {$$= new Nodo("NODO", "NODO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+	} 
 ;
 
 PREDICADO
         :tk_corchete_izq DATO  tk_corchete_der                                          
-        {$$= new Nodo("Porduccion","PREDICADO",[ $tk_corchete_izq, $DATO, $tk_corchete_der] );}
+        {$$= new Nodo("PRE", "PRE" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+	} 
+
         |                                                                               
-        {$$= new Nodo("Porduccion","PREDICADO",[ "ε" ] );}
+        {
+        $$= new Nodo("PRE","PRE");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }
+
 ;
 
 DATO
 //Tipos de datos
         :tk_numero                                                                      
-        {$$= new Nodo("Porduccion","DATO",[ $tk_numero] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}
         |tk_identificador                                                               
-        {$$= new Nodo("Porduccion","DATO",[ $tk_identificador] );}                                                        
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}
         |tk_hilera                                                                      
-        {$$= new Nodo("Porduccion","DATO",[ $tk_hilera] );}                                                                   
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}
         |tk_arroba tk_identificador                                                     
-        {$$= new Nodo("Porduccion","DATO",[ $tk_arroba, $tk_identificador] );}                                                
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+	}
         |tk_last tk_parentesis_izq tk_parentesis_der                                    
-        {$$= new Nodo("Porduccion","DATO",[ $tk_last, $tk_parentesis_izq, $tk_parentesis_der] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+	}
 
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_mas, $DATO] );}                                                  
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_menos DATO                                                             
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_menos, $DATO] );}    
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_asterisco DATO                                                         
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_asterisco, $DATO] );}                                                
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_div DATO                                                               
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_div, $DATO] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_mod DATO                                                               
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_mod, $DATO] );}                                                                                                           
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |tk_menos DATO %prec UMENOS	                                                    
-        {$$= new Nodo("Porduccion","DATO",[ $tk_menos, $DATO] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
 
 //Operaciones Logicas
         |DATO tk_igual DATO           	                                                
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_igual, $DATO] );}                                   
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_indiferente DATO                                                       
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_indiferente, $DATO] );}                   
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_menor_igual DATO                                                       
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_menor_igual, $DATO] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_mayor_igual DATO                                                      
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_mayor_igual, $DATO] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_mayor DATO                                                            
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_mayor, $DATO] );} 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
         |DATO tk_menor DATO                                                            
-        {$$= new Nodo("Porduccion","DATO",[ $DATO, $tk_menor, $DATO] );}                  
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
 ;
