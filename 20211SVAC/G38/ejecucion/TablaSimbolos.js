@@ -499,7 +499,7 @@ class TablaSimbolos {
         var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
         var cadenaRoot = nombreRoot + "[" + 'label="/",' + 'color="red",' + "];\n ";
         cadena += cadenaRoot + this._listaSimbolos[0].sub_entorno[0].nodo.getStrAst(nombreRoot);
-        cadena += "rankdir=LR;\n";
+        //cadena += "rankdir=LR;\n";
         cadena += "}\n";
         return cadena;
     }

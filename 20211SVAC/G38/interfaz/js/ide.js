@@ -2,6 +2,7 @@
 const CONSOLE_LINE_MARK = '>';
 const CONSOLE_MESSAGE_SUCCESSFULL="OK XML";
 const CONSOLE_MESSAGE_SUCCESSFULL_XPATH="OK XPATH";
+const CONSOLE_MESSAGE_SUCCESSFULL_XQUERY="OK XQUERY";
 const ENTER = "\n";
 
 
@@ -166,6 +167,36 @@ const generarCstXMLDescendente= function (cadEntrada){
     }
 };
 
+
+/**
+ * Metodo que analiza el xpath
+ * @param entrada
+ */
+const analizarXQUERY= function (cadEntrada){
+    try {
+        print("Iniciando ejecucion: "+new Date());
+        try {
+            ListaErrores.InicializarXquery();
+            let rootXpath = XqueryAnalyzer.parse(cadEntrada);
+            if(rootXpath){
+                console.info('Se genero correctamente el árbol xquery. ');
+            }else{
+                throw "No se pudo generar correctamente el árbol de xquery. ";
+            }
+            if(ListaErrores.hayErroresXquery()){
+                print("Hubieron errores durante el analisis en XQUERY");
+            }
+            _rootXpath = rootXpath;
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        console.info('Se cargo exitosamente las tabla de simbolos. ');
+        print(CONSOLE_MESSAGE_SUCCESSFULL_XQUERY);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
 
 /**
  * Metodo que analiza el xpath

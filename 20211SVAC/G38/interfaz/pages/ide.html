@@ -77,6 +77,7 @@
     <script src="../../ejecucion/TablaSimbolos.js"></script>
     <script src="../../gramaticas/xpath/XpathAnalyzer.js"></script>
     <script src="../../gramaticas/xpath/XpathAnalyzerDescendant.js"></script>
+    <script src="../../gramaticas/xquery/XqueryAnalyzer.js"></script>
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
     <!--
@@ -222,7 +223,7 @@
         <td>
             <div id="divEntradaXPath" align="center" >
                 <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
-/catalog/book/author[position()]
+<HTML> ASJDF </HTML>
                 </textarea>
             </div>
         </td>
@@ -248,6 +249,8 @@
     <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
     <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
     <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
+    <button id="btnAnalizarXquery" class="button">Analizar XQUERY</button>
+    <button id="btnTablaErroresXQuery" class="button">Errores XQUERY</button>
 </div>
 
 <div id="consola" align="center">
@@ -277,6 +280,14 @@
             $("#btnAnalizarXML").click(function(){
                 entrada = $("#txtEntradaXML").val();
                 analizarXML(entrada);
+            });
+
+            /**
+             * AnalizarXQUERY
+             */
+            $("#btnAnalizarXquery").click(function(){
+                entrada = $("#txtEntradaXPath").val();
+                analizarXQUERY(entrada);
             });
 
 
@@ -415,6 +426,19 @@
                 }
                 XpathUtil.printTabHtml(ListaErrores.getHtmlTableXPath());
                 print("Tabla Errores XPath OK");
+            });
+
+            /**
+             * Ver Tabla Errores XQuery
+             */
+            $("#btnTablaErroresXQuery").click(function(){
+                print("Renderizando tabla de errores XQuery.  "+new Date());
+                if(ListaErrores==undefined){
+                    print("No hay tabla de errores que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(ListaErrores.getHtmlTableXQuery());
+                print("Tabla Errores XQuery OK");
             });
 
             /**
