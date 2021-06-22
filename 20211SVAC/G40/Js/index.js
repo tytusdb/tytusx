@@ -148,7 +148,6 @@ function CargarXML(){
     } 
 
  SetearTraduccion();
- console.log(stack);
     
 }
 
@@ -661,5 +660,5 @@ function SetearTraduccion(){
 
     stack.unshift(encodingXML,finalXML);
     localStorage.setItem('stackJSON',JSON.stringify(stack, null, 2));
-    window.alert("Traduccion XML a C3D exitosa, scrollee hacia abajo para ver resultado. :D");
+    window.alert("Traducción XML a C3D exitosa, scrollee hacia abajo para ver resultado. :D");
 }

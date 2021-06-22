@@ -83,6 +83,7 @@ export class XmlEditorComponent implements OnInit {
     this.arbol = <ArbolXML>parserAscendente.parse(this.content);
     let entorno = this.inicializarTabla();
     this.arbol.tabla = entorno;
+    this._data.changeXML(this.arbol)
     this.cargarReportes();
   };
 
@@ -91,6 +92,7 @@ export class XmlEditorComponent implements OnInit {
     this.arbol = <ArbolXML>parserDescendente.parse(this.content);
     let entorno = this.inicializarTabla();
     this.arbol.tabla = entorno;
+    this._data.changeXML(this.arbol)
     this.cargarReportes();
   };
 

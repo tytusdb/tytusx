@@ -1,0 +1,95 @@
+/*******   Para la creacion de un proyecto en react   *****/
+npx create-react-app myapp
+cd myapp
+npm start   //para ejecutar el proyecto localhost:3000
+
+
+/*******   Para el deployment con github pages   *******/
+npm install --save-dev gh-pages
+//pegar en package.json:
+"homepage":"https://yourusername.github.io/repository-name" 
+"scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    }
+
+//en terminal ejecutar:
+npm run build
+npm run deploy
+
+//en github seccion pages seleccionar:
+Source: gh-pages branch   /(root)
+
+/********** Para correr el programa para edicion *********************/
+tsc --init
+//en el archivo tsconfig colocar el siguiente codigo (configurar rutas en outDir, include)
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": false,
+    "outDir": "./src/code",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "code/**/*.ts"
+  ]
+}
+
+tsc -w //en la carpeta del front
+npm start //en la carpeta del front
+
+
+
+/*<bookstore>
+  <book>
+    <title lang="en">Harry Potter</title>
+    <price>29.99</price>
+  </book>
+  <book>
+    <title lang="en">Learning XML</title>
+    <price>39.95</price>
+  </book>
+</bookstore>*/
+
+class Objeto {
+    tipo = ''
+    atributos = []
+    hijos = []
+}
+class Atributo {
+    nombre =''
+    valor = ''
+}*/
+
+/*
+<biblioteca>
+  <libro>
+    <titulo>La vida está en otra parte</titulo>
+    <autor>Milan Kundera</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Pantaleón y las visitadoras</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1973"/>
+  </libro>
+  <libro>
+    <titulo>Conversación en la catedral</titulo>
+    <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+    <fechaPublicacion año="1969"/>
+  </libro>
+</biblioteca>
+*/
+
+class Objeto {
+    tipo = ''
+    atributos = []
+    hijos = []
+}
+class Atributo {
+    nombre =''
+    valor = ''
+}
