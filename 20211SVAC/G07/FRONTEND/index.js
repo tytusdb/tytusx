@@ -161,10 +161,11 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 
 </bookstore>
 `
-let XQuery = `
-for $x in /bookstore/book
+let XQuery = `for $x in /bookstore/book
 where $x/price>30
+order by $x/price
 return $x/title
+
 `
 editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada

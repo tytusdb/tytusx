@@ -52,7 +52,7 @@
 "ge"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ge';%}
 
 
-
+/*
 "<html>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_html_abre';%}
 "</html>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_html_cierra';%}
 "<body>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_body_abre';%}
@@ -64,7 +64,7 @@
 "</ul>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ul_cierra';%}
 "<li>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_li_abre';%}
 "</li>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_li_cierra';%}
-
+*/
 
 "$"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_dolar';%}
 
@@ -130,6 +130,7 @@
 [0-9]+("."[0-9]+)?\b   %{ listaTokens.push(new Token("Numero", yytext, yylloc.first_line, yylloc.first_column)); return "tk_numero";%}
 
 
+
 // FIN DEL ARCHIVO
 <<EOF>>                                     %{ return "EOF"; %}
 // ERRORES LEXICOS
@@ -158,14 +159,17 @@ INICIO :
         XQUERYGRA EOF                                                                   {return $1;}  
 ;
 XQUERYGRA
-        :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$};}
+        :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
+        |HTML                                                                           {$$={instr:"HTML",valor:$1};}
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
 ;
 ORDEN
-        :                                                                               {$$=null;}                                                                     
+        :                                                                               {$$=null;}  
+        |tk_order_by VARIABLE                                                           {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:null}}
+        |tk_order_by VARIABLE XPATHGRA                                                  {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:$XPATHGRA}}        
 ;
 WHERE
         :tk_where CONDICIONAL                                                           {$$={instr:"WHERE",condicion:$CONDICIONAL};}       
@@ -195,7 +199,7 @@ RETURN
         |tk_return VARIABLE XPATHGRA                                                    {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
 ;
 LLAMADA
-        :tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der XPATHGRA                  {}
+        :tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der XPATHGRA                  {$$=$XPATHGRA;}
         |XPATHGRA                                                                       {$$=$1;}
 ;
 VARIABLE
@@ -261,4 +265,17 @@ DATO
         |DATO tk_mayor_igual DATO                                                       {$$= {tipo:"OP_MAYOR_IGUAL",valor1:$1,valor2:$3}}
         |DATO tk_mayor DATO                                                             {$$= {tipo:"OP_MAYOR",valor1:$1,valor2:$3}}
         |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}                  
+;
+
+HTML
+    :CONTENIDO                                                                          {$$=$1;}
+;
+CONTENIDO
+        :CONTENIDO L_CONTENIDO
+        |L_CONTENIDO
+;
+L_CONTENIDO
+        :tk_menor tk_identificador tk_mayor                                             {$$=$1+$2;}
+        |tk_menor tk_diagonal tk_identificador tk_mayor                                 {$$=$1;}
+        |tk_identificador                                                               {$$=$1;}
 ;
