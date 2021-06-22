@@ -27,11 +27,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { GramaticalReportComponent } from './paginas/gramatical-report/gramatical-report.component';
 import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
 import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.component';
-import 'codemirror/parser';
-import 'codemirror/ava-sql';
-import 'codemirror/addon/edit/closebrackets.js';
-import 'codemirror/addon/edit/matchbrackets.js';
-import 'codemirror/addon/display/placeholder.js';
 @NgModule({
   declarations: [
     AppComponent,

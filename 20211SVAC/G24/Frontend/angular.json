@@ -28,9 +28,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.css",
-              "../node_modules/codemirror/lib/codemirror.css",
-              "../node_modules/codemirror/theme/monokai.css"
+              "src/styles.css"
               
             ],
             "scripts": []
