@@ -155,13 +155,14 @@
 %%
 
 /* Definición de la gramática */
-INICIO : 
-        XQUERYGRA EOF                                                                   {return $1;}  
+INICIO  
+        :XQUERYGRA EOF                                                                   {return $1;}  
+        |HTML  EOF                                                                       {return {instr:"HTML",valor:$1};}
 ;
 XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
-        |HTML                                                                           {$$={instr:"HTML",valor:$1};}
+        
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
@@ -195,12 +196,16 @@ CONDICIONAL
         |CONDICIONAL tk_ne CONDICIONAL                                                  {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}
 ;
 RETURN
-        :tk_return VARIABLE                                                             {$$={variable:$VARIABLE,consulta:null}}
-        |tk_return VARIABLE XPATHGRA                                                    {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
+        :tk_return VARIABLE                                                             {$$={tipo:"VAR",variable:$VARIABLE,consulta:null}}
+        |tk_return VARIABLE XPATHGRA                                                    {$$={tipo:"VAR",variable:$VARIABLE,consulta:$XPATHGRA}}
+        |tk_return HTML                                                                 {$$={tipo:"HTML",valor:$HTML}}
 ;
+
 LLAMADA
         :tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der XPATHGRA                  {$$=$XPATHGRA;}
         |XPATHGRA                                                                       {$$=$1;}
+        |VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
+        |VARIABLE                                                                       {$$={variable:$VARIABLE,consulta:null}}
 ;
 VARIABLE
         :tk_dolar tk_identificador                                                      {$$=$tk_identificador;}
@@ -271,11 +276,16 @@ HTML
     :CONTENIDO                                                                          {$$=$1;}
 ;
 CONTENIDO
-        :CONTENIDO L_CONTENIDO
-        |L_CONTENIDO
+        :CONTENIDO L_CONTENIDO                                                          {$1.push($2);$$=$1;} 
+        |L_CONTENIDO                                                                    {$$=[$1];} 
+        |CONTENIDO COD                                                                  {$1.push($2);$$=$1;} 
+        |COD                                                                            {$$=[$1];}
 ;
 L_CONTENIDO
-        :tk_menor tk_identificador tk_mayor                                             {$$=$1+$2;}
-        |tk_menor tk_diagonal tk_identificador tk_mayor                                 {$$=$1;}
-        |tk_identificador                                                               {$$=$1;}
+        :tk_menor tk_identificador tk_mayor                                             {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()};}
+        |tk_menor tk_diagonal tk_identificador tk_mayor                                 {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()+$4.toString()};}
+        |tk_identificador                                                               {$$={tipo:"TXT",valor:$1.toString()};}
+;
+COD
+        :tk_llave_izq XQUERYGRA tk_llave_der                                            {$$={tipo:"COD",valor:$2};}  
 ;
