@@ -144,7 +144,7 @@
 %left 'tk_or'
 %left 'tk_and'
 %left 'tk_indiferente'
-%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual'
+%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual' 'tk_gt' 'tk_lt' 'tk_ge' 'tk_le' 'tk_eq' 'tk_ne'
 %left 'tk_mas' 'tk_menos'
 %left 'tk_asterisco' 'tk_div' 'tk_mod'
 %left unmenos
@@ -159,15 +159,22 @@ INICIO :
         {return $XQUERYGRA;}  
 ;
 XQUERYGRA
-        :FOR_IN RETURN                                                                  
+        :FOR_IN WHERE  ORDEN RETURN                                                                  
         {$$= new Nodo("XQY", "XQY" );
 	$$.agregarHijo($1);
         $$.agregarHijo($2);
+        $$.agregarHijo($3);
+        $$.agregarHijo($4);
 	}
         |LLAMADA 
         {$$= new Nodo("XQY", "XQY" );
         $$.agregarHijo($1);
 	} 
+        |HTML
+        {$$= new Nodo("XQY", "XQY" );
+        $$.agregarHijo($1);
+	} 
+
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  
@@ -178,6 +185,126 @@ FOR_IN
         $$.agregarHijo($4);
 	} 
 ;
+ORDEN
+        :                                                                               
+        |tk_order_by VARIABLE
+        {$$= new Nodo("ORD", "ORD" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}                                                         
+        |tk_order_by VARIABLE XPATHGRA                                                       
+        {$$= new Nodo("ORD", "ORD" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+	}                                                         
+;
+WHERE
+        :tk_where CONDICIONAL 
+        {$$= new Nodo("WHE", "WHE" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}                                                                 
+        |
+        {
+        $$= new Nodo("WHE","WHE");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }                                                                               
+;
+
+CONDICIONAL
+        :VARIABLE XPATHGRA 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+	}                                                                       
+        |VARIABLE 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+	}                                                                              
+        |tk_numero  
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}                                                                          
+        |tk_hilera                                                                     
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo(new Nodo($1,$1));
+	}        
+        |CONDICIONAL tk_mayor CONDICIONAL 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                    
+        |CONDICIONAL tk_menor CONDICIONAL  
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                      
+        |CONDICIONAL tk_mayor_igual CONDICIONAL
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                   
+        |CONDICIONAL tk_menor_igual CONDICIONAL
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                  
+        |CONDICIONAL tk_igual CONDICIONAL   
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                     
+        |CONDICIONAL tk_indiferente CONDICIONAL   
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                
+        //
+        |CONDICIONAL tk_gt CONDICIONAL  
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                                                          
+        |CONDICIONAL tk_lt CONDICIONAL                                                  
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}         
+        |CONDICIONAL tk_ge CONDICIONAL                                                  
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}         
+        |CONDICIONAL tk_le CONDICIONAL                                                 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}         
+        |CONDICIONAL tk_eq CONDICIONAL                                                   
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}         
+        |CONDICIONAL tk_ne CONDICIONAL                                                  
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	} 
+;
+
 RETURN
         :tk_return VARIABLE                                                             
         {$$= new Nodo("RET", "RET" );

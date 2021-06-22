@@ -140,7 +140,7 @@ break;
 case 28:
 this.$={variable:$$[$0-1],consulta:$$[$0]}
 break;
-case 29: case 30: case 31: case 32: case 34: case 68:
+case 29: case 30: case 31: case 32: case 34: case 68: case 73:
 this.$=$$[$0];
 break;
 case 33:
@@ -232,6 +232,12 @@ this.$= {tipo:"OP_MAYOR",valor1:$$[$0-2],valor2:$$[$0]}
 break;
 case 67:
 this.$= {tipo:"OP_MENOR",valor1:$$[$0-2],valor2:$$[$0]}
+break;
+case 71:
+this.$=$$[$0-2]+$$[$0-1];
+break;
+case 72:
+this.$=$$[$0-3];
 break;
 }
 },
