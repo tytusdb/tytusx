@@ -161,14 +161,8 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 
 </bookstore>
 `
-<<<<<<< HEAD
-let XQuery = `for $x in /bookstore/book
-where $x/price>30
-order by $x/price
-=======
 let XQuery = `
 for $x in /bookstore/book
->>>>>>> 6f9c9f7ee7662b3a30905850cbd5be937fb6c5d3
 return $x/title
 
 `
