@@ -133,42 +133,8 @@ export default class BarrasNodo extends Instruccion {
     }
 
   }
-  //localStorage.setItem("consulta", this.contenido);
-
-  /*} else {
-    return new NodoErrores(
-      'SEMANTICO',
-      'VARIABLE ' + this.Operacion + ' NO EXISTE',
-      this.fila,
-      this.columna
-    );
-  }*/
-
-
-  buscarTablaSimbolos(t: tablaSimbolos, tri: Arbol): string {
-    for (var key of t.tablaActual) {
-      //alert(key + " = " + value);
-      var listaobjetitos = "";
-      var nombre = key.getidentificador();
-
-      let objetos = key.getvalor();
-      if (objetos instanceof tablaSimbolos) {
-        for (var key3 of objetos.tablaActual) {
-          listaobjetitos += `${key3.getidentificador()}, `
-        }
-
-        this.buscarTablaSimbolos(objetos, tri);
-
-      } else {
-        this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
-      }
-
-
-    }
-    return this.contenido;
-    console.log(this.contenido);
-    localStorage.setItem("consulta", this.contenido);
-
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
   }
 
 

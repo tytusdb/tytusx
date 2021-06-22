@@ -66,6 +66,9 @@ export default class Logica extends Instruccion {
         return !unico;
     }
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export enum Logicas {

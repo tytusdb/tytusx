@@ -18,4 +18,7 @@ export default class Todo extends Instruccion {
         var nodo= new nodoAST(this.Operacion); //PADRE SELECT    
         return nodo;
     }
+    codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+        throw new Error('Method not implemented.');
+    }
 }

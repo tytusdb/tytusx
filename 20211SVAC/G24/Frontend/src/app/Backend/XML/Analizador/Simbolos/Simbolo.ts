@@ -11,6 +11,7 @@ export default class Simbolo {
   private cd3variable:any;
   private temporal
   private ambito:String
+  private cdatributo:any;
   constructor(tipo: Tipo, identificador: String, linea: String, columna: String, ambito:String, valor?: any,cd3script?: string) {
     this.tipo = tipo;
     this.identificador = identificador.toLowerCase();
@@ -40,8 +41,11 @@ export default class Simbolo {
     this.valor = value;
   }
   
-  public agregarAtributo(par1: String, par2: String) {
+  public agregarAtributo(par1: String, par2: String,linea:String, columna:String, cd3:String) {
     this.atributo.set(par1, par2);
+    this.cdatributo=cd3;
+    this.linea=linea;
+    this.columna=columna;
   }
 
   public getAtributo(): Map<String, String> {
@@ -50,6 +54,16 @@ export default class Simbolo {
 
   public setAtributo(atributo: Map<String, String>) {
     this.atributo = atributo;
+    
+  }
+  public getAtributoLinea(){
+    return this.linea
+  }
+  public getAtributoColumna(){
+    return this.columna
+  }
+  public get3DAtributo(){
+    return this.cdatributo
   }
 
   public getLinea(): String {
