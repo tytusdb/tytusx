@@ -5,7 +5,8 @@ export class Simbolo{
     columna: number;
     pos: number;
     last: number;
-    SP:number;
+    SP_ID:number;
+    SP_VAL:number;
 
     constructor(id:string, valor:string, linea:number, columna:number){
         this.identificador = id;
@@ -14,7 +15,8 @@ export class Simbolo{
         this.columna = columna;
         this.pos = -1;
         this.last = -1;
-        this.SP = -1;
+        this.SP_ID = -1;
+        this.SP_VAL = -1;
     }
 
 

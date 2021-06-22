@@ -9,7 +9,8 @@ export class Entorno{
     columna: number;
     pos: number;
     last : number;
-    SP:number;
+    SP_ID:number;
+    SP_VAL:number;
 
 
     constructor(id:string, texto:string, linea:number, columna:number, listaSimbolos:Array<Simbolo>, listaE:Array<Entorno>){
@@ -21,7 +22,8 @@ export class Entorno{
         this.listaEntornos = listaE
         this.pos = -1;
         this.last = -1;
-        this.SP = -1;
+        this.SP_ID = -1;
+        this.SP_VAL = -1;
         this.asignarPosEnts();
         this.asignarPosSimb();
     }
