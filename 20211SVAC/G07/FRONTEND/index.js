@@ -169,6 +169,26 @@ return $x/title
 //where $x/price>30
 //return $x/title
 
+let Encabezado3D = `/*------HEADER------*/
+#include <stdio.h>
+#include <math.h>
+
+double heap[30101999];
+double stack[30101999];
+double P;
+double H;
+
+
+
+/*------MAIN------*/
+void main() {
+    P = 0; H = 0;
+
+
+    return;
+}
+`
+
 editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada
 
@@ -403,6 +423,21 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+/**
+ * ******************************************************
+ * CONSOLA 3D
+ * ******************************************************
+ */
+
+    
+
+btn3d.addEventListener("click", () => {
+
+  console.log("EL ANALIZADOR REGRESA");
+  consola3D.value=Encabezado3D;
+
+
+})
 
 /**
  * ******************************************************
