@@ -69,6 +69,9 @@ export default class Simbolo {
   public getcd3Value(etiqueta:String){
     this.cd3variable=etiqueta
   }
+  public setcd3Value():String{
+    return this.cd3variable
+  }
   public igualdadambito():String{
     this.temporal=this.ambito
     return this.ambito

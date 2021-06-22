@@ -5,7 +5,7 @@ import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 import { InicioService } from 'src/app/servicios/inicio.service';
 import * as Analizador from 'src/app/Backend/XML/Analizador/GramaticaXML';
 import * as AnalizadorD from 'src/app/Backend/XML/Analizador/GramaticaXMLDescPRUEBA';
-import * as AnalizarAscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPath'
+import * as AnalizarAscXpath from 'src/app/Backend/XPATH/GramaticaXPath'
 import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPathDesc'
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import * as GramaticalDes from 'src/app/Backend/XML/Analizador/XMLgraphDesc'
@@ -25,7 +25,6 @@ import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNod
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
 
 import 'codemirror/mode/htmlmixed/htmlmixed';
-import * as CodeMirror from 'codemirror';
 import { ViewChild } from '@angular/core';
 
 export let listaErrores: Array<NodoErrores>;
@@ -150,10 +149,43 @@ export class ContenidoInicioComponent implements OnInit {
       console.log(this.tablaGlobal);
 
       var atributos = "";
+      /***************************************************************************************************
+     ************************* MANEJO DE CODIGO 3 DIRECCIONES ASCENDENTE *******************************
+     * *************************************************************************************************
+    */
+   
+    var contenidocd3="#include <stdio.h>\n#include<math.h>\n"
+    
+    Tree.codigo3d.push("int main(){\n");
+     
 
+    for (let i of Tree.getinstrucciones()) {
+      if (i instanceof Objeto) {
+        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
+        this.tablaGlobal.setVariable(lista);
+      }
+    }
+    //ES VARIABLES AL INICIO
+    for (let x = 0; x < Tree.contadort; x++) {
+      if(x==0){contenidocd3=contenidocd3+"double "}
+      else if(x%20==0){contenidocd3=contenidocd3+"\n"}
+     contenidocd3=contenidocd3+"t"+x;
+     if(Tree.contadort-1!==x){contenidocd3=contenidocd3+","}
+
+    }
+    if( Tree.contadort!==0){contenidocd3=contenidocd3+";\n"}
+    Tree.Encabezadocodigo3d.forEach(element => {
+      contenidocd3+=element+"\n"
+    });
+    //ITERA PARA EL CONTENIDO DEL MAIN
+    Tree.codigo3d.forEach(element => {
+      contenidocd3+=element+"\n"
+    });
+    contenidocd3+="return 1;\n}"
+    this.mostrarContenido(contenidocd3, 'cdirecciones');
 
       
-      /* L L E N A D O    T A B L A    D E    S I M B O L O S */
+      /* **********************L L E N A D O    T A B L A    D E    S I M B O L O S************************* */
 
       Ambito="Global"
       for (var key of this.tablaGlobal.tablaActual) {
@@ -165,7 +197,9 @@ export class ContenidoInicioComponent implements OnInit {
         var linea = key.getLinea();
         var columna = key.getColumna();
         var nombre = key.getidentificador();
-        var atributos = "";
+        var atri = key.getAtributo();
+        var cd3direcciones= key.setcd3Value()
+
 
        /* if(nombre!=null){
           let objetos = key.getvalor();
@@ -224,7 +258,7 @@ export class ContenidoInicioComponent implements OnInit {
         
 
 
-        var Reporte = new reporteTabla(nombre, tipo,entorno, contenido, linea, columna, 'pos');
+        var Reporte = new reporteTabla(nombre, tipo,entorno, contenido, linea, columna, cd3direcciones);
         Tree.listaSimbolos.push(Reporte);
       }
 
@@ -280,40 +314,7 @@ export class ContenidoInicioComponent implements OnInit {
       localStorage.setItem("errores", errores);
     }
 
-    /***************************************************************************************************
-     ************************* MANEJO DE CODIGO 3 DIRECCIONES ASCENDENTE *******************************
-     * *************************************************************************************************
-    */
-   
-    var contenidocd3="#include <stdio.h>\n#include<math.h>\n"
     
-    Tree.codigo3d.push("int main(){\n");
-     
-
-    for (let i of Tree.getinstrucciones()) {
-      if (i instanceof Objeto) {
-        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
-        this.tablaGlobal.setVariable(lista);
-      }
-    }
-    //ES VARIABLES AL INICIO
-    for (let x = 0; x < Tree.contadort; x++) {
-      if(x==0){contenidocd3=contenidocd3+"double "}
-      else if(x%20==0){contenidocd3=contenidocd3+"\n"}
-     contenidocd3=contenidocd3+"t"+x;
-     if(Tree.contadort-1!==x){contenidocd3=contenidocd3+","}
-
-    }
-    if( Tree.contadort!==0){contenidocd3=contenidocd3+";\n"}
-    Tree.Encabezadocodigo3d.forEach(element => {
-      contenidocd3+=element+"\n"
-    });
-    //ITERA PARA EL CONTENIDO DEL MAIN
-    Tree.codigo3d.forEach(element => {
-      contenidocd3+=element+"\n"
-    });
-    contenidocd3+="return 1;\n}"
-    this.mostrarContenido(contenidocd3, 'cdirecciones');
   }
 
   llenarTablaSimbolos(t: tablaSimbolos, tri: Arbol) {
@@ -328,8 +329,8 @@ export class ContenidoInicioComponent implements OnInit {
       var linea = key.getLinea();
       var columna = key.getColumna();
       var nombre = key.getidentificador();
+      var cd3direcciones= key.setcd3Value();
 
-      
       /*for (var [key2, value2,] of key.getAtributo()) {
         nombre = key.getidentificador();
         if (key.getAtributo() != null) {
@@ -370,8 +371,9 @@ export class ContenidoInicioComponent implements OnInit {
         tipo = "Atributo";
       }
      
-        var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
       
+
+      var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, cd3direcciones);
 
       tri.listaSimbolos.push(Reporte);
 
