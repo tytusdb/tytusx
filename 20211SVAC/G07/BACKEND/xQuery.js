@@ -24,6 +24,10 @@ function ejecutarForIn(instruccion,entorno,padre){
     let consulta=instruccion.iterador.consulta;
     let entornos=procesarXpath(consulta,entorno,padre);
     entornos=procesarEtorno(entornos);
+    //Orden by
+    if(instruccion.order){
+        entornos=ordenar(instruccion.order,entornos);
+    }
     let where=instruccion.where;
     let respuesta="";
     for (const x of entornos) {
@@ -77,7 +81,7 @@ function validarWhere(instruccion,tabla){
         case "NUMERO":
             return parseInt(instruccion.valor)
         case "CADENA":
-            console.log(instruccion);
+            
             return instruccion.valor
         case "VARIABLE":
             let variable=tabla.getSimbolo(instruccion.variable);
@@ -204,7 +208,6 @@ function imprimirEntorno(entorno){
 }
 function getConsultaXPath(arreglo){
     let retorno=[];
-    let indice=0;
     let contador=0;
     for (const iterator of arreglo) {
         if(contador!=0){
@@ -222,12 +225,47 @@ function procesarEtorno(entorno){
 }
 
 function procesarArreglo(entorno){
-   if(!entorno.etiqueta){
+   if(entorno){
+    if(!entorno.etiqueta){
         for (const iterator of entorno) {
             procesarArreglo(iterator);
         }   
     }else{
         regreso_.push(entorno);
     }
+   }
     
+}
+function ordenar(instruccion,entornos){
+    let entornosAux=[];
+    for (const entorno of entornos) {
+        if(instruccion.consulta){
+            let arregloEntornos=procesarXpath(instruccion.consulta,entorno,entorno)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            entornosAux.unshift(arregloEntornos[0]);
+        }else{
+            entornosAux.unshift(entorno);
+        }
+        
+    }
+    console.log(entornosAux);
+    let i=0;
+    for (const principal of entornosAux) {
+        let ii=0;
+        for (const secundario of entornosAux) {
+            if(entornosAux[i].texto>entornosAux[ii].texto){
+                let aux=entornosAux[ii];
+                entornosAux[ii]=entornosAux[i];
+                entornosAux[i]=aux;
+
+                let aux2=entornos[ii];
+                entornos[ii]=entornos[i];
+                entornos[i]=aux2;
+            }
+            ii++;
+        } 
+        i++;
+    }
+ 
+    return entornos;
 }
