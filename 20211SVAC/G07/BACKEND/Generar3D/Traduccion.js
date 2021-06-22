@@ -11,7 +11,7 @@ class Traduccion {
 
     }
 
-    
+    // Metodo que permite traducir una cadena a codigo de 3Direcciones y lo agrega al Heap
     traducirCadena(cadena) {        
         //Se obtiene la posicion del heap
         this.t0 = this.h;
@@ -55,6 +55,25 @@ class Traduccion {
 
     }
 
+    //Metodo para obtener del Heap un String
+    obtenerCadena(indice) {
+        let cadena = '';
+        let cont = indice;
+        
+        while (true) {
+            let asciiChar = this.heap[cont];
+            if (asciiChar !== -1) {
+                cadena += String.fromCharCode(asciiChar);
+            } else {
+                break;
+            }
+
+            cont++;
+        }
+
+        console.log("Cadena Salida", cadena);
+    }
+
     obtenerCodigo() {
 
         // Se obtienen las etiquetas
@@ -84,7 +103,7 @@ class Traduccion {
             ${this.traduccion3D}
 
             printf("Hello World");
-            
+
             return;
         }
 
