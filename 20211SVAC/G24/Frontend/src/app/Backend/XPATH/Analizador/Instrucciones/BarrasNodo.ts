@@ -9,7 +9,9 @@ import Identificador from '../Expresiones/Identificador';
 import Arbol from '../Simbolos/Arbol';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 import AtributoSimple from './AtributosSimples';
+import SelectRoot from './SelectRoot';
 import Todo from './todo';
+const inicio = require("../../../../componentes/contenido-inicio/contenido-inicio.component")
 
 export default class BarrasNodo extends Instruccion {
   public Barra: string;
@@ -53,7 +55,7 @@ export default class BarrasNodo extends Instruccion {
     //if (variable != null) {
     if (this.Barra2 == null) {
       console.log("Aqui esta el arbol");
-      let salidas = new tablaSimbolos();
+      let salidas:tablaSimbolos = new tablaSimbolos();
       let cadena = ''
       let error = ''
 
@@ -67,7 +69,38 @@ export default class BarrasNodo extends Instruccion {
         }
       } else if (this.Operacion instanceof Aritmetica) {
 
-      } else if (this.Operacion instanceof Todo) {
+      } else if (this.Operacion instanceof SelectRoot){
+        if(variable==="."){
+          for (var key of tabla.getTabla()) {
+            salidas.setVariable(key)
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }else{
+          //SI EN CASO FUERA .. ENTONCES REGRESA AL NODO ANTERIOR
+          var temporal=tabla.tablaAnterior
+          if(temporal!=null){
+            
+            for(var i of temporal.tablaActual){
+              console.log(inicio.ArbolGlobalReporte)
+              for(var b of inicio.ArbolGlobalReporte){
+                if( b.identificador=== i.identificador && b.entorno=="Global"){
+                  return "Nodo no encontado: [object XMLDocument]"
+                }
+              }
+              salidas.setVariable(i)
+            }
+          }else{
+            cadena="Nodo no encontado: [object XMLDocument]"
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }
+      }else if (this.Operacion instanceof Todo) {
         for (var key of tabla.getTabla()) {
           salidas.setVariable(key)
         }
@@ -79,6 +112,7 @@ export default class BarrasNodo extends Instruccion {
         for (var key of tabla.getTabla()) {
          
           if (key.getidentificador() == variable) {
+            
             console.log(key.getidentificador())
             if (key.getvalor() instanceof tablaSimbolos) {
               for (let sim of key.getvalor().getTabla()) {
@@ -102,11 +136,12 @@ export default class BarrasNodo extends Instruccion {
         }
         console.log("OBJETOSSALIDA")
         console.log(salidas)
+        salidas.setAnterior(tabla)
         return salidas
 
       }
 
-    } else {
+    } else {         // **************************************ESTE ES DOBLE BARRA******************************
       console.log("entro doble barra")
       //DOBLE BARRA
       let salidas = new tablaSimbolos();
@@ -120,7 +155,38 @@ export default class BarrasNodo extends Instruccion {
         }
         return variable
       } else if (this.Operacion instanceof Todo) {
-      } else {
+      } else if (this.Operacion instanceof SelectRoot){
+        if(variable==="."){
+          for (var key of tabla.getTabla()) {
+            salidas.setVariable(key)
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }else{
+          //SI EN CASO FUERA .. ENTONCES REGRESA AL NODO ANTERIOR
+          var temporal=tabla.tablaAnterior
+          if(temporal!=null){
+            
+            for(var i of temporal.tablaActual){
+              console.log(inicio.ArbolGlobalReporte)
+              for(var b of inicio.ArbolGlobalReporte){
+                if( b.identificador=== i.identificador && b.entorno=="Global"){
+                  return "Nodo no encontado: [object XMLDocument]"
+                }
+              }
+              salidas.setVariable(i)
+            }
+          }else{
+            cadena="Nodo no encontado: [object XMLDocument]"
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }
+      }else {
 
         for (var key of tabla.getTabla()) {
           if (key.getidentificador() == variable) {
@@ -140,6 +206,7 @@ export default class BarrasNodo extends Instruccion {
           }
           console.log("OBJETOSSALIDA")
           console.log(salidas)
+          salidas.setAnterior(tabla)
           return salidas
         }
       }
