@@ -19,25 +19,24 @@ function getConsultaXQuery(instruccion, entorno,padre){
             return procesarHTML(instruccion.valor,entorno,null)
         case "LLAMADA":
             return ejecutarLLamada(instruccion.valor,entorno,padre);
+        case "F_DATA":
+            return ejecutarData(instruccion.valor,entorno,padre);
         default:
             return null
     }
 }
 
 function ejecutarForIn(instruccion,entorno,padre){
-    console.error("ejecutarForIn");
-    console.log(instruccion);
+
     
     let consulta=instruccion.iterador.consulta;
     let entornos=procesarXpath(consulta,entorno,padre);
-    console.log(consulta);
     entornos=procesarEtorno(entornos);
     
     //Orden by
     if(instruccion.order){
         entornos=ordenar(instruccion.order,entornos);
     }
-    console.log(entornos);
     let where=instruccion.where;
     let respuesta="";
     for (const x of entornos) {
@@ -48,7 +47,7 @@ function ejecutarForIn(instruccion,entorno,padre){
             retorno=procesarReturn(instruccion.retorno,var_);
         }
         if(retorno){
-            respuesta+=retorno;
+            respuesta+=retorno+'\n';
         }
     }
     
@@ -61,14 +60,17 @@ function ejecutarForIn(instruccion,entorno,padre){
 }
 function ejecutarLLamada (instruccion,entorno,padre){
     let variable=entorno.getSimbolo(instruccion.variable);
+
         if(variable){
             if(instruccion.consulta){
                 let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable);
+                
                 arregloEntornos=procesarEtorno(arregloEntornos);
                 let txt="";
                 for (const iterator of arregloEntornos) {
                     txt+=imprimirEntorno(iterator);
                 }
+                
                 return txt;
             }
             return imprimirEntorno(variable);
@@ -123,8 +125,6 @@ function validarWhere(instruccion,tabla){
            
     }
 }
-
-
 function procesarReturn(instruccion,variables){
     if(instruccion.tipo=="VAR"){
         let variable=variables.getSimbolo(instruccion.variable);
@@ -143,17 +143,48 @@ function procesarReturn(instruccion,variables){
         }
         
        
-    }else{
+    }else if(instruccion.tipo=="HTML"){
         
         return procesarHTML(instruccion.valor,variables,null)
+    }else if(instruccion.tipo=="IF"){
+        
+
+        return procesarIF(instruccion.valor,variables,null);
+    }
+    
+    return null;
+}
+function procesarIF(instruccion,variables){
+    let res=validarWhere(instruccion.condicion,variables);
+    if(res){
+        switch (instruccion.then.tipo) {
+            case "HTML":
+                return procesarHTML(instruccion.then.valor,variables,null)  ; 
+            case "LLAMADA":
+                return ejecutarLLamada(instruccion.else.valor,entorno,entorno);         
+            default:
+              return null;
+        }
+    }else{
+        if(instruccion.else){
+            switch (instruccion.else.tipo) {
+                case "HTML":
+                    return procesarHTML(instruccion.else.valor,variables,null)  ;
+                case "LLAMADA":
+                    return ejecutarLLamada(instruccion.else.valor,entorno,entorno);     
+                default:
+                  return null;
+            }
+        }
     }
     return null;
 }
+
 function procesarHTML(arreglo,entorno,padre){
     let txt="";
     for (const iterator of arreglo) {
         if(iterator.tipo=="TXT"){
-            txt+=iterator.valor;
+            txt+=iterator.valor+'\n';
         }
         if(iterator.tipo=="COD"){
             txt+=getConsultaXQuery(iterator.valor,entorno,padre);
@@ -278,7 +309,6 @@ function procesarEtorno(entorno){
 
 function procesarArreglo(entorno){
    if(entorno){
-       console.log(entorno);
     if(!entorno.etiqueta||!entorno){
         for (const iterator of entorno) {
             procesarArreglo(iterator);
@@ -295,30 +325,45 @@ function ordenar(instruccion,entornos){
         if(instruccion.consulta){
             let arregloEntornos=procesarXpath(instruccion.consulta,entorno,entorno)
             arregloEntornos=procesarEtorno(arregloEntornos);
-            entornosAux.unshift(arregloEntornos[0]);
+            entornosAux.push(arregloEntornos[0]);
         }else{
-            entornosAux.unshift(entorno);
+            entornosAux.push(entorno);
         }
         
     }
-    console.log(entornosAux);
-    let i=0;
-    for (const principal of entornosAux) {
-        let ii=0;
-        for (const secundario of entornosAux) {
-            if(entornosAux[i].texto>entornosAux[ii].texto){
-                let aux=entornosAux[ii];
-                entornosAux[ii]=entornosAux[i];
-                entornosAux[i]=aux;
 
-                let aux2=entornos[ii];
-                entornos[ii]=entornos[i];
-                entornos[i]=aux2;
+
+
+    console.log(entornosAux);
+    var n, i, k, aux,aux2;
+    n = entornosAux.length;
+    for (k = 1; k < n; k++) {
+        for (i = 0; i < (n - k); i++) {
+            if (parseFloat(entornosAux[i].texto) < parseFloat(entornosAux[i + 1].texto)) {
+                console.log(entornosAux[i].texto);
+                console.log(" CAMBIO POR ");
+                console.log(entornosAux[i+1].texto);
+                aux = entornosAux[i];
+                entornosAux[i] = entornosAux[i + 1];
+                entornosAux[i + 1] = aux;
+                
+                aux2 = entornos[i];
+                entornos[i] = entornos[i + 1];
+                entornos[i + 1] = aux2;
+                
             }
-            ii++;
-        } 
-        i++;
+        }
     }
+    console.log(entornosAux);
  
     return entornos;
+}
+function ejecutarData(instruccion,entorno,padre){
+    let res=ejecutarLLamada(instruccion,entorno,entorno);
+    res = res.replace(/[<][^><]+[>]/gm, '');
+    res = res.replace('\n', '');
+    if(res){
+        return  res;
+    }
+    return  null;
 }

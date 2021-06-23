@@ -172,6 +172,7 @@ INICIO
 XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
+        |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
         
 ;
 FOR_IN
@@ -209,6 +210,7 @@ RETURN
         :tk_return VARIABLE                                                             {$$={tipo:"VAR",variable:$VARIABLE,consulta:null}}
         |tk_return VARIABLE XPATHGRA                                                    {$$={tipo:"VAR",variable:$VARIABLE,consulta:$XPATHGRA}}
         |tk_return HTML                                                                 {$$={tipo:"HTML",valor:$HTML}}
+        |tk_return IF                                                                   {$$={tipo:"IF",valor:$IF}}
 ;
 
 LLAMADA
@@ -281,6 +283,13 @@ DATO
         |DATO tk_mayor DATO                                                             {$$= {tipo:"OP_MAYOR",valor1:$1,valor2:$3}}
         |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}                  
 ;
+F_DATA
+        :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}
+;
+CONS
+        :VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
+        |VARIABLE                                                                       {$$={variable:$VARIABLE,consulta:null}}
+;
 
 HTML
     :CONTENIDO                                                                          {$$=$1;}
@@ -299,6 +308,33 @@ L_CONTENIDO
 COD
         :tk_llave_izq XQUERYGRA tk_llave_der                                            {$$={tipo:"COD",valor:$2};}  
 ;
+IF
+        :tk_if tk_parentesis_izq CONDICIONAL tk_parentesis_der THEN ELSE                {$$={condicion:$CONDICIONAL,else:$ELSE,then:$THEN};}
+        |tk_if tk_parentesis_izq CONDICIONAL tk_parentesis_der THEN                     {$$={condicion:$CONDICIONAL,else:null,then:$THEN};}
+;
+THEN
+        :tk_then HTML                                                                   {$$={tipo:"HTML",valor:$2}}                                                                   
+        |tk_then LLAMADA                                                                {$$={tipo:"LLAMADA",valor:$2}} 
+;
+ELSE
+        :tk_else HTML                                                                   {$$={tipo:"HTML",valor:$2}}                                                                   
+        |tk_else LLAMADA                                                                {$$={tipo:"LLAMADA",valor:$2}} 
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FUNCACKERMAN
         : CABEZAFUNC tk_parentesis_izq LISTAFUNC tk_parentesis_der RETURNFUNC FUNCOPERACION tk_punto_coma LLAMADAFUNCION

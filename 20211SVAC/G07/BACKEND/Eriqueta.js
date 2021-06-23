@@ -23,7 +23,7 @@ class Etiqueta {
         this.cuerpo += "\n"+this.contenido + "";
       }
 
-      this.cuerpo += "</" + this.nombre + ">\n";
+      this.cuerpo += "</" + this.nombre + ">";
     } else if (this.tipo == "unica") {
       this.cuerpo += "<" + this.nombre+" ";
       if (this.atributo != "" && this.atributo != undefined) {
