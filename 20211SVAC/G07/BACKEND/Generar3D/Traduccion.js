@@ -117,6 +117,11 @@ class Traduccion {
         return cadena;
     }
 
+    esNumero(entrada) {
+
+        return !isNaN(entrada);
+    }
+
     obtenerCodigo() {
 
         // Se obtienen las etiquetas

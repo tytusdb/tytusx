@@ -423,7 +423,6 @@ consola3D.value=Encabezado3D;
 
 // Analizar la entrada XML al hacer CLICK al boton
 botonCargar.addEventListener("click", () => {
-    console.log("Analizando XML DES ...")
     tipoAnalizadorXML = "Descendente";
 
     // Analizador XML por la izquierda
@@ -437,10 +436,13 @@ botonCargar.addEventListener("click", () => {
     globalencod =parserXML.tipoencoding;
     console.error("Aqui");
     console.log(consulta_xml.parse("<price>5.95</price>"));
+
+    // Tabla de Simbolos
+    tablaSimbolos = new TablaSimbolos(parserXML.json);
+    tablaSimbolos = tablaSimbolos.generarTabla();
 })
 
 botonCargar2.addEventListener("click", () => {
-  console.log("Analizando XML ASC ...")
   tipoAnalizadorXML = "Ascendente";
 
   // Analizador XML por la izquierda
@@ -452,6 +454,10 @@ botonCargar2.addEventListener("click", () => {
 
   codificador.innerHTML = parserXML.tipoencoding;
   globalencod =parserXML.tipoencoding;
+
+  // Tabla de Simbolos
+  tablaSimbolos = new TablaSimbolos(parserXML.json);
+  tablaSimbolos = tablaSimbolos.generarTabla();
 
 
 })
@@ -499,10 +505,7 @@ btnReporteXML.addEventListener("click", () => {
   tablaTitulo.innerHTML = 'Reporte Tabla Simbolos XML ' + tipoAnalizadorXML;
   tabla.innerHTML = "";
 
-  // Tabla de Simbolos
-  tablaSimbolos = new TablaSimbolos(parserXML.json);
-  tablaSimbolos = tablaSimbolos.generarTabla();
-
+  
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
   <th scope="col">Nombre</th>
@@ -511,6 +514,7 @@ btnReporteXML.addEventListener("click", () => {
   <th scope="col">Fila</th>
   <th scope="col">Columna</th>
   <th scope="col">Valor</th>
+  <th scope="col">Indice</th>
   `;
 
 
@@ -524,6 +528,7 @@ btnReporteXML.addEventListener("click", () => {
         <td>${simbolo.fila}</td>
         <td>${simbolo.columna}</td>
         <td>${simbolo.valor}</td>
+        <td>${simbolo.indice === -1 ? '' : simbolo.indice}</td>
       </tr>
     `;
   });
