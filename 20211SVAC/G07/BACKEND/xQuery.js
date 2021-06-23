@@ -21,6 +21,8 @@ function getConsultaXQuery(instruccion, entorno,padre){
             return ejecutarLLamada(instruccion.valor,entorno,padre);
         case "F_DATA":
             return ejecutarData(instruccion.valor,entorno,padre);
+        case "F_UPPER":
+            return ejecutarUpper(instruccion.valor,entorno,padre);
         default:
             return null
     }
@@ -364,6 +366,14 @@ function ejecutarData(instruccion,entorno,padre){
     res = res.replace('\n', '');
     if(res){
         return  res;
+    }
+    return  null;
+}
+function ejecutarUpper(instruccion,entorno,padre){
+    let res=ejecutarLLamada(instruccion,entorno,entorno);
+    
+    if(res){
+        return  res.toUpperCase();
     }
     return  null;
 }
