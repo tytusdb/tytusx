@@ -172,6 +172,7 @@ INICIO
 XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
+        |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
         
 ;
 FOR_IN
@@ -281,6 +282,13 @@ DATO
         |DATO tk_mayor DATO                                                             {$$= {tipo:"OP_MAYOR",valor1:$1,valor2:$3}}
         |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}                  
 ;
+F_DATA
+        :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}
+;
+CONS
+        :VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
+        |VARIABLE                                                                       {$$={variable:$VARIABLE,consulta:null}}
+;
 
 HTML
     :CONTENIDO                                                                          {$$=$1;}
@@ -299,6 +307,22 @@ L_CONTENIDO
 COD
         :tk_llave_izq XQUERYGRA tk_llave_der                                            {$$={tipo:"COD",valor:$2};}  
 ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FUNCACKERMAN
         : CABEZAFUNC tk_parentesis_izq LISTAFUNC tk_parentesis_der RETURNFUNC FUNCOPERACION tk_punto_coma LLAMADAFUNCION
