@@ -219,6 +219,14 @@ function procesarXpath(consulta,entorno,padre){
                 return res
             }
             return null
+        case "ATRIBUTO":
+            if(entorno.atributos){
+                if(entorno.atributos.nombreAtributo==instruccion.valor){
+                   return entorno.atributos.valorAtributo;
+                }
+            }
+
+            return null;
         default:
             return null
     }
@@ -270,7 +278,8 @@ function procesarEtorno(entorno){
 
 function procesarArreglo(entorno){
    if(entorno){
-    if(!entorno.etiqueta){
+       console.log(entorno);
+    if(!entorno.etiqueta||!entorno){
         for (const iterator of entorno) {
             procesarArreglo(iterator);
         }   
