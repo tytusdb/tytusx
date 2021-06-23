@@ -26,7 +26,10 @@ export class AppComponent {
 
  
   title = 'proyecto1';
-  txtXpath = `/bookstore/book/title`;
+  txtXpath = `for $x in /bookstore/book
+  where $x/price>30
+  order by $x/title
+  return $x/title`;
   consoleValue = "";
   parser;
   retroceder = true;
@@ -84,6 +87,7 @@ cstxml;
   double heap[30101999];
   double stack[30101999];
   double SP;
+
   double HP;
   
   /*------MAIN------*/

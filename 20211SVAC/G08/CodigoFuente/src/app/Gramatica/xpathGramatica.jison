@@ -2,7 +2,6 @@
 %options case-insensitive
 
 entero [0-9]+("."[0-9]+)?
-
 caracterliteral (\'[^']*\')
 stringliteral (\"(\\\"|[^"]|\n)*\")
 comentario_linea  ("//".*\r\n)|("//".*\n)|("//".*\r)
@@ -15,7 +14,6 @@ escape                              \\{escapechar}
 "//"                        return 'BARRAS';
 "//".*                              // comentario simple línea
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] // comentario multiple líneas
-
 
 {entero}	      return 'entero'
 {stringliteral}       return 'STRING_LITERAL'
@@ -42,10 +40,11 @@ escape                              \\{escapechar}
 "+"                         return '+';
 "-"                         return '-';
 "*"                         return '*';
+"$"                         return '$';
+"&"                         return '&';
+"\""                        return 'comillas';
 
-
-
-
+"</"                        return '</';
 "<="                        return '<=';
 ">="                        return '>=';
 "<"                         return '<';
@@ -53,16 +52,39 @@ escape                              \\{escapechar}
 "="                         return '=';
 "=="                        return 'equal';
 "!="                        return '!=';
-
+":="                        return ':=';
 "and"                       return 'and';
 "or"                        return 'or';
 "!"                         return 'not';
+"for"                       return 'for';
+"in"                        return 'in';
+"where"                     return 'where';
+"return"                    return 'return';
+"order"                     return 'order';
+"by"                        return 'by';
+"eq"                        return 'eq'
+"ne"                        return 'ne'
+"lt"                        return 'lt'
+"le"                        return 'le'
+"gt"                        return 'gt'
+"ge"                        return 'ge'
+"let"                       return 'let'
+"to"                        return 'to'
+"ascending"                 return 'ascending'
+"descending"                return 'descending'
+"amp"                       return 'amp'
+"quot"                      return 'quot'
+"apos"                      return 'apos'
 
 ":"                         return ':';
+","                         return ',';
 ";"                         return 'semicolon';
-
+"then"                      return 'then';
+"else"                      return 'else';
 "["                         return '[';
 "]"                         return ']';
+"{"                         return '{';
+"}"                         return '}';
 "@"                         return 'arroba';
 "&&"                        return 'and';
 "|"                         return '|';
@@ -81,7 +103,7 @@ escape                              \\{escapechar}
 
 ".."                   return 'DOBLEDOT'
 "."                   return 'DOT'
-
+[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_!@#$%+^'`"*()/¡:;.,~-¤Ã-]            return 'CharRef';
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
 /lex
@@ -118,7 +140,127 @@ expressions
     : XPath EOF 
         { salida = []; typeof console !== 'undefined' ? console.log($1) : print($1);
           return $1; }
-    ;
+    | XQUERY EOF;
+
+XQUERY : FLWORExpr
+        |DirectConstructor;
+
+//*************
+DirectConstructor : DirElemConstructor;
+
+DirElemConstructor: '<' nodename DirAttributeList BARRASIMPLE '>'
+	| '<' nodename DirAttributeList '>' EDirElemContent '</' nodename '>';
+			
+EDirElemContent : LDirElemContent
+	|;
+			
+LDirElemContent : LDirElemContent DirElemContent
+	|DirElemContent;
+	
+DirElemContent : DirectConstructor
+| CommonContent;
+
+CommonContent : PredefinedEntityRef  | nodename | EnclosedExpr| CharRef | DOT| ':';
+
+ EnclosedExpr: '{' Expr '}';
+ 
+ PredefinedEntityRef: '&' REF semicolon;
+ 
+ REF: 'lt' | 'gt' | 'amp' | 'quot' | 'apos';
+ 
+ DirAttributeList : LAtr
+	|;
+LAtr: LAtr Atr
+	| Atr;
+Atr: nodename '=' STRING_LITERAL;
+
+//******************* INICIO
+ForClause: for LForBinding;
+
+LForBinding: LForBinding ',' ForBinding
+	|ForBinding;
+
+ForBinding: '$'nodename in SENTENCIA;
+
+ExprSingle: FLWORExpr
+	| IfExpr
+        |StringConcatExpr
+        | lparen entero to entero rparen
+        | DirectConstructor;
+	
+FLWORExpr : InitialClause ELIntermediateClause ReturnClause;
+
+QuantifiedExpr: '$' nodename;
+
+InitialClause: ForClause 
+| LetClause;
+
+LetClause: let LLetBinding;
+
+LLetBinding: LLetBinding ',' LetBinding
+	|LetBinding;
+			
+LetBinding: '$' nodename ':=' ExprSingle;
+
+ELIntermediateClause : LIntermediateClause
+        |;
+
+LIntermediateClause : LIntermediateClause IntermediateClause
+                |IntermediateClause;
+
+IntermediateClause: InitialClause | WhereClause | OrderByClause;
+
+WhereClause: where LComparisonExpr;
+
+OrderByClause: order by OrderSpecList;
+
+OrderSpecList:OrderSpecList ',' OrderSpec
+	| OrderSpec;
+OrderSpec : ExprSingle OrderModifier;
+
+OrderModifier: ascending
+	| descending
+        | ;
+			
+ReturnClause: return ExprSingle;
+
+IfExpr: if lparen Expr rparen then ExprSingle else ExprSingle;
+
+Expr: 	Expr ExprSingle
+        |ExprSingle;
+
+LComparisonExpr : LComparisonExpr and  ComparisonExpr
+        | LComparisonExpr or  ComparisonExpr
+        | ComparisonExpr;
+
+ComparisonExpr : StringConcatExpr ComparisonValue XPARAM;
+
+XPARAM : numberLiteral
+|  XOPERACION ;
+
+XOPERACION: XPARAM '+' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mas);}
+        |XPARAM '-' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menos);}
+        |XPARAM '*' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Por);}
+        |XPARAM mod XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mod);}
+        |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);};
+
+
+
+StringConcatExpr : '$' nodename SENTENCIA
+		| '$' nodename;
+
+ComparisonValue : GeneralComp | ValueComp;
+
+ValueComp : 'eq' | 'ne' | 'lt' | 'le' | 'gt' | 'ge';
+
+GeneralComp : '=' | '!=' | '<' | '<=' | '>' | '>=';
+
+//******************* FIN
+XCOMPARISON : $ SENTENCIA ComparisonValue PARAMETRO;
+
+        
+IF : if lparen xvar BARRASIMPLE  OPERACION rparen SIMPLE_EXPRESION then else SIMPLE_EXPRESION;
+
 
 XPath : LSENTENCIA {$$ = salida; salida = []; return $$;};
 
