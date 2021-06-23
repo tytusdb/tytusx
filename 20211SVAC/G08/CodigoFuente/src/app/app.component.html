@@ -57,11 +57,15 @@
       <textarea style="resize: none;" id="txtXpath"  [(ngModel)]="txtXpath" class="form-control"  rows="2" [ngModelOptions]="{standalone: true}"></textarea>
     </div>
     <form>
-      <div class="form-group">
-        <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
           <label for="txtXml">Editor XML:</label>
           <textarea style="resize: none;"   [(ngModel)]="xmlText" class="form-control" id="txtXml" rows="15" [ngModelOptions]="{standalone: true}"></textarea>
-        </div>
+         </div>
+         <div class="col-md-6">
+          <label for="txtXml">Salida C3D:</label>
+          <textarea style="resize: none;" [(ngModel)]="c3dText" class="form-control" id="txtC3D" rows="15" [ngModelOptions]="{standalone: true}"></textarea>
+         </div>
       </div>
     </form>
      <div class="form-group">

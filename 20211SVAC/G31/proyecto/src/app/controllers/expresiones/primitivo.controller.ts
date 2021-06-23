@@ -14,6 +14,6 @@ export class Primitivo extends Nodo {
   }
 
   public ejecutar(tabla: Tabla, arbol: Arbol) {
-    throw new Error('Method not implemented in Primitivo');
+    return this.valor;
   }
 }

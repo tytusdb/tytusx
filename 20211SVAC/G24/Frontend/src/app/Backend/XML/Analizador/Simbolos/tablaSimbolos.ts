@@ -41,6 +41,7 @@ export default class tablaSimbolos {
       break;
     }
     */
+   console.log(simbolo.getambito())
     this.tablaActual.push(simbolo);
     return `creada con exito`;
   }

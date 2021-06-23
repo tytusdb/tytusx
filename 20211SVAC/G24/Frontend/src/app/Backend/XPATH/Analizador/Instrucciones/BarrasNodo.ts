@@ -3,9 +3,11 @@ import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import NodoErrores from '../Excepciones/NodoErrores';
+import Aritmetica from '../Expresiones/Aritmetica';
 import Identificador from '../Expresiones/Identificador';
 import Arbol from '../Simbolos/Arbol';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
+import AtributoSimple from './AtributosSimples';
 
 export default class BarrasNodo extends Instruccion {
   public Barra: string;
@@ -52,72 +54,81 @@ export default class BarrasNodo extends Instruccion {
       let salidas = new tablaSimbolos();
       let cadena = ''
       let error = ''
-      for (var key of tabla.getTabla()) {//SIMBOLOS
-        /*let objetos = key.getvalor();
-        if (objetos instanceof tablaSimbolos) { // BUSCAR UNA RAMA HIJA
-          for(let key2 of objetos.getTabla())
-          {
-            if(key2.getidentificador() == variable){
-              salidas.push(key2)
-            }
-          }
 
-        } else {
-          //this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ","\n");
-          //MANDA ERROR
-        }*/
-        if (key.getidentificador() == variable) {
-          console.log(key.getidentificador())
-          if (key.getvalor() instanceof tablaSimbolos) {
-            for (let sim of key.getvalor().getTabla()) {
-              salidas.setVariable(sim)
-            }
-
-          }
-          else {
-            cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
-          }
-        } else {
-          error = "Nodo no encontrado ";
-          console.log(error);
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          console.log(this.Operacion.cadena)
+          return this.Operacion.cadena
         }
+        return variable
+      }else if(this.Operacion instanceof Aritmetica){
+        
+      } else {
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          } else {
+            error = "Nodo no encontrado ";
+            console.log(error);
+          }
+
+        }
+        if (cadena != '') {
+          return cadena
+        } else if (error != '') {
+          return error
+        }
+        console.log("OBJETOSSALIDA")
+        console.log(salidas)
+        return salidas
 
       }
-      if (cadena != '') {
-        return cadena
-      } else if (error != '') {
-        return error
-      }
-      console.log("OBJETOSSALIDA")
-      console.log(salidas)
-      return salidas
+
     } else {
       console.log("entro doble barra")
       //DOBLE BARRA
       let salidas = new tablaSimbolos();
       let cadena = ''
 
-      for (var key of tabla.getTabla()) {
-        if (key.getidentificador() == variable) {
-          console.log(key.getidentificador())
-          if (key.getvalor() instanceof tablaSimbolos) {
-            for (let sim of key.getvalor().getTabla()) {
-              salidas.setVariable(sim)
+      /**ESTE SERVIRIA CUANDO ES TRIPO ATRIBUTO SIMPLE */
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          return this.Operacion.cadena
+        }
+        return variable
+      } else {
+
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
             }
-
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
           }
-          else {
-            cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+          if (cadena != '') {
+            return cadena
           }
+          console.log("OBJETOSSALIDA")
+          console.log(salidas)
+          return salidas
         }
-
-
-        if (cadena != '') {
-          return cadena
-        }
-        console.log("OBJETOSSALIDA")
-        console.log(salidas)
-        return salidas
       }
     }
 
