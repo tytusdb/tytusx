@@ -1,4 +1,5 @@
 
+import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos';
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
@@ -8,6 +9,7 @@ import Identificador from '../Expresiones/Identificador';
 import Arbol from '../Simbolos/Arbol';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 import AtributoSimple from './AtributosSimples';
+import Todo from './todo';
 
 export default class BarrasNodo extends Instruccion {
   public Barra: string;
@@ -60,12 +62,22 @@ export default class BarrasNodo extends Instruccion {
         if (this.Operacion.cadena != '') {
           console.log(this.Operacion.cadena)
           return this.Operacion.cadena
+        } else {
+          return "No hay atributos"
         }
-        return variable
-      }else if(this.Operacion instanceof Aritmetica){
-        
+      } else if (this.Operacion instanceof Aritmetica) {
+
+      } else if (this.Operacion instanceof Todo) {
+        for (var key of tabla.getTabla()) {
+          salidas.setVariable(key)
+        }
+        if (cadena != '') {
+          return cadena
+        }
+        return salidas
       } else {
         for (var key of tabla.getTabla()) {
+         
           if (key.getidentificador() == variable) {
             console.log(key.getidentificador())
             if (key.getvalor() instanceof tablaSimbolos) {
@@ -107,6 +119,7 @@ export default class BarrasNodo extends Instruccion {
           return this.Operacion.cadena
         }
         return variable
+      } else if (this.Operacion instanceof Todo) {
       } else {
 
         for (var key of tabla.getTabla()) {
@@ -133,6 +146,23 @@ export default class BarrasNodo extends Instruccion {
     }
 
   }
+  CollectAll(key: Simbolo, cad: string, salidas: tablaSimbolos) {
+    if (key.getvalor().getTabla() != null) {
+      for (let sim of key.getvalor().getTabla()) {
+        salidas.setVariable(sim)
+        if (sim instanceof Simbolo) {
+          if (sim.getAtributo().size != 0) {
+            sim.getAtributo().forEach(element => {
+              cad += element.trim() + "\n"
+            });
+          }
+          if (sim.getvalor() instanceof tablaSimbolos) {
+            this.CollectAll(sim, cad, salidas)
+          }
+        }
+      }
+    }
+  }
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
     let variable = this.Operacion.codigo3D(arbol, tabla);
     console.log(this.Operacion)
@@ -150,8 +180,8 @@ export default class BarrasNodo extends Instruccion {
           return this.Operacion.cadena
         }
         return variable
-      }else if(this.Operacion instanceof Aritmetica){
-        
+      } else if (this.Operacion instanceof Aritmetica) {
+
       } else {
         for (var key of tabla.getTabla()) {
           if (key.getidentificador() == variable) {
