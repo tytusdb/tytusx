@@ -67,7 +67,7 @@ class Traduccion {
             //Se asigna el caracter al heap
             this.heap[this.t1++] = asciiChar;
             this.traduccion3D += `
-            heap[(int) t${this.t+1}] = ${asciiChar};
+            heap[(int) t${this.t+1}] = ${asciiChar};  //${cadena[i]}
             t${this.t+1} = t${this.t+1} + 1;`;
             
         }
@@ -117,10 +117,15 @@ class Traduccion {
         return cadena;
     }
 
+    esNumero(entrada) {
+
+        return !isNaN(entrada);
+    }
+
     obtenerCodigo() {
 
         // Se obtienen las etiquetas
-        let etiquetas = 'double ';
+        let etiquetas = '';
         for (let i = 0; i < this.t; i++) {
             if (i === this.t - 1) {
                 etiquetas += `t${i};`
@@ -128,17 +133,34 @@ class Traduccion {
             }
             etiquetas += `t${i},` 
         }
+
+        //Etiquetas en consola
+        let auxEtiqueta = '';
+        for (let i = 0; i < this.t; i++) {
+            if (i === this.t - 1) {
+                auxEtiqueta += `t${i};`
+                break; 
+            }
+            
+            auxEtiqueta += `t${i},` 
+
+            if (i % 50 === 0 && i != 0) {
+                auxEtiqueta += `\n        `;    
+            }
+        }
+        console.log(auxEtiqueta);
+
         
 
         let codigoTraducido = `
         #include <stdio.h>
         #include <math.h>
 
-        double heap[${this.heap.length}];
-        double stack[${this.stack.length}];
-        double P;
-        double H;
-        ${etiquetas}
+        float heap[${this.heap.length}];
+        float stack[${this.stack.length}];
+        float P;
+        float H;
+        float ${auxEtiqueta}
 
         void main() {
             P = 0; H = 0;

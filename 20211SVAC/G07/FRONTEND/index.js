@@ -345,86 +345,17 @@ then <moderno>{substring($x/year,5)}</moderno>
 else <antiguo>{substring($x/year,2)}</antiguo>
 
 `
-//for $x in /bookstore/book
-//where $x/price>30
-//return $x/title
-
-let Encabezado3D = `/*------HEADER------*/
-#include <stdio.h>
-#include <math.h>
-
-double heap[30101999];
-double stack[30101999];
-double P;
-double H;
-double t0,t1,t2,t3,t4,t5,t6,t7,t8,t9;
-/*------MAIN------*/
-void main() {
-  P = 0; H = 0;
-
-  
-  t0 = H;
-  t1 = t0;
-  H = H + 1;
-  heap[(int) t1] = 65;
-  
-  t2 = H;
-  t3 = t2;
-  H = H + 4;
-  heap[(int) t3] = 65;
-  t3 = t3 + 1;
-  heap[(int) t3] = 104;
-  t3 = t3 + 1;
-  heap[(int) t3] = 106;
-  t3 = t3 + 1;
-  heap[(int) t3] = 107;
-  t3 = t3 + 1;
-  heap[(int) t3] = -1;
-  
-  t4 = H;
-  t5 = t4;
-  H = H + 1;
-  heap[(int) t5] = 12.4;
-  
-  t6 = H;
-  t7 = t6;
-  H = H + 6;
-  heap[(int) t7] = 67;
-  t7 = t7 + 1;
-  heap[(int) t7] = 97;
-  t7 = t7 + 1;
-  heap[(int) t7] = 100;
-  t7 = t7 + 1;
-  heap[(int) t7] = 101;
-  t7 = t7 + 1;
-  heap[(int) t7] = 110;
-  t7 = t7 + 1;
-  heap[(int) t7] = 97;
-  t7 = t7 + 1;
-  heap[(int) t7] = -1;
-  
-  t8 = H;
-  t9 = t8;
-  H = H + 1;
-  heap[(int) t9] = 30;
-  
-
-  printf("Hello World");
-
-}
 
 
 
-`
 
 editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada;
-consola3D.value=Encabezado3D;
+let consolaC3D = document.getElementById('consola3D');
 
 
 // Analizar la entrada XML al hacer CLICK al boton
 botonCargar.addEventListener("click", () => {
-    console.log("Analizando XML DES ...")
     tipoAnalizadorXML = "Descendente";
 
     // Analizador XML por la izquierda
@@ -438,10 +369,16 @@ botonCargar.addEventListener("click", () => {
     globalencod =parserXML.tipoencoding;
     console.error("Aqui");
     console.log(consulta_xml.parse("<price>5.95</price>"));
+
+    // Se genera la Tabla de Simbolos
+    tablaSimbolos = new TablaSimbolos(parserXML.json);
+    tablaSimbolos = tablaSimbolos.generarTabla();
+
+    // Mostrar el C3D Traducido
+    consolaC3D.value = traductorC3D.obtenerCodigo();
 })
 
 botonCargar2.addEventListener("click", () => {
-  console.log("Analizando XML ASC ...")
   tipoAnalizadorXML = "Ascendente";
 
   // Analizador XML por la izquierda
@@ -453,6 +390,13 @@ botonCargar2.addEventListener("click", () => {
 
   codificador.innerHTML = parserXML.tipoencoding;
   globalencod =parserXML.tipoencoding;
+
+  // Se genera la Tabla de Simbolos
+  tablaSimbolos = new TablaSimbolos(parserXML.json);
+  tablaSimbolos = tablaSimbolos.generarTabla();
+
+  // Mostrar el C3D Traducido
+  consolaC3D.value = traductorC3D.obtenerCodigo();
 
 
 })
@@ -500,10 +444,7 @@ btnReporteXML.addEventListener("click", () => {
   tablaTitulo.innerHTML = 'Reporte Tabla Simbolos XML ' + tipoAnalizadorXML;
   tabla.innerHTML = "";
 
-  // Tabla de Simbolos
-  tablaSimbolos = new TablaSimbolos(parserXML.json);
-  tablaSimbolos = tablaSimbolos.generarTabla();
-
+  
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
   <th scope="col">Nombre</th>
@@ -512,6 +453,7 @@ btnReporteXML.addEventListener("click", () => {
   <th scope="col">Fila</th>
   <th scope="col">Columna</th>
   <th scope="col">Valor</th>
+  <th scope="col">Indice</th>
   `;
 
 
@@ -525,6 +467,7 @@ btnReporteXML.addEventListener("click", () => {
         <td>${simbolo.fila}</td>
         <td>${simbolo.columna}</td>
         <td>${simbolo.valor}</td>
+        <td>${simbolo.indice === -1 ? '' : simbolo.indice}</td>
       </tr>
     `;
   });

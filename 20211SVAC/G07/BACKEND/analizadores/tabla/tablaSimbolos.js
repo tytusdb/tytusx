@@ -12,8 +12,21 @@ class TablaSimbolos {
             let fila = ambito['linea'];
             let col = ambito['columna'];
             let texto = ambito['texto'];
+
+            // Insertar al heap y generar C3D 
+            let referenciaHeap = -1;
+
+            //Verificar si el valor es numerico o cadena
+            if (texto.trim() !== "") {
+                if (traductorC3D.esNumero(texto)) {
+                    referenciaHeap = traductorC3D.traducirNumero(parseFloat(texto));
+                } else {
+                    referenciaHeap = traductorC3D.traducirCadena(texto);
+                }
+            }
             
-            this.simbolos.push(new Simbolo(nombre, "etiqueta " + tipo, ambitoPadre, fila, col, texto));
+            
+            this.simbolos.push(new Simbolo(nombre, "etiqueta " + tipo, ambitoPadre, fila, col, texto, referenciaHeap));
 
             //ATRIBUTOS DE LA ETIQUETA
             if (ambito['atributos']) {
@@ -27,7 +40,17 @@ class TablaSimbolos {
                     let ambitoAtributo = nombre;
                     let tipoAtributo = "atributo";
 
-                    this.simbolos.push(new Simbolo(nombreAtributo, tipoAtributo, ambitoAtributo, filaAtributo, colAtributo, valorAtributo));
+                    // Insertar al heap y generar C3D 
+                    let referenciaHeap = -1;
+
+                    //Verificar si el valor es numerico o cadena
+                    if (traductorC3D.esNumero(valorAtributo)) {
+                        referenciaHeap = traductorC3D.traducirNumero(parseFloat(valorAtributo));
+                    } else {
+                        referenciaHeap = traductorC3D.traducirCadena(valorAtributo);
+                    }
+
+                    this.simbolos.push(new Simbolo(nombreAtributo, tipoAtributo, ambitoAtributo, filaAtributo, colAtributo, valorAtributo, referenciaHeap));
                 });
             }
 
