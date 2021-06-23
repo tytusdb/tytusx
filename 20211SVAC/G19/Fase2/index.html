@@ -1,0 +1,235 @@
+
+<html> 
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">    
+        <link rel="stylesheet" type="text/css" href="./Css/styles.css">\
+        <link rel="stylesheet" type="text/css" href="./Css/vis.css">
+        <script src="./Js/Tabs.js"></script>
+        <script src="./Js/index.js"></script>
+        <script src="./Js/Descargas.js"></script>
+        <script src="./Js/vis.js"></script>
+        <script src="./Js/Interprete/Gramatica/XMLascReports.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XMLdescReports.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XpathAsc.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XpathDesc.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XQueryAsc.js" ></script>
+        <script src="./Js/Interprete/Expresiones/Atributo.js"></script>
+        <script src="./Js/Interprete/Expresiones/Objeto.js"></script>
+        <script src="./Js/Interprete/AST/GenerarArbol.js"></script>
+        <script src="./Js/Interprete/AST/NodoArbol.js"></script>
+        <script src="./Js/Interprete/AST/Error.js"></script>
+        <script src="./Js/Interprete/AST/ListaErrores.js"></script>
+        <script src="./Js/globales.js" ></script>
+        <script src="./Js/Interprete/AST/AST.js"></script>
+        <script src="./Js/Interprete/AST/Entorno.js"></script>
+        <script src="./Js/Interprete/AST/EntornoXML.js"></script>
+        <script src="./Js/Interprete/AST/Simbolo.js"></script>
+        <script src="./Js/Interprete/AST/TablaSimbolos.js"></script>
+        <script src="./Js/Interprete/AST/TablaSimbolosXML.js"></script>
+        <script src="./Js/Interprete/AST/Tipo.js"></script>
+        <script src="./Js/Interprete/AST/ReporteGramatical.js"></script>
+        <script src="./Js/Interprete/AST/ReporteTablaSimbolos.js"></script>
+        <script src="./Js/Interprete/AST/ReporteTablaSimbolosXMl.js"></script>
+        <script src="./Js/Interprete/Expresiones/Operacion.js"></script>
+        <script src="./Js/Interprete/Expresiones/Primitivo.js"></script>
+        <script src="./Js/Interprete/Interfaces/Expresion.js"></script>
+        <script src="./Js/Interprete/Interfaces/Instruccion.js"></script>
+        <script src="./Js/Interprete/Expresiones/Axes.js"></script>
+        <script src="./Js/Interprete/Expresiones/ExpresionXPath.js"></script>
+        <script src="./Js/Interprete/Expresiones/NodoXpath.js"></script>
+        <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
+        <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
+
+        <script>
+
+            var heap = [];
+            var stack = [];
+            var contadorStack = 0;
+            var contadorTemporales = 0;
+            var SP = 2;
+            var HP = 0;
+            var T0 = 0;
+            var T1 = 0;
+            var temporal0 = "";
+            var temporal1 = "";
+            var globalC3D = "";
+            var xpathC3D = "";
+            var xmlC3D = "";
+            var C3DXML = new TraductorXML();
+            var numeroTemporales = 0;
+            var codificacionGlobal = "UTF-8";
+            var ListaErr = new ListaErrores();
+            var GenerarDOT = new GenerarArbol();
+            var tablaSimbolosXML = null;
+            var NumeroE = 1;
+            var resultadoXML = null;
+            var resultadoXPath = null;
+            var resultadoXQuery = null;
+            var analisisCorrecto = true;
+            var analisisXpathCorrecto = true;
+            var analisisXqueryCorrecto = true;
+            var continuarXpath = true;
+            var DOTxmlCSTasc = "";
+            var DOTxmlCSTdesc = "";
+            var DOTxmlErrores = "";
+            var DOTXPATHASTasc = "";
+            var DOTXPATHASTDesc = "";
+            var DOTXQUERYASTAsc = "";
+            var DOTXQUERYASTDesc = "";
+            var RGxml = new ReporteGramatical();
+            var RGxmlDesc = new ReporteGramatical();
+            var ListaDAG = [];
+            var nodoxPATHASC = null;
+            var nodoxPATHDESC = null;
+            var nodoxQUERYASC = null;
+            var IDentorno = 1;
+            var IDobj = 1;
+            var objetosGlobal = null;
+            var entornosGlobal = null;
+            var salidaXPath = null;
+            var salidaRecursiva = "";
+            var salidaGlobal = "";
+        </script>
+        <title> Compi 2 - Proyecto 1 Fase 2</title>
+        <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
+        <script src="./codemirror/lib/codemirror.js"></script>
+        <script src="./codemirror/mode/clike/clike.js"></script>
+        <link href="./codemirror/theme/midnight.css" rel="stylesheet">
+        <link href="./codemirror/theme/cobalt.css" rel="stylesheet">
+        <link href="./codemirror/theme/duotone-light.css" rel="stylesheet">
+        <link href="./codemirror/theme/duotone-dark.css" rel="stylesheet">
+        <link href="./codemirror/theme/ayu-dark.css" rel="stylesheet">
+        <script src="./codemirror/mode/xml/xml.js"></script>
+        <script src="./codemirror/mode/xquery/xquery.js"></script>
+        
+    </head> 
+    <body> 
+       <div class="editor1"> 
+            <div>
+                <div class="componente">
+                    <div class="dropdown">
+                        <button onclick="Menu()" class="dropbtn">Menú</button>
+                        <div id="myDropdown1" class="dropdown-content">
+                            <input type="file" id="real-file" hidden="hidden" />
+                            <a class="dropitem" id="botonAbrir">Abrir archivo XML</a>
+                            <input type="file" id="real-file2" hidden="hidden" />
+                            <a class="dropitem" id="XPath">Abrir archivo XPath</a>
+                            <a class="dropitem" id="guardar-xml" onclick="GenerarDescarga()">Guardar XML como...</a>
+                            <a class="dropitem" id="guardar-xpath" onclick="GenerarDescargaXPath()">Guardar XPath como...</a>
+                            <a class="dropitem" onclick="LimpiarXML()">Limpiar editor XML</a>
+                            <a class="dropitem" onclick="LimpiarXPath()">Limpiar editor XPath</a>
+                            <a class="dropitem" onclick="LimpiarSalida()">Limpiar salida</a>
+                            <a class="dropitem" onclick="LimpiarTodo()">Limpiar todo</a>
+                        </div>
+                    </div> 
+                </div>
+                <div class="componente">
+                    <div class="dropdown">
+                        <button onclick="Descargar()" class="dropbtn">Reportes</button>
+                        <div id="myDropdown2" class="dropdown-content">
+                        <a class="dropitem" id="cstXML">CST XML (Asc)</a>
+                        <a class="dropitem" id="cstXMLDesc">CST XML (Desc)</a>
+                        <a class="dropitem" id="erroresXML">Errores</a>
+                        <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>
+                        <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
+                        <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
+                        <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
+                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>
+                        <a class="dropitem" id="heap">HEAP</a>        
+                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
+                        </div>
+                    </div> 
+                </div>
+                
+            </div>
+            <div class="editores">
+                <!-- INICIO TAGS -->
+                 <!-- Tab links -->
+                <div class="tab">
+                    <button id='pagina1' class="tablinks" onclick="openTag(event, 'p1'); SetearUno()">Pagina 1</button>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function(event) { 
+                          document.getElementById("pagina1").click();
+                       });
+                      </script>
+                    <button class="tablinks" onclick="openTag(event, 'p2'); SetearDos()">Pagina 2</button>
+                    <button class="tablinks" onclick="openTag(event, 'p3'); SetearTres()">Pagina 3</button>
+                    <button class="tablinks" onclick="openTag(event, 'p4'); SetearCuatro()">Pagina 4</button>
+                </div>
+                <!-- Tab content -->
+                <div id="p1" class="tabcontent">
+                    <!-- EDITOR 1 -->
+                    <textarea id="editor"></textarea>
+                    <span>
+                        <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>   
+                    <!-- FIN EDITOR 1 -->                 
+                </div>                   
+                <div id="p2" class="tabcontent">
+                    <!-- EDITOR 2 -->
+                    <textarea id="editor2"></textarea>
+                    <span>
+                        <button class="button2" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button4" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>
+                    <!-- FIN EDITOR 2 -->
+                </div>
+                <div id="p3" class="tabcontent">
+                    <!-- EDITOR 3 -->
+                    <textarea id="editor3"></textarea>
+                    <span>
+                        <button class="button3" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button1" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>
+                    <!-- FIN EDITOR 3 -->
+                </div> 
+                <div id="p4" class="tabcontent">
+                    <!-- EDITOR 4 -->
+                    <textarea id="editor4"></textarea>
+                    <span>
+                        <button class="button4" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button2" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>
+                    <!-- FIN EDITOR 4 -->
+                </div> 
+                <script src="Js/Codemirrors.js"></script>
+                <script>DefaultTag('p1');</script>
+               <!-- FIN TAGS -->
+            </div>  
+       </div>        
+        <div class="labelConsola"><label class="label info">ENTRADA XPATH</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="entrada_xpath"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>
+        <div class="labelConsola"><label class="label info">ENTRADA XQUERY</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="entrada_xquery"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>
+        <div class="labelConsola"><label class="label info">SALIDA</label></div>
+        <div class="consola">
+            <!-- CONSOLA Python -->
+            <textarea id="salida_xpath"></textarea>
+            <!-- FIN CONSOLA JS -->
+        </div>
+        <div class="labelConsola"><label class="label info">SALIDA TRADUCCION</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="salida_traduccion"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>       
+        <script src="Js/Consolas.js"></script>
+
+    <script src="./Js/jquery.min.js"></script>
+    <script src="./Js/jquery.backtotop.js"></script>
+    <script src="./Js/jquery.mobilemenu.js"></script>     
+              
+    </body> 
+ </html> 
+ 
