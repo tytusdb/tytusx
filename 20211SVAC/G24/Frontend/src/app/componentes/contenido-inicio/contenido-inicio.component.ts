@@ -31,6 +31,7 @@ export let listainstrucciones: Array<Instruccion[]>
 export let Ambito: String;
 export let Ambito2: String;
 export let tabsim: Map<String, String>
+export var contenidocd3= ""
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -154,7 +155,7 @@ export class ContenidoInicioComponent implements OnInit {
      * *************************************************************************************************
     */
 
-      var contenidocd3 = "#include <stdio.h>\n#include<math.h>\n"
+      contenidocd3 = "#include <stdio.h>\n#include<math.h>\n"
 
       Tree.codigo3d.push("int main(){\n");
 
@@ -181,28 +182,26 @@ export class ContenidoInicioComponent implements OnInit {
       Tree.codigo3d.forEach(element => {
         contenidocd3 += element + "\n"
       });
-      contenidocd3 += "return 1;\n}"
-      this.mostrarContenido(contenidocd3, 'cdirecciones');
+      
 
 
       /* **********************L L E N A D O    T A B L A    D E    S I M B O L O S************************* */
       Ambito = "Global"
       tabsim = new Map<String, String>();
       for (var key of this.tablaGlobal.tablaActual) {
-        if (key.getAtributo().size != 0) {
-          for (var [key2, value2,] of key.getAtributo()) {
-            atributos += ` ${key2}=>${value2}, `;
-            var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
-            Tree.listaSimbolos.push(Reporte);
-          }
-        }
-
+        
         if (key.getvalor() instanceof tablaSimbolos) {
           var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
           Tree.listaSimbolos.push(Reporte);
+          if (key.getAtributo().size != 0) {
+            for (var [key2, value2,] of key.getAtributo()) {
+              var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
+              Tree.listaSimbolos.push(Reporte);
+            }
+          }
+  
           tabsim.set(Ambito, key.getidentificador())
           Ambito = key.getidentificador();
-
           this.ReportSimbolos(key.getvalor(), Tree)
         } else {
           var Reporte = new reporteTabla(key.getidentificador(), "Objeto", key.getidentificador(), key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
@@ -210,7 +209,10 @@ export class ContenidoInicioComponent implements OnInit {
         }
       }
 
-
+      tabsim.clear();
+      /***************************************************************************************************************
+       * ***********************************************A R B O L ****************************************************
+       **************************************************************************************************************/
       var init = new nodoAST("RAIZ");
       var instrucciones = new nodoAST("HIJOS");
       for (let i of Tree.getinstrucciones()) {
@@ -264,12 +266,7 @@ export class ContenidoInicioComponent implements OnInit {
   }
   ReportSimbolos(tablaGlobal: tablaSimbolos, Tree: Arbol) {
     for (var key of tablaGlobal.tablaActual) {
-      if (key.getAtributo().size != 0) {
-        for (var [key2, value2,] of key.getAtributo()) {
-          var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
-          Tree.listaSimbolos.push(Reporte);
-        }
-      }
+      
       if (key.getvalor() instanceof tablaSimbolos) {
         if (Ambito === key.getidentificador().toString()) {
           for (var [key2, value2,] of tabsim) {
@@ -294,6 +291,12 @@ export class ContenidoInicioComponent implements OnInit {
 
             }
           }
+          if (key.getAtributo().size != 0) {
+            for (var [key2, value2,] of key.getAtributo()) {
+              var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
+              Tree.listaSimbolos.push(Reporte);
+            }
+          }
         this.ReportSimbolos(key.getvalor(), Tree)
       } else {
         var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
@@ -302,6 +305,10 @@ export class ContenidoInicioComponent implements OnInit {
     }
   }
 
+
+  finalizarCD3(){
+    this.mostrarContenido(contenidocd3+"return 1;\n}", 'cdirecciones');
+  }
 
   /*A R B O L  D E S C E N D E N T E */
 
@@ -409,6 +416,7 @@ export class ContenidoInicioComponent implements OnInit {
         console.log(element)
         if (element instanceof BarrasNodo) {
           console.log("es barranodo")
+          
           var resultador = element.interpretar(Tree, tablita);
           if (resultador instanceof tablaSimbolos) {
             tablita = resultador
@@ -559,10 +567,12 @@ export class ContenidoInicioComponent implements OnInit {
           listaobjetitos += `${key3.getidentificador()}, `
         }
 
-        salida += this.recorrerTabla(objetos);
+        salida += "<"+key.getidentificador()+">\n"+this.recorrerTabla(objetos)+"</"+key.getidentificador()+">\n";
 
       } else {
-        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+        salida+= "<"+key.getidentificador()+">"
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
+        salida+= "</"+key.getidentificador()+">\n"
       }
     }
     return salida;
