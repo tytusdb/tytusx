@@ -275,7 +275,6 @@ APERTURA
         // Verificar Etiqueta
         verificarEtiquetas.push(new Token("ETIQUETA",$2 , @2.first_line, @2.first_column ));
 
-        console.log("ATRIBUTO APERT",$3);
 
     }
     |tk_abre tk_etiqueta tk_cierra {

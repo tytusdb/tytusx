@@ -344,81 +344,13 @@ return if ($x/year>1990)
 then <moderno>{data($x/year)}</moderno>
 else <antiguo>{data($x/year)}</antiguo>
 `
-//for $x in /bookstore/book
-//where $x/price>30
-//return $x/title
-
-let Encabezado3D = `/*------HEADER------*/
-#include <stdio.h>
-#include <math.h>
-
-double heap[30101999];
-double stack[30101999];
-double P;
-double H;
-double t0,t1,t2,t3,t4,t5,t6,t7,t8,t9;
-/*------MAIN------*/
-void main() {
-  P = 0; H = 0;
-
-  
-  t0 = H;
-  t1 = t0;
-  H = H + 1;
-  heap[(int) t1] = 65;
-  
-  t2 = H;
-  t3 = t2;
-  H = H + 4;
-  heap[(int) t3] = 65;
-  t3 = t3 + 1;
-  heap[(int) t3] = 104;
-  t3 = t3 + 1;
-  heap[(int) t3] = 106;
-  t3 = t3 + 1;
-  heap[(int) t3] = 107;
-  t3 = t3 + 1;
-  heap[(int) t3] = -1;
-  
-  t4 = H;
-  t5 = t4;
-  H = H + 1;
-  heap[(int) t5] = 12.4;
-  
-  t6 = H;
-  t7 = t6;
-  H = H + 6;
-  heap[(int) t7] = 67;
-  t7 = t7 + 1;
-  heap[(int) t7] = 97;
-  t7 = t7 + 1;
-  heap[(int) t7] = 100;
-  t7 = t7 + 1;
-  heap[(int) t7] = 101;
-  t7 = t7 + 1;
-  heap[(int) t7] = 110;
-  t7 = t7 + 1;
-  heap[(int) t7] = 97;
-  t7 = t7 + 1;
-  heap[(int) t7] = -1;
-  
-  t8 = H;
-  t9 = t8;
-  H = H + 1;
-  heap[(int) t9] = 30;
-  
-
-  printf("Hello World");
-
-}
 
 
 
-`
 
 editorXQUERY.value=XQuery;
 editorXML.value = textoEntrada;
-consola3D.value=Encabezado3D;
+let consolaC3D = document.getElementById('consola3D');
 
 
 // Analizar la entrada XML al hacer CLICK al boton
@@ -437,9 +369,12 @@ botonCargar.addEventListener("click", () => {
     console.error("Aqui");
     console.log(consulta_xml.parse("<price>5.95</price>"));
 
-    // Tabla de Simbolos
+    // Se genera la Tabla de Simbolos
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
+
+    // Mostrar el C3D Traducido
+    consolaC3D.value = traductorC3D.obtenerCodigo();
 })
 
 botonCargar2.addEventListener("click", () => {
@@ -455,9 +390,12 @@ botonCargar2.addEventListener("click", () => {
   codificador.innerHTML = parserXML.tipoencoding;
   globalencod =parserXML.tipoencoding;
 
-  // Tabla de Simbolos
+  // Se genera la Tabla de Simbolos
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
+
+  // Mostrar el C3D Traducido
+  consolaC3D.value = traductorC3D.obtenerCodigo();
 
 
 })
