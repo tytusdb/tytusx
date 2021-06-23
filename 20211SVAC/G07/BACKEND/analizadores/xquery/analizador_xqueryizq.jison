@@ -210,6 +210,7 @@ RETURN
         :tk_return VARIABLE                                                             {$$={tipo:"VAR",variable:$VARIABLE,consulta:null}}
         |tk_return VARIABLE XPATHGRA                                                    {$$={tipo:"VAR",variable:$VARIABLE,consulta:$XPATHGRA}}
         |tk_return HTML                                                                 {$$={tipo:"HTML",valor:$HTML}}
+        |tk_return IF                                                                   {$$={tipo:"IF",valor:$IF}}
 ;
 
 LLAMADA
@@ -307,7 +308,18 @@ L_CONTENIDO
 COD
         :tk_llave_izq XQUERYGRA tk_llave_der                                            {$$={tipo:"COD",valor:$2};}  
 ;
-
+IF
+        :tk_if tk_parentesis_izq CONDICIONAL tk_parentesis_der THEN ELSE                {$$={condicion:$CONDICIONAL,else:$ELSE,then:$THEN};}
+        |tk_if tk_parentesis_izq CONDICIONAL tk_parentesis_der THEN                     {$$={condicion:$CONDICIONAL,else:null,then:$THEN};}
+;
+THEN
+        :tk_then HTML                                                                   {$$={tipo:"HTML",valor:$2}}                                                                   
+        |tk_then LLAMADA                                                                {$$={tipo:"LLAMADA",valor:$2}} 
+;
+ELSE
+        :tk_else HTML                                                                   {$$={tipo:"HTML",valor:$2}}                                                                   
+        |tk_else LLAMADA                                                                {$$={tipo:"LLAMADA",valor:$2}} 
+;
 
 
 

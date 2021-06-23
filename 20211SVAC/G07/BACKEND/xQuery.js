@@ -47,7 +47,7 @@ function ejecutarForIn(instruccion,entorno,padre){
             retorno=procesarReturn(instruccion.retorno,var_);
         }
         if(retorno){
-            respuesta+=retorno;
+            respuesta+=retorno+'\n';
         }
     }
     
@@ -143,17 +143,48 @@ function procesarReturn(instruccion,variables){
         }
         
        
-    }else{
+    }else if(instruccion.tipo=="HTML"){
         
         return procesarHTML(instruccion.valor,variables,null)
+    }else if(instruccion.tipo=="IF"){
+        
+
+        return procesarIF(instruccion.valor,variables,null);
+    }
+    
+    return null;
+}
+function procesarIF(instruccion,variables){
+    let res=validarWhere(instruccion.condicion,variables);
+    if(res){
+        switch (instruccion.then.tipo) {
+            case "HTML":
+                return procesarHTML(instruccion.then.valor,variables,null)  ; 
+            case "LLAMADA":
+                return ejecutarLLamada(instruccion.else.valor,entorno,entorno);         
+            default:
+              return null;
+        }
+    }else{
+        if(instruccion.else){
+            switch (instruccion.else.tipo) {
+                case "HTML":
+                    return procesarHTML(instruccion.else.valor,variables,null)  ;
+                case "LLAMADA":
+                    return ejecutarLLamada(instruccion.else.valor,entorno,entorno);     
+                default:
+                  return null;
+            }
+        }
     }
     return null;
 }
+
 function procesarHTML(arreglo,entorno,padre){
     let txt="";
     for (const iterator of arreglo) {
         if(iterator.tipo=="TXT"){
-            txt+=iterator.valor;
+            txt+=iterator.valor+'\n';
         }
         if(iterator.tipo=="COD"){
             txt+=getConsultaXQuery(iterator.valor,entorno,padre);
@@ -330,6 +361,7 @@ function ordenar(instruccion,entornos){
 function ejecutarData(instruccion,entorno,padre){
     let res=ejecutarLLamada(instruccion,entorno,entorno);
     res = res.replace(/[<][^><]+[>]/gm, '');
+    res = res.replace('\n', '');
     if(res){
         return  res;
     }

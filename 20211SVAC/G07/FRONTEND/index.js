@@ -339,13 +339,10 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 </bookstore>
 `
 
-let XQuery = `<ul>
-{
-for $x in doc("books.xml")/bookstore/book
-order by $x
-return <hijo>{data($x/title)}</hijo>
-}
-</ul>
+let XQuery = `for $x in doc("books.xml")/bookstore/book
+return if ($x/year>1990)
+then <moderno>{data($x/year)}</moderno>
+else <antiguo>{data($x/year)}</antiguo>
 `
 //for $x in /bookstore/book
 //where $x/price>30
