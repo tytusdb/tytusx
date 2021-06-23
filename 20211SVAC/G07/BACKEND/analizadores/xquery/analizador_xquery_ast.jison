@@ -149,14 +149,28 @@
 %left 'tk_asterisco' 'tk_div' 'tk_mod'
 %left unmenos
 
-%start INICIO
+%start S
 
 %%
 
 /* Definición de la gramática */
+S:
+        INICIO EOF    {return $INICIO;}
+;
+
 INICIO : 
-        XQUERYGRA EOF                                                                   
-        {return $XQUERYGRA;}  
+        XQUERYGRA                                                                    
+        {$$= new Nodo("INI", "INI" );
+        $$.agregarHijo($1);
+	}
+        |HTML  
+        {$$= new Nodo("INI", "INI" );
+        $$.agregarHijo($1);
+	}
+        |FUNCACKERMAN 
+        {$$= new Nodo("INI", "INI" );
+        $$.agregarHijo($1);
+	}        
 ;
 XQUERYGRA
         :FOR_IN WHERE  ORDEN RETURN                                                                  
@@ -170,11 +184,14 @@ XQUERYGRA
         {$$= new Nodo("XQY", "XQY" );
         $$.agregarHijo($1);
 	} 
-        |HTML
+        |F_DATA
         {$$= new Nodo("XQY", "XQY" );
         $$.agregarHijo($1);
-	} 
-
+	}
+        |F_UPPER
+        {$$= new Nodo("XQY", "XQY" );
+        $$.agregarHijo($1);
+	}         
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  
@@ -317,6 +334,16 @@ RETURN
         $$.agregarHijo($2);
         $$.agregarHijo($3);
 	} 
+        |tk_return HTML                                                             
+        {$$= new Nodo("RET", "RET" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}
+        |tk_return IF                                                             
+        {$$= new Nodo("RET", "RET" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	} 
 ;
 LLAMADA
         :tk_doc tk_parentesis_izq tk_hilera tk_parentesis_der XPATHGRA                 
@@ -328,6 +355,15 @@ LLAMADA
         $$.agregarHijo($5);
 	}         
         |XPATHGRA                                                                       
+        {$$= new Nodo("LLA","LLA");
+        $$.agregarHijo($1);
+        }
+        |VARIABLE XPATHGRA                                                                       
+        {$$= new Nodo("LLA","LLA");
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        }
+        |VARIABLE                                                                       
         {$$= new Nodo("LLA","LLA");
         $$.agregarHijo($1);
         }
@@ -571,3 +607,132 @@ DATO
         $$.agregarHijo($3);
 	}
 ;
+
+F_DATA
+        :tk_data tk_parentesis_izq CONS tk_parentesis_der  
+        {$$= new Nodo("FDATA", "FDATA" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+	}                                     
+;
+F_UPPER
+        :tk_upper tk_parentesis_izq CONS tk_parentesis_der 
+        {$$= new Nodo("FUP", "FUP" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+	}                                     
+;
+CONS
+        :VARIABLE XPATHGRA 
+        {$$= new Nodo("CONS", "CONS" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+	}                                                                      
+        |VARIABLE                                                                        
+        {$$= new Nodo("CONS", "CONS" );
+        $$.agregarHijo($1);
+        }
+;
+
+
+HTML
+    :CONTENIDO 
+        {$$= new Nodo("HTML", "HTML" );
+        $$.agregarHijo($1);
+        }                                                                             
+;
+CONTENIDO
+        :CONTENIDO L_CONTENIDO                                                          
+        {$$= new Nodo("CONT", "CONT" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        }        
+        |L_CONTENIDO                                                                
+        {$$= new Nodo("CONT", "CONT" );
+        $$.agregarHijo($1);
+        }        
+        |CONTENIDO COD                                                                  
+        {$$= new Nodo("CONT", "CONT" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        }        
+        |COD
+        {$$= new Nodo("CONT", "CONT" );
+        $$.agregarHijo($1);
+        }                                                                                   
+;
+L_CONTENIDO
+        :tk_menor tk_identificador tk_mayor
+        {$$= new Nodo("LCONT", "LCONT" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+	}                                                     
+        |tk_menor tk_diagonal tk_identificador tk_mayor
+        {$$= new Nodo("LCONT", "LCONT" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+	}                                   
+        |tk_identificador                                                               
+        {$$= new Nodo("LCONT", "LCONT" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }  
+;
+COD
+        :tk_llave_izq XQUERYGRA tk_llave_der 
+        {$$= new Nodo("COD", "COD" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+	}                                                     
+;
+IF
+        :tk_if tk_parentesis_izq CONDICIONAL tk_parentesis_der THEN ELSE                 
+        {$$= new Nodo("IF", "IF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+        $$.agregarHijo($6);
+        }         
+        |tk_if tk_parentesis_izq CONDICIONAL tk_parentesis_der THEN                     
+        {$$= new Nodo("IF", "IF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+        } 
+;
+THEN
+        :tk_then HTML
+        {$$= new Nodo("THEN", "THEN" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+        |tk_then LLAMADA                                                                
+        {$$= new Nodo("THEN", "THEN" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+;
+ELSE
+        :tk_else HTML
+        {$$= new Nodo("ELSE", "ELSE" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+        |tk_else LLAMADA   
+        {$$= new Nodo("ELSE", "ELSE" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+;
+
