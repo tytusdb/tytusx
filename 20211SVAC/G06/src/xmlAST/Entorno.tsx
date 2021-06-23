@@ -8,9 +8,12 @@ export class Entorno{
     linea: number;
     columna: number;
     pos: number;
-    last : boolean;
+    last : number;
+    SP_ID:number;
+    SP_VAL:number;
 
-    constructor(id:string, texto:string, linea:number, columna:number, listaSimbolos:Array<Simbolo>, listaE:Array<Entorno>, last:boolean){
+
+    constructor(id:string, texto:string, linea:number, columna:number, listaSimbolos:Array<Simbolo>, listaE:Array<Entorno>){
         this.identificador = id;
         this.texto = texto;
         this.linea = linea;
@@ -18,29 +21,25 @@ export class Entorno{
         this.listaSimbolos = listaSimbolos;
         this.listaEntornos = listaE
         this.pos = -1;
-        this.last = last; 
+        this.last = -1;
+        this.SP_ID = -1;
+        this.SP_VAL = -1;
+        this.asignarPosEnts();
+        this.asignarPosSimb();
     }
     
-    public setPos(pos: number){
-        this.pos= pos;
-    }
-
-    public setLast(last: boolean){
-        this.last= last;
-    }
-
-    public getAtributos(idAtrubito: string) : Simbolo[] {
-
-        var L_atrubitos : Simbolo[] = []; //          
-
-        for (const Simbolo of this.listaSimbolos) {
-            
-            if (Simbolo.identificador === idAtrubito){
-                L_atrubitos.push(Simbolo)
-            }
+    private asignarPosEnts(){
+        for (let index = 0; index < this.listaEntornos.length; index++) {
+            this.listaEntornos[index].last = this.listaEntornos.length
+            this.listaEntornos[index].pos = index;
         }
+    }
 
-        return L_atrubitos;
+    private asignarPosSimb(){
+        for (let index = 0; index < this.listaSimbolos.length; index++) {
+            this.listaSimbolos[index].last = this.listaSimbolos.length;
+            this.listaSimbolos[index].pos = index;
+        }
     }
 
     public getAtributo(idAtrubito: string) : Simbolo | null{

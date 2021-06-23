@@ -99,27 +99,24 @@
 S: LISTA EOF {$$=$1; ReporteGD.agregar('S::=LISTA','S.VAL = LISTA.VAL',''); return $$;};
 
 LISTA: PUNTO              {$$=$1; ReporteGD.agregar('LISTA::=PUNTO','LISTA.VAL = PUNTO.VAL','');}
-    |  LISTAS             {$$=$1; ReporteGD.agregar('LISTA::=LISTAS','LISTA.VAL = LISTAS.VAL','');}
+    |  LISTA2             {$$=$1; ReporteGD.agregar('LISTA::=LISTA2','LISTA.VAL = LISTA2.VAL','');}
     ;
+
+LISTA2 : LISTA2 BARRAS LISTA2 { ReporteGA.agregar('LISTA2::=LISTA2 BARRAS LISTA2','LISTA2.VAL = ARRAY(LISTA2.VAL,LISTA2.VAL)',''); }
+       | LISTAS               { ReporteGA.agregar('LISTA2::=LISTAS','LISTA2.VAL = LISTAS.VAL',''); }
+       ;
 
 LISTAS: LISTA1 LISTAS    {$2.push($1); $$=$2; ReporteGD.agregar('LISTAS::=LISTA1LISTAS','LISTAS.VAL = LISTA1.VAL + LISTAS.VAL','');}
-    |LISTA1             {$$=[$1]; ReporteGD.agregar('LISTAS::=LISTA1','LISTAS.VAL = LISTA1.VAL','');}
+    |LISTA1              {$$=[$1]; ReporteGD.agregar('LISTAS::=LISTA1','LISTAS.VAL = LISTA1.VAL','');}
     ;
 
-LISTA1:ATRIBUTO BARRAS LISTA1       {$$=$3; ReporteGD.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL + BARRAS.VAL + LISTA1.VAL','');}
-    |ASTERISCO BARRAS LISTA1        {$$=$3; ReporteGD.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL + BARRAS.VAL + LISTA1.VAL','');}
-    |PALABRAS_R BARRAS LISTA1       {$$=$3; ReporteGD.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL + BARRAS.VAL + LISTA1.VAL','');}
-    |ATRIBUTO1 BARRAS LISTA1        {$$=$1; ReporteGD.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL + BARRAS.VAL + LISTA1.VAL','');}
-    |PR TK_PARENTESIS BARRAS LISTA1 {$$=$1; ReporteGD.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL + TK_PARENTESIS.VAL + BARRAS.VAL + LISTA1.VAL','');}
-    |IDS BARRAS LISTA1              {$$=$3; ReporteGD.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL + BARRAS.VAL + LISTA1.VAL','');}
+LISTA1: PALABRAS_R                  {$$=$1; ReporteGD.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');}
+    |IDS                            {$$=$1; ReporteGD.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL','');}
     |ATRIBUTO                       {$$=$1; ReporteGD.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL','');}
     |ATRIBUTO1                      {$$=$1; ReporteGD.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL','');}
-    |PR  TK_PARENTESIS              {$$=$1; ReporteGD.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL+ TK_PARENTESIS.VAL','');}
-    |PALABRAS_R                     {$$=$1; ReporteGD.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');}
-    |IDS                            {$$=$1; ReporteGD.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL','');}
     |ASTERISCO                      {$$=$1; ReporteGD.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL','');}
     |                               {ReporteGD.agregar('LISTA1::=ε','LISTA1.VAL = EPSILON','');}
-    |error                          {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+    |error                          { }
     ;
 
 BARRAS: TK_BARRA_VERTICAL {$$=$1}
@@ -127,27 +124,26 @@ BARRAS: TK_BARRA_VERTICAL {$$=$1}
     |TK_OR {$$ = $1};
 
 PUNTO: TK_PUNTO PUNTO1          {$$=$2; ReporteGD.agregar('PUNTO::=tk_punto PUNTO1','PUNTO.VAL = TK_PUNTO.VAL + PUNTO1.VAL','');}
-    |error                      {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+    |error                      { }
     ;
 PUNTO1: LISTAS                  {$$=$1; ReporteGD.agregar('PUNTO1::=LISTAS','PUNTO1.VAL = LISTAS.VAL','');}
-    |error                      {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+    |error                      { }
     ;
 
-IDS: TK_DBARRA TK_IDENTIFICADOR ASTERISCO1      {$$ = new Conca('&',$1,$2,$3,@1.first_line,@1.first_column); ReporteGD.agregar('IDS::=tk_dbarra tk_identificador ASTERISCO1','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');}
-    |TK_BARRA TK_IDENTIFICADOR  ASTERISCO1      {$$ = new Conca('&',$1,$2,$3,@1.first_line,@1.first_column); ReporteGD.agregar('IDS::=tk_barra tk_identificador ASTERISCO1','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL +  ASTERISCO1.VAL','');}
-    |TK_DBARRA TK_IDENTIFICADOR                 {$$ = new Conca('.',$1,$2,new Dato('',@1.first_line,@1.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('IDS::=tk_dbarra tk_identificador','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL','');}
-    |TK_BARRA TK_IDENTIFICADOR                  {$$ = new Conca('.',$1,$2,new Dato('',@1.first_line,@1.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('IDS::=tk_barra tk_identificador','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL','');}
-    |TK_IDENTIFICADOR                           {$$ = new Conca('.','',$1,new Dato('',@1.first_line,@1.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('IDS::=tk_identificador','IDS.VAL = TK_IDENTIFICADOR.VAL  ','');}
+IDS: TK_DBARRA TK_IDENTIFICADOR ASTERISCO1      { ReporteGD.agregar('IDS::=tk_dbarra tk_identificador ASTERISCO1','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');}
+    |TK_BARRA TK_IDENTIFICADOR  ASTERISCO1      { ReporteGD.agregar('IDS::=tk_barra tk_identificador ASTERISCO1','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL +  ASTERISCO1.VAL','');}
+    |TK_DBARRA TK_IDENTIFICADOR                 { ReporteGD.agregar('IDS::=tk_dbarra tk_identificador','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL','');}
+    |TK_BARRA TK_IDENTIFICADOR                  { ReporteGD.agregar('IDS::=tk_barra tk_identificador','IDS.VAL = TK_BARRA.VAL + TK_IDENTIFICADOR.VAL','');}
+    |TK_IDENTIFICADOR                           { ReporteGD.agregar('IDS::=tk_identificador','IDS.VAL = TK_IDENTIFICADOR.VAL  ','');}
     ;
 
 
-ATRIBUTO: TK_DBARRA TK_ARROBA TK_POR L_ATRIBUTO     {$$ = new Conca('?',$1,$2+$3,new L_Atributo($4,@4.first_line,@4.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');}
-    |TK_BARRA TK_ARROBA TK_POR L_ATRIBUTO           {$$ = new Conca('?',$1,$2+$3,new L_Atributo($4,@4.first_line,@4.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');} 
-    |TK_ARROBA TK_POR  L_ATRIBUTO                   {$$ = new Conca('?','',$1+$2,new L_Atributo($3,@3.first_line,@3.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');}
-    |TK_DBARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO{$$ = new Conca('?',$1,$2+$3,new L_Atributo($4,@4.first_line,@4.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');}
-    |TK_BARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO {$$ = new Conca('?',$1,$2+$3,new L_Atributo($4,@4.first_line,@4.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');} 
-    |TK_ARROBA TK_IDENTIFICADOR  L_ATRIBUTO         {$$ = new Conca('?','',$1+$2,new L_Atributo($3,@3.first_line,@3.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');}
-     
+ATRIBUTO: TK_DBARRA TK_ARROBA TK_POR L_ATRIBUTO     { ReporteGD.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');}
+    |TK_ARROBA TK_POR  L_ATRIBUTO                   { ReporteGD.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');}
+    |TK_BARRA TK_ARROBA TK_POR L_ATRIBUTO           { ReporteGD.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_POR.VAL + L_ATRIBUTO.VAL','');} 
+    |TK_DBARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO{ ReporteGD.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');}
+    |TK_BARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO { ReporteGD.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');} 
+    |TK_ARROBA TK_IDENTIFICADOR  L_ATRIBUTO         { ReporteGD.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');}
     ;
 
 
@@ -155,18 +151,19 @@ L_ATRIBUTO: ATRIBUTO1 L_ATRIBUTO   {$2.push($1); $$=$2; ReporteGD.agregar('L_ATR
     |ATRIBUTO1                      {$$=[$1]; ReporteGD.agregar('L_ATRIBUTO::=ATRIBUTO1','L_ATRIBUTO.VAL = ATRIBUTO1.VAL','');}
     ;
 
-ATRIBUTO1: TK_DBARRA  TK_DPUNTO     {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
-    |TK_DBARRA TK_PUNTO             {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
-    |TK_BARRA TK_DPUNTO             {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');}
-    |TK_BARRA TK_PUNTO              {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');}
-    |                               {$$ = new AtributoXpath('','',@1.first_line,@1.first_column); ReporteGD.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');}
+ATRIBUTO1: TK_DBARRA  TK_DPUNTO     { ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_dpunto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
+    |TK_DBARRA TK_PUNTO             { ReporteGD.agregar('ATRIBUTO1::=tk_dbarra tk_punto','ATRIBUTO1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
+    |TK_BARRA TK_DPUNTO             { ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_dpunto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_DPUNTO.VAL','');}
+    |TK_BARRA TK_PUNTO              { ReporteGD.agregar('ATRIBUTO1::=tk_barra tk_punto','ATRIBUTO1.VAL = TK_BARRA.VAL + TK_PUNTO.VAL','');}
+    |                               { ReporteGD.agregar('ATRIBUTO1::= ε','ATRIBUTO1.VAL = EPSILON','');}
     ;
 
-PALABRAS_R: TK_DBARRA PR TK_DDP OPCION ASTERISCO1{$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
-    |TK_BARRA PR TK_DDP OPCION  ASTERISCO1       {$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGD.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
-    |TK_DBARRA PR TK_DDP OPCION                  {$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
-    |TK_BARRA PR TK_DDP OPCION                   {$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGD.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
-    
+PALABRAS_R: TK_DBARRA PR TK_DDP OPCION ASTERISCO1{ ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
+    |TK_BARRA PR TK_DDP OPCION  ASTERISCO1       { ReporteGD.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
+    |TK_DBARRA PR TK_DDP OPCION                  { ReporteGD.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
+    |TK_BARRA PR TK_DDP OPCION                   { ReporteGD.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
+    |TK_BARRA PR  TK_PARENTESIS                  {$$=$2; ReporteGA.agregar('PALABRAS_R::=TK_BARRA PR TK_PARENTESIS','PALABRAS_R.VAL = PR.VAL','');}
+    |TK_DBARRA PR  TK_PARENTESIS                 {$$=$2; ReporteGA.agregar('PALABRAS_R::=TK_DBARRA PR TK_PARENTESIS','PALABRAS_R.VAL = PR.VAL','');}
     ;
 
 PR: TK_ANCESTOR             {$$=$1; ReporteGD.agregar('PR::=tk_ancestor','PR.VAL = TK_ANCESTOR.VAL','');}
@@ -186,25 +183,24 @@ PR: TK_ANCESTOR             {$$=$1; ReporteGD.agregar('PR::=tk_ancestor','PR.VAL
     |TK_POSITION            {$$=$1; ReporteGD.agregar('PR::=tk_self','PR = TK_SELF.VAL','');}
     |TK_NODE                {$$=$1; ReporteGD.agregar('PR::=tk_self','PR = TK_SELF.VAL','');}
     |TK_TEXT                {$$=$1; ReporteGD.agregar('PR::=tk_self','PR = TK_SELF.VAL','');}
-    |error                  {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));}
     ;
 
 
-OPCION: TK_LAST TK_PARENTESIS   {$$ = new PR($1,@1.first_line,@1.first_column); ReporteGD.agregar('OPCION::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');}
-    |TK_POSITION TK_PARENTESIS  {$$ = new PR($1,@1.first_line,@1.first_column); ReporteGD.agregar('OPCION::=tk_position tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');}
-    |TK_NODE TK_PARENTESIS      {$$ = new PR($1,@1.first_line,@1.first_column); ReporteGD.agregar('OPCION::=tk_node tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');}
-    |TK_TEXT TK_PARENTESIS      {$$ = new PR($1,@1.first_line,@1.first_column); ReporteGD.agregar('OPCION::=tk_text tk_parentesis','OPCION.VAL = TK_TEXT.VAL + TK_PARENTESIS.VAL','');}
-    |TK_IDENTIFICADOR           {$$ = new PR($1,@1.first_line,@1.first_column); ReporteGD.agregar('OPCION::=tk_identificador','OPCION.VAL = TK_IDENTIFICADOR.VAL','');}
+OPCION: TK_LAST TK_PARENTESIS   { ReporteGD.agregar('OPCION::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');}
+    |TK_POSITION TK_PARENTESIS  { ReporteGD.agregar('OPCION::=tk_position tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');}
+    |TK_NODE TK_PARENTESIS      { ReporteGD.agregar('OPCION::=tk_node tk_parentesis','OPCION.VAL = TK_NODE.VAL + TK_PARENTESIS.VAL','');}
+    |TK_TEXT TK_PARENTESIS      { ReporteGD.agregar('OPCION::=tk_text tk_parentesis','OPCION.VAL = TK_TEXT.VAL + TK_PARENTESIS.VAL','');}
+    |TK_IDENTIFICADOR           { ReporteGD.agregar('OPCION::=tk_identificador','OPCION.VAL = TK_IDENTIFICADOR.VAL','');}
     ;
 
-ASTERISCO:TK_PUNTO TK_DBARRA TK_POR L_ASTERISCO         {$$ = new Conca('#',$2,$3,$4,@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');}
-    |TK_PUNTO TK_BARRA TK_POR L_ASTERISCO               {$$ = new Conca('#',$2,$3,$4,@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL + TK_BARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');}
-    |TK_DBARRA TK_POR L_ASTERISCO                       {$$ = new Conca('#',$1,$2,$3,@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA TK_POR.VAL + L_ASTERISCO.VAL','');}
-    |TK_BARRA TK_POR L_ASTERISCO                        {$$ = new Conca('#',$1,$2,$3,@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_BARRA.VAL+TK_POR.VAL+L_ASTERISCO.VAL','');}
-    |TK_PUNTO TK_DBARRA TK_POR                          {$$ = new Conca('por',$2,$3,new Dato('',@3.first_line,@3.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por','ASTERISCO.VAL = TK_PUNTO.VAL+ TK_DBARRA.VAL+TK_POR.VAL','');}
-    |TK_PUNTO TK_BARRA TK_POR                           {$$ = new Conca('por',$2,$3,new Dato('',@3.first_line,@3.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_punto tk_barra tk_por','ASTERISCO.VAL =TK_PUNTO.VAL+TK_BARRA.VAL+TK_POR.VAL','');}
-    |TK_DBARRA TK_POR                                   {$$ = new Conca('por',$1,$2,new Dato('',@2.first_line,@2.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_dbarra tk_por','ASTERISCO.VAL = TK_DBARRA.VAL + TK_POR.VAL','');}
-    |TK_BARRA TK_POR                                    {$$ = new Conca('por',$1,$2,new Dato('',@2.first_line,@2.first_column),@1.first_line,@1.first_column); ReporteGD.agregar('ASTERISCO::=tk_barra tk_por','ASTERISCO.VAL = TK_BARRA.VAL + TK_POR.VAL','');}
+ASTERISCO:TK_PUNTO TK_DBARRA TK_POR L_ASTERISCO         { ReporteGD.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');}
+    |TK_PUNTO TK_BARRA TK_POR L_ASTERISCO               { ReporteGD.agregar('ASTERISCO::=tk_punto tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA.VAL + TK_BARRA.VAL+ TK_POR.VAL + L_ASTERISCO.VAL','');}
+    |TK_DBARRA TK_POR L_ASTERISCO                       { ReporteGD.agregar('ASTERISCO::=tk_dbarra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_DBARRA TK_POR.VAL + L_ASTERISCO.VAL','');}
+    |TK_BARRA TK_POR L_ASTERISCO                        { ReporteGD.agregar('ASTERISCO::=tk_barra tk_por L_ASTERISCO','ASTERISCO.VAL = TK_BARRA.VAL+TK_POR.VAL+L_ASTERISCO.VAL','');}
+    |TK_PUNTO TK_DBARRA TK_POR                          { ReporteGD.agregar('ASTERISCO::=tk_punto tk_dbarra tk_por','ASTERISCO.VAL = TK_PUNTO.VAL+ TK_DBARRA.VAL+TK_POR.VAL','');}
+    |TK_PUNTO TK_BARRA TK_POR                           { ReporteGD.agregar('ASTERISCO::=tk_punto tk_barra tk_por','ASTERISCO.VAL =TK_PUNTO.VAL+TK_BARRA.VAL+TK_POR.VAL','');}
+    |TK_DBARRA TK_POR                                   { ReporteGD.agregar('ASTERISCO::=tk_dbarra tk_por','ASTERISCO.VAL = TK_DBARRA.VAL + TK_POR.VAL','');}
+    |TK_BARRA TK_POR                                    { ReporteGD.agregar('ASTERISCO::=tk_barra tk_por','ASTERISCO.VAL = TK_BARRA.VAL + TK_POR.VAL','');}
     ;
 
 L_ASTERISCO: ASTERISCO1 L_ASTERISCO          {$2.push($1); $$=$2; ReporteGD.agregar('L_ASTERISCO::= ASTERISCO1 L_ASTERISCO','L_ASTERISCO.VAL = ASTERISCO1.VAL + L_ASTERISCO.VAL','');}
@@ -218,7 +214,7 @@ ASTERISCO1:TK_CORCHETE_IZQUIERDO EXP TK_CORCHETE_DERECHO    {$$ = $2; ReporteGD.
 EXP:  EXP1 EXP_P                { ReporteGD.agregar('EXP::=EXP1 EXP_P','EXP_P.inh = EXP1.VAL | EXP.VAL= EXP_P.syn','');};
 EXP_P: TK_MAS EXP1 EXP_P        { ReporteGD.agregar('EXP_P::=tk_mas EXP1 EXP_P','EXP_P.inh = EXP_P.inh + EXP1.VAL | EXP_P.syn = EXP_P.syn','');}
     | TK_MENOS EXP1 EXP_P       { ReporteGD.agregar('EXP_P::=tk_menos EXP1 EXP_P','EXP_P.inh = EXP_P.inh - EXP1.VAL | EXP_P.syn = EXP_P.syn','');}
-    |                           { ReporteGD.agregar('EXP_P::=ε','EXP_P.syn = EXP_P.inh','');} 
+    |                           { ReporteGD.agregar('EXP_P::=ε','EXP_P.syn = EXP_P.inh','');}
     ;
 EXP1: EXP2 EXP1_P               { ReporteGD.agregar('EXP1::=EXP2 EXP1_P','EXP1_P.inh = EXP2.VAL | EXP1.VAL= EXP1_P.syn','');};
 EXP1_P:TK_POR EXP2 EXP1_P       { ReporteGD.agregar('EXP1_P::=tk_por EXP2 EXP1_P','EXP1_P.inh = EXP1_P.inh * EXP2.VAL | EXP1_P.syn = EXP1_P.syn','');}
@@ -254,19 +250,19 @@ EXP4: TK_PARENTESIS_IZQUIERDO EXP TK_PARENTESIS_DERECHO  { ReporteGD.agregar('EX
     ;
 
 
-PAL_RE: PR TK_DDP OPCION {$$ = new PAL_RE($1,$3,@1.first_line,@1.first_column);  ReporteGD.agregar('PAL_RE::=PR tk_ddp OPCION','PAL_RE.VAL = PR.VAL + TK_DDP.VAL + OPCION.VAL','');};
+PAL_RE: PR TK_DDP OPCION {  ReporteGD.agregar('PAL_RE::=PR tk_ddp OPCION','PAL_RE.VAL = PR.VAL + TK_DDP.VAL + OPCION.VAL','');};
 
-ATRI: TK_ARROBA TK_POR L_ATRI {$$ = new Atri($1+$2,$3,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI::=tk_arroba tk_por L_ATRI','ATRI.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRI.VAL','');};
+ATRI: TK_ARROBA TK_POR L_ATRI {  ReporteGD.agregar('ATRI::=tk_arroba tk_por L_ATRI','ATRI.VAL = TK_ARROBA.VAL + TK_POR.VAL + L_ATRI.VAL','');};
 
 L_ATRI: ATRI1 L_ATRI {$2.push($1); $$=$2;  ReporteGD.agregar('L_ATRI::= ATRI1 L_ATRI','L_ATRI.VAL = ATRI1.VAL + L_ATRI.VAL','');}
     |ATRI1          {$$=[$1];  ReporteGD.agregar('ATRI1::=ATRI1','L_ATRI.VAL = ATRI1.VAL','');}
     ;
 
-ATRI1: TK_DBARRA TK_DPUNTO      {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
-    |TK_DBARRA TK_PUNTO         {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
-    |TK_BARRA TK_DPUNTO         {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');}
-    |TK_BARRA TK_PUNTO          {$$ = new AtributoXpath($1,$2,@1.first_line,@1.first_column);  ReporteGD.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');}
-    |                           { ReporteGD.agregar('ATRI1::=ε','ATRI1.VAL = EPSILON','');}         
+ATRI1: TK_DBARRA TK_DPUNTO      {  ReporteGD.agregar('ATRI1::=tk_dbarra tk_dpunto','ATRI1.VAL = TK_DBARRA.VAL + TK_DPUNTO.VAL','');}
+    |TK_DBARRA TK_PUNTO         {  ReporteGD.agregar('ATRI1::=tk_dbarra tk_punto' ,'ATRI1.VAL = TK_DBARRA.VAL + TK_PUNTO.VAL','');}
+    |TK_BARRA TK_DPUNTO         {  ReporteGD.agregar('ATRI1::=tk_barra  tk_dpunto','ATRI1.VAL = TK_BARRA.VAL  + TK_TK_DPUNTO.VAL','');}
+    |TK_BARRA TK_PUNTO          {  ReporteGD.agregar('ATRI1::=tk_barra  tk_punto' ,'ATRI1.VAL = TK_BARRA.VAL  + TK_PUNTO.VAL','');}
+    |                           { ReporteGD.agregar('ATRI1::=ε','ATRI1.VAL = EPSILON','');}
     ;
 
 /*FIN DE LA GRAMATICA */

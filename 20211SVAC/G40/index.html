@@ -13,6 +13,7 @@
         <script src="./Js/Interprete/Gramatica/XMLdescReports.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathAsc.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathDesc.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XQueryAsc.js" ></script>
         <script src="./Js/Interprete/Expresiones/Atributo.js"></script>
         <script src="./Js/Interprete/Expresiones/Objeto.js"></script>
         <script src="./Js/Interprete/AST/GenerarArbol.js"></script>
@@ -32,6 +33,8 @@
         <script src="./Js/Interprete/AST/ReporteTablaSimbolosXMl.js"></script>
         <script src="./Js/Interprete/Expresiones/Operacion.js"></script>
         <script src="./Js/Interprete/Expresiones/Primitivo.js"></script>
+        <script src="./Js/Interprete/Expresiones/Sentencia.js"></script>.
+        <script src="./Js/Interprete/Expresiones/ExpresionXQuery.js"></script>
         <script src="./Js/Interprete/Interfaces/Expresion.js"></script>
         <script src="./Js/Interprete/Interfaces/Instruccion.js"></script>
         <script src="./Js/Interprete/Expresiones/Axes.js"></script>
@@ -39,10 +42,28 @@
         <script src="./Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
+        <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
+        <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
 
         <script>
 
-
+            var heap = [];
+            var stack = [];
+            var finalXML = 0;
+            var encodingXML = 0;
+            var contadorStack = 0;
+            var contadorTemporales = 0;
+            var SP = 2;
+            var HP = 0;
+            var T0 = 0;
+            var T1 = 0;
+            var temporal0 = "";
+            var temporal1 = "";
+            var globalC3D = "";
+            var xpathC3D = "";
+            var xmlC3D = "";
+            var C3DXML = new TraductorXML();
+            var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();
             var GenerarDOT = new GenerarArbol();
@@ -50,23 +71,30 @@
             var NumeroE = 1;
             var resultadoXML = null;
             var resultadoXPath = null;
+            var resultadoXQuery = null;
             var analisisCorrecto = true;
             var analisisXpathCorrecto = true;
+            var analisisXqueryCorrecto = true;
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
             var DOTxmlCSTdesc = "";
             var DOTxmlErrores = "";
             var DOTXPATHASTasc = "";
             var DOTXPATHASTDesc = "";
+            var DOTXQUERYASTAsc = "";
+            var DOTXQUERYASTDesc = "";
             var RGxml = new ReporteGramatical();
             var RGxmlDesc = new ReporteGramatical();
+            var ListaDAG = [];
             var nodoxPATHASC = null;
             var nodoxPATHDESC = null;
+            var nodoxQUERYASC = null;
             var IDentorno = 1;
             var IDobj = 1;
             var objetosGlobal = null;
             var entornosGlobal = null;
             var salidaXPath = null;
+            var salidaXQuery = null;
             var salidaRecursiva = "";
             var salidaGlobal = "";
         </script>
@@ -78,7 +106,10 @@
         <link href="./codemirror/theme/cobalt.css" rel="stylesheet">
         <link href="./codemirror/theme/duotone-light.css" rel="stylesheet">
         <link href="./codemirror/theme/duotone-dark.css" rel="stylesheet">
+        <link href="./codemirror/theme/ayu-dark.css" rel="stylesheet">
         <script src="./codemirror/mode/xml/xml.js"></script>
+        <script src="./codemirror/mode/xquery/xquery.js"></script>
+        
     </head> 
     <body oncontextmenu="return false;"> 
        <div class="editor1"> 
@@ -111,7 +142,10 @@
                         <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
                         <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
                         <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
-                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>                                
+                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>
+                        <a class="dropitem" id="heap">HEAP</a>  
+                        <a class="dropitem" id="stack">STACK</a>        
+                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
                         </div>
                     </div> 
                 </div>
@@ -145,8 +179,8 @@
                     <!-- EDITOR 2 -->
                     <textarea id="editor2"></textarea>
                     <span>
-                        <button class="button2" >Ejecutar (Asc)</button>
-                        <button class="button4" >Ejecutar (Desc)</button>
+                        <button class="button2" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button4" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>
                     <!-- FIN EDITOR 2 -->
                 </div>
@@ -154,8 +188,8 @@
                     <!-- EDITOR 3 -->
                     <textarea id="editor3"></textarea>
                     <span>
-                        <button class="button3" >Ejecutar (Asc)</button>
-                        <button class="button1" >Ejecutar (Desc)</button>
+                        <button class="button3" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button1" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>
                     <!-- FIN EDITOR 3 -->
                 </div> 
@@ -163,8 +197,8 @@
                     <!-- EDITOR 4 -->
                     <textarea id="editor4"></textarea>
                     <span>
-                        <button class="button4" >Ejecutar (Asc)</button>
-                        <button class="button2" >Ejecutar (Desc)</button>
+                        <button class="button4" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button2" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>
                     <!-- FIN EDITOR 4 -->
                 </div> 
@@ -179,15 +213,26 @@
             <textarea id="entrada_xpath"></textarea>
             <!-- FIN ENTRADA XPATH -->
         </div>
+        <div class="labelConsola"><label class="label info">ENTRADA XQUERY</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="entrada_xquery"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>
         <div class="labelConsola"><label class="label info">SALIDA</label></div>
         <div class="consola">
             <!-- CONSOLA Python -->
             <textarea id="salida_xpath"></textarea>
             <!-- FIN CONSOLA JS -->
         </div>
-    </div>           
+        <div class="labelConsola"><label class="label info">SALIDA TRADUCCION</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="salida_traduccion"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>       
         <script src="Js/Consolas.js"></script>
-        
+
     <script src="./Js/jquery.min.js"></script>
     <script src="./Js/jquery.backtotop.js"></script>
     <script src="./Js/jquery.mobilemenu.js"></script>     

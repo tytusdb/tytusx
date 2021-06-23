@@ -24,7 +24,8 @@ class ReporteTablaSimbolosXML{
                         "Tipo": "Atributo",
                         "Ambito": nombreAmbito,
                         "Fila": entornoPadre.tabla[i].getFila(),
-                        "Columna": entornoPadre.tabla[i].getColumna()
+                        "Columna": entornoPadre.tabla[i].getColumna(),
+                        "Posicion": entornoPadre.tabla[i].getPosicion()
                 }
 
                 this.arreglo.push(atributoAux);
@@ -36,7 +37,8 @@ class ReporteTablaSimbolosXML{
                     "Tipo": "Objeto",
                     "Ambito": nombreAmbito,
                     "Fila": entornoPadre.tabla[i].getFila(),
-                    "Columna": entornoPadre.tabla[i].getColumna()
+                    "Columna": entornoPadre.tabla[i].getColumna(),
+                    "Posicion": entornoPadre.tabla[i].getPosicion()
                 }
 
                 this.arreglo.push(objetoAux);

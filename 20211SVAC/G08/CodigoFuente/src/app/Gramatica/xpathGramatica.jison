@@ -20,18 +20,18 @@ escape                              \\{escapechar}
 {entero}	      return 'entero'
 {stringliteral}       return 'STRING_LITERAL'
 {caracterliteral}     return 'CARACTER_LITERAL'
-"ancestor"                  return 'ancestor';
 "ancestor-or-self"          return 'ancestor-or-self';
+"ancestor"                  return 'ancestor';
 "attribute"                 return 'attribute';
 "child"                     return 'child';
-"descendant"                return 'descendant';
 "descendant-or-self"        return 'descendant-or-self';
-"following"                 return 'following';
+"descendant"                return 'descendant';
 "following-sibling"         return 'following-sibling';
+"following"                 return 'following';
 "namespace"                 return 'namespace';
 "parent"                    return 'parent';
-"preceding"                 return 'preceding';
 "preceding-sibling"         return 'preceding-sibling';
+"preceding"                 return 'preceding';
 "self"                      return 'self';
 "last"                      return 'last';
 "position"                  return 'position';
@@ -182,6 +182,7 @@ PARAMETRO :FUNCION_OPERABLE  {$$ = $1;}
         | OPERACION {$$ = new ParametroOperacionXpath($1,'',TipoParametro.Operacion);}
         | DOBLEDOT {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.DosPuntos);}
         | DOT   {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Punto);}
+        | nodename BARRASIMPLE  ATRIBUTO {$$ = new ParametroOperacionXpath(null,$1 + '@' + $3,TipoParametro.Nodo);}
         | ATRIBUTO {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Atributo);}
         | STRING_LITERAL {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Cadena);}
         | nodename {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Nodo);}

@@ -1,3 +1,4 @@
+import { Tipos } from "../../xpath/Enum";
 import { Atributo } from "../Atributo";
 import { Element } from "../Element";
 
@@ -62,41 +63,31 @@ export class Ambito {
         return _elements;
     }
 
-    searchAnyAttributes(_element: Element, _array: Array<Atributo>, _elements: Array<Element>) {
+    searchAnyAttributes(_id: string, _element: Element, _array: Array<Atributo>) {
         if (_element.attributes) {
             _element.attributes.forEach(attribute => {
-                _array.push(attribute);
+                if (attribute.id === _id || _id === "*")
+                    _array.push(attribute);
             });
-            _elements.push(_element);
         }
         if (_element.childs) {
             _element.childs.forEach(child => {
-                _array = this.searchAnyAttributes(child, _array, _elements).atributos;
+                _array = this.searchAnyAttributes(_id, child, _array,);
             });
         }
-        return { atributos: _array, elementos: _elements };
+        return _array;
     }
 
-    searchAttributesFromCurrent(_element: Element, _id: string, _array: Array<Atributo>, _elements: Array<Element>) {
-        let flag: boolean = false;
-        if (_element.attributes) {
-            _element.attributes.forEach(attribute => {
-                if (attribute.id === _id) {
-                    _array.push(attribute);
-                    flag = true;
-                }
-            });
-            if (flag) {
-                _elements.push(_element);
-                flag = false;
-            }
-        }
+    searchAnyText(_element: Element, _array: Array<string>) {
         if (_element.childs) {
             _element.childs.forEach(child => {
-                _array = this.searchAttributesFromCurrent(child, _id, _array, _elements).atributos;
+                _array = this.searchAnyText(child, _array);
             });
         }
-        return { atributos: _array, elementos: _elements };
+        if (_element.value) {
+            _array.push(_element.value);
+        }
+        return _array
     }
 
     searchSingleNode(_nodename: string, _element: Element, _array: Array<Element>): Array<Element> {
@@ -115,6 +106,70 @@ export class Ambito {
                 _array = this.searchNodes(_nodename, child, _array);
             });
         }
+        return _array;
+    }
+
+    compareCurrent(_currentNode: Element, _array: Array<Element>, _axisname: Tipos) {
+        switch (_axisname) {
+            case Tipos.AXIS_ANCESTOR:
+            case Tipos.AXIS_ANCESTOR_OR_SELF:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, true, false, false);
+            case Tipos.AXIS_PRECEDING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, false);
+            case Tipos.AXIS_PRECEDING_SIBLING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, true);
+            case Tipos.AXIS_FOLLOWING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, false);
+            case Tipos.AXIS_FOLLOWING_SIBLING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, true);
+        }
+        return _array;
+    }
+
+    getBefore(_element: Element, _currentNode: Element, _array: Array<Element>, isAncestor: boolean, isPreceding: boolean, isSibling: boolean): any {
+        if (_element == _currentNode) return false;
+        if (_element.childs) {
+            for (let i = 0; i < _element.childs.length; i++) {
+                const child = _element.childs[i];
+                if (isPreceding && isSibling) _array.push(child);
+                let a = this.getBefore(child, _currentNode, _array, isAncestor, isPreceding, isSibling);
+                if (a === false) return _array;
+            }
+            if (isPreceding && !isSibling) _array.push(_element);
+        }
+        if (isAncestor) _array.push(_element);
+        return _array;
+    }
+
+    getFollowings(_element: Element, _currentNode: Element, _array: Array<Element>, _found: boolean, isSibling: boolean): any {
+        if (_element == _currentNode) _found = true;
+        if (_element.childs) {
+            for (let i = 0; i < _element.childs.length; i++) {
+                const child = _element.childs[i];
+                this.getFollowings(child, _currentNode, _array, _found, isSibling);
+                return _array;
+            }
+            if (_found && !isSibling)
+                _array.push(_element);
+        }
+        if (_found && isSibling) _array.push(_element);
+        return _array;
+    }
+
+    searchAncestors(_element: Element, _currentNode: Element, _array: Array<Element>): any {
+        if (_element == _currentNode) {
+            return { found: _array };
+        }
+        if (_element.childs) {
+            let a: any;
+            for (let i = 0; i < _element.childs.length; i++) {
+                const child = _element.childs[i];
+                a = this.searchAncestors(child, _currentNode, _array);
+                if (a.found) return a.found;
+                else _array = a;
+            }
+        }
+        _array.push(_element);
         return _array;
     }
 

@@ -30,37 +30,34 @@ export default class Objeto extends Instruccion {
   public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
     var simbolo;
 
-    
+
     if (this.listaAtributos != null) {
       for (let i of this.listaAtributos) {
         var s = i.interpretar(arbol, tabla);
         if (s.identificador == "encoding") {
-          console.log(s.valor);
           arbol.setEncoding(s.valor);
         }
       }
     }
 
 
-
     if (this.listaObjetos != null) {
 
-        var ts = new tablaSimbolos(); /*entorno hijo */
-        for (let i of this.listaObjetos) {
-          var r = i.interpretar(arbol, tabla); /* Obtiene el objeto hijo */
-          ts.setVariable(r);
-        }
-        simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, ts);
-        //arbol.listaSimbolos.push(simbolo);
-
+      var ts = new tablaSimbolos(); /*entorno hijo */
+      for (let i of this.listaObjetos) {
+        var r = i.interpretar(arbol, tabla); /* Obtiene el objeto hijo */
+        ts.setVariable(r);
+      }
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"anteriorentorno" ,ts);
+      //arbol.actualizarTabla(simbolo,this.linea.toString(),this.columna.toString());
     } else if (this.contenido != null) {
-      console.log(arbol.getEncoding());
+
       //if o switch buscando codificacion
       if (arbol.getEncoding() == "UTF-8") {
         this.contenido = (this.contenido);
-      }else if(arbol.getEncoding()=="ISO-8859-1"){
+      } else if (arbol.getEncoding() == "ISO-8859-1") {
         this.contenido = unescape(encodeURIComponent(this.contenido));
-      }else if (arbol.getEncoding() == "ASCII") {
+      } else if (arbol.getEncoding() == "ASCII") {
         this.contenido = (this.contenido);
         //
         /*console.log(this.getCharCodes(this.contenido));
@@ -68,20 +65,25 @@ export default class Objeto extends Instruccion {
       } else {
         this.contenido = this.contenido;
       }
-  
-      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.contenido);
+      
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"anteriorentorno", this.contenido);
+
     } else {
       listaErrores.push(new NodoErrores('SEMANTICO', this.identificador + ' Datos nulos', this.fila, this.columna));
     }
 
 
     if (this.listaAtributos != null) {
+      if(this.identificador!="xml"){
+
+      
       for (let i of this.listaAtributos) {
         var s = i.interpretar(arbol, tabla);
 
         simbolo.agregarAtributo(s.identificador, s.valor);
-
+        simbolo= new Simbolo(new Tipo(tipoDato.ATRIBUTO), s.identificador, s.linea.toString(), s.columna.toString(),"", s.valor);
       }
+    }
     }
 
     return simbolo;
@@ -139,6 +141,117 @@ export default class Objeto extends Instruccion {
       nodo.agregarHijoAST(lista);
     }
     return nodo;
+  }
+
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    var simbolo;
+
+    if (this.listaObjetos != null) {
+      
+      var ts = new tablaSimbolos(); /*entorno hijo */
+     
+      for (let i of this.listaObjetos) {
+        var r = i.codigo3D(arbol, tabla); /* Obtiene el objeto hijo */
+        ts.setVariable(r);
+      }
+      let contador = arbol.getContadort();
+      let stack = arbol.getSTACK();
+      arbol.codigo3d.push(`// declaracion ${this.identificador}`);
+      arbol.codigo3d.push(`t${contador}=s+${stack};`);
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"" ,ts, `t${contador}`);
+
+    }
+
+    else if (this.contenido != null) {
+
+      //if o switch buscando codificacion
+      if (arbol.getEncoding() == "UTF-8") {
+        this.contenido = (this.contenido);
+      } else if (arbol.getEncoding() == "ISO-8859-1") {
+        this.contenido = unescape(encodeURIComponent(this.contenido));
+      } else if (arbol.getEncoding() == "ASCII") {
+        this.contenido = (this.contenido);
+        //
+        /*console.log(this.getCharCodes(this.contenido));
+        this.contenido = this.getCharCodes(this.contenido) + "";*/
+      } else {
+        this.contenido = this.contenido;
+        this.contenido = this.contenido.toString().replace("%20", " ").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&apos;", "'").replace("&quot;", "\"");
+      }
+
+      let stackID = arbol.getSTACK();
+      let contadorID = arbol.getContadort(); //temporales
+      arbol.codigo3d.push(`// declaracion ${this.identificador}`);
+      arbol.codigo3d.push(`t${contadorID}=s+${stackID};`);
+
+      let data: string = this.contenido + "";
+      let estado = 0;
+      for (let x = 0; x < data.length; x++) {
+        const iterator = data[x];
+        switch (estado) {
+          case 0: {
+            if (iterator == "\\") { estado = 1; continue; }
+            arbol.codigo3d.push(`//agregamos el string al heap ${iterator}`);
+            arbol.codigo3d.push("t0=p;");
+
+            arbol.codigo3d.push("t1=" + iterator.charCodeAt(0) + ";");
+            arbol.codigo3d.push("guardarString();");
+            break;
+          }
+          case 1:
+            {
+              let assci = 0;
+              if (iterator == "n") { assci = 10; }
+              else if (iterator == "\"") { assci = 34; }
+              else if (iterator == "\\") { assci = 92 }
+              else if (iterator == "r") { assci = 10 }
+              else if (iterator == "t") { assci = 9; }
+              else {
+                arbol.codigo3d.push("//agregamos el string al heap");
+                arbol.codigo3d.push("t0=p;");
+
+                arbol.codigo3d.push("t1=" + 34 + ";");
+                arbol.codigo3d.push("guardarString();");
+                arbol.codigo3d.push("//agregamos el string al heap");
+                arbol.codigo3d.push("t0=p;");
+
+                arbol.codigo3d.push("t1=" + iterator.charAt(0) + ";");
+                arbol.codigo3d.push("guardarString();");
+              }
+              arbol.codigo3d.push("//agregamos el string al heap");
+              arbol.codigo3d.push("t0=p;");
+
+              arbol.codigo3d.push("t1=" + assci + ";");
+              arbol.codigo3d.push("guardarString();");
+              estado = 0;
+              break;
+            }
+        }
+
+      }
+      arbol.codigo3d.push("t0=p;");
+      arbol.codigo3d.push("t1=-1;");
+      arbol.codigo3d.push("guardarString();");
+      const contadort = arbol.getContadort();
+      arbol.codigo3d.push("t" + contadort + "=p-" + (data.length + 1) + ";");
+      arbol.codigo3d.push(`stack[(int)t${contadorID}]= t${contadort};`);
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"", this.contenido, `t${contadorID}`);
+
+    }
+
+
+
+    if (this.listaAtributos != null) {
+      for (let i of this.listaAtributos) {
+        var s = i.codigo3D(arbol, tabla);
+        
+          simbolo.agregarAtributo(s.identificador, s.valor);
+        simbolo= new Simbolo(new Tipo(tipoDato.ATRIBUTO), s.identificador, s.linea.toString(), s.columna.toString(),"", s.valor, s.cd3script);
+        
+      }
+    }
+
+    return simbolo
   }
 }
 

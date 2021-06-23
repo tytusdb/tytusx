@@ -37,4 +37,10 @@ class XmlAttribute extends XmlObjectAncestor {
     isAttribute() {
         return true;
     }
+    getStrAst(nodoPadre) {
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot = nombreRoot + "[" + 'label="Attribute:' + this.name + "=" + this._value + '",' + 'color="lightblue3",' + "];\n ";
+        var cad = cadenaRoot + nodoPadre + "->" + nombreRoot + ";\n";
+        return cad;
+    }
 }

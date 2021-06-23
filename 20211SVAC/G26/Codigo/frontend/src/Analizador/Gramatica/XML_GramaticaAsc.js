@@ -85,15 +85,30 @@ var XML_GramaticaAsc = (function () {
             var $0 = $$.length - 1;
             switch (yystate) {
                 case 1:
+                    /* CONSTRUCCION DE CST */
+                    let raiz = new Nodo(cst.cstXmlAsc.getId(), 'START', null, [cst.cstXmlAsc.obtenerUltimoNodo()]);
+                    cst.cstXmlAsc.setRaiz(raiz);
                     return $$[$0 - 1];
                     break;
                 case 2:
                     $$[$0].unshift(new Objeto($$[$0 - 4], '', _$[$0 - 6].first_line, _$[$0 - 6].first_column, $$[$0 - 3], [], true));
                     this.$ = $$[$0];
+                    /* CONSTRUCCION DE CST */
+                    let elementos = cst.cstXmlAsc.obtenerUltimoNodo();
+                    let atributosE = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ENCABEZADO', null, [new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), '<', null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'interrog', null, [new Nodo(cst.cstXmlAsc.getId(), '?', null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'xml', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 4].toString().replaceAll("\"", ""), null, [])]),
+                        atributosE,
+                        new Nodo(cst.cstXmlAsc.getId(), 'interrog', null, [new Nodo(cst.cstXmlAsc.getId(), '?', null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), '>', null, [])]),
+                        elementos]));
                     break;
                 case 3:
                     errores.default.agregarError('sintáctico', 'Token inesperado \'' + yytext + '\'', _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     this.$ = $$[$0];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ENCABEZADO', null, [cst.cstXmlAsc.obtenerUltimoNodo()]));
                     break;
                 case 4:
                     if ($$[$0 - 1] !== null) {
@@ -105,20 +120,33 @@ var XML_GramaticaAsc = (function () {
                         this.$ = [$$[$0 - 1]];
                     else
                         this.$ = [];
+                    /* CONSTRUCCION DE CST */
+                    let elem = cst.cstXmlAsc.obtenerUltimoNodo();
+                    let listaElem = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTAELEMENTOS', null, [listaElem, elem]));
                     break;
                 case 5:
                     if ($$[$0] !== null)
                         this.$ = [$$[$0]];
                     else
                         this.$ = [];
+                    /* CONSTRUCCION DE CST */
+                    let padreLE = new Nodo(cst.cstXmlAsc.getId(), 'LISTAELEMENTOS', null, [cst.cstXmlAsc.obtenerUltimoNodo()]);
+                    cst.cstXmlAsc.agregarPila(padreLE);
                     break;
                 case 6:
                     this.$ = new Objeto($$[$0 - 3], '', _$[$0 - 4].first_line, _$[$0 - 4].first_column, $$[$0 - 2], [], true);
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ELEMENTO', null, [new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 4].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 3].toString().replaceAll("\"", ""), null, [])]),
+                        cst.cstXmlAsc.obtenerUltimoNodo(),
+                        new Nodo(cst.cstXmlAsc.getId(), 'diag', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 1].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 7:
                     console.log(Objeto);
                     if ($$[$0 - 7] === $$[$0 - 1]) {
-                        this.$ = new Objeto($$[$0 - 7], $$[$0 - 4].toString(), _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], [], false);
+                        this.$ = new Objeto($$[$0 - 7], $$[$0 - 4].toString().replaceAll("\"", ""), _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], [], false);
                     }
                     else {
                         console.log(errores.default);
@@ -126,6 +154,18 @@ var XML_GramaticaAsc = (function () {
                         errores.default.agregarError('semantico', 'Las etiquetas deben ser iguales', _$[$0 - 8].first_line, _$[$0 - 8].first_column);
                         this.$ = null;
                     }
+                    /* CONSTRUCCION DE CST */
+                    var elemText = cst.cstXmlAsc.obtenerUltimoNodo();
+                    var elemAtr = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ELEMENTO', null, [new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 8].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 7].toString().replaceAll("\"", ""), null, [])]),
+                        elemAtr,
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 5].toString().replaceAll("\"", ""), null, [])]),
+                        elemText,
+                        new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 3].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'diag', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 2].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 1].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 8:
                     if ($$[$0 - 7] === $$[$0 - 1]) {
@@ -137,6 +177,18 @@ var XML_GramaticaAsc = (function () {
                         errores.default.agregarError('semantico', 'Las etiquetas deben ser iguales', _$[$0 - 8].first_line, _$[$0 - 8].first_column);
                         this.$ = null;
                     }
+                    /* CONSTRUCCION DE CST */
+                    let elem1 = cst.cstXmlAsc.obtenerUltimoNodo();
+                    let atr1 = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ELEMENTO', null, [new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 8].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 7].toString().replaceAll("\"", ""), null, [])]),
+                        atr1,
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 5].toString().replaceAll("\"", ""), null, [])]),
+                        elem1,
+                        new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 3].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'diag', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 2].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 1].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 9:
                     if ($$[$0 - 6] === $$[$0 - 1]) {
@@ -148,68 +200,133 @@ var XML_GramaticaAsc = (function () {
                         errores.default.agregarError('semantico', 'Las etiquetas deben ser iguales', _$[$0 - 7].first_line, _$[$0 - 7].first_column);
                         this.$ = null;
                     }
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ELEMENTO', null, [new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 7].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 6].toString().replaceAll("\"", ""), null, [])]),
+                        cst.cstXmlAsc.obtenerUltimoNodo(),
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 4].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'lt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 3].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'diag', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 2].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 1].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'gt', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 10:
                     console.log('Entra a error sintactico');
                     errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     this.$ = null;
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ELEMENTO', null, []));
                     break;
                 case 11:
                     this.$ = $$[$0];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTAATRIBUTOS', null, [cst.cstXmlAsc.obtenerUltimoNodo()]));
                     break;
                 case 12:
                     this.$ = [];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTAATRIBUTOS', null, [new Nodo(cst.cstXmlAsc.getId(), 'epsilon', null, [])]));
                     break;
                 case 13:
                     $$[$0 - 1].push($$[$0]);
                     this.$ = $$[$0 - 1];
+                    /* CONSTRUCCION DE CST */
+                    let atr2 = cst.cstXmlAsc.obtenerUltimoNodo();
+                    let atrs2 = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ATRIBUTOS', null, [atrs2, atr2]));
                     break;
                 case 14:
                     this.$ = [$$[$0]];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ATRIBUTOS', null, [cst.cstXmlAsc.obtenerUltimoNodo()]));
                     break;
                 case 15:
                 case 16:
-                    this.$ = new Atributo($$[$0 - 2].toString(), $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
+                    this.$ = new Atributo($$[$0 - 2].toString().replaceAll("\"", ""), $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ATRIBUTO', null, [new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 2].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'asignacion', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0 - 1].toString().replaceAll("\"", ""), null, [])]),
+                        new Nodo(cst.cstXmlAsc.getId(), 'cadena', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 17:
                     console.log('Entra a error Atribut sintactico');
                     errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', _$[$0].first_line, _$[$0].first_column);
                     this.$ = new Atributo("", "", _$[$0].first_line, _$[$0].first_column);
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'ATRIBUTO', null, []));
                     break;
                 case 18:
                     $$[$0 - 1] = $$[$0 - 1] + " " + $$[$0];
                     this.$ = $$[$0 - 1];
+                    /* CONSTRUCCION DE CST */
+                    let text2 = cst.cstXmlAsc.obtenerUltimoNodo();
+                    let textContent2 = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXTCONTENT', null, [textContent2, text2]));
                     break;
                 case 19:
                     this.$ = $$[$0];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXTCONTENT', null, [cst.cstXmlAsc.obtenerUltimoNodo()]));
                     break;
                 case 20:
+                    this.$ = $$[$0].toString().replaceAll("\"", "");
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
+                    break;
                 case 21:
-                case 23:
-                case 24:
-                case 25:
-                    this.$ = $$[$0].toString();
+                    this.$ = $$[$0].toString().replaceAll("\"", "");
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'content', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 22:
+                    this.$ = $$[$0].toString().replaceAll("\"", "");
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'double', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
+                    break;
+                case 23:
+                    this.$ = $$[$0].toString().replaceAll("\"", "");
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'integer', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
+                    break;
+                case 24:
                     this.$ = $$[$0].toString();
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'identificador', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
+                    break;
+                case 25:
+                    this.$ = $$[$0].toString().replaceAll("\"", "");
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'comilla simple', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 26:
                     this.$ = "<";
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'menor que', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 27:
                     this.$ = ">";
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'mayor que', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 28:
                     this.$ = "&";
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'ampersand', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 29:
                     this.$ = "'";
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'apostrofe', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 30:
                     this.$ = "\"";
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'comilla doble', null, [new Nodo(cst.cstXmlAsc.getId(), '"', null, [])])]));
                     break;
                 case 31:
-                    this.$ = $$[$0].toString();
+                    this.$ = $$[$0].toString().replaceAll("\"", "");
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, []));
                     break;
             }
         },
@@ -430,10 +547,11 @@ var XML_GramaticaAsc = (function () {
         } };
     //const Nodo = require("./AST/nodo_arbol");
     //var raiz;
-    var Objeto = require("../XML/Objeto").Objeto;
-    var Atributo = require("../XML/Atributo").Atributo;
-    var errores = require('../Global/ListaError');
-    //import errores from '../Global/ListaError';
+    const { Objeto } = require("../XML/Objeto");
+    const { Atributo } = require("../XML/Atributo");
+    const errores = require('../Global/ListaError');
+    const { Nodo } = require('../Reporte/Nodo');
+    const cst = require('../Reporte/CST');
     /* generated by jison-lex 0.3.4 */
     var lexer = (function () {
         var lexer = ({

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ambito = void 0;
+var Enum_1 = require("../../xpath/Enum");
 var Ambito = /** @class */ (function () {
     function Ambito(_anterior, _tipo) {
         this.anterior = _anterior;
@@ -54,42 +55,32 @@ var Ambito = /** @class */ (function () {
         }
         return _elements;
     };
-    Ambito.prototype.searchAnyAttributes = function (_element, _array, _elements) {
+    Ambito.prototype.searchAnyAttributes = function (_id, _element, _array) {
         var _this = this;
         if (_element.attributes) {
             _element.attributes.forEach(function (attribute) {
-                _array.push(attribute);
-            });
-            _elements.push(_element);
-        }
-        if (_element.childs) {
-            _element.childs.forEach(function (child) {
-                _array = _this.searchAnyAttributes(child, _array, _elements).atributos;
-            });
-        }
-        return { atributos: _array, elementos: _elements };
-    };
-    Ambito.prototype.searchAttributesFromCurrent = function (_element, _id, _array, _elements) {
-        var _this = this;
-        var flag = false;
-        if (_element.attributes) {
-            _element.attributes.forEach(function (attribute) {
-                if (attribute.id === _id) {
+                if (attribute.id === _id || _id === "*")
                     _array.push(attribute);
-                    flag = true;
-                }
             });
-            if (flag) {
-                _elements.push(_element);
-                flag = false;
-            }
         }
         if (_element.childs) {
             _element.childs.forEach(function (child) {
-                _array = _this.searchAttributesFromCurrent(child, _id, _array, _elements).atributos;
+                _array = _this.searchAnyAttributes(_id, child, _array);
             });
         }
-        return { atributos: _array, elementos: _elements };
+        return _array;
+    };
+    Ambito.prototype.searchAnyText = function (_element, _array) {
+        var _this = this;
+        if (_element.childs) {
+            _element.childs.forEach(function (child) {
+                _array = _this.searchAnyText(child, _array);
+            });
+        }
+        if (_element.value) {
+            _array.push(_element.value);
+        }
+        return _array;
     };
     Ambito.prototype.searchSingleNode = function (_nodename, _element, _array) {
         if (_nodename === _element.id_open) {
@@ -107,6 +98,75 @@ var Ambito = /** @class */ (function () {
                 _array = _this.searchNodes(_nodename, child, _array);
             });
         }
+        return _array;
+    };
+    Ambito.prototype.compareCurrent = function (_currentNode, _array, _axisname) {
+        switch (_axisname) {
+            case Enum_1.Tipos.AXIS_ANCESTOR:
+            case Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, true, false, false);
+            case Enum_1.Tipos.AXIS_PRECEDING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, false);
+            case Enum_1.Tipos.AXIS_PRECEDING_SIBLING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, true);
+            case Enum_1.Tipos.AXIS_FOLLOWING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, false);
+            case Enum_1.Tipos.AXIS_FOLLOWING_SIBLING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, true);
+        }
+        return _array;
+    };
+    Ambito.prototype.getBefore = function (_element, _currentNode, _array, isAncestor, isPreceding, isSibling) {
+        if (_element == _currentNode)
+            return false;
+        if (_element.childs) {
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                if (isPreceding && isSibling)
+                    _array.push(child);
+                var a = this.getBefore(child, _currentNode, _array, isAncestor, isPreceding, isSibling);
+                if (a === false)
+                    return _array;
+            }
+            if (isPreceding && !isSibling)
+                _array.push(_element);
+        }
+        if (isAncestor)
+            _array.push(_element);
+        return _array;
+    };
+    Ambito.prototype.getFollowings = function (_element, _currentNode, _array, _found, isSibling) {
+        if (_element == _currentNode)
+            _found = true;
+        if (_element.childs) {
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                this.getFollowings(child, _currentNode, _array, _found, isSibling);
+                return _array;
+            }
+            if (_found && !isSibling)
+                _array.push(_element);
+        }
+        if (_found && isSibling)
+            _array.push(_element);
+        return _array;
+    };
+    Ambito.prototype.searchAncestors = function (_element, _currentNode, _array) {
+        if (_element == _currentNode) {
+            return { found: _array };
+        }
+        if (_element.childs) {
+            var a = void 0;
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                a = this.searchAncestors(child, _currentNode, _array);
+                if (a.found)
+                    return a.found;
+                else
+                    _array = a;
+            }
+        }
+        _array.push(_element);
         return _array;
     };
     Ambito.prototype.getGlobal = function () {

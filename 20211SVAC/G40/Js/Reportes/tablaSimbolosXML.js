@@ -17,7 +17,7 @@ const init = function(e){
                             <td>${data[i].Ambito}</td>
 							<td>${data[i].Fila}</td>
 							<td>${data[i].Columna}</td>
-
+							<td>${data[i].Posicion}</td>
 					  </tr>`
 			table.innerHTML += row
 

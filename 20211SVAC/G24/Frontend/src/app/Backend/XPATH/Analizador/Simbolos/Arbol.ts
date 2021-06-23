@@ -1,10 +1,11 @@
-import tablaSimbolos from './tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import { Instruccion } from '../Abstracto/Instruccion';
 import NodoErrores from '../Excepciones/NodoErrores';
 import { reporteTabla } from '../Reportes/reporteTabla';
 import obtenerValor from '../Reportes/cambiarTipo';
+import Atributo from 'src/app/Backend/XML/Analizador/Expresiones/Atributo';
 export default class Arbol {
-  private instrucciones: Array<Instruccion>;
+  private instrucciones: Array<Instruccion[]>;
   private NodoErrores: Array<NodoErrores>;
   private funciones: Array<Instruccion>;
   public listaSimbolos: Array<reporteTabla>;
@@ -40,6 +41,10 @@ export default class Arbol {
     }
     return 'as';
   }
+
+  
+
+ 
   public getfunciones(): Array<Instruccion> {
     return this.funciones;
   }
@@ -53,10 +58,10 @@ export default class Arbol {
     this.NodoErrores = value;
   }
 
-  public getinstrucciones(): Array<Instruccion> {
+  public getinstrucciones(): Array<Instruccion[]> {
     return this.instrucciones;
   }
-  public setinstrucciones(value: Array<Instruccion>) {
+  public setinstrucciones(value: Array<Instruccion[]>) {
     this.instrucciones = value;
   }
   private consola: String = '';
@@ -77,7 +82,7 @@ export default class Arbol {
     this.tablaGlobal = value;
   }
 
-  constructor(instrucciones: Array<Instruccion>) {
+  constructor(instrucciones: Array<Instruccion[]>) {
     this.instrucciones = instrucciones;
     this.consola = '';
     this.tablaGlobal = new tablaSimbolos();

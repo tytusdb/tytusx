@@ -1,7 +1,6 @@
 
 /* SECCION DE IMPORTS */
 %{
-
 %}
 
 /* description: Parses and executes mathematical expressions. */
@@ -34,19 +33,55 @@
 "`"[^''\n]*"`" 				return 'str'
 [0-9]+("."[0-9]+)?\b  				return 'num'
 [a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]|"_"|"-")*			return 'id'
-"\\="|"\\<"|"\\>"|"\\/"|"\\“"|"\\\""|"\\'"|"\\’"|"\\`"|"\\`"|"\\‘"                         return 'signo_especial'
+"\\="|"\\<"|"\\>"|"\\/"|"\\“"|"\\\""|"\\'"|"\\’"|"\\`"|"\\`"|"\\‘"|.                         return 'signo_especial'
 "&lt;"|"&gt;"|"&amp;"|"&apos;"|"&quot;"|"&eq;"                                             return 'caracter_especial'
 [^a-zA-Z/<>=]                     return 'signo'
+
 <<EOF>>               return 'EOF'
-.                     return 'INVALID'
 
 /lex
 
 
+%right 'igual'
+%left 'menor'
 
 %start S
 
 %% /* language grammar */
+
+
+
+LISTA_TAGS      : LISTA_TAGS TAG
+                {{
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="LISTA_TAGS_P",'+'color="lightblue3",'+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot  + $2["cad"] + $1["cad"];
+					cad+=nombreRoot+"->"+$2["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+                }}
+                | TAG
+                {{
+
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="LISTA_TAGS",'+'color="lightblue3",'+"];\n ";
+					//childs
+					//RESULTADO
+                    var cad = cadenaRoot + $1["cad"];
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+                }}
+
+                ;
 
 
 /*********************************************************************************************/
@@ -58,156 +93,394 @@
 
 S   :  TAG EOF
         {{
-            ReporteGramatical.agregarProduccionXML("S -> TAG EOF","$$ = $1;return $$;");
-            $$ = $1;
-            return $$;
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="S",'+'color="lightblue3",'+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + $1["cad"]  ;
+					cad+=nombreRoot+"->"+$1["nombre"] +";\n";
+
+
+                    var cadena
+                    cadena = "digraph G { \n ";
+                    cadena += cad;
+                    cadena += "}";
+                    return cadena;
         }}
-        | EOF
     ;
 
-LISTA_TAGS      :  TAG  LISTA_TAGS
+LiSTA_TAGS      :  TAG LISTA_TAGS_P
                 {{
-                    ReporteGramatical.agregarProduccionXML("LISTA_TAGS -> TAG LISTA_TAGS_P","$$ = $2; $$.unshift($1); ");
-                    $$ = $2;
-                    $$.unshift($1);
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="LISTA_TAGS",'+'color="lightblue3",'+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + $1["cad"] + $2["cad"] ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$2["nombre"]+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
                 }}
                 ;
 
-LISTA_TAGS_P      : TAG LISTA_TAGS_P
-                {{
-                    ReporteGramatical.agregarProduccionXML("LISTA_TAGS_P -> TAG LISTA_TAGS_P","$$ = $2;$$.unshift($1);");
-                    $$ = $2;
-                    $$.unshift($1);
-                }}
+ LISTA_TAGS_P     : TAG     LISTA_TAGS_P
+                {
+					//parent CONTENIDO->CONTENIDO VALOR
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="LISTA_TAGS_P",'+'color="lightblue3",'+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + $1["cad"] + $2["cad"] ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$2["nombre"]+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+                }
                 |
+                {
+					//parent CONTENIDO->CONTENIDO VALOR
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="LISTA_TAGS_P",'+'color="lightblue3",'+"];\n ";
+                    //epsion
+                    var nombreEpison = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaEpsion =nombreRoot+"["+'label="Ɛ",'+'color="green",'+"];\n ";
+                    //
+                    var cad = cadenaRoot + cadenaEpsion;
+                    cad += nombreRoot+"->"+nombreEpison+"; \n ";
+                    //Resultado
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+                }
+
+                ;
+
+TAG             :  TAG_APERTURA mayor TAG_CIERRE
                 {{
-                    ReporteGramatical.agregarProduccionXML("LISTA_TAGS_P -> ε","$$ = [] ;");
-                    $$ = [] ;
+					//parent TAG_APERTURA mayor TAG_CIERRE
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var nombreMayor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMayor=nombreMayor+"["+'label=">",'+'color="greenyellow",'+"];\n ";
+
+					//RESULTADO
+					var cad = cadenaRoot + $1["cad"]+ cadenaMayor + $3["cad"]     ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+nombreMayor+";\n";
+					cad+=nombreRoot+"->"+$3["nombre"]+";\n";
+
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+                }}
+                |  TAG_APERTURA slash mayor
+                {{
+					//parent TAG_APERTURA slash mayor
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var nombreMayor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMayor=nombreMayor+"["+'label="/>",'+'color="greenyellow",'+"];\n ";
+
+					//RESULTADO
+					var cad = cadenaRoot + $1["cad"]+ cadenaMayor    ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+nombreMayor+";\n";
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
+                }}
+                |  TAG_APERTURA mayor LISTA_TAGS TAG_CIERRE
+                {{
+					//parent TAG_APERTURA mayor LISTA_TAGS TAG_CIERRE
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var nombreMayor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMayor=nombreMayor+"["+'label=">",'+'color="greenyellow",'+"];\n ";
+
+					//RESULTADO
+					var cad = cadenaRoot + $1["cad"]+ cadenaMayor + $3["cad"]+ $4["cad"]    ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+nombreMayor+";\n";
+					cad+=nombreRoot+"->"+$3["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$4["nombre"]+";\n";
+
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
+                }}
+                |  TAG_APERTURA mayor CONTENIDO TAG_CIERRE
+                {{
+					//parent TAG_APERTURA mayor CONTENIDO TAG_CIERRE
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var nombreMayor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMayor=nombreMayor+"["+'label=">",'+'color="greenyellow",'+"];\n ";
+
+					//RESULTADO
+					var cad = cadenaRoot + $1["cad"]+ cadenaMayor + $3["cad"]+ $4["cad"]    ;
+					cad+=nombreRoot+"->"+nombreMayor+";\n";
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$3["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$4["nombre"]+";\n";
+
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
                 }}
                 ;
 
+TAG_APERTURA    :  TAG_APERTURA id igual str
+                {{
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG_APERTURA",'+'color="lightblue3",'+"];\n ";
+					//childs
+					var nombreId = XpathUtil.generarIdUnicoXmlNode();
+					var cadenaId = nombreId + "["+'label="id(valLex='+$2+')",'+'color="greenyellow",'+"];\n ";
 
+                    var nombreIgual = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaIgual=nombreIgual+"["+'label="=",'+'color="greenyellow",'+"];\n ";
 
+					var nombreStr = XpathUtil.generarIdUnicoXmlNode();
+					var cadenaStr = nombreStr + "["+'label="str(valLex='+$4.substr(1,($4).length-2)+')",'+'color="greenyellow",'+"];\n ";
 
-TAG             :  menor id L_ATRIBUTOS mayor menor slash id mayor
-                {{
-                    ReporteGramatical.agregarProduccionXML("TAG -> TAG_APERTURA mayor TAG_CIERRE","var parent = $1;$$ = parent ;");
-                    var parent = $1;
-                    $$ = parent ;
-                }}
-                |  menor id L_ATRIBUTOS slash mayor
-                {{
-                    ReporteGramatical.agregarProduccionXML("TAG -> TAG_APERTURA slash mayor","var parent = $1;$$ = parent ;");
-                    var parent = $1;
-                    $$ = parent ;
-                }}
-                |  menor id L_ATRIBUTOS mayor LISTA_TAGS menor slash id mayor
-                {{
-                    ReporteGramatical.agregarProduccionXML("TAG -> TAG_APERTURA mayor LISTA_TAGS TAG_CIERRE",
-                                      "var parent = $1;var childs = $3;for(let child of childs){    child.parent = parent;};parent.childs = childs;$$ = parent;");
-                    var parent = $1;
-                    var childs = $3;
-                    for(let child of childs){
-                        child.parent = parent;
-                    };
-                    parent.childs = childs;
-                    $$ = parent;
-                }}
-                |  menor id L_ATRIBUTOS mayor CONTENIDO menor slash id mayor
-                {{
-                    ReporteGramatical.agregarProduccionXML("TAG -> TAG_APERTURA mayor CONTENIDO TAG_CIERRE",
-                                        "var parent = $1;var contenido = new XmlContent(null,null,parent,$3.firts_line,$3.firts_column,$3);parent.childs.push(contenido);$$ = parent;");
-                    var parent = $1;
-                    var contenido = new XmlContent(null,null,parent,$3.firts_line,$3.firts_column,$3);
-                    parent.childs.push(contenido);
-                    $$ = parent;
-                }}
-                ;
+					//RESULTADO
+					var cad = cadenaRoot + $1["cad"] + cadenaId + cadenaIgual + cadenaStr ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+nombreId+";\n";
+					cad+=nombreRoot+"->"+nombreIgual+";\n";
+					cad+=nombreRoot+"->"+nombreStr+";\n";
 
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
 
-L_ATRIBUTOS  :  id igual str  L_ATRIBUTOS
-                {{
-                    ReporteGramatical.agregarProduccionXML("TAG_APERTURA_P -> id igual str  TAG_APERTURA_P"
-                                    ,"var attribute = new XmlAttribute($1,$3);$$=$4;$$.unshift(attribute);");
-                    var attribute = new XmlAttribute($1,$3);
-                    $$=$4;
-                    $$.unshift(attribute);
                 }}
-                |
+                | menor id
                 {{
-                    ReporteGramatical.agregarProduccionXML("TAG_APERTURA_P -> ε "
-                                    ,"$$=[]");
-                     $$=[];
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG_APERTURA",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var nombreMenor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMenor=nombreMenor+"["+'label="<",'+'color="greenyellow",'+"];\n ";
+					var nombreId = XpathUtil.generarIdUnicoXmlNode();
+					var cadenaId = nombreId + "["+'label="id(valLex='+$2+')",'+'color="greenyellow",'+"];\n ";
+					//RESULTADO asdf
+					var cad = cadenaRoot + cadenaMenor + cadenaId ;
+					cad+=nombreRoot+"->"+nombreMenor+";\n";
+					cad+=nombreRoot+"->"+nombreId+";\n";
+
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
                 }}
                 ;
 
+TAG_CIERRE      : menor slash id mayor
+                {{
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="TAG_CIERRE",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var nombreMenor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMenor=nombreMenor+"["+'label="</",'+'color="greenyellow",'+"];\n ";
+
+					var nombreId = XpathUtil.generarIdUnicoXmlNode();
+					var cadenaId = nombreId + "["+'label="id(valLex='+$3+')",'+'color="greenyellow",'+"];\n ";
+
+                    var nombreMayor = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaMayor=nombreMayor+"["+'label=">",'+'color="greenyellow",'+"];\n ";
+					//RESULTADO
+					var cad = cadenaRoot + cadenaMenor + cadenaId + cadenaMayor;
+					cad+=nombreRoot+"->"+nombreMenor+";\n";
+					cad+=nombreRoot+"->"+nombreId+";\n";
+					cad+=nombreRoot+"->"+nombreMayor+";\n";
+
+                    $$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+                }}
+                ;
 
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++     CONTENIDO   ++++++++++++*/
 
 
-CONTENIDO       :  CONTENIDO VALOR
+CONTENIDO       :  VALOR CONTENIDO_P
                 {{
-                    ReporteGramatical.agregarProduccionXML("CONTENIDO -> CONTENIDO VALOR"
-                                    ,"$$=$1+$2;");
-                    $$=$1+$2;
-                }}
-                | VALOR
-                {{
-                    ReporteGramatical.agregarProduccionXML("CONTENIDO -> VALOR"
-                                    ,"$$=$1;");
-                    $$=$1;
-                }}
-                ;
+					//parent CONTENIDO->VALOR
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="CONTENIDO",'+'color="lightblue3",'+"];\n ";
+					//childs
+					//RESULTADO
+                    var cad = cadenaRoot + $1["cad"]+ $2["cad"];
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$2["nombre"]+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
 
-CONTENIDO_P       :  CONTENIDO CONTENIDO_P
-                {{
-                    ReporteGramatical.agregarProduccionXML("CONTENIDO_P -> CONTENIDO CONTENIDO_P "
-                                    ,"$$=$2+$1; ");
-                    $$=$2+$1;
                 }}
-                |
-                {{
-                    ReporteGramatical.agregarProduccionXML("CONTENIDO_P -> ε"
-                                    ,"$$="";");
-                    $$="";
-                }}
-                ;
+				;
+
+
+CONTENIDO_P     :   VALOR   CONTENIDO_P
+                {
+					//parent CONTENIDO->CONTENIDO VALOR
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="CONTENIDO_P",'+'color="lightblue3",'+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + $1["cad"] + $2["cad"] ;
+					cad+=nombreRoot+"->"+$1["nombre"]+";\n";
+					cad+=nombreRoot+"->"+$2["nombre"]+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+                }
+                 |
+                 {
+					//parent CONTENIDO->CONTENIDO VALOR
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="CONTENIDO_P",'+'color="lightblue3",'+"];\n ";
+                    //epsion
+                    var nombreEpison = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaEpsion =nombreRoot+"["+'label="Ɛ",'+'color="green",'+"];\n ";
+                    //
+                    var cad = cadenaRoot + cadenaEpsion;
+                    cad += nombreRoot+"->"+nombreEpison+"; \n ";
+                    //Resultado
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+                 }
+                 ;
+
 
 VALOR           : id
                 {{
-                    ReporteGramatical.agregarProduccionXML("VALOR -> id"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
+					//parent  id
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="VALOR",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var labelTerminal = 'label="id(valLex='+$1+')",';
+                    var colorTerminal = 'color="greenyellow",';
+                    var nombreTerminal = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaTerminal=nombreTerminal+"["+labelTerminal+colorTerminal+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + cadenaTerminal;
+					cad+=nombreRoot+"->"+nombreTerminal+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
                 }}
                 | str
                 {{
-                    ReporteGramatical.agregarProduccionXML("VALOR -> str"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="VALOR",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var labelTerminal = 'label="str(valLex='+$1.substr(1,($1).length-2)+')",';
+                    var colorTerminal = 'color="greenyellow",';
+                    var nombreTerminal = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaTerminal=nombreTerminal+"["+labelTerminal+colorTerminal+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + cadenaTerminal;
+					cad+=nombreRoot+"->"+nombreTerminal+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
                 }}
                 | signo_especial
                 {{
-                    ReporteGramatical.agregarProduccionXML("VALOR -> signo_especial"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="VALOR",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var labelTerminal = 'label="signo_especial(valLex='+$1+')",';
+                    var colorTerminal = 'color="greenyellow",';
+                    var nombreTerminal = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaTerminal=nombreTerminal+"["+labelTerminal+colorTerminal+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + cadenaTerminal;
+					cad+=nombreRoot+"->"+nombreTerminal+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
                 }}
                 |caracter_especial
                 {{
-                    ReporteGramatical.agregarProduccionXML("VALOR -> caracter_especial"
-                                    ,'$$=$1+" "');
-                    $$=$1.toLowerCase()+" ";
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="VALOR",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var labelTerminal = 'label="caracter_especial(valLex='+$1+')",';
+                    var colorTerminal = 'color="greenyellow",';
+                    var nombreTerminal = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaTerminal=nombreTerminal+"["+labelTerminal+colorTerminal+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + cadenaTerminal;
+					cad+=nombreRoot+"->"+nombreTerminal+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
                 }}
                 | signo
                 {{
-                    ReporteGramatical.agregarProduccionXML("VALOR -> signo"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="VALOR",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var labelTerminal = 'label="signo(valLex='+$1+')",';
+                    var colorTerminal = 'color="greenyellow",';
+                    var nombreTerminal = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaTerminal=nombreTerminal+"["+labelTerminal+colorTerminal+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + cadenaTerminal;
+					cad+=nombreRoot+"->"+nombreTerminal+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
                 }}
                 | num
                 {{
-                    ReporteGramatical.agregarProduccionXML("VALOR -> num"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
+					//parent
+                    var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaRoot=nombreRoot+"["+'label="VALOR",'+'color="lightblue3",'+"];\n ";
+					//childs
+                    var labelTerminal = 'label="num(valLex='+$1+')",';
+                    var colorTerminal = 'color="greenyellow",';
+                    var nombreTerminal = XpathUtil.generarIdUnicoXmlNode();
+                    var cadenaTerminal=nombreTerminal+"["+labelTerminal+colorTerminal+"];\n ";
+					//RESULTADO
+                    var cad = cadenaRoot + cadenaTerminal;
+					cad+=nombreRoot+"->"+nombreTerminal+";\n";
+					$$=[];
+                    $$["nombre"]=nombreRoot;
+                    $$["cad"]=cad;
+
+
                 }}
                 ;

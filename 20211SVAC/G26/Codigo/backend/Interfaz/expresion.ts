@@ -5,5 +5,6 @@ export interface Expresion{
     columna: number;
     
     getTipo(entorno:Entorno):any;
+    getValorInicial(entorno:Entorno):any;
     getValor(entorno:Entorno):any;
 }

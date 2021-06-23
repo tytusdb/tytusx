@@ -66,7 +66,7 @@
 
 <<EOF>>     %{  return 'EOF';   %}
 
-.           Error.add(new NodoError("Lexico","No se esperaba el caracter: "+yytext,yylineno))
+.           {Error.add(new NodoError("Lexico","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column));}
 
 /lex
 /*ANALISIS LEXICO TERMINADO */
@@ -97,39 +97,37 @@
 S: LISTA EOF {$$=$1; ReporteGA.agregar('S::=LISTA','S.VAL = LISTA.VAL',''); return $$;};
 
 LISTA: PUNTO              {$$=$1; ReporteGA.agregar('LISTA::=PUNTO','LISTA.VAL = PUNTO.VAL','');}
-    |  LISTAS             {$$=$1; ReporteGA.agregar('LISTA::=LISTAS','LISTA.VAL = LISTAS.VAL','');}
+    |  LISTA2             {$$=$1; ReporteGA.agregar('LISTA::=LISTA2','LISTA.VAL = LISTA2.VAL','');}
     ;
 
 LISTAS: LISTAS LISTA1   {$1.push($2); $$=$1; ReporteGA.agregar('LISTAS::=LISTASLISTA1','LISTAS.VAL = LISTAS.VAL + LISTA1.VAL','');}
     |LISTA1             {$$=[$1]; ReporteGA.agregar('LISTAS::=LISTA1','LISTAS.VAL = LISTA1.VAL','');}
     ;
 
-LISTA1:IDS BARRAS LISTA1            {$$=$3; ReporteGA.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL','');}
-    |ATRIBUTO BARRAS LISTA1         {$$=$3; ReporteGA.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL','');}
-    |ASTERISCO BARRAS LISTA1        {$$=$3; ReporteGA.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL','');}
-    |PALABRAS_R BARRAS LISTA1       {$$=$3; ReporteGA.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');}
-    |ATRIBUTO1 BARRAS LISTA1        {$$=$1; ReporteGA.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL','');}
-    |PR TK_PARENTESIS BARRAS LISTA1 {$$=$1; ReporteGA.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL','');}
+LISTA2 : LISTA2 BARRAS LISTA2 { $$ = new Operacion($1,$3,$2,@1.first_line,@1.first_column); ReporteGA.agregar('LISTA2::=LISTA2 BARRAS LISTA2','LISTA2.VAL = ARRAY(LISTA2.VAL,LISTA2.VAL)',''); }
+       | LISTAS               { $$ = $1; ReporteGA.agregar('LISTA2::=LISTAS','LISTA2.VAL = LISTAS.VAL',''); }
+       ;
+
+LISTA1: PALABRAS_R                  {$$=$1; ReporteGA.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');}
     |IDS                            {$$=$1; ReporteGA.agregar('LISTA1::=IDS','LISTA1.VAL = IDS.VAL','');}
     |ATRIBUTO                       {$$=$1; ReporteGA.agregar('LISTA1::=ATRIBUTO','LISTA1.VAL = ATRIBUTO.VAL','');}
     |ATRIBUTO1                      {$$=$1; ReporteGA.agregar('LISTA1::=ATRIBUTO1','LISTA1.VAL = ATRIBUTO1.VAL','');}
-    |PR  TK_PARENTESIS              {$$=$1; ReporteGA.agregar('LISTA1::=PR','LISTA1.VAL = PR.VAL','');}
-    |PALABRAS_R                     {$$=$1; ReporteGA.agregar('LISTA1::=PALABRAS_R','LISTA1.VAL = PALABRAS_R.VAL','');}
     |ASTERISCO                      {$$=$1; ReporteGA.agregar('LISTA1::=ASTERISCO','LISTA1.VAL = ASTERISCO.VAL','');}
     |                               {ReporteGA.agregar('LISTA1::=ε','LISTA1.VAL = EPSILON','');}
-    |error                          {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+    |error                          {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,@1.first_line,@1.first_column));}
     ;
 
-BARRAS: TK_BARRA_VERTICAL {$$=$1}
-    |TK_AND {$$ = $1}
-    |TK_OR {$$ = $1};
+BARRAS: TK_BARRA_VERTICAL {$$=Operador.CONCATENACION;}
+    |TK_AND {$$ = Operador.AND; }
+    |TK_OR {$$ = Operador.OR; }
+    ;
 
 PUNTO: TK_PUNTO PUNTO1          {$$=$2; ReporteGA.agregar('PUNTO::=tk_punto PUNTO1','PUNTO.VAL = TK_PUNTO + PUNTO1.VAL','');}
-    |error                      {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+    |error                      {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,@1.first_line,@1.first_column));}
     ;
 
 PUNTO1: LISTAS                  {$$=$1; ReporteGA.agregar('PUNTO1::=LISTAS','PUNTO1.VAL = LISTAS.VAL','');}
-    |error                      {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+    |error                      {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,@1.first_line,@1.first_column));}
     ;
 
 IDS: TK_DBARRA TK_IDENTIFICADOR ASTERISCO1      {$$ = new Conca('&',$1,$2,$3,@1.first_line,@1.first_column); ReporteGA.agregar('IDS::=tk_dbarra tk_identificador ASTERISCO1','IDS.VAL = TK_DBARRA.VAL + TK_IDENTIFICADOR.VAL + ASTERISCO1.VAL','');}
@@ -145,7 +143,6 @@ ATRIBUTO: TK_DBARRA TK_ARROBA TK_POR L_ATRIBUTO     {$$ = new Conca('?',$1,$2+$3
     |TK_DBARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO{$$ = new Conca('?',$1,$2+$3,new L_Atributo($4,@4.first_line,@4.first_column),@1.first_line,@1.first_column); ReporteGA.agregar('ATRIBUTO::=tk_dbarra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_DBARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');}
     |TK_BARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO {$$ = new Conca('?',$1,$2+$3,new L_Atributo($4,@4.first_line,@4.first_column),@1.first_line,@1.first_column); ReporteGA.agregar('ATRIBUTO::=tk_barra tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_BARRA.VAL + TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');} 
     |TK_ARROBA TK_IDENTIFICADOR  L_ATRIBUTO         {$$ = new Conca('?','',$1+$2,new L_Atributo($3,@3.first_line,@3.first_column),@1.first_line,@1.first_column); ReporteGA.agregar('ATRIBUTO::=tk_arroba tk_por L_ATRIBUTO','ATRIBUTO.VAL = TK_ARROBA.VAL + TK_IDENTIFICADOR.VAL + L_ATRIBUTO.VAL','');}
-     
     ;
 
 L_ATRIBUTO: L_ATRIBUTO ATRIBUTO1    {$1.push($2); $$=$1; ReporteGA.agregar('L_ATRIBUTO::=L_ATRIBUTO ATRIBUTO1','L_ATRIBUTO.VAL = L_ATRIBUTO.VAL + ATRIBUTO1.VAL','');}
@@ -164,7 +161,8 @@ PALABRAS_R: TK_DBARRA PR TK_DDP OPCION ASTERISCO1{$$ = new Conca('!',$1,$2,$4,@1
     |TK_BARRA PR TK_DDP OPCION  ASTERISCO1       {$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGA.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
     |TK_DBARRA PR TK_DDP OPCION                  {$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGA.agregar('PALABRAS_R::=tk_dbarra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_DBARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
     |TK_BARRA PR TK_DDP OPCION                   {$$ = new Conca('!',$1,$2,$4,@1.first_line,@1.first_column); ReporteGA.agregar('PALABRAS_R::=tk_barra PR tk_ddp OPCION','PALABRAS_R.VAL = TK_BARRA.VAL + PR.VAL + TK_DDP.VAL + OPCION.VAL','');}
-    
+    |TK_BARRA PR  TK_PARENTESIS                  {$$=$2; ReporteGA.agregar('PALABRAS_R::=TK_BARRA PR TK_PARENTESIS','PALABRAS_R.VAL = PR.VAL','');}
+    |TK_DBARRA PR  TK_PARENTESIS                 {$$=$2; ReporteGA.agregar('PALABRAS_R::=TK_DBARRA PR TK_PARENTESIS','PALABRAS_R.VAL = PR.VAL','');}
     ;
 
 PR: TK_ANCESTOR             {$$=$1; ReporteGA.agregar('PR::=tk_ancestor','PR.VAL = TK_ANCESTOR.VAL','');}
@@ -184,7 +182,6 @@ PR: TK_ANCESTOR             {$$=$1; ReporteGA.agregar('PR::=tk_ancestor','PR.VAL
     |TK_POSITION            {$$=$1; ReporteGA.agregar('PR::=tk_self','PR = TK_SELF.VAL','');}
     |TK_NODE                {$$=$1; ReporteGA.agregar('PR::=tk_self','PR = TK_SELF.VAL','');}
     |TK_TEXT                {$$=$1; ReporteGA.agregar('PR::=tk_self','PR = TK_SELF.VAL','');}
-    |error                  {Error.add(new NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));}
     ;
 
 OPCION: TK_LAST TK_PARENTESIS   {$$ = new PR($1,@1.first_line,@1.first_column); ReporteGA.agregar('OPCION::=tk_last tk_parentesis','OPCION.VAL = TK_LAST.VAL + TK_PARENTESIS.VAL','');}
@@ -209,10 +206,8 @@ L_ASTERISCO: L_ASTERISCO ASTERISCO1          {$1.push($2); $$=$1; ReporteGA.agre
     ;
 
 ASTERISCO1:TK_CORCHETE_IZQUIERDO EXP TK_CORCHETE_DERECHO    {$$ = $2; ReporteGA.agregar('ASTERISCO1::=tk_corchete_izquierdo EXP tk_corchete_derecho','ASTERISCO1.VAL = EXP.VAL','');}
-    |TK_IDENTIFICADOR          {$$ = $1; ReporteGA.agregar('ASTERISCO1::=TK_IDENTIFICADOR','ASTERISCO1.VAL = TK_IDENTIFICADOR.VAL','');}
+    |TK_IDENTIFICADOR                                       {$$ = $1; ReporteGA.agregar('ASTERISCO1::=TK_IDENTIFICADOR','ASTERISCO1.VAL = TK_IDENTIFICADOR.VAL','');}
     ;
-    //QUITAR LA ambigüedad
-
 
 EXP: EXP TK_MAS EXP                                     {$$ = new Operacion($1,$3,Operador.SUMA,@1.first_line,@1.first_column); ReporteGA.agregar('EXP::=EXP tk_mas T','EXP.VAL = EXP1.VAL + T.VAL','');}
     |EXP TK_MENOS EXP                                   {$$ = new Operacion($1,$3,Operador.RESTA,@1.first_line,@1.first_column); ReporteGA.agregar('EXP::=EXP tk_menos T','EXP.VAL = EXP1.VAL - T.VAL','');}
@@ -231,7 +226,7 @@ EXP: EXP TK_MAS EXP                                     {$$ = new Operacion($1,$
     |TK_PARENTESIS_IZQUIERDO EXP TK_PARENTESIS_DERECHO  {$$ = $2; ReporteGA.agregar('G::=tk_parentesis_izquierdo EXP tk_parentesis_derecho','G.VAL = EXP.VAL','');}
     |TK_MENOS EXP %prec UMINUS                          {$$ = new Operacion($1,$2,Operador.MENOS_UNARIO,@1.first_line,@1.first_column); ReporteGA.agregar('G::=tk_menos EXP','G.VAL = TK_MENOS.VAL * EXP.VAL','');}
     |ATRI                                               {$$=$1;  ReporteGA.agregar('G::=ATRI','G.VAL = ATRI.VAL','');}
-    |TK_ARROBA EXP                                      {$$=$1;  ReporteGA.agregar('G::=tk_arroba EXP','EXP.VAL = TK_ARROBA + EXP.VAL','');}
+    |TK_ARROBA EXP                                      {$$=$2;  ReporteGA.agregar('G::=tk_arroba EXP','EXP.VAL = TK_ARROBA + EXP.VAL','');}
     |TK_DECIMAL                                         {$$ = new Dato(Number($1),@1.first_line,@1.first_column); ReporteGA.agregar('G::=tk_decimal','G.VAL = TK_DECIMAL.LEXVAL','');}
     |TK_ENTERO                                          {$$ = new Dato(Number($1),@1.first_line,@1.first_column); ReporteGA.agregar('G::=tk_entero','G.VAL = TK_ENTERO.LEXVAL','');}
     |TK_CADENA                                          {$$ = new Dato($1,@1.first_line,@1.first_column); ReporteGA.agregar('G::=tk_cadena','G.VAL = TK_CADENA.VAL','');}
