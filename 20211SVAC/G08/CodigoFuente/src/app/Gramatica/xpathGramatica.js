@@ -72,790 +72,850 @@
   }
 */
 var xpathGramatica = (function(){
-    var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[1,8],$V3=[1,9],$V4=[1,10],$V5=[1,11],$V6=[1,14],$V7=[1,15],$V8=[1,16],$V9=[1,17],$Va=[1,18],$Vb=[1,19],$Vc=[1,20],$Vd=[1,21],$Ve=[1,22],$Vf=[1,23],$Vg=[1,24],$Vh=[1,25],$Vi=[1,26],$Vj=[5,7],$Vk=[1,32],$Vl=[1,33],$Vm=[1,34],$Vn=[1,35],$Vo=[1,38],$Vp=[1,39],$Vq=[1,40],$Vr=[1,41],$Vs=[1,42],$Vt=[5,7,13,14,15,16,17,18,22,25,29,53,54,55,56,57,58,59,60,61,62,63,64,65],$Vu=[2,27],$Vv=[1,44],$Vw=[5,7,13,14,15,16,17,18,22,25,26,29,53,54,55,56,57,58,59,60,61,62,63,64,65],$Vx=[1,58],$Vy=[1,56],$Vz=[1,57],$VA=[1,65],$VB=[1,61],$VC=[1,62],$VD=[1,60],$VE=[1,63],$VF=[1,64],$VG=[5,7,13,14,15,16,17,18,22,24,25,26,28,29,36,37,38,39,40,41,42,43,44,45,46,47,53,54,55,56,57,58,59,60,61,62,63,64,65],$VH=[1,72],$VI=[1,70],$VJ=[1,71],$VK=[1,73],$VL=[1,74],$VM=[1,75],$VN=[1,76],$VO=[1,77],$VP=[1,78],$VQ=[1,79],$VR=[1,80],$VS=[1,81],$VT=[1,82],$VU=[15,24,28,36,37,38,39,40,41,42,43,44,45,46,47],$VV=[24,28,36,37,40,41,42,43,44,45,46,47],$VW=[24,28,40,41,42,43,44,45,46,47];
-    var parser = {trace: function trace () { },
-    yy: {},
-    symbols_: {"error":2,"expressions":3,"XPath":4,"EOF":5,"LSENTENCIA":6,"|":7,"SENTENCIA":8,"NODO_NO_PREDICABLE":9,"NODO_PREDICABLE":10,"predicate":11,"NODO":12,"BARRAS":13,"BARRASIMPLE":14,"*":15,"nodename":16,"DOBLEDOT":17,"DOT":18,"AXIS":19,"ATRIBUTO":20,"FUNCION_NO_OPERABLE":21,"node":22,"lparen":23,"rparen":24,"text":25,"[":26,"PARAMETRO":27,"]":28,"arroba":29,"FUNCION_OPERABLE":30,"last":31,"position":32,"numberLiteral":33,"OPERACION":34,"STRING_LITERAL":35,"+":36,"-":37,"mod":38,"div":39,"<=":40,">=":41,">":42,"<":43,"=":44,"!=":45,"and":46,"or":47,"DoubleLiteral":48,"entero":49,"NOMBRE_AXIS":50,":":51,"PARAMETRO_AXIS":52,"ancestor":53,"ancestor-or-self":54,"attribute":55,"child":56,"descendant":57,"descendant-or-self":58,"following":59,"following-sibling":60,"namespace":61,"parent":62,"preceding":63,"preceding-sibling":64,"self":65,"$accept":0,"$end":1},
-    terminals_: {2:"error",5:"EOF",7:"|",13:"BARRAS",14:"BARRASIMPLE",15:"*",16:"nodename",17:"DOBLEDOT",18:"DOT",22:"node",23:"lparen",24:"rparen",25:"text",26:"[",28:"]",29:"arroba",31:"last",32:"position",35:"STRING_LITERAL",36:"+",37:"-",38:"mod",39:"div",40:"<=",41:">=",42:">",43:"<",44:"=",45:"!=",46:"and",47:"or",48:"DoubleLiteral",49:"entero",51:":",53:"ancestor",54:"ancestor-or-self",55:"attribute",56:"child",57:"descendant",58:"descendant-or-self",59:"following",60:"following-sibling",61:"namespace",62:"parent",63:"preceding",64:"preceding-sibling",65:"self"},
-    productions_: [0,[3,2],[4,1],[6,3],[6,1],[8,2],[8,3],[8,2],[12,1],[12,1],[12,1],[12,1],[12,1],[12,1],[12,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[9,1],[9,1],[9,1],[21,3],[21,3],[11,3],[11,0],[20,2],[20,2],[30,3],[30,3],[27,1],[27,1],[27,1],[27,1],[27,1],[27,3],[27,1],[27,1],[27,1],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[34,3],[33,1],[33,1],[19,4],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[52,1],[52,1],[52,1]],
-    performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
-    /* this == yyval */
-    
-    var $0 = $$.length - 1;
-    switch (yystate) {
-    case 1:
-     salida = []; typeof console !== 'undefined' ? console.log($$[$0-1]) : print($$[$0-1]);
-              return $$[$0-1]; 
-    break;
-    case 2:
-    this.$ = salida; salida = []; return this.$;
-    break;
-    case 3:
-     salida.push($$[$0]);
-    break;
-    case 4:
-      salida.push($$[$0]);
-    break;
-    case 5:
-    this.$ = new sentenciaXpath($$[$0],null,$$[$0-1]);
-    break;
-    case 6:
-    this.$ = new sentenciaXpath($$[$0-1],$$[$0],$$[$0-2]);
-    break;
-    case 7:
-          
-                                    if($$[$0-1] != TipoNodo.ID && $$[$0] != null) {console.log("Error toquen no debe llever predicado");}
-                                    else{
-                                            this.$ = new sentenciaXpath($$[$0-1],$$[$0],null);
-                                    }
-                            
-    break;
-    case 8: case 22:
-    this.$ = new NodoXpath(TipoNodo.Descendiente,$$[$0],null);
-    break;
-    case 9: case 23:
-    this.$ = new NodoXpath(TipoNodo.Raiz,$$[$0],null);
-    break;
-    case 10: case 15: case 73:
-    this.$ = new NodoXpath(TipoNodo.Asterisco,$$[$0],null);
-    break;
-    case 11: case 16: case 71:
-    this.$ = new NodoXpath(TipoNodo.ID,$$[$0],null);
-    break;
-    case 12:
-    this.$ = new NodoXpath(TipoNodo.NodoPadre,$$[$0],null); 
-    break;
-    case 13: case 20:
-    this.$ = new NodoXpath(TipoNodo.AutoReferencia,$$[$0],null);
-    break;
-    case 14: case 17: case 21: case 28: case 29: case 32: case 33: case 58: case 59: case 60: case 61: case 62: case 63: case 64: case 65: case 66: case 67: case 68: case 69: case 70: case 72:
-    this.$ = $$[$0];
-    break;
-    case 18:
-    this.$ = new NodoXpath(TipoNodo.Atributo,$$[$0],null);
-    break;
-    case 19:
-    this.$ = new NodoXpath(TipoNodo.NodoPadre,$$[$0],null);
-    break;
-    case 24:
-    this.$ = new NodoXpath(TipoNodo.Funcion_Node,$$[$0-2],null);
-    break;
-    case 25:
-    this.$ = new NodoXpath(TipoNodo.Funcion_Text,$$[$0-2],null);
-    break;
-    case 26:
-    this.$ = $$[$0-1];
-    break;
-    case 27:
-    this.$ = null;
-    break;
-    case 30:
-    this.$ = new ParametroOperacionXpath(null,$$[$0-2],TipoParametro.Funtion_Last); console.log($$[$0-2]);
-    break;
-    case 31:
-    this.$ = new ParametroOperacionXpath(null,$$[$0-2],TipoParametro.Funtion_Position);
-    break;
-    case 34:
-    this.$ = new ParametroOperacionXpath($$[$0],'',TipoParametro.Operacion);
-    break;
-    case 35:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.DosPuntos);
-    break;
-    case 36:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Punto);
-    break;
-    case 37:
-    this.$ = new ParametroOperacionXpath(null,$$[$0-2] + '@' + $$[$0],TipoParametro.Nodo);
-    break;
-    case 38:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Atributo);
-    break;
-    case 39:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Cadena);
-    break;
-    case 40:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Nodo);
-    break;
-    case 41:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mas);
-    break;
-    case 42:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Menos);
-    break;
-    case 43:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Por);
-    break;
-    case 44:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mod);
-    break;
-    case 45:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Div);
-    break;
-    case 46:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.MenorIgual);
-    break;
-    case 47:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.MayorIgual);
-    break;
-    case 48:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mayor);
-    break;
-    case 49:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Menor);
-    break;
-    case 50:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Igual);
-    break;
-    case 51:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Diferente);
-    break;
-    case 52:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.And);
-    break;
-    case 53:
-    this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Or);
-    break;
-    case 54:
-    this.$ = $$[$0-1].Operacion;
-    break;
-    case 55:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Decimal);
-    break;
-    case 56:
-    this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Entero);
-    break;
-    case 57:
-    this.$ = new NodoXpath(TipoNodo.Axis,$$[$0-3],$$[$0]); 
-    break;
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,13],$V1=[1,17],$V2=[1,15],$V3=[1,19],$V4=[1,21],$V5=[1,22],$V6=[1,16],$V7=[1,14],$V8=[1,18],$V9=[1,24],$Va=[1,25],$Vb=[1,26],$Vc=[1,27],$Vd=[1,28],$Ve=[1,29],$Vf=[1,30],$Vg=[1,31],$Vh=[1,32],$Vi=[1,33],$Vj=[1,34],$Vk=[1,35],$Vl=[1,36],$Vm=[5,109],$Vn=[1,46],$Vo=[1,44],$Vp=[1,50],$Vq=[1,45],$Vr=[1,43],$Vs=[1,49],$Vt=[1,51],$Vu=[1,52],$Vv=[1,53],$Vw=[1,60],$Vx=[1,61],$Vy=[5,10,11,16,22,23,24,25,27,28,41,43,45,51,54,60,68,70,75,76,77,78,80],$Vz=[5,10,11,13,14,23,27,31,32,38,41,43,45,51,54,60,68,70,75,76,77,78,80,90,95,96,97,98,99,100,101,109,114,115,119,120,123,130,131,132,133,134,135,136,137,138,139,140,141,142],$VA=[2,122],$VB=[1,63],$VC=[41,60,68,70,77],$VD=[5,10,11,13,14,23,27,31,32,38,41,43,45,51,54,60,68,70,75,76,77,78,80,90,95,96,97,98,99,100,101,109,114,115,119,120,121,123,130,131,132,133,134,135,136,137,138,139,140,141,142],$VE=[1,67],$VF=[1,70],$VG=[1,84],$VH=[1,92],$VI=[1,91],$VJ=[1,94],$VK=[1,99],$VL=[1,98],$VM=[1,90],$VN=[1,95],$VO=[1,96],$VP=[1,97],$VQ=[13,14],$VR=[1,103],$VS=[41,43,60,68,70,77],$VT=[5,10,11,13,14,23,27,31,32,38,41,43,45,51,54,60,68,70,75,76,77,78,80,81,83,88,89,90,91,92,95,96,97,98,99,100,101,109,114,115,119,120,121,122,123,130,131,132,133,134,135,136,137,138,139,140,141,142],$VU=[5,10,27,41,43,45,51,54,60,68,70,75,76,77,78,80],$VV=[1,115],$VW=[1,117],$VX=[41,60,68,70,77,81,83],$VY=[1,148],$VZ=[1,147],$V_=[1,149],$V$=[1,151],$V01=[1,152],$V11=[1,140],$V21=[1,141],$V31=[1,142],$V41=[1,143],$V51=[1,144],$V61=[1,150],$V71=[1,145],$V81=[1,146],$V91=[10,14,38,54,81,83,88,89,90,91,92,99,100,101,122],$Va1=[10,14,38,41,54,60,68,70,77,81,83,88,89,90,91,92,99,100,101,122],$Vb1=[11,13,14],$Vc1=[52,127],$Vd1=[5,10,14,27,31,32,38,41,43,45,51,54,60,68,70,75,76,77,78,80,95,96,97,98,99,100,101],$Ve1=[1,205],$Vf1=[1,207],$Vg1=[1,208],$Vh1=[1,209],$Vi1=[1,211],$Vj1=[1,210],$Vk1=[1,220],$Vl1=[1,221],$Vm1=[1,222],$Vn1=[41,60,68,70,77,81,83,88,89,90,91,92],$Vo1=[10,14,38,54,81,83,88,89,99,100,101,122],$Vp1=[10,14,38,54,81,83,99,100,101,122],$Vq1=[10,11,16,22,23,24,25,28],$Vr1=[10,27,41,45,51,54,60,78],$Vs1=[41,60,68,70,77,81,83,88,89];
+var parser = {trace: function trace () { },
+yy: {},
+symbols_: {"error":2,"expressions":3,"XPath":4,"EOF":5,"XQUERY":6,"FLWORExpr":7,"DirectConstructor":8,"DirElemConstructor":9,"<":10,"nodename":11,"DirAttributeList":12,"BARRASIMPLE":13,">":14,"EDirElemContent":15,"</":16,"LDirElemContent":17,"DirElemContent":18,"CommonContent":19,"PredefinedEntityRef":20,"EnclosedExpr":21,"CharRef":22,"DOT":23,":":24,"{":25,"Expr":26,"}":27,"&":28,"REF":29,"semicolon":30,"lt":31,"gt":32,"amp":33,"quot":34,"apos":35,"LAtr":36,"Atr":37,"=":38,"STRING_LITERAL":39,"ForClause":40,"for":41,"LForBinding":42,",":43,"ForBinding":44,"$":45,"in":46,"SENTENCIA":47,"ExprSingle":48,"IfExpr":49,"StringConcatExpr":50,"lparen":51,"entero":52,"to":53,"rparen":54,"InitialClause":55,"ELIntermediateClause":56,"ReturnClause":57,"QuantifiedExpr":58,"LetClause":59,"let":60,"LLetBinding":61,"LetBinding":62,":=":63,"LIntermediateClause":64,"IntermediateClause":65,"WhereClause":66,"OrderByClause":67,"where":68,"LComparisonExpr":69,"order":70,"by":71,"OrderSpecList":72,"OrderSpec":73,"OrderModifier":74,"ascending":75,"descending":76,"return":77,"if":78,"then":79,"else":80,"and":81,"ComparisonExpr":82,"or":83,"ComparisonValue":84,"XPARAM":85,"numberLiteral":86,"XOPERACION":87,"+":88,"-":89,"*":90,"mod":91,"div":92,"GeneralComp":93,"ValueComp":94,"eq":95,"ne":96,"le":97,"ge":98,"!=":99,"<=":100,">=":101,"XCOMPARISON":102,"PARAMETRO":103,"IF":104,"xvar":105,"OPERACION":106,"SIMPLE_EXPRESION":107,"LSENTENCIA":108,"|":109,"NODO_NO_PREDICABLE":110,"NODO_PREDICABLE":111,"predicate":112,"NODO":113,"BARRAS":114,"DOBLEDOT":115,"AXIS":116,"ATRIBUTO":117,"FUNCION_NO_OPERABLE":118,"node":119,"text":120,"[":121,"]":122,"arroba":123,"FUNCION_OPERABLE":124,"last":125,"position":126,"DoubleLiteral":127,"NOMBRE_AXIS":128,"PARAMETRO_AXIS":129,"ancestor":130,"ancestor-or-self":131,"attribute":132,"child":133,"descendant":134,"descendant-or-self":135,"following":136,"following-sibling":137,"namespace":138,"parent":139,"preceding":140,"preceding-sibling":141,"self":142,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",10:"<",11:"nodename",13:"BARRASIMPLE",14:">",16:"</",22:"CharRef",23:"DOT",24:":",25:"{",27:"}",28:"&",30:"semicolon",31:"lt",32:"gt",33:"amp",34:"quot",35:"apos",38:"=",39:"STRING_LITERAL",41:"for",43:",",45:"$",46:"in",51:"lparen",52:"entero",53:"to",54:"rparen",60:"let",63:":=",68:"where",70:"order",71:"by",75:"ascending",76:"descending",77:"return",78:"if",79:"then",80:"else",81:"and",83:"or",88:"+",89:"-",90:"*",91:"mod",92:"div",95:"eq",96:"ne",97:"le",98:"ge",99:"!=",100:"<=",101:">=",105:"xvar",107:"SIMPLE_EXPRESION",109:"|",114:"BARRAS",115:"DOBLEDOT",119:"node",120:"text",121:"[",122:"]",123:"arroba",125:"last",126:"position",127:"DoubleLiteral",130:"ancestor",131:"ancestor-or-self",132:"attribute",133:"child",134:"descendant",135:"descendant-or-self",136:"following",137:"following-sibling",138:"namespace",139:"parent",140:"preceding",141:"preceding-sibling",142:"self"},
+productions_: [0,[3,2],[3,2],[6,1],[6,1],[8,1],[9,5],[9,8],[15,1],[15,0],[17,2],[17,1],[18,1],[18,1],[19,1],[19,1],[19,1],[19,1],[19,1],[19,1],[21,3],[20,3],[29,1],[29,1],[29,1],[29,1],[29,1],[12,1],[12,0],[36,2],[36,1],[37,3],[40,2],[42,3],[42,1],[44,4],[48,1],[48,1],[48,1],[48,5],[48,1],[7,3],[58,2],[55,1],[55,1],[59,2],[61,3],[61,1],[62,4],[56,1],[56,0],[64,2],[64,1],[65,1],[65,1],[65,1],[66,2],[67,3],[72,3],[72,1],[73,2],[74,1],[74,1],[74,0],[57,2],[49,8],[26,2],[26,1],[69,3],[69,3],[69,1],[82,3],[85,1],[85,1],[87,3],[87,3],[87,3],[87,3],[87,3],[50,3],[50,2],[84,1],[84,1],[94,1],[94,1],[94,1],[94,1],[94,1],[94,1],[93,1],[93,1],[93,1],[93,1],[93,1],[93,1],[102,3],[104,10],[4,1],[108,3],[108,1],[47,2],[47,3],[47,2],[113,1],[113,1],[113,1],[113,1],[113,1],[113,1],[113,1],[111,1],[111,1],[111,1],[111,1],[111,1],[111,1],[110,1],[110,1],[110,1],[118,3],[118,3],[112,3],[112,0],[117,2],[117,2],[124,3],[124,3],[103,1],[103,1],[103,1],[103,1],[103,1],[103,3],[103,1],[103,1],[103,1],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[106,3],[86,1],[86,1],[116,4],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[128,1],[129,1],[129,1],[129,1]],
+performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
+/* this == yyval */
+
+var $0 = $$.length - 1;
+switch (yystate) {
+case 1:
+ salida = []; typeof console !== 'undefined' ? console.log($$[$0-1]) : print($$[$0-1]);
+          return $$[$0-1]; 
+break;
+case 74: case 136:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mas);
+break;
+case 75: case 137:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Menos);
+break;
+case 76: case 138:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Por);
+break;
+case 77: case 139:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mod);
+break;
+case 78: case 140:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Div);
+break;
+case 97:
+this.$ = salida; salida = []; return this.$;
+break;
+case 98:
+ salida.push($$[$0]);
+break;
+case 99:
+  salida.push($$[$0]);
+break;
+case 100:
+this.$ = new sentenciaXpath($$[$0],null,$$[$0-1]);
+break;
+case 101:
+this.$ = new sentenciaXpath($$[$0-1],$$[$0],$$[$0-2]);
+break;
+case 102:
+      
+                                if($$[$0-1] != TipoNodo.ID && $$[$0] != null) {console.log("Error toquen no debe llever predicado");}
+                                else{
+                                        this.$ = new sentenciaXpath($$[$0-1],$$[$0],null);
+                                }
+                        
+break;
+case 103: case 117:
+this.$ = new NodoXpath(TipoNodo.Descendiente,$$[$0],null);
+break;
+case 104: case 118:
+this.$ = new NodoXpath(TipoNodo.Raiz,$$[$0],null);
+break;
+case 105: case 110: case 168:
+this.$ = new NodoXpath(TipoNodo.Asterisco,$$[$0],null);
+break;
+case 106: case 111: case 166:
+this.$ = new NodoXpath(TipoNodo.ID,$$[$0],null);
+break;
+case 107:
+this.$ = new NodoXpath(TipoNodo.NodoPadre,$$[$0],null); 
+break;
+case 108: case 115:
+this.$ = new NodoXpath(TipoNodo.AutoReferencia,$$[$0],null);
+break;
+case 109: case 112: case 116: case 123: case 124: case 127: case 128: case 153: case 154: case 155: case 156: case 157: case 158: case 159: case 160: case 161: case 162: case 163: case 164: case 165: case 167:
+this.$ = $$[$0];
+break;
+case 113:
+this.$ = new NodoXpath(TipoNodo.Atributo,$$[$0],null);
+break;
+case 114:
+this.$ = new NodoXpath(TipoNodo.NodoPadre,$$[$0],null);
+break;
+case 119:
+this.$ = new NodoXpath(TipoNodo.Funcion_Node,$$[$0-2],null);
+break;
+case 120:
+this.$ = new NodoXpath(TipoNodo.Funcion_Text,$$[$0-2],null);
+break;
+case 121:
+this.$ = $$[$0-1];
+break;
+case 122:
+this.$ = null;
+break;
+case 125:
+this.$ = new ParametroOperacionXpath(null,$$[$0-2],TipoParametro.Funtion_Last); console.log($$[$0-2]);
+break;
+case 126:
+this.$ = new ParametroOperacionXpath(null,$$[$0-2],TipoParametro.Funtion_Position);
+break;
+case 129:
+this.$ = new ParametroOperacionXpath($$[$0],'',TipoParametro.Operacion);
+break;
+case 130:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.DosPuntos);
+break;
+case 131:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Punto);
+break;
+case 132:
+this.$ = new ParametroOperacionXpath(null,$$[$0-2] + '@' + $$[$0],TipoParametro.Nodo);
+break;
+case 133:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Atributo);
+break;
+case 134:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Cadena);
+break;
+case 135:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Nodo);
+break;
+case 141:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.MenorIgual);
+break;
+case 142:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.MayorIgual);
+break;
+case 143:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mayor);
+break;
+case 144:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Menor);
+break;
+case 145:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Igual);
+break;
+case 146:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Diferente);
+break;
+case 147:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.And);
+break;
+case 148:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Or);
+break;
+case 149:
+this.$ = $$[$0-1].Operacion;
+break;
+case 150:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Decimal);
+break;
+case 151:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Entero);
+break;
+case 152:
+this.$ = new NodoXpath(TipoNodo.Axis,$$[$0-3],$$[$0]); 
+break;
+}
+},
+table: [{3:1,4:2,6:3,7:5,8:6,9:9,10:$V0,11:$V1,13:$V2,23:$V3,40:11,41:$V4,47:7,55:8,59:12,60:$V5,90:$V6,108:4,113:10,114:$V7,115:$V8,116:20,128:23,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl},{1:[3]},{5:[1,37]},{5:[1,38]},{5:[2,97],109:[1,39]},{5:[2,3]},{5:[2,4]},o($Vm,[2,99],{128:23,110:40,111:41,118:42,116:47,117:48,11:$Vn,13:$Vo,23:$Vp,90:$Vq,114:$Vr,115:$Vs,119:$Vt,120:$Vu,123:$Vv,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl}),{40:11,41:$V4,55:57,56:54,59:12,60:$V5,64:55,65:56,66:58,67:59,68:$Vw,70:$Vx,77:[2,50]},o($Vy,[2,5]),o($Vz,$VA,{112:62,121:$VB}),o($VC,[2,43]),o($VC,[2,44]),{11:[1,64]},o($VD,[2,103]),o($VD,[2,104]),o($VD,[2,105]),o($VD,[2,106]),o($VD,[2,107]),o($VD,[2,108]),o($VD,[2,109]),{42:65,44:66,45:$VE},{45:$VF,61:68,62:69},{24:[1,71]},{24:[2,153]},{24:[2,154]},{24:[2,155]},{24:[2,156]},{24:[2,157]},{24:[2,158]},{24:[2,159]},{24:[2,160]},{24:[2,161]},{24:[2,162]},{24:[2,163]},{24:[2,164]},{24:[2,165]},{1:[2,1]},{1:[2,2]},{11:$V1,13:$V2,23:$V3,47:72,90:$V6,113:10,114:$V7,115:$V8,116:20,128:23,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl},o($Vz,[2,100]),o($Vz,$VA,{112:73,121:$VB}),o($Vz,[2,116]),o($Vz,[2,117]),o($Vz,[2,118]),o($VD,[2,110]),o($VD,[2,111]),o($VD,[2,112]),o($VD,[2,113]),o($VD,[2,114]),o($VD,[2,115]),{51:[1,74]},{51:[1,75]},{11:[1,76],90:[1,77]},{57:78,77:[1,79]},{40:11,41:$V4,55:57,59:12,60:$V5,65:80,66:58,67:59,68:$Vw,70:$Vx,77:[2,49]},o($VC,[2,52]),o($VC,[2,53]),o($VC,[2,54]),o($VC,[2,55]),{45:$VG,50:83,69:81,82:82},{71:[1,85]},o($Vz,[2,102]),{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:86,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},o($VQ,[2,28],{12:100,36:101,37:102,11:$VR}),o($VC,[2,32],{43:[1,104]}),o($VS,[2,34]),{11:[1,105]},o($VC,[2,45],{43:[1,106]}),o($VS,[2,47]),{11:[1,107]},{24:[1,108]},o($Vm,[2,98],{128:23,110:40,111:41,118:42,116:47,117:48,11:$Vn,13:$Vo,23:$Vp,90:$Vq,114:$Vr,115:$Vs,119:$Vt,120:$Vu,123:$Vv,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl}),o($Vz,[2,101]),{54:[1,109]},{54:[1,110]},o($VT,[2,123]),o($VT,[2,124]),o($VU,[2,41]),{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:111,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},o($VC,[2,51]),o($VC,[2,56],{81:[1,118],83:[1,119]}),o($VX,[2,70]),{10:[1,125],14:[1,127],31:[1,131],32:[1,133],38:[1,123],84:120,93:121,94:122,95:[1,129],96:[1,130],97:[1,132],98:[1,134],99:[1,124],100:[1,126],101:[1,128]},{11:[1,135]},{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:138,49:113,50:114,51:$VV,55:8,59:12,60:$V5,72:136,73:137,78:$VW},{10:$VY,14:$VZ,38:$V_,81:$V$,83:$V01,88:$V11,89:$V21,90:$V31,91:$V41,92:$V51,99:$V61,100:$V71,101:$V81,122:[1,139]},o($V91,[2,127]),o($V91,[2,128]),o($V91,[2,129]),o($V91,[2,130]),o($V91,[2,131]),o($V91,[2,135],{13:[1,153]}),o($V91,[2,133]),o($V91,[2,134]),{51:[1,154]},{51:[1,155]},o($Va1,[2,150]),o($Va1,[2,151]),{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:156,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{13:[1,157],14:[1,158]},o($VQ,[2,27],{37:159,11:$VR}),o($Vb1,[2,30]),{38:[1,160]},{44:161,45:$VE},{46:[1,162]},{45:$VF,62:163},{63:[1,164]},{11:[1,166],90:[1,168],118:167,119:$Vt,120:$Vu,129:165},o($VD,[2,119]),o($VD,[2,120]),o($VU,[2,64]),o($VU,[2,36]),o($VU,[2,37]),o($VU,[2,38]),{52:[1,169]},o($VU,[2,40]),{51:[1,170]},{45:$VG,50:83,82:171},{45:$VG,50:83,82:172},{52:$VL,85:173,86:174,87:175,127:$VP},o($Vc1,[2,81]),o($Vc1,[2,82]),o($Vc1,[2,89]),o($Vc1,[2,90]),o($Vc1,[2,91]),o($Vc1,[2,92]),o($Vc1,[2,93]),o($Vc1,[2,94]),o($Vc1,[2,83]),o($Vc1,[2,84]),o($Vc1,[2,85]),o($Vc1,[2,86]),o($Vc1,[2,87]),o($Vc1,[2,88]),o($Vd1,[2,80],{113:10,116:20,128:23,47:176,11:$V1,13:$V2,23:$V3,90:$V6,114:$V7,115:$V8,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl}),o($VC,[2,57],{43:[1,177]}),o($VS,[2,59]),o($VS,[2,63],{74:178,75:[1,179],76:[1,180]}),o($Vz,[2,121]),{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:181,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:182,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:183,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:184,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:185,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:186,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:187,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:188,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:189,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:190,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:191,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:192,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{11:$VH,23:$VI,39:$VJ,51:$VK,52:$VL,86:88,103:193,106:89,115:$VM,117:93,123:$Vv,124:87,125:$VN,126:$VO,127:$VP},{117:194,123:$Vv},{54:[1,195]},{54:[1,196]},{10:$VY,14:$VZ,38:$V_,54:[1,197],81:$V$,83:$V01,88:$V11,89:$V21,90:$V31,91:$V41,92:$V51,99:$V61,100:$V71,101:$V81},{14:[1,198]},{8:202,9:9,10:$V0,11:$Ve1,15:199,16:[2,9],17:200,18:201,19:203,20:204,21:206,22:$Vf1,23:$Vg1,24:$Vh1,25:$Vi1,28:$Vj1},o($Vb1,[2,29]),{39:[1,212]},o($VS,[2,33]),{11:$V1,13:$V2,23:$V3,47:213,90:$V6,113:10,114:$V7,115:$V8,116:20,128:23,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl},o($VS,[2,46]),{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:214,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},o($VD,[2,152]),o($VD,[2,166]),o($VD,[2,167]),o($VD,[2,168]),{53:[1,215]},{7:112,8:116,9:9,10:$V0,26:216,40:11,41:$V4,45:$VG,48:217,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},o($VX,[2,68]),o($VX,[2,69]),o($VX,[2,71],{88:[1,218],89:[1,219],90:$Vk1,91:$Vl1,92:$Vm1}),o($Vn1,[2,72]),o($Vn1,[2,73]),o($Vd1,[2,79],{128:23,110:40,111:41,118:42,116:47,117:48,11:$Vn,13:$Vo,23:$Vp,90:$Vq,114:$Vr,115:$Vs,119:$Vt,120:$Vu,123:$Vv,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl}),{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:138,49:113,50:114,51:$VV,55:8,59:12,60:$V5,73:223,78:$VW},o($VS,[2,60]),o($VS,[2,61]),o($VS,[2,62]),o($Vo1,[2,136],{90:$V31,91:$V41,92:$V51}),o($Vo1,[2,137],{90:$V31,91:$V41,92:$V51}),o($V91,[2,138]),o($V91,[2,139]),o($V91,[2,140]),o($Vp1,[2,141],{88:$V11,89:$V21,90:$V31,91:$V41,92:$V51}),o($Vp1,[2,142],{88:$V11,89:$V21,90:$V31,91:$V41,92:$V51}),o($Vp1,[2,143],{88:$V11,89:$V21,90:$V31,91:$V41,92:$V51}),o($Vp1,[2,144],{88:$V11,89:$V21,90:$V31,91:$V41,92:$V51}),o($Vp1,[2,145],{88:$V11,89:$V21,90:$V31,91:$V41,92:$V51}),o($Vp1,[2,146],{88:$V11,89:$V21,90:$V31,91:$V41,92:$V51}),o([54,81,83,122],[2,147],{10:$VY,14:$VZ,38:$V_,88:$V11,89:$V21,90:$V31,91:$V41,92:$V51,99:$V61,100:$V71,101:$V81}),o([54,83,122],[2,148],{10:$VY,14:$VZ,38:$V_,81:$V$,88:$V11,89:$V21,90:$V31,91:$V41,92:$V51,99:$V61,100:$V71,101:$V81}),o($V91,[2,132]),o($V91,[2,125]),o($V91,[2,126]),o($V91,[2,149]),o($Vy,[2,6]),{16:[1,224]},{8:202,9:9,10:$V0,11:$Ve1,16:[2,8],18:225,19:203,20:204,21:206,22:$Vf1,23:$Vg1,24:$Vh1,25:$Vi1,28:$Vj1},o($Vq1,[2,11]),o($Vq1,[2,12]),o($Vq1,[2,13]),o($Vq1,[2,14]),o($Vq1,[2,15]),o($Vq1,[2,16]),o($Vq1,[2,17]),o($Vq1,[2,18]),o($Vq1,[2,19]),{29:226,31:[1,227],32:[1,228],33:[1,229],34:[1,230],35:[1,231]},{7:112,8:116,9:9,10:$V0,26:232,40:11,41:$V4,45:$VG,48:217,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},o($Vb1,[2,31]),o($VS,[2,35],{128:23,110:40,111:41,118:42,116:47,117:48,11:$Vn,13:$Vo,23:$Vp,90:$Vq,114:$Vr,115:$Vs,119:$Vt,120:$Vu,123:$Vv,130:$V9,131:$Va,132:$Vb,133:$Vc,134:$Vd,135:$Ve,136:$Vf,137:$Vg,138:$Vh,139:$Vi,140:$Vj,141:$Vk,142:$Vl}),o($VS,[2,48]),{52:[1,233]},{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:235,49:113,50:114,51:$VV,54:[1,234],55:8,59:12,60:$V5,78:$VW},o($Vr1,[2,67]),{52:$VL,85:236,86:174,87:175,127:$VP},{52:$VL,85:237,86:174,87:175,127:$VP},{52:$VL,85:238,86:174,87:175,127:$VP},{52:$VL,85:239,86:174,87:175,127:$VP},{52:$VL,85:240,86:174,87:175,127:$VP},o($VS,[2,58]),{11:[1,241]},o($Vq1,[2,10]),{30:[1,242]},{30:[2,22]},{30:[2,23]},{30:[2,24]},{30:[2,25]},{30:[2,26]},{7:112,8:116,9:9,10:$V0,27:[1,243],40:11,41:$V4,45:$VG,48:235,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},{54:[1,244]},{79:[1,245]},o($Vr1,[2,66]),o($Vs1,[2,74],{90:$Vk1,91:$Vl1,92:$Vm1}),o($Vs1,[2,75],{90:$Vk1,91:$Vl1,92:$Vm1}),o($Vn1,[2,76]),o($Vn1,[2,77]),o($Vn1,[2,78]),{14:[1,246]},o($Vq1,[2,21]),o($Vq1,[2,20]),o($VU,[2,39]),{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:247,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},o($Vy,[2,7]),{80:[1,248]},{7:112,8:116,9:9,10:$V0,40:11,41:$V4,45:$VG,48:249,49:113,50:114,51:$VV,55:8,59:12,60:$V5,78:$VW},o($VU,[2,65])],
+defaultActions: {5:[2,3],6:[2,4],24:[2,153],25:[2,154],26:[2,155],27:[2,156],28:[2,157],29:[2,158],30:[2,159],31:[2,160],32:[2,161],33:[2,162],34:[2,163],35:[2,164],36:[2,165],37:[2,1],38:[2,2],227:[2,22],228:[2,23],229:[2,24],230:[2,25],231:[2,26]},
+parseError: function parseError (str, hash) {
+    if (hash.recoverable) {
+        this.trace(str);
+    } else {
+        var error = new Error(str);
+        error.hash = hash;
+        throw error;
     }
-    },
-    table: [{3:1,4:2,6:3,8:4,12:5,13:$V0,14:$V1,15:$V2,16:$V3,17:$V4,18:$V5,19:12,50:13,53:$V6,54:$V7,55:$V8,56:$V9,57:$Va,58:$Vb,59:$Vc,60:$Vd,61:$Ve,62:$Vf,63:$Vg,64:$Vh,65:$Vi},{1:[3]},{5:[1,27]},{5:[2,2],7:[1,28]},o($Vj,[2,4],{50:13,9:29,10:30,21:31,19:36,20:37,13:$Vk,14:$Vl,15:$Vm,16:$Vn,17:$Vo,18:$Vp,22:$Vq,25:$Vr,29:$Vs,53:$V6,54:$V7,55:$V8,56:$V9,57:$Va,58:$Vb,59:$Vc,60:$Vd,61:$Ve,62:$Vf,63:$Vg,64:$Vh,65:$Vi}),o($Vt,$Vu,{11:43,26:$Vv}),o($Vw,[2,8]),o($Vw,[2,9]),o($Vw,[2,10]),o($Vw,[2,11]),o($Vw,[2,12]),o($Vw,[2,13]),o($Vw,[2,14]),{51:[1,45]},{51:[2,58]},{51:[2,59]},{51:[2,60]},{51:[2,61]},{51:[2,62]},{51:[2,63]},{51:[2,64]},{51:[2,65]},{51:[2,66]},{51:[2,67]},{51:[2,68]},{51:[2,69]},{51:[2,70]},{1:[2,1]},{8:46,12:5,13:$V0,14:$V1,15:$V2,16:$V3,17:$V4,18:$V5,19:12,50:13,53:$V6,54:$V7,55:$V8,56:$V9,57:$Va,58:$Vb,59:$Vc,60:$Vd,61:$Ve,62:$Vf,63:$Vg,64:$Vh,65:$Vi},o($Vt,[2,5]),o($Vt,$Vu,{11:47,26:$Vv}),o($Vt,[2,21]),o($Vt,[2,22]),o($Vt,[2,23]),o($Vw,[2,15]),o($Vw,[2,16]),o($Vw,[2,17]),o($Vw,[2,18]),o($Vw,[2,19]),o($Vw,[2,20]),{23:[1,48]},{23:[1,49]},{15:[1,51],16:[1,50]},o($Vt,[2,7]),{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:52,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{51:[1,66]},o($Vj,[2,3],{50:13,9:29,10:30,21:31,19:36,20:37,13:$Vk,14:$Vl,15:$Vm,16:$Vn,17:$Vo,18:$Vp,22:$Vq,25:$Vr,29:$Vs,53:$V6,54:$V7,55:$V8,56:$V9,57:$Va,58:$Vb,59:$Vc,60:$Vd,61:$Ve,62:$Vf,63:$Vg,64:$Vh,65:$Vi}),o($Vt,[2,6]),{24:[1,67]},{24:[1,68]},o($VG,[2,28]),o($VG,[2,29]),{15:$VH,28:[1,69],36:$VI,37:$VJ,38:$VK,39:$VL,40:$VM,41:$VN,42:$VO,43:$VP,44:$VQ,45:$VR,46:$VS,47:$VT},o($VU,[2,32]),o($VU,[2,33]),o($VU,[2,34]),o($VU,[2,35]),o($VU,[2,36]),o($VU,[2,40],{14:[1,83]}),o($VU,[2,38]),o($VU,[2,39]),{23:[1,84]},{23:[1,85]},o($VU,[2,55]),o($VU,[2,56]),{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:86,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{15:[1,90],16:[1,88],21:89,22:$Vq,25:$Vr,52:87},o($Vw,[2,24]),o($Vw,[2,25]),o($Vt,[2,26]),{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:91,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:92,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:93,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:94,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:95,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:96,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:97,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:98,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:99,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:100,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:101,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:102,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{16:$Vx,17:$Vy,18:$Vz,20:59,23:$VA,27:103,29:$Vs,30:53,31:$VB,32:$VC,33:54,34:55,35:$VD,48:$VE,49:$VF},{20:104,29:$Vs},{24:[1,105]},{24:[1,106]},{15:$VH,24:[1,107],36:$VI,37:$VJ,38:$VK,39:$VL,40:$VM,41:$VN,42:$VO,43:$VP,44:$VQ,45:$VR,46:$VS,47:$VT},o($Vw,[2,57]),o($Vw,[2,71]),o($Vw,[2,72]),o($Vw,[2,73]),o($VV,[2,41],{15:$VH,38:$VK,39:$VL}),o($VV,[2,42],{15:$VH,38:$VK,39:$VL}),o($VU,[2,43]),o($VU,[2,44]),o($VU,[2,45]),o($VW,[2,46],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL}),o($VW,[2,47],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL}),o($VW,[2,48],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL}),o($VW,[2,49],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL}),o($VW,[2,50],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL}),o($VW,[2,51],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL}),o([24,28,46,47],[2,52],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL,40:$VM,41:$VN,42:$VO,43:$VP,44:$VQ,45:$VR}),o([24,28,47],[2,53],{15:$VH,36:$VI,37:$VJ,38:$VK,39:$VL,40:$VM,41:$VN,42:$VO,43:$VP,44:$VQ,45:$VR,46:$VS}),o($VU,[2,37]),o($VU,[2,30]),o($VU,[2,31]),o($VU,[2,54])],
-    defaultActions: {14:[2,58],15:[2,59],16:[2,60],17:[2,61],18:[2,62],19:[2,63],20:[2,64],21:[2,65],22:[2,66],23:[2,67],24:[2,68],25:[2,69],26:[2,70],27:[2,1]},
-    parseError: function parseError (str, hash) {
-        if (hash.recoverable) {
-            this.trace(str);
+},
+parse: function parse(input) {
+    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+    var args = lstack.slice.call(arguments, 1);
+    var lexer = Object.create(this.lexer);
+    var sharedState = { yy: {} };
+    for (var k in this.yy) {
+        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+            sharedState.yy[k] = this.yy[k];
+        }
+    }
+    lexer.setInput(input, sharedState.yy);
+    sharedState.yy.lexer = lexer;
+    sharedState.yy.parser = this;
+    if (typeof lexer.yylloc == 'undefined') {
+        lexer.yylloc = {};
+    }
+    var yyloc = lexer.yylloc;
+    lstack.push(yyloc);
+    var ranges = lexer.options && lexer.options.ranges;
+    if (typeof sharedState.yy.parseError === 'function') {
+        this.parseError = sharedState.yy.parseError;
+    } else {
+        this.parseError = Object.getPrototypeOf(this).parseError;
+    }
+    function popStack(n) {
+        stack.length = stack.length - 2 * n;
+        vstack.length = vstack.length - n;
+        lstack.length = lstack.length - n;
+    }
+    _token_stack:
+        var lex = function () {
+            var token;
+            token = lexer.lex() || EOF;
+            if (typeof token !== 'number') {
+                token = self.symbols_[token] || token;
+            }
+            return token;
+        };
+    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+    while (true) {
+        state = stack[stack.length - 1];
+        if (this.defaultActions[state]) {
+            action = this.defaultActions[state];
         } else {
-            var error = new Error(str);
-            error.hash = hash;
-            throw error;
-        }
-    },
-    parse: function parse(input) {
-        var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
-        var args = lstack.slice.call(arguments, 1);
-        var lexer = Object.create(this.lexer);
-        var sharedState = { yy: {} };
-        for (var k in this.yy) {
-            if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-                sharedState.yy[k] = this.yy[k];
+            if (symbol === null || typeof symbol == 'undefined') {
+                symbol = lex();
             }
+            action = table[state] && table[state][symbol];
         }
-        lexer.setInput(input, sharedState.yy);
-        sharedState.yy.lexer = lexer;
-        sharedState.yy.parser = this;
-        if (typeof lexer.yylloc == 'undefined') {
-            lexer.yylloc = {};
-        }
-        var yyloc = lexer.yylloc;
-        lstack.push(yyloc);
-        var ranges = lexer.options && lexer.options.ranges;
-        if (typeof sharedState.yy.parseError === 'function') {
-            this.parseError = sharedState.yy.parseError;
-        } else {
-            this.parseError = Object.getPrototypeOf(this).parseError;
-        }
-        function popStack(n) {
-            stack.length = stack.length - 2 * n;
-            vstack.length = vstack.length - n;
-            lstack.length = lstack.length - n;
-        }
-        _token_stack:
-            var lex = function () {
-                var token;
-                token = lexer.lex() || EOF;
-                if (typeof token !== 'number') {
-                    token = self.symbols_[token] || token;
-                }
-                return token;
-            };
-        var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
-        while (true) {
-            state = stack[stack.length - 1];
-            if (this.defaultActions[state]) {
-                action = this.defaultActions[state];
-            } else {
-                if (symbol === null || typeof symbol == 'undefined') {
-                    symbol = lex();
-                }
-                action = table[state] && table[state][symbol];
-            }
-                        if (typeof action === 'undefined' || !action.length || !action[0]) {
-                    var errStr = '';
-                    expected = [];
-                    for (p in table[state]) {
-                        if (this.terminals_[p] && p > TERROR) {
-                            expected.push('\'' + this.terminals_[p] + '\'');
-                        }
+                    if (typeof action === 'undefined' || !action.length || !action[0]) {
+                var errStr = '';
+                expected = [];
+                for (p in table[state]) {
+                    if (this.terminals_[p] && p > TERROR) {
+                        expected.push('\'' + this.terminals_[p] + '\'');
                     }
-                    if (lexer.showPosition) {
-                        errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                    } else {
-                        errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
-                    }
-                    this.parseError(errStr, {
-                        text: lexer.match,
-                        token: this.terminals_[symbol] || symbol,
-                        line: lexer.yylineno,
-                        loc: yyloc,
-                        expected: expected
-                    });
                 }
-            if (action[0] instanceof Array && action.length > 1) {
-                throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-            }
-            switch (action[0]) {
-            case 1:
-                stack.push(symbol);
-                vstack.push(lexer.yytext);
-                lstack.push(lexer.yylloc);
-                stack.push(action[1]);
-                symbol = null;
-                if (!preErrorSymbol) {
-                    yyleng = lexer.yyleng;
-                    yytext = lexer.yytext;
-                    yylineno = lexer.yylineno;
-                    yyloc = lexer.yylloc;
-                    if (recovering > 0) {
-                        recovering--;
-                    }
+                if (lexer.showPosition) {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
                 } else {
-                    symbol = preErrorSymbol;
-                    preErrorSymbol = null;
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
                 }
-                break;
-            case 2:
-                len = this.productions_[action[1]][1];
-                yyval.$ = vstack[vstack.length - len];
-                yyval._$ = {
-                    first_line: lstack[lstack.length - (len || 1)].first_line,
-                    last_line: lstack[lstack.length - 1].last_line,
-                    first_column: lstack[lstack.length - (len || 1)].first_column,
-                    last_column: lstack[lstack.length - 1].last_column
-                };
-                if (ranges) {
-                    yyval._$.range = [
-                        lstack[lstack.length - (len || 1)].range[0],
-                        lstack[lstack.length - 1].range[1]
-                    ];
-                }
-                r = this.performAction.apply(yyval, [
-                    yytext,
-                    yyleng,
-                    yylineno,
-                    sharedState.yy,
-                    action[1],
-                    vstack,
-                    lstack
-                ].concat(args));
-                if (typeof r !== 'undefined') {
-                    return r;
-                }
-                if (len) {
-                    stack = stack.slice(0, -1 * len * 2);
-                    vstack = vstack.slice(0, -1 * len);
-                    lstack = lstack.slice(0, -1 * len);
-                }
-                stack.push(this.productions_[action[1]][0]);
-                vstack.push(yyval.$);
-                lstack.push(yyval._$);
-                newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-                stack.push(newState);
-                break;
-            case 3:
-                return true;
+                this.parseError(errStr, {
+                    text: lexer.match,
+                    token: this.terminals_[symbol] || symbol,
+                    line: lexer.yylineno,
+                    loc: yyloc,
+                    expected: expected
+                });
             }
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
         }
-        return true;
-    }};
-    
-            const {sentenciaXpath} = require("../Estructuras/sentenciaXpath.js");
-            const {parametroXpath} = require("../Estructuras/parametroXpath.js");
-            const {ParametroOperacionXpath} = require("../Estructuras/ParametroOperacionXpath.js");
-            const {OperacionXpath} = require("../Estructuras/OperacionXpath.js");
-            const {NodoXpath} = require("../Estructuras/NodoXpath.js");
-            const {TipoParametro, TipoOperador, TipoNodo} = require("../Estructuras/tipificacion.js");
-            let salida = [];
-    /* generated by jison-lex 0.3.4 */
-    var lexer = (function(){
-    var lexer = ({
-    
-    EOF:1,
-    
-    parseError:function parseError(str, hash) {
-            if (this.yy.parser) {
-                this.yy.parser.parseError(str, hash);
+        switch (action[0]) {
+        case 1:
+            stack.push(symbol);
+            vstack.push(lexer.yytext);
+            lstack.push(lexer.yylloc);
+            stack.push(action[1]);
+            symbol = null;
+            if (!preErrorSymbol) {
+                yyleng = lexer.yyleng;
+                yytext = lexer.yytext;
+                yylineno = lexer.yylineno;
+                yyloc = lexer.yylloc;
+                if (recovering > 0) {
+                    recovering--;
+                }
             } else {
-                throw new Error(str);
+                symbol = preErrorSymbol;
+                preErrorSymbol = null;
             }
-        },
-    
-    // resets the lexer, sets new input
-    setInput:function (input, yy) {
-            this.yy = yy || this.yy || {};
-            this._input = input;
-            this._more = this._backtrack = this.done = false;
-            this.yylineno = this.yyleng = 0;
-            this.yytext = this.matched = this.match = '';
-            this.conditionStack = ['INITIAL'];
-            this.yylloc = {
-                first_line: 1,
-                first_column: 0,
-                last_line: 1,
-                last_column: 0
+            break;
+        case 2:
+            len = this.productions_[action[1]][1];
+            yyval.$ = vstack[vstack.length - len];
+            yyval._$ = {
+                first_line: lstack[lstack.length - (len || 1)].first_line,
+                last_line: lstack[lstack.length - 1].last_line,
+                first_column: lstack[lstack.length - (len || 1)].first_column,
+                last_column: lstack[lstack.length - 1].last_column
             };
-            if (this.options.ranges) {
-                this.yylloc.range = [0,0];
+            if (ranges) {
+                yyval._$.range = [
+                    lstack[lstack.length - (len || 1)].range[0],
+                    lstack[lstack.length - 1].range[1]
+                ];
             }
-            this.offset = 0;
-            return this;
-        },
-    
-    // consumes and returns one char from the input
-    input:function () {
-            var ch = this._input[0];
-            this.yytext += ch;
-            this.yyleng++;
-            this.offset++;
-            this.match += ch;
-            this.matched += ch;
-            var lines = ch.match(/(?:\r\n?|\n).*/g);
-            if (lines) {
-                this.yylineno++;
-                this.yylloc.last_line++;
-            } else {
-                this.yylloc.last_column++;
-            }
-            if (this.options.ranges) {
-                this.yylloc.range[1]++;
-            }
-    
-            this._input = this._input.slice(1);
-            return ch;
-        },
-    
-    // unshifts one char (or a string) into the input
-    unput:function (ch) {
-            var len = ch.length;
-            var lines = ch.split(/(?:\r\n?|\n)/g);
-    
-            this._input = ch + this._input;
-            this.yytext = this.yytext.substr(0, this.yytext.length - len);
-            //this.yyleng -= len;
-            this.offset -= len;
-            var oldLines = this.match.split(/(?:\r\n?|\n)/g);
-            this.match = this.match.substr(0, this.match.length - 1);
-            this.matched = this.matched.substr(0, this.matched.length - 1);
-    
-            if (lines.length - 1) {
-                this.yylineno -= lines.length - 1;
-            }
-            var r = this.yylloc.range;
-    
-            this.yylloc = {
-                first_line: this.yylloc.first_line,
-                last_line: this.yylineno + 1,
-                first_column: this.yylloc.first_column,
-                last_column: lines ?
-                    (lines.length === oldLines.length ? this.yylloc.first_column : 0)
-                     + oldLines[oldLines.length - lines.length].length - lines[0].length :
-                  this.yylloc.first_column - len
-            };
-    
-            if (this.options.ranges) {
-                this.yylloc.range = [r[0], r[0] + this.yyleng - len];
-            }
-            this.yyleng = this.yytext.length;
-            return this;
-        },
-    
-    // When called from action, caches matched text and appends it on next action
-    more:function () {
-            this._more = true;
-            return this;
-        },
-    
-    // When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
-    reject:function () {
-            if (this.options.backtrack_lexer) {
-                this._backtrack = true;
-            } else {
-                return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
-                    text: "",
-                    token: null,
-                    line: this.yylineno
-                });
-    
-            }
-            return this;
-        },
-    
-    // retain first n characters of the match
-    less:function (n) {
-            this.unput(this.match.slice(n));
-        },
-    
-    // displays already matched input, i.e. for error messages
-    pastInput:function () {
-            var past = this.matched.substr(0, this.matched.length - this.match.length);
-            return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
-        },
-    
-    // displays upcoming input, i.e. for error messages
-    upcomingInput:function () {
-            var next = this.match;
-            if (next.length < 20) {
-                next += this._input.substr(0, 20-next.length);
-            }
-            return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
-        },
-    
-    // displays the character position where the lexing error occurred, i.e. for error messages
-    showPosition:function () {
-            var pre = this.pastInput();
-            var c = new Array(pre.length + 1).join("-");
-            return pre + this.upcomingInput() + "\n" + c + "^";
-        },
-    
-    // test the lexed token: return FALSE when not a match, otherwise return token
-    test_match:function(match, indexed_rule) {
-            var token,
-                lines,
-                backup;
-    
-            if (this.options.backtrack_lexer) {
-                // save context
-                backup = {
-                    yylineno: this.yylineno,
-                    yylloc: {
-                        first_line: this.yylloc.first_line,
-                        last_line: this.last_line,
-                        first_column: this.yylloc.first_column,
-                        last_column: this.yylloc.last_column
-                    },
-                    yytext: this.yytext,
-                    match: this.match,
-                    matches: this.matches,
-                    matched: this.matched,
-                    yyleng: this.yyleng,
-                    offset: this.offset,
-                    _more: this._more,
-                    _input: this._input,
-                    yy: this.yy,
-                    conditionStack: this.conditionStack.slice(0),
-                    done: this.done
-                };
-                if (this.options.ranges) {
-                    backup.yylloc.range = this.yylloc.range.slice(0);
-                }
-            }
-    
-            lines = match[0].match(/(?:\r\n?|\n).*/g);
-            if (lines) {
-                this.yylineno += lines.length;
-            }
-            this.yylloc = {
-                first_line: this.yylloc.last_line,
-                last_line: this.yylineno + 1,
-                first_column: this.yylloc.last_column,
-                last_column: lines ?
-                             lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
-                             this.yylloc.last_column + match[0].length
-            };
-            this.yytext += match[0];
-            this.match += match[0];
-            this.matches = match;
-            this.yyleng = this.yytext.length;
-            if (this.options.ranges) {
-                this.yylloc.range = [this.offset, this.offset += this.yyleng];
-            }
-            this._more = false;
-            this._backtrack = false;
-            this._input = this._input.slice(match[0].length);
-            this.matched += match[0];
-            token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
-            if (this.done && this._input) {
-                this.done = false;
-            }
-            if (token) {
-                return token;
-            } else if (this._backtrack) {
-                // recover context
-                for (var k in backup) {
-                    this[k] = backup[k];
-                }
-                return false; // rule action called reject() implying the next rule should be tested instead.
-            }
-            return false;
-        },
-    
-    // return next match in input
-    next:function () {
-            if (this.done) {
-                return this.EOF;
-            }
-            if (!this._input) {
-                this.done = true;
-            }
-    
-            var token,
-                match,
-                tempMatch,
-                index;
-            if (!this._more) {
-                this.yytext = '';
-                this.match = '';
-            }
-            var rules = this._currentRules();
-            for (var i = 0; i < rules.length; i++) {
-                tempMatch = this._input.match(this.rules[rules[i]]);
-                if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-                    match = tempMatch;
-                    index = i;
-                    if (this.options.backtrack_lexer) {
-                        token = this.test_match(tempMatch, rules[i]);
-                        if (token !== false) {
-                            return token;
-                        } else if (this._backtrack) {
-                            match = false;
-                            continue; // rule action called reject() implying a rule MISmatch.
-                        } else {
-                            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                            return false;
-                        }
-                    } else if (!this.options.flex) {
-                        break;
-                    }
-                }
-            }
-            if (match) {
-                token = this.test_match(match, rules[index]);
-                if (token !== false) {
-                    return token;
-                }
-                // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                return false;
-            }
-            if (this._input === "") {
-                return this.EOF;
-            } else {
-                return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
-                    text: "",
-                    token: null,
-                    line: this.yylineno
-                });
-            }
-        },
-    
-    // return next match that has a token
-    lex:function lex () {
-            var r = this.next();
-            if (r) {
+            r = this.performAction.apply(yyval, [
+                yytext,
+                yyleng,
+                yylineno,
+                sharedState.yy,
+                action[1],
+                vstack,
+                lstack
+            ].concat(args));
+            if (typeof r !== 'undefined') {
                 return r;
-            } else {
-                return this.lex();
             }
-        },
-    
-    // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
-    begin:function begin (condition) {
-            this.conditionStack.push(condition);
-        },
-    
-    // pop the previously active lexer condition state off the condition stack
-    popState:function popState () {
-            var n = this.conditionStack.length - 1;
-            if (n > 0) {
-                return this.conditionStack.pop();
-            } else {
-                return this.conditionStack[0];
+            if (len) {
+                stack = stack.slice(0, -1 * len * 2);
+                vstack = vstack.slice(0, -1 * len);
+                lstack = lstack.slice(0, -1 * len);
             }
-        },
-    
-    // produce the lexer rule set which is active for the currently active lexer condition state
-    _currentRules:function _currentRules () {
-            if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-                return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
-            } else {
-                return this.conditions["INITIAL"].rules;
-            }
-        },
-    
-    // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
-    topState:function topState (n) {
-            n = this.conditionStack.length - 1 - Math.abs(n || 0);
-            if (n >= 0) {
-                return this.conditionStack[n];
-            } else {
-                return "INITIAL";
-            }
-        },
-    
-    // alias for begin(condition)
-    pushState:function pushState (condition) {
-            this.begin(condition);
-        },
-    
-    // return the number of states currently on the stack
-    stateStackSize:function stateStackSize() {
-            return this.conditionStack.length;
-        },
-    options: {"case-insensitive":true},
-    performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
-    var YYSTATE=YY_START;
-    switch($avoiding_name_collisions) {
-    case 0:/* skip whitespace */
-    break;
-    case 1:return 13;
-    break;
-    case 2:// comentario simple línea
-    break;
-    case 3:// comentario multiple líneas
-    break;
-    case 4:return 49
-    break;
-    case 5:return 35
-    break;
-    case 6:return 'CARACTER_LITERAL'
-    break;
-    case 7:return 54;
-    break;
-    case 8:return 53;
-    break;
-    case 9:return 55;
-    break;
-    case 10:return 56;
-    break;
-    case 11:return 58;
-    break;
-    case 12:return 57;
-    break;
-    case 13:return 60;
-    break;
-    case 14:return 59;
-    break;
-    case 15:return 61;
-    break;
-    case 16:return 62;
-    break;
-    case 17:return 64;
-    break;
-    case 18:return 63;
-    break;
-    case 19:return 65;
-    break;
-    case 20:return 31;
-    break;
-    case 21:return 32;
-    break;
-    case 22:return 25;
-    break;
-    case 23:return 22;
-    break;
-    case 24:return 39;
-    break;
-    case 25:return 38;
-    break;
-    case 26:return 36;
-    break;
-    case 27:return 37;
-    break;
-    case 28:return 15;
-    break;
-    case 29:return 40;
-    break;
-    case 30:return 41;
-    break;
-    case 31:return 43;
-    break;
-    case 32:return 42;
-    break;
-    case 33:return 44;
-    break;
-    case 34:return 'equal';
-    break;
-    case 35:return 45;
-    break;
-    case 36:return 46;
-    break;
-    case 37:return 47;
-    break;
-    case 38:return 'not';
-    break;
-    case 39:return 51;
-    break;
-    case 40:return 'semicolon';
-    break;
-    case 41:return 26;
-    break;
-    case 42:return 28;
-    break;
-    case 43:return 29;
-    break;
-    case 44:return 46;
-    break;
-    case 45:return 7;
-    break;
-    case 46:return 23;
-    break;
-    case 47:return 24;
-    break;
-    case 48:return 48;
-    break;
-    case 49:return 'IntegerLiteral';
-    break;
-    case 50:return 'string';
-    break;
-    case 51:return 16;
-    break;
-    case 52:return 14;
-    break;
-    case 53:return 17
-    break;
-    case 54:return 18
-    break;
-    case 55:return 5
-    break;
-    case 56:return 'INVALID'
-    break;
-    }
-    },
-    rules: [/^(?:\s+)/i,/^(?:\/\/)/i,/^(?:\/\/.*)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:([0-9]+(\.[0-9]+)?))/i,/^(?:(("(\\"|[^"]|\n)*")))/i,/^(?:(('[^']*')))/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:text\b)/i,/^(?:node\b)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:and\b)/i,/^(?:or\b)/i,/^(?:!)/i,/^(?::)/i,/^(?:;)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:@)/i,/^(?:&&)/i,/^(?:\|)/i,/^(?:\()/i,/^(?:\))/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:"[^\"]*")/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:\/)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:$)/i,/^(?:.)/i],
-    conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56],"inclusive":true}}
-    });
-    return lexer;
-    })();
-    parser.lexer = lexer;
-    function Parser () {
-      this.yy = {};
-    }
-    Parser.prototype = parser;parser.Parser = Parser;
-    return new Parser;
-    })();
-    
-    
-    if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-    exports.parser = xpathGramatica;
-    exports.Parser = xpathGramatica.Parser;
-    exports.parse = function () { return xpathGramatica.parse.apply(xpathGramatica, arguments); };
-    exports.main = function commonjsMain (args) {
-        if (!args[1]) {
-            console.log('Usage: '+args[0]+' FILE');
-            process.exit(1);
+            stack.push(this.productions_[action[1]][0]);
+            vstack.push(yyval.$);
+            lstack.push(yyval._$);
+            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+            stack.push(newState);
+            break;
+        case 3:
+            return true;
         }
-        var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
-        return exports.parser.parse(source);
-    };
-    if (typeof module !== 'undefined' && require.main === module) {
-      exports.main(process.argv.slice(1));
     }
+    return true;
+}};
+
+        const {sentenciaXpath} = require("../Estructuras/sentenciaXpath.js");
+        const {parametroXpath} = require("../Estructuras/parametroXpath.js");
+        const {ParametroOperacionXpath} = require("../Estructuras/ParametroOperacionXpath.js");
+        const {OperacionXpath} = require("../Estructuras/OperacionXpath.js");
+        const {NodoXpath} = require("../Estructuras/NodoXpath.js");
+        const {TipoParametro, TipoOperador, TipoNodo} = require("../Estructuras/tipificacion.js");
+        let salida = [];
+/* generated by jison-lex 0.3.4 */
+var lexer = (function(){
+var lexer = ({
+
+EOF:1,
+
+parseError:function parseError(str, hash) {
+        if (this.yy.parser) {
+            this.yy.parser.parseError(str, hash);
+        } else {
+            throw new Error(str);
+        }
+    },
+
+// resets the lexer, sets new input
+setInput:function (input, yy) {
+        this.yy = yy || this.yy || {};
+        this._input = input;
+        this._more = this._backtrack = this.done = false;
+        this.yylineno = this.yyleng = 0;
+        this.yytext = this.matched = this.match = '';
+        this.conditionStack = ['INITIAL'];
+        this.yylloc = {
+            first_line: 1,
+            first_column: 0,
+            last_line: 1,
+            last_column: 0
+        };
+        if (this.options.ranges) {
+            this.yylloc.range = [0,0];
+        }
+        this.offset = 0;
+        return this;
+    },
+
+// consumes and returns one char from the input
+input:function () {
+        var ch = this._input[0];
+        this.yytext += ch;
+        this.yyleng++;
+        this.offset++;
+        this.match += ch;
+        this.matched += ch;
+        var lines = ch.match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno++;
+            this.yylloc.last_line++;
+        } else {
+            this.yylloc.last_column++;
+        }
+        if (this.options.ranges) {
+            this.yylloc.range[1]++;
+        }
+
+        this._input = this._input.slice(1);
+        return ch;
+    },
+
+// unshifts one char (or a string) into the input
+unput:function (ch) {
+        var len = ch.length;
+        var lines = ch.split(/(?:\r\n?|\n)/g);
+
+        this._input = ch + this._input;
+        this.yytext = this.yytext.substr(0, this.yytext.length - len);
+        //this.yyleng -= len;
+        this.offset -= len;
+        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+        this.match = this.match.substr(0, this.match.length - 1);
+        this.matched = this.matched.substr(0, this.matched.length - 1);
+
+        if (lines.length - 1) {
+            this.yylineno -= lines.length - 1;
+        }
+        var r = this.yylloc.range;
+
+        this.yylloc = {
+            first_line: this.yylloc.first_line,
+            last_line: this.yylineno + 1,
+            first_column: this.yylloc.first_column,
+            last_column: lines ?
+                (lines.length === oldLines.length ? this.yylloc.first_column : 0)
+                 + oldLines[oldLines.length - lines.length].length - lines[0].length :
+              this.yylloc.first_column - len
+        };
+
+        if (this.options.ranges) {
+            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+        }
+        this.yyleng = this.yytext.length;
+        return this;
+    },
+
+// When called from action, caches matched text and appends it on next action
+more:function () {
+        this._more = true;
+        return this;
+    },
+
+// When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+reject:function () {
+        if (this.options.backtrack_lexer) {
+            this._backtrack = true;
+        } else {
+            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                text: "",
+                token: null,
+                line: this.yylineno
+            });
+
+        }
+        return this;
+    },
+
+// retain first n characters of the match
+less:function (n) {
+        this.unput(this.match.slice(n));
+    },
+
+// displays already matched input, i.e. for error messages
+pastInput:function () {
+        var past = this.matched.substr(0, this.matched.length - this.match.length);
+        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
+    },
+
+// displays upcoming input, i.e. for error messages
+upcomingInput:function () {
+        var next = this.match;
+        if (next.length < 20) {
+            next += this._input.substr(0, 20-next.length);
+        }
+        return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+    },
+
+// displays the character position where the lexing error occurred, i.e. for error messages
+showPosition:function () {
+        var pre = this.pastInput();
+        var c = new Array(pre.length + 1).join("-");
+        return pre + this.upcomingInput() + "\n" + c + "^";
+    },
+
+// test the lexed token: return FALSE when not a match, otherwise return token
+test_match:function(match, indexed_rule) {
+        var token,
+            lines,
+            backup;
+
+        if (this.options.backtrack_lexer) {
+            // save context
+            backup = {
+                yylineno: this.yylineno,
+                yylloc: {
+                    first_line: this.yylloc.first_line,
+                    last_line: this.last_line,
+                    first_column: this.yylloc.first_column,
+                    last_column: this.yylloc.last_column
+                },
+                yytext: this.yytext,
+                match: this.match,
+                matches: this.matches,
+                matched: this.matched,
+                yyleng: this.yyleng,
+                offset: this.offset,
+                _more: this._more,
+                _input: this._input,
+                yy: this.yy,
+                conditionStack: this.conditionStack.slice(0),
+                done: this.done
+            };
+            if (this.options.ranges) {
+                backup.yylloc.range = this.yylloc.range.slice(0);
+            }
+        }
+
+        lines = match[0].match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno += lines.length;
+        }
+        this.yylloc = {
+            first_line: this.yylloc.last_line,
+            last_line: this.yylineno + 1,
+            first_column: this.yylloc.last_column,
+            last_column: lines ?
+                         lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
+                         this.yylloc.last_column + match[0].length
+        };
+        this.yytext += match[0];
+        this.match += match[0];
+        this.matches = match;
+        this.yyleng = this.yytext.length;
+        if (this.options.ranges) {
+            this.yylloc.range = [this.offset, this.offset += this.yyleng];
+        }
+        this._more = false;
+        this._backtrack = false;
+        this._input = this._input.slice(match[0].length);
+        this.matched += match[0];
+        token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+        if (this.done && this._input) {
+            this.done = false;
+        }
+        if (token) {
+            return token;
+        } else if (this._backtrack) {
+            // recover context
+            for (var k in backup) {
+                this[k] = backup[k];
+            }
+            return false; // rule action called reject() implying the next rule should be tested instead.
+        }
+        return false;
+    },
+
+// return next match in input
+next:function () {
+        if (this.done) {
+            return this.EOF;
+        }
+        if (!this._input) {
+            this.done = true;
+        }
+
+        var token,
+            match,
+            tempMatch,
+            index;
+        if (!this._more) {
+            this.yytext = '';
+            this.match = '';
+        }
+        var rules = this._currentRules();
+        for (var i = 0; i < rules.length; i++) {
+            tempMatch = this._input.match(this.rules[rules[i]]);
+            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                match = tempMatch;
+                index = i;
+                if (this.options.backtrack_lexer) {
+                    token = this.test_match(tempMatch, rules[i]);
+                    if (token !== false) {
+                        return token;
+                    } else if (this._backtrack) {
+                        match = false;
+                        continue; // rule action called reject() implying a rule MISmatch.
+                    } else {
+                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                        return false;
+                    }
+                } else if (!this.options.flex) {
+                    break;
+                }
+            }
+        }
+        if (match) {
+            token = this.test_match(match, rules[index]);
+            if (token !== false) {
+                return token;
+            }
+            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+            return false;
+        }
+        if (this._input === "") {
+            return this.EOF;
+        } else {
+            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                text: "",
+                token: null,
+                line: this.yylineno
+            });
+        }
+    },
+
+// return next match that has a token
+lex:function lex () {
+        var r = this.next();
+        if (r) {
+            return r;
+        } else {
+            return this.lex();
+        }
+    },
+
+// activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+begin:function begin (condition) {
+        this.conditionStack.push(condition);
+    },
+
+// pop the previously active lexer condition state off the condition stack
+popState:function popState () {
+        var n = this.conditionStack.length - 1;
+        if (n > 0) {
+            return this.conditionStack.pop();
+        } else {
+            return this.conditionStack[0];
+        }
+    },
+
+// produce the lexer rule set which is active for the currently active lexer condition state
+_currentRules:function _currentRules () {
+        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+            return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+        } else {
+            return this.conditions["INITIAL"].rules;
+        }
+    },
+
+// return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+topState:function topState (n) {
+        n = this.conditionStack.length - 1 - Math.abs(n || 0);
+        if (n >= 0) {
+            return this.conditionStack[n];
+        } else {
+            return "INITIAL";
+        }
+    },
+
+// alias for begin(condition)
+pushState:function pushState (condition) {
+        this.begin(condition);
+    },
+
+// return the number of states currently on the stack
+stateStackSize:function stateStackSize() {
+        return this.conditionStack.length;
+    },
+options: {"case-insensitive":true},
+performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
+var YYSTATE=YY_START;
+switch($avoiding_name_collisions) {
+case 0:/* skip whitespace */
+break;
+case 1:return 114;
+break;
+case 2:// comentario simple línea
+break;
+case 3:// comentario multiple líneas
+break;
+case 4:return 52
+break;
+case 5:return 39
+break;
+case 6:return 'CARACTER_LITERAL'
+break;
+case 7:return 131;
+break;
+case 8:return 130;
+break;
+case 9:return 132;
+break;
+case 10:return 133;
+break;
+case 11:return 135;
+break;
+case 12:return 134;
+break;
+case 13:return 137;
+break;
+case 14:return 136;
+break;
+case 15:return 138;
+break;
+case 16:return 139;
+break;
+case 17:return 141;
+break;
+case 18:return 140;
+break;
+case 19:return 142;
+break;
+case 20:return 125;
+break;
+case 21:return 126;
+break;
+case 22:return 120;
+break;
+case 23:return 119;
+break;
+case 24:return 92;
+break;
+case 25:return 91;
+break;
+case 26:return 88;
+break;
+case 27:return 89;
+break;
+case 28:return 90;
+break;
+case 29:return 45;
+break;
+case 30:return 28;
+break;
+case 31:return 'comillas';
+break;
+case 32:return 16;
+break;
+case 33:return 100;
+break;
+case 34:return 101;
+break;
+case 35:return 10;
+break;
+case 36:return 14;
+break;
+case 37:return 38;
+break;
+case 38:return 'equal';
+break;
+case 39:return 99;
+break;
+case 40:return 63;
+break;
+case 41:return 81;
+break;
+case 42:return 83;
+break;
+case 43:return 'not';
+break;
+case 44:return 41;
+break;
+case 45:return 46;
+break;
+case 46:return 68;
+break;
+case 47:return 77;
+break;
+case 48:return 70;
+break;
+case 49:return 71;
+break;
+case 50:return 95
+break;
+case 51:return 96
+break;
+case 52:return 31
+break;
+case 53:return 97
+break;
+case 54:return 32
+break;
+case 55:return 98
+break;
+case 56:return 60
+break;
+case 57:return 53
+break;
+case 58:return 75
+break;
+case 59:return 76
+break;
+case 60:return 33
+break;
+case 61:return 34
+break;
+case 62:return 35
+break;
+case 63:return 24;
+break;
+case 64:return 43;
+break;
+case 65:return 30;
+break;
+case 66:return 79;
+break;
+case 67:return 80;
+break;
+case 68:return 121;
+break;
+case 69:return 122;
+break;
+case 70:return 25;
+break;
+case 71:return 27;
+break;
+case 72:return 123;
+break;
+case 73:return 81;
+break;
+case 74:return 109;
+break;
+case 75:return 51;
+break;
+case 76:return 54;
+break;
+case 77:return 127;
+break;
+case 78:return 'IntegerLiteral';
+break;
+case 79:return 'string';
+break;
+case 80:return 11;
+break;
+case 81:return 13;
+break;
+case 82:return 115
+break;
+case 83:return 23
+break;
+case 84:return 22;
+break;
+case 85:return 5
+break;
+case 86:return 'INVALID'
+break;
+}
+},
+rules: [/^(?:\s+)/i,/^(?:\/\/)/i,/^(?:\/\/.*)/i,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/i,/^(?:([0-9]+(\.[0-9]+)?))/i,/^(?:(("(\\"|[^"]|\n)*")))/i,/^(?:(('[^']*')))/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:text\b)/i,/^(?:node\b)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\$)/i,/^(?:&)/i,/^(?:")/i,/^(?:<\/)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:==)/i,/^(?:!=)/i,/^(?::=)/i,/^(?:and\b)/i,/^(?:or\b)/i,/^(?:!)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:where\b)/i,/^(?:return\b)/i,/^(?:order\b)/i,/^(?:by\b)/i,/^(?:eq\b)/i,/^(?:ne\b)/i,/^(?:lt\b)/i,/^(?:le\b)/i,/^(?:gt\b)/i,/^(?:ge\b)/i,/^(?:let\b)/i,/^(?:to\b)/i,/^(?:ascending\b)/i,/^(?:descending\b)/i,/^(?:amp\b)/i,/^(?:quot\b)/i,/^(?:apos\b)/i,/^(?::)/i,/^(?:,)/i,/^(?:;)/i,/^(?:then\b)/i,/^(?:else\b)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\{)/i,/^(?:\})/i,/^(?:@)/i,/^(?:&&)/i,/^(?:\|)/i,/^(?:\()/i,/^(?:\))/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:"[^\"]*")/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:\/)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_!@#$%+^'`"*()/¡:;.,~-¤Ã-])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86],"inclusive":true}}
+});
+return lexer;
+})();
+parser.lexer = lexer;
+function Parser () {
+  this.yy = {};
+}
+Parser.prototype = parser;parser.Parser = Parser;
+return new Parser;
+})();
+
+
+if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+exports.parser = xpathGramatica;
+exports.Parser = xpathGramatica.Parser;
+exports.parse = function () { return xpathGramatica.parse.apply(xpathGramatica, arguments); };
+exports.main = function commonjsMain (args) {
+    if (!args[1]) {
+        console.log('Usage: '+args[0]+' FILE');
+        process.exit(1);
     }
+    var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+    return exports.parser.parse(source);
+};
+if (typeof module !== 'undefined' && require.main === module) {
+  exports.main(process.argv.slice(1));
+}
+}
