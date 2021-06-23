@@ -23,13 +23,14 @@ import { reporteTabla } from 'src/app/Backend/XML/Analizador/Reportes/reporteTab
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
-
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import { ViewChild } from '@angular/core';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
-export let Ambito:String;
+export let Ambito: String;
+export let Ambito2: String;
+export let tabsim: Map<String, String>
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -56,7 +57,7 @@ export class ContenidoInicioComponent implements OnInit {
   codeMirrorOptions2: any = {
     theme: '3024-night',
     mode: 'application/typescript',
-    readOnly:true,
+    readOnly: true,
     lineNumbers: true,
     lineWrapping: true,
     foldGutter: false,
@@ -68,21 +69,21 @@ export class ContenidoInicioComponent implements OnInit {
   };
   constructor(private inicioSrv: InicioService, private dialog: MatDialog) {
     this.code = 'asd';
-    
+
   }
   tablaGlobal: tablaSimbolos = new tablaSimbolos();
   code = '';
   contenido = '';
   ngOnInit(): void {
     console.log(document.querySelector('#codigo'))
-   /* var editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
-      mode: "javascript",
-      lineNumbers: true,
-  });
-  editor.save()*/
+    /* var editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
+       mode: "javascript",
+       lineNumbers: true,
+   });
+   editor.save()*/
   }
   ngAfterViewInit(): void {
-    
+
     this.editor.getEditor().setOptions({
       showLineNumbers: true,
       tabSize: 2
@@ -142,8 +143,7 @@ export class ContenidoInicioComponent implements OnInit {
       for (let i of Tree.getinstrucciones()) {
         if (i instanceof Objeto) {
           var objetito = i.interpretar(Tree, this.tablaGlobal); //retorna simbolo
-          this.tablaGlobal.setVariable(objetito);
-          //Tree.getFuncion(objetito);
+          //this.tablaGlobal.setVariable(objetito)
         }
       }
       console.log(this.tablaGlobal);
@@ -153,116 +153,62 @@ export class ContenidoInicioComponent implements OnInit {
      ************************* MANEJO DE CODIGO 3 DIRECCIONES ASCENDENTE *******************************
      * *************************************************************************************************
     */
-   
-    var contenidocd3="#include <stdio.h>\n#include<math.h>\n"
-    
-    Tree.codigo3d.push("int main(){\n");
-     
 
-    for (let i of Tree.getinstrucciones()) {
-      if (i instanceof Objeto) {
-        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
-        this.tablaGlobal.setVariable(lista);
+      var contenidocd3 = "#include <stdio.h>\n#include<math.h>\n"
+
+      Tree.codigo3d.push("int main(){\n");
+
+
+      for (let i of Tree.getinstrucciones()) {
+        if (i instanceof Objeto) {
+          var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
+          this.tablaGlobal.setVariable(lista);
+        }
       }
-    }
-    //ES VARIABLES AL INICIO
-    for (let x = 0; x < Tree.contadort; x++) {
-      if(x==0){contenidocd3=contenidocd3+"double "}
-      else if(x%20==0){contenidocd3=contenidocd3+"\n"}
-     contenidocd3=contenidocd3+"t"+x;
-     if(Tree.contadort-1!==x){contenidocd3=contenidocd3+","}
+      //ES VARIABLES AL INICIO
+      for (let x = 0; x < Tree.contadort; x++) {
+        if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+        else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+        contenidocd3 = contenidocd3 + "t" + x;
+        if (Tree.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
 
-    }
-    if( Tree.contadort!==0){contenidocd3=contenidocd3+";\n"}
-    Tree.Encabezadocodigo3d.forEach(element => {
-      contenidocd3+=element+"\n"
-    });
-    //ITERA PARA EL CONTENIDO DEL MAIN
-    Tree.codigo3d.forEach(element => {
-      contenidocd3+=element+"\n"
-    });
-    contenidocd3+="return 1;\n}"
-    this.mostrarContenido(contenidocd3, 'cdirecciones');
+      }
+      if (Tree.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
+      Tree.Encabezadocodigo3d.forEach(element => {
+        contenidocd3 += element + "\n"
+      });
+      //ITERA PARA EL CONTENIDO DEL MAIN
+      Tree.codigo3d.forEach(element => {
+        contenidocd3 += element + "\n"
+      });
+      contenidocd3 += "return 1;\n}"
+      this.mostrarContenido(contenidocd3, 'cdirecciones');
 
-      
+
       /* **********************L L E N A D O    T A B L A    D E    S I M B O L O S************************* */
-
-      Ambito="Global"
+      Ambito = "Global"
+      tabsim = new Map<String, String>();
       for (var key of this.tablaGlobal.tablaActual) {
-        var entorno= Ambito
-        var listaobjetitos = "";
-        var contenido = "";
-        var tipo = "";
-        var posicion = ""; //stack y heap
-        var linea = key.getLinea();
-        var columna = key.getColumna();
-        var nombre = key.getidentificador();
-        var atri = key.getAtributo();
-        var cd3direcciones= key.setcd3Value()
-
-
-       /* if(nombre!=null){
-          let objetos = key.getvalor();
-        if (objetos instanceof tablaSimbolos) {
-          for (var key3 of objetos.tablaActual) {
-            listaobjetitos += `${key3.}, `
-            if(listaobjetitos!=null){
-              entorno=listaobjetitos;
-              console.log(entorno);
-            }
-          }
-        }*/
-
-
-        /*for (var [key2, value2,] of key.getAtributo()) {
-          nombre = key.getidentificador();
-          if (key.getAtributo() != null) {
-            nombre = nombre;
+        if (key.getAtributo().size != 0) {
+          for (var [key2, value2,] of key.getAtributo()) {
             atributos += ` ${key2}=>${value2}, `;
-            if (nombre != null) {
-              if (nombre == key.getidentificador()) {
-                nombre += atributos;
-              } else {
-                nombre = atributos;
-              }
-            }
+            var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
+            Tree.listaSimbolos.push(Reporte);
           }
-        }*/
-
-        let idEntorno=key.getidentificador();
-        
-        let objetos = key.getvalor();
-        if (objetos instanceof tablaSimbolos) {
-          for (var key3 of objetos.tablaActual) {
-            listaobjetitos += `${key3.getidentificador()}, `
-            if(listaobjetitos!=null){
-            
-              Ambito=nombre
-            }else{
-              Ambito=key3.getidentificador()
-            }
-          }
-
-          this.llenarTablaSimbolos(objetos, Tree);
-
-        } else {
-          contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         }
-        if (key.gettipo().getTipo() == 1) {
-          tipo = "Objeto";
+
+        if (key.getvalor() instanceof tablaSimbolos) {
+          var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+          Tree.listaSimbolos.push(Reporte);
+          tabsim.set(Ambito, key.getidentificador())
+          Ambito = key.getidentificador();
+
+          this.ReportSimbolos(key.getvalor(), Tree)
         } else {
-          tipo = "Atributo";
+          var Reporte = new reporteTabla(key.getidentificador(), "Objeto", key.getidentificador(), key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
+          Tree.listaSimbolos.push(Reporte);
         }
-        
-          var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
-        
-
-
-        var Reporte = new reporteTabla(nombre, tipo,entorno, contenido, linea, columna, cd3direcciones);
-        Tree.listaSimbolos.push(Reporte);
       }
-
-      // TERMINA FOR 
 
 
       var init = new nodoAST("RAIZ");
@@ -314,73 +260,47 @@ export class ContenidoInicioComponent implements OnInit {
       localStorage.setItem("errores", errores);
     }
 
-    
+
   }
-
-  llenarTablaSimbolos(t: tablaSimbolos, tri: Arbol) {
-
-    for (var key of t.tablaActual) {
-      var atributos = "";
-
-      var entorno = Ambito;
-      var listaobjetitos = "";
-      var contenido = "";
-      var tipo = "";
-      var linea = key.getLinea();
-      var columna = key.getColumna();
-      var nombre = key.getidentificador();
-      var cd3direcciones= key.setcd3Value();
-
-      /*for (var [key2, value2,] of key.getAtributo()) {
-        nombre = key.getidentificador();
-        if (key.getAtributo() != null) {
-          atributos+=` ${key2} => ${value2}, `; 
-         // break;
+  ReportSimbolos(tablaGlobal: tablaSimbolos, Tree: Arbol) {
+    for (var key of tablaGlobal.tablaActual) {
+      if (key.getAtributo().size != 0) {
+        for (var [key2, value2,] of key.getAtributo()) {
+          var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
+          Tree.listaSimbolos.push(Reporte);
         }
+      }
+      if (key.getvalor() instanceof tablaSimbolos) {
+        if (Ambito === key.getidentificador().toString()) {
+          for (var [key2, value2,] of tabsim) {
 
-      }*/
-      let objetos = key.getvalor();
-      if (objetos instanceof tablaSimbolos) {
-        for (var key3 of objetos.tablaActual) {
-          listaobjetitos += `${key3.getidentificador()}, `
-          if(listaobjetitos!=null){
+            if (value2 === key.getidentificador()) {
+              Ambito = key2
+            }
 
-            
-            Ambito=nombre
-            
-            //entorno=listaobjetitos;
-           // console.log(entorno);
-          }else{
-            console.log("ENTRA AL ELSE")
-            Ambito=key3.getidentificador()
           }
         }
-        
-        Ambito=nombre
-        listaobjetitos=""
-        this.llenarTablaSimbolos(objetos, tri);
+        var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+        Tree.listaSimbolos.push(Reporte);
+       
+          for (var [key2, value2,] of tabsim) {
+            if (Ambito != key.getidentificador().toString()) {
+              if (key2 === Ambito && value2 === key.getidentificador()) {
+                Ambito = value2
+              } else {
+                tabsim.set(Ambito, key.getidentificador())
+                Ambito = key.getidentificador();
+              }
+
+            }
+          }
+        this.ReportSimbolos(key.getvalor(), Tree)
       } else {
-        contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
-        
-  
-
+        var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
+        Tree.listaSimbolos.push(Reporte);
       }
-      if (key.gettipo().getTipo() == 1) {
-        tipo = "Objeto";
-      } else {
-        tipo = "Atributo";
-      }
-     
-      
-
-      var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, cd3direcciones);
-
-      tri.listaSimbolos.push(Reporte);
-
     }
   }
-
-  
 
 
   /*A R B O L  D E S C E N D E N T E */
@@ -414,6 +334,41 @@ export class ContenidoInicioComponent implements OnInit {
 
     let sim_string = JSON.stringify(init2);
     localStorage.setItem("simbolos1", sim_string);
+
+    /***************************************************************************************************
+     ************************* MANEJO DE CODIGO 3 DIRECCIONES DESCENDENTE ******************************
+     * *************************************************************************************************
+    */
+
+    var contenidocd3 = "#include <stdio.h>\n#include<math.h>\n"
+
+    Tree.codigo3d.push("int main(){\n");
+
+
+    for (let i of Tree.getinstrucciones()) {
+      if (i instanceof Objeto) {
+        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
+        this.tablaGlobal.setVariable(lista);
+      }
+    }
+    //ES VARIABLES AL INICIO
+    for (let x = 0; x < Tree.contadort; x++) {
+      if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+      else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+      contenidocd3 = contenidocd3 + "t" + x;
+      if (Tree.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
+
+    }
+    if (Tree.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
+    Tree.Encabezadocodigo3d.forEach(element => {
+      contenidocd3 += element + "\n"
+    });
+    //ITERA PARA EL CONTENIDO DEL MAIN
+    Tree.codigo3d.forEach(element => {
+      contenidocd3 += element + "\n"
+    });
+    contenidocd3 += "return 1;\n}"
+    this.mostrarContenido(contenidocd3, 'cdirecciones');
     const gramat = GramaticalDes;
     const gramar = gramat.parse(texto);
     localStorage.setItem("gramatica1", gramar);

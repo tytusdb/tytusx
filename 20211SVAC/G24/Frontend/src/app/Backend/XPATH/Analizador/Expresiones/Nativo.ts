@@ -32,4 +32,7 @@ export default class Nativo extends Instruccion {
     }
     return this.valor;
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }
