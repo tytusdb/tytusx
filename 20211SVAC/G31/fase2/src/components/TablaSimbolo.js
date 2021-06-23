@@ -21,6 +21,7 @@ export default class TablaSimbolo extends React.Component {
             <th>Tipo</th>
             <th>Valor</th>
             <th>Ambito</th> 
+            <th>Posición</th>
             <th>Fila</th> 
             <th>Columna</th> 
           </tr> 
@@ -33,6 +34,7 @@ export default class TablaSimbolo extends React.Component {
                 <td>{item.tipo}</td>
                 <td>{item.valor}</td>
                 <td>{item.ambito}</td>
+                <td>{item.posicion}</td>
                 <td>{item.fila}</td>
                 <td>{item.columna}</td>
               </tr>

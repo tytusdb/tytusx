@@ -459,14 +459,41 @@ SENTENCIA: tk_let tk_idflower tk_dospuntosigual EXPRESION_LOGICAX {  nodoaux = n
                                                                      nodoaux.agregarHijo($4[1]);
                                                                      $$ = [null,nodoaux]; }
 
-        | tk_where tk_idflower tk_slash EXPRESION_LOGICAX  { sentenciaAux = new Sentencia(TipoSentencia.WHERE, $4[0], @1.first_line, @1.first_column);
-                                        $$ = [sentenciaAux,$4[1]]; }
+        | tk_where tk_idflower tk_slash EXPRESION_LOGICAX  { 
+                                        nodoaux = new NodoArbol("Where","");
+                                        nodoaux.agregarHijo($4[1]);
+                                        sentenciaAux = new Sentencia(TipoSentencia.WHERE, $4[0], @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
 
-        | tk_order tk_by tk_idflower tk_slash EXPRESION_LOGICAX {    sentenciaAux = new Sentencia(TipoSentencia.ORDERBY, $5[0], @1.first_line, @1.first_column);
-                                                $$ = [sentenciaAux,$5[1]]; }
+        | tk_order tk_by tk_idflower tk_slash tk_identificador {    
+                                        nodoaux = new NodoArbol("OrderBy","");
+                                        nodoaux.agregarHijo(new NodoArbol($5,""));
+                                        sentenciaAux = new Sentencia(TipoSentencia.ORDERBY_ELEMENTO, $5, @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
 
-        | tk_return tk_idflower tk_slash EXPRESION_LOGICAX {  sentenciaAux = new Sentencia(TipoSentencia.RETURN, $4[0], @1.first_line, @1.first_column);
-                              $$ = [sentenciaAux,$4[1]];  };
+        | tk_order tk_by tk_idflower tk_slash tk_arroba tk_identificador {  
+                                        nodoaux = new NodoArbol("OrderBy","");
+                                        nodoaux.agregarHijo(new NodoArbol("@"+$6,""));  
+                                        sentenciaAux = new Sentencia(TipoSentencia.ORDERBY_ATRIBUTO, $6, @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
+
+        | tk_order tk_by tk_idflower  {  
+                                        nodoaux = new NodoArbol("OrderBy","");
+                                        nodoaux.agregarHijo(new NodoArbol($3,""));  
+                                        sentenciaAux = new Sentencia(TipoSentencia.ORDERBY, $3, @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
+
+        | tk_return tk_idflower  {  
+                                nodoaux = new NodoArbol("Return","");
+                                nodoaux.agregarHijo(new NodoArbol($2,""));
+                                sentenciaAux = new Sentencia(TipoSentencia.RETURN, null, @1.first_line, @1.first_column);
+                                $$ = [sentenciaAux,nodoaux];  }
+
+        | tk_return tk_idflower tk_slash EXPRESION_LOGICAX {  
+                                nodoaux = new NodoArbol("Return","");
+                                nodoaux.agregarHijo($4[1]);
+                                sentenciaAux = new Sentencia(TipoSentencia.RETURN, $4[0], @1.first_line, @1.first_column);
+                                $$ = [sentenciaAux,nodoaux];  };
 
 
 
