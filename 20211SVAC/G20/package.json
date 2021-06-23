@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc -w",
     "gramatica": "jison ./Gramatica/gramatica_XML_ASC.jison",
-    "xmlAsc": "jison ./Gramatica/gramatica_XML_ASC.jison && mv ./gramatica_XML_ASC.js ./dist/Gramatica/",
-    "xpathAsc": "jison ./Gramatica/xpathAsc.jison && mv ./xpathAsc.js ./dist/Gramatica/",
+    "xmlAsc": "jison ./src/Gramatica/gramatica_XML_ASC.jison && mv ./gramatica_XML_ASC.js ./dist/Gramatica/",
+    "xpathAsc": "jison ./src/Gramatica/xpathAsc.jison && mv ./xpathAsc.js ./dist/Gramatica/",
     "prod": "browserify ./dist/main.js --standalone load > bundle.js"
   },
   "author": "Haroldo Pablo Arias Molina",
