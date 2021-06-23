@@ -629,6 +629,7 @@ OPCIONES_ORDER_BY
 
 OPCION_ORDER_BY
     : identificadorXquery RUTAS_QUERY
+    | identificadorXquery
 ;
 
 ESTRUCTURA_RETURN 
