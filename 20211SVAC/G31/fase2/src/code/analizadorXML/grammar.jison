@@ -119,6 +119,10 @@ ini
       grafo = new grafoCST();
       return {datos:$$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,tabla:retornoGrafo.TablaGramatica,errores:retornoErrores}
     }
+  | EOF 
+    {
+      return {datos:[],edges:[],nodes:[], tabla:[], errores:retornoErrores}
+    }
   | error 
     {
       ListaErrores.push({Error:'Error sintactico irrecuperable',tipo:"Semantico", Linea: this._$.first_line , columna: this._$.first_column}) 

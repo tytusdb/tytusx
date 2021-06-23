@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import React from 'react';
 import { parse as parseXPath } from '../code/analizadorXPath/Xpath'
 import {UnControlled as CodeMirror} from 'react-codemirror2'
+import { CD3 } from '../code/codigo3D/cd3';
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
 require('../../node_modules/codemirror/mode/xml/xml')
 require('../../node_modules/codemirror/mode/javascript/javascript')
+require('../../node_modules/codemirror/mode/clike/clike')
 
 //const XPath = require('../code/analizadorXPath/Xpath')
 const XPathDesc = require('../code/analizadorXPath/XPathDesc')
@@ -24,6 +26,7 @@ class Navigation extends React.Component{
             OutputTextarea: "",
             XMLTextarea: "",
             InputTextarea: "",
+            TraductorTextArea: "", 
             XML: {
                 tipo : '',
                 texto : '',
@@ -87,17 +90,18 @@ class Navigation extends React.Component{
 
     }
 
-    setText(){
+    setText(){  // ANALISIS ASCENDENTE XPATH 
         console.log("setText Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
-        var funcion = parseXPath(text);
+        var funcion = parseXPath(text); //XPATH 
         if(funcion.errores.length > 0)
         {
             alert("Se detectaron errores en la entrada :( Xpath")
             console.log(funcion.errores)
         }
-        var respuesta=funcion.Ejecutar(this.state.XML);
+        console.log(funcion)
+        var respuesta=funcion.Ejecutar(this.state.XML);   // donde esta esta funcion.Ejecutar   // ENTORNO  // 
         this.setState({OutputTextarea: respuesta});  
         var AST = funcion.Graficar();
         this.setState({AST:AST})
@@ -108,7 +112,7 @@ class Navigation extends React.Component{
         this.setState({TablaGramticalXPath: funcion.tablaGramatica});
     }
 
-    setTextDesc(){
+    setTextDesc(){  // DESCENDENTE XPATH 
         console.log("setTextDesc Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
@@ -145,17 +149,27 @@ class Navigation extends React.Component{
         this.setState({TablaGramatical: resultado.tabla.reverse()})
     }
  
-    actualizar(){
+    actualizar(){ // ANALIZADOR ASCENDENTE XML - Ver como guardan los datos en la tabla de simbolos para la traducción 
+        console.log('Hola')
         var x = this.state.XMLTextarea;
         var resultado = grammar.parse(x)
         if(resultado.errores.length>0)
         {
             alert("Errores en el analisis del XML")
         }
-        this.setState({XML:resultado.datos})
+        resultado.datos = this.getC3D(resultado.datos); 
+        this.setState({XML:resultado.datos}) // resultado.datos estan los objetos // this.state.XML el entorno
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
-        this.setState({Mistakes: resultado.errores})
+        this.setState({Mistakes: resultado.errores})   
         this.setState({TablaGramatical: resultado.tabla})
+    }
+
+    getC3D(xml){
+        var traducir = new CD3(); 
+        var codigo = traducir.getTraduccion(xml)
+        console.log('getCD3', codigo)
+        this.setState({TraductorTextArea: codigo.traduccion})
+        return codigo.entorno
     }
 
     handleOnChange = e => {
@@ -193,7 +207,7 @@ class Navigation extends React.Component{
         this.fileReader.readAsText(event.target.files[0]);
     }
 
-    handleFileReader = (e) => {
+    handleFileReader = (e) => {      // Tambien se ejecuta aqui con el analizador ASCENDENTE XML 
         const content = this.fileReader.result;
         console.log(content);
         this.setState({XMLTextarea: content});
@@ -204,7 +218,8 @@ class Navigation extends React.Component{
         {
             alert("Errores en el analisis del XML")
         }
-        this.setState({XML:resultado.datos})
+        resultado.datos = this.getC3D(resultado.datos);
+        this.setState({XML:resultado.datos}) // Esto es lo que se envia para ejecutar el XPATH 
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
         this.setState({Mistakes: resultado.errores})
         this.setState({TablaGramatical: resultado.tabla});
@@ -232,6 +247,7 @@ class Navigation extends React.Component{
         {
             alert("Errores en el analisis del XML")
         }
+        resultado.datos = this.getC3D(resultado.datos);
         this.setState({XML:resultado.datos})
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
         this.setState({Mistakes: resultado.errores})
@@ -309,10 +325,10 @@ class Navigation extends React.Component{
                 <div className="row">
                     <div className="col-6 block">
                         <div className="row">
-                            <div className="col-6 block"> 
+                           {/* <div className="col-6 block"> 
                                 <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.xmlDesc() }>XML Desc</button>
-                            </div>
-                            <div className="col-6 block">
+                            </div> */ }
+                            <div className="col-12 block">
                                 <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }>XML Asc</button> 
                             </div>
                         </div>
@@ -364,10 +380,32 @@ class Navigation extends React.Component{
                              placeholder="Bienvenido"
                              />
                         </div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
-
+            <div className="container">
+            <div className="row">
+                        <div className="row container">
+                            <label className="labelClass"> Traducción  </label> 
+                            <CodeMirror
+                             className="codeMirror"
+                             value = {this.state.TraductorTextArea}
+                             options={{
+                                mode: 'clike',
+                                theme: 'dracula',
+                                lineNumbers: true,
+                                styleActiveLine: true,
+                                lineWrapping: true,
+                                columnNumbers:true,
+                                foldGutter: true,
+                                gutter: true,
+                              }}
+                             //onChange={}
+                             placeholder="Bienvenido"
+                             />
+                        </div>
+                    </div>    
+            </div>
             <div className="container">
                 <div className="row">
                     <label className="labelClass">Output</label>
