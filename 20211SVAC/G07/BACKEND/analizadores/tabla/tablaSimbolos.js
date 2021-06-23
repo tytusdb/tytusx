@@ -25,17 +25,33 @@ class TablaSimbolos {
             let amb = ambitoActual.shift();
             this.simbolos.push(new Simbolo(nombre,"etiqueta " + tipo, amb, fila, col, texto));
 
+            //console.log("LA ETIQUETA", nombre, "TIENE VALOR", texto);
+
             
             //ATRIBUTOS DE LA ETIQUETA
             if (ambito['atributos']) {
-                let fila = ambito['atributos'].linea;
-                let col = ambito['atributos'].columna;
 
-                for (let key in ambito['atributos']) {
-                    if (key !== 'linea' && key !== 'tipo' && key !== 'columna' && key !== 'nodo') {
-                        this.simbolos.push(new Simbolo(key,"atributo", nombre, fila, col, ambito['atributos'][key]));
-                    }
-                }
+                let arrayAtributos = ambito['atributos'];
+
+                arrayAtributos.forEach(atributo => {
+                    let filaAtributo = atributo.linea;
+                    let colAtributo = atributo.columna;
+                    let nombreAtributo = atributo.nombreAtributo;
+                    let valorAtributo = atributo.valorAtributo;
+                    let ambitoAtributo = nombre;
+                    let tipoAtributo = "atributo";
+
+                    this.simbolos.push(new Simbolo(nombreAtributo, tipoAtributo, ambitoAtributo, filaAtributo, colAtributo, valorAtributo));
+                });
+
+                // let fila = ambito['atributos'].linea;
+                // let col = ambito['atributos'].columna;
+
+                // for (let key in ambito['atributos']) {
+                //     if (key !== 'linea' && key !== 'tipo' && key !== 'columna' && key !== 'nodo') {
+                //         this.simbolos.push(new Simbolo(key,"atributo", nombre, fila, col, ambito['atributos'][key]));
+                //     }
+                // }
             }   
 
             // VERIFICANDO LOS HIJOS

@@ -205,7 +205,7 @@ ETIQUETA_UNICA
         $$ = {}
         $$["etiqueta"] = $2;
         $$["tipo"] = "unica";
-        $$["atributos"] = $3;
+        $$["atributos"] = $3['atributos'];
         $$["linea"] = @2.first_line;
         $$["columna"] = @2.first_column;    
 
@@ -231,7 +231,7 @@ APERTURA
         $$ = {}
         $$["etiqueta"] = $2;
         $$["tipo"] = "completa";
-        $$["atributos"] = $3;
+        $$["atributos"] = [];
         $$["linea"] = @2.first_line;
         $$["columna"] = @2.first_column;
 
@@ -241,6 +241,7 @@ APERTURA
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $2));
 
         if($3) {
+            $$['atributos'] = $3['atributos'];
             nodoPadre.agregarHijo($3['nodo']);
         } 
 
@@ -268,12 +269,17 @@ ATRIBUTOS
         }
 
         // GUARDAR LOS DATOS
-        if ($2) {
-            for(let key in $2) {
-                $1[key] = $2[key];
-            }
+        $$ = {
+            'atributos': [$1]
         }
-        $$ = $1;
+
+        if ($2) {
+            console.log('Iterar', $2['atributos']);
+            $2['atributos'].forEach(atributo => {
+                $$['atributos'].push(atributo);
+                console.log(atributo);
+            });
+        }
 
         // ALMACENANDO EL NODO
         $$['nodo'] = nodoPadre;
