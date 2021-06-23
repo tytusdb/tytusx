@@ -1,105 +1,3 @@
-let tabs_ = Array.from(document.querySelectorAll(".tab"));
-let panels = Array.from(document.querySelectorAll(".panel"));
-let editors = [];
-
-// EDITOR INICIAL
-
-editors.push(document.getElementById("editor"));
-
-// ELIMINAR LA CLASE ACTIVE
-function removeActive() {
-  tabs_.map((tab) => tab.classList.remove("active"));
-  panels.map((panel) => panel.classList.remove("active"));
-}
-
-// EVENTO PARA DETECTAR LA PESTAÑA SELECCIONADA
-document.getElementById("tabs").addEventListener("click", (event) => {
-  if (event.target.classList.contains("tab")) {
-    let i = tabs_.indexOf(event.target);
-    removeActive();
-    tabs_[i].classList.add("active");
-    panels[i].classList.add("active");
-  }
-});
-
-// FUNCION PARA CREAR UN ARCHIVO NUEVO DENTRO DEL EDITOR
-function nuevoArchivo(nombreTab = "new.XPath", contenido = "") {
-  removeActive();
-
-  let li = document.createElement("li");
-  li.className = "tab active";
-  li.innerHTML = nombreTab;
-
-  let div = document.createElement("div");
-  div.className = "panel active";
-
-  let txtArea = document.createElement("textarea");
-  txtArea.className = "editor";
-  txtArea.value = contenido;
-
-  div.appendChild(txtArea);
-
-  tabs_.push(li);
-  panels.push(div);
-  document.getElementById("tabs").appendChild(li);
-  document.getElementById("panels").appendChild(div);
-}
-
-// EVENTO QUE CREA EL NUEVO DOCUMENTO EN BLANCO
-document.getElementById("nuevoDoc").addEventListener("click", () => {
-  nuevoArchivo();
-});
-
-// EVENTO QUE CIERRA LAS PESTAÑAS
-document.getElementById("cerrarDoc").addEventListener("click", () => {
-  let i = tabs_.findIndex((tab) => tab.classList.contains("active"));
-  let tab = tabs_[i];
-  let panel = panels[i];
-
-  tab.parentNode.removeChild(tab);
-  panel.parentNode.removeChild(panel);
-
-  tabs_.splice(i, 1);
-  panels.splice(i, 1);
-
-  if (tabs_.length > 0) {
-    tabs_[0].classList.add("active");
-    panels[0].classList.add("active");
-  }
-});
-
-// EVENTO QUE GUARDA EL DOCUMENTO QUE SE TIENE EN EL EDITOR
-document.getElementById("guardarDoc").addEventListener("click", () => {
-  let i = tabs_.findIndex((tab) => tab.classList.contains("active"));
-  let ed = editors[i];
-
-  let blob = new Blob([ed.getValue()], { type: "text/plain" });
-  let url = window.URL.createObjectURL(blob);
-  let a = document.createElement("a");
-  a.href = url;
-  a.download = tabs_[i].textContent;
-  a.click();
-});
-
-// EVENTO QUE ABRE UN DOCUMENTO DEL EQUIPO
-document.getElementById("abrirDoc").addEventListener("click", () => {
-  let archivo = document.getElementById("fileInput").click();
-});
-
-// FUNCION PARA ABRIR EL ARCHIVO SELECCIONADO DEL EQUIPO
-function abrirArchivo(archivos) {
-  let archivo = archivos.files[0];
-  let lector = new FileReader();
-  lector.onload = (e) => {
-    let contents = e.target.result;
-    nuevoArchivo(archivo.name, contents);
-  };
-  lector.readAsText(archivo);
-  archivo.clear;
-
-  document.getElementById("fileInput").value = "";
-}
-
 // BOTONES PARA ANALIZAR
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
@@ -349,12 +247,15 @@ else <antiguo>{data($x/year)}</antiguo>
 
 
 editorXQUERY.value=XQuery;
+
 editorXML.value = textoEntrada;
 let consolaC3D = document.getElementById('consola3D');
 
 
 // Analizar la entrada XML al hacer CLICK al boton
 botonCargar.addEventListener("click", () => {
+    alert("Ejecutando XML Descendente");
+
     tipoAnalizadorXML = "Descendente";
 
     // Analizador XML por la izquierda
@@ -373,11 +274,11 @@ botonCargar.addEventListener("click", () => {
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
 
-    // Mostrar el C3D Traducido
-    consolaC3D.value = traductorC3D.obtenerCodigo();
 })
 
 botonCargar2.addEventListener("click", () => {
+  alert("Ejecutando XML Ascendente");
+
   tipoAnalizadorXML = "Ascendente";
 
   // Analizador XML por la izquierda
@@ -394,8 +295,6 @@ botonCargar2.addEventListener("click", () => {
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
 
-  // Mostrar el C3D Traducido
-  consolaC3D.value = traductorC3D.obtenerCodigo();
 
 
 })
@@ -599,22 +498,15 @@ function analizar_xpath() {
  * CONSOLA 3D
  * ******************************************************
  */
-
+let boton3D = document.getElementById('btn3d');
     
 
-btn3d.addEventListener("click", () => {
+boton3D.addEventListener("click", () => {
 
-  console.log("Codigo en 3D");
-  //consola3D.value=Encabezado3D;
-  let AST_xquery=grammar.parse(document.getElementById("consola3D").value);//Decendente
-  console.log(AST_xquery);
-  // Se activa el modal
-  
-  activarModal();
-
-  // Generar el arbol con Treant JS
- 
-  graficarArbol(AST_xquery);
+  // Mostrar el C3D Traducido
+  if (tablaSimbolos.length > 0) {
+    consolaC3D.value = traductorC3D.obtenerCodigo();
+  }
 
 })
 
