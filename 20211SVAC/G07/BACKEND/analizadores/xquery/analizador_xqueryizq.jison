@@ -103,8 +103,8 @@
 "position"             %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_position';%}
 "text"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_text';%}
 "upper-case"           %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_upper';%}
-
-
+"lower-case"           %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_lower';%}
+"substring"            %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_substring';%}
 
 // SIMBOLOS
 ":="                   %{ listaTokens.push(new Token("ComparacionLet", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_let_igual';%}
@@ -175,6 +175,8 @@ XQUERYGRA
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
         |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
         |F_UPPER                                                                        {$$={instr:"F_UPPER",valor:$1};}
+        |F_LOWER                                                                        {$$={instr:"F_LOWER",valor:$1};}   
+        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};}                       
         
 ;
 FOR_IN
@@ -290,6 +292,13 @@ F_DATA
 ;
 F_UPPER
         :tk_upper tk_parentesis_izq CONS tk_parentesis_der                              {$$=$3;}
+;
+F_LOWER
+        :tk_lower tk_parentesis_izq CONS tk_parentesis_der                              {$$=$3;}
+;
+F_SUBSTRING
+        :tk_substring tk_parentesis_izq CONS tk_coma tk_numero tk_parentesis_der                          {$$={valor:$3,inicio:$5,fin:null};}
+        |tk_substring tk_parentesis_izq CONS tk_coma tk_numero tk_coma tk_numero tk_parentesis_der        {$$={valor:$3,inicio:$5,fin:$7};}
 ;
 CONS
         :VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}

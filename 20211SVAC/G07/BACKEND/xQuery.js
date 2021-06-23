@@ -23,6 +23,10 @@ function getConsultaXQuery(instruccion, entorno,padre){
             return ejecutarData(instruccion.valor,entorno,padre);
         case "F_UPPER":
             return ejecutarUpper(instruccion.valor,entorno,padre);
+        case "F_LOWER":
+            return ejecutarLower(instruccion.valor,entorno,padre);
+        case "F_SUBSTRING":
+            return ejecutarSubstring(instruccion.valor,entorno,padre);
         default:
             return null
     }
@@ -269,13 +273,18 @@ function imprimirEntorno(entorno){
 
     let contenido="";
     let atributo;
+    let arregloAtributo=[];
         if (entorno.atributos) {
-          atributo = {
-            etiqueta: entorno.atributos.nombreAtributo,
-            valor: entorno.atributos.valorAtributo,
-          };
+          for (const atr of entorno.atributos) {
+            
+            atributo = {
+                etiqueta: atr.nombreAtributo,
+                valor: atr.valorAtributo,
+              };
+            arregloAtributo.unshift(atributo);
+          }
         } else {
-          atributo = "";
+            arregloAtributo = [];
         }
     for (const iterator of entorno.hijos) {
         contenido += imprimirEntorno(iterator);
@@ -284,7 +293,7 @@ function imprimirEntorno(entorno){
         entorno.etiqueta,
         entorno.texto,
         contenido,
-        atributo
+        arregloAtributo
       ); //nombre,texto,contenido
       if (retorno) {
         return retorno.obtenerXML();
@@ -374,6 +383,26 @@ function ejecutarUpper(instruccion,entorno,padre){
     
     if(res){
         return  res.toUpperCase();
+    }
+    return  null;
+}
+function ejecutarLower(instruccion,entorno,padre){
+    let res=ejecutarLLamada(instruccion,entorno,entorno);
+    
+    if(res){
+        return  res.toLowerCase();
+    }
+    return  null;
+}
+
+function ejecutarSubstring(instruccion,entorno,padre){
+    let res=ejecutarLLamada(instruccion.valor,entorno,entorno);
+    console.log(instruccion);
+    if(res){
+        if(instruccion.fin){
+            return  res.substring(instruccion.inicio,instruccion.fin);
+        }
+        return  res.substring(instruccion.inicio,res.length);
     }
     return  null;
 }
