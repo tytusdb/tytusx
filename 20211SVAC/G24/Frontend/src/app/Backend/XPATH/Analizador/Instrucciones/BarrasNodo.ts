@@ -133,42 +133,92 @@ export default class BarrasNodo extends Instruccion {
     }
 
   }
-  //localStorage.setItem("consulta", this.contenido);
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    let variable = this.Operacion.codigo3D(arbol, tabla);
+    console.log(this.Operacion)
+    //if (variable != null) {
+    if (this.Barra2 == null) {
+      console.log("Aqui esta el arbol");
+      let salidas = new tablaSimbolos();
+      let cadena = ''
+      let error = ''
 
-  /*} else {
-    return new NodoErrores(
-      'SEMANTICO',
-      'VARIABLE ' + this.Operacion + ' NO EXISTE',
-      this.fila,
-      this.columna
-    );
-  }*/
-
-
-  buscarTablaSimbolos(t: tablaSimbolos, tri: Arbol): string {
-    for (var key of t.tablaActual) {
-      //alert(key + " = " + value);
-      var listaobjetitos = "";
-      var nombre = key.getidentificador();
-
-      let objetos = key.getvalor();
-      if (objetos instanceof tablaSimbolos) {
-        for (var key3 of objetos.tablaActual) {
-          listaobjetitos += `${key3.getidentificador()}, `
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          console.log(this.Operacion.cadena)
+          return this.Operacion.cadena
         }
-
-        this.buscarTablaSimbolos(objetos, tri);
-
+        return variable
+      }else if(this.Operacion instanceof Aritmetica){
+        
       } else {
-        this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          } else {
+            error = "Nodo no encontrado ";
+            console.log(error);
+          }
+
+        }
+        if (cadena != '') {
+          return cadena
+        } else if (error != '') {
+          return error
+        }
+        console.log("OBJETOSSALIDA")
+        console.log(salidas)
+        return salidas
+
       }
 
+    } else {
+      console.log("entro doble barra")
+      //DOBLE BARRA
+      let salidas = new tablaSimbolos();
+      let cadena = ''
 
+      /**ESTE SERVIRIA CUANDO ES TRIPO ATRIBUTO SIMPLE */
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          return this.Operacion.cadena
+        }
+        return variable
+      } else {
+
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          console.log("OBJETOSSALIDA")
+          console.log(salidas)
+          return salidas
+        }
+      }
     }
-    return this.contenido;
-    console.log(this.contenido);
-    localStorage.setItem("consulta", this.contenido);
-
   }
 
 

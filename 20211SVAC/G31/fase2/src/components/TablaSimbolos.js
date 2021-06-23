@@ -1,15 +1,15 @@
 import logo from '../logo.svg';
 import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
-import TablaSimbolo from './TablaSimbolo'
-
+import TablaSimbolo from './TablaSimbolo'; 
+import { CD3 } from '../code/codigo3D/cd3';
 
 class TablaSimbolos extends React.Component{
 
     constructor(props){
         super(props);
         this.XML = this.props.location.XML;
-        console.log(this.XML);
+        console.log('XML', this.XML);
 
         this.table = [];
         this.readSimbols(this.XML);
@@ -23,12 +23,13 @@ class TablaSimbolos extends React.Component{
         if(entActual == "/"){
             entActual = "global";
         }
-
+/*
         //Etiquetas
         this.table.push({nombre: "NombreEtiqueta",
         tipo: "Cadena",
         valor: entActual,
         ambito: entActual,
+        posicion: ent.posicion, 
         fila: ent.linea,
         columna: ent.columna
         });
@@ -39,10 +40,11 @@ class TablaSimbolos extends React.Component{
             tipo: "Cadena",
             valor: ent.texto,
             ambito: entActual,
+            posicion: ent.posicion, 
             fila: ent.linea,
             columna: ent.columna
             });
-        }
+        }*/
         
         //para cada atributo
         for (const atributo of ent.atributos) {
@@ -52,6 +54,7 @@ class TablaSimbolos extends React.Component{
                 tipo: "Atributo",
                 valor: atributo.valor,
                 ambito: entActual,
+                posicion: atributo.posicion, 
                 fila: atributo.linea,
                 columna: atributo.columna
             });   
@@ -62,9 +65,10 @@ class TablaSimbolos extends React.Component{
 
             this.table.push({
                 nombre: hijo.tipo,
-                tipo: "Etiqueta",
-                valor: "Object",
+                tipo: "Objeto",
+                valor: hijo.texto,
                 ambito: entActual,
+                posicion: hijo.posicion, 
                 fila: hijo.linea,
                 columna: hijo.columna
             });  
@@ -73,7 +77,6 @@ class TablaSimbolos extends React.Component{
         }
 
     }
-
 
     render(){
         return(
@@ -116,8 +119,8 @@ class TablaSimbolos extends React.Component{
             <div className="text-center p-3 text-light ">
                 <font size="3">
                 <p>
-                Grupo 17 <br/>
-                Jorge Ambrocio - Marcelo Marroquín - Viany Juárez<br/>
+                Grupo 31 <br/>
+                Jacqueline Mendéz - Stefany Coromac <br/>
                 Organización de Lenguajes y Compiladores 2<br/>
                 Escuela de Vacaciones Junio 2021<br/>                
                 </p>

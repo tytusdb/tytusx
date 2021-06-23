@@ -49,18 +49,18 @@ export class Camino extends Axes
   }
 
   getValor(nodos,inicio=1)
-  {
+  { 
       var retornos = []
-      for (const nodo of nodos) 
+      for (const nodo of nodos)  // nodos son los entornos (los objetos que devuelve el arbol )
       {
         var retorno = []
         var posicion = inicio;
         if(this.tipo==TipoPath.ABS)
         {
             for (const iterator of nodo.entorno.hijos) {
-                if(iterator.tipo == this.nombre || this.nombre=="*" )
+                if(iterator.tipo == this.nombre || this.nombre=="*" ) // Que hace el asterisco 
                 {
-                    var nuevaPila = Object.assign([],nodo.pila)
+                    var nuevaPila = Object.assign([],nodo.pila)  // Que hace el Object.assign? 
                     nuevaPila.push(nodo.entorno)
                     retorno.push(new Nodo(Tipo.NODO,iterator,nuevaPila,iterator.texto,posicion,posicion))
                     posicion++
@@ -68,7 +68,7 @@ export class Camino extends Axes
             }
             retorno = Predicado(this.predicado,retorno)
         }
-        else
+        else    // Tipo.path = relativo del object CAMINO 
         {
           retorno = RecursivaCamino(nodos,this.nombre,this.predicado,posicion,1)
           retornos = concatenarNodos(retornos,retorno)

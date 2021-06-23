@@ -95,7 +95,7 @@ function CargarXML(){
                     var contador = 1;
                     resultadoXPath.forEach(function (funcion){
 
-                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaGlobal+="↓ Resultado consulta XPath "+contador+" ↓\n\n";
                         salidaRecursiva = "";
                         salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
                         //console.log(salidaXPath);
@@ -137,6 +137,24 @@ function CargarXML(){
                     //localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XQuery ↓");
                     console.log(resultadoXQuery[0]);
+
+                    salidaGlobal+="↓ Resultado consulta XQuery ↓\n\n";
+                    salidaRecursiva = "";
+                    salidaXQuery = resultadoXQuery[0].ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                    //console.log(salidaXQuery);
+                    GenerarSalidaXPath(salidaXQuery);
+
+
+                    if(salidaRecursiva!=""){
+                        salidaGlobal+= salidaRecursiva + "\n\n";
+                    } else {
+                        salidaGlobal+= "No se encontraron coincidencias para la entrada XQuery. :(\n\n";
+                    }
+
+                    //var salidaTemporal = SalidaXPath.getValue();
+
+
+                    SetSalida(salidaGlobal);
 
                 } else {                   
                     SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
@@ -416,6 +434,8 @@ function ObtenerEntornos(entorno){
     return entornoArr;
 }
 
+
+
 function EntornoYaExiste(arreglo, id){
 
     var existe = false;
@@ -523,6 +543,7 @@ function GenerarSalidaXPath(objetos){
     }
 
 }
+
 function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();
@@ -616,7 +637,7 @@ function SetearTraduccion(){
     
     `;
     
-    globalC3D += `void main(){
+    globalC3D += `int main(){
         
         //el stack pointer inicia en 2 porque en la posicion 0 guardamos el encoding
         //y la posicion 1 indicara donde termina el xml en el heap
@@ -651,7 +672,7 @@ function SetearTraduccion(){
         for(int loop = 0; loop < stack[1]; loop++){
             printf("%c", (char) heap[loop]);}
     
-        return;
+        return 0;
 
     }`;    
 
