@@ -27,7 +27,7 @@ comment ("#"[^\r\n]* [^\r\n])
 "begin"               %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_begin';%}
 "end"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_end';%}
 "call"                %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_call';%}
-"print"               %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_print';%}
+"printf"               %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_printf';%}
 "if"                  %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_if';%}
 "\"%c\""              %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_caracter';%}
 "\"%i\""              %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_entero';%}
@@ -142,7 +142,7 @@ SENTENCIA
 	$$.agregarHijo($6);
 	$$.agregarHijo(new Nodo($7,$7));
 	}
-	| tk_print tk_parent_izq TIPO_PRINT tk_parent_der tk_punto_coma
+	| tk_printf tk_parent_izq TIPO_PRINT tk_parent_der tk_punto_coma
 	{
     $$= new Nodo("SEN","SEN");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -151,7 +151,7 @@ SENTENCIA
 	$$.agregarHijo(new Nodo($4,$4));
 	$$.agregarHijo(new Nodo($5,$5));
 	}
-	| tk_print tk_parent_izq TIPO_PRINT tk_coma VALOR tk_parent_der tk_punto_coma
+	| tk_printf tk_parent_izq TIPO_PRINT tk_coma VALOR tk_parent_der tk_punto_coma
 	{
     $$= new Nodo("SEN","SEN");
 	$$.agregarHijo(new Nodo($1,$1));

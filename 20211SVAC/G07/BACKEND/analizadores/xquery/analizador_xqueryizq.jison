@@ -51,6 +51,15 @@
 "gt"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_gt';%}
 "ge"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ge';%}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//palabras reservadas para las funciones en XQUERY 
+"declare"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_declare';%}
+"function"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_function';%}
+"local:"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_local';%}
+"as"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_as';%}
+"xs:"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_xs';%}
+";"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_punto_coma';%}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
 "<html>"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_html_abre';%}
@@ -158,6 +167,7 @@
 INICIO  
         :XQUERYGRA EOF                                                                   {return $1;}  
         |HTML  EOF                                                                       {return {instr:"HTML",valor:$1};}
+        |FUNCACKERMAN EOF 
 ;
 XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
@@ -289,3 +299,56 @@ L_CONTENIDO
 COD
         :tk_llave_izq XQUERYGRA tk_llave_der                                            {$$={tipo:"COD",valor:$2};}  
 ;
+
+FUNCACKERMAN
+        : CABEZAFUNC tk_parentesis_izq LISTAFUNC tk_parentesis_der RETURNFUNC FUNCOPERACION tk_punto_coma LLAMADAFUNCION
+;
+
+CABEZAFUNC
+        : tk_declare tk_function tk_local tk_identificador
+;
+
+LISTAFUNC
+        : LISTAFUNC tk_coma LISTACONF
+        |LISTACONF
+;
+
+LISTACONF
+        : tk_dolar tk_identificador tk_as tk_xs tk_identificador
+;
+
+RETURNFUNC
+        :tk_as tk_xs tk_identificador
+;
+
+FUNCOPERACION
+        :tk_llave_izq CODIGOFUNCION tk_llave_der
+;
+
+CODIGOFUNCION
+        :XQUERYGRA
+        |
+;
+LLAMADAFUNCION
+        :LLAFCONT
+;
+
+LLAFCONT
+        :LLAFCONT L_LLAFCONT
+        |L_LLAFCONT
+        |LLAFCONT LLAD
+        |LLAD
+;
+L_LLAFCONT
+        :tk_menor tk_identificador tk_mayor                                             {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()};}
+        |tk_menor tk_diagonal tk_identificador tk_mayor                                 {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()+$4.toString()};}
+        |tk_identificador                                                               {$$={tipo:"TXT",valor:$1.toString()};}
+;
+LLAD
+        :tk_llave_izq tk_local tk_identificador tk_parentesis_izq FF tk_parentesis_der tk_llave_der                                            {$$={tipo:"COD",valor:$2};}  
+;
+FF
+        :XQUERYGRA
+        |tk_identificador tk_coma tk_identificador
+        |tk_numero tk_coma tk_numero
+; 
