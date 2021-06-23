@@ -220,7 +220,7 @@ case 13:
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
         this.$["tipo"] = "unica";
-        this.$["atributos"] = $$[$0-1]['atributos'];
+        this.$["atributos"] = [];
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;    
 
@@ -229,6 +229,7 @@ case 13:
         nodoPadre.agregarHijo(new Nodo("APERTURA", $$[$0-3]));
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $$[$0-2]));
         if ($$[$0-1]) {
+            this.$['atributos'] = $$[$0-1]['atributos'];
             nodoPadre.agregarHijo($$[$0-1]['nodo']);
         }
         nodoPadre.agregarHijo(new Nodo("CIERRE", $$[$0]));
@@ -287,10 +288,8 @@ case 15:
         }
 
         if ($$[$0]) {
-            console.log('Iterar', $$[$0]['atributos']);
             $$[$0]['atributos'].forEach(atributo => {
                 this.$['atributos'].push(atributo);
-                console.log(atributo);
             });
         }
 

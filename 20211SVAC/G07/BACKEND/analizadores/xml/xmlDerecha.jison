@@ -205,7 +205,7 @@ ETIQUETA_UNICA
         $$ = {}
         $$["etiqueta"] = $2;
         $$["tipo"] = "unica";
-        $$["atributos"] = $3['atributos'];
+        $$["atributos"] = [];
         $$["linea"] = @2.first_line;
         $$["columna"] = @2.first_column;    
 
@@ -214,6 +214,7 @@ ETIQUETA_UNICA
         nodoPadre.agregarHijo(new Nodo("APERTURA", $1));
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $2));
         if ($3) {
+            $$['atributos'] = $3['atributos'];
             nodoPadre.agregarHijo($3['nodo']);
         }
         nodoPadre.agregarHijo(new Nodo("CIERRE", $4));
@@ -274,10 +275,8 @@ ATRIBUTOS
         }
 
         if ($2) {
-            console.log('Iterar', $2['atributos']);
             $2['atributos'].forEach(atributo => {
                 $$['atributos'].push(atributo);
-                console.log(atributo);
             });
         }
 

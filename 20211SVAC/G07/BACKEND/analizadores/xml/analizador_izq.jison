@@ -222,7 +222,7 @@ ETIQUETA_UNICA
         $$ = {}
         $$["etiqueta"] = $2;
         $$["tipo"] = "unica";
-        $$["atributos"] = $3;
+        $$["atributos"] = [];
         $$["linea"] = @2.first_line;
         $$["columna"] = @2.first_column;    
 
@@ -231,6 +231,7 @@ ETIQUETA_UNICA
         nodoPadre.agregarHijo(new Nodo("APERTURA", $1));
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $2));
         if ($3) {
+            $$['atributos'] = $3['atributos'];
             nodoPadre.agregarHijo($3['nodo']);
         }
         nodoPadre.agregarHijo(new Nodo("CIERRE", $4));
@@ -249,7 +250,7 @@ APERTURA
         $$ = {}
         $$["etiqueta"] = $2;
         $$["tipo"] = "completa";
-        $$["atributos"] = $3;
+        $$["atributos"] = [];
         $$["linea"] = @2.first_line;
         $$["columna"] = @2.first_column;
 
@@ -259,6 +260,7 @@ APERTURA
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $2));
 
         if($3) {
+            $$['atributos'] = $3['atributos'];
             nodoPadre.agregarHijo($3['nodo']);
         } 
         nodoPadre.agregarHijo(new Nodo("CIERRE",$4));
@@ -272,6 +274,8 @@ APERTURA
 
         // Verificar Etiqueta
         verificarEtiquetas.push(new Token("ETIQUETA",$2 , @2.first_line, @2.first_column ));
+
+        console.log("ATRIBUTO APERT",$3);
 
     }
     |tk_abre tk_etiqueta tk_cierra {
@@ -309,18 +313,25 @@ ATRIBUTOS
         }
 
         // GUARDAR LOS DATOS
-        if ($1) {
-            for(let key in $1) {
-                $2[key] = $1[key];
-            }
+        $$ = {
+            'atributos': [$2]
         }
-        $$ = $2;
+
+        if ($1) {
+            $1['atributos'].forEach(atributo => {
+                $$['atributos'].push(atributo);
+            });
+        }
+
+
         // ALMACENANDO EL NODO
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
         gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTOS.VAL ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTOS> <ATRIBUTO>\n` + gramatical;
+
+        console.log("ATRIBUTO LIST", $$);
 
     }
     | ATRIBUTO {
@@ -329,13 +340,17 @@ ATRIBUTOS
         nodoPadre.agregarHijo($1['nodo']);
 
         // GUARDAR LOS DATOS
-        $$ = $1;
+        $$ = {
+            'atributos':  [$1]
+        };
         // ALMACENANDO EL NODO
         $$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
         gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTO>\n` + gramatical;
+
+        
     }
 ;
 
@@ -349,16 +364,21 @@ ATRIBUTO
     
         // GUARDAR LOS DATOS
         $$ = {};
-        $$[$1] = $3.replaceAll('"','');
+        $$["valorAtributo"] = $3.replaceAll('"','');
+        $$["nombreAtributo"]=$1;
         $$["tipo"] = "atributo";
         $$["linea"] = @1.first_line;
         $$["columna"] = @1.first_column;
+
+
         // ALMACENANDO EL CST
         $$["nodo"] = nodoPadre;
 
         //REPORTE GRAMATICA
         gramaticapp = `ATRIBUTO.VAL -> etiqueta.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<ATRIBUTO> := ${$1} ${$2} ${$3} \n` + gramatical;
+
+        
     }
 ;
 
