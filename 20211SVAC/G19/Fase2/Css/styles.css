@@ -1,15 +1,15 @@
 body {
-  
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-  }
-
+  background-image: url("images.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
 .editor1
 {        
 float: left; 
 margin-right: 20px;
 margin-left: 20px;
+border-radius: 4px;
 }
 
 .formato * {
@@ -19,25 +19,31 @@ margin-left: 20px;
 
 .editores
 {
-background-color: black;        
+  width: 720px;
+background-color: rgba(255, 255, 255, 0);        
 float: left; 
-margin-right: 25px;
+margin-right: 2px;
+border-radius: 4px;
 } 
 
 .consolas
 { 
+ 
   height: 100vh;
   float: left;
 }
 
 .labelConsola
 { 
-margin-top: 40px;
+margin-top: 95px;
+border-radius: 4px;
+
 }
 
 .consola
 { 
- margin-top: 25px;
+  
+ margin-top: 65px;
 }
 
 .componente
@@ -47,6 +53,7 @@ margin-right: 10px;
 margin-left: 40px;
 margin-top: 20px;
 margin-bottom: 15px;
+border-radius: 4px;
 }
 
 .componente2
@@ -56,16 +63,19 @@ margin-right: 10px;
 margin-left: 250px;
 margin-top: 30px;
 margin-bottom: 15px;
+border-radius: 4px;
 }
 
-/* Style the tab */
+
 .tab {
+  background-color: rgba(255, 255, 255, 0);  
 overflow: hidden;
 border: 1px solid #ccc;
-background-color: #f1f1f1;
+
+border-radius: 4px;
 }
 
-/* Style the buttons that are used to open the tab content */
+
 .tab button {
 background-color: inherit;
 float: left;
@@ -74,30 +84,31 @@ outline: none;
 cursor: pointer;
 padding: 14px 16px;
 transition: 0.3s;
+border-radius: 4px;
 }
 
-/* Change background color of buttons on hover */
 .tab button:hover {
 background-color: #ddd;
+border-radius: 4px;
 }
 
-/* Create an active/current tablink class */
 .tab button.active {
 background-color: #ccc;
+border-radius: 4px;
 }
 
-/* Style the tab content */
 .tabcontent {
 display: none;
-padding: 6px 25px;
+
 border: 1px solid #ccc;
 border-top: none;
+border-radius: 4px;
 } 
 
 
 
 .button1 {
-background-color: #ff0000; /* RED */
+background-color: #4de75a; 
 border: none;
 color: white;
 padding: 15px 32px;
@@ -108,11 +119,12 @@ font-size: 16px;
 width: 100%;
 margin-top: 10px;
 cursor: pointer;
+border-radius: 4px;
 
 }
 
 .button2 {
-background-color: #0076e4; /* Azul */
+background-color: #4de75a; 
 border: none;
 color: white;
 padding: 15px 32px;
@@ -123,10 +135,11 @@ font-size: 16px;
 width: 100%;
 margin-top: 10px;
 cursor: pointer;
+border-radius: 4px;
 }
 
 .button3 {
-background-color: #b3ff00; /* amarillo */
+background-color: #4de75a;
 border: none;
 color: rgb(0, 0, 0);
 padding: 15px 32px;
@@ -137,10 +150,11 @@ font-size: 16px;
 width: 100%;
 margin-top: 10px;
 cursor: pointer;
+border-radius: 4px;
 }
 
 .button4 {
-background-color: #ac00ac; /* morado */
+background-color: #4de75a; 
 border: none;
 color: white;
 padding: 15px 32px;
@@ -151,6 +165,7 @@ font-size: 16px;
 width: 100%;
 margin-top: 10px;
 cursor: pointer;
+border-radius: 4px;
 }
 
 .label {
@@ -158,24 +173,28 @@ color: white;
 padding: 8px;
 }
 
-.success {background-color: #4CAF50;} /* Green */
-.info {background-color: #2196F3;} /* Blue */
-.warning {background-color: #ff9800;} /* Orange */
-.danger {background-color: #f44336;} /* Red */
-.other {background-color: #e7e7e7; color: black;} /* Gray */
+.success {background-color: #4CAF50;} 
+.info {background-color: #4de75a;
+  font-family: Arial, monospace;
+  border-radius: 4px;} 
+.warning {background-color: #ff9800;} 
+.danger {background-color: #f44336;} 
+.other {background-color: #e7e7e7; color: rgb(255, 255, 255);} 
 
- /* Dropdown Button */
+
  .dropbtn {
-    background-color: #3498DB;
+    background-color: #4de75a;
     color: white;
     padding: 16px;
     font-size: 16px;
     border: none;
     cursor: pointer;
+    border-radius: 4px;
   }
 
-   /* Dropdown Button */
+
  .dropitem {
+  font-family: Arial, monospace;
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     padding: 16px;
@@ -184,18 +203,20 @@ padding: 8px;
     cursor: pointer;
   }
   
-  /* Dropdown button on hover & focus */
+
   .dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
+    background-color: #4de75a;
+    border-radius: 4px;
   }
   
-  /* The container <div> - needed to position the dropdown content */
+
   .dropdown {
     position: relative;
     display: inline-block;
+    border-radius: 4px;
   }
   
-  /* Dropdown Content (Hidden by Default) */
+
   .dropdown-content {
     display: none;
     position: fixed;
@@ -205,7 +226,7 @@ padding: 8px;
     z-index: 10;
   }
   
-  /* Links inside the dropdown */
+
   .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -213,8 +234,7 @@ padding: 8px;
     display: block;
   }
   
-  /* Change color of dropdown links on hover */
+
   .dropdown-content a:hover {background-color: #ddd}
-  
-  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+
   .show {display:block;} 
