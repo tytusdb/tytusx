@@ -1679,4 +1679,11 @@ export enum TipoOperacion{
     NOT,
     MOD,
     PAR,
+    //OPERACIONES ADICIONALES PARA XQUERY
+    XQEQ, //igual
+    XQGT, //Greather than >
+    XQLT, // Lower Than
+    XQNE, // Not equal
+    XQLE, // Lower equal then
+    XQGE, // Greather equal then
 }

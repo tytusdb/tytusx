@@ -24,6 +24,13 @@ export class Nodo implements Expresion{
         this.NodeTest = nodeTest;
     }
 
+    public ToString(): string{
+        if(this.predicado != undefined){
+            return this.nombre+" "+this.predicado
+        }
+        return this.nombre
+    }
+
     public isFromRoot(): boolean {
         return this.fromRoot;
     }

@@ -1,4 +1,5 @@
 import * as XMLGramAsc from './Gramatica/XML_GramaticaAsc';
+import * as XQueryGram from './Gramatica/XQuery_GramaticaAsc';
 import {Entorno} from './AST/Entorno';
 import { Objeto } from './XML/Objeto';
 import { Atributo } from './XML/Atributo';
@@ -104,6 +105,17 @@ class Analizador{
       console.log("---------------FIN---------------------");
     });
     return salida
+  }
+
+  XQueryAscendente(entrada: string): String{
+    console.log("---- XQUERY ASCENDENTE ----- ")
+    const consultas = XQueryGram.parse(entrada);
+    let salida = "";
+    consultas.forEach((elem: any) => {
+      salida += elem;
+    })
+    console.log("SALIDA: ", salida);
+    return salida;
   }
 
   getTablaSimbolos(){
