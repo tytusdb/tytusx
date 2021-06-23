@@ -81,18 +81,21 @@ function generateC3DXML(entornoG: Entorno): string {
 }
 
 function recorrerSimbolos(result: C3DResult, entorno: Entorno): C3DResult {
-    entorno.getTable().forEach((s: Simbolo) => {
 
+    entorno.getTable().forEach(s => {
+        if (s instanceof Nodo) {
+            if (s.getEntorno() != null) {
+                result = recorrerSimbolos(result, s.getEntorno());
+            }
+        }
+    });
+
+    entorno.getTable().forEach((s: Simbolo) => {
         if (s instanceof Nodo) {
             s.getAtributos().forEach(a => result = a.generateC3D(result));
+            result = s.getEntorno().generateC3DXML(result);
+            result = s.setEntornoToChilds(result);
             result = s.generateC3D(result);
-        }
-
-        if (s.getType() == Type.DOUBLE_TAG) {
-            let nodo: Nodo = s as Nodo;
-            if (nodo.getEntorno() != null) {
-                result = recorrerSimbolos(result, nodo.getEntorno());
-            }
         }
     });
 

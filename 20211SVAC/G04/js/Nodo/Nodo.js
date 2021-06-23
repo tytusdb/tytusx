@@ -89,7 +89,7 @@ class Nodo extends Simbolo {
         codigo.push(`\n\t//C3D nodo ${super.getNombre()}`);
         codigo.push(`\tt${i} = H;`);
         codigo.push(`\tt${i + 1} = t${i};`);
-        codigo.push(`\tH = H + 3;`);
+        codigo.push(`\tH = H + 4;`);
         //Nombre
         codigo.push(`\tt${i + 2} = H;`);
         Array.from(super.getNombre()).forEach(s => {
@@ -122,9 +122,39 @@ class Nodo extends Simbolo {
             codigo.push(`\tt${i + 5} = t${i + 5} + 1;`);
             iTemp++;
         });
+        iTemp++;
         codigo.push(`\n\theap[(int)t${i + 1}] = t${i + 4};`);
-        codigo.push(`\tstack[(int)${p++}] =  t${i};`);
-        resultC3D.setNextTemp(iTemp + 1);
+        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
+        //Entorno
+        codigo.push(`\n\tt${iTemp} = stack[(int)${this.entorno.getStackPointer()}];`);
+        codigo.push(`\theap[(int)t${i + 1}] = t${iTemp++};`);
+        codigo.push(`\tstack[(int)${p++}] = t${i};`);
+        resultC3D.setNextTemp(iTemp);
+        resultC3D.setSp(p);
+        resultC3D.setCodigo(codigo);
+        return resultC3D;
+    }
+    setEntornoToChilds(resultC3D) {
+        let codigo = resultC3D.getCodigo();
+        let i = resultC3D.getNextTemp();
+        let p = resultC3D.getSp();
+        //let iTemp: number = i;
+        if (this.nodos.length > 0) {
+            codigo.push(`\n\t//Agregando entorno a childs`);
+        }
+        ;
+        this.nodos.forEach(n => {
+            if (n.getType() == Type.DOUBLE_TAG) {
+                /*codigo.push(`\tt${i} = stack[(int)${n.getStackPointer()}];`); //Accedo al nodo
+                codigo.push(`\tt${i} = t${i} + 3;`); //Accedo al entorno del nodo*/
+                codigo.push(`\tt${i} = stack[(int)${n.getEntorno().getStackPointer()}];`); //Referencia del entorno del child
+                codigo.push(`\tt${i} = t${i} + 0;`); //Accedo al anterior del entorno
+                codigo.push(`\tt${i + 1} = stack[(int)${this.entorno.getStackPointer()}];`);
+                codigo.push(`\theap[(int)t${i}] = t${i + 1};`);
+                i += 2;
+            }
+        });
+        resultC3D.setNextTemp(i);
         resultC3D.setSp(p);
         resultC3D.setCodigo(codigo);
         return resultC3D;

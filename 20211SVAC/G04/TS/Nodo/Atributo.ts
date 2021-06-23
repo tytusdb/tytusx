@@ -42,7 +42,7 @@ class Atributo extends Simbolo {
         codigo.push(`\theap[(int)H] = -1;`);
         codigo.push(`\tH = H + 1;`);
         codigo.push(`\theap[(int)t${i+1}] = t${i+3};`);
-        codigo.push(`\tstack[(int)${p++}] =  t${i};`);
+        codigo.push(`\tstack[(int)${p++}] = t${i};`);
 
         resultC3D.setNextTemp(i+4);
         resultC3D.setSp(p);
