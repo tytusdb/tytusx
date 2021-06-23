@@ -1,16 +1,14 @@
 import {instruccion_3d} from "./instruccion_3d";
 
-export default class declaracion implements instruccion_3d{
-  public tipo: string
-  public id: string
+export default class entiqueta implements instruccion_3d{
+  public etiqueta: string
 
-  constructor(tipo, id) {
-      this.tipo = tipo;
-      this.id = id;
+  constructor(etiqueta : string) {
+    this.etiqueta = etiqueta;
   }
 
   getText(){
-    return this.tipo + " " + this.id + ";";
+    return this.etiqueta + ":";
   }
 
   intrucciones_3d: Array<instruccion_3d>;

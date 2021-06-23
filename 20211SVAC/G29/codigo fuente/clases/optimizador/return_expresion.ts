@@ -1,16 +1,14 @@
 import {instruccion_3d} from "./instruccion_3d";
 
-export default class declaracion implements instruccion_3d{
-  public tipo: string
-  public id: string
+export default class return_expresion implements instruccion_3d{
+  public _return : string;
 
-  constructor(tipo, id) {
-      this.tipo = tipo;
-      this.id = id;
+  constructor(_return : string ) {
+    this._return = _return;
   }
 
   getText(){
-    return this.tipo + " " + this.id + ";";
+    return 'return ' + this._return + ';';
   }
 
   intrucciones_3d: Array<instruccion_3d>;
@@ -21,5 +19,6 @@ export default class declaracion implements instruccion_3d{
   insertar(instruccion: instruccion_3d) {
     this.intrucciones_3d.push(instruccion);
   }
+
 
 }
