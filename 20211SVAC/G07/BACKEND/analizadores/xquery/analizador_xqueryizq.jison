@@ -102,6 +102,7 @@
 "last"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_last';%}
 "position"             %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_position';%}
 "text"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_text';%}
+"upper-case"           %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_upper';%}
 
 
 
@@ -173,6 +174,7 @@ XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
         |LLAMADA                                                                        {$$={instr:"LLAMADA",valor:$1};}
         |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
+        |F_UPPER                                                                        {$$={instr:"F_UPPER",valor:$1};}
         
 ;
 FOR_IN
@@ -285,6 +287,9 @@ DATO
 ;
 F_DATA
         :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}
+;
+F_UPPER
+        :tk_upper tk_parentesis_izq CONS tk_parentesis_der                              {$$=$3;}
 ;
 CONS
         :VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
