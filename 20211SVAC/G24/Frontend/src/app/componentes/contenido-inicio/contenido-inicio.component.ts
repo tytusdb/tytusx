@@ -32,6 +32,7 @@ export let Ambito: String;
 export let Ambito2: String;
 export let tabsim: Map<String, String>
 export var contenidocd3= ""
+export let ArbolGlobalReporte:reporteTabla[];
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -208,7 +209,7 @@ export class ContenidoInicioComponent implements OnInit {
           Tree.listaSimbolos.push(Reporte);
         }
       }
-
+      ArbolGlobalReporte=Tree.getSimbolos()
       tabsim.clear();
       /***************************************************************************************************************
        * ***********************************************A R B O L ****************************************************

@@ -15,7 +15,11 @@ export default class SelectRoot extends Instruccion {
         this.Operacion2= select2
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+        if(this.Operacion2!=null){
+            return ".."
+        }else{
+            return this.Operacion
+        }
     }
     getNodosAST(): nodoAST {
         var nodo= new nodoAST("ALL"); //PADRE SELECT
