@@ -23,8 +23,8 @@ BSL                         "\\".
 "main"                      %{ return 'tk_main';  %}
 "printf"                    %{ return 'tk_printf';  %}  
 "return"                    %{ return 'tk_return';  %} 
-[-]?([0-9]+["."][0-9]+)\b        %{ return 'tk_decimal';  %}
-[-]?[0-9]+\b                    %{ return 'tk_entero';  %}
+([0-9]+["."][0-9]+)\b        %{ return 'tk_decimal';  %}
+[0-9]+\b                    %{ return 'tk_entero';  %}
 \"[^\"]*\"                  %{ /*yytext = yytext.substr(1, yyleng-2);*/ return 'tk_cadena1'; %}
 \'[^\']*\'                  %{ /*yytext = yytext.substr(1, yyleng-2);*/ return 'tk_cadena2'; %}
 ([a-zA-ZáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*     %{ return 'tk_identificador'; %}
@@ -111,8 +111,11 @@ IDS: IDS tk_coma tk_identificador { $1.push($3); $$ = $1; }
 
 
 EXPRESION:      tk_identificador { $$ = $1; }
-        |       tk_decimal { $$ = $1;  }
-        |       tk_entero { $$ = $1; };
+        |       tk_decimal { $$ = $1; }
+        |       tk_entero { $$ = $1; }
+        |       tk_menos tk_identificador { $$ = "-" + $1; }
+        |       tk_menos tk_decimal { $$ = "-" + $1; }
+        |       tk_menos tk_entero { $$ = "-" + $1; };
 
 OPERADOR:       tk_mas { $$ = [Operador.SUMA,"+"]; }
         |       tk_menos { $$ = [Operador.RESTA,"-"];  }
