@@ -41,6 +41,7 @@
         <script src="./Js/Interprete/Expresiones/ExpresionXPath.js"></script>
         <script src="./Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
+        <script src="./Js/Interprete/Expresiones/Declaracion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
         <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
@@ -52,7 +53,9 @@
             var finalXML = 0;
             var encodingXML = 0;
             var contadorStack = 0;
+            var contadorHeap = 0;
             var contadorTemporales = 0;
+            var contadorEtiquetas = 0;
             var SP = 2;
             var HP = 0;
             var T0 = 0;
@@ -86,6 +89,7 @@
             var RGxml = new ReporteGramatical();
             var RGxmlDesc = new ReporteGramatical();
             var ListaDAG = [];
+            var ListaOptimizaciones = [];
             var nodoxPATHASC = null;
             var nodoxPATHDESC = null;
             var nodoxQUERYASC = null;
@@ -230,6 +234,7 @@
             <!-- ENTRADA XPATH -->
             <textarea id="salida_traduccion"></textarea>
             <!-- FIN ENTRADA XPATH -->
+            <button class="button3">Optimizar</button>
         </div>       
         <script src="Js/Consolas.js"></script>
 
