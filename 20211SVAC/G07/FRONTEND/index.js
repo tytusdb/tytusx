@@ -268,12 +268,12 @@ botonCargar.addEventListener("click", () => {
 
     codificador.innerHTML = parserXML.tipoencoding;
     globalencod =parserXML.tipoencoding;
-    console.error("Aqui");
-    console.log(consulta_xml.parse("<price>5.95</price>"));
+    //console.log(consulta_xml.parse("<price>5.95</price>"));
 
     // Se genera la Tabla de Simbolos
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
+
 
 })
 

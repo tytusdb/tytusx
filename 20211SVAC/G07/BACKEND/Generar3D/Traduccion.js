@@ -8,6 +8,8 @@ class Traduccion {
         this.p = 0;
         this.t = 0;
         this.traduccion3D = ``;
+        this.funciones3D = this.obtenerFuncionesC3D();
+        
 
     }
 
@@ -57,7 +59,7 @@ class Traduccion {
         //Aumento del uso del heap
         this.h = this.h + cadena.length + 1;
         this.traduccion3D += `
-            H = H + ${cadena.length};`;
+            H = H + ${cadena.length + 1};`;
 
         //Asignar al heap cada uno de los caracteres que conforman la Cadena
         for (let i = 0; i < cadena.length; i++) {
@@ -117,22 +119,40 @@ class Traduccion {
         return cadena;
     }
 
+
+    // Imprimir una cadena a partir del indice de referencia
+    imprimirCadena(indice) {
+        this.funciones3D.imprimirCadena.status = true;
+
+        this.traduccion3D += `
+            // Imprimir Cadena
+            t0 = ${indice};
+            imprimirCadena();
+            printf("\\n");
+            `;
+    }
+
+    // Imprimir un numero a partir del indice de referencia
+    imprimirNumero(indice) {
+        this.funciones3D.imprimirNumero.status = true;
+
+        this.traduccion3D += `
+            // Imprimir Numero
+            t0 = ${indice};
+            imprimirNumero();
+            printf("\\n");
+            `;
+    }
+
+    //Verifica si una entrada es un numero
     esNumero(entrada) {
 
         return !isNaN(entrada);
     }
 
-    obtenerCodigo() {
 
-        // Se obtienen las etiquetas
-        let etiquetas = '';
-        for (let i = 0; i < this.t; i++) {
-            if (i === this.t - 1) {
-                etiquetas += `t${i};`
-                break; 
-            }
-            etiquetas += `t${i},` 
-        }
+
+    obtenerCodigo() {
 
         //Etiquetas en consola
         let auxEtiqueta = '';
@@ -148,7 +168,16 @@ class Traduccion {
                 auxEtiqueta += `\n        `;    
             }
         }
-        console.log(auxEtiqueta);
+        
+        //Funciones que se van a utilizar
+        let auxFunc = '';
+        for (let key in this.funciones3D) {
+            let func = this.funciones3D[key];
+
+            if (func.status) {
+                auxFunc += `${func.codigo} \n       `;
+            }
+        }
 
         
 
@@ -162,12 +191,13 @@ class Traduccion {
         float H;
         float ${auxEtiqueta}
 
+        ${auxFunc}
+
         void main() {
             P = 0; H = 0;
 
             ${this.traduccion3D}
 
-            printf("Hello World");
 
             return;
         }
@@ -178,6 +208,49 @@ class Traduccion {
         return codigoTraducido;
 
     }
+
+    obtenerFuncionesC3D() {
+        let func3D = {};
+
+        // Se agrega la funcion imprimirCadena
+        func3D['imprimirCadena'] = {
+            "status": false,
+            "codigo": `void imprimirCadena() {
+            goto L0;
+            L0:
+                t1 = heap[(int) t0];
+                    
+                if (t1 == -1) goto L2;
+                goto L1;
+            L1:
+                printf("%c", (int) t1);
+                t0 = t0 + 1;
+                goto L0;
+            L2:
+                return;
+        }
+            ` 
+        }
+
+        //Se agrega la funcion imprimirNumero
+        func3D['imprimirNumero'] = {
+            "status": false,
+            "codigo": ` void imprimirNumero() {
+            goto L0;
+            L0:
+                t1 = heap[(int) t0];
+                printf("%f", t1);   
+                goto L1;
+            L1:
+                return;
+        }
+            ` 
+        }
+
+        return func3D;
+    }
+
+    
 
 }
 
