@@ -123,6 +123,9 @@ function validarWhere(instruccion,tabla){
             let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable)
             arregloEntornos=procesarEtorno(arregloEntornos);
             for (const iterator of arregloEntornos) {
+                if(iterator.valorAtributo){
+                    return iterator.valorAtributo;
+                }
                 return iterator.texto
             }
 
@@ -162,6 +165,7 @@ function procesarReturn(instruccion,variables){
 }
 function procesarIF(instruccion,variables){
     let res=validarWhere(instruccion.condicion,variables);
+
     if(res){
         switch (instruccion.then.tipo) {
             case "HTML":
@@ -257,14 +261,15 @@ function procesarXpath(consulta,entorno,padre){
             }
             return null
         case "ATRIBUTO":
-            let regreso
+            let regreso=[];
             for (const atributo of entorno.atributos) {
                 if(atributo.nombreAtributo==instruccion.valor){
-
+                    regreso.push(atributo);
                 }
             }
-            console.log(instruccion);
-            console.log(entorno);
+            if(regreso!=[]){
+                return regreso;
+            }
             return null;
         default:
             return null
@@ -276,30 +281,35 @@ function imprimirEntorno(entorno){
     let contenido="";
     let atributo;
     let arregloAtributo=[];
+    if(entorno.valorAtributo){
+        let txt =entorno.nombreAtributo +'="' +entorno.valorAtributo +'"\n';
+        return txt;
+    }else{
         if (entorno.atributos) {
-          for (const atr of entorno.atributos) {
-            
-            atributo = {
-                etiqueta: atr.nombreAtributo,
-                valor: atr.valorAtributo,
-              };
-            arregloAtributo.unshift(atributo);
+            for (const atr of entorno.atributos) {
+              
+              atributo = {
+                  etiqueta: atr.nombreAtributo,
+                  valor: atr.valorAtributo,
+                };
+              arregloAtributo.unshift(atributo);
+            }
+          } else {
+              arregloAtributo = [];
           }
-        } else {
-            arregloAtributo = [];
-        }
-    for (const iterator of entorno.hijos) {
-        contenido += imprimirEntorno(iterator);
-    }
-    let retorno = new Etiqueta(
-        entorno.etiqueta,
-        entorno.texto,
-        contenido,
-        arregloAtributo
-      ); //nombre,texto,contenido
-      if (retorno) {
-        return retorno.obtenerXML();
+      for (const iterator of entorno.hijos) {
+          contenido += imprimirEntorno(iterator);
       }
+      let retorno = new Etiqueta(
+          entorno.etiqueta,
+          entorno.texto,
+          contenido,
+          arregloAtributo
+        ); //nombre,texto,contenido
+        if (retorno) {
+          return retorno.obtenerXML();
+        }
+    }
       return null;
 }
 function getConsultaXPath(arreglo){
@@ -321,11 +331,17 @@ function procesarEtorno(entorno){
 }
 
 function procesarArreglo(entorno){
+    console.log(entorno);
    if(entorno){
     if(!entorno.etiqueta||!entorno){
-        for (const iterator of entorno) {
-            procesarArreglo(iterator);
-        }   
+        if(entorno.valorAtributo){
+            regreso_.push(entorno);
+        }else{
+            for (const iterator of entorno) {
+                procesarArreglo(iterator);
+            }
+        }
+   
     }else{
         regreso_.push(entorno);
     }

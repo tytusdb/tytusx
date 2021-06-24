@@ -16,6 +16,7 @@ nav {
     padding: 0 100px;
     justify-content: space-between;
     height: 6vh;
+    z-index: 400;
 }
 
 nav span {

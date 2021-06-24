@@ -28,7 +28,7 @@
     z-index: 100;
     padding-top: 50px;
     display: flex;
-    top: -100vh;
+    top: -200vh;
 }
 
 .modalContainer {
