@@ -1,21 +1,15 @@
 import {instruccion_3d} from "./instruccion_3d";
 
 export default class asignacion implements instruccion_3d{
-  public variable: string;
-  public izq : string;
-  public operador: string;
-  public der : string;
+  public imprimir: string;
 
-  constructor(variable, izq, operador, der) {
+  constructor(imprimir : string ) {
     this.intrucciones_3d = new Array<instruccion_3d>();
-    this.variable = variable;
-    this.izq = izq;
-    this.operador = operador;
-    this.der = der;
+    this.imprimir = imprimir;
   }
 
   getText(){
-    return this.variable + "=" + this.izq + this.operador + this.der + ";";
+    return this.imprimir + ";";
   }
 
   intrucciones_3d: Array<instruccion_3d>;

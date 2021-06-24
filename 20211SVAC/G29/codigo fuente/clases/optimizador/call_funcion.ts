@@ -4,6 +4,7 @@ export default class call_funcion implements instruccion_3d{
   public funcion: string
 
   constructor(funcion : string) {
+    this.intrucciones_3d = new Array<instruccion_3d>();
     this.funcion = funcion;
   }
 
@@ -19,5 +20,12 @@ export default class call_funcion implements instruccion_3d{
   insertar(instruccion: instruccion_3d) {
     this.intrucciones_3d.push(instruccion);
   }
+
+  insertar_lista(lista: Array<instruccion_3d>) {
+    for(let x of lista){
+      this.intrucciones_3d.push(x);
+    }
+  }
+
 
 }
