@@ -2,13 +2,16 @@
 //Object.defineProperty(exports, "__esModule", { value: true });
 //exports.Declaracion = void 0;
 var Declaracion = /** @class */ (function () {
-    function Declaracion(linea, columna, codigo, tipo, ids) {
+    function Declaracion(linea, columna, tipo, ids, dato) {
         this.linea = linea;
         this.columna = columna;
-        this.codigo = codigo;
+        this.codigo = "";
         this.tipo = tipo;
         this.instrucciones = [];
         this.ids = ids;
+        this.dato = dato;
+
+
     }
     Declaracion.prototype.getInstrucciones = function () {
         return this.instrucciones;
@@ -20,6 +23,19 @@ var Declaracion = /** @class */ (function () {
         return this.tipo;
     };
     Declaracion.prototype.getCodigo3D = function () {
+
+        var idsAux = "";
+
+        for (var i = 0; i < this.ids.length; i++) {
+            if(i==0){
+                idsAux += this.ids[i];
+            } else {
+                idsAux += ", " + this.ids[i];
+            }
+          }
+
+        this.codigo = this.dato + " " + idsAux + ";\n";
+
         return this.codigo;
     };
     return Declaracion;

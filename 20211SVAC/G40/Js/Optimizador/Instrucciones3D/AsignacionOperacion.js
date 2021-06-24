@@ -18,6 +18,22 @@ var AsignacionOperacion = /** @class */ (function () {
     AsignacionOperacion.prototype.getTipo = function () {
         return this.tipo;
     };
+
+    AsignacionOperacion.prototype.setOperando1 = function (op1) {
+        this.operando1 = op1;
+    };
+    AsignacionOperacion.prototype.getOperando1 = function () {
+        return this.operando1;
+    };
+
+    AsignacionOperacion.prototype.setOperando2 = function (op2) {
+        this.operando2 = op2;
+    };
+    AsignacionOperacion.prototype.getOperando2 = function () {
+        return this.operando2;
+    };
+
+
     AsignacionOperacion.prototype.getCodigo3D = function () {
         return this.codigo;
     };

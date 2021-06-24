@@ -2,12 +2,12 @@
 //Object.defineProperty(exports, "__esModule", { value: true });
 //exports.Etiqueta = void 0;
 var Etiqueta = /** @class */ (function () {
-    function Etiqueta(temporal, linea, columna, codigo, tipo) {
+    function Etiqueta(etiqueta, linea, columna, codigo, tipo) {
         this.linea = linea;
         this.columna = columna;
         this.codigo = codigo;
         this.tipo = tipo;
-        this.temporal = temporal;
+        this.etiqueta = etiqueta;
     }
     Etiqueta.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
@@ -15,6 +15,8 @@ var Etiqueta = /** @class */ (function () {
     Etiqueta.prototype.getTipo = function () {
         return this.tipo;
     };
+
+    
     Etiqueta.prototype.getCodigo3D = function () {
         return this.codigo;
     };
