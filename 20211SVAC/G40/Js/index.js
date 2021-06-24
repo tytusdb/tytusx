@@ -138,23 +138,26 @@ function CargarXML(){
                     console.log("↓ Funcion XQuery ↓");
                     console.log(resultadoXQuery[0]);
 
-                    salidaGlobal+="↓ Resultado consulta XQuery ↓\n\n";
-                    salidaRecursiva = "";
-                    salidaXQuery = resultadoXQuery[0].ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                    //console.log(salidaXQuery);
-                    GenerarSalidaXPath(salidaXQuery);
 
+                    var contador = 1;
+                    resultadoXQuery[0].forEach(function (funcion){
 
-                    if(salidaRecursiva!=""){
-                        salidaGlobal+= salidaRecursiva + "\n\n";
-                    } else {
-                        salidaGlobal+= "No se encontraron coincidencias para la entrada XQuery. :(\n\n";
-                    }
+                        salidaGlobal+="↓ Resultado consulta XQuery "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXQuery = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+                        GenerarSalidaXPath(salidaXQuery);
 
-                    //var salidaTemporal = SalidaXPath.getValue();
+                        if(salidaRecursiva!=""){
+                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        } else {
+                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                        }
 
-
+                        contador++;
+                    } );
+                    
                     SetSalida(salidaGlobal);
+             
 
                 } else {                   
                     SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
