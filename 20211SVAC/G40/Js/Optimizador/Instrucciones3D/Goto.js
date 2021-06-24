@@ -9,6 +9,19 @@ var Goto = /** @class */ (function () {
         this.tipo = tipo;
         this.etiqueta = etiqueta;
     }
+
+    Goto.prototype.getLinea = function () {
+        return this.linea;
+    };
+
+    Goto.prototype.getColumna = function () {
+        return this.columna;
+    };
+
+    Goto.prototype.getEtiqueta = function () {
+       return this.etiqueta;
+    };
+
     Goto.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };

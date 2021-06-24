@@ -201,7 +201,7 @@ case 39:
 break;
 case 40:
 
-                this.$ = new Goto($$[$0-2], _$[$0-2].first_line, _$[$0-2].first_column, "goto " + $$[$0-1] + ";\n", TipoInstruccion3D.GOTO);
+                this.$ = new Goto($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, "goto " + $$[$0-1] + ";\n", TipoInstruccion3D.GOTO);
                 
 break;
 case 41:
