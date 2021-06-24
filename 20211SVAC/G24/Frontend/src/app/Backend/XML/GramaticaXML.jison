@@ -46,7 +46,7 @@ const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.c
 \'[^\']*\'             { yytext=yytext.substr(1,yyleng-2); return 'QUOTE'; }
 
 
-([a-zA-Z])[a-zA-Z0-9_^Ññáéíúó]*  return 'IDENTIFICADOR';
+([a-zA-Z_À-ÿ])[a-zA-Z0-9_^ÑñÀ-ÿ]*  return 'IDENTIFICADOR';
 <<EOF>>               return 'EOF'
 [ \r\t]+ {}
 \n+ {}
@@ -85,7 +85,6 @@ OBJETOS
         : OBJETOS OBJETO { $1.push($2); $$ = $1; }
         | OBJETO { $$ = [$1]; }
         ;
-
 OBJETO
         : MENORQUEESPECIAL IDENTIFICADOR L_ATRIBUTOS MAYORQUEESPECIAL  INSTRUCCION          {$$ = new objeto.default($2,null,$3,$5,@1.first_line,@1.first_column);}
         | MENORQUE IDENTIFICADOR L_ATRIBUTOS SELFCLOSE INSTRUCCION      {$$ = new objeto.default($2,null,$3,$5,@1.first_line,@1.first_column);}

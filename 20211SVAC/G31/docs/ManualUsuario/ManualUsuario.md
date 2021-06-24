@@ -1,4 +1,4 @@
-# Manual de Usuario Tytus X - Grupo 31
+# Manual de Usuario TytusX - Grupo 31
 
 ## **Contenido**
 - [Descripcion General](#idDescripcion)
@@ -14,14 +14,14 @@ Tytus X es un administrador de bases de datos documental de codigo abierto. Sopo
 La interfaz grafica cuenta con dos editores de texto uno para el archivo a utilizar de consulta de tipo XML y el otro editor para la consulta en XPath 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/1.PNG" width="400">
     <p align="center">Editores de XML Y XPath </p>
 </div>
 
 Seguidamente tenemos un conjunto de pestañas para poder visualizar los reportes de cada uno de los analizadores de XML y XPath. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/2.PNG" width="400">
     <p align="center">Reportes </p>
 </div>
 
@@ -76,7 +76,7 @@ Seguidamente tenemos un conjunto de pestañas para poder visualizar los reportes
 2. Elige el analizador a utilizar para el archivo de entrada. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/3.PNG" width="400">
     <p align="center"> Botones de Analisis Ascendente y Descendente </p>
 </div>
 
@@ -91,7 +91,7 @@ La entrada pasa por un analizador Ascendente y devuelve un arbol CST y una tabla
 - Ejemplo de Arbol CST generado para un archivo XML, este reporte se muestra si el archivo no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/4.PNG" width="400">
     <p align="center"> Arbol CST  </p>
 </div>
 
@@ -100,8 +100,16 @@ La entrada pasa por un analizador Ascendente y devuelve un arbol CST y una tabla
 - Ejemplo de tabla de símbolos generada para un archivo XML, este reporte se muestra si el archivo no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/5.PNG" width="400">
     <p align="center"> Tabla de Símbolos  </p>
+</div>
+
+##### Reporte Gramatical 
+- Ejemplo de reporte gramatical ascendente de la entrada, este se muestra si la entrada no contiene errores. 
+
+<div align="center">
+    <img src="../assets/15.PNG" width="400">
+    <p align="center"> Reporte Gramatical Ascendente </p>
 </div>
 
 ##### Reporte de Errores Léxicos, Sintácticos y Semánticos 
@@ -109,7 +117,7 @@ La entrada pasa por un analizador Ascendente y devuelve un arbol CST y una tabla
 - Ejemplo de Reportes generados si el archivo de entrada contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/6.PNG" width="400">
     <p align="center"> Errores Encontrados </p>
 </div>
 
@@ -122,7 +130,7 @@ La entrada pasa por un analizador Descendente y devuelve un arbol CST y una tabl
 - Ejemplo de Arbol CST generado para un archivo XML, este reporte se muestra si el archivo no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/7.PNG" width="400">
     <p align="center"> Árbol CST  </p>
 </div>
 
@@ -131,8 +139,16 @@ La entrada pasa por un analizador Descendente y devuelve un arbol CST y una tabl
 - Ejemplo de tabla de símbolos generada para un archivo XML, este reporte se muestra si el archivo no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/5.PNG" width="400">
     <p align="center"> Tabla de Símbolos  </p>
+</div>
+
+##### Reporte Gramatical 
+- Ejemplo de reporte gramatical descendente de la entrada de XML, este se muestra si la entrada no contiene errores. 
+
+<div align="center">
+    <img src="../assets/16.PNG" width="400">
+    <p align="center"> Reporte Gramatical Descendente </p>
 </div>
 
 ##### Reporte de Errores Léxicos, Sintácticos y Semánticos 
@@ -140,7 +156,7 @@ La entrada pasa por un analizador Descendente y devuelve un arbol CST y una tabl
 - Ejemplo de Reportes generados si el archivo de entrada contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/6.PNG" width="400">
     <p align="center"> Errores Encontrados </p>
 </div>
 
@@ -155,6 +171,7 @@ La entrada pasa por un analizador Descendente y devuelve un arbol CST y una tabl
 /bookstore/book/price[text()]
 /bookstore/book[price>35]/price
 ```
+
 - En el editor de XPATH se encuentran las opciones para poder ejecutar un análisis ascendente o descendente. 
 
 5. Se procede a ejecutar la consulta con el analizador correspondiente. 
@@ -168,7 +185,7 @@ La entrada pasa por un analizador ascendente y devuelve un árbol CST, un árbol
 - Ejemplo de árbol CST generado para una consulta de XPATH, este reporte se muestra si la entrada no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/9.PNG" width="400">
     <p align="center"> Arbol CST  </p>
 </div>
 
@@ -177,16 +194,25 @@ La entrada pasa por un analizador ascendente y devuelve un árbol CST, un árbol
 - Ejemplo de árbol AST generado para una consulta en XPATH, este reporte se muestra si la entrada no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/8.PNG" width="400">
     <p align="center"> Árbol AST  </p>
 </div>
+
+##### Reporte Gramatical 
+- Ejemplo de reporte gramatical ascendente de la consulta en XPATH, este se muestra si la entrada no contiene errores. 
+
+<div align="center">
+    <img src="../assets/17.PNG" width="400">
+    <p align="center"> Reporte Gramatical Ascendente </p>
+</div>
+
 
 ##### Reporte de Errores Léxicos, Sintácticos y Semánticos 
 
 - Ejemplo de Reportes generados si el archivo de entrada contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/10.PNG" width="400">
     <p align="center"> Errores Encontrados </p>
 </div>
 
@@ -199,7 +225,7 @@ La entrada pasa por un analizador descendente y devuelve un árbol CST, un árbo
 - Ejemplo de árbol CST generado para una consulta de XPATH, este reporte se muestra si la entrada no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/11.PNG" width="400">
     <p align="center"> Arbol CST  </p>
 </div>
 
@@ -208,8 +234,16 @@ La entrada pasa por un analizador descendente y devuelve un árbol CST, un árbo
 - Ejemplo de árbol AST generado para una consulta en XPATH, este reporte se muestra si la entrada no contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/12.PNG" width="400">
     <p align="center"> Árbol AST  </p>
+</div>
+
+##### Reporte Gramatical 
+- Ejemplo de reporte gramatical descendente de la consulta en XPATH, este se muestra si la entrada no contiene errores. 
+
+<div align="center">
+    <img src="../assets/18.PNG" width="400">
+    <p align="center"> Reporte Gramatical Ascendente </p>
 </div>
 
 ##### Reporte de Errores Léxicos, Sintácticos y Semánticos 
@@ -217,14 +251,14 @@ La entrada pasa por un analizador descendente y devuelve un árbol CST, un árbo
 - Ejemplo de Reportes generados si el archivo de entrada contiene errores. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/10.PNG" width="400">
     <p align="center"> Errores Encontrados </p>
 </div>
 
 6. Si la ejecución del archivo XML y la consulta en XPATH es correcta se procede a mostrar el resultado en el apartado de consola. 
 
 <div align="center">
-    <img src="" width="400">
+    <img src="../assets/14.PNG" width="400">
     <p align="center"> Consola </p>
 </div>
 

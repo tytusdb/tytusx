@@ -3,8 +3,10 @@
   const { Objeto } = require('src/app/controllers/xml/objeto.controller');
   const { Atributo } = require('src/app/controllers/xml/atributo.controller');
   const { Excepcion } = require('src/app/models/excepcion.model');
-  const { NodoGrafico } = require('src/app/utils/reports/nodoGrafico')
+  const { NodoGrafico } = require('src/app/utils/reports/nodoGrafico');
+  const { Buffer } = require('buffer')
   var errores = []
+  var encodingGeneral = ''
 %}
 
 /* Analisis Lexico */
@@ -59,7 +61,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                             $1.grafica,
                                             $2.grafica
                                           ]),
-                                          gramatica: `<INICIO> ::= <CONFIG> <OBJETOS_GLOBALES> <EOF>\n`
+                                          gramatica: `<INICIO> ::= <CONFIG> <OBJETOS_GLOBALES> <EOF> \t\t\t\t\t\t\t\t\t\t\t\t { INICIO.objetos = OBJETOS_GLOBALES.objetos; }\n`
                                         }
 
                                         $$.gramatica += $1.gramatica;
@@ -96,8 +98,11 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                                       new NodoGrafico('?', []),
                                                                                       new NodoGrafico('>', [])
                                                                                     ]),
-                                                                                    gramatica: `<CONFIG> ::= "<" "?" "xml" "version" "=" "${$6}" "encoding" "=" "${$9}" "?" ">" \n`
+                                                                                    gramatica: `<CONFIG> ::= "<" "?" "xml" "version" "=" "${$6}" "encoding" "=" "${$9}" "?" ">"      { version = cadena1.lexvalor; encoding = cadena2.lexvalor;  } \n`
                                                                                   }
+
+                                                                                  encodingGeneral = $9;
+
                                                                                 }
   ;
 
@@ -109,7 +114,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                   $1.grafica,
                                                   $2.grafica
                                                 ]),
-                                                gramatica: `<OBJETOS_GLOBALES> ::= <OBJETOS_GLOBALES> <OBJETO>\n`,
+                                                gramatica: `<OBJETOS_GLOBALES> ::= <OBJETOS_GLOBALES> <OBJETO> \t\t\t\t\t\t\t\t\t\t\t\t { OBJETOS_GLOBALES1.objetos.push(OBJETO.objetos);   objetos = OBJETOS_GLOBLES1.objetos; }\n`,
                                                 valorObj: `${$1.valorObj}\n${$2.valorObj}\n`
                                               }
 
@@ -120,7 +125,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                               $$ = {
                                                 objetos: [$1.objetos],
                                                 grafica: new NodoGrafico('OBJETOS GLOBALES', [$1.grafica]),
-                                                gramatica: `<OBJETOS_GLOBALES> ::= <OBJETO>\n`,
+                                                gramatica: `<OBJETOS_GLOBALES> ::= <OBJETO> \t\t\t\t\t\t\t\t\t\t\t\t\t { objetos = OBJETO.objetos; }\n`,
                                                 valorObj: `${$1.valorObj}\n`
                                               }
                                               $$.gramatica += $1.gramatica;
@@ -137,7 +142,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                         $$ = {
                                           objetos: $1.objetos,
                                           grafica: new NodoGrafico('OBJETOS', [$1.grafica, $2.grafica]),
-                                          gramatica: `<OBJETOS> ::= <OBJETOS> <OBJETO>\n`,
+                                          gramatica: `<OBJETOS> ::= <OBJETOS> <OBJETO> \t\t\t\t\t\t\t\t\t\t\t\t { OBJETOS1.objetos.push(OBJETO.objetos); objetos = OBJETOS1.objetos; }  \n`,
                                           valorObj: `${$1.valorObj}${$2.valorObj}`
                                         }
 
@@ -148,7 +153,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                         $$ = {
                                           objetos: [$1.objetos],
                                           grafica: new NodoGrafico('OBJETOS', [$1.grafica]),
-                                          gramatica: `<OBJETOS> ::= <OBJETO>\n`,
+                                          gramatica: `<OBJETOS> ::= <OBJETO> \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t { objetos = OBJETO.objetos; } \n`,
                                           valorObj:  `${$1.valorObj}`
                                         }
 
@@ -174,7 +179,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('ID', [new NodoGrafico($8, [])]),
                                                                       new NodoGrafico('>', [])
                                                                       ]),
-                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> ">" <OBJETOS> "<" "/" "${$8}" ">"\n`,
+                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> ">" <OBJETOS> "<" "/" "${$8}" ">" \t\t\t\t { objetos = new Objeto(id.valor, '', ATRIBUTOS.objetos, OBJETOS.objeto); } \n`,
                                                                       valorObj: `<${$2} ${$3.valorObj}>\n${$5.valorObj}</${$8}>\n`
                                                                     }
                                                                     $$.objetos.valorObj = $$.valorObj;
@@ -199,7 +204,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('ID', [new NodoGrafico($7), []]),
                                                                       new NodoGrafico('>', [])
                                                                       ]),
-                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" ">" <OBJETOS> "<" "/" "${$7}" ">"\n`,
+                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" ">" <OBJETOS> "<" "/" "${$7}" "> \t\t\t\t\t\t\t { objetos = new Objeto(id.valor, '', [], OBJETOS.objeto); }"\n`,
                                                                       valorObj: `<${$2}>\n${$4.valorObj}</${$7}>\n`
                                                                     }
                                                                     $$.objetos.valorObj = $$.valorObj;
@@ -225,7 +230,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('ID', [new NodoGrafico($6, [])]),
                                                                       new NodoGrafico('>', [])
                                                                       ]),
-                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> ">" <TEXTO> "<" "/" "${$6}" ">"\n`,
+                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> ">" <TEXTO> "<" "/" "${$6}" ">" \t\t\t\t { objetos = new Objeto(id.valor, TEXTO.valor, ATRIBUTOS.objetos, []); }\n`,
                                                                       valorObj: `<${$2} ${$3.valorObj} > ${$5.texto} </${$6}>\n`
                                                                     }
                                                                     $$.objetos.valorObj = $$.valorObj;
@@ -249,7 +254,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('ID', [new NodoGrafico($5, [])]),
                                                                       new NodoGrafico('>', [])
                                                                       ]),
-                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" ">" <TEXTO> "<" "/" "${$5}" ">"\n`,
+                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" ">" <TEXTO> "<" "/" "${$5}" ">" \t\t\t\t\t\t\t\t\t\t  { objetos = new Objeto(id.valor, TEXTO.valor, [], []); }\n`,
                                                                       valorObj: `<${$2}> ${$4.texto} </${$5}>\n`
                                                                     }
                                                                     $$.objetos.valorObj = $$.valorObj;
@@ -276,7 +281,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('ID', [new NodoGrafico($8, [])]),
                                                                       new NodoGrafico('>', [])
                                                                       ]),
-                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> ">" <TEXTO> "<" "/" "${$8}" ">"\n`,
+                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> ">" <TEXTO> "<" "/" "${$8}" ">" \t\t\t\t\t\t\t\t\t\t\t\t   { objetos = new Objeto(id.valor, TEXTO.valor, [], []); }\n`,
                                                                       valorObj: `<${$2} ${$3.valorObj} > ${$5.texto} </${$8}>\n`
                                                                     }
                                                                     $$.objetos.valorObj = $$.valorObj;
@@ -301,7 +306,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('ID', [new NodoGrafico($7, [])]),
                                                                       new NodoGrafico('>', [])
                                                                       ]),
-                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" ">" <TEXTO> "<" "/" "${$7}" ">"\n`,
+                                                                      gramatica: `<OBJETO> ::= "<" "${$2}" ">" <TEXTO> "<" "/" "${$7}" ">"  \t\t\t\t\t\t\t\t\t\t\t\t    { objetos = new Objeto(id.valor, TEXTO.valor, [], []); }\n`,
                                                                       valorObj: `<${$2}> ${$4.texto} </${$7}>\n`
                                                                     }
                                                                     $$.objetos.valorObj = $$.valorObj;
@@ -317,7 +322,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                                       new NodoGrafico('/', []),
                                                                       new NodoGrafico('>', [])
                                                                     ]),
-                                                                    gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> "/" ">" \n`,
+                                                                    gramatica: `<OBJETO> ::= "<" "${$2}" <ATRIBUTOS> "/" ">"  \t\t\t\t\t\t\t\t\t\t\t\t    { objetos = new Objeto(id.valor, '', ATRIBUTOS.objetos, []); } \n`,
                                                                     valorObj: `<${$2} ${$3.valorObj} /> \n`
                                                                   }
                                                                   $$.objetos.valorObj = $$.valorObj;
@@ -330,7 +335,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                         $$ = {
                                           objetos: $1.objetos,
                                           grafica: new NodoGrafico('ATRIBUTOS', [$1.grafica, $2.grafica]),
-                                          gramatica: `<ATRIBUTOS> ::= <ATRIBUTOS> <ATRIBUTO> \n`,
+                                          gramatica: `<ATRIBUTOS> ::= <ATRIBUTOS> <ATRIBUTO> \t\t\t\t\t\t\t\t\t\t\t\t\t\t     { ATRIBUTOS1.objetos.push(ATRIBUTO.objetos); objetos = ATRIBUTOS1.objetos; }\n`,
                                           valorObj: `${$1.valorObj} ${$2.valorObj}`
                                         }
 
@@ -341,7 +346,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                         $$ = {
                                           objetos: [$1.objetos],
                                           grafica: new NodoGrafico('ATRIBUTOS', [$1.grafica]),
-                                          gramatica: `<ATRIBUTOS> ::= <ATRIBUTO> \n`,
+                                          gramatica: `<ATRIBUTOS> ::= <ATRIBUTO>  \t\t\t\t\t\t\t\t\t\t\t\t\t\t    { objetos = ATRIBUTO.objetos ; }  \n`,
                                           valorObj: $1.valorObj
                                         }
                                         $$.gramatica += $1.gramatica;
@@ -355,7 +360,7 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
                                                 new NodoGrafico('=', []),
                                                 new NodoGrafico('CADENA', [new NodoGrafico($3, [])])
                                               ]),
-                                              gramatica:  `<ATRIBUTO> ::= "${$1}" "=" "${$3}"\n`,
+                                              gramatica:  `<ATRIBUTO> ::= "${$1}" "=" "${$3}" \t\t\t\t\t\t\t\t\t\t\t\t\t { objetos = new Atributo(id.valor, cadena.valor); }\n`,
                                               valorObj: `${$1} = "${$3}"`
                                             }
                                       }
@@ -363,12 +368,46 @@ dentro          (((\&\w+\;)|[^&<>])*\<\/)
 
   TEXTO: TEXTO CONTENIDO  { $$ = {
                             texto: `${$1} ${$2}`,
-                            gramatica: `<TEXTO > ::= "${$1} ${$2}"\n`
+                            gramatica: `<TEXTO > ::= "${$1} ${$2}" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t { valor = TEXTO.lexvalor }\n`
                             }
+                            $$.texto = $$.texto.replaceAll('&amp;', '&');
+                            $$.texto = $$.texto.replaceAll('&quot;', "'");
+                            $$.texto = $$.texto.replaceAll('&apos;', '"');
+                            $$.texto = $$.texto.replaceAll('&lt;', '<');
+                            $$.texto = $$.texto.replaceAll('&gt;', '>');
+
+                            if(encodingGeneral.toLowerCase() == 'iso-8859-1'){
+                              $$.texto = buffer.toString('Latin1');
+                            }else if (encodingGeneral.toLowerCase() == 'ascii'){
+                              $$.texto = buffer.toString('ASCII');
+                            }else{
+                               $$.texto = buffer.toString('UTF-8');
+                            }
+
+                            $$.gramatica =  `<TEXTO > ::= "${$$.texto}" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t { valor = TEXTO.lexvalor }\n`
+
                           }
-  | CONTENIDO             { $$ = {
+  | CONTENIDO             {
+                            $$ = {
                               texto: $1,
-                              gramatica: `<TEXTO> ::= "${$1}"\n`  }
+                              gramatica: `<TEXTO> ::= "${$1}" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t { valor = TEXTO.lexvalor }\n`
+                            }
+                            $$.texto = $$.texto.replaceAll('&amp;', '&');
+                            $$.texto = $$.texto.replaceAll('&quot;', "'");
+                            $$.texto = $$.texto.replaceAll('&apos;', '"');
+                            $$.texto = $$.texto.replaceAll('&lt;', '<');
+                            $$.texto = $$.texto.replaceAll('&gt;', '>');
+                            let buffer = new Buffer($$.texto);
+
+                            if(encodingGeneral.toLowerCase() == 'iso-8859-1'){
+                              $$.texto = buffer.toString('Latin1');
+                            }else if (encodingGeneral.toLowerCase() == 'ascii'){
+                              $$.texto = buffer.toString('ASCII');
+                            }else{
+                               $$.texto = buffer.toString('UTF-8');
+                            }
+
+                            $$.gramatica =  `<TEXTO> ::= "${$$.texto}" \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t { valor = TEXTO.lexvalor }\n`
                           }
   ;
 

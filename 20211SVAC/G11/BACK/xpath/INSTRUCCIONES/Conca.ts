@@ -1,0 +1,294 @@
+
+import { AST } from "../AST/AST";
+import { Entorno } from "../AST/Entorno";
+import { Expresion } from "../INTERFACES/Expresion";
+import { Instruccion } from "../INTERFACES/Instruccion";
+import { Consulta } from "../CONSULTAS/Consulta";
+
+export class Conca implements Instruccion {
+    linea: number;
+    columna: number;
+    public expresion: Expresion;
+    public identificador: string;
+    public barritas: string;
+    public separador: string;
+
+    constructor(sep: string, bar: string, id: string, exp: Expresion, linea: number, columna: number) {
+        this.separador = sep;
+        this.barritas = bar;
+        this.identificador = id;
+        this.expresion = exp;
+        this.linea = linea;
+        this.columna = columna;
+    }
+
+    ejecutar(ent: Entorno, arbol: AST) {
+        // console.log("Si es: "+this.expresion);
+        let valor;
+        //valor = this.expresion.getValorImplicito(ent, arbol);
+        if (this.expresion.getTipo == undefined) {
+            for (var val in this.expresion) {
+                valor = this.expresion[val].barras+ this.expresion[val].puntos;
+                this.Consultas(valor);
+            }
+        } else {
+
+            valor = this.expresion.getValorImplicito(ent, arbol);
+            this.Consultas(valor);
+        }
+
+
+
+    }
+
+    Consultas(valor: any) {
+        //ID CON VALOR->EXP
+        console.log('');
+        switch (this.separador) {
+            /* CONSULTAS IDENTIFICADORES */
+            case '&':
+                console.log("SOY UN ID");
+                if (valor !== '') {
+                    Consulta.agregar(this.identificador, '2', this.identificador);
+                    if (typeof (valor) === 'number') {
+                        Consulta.agregar(this.identificador, '3', Number(valor - 1));//DEVUELVO LA POSICION REAL DE LA CONSULTA
+                        //VALIDAR LOS ATRIS Y PR DENTRO DE [] AUN NO TENGO MUY CLARO ESO JAJA
+                    }
+                }
+                break;
+            case '.':
+                if (this.barritas === '//') {
+                    Consulta.agregar(this.identificador, '0', this.identificador);
+                } else {
+                    Consulta.agregar(this.identificador, '1', this.identificador);
+                }
+                break;
+            /**-------------------------------------------------------------------- */
+            /*CONSULTAS CON ASTERISCO */
+            case '#': //SOLO VIENE ASTERISCO Y EXP
+                console.log("SOY UN ASTERISCO");
+                Consulta.agregar(this.identificador, '0', this.identificador);
+                Consulta.agregar(this.identificador, '0', valor);
+                break;
+            case 'por': // SOLO VIENE ASTERISCO
+                Consulta.agregar(this.identificador, '0', this.identificador);
+                break;
+            /**------------------------------------------------------------- */
+            /*CONSULTAS PR */
+            case '!':
+                console.log("SOY UNA PR")
+                switch (this.identificador) {
+                    case 'ancestor':
+                        Consulta.agregar(this.identificador, '7', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'ancestor-or-self':
+                        Consulta.agregar(this.identificador, '8', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'attribute':
+                        Consulta.agregar(this.identificador, '9', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'child':
+                        Consulta.agregar(this.identificador, '10', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'descendant':
+                        Consulta.agregar(this.identificador, '11', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'descendant-or-self':
+                        Consulta.agregar(this.identificador, '12', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'following':
+                        Consulta.agregar(this.identificador, '13', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break
+                    case 'following-sibling':
+                        Consulta.agregar(this.identificador, '14', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'namespace':
+                        Consulta.agregar(this.identificador, '15', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'parent':
+                        Consulta.agregar(this.identificador, '16', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'preceding':
+                        Consulta.agregar(this.identificador, '17', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'preceding-sibling':
+                        Consulta.agregar(this.identificador, '18', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                    case 'self':
+                        Consulta.agregar(this.identificador, '19', this.identificador);
+                        if (valor === 'last') {
+                            Consulta.agregar(this.identificador, '20', this.identificador);
+                        } else if (valor === 'position') {
+                            Consulta.agregar(this.identificador, '21', this.identificador);
+                        } else if (valor === 'node') {
+                            Consulta.agregar(this.identificador, '22', this.identificador);
+                        } else if (valor === 'text') {
+                            Consulta.agregar(this.identificador, '23', this.identificador);
+                        } else {
+                            Consulta.agregar(this.identificador, '24', this.identificador);
+                        }
+                        break;
+                }
+                break;
+            /**--------------------------------------------------------------------- */
+            /*CONSULTAS ATRIBUTOS */
+            case '?':
+                console.log("SOY UN ATRIBUTO");
+                if (valor !== '') {
+                    if (valor === '//..') {
+                        Consulta.agregar(this.identificador, '6', valor);
+                    } else if (valor === '//.') {
+                        Consulta.agregar(this.identificador, '5', valor);
+                    } else if (valor === '/..') {
+                        Consulta.agregar(this.identificador, '6', valor);
+                    } else if (valor === '/.') {
+                        Consulta.agregar(this.identificador, '5', valor);
+                    }
+                } else {
+                    Consulta.agregar(this.identificador, '4', valor);
+                }
+
+                break;
+        }
+        /**--------------------------------------------------------------------------- */
+        if (valor !== null) {
+            console.log('>>>', this.barritas + this.identificador + '[' + valor + ']');
+        } else {
+            console.log('>> Error, no se pueden imprimir valores nulos');
+        }
+
+    }
+
+}
