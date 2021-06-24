@@ -1,6 +1,13 @@
 %{
-
+  const Padre=require("../app/Clases/Models/Nodo.js");
+  const Tipo=require("../app/Clases/Hijos/Tipo.js");
+  const Funcion=require("../app/Clases/Hijos/Funciones.js");
+  const Parametros=require("../app/Clases/Hijos/Parametros.js");
+  const Declaracion=require("../app/Clases/Hijos/Declaracion.js");
+  const Operacion=require("../app/Clases/Hijos/Operaciones.js");
+  const tipoOperacion=require("../app/Clases/Hijos/TipoOperacion.js");
 %}
+
 
 %lex
 
@@ -208,8 +215,8 @@ XQUERY
   | DECLARACIONES
 ;
 SENTENCIAS
-  : SENTENCIAS FORS 
-  | SENTENCIAS LETS 
+  : SENTENCIAS FORS
+  | SENTENCIAS LETS
   | SENTENCIAS IFS
   | SENTENCIAS ETIQUETAS
   | SENTENCIAS RETURN
@@ -225,27 +232,27 @@ FORS
 ;
 
 OPTION
-  : variable rin XPATH CONSULTAR  
+  : variable rin XPATH CONSULTAR
   | variable rat variable rin XPATH CONSULTAR
-  | LOOP  
+  | LOOP
 ;
 
-LOOP 
-  : variable rin parizq NUMEROS parder coma LOOP 
+LOOP
+  : variable rin parizq NUMEROS parder coma LOOP
   | variable rin parizq NUMEROS parder CONSULTAR
 ;
 
 NUMEROS
-  : rentero coma NUMEROS 
-  | rentero             
-  | rdecimal coma NUMEROS 
-  | rdecimal              
-  | rentero rto rentero 
+  : rentero coma NUMEROS
+  | rentero
+  | rdecimal coma NUMEROS
+  | rdecimal
+  | rentero rto rentero
 
 ;
 
 FUNCIONCITAS
-  : rdata parizq EXP parder 
+  : rdata parizq EXP parder
   | rupper parizq variable parder
   | rupper parizq variable diagonal id parder
   | rsubstring parizq variable coma CONDICION coma CONDICION parder
@@ -258,16 +265,16 @@ CONSULTAR
   | RETURN
 
 ;
-WHERE 
+WHERE
   : rwhere CUERPO
 ;
 
 CUERPO
-  : CUERPO variable diagonal CONDICION and 
-  | CUERPO variable diagonal CONDICION or 
+  : CUERPO variable diagonal CONDICION and
+  | CUERPO variable diagonal CONDICION or
   | variable diagonal CONDICION
 ;
-ORDER 
+ORDER
   : rorder rby ORDENAMIENTO
 ;
 
@@ -278,8 +285,8 @@ ORDENAMIENTO
   | variable diagonal id
 ;
 
-RETURN 
-  : rreturn 
+RETURN
+  : rreturn
   | rreturn variable
   | rreturn variable diagonal id
   | rreturn ETIQUETAS
@@ -326,300 +333,548 @@ VARS
 
 //local:minPrice($book/price,$book/discount)}
 CONDICION:
-	 CONDICION mas CONDICION
-	|CONDICION menos CONDICION
-	|CONDICION por CONDICION
-	|CONDICION div CONDICION
-	|CONDICION mod CONDICION
-	|CONDICION or CONDICION
-	|CONDICION and CONDICION
-	|CONDICION igual CONDICION
-	|CONDICION dif CONDICION
-	|CONDICION menor CONDICION
-	|CONDICION mayor CONDICION
-	|CONDICION menori CONDICION
-	|CONDICION mayori CONDICION
-  |CONDICION req CONDICION
-  |CONDICION rne CONDICION
-  |CONDICION rlt CONDICION
-  |CONDICION rle CONDICION
-  |CONDICION rgt CONDICION
-  |CONDICION rge CONDICION
-	|parizq CONDICION parder
-	|CONDICION diagonal CONDICION
-	|cadena
-	|rdecimal
-	|rentero
-	|id
-	|cadenas
-  |variable
+	 CONDICION mas CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.SUMA,$1,$3));
+                                                   }
+	|CONDICION menos CONDICION                       {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.RESTA,$1,$3));
+                                                   }
+	|CONDICION por CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MULTIPLICACION,$1,$3));
+                                                   }
+	|CONDICION div CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.DIVISION,$1,$3));
+                                                   }
+	|CONDICION mod CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MODAL,$1,$3));
+                                                   }
+	|CONDICION or CONDICION                          {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.OR,$1,$3));
+                                                   }
+	|CONDICION and CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.AND,$1,$3));
+                                                   }
+	|CONDICION igual CONDICION                       {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.IGUAL,$1,$3));
+                                                   }
+	|CONDICION dif CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.DIFERENTE,$1,$3));
+                                                   }
+	|CONDICION menor CONDICION                       {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MENOR,$1,$3));
+                                                   }
+	|CONDICION mayor CONDICION                       {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MAYOR,$1,$3));
+                                                   }
+	|CONDICION menori CONDICION                      {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MENORI,$1,$3));
+                                                   }
+	|CONDICION mayori CONDICION                      {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MAYORI,$1,$3));
+                                                   }
+  |CONDICION req CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.IGUALU,$1,$3));
+                                                   }
+  |CONDICION rne CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.DIFERENTEU,$1,$3));
+                                                   }
+  |CONDICION rlt CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MENORU,$1,$3));
+                                                   }
+  |CONDICION rle CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MENORIU,$1,$3));
+                                                   }
+  |CONDICION rgt CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MAYORU,$1,$3));
+                                                   }
+  |CONDICION rge CONDICION                         {
+                                                    $$=new Padre.default("CONDICION","");
+                                                    $$.AgregarHijo(new Operacion.Operacion(tipoOperacion.Operador.MAYORIU,$1,$3));
+                                                   }
+	|parizq CONDICION parder                         {
+                                                    $$=$2;
+                                                   }
+	|cadena                                          { $$=new Padre.default($1,""); }
+	|rdecimal                                        { $$=new Padre.default($1,""); }
+	|rentero                                         { $$=new Padre.default($1,""); }
+	|id                                              { $$=new Padre.default($1,""); }
+	|cadenas                                         { $$=new Padre.default($1,""); }
+  |variable                                        { $$=new Padre.default($1,""); }
 	;
 
 
 IFS
-  : rif parizq CONDICION parder rthen SENTENCIAS relse SENTENCIAS
-  | rif parizq CONDICION parder rthen SENTENCIAS  
+  : rif parizq CONDICION parder rthen SENTENCIAS relse SENTENCIAS   {
+                                                                      $$=Padre.default("IF","");
+                                                                      $$.AgregarHijo(new Declaracion.Declaracion($3,$6,$8,@1.first_line, @1.first_column));
+                                                                    }
+  | rif parizq CONDICION parder rthen SENTENCIAS                    {
+                                                                      $$=Padre.default("IF","");
+                                                                      $$.AgregarHijo(new Declaracion.Declaracion($3,$6,null,@1.first_line, @1.first_column));
+                                                                    }
 ;
 
 LETS
-  : rlet variable dospuntos igual ASIGNACIONES
-  | rlet variable
+  : rlet variable dospuntos igual ASIGNACIONES  {
+                                                 $$=Padre.default("LET","");
+                                                 $$.AgregarHijo(new Declaracion.Declaracion($2,$5,@1.first_line, @1.first_column));
+                                                }
+  | rlet variable                               {
+                                                 $$=Padre.default("LET","");
+                                                 $$.AgregarHijo(new Declaracion.Declaracion($2,null,@1.first_line, @1.first_column));
+                                                }
 ;
 
 ASIGNACIONES
-  : XPATH
-  | parizq NUMEROS parder
-  | parizq FUNCIONCITAS parder
-  | CONDICION
-  | FUNCIONCITAS
+  : XPATH                                       {
+                                                 $$=Padre.default("ASIGNACIONES","");
+                                                 $$.AgregarHijo($1);
+                                                }
+  | parizq NUMEROS parder                       {
+                                                 $$=Padre.default("ASIGNACIONES","");
+                                                 $$.AgregarHijo(new Padre.default($1,""));
+                                                 $$.AgregarHijo($2);
+                                                 $$.AgregarHijo(new Padre.default($3,""));
+                                                }
+  | parizq FUNCIONCITAS parder                  {
+                                                 $$=Padre.default("ASIGNACIONES","");
+                                                 $$.AgregarHijo(new Padre.default($1,""));
+                                                 $$.AgregarHijo($2);
+                                                 $$.AgregarHijo(new Padre.default($3,""));
+                                                }
+  | CONDICION                                   {
+                                                 $$=Padre.default("ASIGNACIONES","");
+                                                 $$.AgregarHijo($1);
+                                                }
+  | FUNCIONCITAS                                {
+                                                 $$=Padre.default("ASIGNACIONES","");
+                                                 $$.AgregarHijo($1);
+                                                }
 
 ;
 
 TIPOS :
-   rinteger inter
-  |decimal inter
-  |rstring inter
-  |rboolean inter
-  |rdata inter
-  |rboolean inter
-  |rfloat inter
+   rinteger inter     {
+                        $$=new Padre.default("TIPOS","");
+                        $$.AgregarHijo(Tipo.Tipo.INTEGER)
+                      }
+  |decimal inter      {
+                        $$=new Padre.default("TIPOS","");
+                        $$.AgregarHijo(Tipo.Tipo.DECIMAL)
+                      }
+  |rstring inter      {
+                        $$=new Padre.default("TIPOS","");
+                        $$.AgregarHijo(Tipo.Tipo.STRING)
+                      }
+  |rboolean inter     {
+                        $$=new Padre.default("TIPOS","");
+                        $$.AgregarHijo(Tipo.Tipo.BOOLEAN)
+                      }
+  |rdata inter        {
+                        $$=new Padre.default("TIPOS","");
+                        $$.AgregarHijo(Tipo.Tipo.DATA)
+                      }
+  |rfloat inter       {
+                        $$=new Padre.default("TIPOS","");
+                        $$.AgregarHijo(Tipo.Tipo.FLOAT)
+                      }
 ;
 
 DECLARACIONES
-  : rdeclare rfunction id dospuntos id parizq PARAMETROS parder ras rxs dospuntos TIPOS llaveizq SENTENCIAS llaveder puntocoma
-  |rdeclare rfunction id dospuntos id parizq parder ras rxs dospuntos TIPOS llaveizq SENTENCIAS llaveder puntocoma
-  |rdeclare rfunction id dospuntos id parizq PARAMETROS parder ras rxs dospuntos TIPOS parder  llaveder puntocoma
-  |rdeclare rfunction id dospuntos id parizq  parder ras rxs dospuntos TIPOS llaveizq  parder puntocoma
+  :rdeclare rfunction id dospuntos id parizq PARAMETROS parder ras rxs dospuntos TIPOS llaveizq SENTENCIAS llaveder puntocoma {
+                                                                                                                                $$=new Padre.default("FUNCIONES_XQUERY","");
+                                                                                                                                $$.AgregarHijo(new Funcion.default($3,$5,$7,$12,$14,@1.first_line, @1.first_column));
+                                                                                                                              }
+  |rdeclare rfunction id dospuntos id parizq parder ras rxs dospuntos TIPOS llaveizq SENTENCIAS llaveder puntocoma            {
+                                                                                                                                $$=new Padre.default("FUNCIONES_XQUERY","");
+                                                                                                                                $$.AgregarHijo(new Funcion.default($3,$5,null,$11,$13,@1.first_line, @1.first_column));
+                                                                                                                              }
+  |rdeclare rfunction id dospuntos id parizq PARAMETROS parder ras rxs dospuntos TIPOS parder  llaveder puntocoma             {
+                                                                                                                                $$=new Padre.default("FUNCIONES_XQUERY","");
+                                                                                                                                $$.AgregarHijo(new Funcion.default($3,$5,$7,$12,null,@1.first_line, @1.first_column));
+                                                                                                                              }
+  |rdeclare rfunction id dospuntos id parizq  parder ras rxs dospuntos TIPOS llaveizq  parder puntocoma                       {
+                                                                                                                                $$=new Padre.default("FUNCIONES_XQUERY","");
+                                                                                                                                $$.AgregarHijo(new Funcion.default($3,$5,null,$11,null,@1.first_line, @1.first_column));
+                                                                                                                              }
 ;
 
 PARAMETROS
-  : variable ras rxs dospuntos TIPOS coma PARAMETROS
-  | variable ras rxs dospuntos TIPOS 
+  : variable ras rxs dospuntos TIPOS coma PARAMETROS  {
+                                                        $$=new Padre.default("PARAMETROS","");
+                                                        $$.AgregarHijo(new Parametros.Parametros($1,$5));
+                                                        $$.AgregarHijo($7);
+                                                      }
+  | variable ras rxs dospuntos TIPOS                  {
+                                                        $$=new Padre.default("PARAMETROS","")
+                                                        $$.AgregarHijo(new Parametros.Parametros($1,$5));
+                                                      }
 ;
 
 
 TEXTO
-  : TEXTO id                 {
-                              }
-  | TEXTO rentero             {
-                              }
-  | TEXTO rdecimal
-  | TEXTO rentero
-  | TEXTO integer
-  | TEXTO decimal
-  | TEXTO float
-  | TEXTO double
-
-  | TEXTO cadena              {
-                              }
-  | TEXTO cadenas               {
-                              }
-  | TEXTO barra               {
-                              }
-  | TEXTO dolar               {
-                              }
-  | TEXTO corder                 {
-                              }
-  | TEXTO corizq             {
-                              }
-  | TEXTO parder            {
-                              }
-  | TEXTO parizq            {
-                              }
-  | TEXTO mayor            {
-                              }
-  | TEXTO menor            {
-                              }
-  | TEXTO mayori           {
-                              }
-  | TEXTO menori              {
-                              }
-  | TEXTO igual           {
-                              }
-  | TEXTO CARACTER
-  | TEXTO punto
-  | TEXTO puntocoma
-  | TEXTO dospuntos
-  | TEXTO mas
-  | TEXTO menos
-  | TEXTO por
-  | TEXTO diagonal
-  | TEXTO inter
-  | TEXTO dosp
-  | TEXTO div
-  | TEXTO and
-  | TEXTO or
-  | TEXTO mod
-  | TEXTO difer
-  | TEXTO for
-  | TEXTO in
-  | TEXTO where
-  | TEXTO order
-  | TEXTO by
-  | TEXTO 'return'
-  | TEXTO 'if'
-  | TEXTO then
-  | TEXTO 'else'
-  | id                 {
-                              }
-  | rentero             {
-                              }
-  | rdecimal
-  | rentero
-  | integer
-  | decimal
-  | float
-  | double
-
-  | cadena              {
-                              }
-  | cadenas               {
-                              }
-  | barra               {
-                              }
-  | dolar               {
-                              }
-  | corder                 {
-                              }
-  | corizq             {
-                              }
-  | parder            {
-                              }
-  | parizq            {
-                              }
-  | mayor            {
-                              }
-  | menor            {
-                              }
-  | mayori           {
-                              }
-  | menori              {
-                              }
-  | igual           {
-                              }
-  | CARACTER
-  | punto
-  | puntocoma
-  | dospuntos
-  | mas
-  | menos
-  | por
-  | diagonal
-  | inter
-  | dosp
-  | div
-  | and
-  | or
-  | mod
-  | difer
-  | for
-  | in
-  | where
-  | order
-  | by
-  | 'return'
-  | 'if'
-  | then
-  | 'else'
+  : TEXTO id                 {$$=$1+" "+$2}
+  | TEXTO rentero            {$$=$1+" "+$2}
+  | TEXTO rdecimal           {$$=$1+" "+$2}
+  | TEXTO rentero            {$$=$1+" "+$2}
+  | TEXTO integer            {$$=$1+" "+$2}
+  | TEXTO decimal            {$$=$1+" "+$2}
+  | TEXTO float              {$$=$1+" "+$2}
+  | TEXTO double             {$$=$1+" "+$2}
+  | TEXTO cadena             {$$=$1+" "+$2}
+  | TEXTO cadenas            {$$=$1+" "+$2}
+  | TEXTO barra              {$$=$1+" "+$2}
+  | TEXTO dolar              {$$=$1+" "+$2}
+  | TEXTO corder             {$$=$1+" "+$2}
+  | TEXTO corizq             {$$=$1+" "+$2}
+  | TEXTO parder             {$$=$1+" "+$2}
+  | TEXTO parizq             {$$=$1+" "+$2}
+  | TEXTO mayor              {$$=$1+" "+$2}
+  | TEXTO menor              {$$=$1+" "+$2}
+  | TEXTO mayori             {$$=$1+" "+$2}
+  | TEXTO menori             {$$=$1+" "+$2}
+  | TEXTO igual              {$$=$1+" "+$2}
+  | TEXTO CARACTER           {$$=$1+" "+$2}
+  | TEXTO punto              {$$=$1+" "+$2}
+  | TEXTO puntocoma          {$$=$1+" "+$2}
+  | TEXTO dospuntos          {$$=$1+" "+$2}
+  | TEXTO mas                {$$=$1+" "+$2}
+  | TEXTO menos              {$$=$1+" "+$2}
+  | TEXTO por                {$$=$1+" "+$2}
+  | TEXTO diagonal           {$$=$1+" "+$2}
+  | TEXTO inter              {$$=$1+" "+$2}
+  | TEXTO dosp               {$$=$1+" "+$2}
+  | TEXTO div                {$$=$1+" "+$2}
+  | TEXTO and                {$$=$1+" "+$2}
+  | TEXTO or                 {$$=$1+" "+$2}
+  | TEXTO mod                {$$=$1+" "+$2}
+  | TEXTO difer              {$$=$1+" "+$2}
+  | TEXTO for                {$$=$1+" "+$2}
+  | TEXTO in                 {$$=$1+" "+$2}
+  | TEXTO where              {$$=$1+" "+$2}
+  | TEXTO order              {$$=$1+" "+$2}
+  | TEXTO by                 {$$=$1+" "+$2}
+  | TEXTO 'return'           {$$=$1+" "+$2}
+  | TEXTO 'if'               {$$=$1+" "+$2}
+  | TEXTO then               {$$=$1+" "+$2}
+  | TEXTO 'else'             {$$=$1+" "+$2}
+  | id                       {$$=$1}
+  | rentero                  {$$=$1}
+  | rdecimal                 {$$=$1}
+  | rentero                  {$$=$1}
+  | integer                  {$$=$1}
+  | decimal                  {$$=$1}
+  | float                    {$$=$1}
+  | double                   {$$=$1}
+  | cadena                   {$$=$1}
+  | cadenas                  {$$=$1}
+  | barra                    {$$=$1}
+  | dolar                    {$$=$1}
+  | corder                   {$$=$1}
+  | corizq                   {$$=$1}
+  | parder                   {$$=$1}
+  | parizq                   {$$=$1}
+  | mayor                    {$$=$1}
+  | menor                    {$$=$1}
+  | mayori                   {$$=$1}
+  | menori                   {$$=$1}
+  | igual                    {$$=$1}
+  | CARACTER                 {$$=$1}
+  | punto                    {$$=$1}
+  | puntocoma                {$$=$1}
+  | dospuntos                {$$=$1}
+  | mas                      {$$=$1}
+  | menos                    {$$=$1}
+  | por                      {$$=$1}
+  | diagonal                 {$$=$1}
+  | inter                    {$$=$1}
+  | dosp                     {$$=$1}
+  | div                      {$$=$1}
+  | and                      {$$=$1}
+  | or                       {$$=$1}
+  | mod                      {$$=$1}
+  | difer                    {$$=$1}
+  | for                      {$$=$1}
+  | in                       {$$=$1}
+  | where                    {$$=$1}
+  | order                    {$$=$1}
+  | by                       {$$=$1}
+  | 'return'                 {$$=$1}
+  | 'if'                     {$$=$1}
+  | then                     {$$=$1}
+  | 'else'                   {$$=$1}
 ;
 
 XPATH
-	: XPATH L_CONTENIDO
-	| L_CONTENIDO
+	: XPATH L_CONTENIDO                                          {
+                                                                  $$=new Padre.default("XPATH","");
+                                                                  $$.AgregarHijo($1);
+                                                                  $$.AgregarHijo($2);
+                                                               }
+	| L_CONTENIDO                                                {
+                                                                  $$=new Padre.default("XPATH","");
+                                                                  $$.AgregarHijo($1);
+                                                               }
 ;
 
 L_CONTENIDO:
-	diagonal CONTENIDO
-	|dobled  CONTENIDO
+	diagonal CONTENIDO                                           {
+                                                                 $$=new Padre.default("L_CONTENIDO",$1);
+                                                                 $$.AgregarHijo($2);
+                                                               }
+	|dobled  CONTENIDO                                           {
+                                                                 $$=new Padre.default("L_CONTENIDO",$1);
+                                                                 $$.AgregarHijo($2);
+                                                               }
 ;
 
 CONTENIDO:
-	id
-	|id PREDICADO
-	|FUNCIONES
-	|EXPRESION
-	|EJES
-	|dosp
-	|punto
-	|por
-	|arroba por
+	id                                                           {
+                                                                 $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+
+                                                               }
+	|id PREDICADO                                                { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                                 $$.AgregarHijo($2);
+                                                               }
+	|FUNCIONES                                                   { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                               }
+	|EXPRESION                                                   { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                               }
+	|EJES                                                        { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                               }
+	|dosp                                                        { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                               }
+	|punto                                                       { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                               }
+	|por                                                         { $$=new Padre.default("CONTENIDO","");
+                                                                 $$.AgregarHijo($1);
+                                                               }
+	|arroba por                                                  {
+                                                                  $$=new Padre.default("CONTENIDO","");
+                                                                  $$.AgregarHijo($1+$2)
+                                                                }
 ;
 
 PREDICADO:
-	 PREDICADO corizq EXPRESION corder
-	|corizq EXPRESION corder
+	 PREDICADO corizq EXPRESION corder                          {
+                                                                $$=new Padre.default("PREDICADO","");
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|corizq EXPRESION corder                                    {
+                                                                $$=new Padre.default("PREDICADO","");
+                                                                $$.AgregarHijo($2);
+                                                              }
 ;
 
 EXPRESION:
-	 EXPRESION mas EXPRESION
-	|EXPRESION menos EXPRESION
-	|EXPRESION por EXPRESION
-	|EXPRESION div EXPRESION
-	|EXPRESION mod EXPRESION
-	|EXPRESION or EXPRESION
-	|EXPRESION and EXPRESION
-	|EXPRESION igual EXPRESION
-	|EXPRESION dif EXPRESION
-	|EXPRESION menor EXPRESION
-	|EXPRESION mayor EXPRESION
-	|EXPRESION menori EXPRESION
-	|EXPRESION mayori EXPRESION
-  |EXPRESION req EXPRESION
-  |EXPRESION rne EXPRESION
-  |EXPRESION rlt EXPRESION
-  |EXPRESION rle EXPRESION
-  |EXPRESION rgt EXPRESION
-  |EXPRESION rge EXPRESION
-	|parizq EXPRESION parder
-	|EXPRESION diagonal EXPRESION
-  |rsubstring parizq id coma EXPRESION coma EXPRESION  parder
-	|arroba id
-	|arroba por
-	|FUNCIONES
-	|cadena
-	|rdecimal
-	|rentero
-	|punto
-	|dosp
-	|id
-	|cadenas
+	 EXPRESION mas EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION menos EXPRESION                                  { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION por EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION div EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION mod EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION or EXPRESION                                     { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION and EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION igual EXPRESION                                  { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION dif EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION menor EXPRESION                                  { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION mayor EXPRESION                                  { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION menori EXPRESION                                 { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|EXPRESION mayori EXPRESION                                 { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |EXPRESION req EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |EXPRESION rne EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |EXPRESION rlt EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |EXPRESION rle EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |EXPRESION rgt EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |EXPRESION rge EXPRESION                                    { $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+	|parizq EXPRESION parder                                    {
+                                                                $$=new Padre.default("EXPRESION","");
+                                                                $$.AgregarHijo(new Padre.default($1,""));
+                                                                $$.AgregarHijo($2);
+                                                                $$.AgregarHijo(new Padre.default($3,""));
+                                                              }
+	|EXPRESION diagonal EXPRESION                               {
+                                                                $$=new Padre.default("EXPRESION",$2);
+                                                                $$.AgregarHijo($1);
+                                                                $$.AgregarHijo($3);
+                                                              }
+  |rsubstring parizq id coma EXPRESION coma EXPRESION  parder {
+                                                                 $$=new Padre.default("EXPRESION",$1);
+                                                                 $$.AgregarHijo($3);
+                                                                 $$.AgregarHijo($5);
+                                                                 $$.AgregarHijo($7);
+                                                              }
+	|arroba id                               { $$=new Padre.default("EXPRESION",$1+$2); }
+	|arroba por                              { $$=new Padre.default("EXPRESION",$1+$2); }
+	|FUNCIONES                               { $$=new Padre.default("EXPRESION",$1); }
+	|cadena                                  { $$=new Padre.default("EXPRESION",$1); }
+	|rdecimal                                { $$=new Padre.default("EXPRESION",$1); }
+	|rentero                                 { $$=new Padre.default("EXPRESION",$1); }
+	|punto                                   { $$=new Padre.default("EXPRESION",$1); }
+	|dosp                                    { $$=new Padre.default("EXPRESION",$1); }
+	|id                                      { $$=new Padre.default("EXPRESION",$1); }
+	|cadenas                                 { $$=new Padre.default("EXPRESION",$1); }
 	;
 
 FUNCIONES:
-	 FUNCION parizq parder
+	 FUNCION parizq parder                   { $$=$1 }
 ;
 
 FUNCION:
-	 rlast
-	|rposition
-	|rnode
-	|rtext
+	 rlast                                   { $$=new Padre.default("FUNCION",$1); }
+	|rposition                               { $$=new Padre.default("FUNCION",$1); }
+	|rnode                                   { $$=new Padre.default("FUNCION",$1); }
+	|rtext                                   { $$=new Padre.default("FUNCION",$1); }
 ;
 
 EJES:
-	 EJE dospuntos dospuntos CONTEJES
-	|EJES EJE dospuntos dospuntos CONTEJES
+	 EJES EJE dospuntos dospuntos CONTEJES  {
+                                            $$=new Padre.default("EJES",null)
+                                            $$.AgregarHijo($1);
+                                            $$.AgregarHijo($2);
+                                            $$.AgregarHijo($5);
+                                          }
+  | EJE dospuntos dospuntos CONTEJES      {
+                                            $$=new Padre.default("EJE","");
+                                            $$=AgregarHijo($1);
+                                            $$.AgregarHijo($4);
+                                          }
 ;
 
 CONTEJES:
-	id
-	|id PREDICADO
-	|CONTEJES L_CONTENIDO
-	|L_CONTENIDO
+	 id                       { $$=new Padre.default($1,""); }
+
+	|id PREDICADO             { $$=new Padre.default($1,"");
+                              $$.AgregarHijo($2);
+                            }
+	|CONTEJES L_CONTENIDO     {
+                              $$ = new Padre.default("CONT_EJES","")
+                              $$.AgregarHijo($1);
+                              $$.AgregarHijo($2);
+                            }
+	|L_CONTENIDO              { $$=$1 }
 ;
 
 EJE:
-	 rancestros
-	|rancestro
-	|ratributo
-	|rchild
-	|rdescenos
-	|rdescen
-	|rseguidorh
-	|rseguidor
-	|rnombres
-	|rparent
-	|rprecedings
-	|rpreceding
-	|rself
+	 rancestros       {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rancestro        {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|ratributo        {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rchild           {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rdescenos        {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rdescen          {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rseguidorh       {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rseguidor        {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rnombres         {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rparent          {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rprecedings      {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rpreceding       {
+                      $$=new Padre.default("EJE",$1);
+                    }
+	|rself            {
+                      $$=new Padre.default("EJE",$1);
+                    }
 ;
