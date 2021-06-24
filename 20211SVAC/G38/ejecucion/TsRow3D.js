@@ -1,5 +1,5 @@
 "use strict";
-class TsRow {
+class TsRow3D {
     constructor(identificador, indice, nombreElemento, nodo, tipo, entorno, entorno_row) {
         this._identificador = identificador;
         this._indice = indice;
@@ -112,7 +112,7 @@ class TsRow {
         this._sub_entorno = value;
     }
     obtenerTablaSimbolos() {
-        let ts = new TablaSimbolos(null);
+        let ts = new TablaSimbolos3D(null);
         if (this._sub_entorno !== undefined && this._sub_entorno !== null)
             ts.listaSimbolos = this._sub_entorno;
         return ts;
@@ -179,29 +179,29 @@ class TsRow {
         }
         return result;
     }
-    isEqual(tsRow) {
-        if (tsRow == undefined || tsRow == null) {
+    isEqual(TsRow3D) {
+        if (TsRow3D == undefined || TsRow3D == null) {
             return false;
         }
-        if (this._nombreElemento != tsRow._nombreElemento) {
+        if (this._nombreElemento != TsRow3D._nombreElemento) {
             return false;
         }
-        if (this._indice != tsRow._indice) {
+        if (this._indice != TsRow3D._indice) {
             return false;
         }
-        if (this._sub_entorno != null && tsRow.sub_entorno == null
-            || this.sub_entorno == null && tsRow.sub_entorno != null) {
+        if (this._sub_entorno != null && TsRow3D.sub_entorno == null
+            || this.sub_entorno == null && TsRow3D.sub_entorno != null) {
             return false;
         }
-        if (this.sub_entorno == null || tsRow.sub_entorno == null) {
+        if (this.sub_entorno == null || TsRow3D.sub_entorno == null) {
             return true;
         }
-        if (this.sub_entorno.length != tsRow.sub_entorno.length) {
+        if (this.sub_entorno.length != TsRow3D.sub_entorno.length) {
             return false;
         }
         for (let i in this._sub_entorno) {
             let thisSubRow = this._sub_entorno[i];
-            let subRow = tsRow._sub_entorno[i];
+            let subRow = TsRow3D._sub_entorno[i];
             if (!thisSubRow.isEqual(subRow)) {
                 return false;
             }
@@ -210,51 +210,5 @@ class TsRow {
     }
     get id() {
         return this._id;
-    }
-    generarCodigo_3d() {
-        var tempPosObjeto = CodeUtil.generarTemporal();
-        var tempPosCadena = CodeUtil.generarTemporal();
-        var tempPosSubEntorno = CodeUtil.generarTemporal();
-        var tempEtiquetaRepositorio;
-        var sizeEntorno = (this.nodo instanceof XmlAttribute) ? this._sub_entorno.length + 1 : this._sub_entorno.length;
-        CodeUtil.printComment("-> Inició " + this._identificador);
-        CodeUtil.printWithComment(tempPosObjeto + " = HP + 0 ; ", "Guardamos el inicio del Objeto");
-        CodeUtil.printWithComment(tempPosCadena + " = HP + 1 ; ", "Guardamos el espacio para "
-            + ((this.nodo instanceof XmlElement) ? "la etiqueta" : (this.nodo instanceof XmlContent) ? "el contenido" : " el nombre del atributo"));
-        CodeUtil.printComment("Apartamos espacio para los atributos de " + this._identificador);
-        CodeUtil.printWithComment("HP = HP + 2 ;", "Incrementamos el espacio para atributos internos");
-        CodeUtil.printWithComment(tempPosSubEntorno + " = HP + 0 ; ", "Guardamos el inicio de su subentorno");
-        CodeUtil.printWithComment("HP = HP + " + sizeEntorno + ";", "Incrementamos el heap con el " + "tamaño de los atributos");
-        CodeUtil.printComment("Guardamos el tipo de objeto");
-        CodeUtil.printWithComment("Heap[(int)" + tempPosObjeto + "] = " + this.tipo.getTipo() + ";", "Guardamos el Tipo: " + this.tipo + "(" + this.tipo.getTipo() + ")");
-        tempEtiquetaRepositorio = this.nodo.generateString_3d();
-        CodeUtil.printComment("Guardamos la etiqueta generada");
-        CodeUtil.printWithComment("Heap[(int)" + tempPosCadena + "] = " + tempEtiquetaRepositorio + ";", "Guardamos en heap el apuntador a la cadena");
-        CodeUtil.print("");
-        CodeUtil.printComment("Inició Código de los hijos de " + this._identificador);
-        if (this.nodo instanceof XmlElement) {
-            var _i = 0;
-            for (let child of this._sub_entorno) {
-                let tmpPosChild = CodeUtil.generarTemporal();
-                let tmpChild;
-                CodeUtil.print("");
-                CodeUtil.print(tmpPosChild + " = " + tempPosSubEntorno + " + " + _i + " ;");
-                tmpChild = child.generarCodigo_3d();
-                CodeUtil.print("Heap[(int)" + tmpPosChild + "] = " + tmpChild + " ;");
-                _i += 1;
-            }
-        }
-        else if (this.nodo instanceof XmlAttribute) {
-            let tmpGeneradoValorAtributo;
-            let nodoAtributo = this.nodo;
-            let tmpPosChild = CodeUtil.generarTemporal();
-            CodeUtil.printWithComment(tmpPosChild + " = " + tempPosSubEntorno + " + " + 0 + " ;", //Cero porque para atributos no tiene hijos
-            "Posicion para valor del atriuto");
-            tmpGeneradoValorAtributo = nodoAtributo.generateValueString_3d();
-            CodeUtil.printWithComment("Heap[(int)" + tmpPosChild + "] = " + tmpGeneradoValorAtributo + " ;", "Guardamos la posicion del valor del atributo");
-        }
-        CodeUtil.printComment("Finalizó Código de los hijos de " + this._identificador);
-        CodeUtil.printComment("-> Finalizó " + this._identificador);
-        return tempPosObjeto;
     }
 }

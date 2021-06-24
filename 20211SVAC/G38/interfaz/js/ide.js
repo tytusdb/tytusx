@@ -295,3 +295,26 @@ const getStringAst = function (){
     _graphicUtil = new GraphicUtil();
     return _graphicUtil.generarGrafo(_backEnd.root);
 };
+
+function  generar3D(cadEntradaXml){
+    var tablaSimbolosXml;
+    try {
+        analizarXML(cadEntradaXml);
+        CodeUtil.init();
+        tablaSimbolosXml = _tsXml;
+        tablaSimbolosXml.cargarXml_3d();
+        CodeUtil.finalizeCad();
+        print('Fin de generación');
+    }catch (e){
+        print('error en ejecucion: '+e);
+        console.log(e);
+    }
+};
+
+
+function descargarArchivo(cadEntradaXml){
+    generar3D(cadEntradaXml);
+    var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "XPath.c");
+
+};

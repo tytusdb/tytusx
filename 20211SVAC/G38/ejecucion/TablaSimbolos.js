@@ -503,4 +503,11 @@ class TablaSimbolos {
         cadena += "}\n";
         return cadena;
     }
+    cargarXml_3d() {
+        CodeUtil.printWithComment("void cargarXml()", "Carga el xml al stack,heap y repository");
+        CodeUtil.print("{");
+        this.listaSimbolos[0].sub_entorno[0].generarCodigo_3d();
+        CodeUtil.printWithComment("}", "Fin de cargarXml()");
+        CodeUtil.print("");
+    }
 }
