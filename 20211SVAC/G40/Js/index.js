@@ -1,6 +1,7 @@
 "use strict";
 
 function Optimizar(){
+    ListaOptimizaciones = [];
     var contenido = SalidaTraduccion.getValue();
     if (contenido == ""){
         window.alert("No hay C3D para optimizar :O !");
@@ -9,10 +10,15 @@ function Optimizar(){
         analisisOptimizadorCorrecto = EjecutarOptimizador(contenido);
 
         if (analisisOptimizadorCorrecto){
-
+            
             console.log("↓ RESULTADO PARSER OPTIMIZADOR ↓");
             console.log(resultadoOptimizador);
-
+            var Optimizar = new Optimizador(resultadoOptimizador);
+            var salida = Optimizar.Ejecutar();
+            SalidaTraduccion.setValue(salida);
+            window.alert("C3D optimizado exitosamente :D !");
+            console.log(ListaOptimizaciones);
+            localStorage.setItem('opJSON',JSON.stringify(ListaOptimizaciones, null, 2));
         } else {
             window.alert("El parser del Optimizador no pudo recuperarse de un error sintactico D: !");
         }
@@ -24,7 +30,7 @@ function Optimizar(){
 function EjecutarOptimizador(contenidoC3D){ 
     try {
 
-        resultadoOptimizador = Optimizador.parse(contenidoC3D);
+        resultadoOptimizador = GramaticaOptimizador.parse(contenidoC3D);
         return true;
     } catch (error) {
         console.log(error);
