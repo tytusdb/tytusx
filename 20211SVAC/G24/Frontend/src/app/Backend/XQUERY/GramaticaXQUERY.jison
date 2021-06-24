@@ -29,7 +29,6 @@
 "ge"        return 'RMAYORIGUAL';
 "at"        return 'RAT';
 "to"        return 'RTO';
-"and"       return 'RAND';
 "declare"   return 'RDECLARE';
 "function"  return 'RFUNCTION';
 "div"       return 'RDIV';
@@ -39,6 +38,7 @@
 "node"      return 'RNODO';
 "text"      return 'RTEXT';
 "data"      return 'RDATA';
+"last"      return 'RLAST';
 
           
 
@@ -53,25 +53,28 @@
 "</h1>"         return 'CH1';
 "<ul>"          return 'AUL';
 "</ul>"         return 'CUL';
-"<li>"          return 'ALI';
-"</li>"         return 'CLI';
 
 
 
+"*"         return 'ASTERISCO';
 "("         return 'PARIZQ';
 ")"         return 'PARDER';    
+".."        return 'DOBLEPUNTO';
 "."         return 'PUNTO';
+"//"        return 'DOBLEBARRA';
 "/"         return 'BARRA';
 "["         return 'CORIZQ';
 "]"         return 'CORDER';
 "$"         return 'DOLAR';
 ">="        return 'MAYORIGUAL';
+"</"        return 'MENORQUECIERRE';
 "<="        return 'MENORIGUAL';
 "<"         return 'MENORQUE';
 ">"         return 'MAYORQUE';
 "{"         return 'LLAVEIZQ';
 "}"         return 'LLAVEDER';
 "!="        return 'DIFERENCIACION';
+"="         return 'IGUAL';
 "=="        return 'IGUALACION';
 "+"         return 'MAS';
 "-"         return 'MENOS';
@@ -81,7 +84,8 @@
 "^"         return 'POTENCIA';
 "@"         return 'ARROBA';
 ","         return 'COMA';
-":="        return 'CLAUSE';
+":="        return 'LETDOSPUNTOS';
+":"         return 'DOSPUNTOS';
 
 \"[^\"]*\"             { yytext=yytext.substr(1,yyleng-2); return 'CADENA'; }
 \'[^\']*\'             { yytext=yytext.substr(1,yyleng-2); return 'QUOTE'; }
@@ -90,7 +94,6 @@
 ([a-zA-Z_À-ÿ\u00F1\u00D1])[a-zA-Z0-9_^ÑñÀ-ÿ\-\.\u00F1\u00D10-9_]*  return 'IDENTIFICADOR';
 ([a-zA-Z_À-ÿ\u00F1\u00D1])[a-zA-Z0-9_^ÑñÀ-ÿ\-\.\u00F1\u00D10-9_/?]*  return 'IDCONSULTA';
 
-//([/]*.^\n+)*  return 'ERCONSULTA';
 [0-9]+("."[0-9]+)?\b                      return 'ENTERO';
 
 <<EOF>>               return 'EOF'
@@ -112,17 +115,22 @@ INICIO
 ;
 
 INSTRUCCIONES
-    :INSTRUCCIONES INSTRUCCION {$1.push($2); $$=$1;}
-    |INSTRUCCION    {$$=[$1];}
+   //| //html
+    :INSTRUCCION    {$$=$1}
 ;
 
 INSTRUCCION
     :FOR {$$=$1;}
+    |LET {$$=$1;}
 ;
 
+LET
+    :RLET VARIABLE LETDOSPUNTOS L_CLAUSULA RRETURN RESULTADO {$$="res "+$2+" := "+$4+" return "+$6}
+    ;
+
 FOR
-    :RFOR VARIABLE SENTENCIA L_CONDICIONALES  RRETURN CONDICION {$$="for "+$2+$3+$4+" return "+$6}
-    |RFOR VARIABLE SENTENCIA  RRETURN CONDICION {$$="for "+$2+$3+" return "+$5} //CONDICION SE DEBE CAMBIAR 
+    :RFOR VARIABLE SENTENCIA L_CONDICIONALES  RRETURN RESULTADO {$$="for "+$2+$3+$4+" return "+$6}
+    |RFOR VARIABLE SENTENCIA  RRETURN RESULTADO {$$="for "+$2+$3+" return "+$5} 
     ;
 
 L_CONDICIONALES
@@ -136,17 +144,18 @@ CONDICIONALES
     ;
 
 CONDICION
-    :VARIABLE CONSULTA CONECTOR CONDICION   {$$=$1+$2+" "+$3+$4}
-    |VARIABLE CONSULTA                      {$$=$1+$2}
+    :VARIABLE L_CONSULTAS CONECTOR CONDICION   {$$=$1+$2+" "+$3+$4}
+    |VARIABLE L_CONSULTAS                      {$$=$1+$2}
     |VARIABLE                               {$$=$1}
     ;
 
 
 SENTENCIA
-    : RIN FOPEN CONSULTA {$$=" in "+$2+$3}
-    | RIN CONSULTA {$$=" in "+$2}
+    : RIN FOPEN L_CONSULTAS {$$=" in "+$2+$3}
+    | RIN L_CONSULTAS {$$=" in "+$2}
     | RIN L_CLAUSULA {$$=" in "+$2}
-    | RAT VARIABLE RIN {$$= "at "+$2+" in "}
+    | RAT VARIABLE SENTENCIA {$$= "at "+$2+" in "}
+    | VARIABLE SENTENCIA {$$=$1+$2}
     ;
 
 L_CLAUSULA
@@ -155,8 +164,8 @@ L_CLAUSULA
     ;
 
 CLAUSULA
-    :PARDER ENTERO RTO ENTERO PARIZQ {$$=$2+" to "+$4}
-    |PARDER ENTERO RTO ENTERO PARIZQ CONECTOR {$$=$2+" to "+$4+$6}
+    :PARIZQ ENTERO CONECTOR ENTERO PARDER {$$=$2+" to "+$4}
+    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR {$$=$2+" to "+$4+$6}
     ;
 
 VARIABLE
@@ -167,13 +176,103 @@ FOPEN
     :RDOC PARIZQ CADENA PARDER  {$$="doc("+$3+")"}
 ;
 
-CONSULTA
-    :BARRA IDENTIFICADOR            {$$="/"+$2}  //AQUI HAY QUE AGREGAR TODO LO QUE PUEDE VENIR DE XPATH
-;
 
 CONECTOR
     :AND    {$$=$1}
     |OR     {$$=$1}
     |COMA   {$$=$1}
+    |PUNTO  {$$=$1}
+    |RTO    {$$=$1}
     ;    
 
+RESULTADO
+    :CONDICION  {$$=$1}
+    |ABERTURA L_RESULT  CIERRE {$$=$1+$2+$3}
+    |IF         {$$=$1}
+    ;
+
+L_RESULT
+    :L_RESULT RESULT {$1.push($2); $$=$1;}
+    |RESULT  {$$=[$1];}
+    ;
+
+RESULT
+    :LLAVEIZQ CONDICION LLAVEDER {$$=" {"+$2+"} "}
+    |LLAVEIZQ CONDICION LLAVEDER CONECTOR RESULT {$$=" {"+$2+"} "+$4+$5}
+    |LLAVEIZQ RDATA PARIZQ CONDICION PARDER LLAVEDER {$$=" {data("+$4+")} "}
+    |LLAVEIZQ RDATA PARIZQ CONDICION PARDER LLAVEDER CONECTOR ASIGNACION RESULT {$$=" {data("+$4+")} "+$7+$8+$9}
+    |ASIGNACION RESULT  {$$=$1+$2}
+    |//IF
+    ;    
+
+ASIGNACION
+    :IDENTIFICADOR DOSPUNTOS    {$$=$1+" : "}
+    |IDENTIFICADOR IGUAL   {$$=$1+" = "}
+    ;
+
+IF  
+    :RIF PARIZQ VARIABLE CONSULTA PARDER RTHEN RESULTADO RELSE RESULTADO
+    |RIF PARIZQ VARIABLE CONSULTA PARDER RTHEN RESULTADO RELSE PARIZQ PARDER
+    ;
+
+ABERTURA
+    :MENORQUE IDENTIFICADOR ATRIBUTO MAYORQUE {$$="<"+$2+$3+">"}
+    |MENORQUE IDENTIFICADOR MAYORQUE    {$$="<"+$2+">"}
+    ;    
+
+CIERRE
+    :MENORQUECIERRE IDENTIFICADOR MAYORQUE {$$="</"+$2+">"}
+    ;
+
+ATRIBUTO
+    :IDENTIFICADOR IGUAL CADENA  {$$=$1+"="+$3}
+    ;
+
+//XPATH
+    
+L_CONSULTAS
+    :L_CONSULTAS CONSULTA {$1.push($2); $$=$1;}
+    |CONSULTA                {$$=[$1];}
+    ;    
+
+CONSULTA
+    :OPCIONESCONSULT PREDICADO SALIDA            {$$="/"+$2}  //AQUI HAY QUE AGREGAR TODO LO QUE PUEDE VENIR DE XPATH
+    |EXPRESION SALIDA                            
+;
+
+SALIDA  
+    :CONSULTA
+    |
+    ;
+
+OPCIONESCONSULT
+    :BARRA                  {$$=$1}
+    |DOBLEBARRA             {$$=$1}
+    |ARROBA                 {$$=$1}
+    |DOBLEPUNTO             {$$=$1}
+    |PUNTO                  {$$=$1}
+    |ASTERISCO              {$$=$1}
+    ;
+
+PREDICADO
+    :CORIZQ EXPRESION CORDER    {$$="["+$2+"]"}
+    |EXPRESION                  {$$=$1}
+    ;
+
+EXPRESION
+    :ENTERO                     {$$=$1}
+    |IDENTIFICADOR              {$$=$1}
+    |CADENA                     {$$=$1}
+    |ARROBA IDENTIFICADOR       {$$="@ "+$2}
+    |RLAST PARIZQ PARDER        {$$=$1+"()"}
+    |EXPRESION MAS EXPRESION    {$$=$1+" + "+$3}
+    |EXPRESION MENOS EXPRESION  {$$=$1+" - "+$3}
+    |EXPRESION RDIV EXPRESION   {$$=$1+" div "+$3}
+    |EXPRESION MODULO EXPRESION {$$=$1+" % "+$3}
+    |EXPRESION IGUALACION EXPRESION {$$=$1+" == "+$3}
+    |EXPRESION DIFERENCIACION EXPRESION {$$=$1+"!="+$3}
+    |EXPRESION MENORIGUAL EXPRESION {$$=$1+"<="+$3}
+    |EXPRESION MAYORIGUAL EXPRESION {$$=$1+"=>"+$3}
+    |EXPRESION MENORQUE EXPRESION {$$=$1+"<"+$3}
+    |EXPRESION MAYORQUE EXPRESION {$$=$1+">"+$3}
+    ;    
