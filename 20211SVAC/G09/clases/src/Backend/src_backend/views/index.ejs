@@ -1,0 +1,153 @@
+<!DOCTYPE html5>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Compilador</title>
+    <link rel="stylesheet" href="/css/codemirror.css">
+    <link rel="stylesheet" href="/css/material-darker.css">
+    <!-- <link rel="stylesheet" href="/css/bootstrap.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Slabo+27px&display=swap" rel="stylesheet">
+</head>
+
+<body style="background-color: rgb(22, 22, 22);">
+    <center>
+        <h3 style="color: beige;">XML Compiler </h3>
+    </center>
+
+
+    <form method="post" action="/analizar" id="form">
+
+
+        <div style="display: flex; width: 1000px; margin: auto;">
+            <% if (entrada) { %>
+
+                <textarea class="form-control" id="Xpath" name="Xpath" rows="3"></textarea>
+                <% } else {%>
+
+                    <textarea id="Xpath" name="Xpath"></textarea>
+                    <%}%>
+        </div>
+
+        <div style="display: flex; width: 1000px; margin: auto;">
+
+            <div style="width: 50%; margin-right: 20px;">
+
+                <h5 style="color: beige;">Input</h5>
+                <% if (entrada) { %>
+                    <textarea id="entrada" name="entrada"><%= entrada %></textarea>
+                    <% } else {%>
+                        <textarea id="entrada" name="entrada"></textarea>
+                        <%}%>
+            </div>
+
+            <div style="width: 50%; margin-right: 20px;">
+                <h5 style="color: beige;">Output</h5>
+                <% if (consola) { %>
+                    <textarea class="consola" id="consola" name="consola" readonly><%=consola%></textarea>
+                    <% } else {%>
+                        <textarea class="consola" id="consola" name="consola" readonly></textarea>
+                        <%}%>
+            </div>
+        </div>
+    </form>
+    <center>
+        <button class="btn btn-primary" onclick="ejecutar()">Ejecutar</button>
+        <button class="btn btn-primary" onclick="Simbols()">Reportes</button>
+        <input type="file" id="archivoTexto" class="btn btn-primary">
+    </center>
+    <hr>
+    <script src="./Main.js"></script>
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/Jquery.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <!-- <script src="/Mode/javascript/javascript.js"></script> -->
+    <script src="/Mode/python/python.js"></script>
+    <script src="/Mode/pascal/pascal.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function ejecutar() {
+            document.getElementById('form').submit();
+        }
+
+        function Simbols() {
+
+            axios.get('http://localhost:3000/Simbols')
+
+                .then((response) => {
+
+                   console.log(response)
+
+                })
+                .catch((error) => {
+
+
+                    console.log("efe");
+                    console.log(error);
+
+                });
+        }
+
+        const editor = CodeMirror.fromTextArea(entrada, {
+            lineNumbers: true,
+            mode: "python",
+            theme: "material-darker",
+            smartIndent: true,
+            tabSize: 2,
+        });
+
+        editor.setSize(500, 400);
+        const editorX = CodeMirror.fromTextArea(Xpath, {
+
+            mode: "python",
+            theme: "material-darker",
+            smartIndent: true,
+            tabSize: 2,
+        });
+
+        editorX.setSize(500, 50);
+
+        const editor2 = CodeMirror.fromTextArea(consola, {
+            lineNumbers: true,
+            mode: "python",
+            theme: "material-darker",
+            readOnly: "nocursor"
+
+
+        });
+
+        editor2.setSize(500, 400);
+
+
+        //CARGAR ARCHIVO
+        function abrirArchivo(evento) {
+            let archivo = evento.target.files[0]
+
+            if (archivo) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let contenido = e.target.result;
+                    // document.getElementById('entrada').innerText = contenido;
+
+                    var textArea = document.getElementById("entrada");
+                    editor.getDoc().setValue(contenido);
+                };
+
+                reader.readAsText(archivo)
+            }
+        }
+
+
+        window.addEventListener('load', () => {
+            document.getElementById('archivoTexto').addEventListener('change', abrirArchivo)
+        });
+
+
+    </script>
+</body>
+
+</html>

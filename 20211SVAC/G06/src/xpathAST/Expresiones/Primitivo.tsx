@@ -19,7 +19,7 @@ export class Primitivo implements Expression{
     public line : Number, 
     public column : Number, 
     public valor : any, 
-    public tipoPrimitivo : tipoPrimitivo) {}
+    public tipoPrimitivo? : tipoPrimitivo) {}
 
     public execute(ent: Entorno, simboloPadre?:Simbolo) : Retorno {
         
@@ -27,6 +27,22 @@ export class Primitivo implements Expression{
             return { value: Number(this.valor), type: tipoPrimitivo.NUMBER };
         }else if (this.tipoPrimitivo === tipoPrimitivo.STRING) {
             return { value: String(this.valor), type: tipoPrimitivo.STRING };
+        }else if (this.valor === "position"){
+
+            if (simboloPadre !== undefined){
+                return {value: simboloPadre.pos, type: tipoPrimitivo.NUMBER}
+            }else {
+                return {value: ent.pos, type: tipoPrimitivo.NUMBER}
+            }
+
+        }else if (this.valor === "last"){
+
+            if (simboloPadre !== undefined){
+                return {value: simboloPadre.last, type: tipoPrimitivo.NUMBER}
+            }else {
+                return {value: ent.last, type: tipoPrimitivo.NUMBER}
+            }
+            
         }else {
             throw new Error("Error Semantico: no se reconoce el valor, Linea: "+this.line+"Column: "+this.column);
         }

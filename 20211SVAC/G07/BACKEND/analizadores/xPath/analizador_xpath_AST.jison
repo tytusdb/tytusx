@@ -87,7 +87,7 @@
 %left 'tk_or'
 %left 'tk_and'
 %left 'tk_indiferente'
-%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual'
+%left 'tk_menor' 'tk_menor_igual' 'tk_mayor' 'tk_mayor_igual' 'tk_igual'
 %left 'tk_mas' 'tk_menos'
 %left 'tk_asterisco' 'tk_div' 'tk_mod'
 %left unmenos
@@ -208,7 +208,8 @@ PREDICADO:
 DATO:
          tk_numero                                               {$$= $tk_numero;}   
         |tk_identificador                                        {$$= new Nodo("Porduccion","ID",[$tk_identificador]);}
-        |tk_hilera                                               {$$= new Nodo("Porduccion","CADENA",[$tk_hilera]);}
+        |tk_hilera                                               {$$= new Nodo("Porduccion","CADENA",[$tk_hilera.slice(1,-1)]);}
+        |tk_arroba tk_identificador                              {$$= new Nodo("Porduccion","ATRIBUTO",[$tk_identificador]);}
         |tk_last tk_parentesis_izq tk_parentesis_der             {$$= new Nodo("Porduccion","LAST",[]);} 
         |DATO tk_mas DATO                                        {$$= new Nodo("Porduccion","SUM",[$1,$tk_mas,$3]);}  
         |DATO tk_menos DATO                                      {$$= new Nodo("Porduccion","RES",[ $1,$2,$3]);} 

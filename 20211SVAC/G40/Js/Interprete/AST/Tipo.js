@@ -101,3 +101,20 @@ var TipoOperadores;
     TipoOperadores[TipoOperadores["ELEMENTOS"] = 65] = "ELEMENTOS";
     TipoOperadores[TipoOperadores["ATRIBUTOS"] = 66] = "ATRIBUTOS";
 })(TipoOperadores || (TipoOperadores = {}));
+
+var TipoOperadores;
+(function (TipoOperadores) {
+    TipoOperadores[TipoOperadores["ELEMENTOS"] = 65] = "ELEMENTOS";
+    TipoOperadores[TipoOperadores["ATRIBUTOS"] = 66] = "ATRIBUTOS";
+})(TipoOperadores || (TipoOperadores = {}));
+
+var TipoSentencia;
+(function (TipoSentencia) {
+    TipoSentencia[TipoSentencia["WHERE"] = 67] = "WHERE";
+    TipoSentencia[TipoSentencia["ORDERBY"] = 68] = "ORDERBY";
+    TipoSentencia[TipoSentencia["ORDERBY_ELEMENTO"] = 69] = "ORDERBY_ELEMENTO";
+    TipoSentencia[TipoSentencia["ORDERBY_ATRIBUTO"] = 70] = "ORDERBY_ATRIBUTO";
+    TipoSentencia[TipoSentencia["RETURN"] = 71] = "RETURN";
+    TipoSentencia[TipoSentencia["LET"] = 72] = "LET";
+    TipoSentencia[TipoSentencia["NULL"] = 73] = "NULL";
+})(TipoSentencia  || (TipoSentencia = {}));

@@ -19,6 +19,7 @@ var isFirst = 0;
 
 function construyeGraficaTS(Arbol){
     var script = "";
+    contNodos=0;
     if (Arbol){
         var Raiz = Arbol;
         console.log("\n>>>Reconoció la Raíz del TS: "+Arbol.identificador);
@@ -60,7 +61,7 @@ function construyeGraficaTS(Arbol){
         }
 
         console.log("\n>>>Terminó de construir el código de la tabla...");
-    }
+    }    
 
     return script;
 }
@@ -72,7 +73,7 @@ function construyeAtributos(Nodo){
     var numObjetos = 0;
     //se obtiene la cantidad de hijos del nodo
     if(Nodo.listaAtributos != null){
-        alert('Entro a asignación de hijos');
+        //alert('Entro a asignación de hijos');
         numHijos = Nodo.listaAtributos.length;
     }
     console.log("\n>>>Cantidad de atributos del nodo: "+ numHijos);
@@ -155,6 +156,6 @@ function construyeObjetos(Nodo, Padre){
 
 const codigoTS = function(){
     var tabla = document.getElementById('Salida').value;
-    alert("Tabla:\n"+tabla);
+    //alert("Tabla:\n"+tabla);
     return tabla;
 }

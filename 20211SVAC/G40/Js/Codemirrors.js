@@ -4,7 +4,7 @@ var editor = CodeMirror.fromTextArea
 (document.getElementById('editor'),{
     mode : "text/html",
     htmlMode: true,
-    theme: "cobalt",
+    theme: "ayu-dark",
     lineNumbers: true,
     fixedGutter: false,
     autoRefresh:true
@@ -17,7 +17,7 @@ var editor2 = CodeMirror.fromTextArea
 (document.getElementById('editor2'),{
     mode : "text/html",
     htmlMode: true,
-    theme: "cobalt",
+    theme: "ayu-dark",
     lineNumbers: true,
     fixedGutter: false,
     autoRefresh:true
@@ -30,7 +30,7 @@ var editor3 = CodeMirror.fromTextArea
 (document.getElementById('editor3'),{
     mode : "text/html",
     htmlMode: true,
-    theme: "cobalt",
+    theme: "ayu-dark",
     lineNumbers: true,
     fixedGutter: false,
     autoRefresh:true
@@ -43,7 +43,7 @@ var editor4 = CodeMirror.fromTextArea
 (document.getElementById('editor4'),{
     mode : "text/html",
     htmlMode: true,
-    theme: "cobalt",
+    theme: "ayu-dark",
     lineNumbers: true,
     fixedGutter: false,
     autoRefresh:true
@@ -123,3 +123,4 @@ realFileBtn2.addEventListener("change", function() {
         
       }  
 });
+

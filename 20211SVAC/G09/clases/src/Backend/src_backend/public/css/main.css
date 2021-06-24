@@ -1,0 +1,256 @@
+.area {
+    background-color: red;
+}
+
+#cuerpo {
+    background-color: #e0e0e0;
+}
+
+.column_layout {
+    float: left;
+    width: 1%;
+}
+
+.row_layout:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+    .column_layout {
+        width: 100%;
+    }
+}
+
+.menu {
+    width: 100%;
+    position: absolute;
+}
+
+.pestañas {
+    border-style: solid;
+    border-radius: 5px;
+    height: 550px;
+    width: 930px;
+    position: relative;
+    top: 0px;
+}
+
+.PaquetesRecibidos {
+    overflow: auto;
+}
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 4px 4px;
+    transition: 0.3s;
+}
+
+.tabsEditor button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 4px 4px;
+    transition: 0.3s;
+}
+
+
+/* Style the buttons that are used to open the tab content */
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 4px 4px;
+    transition: 0.3s;
+}
+
+.tabsEditor button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 4px 4px;
+    transition: 0.3s;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+.tabsEditor button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+.tabsEditor button.active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    display: none;
+    border: 1px solid #ccc;
+    border-top: none;
+    height: 94%;
+    width: 100%;
+}
+
+.tabEditor {
+    display: none;
+    height: 550px;
+    width: 50%;
+}
+
+#AreaTexto {
+    height: 100%;
+    left: 1%;
+    position: relative;
+    background-color: blue;
+}
+
+#panelTraduccion {
+    left: 420px;
+    width: 930px;
+    height: 550px;
+    position: relative;
+    font-family: 'Slabo 27px', serif;
+}
+
+#panelDebugger {
+    left: 300px;
+    width: 635px;
+    height: 480px;
+    position: relative;
+    font-family: 'Slabo 27px', serif;
+    overflow: auto;
+    color: rgb(255, 255, 255);
+    background-color: black;
+    border: 1px solid rgb(255, 255, 255);
+}
+
+#panelStack {
+    width: 200px;
+    left: 10px;
+    top: 20px;
+    position: relative;
+    overflow: auto;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+#panelHeap {
+    width: 200px;
+    left: 20px;
+    top: 20px;
+    position: relative;
+    overflow: auto;
+    border: 1px solid rgb(252, 252, 252);
+}
+
+#panelSimbolos {
+    width: 200px;
+    left: 30px;
+    top: 20px;
+    position: relative;
+    overflow: auto;
+    border: 1px solid rgb(255, 255, 255);
+}
+
+#img-button {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+.img-buttonTranslate {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
+#buttonErrors {
+    left: 30px;
+    position: relative;
+}
+
+#buttonTsim {
+    left: 30px;
+    position: relative;
+}
+
+table,
+th,
+td {
+    border: 1px solid rgb(255, 255, 255);
+}
+
+#cuadruplos {
+    height: 500px;
+}
+
+#pestañasEditor {
+    background-color: black;
+}   
+
+.consola {
+    padding-left: 10px;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 2px;
+    background-color: rgb(24, 24, 24);
+    color: rgb(6, 131, 48);
+    resize: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.clase4dcss {
+    background-color: rgb(0, 0, 0);
+}
+
+.clase4dcss1 {
+    background-color: rgb(255, 7, 243);
+}
+
+#Simbolos {
+    overflow: auto;
+}
+
+#Errores {
+    overflow: auto;
+}
+
+#Optimizacion {
+    overflow: auto;
+}

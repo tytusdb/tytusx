@@ -15,12 +15,12 @@ class Etiqueta {
           this.atributo.etiqueta + '="' + this.atributo.valor + '"';
       }
 
-      this.cuerpo += ">\n";
+      this.cuerpo += ">";
       if (this.texto != "" && this.texto != undefined) {
-        this.cuerpo += this.texto + "\n";
+        this.cuerpo += this.texto + "";
       }
       if (this.contenido != "" && this.contenido != undefined) {
-        this.cuerpo += this.contenido + "\n";
+        this.cuerpo += "\n"+this.contenido + "\n";
       }
 
       this.cuerpo += "</" + this.nombre + ">\n";

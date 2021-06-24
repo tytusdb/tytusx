@@ -70,14 +70,20 @@ BSL                                 "\\".
 
 
 /* Definición de la gramática */
-START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF { return $10;}
-    ;
+START : lteq xml  version asig StringLiteral encoding asig StringLiteral gteq RAIZ EOF 
+{ 
+    var nodo = new Objeto('RAIZ','',0, 0,null,null); 
+    nodo.agregarObjeto($10);
+    var arreglo =[nodo];
+    return arreglo;
+}
+;
 
   
 
 RAIZ:
-    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); }
-    | lt identifier  gt RAICES  lt div identifier gt {$$= new Objeto($2,'',0,0,null);}    
+    lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); }
+    | lt identifier  gt RAICES  lt div identifier gt {$$= new Objeto($2,'',@1.first_line, @1.first_column,null,$4);}    
              
 ;
 
@@ -88,10 +94,10 @@ RAICES:
 
   
 OBJETO:
-           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); } 
-        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,0,0,$3,null); } 
-        |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}       
-        |  lt identifier  gt identifier  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}    
+           lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',@1.first_line, @1.first_column,$3,$5); } 
+        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,@1.first_line, @1.first_column,$3,null); } 
+        |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',@1.first_line, @1.first_column,null,$4);}       
+        |  lt identifier  gt identifier  lt div identifier gt  { $$= new Objeto($2,$4,@1.first_line, @1.first_column,null,null);}    
            
 ;
 
@@ -103,5 +109,5 @@ ATRIBUTOS:
 ;
 
 ATRIBUTO: 
-    identifier asig StringLiteral {$$= new Atributo($1,$3);}                 
+    identifier asig StringLiteral {$$= new Atributo($1,$3,@1.first_line, @1.first_column);}                 
 ;

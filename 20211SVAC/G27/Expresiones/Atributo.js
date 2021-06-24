@@ -4,5 +4,6 @@ class Atributo {
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
+        this.tipo = 'Atributo';
     }
 }
