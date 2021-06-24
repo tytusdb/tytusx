@@ -129,7 +129,7 @@ case 15:
  this.$ = [$$[$0]] 
 break;
 case 19: case 20: case 21:
- this.$ = "-" + $$[$0-1]; 
+ this.$ = "-" + $$[$0]; 
 break;
 case 22:
  this.$ = [Operador.SUMA,"+"]; 
