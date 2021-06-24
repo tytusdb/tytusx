@@ -239,8 +239,9 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 
 let XQuery = `for $x in doc("books.xml")/bookstore/book
 return if ($x/year>1990)
-then <moderno>{data($x/year)}</moderno>
-else <antiguo>{data($x/year)}</antiguo>
+then <moderno>{substring($x/year,5)}</moderno>
+else <antiguo>{substring($x/year,2)}</antiguo>
+
 `
 
 
