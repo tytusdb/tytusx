@@ -1,110 +1,8 @@
-let tabs_ = Array.from(document.querySelectorAll(".tab"));
-let panels = Array.from(document.querySelectorAll(".panel"));
-let editors = [];
-
-// EDITOR INICIAL
-
-editors.push(document.getElementById("editor"));
-
-// ELIMINAR LA CLASE ACTIVE
-function removeActive() {
-  tabs_.map((tab) => tab.classList.remove("active"));
-  panels.map((panel) => panel.classList.remove("active"));
-}
-
-// EVENTO PARA DETECTAR LA PESTAÑA SELECCIONADA
-document.getElementById("tabs").addEventListener("click", (event) => {
-  if (event.target.classList.contains("tab")) {
-    let i = tabs_.indexOf(event.target);
-    removeActive();
-    tabs_[i].classList.add("active");
-    panels[i].classList.add("active");
-  }
-});
-
-// FUNCION PARA CREAR UN ARCHIVO NUEVO DENTRO DEL EDITOR
-function nuevoArchivo(nombreTab = "new.XPath", contenido = "") {
-  removeActive();
-
-  let li = document.createElement("li");
-  li.className = "tab active";
-  li.innerHTML = nombreTab;
-
-  let div = document.createElement("div");
-  div.className = "panel active";
-
-  let txtArea = document.createElement("textarea");
-  txtArea.className = "editor";
-  txtArea.value = contenido;
-
-  div.appendChild(txtArea);
-
-  tabs_.push(li);
-  panels.push(div);
-  document.getElementById("tabs").appendChild(li);
-  document.getElementById("panels").appendChild(div);
-}
-
-// EVENTO QUE CREA EL NUEVO DOCUMENTO EN BLANCO
-document.getElementById("nuevoDoc").addEventListener("click", () => {
-  nuevoArchivo();
-});
-
-// EVENTO QUE CIERRA LAS PESTAÑAS
-document.getElementById("cerrarDoc").addEventListener("click", () => {
-  let i = tabs_.findIndex((tab) => tab.classList.contains("active"));
-  let tab = tabs_[i];
-  let panel = panels[i];
-
-  tab.parentNode.removeChild(tab);
-  panel.parentNode.removeChild(panel);
-
-  tabs_.splice(i, 1);
-  panels.splice(i, 1);
-
-  if (tabs_.length > 0) {
-    tabs_[0].classList.add("active");
-    panels[0].classList.add("active");
-  }
-});
-
-// EVENTO QUE GUARDA EL DOCUMENTO QUE SE TIENE EN EL EDITOR
-document.getElementById("guardarDoc").addEventListener("click", () => {
-  let i = tabs_.findIndex((tab) => tab.classList.contains("active"));
-  let ed = editors[i];
-
-  let blob = new Blob([ed.getValue()], { type: "text/plain" });
-  let url = window.URL.createObjectURL(blob);
-  let a = document.createElement("a");
-  a.href = url;
-  a.download = tabs_[i].textContent;
-  a.click();
-});
-
-// EVENTO QUE ABRE UN DOCUMENTO DEL EQUIPO
-document.getElementById("abrirDoc").addEventListener("click", () => {
-  let archivo = document.getElementById("fileInput").click();
-});
-
-// FUNCION PARA ABRIR EL ARCHIVO SELECCIONADO DEL EQUIPO
-function abrirArchivo(archivos) {
-  let archivo = archivos.files[0];
-  let lector = new FileReader();
-  lector.onload = (e) => {
-    let contents = e.target.result;
-    nuevoArchivo(archivo.name, contents);
-  };
-  lector.readAsText(archivo);
-  archivo.clear;
-
-  document.getElementById("fileInput").value = "";
-}
-
 // BOTONES PARA ANALIZAR
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/*");
+let editorXPATH = (document.getElementById("editor").value = "/bookstore");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
@@ -113,84 +11,41 @@ let listaTokens=[];
 let parserXML;
 let globalencod;
 let codificador = document.getElementById("codencod");
-let textoEntrada = `<?xml version="1.0" encoding="ASCII"?>
-<mundo>
-  <continente name="Europa">
-    <pais moneda="Euro">
-      <nombre>Monaco</nombre>
-      <capital>Ciudad de Monaco</capital>
-      <idioma>Frances</idioma>
-      <poblacion year="2019" unit="thousands">38.964</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Austria</nombre>
-      <capital>Viena</capital>
-      <idioma>Aleman</idioma>
-      <poblacion year="2019" unit="millions">8.859</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Portugal</nombre>
-      <capital>Lisboa</capital>
-      <idioma>Portugues</idioma>
-      <poblacion year="2019" unit="millions">10.28</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Francia</nombre>
-      <capital>Paris</capital>
-      <idioma>Frances</idioma>
-      <poblacion year="2019" unit="millions">67.06</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>Alemania</nombre>
-      <capital>Berlin</capital>
-      <idioma>Aleman</idioma>
-      <poblacion year="2019" unit="millions">83.02</poblacion>
-    </pais>
-    <pais moneda="Euro">
-      <nombre>España</nombre>
-      <capital>Madrid</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">46.94</poblacion>
-    </pais>
-  </continente>
-  <continente name="America">
-    <pais moneda="Dolar">
-      <nombre>Estados unidos</nombre>
-      <capital>Washington DC</capital>
-      <poblacion year="2019" unit="millions">328.2</poblacion>
-    </pais>
-    <pais moneda="Quetzal">
-      <nombre>Guatemala</nombre>
-      <capital>Ciudad de Guatemala</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">16.6</poblacion>
-    </pais>
-    <pais moneda="Dolar">
-      <nombre>El Salvador</nombre>
-      <capital>San Salvador</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">6.454</poblacion>
-    </pais>
-    <pais moneda="Peso argentino">
-      <nombre>Argentina</nombre>
-      <capital>Buenos Aires</capital>
-      <idioma>Español</idioma>
-      <poblacion year="2019" unit="millions">44.94</poblacion>
-    </pais>
-    <pais moneda="Real brasileño">
-      <nombre>Brasil</nombre>
-      <capital>Brasilia</capital>
-      <idioma>Portugues</idioma>
-      <poblacion year="2019" unit="millions">221</poblacion>
-    </pais>
-  </continente>
-</mundo>
+
+//botones de xquery por la izquierda
+let btnCargarxquery = document.getElementById("btnCargarxquery");
+let parserXQUERY;
+let editorXQUERY = document.getElementById("consolaXQUERY");
+
+//variables para boton a la derecha de xquery
+let btnCargarxqueryder = document.getElementById("btnCargarxqueryder");
+let parserXQUERYder;
+
+let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
+<bookstore>
+Hola
+</bookstore>
 `
-editorXML.value = textoEntrada
+
+let XQuery = `for $x in doc("books.xml")/bookstore/book
+return if ($x/@category="AMONG US")
+then <AMONG_US>{data($x/title)}</AMONG_US>
+else <NO>{data($x/title)}</NO>
+`
+
+
+
+
+editorXQUERY.value=XQuery;
+
+editorXML.value = textoEntrada;
+let consolaC3D = document.getElementById('consola3D');
+
 
 // Analizar la entrada XML al hacer CLICK al boton
 botonCargar.addEventListener("click", () => {
-    console.log("Analizando XML DES ...")
+    alert("Ejecutando XML Descendente");
+
     tipoAnalizadorXML = "Descendente";
 
     // Analizador XML por la izquierda
@@ -202,11 +57,18 @@ botonCargar.addEventListener("click", () => {
 
     codificador.innerHTML = parserXML.tipoencoding;
     globalencod =parserXML.tipoencoding;
+    //console.log(consulta_xml.parse("<price>5.95</price>"));
+
+    // Se genera la Tabla de Simbolos
+    tablaSimbolos = new TablaSimbolos(parserXML.json);
+    tablaSimbolos = tablaSimbolos.generarTabla();
+
 
 })
 
 botonCargar2.addEventListener("click", () => {
-  console.log("Analizando XML ASC ...")
+  alert("Ejecutando XML Ascendente");
+
   tipoAnalizadorXML = "Ascendente";
 
   // Analizador XML por la izquierda
@@ -219,8 +81,15 @@ botonCargar2.addEventListener("click", () => {
   codificador.innerHTML = parserXML.tipoencoding;
   globalencod =parserXML.tipoencoding;
 
+  // Se genera la Tabla de Simbolos
+  tablaSimbolos = new TablaSimbolos(parserXML.json);
+  tablaSimbolos = tablaSimbolos.generarTabla();
+
+
 
 })
+
+
 document.getElementById("ast").addEventListener("click", () => {
     let AST_xPath=analizadorizq_xpath.parse(document.getElementById("editor").value);
   
@@ -263,10 +132,7 @@ btnReporteXML.addEventListener("click", () => {
   tablaTitulo.innerHTML = 'Reporte Tabla Simbolos XML ' + tipoAnalizadorXML;
   tabla.innerHTML = "";
 
-  // Tabla de Simbolos
-  tablaSimbolos = new TablaSimbolos(parserXML.json);
-  tablaSimbolos = tablaSimbolos.generarTabla();
-
+  
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
   <th scope="col">Nombre</th>
@@ -275,6 +141,7 @@ btnReporteXML.addEventListener("click", () => {
   <th scope="col">Fila</th>
   <th scope="col">Columna</th>
   <th scope="col">Valor</th>
+  <th scope="col">Indice</th>
   `;
 
 
@@ -288,6 +155,7 @@ btnReporteXML.addEventListener("click", () => {
         <td>${simbolo.fila}</td>
         <td>${simbolo.columna}</td>
         <td>${simbolo.valor}</td>
+        <td>${simbolo.indice === -1 ? '' : simbolo.indice}</td>
       </tr>
     `;
   });
@@ -415,6 +283,67 @@ function analizar_xpath() {
  // imprimiConsola(parseCadena.parse("&lt;  &amp es un caracter especial  y aqui &quot;  un txt &quot; y un apostrofe &apos; &gt;"));
   
 }
+/**
+ * ******************************************************
+ * CONSOLA 3D
+ * ******************************************************
+ */
+let boton3D = document.getElementById('btn3d');
+    
+
+boton3D.addEventListener("click", () => {
+
+  // Mostrar el C3D Traducido
+  if (tablaSimbolos.length > 0) {
+    consolaC3D.value = traductorC3D.obtenerCodigo();
+  }
+
+})
+
+/**
+ * ******************************************************
+ * XQUERY
+ * ******************************************************
+ */
+ btnCargarxquery.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "ASCENDENTE";
+
+  // Analizador XQUERY por la izquierda
+  parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  parserXML = xmlDerecha.parse(editorXML.value);
+  globalencod =parserXML.tipoencoding;
+  ejecutarXQuery(parserXQUERY,parserXML.json);
+
+
+})
+
+btnCargarxqueryder.addEventListener("click", () => {
+  console.log("Analizando XQUERY ")
+  tipoAnalizadorXML = "DESCENDENTE";
+
+  // Analizador XQUERY por la DERECHA
+  parserXQUERYder = analizador_xqueryder.parse(editorXQUERY.value);
+
+  console.log("EL ANALIZADOR REGRESA");
+  console.log(parserXQUERYder);
+
+
+})
+document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
+  let AST_xQuery=analizador_xquery_ast.parse(editorXQUERY.value);
+
+  // Se activa el modal
+  activarModal();
+
+  // Generar el arbol con Treant JS
+  graficarArbol(AST_xQuery);
+
+})
+
+
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));
@@ -454,7 +383,7 @@ function imprimiConsola(txt){
       document.getElementById("consolaPython").value=txt+"\n";
     }
   }
-document.getElementById("msgError").style.display="none";
+
 
 
 
