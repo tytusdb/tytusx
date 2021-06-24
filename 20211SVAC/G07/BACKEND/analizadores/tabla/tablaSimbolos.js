@@ -27,6 +27,7 @@ class TablaSimbolos {
             
             
             this.simbolos.push(new Simbolo(nombre, "etiqueta " + tipo, ambitoPadre, fila, col, texto, referenciaHeap));
+            ambito['referenciaHeap'] = referenciaHeap;
 
             //ATRIBUTOS DE LA ETIQUETA
             if (ambito['atributos']) {
@@ -51,6 +52,7 @@ class TablaSimbolos {
                     }
 
                     this.simbolos.push(new Simbolo(nombreAtributo, tipoAtributo, ambitoAtributo, filaAtributo, colAtributo, valorAtributo, referenciaHeap));
+                    atributo['referenciaHeap'] = referenciaHeap;
                 });
             }
 
@@ -68,6 +70,9 @@ class TablaSimbolos {
 
     generarTabla() {
         this.generarTablaRecursivo(this.jsonStruct, "global");
+
+
+
         return this.simbolos;
     }
 
