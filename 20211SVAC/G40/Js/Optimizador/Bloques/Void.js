@@ -22,14 +22,14 @@ var Void = /** @class */ (function () {
     };
     Void.prototype.getCodigo3D = function () {
 
-        var codigoAux = "void " + this.identificador + "(){\n\n";
-
+        
+        var codigoAux = "\nvoid " + this.identificador + "(){\n\n";
         for (var i = 0; i < this.instrucciones.length; i++) {
-            codigoAux += this.instrucciones[i].getCodigo3D() + "\n";
+            codigoAux += "  " + this.instrucciones[i].getCodigo3D();
           }
 
-        codigoAux += "}\n";
-
+          
+          codigoAux += "}\n";
         this.codigo = codigoAux;
 
         return this.codigo;
