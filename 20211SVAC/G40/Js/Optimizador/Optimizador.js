@@ -7,6 +7,7 @@ class Optimizador{
 
     Ejecutar(){
 
+        this.Regla1();
         this.Regla6();
         this.Regla7();
         this.Regla8();
@@ -19,6 +20,76 @@ class Optimizador{
         this.Regla15();
         this.Regla16();
         return this.GenerarResultado();
+    }
+
+    /*
+    goto L1; 
+    <instrucciones> L1: 
+    */
+    Regla1(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            //Iteramos sobre cada bloque de instrucciones
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                //Iteramos sobre cada instruccion del bloque
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    //Verificamos que la instruccion sea una instruccion GOTO
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.GOTO){
+
+                        var posicionGoto = i;
+                        var inicio = i + 1;
+                        for (var j=inicio; j < bloque.getInstrucciones().length;j++ ){
+
+                            if(bloque.getInstrucciones()[j].getTipo() == TipoInstruccion3D.ETIQUETA &&
+                               (bloque.getInstrucciones()[posicionGoto].getEtiqueta() == bloque.getInstrucciones()[j].getEtiqueta() )){
+
+                                var existeEtiqueta = false;
+
+                                for(var x=inicio; (x < bloque.getInstrucciones().length) && (x < j); x++ ){
+                                   
+                                    if(bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ETIQUETA){
+                                        existeEtiqueta = true;
+                                        break;
+                                    }                              
+                                }
+
+                                if(existeEtiqueta==false){
+
+                                    var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                    codigoAntes += ` [instruciones] ` + bloque.getInstrucciones()[j].getEtiqueta() + ":";
+
+                                    var codigoDespues = bloque.getInstrucciones()[i].getCodigo3D();
+                                    codigoDespues += bloque.getInstrucciones()[j].getEtiqueta() + ":";
+
+                                    ListaOptimizaciones.push(new Optimizacion(
+                                        bloque.getInstrucciones()[i].getLinea(),
+                                        bloque.getInstrucciones()[i].getColumna(),
+                                        "Bloques",
+                                        codigoAntes,
+                                        codigoDespues,
+                                        "Regla 1"));
+
+
+                                    for(var y=inicio; (y < bloque.getInstrucciones().length) && (y < j); y++ ){
+                                        bloque.getInstrucciones().splice(y,1);
+                                        y--;
+                                        //j--;
+                                       // i--;
+                                    }  
+                                    
+                                    
+                                }                               
+                            }
+                        }
+                    }            
+                }
+            }
+        });
     }
 
     // T1 = T1 + 0;
@@ -171,17 +242,15 @@ class Optimizador{
 
                         if(( bloque.getInstrucciones()[i].getOperador() == Operador.SUMA) &&
                         (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
-                         bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
-                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
-                         (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
+                         bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&              
                         (bloque.getInstrucciones()[i].getOperando1() == "0" || bloque.getInstrucciones()[i].getOperando2() == "0")){
 
                             var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
                             var codigoAux = bloque.getInstrucciones()[i].getTemporal();
 
-                            if((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string")){
+                            if(bloque.getInstrucciones()[i].getOperando2() == "0"){
                                 codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + ";\n";
-                            } else if ((typeof (bloque.getInstrucciones()[i].getOperando2()) === "string")){
+                            } else if (bloque.getInstrucciones()[i].getOperando1() == "0"){
                                 codigoAux += " = " + bloque.getInstrucciones()[i].getOperando2() + ";\n";
                             }
 
@@ -218,19 +287,11 @@ class Optimizador{
                         if(( bloque.getInstrucciones()[i].getOperador() == Operador.RESTA) &&
                         (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
                          bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
-                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
-                         (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
-                        (bloque.getInstrucciones()[i].getOperando1() == "0" || bloque.getInstrucciones()[i].getOperando2() == "0")){
+                        (bloque.getInstrucciones()[i].getOperando2() == "0")){
 
                             var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
-                            var codigoAux = bloque.getInstrucciones()[i].getTemporal();
-
-                            if((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string")){
-                                codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + ";\n";
-                            } else if ((typeof (bloque.getInstrucciones()[i].getOperando2()) === "string")){
-                                codigoAux += " = " + bloque.getInstrucciones()[i].getOperando2() + ";\n";
-                            }
-
+                            var codigoAux = bloque.getInstrucciones()[i].getTemporal() +  " = " + bloque.getInstrucciones()[i].getOperando1() + ";\n";
+                            
                             bloque.getInstrucciones()[i].setCodigo(codigoAux);
 
                             ListaOptimizaciones.push(new Optimizacion(
@@ -264,16 +325,14 @@ class Optimizador{
                         if(( bloque.getInstrucciones()[i].getOperador() == Operador.MULTIPLICACION) &&
                         (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
                             bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
-                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
-                            (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
                         (bloque.getInstrucciones()[i].getOperando1() == "1" || bloque.getInstrucciones()[i].getOperando2() == "1")){
 
                             var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
                             var codigoAux = bloque.getInstrucciones()[i].getTemporal();
 
-                            if((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string")){
+                            if(bloque.getInstrucciones()[i].getOperando2() == "1"){
                                 codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + ";\n";
-                            } else if ((typeof (bloque.getInstrucciones()[i].getOperando2()) === "string")){
+                            } else if (bloque.getInstrucciones()[i].getOperando1() == "1"){
                                 codigoAux += " = " + bloque.getInstrucciones()[i].getOperando2() + ";\n";
                             }
 
@@ -348,18 +407,16 @@ class Optimizador{
 
                         if(( bloque.getInstrucciones()[i].getOperador() == Operador.MULTIPLICACION) &&
                         (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
-                            bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
-                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
-                            (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
+                         bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
                         (bloque.getInstrucciones()[i].getOperando1() == "2" || bloque.getInstrucciones()[i].getOperando2() == "2")){
 
                             var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
                             var codigoAux = bloque.getInstrucciones()[i].getTemporal();
 
-                            if((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string")){
+                            if(bloque.getInstrucciones()[i].getOperando2() == "2"){
                                 codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + " + "
                                  + bloque.getInstrucciones()[i].getOperando1() + ";\n";
-                            } else if ((typeof (bloque.getInstrucciones()[i].getOperando2()) === "string")){
+                            } else if (bloque.getInstrucciones()[i].getOperando1() == "2"){
                                 codigoAux += " = " + bloque.getInstrucciones()[i].getOperando2() + " + "
                                  + bloque.getInstrucciones()[i].getOperando2() + ";\n";
                             }
@@ -397,8 +454,6 @@ class Optimizador{
                         if(( bloque.getInstrucciones()[i].getOperador() == Operador.MULTIPLICACION) &&
                         (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
                             bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
-                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
-                            (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
                         (bloque.getInstrucciones()[i].getOperando1() == "0" || bloque.getInstrucciones()[i].getOperando2() == "0")){
 
                             var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();

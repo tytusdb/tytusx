@@ -154,7 +154,7 @@ INSTRUCCION:    tk_identificador tk_igual EXPRESION OPERADOR EXPRESION tk_puntoy
                 $$ = new Etiqueta($1, @1.first_line, @1.first_column, $1 + ":\n", TipoInstruccion3D.ETIQUETA);
                 }
         |       tk_goto tk_identificador tk_puntoycoma {
-                $$ = new Goto($1, @1.first_line, @1.first_column, "goto " + $2 + ";\n", TipoInstruccion3D.GOTO);
+                $$ = new Goto($2, @1.first_line, @1.first_column, "goto " + $2 + ";\n", TipoInstruccion3D.GOTO);
                 }
         |       tk_return tk_puntoycoma { 
                 $$ = new Return(null, @1.first_line, @1.first_column, "return;\n", TipoInstruccion3D.RETURN);
