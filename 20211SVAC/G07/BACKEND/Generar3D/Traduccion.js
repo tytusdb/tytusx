@@ -144,7 +144,7 @@ class Traduccion {
             
             auxEtiqueta += `t${i},` 
 
-            if (i % 50 === 0 && i != 0) {
+            if (i % 20 === 0 && i != 0) {
                 auxEtiqueta += `\n        `;    
             }
         }

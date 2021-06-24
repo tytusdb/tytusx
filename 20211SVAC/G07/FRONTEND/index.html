@@ -26,28 +26,31 @@
     <input type="file" id="fileInput" style="display: none;" onchange="abrirArchivo(this)">
     <nav>
         <ul class="menu">
-            <li class="menu-item">Archivo XPath
+
+            <li class="menu-item">XML
                 <ul class="submenu">
-                    <li class="subitem" id="abrirDoc">Abrir</li>
-                    <li class="subitem" id="nuevoDoc">Nuevo</li>
-                    <li class="subitem" id="guardarDoc">Guardar</li>
+                    <li class="subitem" id="btnCargar"><a>Descendente</a></li>
+                    <li class="subitem" id="btnCargar2"><a>Ascendente</a></li>
                 </ul>
             </li>
-            
-            <li class="menu-item" id="reportesPy">Ejecutar xPath ▷
+
+            <li class="menu-item" id="reportesPy">XPATH
                 <ul class="submenu">
                     <li class="subitem" id="btn_EjecutarIzq"><a id="" >Ascendente</a></li>
                     <li class="subitem" id="btn_EjecutarDer"><a id="" >Descendente</a></li>
                 </ul>
             </li>
-            <li class="menu-item" id="cerrarDoc">Cerrar Pestaña</li>
-            <li class="menu-item" id="reportesPy">Reportes xPath
+
+            <li class="menu-item">XQUERY
                 <ul class="submenu">
-                    <li class="subitem"><a id="ast">AST </a></li>
-                    <li class="subitem"><a id="btnReporteXPATHcst" >CST</a></li>
+                    <li class="subitem" id="btnCargarxqueryder"><a>Descendente</a></li>
+                    <li class="subitem" id="btnCargarxquery"><a>Ascendente</a></li>
                 </ul>
             </li>
-            <li class="menu-item" id="reportesPy">Reportes XML
+
+            <li class="menu-item"><a id="btn3d">Traducir</a></li>
+
+            <li class="menu-item">Rep. XML
                 <ul class="submenu">
                     <li class="subitem"><a id="btnReporteXML" data-toggle="modal" data-target="#EpicModal">Tabla de Simbolos</a></li>
                     <li class="subitem"><a id="btnReporteXGRAM" data-toggle="modal" data-target="#EpicModalAST">Reporte Gramatical</a></li>
@@ -55,68 +58,58 @@
                     <li class="subitem"><a id="btnReporteXMLErrores" data-toggle="modal" data-target="#EpicModal">Errores</a></li>
                 </ul>
             </li>
-            <li class="menu-item" id="reportesPy">Rep XQUERY
+            
+            <li class="menu-item" >Rep. XPATH
+                <ul class="submenu">
+                    <li class="subitem"><a id="ast">AST </a></li>
+                    <li class="subitem"><a id="btnReporteXPATHcst" >CST</a></li>
+                </ul>
+            </li>
+            
+            
+            <li class="menu-item" >Rep. XQUERY
                 <ul class="submenu">
                     <li class="subitem"><a id="btnReporteXQUERYcst">CST XQUERY</a></li>
                     <li class="subitem"><a id="btnReporteXQUERYcst">OPTIMIZAR</a></li>
-                </ul>
-            </li>
-            <li class="menu-item" id="reportesPy">Traducir
-                <ul class="submenu">
-                    <li class="subitem"><a id="btn3d">XML 3D</a></li>
                 </ul>
             </li>
         </ul>
         
         <span>Compiladores 2 -- Grupo 7</span>
     </nav>
-    <div id="msgError" class="alert alert-danger" role="alert">
+    
+    <!-- <div id="msgError" class="alert alert-danger" role="alert">
         Algo salio mal :(... Revisa el reporte de errores para  más información
-    </div>
+    </div> -->
+
     <main>
-        <div class="tabs-container">
-            <ul class="tabs" id="tabs">
-                <li class="tab active">File.XPath</li>
-            </ul>
-            <div class="panels" id="panels">
-                <div class="panel active">
-                    <textarea class="editor" id="editor"></textarea>
-                    <div class="consoladx">
-                        <h2>XQUERY </h2>
-                         <textarea id="consolaXQUERY"></textarea>
-                         <tr>
-                            <td><input class="subitem btnCargarx" id="btnCargarxquery" type="button" value="Xquery ASC"/></td>
-                            <td><input class="subitem btnCargarx" id="btnCargarxqueryder" type="button" value="Xquery DES"/></td>
-                    
-                            <!--     <td><input class="subitem btnCargar" id="btnCargarxquery" type="button" value="Cargar XQUERY" onclick="alert('Xquery Cargado')" /></td>-->
-                        </tr>
-                    </div>    
-                </div>
-            </div>
+
+        <div class="editorContainer">
+            <!-- EDITOR PARA EL XML -->
+            <p>XML</p>
+            <textarea  class="editor" id="consolaJS"></textarea>
+
+            <!-- EDITOR PARA EL XPATH -->
+            <p>XPATH</p>
+            <textarea class="editor" id="editor"></textarea>
+
+            <!-- EDITOR PARA EL XQUERY -->
+            <p>XQUERY</p>
+            <textarea  class="editor" id="consolaXQUERY"></textarea>
         </div>
-        <aside class="consolas">
-            <div class="consola">
-                <h2>XML</h2>
-                <textarea id="consolaJS"></textarea>
-                <table class="btnCargar">
-                    <tr>
-                        <td><input class="subitem btnCargar" id="btnCargar" type="button" value="Cargar XML DES" onclick="alert('XML DES Cargado')" /></td>
-                        <td><input class="subitem btnCargar" id="btnCargar2" type="button" value="Cargar XML ASC"   onclick="alert('XML ASC Cargado')"/></td>
-                    </tr>
-                </table>
-                
-                
-            </div>
-            <div class="consola">
-                <h2>Salida </h2>  <p id="codencod" > Encoding </p>
-                <textarea id="consolaPython"></textarea>
-            </div>
-        </aside>
+        <div class="editorContainer">
+            <!-- EDITOR PARA LA SALIDA DE LA EJECUCION XQUERY O XPATH -->
+            <p>SALIDA  <span id="codencod" > Encoding </span> </p>
+            <textarea  class="editor editorOutput" id="consolaPython"></textarea>
+
+            <!-- EDITOR PARA MOSTRAR EL CODIGO DE 3DIRECCIONES -->
+            <p>C3D</p>
+            <textarea  class="editor editorOutput" id="consola3D"></textarea> 
+        </div>
+
+        
     </main>
-    <div class="consoladx3d">
-        <h3>CONSOLA 3D</h3>
-        <textarea id="consola3D"></textarea>
-    </div>
+        
    
     <div id="graph" style="width: 100%;"></div>
     

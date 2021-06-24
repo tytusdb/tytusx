@@ -67,7 +67,7 @@ class TablaSimbolos {
 
 
     generarTabla() {
-        this.generarTablaRecursivo(this.jsonStruct, "GLOBAL");
+        this.generarTablaRecursivo(this.jsonStruct, "global");
         return this.simbolos;
     }
 
