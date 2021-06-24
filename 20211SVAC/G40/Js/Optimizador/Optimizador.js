@@ -13,6 +13,11 @@ class Optimizador{
         this.Regla9();
         this.Regla10();
         this.Regla11();
+        this.Regla12();
+        this.Regla13();
+        this.Regla14();
+        this.Regla15();
+        this.Regla16();
         return this.GenerarResultado();
     }
 
@@ -236,6 +241,217 @@ class Optimizador{
                                 codigoAux,
                                 "Regla 11"));
                                
+                        }
+                    }    
+                }
+            }           
+        });
+    }
+
+    // T1 = T2 * 1;
+    Regla12(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION){
+
+                        if(( bloque.getInstrucciones()[i].getOperador() == Operador.MULTIPLICACION) &&
+                        (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
+                            bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
+                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
+                            (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
+                        (bloque.getInstrucciones()[i].getOperando1() == "1" || bloque.getInstrucciones()[i].getOperando2() == "1")){
+
+                            var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
+                            var codigoAux = bloque.getInstrucciones()[i].getTemporal();
+
+                            if((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string")){
+                                codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + ";\n";
+                            } else if ((typeof (bloque.getInstrucciones()[i].getOperando2()) === "string")){
+                                codigoAux += " = " + bloque.getInstrucciones()[i].getOperando2() + ";\n";
+                            }
+
+                            bloque.getInstrucciones()[i].setCodigo(codigoAux);
+
+                            ListaOptimizaciones.push(new Optimizacion(
+                                bloque.getInstrucciones()[i].getLinea(),
+                                bloque.getInstrucciones()[i].getColumna(),
+                                "Bloques",
+                                codigoAntes,
+                                codigoAux,
+                                "Regla 12"));
+                                
+                        }
+                    }    
+                }
+            }           
+        });
+    }
+
+    // T1 = T2 / 1;
+    Regla13(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION){
+
+                        if(( bloque.getInstrucciones()[i].getOperador() == Operador.DIVISION) &&
+                        (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
+                         bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
+                        (bloque.getInstrucciones()[i].getOperando2() == "1")){
+
+                            var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
+                            var codigoAux = bloque.getInstrucciones()[i].getTemporal();
+                            codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + ";\n";
+                            
+                            bloque.getInstrucciones()[i].setCodigo(codigoAux);
+
+                            ListaOptimizaciones.push(new Optimizacion(
+                                bloque.getInstrucciones()[i].getLinea(),
+                                bloque.getInstrucciones()[i].getColumna(),
+                                "Bloques",
+                                codigoAntes,
+                                codigoAux,
+                                "Regla 13"));
+                                
+                        }
+                    }    
+                }
+            }           
+        });
+    }
+
+    // T1 = T2 * 2;
+    Regla14(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION){
+
+                        if(( bloque.getInstrucciones()[i].getOperador() == Operador.MULTIPLICACION) &&
+                        (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
+                            bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
+                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
+                            (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
+                        (bloque.getInstrucciones()[i].getOperando1() == "2" || bloque.getInstrucciones()[i].getOperando2() == "2")){
+
+                            var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
+                            var codigoAux = bloque.getInstrucciones()[i].getTemporal();
+
+                            if((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string")){
+                                codigoAux += " = " + bloque.getInstrucciones()[i].getOperando1() + " + "
+                                 + bloque.getInstrucciones()[i].getOperando1() + ";\n";
+                            } else if ((typeof (bloque.getInstrucciones()[i].getOperando2()) === "string")){
+                                codigoAux += " = " + bloque.getInstrucciones()[i].getOperando2() + " + "
+                                 + bloque.getInstrucciones()[i].getOperando2() + ";\n";
+                            }
+
+                            bloque.getInstrucciones()[i].setCodigo(codigoAux);
+
+                            ListaOptimizaciones.push(new Optimizacion(
+                                bloque.getInstrucciones()[i].getLinea(),
+                                bloque.getInstrucciones()[i].getColumna(),
+                                "Bloques",
+                                codigoAntes,
+                                codigoAux,
+                                "Regla 14"));
+                                
+                        }
+                    }    
+                }
+            }           
+        });
+    }
+
+    // T1 = T2 * 0;
+    Regla15(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION){
+
+                        if(( bloque.getInstrucciones()[i].getOperador() == Operador.MULTIPLICACION) &&
+                        (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
+                            bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
+                        (((typeof (bloque.getInstrucciones()[i].getOperando1()) === "string") ||
+                            (typeof (bloque.getInstrucciones()[i].getOperando2()) === "string"))) &&
+                        (bloque.getInstrucciones()[i].getOperando1() == "0" || bloque.getInstrucciones()[i].getOperando2() == "0")){
+
+                            var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
+                            var codigoAux = bloque.getInstrucciones()[i].getTemporal()+" = 0;\n";
+
+
+                            bloque.getInstrucciones()[i].setCodigo(codigoAux);
+
+                            ListaOptimizaciones.push(new Optimizacion(
+                                bloque.getInstrucciones()[i].getLinea(),
+                                bloque.getInstrucciones()[i].getColumna(),
+                                "Bloques",
+                                codigoAntes,
+                                codigoAux,
+                                "Regla 15"));
+                                
+                        }
+                    }    
+                }
+            }           
+        });
+    }
+
+    // T1 = 0 / T2;
+    Regla16(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION){
+
+                        if(( bloque.getInstrucciones()[i].getOperador() == Operador.DIVISION) &&
+                        (bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando1() &&
+                         bloque.getInstrucciones()[i].getTemporal() != bloque.getInstrucciones()[i].getOperando2()) &&
+                        (bloque.getInstrucciones()[i].getOperando1() == "0")){
+
+                            var codigoAntes = bloque.getInstrucciones()[i].getCodigo3D();
+                            var codigoAux = bloque.getInstrucciones()[i].getTemporal()+" = 0;\n";
+                            bloque.getInstrucciones()[i].setCodigo(codigoAux);
+
+                            ListaOptimizaciones.push(new Optimizacion(
+                                bloque.getInstrucciones()[i].getLinea(),
+                                bloque.getInstrucciones()[i].getColumna(),
+                                "Bloques",
+                                codigoAntes,
+                                codigoAux,
+                                "Regla 16"));
+                                
                         }
                     }    
                 }

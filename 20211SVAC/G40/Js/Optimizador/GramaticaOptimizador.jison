@@ -113,9 +113,9 @@ IDS: IDS tk_coma tk_identificador { $1.push($3); $$ = $1; }
 EXPRESION:      tk_identificador { $$ = $1; }
         |       tk_decimal { $$ = $1; }
         |       tk_entero { $$ = $1; }
-        |       tk_menos tk_identificador { $$ = "-" + $1; }
-        |       tk_menos tk_decimal { $$ = "-" + $1; }
-        |       tk_menos tk_entero { $$ = "-" + $1; };
+        |       tk_menos tk_identificador { $$ = "-" + $2; }
+        |       tk_menos tk_decimal { $$ = "-" + $2; }
+        |       tk_menos tk_entero { $$ = "-" + $2; };
 
 OPERADOR:       tk_mas { $$ = [Operador.SUMA,"+"]; }
         |       tk_menos { $$ = [Operador.RESTA,"-"];  }
