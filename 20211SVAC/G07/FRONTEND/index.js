@@ -23,7 +23,7 @@ let parserXQUERYder;
 
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 <bookstore>
-   <book category="COOKING">
+   <book category="AMONG US">
       <title>Empire Burlesque</title>
       <author>Bob Dylan</author>
       <country>USA</country>
@@ -170,7 +170,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>8.90</price>
       <year>1988</year>
    </book>
-   <book category="UKRANIA">
+   <book category="AMONG US">
       <title>Bridge of Spies</title>
       <author>T&apos;Pau</author>
       <country>UK</country>
@@ -202,7 +202,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>9.90</price>
       <year>1991</year>
    </book>
-   <book category="ROCK">
+   <book category="AMONG US">
       <title>The dock of the bay</title>
       <author>Otis Redding</author>
       <country>USA</country>
@@ -226,7 +226,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>7.80</price>
       <year>1987</year>
    </book>
-   <book category="MEDICINE">
+   <book category="AMONG US">
       <title>Unchain my heart</title>
       <author>Joe Cocker</author>
       <country>USA</country>
@@ -238,10 +238,9 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 let XQuery = `for $x in doc("books.xml")/bookstore/book
-return if ($x/year>1990)
-then <moderno>{substring($x/year,5)}</moderno>
-else <antiguo>{substring($x/year,2)}</antiguo>
-
+return if ($x/@category="AMONG US")
+then <AMONG_US>{data($x/title)}</AMONG_US>
+else <NO>{data($x/title)}</NO>
 `
 
 
