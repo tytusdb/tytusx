@@ -576,4 +576,34 @@ class TablaSimbolos {
     set last(value: number) {
         this._last = value;
     }
+
+    public getStrAst():string{
+        let cadena;
+        cadena = "digraph G {\n";
+        if(!this.tieneSimbolos()){
+            cadena += "}\n";
+            return cadena;
+        }
+
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot=nombreRoot+"["+'label="/",'+'color="red",'+"];\n ";
+
+        cadena += cadenaRoot+this._listaSimbolos[0].sub_entorno[0].nodo.getStrAst(nombreRoot);
+        //cadena += "rankdir=LR;\n";
+        cadena += "}\n";
+        return cadena;
+    }
+
+
+    public cargarXml_3d(){
+        CodeUtil.printWithComment("void cargarXml()","Carga el xml al stack,heap y repository");
+        CodeUtil.print("{");
+        this.listaSimbolos[0].sub_entorno[0].generarCodigo_3d();
+        CodeUtil.printWithComment("}","Fin de cargarXml()");
+        CodeUtil.print("");
+
+    }
+
+
+
 }

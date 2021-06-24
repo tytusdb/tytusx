@@ -1,6 +1,7 @@
 class ListaErrores {
     private static _erroresXpath: ListaErrores = new ListaErrores();
     private static _erroresXML: ListaErrores = new ListaErrores();
+    private static _erroresXquery: ListaErrores = new ListaErrores();
 
     private lista: TokenError[];
 
@@ -22,12 +23,23 @@ class ListaErrores {
         return true;
     }
 
+    static hayErroresXquery():boolean{
+        if(this._erroresXquery.lista == null || this._erroresXquery.lista.length==0){
+            return false;
+        }
+        return true;
+    }
+
     public static InicializarXpath() {
         this._erroresXpath = new ListaErrores();
     }
 
     public static InicializarXML() {
         this._erroresXpath = new ListaErrores();
+    }
+
+    public static InicializarXquery() {
+        this._erroresXquery = new ListaErrores();
     }
 
     public static AgregarErrorXML(error: TokenError) {
@@ -44,6 +56,12 @@ class ListaErrores {
         this._erroresXpath.lista.push(error);
     }
 
+    public static AgregarErrorXQUERY(error: TokenError) {
+        if (this._erroresXquery == undefined || Object.keys(this._erroresXquery).length === 0) {
+            this.InicializarXquery();
+        }
+        this._erroresXquery.lista.push(error);
+    }
 
     static ValidarEtiquetas(idApertura:string, idCierre:string, linea:number, columna:number){
         if(idApertura == undefined || idApertura == null

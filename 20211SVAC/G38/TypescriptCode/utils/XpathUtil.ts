@@ -70,6 +70,13 @@ class XpathUtil{
         return ts;
     }
 
+
+    static crearTablaSimbolos3D(listSimbolos:Array<TsRow3D>){
+        let ts = new TablaSimbolos3D(null);
+        ts.listaSimbolos = listSimbolos;
+        return ts;
+    }
+
     static contador:number = 0;
     static generarIdUnicoTsRow():string{
         let cad = "#tsRow"+this.contador;

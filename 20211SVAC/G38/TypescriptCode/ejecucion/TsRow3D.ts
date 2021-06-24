@@ -1,17 +1,17 @@
-class TsRow{
+class TsRow3D{
     private _identificador:string;
     private _indice:number;
     private _nombreElemento:string;
     private _nodo:XmlObjectInt;
     private _tipo:Tipo;
     private _entorno:string;
-    private _entorno_row:TsRow;
-    private _sub_entorno:Array<TsRow>;
+    private _entorno_row:TsRow3D;
+    private _sub_entorno:Array<TsRow3D>;
     private _id:string;
 
 
     constructor(identificador: string, indice: number, nombreElemento: string, nodo: XmlObjectInt,
-                tipo: Tipo, entorno: string, entorno_row: TsRow) {
+                tipo: Tipo, entorno: string, entorno_row: TsRow3D) {
         this._identificador = identificador;
         this._indice = indice;
         this._nombreElemento = nombreElemento;
@@ -125,31 +125,31 @@ class TsRow{
         this._entorno = value;
     }
 
-    get entorno_row(): TsRow {
+    get entorno_row(): TsRow3D {
         return this._entorno_row;
     }
 
-    set entorno_row(value: TsRow) {
+    set entorno_row(value: TsRow3D) {
         this._entorno_row = value;
     }
 
-    get sub_entorno(): Array<TsRow> {
+    get sub_entorno(): Array<TsRow3D> {
         return this._sub_entorno;
     }
 
-    set sub_entorno(value: Array<TsRow>) {
+    set sub_entorno(value: Array<TsRow3D>) {
         this._sub_entorno = value;
     }
 
-    public obtenerTablaSimbolos(): TablaSimbolos{
-        let ts = new TablaSimbolos(null);
+    public obtenerTablaSimbolos(): TablaSimbolos3D{
+        let ts = new TablaSimbolos3D(null);
         if(this._sub_entorno !== undefined && this._sub_entorno !== null )
             ts.listaSimbolos = this._sub_entorno;
         return ts;
     }
 
-    public getObjectsInRowByNombreElemento(nombreElemento:string ):Array<TsRow>{
-        let result : Array<TsRow> = [];
+    public getObjectsInRowByNombreElemento(nombreElemento:string ):Array<TsRow3D>{
+        let result : Array<TsRow3D> = [];
         if(this._nodo instanceof XmlAttribute || this._nodo instanceof XmlContent ){
             return  result;
         }
@@ -165,8 +165,8 @@ class TsRow{
         return result;
     }
 
-    public getAllSubTextInRow():Array<TsRow>{
-        let result : Array<TsRow> = [];
+    public getAllSubTextInRow():Array<TsRow3D>{
+        let result : Array<TsRow3D> = [];
 
         if(this._sub_entorno == undefined || this._sub_entorno == null || this._sub_entorno.length == 0){
             return result;
@@ -182,8 +182,8 @@ class TsRow{
         return result;
     }
 
-    public getSubTextInRow():Array<TsRow>{
-        let result : Array<TsRow> = [];
+    public getSubTextInRow():Array<TsRow3D>{
+        let result : Array<TsRow3D> = [];
         if(this._sub_entorno == undefined || this._sub_entorno == null
             || this._sub_entorno.length == 0 ){
             return result;
@@ -197,8 +197,8 @@ class TsRow{
     }
 
 
-    public getSubObjectsInRow (  ):Array<TsRow>{
-        let result : Array<TsRow> = [];
+    public getSubObjectsInRow (  ):Array<TsRow3D>{
+        let result : Array<TsRow3D> = [];
         if(!(this._nodo instanceof XmlElement)){
             return  result;
         }
@@ -215,29 +215,29 @@ class TsRow{
         return result;
     }
 
-    public isEqual(tsRow:TsRow):boolean{
-        if(tsRow == undefined || tsRow == null){
+    public isEqual(TsRow3D:TsRow3D):boolean{
+        if(TsRow3D == undefined || TsRow3D == null){
             return false;
         }
-        if(this._nombreElemento != tsRow._nombreElemento ){
+        if(this._nombreElemento != TsRow3D._nombreElemento ){
             return false;
         }
-        if(this._indice  != tsRow._indice){
+        if(this._indice  != TsRow3D._indice){
             return false;
         }
-        if(this._sub_entorno!=null && tsRow.sub_entorno == null
-                || this.sub_entorno == null && tsRow.sub_entorno !=null ){
+        if(this._sub_entorno!=null && TsRow3D.sub_entorno == null
+                || this.sub_entorno == null && TsRow3D.sub_entorno !=null ){
             return false;
         }
-        if(this.sub_entorno == null || tsRow.sub_entorno ==null){
+        if(this.sub_entorno == null || TsRow3D.sub_entorno ==null){
             return true;
         }
-        if(this.sub_entorno.length != tsRow.sub_entorno.length){
+        if(this.sub_entorno.length != TsRow3D.sub_entorno.length){
             return false;
         }
         for(let i in this._sub_entorno ){
             let thisSubRow = this._sub_entorno[i];
-            let subRow = tsRow._sub_entorno[i];
+            let subRow = TsRow3D._sub_entorno[i];
             if(!thisSubRow.isEqual(subRow)){
                 return false;
             }
@@ -249,68 +249,6 @@ class TsRow{
     get id(): string {
         return this._id;
     }
-
-    public generarCodigo_3d():string{
-        var tempPosObjeto = CodeUtil.generarTemporal();
-        var tempPosCadena = CodeUtil.generarTemporal();
-        var tempPosSubEntorno = CodeUtil.generarTemporal();
-        var tempEtiquetaRepositorio;
-        var sizeEntorno= (this.nodo instanceof XmlAttribute)? this._sub_entorno.length+1:this._sub_entorno.length ;
-        CodeUtil.printComment("-> Inició "+this._identificador);
-
-        CodeUtil.printWithComment(tempPosObjeto+" = HP + 0 ; ",
-            "Guardamos el inicio del Objeto");
-        CodeUtil.printWithComment(tempPosCadena+" = HP + 1 ; ",
-            "Guardamos el espacio para "
-            +((this.nodo instanceof XmlElement)?"la etiqueta":(this.nodo instanceof XmlContent)?"el contenido":" el nombre del atributo"));
-
-        CodeUtil.printComment("Apartamos espacio para los atributos de "+this._identificador);
-        CodeUtil.printWithComment("HP = HP + 2 ;",
-            "Incrementamos el espacio para atributos internos");
-        CodeUtil.printWithComment(tempPosSubEntorno +" = HP + 0 ; ",
-            "Guardamos el inicio de su subentorno");
-        CodeUtil.printWithComment("HP = HP + "+sizeEntorno+";",
-            "Incrementamos el heap con el " + "tamaño de los atributos");
-
-        CodeUtil.printComment("Guardamos el tipo de objeto");
-        CodeUtil.printWithComment("Heap[(int)"+tempPosObjeto+"] = "+this.tipo.getTipo()+";",
-            "Guardamos el Tipo: " +this.tipo+"("+this.tipo.getTipo()+")");
-
-        tempEtiquetaRepositorio = this.nodo.generateString_3d();
-
-        CodeUtil.printComment("Guardamos la etiqueta generada");
-        CodeUtil.printWithComment("Heap[(int)"+tempPosCadena+"] = "+tempEtiquetaRepositorio + ";",
-            "Guardamos en heap el apuntador a la cadena");
-        CodeUtil.print("");
-        CodeUtil.printComment("Inició Código de los hijos de "+this._identificador);
-        if(this.nodo instanceof XmlElement){
-            var _i:number=0;
-            for(let child of this._sub_entorno){
-                let tmpPosChild=CodeUtil.generarTemporal();
-                let tmpChild;
-                CodeUtil.print("")
-                CodeUtil.print(tmpPosChild + " = "+tempPosSubEntorno+ " + " + _i + " ;" );
-                tmpChild = child.generarCodigo_3d();
-                CodeUtil.print("Heap[(int)"+tmpPosChild+"] = "+tmpChild+" ;");
-                _i+=1;
-            }
-        }else if(this.nodo instanceof XmlAttribute){
-            let tmpGeneradoValorAtributo;
-            let nodoAtributo:XmlAttribute = this.nodo;
-            let tmpPosChild=CodeUtil.generarTemporal();
-            CodeUtil.printWithComment(tmpPosChild + " = "+tempPosSubEntorno+ " + " + 0 + " ;" , //Cero porque para atributos no tiene hijos
-                "Posicion para valor del atriuto");
-            tmpGeneradoValorAtributo = nodoAtributo.generateValueString_3d()
-            CodeUtil.printWithComment("Heap[(int)"+tmpPosChild+"] = "+tmpGeneradoValorAtributo+" ;",
-                "Guardamos la posicion del valor del atributo");
-
-        }
-
-        CodeUtil.printComment("Finalizó Código de los hijos de "+this._identificador);
-        CodeUtil.printComment("-> Finalizó "+this._identificador);
-        return tempPosObjeto;
-    }
-
 
 
 }
