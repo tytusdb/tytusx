@@ -594,7 +594,7 @@ function imprimiConsola(txt){
       document.getElementById("consolaPython").value=txt+"\n";
     }
   }
-document.getElementById("msgError").style.display="none";
+
 
 
 

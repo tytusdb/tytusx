@@ -257,12 +257,14 @@ function procesarXpath(consulta,entorno,padre){
             }
             return null
         case "ATRIBUTO":
-            if(entorno.atributos){
-                if(entorno.atributos.nombreAtributo==instruccion.valor){
-                   return entorno.atributos.valorAtributo;
+            let regreso
+            for (const atributo of entorno.atributos) {
+                if(atributo.nombreAtributo==instruccion.valor){
+
                 }
             }
-
+            console.log(instruccion);
+            console.log(entorno);
             return null;
         default:
             return null
