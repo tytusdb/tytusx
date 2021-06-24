@@ -45,7 +45,25 @@
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
         <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
-
+        <!--- SCRIPTS PARA OPTIMIZADOR --->
+        <script src="./Js/Optimizador/Optimizador.js"></script>
+        <script src="./Js/Optimizador/Optimizacion.js"></script>
+        <script src="./Js/Optimizador/Tipo3D.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/ArregloAsignacion.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionArreglo.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionOperacion.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionSimple.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Etiqueta.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Goto.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/If.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Llamada.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Print.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Return.js"></script>
+        <script src="./Js/Optimizador/Bloques/Declaracion.js"></script>
+        <script src="./Js/Optimizador/Bloques/DeclaracionArreglo.js"></script>
+        <script src="./Js/Optimizador/Bloques/Include.js"></script>
+        <script src="./Js/Optimizador/Bloques/Main.js"></script>
+        <script src="./Js/Optimizador/Bloques/Void.js"></script>
         <script>
 
             var heap = [];
@@ -75,9 +93,11 @@
             var resultadoXML = null;
             var resultadoXPath = null;
             var resultadoXQuery = null;
+            var resultadoOptimizador = null;
             var analisisCorrecto = true;
             var analisisXpathCorrecto = true;
             var analisisXqueryCorrecto = true;
+            var analisisOptimizadorCorrecto = true;
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
             var DOTxmlCSTdesc = "";
@@ -234,7 +254,7 @@
             <!-- ENTRADA XPATH -->
             <textarea id="salida_traduccion"></textarea>
             <!-- FIN ENTRADA XPATH -->
-            <button class="button3">Optimizar</button>
+            <button class="button3" onclick="Optimizar()">Optimizar</button>
         </div>       
         <script src="Js/Consolas.js"></script>
 

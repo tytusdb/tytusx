@@ -2,10 +2,10 @@
 //Object.defineProperty(exports, "__esModule", { value: true });
 //exports.Main = void 0;
 var Main = /** @class */ (function () {
-    function Main(linea, columna, codigo, tipo, instrucciones) {
+    function Main(linea, columna, tipo, instrucciones) {
         this.linea = linea;
         this.columna = columna;
-        this.codigo = codigo;
+        this.codigo = "";
         this.tipo = tipo;
         this.instrucciones = instrucciones;
     }
@@ -19,8 +19,22 @@ var Main = /** @class */ (function () {
         return this.tipo;
     };
     Main.prototype.getCodigo3D = function () {
+
+        var codigoAux = `
+        /*------ METODO MAIN ------*/
+        int main(){
+            `;
+
+        for (var i = 0; i < this.instrucciones.length; i++) {
+            codigoAux += this.instrucciones[i].getCodigo3D() + "\n";
+          }
+
+        codigoAux += "}\n";
+
+        this.codigo = codigoAux;
+
         return this.codigo;
     };
     return Main;
 }());
-//exports.Main = Main;
+//  exports.Main = Main;

@@ -1,5 +1,37 @@
 "use strict";
 
+function Optimizar(){
+    var contenido = SalidaTraduccion.getValue();
+    if (contenido == ""){
+        window.alert("No hay C3D para optimizar :O !");
+    } else {
+
+        analisisOptimizadorCorrecto = EjecutarOptimizador(contenido);
+
+        if (analisisOptimizadorCorrecto){
+
+            console.log("↓ RESULTADO PARSER OPTIMIZADOR ↓");
+            console.log(resultadoOptimizador);
+
+        } else {
+            window.alert("El parser del Optimizador no pudo recuperarse de un error sintactico D: !");
+        }
+
+    }
+
+}
+
+function EjecutarOptimizador(contenidoC3D){ 
+    try {
+
+        resultadoOptimizador = Optimizador.parse(contenidoC3D);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 function CargarXML(){
 
 
@@ -70,7 +102,7 @@ function CargarXML(){
             localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
             
         } else {
-            SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
+            SetSalida("El parser XML no pudo recuperarse de un error sintactico.");
         }
 
         if (analisisCorrecto) {
@@ -437,8 +469,6 @@ function ObtenerEntornos(entorno){
     return entornoArr;
 }
 
-
-
 function EntornoYaExiste(arreglo, id){
 
     var existe = false;
@@ -686,3 +716,4 @@ function SetearTraduccion(){
     localStorage.setItem('stackJSON',JSON.stringify(stack, null, 2));
     window.alert("Traducción XML a C3D exitosa, scrollee hacia abajo para ver resultado. :D");
 }
+

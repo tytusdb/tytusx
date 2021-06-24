@@ -71,8 +71,8 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var analizador = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,7],$V4=[1,4],$V5=[1,6],$V6=[5,8,9,10,11,12,22],$V7=[2,7],$V8=[14,24],$V9=[20,29],$Va=[1,40],$Vb=[1,41],$Vc=[1,42],$Vd=[1,43],$Ve=[1,44],$Vf=[14,27,46,47,48,50],$Vg=[1,63],$Vh=[1,62],$Vi=[1,70],$Vj=[2,16],$Vk=[13,16,20,24,33,34,35,36,37,40,41,42,43],$Vl=[1,80],$Vm=[14,18,31];
+var Optimizador = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,7],$V4=[1,4],$V5=[1,6],$V6=[5,8,9,10,11,12,22],$V7=[2,7],$V8=[14,24],$V9=[20,29],$Va=[1,40],$Vb=[1,41],$Vc=[1,42],$Vd=[1,43],$Ve=[1,44],$Vf=[14,27,46,47,48,50],$Vg=[1,63],$Vh=[1,62],$Vi=[1,70],$Vj=[2,16],$Vk=[13,16,19,20,24,33,34,35,36,37,40,41,42,43],$Vl=[1,80],$Vm=[14,18,31];
 var parser = {trace: function trace () { },
 yy: {},
 symbols_: {"error":2,"INICIO":3,"BLOQUES":4,"EOF":5,"BLOQUE":6,"TIPO_DATO":7,"tk_double":8,"tk_float":9,"tk_char":10,"tk_int":11,"tk_include":12,"tk_menor":13,"tk_identificador":14,"tk_extension":15,"tk_mayor":16,"tk_corchetea":17,"tk_entero":18,"tk_corchetec":19,"tk_puntoycoma":20,"IDS":21,"tk_void":22,"tk_parentesisa":23,"tk_parentesisc":24,"tk_llavea":25,"INSTRUCCIONES":26,"tk_llavec":27,"tk_main":28,"tk_coma":29,"EXPRESION":30,"tk_decimal":31,"OPERADOR":32,"tk_mas":33,"tk_menos":34,"tk_division":35,"tk_multiplicacion":36,"tk_modulo":37,"INSTRUCCION":38,"COMPARADOR":39,"tk_igualigual":40,"tk_noigual":41,"tk_mayorigual":42,"tk_menorigual":43,"tk_igual":44,"tk_dospuntos":45,"tk_goto":46,"tk_return":47,"tk_printf":48,"tk_cadena1":49,"tk_if":50,"$accept":0,"$end":1},
@@ -84,15 +84,156 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-  this.$ = "TODO CORRECTO :D OPTIMIZADOR VERSION";
+        console.log("TODO CORRECTO :D OPTIMIZADOR VERSION");
+                                this.$ = $$[$0-1];
                                 return this.$; 
 break;
-case 2: case 4: case 5: case 6: case 7: case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38: case 39: case 40: case 41: case 42:
+case 2:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+break;
+case 3:
+ this.$ = [$$[$0]]; 
+break;
+case 4: case 5: case 6: case 7: case 16: case 18:
+ this.$ = $$[$0]; 
+break;
+case 8:
+  
+                      this.$ = new Include(_$[$0-4].first_line, _$[$0-4].first_column, "#include <"+ $$[$0-2] + ".h>\n", TipoBloque.INCLUDE);
+                
+break;
+case 9:
  
+                this.$ = new DeclaracionArreglo(_$[$0-5].first_line, _$[$0-5].first_column, $$[$0-5]+" "+$$[$0-4]+"["+$$[$0-2]+"];\n", TipoBloque.DECLARACION_ARREGLO);
+                
+break;
+case 10:
+
+                this.$ = new Declaracion(_$[$0-2].first_line, _$[$0-2].first_column, TipoBloque.DECLARACION, $$[$0-1], $$[$0-2]);
+                
+break;
+case 11: case 12:
+
+                this.$ = new Void($$[$0-5], _$[$0-6].first_line, _$[$0-6].first_column, TipoBloque.VOID, $$[$0-1]);
+         
+break;
+case 13:
+
+                this.$ = new Main(_$[$0-6].first_line, _$[$0-6].first_column, TipoBloque.MAIN, $$[$0-1]);
+         
+break;
+case 14:
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
+break;
+case 15:
+ this.$ = [$$[$0]] 
+break;
+case 17:
+ this.$ = $$[$0];  
+break;
+case 19:
+ this.$ = [Operador.SUMA,"+"]; 
+break;
+case 20:
+ this.$ = [Operador.RESTA,"-"];  
+break;
+case 21:
+ this.$ = [Operador.DIVISION,"/"]; 
+break;
+case 22:
+ this.$ = [Operador.MULTIPLICACION,"*"]; 
+break;
+case 23:
+ this.$ = [Operador.MODULO,"%"]; 
+break;
+case 24:
+ $$[$0-1].push($$[$0]); this.$ = $$[$0-1];  
+break;
+case 25:
+  this.$ = [$$[$0]]; 
+break;
+case 26:
+ this.$ = [Operador.IGUAL,"=="]; 
+break;
+case 27:
+ this.$ = [Operador.DIFERENTE_QUE,"!="]; 
+break;
+case 28:
+ this.$ = [Operador.MAYOR_IGUAL_QUE,">="]; 
+break;
+case 29:
+ this.$ = [Operador.MENOR_IGUAL_QUE,"<="]; 
+break;
+case 30:
+ this.$ = [Operador.MAYOR_QUE,">"]; 
+break;
+case 31:
+ this.$ = [Operador.MENOR_QUE,"<"];
+break;
+case 32:
+
+                codigoAux = $$[$0-5] + " = " + $$[$0-3] + " " + $$[$0-2][1] + " " + $$[$0-1] + ";\n";
+                this.$ = new AsignacionOperacion($$[$0-5], $$[$0-3], $$[$0-1], $$[$0-2][0], _$[$0-5].first_line, _$[$0-5].first_column, codigoAux, TipoInstruccion3D.ASIGNACION_OPERACION);
+                
+break;
+case 33:
+
+                codigoAux = $$[$0-3] + " = " + $$[$0-1] + ";\n";
+                this.$ = new AsignacionSimple($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column, codigoAux, TipoInstruccion3D.ASIGNACION_SIMPLE);
+                
+break;
+case 34:
+
+                codigoAux = $$[$0-9] + " = " + $$[$0-7] + "[(" + $$[$0-4] + ")" + $$[$0-2] + "];\n";
+                this.$ = new AsignacionArreglo($$[$0-9], codigoAux, _$[$0-9].first_line, _$[$0-9].first_column, TipoInstruccion3D.ASIGNACION_ARREGLO);
+                
+break;
+case 35:
+
+                codigoAux = $$[$0-9] + "[(" + $$[$0-6] + ")" + $$[$0-4] + "] = " + $$[$0-1] + ";\n";
+                this.$ = new  ArregloAsignaciono($$[$0-9], codigoAux, _$[$0-9].first_line, _$[$0-9].first_column, TipoInstruccion3D.ARREGLO_ASIGNACION);
+                
+break;
+case 36:
+ 
+                this.$ = new Etiqueta($$[$0-1], _$[$0-1].first_line, _$[$0-1].first_column, $$[$0-1] + ":\n", TipoInstruccion3D.ETIQUETA);
+                
+break;
+case 37:
+
+                this.$ = new Goto($$[$0-2], _$[$0-2].first_line, _$[$0-2].first_column, "goto " + $$[$0-1] + ";\n", TipoInstruccion3D.GOTO);
+                
+break;
+case 38:
+ 
+                this.$ = new Return(null, _$[$0-1].first_line, _$[$0-1].first_column, "return;\n", TipoInstruccion3D.RETURN);
+                
+break;
+case 39:
+
+                this.$ = new Return($$[$0-1], _$[$0-2].first_line, _$[$0-2].first_column, "return " + $$[$0-1] + ";\n", TipoInstruccion3D.RETURN);
+                
+break;
+case 40:
+
+                this.$ = new Llamada($$[$0-3], _$[$0-3].first_line, _$[$0-3].first_column, $$[$0-3] + "();\n", TipoInstruccion3D.LLAMADA);
+                
+break;
+case 41:
+
+                codigoAux = "printf(" + $$[$0-7] + ", (" + $$[$0-4] + ")" + $$[$0-2] + ");\n";
+                this.$ = new Print(_$[$0-9].first_line, _$[$0-9].first_column, codigoAux, TipoInstruccion3D.PRINT);
+                
+break;
+case 42:
+
+                codigoAux = "if (" + $$[$0-6] + " " + $$[$0-5][1] + " " + $$[$0-4] + ") goto " + $$[$0-1] + ";\n";
+                this.$ = new If($$[$0-6], $$[$0-4], $$[$0-5][0], $$[$0-1], _$[$0-8].first_line, _$[$0-8].first_column, codigoAux, TipoInstruccion3D.IF);
+         
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:5,8:$V0,9:$V1,10:$V2,11:$V3,12:$V4,22:$V5},{1:[3]},{5:[1,11],6:12,7:5,8:$V0,9:$V1,10:$V2,11:$V3,12:$V4,22:$V5},o($V6,[2,3]),{13:[1,13]},{14:[1,14],21:15},{14:[1,16],28:[1,17]},{14:$V7,28:[1,18]},o($V8,[2,4]),o($V8,[2,5]),o($V8,[2,6]),{1:[2,1]},o($V6,[2,2]),{14:[1,19]},o($V9,[2,15],{17:[1,20]}),{20:[1,21],29:[1,22]},{23:[1,23]},{23:[1,24]},{23:[1,25]},{15:[1,26]},{18:[1,27]},o($V6,[2,10]),{14:[1,28]},{24:[1,29]},{24:[1,30]},{24:[1,31]},{16:[1,32]},{19:[1,33]},o($V9,[2,14]),{25:[1,34]},{25:[1,35]},{25:[1,36]},o($V6,[2,8]),{20:[1,37]},{14:$Va,26:38,38:39,46:$Vb,47:$Vc,48:$Vd,50:$Ve},{14:$Va,26:45,38:39,46:$Vb,47:$Vc,48:$Vd,50:$Ve},{14:$Va,26:46,38:39,46:$Vb,47:$Vc,48:$Vd,50:$Ve},o($V6,[2,9]),{14:$Va,27:[1,47],38:48,46:$Vb,47:$Vc,48:$Vd,50:$Ve},o($Vf,[2,25]),{17:[1,50],23:[1,52],44:[1,49],45:[1,51]},{14:[1,53]},{18:[1,55],20:[1,54]},{23:[1,56]},{23:[1,57]},{14:$Va,27:[1,58],38:48,46:$Vb,47:$Vc,48:$Vd,50:$Ve},{14:$Va,27:[1,59],38:48,46:$Vb,47:$Vc,48:$Vd,50:$Ve},o($V6,[2,11]),o($Vf,[2,24]),{14:[1,61],18:$Vg,30:60,31:$Vh},{23:[1,64]},o($Vf,[2,36]),{24:[1,65]},{20:[1,66]},o($Vf,[2,38]),{20:[1,67]},{49:[1,68]},{14:$Vi,18:$Vg,30:69,31:$Vh},o($V6,[2,12]),o($V6,[2,13]),{20:[1,72],32:71,33:[1,73],34:[1,74],35:[1,75],36:[1,76],37:[1,77]},o([20,33,34,35,36,37],$Vj,{17:[1,78]}),o($Vk,[2,17]),o($Vk,[2,18]),{7:79,8:$V0,9:$V1,10:$V2,11:$Vl},{20:[1,81]},o($Vf,[2,37]),o($Vf,[2,39]),{29:[1,82]},{13:[1,89],16:[1,88],39:83,40:[1,84],41:[1,85],42:[1,86],43:[1,87]},o([13,16,20,24,40,41,42,43],$Vj),{14:$Vi,18:$Vg,30:90,31:$Vh},o($Vf,[2,33]),o($Vm,[2,19]),o($Vm,[2,20]),o($Vm,[2,21]),o($Vm,[2,22]),o($Vm,[2,23]),{23:[1,91]},{24:[1,92]},{24:$V7},o($Vf,[2,40]),{23:[1,93]},{14:$Vi,18:$Vg,30:94,31:$Vh},o($Vm,[2,26]),o($Vm,[2,27]),o($Vm,[2,28]),o($Vm,[2,29]),o($Vm,[2,30]),o($Vm,[2,31]),{20:[1,95]},{7:96,8:$V0,9:$V1,10:$V2,11:$Vl},{14:[1,97]},{7:98,8:$V0,9:$V1,10:$V2,11:$Vl},{24:[1,99]},o($Vf,[2,32]),{24:[1,100]},{19:[1,101]},{24:[1,102]},{46:[1,103]},{14:[1,104]},{44:[1,105]},{14:$Vi,18:$Vg,30:106,31:$Vh},{14:[1,107]},{19:[1,108]},{14:$Vi,18:$Vg,30:109,31:$Vh},{24:[1,110]},{20:[1,111]},{20:[1,112]},{20:[1,113]},{20:[1,114]},o($Vf,[2,42]),o($Vf,[2,34]),o($Vf,[2,35]),o($Vf,[2,41])],
+table: [{3:1,4:2,6:3,7:5,8:$V0,9:$V1,10:$V2,11:$V3,12:$V4,22:$V5},{1:[3]},{5:[1,11],6:12,7:5,8:$V0,9:$V1,10:$V2,11:$V3,12:$V4,22:$V5},o($V6,[2,3]),{13:[1,13]},{14:[1,14],21:15},{14:[1,16],28:[1,17]},{14:$V7,28:[1,18]},o($V8,[2,4]),o($V8,[2,5]),o($V8,[2,6]),{1:[2,1]},o($V6,[2,2]),{14:[1,19]},o($V9,[2,15],{17:[1,20]}),{20:[1,21],29:[1,22]},{23:[1,23]},{23:[1,24]},{23:[1,25]},{15:[1,26]},{18:[1,27]},o($V6,[2,10]),{14:[1,28]},{24:[1,29]},{24:[1,30]},{24:[1,31]},{16:[1,32]},{19:[1,33]},o($V9,[2,14]),{25:[1,34]},{25:[1,35]},{25:[1,36]},o($V6,[2,8]),{20:[1,37]},{14:$Va,26:38,38:39,46:$Vb,47:$Vc,48:$Vd,50:$Ve},{14:$Va,26:45,38:39,46:$Vb,47:$Vc,48:$Vd,50:$Ve},{14:$Va,26:46,38:39,46:$Vb,47:$Vc,48:$Vd,50:$Ve},o($V6,[2,9]),{14:$Va,27:[1,47],38:48,46:$Vb,47:$Vc,48:$Vd,50:$Ve},o($Vf,[2,25]),{17:[1,50],23:[1,52],44:[1,49],45:[1,51]},{14:[1,53]},{18:[1,55],20:[1,54]},{23:[1,56]},{23:[1,57]},{14:$Va,27:[1,58],38:48,46:$Vb,47:$Vc,48:$Vd,50:$Ve},{14:$Va,27:[1,59],38:48,46:$Vb,47:$Vc,48:$Vd,50:$Ve},o($V6,[2,11]),o($Vf,[2,24]),{14:[1,61],18:$Vg,30:60,31:$Vh},{23:[1,64]},o($Vf,[2,36]),{24:[1,65]},{20:[1,66]},o($Vf,[2,38]),{20:[1,67]},{49:[1,68]},{14:$Vi,18:$Vg,30:69,31:$Vh},o($V6,[2,12]),o($V6,[2,13]),{20:[1,72],32:71,33:[1,73],34:[1,74],35:[1,75],36:[1,76],37:[1,77]},o([20,33,34,35,36,37],$Vj,{17:[1,78]}),o($Vk,[2,17]),o($Vk,[2,18]),{7:79,8:$V0,9:$V1,10:$V2,11:$Vl},{20:[1,81]},o($Vf,[2,37]),o($Vf,[2,39]),{29:[1,82]},{13:[1,89],16:[1,88],39:83,40:[1,84],41:[1,85],42:[1,86],43:[1,87]},o([13,16,19,20,24,40,41,42,43],$Vj),{14:$Vi,18:$Vg,30:90,31:$Vh},o($Vf,[2,33]),o($Vm,[2,19]),o($Vm,[2,20]),o($Vm,[2,21]),o($Vm,[2,22]),o($Vm,[2,23]),{23:[1,91]},{24:[1,92]},{24:$V7},o($Vf,[2,40]),{23:[1,93]},{14:$Vi,18:$Vg,30:94,31:$Vh},o($Vm,[2,26]),o($Vm,[2,27]),o($Vm,[2,28]),o($Vm,[2,29]),o($Vm,[2,30]),o($Vm,[2,31]),{20:[1,95]},{7:96,8:$V0,9:$V1,10:$V2,11:$Vl},{14:$Vi,18:$Vg,30:97,31:$Vh},{7:98,8:$V0,9:$V1,10:$V2,11:$Vl},{24:[1,99]},o($Vf,[2,32]),{24:[1,100]},{19:[1,101]},{24:[1,102]},{46:[1,103]},{14:$Vi,18:$Vg,30:104,31:$Vh},{44:[1,105]},{14:$Vi,18:$Vg,30:106,31:$Vh},{14:[1,107]},{19:[1,108]},{14:$Vi,18:$Vg,30:109,31:$Vh},{24:[1,110]},{20:[1,111]},{20:[1,112]},{20:[1,113]},{20:[1,114]},o($Vf,[2,42]),o($Vf,[2,34]),o($Vf,[2,35]),o($Vf,[2,41])],
 defaultActions: {11:[2,1],80:[2,7]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -606,9 +747,9 @@ case 16: return 31;
 break;
 case 17: return 18;  
 break;
-case 18: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 49; 
+case 18: /*yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2);*/ return 49; 
 break;
-case 19: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); return 'tk_cadena2'; 
+case 19: /*yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2);*/ return 'tk_cadena2'; 
 break;
 case 20: return 14; 
 break;
@@ -679,9 +820,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = analizador;
-exports.Parser = analizador.Parser;
-exports.parse = function () { return analizador.parse.apply(analizador, arguments); };
+exports.parser = Optimizador;
+exports.Parser = Optimizador.Parser;
+exports.parse = function () { return Optimizador.parse.apply(Optimizador, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
