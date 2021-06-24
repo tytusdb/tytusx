@@ -1,4 +1,4 @@
-export abstract class NodoC3D {
+export class NodoC3D {
     public cadena: string;
     public lv: string;
     public lf: string;

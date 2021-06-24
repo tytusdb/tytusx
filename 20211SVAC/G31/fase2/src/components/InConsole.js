@@ -44,7 +44,7 @@ class InConsole extends React.Component{
 
                 <div className="col-2 block">
                     <div className ="row">
-                        <Link to= {{ pathname: "/tytusx/20211SVAC/G17", datos:this.datos }}>
+                        <Link to= {{ pathname: "/tytusx/20211SVAC/G31", datos:this.datos }}>
                             <button type="button" className="btn btn-primary btn-lg">Atrás</button>
                         </Link>
                     </div>
@@ -112,7 +112,7 @@ class InConsole extends React.Component{
                 <font size="3">
                 <p>
                 Grupo 31 <br/>
-                Jacqueline Mendéz - Stefany Coromac <br/>
+                Jacqueline Méndez - Stefany Coromac <br/>
                 Organización de Lenguajes y Compiladores 2<br/>
                 Escuela de Vacaciones Junio 2021<br/>                
                 </p>

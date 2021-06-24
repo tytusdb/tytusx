@@ -285,22 +285,22 @@ class Navigation extends React.Component{
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
                             Arboles
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporteTabla", XML:this.state.XML }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteTabla", XML:this.state.XML }}>
                             Tabla Simbolos
                         </Link>                         
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporteGramatical", TablaGramatical:this.state.TablaGramatical, TablaGramticalXPath: this.state.TablaGramticalXPath }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteGramatical", TablaGramatical:this.state.TablaGramatical, TablaGramticalXPath: this.state.TablaGramticalXPath }}>
                             Gramaticales
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath }}>
                             Errores
                         </Link>                        
                     </li>
@@ -466,7 +466,7 @@ class Navigation extends React.Component{
                 <font size="3">
                 <p>
                 Grupo 31 <br/>
-                Jacqueline Mendéz - Stefany Coromac <br/>
+                Jacqueline Méndez - Stefany Coromac <br/>
                 Organización de Lenguajes y Compiladores 2<br/>
                 Escuela de Vacaciones Junio 2021 ( Fase 2 ) <br/>                
                 </p>
