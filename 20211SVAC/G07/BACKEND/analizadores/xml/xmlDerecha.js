@@ -220,7 +220,7 @@ case 13:
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
         this.$["tipo"] = "unica";
-        this.$["atributos"] = $$[$0-1];
+        this.$["atributos"] = [];
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;    
 
@@ -229,6 +229,7 @@ case 13:
         nodoPadre.agregarHijo(new Nodo("APERTURA", $$[$0-3]));
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $$[$0-2]));
         if ($$[$0-1]) {
+            this.$['atributos'] = $$[$0-1]['atributos'];
             nodoPadre.agregarHijo($$[$0-1]['nodo']);
         }
         nodoPadre.agregarHijo(new Nodo("CIERRE", $$[$0]));
@@ -245,7 +246,7 @@ case 14:
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
         this.$["tipo"] = "completa";
-        this.$["atributos"] = $$[$0-1];
+        this.$["atributos"] = [];
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;
 
@@ -255,6 +256,7 @@ case 14:
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $$[$0-2]));
 
         if($$[$0-1]) {
+            this.$['atributos'] = $$[$0-1]['atributos'];
             nodoPadre.agregarHijo($$[$0-1]['nodo']);
         } 
 
@@ -281,12 +283,15 @@ case 15:
         }
 
         // GUARDAR LOS DATOS
-        if ($$[$0]) {
-            for(let key in $$[$0]) {
-                $$[$0-1][key] = $$[$0][key];
-            }
+        this.$ = {
+            'atributos': [$$[$0-1]]
         }
-        this.$ = $$[$0-1];
+
+        if ($$[$0]) {
+            $$[$0]['atributos'].forEach(atributo => {
+                this.$['atributos'].push(atributo);
+            });
+        }
 
         // ALMACENANDO EL NODO
         this.$['nodo'] = nodoPadre;

@@ -7,14 +7,18 @@ import { Entorno } from '../xml/entorno.controller';
 export class KindTest extends Nodo {
   public instruccion: Nodo;
 
-  constructor(tipo: Tipo, instruccion: Nodo,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, instruccion: Nodo,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ ,tipo, linea, columna);
 
     this.instruccion = instruccion;
   }
 
   public ejecutar(tabla: Tabla, arbol: Arbol) {
+    throw new Error('Method not implemented in KindTest');
+  }
+
+  public c3d(tabla: Tabla, arbol: Arbol) {
     throw new Error('Method not implemented in KindTest');
   }
 

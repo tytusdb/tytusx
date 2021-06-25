@@ -183,12 +183,14 @@ class Acceso {
         return null;
       case "TODO_":
         let contenido = "";
-        let atributo;
+        let atributo=[];
         if (entorno.atributos) {
-          atributo = {
-            etiqueta: entorno.atributos.nombreAtributo,
-            valor: entorno.atributos.valorAtributo,
-          };
+          for (const atr of entorno.atributos) {
+            atributo.push({
+              etiqueta: atr.nombreAtributo,
+              valor: atr.valorAtributo,
+            });
+          }
         } else {
           atributo = "";
         }

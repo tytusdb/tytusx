@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service'
 import { parser as ParserAscendente } from 'src/app/utils/gramatica-xpath/ascendente';
 import { parser as ParserDescendente } from 'src/app/utils/gramatica-xpath/descendente';
+import { parser as ParserXQUERY } from 'src/app/utils/gramatica-xquery/ascendente';
 
 import { Arbol } from 'src/app/models/arbol.model';
 
@@ -82,8 +83,9 @@ export class QueryEditorComponent implements OnInit {
   }
 
   public ejecutarASC(): void {
-    this.arbol = <Arbol>ParserAscendente.parse(this.content);
-    this.ejecucion();
+    console.log(ParserXQUERY.parse(this.content));
+    //this.arbol = <Arbol>ParserAscendente.parse(this.content);
+    //this.ejecucion();
   };
 
   public ejecutarDESC(): void {

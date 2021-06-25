@@ -9,6 +9,19 @@ var Etiqueta = /** @class */ (function () {
         this.tipo = tipo;
         this.etiqueta = etiqueta;
     }
+
+    Etiqueta.prototype.getLinea = function () {
+        return this.linea;
+    };
+
+    Etiqueta.prototype.getColumna = function () {
+        return this.columna;
+    };
+
+    Etiqueta.prototype.getEtiqueta = function () {
+        return this.etiqueta;
+     };
+
     Etiqueta.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };

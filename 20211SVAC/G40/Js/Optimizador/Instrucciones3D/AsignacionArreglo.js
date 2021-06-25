@@ -9,6 +9,19 @@ var AsignacionArreglo = /** @class */ (function () {
         this.tipo = tipo;
         this.temporal = temporal;
     }
+
+    AsignacionArreglo.prototype.getTemporal = function () {
+        return this.temporal;
+    };
+
+    AsignacionArreglo.prototype.getLinea = function () {
+        return this.linea;
+    };
+
+    AsignacionArreglo.prototype.getColumna = function () {
+        return this.columna;
+    };
+
     AsignacionArreglo.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };

@@ -9,9 +9,33 @@ var Goto = /** @class */ (function () {
         this.tipo = tipo;
         this.etiqueta = etiqueta;
     }
+
+    Goto.prototype.getLinea = function () {
+        return this.linea;
+    };
+
+    Goto.prototype.getColumna = function () {
+        return this.columna;
+    };
+
+    Goto.prototype.getEtiqueta = function () {
+       return this.etiqueta;
+    };
+
     Goto.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };
+
+    Goto.prototype.setEtiqueta = function (etiqueta) {
+        this.etiqueta = etiqueta;
+    };
+
+    Goto.prototype.GenerarC3D = function () {
+        
+        this.codigo = "goto " + this.getEtiqueta() + ";\n";
+
+    };
+
     Goto.prototype.getTipo = function () {
         return this.tipo;
     };
