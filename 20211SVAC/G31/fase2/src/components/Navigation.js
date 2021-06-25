@@ -2,6 +2,7 @@ import logo from '../logo.svg';
 import { Link } from 'react-router-dom'
 import React from 'react';
 import {  parse as parseXPath } from '../code/analizadorXPath/Xpath'
+import { parse as parseXQuery } from '../code/analizadorXQuery/ascendente';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { CD3 } from '../code/codigo3D/cd3';
 
@@ -83,7 +84,8 @@ class Navigation extends React.Component{
             Mistakes: [],
             MistakesXPath: [],
             TablaGramatical: [],
-            TablaGramticalXPath: []
+            TablaGramticalXPath: [], 
+            ErroresXQuery: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -170,8 +172,7 @@ class Navigation extends React.Component{
 
     getC3D(xml){
         var traducir = new CD3(); 
-        var codigo = traducir.getTraduccion(xml)
-        console.log('getCD3', codigo)
+        var codigo = traducir.getTraduccion(xml); 
         this.setState({TraductorTextArea: codigo.traduccion})
         return codigo.objeto
     }
@@ -256,6 +257,14 @@ class Navigation extends React.Component{
         this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
         this.setState({Mistakes: resultado.errores})
         this.setState({TablaGramatical: resultado.tabla});
+    }
+
+    ejecutarXQuery(){
+        var texto = this.state.InputTextarea; 
+        console.log('Hola', texto)
+        if(texto == "") return  
+        var resultado = parseXQuery(texto); 
+        console.log(resultado); 
     }
 
     ejecutarConsulta(consulta){
@@ -396,13 +405,12 @@ class Navigation extends React.Component{
                         </div>
                         <div className="row">
                             <p></p>
-                            <div className="col-12 block"> 
+                            <div className="col-6 block"> 
                                 <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Ascendente </button>
-                            </div>
-                            {/*
+                            </div>                            
                             <div className="col-6 block">
-                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setTextDesc() }>Ejecutar Desc</button>
-                            </div>*/ }
+                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.ejecutarXQuery() }> Ejecutar XQuery </button>
+                            </div>
                         </div>
 
                     </div>                    
