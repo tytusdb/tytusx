@@ -9,6 +9,8 @@ class Optimizador{
 
         this.Regla1();
         this.Regla2();
+        this.Regla3();
+        this.Regla4();
         this.Regla6();
         this.Regla7();
         this.Regla8();
@@ -104,7 +106,7 @@ class Optimizador{
 
             if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
 
-                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+                for (var i=0; i < bloque.getInstrucciones().length; i++){
 
                     if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
 
@@ -142,6 +144,97 @@ class Optimizador{
                 }
             }
         });
+    }
+
+    /* If (1 == 1) goto L1; 
+        goto L2;
+     */
+    Regla3(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length; i++){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
+
+                        if((i+1) < bloque.getInstrucciones().length){
+
+                            if((bloque.getInstrucciones()[i].esConstantePositiva()== true) &&
+                            (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
+
+                                var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                    codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
+                          
+                                bloque.getInstrucciones()[i+1].setEtiqueta(bloque.getInstrucciones()[i].getGOTO());
+                                bloque.getInstrucciones()[i+1].GenerarC3D();
+
+                                var codigoDespues = bloque.getInstrucciones()[i+1].getCodigo3D();
+
+                                ListaOptimizaciones.push(new Optimizacion(
+                                    bloque.getInstrucciones()[i].getLinea(),
+                                    bloque.getInstrucciones()[i].getColumna(),
+                                    "Bloques",
+                                    codigoAntes,
+                                    codigoDespues,
+                                    "Regla 3"));
+                                bloque.getInstrucciones().splice(i,1);
+                                i--; 
+
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    /* If (4 == 1) goto L1; 
+        goto L2;
+    */
+    Regla4(){
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length; i++){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
+
+                        if((i+1) < bloque.getInstrucciones().length){
+
+                            if((bloque.getInstrucciones()[i].esConstantePositiva()== false) &&
+                            (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
+
+                                var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                    codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
+                                                  
+                                var codigoDespues = bloque.getInstrucciones()[i+1].getCodigo3D();
+
+                                ListaOptimizaciones.push(new Optimizacion(
+                                    bloque.getInstrucciones()[i].getLinea(),
+                                    bloque.getInstrucciones()[i].getColumna(),
+                                    "Bloques",
+                                    codigoAntes,
+                                    codigoDespues,
+                                    "Regla 4"));
+                                bloque.getInstrucciones().splice(i,1);
+                                i--; 
+
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     // T1 = T1 + 0;
