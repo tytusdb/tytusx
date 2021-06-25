@@ -6,10 +6,10 @@ class Resta {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierda.getTipo(tsXquery, ent);
-        let tipoDerecha = this.derecha.getTipo(tsXquery, ent);
+        let tipoIzquierda = this.izquierda.getTipo(ent);
+        let tipoDerecha = this.derecha.getTipo(ent);
         if (tipoIzquierda.esNumero() && tipoDerecha.esNumero()) {
             tipo = new Tipo(TipoDato.numero);
         }
@@ -18,11 +18,11 @@ class Resta {
         }
         return tipo;
     }
-    getValor(tsXquery, ent) {
-        let tipo = this.getTipo(tsXquery, ent);
+    getValor(ent) {
+        let tipo = this.getTipo(ent);
         let valor;
         if (!tipo.esError()) {
-            valor = this.izquierda.getValor(tsXquery, ent) - this.derecha.getValor(tsXquery, ent);
+            valor = this.izquierda.getValor(ent) - this.derecha.getValor(ent);
         }
         return valor;
     }

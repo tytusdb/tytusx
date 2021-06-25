@@ -62,6 +62,7 @@
     <script src="../../ejecucion/xpath/ast/expresion/PredicateExpresion.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/NodoError.js"></script>
     <script src="../js/ide.js"></script>
+    <script src="../js/FileSaver.js"></script>
     <script src="../js/jquery-3.4.1.min.js"></script>
     <script src="../../gramaticas/xml/xmlAnalyzer.js"></script>
     <script src="../../gramaticas/xml/xmlAnalyzerAst.js"></script>
@@ -80,16 +81,7 @@
     <script src="../../gramaticas/xquery/XqueryAnalyzer.js"></script>
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
-
-    <script src="../../ejecucion/xquery/NodoXquery.js"></script>
-    <script src="../../ejecucion/xquery/TablaSimbolos/Simbolo.js"></script>
-    <script src="../../ejecucion/xquery/TablaSimbolos/TablaSimbolosXquery.js"></script>
-    <script src="../../ejecucion/xquery/expresion/ListaXqueryExpresion.js"></script>
-    <script src="../../ejecucion/xquery/expresion/LlamadaFuncion.js"></script>
-    <script src="../../ejecucion/xquery/expresion/SentenciaFor.js"></script>
-    <script src="../../ejecucion/xquery/expresion/SentenciaIf.js"></script>
-    <script src="../../ejecucion/xquery/expresion/Variable.js"></script>
-
+    <script src="../../utils/CodeUtil.js"></script>
     <!--
 
     -->
@@ -107,125 +99,29 @@
                 <textarea id="txtEntradaXML" cols="80" rows="28" style="background-color:#CCC;font-style:italic">
 
 
-<catalog>
-   <book id="bk101">
-      <author>Gámbardellä, Mátthew</author>
-      <title>XML Developer&apos;s Guide</title>
-      <genre>Computer</genre>
-      <price>44.95</price>
-      <publish_date>2000-10-01</publish_date>
-      <description>An in-depth look at creating applications
-      with XML.</description>
-   </book>
-   <book id="bk102">
-      <author>Ralls, Kim</author>
-      <title>Midnight Rain</title>
-      <genre>Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2000-12-16</publish_date>
-      <description>A former architect battles corporate zombies,
-      an evil sorceress, and her own childhood to become queen
-      of the world.</description>
-   </book>
-   <book id="bk103">
-      <author>Corets, Eva</author>
-      <title>Maeve Ascendant</title>
-      <genre>Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2000-11-17</publish_date>
-      <description>After the collapse of a nanotechnology
-      society in England, the young survivors lay the
-      foundation for a new society.</description>
-   </book>
-   <book id="bk104">
-      <author>Corets, Eva</author>
-      <title>Oberon's Legacy</title>
-      <genre>Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2001-03-10</publish_date>
-      <description>In post-apocalypse England, the mysterious
-      agent known only as Oberon helps to create a new life
-      for the inhabitants of London. Sequel to Maeve
-      Ascendant.</description>
-   </book>
-   <book id="bk105">
-      <author>Corets, Eva</author>
-      <title>The Sundered Grail</title>
-      <genre top="cali">Fantasy</genre>
-      <price>5.95</price>
-      <publish_date>2001-09-10</publish_date>
-      <description>The two daughters of Maeve, half-sisters,
-      battle one another for control of England. Sequel to
-      Oberon's Legacy.</description>
-   </book>
-   <book id="bk106">
-      <author>Randall, Cynthia</author>
-      <title>Lover Birds</title>
-      <genre top="cali">Romance</genre>
-      <price>4.95</price>
-      <publish_date>2000-09-02</publish_date>
-      <description>When Carla meets Paul at an ornithology
-      conference, tempers fly as feathers get ruffled.</description>
-   </book>
-   <book id="bk107">
-      <author>Thurman, Paula</author>
-      <title>Splish Splash</title>
-      <genre>Romance</genre>
-      <price>4.95</price>
-      <publish_date>2000-11-02</publish_date>
-      <description>A deep sea diver finds true love twenty
-      thousand leagues beneath the sea.</description>
-   </book>
-   <book id="bk108">
-      <author>Knorr, Stefan</author>
-      <title>Creepy Crawlies</title>
-      <genre>Horror</genre>
-      <price>4.95</price>
-      <publish_date>2000-12-06</publish_date>
-      <description>An anthology of horror stories about roaches,
-      centipedes, scorpions  and other insects.</description>
-   </book>
-   <book id="bk109">
-      <author>Kress, Peter</author>
-      <title>Paradox Lost</title>
-      <genre>Science Fiction</genre>
-      <price>6.95</price>
-      <publish_date>2000-11-02</publish_date>
-      <description>After an inadvertant trip through a Heisenberg
-      Uncertainty Device, James Salway discovers the problems
-      of being quantum.</description>
-   </book>
-   <book id="bk110">
-      <author>O'Brien, Tim</author>
-      <title>Microsoft .NET: The Programming Bible</title>
-      <genre top="cali">Computer</genre>
-      <price>36.95</price>
-      <publish_date>2000-12-09</publish_date>
-      <description>Microsoft's .NET initiative is explored in
-      detail in this deep programmer's reference.</description>
-   </book>
-   <book id="bk111">
-      <author>O'Brien, Tim</author>
-      <title>MSXML3: A Comprehensive Guide</title>
-      <genre>Computer</genre>
-      <price>36.95</price>
-      <publish_date>2000-12-01</publish_date>
-      <description>The Microsoft MSXML3 parser is covered in
-      detail, with attention to XML DOM interfaces, XSLT processing,
-      SAX and more.</description>
-   </book>
-   <book id="bk112">
-      <author>Galos, Mike</author>
-      <title>Visual Studio 7: A Comprehensive Guide</title>
-      <genre>Computer</genre>
-      <price>49.95</price>
-      <publish_date cali="hola">2001-04-16</publish_date>
-      <description>Microsoft Visual Studio 7 is explored in depth,
-      looking at how Visual Basic, Visual C++, C#, and ASP+ are
-      integrated into a comprehensive development
-      environment.</description>
-   </book>
-</catalog>
+
+
+<biblioteca>
+	<libro>
+		<titulo>La vida está en otra parte</titulo>
+		<autor>Milan Kundera</autor>
+		<fechaPublicacion año="1973"/>
+	</libro>
+	<libro>
+		<titulo>Pantaleón y las visitadoras</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1973"/>
+	</libro>
+	<libro>
+		<titulo>Conversación en la catedral</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1969"/>
+	</libro>
+</biblioteca>
+
+
+
+
                 </textarea>
             </div>
 
@@ -233,48 +129,7 @@
         <td>
             <div id="divEntradaXPath" align="center" >
                 <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
-<result>
-{
-   if(bookstore/book/@category = "SJKFD") then (
-      <error>
-         <message>books xml does not exist</message>
-      </error>
-   )else if (bookstore/book[2]/@category = "JDFLKSDF") then (
-      <error>
-         <message>ENTRO EN ASD 2</message>
-      </error>
-   )else if (bookstore/book[2]/@category = "JDFLKSDF") then (
-      <error>
-         <message>ENTRO EN ASD 2</message>
-      </error>
-   )
-   else (
-      for $x in bookstore/book
-      where $x/price>30
-      return $x/title
-   )
-}
-</result>
-<salida>
-{
-for $x in bookstore/book/@category
-return <test>x {$x}</test>
-
-for $x at $i in /bookstore/book/title
-return <book>{$i} {data($x)}</book>
-
-for $x in (10,20), $y in (100,200)
-return <test>x{$x} es y{$y}</test>
-
-declare function local:discount($price as xs:decimal?,$percentDiscount as xs:decimal?)
-as xs:decimal? {
-   let $discount := $price - ($price * $percentDiscount div 100)
-   return $discount
-};
-
-return local:discount($originalPrice, $discountAvailed)
-}
-</salida>
+/biblioteca
                 </textarea>
             </div>
         </td>
@@ -299,9 +154,14 @@ return local:discount($originalPrice, $discountAvailed)
     <button id="btnGraficarCstXmlAscendente" class="button">Graficar CST XML Ascendente</button>
     <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
     <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
-    <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
     <button id="btnAnalizarXquery" class="button">Analizar XQUERY</button>
     <button id="btnTablaErroresXQuery" class="button">Errores XQUERY</button>
+    <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
+</div>
+
+<div  id="divBotones3" align="center" >
+    <button id="btnGenerar3D" class="button">Generar 3D</button>
+    <button id="btnDescarga3D" class="button">Descargar 3D</button>
 </div>
 
 <div id="consola" align="center">
@@ -499,7 +359,17 @@ return local:discount($originalPrice, $discountAvailed)
                 $("#txtConsola").val(CONSOLE_LINE_MARK);
             });
 
+            $("#btnDescarga3D").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                descargarArchivo(entradaXml);
+            });
 
+            $("btnGenerar3D").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                generar3D(entradaXml);
+            });
 
         });
     </script>

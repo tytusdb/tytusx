@@ -5,13 +5,13 @@ class ListaXpathExpresion {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ts, ent) {
+    getTipo(ent) {
         return new Tipo(TipoDato.xpathValue);
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         var ts = XpathUtil.crearTablaSimbolos([]);
         this.expresionesXpath.forEach(function (expresion) {
-            let nuevoResultado = ts.listaSimbolos.concat(expresion.getValor(tsXquery, ent).listaSimbolos);
+            let nuevoResultado = ts.listaSimbolos.concat(expresion.getValor(ent).listaSimbolos);
             ts.listaSimbolos = nuevoResultado;
         });
         return ts;

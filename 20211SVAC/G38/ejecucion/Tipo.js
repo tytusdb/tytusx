@@ -10,6 +10,17 @@ var TipoDato;
     TipoDato["global"] = "Global";
     TipoDato["xpathValue"] = "Xpath Query";
 })(TipoDato || (TipoDato = {}));
+var TipoDato3D;
+(function (TipoDato3D) {
+    TipoDato3D[TipoDato3D["objeto"] = 0] = "objeto";
+    TipoDato3D[TipoDato3D["atributo"] = 1] = "atributo";
+    TipoDato3D[TipoDato3D["cadena"] = 2] = "cadena";
+    TipoDato3D[TipoDato3D["numero"] = 3] = "numero";
+    TipoDato3D[TipoDato3D["booleano"] = 4] = "booleano";
+    TipoDato3D[TipoDato3D["err"] = 5] = "err";
+    TipoDato3D[TipoDato3D["global"] = 6] = "global";
+    TipoDato3D[TipoDato3D["xpathValue"] = 7] = "xpathValue";
+})(TipoDato3D || (TipoDato3D = {}));
 class Tipo {
     constructor(tipoDato) {
         this.tipoDato = tipoDato;
@@ -44,19 +55,26 @@ class Tipo {
     esGlobal() {
         return this.tipoDato == TipoDato.global;
     }
-    equals(tipo) {
-        return this.tipoDato == tipo.tipoDato;
-    }
-    esEquivalente(tipo) {
-        let esEquivalente = false;
-        if (this.esBoolean() && tipo.esBoolean())
-            esEquivalente = true;
-        else if (this.esNumero() && (tipo.esNumero() || tipo.esBoolean()))
-            esEquivalente = true;
-        else if (this.esCadena() && (tipo.esCadena() || tipo.esNumero() || tipo.esBoolean()))
-            esEquivalente = true;
-        else if (this.tipoDato == tipo.tipoDato)
-            esEquivalente = true;
-        return esEquivalente;
+    getTipo() {
+        switch (this.tipoDato) {
+            case TipoDato.objeto:
+                return TipoDato3D.objeto;
+            case TipoDato.atributo:
+                return TipoDato3D.atributo;
+            case TipoDato.cadena:
+                return TipoDato3D.cadena;
+            case TipoDato.booleano:
+                return TipoDato3D.booleano;
+            case TipoDato.numero:
+                return TipoDato3D.numero;
+            case TipoDato.err:
+                return TipoDato3D.err;
+            case TipoDato.global:
+                return TipoDato3D.global;
+            case TipoDato.xpathValue:
+                return TipoDato3D.xpathValue;
+            default:
+                throw new Error("Tipo de dato no reconocido: " + this.tipoDato);
+        }
     }
 }

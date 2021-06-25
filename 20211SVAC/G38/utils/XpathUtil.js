@@ -63,6 +63,11 @@ class XpathUtil {
         ts.listaSimbolos = listSimbolos;
         return ts;
     }
+    static crearTablaSimbolos3D(listSimbolos) {
+        let ts = new TablaSimbolos3D(null);
+        ts.listaSimbolos = listSimbolos;
+        return ts;
+    }
     static generarIdUnicoTsRow() {
         let cad = "#tsRow" + this.contador;
         this.contador += 1;

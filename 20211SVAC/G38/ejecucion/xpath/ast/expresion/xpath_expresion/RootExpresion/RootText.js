@@ -5,10 +5,10 @@ class RootText {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         let ts = ent.findSubTextInTS();
         return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }

@@ -6,10 +6,10 @@ class RootIdentifier {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         let ts = ent.findObjectsByNombreElemento(this.identifier);
         return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
