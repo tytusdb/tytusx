@@ -7,10 +7,12 @@ class Optimizador{
 
     Ejecutar(){
 
+        //Aplicando 16 reglas de optimizacion
         this.Regla1();
         this.Regla2();
         this.Regla3();
         this.Regla4();
+        this.Regla5();
         this.Regla6();
         this.Regla7();
         this.Regla8();
@@ -51,42 +53,41 @@ class Optimizador{
                             if(bloque.getInstrucciones()[j].getTipo() == TipoInstruccion3D.ETIQUETA &&
                                (bloque.getInstrucciones()[posicionGoto].getEtiqueta() == bloque.getInstrucciones()[j].getEtiqueta() )){
 
-                                var existeEtiqueta = false;
+                                if((j-1) != posicionGoto){
 
-                                for(var x=inicio; (x < bloque.getInstrucciones().length) && (x < j); x++ ){
-                                   
-                                    if(bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ETIQUETA){
-                                        existeEtiqueta = true;
-                                        break;
-                                    }                              
-                                }
+                                    var existeEtiqueta = false;
 
-                                if(existeEtiqueta==false){
-
-                                    var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
-                                    codigoAntes += ` [instruciones] ` + bloque.getInstrucciones()[j].getEtiqueta() + ":";
-
-                                    var codigoDespues = bloque.getInstrucciones()[i].getCodigo3D();
-                                    codigoDespues += bloque.getInstrucciones()[j].getEtiqueta() + ":";
-
-                                    ListaOptimizaciones.push(new Optimizacion(
-                                        bloque.getInstrucciones()[i].getLinea(),
-                                        bloque.getInstrucciones()[i].getColumna(),
-                                        "Bloques",
-                                        codigoAntes,
-                                        codigoDespues,
-                                        "Regla 1"));
-
-
-                                    for(var y=inicio; (y < bloque.getInstrucciones().length) && (y < j); y++ ){
-                                        bloque.getInstrucciones().splice(y,1);
-                                        y--;
-                                        //j--;
-                                       // i--;
+                                    for(var x=inicio; (x < bloque.getInstrucciones().length) && (x < j); x++ ){
+                                       
+                                        if(bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ETIQUETA){
+                                            existeEtiqueta = true;
+                                            break;
+                                        }                              
+                                    }
+    
+                                    if(existeEtiqueta==false){
+    
+                                        var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                        codigoAntes += ` [instruciones] ` + bloque.getInstrucciones()[j].getEtiqueta() + ":";
+    
+                                        var codigoDespues = bloque.getInstrucciones()[i].getCodigo3D();
+                                        codigoDespues += bloque.getInstrucciones()[j].getEtiqueta() + ":";
+    
+                                        ListaOptimizaciones.push(new Optimizacion(
+                                            bloque.getInstrucciones()[i].getLinea(),
+                                            bloque.getInstrucciones()[i].getColumna(),
+                                            "Bloques",
+                                            codigoAntes,
+                                            codigoDespues,
+                                            "Regla 1"));
+    
+                                        bloque.getInstrucciones().splice(inicio,j-inicio);
+                                        // OJO CON ESTOS INDICES
+                                        j--;
+                                        i--;
                                     }  
-                                    
-                                    
-                                }                               
+                                }
+                                                          
                             }
                         }
                     }            
@@ -228,6 +229,92 @@ class Optimizador{
                                 bloque.getInstrucciones().splice(i,1);
                                 i--; 
 
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    /* 
+    T3 = T2; 
+    <instrucciones> 
+    T2 = T3;    
+    */
+    Regla5(){
+
+        function EsNumero(str) {
+            if (typeof str != "string") return false 
+            return !isNaN(str) && !isNaN(parseFloat(str)) 
+        }
+
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            //Iteramos sobre cada bloque de instrucciones
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                //Iteramos sobre cada instruccion del bloque
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    //Verificamos que la instruccion sea una instruccion ASIGNACION_SIMPLE
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.ASIGNACION_SIMPLE){
+
+                        //Validamos que el temporal no este igualado a un numero
+                        if(EsNumero(bloque.getInstrucciones()[i].getValor()) == false){
+
+                            var Temporal1 = bloque.getInstrucciones()[i].getTemporal();
+                            var Temporal2 = bloque.getInstrucciones()[i].getValor();
+
+                            var posicionAsignacionSimple = i;
+                            var inicio = i + 1;
+
+                            for (var j=inicio; j < bloque.getInstrucciones().length; j++){
+
+                                //buscamos por una instruccion de la forma a = b o de la forma b = a
+
+                                if(bloque.getInstrucciones()[j].getTipo() == TipoInstruccion3D.ASIGNACION_SIMPLE &&
+                               (((bloque.getInstrucciones()[j].getTemporal() == Temporal1) && (bloque.getInstrucciones()[j].getValor() == Temporal2)) || 
+                               ((bloque.getInstrucciones()[j].getTemporal() == Temporal2) && (bloque.getInstrucciones()[j].getValor() == Temporal1)))){
+
+                                var cambiaValor = false;
+
+                                    for(var x=inicio; (x < bloque.getInstrucciones().length) && (x < j); x++){
+                                    
+                                        if((bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION) ||
+                                        (bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_SIMPLE) ||
+                                        (bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_ARREGLO)){
+
+                                            if((bloque.getInstrucciones()[x].getTemporal() == Temporal1) ||
+                                            (bloque.getInstrucciones()[x].getTemporal() == Temporal2)){
+                                                cambiaValor = true;
+                                                break;
+                                            }
+                                        }                              
+                                    }
+
+                                    if(cambiaValor==false){
+
+                                        var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                        codigoAntes += ` [instruciones] ` + bloque.getInstrucciones()[j].getCodigo3D();
+
+                                        var codigoDespues = bloque.getInstrucciones()[i].getCodigo3D();
+                                        codigoDespues += ` [instruciones] `;
+
+                                        ListaOptimizaciones.push(new Optimizacion(
+                                            bloque.getInstrucciones()[i].getLinea(),
+                                            bloque.getInstrucciones()[i].getColumna(),
+                                            "Bloques",
+                                            codigoAntes,
+                                            codigoDespues,
+                                            "Regla 5"));
+                                        bloque.getInstrucciones().splice(j,1);
+                                        j--; 
+                                    }        
+                               }
                             }
                         }
                     }
@@ -658,6 +745,7 @@ class Optimizador{
             }           
         });
     }
+
 
     GenerarResultado(){
 
