@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
 import Objeto from 'src/app/Backend/XML/Analizador/Expresiones/Objeto';
-import Simbolo from 'src/app/Backend/XPATH/Analizador/Simbolos/Simbolo';
-import tablaSimbolos from 'src/app/Backend/XPATH/Analizador/Simbolos/tablaSimbolos';
+//import Simbolo from 'src/app/Backend/XPATH/Analizador/Simbolos/Simbolo';
+//import tablaSimbolos from 'src/app/Backend/XPATH/Analizador/Simbolos/tablaSimbolos';
 import * as vis from 'vis';
 @Component({
   selector: 'app-arbol-ast',

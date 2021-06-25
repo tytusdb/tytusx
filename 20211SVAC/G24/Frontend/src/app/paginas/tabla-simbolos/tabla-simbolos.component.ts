@@ -8,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class TablaSimbolosComponent implements OnInit {
   displayedColumns: string[] = [
     'ID',
+    'TIPO',
+    'AMBITO',
     'CONTENIDO',
-    'LISTA ATRIBUTO',
-    'LISTA OBJETO'
+    'LINEA',  
+    'COLUMNA',
+    'POSICION'
   ];
   dataSource = '';
   constructor() {}
@@ -19,6 +22,7 @@ export class TablaSimbolosComponent implements OnInit {
     let info = window.localStorage.getItem('symbol');
     let otro = JSON.parse(info);
     this.dataSource = otro;
+    console.log("Aqui abajo tabla simbolos")
     console.log(this.dataSource)
   }
 }

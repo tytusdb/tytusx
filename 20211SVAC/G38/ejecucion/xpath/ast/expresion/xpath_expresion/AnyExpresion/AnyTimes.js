@@ -9,6 +9,7 @@ class AnyTimes {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent.findAllSubObjects();
+        let ts = ent.findAllSubObjects();
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

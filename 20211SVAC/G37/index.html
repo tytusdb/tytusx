@@ -5,17 +5,35 @@
   <title>Compiladores 2 - Proyecto XPath</title>
   <meta charset="utf-8">
   <script>var exports = {};</script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <script src="js/funciones.js"></script>
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
-  <script src="https://codemirror.net/mode/xml/xml.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-  <script src="js/gramatica.js"></script>
-  <script src="js/index.js"></script>
+  <script src="js/codemirror.min.js"></script>
+  <link rel="stylesheet" href="css/codemirror.min.css" />
+  <script src="js/xml.js"></script>
+  <script src="js/FileSaver.js"></script>
+  <script src="js/prod/Ambito.js"></script>
+  <script src="js/prod/Atributo.js"></script>
+  <script src="js/prod/Simbolo.js"></script>
+  <script src="js/prod/Tipo.js"></script>
+  <script src="js/prod/Operacion.js"></script>
+  <script src="js/prod/Instruccion.js"></script>
+  <script src="js/prod/Expresion.js"></script>
+  <script src="js/prod/AST.js"></script>
+  <script src="js/prod/Nodo.js"></script>
+  <script src="xpath/Gramatica/gramaticaV2.js"></script>
+  <script src="js/prod/nodoCST.js"></script>
+  <script src="js/prod/Gramatica1.js"></script>
+  <script src="js/RError.js"></script>
+  <script src="xpath/Gramatica/gramatica.js"></script>
+  <script src="js/prod/Elemento.js"></script>
+  <script src="xpath/MISPRUEBAS/index.js"></script>
+  <script src="js/prod/Errores.js"></script>
+  <script src="js/prod/gdesc.js"></script>
+  <script src="js/prod/index.js"></script>
+  <script src="js/interprete.js"></script>
 </head>
 
 <body>
@@ -40,7 +58,8 @@
             <button class="btn btn-secondary" onclick="limpiarXPath()">Limpiar XPath</button>
           </div>
           <div class="btn-group btn-group-md">
-            <button class="btn btn-danger" onclick="ejecutarCodigo()">Analizar</button>
+            <button class="btn btn-danger" onclick="parseQuery()">Realizar Consulta</button> 
+            <button class="btn btn-danger" onclick="analizarDescXML()">AnalizarX</button> 
           </div>
           <div class="btn-group btn-group-sm">
             <button class="btn btn-tertiary">Tabla de simbolos</button>
@@ -63,8 +82,19 @@
               CST
             </button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
-              <a class="dropdown-item" target="_blanck" id="cstXpath" href="./reportes/CST.html">A-Xpath</a>
+              <a class="dropdown-item" target="_blanck" id="cstXpath1" href="./reportes/ast.html">A-Xpath</a>
+              <a class="dropdown-item" target="_blanck" id="cstXpath1" href="./reportes/CST_XML.html">XML</a>
               <a class="dropdown-item" href="#">D-Xpath</a>
+            </div>
+          </div>
+          <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Errores
+            </button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+              <a class="dropdown-item" target="_blanck" id="erroresParserDescendente" href="./reportes/tErrores.html">A-Desc-XML</a>
+              <a class="dropdown-item" href="#">A-Xpath</a>
             </div>
           </div>
         </ul>
@@ -121,7 +151,23 @@
         localStorage.removeItem("cst")
         localStorage.removeItem("rg")
         /*Guardando los datos en el LocalStorage*/
-        localStorage.setItem("xpath", nom);
+        //localStorage.setItem("xpath", nom);
+        console.log('estoy en cstXpath')
+        var hol = ejecutarCodigo(nom)
+      });
+    });
+
+    $(document).ready(function () {
+      $('#cstXpath1').click(function () {
+        /*Captura de datos escrito en los inputs*/
+        var nom = document.getElementById("txtQuery").value;
+        localStorage.removeItem("xpath");
+        localStorage.removeItem("cst")
+        localStorage.removeItem("rg")
+        /*Guardando los datos en el LocalStorage*/
+        //localStorage.setItem("xpath", nom);
+        console.log('estoy en cstXpath1')
+        var hol = ejecutarCodigo(nom)
       });
     });
   </script>

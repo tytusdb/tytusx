@@ -379,7 +379,7 @@ EXPRESION_RELACIONAL :  EXPRESION_NUMERICA tk_mayor EXPRESION_NUMERICA { operaci
                                                                        $$ = [operacionAux,nodoaux]; } 
 
                 |       EXPRESION_NUMERICA tk_noigual EXPRESION_CADENA { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.DIFERENTE_QUE, @1.first_line, @1.first_column);
-                                                                         nodoaux = new NodoArbol("=","");
+                                                                         nodoaux = new NodoArbol("!=","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
                                                                          $$ = [operacionAux,nodoaux]; }   
@@ -456,6 +456,7 @@ EXPRESION_NUMERICA : tk_menos EXPRESION_NUMERICA %prec UMENOS	{   negativo = new
   | tk_last { expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.LAST);
               nodoaux = new NodoArbol($1,"");
               $$ = [expresionAux,nodoaux];   }
+              
   | AXES  { $$ = $1; }
 
   | tk_position   {   expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.POSITION);
@@ -467,10 +468,12 @@ EXPRESION_NUMERICA : tk_menos EXPRESION_NUMERICA %prec UMENOS	{   negativo = new
                         $$ = [primitivoAux,nodoaux];};
 
 CADENA :         tk_cadena1 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($1,"");
                               $$ = [primitivoAux,nodoaux];   }
 
         |        tk_cadena2 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
                               nodoaux = new NodoArbol($1,"");
                               $$ = [primitivoAux,nodoaux];   };
 

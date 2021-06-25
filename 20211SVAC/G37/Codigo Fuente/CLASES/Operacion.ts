@@ -4,6 +4,9 @@ import { Tipo } from "./Tipo";
 import { Expresion } from "./Expresion";
 
 export enum Operador {
+    ENTERO,
+    DECIMAL,
+    CADENA,
     SUMA,
     RESTA,
     MULTIPLICACION,
@@ -20,7 +23,12 @@ export enum Operador {
     MAYOR_IGUA_QUE,
     MENOR_IGUA_QUE,
     DESCONOCIDO,
-    NODO
+    NODO,
+    AXE,
+    POR_WILDCARD,
+    POR,
+    DOT,
+    DOUBLE_DOT
 }
 
 export class Operacion implements Expresion {
@@ -145,7 +153,7 @@ export class Operacion implements Expresion {
             let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
             if (this.operador == Operador.NODO)
             {
-                
+                return op1;
             }
             else if (this.operador == Operador.MENOS_UNARIO)
             {

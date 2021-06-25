@@ -9,5 +9,7 @@ class RootAtributeTimes {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
+        let ts = ent.findAllAtributesInObjects();
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

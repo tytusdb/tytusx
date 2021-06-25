@@ -26,7 +26,10 @@ export class AppComponent {
 
  
   title = 'proyecto1';
-  txtXpath = `/catalog/book[@id="bk101"]/./*/text()`;
+  txtXpath = `for $x in /bookstore/book
+  where $x/price>30
+  order by $x/title
+  return $x/title`;
   consoleValue = "";
   parser;
   retroceder = true;
@@ -37,25 +40,63 @@ export class AppComponent {
   astXML;
   arbol;
   rgxmlasc;
+rgxmldesc;
+cstxml;
   tablaXML="";
   xmlText = `<?xml version="1.0" encoding="UTF-8"?>
-  <biblioteca>
-    <libro>
-      <titulo>La vida esta en otra parte</titulo>
-      <autor>Milan Kundera</autor>
-      <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-      <titulo>Pantaleon y las visitadoras</titulo>
-      <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-      <fechaPublicacion año="1973"/>
-    </libro>
-    <libro>
-      <titulo>Conversacion en la catedral</titulo>
-      <autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-      <fechaPublicacion año="1969"/>
-    </libro>
-  </biblioteca>`;
+
+  <bookstore>
+  
+  <book category="COOKING">
+    <title lang="en">Everyday Italian</title>
+    <author>Giada De Laurentiis</author>
+    <year>2005</year>
+    <price>30.00</price>
+  </book>
+  
+  <book category="CHILDREN">
+    <title lang="en">Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">XQuery Kick Start</title>
+    <author>James McGovern</author>
+    <author>Per Bothner</author>
+    <author>Kurt Cagle</author>
+    <author>James Linn</author>
+    <author>Vaidyanathan Nagarajan</author>
+    <year>2003</year>
+    <price>49.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <year>2003</year>
+    <price>39.95</price>
+  </book>
+  
+  </bookstore>`;
+  c3dTextInicial = `/*------HEADER------*/
+  #include <stdio.h>
+  #include <math.h>
+  
+  double heap[30101999];
+  double stack[30101999];
+  double SP;
+
+  double HP;
+  
+  /*------MAIN------*/
+  void main() {
+    SP = 0; HP = 0;`;
+c3dText = '';
+c3dTextGenerado = '';
+c3dTextFinal = `    return;
+    }`;
   
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
@@ -65,20 +106,22 @@ export class AppComponent {
     this.parserXml = require("./Gramatica/gramatica");
     this.astXML= require("./Gramatica/gramaticaXMLAsc_Arbol");
     this.arbol=require("./AST/crearArbolDot");
+	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
   }
 
   Compilar() {
     this.consoleValue ="";
-    var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
+    var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
     console.log('parseando: ' + this.txtXpath);
     var xPathObject = this.parser.parse(this.txtXpath) as sentenciaXpath[];
     //console.log('xPathObject');
     //console.log(xPathObject);
     //Agregamos para cada sentencia su sentencia hija para simular lista doblemente enlazada (padre,hijo)
     var elementoActual:sentenciaXpath; 
-    this.xmlOriginal = xmlObject;
-    var lista = [];
+   
+    var lista:Objeto[] = [];
     lista.push(xmlObject);
+    this.xmlOriginal = lista;
     console.log(xmlObject);
     this.consoleValue = '';
     xPathObject.forEach(element => {
@@ -96,7 +139,7 @@ export class AppComponent {
     });
     //elementoActual en este momento es la raiz de la entrada Xpath
    
-    
+  this.c3dText = this.c3dTextInicial + '\n' + this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
   }
   openTablaSimbolos() {
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
@@ -244,34 +287,43 @@ export class AppComponent {
           
         }break;
       case TipoNodo.Axis :
-      {
+      {  
+        if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
+          this.listaDescendientes.push(raiz);
+        }
         switch(raiz.Tipo.Valor){
           case 'ancestor':{
-            //result += this.BuscarAncestros(xml,);
+          
+            xml = this.GetXmlEtiqueta(xml,raiz);
           }break;
           case 'ancestor-or-self':{
             
+            xml = this.GetXmlEtiqueta(xml,raiz);
           }break;
           case 'attribute':{
             if(raiz.Tipo.AxisNodo.Tipo == TipoNodo.ID){
-              padre.forEach(element => {
+              padre = xml;
+              xml = this.GetAllAtributos(xml);
+              var temp:Objeto[] =[];
+              console.log('attribute');
+              console.log(xml);
+              xml.forEach(element => {
                 element.listaAtributos.forEach(atr => {
                   if(atr.identificador == raiz.Tipo.AxisNodo.Valor){
-                    result += atr.identificador + ' = ' + atr.valor + '\n';
+                    temp.push(element);
                   }
                 });
               });
+              xml = temp;
             }
             
           }break;
           case 'child':{
-            if(raiz.Tipo.AxisNodo.Tipo == TipoNodo.ID){
-              xml.forEach(element => {
-                if(element.identificador == raiz.Tipo.AxisNodo.Valor){
-                  result += this.GetXmlText(element);
-                }
-              });
-            }
+              
+              xml = this.GetXmlEtiqueta(xml,raiz);
+              console.log('xml child');
+              console.log(xml);
+             
           }break;
           case 'descendant':{
             if(raiz.Tipo.AxisNodo.Tipo == TipoNodo.ID){
@@ -286,16 +338,32 @@ export class AppComponent {
             }
           }break;
           case 'following':{
-            
+            var temp :Objeto[]=[];
+            xml.forEach(element => {
+              temp= temp.concat(element.listaObjetos);
+            });
+            xml = temp;
           }break;
           case 'following-sibling':{
-            
+            var temp :Objeto[]=[];
+            xml.forEach(element => {
+              temp= temp.concat(element.listaObjetos);
+            });
+            xml = temp;
           }break;
           case 'namespace':{
             
           }break;
           case 'parent':{
-            
+            var temp :Objeto[]=[];
+            xml.forEach(element => {
+              if(element.padre!= null){
+                if(!temp.includes(element)){
+                  temp.push(element);
+                }
+              }
+            });
+            xml = temp;
           }break;
           case 'preceding':{
             
@@ -312,9 +380,18 @@ export class AppComponent {
           }break;
         }
         if(raiz.Hijo ==null){
-          xml.forEach(element => {
-            result += this.GetXmlText(element);
-          });
+         
+          if(raiz.Tipo.Valor == 'attribute'){
+            xml.forEach(element => {
+             element.listaAtributos.forEach(atr => {
+              result += atr.identificador + '=' + atr.valor;
+             });
+            });
+          }else{
+            xml.forEach(element => {
+              result += this.GetXmlText(element);
+            });
+          }
         }else{
           result += this.ProcesarNodoRaiz(raiz.Hijo,xml,padre);
         }
@@ -329,10 +406,10 @@ export class AppComponent {
       }break;
       case TipoNodo.Funcion_Node :
       {
-        console.log('node');
-        console.log(xml);
-        xml = this.GetNodes(xml);
-        console.log(xml);
+        // console.log('node');
+        // console.log(xml);
+        // xml = this.GetNodes(xml);
+        // console.log(xml);
         if(raiz.Hijo ==null){
           xml.forEach(element => {
             result += this.GetXmlText(element);
@@ -364,6 +441,8 @@ export class AppComponent {
   }
   GetXmlEtiqueta(xml:Objeto[],etiqueta:sentenciaXpath):Objeto[]
   { 
+    console.log('GetXmlEtiqueta');
+    console.log(xml);
     var result:Objeto[] = [];
     if(this.listaDescendientes.length > 0){
       result = this.BuscarValorDescendiente(xml);
@@ -389,12 +468,10 @@ export class AppComponent {
      
     }
     if(etiqueta.Parametro!=null){
-      console.log('item con operacion');
-      console.log(etiqueta);
-      console.log(result);
       result = this.FiltrarOperacion(result,etiqueta);
-      console.log(result);
     }
+    console.log('result GetXmlEtiqueta');
+    console.log(result);
     return result;
   }
 
@@ -1312,7 +1389,10 @@ export class AppComponent {
     this.listaDescendientes.forEach(item => {
       var aux:Objeto[] = [];
       if(temp!=undefined)
-      {
+      { 
+        console.log('BuscarValorDescendiente');
+        console.log(xml);
+        console.log(item);
         temp.forEach(element => {
           if(item.Tipo.Tipo == TipoNodo.Atributo){
             element.listaAtributos.forEach(atr => {
@@ -1321,7 +1401,24 @@ export class AppComponent {
               }
             });
             aux = aux.concat(this.BuscarEtiqueta(element.listaObjetos,item));
-          }else{
+          }else if(item.Tipo.Tipo == TipoNodo.Axis){
+            if(item.Tipo.AxisNodo.Tipo == TipoNodo.Atributo){
+              element.listaAtributos.forEach(atr => {
+                if(atr.identificador == item.Tipo.AxisNodo.Valor){
+                  aux.push(element);
+                }
+              });
+              aux = aux.concat(this.BuscarEtiqueta(element.listaObjetos,item));
+            }else{
+              if(element.identificador == item.Tipo.AxisNodo.Valor){
+                aux.push(element);
+              }else{
+                aux = aux.concat(this.BuscarEtiqueta(element.listaObjetos,item));
+              }
+            }
+            
+          }
+          else{
             if(element.identificador == item.Tipo.Valor){
               aux.push(element);
             }else{
@@ -1331,12 +1428,12 @@ export class AppComponent {
         });
       }
       temp = aux;
-      if(item.Parametro!=null){
-        console.log('item con operacion');
-        console.log(temp);
-        temp = this.FiltrarOperacion(temp,item);
-        console.log(temp);
-      }
+      // if(item.Parametro!=null){
+      //   console.log('item con operacion');
+      //   console.log(temp);
+      //   temp = this.FiltrarOperacion(temp,item);
+      //   console.log(temp);
+      // }
     });
 
     //result = this.BuscarValorEtiqueta(temp,this.listaDescendientes[this.listaDescendientes.length -1],onlyParamas);
@@ -1358,7 +1455,27 @@ export class AppComponent {
         { 
           ret = ret.concat( this.BuscarEtiqueta(element.listaObjetos,etiqueta));
         }
-      }else{
+      }else if(etiqueta.Tipo.Tipo == TipoNodo.Axis){
+        if(etiqueta.Tipo.AxisNodo.Tipo == TipoNodo.Atributo){
+          element.listaAtributos.forEach(atr => {
+            if(atr.identificador == etiqueta.Tipo.AxisNodo.Valor){
+              ret.push(element);
+            }
+          });
+          if(element.listaObjetos.length > 0)
+          { 
+            ret = ret.concat( this.BuscarEtiqueta(element.listaObjetos,etiqueta));
+          }
+        }else{
+          if(element.identificador == etiqueta.Tipo.AxisNodo.Valor){
+            ret.push(element);
+          }else{
+            if(element.listaObjetos.length > 0)
+            ret = ret.concat( this.BuscarEtiqueta(element.listaObjetos,etiqueta));
+          }
+        }
+      }
+      else{
         if(element.identificador == etiqueta.Tipo.Valor){
           ret.push(element);
         }else{
@@ -1564,9 +1681,23 @@ export class AppComponent {
                   switch(ret[2]){
                     case "=":{
                       element.listaObjetos.forEach(obj => {
-                        if(obj.texto.replace(re,'').replace(ra,'') == ret[1].toString().replace(re,'').replace(ra,''))
-                        {
-                          result .push(element);
+                        if(ret[0].includes('@')){
+                          var arr = ret[0].split('@');
+                          if(obj.identificador == arr[0]){
+                            obj.listaAtributos.forEach(atr => {
+                              if(atr.identificador == arr[1]){
+                                if(atr.valor.replace(re,'').replace(ra,'') == ret[1].toString().replace(re,'').replace(ra,''))
+                                {
+                                  result .push(element);
+                                }
+                              }
+                            });
+                          }
+                        }else{
+                          if(obj.texto.replace(re,'').replace(ra,'') == ret[1].toString().replace(re,'').replace(ra,''))
+                          {
+                            result .push(element);
+                          }
                         }
                       });
                     }break;
@@ -1670,9 +1801,38 @@ export class AppComponent {
           }
         }break;
         case TipoParametro.Nodo:{
+          console.log('Nodo')
+          console.log(xml)
+          console.log(etiqueta)
           xml.forEach(element => {
             element.listaObjetos.forEach(obj => {
-              if(obj.identificador == etiqueta.Tipo.Valor){
+              if(etiqueta.Parametro.Valor.includes('@')){
+                var arr = etiqueta.Parametro.Valor.split('@');
+                if(obj.identificador == arr[0]){
+                  obj.listaAtributos.forEach(atr => {
+                    if(atr.identificador == arr[1]){
+                      result.push(element);
+                    }
+                  });
+                }
+              }else{
+                if(obj.identificador == etiqueta.Parametro.Valor){
+                  result.push(element);
+                }
+              }
+
+              
+            });
+          });
+          
+        }break;
+        case TipoParametro.Ruta:{
+          console.log('Ruta perro')
+          console.log(xml)
+          console.log(etiqueta)
+          xml.forEach(element => {
+            element.listaObjetos.forEach(obj => {
+              if(obj.identificador == etiqueta.Parametro.Valor){
                 result.push(element);
               }
             });
@@ -1823,6 +1983,8 @@ console.log();
 		}
     this.tablaXML=table;*/
     }
+ 
+
     generarReporteErroresXML(){
       var xmlObject = this.astXML.parse(this.xmlText)[3] as ListaErrores;
       
@@ -1833,6 +1995,21 @@ console.log();
       maxHeight: '80%'
     });
 
+    }
+
+    dibujarCSTDes(){
+      graphviz('#graph2').width(500);
+    graphviz('#graph2').height(750);
+    
+    const objetos = this.cstxml.parse(this.xmlText);    
+    console.log('objetos almacenados--->', objetos);
+    const arbol = new this.arbol.CrearArbolDot();
+    //console.log(arbol);   
+    var recorrido=arbol.recorrerHijos(objetos[1]);
+    console.log(recorrido);
+    this.rgxmldesc=objetos[2].arreglo_elementos;
+    graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
+console.log();
     }
 
 }

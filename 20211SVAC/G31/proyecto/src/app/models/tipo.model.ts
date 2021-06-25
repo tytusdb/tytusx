@@ -9,5 +9,15 @@ export enum Tipo {
 
   ETIQUETA = 'etiqueta',
   ATRIBUTO = 'atributo',
-  OBJETO = 'objeto'
+  OBJETO = 'objeto',
+
+  MAIN = 'main',
+  FUNCION = 'funcion',
+  PROCEDIMIENTO = 'procedimiento',
+  VARIABLE = 'variable',
+  VARIABLE_REFERENCIA = 'variable referencia',
+  CONSTANTE = 'constante',
+  PRIMITIVO = 'primitivo',
+  
+  NULO = 'nulo'
 };

@@ -1,70 +1,11 @@
 let errorTableXml, symbolTableXml;
 let errorTableXpath, tokenTableXpath;
 let xmlEditor, xpathEditor, consoleResult, grammarReport;
+let GlobalSymbolTable = {};
+let GlobalTree = {};
 
+let dotStringCst = "", dotStringAst = '', count_temp = 0;
 
-let dotStringCst = "",
-  dotStringAst = `digraph G {
-        n0 [ label = "BEGIN ASC" ];
-        n1 [ label = "EXP" ];
-        n0 -> n1; 
-        n2 [ label = "ADDITIVEEXPR" ];
-        n1 -> n2; 
-        n3 [ label = "NUMERICLITERAL" ];
-        n2 -> n3; 
-        n4 [ label = "1" ];
-        n3 -> n4; 
-        n5 [ label = "+" ];
-        n2 -> n5; 
-        n6 [ label = "NUMERICLITERAL" ];
-        n2 -> n6; 
-        n7 [ label = "2" ];
-        n6 -> n7; 
-        n8 [ label = "EOF" ];
-        n0 -> n8; 
-        }`;
-
-let dataTest1 = [
-  {
-    "Error Type": "Lexico",
-    "Row": "50",
-    "Column": "10",
-    "Description": "akljf lajfdlajlsfdjla sfjd",
-  },
-  {
-    "Error Type": "Semantico",
-    "Row": "20",
-    "Column": "5",
-    "Description": "fjfjfj akljf lajfdlajlsfdjla sfjd",
-  },
-  {
-    "Error Type": "Sintactico",
-    "Row": "30",
-    "Column": "8",
-    "Description": "jajajaja akljf lajfdlajlsfdjla sfjd",
-  }
-]
-
-let dataTest2 = [
-  {
-    "Error Type": "Lexico 2",
-    "Row": "50",
-    "Column": "10",
-    "Description": "description 1",
-  },
-  {
-    "Error Type": "Semantico 2",
-    "Row": "20",
-    "Column": "5",
-    "Description": "description 2",
-  },
-  {
-    "Error Type": "Sintactico 2",
-    "Row": "30",
-    "Column": "8",
-    "Description": "description 3",
-  }
-]
 
 $(document).ready(function () {
 
@@ -83,9 +24,6 @@ $(document).ready(function () {
   grammarReport = editor('grammar__report__editor', 'xml', false, true, false);
 });
 
-
-
-
 /**
  * create a new instance of codemirror
  * @param {*} id            id from textarea
@@ -95,6 +33,7 @@ $(document).ready(function () {
  * @param {*} styleActiveLine true =  gives the wrapper of the line that contains the cursor, otherwaise not; default = false
  * @returns  new instance of CodeMirror
  */
+
 function editor(id, language, lineNumbers = true, readOnly = false, styleActiveLine = true) {
   return CodeMirror.fromTextArea(document.getElementById(id), {
     lineNumbers,
@@ -106,10 +45,6 @@ function editor(id, language, lineNumbers = true, readOnly = false, styleActiveL
   });
 
 }
-
-
-
-
 /**
  * Open a text file
  * @param {*} editor editor where the content of the file will be displayed  
@@ -134,9 +69,6 @@ const openFile = async (editor) => {
   }
   reader.readAsText(file)
 }
-
-
-
 /**
  * Save editor content 
  * @param {*} fileName      file name
@@ -162,9 +94,6 @@ const saveFile = async (fileName, extension, editor) => {
     download(`${fileName}.${extension}`, editor.getValue())
   }
 }
-
-
-
 /**
  * Dowload a file.
  * @param {*} name file name
@@ -177,9 +106,6 @@ const download = (name, content) => {
   link.setAttribute("download", name)
   link.click()
 }
-
-
-
 /**
  * Clean an editor's content.
  * @param {*} editor editor to clean the content.
@@ -188,9 +114,8 @@ const cleanEditor = (editor) => {
   editor.setValue("");
 }
 
-
 /**
- * Performs top-down parsing of XML
+ * ANALIZADOR DESCENDENTE XML
  */
 const analysDescXml = () => {
 
@@ -199,44 +124,37 @@ const analysDescXml = () => {
 
   //creacion del arbol
   const raiz_arbol = gramdesc.parse(texto);
-  console.log(raiz_arbol);
+  GlobalTree = raiz_arbol;
 
   //creacion de la tabla de simbolos
   const tabla_simbolos = new Tabla_Simbolos(CrearTabla(raiz_arbol.objeto));
-  console.log(tabla_simbolos);
-
-  //test consulta
-  let entrada = ['biblioteca', 'libro', 'autor'];
-  const consulta = new Consulta(entrada, 1, 1);
-  console.log('Entrada: ' + entrada);
-  consulta.ejecutar(tabla_simbolos.simbolos, {});
+  GlobalSymbolTable = tabla_simbolos;
 
   //generacion del arbol 
   dotStringCst = CST_XML(raiz_arbol.objeto);
 
   //generacion reporte tabla de simbolos
   const TablaSimbolos = ReporteTabla(tabla_simbolos.simbolos, 'Global', []);
-  console.log(TablaSimbolos);
 
   //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
   symbolTableXml = newDataTable('#symbolTableXml',
     [{ data: "Idientifier" }, { data: "Type" }, { data: "Value" }, { data: "Row" }, { data: "Column" }, { data: "Environment" }],
     TablaSimbolos);
+
   //cargando datos a tabla de errores
   errorTableXml.destroy();
   errorTableXml = newDataTable('#errorTableXml',
     [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
     raiz_arbol.errores);
 
+  alert('Archivo XML analizado.')
+
 }
 
 /**
- * Perform bottom-up parsing of XML
+ * ANALIZADOR ASCENDENTE XML
  */
-
-var count_temp = 0;
-
 const analysAscXml = () => {
 
   console.log('Analizador Ascendente')
@@ -244,24 +162,18 @@ const analysAscXml = () => {
 
   //creacion del arbol
   const raiz_arbol = gramasc.parse(texto);
-  console.log(raiz_arbol);
+  GlobalTree = raiz_arbol;
 
   //creacion de la tabla de simbolos
   const tabla_simbolos = new Tabla_Simbolos(CrearTabla(raiz_arbol.objeto));
-  console.log(tabla_simbolos);
-
-  //test consulta
-  let entrada = ['biblioteca', 'libro', 'autor'];
-  const consulta = new Consulta(entrada, 1, 1);
-  console.log('Entrada: ' + entrada);
-  consulta.ejecutar(tabla_simbolos.simbolos, {});
+  GlobalSymbolTable = tabla_simbolos;
 
   //generacion del arbol
   dotStringCst = CST_XML(raiz_arbol.objeto);
 
   //generacion reporte tabla de simbolos
   const TablaSimbolos = ReporteTabla(tabla_simbolos.simbolos, 'Global', []);
-  console.log(TablaSimbolos);
+
 
   //cargando datos a tabla de simbolos
   symbolTableXml.destroy();
@@ -274,8 +186,94 @@ const analysAscXml = () => {
     [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
     raiz_arbol.errores);
 
+
+  alert('Archivo XML analizado.')
+
+
 }
 
+/**
+ * ANALIZADOR DESCENDENTE XPATH
+ */
+const analysDescXpath = () => {
+
+  console.log('Analizador XPath Descendente')
+  var consol_out = ''
+  var query_out = ''
+  var path = xpathEditor.getValue();
+
+  //Analizador XPath
+  const xpath = gram_xpath_desc.parse(path);
+  if (xpath) consol_out = 'LA CONSULTA XPATH ES VALIDA'
+  else consol_out = 'LA CONSULTA XPATH CONTIENE ERRORES'
+
+
+  //test consulta
+  let entrada = path.split('/');
+  entrada.splice(0, 1);
+  const consulta = new Consulta(entrada, 1, 1);
+  query_out = consulta.ejecutar(GlobalSymbolTable.simbolos, {});
+
+  //encoding
+  query_out = Encoding(query_out);
+
+
+  //seteando consola
+  consoleResult.setValue(consol_out + '\n' + query_out);
+
+
+  //Manejando errores
+  // errorTableXpath.destroy();
+  // errorTableXpath = newDataTable('#errorTableXpath',
+  //   [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
+  //   dataTest1);
+
+
+}
+
+/**
+ * ANALIZADOR ASCENDENTE XPATH
+ */
+const analysAscXpath = () => {
+
+  console.log('Analizador XPath Ascendente')
+  var consol_out = ''
+  var query_out = ''
+  var path = xpathEditor.getValue();
+
+  //Analizador XPath
+  const xpath = gram_xpath_asc.parse(path);
+  if (xpath) consol_out = 'LA CONSULTA XPATH ES VALIDA'
+  else consol_out = 'LA CONSULTA XPATH CONTIENE ERRORES'
+
+
+  //test consulta
+  let entrada = path.split('/')
+  entrada.splice(0, 1);
+  const consulta = new Consulta(entrada, 1, 1);
+  query_out = consulta.ejecutar(GlobalSymbolTable.simbolos, {});
+
+  //encoding
+  query_out = Encoding(query_out);
+
+  //seteando consola
+  consoleResult.setValue(consol_out + '\n' + query_out);
+
+
+  //Manejando errores
+  // errorTableXpath.destroy();
+  // errorTableXpath = newDataTable('#errorTableXpath',
+  //   [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
+  //   dataTest2);
+
+
+
+
+}
+
+/**
+ * Necessary Functions 
+ */
 function CrearTabla(objeto) {
   //validando si existe el nodo
   if (objeto != undefined) {
@@ -375,38 +373,43 @@ function CrearCST(objeto, count, node) {
   }
 }
 
+function Encoding(cadena) {
+  //encoding
+  for (let enc of GlobalTree.config) {
+    if (enc.identificador.toLowerCase() == 'encoding') {
+      switch (enc.valor.toLowerCase()) {
+        case 'utf-8':
+          cadena = utf8(cadena);
+          break;
+        case 'ascii':
+          cadena = ascii(cadena);
+          break;
+        default:
+          console.log('No se encontro codificacion valida')
+          break;
+      }
+    }
+  }
+  return cadena;
+}
 
+function utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
 
+function ascii(s) {
+  var salida = ''
+  for (let cha of s) {
+    salida += cha.charCodeAt(0) + ' ';
+  }
+  return salida;
+}
 
-/**
- * Performs top-down parsing of XPATH
- */
-const analysDescXpath = () => {
-
-  errorTableXpath.destroy();
-  errorTableXpath = newDataTable('#errorTableXpath',
-    [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-    dataTest1);
-
-  consoleResult.setValue("DESC XPATH FINISHED");
+function iso(s) {
+  return decodeURIComponent(escape(s));
 }
 
 
-/**
- * Perform bottom-up parsing of XPATH
- */
-const analysAscXpath = () => {
-  console.log("ASC XPATH FINISHED");
-
-  errorTableXpath.destroy();
-  errorTableXpath = newDataTable('#errorTableXpath',
-    [{ data: "Error Type" }, { data: "Row" }, { data: "Column" }, { data: "Description" }],
-    dataTest2);
-
-  consoleResult.setValue("ASC XPATH FINISHED");
-
-
-}
 
 /**
  *  Reinitialize data table

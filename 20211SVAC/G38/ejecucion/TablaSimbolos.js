@@ -49,7 +49,7 @@ class TablaSimbolos {
         if (tablaTemporal.listaSimbolos.length > 0)
             objetos = objetos.concat(tablaTemporal.listaSimbolos);
         this._listaSimbolos.forEach(function (simbolo) {
-            if (simbolo.tipo.esObjeto() &&
+            if ((simbolo.tipo.esObjeto() || simbolo.tipo.esGlobal()) &&
                 simbolo.sub_entorno !== undefined &&
                 simbolo.sub_entorno !== null) {
                 let ts = XpathUtil.crearTablaSimbolos(simbolo.sub_entorno);
@@ -88,7 +88,7 @@ class TablaSimbolos {
         if (tablaTemporal.listaSimbolos.length > 0)
             objetos = objetos.concat(tablaTemporal.listaSimbolos);
         this._listaSimbolos.forEach(function (simbolo) {
-            if (simbolo.tipo.esObjeto() &&
+            if ((simbolo.tipo.esObjeto() || simbolo.tipo.esGlobal()) &&
                 simbolo.sub_entorno !== undefined &&
                 simbolo.sub_entorno !== null) {
                 let ts = XpathUtil.crearTablaSimbolos(simbolo.sub_entorno);
@@ -148,6 +148,34 @@ class TablaSimbolos {
         ts._listaSimbolos = resultado;
         return ts;
     }
+    findAllSubTextInTS() {
+        let resultado = [];
+        if (!this.tieneSimbolos()) {
+            return XpathUtil.crearTablaSimbolos([]);
+        }
+        for (let row of this._listaSimbolos) {
+            if (row == undefined || row == null) {
+                continue;
+            }
+            resultado = resultado.concat(row.getAllSubTextInRow());
+        }
+        let ts = XpathUtil.crearTablaSimbolos(resultado);
+        return ts;
+    }
+    findSubTextInTS() {
+        let resultado = [];
+        if (!this.tieneSimbolos()) {
+            return XpathUtil.crearTablaSimbolos([]);
+        }
+        for (let row of this._listaSimbolos) {
+            if (row == undefined || row == null) {
+                continue;
+            }
+            resultado = resultado.concat(row.getSubTextInRow());
+        }
+        let ts = XpathUtil.crearTablaSimbolos(resultado);
+        return ts;
+    }
     findAllObjects() {
         let objetos = [];
         for (let row of this._listaSimbolos) {
@@ -170,20 +198,53 @@ class TablaSimbolos {
         }
         return XpathUtil.crearTablaSimbolos(objetosPadre);
     }
+    getElementsParentsRecursive() {
+        let simbolosPadre = XpathUtil.crearTablaSimbolos([]);
+        simbolosPadre.listaSimbolos = this.getElementsParents().listaSimbolos;
+        for (let simbolo of this.listaSimbolos) {
+            if (simbolo.entorno_row !== undefined &&
+                simbolo.entorno_row !== null) {
+                let tablaAncestro = XpathUtil.crearTablaSimbolos([simbolo.entorno_row]);
+                let tablaTemp = tablaAncestro.getElementsParentsRecursive();
+                if (!tablaTemp.esVacia())
+                    simbolosPadre.listaSimbolos = simbolosPadre.listaSimbolos.concat(tablaTemp.listaSimbolos);
+            }
+        }
+        return simbolosPadre;
+    }
     getElementsParents() {
-        this.listaSimbolos =
-            this.listaSimbolos.map(function (simbolo) {
-                if (simbolo.entorno_row !== undefined && simbolo.entorno_row !== null) {
-                    return simbolo.entorno_row;
-                }
+        // traer todos los padres del que su id es igual a nombreElemento
+        let tablaParent = XpathUtil.crearTablaSimbolos([]);
+        tablaParent.listaSimbolos =
+            this.listaSimbolos.filter(function (simbolo) {
+                if (simbolo.entorno_row !== undefined &&
+                    simbolo.entorno_row !== null)
+                    return true;
                 else
-                    throw Error("Se esta tratando de obtener el padre en el nodo raiz");
+                    return false;
+            }).map(function (simbolo) {
+                return simbolo.entorno_row;
             });
-        return this;
+        return tablaParent;
+    }
+    getElementsParentsByNombreElementoRecursive(nombreElemento) {
+        let simbolosPadre = XpathUtil.crearTablaSimbolos([]);
+        simbolosPadre.listaSimbolos = this.getElementsParentsByNombreElemento(nombreElemento).listaSimbolos;
+        for (let simbolo of this.listaSimbolos) {
+            if (simbolo.entorno_row !== undefined &&
+                simbolo.entorno_row !== null) {
+                let tablaAncestro = XpathUtil.crearTablaSimbolos([simbolo.entorno_row]);
+                let tablaTemp = tablaAncestro.getElementsParentsByNombreElementoRecursive(nombreElemento);
+                if (!tablaTemp.esVacia())
+                    simbolosPadre.listaSimbolos = simbolosPadre.listaSimbolos.concat(tablaTemp.listaSimbolos);
+            }
+        }
+        return simbolosPadre;
     }
     getElementsParentsByNombreElemento(nombreElemento) {
         // traer todos los padres del que su id es igual a nombreElemento
-        this.listaSimbolos =
+        let tablaParent = XpathUtil.crearTablaSimbolos([]);
+        tablaParent.listaSimbolos =
             this.listaSimbolos.filter(function (simbolo) {
                 if (simbolo.entorno_row !== undefined &&
                     simbolo.entorno_row !== null &&
@@ -194,7 +255,7 @@ class TablaSimbolos {
             }).map(function (simbolo) {
                 return simbolo.entorno_row;
             });
-        return this;
+        return tablaParent;
     }
     replaceAtributesWithObjects() {
         this.listaSimbolos =
@@ -205,8 +266,42 @@ class TablaSimbolos {
                     return simbolo;
             });
     }
+    chageTypeTsRowAttribute() {
+        var objetos = [];
+        for (let row of this._listaSimbolos) {
+            if (row.nodo instanceof XmlAttribute) {
+                var nodo = new TsRowAttribute(row);
+                objetos.push(nodo);
+            }
+            else {
+                objetos.push(row);
+            }
+        }
+        this._listaSimbolos = objetos;
+    }
     esVacia() {
         return this.listaSimbolos == null || this.listaSimbolos == undefined || this.listaSimbolos.length == 0;
+    }
+    getContentRow() {
+        let content = null;
+        if (this._listaSimbolos === undefined || this._listaSimbolos == null)
+            throw Error('Lista de simbolos es nula');
+        for (let row of this._listaSimbolos) {
+            if (row.tipo.esObjeto() || row.tipo.esAtributo()) {
+                content = row.obtenerTexto();
+                break;
+            }
+        }
+        return content;
+    }
+    tieneUnElemento() {
+        return this.listaSimbolos != null && this.listaSimbolos != undefined && this.listaSimbolos.length == 1;
+    }
+    getElementoInTsByPosition(position) {
+        let row = null;
+        if (this.listaSimbolos != null && this.listaSimbolos.length >= position)
+            row = this.listaSimbolos[position];
+        return row;
     }
     getHtmlTable() {
         let cad;
@@ -268,6 +363,9 @@ class TablaSimbolos {
         let i = 1;
         let cad = "";
         for (let row of this._listaSimbolos) {
+            if (row != null && row.nodo instanceof XmlRoot) {
+                continue;
+            }
             cad += i + ".\n" + row.toStr("");
             i += 1;
         }
@@ -304,5 +402,105 @@ class TablaSimbolos {
             }
         }
         return true;
+    }
+    eliminarDuplicados() {
+        var nuevaLista = [];
+        if (this._listaSimbolos == null) {
+            this.listaSimbolos = nuevaLista;
+            return;
+        }
+        for (let subRow of this._listaSimbolos) {
+            let existe = false;
+            for (let tmp of nuevaLista) {
+                if (tmp.id == subRow.id) {
+                    existe = true;
+                    break;
+                }
+            }
+            if (!existe) {
+                nuevaLista.push(subRow);
+            }
+        }
+        this._listaSimbolos = nuevaLista;
+    }
+    findAllNodes() {
+        let ts = this.findAllSubObjects();
+        return ts;
+    }
+    findAllChildsNodes() {
+        let result_row = [];
+        let ts = this.findAllObjects();
+        if (ts == undefined || ts == null) {
+            return XpathUtil.crearTablaSimbolos([]);
+        }
+        for (let sub_row of ts._listaSimbolos) {
+            if (sub_row == undefined || sub_row == null) {
+                continue;
+            }
+            if (sub_row.sub_entorno == undefined || sub_row == null) {
+                continue;
+            }
+            if (sub_row.sub_entorno.length == 0) {
+                continue;
+            }
+            result_row.push(sub_row);
+        }
+        return XpathUtil.crearTablaSimbolos(result_row);
+    }
+    findAllSubTextRows() {
+        if (!this.tieneSimbolos()) {
+            return XpathUtil.crearTablaSimbolos([]);
+        }
+        let ts = XpathUtil.crearTablaSimbolos([]);
+        for (let sub_row of this._listaSimbolos) {
+            if (sub_row == undefined || sub_row == null) {
+                continue;
+            }
+            if (sub_row.tipo.esPrimitivo()) {
+                ts._listaSimbolos.push(sub_row);
+            }
+        }
+        return ts;
+    }
+    tieneSimbolos() {
+        return this._listaSimbolos != undefined && this._listaSimbolos != null;
+    }
+    getPosition() {
+        let position = null;
+        for (let row of this._listaSimbolos) {
+            if (row.tipo.esObjeto()) {
+                position = row.indice;
+                break;
+            }
+        }
+        return position;
+    }
+    getLastPosition() {
+        let posicionMasGrande = 0;
+        this.listaSimbolos.forEach(function (tsRow) {
+            if (tsRow.indice > posicionMasGrande)
+                posicionMasGrande = tsRow.indice;
+        });
+        return posicionMasGrande;
+    }
+    get last() {
+        return this._last;
+    }
+    set last(value) {
+        this._last = value;
+    }
+    getStrAst() {
+        let cadena;
+        cadena = "digraph G {\n";
+        if (!this.tieneSimbolos()) {
+            cadena += "}\n";
+            return cadena;
+        }
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot = nombreRoot + "[" + 'label="/",' + 'color="red",' + "];\n ";
+        cadena += cadenaRoot + this._listaSimbolos[0].sub_entorno[0].nodo.getStrAst(nombreRoot);
+        cadena += "rankdir=LR;\n";
+        cadena += "}\n";
+        return cadena;
     }
 }

@@ -12,8 +12,18 @@ class NativeFunctionExpresion {
         this.columna = columna;
     }
     getTipo(ent) {
-        return new Tipo(TipoDato.err);
+        return new Tipo(TipoDato.numero);
     }
     getValor(ent) {
+        let position;
+        switch (this.nativeFunction) {
+            case NativeFunction.position:
+                position = ent.getPosition();
+                break;
+            case NativeFunction.last:
+                position = ent.last;
+                break;
+        }
+        return position;
     }
 }

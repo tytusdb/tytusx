@@ -10,6 +10,8 @@ export class Simbolo {
   public linea: number;
   public columna: number;
 
+  public posicion: number;
+
   constructor(tipoOBJ: Tipo, tipo: Tipo, identificador: string,
     valor: Object, ambito: string, linea: number, columna: number) {
     this.tipoOBJ = tipoOBJ;
@@ -19,5 +21,8 @@ export class Simbolo {
     this.ambito = ambito;
     this.linea = linea;
     this.columna = columna;
+    this.posicion = 0;
   }
+
+
 }

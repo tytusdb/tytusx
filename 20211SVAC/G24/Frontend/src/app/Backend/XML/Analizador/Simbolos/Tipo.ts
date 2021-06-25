@@ -17,5 +17,6 @@ export default class Tipo {
 export enum tipoDato {
   CADENA,
   OBJETO,
-  QUOTE
+  QUOTE,
+  ATRIBUTO
 }

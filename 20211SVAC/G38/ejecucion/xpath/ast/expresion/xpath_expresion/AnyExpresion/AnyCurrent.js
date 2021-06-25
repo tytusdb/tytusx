@@ -9,6 +9,7 @@ class AnyCurrent {
         return new Tipo(TipoDato.err);
     }
     getValor(ent) {
-        return ent;
+        let ts = ent;
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

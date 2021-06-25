@@ -13,6 +13,28 @@ module.exports = __webpack_require__(/*! /home/ldecast/JUNIO 2021/Compiladores 2
 /***/ }),
 
 /***/ 1:
+/*!***************************!*\
+  !*** ./streams (ignored) ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 2:
+/*!*******************************!*\
+  !*** ./extend-node (ignored) ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 3:
 /*!********************!*\
   !*** fs (ignored) ***!
   \********************/
@@ -23,7 +45,7 @@ module.exports = __webpack_require__(/*! /home/ldecast/JUNIO 2021/Compiladores 2
 
 /***/ }),
 
-/***/ 2:
+/***/ 4:
 /*!**********************!*\
   !*** path (ignored) ***!
   \**********************/
@@ -49,59 +71,89 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
 var Expresion_1 = __importDefault(__webpack_require__(/*! ../../Expresion/Expresion */ "gajf"));
 var Predicate_1 = __webpack_require__(/*! ./Predicate */ "Iysv");
+var Axis_1 = __importDefault(__webpack_require__(/*! ./Axis/Axis */ "pW4W"));
 function DobleEje(_instruccion, _ambito, _contexto) {
-    var retorno = { cadena: Enum_1.Tipos.NONE, retorno: Array() };
-    var err = { err: "No se encontraron elementos.\n", linea: _instruccion.linea, columna: _instruccion.columna };
-    var contexto = (_contexto.retorno) ? (_contexto.retorno) : null;
-    var expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
-    if (expresion.err)
+    var _404 = { notFound: "No se encontraron elementos." };
+    var contexto = (_contexto.elementos) ? (_contexto) : null;
+    var expresion;
+    if (_instruccion.expresion.expresion)
+        expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
+    else
+        expresion = Expresion_1.default(_instruccion.expresion, _ambito, contexto);
+    if (expresion.error)
         return expresion;
     var predicate = _instruccion.expresion.predicate;
     var root;
     if (expresion.tipo === Enum_1.Tipos.ELEMENTOS) {
         root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
-        root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
+        root = getAllSymbolFromCurrent({ id: expresion.valor, tipo: "@" }, contexto, _ambito, predicate);
+        if (root.atributos.error)
+            return root.atributos;
         if (root.atributos.length === 0)
-            return err;
-        retorno.cadena = Enum_1.Tipos.ATRIBUTOS;
+            return _404;
+        return root;
     }
     else if (expresion.tipo === Enum_1.Tipos.ASTERISCO) {
         root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.FUNCION_NODE) {
         root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
+        if (root.nodos.error)
+            return root.nodos;
         if (root.nodos.length === 0)
-            return err;
-        retorno.cadena = root.tipo;
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+        root = getAllSymbolFromCurrent(expresion.valor, contexto, _ambito, predicate);
+        if (root.texto.error)
+            return root.texto;
+        if (root.texto.length === 0)
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.SELECT_AXIS) {
+        root = Axis_1.default.GetAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, true);
+        if (root.error)
+            return root;
+        return root;
     }
     else {
-        return { err: "Expresión no válida.\n", linea: _instruccion.linea, columna: _instruccion.columna };
+        return { error: "Expresión no válida.", tipo: "Semántico", origen: "Query", linea: _instruccion.linea, columna: _instruccion.columna };
     }
-    if (root.err)
-        return root;
-    if (root.length === 0 || root === null)
-        return err;
-    retorno.retorno = root;
-    return retorno;
+    if (root === null || root.error || root.elementos.error || root.elementos.length === 0)
+        return _404;
+    return root;
 }
 function getAllSymbolFromCurrent(_nodename, _contexto, _ambito, _condicion) {
     if (_contexto)
         return getFromCurrent(_nodename, _contexto, _ambito, _condicion);
     else
-        return getFromRoot(_nodename, _ambito, _condicion);
+        return { error: "Indstrucción no procesada.", tipo: "Semántico", origen: "Query", linea: 1, columna: 1 };
 }
 function getFromCurrent(_id, _contexto, _ambito, _condicion) {
     var elements = Array();
     var attributes = Array();
     var nodes = Array();
+    // Selecciona únicamente el texto contenido en el nodo y todos sus descendientes
+    if (_id === "text()") {
+        var text = Array();
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
+            text = _ambito.searchAnyText(element, text);
+            elements.push(element);
+        }
+        if (_condicion) {
+            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+            text = filter.filterElements(text);
+            elements = filter.contexto;
+        }
+        return { texto: text, elementos: elements, cadena: Enum_1.Tipos.TEXTOS };
+    }
     // Selecciona todos los descencientes (elementos y/o texto)
-    if (_id === "node()") {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+    else if (_id === "node()") {
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs) {
                 element.childs.forEach(function (child) {
                     nodes = _ambito.nodesFunction(child, nodes);
@@ -109,35 +161,28 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
             }
             else if (element.value)
                 nodes.push({ textos: element.value });
+            elements.push(element);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes = filter.filterNodes(nodes);
+            nodes = filter.filterElements(nodes);
+            elements = filter.contexto;
         }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes };
+        return { cadena: Enum_1.Tipos.COMBINADO, nodos: nodes, elementos: _contexto.elementos };
     }
     // Selecciona todos los atributos a partir del contexto
     else if (_id.tipo === "@") {
-        var a = { atributos: attributes, elementos: elements };
-        if (_id.id === "*") {
-            for (var i = 0; i < _contexto.length; i++) {
-                var element = _contexto[i];
-                a = _ambito.searchAnyAttributes(element, attributes, elements);
-            }
-        }
-        else {
-            for (var i = 0; i < _contexto.length; i++) {
-                var element = _contexto[i];
-                a = _ambito.searchAttributesFromCurrent(element, _id.id, attributes, elements);
-            }
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
+            attributes = _ambito.searchAnyAttributes(_id.id, element, attributes);
         }
         if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, a.elementos);
-            a.elementos = filter.filterElements();
-            a.atributos = filter.filterAttributes(a.atributos);
+            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+            attributes = filter.filterAttributes(attributes);
         }
-        return a;
+        return { atributos: attributes, elementos: [], cadena: Enum_1.Tipos.ATRIBUTOS };
     }
+    // Selecciona el padre
     else if (_id === "..") {
         if (_contexto.atributos) {
             var _loop_1 = function (i) {
@@ -151,12 +196,12 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
             }
             if (_condicion) {
                 var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-                elements = filter.filterElements();
+                elements = filter.filterElements(elements);
             }
-            return elements;
+            return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
         }
         var _loop_2 = function (i) {
-            var element = _contexto[i];
+            var element = _contexto.elementos[i];
             var dad = element.father;
             if (dad) {
                 _ambito.tablaSimbolos.forEach(function (elm) {
@@ -169,19 +214,19 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
                 });
             }
         };
-        for (var i = 0; i < _contexto.length; i++) {
+        for (var i = 0; i < _contexto.elementos.length; i++) {
             _loop_2(i);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
-    // Selecciona todos los descendientes con el id
+    // Selecciona todos los descendientes con el id o en el caso que sea //*
     else {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs)
                 element.childs.forEach(function (child) {
                     elements = _ambito.searchNodes(_id, child, elements);
@@ -189,57 +234,9 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
-    }
-}
-function getFromRoot(_id, _ambito, _condicion) {
-    var elements = Array();
-    var attributes = Array();
-    // Selecciona todos los descencientes (elementos y/o texto)
-    if (_id === "node()") {
-        var nodes_1 = Array();
-        _ambito.tablaSimbolos.forEach(function (element) {
-            nodes_1 = _ambito.nodesFunction(element, nodes_1);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes_1 = filter.filterNodes(nodes_1);
-        }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes_1 };
-    }
-    // Selecciona todos los atributos a partir de la raíz
-    else if (_id.tipo === "@") {
-        var a_1 = { atributos: attributes, elementos: elements };
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (_id.id === "*")
-                a_1 = _ambito.searchAnyAttributes(element, attributes, elements);
-            else
-                a_1 = _ambito.searchAttributesFromCurrent(element, _id.id, attributes, elements);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, a_1.elementos);
-            a_1.elementos = filter.filterElements();
-            a_1.atributos = filter.filterAttributes(a_1.atributos);
-        }
-        return a_1;
-    }
-    // Selecciona todos los descendientes con el id o si es un *
-    else {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.id_open === _id || _id === "*")
-                elements.push(element);
-            if (element.childs)
-                element.childs.forEach(function (child) {
-                    elements = _ambito.searchNodes(_id, child, elements);
-                });
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
 }
 module.exports = DobleEje;
@@ -262,72 +259,110 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Enum_1 = __webpack_require__(/*! ../../../model/xpath/Enum */ "MEUw");
 var DobleEje_1 = __importDefault(__webpack_require__(/*! ./Selecting/DobleEje */ "67Yu"));
 var Eje_1 = __importDefault(__webpack_require__(/*! ./Selecting/Eje */ "CG7/"));
-function Bloque(_instruccion, _ambito) {
-    var retorno = { cadena: "", retorno: null };
+var Axis_1 = __importDefault(__webpack_require__(/*! ./Selecting/Axis/Axis */ "pW4W"));
+var reset;
+var output = [];
+function Bloque(_instruccion, _ambito, _retorno) {
     var tmp;
-    // console.log(_instruccion, 888888);
+    reset = _retorno;
     for (var i = 0; i < _instruccion.length; i++) {
         var camino = _instruccion[i]; // En caso de tener varios caminos
         for (var j = 0; j < camino.length; j++) {
             var instr = camino[j];
-            console.log(instr, 7777777);
-            switch (instr.tipo) {
-                case Enum_1.Tipos.SELECT_FROM_ROOT:
-                    tmp = Eje_1.default(instr, _ambito, retorno);
-                    if (tmp.err)
-                        return tmp;
-                    retorno = tmp;
+            if (instr.tipo === Enum_1.Tipos.SELECT_FROM_ROOT) {
+                tmp = Eje_1.default(instr, _ambito, _retorno);
+                if (tmp.notFound) {
+                    _retorno = reset;
                     break;
-                case Enum_1.Tipos.SELECT_FROM_CURRENT:
-                    tmp = DobleEje_1.default(instr, _ambito, retorno);
-                    if (tmp.err)
-                        return tmp;
-                    retorno = tmp;
+                }
+                if (tmp.error)
+                    return tmp;
+                _retorno = tmp;
+            }
+            else if (instr.tipo === Enum_1.Tipos.SELECT_FROM_CURRENT) {
+                tmp = DobleEje_1.default(instr, _ambito, _retorno);
+                if (tmp.notFound) {
+                    _retorno = reset;
                     break;
-                default:
-                    return { err: "Instrucción no procesada.\n", linea: instr.linea, columna: instr.columna };
+                }
+                if (tmp.error)
+                    return tmp;
+                _retorno = tmp;
+            }
+            else if (instr.tipo === Enum_1.Tipos.SELECT_AXIS) {
+                tmp = Axis_1.default.SA(instr, _ambito, _retorno);
+                if (tmp.notFound) {
+                    _retorno = reset;
+                    break;
+                }
+                if (tmp.error)
+                    return tmp;
+                _retorno = tmp;
+            }
+            else {
+                return { error: "Error: Instrucción no procesada.", tipo: "Semántico", origen: "Query", linea: instr.linea, columna: instr.columna };
             }
         }
+        output.push(_retorno);
+        _retorno = reset;
     }
-    // console.log(retorno, 888888888)
-    if (retorno.retorno) {
-        var cadena_1 = "";
-        if (retorno.cadena === Enum_1.Tipos.TEXTOS) {
-            var root = retorno.retorno;
+    return writeOutput();
+}
+function writeOutput() {
+    var cadena = "";
+    for (var i = 0; i < output.length; i++) {
+        var path = output[i];
+        if (path.cadena === Enum_1.Tipos.TEXTOS) {
+            var root = (path.texto) ? (path.texto) : (path.elementos);
             root.forEach(function (txt) {
-                cadena_1 += concatText(txt);
+                cadena += concatText(txt);
             });
         }
-        else if (retorno.cadena === Enum_1.Tipos.ELEMENTOS) {
-            var root = retorno.retorno;
+        else if (path.cadena === Enum_1.Tipos.ELEMENTOS) {
+            var root = path.elementos;
             root.forEach(function (element) {
-                cadena_1 += concatChilds(element, "");
+                cadena += concatChilds(element, "");
             });
         }
-        else if (retorno.cadena === Enum_1.Tipos.ATRIBUTOS) {
-            // let root: Array<Atributo> = attr; // <-- muestra sólo el atributo
-            // root.forEach(attribute => {
-            //     cadena += concatAttributes(attribute);
-            // });
-            var root = retorno.retorno.elementos; // <-- muestra toda la etiqueta
-            root.forEach(function (element) {
-                cadena_1 += extractAttributes(element, "");
-            });
+        else if (path.cadena === Enum_1.Tipos.ATRIBUTOS) {
+            if (path.atributos) {
+                var root = path.atributos; // <-- muestra sólo el atributo
+                root.forEach(function (attr) {
+                    cadena += concatAttributes(attr);
+                });
+            }
+            else {
+                var root = path.elementos; // <-- muestra toda la etiqueta
+                root.forEach(function (element) {
+                    cadena += extractAttributes(element, "");
+                });
+            }
         }
-        else if (retorno.cadena === Enum_1.Tipos.COMBINADO) {
-            var root = retorno.retorno.nodos;
+        else if (path.cadena === Enum_1.Tipos.COMBINADO) {
+            var root = path.nodos;
             root.forEach(function (elemento) {
                 if (elemento.elementos) {
-                    cadena_1 += concatChilds(elemento.elementos, "");
+                    cadena += concatChilds(elemento.elementos, "");
                 }
                 else if (elemento.textos) {
-                    cadena_1 += concatText(elemento.textos);
+                    cadena += concatText(elemento.textos);
                 }
             });
         }
-        retorno.cadena = cadena_1.substring(1);
     }
-    return retorno;
+    output = [];
+    if (cadena)
+        return replaceEntity(cadena.substring(1));
+    return "No se encontraron elementos.";
+}
+function replaceEntity(cadena) {
+    var _lessThan = /&lt;/gi;
+    var _greaterThan = /&gt;/gi;
+    var _ampersand = /&amp;/gi;
+    var _apostrophe = /&apos;/gi;
+    var _quotation = /&quot;/gi;
+    var salida = cadena.replace(_lessThan, "<").replace(_greaterThan, ">").replace(_ampersand, "&").replace(_apostrophe, "\'").replace(_quotation, "\"");
+    return salida;
 }
 function concatChilds(_element, cadena) {
     cadena = ("\n<" + _element.id_open);
@@ -453,174 +488,315 @@ module.exports = Bloque;
   }
 */
 var xpath_up = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[5,6],$Vs=[5,6,9,10,24,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,60],$Vt=[5,6,9,10,16,18,19,20,21,22,23,24,25,26,28,29,30,31,32,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,60],$Vu=[2,13],$Vv=[1,44],$Vw=[5,6,9,10,14,16,18,19,20,21,22,23,24,25,26,28,29,30,31,32,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,60],$Vx=[1,56],$Vy=[1,57],$Vz=[1,66],$VA=[1,67],$VB=[1,68],$VC=[1,69],$VD=[1,70],$VE=[1,71],$VF=[1,72],$VG=[1,73],$VH=[1,74],$VI=[1,75],$VJ=[1,76],$VK=[1,77],$VL=[1,78],$VM=[16,18,19,20,21,22,23,24,25,26,28,29,30,31,32],$VN=[16,18,19,20,21,28,29,30,31,32],$VO=[16,18,19,20,21,22,23,28,29,30,31,32];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[5,6,8],$Vs=[5,6,8,10,11,25,36,37,38,39,40,41,42,43,44,45,46,49,50,51,52,53,54,55,56,57,58,59,60,61],$Vt=[5,6,8,10,11,17,19,20,21,22,23,24,25,26,27,29,30,31,32,33,36,37,38,39,40,41,42,43,44,45,46,49,50,51,52,53,54,55,56,57,58,59,60,61],$Vu=[2,14],$Vv=[1,45],$Vw=[5,6,8,10,11,15,17,19,20,21,22,23,24,25,26,27,29,30,31,32,33,36,37,38,39,40,41,42,43,44,45,46,49,50,51,52,53,54,55,56,57,58,59,60,61],$Vx=[1,58],$Vy=[1,59],$Vz=[1,68],$VA=[1,69],$VB=[1,70],$VC=[1,71],$VD=[1,72],$VE=[1,73],$VF=[1,74],$VG=[1,75],$VH=[1,76],$VI=[1,77],$VJ=[1,78],$VK=[1,79],$VL=[1,80],$VM=[17,19,20,21,22,23,24,25,26,27,29,30,31,32,33],$VN=[17,19,20,21,22,29,30,31,32,33],$VO=[17,19,20,21,22,23,24,29,30,31,32,33];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"tk_line":6,"XPATH":7,"QUERY":8,"tk_2bar":9,"tk_bar":10,"EXP_PR":11,"AXIS":12,"CORCHET":13,"tk_corA":14,"E":15,"tk_corC":16,"CORCHETP":17,"tk_menorigual":18,"tk_menor":19,"tk_mayorigual":20,"tk_mayor":21,"tk_mas":22,"tk_menos":23,"tk_asterisco":24,"tk_div":25,"tk_mod":26,"tk_ParA":27,"tk_ParC":28,"tk_or":29,"tk_and":30,"tk_equal":31,"tk_diferent":32,"FUNC":33,"PRIMITIVO":34,"tk_id":35,"tk_attribute_d":36,"tk_attribute_s":37,"num":38,"tk_punto":39,"tk_2puntos":40,"tk_arroba":41,"tk_text":42,"tk_last":43,"tk_position":44,"tk_node":45,"AXISNAME":46,"tk_4puntos":47,"tk_ancestor":48,"tk_ancestor2":49,"tk_attribute":50,"tk_child":51,"tk_descendant":52,"tk_descendant2":53,"tk_following":54,"tk_following2":55,"tk_namespace":56,"tk_parent":57,"tk_preceding":58,"tk_preceding2":59,"tk_self":60,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"tk_line",9:"tk_2bar",10:"tk_bar",14:"tk_corA",16:"tk_corC",18:"tk_menorigual",19:"tk_menor",20:"tk_mayorigual",21:"tk_mayor",22:"tk_mas",23:"tk_menos",24:"tk_asterisco",25:"tk_div",26:"tk_mod",27:"tk_ParA",28:"tk_ParC",29:"tk_or",30:"tk_and",31:"tk_equal",32:"tk_diferent",35:"tk_id",36:"tk_attribute_d",37:"tk_attribute_s",38:"num",39:"tk_punto",40:"tk_2puntos",41:"tk_arroba",42:"tk_text",43:"tk_last",44:"tk_position",45:"tk_node",47:"tk_4puntos",48:"tk_ancestor",49:"tk_ancestor2",50:"tk_attribute",51:"tk_child",52:"tk_descendant",53:"tk_descendant2",54:"tk_following",55:"tk_following2",56:"tk_namespace",57:"tk_parent",58:"tk_preceding",59:"tk_preceding2",60:"tk_self"},
-productions_: [0,[3,2],[4,3],[4,1],[7,2],[7,1],[8,2],[8,2],[8,1],[8,1],[13,4],[13,3],[17,1],[17,0],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,2],[15,3],[15,3],[15,3],[15,3],[15,3],[15,1],[11,2],[11,2],[34,1],[34,1],[34,1],[34,1],[34,1],[34,1],[34,1],[34,2],[34,2],[33,3],[33,3],[33,3],[33,3],[12,3],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1]],
+symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"tk_line":6,"XPATH":7,"tk_2line":8,"QUERY":9,"tk_2bar":10,"tk_bar":11,"EXP_PR":12,"AXIS":13,"CORCHET":14,"tk_corA":15,"E":16,"tk_corC":17,"CORCHETP":18,"tk_menorigual":19,"tk_menor":20,"tk_mayorigual":21,"tk_mayor":22,"tk_mas":23,"tk_menos":24,"tk_asterisco":25,"tk_div":26,"tk_mod":27,"tk_ParA":28,"tk_ParC":29,"tk_or":30,"tk_and":31,"tk_equal":32,"tk_diferent":33,"FUNC":34,"PRIMITIVO":35,"tk_id":36,"tk_attribute_d":37,"tk_attribute_s":38,"num":39,"tk_punto":40,"tk_2puntos":41,"tk_arroba":42,"tk_text":43,"tk_last":44,"tk_position":45,"tk_node":46,"AXISNAME":47,"tk_4puntos":48,"tk_ancestor":49,"tk_ancestor2":50,"tk_attribute":51,"tk_child":52,"tk_descendant":53,"tk_descendant2":54,"tk_following":55,"tk_following2":56,"tk_namespace":57,"tk_parent":58,"tk_preceding":59,"tk_preceding2":60,"tk_self":61,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"tk_line",8:"tk_2line",10:"tk_2bar",11:"tk_bar",15:"tk_corA",17:"tk_corC",19:"tk_menorigual",20:"tk_menor",21:"tk_mayorigual",22:"tk_mayor",23:"tk_mas",24:"tk_menos",25:"tk_asterisco",26:"tk_div",27:"tk_mod",28:"tk_ParA",29:"tk_ParC",30:"tk_or",31:"tk_and",32:"tk_equal",33:"tk_diferent",36:"tk_id",37:"tk_attribute_d",38:"tk_attribute_s",39:"num",40:"tk_punto",41:"tk_2puntos",42:"tk_arroba",43:"tk_text",44:"tk_last",45:"tk_position",46:"tk_node",48:"tk_4puntos",49:"tk_ancestor",50:"tk_ancestor2",51:"tk_attribute",52:"tk_child",53:"tk_descendant",54:"tk_descendant2",55:"tk_following",56:"tk_following2",57:"tk_namespace",58:"tk_parent",59:"tk_preceding",60:"tk_preceding2",61:"tk_self"},
+productions_: [0,[3,2],[4,3],[4,3],[4,1],[7,2],[7,1],[9,2],[9,2],[9,1],[9,1],[14,4],[14,3],[18,1],[18,0],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,2],[16,3],[16,3],[16,3],[16,3],[16,3],[16,1],[12,2],[12,2],[35,1],[35,1],[35,1],[35,1],[35,1],[35,1],[35,1],[35,2],[35,2],[34,3],[34,3],[34,3],[34,3],[13,3],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- console.log($$[$0-1],999); ast = { ast: $$[$0-1], errors: errors }; errors = []; return ast; 
+ 	prod_1 = grammar_stack.pop();
+					prod_2 = grammar_stack.pop();
+			 		grammar_stack.push({'ini -> XPATH_U EOF': [prod_2, prod_1]});
+					grammar_report =  getGrammarReport(grammar_stack);
+                    cst = getCST(grammar_stack);
+                    console.log(grammar_report);
+                    let arbol_ast = getASTTree($$[$0-1]);
+					ast = { ast: $$[$0-1], errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : arbol_ast }; return ast;
+					
 break;
 case 2:
- $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
+ $$[$0-2].push($$[$0]); this.$=$$[$0-2];
+								 prod_1 = grammar_stack.pop();
+								 prod_2 = grammar_stack.pop();
+			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_line\t Lexema: ' + $$[$0-2], prod_1]}); 
 break;
-case 3: case 5:
- this.$=[$$[$0]]; 
+case 3:
+ $$[$0-2].push($$[$0]); this.$=$$[$0-2];
+								 prod_1 = grammar_stack.pop();
+								 prod_2 = grammar_stack.pop();
+			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_2line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_2line\t Lexema: ' + $$[$0-2], prod_1]}); 
 break;
 case 4:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+ this.$=[$$[$0]];
+				  prod_1 = grammar_stack.pop();
+			 	  grammar_stack.push({'XPATH_U -> XPATH {SS = [S1]}': [prod_1]}); 
+break;
+case 5:
+ $$[$0-1].push($$[$0]); this.$=$$[$0-1];
+					  prod_1 = grammar_stack.pop();
+					  prod_2 = grammar_stack.pop();
+			 		  grammar_stack.push({'XPATH -> XPATH QUERY {S1.push(S2); SS = S1;}': [prod_2, prod_1]}); 
 break;
 case 6:
- this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=[$$[$0]];
+			   prod_1 = grammar_stack.pop();
+			   grammar_stack.push({'XPATH -> QUERY {SS = [S1]}': [prod_1]}); 
 break;
 case 7:
- this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					   prod_1 = grammar_stack.pop();
+			 		   grammar_stack.push({'QUERY -> tk_2bar QUERY SS=builder.newDoubleAxis(Param);': ['token: tk_2bar\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 8: case 9: case 12: case 29:
- this.$=$$[$0]; 
+case 8:
+ this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+			 		 grammar_stack.push({'QUERY -> tk_bar QUERY {SS=builder.newAxis(Param);}': ['token: tk_bar\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 9:
+ this.$=$$[$0];
+			   prod_1 = grammar_stack.pop();
+			   grammar_stack.push({'QUERY -> EXP_PR {SS=S1}': [prod_1]}); 
 break;
 case 10:
- $$[$0-3].push(builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)); this.$=$$[$0-3]; 
+ this.$=$$[$0];
+			 prod_1 = grammar_stack.pop();
+			 grammar_stack.push({'QUERY -> AXIS {SS=S1}': [prod_1]}); 
 break;
 case 11:
- this.$=[builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)]; 
+ $$[$0-3].push(builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)); this.$=$$[$0-3];
+									 prod_1 = grammar_stack.pop();
+									 prod_2 = grammar_stack.pop();
+						 			 grammar_stack.push({'CORCHET -> CORCHET tk_ParA E tk_ParC {S1.push(builder.NewPredicate(Param))}': [prod_2, 'token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 12:
+ this.$=[builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)];
+						 prod_1 = grammar_stack.pop();
+						 grammar_stack.push({'CORCHET -> tk_corA E tk_corC {SS=builder.newPredicate(Param)}': ['token: tk_corA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_corC\t Lexema: ' + $$[$0]]}); 
 break;
 case 13:
- this.$=null; 
+ this.$=$$[$0];
+					prod_1 = grammar_stack.pop();
+					grammar_stack.push({'CORCHETP -> CORCHET {SS=S1;}': [prod_1]}); 
 break;
 case 14:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1); 
+ this.$=null;
+			grammar_stack.push({'CORCHETP -> Empty {SS=null}': ['EMPTY'] }); 
 break;
 case 15:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+				 		prod_2 = grammar_stack.pop();
+					    grammar_stack.push({'E -> E tk_menorigual E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 16:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -> E tk_menor E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_menor\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 17:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1);
+						  prod_1 = grammar_stack.pop();
+				 		  prod_2 = grammar_stack.pop();
+						  grammar_stack.push({'E -> E tk_mayorigual E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mayorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 18:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -> E tk_mayor E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mayor\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 19:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_mas E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mas\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 20:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				  	 grammar_stack.push({'E -> E tk_menos E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 21:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1);
+						 prod_1 = grammar_stack.pop();
+				 		 prod_2 = grammar_stack.pop();
+				  		 grammar_stack.push({'E -> E tk_asterisco E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_asterisco\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 22:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_div E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_div\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 23:
- this.$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this._$.first_line, this._$.first_column+1), $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_mod E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mod\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 24:
- this.$=$$[$0-1] 
+ this.$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this.$.first_line, this.$.first_column+1), $$[$0], Tipos.OPERACION_RESTA, this.$.first_line, this.$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+						  		grammar_stack.push({'E -: tk_menos E': ['token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]});
 break;
 case 25:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1); 
+ this.$=$$[$0-1];
+						  prod_1 = grammar_stack.pop();
+						  grammar_stack.push({'E -> tk_ParA E tk_ParC {SS=S2}': ['token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
 case 26:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1);
+				  prod_1 = grammar_stack.pop();
+				  prod_2 = grammar_stack.pop();
+				  grammar_stack.push({'E -> E tk_or E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_or\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 27:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_and E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_and\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 28:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+					 prod_1 = grammar_stack.pop();
+					 prod_2 = grammar_stack.pop();
+					 grammar_stack.push({'E -> E tk_equal E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_equal\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 30: case 31:
- this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+case 29:
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'E -> E tk_diferent E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_diferent\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 30:
+ this.$=$$[$0];
+			  prod_1 = grammar_stack.pop();
+			  grammar_stack.push({'E -> QUERY {SS=S1}': [prod_1]}); 
+break;
+case 31:
+ this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'EXP_PR -> FUNC CORCHETP {SS=builder.newExpression(Param)}': [prod_2, prod_1]}); 
 break;
 case 32:
- this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'EXP_PR -> PRIMITIVO CORCHETP {SS=builder.newExpression(Param)}': [prod_2, prod_1]}); 
 break;
-case 33: case 34:
- this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+case 33:
+ this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -> tk_id {SS=builder.newNodename(Param)}':['token: tk_text\t Lexema: ' + $$[$0]]}); 
+break;
+case 34:
+ this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1);
+						   grammar_stack.push({'PRIMITIVO -> tk_attribute_d {SS=builder.newValue(Param)}':['token: tk_attribute_d\t Lexema: ' + $$[$0]]}); 
 break;
 case 35:
- this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+						   grammar_stack.push({'PRIMITIVO -> tk_attribute_s {SS=builder.newValue(Param)}':['token: tk_attribute_s\t Lexema: ' + $$[$0]]}); 
 break;
 case 36:
- this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
+				grammar_stack.push({'PRIMITIVO -> num {SS=builder.newValue(Param)}':['token: num\t Lexema: ' + $$[$0]]}); 
 break;
 case 37:
- this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -> tk_asterisco {SS=builder.newValue(Param)}':['token: tk_asterisco\t Lexema: ' + $$[$0]]}); 
 break;
 case 38:
- this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+					 grammar_stack.push({'PRIMITIVO -> tk_punto {SS=builder.newCurrent(Param)}':['token: tk_punto\t Lexema: ' + $$[$0]]}); 
 break;
-case 39: case 40:
- this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+case 39:
+ this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1);
+					   grammar_stack.push({'PRIMITIVO -> tk_2puntos {SS=builder.newParent(Param)}':['token: tk_2puntos\t Lexema: ' + $$[$0]]}); 
+break;
+case 40:
+ this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1);
+							grammar_stack.push({'PRIMITIVO -> tk_arroba tk_id {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_id\t Lexema: ' + $$[$0]]}); 
 break;
 case 41:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+							 grammar_stack.push({'PRIMITIVO -> tk_arroba tk_asterisco {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_asterisco\t Lexema: ' + $$[$0]]});
 break;
 case 42:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -> tk_text tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_text\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
 case 43:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -> tk_last tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_last\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
 case 44:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+									grammar_stack.push({'FUNC -> tk_position tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_position\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
 case 45:
- this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+								grammar_stack.push({'FUNC -> tk_node tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_node\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
 case 46:
- this.$ = Tipos.AXIS_ANCESTOR 
+ this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'AXIS -> AXISNAME tk_4puntos QUERY {SS=builder.newAxisObject(Param)}':[prod_2, 'token: tk_4puntos\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 47:
- this.$ = Tipos.AXIS_ANCESTOR_OR_SELF 
+ this.$ = Tipos.AXIS_ANCESTOR;
+						grammar_stack.push({'AXISNAME -> tk_ancestor {SS = Tipos.AxisTipo}':['token: tk_ancestor\t Lexema: ' + $$[$0]]}); 
 break;
 case 48:
- this.$ = Tipos.AXIS_ATTRIBUTE 
+ this.$ = Tipos.AXIS_ANCESTOR_OR_SELF;
+						grammar_stack.push({'AXISNAME -> tk_ancestor2 {SS = Tipos.AxisTipo}':['token: tk_ancestor2\t Lexema: ' + $$[$0]]}); 
 break;
 case 49:
- this.$ = Tipos.AXIS_CHILD 
+ this.$ = Tipos.AXIS_ATTRIBUTE;
+						grammar_stack.push({'AXISNAME -> tk_attribute {SS = Tipos.AxisTipo}':['token: tk_attribute\t Lexema: ' + $$[$0]]}); 
 break;
 case 50:
- this.$ = Tipos.AXIS_DESCENDANT 
+ this.$ = Tipos.AXIS_CHILD;
+						grammar_stack.push({'AXISNAME -> tk_child {SS = Tipos.AxisTipo}':['token: tk_child\t Lexema: ' + $$[$0]]}); 
 break;
 case 51:
- this.$ = Tipos.AXIS_DESCENDANT_OR_SELF 
+ this.$ = Tipos.AXIS_DESCENDANT;
+						grammar_stack.push({'AXISNAME -> tk_descendant {SS = Tipos.AxisTipo}':['token: tk_descendant\t Lexema: ' + $$[$0]]}); 
 break;
 case 52:
- this.$ = Tipos.AXIS_FOLLOWING 
+ this.$ = Tipos.AXIS_DESCENDANT_OR_SELF;
+						grammar_stack.push({'AXISNAME -> tk_descendant2 {SS = Tipos.AxisTipo}':['token: tk_descendant2\t Lexema: ' + $$[$0]]}); 
 break;
 case 53:
- this.$ = Tipos.AXIS_FOLLOWING_SIBLING 
+ this.$ = Tipos.AXIS_FOLLOWING;
+						grammar_stack.push({'AXISNAME -> tk_following {SS = Tipos.AxisTipo}':['token: tk_following\t Lexema: ' + $$[$0]]}); 
 break;
 case 54:
- this.$ = Tipos.AXIS_NAMESPACE 
+ this.$ = Tipos.AXIS_FOLLOWING_SIBLING;
+						grammar_stack.push({'AXISNAME -> tk_following2 {SS = Tipos.AxisTipo}':['token: tk_follownig2\t Lexema: ' + $$[$0]]}); 
 break;
 case 55:
- this.$ = Tipos.AXIS_PARENT 
+ this.$ = Tipos.AXIS_NAMESPACE;
+						grammar_stack.push({'AXISNAME -> tk_namespace {SS = Tipos.AxisTipo}':['token: tk_namespace\t Lexema: ' + $$[$0]]}); 
 break;
 case 56:
- this.$ = Tipos.AXIS_PRECEDING 
+ this.$ = Tipos.AXIS_PARENT;
+						grammar_stack.push({'AXISNAME -> tk_parent {SS = Tipos.AxisTipo}':['token: tk_parent\t Lexema: ' + $$[$0]]}); 
 break;
 case 57:
- this.$ = Tipos.AXIS_PRECEDING_SIBLING 
+ this.$ = Tipos.AXIS_PRECEDING;
+						grammar_stack.push({'AXISNAME -> tk_preceding {SS = Tipos.AxisTipo}':['token: tk_preceding\t Lexema: ' + $$[$0]]}); 
 break;
 case 58:
- this.$ = Tipos.AXIS_SELF 
+ this.$ = Tipos.AXIS_PRECEDING_SIBLING;
+						grammar_stack.push({'AXISNAME -> tk_preceding2 {SS = Tipos.AxisTipo}':['token: tk_preceding2\t Lexema: ' + $$[$0]]}); 
+break;
+case 59:
+ this.$ = Tipos.AXIS_SELF;
+						grammar_stack.push({'AXISNAME -> tk_self {SS = Tipos.AxisTipo}':['token: tk_self\t Lexema: ' + $$[$0]]}); 
 break;
 }
 },
-table: [{3:1,4:2,7:3,8:4,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{1:[3]},{5:[1,37],6:[1,38]},o($Vr,[2,3],{11:7,12:8,33:9,34:10,46:11,8:39,9:$V0,10:$V1,24:$V2,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq}),o($Vs,[2,5]),{8:40,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:41,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($Vt,[2,8]),o($Vt,[2,9]),o($Vt,$Vu,{17:42,13:43,14:$Vv}),o($Vt,$Vu,{13:43,17:45,14:$Vv}),{47:[1,46]},{27:[1,47]},{27:[1,48]},{27:[1,49]},{27:[1,50]},o($Vw,[2,32]),o($Vw,[2,33]),o($Vw,[2,34]),o($Vw,[2,35]),o($Vw,[2,36]),o($Vw,[2,37]),o($Vw,[2,38]),{24:[1,52],35:[1,51]},{47:[2,46]},{47:[2,47]},{47:[2,48]},{47:[2,49]},{47:[2,50]},{47:[2,51]},{47:[2,52]},{47:[2,53]},{47:[2,54]},{47:[2,55]},{47:[2,56]},{47:[2,57]},{47:[2,58]},{1:[2,1]},{7:53,8:4,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($Vs,[2,4]),o($Vt,[2,6]),o($Vt,[2,7]),o($Vt,[2,30]),o($Vt,[2,12],{14:[1,54]}),{8:58,9:$V0,10:$V1,11:7,12:8,15:55,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($Vt,[2,31]),{8:59,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{28:[1,60]},{28:[1,61]},{28:[1,62]},{28:[1,63]},o($Vw,[2,39]),o($Vw,[2,40]),o($Vr,[2,2],{11:7,12:8,33:9,34:10,46:11,8:39,9:$V0,10:$V1,24:$V2,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq}),{8:58,9:$V0,10:$V1,11:7,12:8,15:64,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{16:[1,65],18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,29:$VI,30:$VJ,31:$VK,32:$VL},{8:58,9:$V0,10:$V1,11:7,12:8,15:79,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:80,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($VM,[2,29]),o($Vt,[2,45]),o($Vw,[2,41]),o($Vw,[2,42]),o($Vw,[2,43]),o($Vw,[2,44]),{16:[1,81],18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,29:$VI,30:$VJ,31:$VK,32:$VL},o($Vw,[2,11]),{8:58,9:$V0,10:$V1,11:7,12:8,15:82,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:83,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:84,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:85,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:86,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:87,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:88,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:89,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:90,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:91,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:92,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:93,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:94,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($VM,[2,23]),{18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,28:[1,95],29:$VI,30:$VJ,31:$VK,32:$VL},o($Vw,[2,10]),o($VN,[2,14],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,15],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,16],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,17],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VO,[2,18],{24:$VF,25:$VG,26:$VH}),o($VO,[2,19],{24:$VF,25:$VG,26:$VH}),o($VM,[2,20]),o($VM,[2,21]),o($VM,[2,22]),o([16,28,29],[2,25],{18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,30:$VJ,31:$VK,32:$VL}),o([16,28,29,30],[2,26],{18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,31:$VK,32:$VL}),o($VN,[2,27],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,28],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VM,[2,24])],
-defaultActions: {24:[2,46],25:[2,47],26:[2,48],27:[2,49],28:[2,50],29:[2,51],30:[2,52],31:[2,53],32:[2,54],33:[2,55],34:[2,56],35:[2,57],36:[2,58],37:[2,1]},
+table: [{3:1,4:2,7:3,9:4,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{1:[3]},{5:[1,37],6:[1,38],8:[1,39]},o($Vr,[2,4],{12:7,13:8,34:9,35:10,47:11,9:40,10:$V0,11:$V1,25:$V2,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq}),o($Vs,[2,6]),{9:41,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:42,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($Vt,[2,9]),o($Vt,[2,10]),o($Vt,$Vu,{18:43,14:44,15:$Vv}),o($Vt,$Vu,{14:44,18:46,15:$Vv}),{48:[1,47]},{28:[1,48]},{28:[1,49]},{28:[1,50]},{28:[1,51]},o($Vw,[2,33]),o($Vw,[2,34]),o($Vw,[2,35]),o($Vw,[2,36]),o($Vw,[2,37]),o($Vw,[2,38]),o($Vw,[2,39]),{25:[1,53],36:[1,52]},{48:[2,47]},{48:[2,48]},{48:[2,49]},{48:[2,50]},{48:[2,51]},{48:[2,52]},{48:[2,53]},{48:[2,54]},{48:[2,55]},{48:[2,56]},{48:[2,57]},{48:[2,58]},{48:[2,59]},{1:[2,1]},{7:54,9:4,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{7:55,9:4,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($Vs,[2,5]),o($Vt,[2,7]),o($Vt,[2,8]),o($Vt,[2,31]),o($Vt,[2,13],{15:[1,56]}),{9:60,10:$V0,11:$V1,12:7,13:8,16:57,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($Vt,[2,32]),{9:61,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{29:[1,62]},{29:[1,63]},{29:[1,64]},{29:[1,65]},o($Vw,[2,40]),o($Vw,[2,41]),o($Vr,[2,2],{12:7,13:8,34:9,35:10,47:11,9:40,10:$V0,11:$V1,25:$V2,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq}),o($Vr,[2,3],{12:7,13:8,34:9,35:10,47:11,9:40,10:$V0,11:$V1,25:$V2,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq}),{9:60,10:$V0,11:$V1,12:7,13:8,16:66,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{17:[1,67],19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,30:$VI,31:$VJ,32:$VK,33:$VL},{9:60,10:$V0,11:$V1,12:7,13:8,16:81,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:82,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($VM,[2,30]),o($Vt,[2,46]),o($Vw,[2,42]),o($Vw,[2,43]),o($Vw,[2,44]),o($Vw,[2,45]),{17:[1,83],19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,30:$VI,31:$VJ,32:$VK,33:$VL},o($Vw,[2,12]),{9:60,10:$V0,11:$V1,12:7,13:8,16:84,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:85,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:86,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:87,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:88,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:89,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:90,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:91,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:92,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:93,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:94,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:95,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:96,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($VM,[2,24]),{19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,29:[1,97],30:$VI,31:$VJ,32:$VK,33:$VL},o($Vw,[2,11]),o($VN,[2,15],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,16],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,17],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,18],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VO,[2,19],{25:$VF,26:$VG,27:$VH}),o($VO,[2,20],{25:$VF,26:$VG,27:$VH}),o($VM,[2,21]),o($VM,[2,22]),o($VM,[2,23]),o([17,29,30],[2,26],{19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,31:$VJ,32:$VK,33:$VL}),o([17,29,30,31],[2,27],{19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,32:$VK,33:$VL}),o($VN,[2,28],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,29],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VM,[2,25])],
+defaultActions: {24:[2,47],25:[2,48],26:[2,49],27:[2,50],28:[2,51],29:[2,52],30:[2,53],31:[2,54],32:[2,55],33:[2,56],34:[2,57],35:[2,58],36:[2,59],37:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -772,11 +948,495 @@ parse: function parse(input) {
     return true;
 }};
 
-	var attribute = '';
+  var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
+	let grammar_stack = [];
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Title</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+
+        str = str + buildGrammarReport(obj);
+
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+
+                     <div id="div-table">
+                     <table style="width:100%">
+
+                     <tr><th>Produccion</th><th>Cuerpo</th><th>Accion</th></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>ini</th><td>XPATH_U EOF</td><td>SS= S1</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>XPATH_U</th><td>XPATH_U tk_line XPATH</td><td>S1.push(S3); SS = S1;</td></tr>
+                     <tr><th></th><td>XPATH_U tk_2line XPATH</td><td>S1.push(S3); SS = S1;</td></tr>
+                     <tr><th></th><td>XPATH</td><td>SS = [S1]</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>XPATH</th><td>XPATH QUERY</td><td>S1.push(S2); SS = S1;</td></tr>
+                     <tr><th></th><td>QUERY</td><td>SS = [S1]</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>QUERY</th><td>tk_2bar QUERY</td><td>SS=builder.newDoubleAxis(Param);</td></tr>
+                     <tr><th></th><td>tk_bar QUERY</td><td>SS=builder.newAxis(Param);</td></tr>
+                     <tr><th></th><td>EXP_PR</td><td>SS=S1</td></tr>
+                     <tr><th></th><td>AXIS</td><td>SS=S1</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>CORCHET</th><td>CORCHET tk_corA E tk_corC</td><td>S1.push(builder.NewPredicate(Param))</td></tr>
+                     <tr><th></th><td>tk_corA E tk_corC</td><td>SS=builder.newPredicate(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>CORCHETP</th><td>CORCHET</td><td>SS=S1</td></tr>
+                     <tr><th></th><td>Empty</td><td>SS=null</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>E</th><td>E tk_menorigual E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_menor E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mayorigual E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mayor E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mas E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_menos E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_asterisco E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_div E </td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mod E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>tk_menos E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>tk_ParA E tk_ParC</td><td>SS=S2</td></tr>
+                     <tr><th></th><td>E tk_or E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_and E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_equal E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_diferent E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>QUERY</td><td>SS=S1</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>EXP_PR</th><td>FUNC CORCHETP</td><td>SS=builder.newExpression(Param)</td></tr>
+                     <tr><th></th><td>PRIMITIVO CORCHETEP</td><td>SS=builder.newExpression(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>PRIMITIVO</th><td>tk_id</td><td>SS=builder.newNodename(Param)</td></tr>
+                     <tr><th></th><td>tk_attribute_d</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_attribute_s</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>num</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_asterisco</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_punto</td><td>SS=builder.newCurrent(Param)</td></tr>
+                     <tr><th></th><td>tk_2puntos</td><td>SS=builder.newParent(Param)</td></tr>
+                     <tr><th></th><td>tk_arroba tk_id</td><td>SS=builder.newAttribute(Param)</td></tr>
+                     <tr><th></th><td>tk_arroba tk_asterisco</td><td>SS=builder.newAttribute(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>FUNC</th><td>tk_text tk_ParA tk_tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_last tk_ParA tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_position tk_ParA tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_node tk_ParA tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>AXIS</th><td>AXISNAME tk_4puntos QUERY</td><td>SS=builder.newAxisObject(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>AXISNAME</th><td>tk_ancestor</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_ancestor2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_attribute</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_child</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_descendant</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_descendant2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_following</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_following2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_namespace</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_parent</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_preceding</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_preceding2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_self</td><td>SS = Tipos.'AxisTipo'</td></tr>
+
+                         </table>
+                     </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                        function fun1() {
+                                            if ($("#tree-root").length > 0) {
+
+                                                $("#tree-root").find("li").each
+                                                (
+                                                    function () {
+                                                        var $span = $("<span></span>");
+                                                        //$(this).toggleClass("expanded");
+                                                        if ($(this).find("ul:first").length > 0) {
+                                                            $span.removeAttr("class");
+                                                            $span.attr("class", "expanded");
+                                                            $(this).find("ul:first").css("display", "block");
+                                                            $(this).append($span);
+                                                        }
+
+                                                    }
+                                                )
+                                            }
+
+                                        }
+
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+    function buildGrammarReport(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                str = str + `<li class= "string">
+                ${value}
+                </li>
+                `;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildGrammarReport(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+        }else{// IS OBJECT
+            for(let key in obj){
+
+                str = `<li class="grammar-tree"><span class="caret">
+                ${key}
+                </span>
+                <ul class="nested">
+                `;
+                str = str + buildGrammarReport(obj[key]);
+                str = str + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>Title</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+            </style>
+        </head>
+        <body>
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
 
 	const { Objeto } = __webpack_require__(/*! ../model/xpath/Objeto */ "YKiq");
 	const { Tipos } = __webpack_require__(/*! ../model/xpath/Enum */ "MEUw");
+  const getASTTree = __webpack_require__(/*! ./ast_xpath */ "JxJB");
 	var builder = new Objeto();
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -1114,91 +1774,91 @@ case 2:// MultiLineComment
 break;
 case 3:// Declaration XML
 break;
-case 4:return 25
+case 4:return 26
 break;
-case 5:return 38
+case 5:return 39
 break;
-case 6:return 18
+case 6:return 19
 break;
-case 7:return 20
+case 7:return 21
 break;
-case 8:return 19
+case 8:return 20
 break;
-case 9:return 21
+case 9:return 22
 break;
-case 10:return 9
+case 10:return 10
 break;
-case 11:return 10
+case 11:return 11
 break;
-case 12:return 31
+case 12:return 32
 break;
-case 13:return 40
+case 13:return 41
 break;
-case 14:return 39
+case 14:return 40
 break;
-case 15:return 47
+case 15:return 48
 break;
-case 16:return 41
+case 16:return 42
 break;
-case 17:return 14
+case 17:return 15
 break;
-case 18:return 16
+case 18:return 17
 break;
-case 19:return 27
+case 19:return 28
 break;
-case 20:return 28
+case 20:return 29
 break;
-case 21:return 24
+case 21:return 25
 break;
-case 22:return 49
+case 22:return 50
 break;
-case 23:return 48
+case 23:return 49
 break;
-case 24:return 50
+case 24:return 51
 break;
-case 25:return 51
+case 25:return 52
 break;
-case 26:return 53
+case 26:return 54
 break;
-case 27:return 52
+case 27:return 53
 break;
-case 28:return 55
+case 28:return 56
 break;
-case 29:return 54
+case 29:return 55
 break;
-case 30:return 56
+case 30:return 57
 break;
-case 31:return 57
+case 31:return 58
 break;
-case 32:return 59
+case 32:return 60
 break;
-case 33:return 58
+case 33:return 59
 break;
-case 34:return 60
+case 34:return 61
 break;
-case 35:return 45
+case 35:return 46
 break;
-case 36:return 43
+case 36:return 44
 break;
-case 37:return 42
+case 37:return 43
 break;
-case 38:return 44
+case 38:return 45
 break;
 case 39:return 6
 break;
-case 40:return 22
+case 40:return 23
 break;
-case 41:return 23
+case 41:return 24
 break;
-case 42:return 32
+case 42:return 33
 break;
-case 43:return 29
+case 43:return 30
 break;
-case 44:return 30
+case 44:return 31
 break;
-case 45:return 26
+case 45:return 27
 break;
-case 46:return 35
+case 46:return 36
 break;
 case 47: attribute = ''; this.begin("string_doubleq"); 
 break;
@@ -1218,7 +1878,7 @@ case 54: attribute += "\'";
 break;
 case 55: attribute += "\r"; 
 break;
-case 56: yy_.yytext = attribute; this.popState(); return 36; 
+case 56: yy_.yytext = attribute; this.popState(); return 37; 
 break;
 case 57: attribute = ''; this.begin("string_singleq"); 
 break;
@@ -1238,18 +1898,16 @@ case 64: attribute += "\'";
 break;
 case 65: attribute += "\r"; 
 break;
-case 66: yy_.yytext = attribute; this.popState(); return 37; 
+case 66: yy_.yytext = attribute; this.popState(); return 38; 
 break;
 case 67:return 5
 break;
-case 68:return 'anything'
-break;
-case 69: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 68: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^><\/]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68,69],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68],"inclusive":true}}
 });
 return lexer;
 })();
@@ -1271,7 +1929,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -1325,60 +1983,90 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
 var Expresion_1 = __importDefault(__webpack_require__(/*! ../../Expresion/Expresion */ "gajf"));
 var Predicate_1 = __webpack_require__(/*! ./Predicate */ "Iysv");
+var Axis_1 = __importDefault(__webpack_require__(/*! ./Axis/Axis */ "pW4W"));
 function Eje(_instruccion, _ambito, _contexto) {
-    var retorno = { cadena: Enum_1.Tipos.NONE, retorno: null };
-    var err = { err: "No se encontraron elementos.\n", linea: _instruccion.linea, columna: _instruccion.columna };
-    var contexto = (_contexto.retorno) ? (_contexto.retorno) : null;
-    var expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
-    if (expresion.err)
+    var _404 = { notFound: "No se encontraron elementos." };
+    var contexto = (_contexto.elementos) ? (_contexto) : null;
+    var expresion;
+    if (_instruccion.expresion.expresion)
+        expresion = Expresion_1.default(_instruccion.expresion.expresion, _ambito, contexto);
+    else
+        expresion = Expresion_1.default(_instruccion.expresion, _ambito, contexto);
+    if (expresion.error)
         return expresion;
     var predicate = _instruccion.expresion.predicate;
     var root;
     if (expresion.tipo === Enum_1.Tipos.ELEMENTOS) {
         root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
-        root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
+        root = getSymbolFromRoot({ id: expresion.valor, tipo: "@" }, contexto, _ambito, predicate);
+        if (root.atributos.error)
+            return root.atributos;
         if (root.atributos.length === 0)
-            return err;
-        retorno.cadena = Enum_1.Tipos.ATRIBUTOS;
+            return _404;
+        return root;
     }
     else if (expresion.tipo === Enum_1.Tipos.ASTERISCO) {
         root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
-        retorno.cadena = Enum_1.Tipos.ELEMENTOS;
     }
     else if (expresion.tipo === Enum_1.Tipos.FUNCION_NODE) {
         root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
+        if (root.nodos.error)
+            return root.nodos;
         if (root.nodos.length === 0)
-            return err;
-        retorno.cadena = root.tipo;
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+        root = getSymbolFromRoot(expresion.valor, contexto, _ambito, predicate);
+        if (root.texto.error)
+            return root.texto;
+        if (root.texto.length === 0)
+            return _404;
+    }
+    else if (expresion.tipo === Enum_1.Tipos.SELECT_AXIS) {
+        root = Axis_1.default.GetAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, false);
+        return root;
     }
     else {
-        return { err: "Expresión no válida.\n", linea: _instruccion.linea, columna: _instruccion.columna };
+        return { error: "Expresión no válida.", tipo: "Semántico", origen: "Query", linea: _instruccion.linea, columna: _instruccion.columna };
     }
-    if (root.err)
-        return root;
-    if (root.length === 0 || root === null)
-        return err;
-    retorno.retorno = root;
-    return retorno;
+    if (root === null || root.error || root.elementos.error || root.elementos.length === 0)
+        return _404;
+    return root;
 }
 function getSymbolFromRoot(_nodename, _contexto, _ambito, _condicion) {
     if (_contexto)
         return getFromCurrent(_nodename, _contexto, _ambito, _condicion);
     else
-        return getFromRoot(_nodename, _ambito, _condicion);
+        return { error: "Indstrucción no procesada.", tipo: "Semántico", origen: "Query", linea: 1, columna: 1 };
 }
 // Desde el ámbito actual
 function getFromCurrent(_id, _contexto, _ambito, _condicion) {
     var elements = Array();
     var attributes = Array();
+    // Selecciona el texto contenido únicamente en el nodo
+    if (_id === "text()") {
+        var text = Array();
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
+            if (element.value) {
+                text.push(element.value);
+                elements.push(element);
+            }
+        }
+        if (_condicion) {
+            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+            text = filter.filterElements(text);
+            elements = filter.contexto;
+        }
+        return { texto: text, elementos: elements, cadena: Enum_1.Tipos.TEXTOS };
+    }
     // Selecciona todos los hijos (elementos o texto)
-    if (_id === "node()") {
+    else if (_id === "node()") {
         var nodes_1 = Array();
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs)
                 element.childs.forEach(function (child) {
                     nodes_1.push({ elementos: child });
@@ -1388,14 +2076,15 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes_1 = filter.filterNodes(nodes_1);
+            nodes_1 = filter.filterElements(nodes_1);
+            elements = filter.contexto;
         }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes_1 };
+        return { cadena: Enum_1.Tipos.COMBINADO, nodos: nodes_1, elementos: _contexto.elementos };
     }
     // Selecciona todos los hijos (elementos)
     else if (_id === "*") {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs) {
                 element.childs.forEach(function (child) {
                     elements.push(child);
@@ -1404,36 +2093,29 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
     // Selecciona los atributos
     else if (_id.tipo === "@") {
-        var flag_1 = false;
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.attributes)
                 element.attributes.forEach(function (attribute) {
-                    if ((_id.id === attribute.id) || (_id.id === "*")) { // En caso de que sea un id ó @*
+                    if ((_id.id == attribute.id) || (_id.id === "*")) { // En caso de que sea un id ó @*
                         attributes.push(attribute);
-                        flag_1 = true;
                     }
                 });
-            if (flag_1) {
-                elements.push(element);
-                flag_1 = false;
-            }
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
             attributes = filter.filterAttributes(attributes);
         }
-        return { atributos: attributes, elementos: elements };
+        return { atributos: attributes, elementos: [], cadena: Enum_1.Tipos.ATRIBUTOS };
     }
     // Selecciona el padre
-    else if (_id === "..") {
+    else if (_id === "..") { // Manejar el regreso de atributos a su padre como la etiqueta misma !
         if (_contexto.atributos) {
             var _loop_1 = function (i) {
                 var attribute = _contexto.atributos[i];
@@ -1444,10 +2126,14 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
             for (var i = 0; i < _contexto.atributos.length; i++) {
                 _loop_1(i);
             }
-            return elements;
+            if (_condicion) {
+                var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
+                elements = filter.filterElements(elements);
+            }
+            return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
         }
         var _loop_2 = function (i) {
-            var element = _contexto[i];
+            var element = _contexto.elementos[i];
             var dad = element.father;
             if (dad) {
                 _ambito.tablaSimbolos.forEach(function (elm) {
@@ -1460,31 +2146,34 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
                 });
             }
         };
-        for (var i = 0; i < _contexto.length; i++) {
+        for (var i = 0; i < _contexto.elementos.length; i++) {
             _loop_2(i);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
     // Selecciona el nodo actual
     else if (_id === ".") {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        if (_contexto.atributos) {
+            return { elementos: [], atributos: _contexto.atributos, cadena: Enum_1.Tipos.ATRIBUTOS };
+        }
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             elements.push(element);
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
     // Búsqueda en los hijos por id
     else {
-        for (var i = 0; i < _contexto.length; i++) {
-            var element = _contexto[i];
+        for (var i = 0; i < _contexto.elementos.length; i++) {
+            var element = _contexto.elementos[i];
             if (element.childs) {
                 element.childs.forEach(function (child) {
                     elements = _ambito.searchSingleNode(_id, child, elements);
@@ -1493,92 +2182,87 @@ function getFromCurrent(_id, _contexto, _ambito, _condicion) {
         }
         if (_condicion) {
             var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
+            elements = filter.filterElements(elements);
         }
-        return elements;
-    }
-}
-// Desde la raíz
-function getFromRoot(_id, _ambito, _condicion) {
-    var elements = Array();
-    var attributes = Array();
-    var text = Array();
-    // Selecciona todos los hijos (elementos o texto)
-    if (_id === "node()") {
-        var nodes_2 = Array();
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.childs)
-                // element.childs.forEach(child => {
-                nodes_2.push({ elementos: element });
-            // });
-            else if (element.value)
-                nodes_2.push({ textos: element.value });
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            nodes_2 = filter.filterNodes(nodes_2);
-        }
-        return { tipo: Enum_1.Tipos.COMBINADO, nodos: nodes_2 };
-    }
-    // Selecciona todos los hijos (elementos)
-    else if (_id === "*") {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            elements.push(element);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
-    }
-    // Selecciona los atributos
-    else if (_id.tipo === "@") {
-        var flag_2 = false;
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.attributes)
-                element.attributes.forEach(function (attribute) {
-                    if ((_id.id === attribute.id) || (_id.id === "*")) {
-                        flag_2 = true;
-                        attributes.push(attribute);
-                    }
-                });
-            if (flag_2) {
-                elements.push(element);
-                flag_2 = false;
-            }
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-            attributes = filter.filterAttributes(attributes);
-        }
-        return { atributos: attributes, elementos: elements };
-    }
-    // Selecciona el nodo actual
-    else if (_id === ".") {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            elements.push(element);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
-    }
-    // Búsqueda por id
-    else {
-        _ambito.tablaSimbolos.forEach(function (element) {
-            if (element.id_open === _id)
-                elements.push(element);
-        });
-        if (_condicion) {
-            var filter = new Predicate_1.Predicate(_condicion, _ambito, elements);
-            elements = filter.filterElements();
-        }
-        return elements;
+        return { elementos: elements, cadena: Enum_1.Tipos.ELEMENTOS };
     }
 }
 module.exports = Eje;
+
+
+/***/ }),
+
+/***/ "Dbnh":
+/*!*************************************************************************!*\
+  !*** ./src/js/controller/xpath/Instruccion/Selecting/Axis/Funciones.js ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var Enum_1 = __webpack_require__(/*! ../../../../../model/xpath/Enum */ "MEUw");
+// Revisa el nodetest y busca hacer match
+function f1(_element, _elements, _text, isDoubleBar) {
+    if (_element.value) {
+        _text.push(_element.value);
+        _elements.push(_element);
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f1(child, _elements, _text, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, texto: _text };
+}
+function f2(_element, _elements, _attributes, valor, isDoubleBar) {
+    for (var j = 0; j < _element.attributes.length; j++) {
+        var attribute = _element.attributes[j];
+        if (attribute.id == valor || valor === "*") {
+            _elements.push(_element);
+            _attributes.push(attribute);
+            break; // Sale del ciclo de atributos para pasar al siguiente elemento
+        }
+        if (attribute.value == valor) {
+            _elements.push(_element);
+            _attributes.push(attribute);
+            break;
+        }
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f2(child, _elements, _attributes, valor, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, atributos: _attributes };
+}
+function f3(_element, _elements, _text, valor, tipo, isDoubleBar) {
+    if (_element.id_open == valor || valor == "*") {
+        if (tipo === Enum_1.Tipos.FUNCION_TEXT)
+            _text.push(_element.value);
+        _elements.push(_element);
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f3(child, _elements, _text, valor, tipo, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, texto: _text };
+}
+function f4(_element, _elements, _text, valor, tipo, isDoubleBar) {
+    if (_element.value == valor || valor == "*") {
+        if (tipo === Enum_1.Tipos.FUNCION_TEXT)
+            _text.push(_element.value);
+        _elements.push(_element);
+    }
+    if (_element.childs && isDoubleBar) {
+        _element.childs.forEach(function (child) {
+            f4(child, _elements, _text, valor, tipo, isDoubleBar);
+        });
+    }
+    return { elementos: _elements, texto: _text };
+}
+module.exports = { f1: f1, f2: f2, f3: f3, f4: f4 };
 
 
 /***/ }),
@@ -1698,7 +2382,6 @@ var Global = /** @class */ (function () {
     function Global(expresiones, ambito) {
         this.expresiones = expresiones;
         this.ambito = ambito;
-        console.log(expresiones, 89999);
         Hijos_1.default.exec(expresiones, this.ambito);
     }
     return Global;
@@ -1737,129 +2420,612 @@ var Predicate = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Predicate.prototype.filterElements = function () {
+    Predicate.prototype.filterElements = function (_resultado) {
+        var _this = this;
         var expresion;
-        for (var i = 0; i < this.predicado.length; i++) {
-            var e = this.predicado[i];
-            console.log(e, 8277237281);
-            expresion = Expresion_1.default(e.condicion, this.ambito, this.contexto);
-            if (expresion.err)
-                return expresion;
-            // En caso de ser una posición en los elementos
+        var _loop_1 = function (i) {
+            var e = this_1.predicado[i]; // En caso de tener varios predicados seguidos
+            console.log(e, "Predicado");
+            expresion = Expresion_1.default(e.condicion, this_1.ambito, this_1.contexto);
+            console.log(expresion, "Expresion predicado");
+            if (expresion.error)
+                return { value: expresion };
             if (expresion.tipo === Enum_1.Tipos.NUMBER) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= this.contexto.length)
-                    this.contexto = [];
+                if (index < 0 || index >= _resultado.length)
+                    _resultado = [];
                 else
-                    this.contexto = [this.contexto[index]];
+                    _resultado = [_resultado[index]];
+            }
+            else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                var tmp_1 = [];
+                this_1.contexto = [];
+                _resultado.forEach(function (element) {
+                    if (element.attributes)
+                        for (var i_1 = 0; i_1 < element.attributes.length; i_1++) {
+                            var attribute = element.attributes[i_1];
+                            if (expresion.atributo) { // Es una comparación
+                                if (expresion.desigualdad) { // (<,<=,>,>=)
+                                    if (expresion.atributo == attribute.id && _this.operarDesigualdad(expresion.desigualdad, expresion.condicion, attribute.value)) {
+                                        tmp_1.push(element);
+                                        _this.contexto.push(element);
+                                        break;
+                                    }
+                                }
+                                else if (expresion.exclude) { // (!=)
+                                    if (expresion.atributo == attribute.id && expresion.condicion != attribute.value) {
+                                        tmp_1.push(element);
+                                        _this.contexto.push(element);
+                                        break;
+                                    }
+                                }
+                                else if (expresion.atributo == attribute.id && expresion.condicion == attribute.value) { // (==)
+                                    tmp_1.push(element);
+                                    _this.contexto.push(element);
+                                    break;
+                                }
+                            }
+                            else if (expresion.valor == attribute.id || expresion.valor == "*") { // No compara valor, sólo apila
+                                tmp_1.push(element);
+                                _this.contexto.push(element);
+                                break;
+                            }
+                        }
+                });
+                _resultado = tmp_1;
+                return { value: _resultado };
+            }
+            else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+                this_1.contexto = [];
+                for (var i_2 = 0; i_2 < _resultado.length; i_2++) {
+                    var element = _resultado[i_2];
+                    var text = element.value;
+                    if (text) {
+                        if (expresion.exclude) {
+                            if (text != expresion.condicion) // text() != 'x'
+                                this_1.contexto.push(element);
+                        }
+                        else if (text == expresion.condicion) // text() == 'x'
+                            this_1.contexto.push(element);
+                    }
+                }
+                return { value: this_1.contexto };
             }
             else if (expresion.tipo === Enum_1.Tipos.FUNCION_LAST) {
-                var index = this.contexto.length - 1;
-                this.contexto = [this.contexto[index]];
+                var index = _resultado.length - 1;
+                _resultado = [_resultado[index]];
             }
             else if (expresion.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-                return this.contexto;
+                return { value: _resultado };
             }
             else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MENOR) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index >= this.contexto.length)
-                    index = this.contexto.length - 1;
+                if (index >= _resultado.length)
+                    index = _resultado.length - 1;
                 var tmp = [];
-                for (var i_1 = index; i_1 <= this.contexto.length && i_1 >= 0; i_1--) {
-                    var element = this.contexto[i_1];
+                for (var i_3 = index; i_3 <= _resultado.length && i_3 >= 0; i_3--) {
+                    var element = _resultado[i_3];
                     tmp.push(element);
                 }
-                this.contexto = tmp;
+                _resultado = tmp;
             }
             else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYOR) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index >= this.contexto.length) {
-                    this.contexto = [];
-                    return this.contexto;
+                if (index >= _resultado.length) {
+                    _resultado = [];
+                    return { value: _resultado };
                 }
                 if (index <= 0)
                     index = 0;
                 var tmp = [];
-                for (var i_2 = index; i_2 < this.contexto.length; i_2++) {
-                    var element = this.contexto[i_2];
+                for (var i_4 = index; i_4 < _resultado.length; i_4++) {
+                    var element = _resultado[i_4];
                     tmp.push(element);
                 }
-                this.contexto = tmp;
+                _resultado = tmp;
             }
-            else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_IGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_DIFERENTE) {
-                var flag = expresion.valor;
-                if (!flag)
-                    this.contexto = [];
+            else if (expresion.tipo === Enum_1.Tipos.ELEMENTOS && expresion.e1 && expresion.e2) {
+                var e1 = expresion.e1;
+                var e2 = expresion.e2;
+                var condition = false;
+                var tmp = [];
+                for (var i_5 = 0; i_5 < this_1.contexto.length; i_5++) {
+                    var element = this_1.contexto[i_5];
+                    if (element.attributes) { // Hace match con un atributo
+                        for (var j = 0; j < element.attributes.length; j++) {
+                            var attribute = element.attributes[j];
+                            condition = this_1.verificarDesigualdad(expresion.desigualdad, attribute.id, e1, attribute.value, e2);
+                            if (condition) {
+                                tmp.push(element);
+                                break; // Sale del ciclo de atributos para pasar al siguiente elemento
+                            }
+                        }
+                    }
+                    if (element.childs) { // Hace match con algún hijo
+                        for (var j = 0; j < element.childs.length; j++) {
+                            var child = element.childs[j];
+                            condition = this_1.verificarDesigualdad(expresion.desigualdad, child.id_open, e1, child.value, e2);
+                            if (condition) {
+                                tmp.push(element);
+                                break;
+                            }
+                        }
+                    }
+                    // Hace match con el elemento
+                    condition = this_1.verificarDesigualdad(expresion.desigualdad, element.id_open, e1, element.value, e2);
+                    if (condition)
+                        tmp.push(element);
+                }
+                _resultado = tmp;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.LOGICA_OR || expresion.tipo === Enum_1.Tipos.LOGICA_AND) {
+                _resultado = expresion.elementos;
             }
             else if (expresion.tipo === Enum_1.Tipos.EXCLUDE) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index >= 0 && index < this.contexto.length) {
+                if (index >= 0 && index < _resultado.length) {
                     var tmp = [];
-                    for (var i_3 = 0; i_3 < this.contexto.length; i_3++) {
-                        var element = this.contexto[i_3];
-                        if (i_3 != index)
+                    for (var i_6 = 0; i_6 < _resultado.length; i_6++) {
+                        var element = _resultado[i_6];
+                        if (i_6 != index)
                             tmp.push(element);
                     }
-                    this.contexto = tmp;
+                    _resultado = tmp;
                 }
             }
+        };
+        var this_1 = this;
+        for (var i = 0; i < this.predicado.length; i++) {
+            var state_1 = _loop_1(i);
+            if (typeof state_1 === "object")
+                return state_1.value;
         }
+        this.contexto = _resultado;
         return this.contexto;
     };
-    Predicate.prototype.filterAttributes = function (_attributes) {
+    Predicate.prototype.filterAttributes = function (_resultado) {
+        var _this = this;
         var expresion;
-        for (var i = 0; i < this.predicado.length; i++) {
-            var e = this.predicado[i];
-            expresion = Expresion_1.default(e.condicion, this.ambito, this.contexto);
-            if (expresion.err)
-                return expresion;
-            // En caso de ser una posición en los elementos
+        var _loop_2 = function (i) {
+            var e = this_2.predicado[i]; // En caso de tener varios predicados seguidos
+            console.log(e, "Predicado");
+            expresion = Expresion_1.default(e.condicion, this_2.ambito, this_2.contexto);
+            console.log(expresion, "Expresion predicado");
+            if (expresion.error)
+                return { value: expresion };
             if (expresion.tipo === Enum_1.Tipos.NUMBER) {
                 var index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= _attributes.length)
-                    _attributes = [];
+                if (index < 0 || index >= _resultado.length)
+                    _resultado = [];
                 else
-                    _attributes = [_attributes[index]];
+                    _resultado = [_resultado[index]];
+            }
+            else if (expresion.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                var tmp_2 = [];
+                this_2.contexto = [];
+                _resultado.forEach(function (attribute) {
+                    if (expresion.atributo) { // Es una comparación
+                        if (expresion.desigualdad) { // (<,<=,>,>=)
+                            if (expresion.atributo == attribute.id && _this.operarDesigualdad(expresion.desigualdad, expresion.condicion, attribute.value)) {
+                                tmp_2.push(attribute);
+                            }
+                        }
+                        else if (expresion.exclude) { // (!=)
+                            if (expresion.atributo == attribute.id && expresion.condicion != attribute.value) {
+                                tmp_2.push(attribute);
+                            }
+                        }
+                        else if (expresion.atributo == attribute.id && expresion.condicion == attribute.value) { // (==)
+                            tmp_2.push(attribute);
+                        }
+                    }
+                    else if (expresion.valor == attribute.id || expresion.valor == "*") { // No compara valor, sólo apila
+                        tmp_2.push(attribute);
+                    }
+                });
+                _resultado = tmp_2;
+                return { value: _resultado };
+            }
+            else if (expresion.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+                var tmp = [];
+                for (var i_7 = 0; i_7 < _resultado.length; i_7++) {
+                    var attribute = _resultado[i_7];
+                    var text = attribute.value;
+                    if (expresion.exclude) {
+                        if (text != expresion.condicion) // text() != 'x'
+                            tmp.push(attribute);
+                    }
+                    else if (text == expresion.condicion) // text() == 'x'
+                        tmp.push(attribute);
+                }
+                return { value: tmp };
             }
             else if (expresion.tipo === Enum_1.Tipos.FUNCION_LAST) {
-                var index = _attributes.length - 1;
-                _attributes = [_attributes[index]];
+                var index = _resultado.length - 1;
+                _resultado = [_resultado[index]];
             }
-            else if (expresion.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-                return _attributes;
+            else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MENOR) {
+                var index = parseInt(expresion.valor) - 1;
+                if (index >= _resultado.length)
+                    index = _resultado.length - 1;
+                var tmp = [];
+                for (var i_8 = index; i_8 <= _resultado.length && i_8 >= 0; i_8--) {
+                    var attribute = _resultado[i_8];
+                    tmp.push(attribute);
+                }
+                _resultado = tmp;
             }
+            else if (expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL || expresion.tipo === Enum_1.Tipos.RELACIONAL_MAYOR) {
+                var index = parseInt(expresion.valor) - 1;
+                if (index >= _resultado.length) {
+                    _resultado = [];
+                    return { value: _resultado };
+                }
+                if (index <= 0)
+                    index = 0;
+                var tmp = [];
+                for (var i_9 = index; i_9 < _resultado.length; i_9++) {
+                    var attribute = _resultado[i_9];
+                    tmp.push(attribute);
+                }
+                _resultado = tmp;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.ELEMENTOS && expresion.e1 && expresion.e2) {
+                var e1 = expresion.e1;
+                var e2 = expresion.e2;
+                var condition = false;
+                var tmp = [];
+                for (var i_10 = 0; i_10 < _resultado.length; i_10++) {
+                    var attribute = _resultado[i_10]; // Hace match con un atributo
+                    condition = this_2.verificarDesigualdad(expresion.desigualdad, attribute.id, e1, attribute.value, e2);
+                    if (condition) {
+                        tmp.push(attribute);
+                    }
+                }
+                _resultado = tmp;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.LOGICA_OR || expresion.tipo === Enum_1.Tipos.LOGICA_AND) {
+                _resultado = expresion.elementos;
+            }
+            else if (expresion.tipo === Enum_1.Tipos.EXCLUDE) {
+                var index = parseInt(expresion.valor) - 1;
+                if (index >= 0 && index < _resultado.length) {
+                    var tmp = [];
+                    for (var i_11 = 0; i_11 < _resultado.length; i_11++) {
+                        var attribute = _resultado[i_11];
+                        if (i_11 != index)
+                            tmp.push(attribute);
+                    }
+                    _resultado = tmp;
+                }
+            }
+        };
+        var this_2 = this;
+        for (var i = 0; i < this.predicado.length; i++) {
+            var state_2 = _loop_2(i);
+            if (typeof state_2 === "object")
+                return state_2.value;
         }
-        return _attributes;
+        return _resultado;
     };
-    Predicate.prototype.filterNodes = function (_nodes) {
-        var expresion;
-        for (var i = 0; i < this.predicado.length; i++) {
-            var e = this.predicado[i];
-            expresion = Expresion_1.default(e.condicion, this.ambito, this.contexto);
-            if (expresion.err)
-                return expresion;
-            // En caso de ser una posición en los elementos
-            if (expresion.tipo === Enum_1.Tipos.NUMBER) {
-                var index = parseInt(expresion.valor) - 1;
-                if (index < 0 || index >= _nodes.length)
-                    _nodes = [];
-                else
-                    _nodes = [_nodes[index]];
-            }
-            else if (expresion.tipo === Enum_1.Tipos.FUNCION_LAST) {
-                var index = _nodes.length - 1;
-                _nodes = [_nodes[index]];
-            }
-            else if (expresion.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-                return _nodes;
-            }
+    Predicate.prototype.operarDesigualdad = function (_tipo, _condicion, _valor) {
+        switch (_tipo) {
+            case Enum_1.Tipos.RELACIONAL_MAYOR:
+                return _valor > _condicion;
+            case Enum_1.Tipos.RELACIONAL_MAYORIGUAL:
+                return _valor >= _condicion;
+            case Enum_1.Tipos.RELACIONAL_MENOR:
+                return _valor < _condicion;
+            case Enum_1.Tipos.RELACIONAL_MENORIGUAL:
+                return _valor <= _condicion;
+            default:
+                return false;
         }
-        return _nodes;
+    };
+    Predicate.prototype.verificarDesigualdad = function (_tipo, v1, e1, v2, e2) {
+        switch (_tipo) {
+            case Enum_1.Tipos.RELACIONAL_MAYOR:
+                return (v1 == e1 && v2 > e2);
+            case Enum_1.Tipos.RELACIONAL_MAYORIGUAL:
+                return (v1 == e1 && v2 >= e2);
+            case Enum_1.Tipos.RELACIONAL_MENOR:
+                return (v1 == e1 && v2 < e2);
+            case Enum_1.Tipos.RELACIONAL_MENORIGUAL:
+                return (v1 == e1 && v2 <= e2);
+            case Enum_1.Tipos.RELACIONAL_IGUAL:
+                return (v1 == e1 && v2 == e2);
+            case Enum_1.Tipos.RELACIONAL_DIFERENTE:
+                return (v1 == e1 && v2 != e2);
+            default:
+                return false;
+        }
     };
     return Predicate;
 }());
 exports.Predicate = Predicate;
 
+
+/***/ }),
+
+/***/ "JxJB":
+/*!***************************************!*\
+  !*** ./src/js/analyzers/ast_xpath.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function getASTTree(obj) {
+  try {
+    let str = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+      <!-- Bootstrap CSS -->
+      <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+      <title>Title</title>
+      <style>
+        #divheight{
+          height: 400px;
+          width: 1050px;
+        }
+        .nav-tabs > li .close {
+          margin: -2px 0 0 10px;
+          font-size: 18px;
+        }
+        .nav-tabs2 > li .close {
+          margin: -2px 0 0 10px;
+          font-size: 18px;
+        }
+    
+      </style>
+    
+      <style>
+        body {
+          font-family: sans-serif;
+          font-size: 15px;
+        }
+    
+        .tree ul {
+          position: relative;
+          padding: 1em 0;
+          white-space: nowrap;
+          margin: 0 auto;
+          text-align: center;
+        }
+        .tree ul::after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+    
+        .tree li {
+          display: inline-block;
+          vertical-align: top;
+          text-align: center;
+          list-style-type: none;
+          position: relative;
+          padding: 1em 0.5em 0 0.5em;
+        }
+        .tree li::before, .tree li::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 50%;
+          border-top: 1px solid #ccc;
+          width: 50%;
+          height: 1em;
+        }
+        .tree li::after {
+          right: auto;
+          left: 50%;
+          border-left: 1px solid #ccc;
+        }
+        /*
+        ul:hover::after  {
+            transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+        }*/
+    
+        .tree li:only-child::after, .tree li:only-child::before {
+          display: none;
+        }
+        .tree li:only-child {
+          padding-top: 0;
+        }
+        .tree li:first-child::before, .tree li:last-child::after {
+          border: 0 none;
+        }
+        .tree li:last-child::before {
+          border-right: 1px solid #ccc;
+          border-radius: 0 5px 0 0;
+        }
+        .tree li:first-child::after {
+          border-radius: 5px 0 0 0;
+        }
+    
+        .tree ul ul::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 50%;
+          border-left: 1px solid #ccc;
+          width: 0;
+          height: 1em;
+        }
+    
+        .tree li a {
+          border: 1px solid #ccc;
+          padding: 0.5em 0.75em;
+          text-decoration: none;
+          display: inline-block;
+          border-radius: 5px;
+          color: #333;
+          position: relative;
+          top: 1px;
+        }
+    
+        .tree li a:hover,
+        .tree li a:hover + ul li a {
+          background: #e9453f;
+          color: #fff;
+          border: 1px solid #e9453f;
+        }
+    
+        .tree li a:hover + ul li::after,
+        .tree li a:hover + ul li::before,
+        .tree li a:hover + ul::before,
+        .tree li a:hover + ul ul::before {
+          border-color: #e9453f;
+        }
+    
+        /*# sourceMappingURL=sytle_.css.map */
+    
+    
+      </style>
+    </head>
+    <body>
+    
+    
+    
+    <div class="tree">
+      <ul id="tree-list">
+    
+        <!--AQUI-->
+        `
+
+    str = str + printObj(obj, 0, "")
+    str = str + `</ul>
+    
+    
+    
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+    `
+    return str;
+  } catch (error) {
+    return "";
+  }
+}
+
+
+function printObj(obj, lines, name) {
+  console.log(obj)
+  let str = "";
+  let str_ = "";
+  if (Array.isArray(obj)) { //IS ARRAY
+    for (let i = 0; i < obj.length; i++) {
+      str = str + printObj(obj[i], lines, "");
+    }
+  } else if (typeof obj === 'object') {// IS OBJECT
+    if (obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT') { // TODO select Parent
+      str = `<li>`;
+      str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT' ? "/" : "//"));
+      str = str + getPredicados(obj.expresion);
+      str = str + `</li>`
+      console.log(str);
+    } else if (obj.tipo === 'EXPRESION') {
+      if (typeof obj.expresion === 'object') {
+        str = `<a>` + name + getName(obj.expresion) + `</a>`;
+      }
+    }
+  } else { // IS STRING
+    for (let i = 0; i < lines; i++) {
+
+      str_ = str_ + "- ";
+    }
+  }
+  return str;
+}
+
+
+
+function getName(obj) {
+
+  let str = "";
+  if (obj.tipo === 'NODENAME') {
+    //console.log(obj)
+    return obj.nodename;
+  } else if (obj.tipo === 'SELECT_PARENT') {
+    return obj.expresion;
+  } else if (obj.tipo === 'SELECT_CURRENT') {
+    return obj.expresion;
+  } else if (obj.tipo === 'ASTERISCO') {
+    return obj.valor;
+  } else if (obj.tipo === 'FUNCION_TEXT') {
+    return obj.valor;
+  } else if (obj.tipo === 'FUNCION_NODE') {
+    return obj.valor;
+  } else if (obj.tipo === 'SELECT_ATTRIBUTES') {
+    return obj.expresion;
+  } else {
+    console.log("Error 1")
+    console.log(obj)
+  }
+  return str
+}
+
+function getPredicados(obj) {
+  let str = "";
+  console.log(obj)
+  if (obj.predicate !== null && obj.predicate !== undefined) {
+
+    str = `<ul>\n`;
+    for (let i = 0; i < obj.predicate.length; i++) {
+      str = str + getPredicado(obj.predicate[i]);
+    }
+    str = str + `</ul>`;
+  }
+  return str;
+}
+
+
+function getPredicado(obj) {
+  let str = ""
+  if (obj.tipo === 'PREDICATE') {
+    //str = `<li><a> ` + obj.condicion.tipo + `</a>
+    //<ul>`
+    str = str + getPredicado(obj.condicion);
+    //str = str + `
+    //</ul></li>`;
+  } else if (obj.tipo === 'EXPRESION') { //TODO to check
+    if ('valor' in obj.expresion) {
+      str = `<li><a>` + obj.expresion.valor + `</a></li>
+            `;
+
+    } else if ('nodename' in obj.expresion) {
+      str = `<li><a>` + obj.expresion.nodename + `</a></li>
+            `;
+
+    } else if (obj.expresion.tipo === 'SELECT_ATTRIBUTES') {
+      str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
+            `;
+
+    } else {
+      console.log("error 2")
+      console.log(obj)
+    }
+
+
+  } else {
+    str = `<li><a>` + obj.tipo + `</a>
+                <ul>`
+    str = str + getPredicado(obj.opIzq);
+    str = str + getPredicado(obj.opDer);
+    str = str + `</ul></li>`
+  }
+
+  return str;
+}
+
+module.exports = getASTTree;
 
 /***/ }),
 
@@ -2122,6 +3288,7 @@ var Tipos;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Ambito = void 0;
+var Enum_1 = __webpack_require__(/*! ../../xpath/Enum */ "MEUw");
 var Ambito = /** @class */ (function () {
     function Ambito(_anterior, _tipo) {
         this.anterior = _anterior;
@@ -2175,42 +3342,32 @@ var Ambito = /** @class */ (function () {
         }
         return _elements;
     };
-    Ambito.prototype.searchAnyAttributes = function (_element, _array, _elements) {
+    Ambito.prototype.searchAnyAttributes = function (_id, _element, _array) {
         var _this = this;
         if (_element.attributes) {
             _element.attributes.forEach(function (attribute) {
-                _array.push(attribute);
-            });
-            _elements.push(_element);
-        }
-        if (_element.childs) {
-            _element.childs.forEach(function (child) {
-                _array = _this.searchAnyAttributes(child, _array, _elements).atributos;
-            });
-        }
-        return { atributos: _array, elementos: _elements };
-    };
-    Ambito.prototype.searchAttributesFromCurrent = function (_element, _id, _array, _elements) {
-        var _this = this;
-        var flag = false;
-        if (_element.attributes) {
-            _element.attributes.forEach(function (attribute) {
-                if (attribute.id === _id) {
+                if (attribute.id === _id || _id === "*")
                     _array.push(attribute);
-                    flag = true;
-                }
             });
-            if (flag) {
-                _elements.push(_element);
-                flag = false;
-            }
         }
         if (_element.childs) {
             _element.childs.forEach(function (child) {
-                _array = _this.searchAttributesFromCurrent(child, _id, _array, _elements).atributos;
+                _array = _this.searchAnyAttributes(_id, child, _array);
             });
         }
-        return { atributos: _array, elementos: _elements };
+        return _array;
+    };
+    Ambito.prototype.searchAnyText = function (_element, _array) {
+        var _this = this;
+        if (_element.childs) {
+            _element.childs.forEach(function (child) {
+                _array = _this.searchAnyText(child, _array);
+            });
+        }
+        if (_element.value) {
+            _array.push(_element.value);
+        }
+        return _array;
     };
     Ambito.prototype.searchSingleNode = function (_nodename, _element, _array) {
         if (_nodename === _element.id_open) {
@@ -2228,6 +3385,75 @@ var Ambito = /** @class */ (function () {
                 _array = _this.searchNodes(_nodename, child, _array);
             });
         }
+        return _array;
+    };
+    Ambito.prototype.compareCurrent = function (_currentNode, _array, _axisname) {
+        switch (_axisname) {
+            case Enum_1.Tipos.AXIS_ANCESTOR:
+            case Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, true, false, false);
+            case Enum_1.Tipos.AXIS_PRECEDING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, false);
+            case Enum_1.Tipos.AXIS_PRECEDING_SIBLING:
+                return this.getBefore(this.tablaSimbolos[0], _currentNode, _array, false, true, true);
+            case Enum_1.Tipos.AXIS_FOLLOWING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, false);
+            case Enum_1.Tipos.AXIS_FOLLOWING_SIBLING:
+                return this.getFollowings(this.tablaSimbolos[0], _currentNode, _array, false, true);
+        }
+        return _array;
+    };
+    Ambito.prototype.getBefore = function (_element, _currentNode, _array, isAncestor, isPreceding, isSibling) {
+        if (_element == _currentNode)
+            return false;
+        if (_element.childs) {
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                if (isPreceding && isSibling)
+                    _array.push(child);
+                var a = this.getBefore(child, _currentNode, _array, isAncestor, isPreceding, isSibling);
+                if (a === false)
+                    return _array;
+            }
+            if (isPreceding && !isSibling)
+                _array.push(_element);
+        }
+        if (isAncestor)
+            _array.push(_element);
+        return _array;
+    };
+    Ambito.prototype.getFollowings = function (_element, _currentNode, _array, _found, isSibling) {
+        if (_element == _currentNode)
+            _found = true;
+        if (_element.childs) {
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                this.getFollowings(child, _currentNode, _array, _found, isSibling);
+                return _array;
+            }
+            if (_found && !isSibling)
+                _array.push(_element);
+        }
+        if (_found && isSibling)
+            _array.push(_element);
+        return _array;
+    };
+    Ambito.prototype.searchAncestors = function (_element, _currentNode, _array) {
+        if (_element == _currentNode) {
+            return { found: _array };
+        }
+        if (_element.childs) {
+            var a = void 0;
+            for (var i = 0; i < _element.childs.length; i++) {
+                var child = _element.childs[i];
+                a = this.searchAncestors(child, _currentNode, _array);
+                if (a.found)
+                    return a.found;
+                else
+                    _array = a;
+            }
+        }
+        _array.push(_element);
         return _array;
     };
     Ambito.prototype.getGlobal = function () {
@@ -2331,97 +3557,94 @@ exports.Ambito = Ambito;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! file-saver */ "Iab2");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app.service */ "F5nt");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
-/* harmony import */ var _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @materia-ui/ngx-monaco-editor */ "0LvA");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "ofXK");
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./app.service */ "F5nt");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+/* harmony import */ var _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @materia-ui/ngx-monaco-editor */ "0LvA");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
 
 
 
 
 
 function AppComponent_tr_99_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "th", 40);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](6);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](7, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](10);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](13, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](14);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "tr");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "th", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](12);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](13, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](14);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const item_r3 = ctx.$implicit;
     const i_r4 = ctx.index;
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](i_r4 + 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.id);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.tipo);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.value);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.entorno);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.linea);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r3.columna);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r4 + 1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.id);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.tipo);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.value);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.entorno);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.linea);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r3.columna);
 } }
 function AppComponent_tr_121_Template(rf, ctx) { if (rf & 1) {
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "tr");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "th", 40);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](6);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](7, "td");
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](8);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](10);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "td", 41);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](12);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "tr");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "th", 40);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "td");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "td", 41);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](12);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 } if (rf & 2) {
     const item_r5 = ctx.$implicit;
     const i_r6 = ctx.index;
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](i_r6 + 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.tipo);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.error);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.origen);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.linea);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate"](item_r5.columna);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](i_r6 + 1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.tipo);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.error);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.origen);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.linea);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](2);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtextInterpolate"](item_r5.columna);
 } }
 class AppComponent {
     constructor(appService) {
@@ -2430,7 +3653,7 @@ class AppComponent {
             theme: "vs-dark",
             automaticLayout: true,
             scrollBeyondLastLine: false,
-            fontSize: 16,
+            fontSize: 13,
             minimap: {
                 enabled: true
             },
@@ -2441,13 +3664,13 @@ class AppComponent {
             readOnly: true,
             automaticLayout: true,
             scrollBeyondLastLine: false,
-            fontSize: 16,
+            fontSize: 14,
             minimap: {
                 enabled: true
             },
             language: 'xml'
         };
-        this.entrada = '';
+        this.entrada = `<?xml version="1.0" encoding="UTF-8"?>`;
         this.consulta = '';
         this.salida = '';
         this.fname = '';
@@ -2455,14 +3678,15 @@ class AppComponent {
         this.errores = [];
     }
     newTab() {
-        window.open("/tytusx-G23", "_blank");
+        window.open("/tytusx/20211SVAC/G23", "_blank");
     }
     closeTab() {
         window.close();
     }
     onSubmit() {
+        var iconvlite = __webpack_require__(/*! iconv-lite */ "rPnE");
         let grammar_value = document.getElementById('grammar_selector').value;
-        if (this.entrada != "" && this.consulta != "") {
+        if (this.entrada != "" && this.consulta != "" && this.entrada != '<?xml version="1.0" encoding="UTF-8"?>') {
             const x = {
                 xml: this.entrada,
                 query: this.consulta,
@@ -2470,7 +3694,10 @@ class AppComponent {
             };
             // llamo a la función compile que devuelve un objeto de retorno
             let data = __webpack_require__(/*! ../js/routes/compile */ "i+6F").compile(x);
-            this.salida = data.output;
+            if (data.encoding == "ascii" || data.encoding == "latin1")
+                this.salida = iconvlite.decode(data.output, data.encoding);
+            else
+                this.salida = data.output;
             this.errores = data.arreglo_errores;
             this.simbolos = data.arreglo_simbolos;
             console.log('Data received!');
@@ -2481,53 +3708,76 @@ class AppComponent {
     getAST() {
         this.simbolos = [];
         this.errores = [];
-        if (this.entrada != "") {
-            const x = { "input": this.entrada };
-            this.appService.getAST(x).subscribe(data => {
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_0__["saveAs"])(data, "AST");
-                this.salida = "AST has been generated!";
-                console.log('AST received!');
-            }, error => {
-                console.log('There was an error :(', error);
-                this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el AST.";
-            });
+        if (this.consulta != "") {
+            let grammar_value = document.getElementById('grammar_selector').value;
+            const x = {
+                xml: this.entrada,
+                query: this.consulta,
+                grammar: Number(grammar_value),
+                report: "XPATH-AST",
+            };
+            let data = __webpack_require__(/*! ../js/routes/reports */ "ieEo").generateReport(x);
+            this.salida = data.output;
+            this.errores = data.arreglo_errores;
+            this.exportFile(data.ast, "AST");
+            console.log('AST received!');
         }
         else
-            alert("Entrada vacía. No se puede generar el AST.");
+            alert("Entrada vacía. No se puede generar el reporte AST.");
     }
     getCST() {
         this.simbolos = [];
         this.errores = [];
         if (this.entrada != "") {
-            const x = { "input": this.entrada };
-            this.appService.getCST(x).subscribe(data => {
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_0__["saveAs"])(data, "CST");
-                this.salida = "CST has been generated!";
-                console.log('CST received!');
-            }, error => {
-                console.log('There was an error :(', error);
-                this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el CST.";
-            });
+            let grammar_value = document.getElementById('grammar_selector').value;
+            const x = {
+                xml: this.entrada,
+                query: this.consulta,
+                grammar: Number(grammar_value),
+                report: "XML-CST",
+            };
+            let data = __webpack_require__(/*! ../js/routes/reports */ "ieEo").generateReport(x);
+            this.salida = data.output;
+            this.errores = data.arreglo_errores;
+            this.exportFile(data.cst, "CST");
+            console.log('CST received!');
         }
         else
-            alert("Entrada vacía. No se puede generar el CST.");
+            alert("Entrada vacía. No se puede generar el reporte CST.");
     }
-    getDAG() {
+    getGrammarReport() {
         this.simbolos = [];
         this.errores = [];
         if (this.entrada != "") {
-            const x = { "input": this.entrada };
-            this.appService.getDAG(x).subscribe(data => {
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_0__["saveAs"])(data, "DAG");
-                this.salida = "DAG has been generated!";
-                console.log('DAG received!');
-            }, error => {
-                console.log('There was an error :(', error);
-                this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el DAG.";
-            });
+            let grammar_value = document.getElementById('grammar_selector').value;
+            const x = {
+                xml: this.entrada,
+                query: this.consulta,
+                grammar: Number(grammar_value),
+                report: "XML-GRAMMAR",
+            };
+            let data = __webpack_require__(/*! ../js/routes/reports */ "ieEo").generateReport(x);
+            this.salida = data.output;
+            this.errores = data.arreglo_errores;
+            this.exportFile(data.grammar_report, "Grammar report");
+            console.log('Grammar report received!');
         }
         else
-            alert("Entrada vacía. No se puede generar el DAG.");
+            alert("Entrada vacía. No se puede generar el reporte gramatical.");
+    }
+    exportFile(data, fname) {
+        var f = document.createElement('a');
+        f.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+        f.setAttribute('download', fname + '.html');
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            f.dispatchEvent(event);
+        }
+        else {
+            f.click();
+        }
+        console.log('File exported!');
     }
     saveFile(id) {
         var f = document.createElement('a');
@@ -2586,246 +3836,246 @@ class AppComponent {
         this.salida = "";
     }
 }
-AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_app_service__WEBPACK_IMPORTED_MODULE_2__["AppService"])); };
-AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 126, vars: 10, consts: [[1, "container-fluid", "title", "pt-2", "pb-1"], ["role", "toolbar", 1, "btn-toolbar"], [1, "mb-2", "btn-group"], [1, "dropdown"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "flase", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0"], [1, "dropdown-menu", "rounded-0", "bg-dark"], ["type", "button", 1, "dropdown-item", "text-white", "item", 3, "click"], ["id", "fileInput1", "type", "file", "accept", ".xml", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["id", "fileInput2", "type", "file", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["type", "button", 1, "btn", "btn-dark", "rounded-0", 3, "click"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0", "dropdown-toggle"], ["role", "group", 1, "btn-group", "sel_g"], ["id", "grammar_selector", 1, "form-select", "btn", "btn-dark", "rounded-0"], ["disabled", ""], ["selected", "", "value", "1"], ["value", "2"], [1, "container-fluid", "px-5", "pt-2"], ["novalidate", "", 1, "mb-4", 3, "ngSubmit"], ["iForm", "ngForm"], [1, "row", "mb-5", "file-editors"], [1, "col-lg-6", "col-sm-12"], [1, "my-0", "text-white", "subtitulo"], ["id", "entrada", "name", "entrada", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], ["id", "consulta", "name", "consulta", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], [1, "row", "text-center"], [1, "col-12"], ["type", "submit", 1, "btn", "btn-outline-light", "btn-lg"], [1, "fas", "fa-play-circle"], [1, "row", "mb-5", "file-console"], ["id", "salida", "name", "salida", 1, "console", 3, "options", "ngModel", "ngModelChange"], [1, "row", "my-5"], [1, "my-1", "text-white", "subtitulo"], [1, "table", "table-striped", "table-dark"], ["scope", "col"], ["scope", "col", 1, "text-center"], [4, "ngFor", "ngForOf"], [1, "mt-2", "mb-1", "text-white", "subtitulo"], [1, "text-center", "text-lg-start"], [1, "text-center", "p-3", 2, "background-color", "rgba(0, 0, 0, 0.2)"], [1, "foot", "my-0"], ["scope", "row"], [1, "text-center"]], template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "h2");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, "TytusX");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](3, "div", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "div", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](5, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](7, " Abrir ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](9, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_9_listener() { return ctx.openDialog(1); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](10, "XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](11, "input", 7);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function AppComponent_Template_input_change_11_listener($event) { return ctx.readFile($event, 1); })("ngModelChange", function AppComponent_Template_input_ngModelChange_11_listener($event) { return ctx.fname = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](12, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_12_listener() { return ctx.openDialog(2); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](13, "XPath");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](14, "input", 8);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("change", function AppComponent_Template_input_change_14_listener($event) { return ctx.readFile($event, 2); })("ngModelChange", function AppComponent_Template_input_ngModelChange_14_listener($event) { return ctx.fname = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](15, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](16, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](17, " Guardar ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](18, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](19, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_19_listener() { return ctx.saveFile(1); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](20, "XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](21, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_21_listener() { return ctx.saveFile(2); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](22, "XPath");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](23, "button", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_23_listener() { return ctx.newTab(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](24, "Nueva pesta\u00F1a");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](25, "button", 9);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_25_listener() { return ctx.closeTab(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](26, "Cerrar pesta\u00F1a");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](27, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](28, "button", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](29, " Limpiar ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](30, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](31, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_31_listener() { return ctx.cleanEditor(1); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](32, "XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](33, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_33_listener() { return ctx.cleanEditor(2); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](34, "XPath");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](35, "div", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](36, "button", 10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](37, " Reportes ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](38, "div", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](39, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_39_listener() { return ctx.getAST(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](40, "AST");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](41, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_41_listener() { return ctx.getCST(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](42, "CST");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](43, "button", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function AppComponent_Template_button_click_43_listener() { return ctx.getDAG(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](44, "DAG");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](45, "div", 11);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](46, "select", 12);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](47, "option", 13);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](48, "Seleccione gram\u00E1tica");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](49, "option", 14);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](50, "Ascendente");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](51, "option", 15);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](52, "Descendente");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](53, "div", 16);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](54, "form", 17, 18);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngSubmit", function AppComponent_Template_form_ngSubmit_54_listener() { return ctx.onSubmit(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](56, "div", 19);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](57, "div", 20);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](58, "p", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](59, "Entrada XML");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](60, "ngx-monaco-editor", 22);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_60_listener($event) { return ctx.entrada = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](61, "div", 20);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](62, "p", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](63, "Editor de consultas");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](64, "ngx-monaco-editor", 23);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_64_listener($event) { return ctx.consulta = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](65, "div", 24);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](66, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](67, "button", 26);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](68, "i", 27);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](69, " COMPILAR");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](70, "div", 28);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](71, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](72, "p", 21);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](73, "Consola de salida");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](74, "ngx-monaco-editor", 29);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_74_listener($event) { return ctx.salida = $event; });
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](75, "br");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](76, "hr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](77, "div", 30);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](78, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](79, "p", 31);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](80, "Tabla de s\u00EDmbolos");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](81, "table", 32);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](82, "thead");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](83, "tr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](84, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](85, "#");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](86, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](87, "Id");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](88, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](89, "Tipo");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](90, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](91, "Contenido");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](92, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](93, "\u00C1mbito");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](94, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](95, "Fila");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](96, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](97, "Columna");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](98, "tbody");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](99, AppComponent_tr_99_Template, 15, 7, "tr", 35);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](100, "hr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](101, "div", 30);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](102, "div", 25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](103, "p", 36);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](104, "Tabla de errores");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](105, "table", 32);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](106, "thead");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](107, "tr");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](108, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](109, "#");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](110, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](111, "Tipo");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](112, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](113, "Error");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](114, "th", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](115, "Origen");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](116, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](117, "Fila");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](118, "th", 34);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](119, "Columna");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](120, "tbody");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](121, AppComponent_tr_121_Template, 13, 6, "tr", 35);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](122, "footer", 37);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](123, "div", 38);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](124, "p", 39);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](125, " \u00A9 2021 Grupo 23 - Organizaci\u00F3n de Lenguajes y Compiladores 2 - TytusX ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_app_service__WEBPACK_IMPORTED_MODULE_1__["AppService"])); };
+AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 126, vars: 10, consts: [[1, "container-fluid", "title", "pt-2", "pb-1"], ["role", "toolbar", 1, "btn-toolbar"], [1, "mb-2", "btn-group"], [1, "dropdown"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "flase", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0"], [1, "dropdown-menu", "rounded-0", "bg-dark"], ["type", "button", 1, "dropdown-item", "text-white", "item", 3, "click"], ["id", "fileInput1", "type", "file", "accept", ".xml", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["id", "fileInput2", "type", "file", 2, "display", "none", 3, "ngModel", "change", "ngModelChange"], ["type", "button", 1, "btn", "btn-dark", "rounded-0", 3, "click"], ["type", "button", "id", "dropdownMenu", "data-toggle", "dropdown", "aria-haspopup", "true", "aria-expanded", "false", 1, "btn", "btn-dark", "rounded-0", "dropdown-toggle"], ["role", "group", 1, "btn-group", "sel_g"], ["id", "grammar_selector", 1, "form-select", "btn", "btn-dark", "rounded-0"], ["disabled", ""], ["selected", "", "value", "1"], ["value", "2"], [1, "container-fluid", "px-5", "pt-2"], ["novalidate", "", 1, "mb-4", 3, "ngSubmit"], ["iForm", "ngForm"], [1, "row", "mb-5", "file-editors"], [1, "col-lg-6", "col-sm-12"], [1, "my-0", "text-white", "subtitulo"], ["id", "entrada", "name", "entrada", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], ["id", "consulta", "name", "consulta", 1, "codebox", 3, "options", "ngModel", "ngModelChange"], [1, "row", "text-center"], [1, "col-12"], ["type", "submit", 1, "btn", "btn-outline-light", "btn-lg"], [1, "fas", "fa-play-circle"], [1, "row", "mb-5", "file-console"], ["id", "salida", "name", "salida", 1, "console", 3, "options", "ngModel", "ngModelChange"], [1, "row", "my-5"], [1, "my-1", "text-white", "subtitulo"], [1, "table", "table-striped", "table-dark"], ["scope", "col"], ["scope", "col", 1, "text-center"], [4, "ngFor", "ngForOf"], [1, "mt-2", "mb-1", "text-white", "subtitulo"], [1, "text-center", "text-lg-start"], [1, "text-center", "p-3", 2, "background-color", "rgba(0, 0, 0, 0.2)"], [1, "foot", "my-0"], ["scope", "row"], [1, "text-center"]], template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "h2");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](2, "TytusX");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "div", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](4, "div", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](6, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](7, " Abrir ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](8, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](9, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_9_listener() { return ctx.openDialog(1); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10, "XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "input", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("change", function AppComponent_Template_input_change_11_listener($event) { return ctx.readFile($event, 1); })("ngModelChange", function AppComponent_Template_input_ngModelChange_11_listener($event) { return ctx.fname = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_12_listener() { return ctx.openDialog(2); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "XPath");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "input", 8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("change", function AppComponent_Template_input_change_14_listener($event) { return ctx.readFile($event, 2); })("ngModelChange", function AppComponent_Template_input_ngModelChange_14_listener($event) { return ctx.fname = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](15, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](17, " Guardar ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](18, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](19, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_19_listener() { return ctx.saveFile(1); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](20, "XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](21, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_21_listener() { return ctx.saveFile(2); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](22, "XPath");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](23, "button", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_23_listener() { return ctx.newTab(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](24, "Nueva pesta\u00F1a");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](25, "button", 9);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_25_listener() { return ctx.closeTab(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](26, "Cerrar pesta\u00F1a");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](27, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](28, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](29, " Limpiar ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](30, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](31, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_31_listener() { return ctx.cleanEditor(1); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](32, "XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](33, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_33_listener() { return ctx.cleanEditor(2); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](34, "XPath");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](35, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](36, "button", 10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](37, " Reportes ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](38, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](39, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_39_listener() { return ctx.getAST(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](40, "AST");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](41, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_41_listener() { return ctx.getCST(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](42, "CST");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](43, "button", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function AppComponent_Template_button_click_43_listener() { return ctx.getGrammarReport(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](44, "Gramatical");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](45, "div", 11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](46, "select", 12);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](47, "option", 13);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](48, "Seleccione gram\u00E1tica");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](49, "option", 14);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](50, "Ascendente");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](51, "option", 15);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](52, "Descendente");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](53, "div", 16);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](54, "form", 17, 18);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngSubmit", function AppComponent_Template_form_ngSubmit_54_listener() { return ctx.onSubmit(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](56, "div", 19);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](57, "div", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](58, "p", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](59, "Entrada XML");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](60, "ngx-monaco-editor", 22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_60_listener($event) { return ctx.entrada = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](61, "div", 20);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](62, "p", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](63, "Editor de consultas");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](64, "ngx-monaco-editor", 23);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_64_listener($event) { return ctx.consulta = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](65, "div", 24);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](66, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](67, "button", 26);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](68, "i", 27);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](69, " COMPILAR");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](70, "div", 28);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](71, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](72, "p", 21);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](73, "Consola de salida");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](74, "ngx-monaco-editor", 29);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngModelChange", function AppComponent_Template_ngx_monaco_editor_ngModelChange_74_listener($event) { return ctx.salida = $event; });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](75, "br");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](76, "hr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](77, "div", 30);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](78, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](79, "p", 31);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](80, "Tabla de s\u00EDmbolos");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](81, "table", 32);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](82, "thead");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](83, "tr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](84, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](85, "#");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](86, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](87, "Id");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](88, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](89, "Tipo");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](90, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](91, "Contenido");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](92, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](93, "\u00C1mbito");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](94, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](95, "Fila");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](96, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](97, "Columna");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](98, "tbody");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](99, AppComponent_tr_99_Template, 15, 7, "tr", 35);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](100, "hr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](101, "div", 30);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](102, "div", 25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](103, "p", 36);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](104, "Tabla de errores");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](105, "table", 32);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](106, "thead");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](107, "tr");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](108, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](109, "#");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](110, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](111, "Tipo");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](112, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](113, "Error");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](114, "th", 33);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](115, "Origen");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](116, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](117, "Fila");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](118, "th", 34);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](119, "Columna");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](120, "tbody");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](121, AppComponent_tr_121_Template, 13, 6, "tr", 35);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](122, "footer", 37);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](123, "div", 38);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](124, "p", 39);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](125, " \u00A9 2021 Grupo 23 - Organizaci\u00F3n de Lenguajes y Compiladores 2 - TytusX ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](11);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx.fname);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngModel", ctx.fname);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](46);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.entrada);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.consulta);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](10);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("options", ctx.ConsoleOptions)("ngModel", ctx.salida);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](25);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.simbolos);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](22);
-        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngForOf", ctx.errores);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgModel"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ɵangular_packages_forms_forms_z"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_3__["NgForm"], _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_4__["MonacoEditorComponent"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["NgForOf"]], styles: ["*[_ngcontent-%COMP%]:not(i) {\n    font-family: 'Varela Round', sans-serif;\n}\n\n.title[_ngcontent-%COMP%] {\n    background-color: #c1502e;\n    font-family: 'Varela Round', sans-serif;\n}\n\n.tbar[_ngcontent-%COMP%] {\n    height: 38px;\n}\n\n.file-editors[_ngcontent-%COMP%] {\n    height: 415px;\n}\n\n.file-console[_ngcontent-%COMP%] {\n    height: 375px;\n}\n\n.subtitulo[_ngcontent-%COMP%] {\n    font-size: large;\n}\n\n.foot[_ngcontent-%COMP%] {\n    color: lightgrey;\n}\n\nhr[_ngcontent-%COMP%] {\n    border-width: 0.13em;\n    border-color: gray;\n}\n\n.fc[_ngcontent-%COMP%]:first-letter {\n    text-transform: capitalize\n}\n\n.item[_ngcontent-%COMP%]:hover {\n    background-color: #292b2c;\n}\n\n.dropdown-menu[_ngcontent-%COMP%] {\n    padding: 0% !important;\n}\n\n.sel_g[_ngcontent-%COMP%] {\n    position: absolute;\n    right: 0%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksdUNBQXVDO0FBQzNDOztBQUVBO0lBQ0kseUJBQXlCO0lBQ3pCLHVDQUF1QztBQUMzQzs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxhQUFhO0FBQ2pCOztBQUVBO0lBQ0ksYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLG9CQUFvQjtJQUNwQixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSTtBQUNKOztBQUVBO0lBQ0kseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksa0JBQWtCO0lBQ2xCLFNBQVM7QUFDYiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIio6bm90KGkpIHtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50aXRsZSB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2MxNTAyZTtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50YmFyIHtcbiAgICBoZWlnaHQ6IDM4cHg7XG59XG5cbi5maWxlLWVkaXRvcnMge1xuICAgIGhlaWdodDogNDE1cHg7XG59XG5cbi5maWxlLWNvbnNvbGUge1xuICAgIGhlaWdodDogMzc1cHg7XG59XG5cbi5zdWJ0aXR1bG8ge1xuICAgIGZvbnQtc2l6ZTogbGFyZ2U7XG59XG5cbi5mb290IHtcbiAgICBjb2xvcjogbGlnaHRncmV5O1xufVxuXG5ociB7XG4gICAgYm9yZGVyLXdpZHRoOiAwLjEzZW07XG4gICAgYm9yZGVyLWNvbG9yOiBncmF5O1xufVxuXG4uZmM6Zmlyc3QtbGV0dGVyIHtcbiAgICB0ZXh0LXRyYW5zZm9ybTogY2FwaXRhbGl6ZVxufVxuXG4uaXRlbTpob3ZlciB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogIzI5MmIyYztcbn1cblxuLmRyb3Bkb3duLW1lbnUge1xuICAgIHBhZGRpbmc6IDAlICFpbXBvcnRhbnQ7XG59XG5cbi5zZWxfZyB7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHJpZ2h0OiAwJTtcbn0iXX0= */"] });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](11);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", ctx.fname);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngModel", ctx.fname);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](46);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.entrada);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("options", ctx.EditorOptions)("ngModel", ctx.consulta);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("options", ctx.ConsoleOptions)("ngModel", ctx.salida);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](25);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.simbolos);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](22);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngForOf", ctx.errores);
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgModel"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgSelectOption"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵangular_packages_forms_forms_z"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵangular_packages_forms_forms_ba"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgForm"], _materia_ui_ngx_monaco_editor__WEBPACK_IMPORTED_MODULE_3__["MonacoEditorComponent"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgForOf"]], styles: ["*[_ngcontent-%COMP%]:not(i) {\n    font-family: 'Varela Round', sans-serif;\n}\n\n.title[_ngcontent-%COMP%] {\n    background-color: #c1502e;\n    font-family: 'Varela Round', sans-serif;\n}\n\n.tbar[_ngcontent-%COMP%] {\n    height: 38px;\n}\n\n.file-editors[_ngcontent-%COMP%] {\n    height: 415px;\n}\n\n.file-console[_ngcontent-%COMP%] {\n    height: 375px;\n}\n\n.subtitulo[_ngcontent-%COMP%] {\n    font-size: large;\n}\n\n.foot[_ngcontent-%COMP%] {\n    color: lightgrey;\n}\n\nhr[_ngcontent-%COMP%] {\n    border-width: 0.13em;\n    border-color: gray;\n}\n\n.fc[_ngcontent-%COMP%]:first-letter {\n    text-transform: capitalize\n}\n\n.item[_ngcontent-%COMP%]:hover {\n    background-color: #292b2c;\n}\n\n.dropdown-menu[_ngcontent-%COMP%] {\n    padding: 0% !important;\n}\n\n.sel_g[_ngcontent-%COMP%] {\n    position: absolute;\n    right: 0%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksdUNBQXVDO0FBQzNDOztBQUVBO0lBQ0kseUJBQXlCO0lBQ3pCLHVDQUF1QztBQUMzQzs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxhQUFhO0FBQ2pCOztBQUVBO0lBQ0ksYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLG9CQUFvQjtJQUNwQixrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSTtBQUNKOztBQUVBO0lBQ0kseUJBQXlCO0FBQzdCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksa0JBQWtCO0lBQ2xCLFNBQVM7QUFDYiIsImZpbGUiOiJhcHAuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIio6bm90KGkpIHtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50aXRsZSB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2MxNTAyZTtcbiAgICBmb250LWZhbWlseTogJ1ZhcmVsYSBSb3VuZCcsIHNhbnMtc2VyaWY7XG59XG5cbi50YmFyIHtcbiAgICBoZWlnaHQ6IDM4cHg7XG59XG5cbi5maWxlLWVkaXRvcnMge1xuICAgIGhlaWdodDogNDE1cHg7XG59XG5cbi5maWxlLWNvbnNvbGUge1xuICAgIGhlaWdodDogMzc1cHg7XG59XG5cbi5zdWJ0aXR1bG8ge1xuICAgIGZvbnQtc2l6ZTogbGFyZ2U7XG59XG5cbi5mb290IHtcbiAgICBjb2xvcjogbGlnaHRncmV5O1xufVxuXG5ociB7XG4gICAgYm9yZGVyLXdpZHRoOiAwLjEzZW07XG4gICAgYm9yZGVyLWNvbG9yOiBncmF5O1xufVxuXG4uZmM6Zmlyc3QtbGV0dGVyIHtcbiAgICB0ZXh0LXRyYW5zZm9ybTogY2FwaXRhbGl6ZVxufVxuXG4uaXRlbTpob3ZlciB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogIzI5MmIyYztcbn1cblxuLmRyb3Bkb3duLW1lbnUge1xuICAgIHBhZGRpbmc6IDAlICFpbXBvcnRhbnQ7XG59XG5cbi5zZWxfZyB7XG4gICAgcG9zaXRpb246IGFic29sdXRlO1xuICAgIHJpZ2h0OiAwJTtcbn0iXX0= */"] });
 
 
 /***/ }),
@@ -2840,27 +4090,113 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineCompo
 "use strict";
 
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
-function Logica(_expresion, _ambito) {
-    switch (_expresion.tipo) {
+function Logica(_expresion, _ambito, _contexto) {
+    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _contexto, _expresion.tipo);
+    if (operators.error)
+        return operators;
+    switch (operators.tipo) {
         case Enum_1.Tipos.LOGICA_AND:
-            return and(_expresion.opIzq, _expresion.opDer, _ambito);
+            return and(operators.op1, operators.op2, _contexto);
         case Enum_1.Tipos.LOGICA_OR:
-            return or(_expresion.opIzq, _expresion.opDer, _ambito);
+            return or(operators.op1, operators.op2, _contexto);
         default:
-            break;
+            return null;
     }
 }
-function and(_opIzq, _opDer, _ambito) {
+function init(_opIzq, _opDer, _ambito, _contexto, _tipo) {
     var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
-    var tipo;
+    var op1 = Expresion(_opIzq, _ambito, _contexto);
+    if (op1.error)
+        return op1;
+    var op2 = Expresion(_opDer, _ambito, _contexto);
+    if (op2.error)
+        return op2;
+    var tipo = _tipo;
+    console.log(op1, 888, op2);
+    if (op1.tipo === Enum_1.Tipos.ELEMENTOS && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+        return { op1: op1, op2: op2, tipo: tipo };
+    }
+    if (op1.tipo === Enum_1.Tipos.ATRIBUTOS && op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+        return { op1: op1, op2: op2, tipo: tipo };
+    }
+    else
+        return { error: "Relación lógica no aceptable.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
 }
-function or(_opIzq, _opDer, _ambito) {
-    var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
-    var tipo;
+function and(_opIzq, _opDer, _contexto) {
+    var op1 = _opIzq; // Tiene sus dos operadores y desigualdad
+    var op2 = _opDer;
+    var context1 = filterElements(op1.e1, op1.e2, op1.desigualdad, _contexto);
+    var context2 = filterElements(op2.e1, op2.e2, op2.desigualdad, _contexto);
+    var tmp = [];
+    for (var i = 0; i < context1.length; i++) {
+        var element1 = context1[i];
+        for (var j = 0; j < context2.length; j++) {
+            var element2 = context2[j];
+            if (element1 == element2) {
+                tmp.push(element1);
+                break;
+            }
+        }
+    }
+    return { tipo: Enum_1.Tipos.LOGICA_AND, elementos: tmp };
+}
+function or(_opIzq, _opDer, _contexto) {
+    var op1 = _opIzq; // Tiene sus dos operadores y desigualdad
+    var op2 = _opDer;
+    var context1 = filterElements(op1.e1, op1.e2, op1.desigualdad, _contexto);
+    var context2 = filterElements(op2.e1, op2.e2, op2.desigualdad, _contexto);
+    var tmp = context1.concat(context2.filter(function (item) { return context1.indexOf(item) < 0; }));
+    return { tipo: Enum_1.Tipos.LOGICA_OR, elementos: tmp };
+}
+function filterElements(e1, e2, desigualdad, _contexto) {
+    var condition = false;
+    var tmp = [];
+    for (var i = 0; i < _contexto.length; i++) {
+        var element = _contexto[i];
+        if (element.attributes) { // Hace match con un atributo
+            for (var j = 0; j < element.attributes.length; j++) {
+                var attribute = element.attributes[j];
+                condition = verificarDesigualdad(desigualdad, attribute.id, e1, attribute.value, e2);
+                if (condition) {
+                    tmp.push(element);
+                    break; // Sale del ciclo de atributos para pasar al siguiente elemento
+                }
+            }
+        }
+        if (element.childs) { // Hace match con algún hijo
+            for (var j = 0; j < element.childs.length; j++) {
+                var child = element.childs[j];
+                condition = verificarDesigualdad(desigualdad, child.id_open, e1, child.value, e2);
+                console.log(desigualdad, child.id_open, e1, child.value, e2);
+                if (condition) {
+                    tmp.push(element);
+                    break;
+                }
+            }
+        }
+        condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2); // Hace match con el elemento
+        if (condition)
+            tmp.push(element);
+    }
+    return tmp;
+}
+function verificarDesigualdad(_tipo, v1, e1, v2, e2) {
+    switch (_tipo) {
+        case Enum_1.Tipos.RELACIONAL_MAYOR:
+            return (v1 == e1 && v2 > e2);
+        case Enum_1.Tipos.RELACIONAL_MAYORIGUAL:
+            return (v1 == e1 && v2 >= e2);
+        case Enum_1.Tipos.RELACIONAL_MENOR:
+            return (v1 == e1 && v2 < e2);
+        case Enum_1.Tipos.RELACIONAL_MENORIGUAL:
+            return (v1 == e1 && v2 <= e2);
+        case Enum_1.Tipos.RELACIONAL_IGUAL:
+            return (v1 == e1 && v2 == e2);
+        case Enum_1.Tipos.RELACIONAL_DIFERENTE:
+            return (v1 == e1 && v2 != e2);
+        default:
+            return false;
+    }
 }
 module.exports = Logica;
 
@@ -2880,10 +4216,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Codes = void 0;
 var Codes;
 (function (Codes) {
-    Codes[Codes["UTF8"] = 0] = "UTF8";
-    Codes[Codes["ASCII"] = 1] = "ASCII";
-    Codes[Codes["ISO8859_1"] = 2] = "ISO8859_1";
-    Codes[Codes["INVALID"] = 3] = "INVALID";
+    Codes["UTF8"] = "utf-8";
+    Codes["ASCII"] = "ascii";
+    Codes["ISO8859_1"] = "latin1";
+    Codes["INVALID"] = "invalid";
 })(Codes = exports.Codes || (exports.Codes = {}));
 
 
@@ -3131,152 +4467,364 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineInjector
   }
 */
 var xml_down = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,7],$V1=[1,6],$V2=[1,11],$V3=[11,13],$V4=[1,16],$V5=[2,6,8],$V6=[1,25],$V7=[1,27],$V8=[1,28],$V9=[1,29],$Va=[1,26],$Vb=[2,8],$Vc=[8,9,13,18,19,21],$Vd=[9,11,13];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,9],$V1=[1,12],$V2=[1,17],$V3=[1,15],$V4=[1,16],$V5=[2,13],$V6=[1,20],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[2,21,22,23],$Vb=[2,6,21,23],$Vc=[2,11,12,21,22,23,24],$Vd=[2,11,12,14,16,17,18,21,22,23,24],$Ve=[2,6,23];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"tk_declaration_xml":4,"ROOT":5,"EOF":6,"XML":7,"tk_open":8,"tk_id":9,"ATTR":10,"tk_close":11,"CHILD":12,"tk_bar":13,"CONTENT":14,"ATTR_P":15,"tk_equal":16,"TK_ATTR":17,"tk_attribute_d":18,"tk_attribute_s":19,"PROP":20,"anything":21,"$accept":0,"$end":1},
-terminals_: {2:"error",4:"tk_declaration_xml",6:"EOF",8:"tk_open",9:"tk_id",11:"tk_close",13:"tk_bar",16:"tk_equal",18:"tk_attribute_d",19:"tk_attribute_s",21:"anything"},
-productions_: [0,[3,3],[3,2],[5,2],[5,1],[7,9],[7,9],[7,5],[7,8],[7,2],[7,2],[10,1],[10,0],[15,4],[15,3],[17,1],[17,1],[12,2],[12,1],[14,2],[14,1],[20,1],[20,1],[20,1],[20,1],[20,1]],
+symbols_: {"error":2,"INI":3,"XML_DECLARATION":4,"ROOT":5,"EOF":6,"XML":7,"tk_open_declaration":8,"ATTRIBUTE_LIST":9,"XML_CLOSE_DECLARATION":10,"tk_close_delcaraton":11,"tk_close":12,"ATTRIBUTE":13,"tk_attribute_name":14,"tk_string":15,"tk_equal":16,"tk_tag_name":17,"cadena_err":18,"XML_OPEN":19,"CHILDREN":20,"tk_open_end_tag":21,"tk_content":22,"tk_open":23,"tk_bar":24,"$accept":0,"$end":1},
+terminals_: {2:"error",6:"EOF",8:"tk_open_declaration",11:"tk_close_delcaraton",12:"tk_close",14:"tk_attribute_name",15:"tk_string",16:"tk_equal",17:"tk_tag_name",18:"cadena_err",21:"tk_open_end_tag",22:"tk_content",23:"tk_open",24:"tk_bar"},
+productions_: [0,[3,3],[3,2],[3,2],[3,1],[3,2],[5,2],[5,1],[4,3],[10,1],[10,1],[10,2],[9,2],[9,0],[13,2],[13,1],[13,2],[13,1],[13,2],[13,1],[7,5],[7,5],[7,5],[7,4],[7,3],[7,3],[7,4],[7,4],[7,6],[7,4],[7,4],[7,4],[7,3],[7,3],[7,2],[19,4],[19,3],[19,1],[19,2],[20,2],[20,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
+/*$$[$0-2][0].printTest(0);console.log($$[$0-2][0].getTree());*/
+                                            prod_1 = grammar_stack.pop();
+                                            prod_2 = grammar_stack.pop();
+                                            grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF {﹩ = [﹩1, ﹩2]}': [prod_2, prod_1, 'EOF' ]});
+                                            //printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            cst = getCST(grammar_stack);
 
-		encoding = new Encoding($$[$0-2]);
-		if (encoding.encoding === encoding.codes.INVALID ) {
-			errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
-		}
-		ast = { ast: $$[$0-1], encoding: encoding,  errors: errors };
-		errors = [];
-		return ast;
-	
+                                            if($$[$0-2]!= null){
+                                                encoding = new Encoding($$[$0-2]);
+                                                ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst: cst, grammar_report: grammar_report};
+                                            } else{
+                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
+                                                ast = { ast: $$[$0-1], encoding: null,  errors: errors, cst: cst, grammar_report: grammar_report};
+                                            }
+                                            errors = [];
+                                            return ast;
+                                            
 break;
 case 2:
- errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors }; 
+
+                                            prod_1 = grammar_stack.pop();
+                                            grammar_stack.push({'INI -> XML_DECLARATION  EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            errors = [];
+                                            return ast;
+                                            
 break;
 case 3:
- if ($$[$0-1]!==null) { $$[$0].push($$[$0-1]); this.$=$$[$0]; } else { this.$=null; } 
+
+                                            prod_1 = grammar_stack.pop();
+                                            grammar_stack.push({'INI -> ROOT EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+
+                                            errors.push({ tipo: "Sintáctico", error: "Falta declaracion del XML", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            errors = [];
+                                            return ast;
+                                            
 break;
-case 4: case 18:
- if ($$[$0]!==null) { this.$=[$$[$0]]; } else { this.$=[]; } 
+case 4:
+
+                                            grammar_stack.push({'INI -> EOF {	errors.add(new Error()); ﹩﹩ = null;}': [ 'EOF']});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            errors.push({ tipo: "Sintáctico", error: "El archivo viene vacio.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+	                                        ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report }
+	                                        errors = [];
+	                                        return ast;
+	                                        
 break;
 case 5:
 
-			tag = new Element($$[$0-7], $$[$0-6], null, $$[$0-4], this._$.first_line, this._$.first_column+1, $$[$0-1]);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				tag.childs.forEach(child => {
-					child.father = $$[$0-7];
-            	});
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-				this.$ = null;
-			}
-		
+	                                        grammar_stack.push({'INI -> error EOF {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ', 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+
+                                            errors.push({ tipo: "Sintáctico", error: "Token no esperado.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            errors = [];
+                                            return ast;
+                                            
 break;
 case 6:
-
-			tag = new Element($$[$0-7], $$[$0-6], $$[$0-4].val, null, this._$.first_line, this._$.first_column+1, $$[$0-1]);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-				this.$ = null;
-			}
-		
+if($$[$0-1] != null && $$[$0] != null){ $$[$0].push($$[$0-1]); this.$ = $$[$0]; } else if($$[$0] == null){this.$ = []; this.$.push($$[$0-1]); }else{this.$ = null;}
+                                                prod_1 = grammar_stack.pop();
+                                                prod_2 = grammar_stack.pop();
+                                                grammar_stack.push({'ROOT ->  XML ROOT  {﹩﹩ = ﹩2.push(﹩1);}': [prod_2, prod_1 ]});
+                                                
 break;
 case 7:
-
-			tag = new Element($$[$0-3], $$[$0-2], null, null, this._$.first_line, this._$.first_column+1, null);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-3].first_line, columna: _$[$0-3].first_column+1 });
-				this.$ = null;
-			}
-		
+this.$ = []; this.$.push($$[$0]);
+	                                            prod_1 = grammar_stack.pop();
+	                                            grammar_stack.push({'ROOT -> XML {﹩﹩ = []; ﹩﹩.push(﹩1);}': [prod_1 ]});
+	                                            
 break;
 case 8:
+if($$[$0-1] == null || $$[$0] == null){
+                                                                            this.$ = null}else{
+                                                                            let str = "";
+                                                                           $$[$0-1].forEach((value)=>{
+                                                                           str = str + value.id+value.value;
+                                                                           });
+                                                                           this.$=str;
+                                                                           }
 
-			tag = new Element($$[$0-6], $$[$0-5], null, null, this._$.first_line, this._$.first_column+1, $$[$0-1]);
-            hasConflict = tag.verificateNames();
-			if (hasConflict === "") {
-				this.$ = tag;
-			}
-			else {
-				errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-				this.$ = null;
-			}
-		
+                                                                           prod_3 = grammar_stack.pop();
+                                                                           prod_2 = grammar_stack.pop();
+                                                                           grammar_stack.push({'XML_DECLARATION -> tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION {﹩﹩ = ﹩2}': ['Token: tk_open_declaration\t Lexema: ' + '&lt;?', prod_2, prod_3]} );
+                                                                           
 break;
-case 9: case 10:
- errors.push({ tipo: "Sintáctico", error: "La etiqueta no fue declarada correctamente.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); this.$ = null; 
+case 9:
+  this.$ = "?>"
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close_delcaraton { ﹩﹩= ﹩1}': ['Token: tk_close_delcaraton\t Lexema: ' + '?&gt;']});
+                                                
 break;
-case 11: case 15: case 16:
- this.$=$$[$0]; 
+case 10:
+this.$ = null;
+                                                 errors.push({ tipo: "Sintáctico", error: "Se esperaba token /", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close {errors.add(new Error()); ﹩﹩ = null;}': ['Token: tk_close\t Lexema: ' + '&gt;']});
+                                                
+break;
+case 11:
+ this.$ = null;
+                                                 errors.push({ tipo: "Sintáctico", error: "Token no esperado. " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                 grammar_stack.push({'XML_CLOSE_DECLARATION -> error tk_close {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                 
 break;
 case 12:
- this.$=null; 
+if($$[$0-1] != null && $$[$0] != null){$$[$0].push($$[$0-1]); this.$ = $$[$0]}else if($$[$0] == null){this.$ = []; this.$.push($$[$0-1]);}else{this.$ = null;}
+                                            prod_1 = grammar_stack.pop();
+                                            prod_2 = grammar_stack.pop();
+                                            grammar_stack.push({'ATTRIBUTE_LIST -> ATTRIBUTE ATTRIBUTE_LIST {if(﹩2 == null){﹩﹩=[]; ﹩﹩.push(﹩1)}else{﹩2.push(﹩1)}}': [ prod_2, prod_1 ] });
+                                          
 break;
 case 13:
-
-		attr = new Atributo($$[$0-3], $$[$0-1], this._$.first_line, this._$.first_column+1);
-		$$[$0].push(attr);
-		this.$=$$[$0];
-	
+this.$ = null;             grammar_stack.push({'ATTRIBUTE_LIST -> Empty {﹩﹩ = null}': ['EMPTY'] });      
 break;
 case 14:
-
-		attr = new Atributo($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
-		this.$=[attr];
-	
+attr = new Atributo($$[$0-1].slice(0, -1), $$[$0].slice(1,-1), this._$.first_line, this._$.first_column+1);
+                                            attr.Cst= `<li><a href=''>ATTRIBUTE</a>
+                                            <ul>
+                                            <li><a href=''>tk_attribute_name</a><ul>\n<li><a href=''>${$$[$0-1]}</a></li></ul></li>
+                                            <li><a href=''>tk_string</a><ul>\n<li><a href=''>${$$[$0]}</a></li></ul></li>
+                                            </ul>
+                                            </li>`;
+                                            this.$ = attr;
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name tk_string {	﹩﹩ = new Attribute(﹩1, ﹩2)}': ['Token: tk_attribute_name\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0] ]});
+                                            
+break;
+case 15:
+ this.$ = null;
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un atributo despues de =.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_attribute_name\t Lexema: ' + $$[$0]]});
+                                            
+break;
+case 16:
+ this.$ = null;
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un nombre para atributo antes de =.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_equal tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_equal\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            
 break;
 case 17:
- if ($$[$0]!==null) { $$[$0-1].push($$[$0]); } this.$=$$[$0-1]; 
+ this.$ = null;
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba signo =", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_tag_name {	errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                            
+break;
+case 18:
+ this.$ = null;
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con digitos.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            
 break;
 case 19:
-
-		if ($$[$0-1].tipo !== $$[$0].tipo) {
-			$$[$0].val=$$[$0-1].val+$$[$0].val;
-		}
-		else {
-			$$[$0].val=$$[$0-1].val+' '+$$[$0].val;
-		}
-		this.$={tipo:$$[$0-1].tipo, val:$$[$0].val};
-	
+ this.$ = null;
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con digitos, y debe tener signo = y atributo a continuacion.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err {	errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0]]});
+                                            
 break;
 case 20:
-
-		this.$={tipo:$$[$0].tipo, val:$$[$0].val};
-	
+if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
+                                                                                let hasConflict = $$[$0-4].verificateNames();
+                                                                                if(hasConflict === "") {
+                                                                                    if($$[$0-4].childs){
+                                                                                        $$[$0-4].childs.forEach(child => {
+                                                                                        child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
+                                                                                        });
+                                                                                        this.$ = $$[$0-4];
+                                                                                    }
+																				}
+                                                                                else {
+																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                                                    this.$ = null;
+																				}
+                                                                                 }else{this.$ = null;}
+                                                                                 prod_1 = grammar_stack.pop();
+                                                                                 prod_2 = grammar_stack.pop();
+                                                                                 grammar_stack.push({'XML-> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩1.children = ﹩2}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                                                 
 break;
 case 21:
- this.$={tipo:1, val:$$[$0]}; 
+if($$[$0-4] != null){$$[$0-4].Value = $$[$0-3]; $$[$0-4].Close = $$[$0-1];  this.$ = $$[$0-4];
+                                                                                let hasConflict = $$[$0-4].verificateNames();
+                                                                                if(hasConflict !== ""){
+                                                                                 errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                                                 this.$ = null;
+                                                                                 }
+	                                                                             }else{this.$ = null;}
+	                                                                             prod_1 = grammar_stack.pop();
+	                                                                             grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩﹩.content = ﹩2}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                             
 break;
 case 22:
- this.$={tipo:2, val:$$[$0]}; 
+this.$ = new Element($$[$0-3], $$[$0-2], null, null, _$[$0-4].first_line, _$[$0-4].first_column+1, null);
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                grammar_stack.push({'XML -> tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-3], prod_1, 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                            
 break;
 case 23:
- this.$={tipo:3, val:$$[$0]}; 
+if($$[$0-3] != null){$$[$0-3].Close = $$[$0-1]; this.$ = $$[$0-3];
+	                                                                            let hasConflict = $$[$0-3].verificateNames();
+	                                                                             if(hasConflict !== ""){
+                                                                                errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                                                this.$ = null;
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                }
+	                                                                            }else{this.$ = null;}
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close {	﹩﹩ = ﹩1;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
+	                                                                            
 break;
 case 24:
- this.$={tipo:4, val:$$[$0]}; 
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
+	                                                                            
 break;
 case 25:
- this.$={tipo:5, val:$$[$0]}; 
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                            
+break;
+case 26:
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            
+break;
+case 27:
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + $$[$0]  ]});
+                                                                            	
+break;
+case 28:
+this.$ =null;
+                                                                                errors.push({ tipo: "Sintáctico", error: "Se esperaba etiqueta de cierre. ", origen: "XML", linea: _$[$0-4].first_line, columna: _$[$0-4].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                prod_2 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, 'Token: tk_content\t Lexema: ' + $$[$0-4],  'Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                            
+break;
+case 29:
+this.$ =null;
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                prod_2 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            
+break;
+case 30:
+this.$ =null;
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+                                                                                prod_1 = grammar_stack.pop();
+                                                                                prod_2 = grammar_stack.pop();
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: '  + '&gt;']});
+	                                                                            
+break;
+case 31:
+this.$ =null;
+	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-3], origen: "XML", linea: _$[$0-3].first_line, columna: _$[$0-3].first_column+1 });
+
+                                                                             grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
+                                                                             
+break;
+case 32:
+this.$ =null;
+    	                                                                    errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
+
+                                                                            grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                                                            
+break;
+case 33:
+this.$ =null;
+	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
+
+	                                                                        grammar_stack.push({'XML -> error tk_bar tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                        
+break;
+case 34:
+this.$ =null;
+	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+
+	                                                                        grammar_stack.push({'XML -> error  tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + '&gt;']});
+	                                                                        
+break;
+case 35:
+ this.$ = new Element($$[$0-2], $$[$0-1], null, null,  _$[$0-3].first_line,  _$[$0-3].first_column+1);
+
+                                                        prod_1 = grammar_stack.pop();
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                         
+break;
+case 36:
+
+                                                        this.$ = null;
+                                                        errors.push({ tipo: "Sintáctico", error: "Se esperaba \">\" despues de la cadena de atributos.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+
+                                                        prod_1 = grammar_stack.pop();
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], prod_1]});
+                                                        
+break;
+case 37:
+ this.$ = null;
+                                                        errors.push({ tipo: "Sintáctico", error: "", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                        grammar_stack.push({'XML_OPEN -> tk_open {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;']});
+                                                        
+break;
+case 38:
+ this.$ = null;
+                                                         errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador para la etiqueta", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                                         grammar_stack.push({'XML_OPEN -> tk_open tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_close\t Lexema: ' + '&gt;']});
+                                                         
+break;
+case 39:
+if($$[$0-1] != null && $$[$0] != null){ $$[$0].push($$[$0-1]); this.$ = $$[$0]; } else if($$[$0] == null){this.$ = []; this.$.push($$[$0-1]); }else{this.$ = null;}
+                                                            prod_1 = grammar_stack.pop();
+                                                            prod_2 = grammar_stack.pop();
+                                                             grammar_stack.push({'CHILDREN -> XML CHILDREN {﹩2.push(﹩1); ﹩﹩ = ﹩2;}':[prod_2,  prod_1]});
+                                                            
+break;
+case 40:
+this.$ = []; this.$.push($$[$0]);
+	                                                        prod_1 = grammar_stack.pop();
+	                                                        grammar_stack.push({'CHILDREN -> XML {﹩﹩ = [﹩1]}': [prod_1] });
+	                                                        
 break;
 }
 },
-table: [{2:[1,3],3:1,4:[1,2]},{1:[3]},{2:$V0,5:4,7:5,8:$V1},{6:[1,8]},{6:[1,9]},{2:$V0,5:10,6:[2,4],7:5,8:$V1},{9:$V2},{8:[1,13],11:[1,12]},{1:[2,2]},{1:[2,1]},{6:[2,3]},o($V3,[2,12],{10:14,15:15,9:$V4}),o($V5,[2,9]),o($V5,[2,10]),{11:[1,17],13:[1,18]},o($V3,[2,11]),{16:[1,19]},{2:$V0,7:23,8:[1,22],9:$V6,12:20,13:$V7,14:21,18:$V8,19:$V9,20:24,21:$Va},{11:[1,30]},{17:31,18:[1,32],19:[1,33]},{2:$V0,7:35,8:[1,34]},{8:[1,36]},{9:$V2,13:[1,37]},o($Vb,[2,18]),{8:[2,20],9:$V6,13:$V7,14:38,18:$V8,19:$V9,20:24,21:$Va},o($Vc,[2,21]),o($Vc,[2,22]),o($Vc,[2,23]),o($Vc,[2,24]),o($Vc,[2,25]),o($V5,[2,7]),o($V3,[2,14],{15:39,9:$V4}),o($Vd,[2,15]),o($Vd,[2,16]),{9:$V2,13:[1,40]},o($Vb,[2,17]),{13:[1,41]},{9:[1,42]},{8:[2,19]},o($V3,[2,13]),{9:[1,43]},{9:[1,44]},{11:[1,45]},{11:[1,46]},{11:[1,47]},o($V5,$Vb),o($V5,[2,5]),o($V5,[2,6])],
-defaultActions: {8:[2,2],9:[2,1],10:[2,3],38:[2,19]},
+table: [{2:[1,5],3:1,4:2,5:3,6:[1,4],7:7,8:[1,6],19:8,23:$V0},{1:[3]},{2:$V1,5:10,6:[1,11],7:7,19:8,23:$V0},{6:[1,13]},{1:[2,4]},{6:[1,14],12:$V2,21:$V3,24:$V4},o([2,11,12],$V5,{9:18,13:19,14:$V6,16:$V7,17:$V8,18:$V9}),{2:$V1,5:24,6:[2,7],7:7,19:8,23:$V0},{2:$V1,7:28,19:8,20:25,21:[1,27],22:[1,26],23:$V0},o($Va,[2,37],{12:[1,30],17:[1,29]}),{6:[1,31]},{1:[2,2]},{12:$V2,21:$V3,24:$V4},{1:[2,3]},{1:[2,5]},{17:[1,32]},{12:[1,33]},o($Vb,[2,34]),{2:[1,37],10:34,11:[1,35],12:[1,36]},o($Vc,$V5,{13:19,9:38,14:$V6,16:$V7,17:$V8,18:$V9}),o($Vd,[2,15],{15:[1,39]}),{15:[1,40]},o($Vd,[2,17]),o($Vd,[2,19],{15:[1,41]}),{6:[2,6]},{21:[1,42]},{21:[1,43],23:[1,44]},{12:[1,46],17:[1,45]},{2:$V1,7:28,19:8,20:47,21:[2,40],23:$V0},o([2,12,21,22,23,24],$V5,{13:19,9:48,14:$V6,16:$V7,17:$V8,18:$V9}),o($Va,[2,38]),{1:[2,1]},o($Vb,[2,32],{12:[1,49]}),o($Vb,[2,33]),o($Ve,[2,8]),o($Ve,[2,9]),o($Ve,[2,10]),{12:[1,50]},o($Vc,[2,12]),o($Vd,[2,14]),o($Vd,[2,16]),o($Vd,[2,18]),{12:[1,52],17:[1,51]},{12:[1,54],17:[1,53]},{17:[1,55]},o($Vb,[2,24],{12:[1,56]}),o($Vb,[2,25]),{21:[2,39]},o($Va,[2,36],{12:[1,58],24:[1,57]}),o($Vb,[2,31]),o($Ve,[2,11]),o($Vb,[2,29],{12:[1,59]}),o($Vb,[2,30]),o($Vb,[2,26],{12:[1,60]}),o($Vb,[2,27]),{9:61,12:$V5,13:19,14:$V6,16:$V7,17:$V8,18:$V9},o($Vb,[2,23]),{12:[1,62]},o($Va,[2,35]),o($Vb,[2,20]),o($Vb,[2,21]),{12:[1,63]},o($Vb,[2,22]),o($Vb,[2,28])],
+defaultActions: {4:[2,4],11:[2,2],13:[2,3],14:[2,5],24:[2,6],31:[2,1],47:[2,39]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -3531,6 +5079,814 @@ _handle_error:
 
 	var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
+	let grammar_stack = [];
+
+
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Reporte gramatical</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+
+        str = str + buildGrammarReport(obj);
+
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+
+                     <div id="div-table">
+                     <table style="width:100%">
+                         <tr>
+                         <th>Produccion</th>
+                         <th>Cuerpo</th>
+                         <th>Accion</th>
+                         </tr>
+
+                         <tr>
+                         <th>INI-&gt;</th>
+                         <td>XML_DECLARATION ROOT EOF</td>
+                         <td>$$ = [$1, $2] </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_DECLARATION  EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>ROOT EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>error EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ROOT-&gt;</th>
+                         <td>XML ROOT</td>
+                         <td>$$ = $2.push($1);</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = []; $$.push($1);</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML_DECLARATION-&gt;</th>
+                         <td>tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION</td>
+                         <td>$$ = $2</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+
+
+                         <tr>
+                         <th>XML_CLOSE_DECLARATION-&gt;</th>
+                         <td>tk_close_delcaraton</td>
+                         <td>$$ = $1</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>ATTRIBUTE_LIST-&gt;</th>
+                         <td>ATTRIBUTE ATTRIBUTE_LIST </td>
+                         <td>if($2 == null){$$=[]; $$.push($1)}else{$2.push($1)}</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>Empty</td>
+                         <td>$$ = null</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ATTRIBUTE-&gt;</th>
+                         <td>tk_attribute_name tk_string  </td>
+                         <td>$$ = new Attribute($1, $2)</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_attribute_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_equal tk_string   </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_tag_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err tk_string </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML-&gt;</th>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close   </td>
+                         <td>$$ = $1; $1.children = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close  </td>
+                         <td>$$ = $1; $$.content = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>$$ = $1; </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag  tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_bar tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>XML_OPEN-&gt;</th>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open   tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>CHILDREN-&gt;</th>
+                         <td>XML CHILDREN</td>
+                         <td>$2.push($1); $$ = $2;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = [$1]</td>
+                         </tr>
+
+                     </table>
+
+                     </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                    function fun1() {
+                                                                                if ($("#tree-root").length > 0) {
+
+                                                                                    $("#tree-root").find("li").each
+                                                                                    (
+                                                                                        function () {
+                                                                                            var $span = $("<span></span>");
+                                                                                            //$(this).toggleClass("expanded");
+                                                                                            if ($(this).find("ul:first").length > 0) {
+                                                                                                $span.removeAttr("class");
+                                                                                                $span.attr("class", "expanded");
+                                                                                                $(this).find("ul:first").css("display", "block");
+                                                                                                $(this).append($span);
+                                                                                            }
+
+                                                                                        }
+                                                                                    )
+                                                                                }
+
+                                                                            }
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+
+    function buildGrammarReport(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                str = str + `<li class= "string">
+                ${value}
+                </li>
+                `;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildGrammarReport(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                str = `<li><span class="caret">
+                ${key}
+                </span>
+                <ul class="nested">
+                `;
+                str = str + buildGrammarReport(obj[key]);
+                str = str + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+
+
+//just for testing purposes
+	function printstrack(obj, lines){
+	return;
+
+        if(Array.isArray(obj)){ //IS ARRAY
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            obj.forEach((value)=>{
+                if(typeof value === 'string' ){
+                     str = ""
+                     for(let i = 0; i < lines; i++){str = str + "- ";}
+                     console.log(str + value);
+                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+                    str = ""
+                    for(let i = 0; i < lines; i++){ str = str + "- ";}
+                    for(let key in value){
+                       console.log(`${str}${key}`);
+                       printstrack(value[key], lines + 1);
+                    }
+                }
+
+                //printstrack(value, lines +1);
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            console.log(str + obj);
+        }else{// IS OBJECT
+            str = ""
+            for(let i = 0; i < lines; i++){ str = str + "- ";}
+            for(let key in obj){
+                console.log(`${str}Key: ${key}`);
+                //console.log(obj[key]);
+                printstrack(obj[key], lines + 1);
+            }
+        }
+	}
+
+
+
+
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>CST</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+
+            </style>
+        </head>
+        <body>
+
+
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+
+
+
+
 
 	const { Atributo } = __webpack_require__(/*! ../model/xml/Atributo */ "tSns");
 	const { Element } = __webpack_require__(/*! ../model/xml/Element */ "Kypw");
@@ -3865,70 +6221,57 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1:// MultiLineComment
+case 1:/* MultiLineComment*/
 break;
-case 2:return 4
+case 2:return 8;
 break;
-case 3:return 8
+case 3:return 11;
 break;
-case 4:return 11
+case 4:return 14;
 break;
-case 5:return 13
+case 5:return 17;
 break;
-case 6:return 16
+case 6:return 21
 break;
-case 7:return 9
+case 7:return 23;
 break;
-case 8: attribute = ''; this.begin("string_doubleq"); 
+case 8: this.pushState('content');  return 12;
 break;
-case 9: attribute += yy_.yytext; 
+case 9:return 24;
 break;
-case 10: attribute += "\""; 
+case 10:return 16;
 break;
-case 11: attribute += "\n"; 
+case 11:return 15;
 break;
-case 12: attribute += " ";  
+case 12:return cadena_err;
 break;
-case 13: attribute += "\t"; 
+case 13:return id_err;
 break;
-case 14: attribute += "\\"; 
+case 14:/* MultiLineComment*/
 break;
-case 15: attribute += "\'"; 
+case 15:
+                                    if(yy_.yytext.match(re)){return 22;}
+                                 
 break;
-case 16: attribute += "\r"; 
+case 16:return 6
 break;
-case 17: yy_.yytext = attribute; this.popState(); return 18; 
+case 17:this.popState(); return 12;
 break;
-case 18: attribute = ''; this.begin("string_singleq"); 
+case 18: this.popState(); return 21
 break;
-case 19: attribute += yy_.yytext; 
+case 19:  this.popState();
+                                    return 23;
 break;
-case 20: attribute += "\""; 
+case 20: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
-case 21: attribute += "\n"; 
+case 21:return 6
 break;
-case 22: attribute += " ";  
-break;
-case 23: attribute += "\t"; 
-break;
-case 24: attribute += "\\"; 
-break;
-case 25: attribute += "\'"; 
-break;
-case 26: attribute += "\r"; 
-break;
-case 27: yy_.yytext = attribute; this.popState(); return 19; 
-break;
-case 28:return 6
-break;
-case 29:return 21
-break;
-case 30: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 22: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^><]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[19,20,21,22,23,24,25,26,27],"inclusive":false},"string_doubleq":{"rules":[9,10,11,12,13,14,15,16,17],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,18,28,29,30],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:(([^<>&\"]|&lt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"content":{"rules":[14,15,16,17,18,19,20],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,21,22],"inclusive":true}}
 });
 return lexer;
 })();
@@ -3950,7 +6293,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -3973,7 +6316,11 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 var Enum_1 = __webpack_require__(/*! ../../../model/xpath/Enum */ "MEUw");
 function Expresion(_expresion, _ambito, _contexto) {
     var tipo = _expresion.tipo;
-    if (tipo === Enum_1.Tipos.NODENAME) {
+    // console.log(_expresion, 1111111) // Agregar el caso de que sea una instrucción y abrir un bloque
+    if (tipo === Enum_1.Tipos.EXPRESION) {
+        return Expresion(_expresion.expresion, _ambito, _contexto);
+    }
+    else if (tipo === Enum_1.Tipos.NODENAME) {
         return { valor: _expresion.nodename, tipo: Enum_1.Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.STRING || tipo === Enum_1.Tipos.NUMBER) {
@@ -3986,8 +6333,13 @@ function Expresion(_expresion, _ambito, _contexto) {
         return { valor: "..", tipo: Enum_1.Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.SELECT_ATTRIBUTES) {
-        var valor = { id: _expresion.expresion, tipo: "@" };
-        return { valor: valor, tipo: Enum_1.Tipos.ATRIBUTOS, linea: _expresion.linea, columna: _expresion.columna };
+        return { valor: _expresion.expresion, tipo: Enum_1.Tipos.ATRIBUTOS, linea: _expresion.linea, columna: _expresion.columna };
+    }
+    else if (tipo === Enum_1.Tipos.SELECT_AXIS) {
+        var nodetest = Expresion(_expresion.nodetest.expresion, _ambito, _contexto);
+        if (nodetest.error)
+            return nodetest;
+        return { axisname: _expresion.axisname, nodetest: nodetest, predicate: _expresion.nodetest.predicate, tipo: Enum_1.Tipos.SELECT_AXIS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.ASTERISCO) {
         return { valor: "*", tipo: Enum_1.Tipos.ASTERISCO, linea: _expresion.linea, columna: _expresion.columna };
@@ -4001,27 +6353,29 @@ function Expresion(_expresion, _ambito, _contexto) {
     else if (tipo === Enum_1.Tipos.FUNCION_POSITION) {
         return { valor: "position()", tipo: Enum_1.Tipos.FUNCION_POSITION, linea: _expresion.linea, columna: _expresion.columna };
     }
-    if (tipo === Enum_1.Tipos.EXPRESION) {
-        return Expresion(_expresion.expresion, _ambito, _contexto);
+    else if (tipo === Enum_1.Tipos.FUNCION_TEXT) {
+        return { valor: "text()", tipo: Enum_1.Tipos.FUNCION_TEXT, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Enum_1.Tipos.OPERACION_SUMA || tipo === Enum_1.Tipos.OPERACION_RESTA || tipo === Enum_1.Tipos.OPERACION_MULTIPLICACION
         || tipo === Enum_1.Tipos.OPERACION_DIVISION || tipo === Enum_1.Tipos.OPERACION_MODULO || tipo === Enum_1.Tipos.OPERACION_NEGACION_UNARIA) {
         var Aritmetica = __webpack_require__(/*! ./Operators/Aritmetica */ "qbRd");
-        return Aritmetica(_expresion, _contexto);
+        return Aritmetica(_expresion, _ambito, _contexto);
     }
     else if (tipo === Enum_1.Tipos.RELACIONAL_MAYOR || tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL
         || tipo === Enum_1.Tipos.RELACIONAL_MENOR || tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL
         || tipo === Enum_1.Tipos.RELACIONAL_IGUAL || tipo === Enum_1.Tipos.RELACIONAL_DIFERENTE) {
         var Relacional = __webpack_require__(/*! ./Operators/Relacional */ "r8U1");
-        return Relacional(_expresion, _contexto);
+        return Relacional(_expresion, _ambito, _contexto);
     }
     else if (tipo === Enum_1.Tipos.LOGICA_AND || tipo === Enum_1.Tipos.LOGICA_OR) {
         var Logica = __webpack_require__(/*! ./Operators/Logica */ "TxV8");
-        return Logica(_expresion, _contexto);
+        return Logica(_expresion, _ambito, _contexto);
     }
     else {
-        console.log(_expresion, "SSSSSSSS");
-        return { err: "Error: Expresi\u00F3n no procesada.\n", linea: _expresion.linea, columna: _expresion.columna };
+        console.log(_expresion, "Expresión no reconocida.");
+        // const Bloque = require("../Instruccion/Bloque");
+        // return Bloque([_expresion], _ambito, _contexto);
+        return { error: "Error: Expresión no procesada.", tipo: "Semántico", origen: "Query", linea: _expresion.linea, columna: _expresion.columna };
     }
 }
 module.exports = Expresion;
@@ -4044,6 +6398,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var Bloque_1 = __importDefault(__webpack_require__(/*! ../controller/xpath/Instruccion/Bloque */ "8Ym7"));
 var Ambito_1 = __webpack_require__(/*! ../model/xml/Ambito/Ambito */ "QFP7");
 var Global_1 = __webpack_require__(/*! ../model/xml/Ambito/Global */ "IRxg");
+var Element_1 = __webpack_require__(/*! ../model/xml/Element */ "Kypw");
 function compile(req) {
     var errors = [];
     try {
@@ -4059,17 +6414,21 @@ function compile(req) {
                 parser_xPath = __webpack_require__(/*! ../analyzers/xpath_up */ "9ArA");
                 break;
             case 2:
-                parser_xml = __webpack_require__(/*! ../analyzers/xml_down */ "cW0F");
-                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_down */ "jiUV");
+                parser_xml = __webpack_require__(/*! ../analyzers/xml_up */ "nxic");
+                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_up */ "9ArA");
                 break;
         }
         // Análisis de XML
         var xml_ast = parser_xml.parse(xml);
+        var encoding = xml_ast.encoding; // Encoding del documento XML
+        if (encoding.encoding === encoding.codes.INVALID) {
+            errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: "1", columna: "1" });
+        }
         if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
             if (xml_ast.errors.length > 0)
-                errors = xml_ast.errors;
+                errors = errors.concat(xml_ast.errors);
             if (xml_ast.ast === null || xml_ast === true) {
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XPath", linea: 1, columna: 1 });
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: "1", columna: "1" });
                 return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
             }
         }
@@ -4082,20 +6441,26 @@ function compile(req) {
         if (xPath_ast.errors.length > 0 || xPath_ast.ast === null || xPath_ast === true) {
             if (xPath_ast.errors.length > 0)
                 errors = xPath_ast.errors;
-            else
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta.", origen: "XPath", linea: 1, columna: 1 });
-            // output: "La consulta contiene errores para analizar.\nIntente de nuevo."
+            if (xPath_ast.ast === null || xPath_ast === true) {
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta digitada.", origen: "XPath", linea: "1", columna: "1" });
+                return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+            }
         }
+        var root = new Element_1.Element("[object XMLDocument]", [], "", cadena.ambito.tablaSimbolos, "0", "0", "[object XMLDocument]");
+        var output = { cadena: "", elementos: [root], atributos: null };
         var xPath_parse = xPath_ast.ast; // AST que genera Jison
-        var bloque = Bloque_1.default(xPath_parse, cadena.ambito); // Procesa la secuencia de accesos (instrucciones)
-        if (bloque.err) {
-            errors.push({ error: bloque.err, tipo: "Semántico", origen: "XPath", linea: bloque.linea, columna: bloque.columna });
+        var bloque = Bloque_1.default(xPath_parse, cadena.ambito, output); // Procesa la secuencia de accesos (instrucciones)
+        if (bloque.error) {
+            errors.push(bloque);
+            return { arreglo_errores: errors, output: bloque.error };
         }
-        var output = {
+        output = {
             arreglo_simbolos: simbolos,
             arreglo_errores: errors,
-            output: bloque.cadena ? bloque.cadena : bloque.err
+            output: bloque,
+            encoding: encoding
         };
+        errors = [];
         return output;
     }
     catch (error) {
@@ -4104,8 +6469,10 @@ function compile(req) {
         var output = {
             arreglo_simbolos: [],
             arreglo_errores: errors,
-            output: (error.message) ? String(error.message) : String(error)
+            output: (error.message) ? String(error.message) : String(error),
+            encoding: "utf-8"
         };
+        errors = [];
         return output;
     }
 }
@@ -4126,14 +6493,154 @@ module.exports = { compile: compile };
 var Ambito_1 = __webpack_require__(/*! ./Ambito */ "QFP7");
 function exec(_expresiones, _ambito) {
     _expresiones.forEach(function (element) {
-        if (element.childs) {
-            var nuevoAmbito = new Ambito_1.Ambito(_ambito, "hijo");
-            exec(element.childs, nuevoAmbito);
+        if (element) {
+            if (element.childs) {
+                var nuevoAmbito = new Ambito_1.Ambito(_ambito, "hijo");
+                exec(element.childs, nuevoAmbito);
+            }
+            _ambito.addSimbolo(element);
         }
-        _ambito.addSimbolo(element);
     });
 }
 module.exports = { exec: exec };
+
+
+/***/ }),
+
+/***/ "ieEo":
+/*!**********************************!*\
+  !*** ./src/js/routes/reports.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function generateReport(req) {
+    var errors = [];
+    try {
+        // Datos de la petición desde Angular
+        var xml = req.xml;
+        var xPath = req.query;
+        var grammar_selected = req.grammar;
+        var report = req.report;
+        // Gramáticas a usarse según la selección: 1=ascendente, 2=descendente
+        var parser_xml = void 0, parser_xPath = void 0;
+        switch (grammar_selected) {
+            case 1:
+                parser_xml = __webpack_require__(/*! ../analyzers/xml_up */ "nxic");
+                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_up */ "9ArA");
+                break;
+            case 2:
+                parser_xml = __webpack_require__(/*! ../analyzers/xml_down */ "cW0F");
+                parser_xPath = __webpack_require__(/*! ../analyzers/xpath_down */ "jiUV");
+                break;
+        }
+        switch (report) {
+            case "XML-CST":
+                return CST_xml(parser_xml, xml);
+            case "XML-GRAMMAR":
+                return GrammarReport_xml(parser_xml, xml);
+            case "XPATH-AST":
+                return AST_xml(parser_xml, xml); // Se dejó el del xml
+            default:
+                return { output: "Algo salió mal." };
+        }
+    }
+    catch (error) {
+        console.log(error);
+        errors.push({ tipo: "Desconocido", error: "Error en tiempo de ejecución.", origen: "", linea: "", columna: "" });
+        var output = {
+            arreglo_errores: errors,
+            output: (error.message) ? String(error.message) : String(error),
+            cst: ""
+        };
+        errors = [];
+        return output;
+    }
+}
+function CST_xml(parser_xml, xml) {
+    var errors = [];
+    // Análisis de XML
+    var xml_ast = parser_xml.parse(xml);
+    var _cst = xml_ast.cst;
+    if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
+        if (xml_ast.errors.length > 0)
+            errors = xml_ast.errors;
+        if (xml_ast.ast === null || xml_ast === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var output = {
+        arreglo_errores: errors,
+        output: "CST generado.",
+        cst: _cst
+    };
+    return output;
+}
+function GrammarReport_xml(parser_xml, xml) {
+    var errors = [];
+    // Análisis de XML
+    var xml_ast = parser_xml.parse(xml);
+    var _grammar = xml_ast.grammar_report;
+    if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
+        if (xml_ast.errors.length > 0)
+            errors = xml_ast.errors;
+        if (xml_ast.ast === null || xml_ast === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var output = {
+        arreglo_errores: errors,
+        output: "Reporte gramatical generado.",
+        grammar_report: _grammar
+    };
+    return output;
+}
+function AST_xml(parser_xml, xml) {
+    var errors = [];
+    // Análisis de XML
+    var xpath_xml = parser_xml.parse(xml);
+    var _ast = xpath_xml.ast;
+    if (xpath_xml.errors.length > 0 || xpath_xml.ast === null || xpath_xml === true) {
+        if (xpath_xml.errors.length > 0)
+            errors = xpath_xml.errors;
+        if (xpath_xml.ast === null || xpath_xml === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var str = _ast[0].getASTXMLTree();
+    var output = {
+        arreglo_errores: errors,
+        output: "AST generado.",
+        ast: str
+    };
+    return output;
+}
+function AST_xpath(parser_xpath, xpath) {
+    var errors = [];
+    // Análisis de XPath
+    var xpath_ast = parser_xpath.parse(xpath);
+    var _ast = xpath_ast.arbolAST;
+    if (xpath_ast.errors.length > 0 || xpath_ast.ast === null || xpath_ast === true) {
+        if (xpath_ast.errors.length > 0)
+            errors = xpath_ast.errors;
+        if (xpath_ast.ast === null || xpath_ast === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta.", origen: "XPath", linea: 1, columna: 1 });
+            return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var output = {
+        arreglo_errores: errors,
+        output: "AST generado.",
+        ast: _ast
+    };
+    return output;
+}
+module.exports = { generateReport: generateReport };
 
 
 /***/ }),
@@ -4145,7 +6652,7 @@ module.exports = { exec: exec };
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {/* parser generated by jison 0.4.18 */
+/* WEBPACK VAR INJECTION */(function(module) {/* parser generated by jison 0.4.17 */
 /*
   Returns a Parser object of the following structure:
 
@@ -4219,31 +6726,339 @@ module.exports = { exec: exec };
   }
 */
 var xpath_down = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,10],$V3=[1,11],$V4=[1,12],$V5=[1,13],$V6=[1,14],$V7=[1,15],$V8=[1,16],$V9=[1,17],$Va=[1,18],$Vb=[1,19],$Vc=[1,20],$Vd=[1,21],$Ve=[1,22],$Vf=[1,23],$Vg=[1,24],$Vh=[1,25],$Vi=[1,26],$Vj=[5,6,9,10,12,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,60,61,62],$Vk=[2,18],$Vl=[1,29],$Vm=[1,30],$Vn=[1,31],$Vo=[1,32],$Vp=[1,34],$Vq=[5,6,9,10,12,13,15,16,17,19,21,25,26,27,28,29,30,33,34,35,36,37,38,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,60,61,62],$Vr=[2,12],$Vs=[1,44],$Vt=[1,45],$Vu=[1,46],$Vv=[1,48],$Vw=[2,22],$Vx=[1,50],$Vy=[1,51],$Vz=[9,10,12,13,21,25,26,27,28,29,30,33,34,35,36,37,38],$VA=[2,51],$VB=[1,59],$VC=[1,57],$VD=[1,58],$VE=[1,84],$VF=[1,85],$VG=[1,83],$VH=[2,36],$VI=[1,77],$VJ=[1,78],$VK=[1,79],$VL=[1,80],$VM=[1,81],$VN=[1,82],$VO=[9,10,12,21,25,26,27,28,29,30],$VP=[2,45],$VQ=[1,89],$VR=[1,87],$VS=[1,88],$VT=[1,90],$VU=[1,91],$VV=[1,92],$VW=[1,93],$VX=[5,6,9,10,12,13,21,25,26,27,28,29,30,33,34,35,36,37,38,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,60,61,62],$VY=[2,25],$VZ=[1,105];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[2,5],$Vs=[1,39],$Vt=[1,40],$Vu=[5,8,9],$Vv=[2,8],$Vw=[5,8,9,12,13,19,22,23,24,25,26,27,28,29,30,32,33,34,35,36,39,40,41,42,43,44,45,46,47,48,49,52,53,54,55,56,57,58,59,60,61,62,63,64],$Vx=[2,17],$Vy=[1,47],$Vz=[5,8,9,12,13,17,19,22,23,24,25,26,27,28,29,30,32,33,34,35,36,39,40,41,42,43,44,45,46,47,48,49,52,53,54,55,56,57,58,59,60,61,62,63,64],$VA=[1,60],$VB=[1,61],$VC=[1,71],$VD=[1,72],$VE=[1,73],$VF=[1,74],$VG=[1,75],$VH=[1,76],$VI=[1,77],$VJ=[1,78],$VK=[1,79],$VL=[1,80],$VM=[1,81],$VN=[1,82],$VO=[1,83],$VP=[19,22,23,24,25,26,27,28,29,30,32,33,34,35,36],$VQ=[2,15],$VR=[1,87],$VS=[19,22,23,24,25,32,33,34,35,36],$VT=[19,22,23,24,25,26,27,32,33,34,35,36];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"CONTI":4,"EOF":5,"tk_punto":6,"AXES":7,"CONTIp":8,"tk_bar":9,"tk_2bar":10,"PAL":11,"tk_4puntos":12,"tk_por":13,"SUBAX":14,"tk_arroba":15,"tk_line":16,"tk_2puntos":17,"CORCHET":18,"tk_corA":19,"E":20,"tk_corC":21,"CORCHETp":22,"T":23,"Ep":24,"tk_menorigual":25,"tk_menor":26,"tk_mayor":27,"tk_mayorigual":28,"tk_or":29,"tk_and":30,"F":31,"Tp":32,"tk_mas":33,"tk_menos":34,"tk_div":35,"tk_mod":36,"tk_diferent":37,"tk_equal":38,"O":39,"num":40,"Q":41,"tk_id":42,"tk_ancestor":43,"tk_ancestor2":44,"tk_attribute_d":45,"tk_attribute_s":46,"tk_child":47,"tk_descendant":48,"tk_descendant2":49,"tk_following":50,"tk_following2":51,"tk_namespace":52,"tk_parent":53,"tk_preceding":54,"tk_preceding2":55,"tk_self":56,"tk_node":57,"tk_ParA":58,"tk_ParC":59,"tk_last":60,"tk_text":61,"tk_position":62,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"tk_punto",9:"tk_bar",10:"tk_2bar",12:"tk_4puntos",13:"tk_por",15:"tk_arroba",16:"tk_line",17:"tk_2puntos",19:"tk_corA",21:"tk_corC",25:"tk_menorigual",26:"tk_menor",27:"tk_mayor",28:"tk_mayorigual",29:"tk_or",30:"tk_and",33:"tk_mas",34:"tk_menos",35:"tk_div",36:"tk_mod",37:"tk_diferent",38:"tk_equal",40:"num",42:"tk_id",43:"tk_ancestor",44:"tk_ancestor2",45:"tk_attribute_d",46:"tk_attribute_s",47:"tk_child",48:"tk_descendant",49:"tk_descendant2",50:"tk_following",51:"tk_following2",52:"tk_namespace",53:"tk_parent",54:"tk_preceding",55:"tk_preceding2",56:"tk_self",57:"tk_node",58:"tk_ParA",59:"tk_ParC",60:"tk_last",61:"tk_text",62:"tk_position"},
-productions_: [0,[3,2],[4,3],[4,3],[4,3],[4,3],[4,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,0],[7,2],[7,2],[7,1],[7,1],[7,1],[7,0],[14,1],[14,1],[14,1],[14,0],[18,4],[22,4],[22,0],[20,2],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,3],[24,0],[23,2],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,0],[31,2],[31,1],[31,1],[31,2],[31,1],[31,0],[39,1],[39,1],[41,1],[41,0],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,1],[11,3],[11,3],[11,3],[11,3]],
+symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"XPATH":6,"XPATH_Up":7,"tk_line":8,"tk_2line":9,"QUERY":10,"XPATHp":11,"tk_2bar":12,"tk_bar":13,"EXP_PR":14,"AXIS":15,"CORCHET":16,"tk_corA":17,"E":18,"tk_corC":19,"CORCHETpp":20,"CORCHETP":21,"tk_menorigual":22,"tk_menor":23,"tk_mayorigual":24,"tk_mayor":25,"tk_mas":26,"tk_menos":27,"tk_asterisco":28,"tk_div":29,"tk_mod":30,"tk_ParA":31,"tk_ParC":32,"tk_or":33,"tk_and":34,"tk_equal":35,"tk_diferent":36,"FUNC":37,"PRIMITIVO":38,"tk_id":39,"tk_attribute_d":40,"tk_attribute_s":41,"num":42,"tk_punto":43,"tk_2puntos":44,"tk_arroba":45,"tk_text":46,"tk_last":47,"tk_position":48,"tk_node":49,"AXISNAME":50,"tk_4puntos":51,"tk_ancestor":52,"tk_ancestor2":53,"tk_attribute":54,"tk_child":55,"tk_descendant":56,"tk_descendant2":57,"tk_following":58,"tk_following2":59,"tk_namespace":60,"tk_parent":61,"tk_preceding":62,"tk_preceding2":63,"tk_self":64,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"tk_line",9:"tk_2line",12:"tk_2bar",13:"tk_bar",17:"tk_corA",19:"tk_corC",22:"tk_menorigual",23:"tk_menor",24:"tk_mayorigual",25:"tk_mayor",26:"tk_mas",27:"tk_menos",28:"tk_asterisco",29:"tk_div",30:"tk_mod",31:"tk_ParA",32:"tk_ParC",33:"tk_or",34:"tk_and",35:"tk_equal",36:"tk_diferent",39:"tk_id",40:"tk_attribute_d",41:"tk_attribute_s",42:"num",43:"tk_punto",44:"tk_2puntos",45:"tk_arroba",46:"tk_text",47:"tk_last",48:"tk_position",49:"tk_node",51:"tk_4puntos",52:"tk_ancestor",53:"tk_ancestor2",54:"tk_attribute",55:"tk_child",56:"tk_descendant",57:"tk_descendant2",58:"tk_following",59:"tk_following2",60:"tk_namespace",61:"tk_parent",62:"tk_preceding",63:"tk_preceding2",64:"tk_self"},
+productions_: [0,[3,2],[4,2],[7,3],[7,3],[7,0],[6,2],[11,2],[11,0],[10,2],[10,2],[10,1],[10,1],[16,4],[20,4],[20,0],[21,1],[21,0],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,2],[18,3],[18,3],[18,3],[18,3],[18,3],[18,1],[14,2],[14,2],[38,1],[38,1],[38,1],[38,1],[38,1],[38,1],[38,1],[38,2],[38,2],[37,3],[37,3],[37,3],[37,3],[15,3],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
-console.log("fin del archivo descendente");
+
+	prod_1 = grammar_stack.pop();
+	prod_2 = grammar_stack.pop();
+	grammar_stack.push({'ini -: XPATH_U EOF ':[prod_2, prod_1]});
+	printstrack(grammar_stack, 0);
+	console.log('gramatica descendente');
+	
+break;
+case 2:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATH_U -: XPATH XPATH_Up ':[prod_2, prod_1]});
+
+break;
+case 3:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATH_Up -: tk_line XPATH XPATH_Up ':['token: tk_line\t Lexema: ' + $$[$0-2], prod_2, prod_1]});
+break;
+case 4:
+
+            prod_1 = grammar_stack.pop();
+            prod_2 = grammar_stack.pop();
+            grammar_stack.push({'XPATH_Up -: tk_2line XPATH XPATH_Up ':['token: tk_2line\t Lexema: ' + $$[$0-2], prod_2, prod_1]});
+break;
+case 5:
+ grammar_stack.push({'XPATH_Up -: Empty': ['EMPTY']}); 
+break;
+case 6:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATH -: QUERY XPATHp ':[prod_2, prod_1]});
+
+break;
+case 7:
+
+		prod_1 = grammar_stack.pop();
+		prod_2 = grammar_stack.pop();
+		grammar_stack.push({'XPATHp -: QUERY XPATHp ':[prod_2, prod_1]});
+
+break;
+case 8:
+ grammar_stack.push({'XPATHp -: Empty': ['EMPTY']}); 
+break;
+case 9:
+ //this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					   prod_1 = grammar_stack.pop();
+			 		   grammar_stack.push({'QUERY -: tk_2bar QUERY': ['token: tk_2bar\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 10:
+ //this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+			 		 grammar_stack.push({'QUERY -: tk_bar QUERY': ['token: tk_bar\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 11:
+ //this.$=$$[$0];
+			   prod_1 = grammar_stack.pop();
+			   grammar_stack.push({'QUERY -: EXP_PR': [prod_1]}); 
+break;
+case 12:
+ //this.$=$$[$0];
+			 prod_1 = grammar_stack.pop();
+			 grammar_stack.push({'QUERY -: AXIS': [prod_1]}); 
+break;
+case 13:
+
+			prod_1 = grammar_stack.pop();
+			prod_2 = grammar_stack.pop();
+			grammar_stack.push({'CORCHET -: tk_corA E tk_corC CORCHETpp': ['token: tk_menorigual\t Lexema: ' + $$[$0-3], prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]});	
+
+break;
+case 14:
+
+										prod_1 = grammar_stack.pop();
+										prod_2 = grammar_stack.pop();
+										grammar_stack.push({'CORCHETpp -: tk_corA E tk_corC CORCHETpp ':['token: tk_menorigual\t Lexema: ' + $$[$0-3], prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]});	
+
+break;
+case 15:
+ grammar_stack.push({'CORCHETpp -: Empty': ['EMPTY']}); 
+break;
+case 16:
+ prod_1 = grammar_stack.pop();
+					grammar_stack.push({'CORCHETP -: CORCHET': [prod_1]}) 
+break;
+case 17:
+ grammar_stack.push({'CORCHETP -: Empty': ['EMPTY']}); 
+break;
+case 18:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+				 		prod_2 = grammar_stack.pop();
+					    grammar_stack.push({'E -: E tk_menorigual E': [prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 19:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -: E tk_menor E': [prod_2, 'token: tk_menor\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 20:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1);
+						  prod_1 = grammar_stack.pop();
+				 		  prod_2 = grammar_stack.pop();
+						  grammar_stack.push({'E -: E tk_mayorigual E': [prod_2, 'token: tk_mayorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 21:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -: E tk_mayor E': [prod_2, 'token: tk_mayor\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 22:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_mas E': [prod_2, 'token: tk_mas\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 23:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				  	 grammar_stack.push({'E -: E tk_menos E': [prod_2, 'token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 24:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1);
+						 prod_1 = grammar_stack.pop();
+				 		 prod_2 = grammar_stack.pop();
+				  		 grammar_stack.push({'E -: E tk_asterisco E': [prod_2, 'token: tk_asterisco\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 25:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_div E': [prod_2, 'token: tk_div\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 26:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_mod E': [prod_2, 'token: tk_mod\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 27:
+ //this.$=builder.newOperation($$[$0], null, Tipos.OPERACION_NEGACION_UNARIA, this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+						  		grammar_stack.push({'E -: tk_menos E': ['token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]});
+break;
+case 28:
+ //this.$=$$[$0-1];
+						  prod_1 = grammar_stack.pop();
+						  grammar_stack.push({'E -: tk_ParA E tk_ParC': ['token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 29:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1);
+				  prod_1 = grammar_stack.pop();
+				  prod_2 = grammar_stack.pop();
+				  grammar_stack.push({'E -: E tk_or E': [prod_2, 'token: tk_or\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 30:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -: E tk_and E': [prod_2, 'token: tk_and\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 31:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+					 prod_1 = grammar_stack.pop();
+					 prod_2 = grammar_stack.pop();
+					 grammar_stack.push({'E -: E tk_equal E': [prod_2, 'token: tk_equal\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 32:
+ //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'E -: E tk_diferent E': [prod_2, 'token: tk_diferent\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 33:
+ //this.$=$$[$0];
+			  prod_1 = grammar_stack.pop();
+			  grammar_stack.push({'E -: QUERY': [prod_1]}); 
+break;
+case 34:
+ //this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'EXP_PR -: FUNC CORCHETP': [prod_2, prod_1]}); 
+break;
+case 35:
+ //this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'EXP_PR -: PRIMITIVO CORCHETP': [prod_2, prod_1]}); 
+break;
+case 36:
+ //this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -: tk_id':['token: tk_text\t Lexema: ' + $$[$0]]}); 
+break;
+case 37:
+ //this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1);
+						   grammar_stack.push({'PRIMITIVO -: tk_attribute_d':['token: tk_attribute_d\t Lexema: ' + $$[$0]]}); 
+break;
+case 38:
+ //this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+						   grammar_stack.push({'PRIMITIVO -: tk_attribute_s':['token: tk_attribute_s\t Lexema: ' + $$[$0]]}); 
+break;
+case 39:
+ //this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
+				grammar_stack.push({'PRIMITIVO -: num':['token: num\t Lexema: ' + $$[$0]]}); 
+break;
+case 40:
+ //this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -: tk_asterisco':['token: tk_asterisco\t Lexema: ' + $$[$0]]}); 
+break;
+case 41:
+ //this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+					 grammar_stack.push({'PRIMITIVO -: tk_punto':['token: tk_punto\t Lexema: ' + $$[$0]]}); 
+break;
+case 42:
+ //this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1);
+					   grammar_stack.push({'PRIMITIVO -: tk_2puntos':['token: tk_2puntos\t Lexema: ' + $$[$0]]}); 
+break;
+case 43:
+ //this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1);
+							grammar_stack.push({'PRIMITIVO -: tk_arroba tk_id':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_id\t Lexema: ' + $$[$0]]}); 
+break;
+case 44:
+ //this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+							 grammar_stack.push({'PRIMITIVO -: tk_arroba tk_asterisco':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_asterisco\t Lexema: ' + $$[$0]]});
+break;
+case 45:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -: tk_text tk_ParA tk_ParC':['token: tk_text\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 46:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -: tk_last tk_ParA tk_ParC':['token: tk_last\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 47:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+									grammar_stack.push({'FUNC -: tk_position tk_ParA tk_ParC':['token: tk_position\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
+break;
+case 48:
+ //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+								grammar_stack.push({'FUNC -: tk_node tk_ParA tk_ParC':['token: tk_node\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
+break;
+case 49:
+ //this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'AXIS -: AXISNAME tk_4puntos QUERY':[prod_2, 'token: tk_4puntos\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 50:
+ //this.$ = Tipos.AXIS_ANCESTOR;
+						grammar_stack.push({'AXISNAME -: tk_ancestor':['token: tk_ancestor\t Lexema: ' + $$[$0]]}); 
+break;
+case 51:
+ //this.$ = Tipos.AXIS_ANCESTOR_OR_SELF;
+						grammar_stack.push({'AXISNAME -: tk_ancestor2':['token: tk_ancestor2\t Lexema: ' + $$[$0]]}); 
+break;
+case 52:
+ //this.$ = Tipos.AXIS_ATTRIBUTE;
+						grammar_stack.push({'AXISNAME -: tk_attribute':['token: tk_attribute\t Lexema: ' + $$[$0]]}); 
+break;
+case 53:
+ //this.$ = Tipos.AXIS_CHILD;
+						grammar_stack.push({'AXISNAME -: tk_child':['token: tk_child\t Lexema: ' + $$[$0]]}); 
+break;
+case 54:
+ //this.$ = Tipos.AXIS_DESCENDANT;
+						grammar_stack.push({'AXISNAME -: tk_descendant':['token: tk_descendant\t Lexema: ' + $$[$0]]}); 
+break;
+case 55:
+ //this.$ = Tipos.AXIS_DESCENDANT_OR_SELF;
+						grammar_stack.push({'AXISNAME -: tk_descendant2':['token: tk_descendant2\t Lexema: ' + $$[$0]]}); 
+break;
+case 56:
+ //this.$ = Tipos.AXIS_FOLLOWING;
+						grammar_stack.push({'AXISNAME -: tk_following':['token: tk_following\t Lexema: ' + $$[$0]]}); 
+break;
+case 57:
+ //this.$ = Tipos.AXIS_FOLLOWING_SIBLING;
+						grammar_stack.push({'AXISNAME -: tk_following2':['token: tk_follownig2\t Lexema: ' + $$[$0]]}); 
+break;
+case 58:
+ //this.$ = Tipos.AXIS_NAMESPACE;
+						grammar_stack.push({'AXISNAME -: tk_namespace':['token: tk_namespace\t Lexema: ' + $$[$0]]}); 
+break;
+case 59:
+ //this.$ = Tipos.AXIS_PARENT;
+						grammar_stack.push({'AXISNAME -: tk_parent':['token: tk_parent\t Lexema: ' + $$[$0]]}); 
+break;
+case 60:
+ //this.$ = Tipos.AXIS_PRECEDING;
+						grammar_stack.push({'AXISNAME -: tk_preceding':['token: tk_preceding\t Lexema: ' + $$[$0]]}); 
+break;
+case 61:
+ //this.$ = Tipos.AXIS_PRECEDING_SIBLING;
+						grammar_stack.push({'AXISNAME -: tk_preceding2':['token: tk_preceding2\t Lexema: ' + $$[$0]]}); 
+break;
+case 62:
+ //this.$ = Tipos.AXIS_SELF;
+						grammar_stack.push({'AXISNAME -: tk_self':['token: tk_self\t Lexema: ' + $$[$0]]}); 
 break;
 }
 },
-table: [{3:1,4:2,6:[1,3],9:[1,4],10:[1,5],11:6,12:[1,7],42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{1:[3]},{5:[1,27]},o($Vj,$Vk,{7:28,18:33,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:35,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:36,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:37,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:38,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vq,[2,56]),o($Vq,[2,57]),o($Vq,[2,58]),o($Vq,[2,59]),o($Vq,[2,60]),o($Vq,[2,61]),o($Vq,[2,62]),o($Vq,[2,63]),o($Vq,[2,64]),o($Vq,[2,65]),o($Vq,[2,66]),o($Vq,[2,67]),o($Vq,[2,68]),o($Vq,[2,69]),o($Vq,[2,70]),{58:[1,39]},{58:[1,40]},{58:[1,41]},{58:[1,42]},{1:[2,1]},{5:$Vr,6:$Vs,8:43,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},o($Vj,$Vw,{14:49,18:52,13:$Vx,15:$Vy,19:$Vp}),o($Vj,$Vw,{18:52,14:53,13:$Vx,15:$Vy,19:$Vp}),o($Vj,[2,15]),o($Vj,[2,16]),o($Vj,[2,17]),o($Vz,$VA,{20:54,23:55,31:56,11:60,18:61,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),{5:$Vr,6:$Vs,8:62,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:63,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:64,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:65,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{59:[1,66]},{59:[1,67]},{59:[1,68]},{59:[1,69]},{5:[2,2]},o($Vj,$Vk,{18:33,7:70,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:71,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:72,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:73,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,$Vk,{18:33,7:74,13:$Vl,15:$Vm,16:$Vn,17:$Vo,19:$Vp}),o($Vj,[2,13]),o($Vj,[2,19]),o($Vj,[2,20]),o($Vj,[2,21]),o($Vj,[2,14]),{21:[1,75]},{9:$VE,10:$VF,12:$VG,21:$VH,24:76,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},o($VO,$VP,{32:86,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),{13:[1,96],39:94,42:[1,95]},o($Vz,[2,47]),o($Vz,[2,48]),o($Vz,[2,55],{41:97,18:98,19:$Vp}),o($Vz,[2,50]),{5:[2,3]},{5:[2,4]},{5:[2,5]},{5:[2,6]},o($Vq,[2,71]),o($Vq,[2,72]),o($Vq,[2,73]),o($Vq,[2,74]),{5:$Vr,6:$Vs,8:99,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:100,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:101,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:102,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},{5:$Vr,6:$Vs,8:103,9:$Vt,10:$Vu,11:47,12:$Vv,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi},o($VX,$VY,{22:104,19:$VZ}),{21:[2,26]},o($Vz,$VA,{31:56,11:60,18:61,23:106,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:107,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:108,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:109,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:110,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:111,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:112,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:113,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{31:56,11:60,18:61,23:114,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($VO,[2,37]),o($Vz,$VA,{11:60,18:61,31:115,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:116,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:117,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:118,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:119,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:120,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,$VA,{11:60,18:61,31:121,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),o($Vz,[2,46]),o($Vz,[2,52]),o($Vz,[2,53]),o($Vz,[2,49]),o($Vz,[2,54]),{5:[2,7]},{5:[2,8]},{5:[2,9]},{5:[2,10]},{5:[2,11]},o($VX,[2,23]),o($Vz,$VA,{23:55,31:56,11:60,18:61,20:122,6:$VB,15:$VC,19:$Vp,40:$VD,42:$V0,43:$V1,44:$V2,45:$V3,46:$V4,47:$V5,48:$V6,49:$V7,50:$V8,51:$V9,52:$Va,53:$Vb,54:$Vc,55:$Vd,56:$Ve,57:$Vf,60:$Vg,61:$Vh,62:$Vi}),{9:$VE,10:$VF,12:$VG,21:$VH,24:123,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:124,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:125,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:126,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:127,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:128,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:129,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:130,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},{9:$VE,10:$VF,12:$VG,21:$VH,24:131,25:$VI,26:$VJ,27:$VK,28:$VL,29:$VM,30:$VN},o($VO,$VP,{32:132,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:133,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:134,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:135,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:136,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:137,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),o($VO,$VP,{32:138,13:$VQ,33:$VR,34:$VS,35:$VT,36:$VU,37:$VV,38:$VW}),{21:[1,139]},{21:[2,27]},{21:[2,28]},{21:[2,29]},{21:[2,30]},{21:[2,31]},{21:[2,32]},{21:[2,33]},{21:[2,34]},{21:[2,35]},o($VO,[2,38]),o($VO,[2,39]),o($VO,[2,40]),o($VO,[2,41]),o($VO,[2,42]),o($VO,[2,43]),o($VO,[2,44]),o($VX,$VY,{22:140,19:$VZ}),o($VX,[2,24])],
-defaultActions: {27:[2,1],43:[2,2],62:[2,3],63:[2,4],64:[2,5],65:[2,6],76:[2,26],99:[2,7],100:[2,8],101:[2,9],102:[2,10],103:[2,11],123:[2,27],124:[2,28],125:[2,29],126:[2,30],127:[2,31],128:[2,32],129:[2,33],130:[2,34],131:[2,35]},
+table: [{3:1,4:2,6:3,10:4,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{1:[3]},{5:[1,37]},{5:$Vr,7:38,8:$Vs,9:$Vt},o($Vu,$Vv,{14:7,15:8,37:9,38:10,50:11,11:41,10:42,12:$V0,13:$V1,28:$V2,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq}),{10:43,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:44,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($Vw,[2,11]),o($Vw,[2,12]),o($Vw,$Vx,{21:45,16:46,17:$Vy}),o($Vw,$Vx,{16:46,21:48,17:$Vy}),{51:[1,49]},{31:[1,50]},{31:[1,51]},{31:[1,52]},{31:[1,53]},o($Vz,[2,36]),o($Vz,[2,37]),o($Vz,[2,38]),o($Vz,[2,39]),o($Vz,[2,40]),o($Vz,[2,41]),o($Vz,[2,42]),{28:[1,55],39:[1,54]},{51:[2,50]},{51:[2,51]},{51:[2,52]},{51:[2,53]},{51:[2,54]},{51:[2,55]},{51:[2,56]},{51:[2,57]},{51:[2,58]},{51:[2,59]},{51:[2,60]},{51:[2,61]},{51:[2,62]},{1:[2,1]},{5:[2,2]},{6:56,10:4,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{6:57,10:4,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($Vu,[2,6]),o($Vu,$Vv,{14:7,15:8,37:9,38:10,50:11,10:42,11:58,12:$V0,13:$V1,28:$V2,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq}),o($Vw,[2,9]),o($Vw,[2,10]),o($Vw,[2,34]),o($Vw,[2,16]),{10:62,12:$V0,13:$V1,14:7,15:8,18:59,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($Vw,[2,35]),{10:63,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{32:[1,64]},{32:[1,65]},{32:[1,66]},{32:[1,67]},o($Vz,[2,43]),o($Vz,[2,44]),{5:$Vr,7:68,8:$Vs,9:$Vt},{5:$Vr,7:69,8:$Vs,9:$Vt},o($Vu,[2,7]),{19:[1,70],22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,33:$VL,34:$VM,35:$VN,36:$VO},{10:62,12:$V0,13:$V1,14:7,15:8,18:84,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:85,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($VP,[2,33]),o($Vw,[2,49]),o($Vz,[2,45]),o($Vz,[2,46]),o($Vz,[2,47]),o($Vz,[2,48]),{5:[2,3]},{5:[2,4]},o($Vw,$VQ,{20:86,17:$VR}),{10:62,12:$V0,13:$V1,14:7,15:8,18:88,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:89,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:90,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:91,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:92,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:93,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:94,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:95,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:96,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:97,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:98,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:99,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:100,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($VP,[2,27]),{22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,32:[1,101],33:$VL,34:$VM,35:$VN,36:$VO},o($Vw,[2,13]),{10:62,12:$V0,13:$V1,14:7,15:8,18:102,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($VS,[2,18],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,19],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,20],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,21],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VT,[2,22],{28:$VI,29:$VJ,30:$VK}),o($VT,[2,23],{28:$VI,29:$VJ,30:$VK}),o($VP,[2,24]),o($VP,[2,25]),o($VP,[2,26]),o([19,32,33],[2,29],{22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,34:$VM,35:$VN,36:$VO}),o([19,32,33,34],[2,30],{22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,35:$VN,36:$VO}),o($VS,[2,31],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,32],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VP,[2,28]),{19:[1,103],22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,33:$VL,34:$VM,35:$VN,36:$VO},o($Vw,$VQ,{20:104,17:$VR}),o($Vw,[2,14])],
+defaultActions: {24:[2,50],25:[2,51],26:[2,52],27:[2,53],28:[2,54],29:[2,55],30:[2,56],31:[2,57],32:[2,58],33:[2,59],34:[2,60],35:[2,61],36:[2,62],37:[2,1],38:[2,2],68:[2,3],69:[2,4]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
     } else {
-        var error = new Error(str);
-        error.hash = hash;
-        throw error;
+        function _parseError (msg, hash) {
+            this.message = msg;
+            this.hash = hash;
+        }
+        _parseError.prototype = Error;
+
+        throw new _parseError(str, hash);
     }
 },
 parse: function parse(input) {
@@ -4386,6 +7201,536 @@ parse: function parse(input) {
 
 	var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
+	let grammar_stack = [];
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Title</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+        str = str + buildGrammarReport(obj);
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+
+                    <div id="div-table">
+                    <table style="width:100%">
+
+                    <tr><th>produccion</th><th>Cuerpo</th><th>Accion</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>ini</th><th>XPATH_U EOF</th><th>SS= S1</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATH_U</th><th>XPATH XPATH_Up</th><th>S1.push(S3); SS = S1;</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATH_Up</th><th>QUERY XPATHp</th><th>S1.push(S2); SS = S1;</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATH</th><th>QUERY XPATHp</th><th></th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATHp</th><th>QUERY XPATHp</th><th>S1.push(S2); SS = S1;</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>QUERY</th><th>tk_2bar QUERY</th><th>SS=builder.newDoubleAxis(Param);</th></tr>
+                    <tr><th></th><th>tk_bar QUERY</th><th>SS=builder.newAxis(Param);</th></tr>
+                    <tr><th></th><th>EXP_PR</th><th>SS=S1</th></tr>
+                    <tr><th></th><th>AXIS</th><th>SS=S1</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>CORCHET</th><th>tk_corA E tk_corC CORCHETpp</th><th>SS=builder.newPredicate(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>CORCHETpp</th><th>tk_corA E tk_corC CORCHETpp</th><th>S1.push(builder.NewPredicate(Param))</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>CORCHETP</th><th>CORCHET</th><th>SS=S1</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>E</th><th>E tk_menorigual E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_menor E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mayorigual E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mayor E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mas E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_menos E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_asterisco E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_div E </th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mod E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>tk_ParA E tk_ParC</th><th>SS=S2</th></tr>
+                    <tr><th></th><th>E tk_or E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_and E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_equal E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_diferent E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>QUERY</th><th>SS = [S1]</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>EXP_PR</th><th>FUNC CORCHETP</th><th>SS=builder.newExpression(Param)</th></tr>
+                    <tr><th></th><th>PRIMITIVO CORCHETP</th><th>SS=builder.newExpression(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>PRIMITIVO</th><th>tk_id</th><th>SS=builder.newNodename(Param)</th></tr>
+                    <tr><th></th><th>tk_attribute_d</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_attribute_s</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>num</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_asterisco</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_punto</th><th>SS=builder.newCurrent(Param)</th></tr>
+                    <tr><th></th><th>tk_2puntos</th><th>SS=builder.newParent(Param)</th></tr>
+                    <tr><th></th><th>tk_arroba tk_id</th><th>SS=builder.newAttribute(Param)</th></tr>
+                    <tr><th></th><th>tk_arroba tk_asterisco</th><th>SS=builder.newAttribute(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>FUNC</th><th>tk_text tk_ParA tk_tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_last tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_position tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_node tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>AXIS</th><th>AXISNAME tk_4puntos QUERY</th><th>SS=builder.newAxisObject(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>AXISNAME</th><th>tk_ancestor</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_ancestor2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_attribute</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_child</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_descendant</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_descendant2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_following</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_following2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_namespace</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_parent</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_preceding</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_preceding2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_self</th><th>SS = Tipos.'AxisTipo'</th></tr>
+
+                        </table>
+                    </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                        function fun1() {
+                                            if ($("#tree-root").length > 0) {
+
+                                                $("#tree-root").find("li").each
+                                                (
+                                                    function () {
+                                                        var $span = $("<span></span>");
+                                                        //$(this).toggleClass("expanded");
+                                                        if ($(this).find("ul:first").length > 0) {
+                                                            $span.removeAttr("class");
+                                                            $span.attr("class", "expanded");
+                                                            $(this).find("ul:first").css("display", "block");
+                                                            $(this).append($span);
+                                                        }
+
+                                                    }
+                                                )
+                                            }
+
+                                        }
+
+
+
+
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+    // .replace("₤","$")
+    function buildGrammarReport(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                str = str + `<li class= "string">
+                ${value}
+                </li>
+                `;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildGrammarReport(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+
+                str = `<li class="grammar-tree"><span class="caret">
+                ${key}
+                </span>
+                <ul class="nested">
+                `;
+                str = str + buildGrammarReport(obj[key]);
+                str = str + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+//just for testing purposes
+	function printstrack(obj, lines){
+	return;
+
+        if(Array.isArray(obj)){ //IS ARRAY
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            obj.forEach((value)=>{
+                if(typeof value === 'string' ){
+                     str = ""
+                     for(let i = 0; i < lines; i++){str = str + "- ";}
+                     console.log(str + value);
+                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
+                    str = ""
+                    for(let i = 0; i < lines; i++){ str = str + "- ";}
+                    for(let key in value){
+                       console.log(`${str}${key}`);
+                       printstrack(value[key], lines + 1);
+                    }
+                }
+
+                //printstrack(value, lines +1);
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            str = ""
+            for(let i = 0; i < lines; i++){str = str + "- ";}
+            console.log(str + obj);
+        }else{// IS OBJECT
+            str = ""
+            for(let i = 0; i < lines; i++){ str = str + "- ";}
+            for(let key in obj){
+                console.log(`${str}Key: ${key}`);
+                //console.log(obj[key]);
+                printstrack(obj[key], lines + 1);
+            }
+        }
+	}
+
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>Title</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+            </style>
+        </head>
+        <body>
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -4716,146 +8061,148 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1:// MultiLineComment
+case 1:// XPATHComment
 break;
-case 2:// Declaration XML
+case 2:// MultiLineComment
 break;
-case 3:return 40
+case 3:// Declaration XML
 break;
-case 4:return 26
+case 4:return 29
 break;
-case 5:return 27
+case 5:return 42
 break;
-case 6:return 10
+case 6:return 22
 break;
-case 7:return 9
+case 7:return 24
 break;
-case 8:return 38
+case 8:return 23
 break;
-case 9:return 17
+case 9:return 25
 break;
-case 10:return 6
+case 10:return 12
 break;
-case 11:return 12
+case 11:return 13
 break;
-case 12:return 15
+case 12:return 35
 break;
-case 13:return 19
+case 13:return 44
 break;
-case 14:return 21
+case 14:return 43
 break;
-case 15:return 58
+case 15:return 51
 break;
-case 16:return 59
+case 16:return 45
 break;
-case 17:return 13
+case 17:return 17
 break;
-case 18:return 43
+case 18:return 19
 break;
-case 19:return 44
+case 19:return 31
 break;
-case 20:return 'tk_attribute'
+case 20:return 32
 break;
-case 21:return 47
+case 21:return 28
 break;
-case 22:return 48
+case 22:return 53
 break;
-case 23:return 49
+case 23:return 52
 break;
-case 24:return 50
+case 24:return 54
 break;
-case 25:return 51
+case 25:return 55
 break;
-case 26:return 52 //no se si namespace se refiere al propio nombre de un nodo o si es una palabra reservada. asi que lo agrego por si acaso
+case 26:return 57
 break;
-case 27:return 53
+case 27:return 56
 break;
-case 28:return 54
+case 28:return 59
 break;
-case 29:return 55
+case 29:return 58
 break;
-case 30:return 56
+case 30:return 60
 break;
-case 31:return 57
+case 31:return 61
 break;
-case 32:return 60
+case 32:return 63
 break;
-case 33:return 61
+case 33:return 62
 break;
-case 34:return 62
+case 34:return 64
 break;
-case 35:return 16
+case 35:return 49
 break;
-case 36:return 33
+case 36:return 47
 break;
-case 37:return 34
+case 37:return 46
 break;
-case 38:return 35
+case 38:return 48
 break;
-case 39:return 37
+case 39:return 8
 break;
-case 40:return 25
+case 40:return 9
 break;
-case 41:return 28
+case 41:return 26
 break;
-case 42:return 29
+case 42:return 27
 break;
-case 43:return 30
+case 43:return 36
 break;
-case 44:return 36
+case 44:return 33
 break;
-case 45:return 42
+case 45:return 34
 break;
-case 46: attribute = ''; this.begin("string_doubleq"); 
+case 46:return 30
 break;
-case 47: attribute += yy_.yytext; 
+case 47:return 39
 break;
-case 48: attribute += "\""; 
+case 48: attribute = ''; this.begin("string_doubleq"); 
 break;
-case 49: attribute += "\n"; 
+case 49: attribute += yy_.yytext; 
 break;
-case 50: attribute += " ";  
+case 50: attribute += "\""; 
 break;
-case 51: attribute += "\t"; 
+case 51: attribute += "\n"; 
 break;
-case 52: attribute += "\\"; 
+case 52: attribute += " ";  
 break;
-case 53: attribute += "\'"; 
+case 53: attribute += "\t"; 
 break;
-case 54: attribute += "\r"; 
+case 54: attribute += "\\"; 
 break;
-case 55: yy_.yytext = attribute; this.popState(); return 45; 
+case 55: attribute += "\'"; 
 break;
-case 56: attribute = ''; this.begin("string_singleq"); 
+case 56: attribute += "\r"; 
 break;
-case 57: attribute += yy_.yytext; 
+case 57: yy_.yytext = attribute; this.popState(); return 40; 
 break;
-case 58: attribute += "\""; 
+case 58: attribute = ''; this.begin("string_singleq"); 
 break;
-case 59: attribute += "\n"; 
+case 59: attribute += yy_.yytext; 
 break;
-case 60: attribute += " ";  
+case 60: attribute += "\""; 
 break;
-case 61: attribute += "\t"; 
+case 61: attribute += "\n"; 
 break;
-case 62: attribute += "\\"; 
+case 62: attribute += " ";  
 break;
-case 63: attribute += "\'"; 
+case 63: attribute += "\t"; 
 break;
-case 64: attribute += "\r"; 
+case 64: attribute += "\\"; 
 break;
-case 65: yy_.yytext = attribute; this.popState(); return 46; 
+case 65: attribute += "\'"; 
 break;
-case 66:return 5
+case 66: attribute += "\r"; 
 break;
-case 67:return 'anything'
+case 67: yy_.yytext = attribute; this.popState(); return 41; 
 break;
-case 68: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 68:return 5
+break;
+case 69: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:following\b)/i,/^(?:following-sibling\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:div\b)/i,/^(?:!=)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^></]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[57,58,59,60,61,62,63,64,65],"inclusive":false},"string_doubleq":{"rules":[47,48,49,50,51,52,53,54,55],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,56,66,67,68],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\|\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"string_singleq":{"rules":[59,60,61,62,63,64,65,66,67],"inclusive":false},"string_doubleq":{"rules":[49,50,51,52,53,54,55,56,57],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,58,68,69],"inclusive":true}}
 });
 return lexer;
 })();
@@ -4877,7 +8224,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -4984,18 +8331,17 @@ case 1:
 /*$$[$0-2][0].printTest(0);console.log($$[$0-2][0].getTree());*/
                                             prod_1 = grammar_stack.pop();
                                             prod_2 = grammar_stack.pop();
-                                            grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF': [prod_2, prod_1, 'EOF' ]});
-                                            printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI-> XML_DECLARATION ROOT EOF {﹩ = [﹩1, ﹩2]}': [prod_2, prod_1, 'EOF' ]});
+                                            //printstrack(grammar_stack, 0); //TODO: Delete is just for testing purposes
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            cst = getCST(grammar_stack);
 
                                             if($$[$0-2]!= null){
                                                 encoding = new Encoding($$[$0-2]);
-                                                if (encoding.encoding === encoding.codes.INVALID ) {
-                                                    errors.push({ tipo: "Léxico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
-                                                }
-                                                ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst:"<p>TEST CST </p>", grammar_report: "<p>grammar report test</p>"};
+                                                ast = { ast: $$[$0-1], encoding: encoding, errors: errors, cst: cst, grammar_report: grammar_report};
                                             } else{
-                                                ast = { ast: $$[$0-1], encoding: null, cst: null, grammar_report: null, errors: errors };
+                                                errors.push({ tipo: "Sintáctico", error: "La codificación del XML no es válida.", origen: "XML", linea: this._$.first_line, columna: this._$.first_column+1 }); return { ast: null, errors: errors };
+                                                ast = { ast: $$[$0-1], encoding: null,  errors: errors, cst: cst, grammar_report: grammar_report};
                                             }
                                             errors = [];
                                             return ast;
@@ -5004,11 +8350,10 @@ break;
 case 2:
 
                                             prod_1 = grammar_stack.pop();
-                                            grammar_stack.push({'INI -> XML_DECLARATION  EOF': [prod_1, 'EOF' ]});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
-
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" };
+                                            grammar_stack.push({'INI -> XML_DECLARATION  EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            encoding = new Encoding($$[$0-1]);
+                                            ast = { ast: null, encoding: encoding,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
@@ -5016,35 +8361,33 @@ break;
 case 3:
 
                                             prod_1 = grammar_stack.pop();
-                                            grammar_stack.push({'INI -> ROOT EOF': [prod_1, 'EOF' ]});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI -> ROOT EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
 
-                                            errors.push({ tipo: "Sintáctico", error: "Falta declaracion del XML", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" };
+                                            errors.push({ tipo: "Sintáctico", error: "Falta declaración del XML", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
 break;
 case 4:
 
-                                            grammar_stack.push({'INI -> EOF': [ 'EOF']});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+                                            grammar_stack.push({'INI -> EOF {	errors.add(new Error()); ﹩﹩ = null;}': [ 'EOF']});
+                                            grammar_report =  getGrammarReport(grammar_stack);
+                                            errors.push({ tipo: "Sintáctico", error: "El archivo viene vacío.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
-	                                        ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" }
+	                                        ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report }
 	                                        errors = [];
 	                                        return ast;
 	                                        
 break;
 case 5:
 
-	                                        grammar_stack.push({'INI -> error EOF': ['Token: error\t Lexema: ', 'EOF' ]});
-                                            printstrack(grammar_stack, 0);
-                                            // console.log(printHtml(grammar_stack));
+	                                        grammar_stack.push({'INI -> error EOF {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ', 'EOF' ]});
+                                            grammar_report =  getGrammarReport(grammar_stack);
 
                                             errors.push({ tipo: "Sintáctico", error: "Token no esperado.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: "<p>grammar report test</p>" };
+                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
@@ -5053,13 +8396,13 @@ case 6:
 $$[$0-1].push($$[$0]);
                                                 prod_1 = grammar_stack.pop();
                                                 prod_2 = grammar_stack.pop();
-                                                grammar_stack.push({'ROOT -> ROOT XML': [prod_2, prod_1 ]});
+                                                grammar_stack.push({'ROOT -> ROOT XML {﹩﹩ = ﹩1.push(₤2);}': [prod_2, prod_1 ]});
                                                 
 break;
 case 7:
 this.$ = [$$[$0]];
 	                                            prod_1 = grammar_stack.pop();
-	                                            grammar_stack.push({'ROOT -> XML': [prod_1 ]});
+	                                            grammar_stack.push({'ROOT -> XML{﹩﹩ = []; ﹩﹩.push($$[$0]);}': [prod_1 ]});
 	                                            
 break;
 case 8:
@@ -5074,35 +8417,35 @@ if($$[$0-1] == null || $$[$0] == null){
 
                                                                            prod_3 = grammar_stack.pop();
                                                                            prod_2 = grammar_stack.pop();
-                                                                           grammar_stack.push({'XML_DECLARATION': ['Token: tk_open_declaration\t Lexema: ' + $$[$0-2], prod_2, prod_3]} );
+                                                                           grammar_stack.push({'XML_DECLARATION -> tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION {﹩﹩ = ﹩2}': ['Token: tk_open_declaration\t Lexema: ' + '&lt;?', prod_2, prod_3]} );
                                                                            
 break;
 case 9:
   this.$ = "?>"
-                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close_delcaraton': ['Token: tk_close_delcaraton\t Lexema: ' + $$[$0]]});
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close_delcaraton { ﹩﹩= ﹩1}': ['Token: tk_close_delcaraton\t Lexema: ' + '?&gt;']});
                                                 
 break;
 case 10:
 this.$ = null;
                                                  errors.push({ tipo: "Sintáctico", error: "Se esperaba token /", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close': ['Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                grammar_stack.push({'XML_CLOSE_DECLARATION -> tk_close {errors.add(new Error()); ﹩﹩ = null;}': ['Token: tk_close\t Lexema: ' + '&gt;']});
                                                 
 break;
 case 11:
  this.$ = null;
                                                  errors.push({ tipo: "Sintáctico", error: "Token no esperado. " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                                 grammar_stack.push({'XML_CLOSE_DECLARATION -> error tk_close': ['Token: error\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                 grammar_stack.push({'XML_CLOSE_DECLARATION -> error tk_close {	errors.add(new Error()); ﹩﹩ = null;}': ['Token: error\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                  
 break;
 case 12:
 if($$[$0] == null){this.$ = null}else if($$[$0-1] == null){this.$ = [$$[$0]]}else{$$[$0-1].push($$[$0]); this.$ = $$[$0-1]}
                                             prod_1 = grammar_stack.pop();
                                             prod_2 = grammar_stack.pop();
-                                            grammar_stack.push({'ATTRIBUTE_LIST -> ATTRIBUTE_LIST ATTRIBUTE': [ prod_2, prod_1 ] });
+                                            grammar_stack.push({'ATTRIBUTE_LIST -> ATTRIBUTE_LIST ATTRIBUTE {if(﹩1 == null){﹩﹩=[]; ﹩﹩.push(﹩2)}else{﹩1.push(﹩2)}}': [ prod_2, prod_1 ] });
                                           
 break;
 case 13:
-this.$ = null;             grammar_stack.push({'ATTRIBUTE_LIST -> Empty': ['EMPTY'] });      
+this.$ = null;             grammar_stack.push({'ATTRIBUTE_LIST -> Empty {﹩﹩ = null}': ['EMPTY'] });      
 break;
 case 14:
 attr = new Atributo($$[$0-1].slice(0, -1), $$[$0].slice(1,-1), this._$.first_line, this._$.first_column+1);
@@ -5113,56 +8456,58 @@ attr = new Atributo($$[$0-1].slice(0, -1), $$[$0].slice(1,-1), this._$.first_lin
                                             </ul>
                                             </li>`;
                                             this.$ = attr;
-                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name tk_string': ['Token: tk_attribute_name\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0] ]});
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name tk_string {	﹩﹩ = new Attribute(﹩1, ﹩2)}': ['Token: tk_attribute_name\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0] ]});
                                             
 break;
 case 15:
  this.$ = null;
-                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un atributo después de =.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name':['Token: tk_attribute_name\t Lexema: ' + $$[$0]]});
+                                            errors.push({ tipo: "Sintáctico", error: "Se esperaba un atributo despues de =.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> tk_attribute_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_attribute_name\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 16:
  this.$ = null;
                                             errors.push({ tipo: "Sintáctico", error: "Se esperaba un nombre para atributo antes de =.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> tk_equal tk_string':['Token: tk_equal\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            grammar_stack.push({'ATTRIBUTE -> tk_equal tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_equal\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 17:
  this.$ = null;
                                             errors.push({ tipo: "Sintáctico", error: "Se esperaba signo =", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> tk_tag_name':['Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                            grammar_stack.push({'ATTRIBUTE -> tk_tag_name {	errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_tag_name\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 18:
  this.$ = null;
-                                            errors.push({ tipo: "Léxico", error: "Nombre del atributo no puede empezar con dígitos.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> cadena_err tk_string':['Token: cadena_err\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con dígitos.", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err tk_string {errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0-1], 'Token: tk_string\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 19:
  this.$ = null;
-                                            errors.push({ tipo: "Léxico", error: "Nombre del atributo no puede empezar con dígitos, y debe tener signo = y atributo a continuación.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                            grammar_stack.push({'ATTRIBUTE -> cadena_err':['Token: cadena_err\t Lexema: ' + $$[$0]]});
+                                            errors.push({ tipo: "Lexico", error: "Nombre del atributo no puede empezar con dígitos, y debe tener signo = y atributo a continuación.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                            grammar_stack.push({'ATTRIBUTE -> cadena_err {	errors.add(new Error()); ﹩﹩ = null;}':['Token: cadena_err\t Lexema: ' + $$[$0]]});
                                             
 break;
 case 20:
 if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
                                                                                 let hasConflict = $$[$0-4].verificateNames();
-																				if(hasConflict === "") {
-																					$$[$0-4].childs.forEach(child => {
-																					child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
-																					});
-																					this.$ = $$[$0-4];
+                                                                                if(hasConflict === "") {
+                                                                                    if($$[$0-4].childs){
+                                                                                        $$[$0-4].childs.forEach(child => {
+                                                                                        child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
+                                                                                        });
+                                                                                        this.$ = $$[$0-4];
+                                                                                    }
 																				}
-																				 else {
+                                                                                 else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
                                                                                     this.$ = null;
 																				 }
-                                                                                 }else{this.$ = null;}
+                                                                                } else{this.$ = null;}
                                                                                  prod_1 = grammar_stack.pop();
                                                                                  prod_2 = grammar_stack.pop();
-                                                                                 grammar_stack.push({'XML-> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' +$$[$0]]});
+                                                                                 grammar_stack.push({'XML-> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩1.children = ﹩2}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                                                  
 break;
 case 21:
@@ -5174,14 +8519,14 @@ if($$[$0-4] != null){$$[$0-4].Value = $$[$0-3]; $$[$0-4].Close = $$[$0-1];  this
                                                                                  }
 	                                                                             }else{this.$ = null;}
 	                                                                             prod_1 = grammar_stack.pop();
-	                                                                             grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                             grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close {﹩﹩ = ﹩1; ﹩﹩.content = ﹩2}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                             
 break;
 case 22:
 this.$ = new Element($$[$0-3], $$[$0-2], null, null, _$[$0-4].first_line, _$[$0-4].first_column+1, null);
 
                                                                                 prod_1 = grammar_stack.pop();
-                                                                                grammar_stack.push({'XML -> tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close':['Token: tk_open\t Lexema: ' + $$[$0-4], 'Token: tk_tag_name\t Lexema: ' + $$[$0-3], prod_1, 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                                                grammar_stack.push({'XML -> tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-3], prod_1, 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            
 break;
 case 23:
@@ -5194,15 +8539,15 @@ if($$[$0-3] != null){$$[$0-3].Close = $$[$0-1]; this.$ = $$[$0-3];
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 }
 	                                                                            }else{this.$ = null;}
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name tk_close {	﹩﹩ = ﹩1;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
 	                                                                            
 break;
 case 24:
 this.$ =null;
-                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
 	                                                                            
 break;
 case 25:
@@ -5210,15 +8555,15 @@ this.$ =null;
                                                                                 errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            
 break;
 case 26:
 this.$ =null;
-                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
 	                                                                            
 break;
 case 27:
@@ -5226,7 +8571,7 @@ this.$ =null;
                                                                                 errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador. ", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
-                                                                                grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag  tk_close':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + $$[$0]  ]});
+                                                                                grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: ' + $$[$0]  ]});
                                                                             	
 break;
 case 28:
@@ -5235,16 +8580,16 @@ this.$ =null;
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close':[prod_2, 'Token: tk_content\t Lexema: ' + $$[$0-4],  'Token: tk_open\t Lexema: ' + $$[$0-3], 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, 'Token: tk_content\t Lexema: ' + $$[$0-4],  'Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                            
 break;
 case 29:
 this.$ =null;
-	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
 	                                                                            
 break;
 case 30:
@@ -5253,76 +8598,76 @@ this.$ =null;
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
-	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag  tk_close':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: '  + $$[$0]]});
+	                                                                            grammar_stack.push({'XML -> XML_OPEN CHILDREN tk_open_end_tag  tk_close {errors.add(new Error()); ﹩﹩ = null;}':[prod_2, prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/',  'Token: tk_close\t Lexema: '  + '&gt;']});
 	                                                                            
 break;
 case 31:
 this.$ =null;
 	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-3], origen: "XML", linea: _$[$0-3].first_line, columna: _$[$0-3].first_column+1 });
 
-                                                                             grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name tk_close':['Token: error\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + $$[$0]]});
+                                                                             grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-3], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: '  + '&gt;']});
                                                                              
 break;
 case 32:
 this.$ =null;
     	                                                                    errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
 
-                                                                            grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + $$[$0-1], 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
+                                                                            grammar_stack.push({'XML -> error tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
                                                                             
 break;
 case 33:
 this.$ =null;
 	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-2], origen: "XML", linea: _$[$0-2].first_line, columna: _$[$0-2].first_column+1 });
 
-	                                                                        grammar_stack.push({'XML -> error tk_bar tk_close':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                        grammar_stack.push({'XML -> error tk_bar tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-2], 'Token: tk_bar\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                        
 break;
 case 34:
 this.$ =null;
 	                                                                        errors.push({ tipo: "Sintáctico", error: "Token no esperado " + $$[$0-1], origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
 
-	                                                                        grammar_stack.push({'XML -> error  tk_close':['Token: error\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + $$[$0]]});
+	                                                                        grammar_stack.push({'XML -> error  tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: error\t Lexema: ' + $$[$0-1],  'Token: tk_close\t Lexema: ' + '&gt;']});
 	                                                                        
 break;
 case 35:
  this.$ = new Element($$[$0-2], $$[$0-1], null, null,  _$[$0-3].first_line,  _$[$0-3].first_column+1);
 
                                                         prod_1 = grammar_stack.pop();
-                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST tk_close':['Token: tk_open\t Lexema: ' + $$[$0-3], 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST tk_close {﹩﹩ = new Element(); ﹩﹩.attributes = ﹩3}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-2], prod_1, 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                          
 break;
 case 36:
 
                                                         this.$ = null;
-                                                        errors.push({ tipo: "Sintáctico", error: "Se esperaba \">\" después de la cadena de atributos.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                        errors.push({ tipo: "Sintáctico", error: "Se esperaba \">\" despues de la cadena de atributos.", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                         prod_1 = grammar_stack.pop();
-                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST':['Token: tk_open\t Lexema: ' + $$[$0-2], 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], prod_1]});
+                                                        grammar_stack.push({'XML_OPEN -> tk_open tk_tag_name ATTRIBUTE_LIST {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_tag_name\t Lexema: ' + $$[$0-1], prod_1]});
                                                         
 break;
 case 37:
  this.$ = null;
                                                         errors.push({ tipo: "Sintáctico", error: "", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
-                                                        grammar_stack.push({'XML_OPEN -> tk_open':['Token: tk_open\t Lexema: ' + $$[$0]]});
+                                                        grammar_stack.push({'XML_OPEN -> tk_open {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;']});
                                                         
 break;
 case 38:
  this.$ = null;
                                                          errors.push({ tipo: "Sintáctico", error: "Se esperaba un identificador para la etiqueta", origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
-                                                         grammar_stack.push({'XML_OPEN -> tk_open tk_close':['Token: tk_open\t Lexema: ' + $$[$0-1], 'Token: tk_close\t Lexema: ' + $$[$0]]});
+                                                         grammar_stack.push({'XML_OPEN -> tk_open tk_close {errors.add(new Error()); ﹩﹩ = null;}':['Token: tk_open\t Lexema: ' + '&lt;', 'Token: tk_close\t Lexema: ' + '&gt;']});
                                                          
 break;
 case 39:
 if($$[$0-1] != null && $$[$0] != null){ $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; } else{this.$ = null;}
                                                             prod_1 = grammar_stack.pop();
                                                             prod_2 = grammar_stack.pop();
-                                                             grammar_stack.push({'CHILDREN -> CHILDREN XML':[prod_2,  prod_1]});
+                                                             grammar_stack.push({'CHILDREN -> CHILDREN XML {﹩1.push(﹩2); ﹩﹩ = $$[$0-1];}':[prod_2,  prod_1]});
                                                             
 break;
 case 40:
  if($$[$0]!=null ){this.$ = [$$[$0]];}else{this.$ = null;}
 	                                                        prod_1 = grammar_stack.pop();
-                                                            grammar_stack.push({'CHILDREN -> XML':[prod_1]});
+                                                            grammar_stack.push({'CHILDREN -> XML {﹩﹩ = [﹩1]}':[prod_1]});
 	                                                        
 break;
 }
@@ -5588,34 +8933,561 @@ _handle_error:
 	let grammar_stack = [];
 
 
-    function printHtml(obj){
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Reporte gramatical</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+
+        str = str + buildGrammarReport(obj);
+
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+                     <div id="div-table">
+                     <table style="width:100%">
+                         <tr>
+                         <th>Produccion</th>
+                         <th>Cuerpo</th>
+                         <th>Accion</th>
+                         </tr>
+
+                         <tr>
+                         <th>INI-&gt;</th>
+                         <td>XML_DECLARATION ROOT EOF</td>
+                         <td>$$ = [$1, $2] </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_DECLARATION  EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>ROOT EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>error EOF</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ROOT-&gt;</th>
+                         <td>ROOT XML</td>
+                         <td>$$ = $1.push($2);</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = []; $$.push($1);</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML_DECLARATION-&gt;</th>
+                         <td>tk_open_declaration ATTRIBUTE_LIST XML_CLOSE_DECLARATION</td>
+                         <td>$$ = $2</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+
+
+                         <tr>
+                         <th>XML_CLOSE_DECLARATION-&gt;</th>
+                         <td>tk_close_delcaraton</td>
+                         <td>$$ = $1</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>ATTRIBUTE_LIST-&gt;</th>
+                         <td>ATTRIBUTE_LIST ATTRIBUTE </td>
+                         <td>if($1 == null){$$=[]; $$.push($2)}else{$1.push($2)}</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>Empty</td>
+                         <td>$$ = null</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+
+                         <tr>
+                         <th>ATTRIBUTE-&gt;</th>
+                         <td>tk_attribute_name tk_string  </td>
+                         <td>$$ = new Attribute($1, $2)</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_attribute_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_equal tk_string   </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_tag_name</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err tk_string </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>cadena_err</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+                         <tr>
+                         <th>XML-&gt;</th>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name tk_close   </td>
+                         <td>$$ = $1; $1.children = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name tk_close  </td>
+                         <td>$$ = $1; $$.content = $2</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_bar tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>$$ = $1; </td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content tk_open_end_tag  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN tk_content  tk_open tk_tag_name ATTRIBUTE_LIST tk_close</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>XML_OPEN CHILDREN tk_open_end_tag  tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_open_end_tag tk_tag_name  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error tk_bar tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>error  tk_close </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>XML_OPEN-&gt;</th>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST tk_close </td>
+                         <td>$$ = new Element(); $$.attributes = $3</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open tk_tag_name ATTRIBUTE_LIST  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open</td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td>tk_open   tk_close  </td>
+                         <td>errors.add(new Error()); $$ = null;</td>
+                         </tr>
+
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td></td>
+                         <td></td>
+                         </tr>
+
+
+                         <tr>
+                         <th>CHILDREN-&gt;</th>
+                         <td>CHILDREN XML </td>
+                         <td>$1.push($2); $$ = $1;</td>
+                         </tr>
+                         <tr>
+                         <td></td>
+                         <td>XML</td>
+                         <td>$$ = [$1]</td>
+                         </tr>
+
+                     </table>
+
+                     </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                        function fun1() {
+                                            if ($("#tree-root").length > 0) {
+
+                                                $("#tree-root").find("li").each
+                                                (
+                                                    function () {
+                                                        var $span = $("<span></span>");
+                                                        //$(this).toggleClass("expanded");
+                                                        if ($(this).find("ul:first").length > 0) {
+                                                            $span.removeAttr("class");
+                                                            $span.attr("class", "expanded");
+                                                            $(this).find("ul:first").css("display", "block");
+                                                            $(this).append($span);
+                                                        }
+
+                                                    }
+                                                )
+                                            }
+
+                                        }
+
+
+
+
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+    // .replace("₤","$")
+    function buildGrammarReport(obj){
         if(obj == null){return "";}
         let str = "";
         if(Array.isArray(obj)){ //IS ARRAY
             obj.forEach((value)=>{
             if(typeof value === 'string' ){
-                str = str + `<li class= "string">${value}</li>
+                str = str + `<li class= "string">
+                ${value}
+                </li>
                 `;
             }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
                 for(let key in value){
-                    str = str + printHtml(value);
+                    str = str + buildGrammarReport(value);
                 }
             }
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
+            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
-                str = `<li><span class="caret">${key}</span>
+
+                str = `<li class="grammar-tree"><span class="caret">
+                ${key}
+                </span>
                 <ul class="nested">
                 `;
-                str = str + printHtml(obj[key]);
+                str = str + buildGrammarReport(obj[key]);
                 str = str + `
                 </ul>
                 </li>`;
             }
         }
-                return str;
+        return str;
     }
 
 
@@ -5631,12 +9503,12 @@ _handle_error:
                 if(typeof value === 'string' ){
                      str = ""
                      for(let i = 0; i < lines; i++){str = str + "- ";}
-                     // console.log(str + value);
+                     console.log(str + value);
                 }else if(Array.isArray(value)){console.log("ERROR 5");}else{
                     str = ""
                     for(let i = 0; i < lines; i++){ str = str + "- ";}
                     for(let key in value){
-                       // console.log(`${str}${key}`);
+                       console.log(`${str}${key}`);
                        printstrack(value[key], lines + 1);
                     }
                 }
@@ -5646,17 +9518,226 @@ _handle_error:
         }else if(typeof obj === 'string' ){ // IS STRING
             str = ""
             for(let i = 0; i < lines; i++){str = str + "- ";}
-            // console.log(str + obj);
+            console.log(str + obj);
         }else{// IS OBJECT
             str = ""
             for(let i = 0; i < lines; i++){ str = str + "- ";}
             for(let key in obj){
-                // console.log(`${str}Key: ${key}`);
+                console.log(`${str}Key: ${key}`);
                 //console.log(obj[key]);
                 printstrack(obj[key], lines + 1);
             }
         }
 	}
+
+
+
+
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>CST</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+
+            </style>
+        </head>
+        <body>
+
+
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
+    }
+
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
+
+
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+
+
 
 
 
@@ -5993,7 +10074,7 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:// Whitespace
 break;
-case 1://MultiLineComment 
+case 1:/* MultiLineComment*/
 break;
 case 2:return 8;
 break;
@@ -6019,28 +10100,31 @@ case 12:return cadena_err;
 break;
 case 13:return id_err;
 break;
-case 14:
+case 14:/* MultiLineComment*/
+break;
+case 15:
                                     if(yy_.yytext.match(re)){return 22;}
                                  
 break;
-case 15:return 6
+case 16:return 6
 break;
-case 16:this.popState(); return 12;
+case 17:this.popState(); return 12;
 break;
-case 17: this.popState(); return 21
+case 18: this.popState(); return 21
 break;
-case 18:  this.popState(); return 23;
+case 19:  this.popState();
+                                    return 23;
 break;
-case 19: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 20: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
-case 20:return 6
+case 21:return 6
 break;
-case 21: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
+case 22: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XML", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:[<][!][-][-][\s\S\n]*?[-][-][>])/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:(([^<>&\"]|&alt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"content":{"rules":[14,15,16,17,18,19],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,20,21],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:<\?([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:\?>)/i,/^(?:(([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*)\s*=))/i,/^(?:([_a-zA-Z]([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*))/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:(("[^\"\n]*[\"\n])|('[^\'\n]*[\'\n])))/i,/^(?:([0-9]+(\.[0-9]+)?([a-zA-Z0-9_.-]|([\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+))*=?))/i,/^(?:{id_err})/i,/^(?:<!--([^-]|-[^-])*-->)/i,/^(?:(([^<>&\"]|&lt;|&gt;|&amp;|&apos;|&quot;)+))/i,/^(?:$)/i,/^(?:>)/i,/^(?:<\/)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"content":{"rules":[14,15,16,17,18,19,20],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,21,22],"inclusive":true}}
 });
 return lexer;
 })();
@@ -6062,7 +10146,7 @@ exports.main = function commonjsMain (args) {
         console.log('Usage: '+args[0]+' FILE');
         process.exit(1);
     }
-    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    var source = __webpack_require__(/*! fs */ 3).readFileSync(__webpack_require__(/*! path */ 4).normalize(args[1]), "utf8");
     return exports.parser.parse(source);
 };
 if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
@@ -6070,6 +10154,219 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 }
 }
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ "YuTi")(module)))
+
+/***/ }),
+
+/***/ "pW4W":
+/*!********************************************************************!*\
+  !*** ./src/js/controller/xpath/Instruccion/Selecting/Axis/Axis.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var Enum_1 = __webpack_require__(/*! ../../../../../model/xpath/Enum */ "MEUw");
+var Expresion_1 = __importDefault(__webpack_require__(/*! ../../../Expresion/Expresion */ "gajf"));
+var Funciones_1 = __importDefault(__webpack_require__(/*! ./Funciones */ "Dbnh"));
+var Predicate_1 = __webpack_require__(/*! ../Predicate */ "Iysv");
+function SelectAxis(_instruccion, _ambito, _contexto) {
+    var _404 = { notFound: "No se encontraron elementos." };
+    var contexto = (_contexto.elementos) ? (_contexto) : null;
+    var expresion = Expresion_1.default(_instruccion, _ambito, contexto);
+    if (expresion.error)
+        return expresion;
+    var root = getAxis(expresion.axisname, expresion.nodetest, expresion.predicate, contexto, _ambito, false);
+    if (root === null || root.error || root.elementos.error || (root.elementos.length === 0 && root.atributos.length === 0))
+        return _404;
+    return root;
+}
+function getAxis(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDoubleBar) {
+    if (_contexto)
+        return firstFiler(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDoubleBar);
+    else
+        return { error: "Indstrucción no procesada.", tipo: "Semántico", origen: "Query", linea: 1, columna: 1 };
+}
+// Revisa el axisname y extrae los elementos
+function firstFiler(_axisname, _nodetest, _predicate, _contexto, _ambito, _isDoubleBar) {
+    var elements = Array();
+    var attributes = Array();
+    var cadena = Enum_1.Tipos.ELEMENTOS;
+    switch (_axisname) {
+        case Enum_1.Tipos.AXIS_ANCESTOR: // Selects all ancestors (parent, grandparent, etc.) of the current node
+        case Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF: // Selects all ancestors (parent, grandparent, etc.) of the current node and the current node itself
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                if (_axisname === Enum_1.Tipos.AXIS_ANCESTOR_OR_SELF) {
+                    if (element.father)
+                        elements.push(element);
+                    else
+                        elements.push(element.childs[0]);
+                }
+                var dad = element.father;
+                if (dad) {
+                    elements = _ambito.compareCurrent(element, elements, _axisname);
+                }
+            }
+            break;
+        case Enum_1.Tipos.AXIS_ATTRIBUTE: // Selects all attributes of the current node
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                if (_isDoubleBar) {
+                    attributes = _ambito.searchAnyAttributes("*", element, attributes);
+                }
+                else if (element.attributes)
+                    element.attributes.forEach(function (attribute) {
+                        attributes.push(attribute);
+                    });
+            }
+            cadena = Enum_1.Tipos.ATRIBUTOS;
+            break;
+        case Enum_1.Tipos.AXIS_CHILD: // Selects all children of the current node
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                // if (_isDoubleBar) {
+                //     elements = _ambito.searchNodes("*", element, elements);
+                // }
+                if (element.childs)
+                    element.childs.forEach(function (child) {
+                        elements.push(child);
+                    });
+            }
+            break;
+        case Enum_1.Tipos.AXIS_DESCENDANT: // Selects all descendants (children, grandchildren, etc.) of the current node
+        case Enum_1.Tipos.AXIS_DESCENDANT_OR_SELF: // Selects all descendants (children, grandchildren, etc.) of the current node and the current node itself
+            console.log(_contexto.elementos, 8989);
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                if (_axisname === Enum_1.Tipos.AXIS_DESCENDANT_OR_SELF) {
+                    if (element.father)
+                        elements.push(element);
+                    // else elements.push(element.childs[0]);
+                }
+                if (element.father)
+                    elements = _ambito.searchNodes("*", element, elements);
+                else
+                    elements = _ambito.searchNodes("*", element.childs[0], elements);
+            }
+            break;
+        case Enum_1.Tipos.AXIS_FOLLOWING: // Selects everything in the document after the closing tag of the current node
+        case Enum_1.Tipos.AXIS_PRECEDING: // Selects all nodes that appear before the current node in the document
+        case Enum_1.Tipos.AXIS_FOLLOWING_SIBLING: // Selects all siblings after the current node:
+        case Enum_1.Tipos.AXIS_PRECEDING_SIBLING: // Selects all siblings before the current node
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                var element = _contexto.elementos[i];
+                var dad = element.father;
+                if (dad && (_axisname === Enum_1.Tipos.AXIS_PRECEDING || _axisname === Enum_1.Tipos.AXIS_PRECEDING_SIBLING)) {
+                    elements = _ambito.compareCurrent(element, elements, _axisname);
+                }
+                else if (_axisname === Enum_1.Tipos.AXIS_FOLLOWING || _axisname === Enum_1.Tipos.AXIS_FOLLOWING_SIBLING) {
+                    elements = _ambito.compareCurrent(element, elements, _axisname);
+                }
+            }
+            break;
+        case Enum_1.Tipos.AXIS_NAMESPACE: // Selects all namespace nodes of the current node
+            return { error: "Error: la funcionalidad 'namespace' no está disponible.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
+        case Enum_1.Tipos.AXIS_PARENT: // Selects the parent of the current node
+            var _loop_1 = function (i) {
+                var element = _contexto.elementos[i];
+                var dad = element.father;
+                if (dad)
+                    _ambito.tablaSimbolos.forEach(function (elm) {
+                        if (elm.id_open === dad.id && elm.line == dad.line && elm.column == dad.column)
+                            elements.push(elm);
+                        if (elm.childs)
+                            elm.childs.forEach(function (child) {
+                                elements = _ambito.searchDad(child, dad.id, dad.line, dad.column, elements);
+                            });
+                    });
+            };
+            for (var i = 0; i < _contexto.elementos.length; i++) {
+                _loop_1(i);
+            }
+            break;
+        case Enum_1.Tipos.AXIS_SELF: // Selects the current node
+            if (_contexto.atributos)
+                attributes = _contexto.atributos;
+            else
+                elements = _contexto.elementos;
+            break;
+        default:
+            return { error: "Error: axisname no válido.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
+    }
+    // return { elementos: elements, atributos: attributes, cadena: cadena };
+    return secondFilter(elements, attributes, _nodetest, _predicate, cadena, _ambito, _isDoubleBar);
+}
+// Revisa el nodetest y busca hacer match
+function secondFilter(_elements, _atributos, _nodetest, _predicate, _cadena, _ambito, _isDoubleBar) {
+    var elements = Array();
+    var attributes = Array();
+    var text = Array();
+    var valor = _nodetest.valor;
+    switch (_nodetest.tipo) {
+        case Enum_1.Tipos.ELEMENTOS:
+        case Enum_1.Tipos.ASTERISCO:
+        case Enum_1.Tipos.FUNCION_TEXT:
+            if (_atributos.length > 0) {
+                for (var i = 0; i < _atributos.length; i++) {
+                    var attribute = _atributos[i];
+                    if (attribute.id == valor || valor === "*") {
+                        attributes.push(attribute);
+                    }
+                    if (attribute.value == valor) {
+                        attributes.push(attribute);
+                    }
+                }
+            }
+            for (var i = 0; i < _elements.length; i++) {
+                var element = _elements[i];
+                if (_nodetest.tipo === Enum_1.Tipos.FUNCION_TEXT && element.value) {
+                    var x_1 = Funciones_1.default.f1(element, elements, text, _isDoubleBar);
+                    elements.concat(x_1.elementos);
+                    text.concat(x_1.texto);
+                    _cadena = Enum_1.Tipos.TEXTOS;
+                    continue;
+                }
+                else if (_atributos.length > 0 && element.attributes) {
+                    var x_2 = Funciones_1.default.f2(element, elements, attributes, valor, _isDoubleBar);
+                    elements.concat(x_2.elementos);
+                    attributes = attributes.concat(x_2.atributos);
+                    _cadena = Enum_1.Tipos.ATRIBUTOS;
+                    continue;
+                }
+                var x = Funciones_1.default.f3(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
+                if (x.elementos.length > 0 || x.texto.length > 0) {
+                    elements.concat(x.elementos);
+                    text.concat(x.texto);
+                    continue; // break;
+                }
+                x = Funciones_1.default.f4(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
+                if (x.elementos.length > 0 || x.texto.length > 0) {
+                    elements.concat(x.elementos);
+                    text.concat(x.texto);
+                    break; //continue;
+                }
+            }
+            break;
+        default:
+            return { error: "Error: nodetest no válido.", tipo: "Semántico", origen: "Query", linea: _nodetest.linea, columna: _nodetest.columna };
+    }
+    // En caso de tener algún predicado
+    if (_predicate) {
+        var filter = new Predicate_1.Predicate(_predicate, _ambito, elements);
+        if (attributes.length > 0) {
+            attributes = filter.filterAttributes(attributes);
+            return { elementos: [], atributos: attributes, cadena: _cadena };
+        }
+        elements = filter.filterElements(elements);
+    }
+    return { elementos: elements, atributos: attributes, texto: text, cadena: _cadena };
+}
+module.exports = { SA: SelectAxis, GetAxis: getAxis };
+
 
 /***/ }),
 
@@ -6083,9 +10380,9 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 "use strict";
 
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
-function Aritmetica(_expresion, _ambito) {
-    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo);
-    if (operators.err)
+function Aritmetica(_expresion, _ambito, _contexto) {
+    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo, _contexto);
+    if (operators.error)
         return operators;
     switch (operators.tipo) {
         case Enum_1.Tipos.OPERACION_SUMA:
@@ -6104,33 +10401,37 @@ function Aritmetica(_expresion, _ambito) {
             return null;
     }
 }
-function init(_opIzq, _opDer, _ambito, _tipo) {
+function init(_opIzq, _opDer, _ambito, _tipo, _contexto) {
     var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
+    var op1 = Expresion(_opIzq, _ambito, _contexto);
+    if (op1.error)
+        return op1;
+    var op2 = Expresion(_opDer, _ambito, _contexto);
+    if (op2.error)
+        return op2;
     var tipo = _tipo;
     if (op1.tipo === Enum_1.Tipos.FUNCION_LAST && op2.tipo === Enum_1.Tipos.NUMBER) {
-        op1 = _ambito.length;
+        op1 = _contexto.length;
         op2 = Number(op2.valor);
     }
     else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_LAST) {
         op1 = Number(op1.valor);
-        op2 = _ambito.length;
+        op2 = _contexto.length;
     }
     else if (op1.tipo === Enum_1.Tipos.FUNCION_POSITION && op2.tipo === Enum_1.Tipos.NUMBER) {
-        op1 = _ambito.length;
+        op1 = _contexto.length;
         op2 = Number(op2.valor);
     }
     else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_POSITION) {
         op1 = Number(op1.valor);
-        op2 = _ambito.length;
+        op2 = _contexto.length;
     }
     else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.NUMBER) {
         op1 = Number(op1.valor);
         op2 = Number(op2.valor);
     }
     else
-        return { err: "Solamente se pueden operar aritméticamente valores numéricos.\n", linea: _opIzq.linea, columna: _opIzq.columna };
+        return { error: "Solamente se pueden operar aritméticamente valores numéricos.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
     return { op1: op1, op2: op2, tipo: tipo };
 }
 function suma(_opIzq, _opDer) {
@@ -6184,9 +10485,9 @@ module.exports = Aritmetica;
 "use strict";
 
 var Enum_1 = __webpack_require__(/*! ../../../../model/xpath/Enum */ "MEUw");
-function Relacional(_expresion, _ambito) {
-    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo);
-    if (operators.err)
+function Relacional(_expresion, _ambito, _contexto) {
+    var operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo, _contexto);
+    if (operators.error)
         return operators;
     switch (operators.tipo) {
         case Enum_1.Tipos.RELACIONAL_MAYOR:
@@ -6205,20 +10506,25 @@ function Relacional(_expresion, _ambito) {
             return null;
     }
 }
-function init(_opIzq, _opDer, _ambito, _tipo) {
+function init(_opIzq, _opDer, _ambito, _tipo, _contexto) {
     var Expresion = __webpack_require__(/*! ../Expresion */ "gajf");
-    var op1 = Expresion(_opIzq, _ambito);
-    var op2 = Expresion(_opDer, _ambito);
+    var op1 = Expresion(_opIzq, _ambito, _contexto);
+    if (op1.error)
+        return op1;
+    var op2 = Expresion(_opDer, _ambito, _contexto);
+    if (op2.error)
+        return op2;
     var tipo = _tipo;
+    // Numéricas
     if (tipo === Enum_1.Tipos.RELACIONAL_MAYOR || tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL ||
         tipo === Enum_1.Tipos.RELACIONAL_MENOR || tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL) {
-        if (op1.tipo === Enum_1.Tipos.FUNCION_LAST && op2.tipo === Enum_1.Tipos.NUMBER) {
-            op1 = _ambito.length;
+        if ((op1.tipo === Enum_1.Tipos.FUNCION_POSITION || op1.tipo === Enum_1.Tipos.FUNCION_LAST) && op2.tipo === Enum_1.Tipos.NUMBER) {
+            op1 = _contexto.length;
             op2 = Number(op2.valor);
         }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_LAST) {
+        else if (op1.tipo === Enum_1.Tipos.NUMBER && (op2.tipo === Enum_1.Tipos.FUNCION_POSITION || op2.tipo === Enum_1.Tipos.FUNCION_LAST)) {
             op2 = Number(op1.valor);
-            op1 = _ambito.length;
+            op1 = _contexto.length;
             if (_tipo === Enum_1.Tipos.RELACIONAL_MAYOR)
                 tipo = Enum_1.Tipos.RELACIONAL_MENOR;
             if (_tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL)
@@ -6228,107 +10534,184 @@ function init(_opIzq, _opDer, _ambito, _tipo) {
             if (_tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL)
                 tipo = Enum_1.Tipos.RELACIONAL_MAYORIGUAL;
         }
-        else if (op1.tipo === Enum_1.Tipos.FUNCION_POSITION && op2.tipo === Enum_1.Tipos.NUMBER) {
-            op1 = _ambito.length;
-            op2 = Number(op2.valor);
-        }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-            op2 = Number(op1.valor);
-            op1 = _ambito.length;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MAYOR)
-                tipo = Enum_1.Tipos.RELACIONAL_MENOR;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MAYORIGUAL)
-                tipo = Enum_1.Tipos.RELACIONAL_MENORIGUAL;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MENOR)
-                tipo = Enum_1.Tipos.RELACIONAL_MAYOR;
-            if (_tipo === Enum_1.Tipos.RELACIONAL_MENORIGUAL)
-                tipo = Enum_1.Tipos.RELACIONAL_MAYORIGUAL;
+        else if (op1.tipo === Enum_1.Tipos.ATRIBUTOS || op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+            var opIzq = { valor: 0, tipo: op1.tipo };
+            var opDer = { valor: 0, tipo: op2.tipo };
+            opIzq.tipo = Enum_1.Tipos.ATRIBUTOS;
+            opDer.tipo = (op1.tipo === Enum_1.Tipos.ATRIBUTOS) ? (op2.tipo) : (op1.tipo);
+            if (op1.tipo === Enum_1.Tipos.ATRIBUTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                opIzq.valor = op1.valor;
+                opDer.valor = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                opIzq.valor = op2.valor;
+                opDer.valor = op1.valor;
+            }
+            else
+                return { error: "Desigualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { op1: opIzq, op2: opDer, tipo: tipo };
         }
         else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.NUMBER) {
             op1 = Number(op1.valor);
             op2 = Number(op2.valor);
         }
+        else if (op1.tipo === Enum_1.Tipos.ELEMENTOS || op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+            if (op1.tipo === Enum_1.Tipos.ELEMENTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                var tmp = op1.valor;
+                op1 = op2.valor;
+                op2 = tmp;
+            }
+            else if (op1.tipo === Enum_1.Tipos.ELEMENTOS && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+            return { op1: { valor: op1, id: true }, op2: op2, tipo: tipo };
+        }
         else
-            return { err: "Solamente se pueden comparar desigualdades entre valores numéricos.\n", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { error: "Solamente se pueden comparar desigualdades entre valores numéricos.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+        return { op1: op1, op2: op2, tipo: tipo };
     }
+    // Numéricas o texto
     if (tipo === Enum_1.Tipos.RELACIONAL_IGUAL || tipo === Enum_1.Tipos.RELACIONAL_DIFERENTE) {
         var opIzq = { valor: 0, tipo: op1.tipo };
         var opDer = { valor: 0, tipo: op2.tipo };
-        if (op1.tipo === Enum_1.Tipos.FUNCION_LAST && op2.tipo === Enum_1.Tipos.NUMBER) {
-            opIzq.valor = _ambito.length;
+        if ((op1.tipo === Enum_1.Tipos.FUNCION_POSITION || op1.tipo === Enum_1.Tipos.FUNCION_LAST) && op2.tipo === Enum_1.Tipos.NUMBER) {
+            opIzq.valor = _contexto.length;
             opDer.valor = Number(op2.valor);
         }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_LAST) {
+        else if (op1.tipo === Enum_1.Tipos.NUMBER && (op2.tipo === Enum_1.Tipos.FUNCION_POSITION || op2.tipo === Enum_1.Tipos.FUNCION_LAST)) {
             opIzq.valor = Number(op1.valor);
-            opDer.valor = _ambito.length;
+            opDer.valor = _contexto.length;
         }
-        else if (op1.tipo === Enum_1.Tipos.FUNCION_POSITION && op2.tipo === Enum_1.Tipos.NUMBER) {
-            opIzq.valor = _ambito.length;
-            opDer.valor = Number(op2.valor);
+        else if (op1.tipo === Enum_1.Tipos.ATRIBUTOS || op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+            opIzq.tipo = Enum_1.Tipos.ATRIBUTOS;
+            opDer.tipo = (op1.tipo === Enum_1.Tipos.ATRIBUTOS) ? (op2.tipo) : (op1.tipo);
+            if (op1.tipo === Enum_1.Tipos.ATRIBUTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                opIzq.valor = op1.valor;
+                opDer.valor = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ATRIBUTOS) {
+                opIzq.valor = op2.valor;
+                opDer.valor = op1.valor;
+            }
+            else
+                return { error: "Igualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { op1: opIzq, op2: opDer, tipo: tipo };
         }
-        else if (op1.tipo === Enum_1.Tipos.NUMBER && op2.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-            opIzq.valor = Number(op1.valor);
-            opDer.valor = _ambito.length;
+        else if (op1.tipo === Enum_1.Tipos.FUNCION_TEXT || op2.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+            opIzq.tipo = Enum_1.Tipos.FUNCION_TEXT;
+            opDer.tipo = (op1.tipo === Enum_1.Tipos.FUNCION_TEXT) ? (op2.tipo) : (op1.tipo);
+            if (op1.tipo === Enum_1.Tipos.FUNCION_TEXT && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                opIzq.valor = op1.valor;
+                opDer.valor = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.FUNCION_TEXT) {
+                opIzq.valor = op2.valor;
+                opDer.valor = op1.valor;
+            }
+            else
+                return { error: "Igualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+            return { op1: opIzq, op2: opDer, tipo: tipo };
         }
-        // else { // Falta
-        // op1 = { valor: op1, tipo: tipo };
-        // op2 = { valor: op2, tipo: tipo };
-        // }
-        return { op1: opIzq, op2: opDer, tipo: tipo };
+        else if (op1.tipo === Enum_1.Tipos.ELEMENTOS || op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+            if (op1.tipo === Enum_1.Tipos.ELEMENTOS && (op2.tipo === Enum_1.Tipos.STRING || op2.tipo === Enum_1.Tipos.NUMBER)) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+            else if ((op1.tipo === Enum_1.Tipos.STRING || op1.tipo === Enum_1.Tipos.NUMBER) && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                var tmp = op1.valor;
+                op1 = op2.valor;
+                op2 = tmp;
+            }
+            else if (op1.tipo === Enum_1.Tipos.ELEMENTOS && op2.tipo === Enum_1.Tipos.ELEMENTOS) {
+                op1 = op1.valor;
+                op2 = op2.valor;
+            }
+        }
+        else {
+            return { error: "Igualdad no compatible.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
+        }
+        return { op1: op1, op2: op2, tipo: tipo };
     }
-    return { op1: op1, op2: op2, tipo: tipo };
+    return { error: "Relación no procesada.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna };
 }
 function mayor(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MAYOR };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYOR, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYOR, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: (_opDer + 1),
         tipo: Enum_1.Tipos.RELACIONAL_MAYOR
     };
 }
 function mayorigual(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MAYORIGUAL };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYORIGUAL, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MAYORIGUAL, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: _opDer,
         tipo: Enum_1.Tipos.RELACIONAL_MAYORIGUAL
     };
 }
 function menor(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MENOR };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENOR, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENOR, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: (_opDer - 1),
         tipo: Enum_1.Tipos.RELACIONAL_MENOR
     };
 }
 function menorigual(_opIzq, _opDer) {
+    if (_opIzq.id)
+        return { e1: _opIzq.valor, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_MENORIGUAL };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENORIGUAL, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { referencia: _opIzq.valor, condicion: _opDer.valor, desigualdad: Enum_1.Tipos.RELACIONAL_MENORIGUAL, tipo: Enum_1.Tipos.ELEMENTOS };
     return {
         valor: _opDer,
         tipo: Enum_1.Tipos.RELACIONAL_MENORIGUAL
     };
 }
 function igual(_opIzq, _opDer) {
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_IGUAL };
     if (_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION || _opDer.tipo === Enum_1.Tipos.FUNCION_POSITION)
         return { valor: ((_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION) ? (_opDer.valor) : (_opIzq.valor)), tipo: Enum_1.Tipos.NUMBER };
     if (_opIzq.tipo === Enum_1.Tipos.FUNCION_LAST || _opDer.tipo === Enum_1.Tipos.FUNCION_LAST)
         return { valor: ((_opIzq.valor == _opDer.valor) ? (_opDer.valor) : (-1)), tipo: Enum_1.Tipos.NUMBER };
-    return {
-        valor: (_opIzq == _opDer),
-        tipo: Enum_1.Tipos.RELACIONAL_IGUAL
-    };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_TEXT)
+        return { condicion: _opDer.valor, tipo: Enum_1.Tipos.FUNCION_TEXT };
+    return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_IGUAL };
 }
 function diferente(_opIzq, _opDer) {
-    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION || _opDer.tipo === Enum_1.Tipos.FUNCION_POSITION) {
-        return {
-            valor: ((_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION) ? (_opDer.valor) : (_opIzq.valor)),
-            tipo: Enum_1.Tipos.EXCLUDE
-        };
-    }
-    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_LAST || _opDer.tipo === Enum_1.Tipos.FUNCION_LAST) {
-        return {
-            valor: ((_opIzq.valor == _opDer.valor) ? (_opDer.valor) : (-1)),
-            tipo: Enum_1.Tipos.EXCLUDE
-        };
-    }
-    return {
-        valor: (_opIzq != _opDer),
-        tipo: Enum_1.Tipos.RELACIONAL_DIFERENTE
-    };
+    if (_opIzq.tipo === Enum_1.Tipos.ELEMENTOS)
+        return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_DIFERENTE };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION || _opDer.tipo === Enum_1.Tipos.FUNCION_POSITION)
+        return { valor: ((_opIzq.tipo === Enum_1.Tipos.FUNCION_POSITION) ? (_opDer.valor) : (_opIzq.valor)), tipo: Enum_1.Tipos.EXCLUDE };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_LAST || _opDer.tipo === Enum_1.Tipos.FUNCION_LAST)
+        return { valor: ((_opIzq.valor == _opDer.valor) ? (_opDer.valor) : (-1)), tipo: Enum_1.Tipos.EXCLUDE };
+    if (_opIzq.tipo === Enum_1.Tipos.ATRIBUTOS)
+        return { atributo: _opIzq.valor, condicion: _opDer.valor, exclude: true, tipo: Enum_1.Tipos.ATRIBUTOS };
+    if (_opIzq.tipo === Enum_1.Tipos.FUNCION_TEXT)
+        return { condicion: _opDer.valor, exclude: true, tipo: Enum_1.Tipos.FUNCION_TEXT };
+    return { e1: _opIzq, e2: _opDer, tipo: Enum_1.Tipos.ELEMENTOS, desigualdad: Enum_1.Tipos.RELACIONAL_DIFERENTE };
 }
 module.exports = Relacional;
 

@@ -1,12 +1,24 @@
 /***********************************************FUNCIONES ESPECÍFICAS DE XML*********************************************************** */
+listaErroresXML = [];
+
 //Función para ejecutar el parser del analizador XML de jison
 const parseXML = function (entrada) {
+    listaErroresXML = [];
     var mensajeConsola = "";
     try {
         console.log("Ingresó a la función parseXML" + new Date());
         document.getElementById('consola').innerHTML += ">Intentando analizar XML (" + new Date() + ") \n";
         try {
-            let resultado = gramaticaXML.parse(entrada);
+            //let resultado = gramaticaXML.parse(entrada);
+            let resultado = erroresXML.parse(entrada); //se llama al parser de errores y objetos
+            console.log("Cantidad de Errores: "+ listaErroresXML.length);
+
+            //Si se encontraron errores en la traducción, se guardan en memoria para generar el reporte
+            console.log("\n\n\n################################################################");
+            var codigoTablaErroresTraduccion = construyeReporteErrores(this.listaErroresXML);
+            console.log("\n################################################################");
+            document.getElementById("hiddenErrores").value = codigoTablaErroresTraduccion;
+
             if (resultado) {
                 document.getElementById('consola').value += ">Se ejecutó el parser";
                 console.info('Entrada fue parseada correctamente!!!!');
@@ -14,17 +26,44 @@ const parseXML = function (entrada) {
 
                 //Si la entrada fue parseada correctamente, se procede a generar el reporte de Tabla de Símbolos
                 console.log("\n\n\n################################################################");
-                var codigoTablaSimbolos = construyeGraficaTS(resultado);
+                var codigoTablaSimbolos = construyeGraficaTS(resultado[0].listaObjetos[0]);
                 console.log("\n################################################################");
                 document.getElementById("hiddenTablaSimbolos").value = codigoTablaSimbolos;
+                
+                let resultadoArboles1 = gramaticaXMLArbolCST.parse(entrada);
+                var Tree = new Arbol('CST',resultadoArboles1);
+                console.log("\n\n\n################################################################");
+                var grafoCST = graficarArbolCST(Tree);
+                console.log(grafoCST);
+                alert(grafoCST);
+                document.getElementById("hiddenCST").value = grafoCST;
+                //pruebaGraficarViz(grafoCST);
+                console.log("\n\n\n################################################################");
 
+                let resultadoArboles2 = gramaticaXMLArbol.parse(entrada);
+                var Tree2 = new Arbol('CST',resultadoArboles2);
+                console.log("\n\n\n################################################################");
+                var grafoAST = graficarArbolAST(Tree2);
+                console.log(grafoAST);
+                alert(grafoAST);
+                document.getElementById("hiddenAST").value = grafoAST;
+                //pruebaGraficarViz(grafoAST);
+                console.log("\n\n\n################################################################");
 
                 return resultado;
             } else {
                 console.info('\nNo se ejecutó la clase parser');
             }
         } catch (e) {
-            document.getElementById('consola').value += ">Error al parsear la entrada: \n>" + e.toString() + "\n";
+            document.getElementById('consola').value += "\n>Error al parsear la entrada: \n>" + e.toString() + "\n";
+            var contErrores = this.listaErroresXML.length;
+            document.getElementById('consola').value += "\n>[Error]: "+this.listaErroresXML[contErrores-1].Descripcion + " linea: "+ this.listaErroresXML[contErrores-1].linea +  " Columna: "+ this.listaErroresXML[contErrores-1].columna;
+            //Si se encontraron errores en la traducción, se guardan en memoria para generar el reporte
+            console.log("\n\n\n################################################################");
+            var codigoTablaErroresTraduccion = construyeReporteErrores(this.listaErroresXML);
+            console.log("\n################################################################");
+            document.getElementById("hiddenErrores").value = codigoTablaErroresTraduccion;
+
             throw ('Error al parserar la entrada: ' + e);
         }
     } catch (error) {
@@ -35,6 +74,12 @@ const parseXML = function (entrada) {
 
 };
 
+function insertarErrorXML(error){
+    alert("Error: "+error.Descripcion);
+    if (error != undefined){
+        this.listaErroresXML.push(error);
+    }
+}
 const parseXMLTS = function (raiz){
     var listaA = [];
     var listaO = []; 
@@ -54,8 +99,8 @@ const parseXMLTS = function (raiz){
     raiz.agregarObjeto(Nodo1);
     raiz.agregarObjeto(Nodo2);
     Nodo1.agregarObjeto(Nodo3);
-    alert("Cantidad objetos Raiz: "+raiz.listaObjetos.length);
-    alert("Cantidad objetos Nodo1: "+Nodo1.listaObjetos.length);
+    //alert("Cantidad objetos Raiz: "+raiz.listaObjetos.length);
+    //alert("Cantidad objetos Nodo1: "+Nodo1.listaObjetos.length);
     //alert("Raiz ID: " + raiz.identificador);
     //alert("Hijo ID: " + raiz.listaObjetos[0].identificador +"\nHijo2 ID: "+raiz.listaObjetos[1].identificador);
     
@@ -99,7 +144,8 @@ function abrirReporteAST(){
     //window.open("Paginas/reporteAST.html","_blank");
     var informacion = document.getElementById('hiddenAST').value;
     document.getElementById('reporteASTGrafica').visible = true;
-    document.getElementById('reporteASTGrafica').innerHTML = informacion;
+    pruebaGraficarVizAST(informacion);
+    //document.getElementById('reporteASTGrafica').innerHTML = informacion;
 }
 
 function abrirReporteCST(){
@@ -107,7 +153,8 @@ function abrirReporteCST(){
     //window.open("Paginas/reporteCST.html","_blank");
     var informacion = document.getElementById('hiddenCST').value;
     document.getElementById('reporteCSTGrafica').visible = true;
-    document.getElementById('reporteCSTGrafica').innerHTML = informacion;
+    pruebaGraficarVizCST(informacion);
+    //document.getElementById('reporteCSTGrafica').innerHTML = informacion;
 }
 
 function abrirReporteErrores(){
@@ -143,7 +190,7 @@ function probandoArbol(){
     var Raiz = new Nodo('Raiz','Raiz'); //Se crea un primer nodo para la raíz del Arbol
     var Tree = new Arbol('CST',Raiz); //Se crea el arbol indicando ID y Raiz
     
-    alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
+    //alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
     Raiz.insertHijo('A','Hijo1');
     Raiz.insertHijo('B','Hijo2');
     Raiz.insertHijo('C','Hijo3');
@@ -190,7 +237,7 @@ function probandoArbolAST(){
     var Raiz = new Nodo('Raiz','+'); //Se crea un primer nodo para la raíz del Arbol
     var Tree = new Arbol('AST',Raiz); //Se crea el arbol indicando ID y Raiz
     
-    alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
+    //alert('ID_Nodo: '+Raiz.id + '\nValor: ' + Raiz.valor + '\nCantidadHijos: '+Raiz.getCantidadHijos());
     Raiz.insertHijo('A','*');
     Raiz.insertHijo('B','*');
 
@@ -226,7 +273,7 @@ function pruebaGraficarViz(grafica){
     viz.renderSVGElement(grafica)
     .then(function(element) {
         //document.body.appendChild(element);
-        alert('entro a la funcion elemento');
+        //alert('entro a la funcion elemento');
         let elemento = document.getElementById('grafica');
         elemento.appendChild(element);
     })
@@ -258,3 +305,5 @@ function showCode(){
     var text = editor.getValue();
     return text;
 }
+
+

@@ -1,19 +1,24 @@
+import { StringLiteralLike } from "typescript";
 import Atributo from "../Expresiones/Atributo";
 import Objeto from "../Expresiones/Objeto";
 
 export class reporteTabla {
   public identificador: String;
-  public contenido: string;
-  public listaAtributos: String;
-  public listaObjetos: String;
+  public tipo: String;
+  public entorno:String;
+  public contenido: String;
+  public linea:String;
+  public columna:String;
+  public posicion: String;
 
-
-  constructor(identificador: String, contenido:string, listaAtributos: String,  listaObjetos: String) {
+  constructor(identificador: String, tipo:String, entorno: String, contenido: String,linea:String,columna:String,posicion:String) {
     this.identificador = identificador;
+    this.tipo=tipo;
+    this.entorno=entorno;
     this.contenido = contenido;
-    this.listaAtributos = listaAtributos;
-    this.listaObjetos = listaObjetos;
-  
+    this.linea=linea;
+    this.columna=columna;
+    this.posicion=posicion;
   }
   public getIdentificador(): String {
     return this.identificador;
@@ -31,22 +36,41 @@ export class reporteTabla {
     this.contenido=contenido;
   }
 
-  public getListaAtributos():String{
-    return this.listaAtributos;
+  public getTipo():String{
+    return this.tipo;
   }
 
-  public setListaAtributos(listaAtributos:String) {
-    this.listaAtributos = listaAtributos;
+  public setTipo(tipo:String) {
+    this.tipo = tipo;
   }
 
-  public getListaObjetos():String{
-    return this.listaObjetos;
+  public getEntorno():String{
+    return this.entorno;
   }
 
-  public setListaObjetos(listaObjetos:String) {
-    this.listaObjetos = listaObjetos;
+  public setEntorno(ent: String) {
+    this.entorno = ent;
   }
 
+  public getLinea(): String {
+    return this.linea;
+  }
+  public getColumna(): String {
+    return this.columna;
+  }
+  public setLinea(linea: String) {
+    this.linea = linea;
+  }
+  public setColumna(col: String) {
+    this.columna = col;
+  }
+  public getPosicion():String{
+    return this.posicion;
+  }
+
+  public setPosicion(posicion:String){
+    this.posicion=posicion;
+  }
 
 
 }
