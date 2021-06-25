@@ -1,5 +1,6 @@
 import { Tipo, TipoPath, concatenarNodos, concatenarNodosOrden , Predicado } from "../AST/Entorno"
 import { Nodo } from "./Expresiones"
+var { C3D } = require('../AST/C3D')
 
 export class Axes 
 {
@@ -45,7 +46,6 @@ export class Camino extends Axes
   {
     super(nombre,predicado,tipo)
 
-
   }
 
   getValor(nodos,inicio=1)
@@ -78,6 +78,12 @@ export class Camino extends Axes
       }
       return retornos
   }
+
+  getC3D(){
+
+  }
+
+
   Graficar(ListaNodes,ListaEdges,contador)
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"")
