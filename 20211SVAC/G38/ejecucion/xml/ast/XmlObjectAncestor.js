@@ -43,9 +43,6 @@ class XmlObjectAncestor {
     /*
     OVERRIDE METHODS
      */
-    getTsScope3D(scope, index) {
-        throw new Error("Method not implemented.");
-    }
     getTsScope(scope, index) {
         throw new Error("Method not implemented.");
     }
@@ -66,8 +63,5 @@ class XmlObjectAncestor {
     }
     getStrAst(nodoPadre) {
         return "";
-    }
-    generateString_3d() {
-        throw new Error("Method not implemented generateString_3d().");
     }
 }

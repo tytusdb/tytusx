@@ -8,10 +8,10 @@ class AnySelf {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         var ts = new TablaSimbolos(null);
         ts = this.getDescendant(ent);
         ts.merge(ent);
