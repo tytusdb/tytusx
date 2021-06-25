@@ -2,7 +2,6 @@ let raizCST;
 let errores = new Errores();
 function analizar() {
     const texto = document.getElementById('inputXML');
-    const consola = document.getElementById('resultC3D');
     errores = new Errores();
     let auxResultado;
     try {
@@ -18,13 +17,14 @@ function analizar() {
     let nodos = auxResultado.nodos;
     let entornoGlobal = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
-    consola.value = generateC3DXML(entornoGlobal);
+    let result = new C3DResult(new Array(), 0, 0, null);
+    result = recorrerSimbolos(result, entornoGlobal);
     setSymbolTable(entornoGlobal);
     raizCST = auxResultado.raizCST;
     if (errores.getErrores().length > 0) {
         errores.agregarEncabezado("XML");
     }
-    analizarXpath(entornoGlobal);
+    analizarXpath(entornoGlobal, result);
 }
 function addSimbolosToEntorno(anterior, nodos, ambito) {
     nodos.forEach((nodo) => {
@@ -42,34 +42,6 @@ function addSimbolosToEntorno(anterior, nodos, ambito) {
             anterior.add(nodo);
         }
     });
-}
-function generateC3DXML(entornoG) {
-    let result = new C3DResult(new Array(), 0, 0, null);
-    result = recorrerSimbolos(result, entornoG);
-    let codigo = new Array();
-    codigo.push("/*------HEADER------*/");
-    codigo.push("#include <stdio.h>");
-    codigo.push("#include <math.h>");
-    codigo.push("double heap[30101999];");
-    codigo.push("double stack[30101999];");
-    codigo.push("double P;");
-    codigo.push("double H;");
-    let aux = new Array();
-    aux.push("double");
-    for (let i = 0; i < result.getNextTemp(); i++) {
-        aux.push(` t${i}`);
-        aux.push(",");
-    }
-    aux.pop();
-    aux.push(";");
-    codigo.push(aux.join(""));
-    codigo.push("\n/*-----MAIN-----*/");
-    codigo.push("void main() {");
-    codigo.push("\tP = 0; H = 0;");
-    result.getCodigo().forEach(l => codigo.push(l));
-    codigo.push("\treturn;");
-    codigo.push("}");
-    return codigo.join("\n");
 }
 function recorrerSimbolos(result, entorno) {
     entorno.getTable().forEach(s => {

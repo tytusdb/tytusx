@@ -1,0 +1,123 @@
+//Consulta 1
+t0 = H;
+t1 = t0;
+H = H+2;
+heap[(int)t1] = 1;
+t1 = t1+1;
+t2 = H;
+heap[(int)H] = 98;
+H = H + 1;
+heap[(int)H] = 111;
+H = H + 1;
+heap[(int)H] = 111;
+H = H + 1;
+heap[(int)H] = 107;
+H = H + 1;
+heap[(int)H] = 115;
+H = H + 1;
+heap[(int)H] = 116;
+H = H + 1;
+heap[(int)H] = 111;
+H = H + 1;
+heap[(int)H] = 114;
+H = H + 1;
+heap[(int)H] = 101;
+H = H + 1;
+heap[(int)H] = -1;
+H = H + 1;
+heap[(int)t1] = t2;
+stack[(int)0] = t0;
+
+//Consulta 2
+t3 = H;
+t4 = t3;
+H = H+2;
+heap[(int)t4] = 1;
+t4 = t4+1;
+t5 = H;
+heap[(int)H] = 98;
+H = H + 1;
+heap[(int)H] = 111;
+H = H + 1;
+heap[(int)H] = 111;
+H = H + 1;
+heap[(int)H] = 107;
+H = H + 1;
+heap[(int)H] = -1;
+H = H + 1;
+heap[(int)t4] = t5;
+stack[(int)1] = t3;
+
+//Arreglo de consultas
+t6 = H;
+t7 = t6+1;
+heap[(int)H] = 2;
+H = H+3;
+
+t8 = stack[(int)0];
+heap[(int)t7] = t8;
+t7 = t7+1;
+
+t9 = stack[(int)1];
+heap[(int)t7] = t9;
+t7 = t7+1;
+
+stack[(int)2] = t6;
+
+
+
+
+
+void compareStrings() {
+    t4 = P+1;
+    t5 = stack[(int)t4];
+    t4 = t4+1;
+    t6 = stack[(int)t4];
+    L1:
+    t7 = heap[(int)t5];
+    t8 = heap[(int)t6];
+    if(t7 != t8) goto L3;
+    if(t7 == -1) goto L2;
+    t5 = t5+1;
+    t6 = t6+1;
+    goto L1;
+    L2:
+    stack[(int)P] = 1;
+    goto L0;
+    L3:
+    stack[(int)P] = 0;
+    L0:
+    return;
+}
+
+
+
+
+
+bookstore/book
+
+t0 = stack[15]; // entorno
+t0 = t0 + 1; //referencia a tabla
+t1 = heap[t0]; // tabla - 97
+
+t2 = heap[t1]; // tamaño de la tabla  -- 2
+t3 = 1; // iterador de tamaño
+t4 = t1 + 1; // posicion en memoria del primer nodo -- 98
+if (t2 > 0) goto L1
+
+L1:
+    t5 = heap[t4] // primer nodo
+    t5 = t5 + 0; // referencia atributo nombre del nodo
+    t6 = heap[t2]; // atributo nombre
+    if (t6 == "book") goto L2;
+    goto L3;
+;
+
+L3:
+    t3 = t3 + 1;
+    t4 = t4 + 1;
+    goto L1;
+;
+
+L2:
+Codigo para generar nuevo array de entornos :v

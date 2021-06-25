@@ -1,6 +1,6 @@
-class ConsultaDescOrSelf {
-    constructor(id) {
-        this.id = id;
+class ConsultaDescOrSelf extends Consulta {
+    constructor(type, id) {
+        super(type, id);
     }
     run(entornos) {
         let newEntornos = new Array();
@@ -13,7 +13,7 @@ class ConsultaDescOrSelf {
         let flag = false;
         let nuevoEntorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
-            if (s instanceof Nodo && s.getNombre() === this.id) {
+            if (s instanceof Nodo && s.getNombre() === super.getId()) {
                 flag = true;
                 nuevoEntorno.add(s);
             }

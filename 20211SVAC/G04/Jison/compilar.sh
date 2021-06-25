@@ -11,13 +11,15 @@ echo traspilando archivos TypeScript
 tsc
 echo ----------------------------------------
 
-echo moviendo archivo
+echo moviendo archivos...
 mv AnalyzerXML.js ../js
-if [ -d ../js/XQUERY ];
-then echo "Carpeta ya existe"
-else mkdir ../js/XQUERY
-fi
-mv analizadorXquery.js ../js/XQUERY
 mv jisonXpaht.js ./XPATH
 mv AnalyzerXpathDesc.js ../js/XPATH
+
+DIR="../js/XQUERY/"
+if [ ! -d "$DIR" ]; then
+  mkdir $DIR
+  echo carpeta XQUERY creada
+fi
+mv analizadorXquery.js ../js/XQUERY
 echo ----------------------------------------

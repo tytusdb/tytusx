@@ -1,4 +1,4 @@
-class ConsultaDescendente2 extends ConsultaSimple implements ConsultaDesc {
+class ConsultaDescendente2 extends ConsultaSimple {
 
     run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();
@@ -15,10 +15,10 @@ class ConsultaDescendente2 extends ConsultaSimple implements ConsultaDesc {
         let nuevoEntorno: Entorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
             if (s instanceof Nodo) {
-                if (super.getIdentificador() === "*") {
+                if (super.getId() === "*") {
                     flag = true;
                     nuevoEntorno.add(s);
-                } else if (s.getNombre() === super.getIdentificador()) {
+                } else if (s.getNombre() === super.getId()) {
                     flag = true;
                     nuevoEntorno.add(s);
                 }

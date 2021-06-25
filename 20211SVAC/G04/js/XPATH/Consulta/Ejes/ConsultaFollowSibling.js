@@ -1,6 +1,6 @@
-class ConsultaFollowSibling {
-    constructor(id) {
-        this.id = id;
+class ConsultaFollowSibling extends Consulta {
+    constructor(type, id) {
+        super(type, id);
         this.ignorarNodos = true;
     }
     run(entornos) {
@@ -13,7 +13,7 @@ class ConsultaFollowSibling {
                 }
             }
         });
-        let parent = new ConsultaPuntos();
+        let parent = new ConsultaPuntos(TipoConsulta.PUNTOS, "");
         entornos = parent.run(entornos);
         entornos = this.getHijos(entornos);
         entornos.forEach((e) => {
@@ -21,11 +21,11 @@ class ConsultaFollowSibling {
             let nuevoEntorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s) => {
                 if (s instanceof Nodo) {
-                    if (this.id === "*" && !this.ignorarNodos) {
+                    if (super.getId() === "*" && !this.ignorarNodos) {
                         flag = true;
                         nuevoEntorno.add(s);
                     }
-                    else if (s.getNombre() == this.id && !this.ignorarNodos) {
+                    else if (s.getNombre() == super.getId() && !this.ignorarNodos) {
                         flag = true;
                         nuevoEntorno.add(s);
                     }
