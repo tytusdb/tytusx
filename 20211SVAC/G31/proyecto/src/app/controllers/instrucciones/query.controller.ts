@@ -8,9 +8,9 @@ export class Query extends Nodo {
   public simbolo: string;
   public pathExpr: Nodo | undefined;
 
-  constructor(tipo: Tipo, simbolo: string, pathExpr: Nodo | undefined,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, simbolo: string, pathExpr: Nodo | undefined,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ, tipo, linea, columna);
 
     this.simbolo = simbolo;
     this.pathExpr = pathExpr;
@@ -20,4 +20,7 @@ export class Query extends Nodo {
     return this.pathExpr?.ejecutar(tabla, arbol)
   }
 
+  public c3d(tabla: Tabla | Entorno, arbol: Arbol) {
+    return this.pathExpr?.c3d(tabla, arbol)
+  }
 }

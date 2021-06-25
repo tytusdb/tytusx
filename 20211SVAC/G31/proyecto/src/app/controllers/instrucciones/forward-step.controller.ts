@@ -8,15 +8,19 @@ export class ForwardStep extends Nodo {
   public instruccion: string;
   public NodeTest: Nodo;
 
-  constructor(tipo: Tipo, instruccion: string, NodeTest: Nodo,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, instruccion: string, NodeTest: Nodo,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ, tipo, linea, columna);
 
     this.instruccion = instruccion;
     this.NodeTest = NodeTest;
   }
 
   public ejecutar(tabla: Tabla, arbol: Arbol) {
+    throw new Error('Method not implemented in ForwardStep');
+  }
+
+  public c3d(tabla: Tabla, arbol: Arbol) {
     throw new Error('Method not implemented in ForwardStep');
   }
 
