@@ -8,6 +8,7 @@ class Optimizador{
     Ejecutar(){
 
         this.Regla1();
+        this.Regla2();
         this.Regla6();
         this.Regla7();
         this.Regla8();
@@ -87,6 +88,57 @@ class Optimizador{
                             }
                         }
                     }            
+                }
+            }
+        });
+    }
+
+    /*
+    If (x == x) goto L1; 
+    goto L2; 
+    */
+    Regla2(){
+        var bloques = this.bloques;
+
+        bloques.forEach(function (bloque){
+
+            if(bloque.getTipo() == TipoBloque.VOID || bloque.getTipo() == TipoBloque.MAIN){
+
+                for (var i=0; i < bloque.getInstrucciones().length;i++ ){
+
+                    if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
+
+                        if((i+2) < bloque.getInstrucciones().length){
+
+                            if((bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO) &&
+                            (bloque.getInstrucciones()[i+2].getTipo() == TipoInstruccion3D.ETIQUETA) &&
+                            (bloque.getInstrucciones()[i].getGOTO() == bloque.getInstrucciones()[i+2].getEtiqueta())){
+
+                                var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                    codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
+                                    codigoAntes += bloque.getInstrucciones()[i+2].getCodigo3D();
+
+                                bloque.getInstrucciones()[i].InvertirOperador();
+                                bloque.getInstrucciones()[i].setGOTO(bloque.getInstrucciones()[i+1].getEtiqueta());
+                                bloque.getInstrucciones()[i].GenerarC3D();
+
+                                var codigoDespues = bloque.getInstrucciones()[i].getCodigo3D();
+                            
+                                ListaOptimizaciones.push(new Optimizacion(
+                                    bloque.getInstrucciones()[i].getLinea(),
+                                    bloque.getInstrucciones()[i].getColumna(),
+                                    "Bloques",
+                                    codigoAntes,
+                                    codigoDespues,
+                                    "Regla 2"));
+                                bloque.getInstrucciones().splice(i+1,2);
+                                i--; 
+
+                            }
+
+                        }
+                    }
+
                 }
             }
         });

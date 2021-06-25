@@ -12,6 +12,15 @@ var If = /** @class */ (function () {
         this.operador = operador;
         this.goto = goto;
     }
+
+    If.prototype.getLinea = function () {
+        return this.linea;
+    };
+
+    If.prototype.getColumna = function () {
+        return this.columna;
+    };
+
     If.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };
@@ -50,6 +59,68 @@ var If = /** @class */ (function () {
     If.prototype.getCodigo3D = function () {
         return this.codigo;
     };
+
+    If.prototype.OperadorString = function () {
+        
+        var operadorActual = this.operador;
+        var operadorSalida = "";
+
+        switch (operadorActual) {
+            case Operador.IGUAL:
+              operadorSalida = "==";
+              break;
+            case Operador.DIFERENTE_QUE:
+                operadorSalida = "!=";
+              break;
+            case Operador.MAYOR_IGUAL_QUE:
+                operadorSalida = ">=";
+                break;
+            case Operador.MENOR_IGUAL_QUE:
+                operadorSalida = "<=";
+                break;
+            case Operador.MAYOR_QUE:
+                operadorSalida = ">";
+                break;
+            case Operador.MENOR_QUE:
+                operadorSalida = "<";
+                break;
+          }
+
+          return operadorSalida;
+    };
+
+    If.prototype.GenerarC3D = function () {
+        
+        this.codigo = "if (" + this.getOperando1() + " " + this.OperadorString() + " " + this.getOperando2() + ") goto " + this.getGOTO() + ";\n";
+
+    };
+
+    If.prototype.InvertirOperador = function () {
+        
+        var operadorActual = this.operador;
+
+        switch (operadorActual) {
+            case Operador.IGUAL:
+              this.operador = Operador.DIFERENTE_QUE;
+              break;
+            case Operador.DIFERENTE_QUE:
+              this.operador = Operador.IGUAL;
+              break;
+            case Operador.MAYOR_IGUAL_QUE:
+                this.operador = Operador.MENOR_QUE;
+                break;
+            case Operador.MENOR_IGUAL_QUE:
+                this.operador = Operador.MAYOR_QUE;
+                break;
+            case Operador.MAYOR_QUE:
+                this.operador = Operador.MENOR_IGUAL_QUE;
+                break;
+            case Operador.MENOR_QUE:
+                this.operador = Operador.MAYOR_IGUAL_QUE;
+                break;
+          }
+    };
+
     return If;
 }());
 //exports.If = If;
