@@ -50,6 +50,15 @@
 "le"                    %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_le';%}
 "gt"                    %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_gt';%}
 "ge"                    %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_ge';%}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//palabras reservadas para las funciones en XQUERY 
+"declare"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_declare';%}
+"function"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_function';%}
+"local:"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_local';%}
+"as"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_as';%}
+"xs:"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_xs';%}
+";"                   %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_punto_coma';%}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -93,6 +102,9 @@
 "last"                  %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_last';%}
 "position"              %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_position';%}
 "text"                  %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_text';%}
+"upper-case"           %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_upper';%}
+"lower-case"           %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_lower';%}
+"substring"            %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_substring';%}
 
 
 
@@ -191,7 +203,15 @@ XQUERYGRA
         |F_UPPER
         {$$= new Nodo("XQY", "XQY" );
         $$.agregarHijo($1);
+	} 
+        |F_LOWER
+        {$$= new Nodo("XQY", "XQY" );
+        $$.agregarHijo($1);
 	}         
+        |F_SUBSTRING        
+        {$$= new Nodo("XQY", "XQY" );
+        $$.agregarHijo($1);
+	} 
 ;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  
@@ -204,7 +224,7 @@ FOR_IN
 ;
 ORDEN
         :                                                                               
-        |tk_order_by VARIABLE
+        tk_order_by VARIABLE
         {$$= new Nodo("ORD", "ORD" );
         $$.agregarHijo(new Nodo($1,$1));
         $$.agregarHijo($2);
@@ -214,7 +234,11 @@ ORDEN
         $$.agregarHijo(new Nodo($1,$1));
         $$.agregarHijo($2);
         $$.agregarHijo($3);
-	}                                                         
+	}
+        |
+         {$$= new Nodo("ORD", "ORD" );
+          $$.agregarHijo(new Nodo("ε","ε"));         
+        }                                                                
 ;
 WHERE
         :tk_where CONDICIONAL 
@@ -625,6 +649,37 @@ F_UPPER
         $$.agregarHijo($3);
         $$.agregarHijo(new Nodo($4,$4));
 	}                                     
+;
+F_LOWER
+        :tk_lower tk_parentesis_izq CONS tk_parentesis_der
+        {$$= new Nodo("FLOW", "FLOW" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+	}
+;
+F_SUBSTRING
+        :tk_substring tk_parentesis_izq CONS tk_coma tk_numero tk_parentesis_der
+        {$$= new Nodo("FSUB", "FSUB" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+        $$.agregarHijo(new Nodo($6,$6));
+	}        
+        |tk_substring tk_parentesis_izq CONS tk_coma tk_numero tk_coma tk_numero tk_parentesis_der
+        {$$= new Nodo("FSUB", "FSUB" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+        $$.agregarHijo(new Nodo($6,$6));
+        $$.agregarHijo(new Nodo($7,$7));
+        $$.agregarHijo(new Nodo($8,$8));	
+        } 
 ;
 CONS
         :VARIABLE XPATHGRA 
