@@ -4,6 +4,7 @@ var tsObjeto = /** @class */ (function () {
         this.tipo = tipo;
         this.entorno = entorno;
         this.sp = 0;
+        this.longitud = this.identificador.length;
     }
     return tsObjeto;
 }());
