@@ -47,7 +47,7 @@ export class Let{
     this.declaraciones = []
     this.declaraciones.push(declaracion)
     this.intermediate = []
-    this.return=null
+    this.expReturn=null
   }
 
   getValor(nodos)
@@ -59,68 +59,37 @@ export class Let{
     for (const intermedia of this.intermediate) {
       intermedia.getValor(newEntorno)
     }
-    var retorno = this.return.getValor(newEntorno)
+    var retorno = this.return(newEntorno)
     return retorno
   }
-}
 
-export class Return
-{
-  constructor(expresion)
+  return(nodos)
   {
-    this.expresion=expresion
-  }
-
-  getValor(nodos)
-  {
-    return this.expresion.getValor(nodos)
+    return this.expReturn.getValor(nodos)
   }
 }
 
-export class FotDeclaracion
+export class ForDeclaracion
 {
-  constructor(nombre,posicion='',exp)
+  constructor(nombre,posicion='',expresion)
   {
     this.nombre = nombre
     this.posicion = posicion
-    this.exp = exp
+    this.expresion = expresion
   }
 
-  getValor(nodos)
+  getValor(nodos=[])
   {
     var retornos = this.expresion.getValor(nodos)
-    if(retornos[0] && retornos[0].tipo==Tipo.ERROR) return
-    if(!this.contains(nodos,this.nombre,retornos))
-    {
-      var Entorno =
-      {
-        tipo : `${this.nombre}`,
-        atributos : [],
-        hijos:retornos,
-        texto:'',
-        posTipo : 0,
-        posTexto : 0,
-      }
-      nodos.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
-    } 
-    if(this.posicion=='') return retornos
+    if(retornos[0] && retornos[0].tipo==Tipo.ERROR) return {valor:[],posicion:[],largo:0}
     var Iterador = []
-    for (let index = 0; index < array.length; index++) {
-      Iterador.push(new Literal(Tipo.INTEGER,index+1))  
-    } 
-    if(!this.contains(nodos,this.posicion,Iterador))
-    {
-      var Entorno =
-      {
-        tipo : `${this.posicion}`,
-        atributos : [],
-        hijos:Iterador,
-        texto:'',
-        posTipo : 0,
-        posTexto : 0,
-      }
-      nodos.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
-    } 
+    if(this.posicion!='')
+    { 
+      for (let index = 0; index < retornos.length; index++) {
+        Iterador.push(new Literal(Tipo.INTEGER,index+1))  
+      } 
+    }
+    return {valor:retornos,posicion:Iterador,largo:retornos.length,nombreValor:this.nombre,nombrePosicion:this.posicion}
   }
 
   contains(nodos,nombre,retornos)
@@ -136,13 +105,67 @@ export class FotDeclaracion
 }
 
 export class For{
-  constructor()
+  constructor(declaraciones=[])
   {
-
+    this.declaraciones = declaraciones
+    this.intermediate = []
+    this.expReturn = null
   }
 
-  getValor()
+  getValor(nodos)
   {
-    
+    var nuevos = []
+    for (const declaracion of this.declaraciones) {
+      nuevos.push(declaracion.getValor(nodos))
+    }
+    for (const intermedia of this.intermediate) {
+      intermedia.getValor(nodos)
+    }
+    var pila = nuevos.map(function(val){return 0})
+    return this.return(nodos,nuevos,0,pila)
+  }
+
+  return(nodos,nuevos,posicion,pila)
+  {
+    var retornos = []
+    for (let i = 0; i < nuevos[posicion].valor.length; i++) {
+      var tempnodos = [...nodos]
+      tempnodos.push(
+        new Nodo(
+          Tipo.NODO, 
+          {
+            tipo : nuevos[posicion].nombreValor,
+            atributos : [],
+            hijos:nuevos[posicion].valor[i],
+            valor:'',
+            posTipo : 0,
+            posTexto : 0,
+          }
+        )
+      )
+      if(nuevos[posicion].posicion.length>0)
+      {
+        tempnodos.push(
+          new Nodo(
+            Tipo.NODO, 
+            {
+              tipo : nuevos[posicion].nombrePosicion,
+              atributos : [],
+              hijos:nuevos[posicion].posicion[i],
+              texto:'',
+              posTipo : 0,
+              posTexto : 0,
+            }
+          )
+        )
+      }
+      if(nuevos.length-1>posicion) {
+        retornos = retornos.concat(this.return(tempnodos,nuevos,posicion+1,pila))
+      }
+      else {
+        retornos = retornos.concat(this.expReturn.getValor(tempnodos))
+      }
+    }
+    return retornos
   }
 }
