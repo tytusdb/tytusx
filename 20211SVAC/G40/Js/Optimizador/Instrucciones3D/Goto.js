@@ -25,6 +25,17 @@ var Goto = /** @class */ (function () {
     Goto.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };
+
+    Goto.prototype.setEtiqueta = function (etiqueta) {
+        this.etiqueta = etiqueta;
+    };
+
+    Goto.prototype.GenerarC3D = function () {
+        
+        this.codigo = "goto " + this.getEtiqueta() + ";\n";
+
+    };
+
     Goto.prototype.getTipo = function () {
         return this.tipo;
     };

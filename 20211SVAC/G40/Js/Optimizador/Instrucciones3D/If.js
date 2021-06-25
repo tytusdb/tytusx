@@ -121,6 +121,46 @@ var If = /** @class */ (function () {
           }
     };
 
+    If.prototype.esConstantePositiva = function () {
+
+        if((this.isNumeric(this.getOperando1())==true && this.isNumeric(this.getOperando2())==true) &&
+        (Number(this.getOperando1()) == Number(this.getOperando2())) && 
+        this.getOperador() == Operador.IGUAL){
+            return true;
+        } else if((this.isNumeric(this.getOperando1())==true && this.isNumeric(this.getOperando2())==true) &&
+        (Number(this.getOperando1()) > Number(this.getOperando2())) && 
+        this.getOperador() == Operador.MAYOR_QUE){
+            return true;
+        } else if((this.isNumeric(this.getOperando1())==true && this.isNumeric(this.getOperando2())==true) &&
+        (Number(this.getOperando1()) < Number(this.getOperando2())) && 
+        this.getOperador() == Operador.MENOR_QUE){
+            return true;
+        } else if((this.isNumeric(this.getOperando1())==true && this.isNumeric(this.getOperando2())==true) &&
+        (Number(this.getOperando1()) != Number(this.getOperando2())) && 
+        this.getOperador() == Operador.DIFERENTE_QUE){
+            return true;
+        } else if((this.isNumeric(this.getOperando1())==true && this.isNumeric(this.getOperando2())==true) &&
+        (Number(this.getOperando1()) >= Number(this.getOperando2())) && 
+        this.getOperador() == Operador.MAYOR_IGUAL_QUE){
+            return true;
+        } else if((this.isNumeric(this.getOperando1())==true && this.isNumeric(this.getOperando2())==true) &&
+        (Number(this.getOperando1()) <= Number(this.getOperando2())) && 
+        this.getOperador() == Operador.MENOR_IGUAL_QUE){
+            return true;
+        } else if ((this.getOperando1() == this.getOperando2()) && 
+        (this.getOperador() == Operador.IGUAL)){
+            return true;
+        } else {
+            return false;
+        }
+
+    };
+
+    If.prototype.isNumeric = function (str) {
+        if (typeof str != "string") return false 
+        return !isNaN(str) && !isNaN(parseFloat(str)) 
+    };
+
     return If;
 }());
 //exports.If = If;
