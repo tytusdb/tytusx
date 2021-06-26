@@ -206,13 +206,13 @@ class Traduccion {
 
         ${auxFunc}
 
-        void main() {
+        int main() {
             P = 0; H = 0;
 
             ${this.traduccion3D}
 
 
-            return;
+            return 0;
         }
         `;
 
