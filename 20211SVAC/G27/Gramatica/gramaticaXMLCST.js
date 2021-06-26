@@ -71,11 +71,11 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramaticaXML = (function(){
+var gramaticaXMLCST = (function(){
 var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,18],$V1=[1,23],$V2=[14,16],$V3=[1,28],$V4=[1,58],$V5=[1,43],$V6=[1,42],$V7=[1,40],$V8=[1,41],$V9=[1,44],$Va=[1,45],$Vb=[1,46],$Vc=[1,47],$Vd=[1,48],$Ve=[1,49],$Vf=[1,50],$Vg=[1,51],$Vh=[1,52],$Vi=[1,53],$Vj=[1,54],$Vk=[1,55],$Vl=[1,56],$Vm=[1,57],$Vn=[1,59],$Vo=[5,8,13,14,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"lteq":4,"xml":5,"version":6,"asig":7,"StringLiteral":8,"encoding":9,"gteq":10,"RAIZ":11,"EOF":12,"lt":13,"identifier":14,"ATRIBUTOS":15,"gt":16,"RAICES":17,"div":18,"OBJETO":19,"VALORES":20,"VALOR":21,"DoubleLiteral":22,"IntegerLiteral":23,"CharLiteral":24,"menor":25,"mayorque":26,"ampersand":27,"apostrofe":28,"quot":29,"content":30,"punto":31,"csimple":32,"fecha":33,"coma":34,"dospuntos":35,"numeral":36,"mas":37,"guion":38,"ATRIBUTO":39,"$accept":0,"$end":1},
+symbols_: {"error":2,"START":3,"lteq":4,"xml":5,"version":6,"asig":7,"StringLiteral":8,"encoding":9,"gteq":10,"RAIZ":11,"EOF":12,"lt":13,"identifier":14,"ATRIBUTOS":15,"gt":16,"RAICES":17,"div":18,"OBJETO":19,"VALOR_ETIQUETA":20,"VALOR":21,"DoubleLiteral":22,"IntegerLiteral":23,"CharLiteral":24,"menor":25,"mayorque":26,"ampersand":27,"apostrofe":28,"quot":29,"content":30,"punto":31,"csimple":32,"fecha":33,"coma":34,"dospuntos":35,"numeral":36,"mas":37,"guion":38,"ATRIBUTO":39,"$accept":0,"$end":1},
 terminals_: {2:"error",4:"lteq",5:"xml",6:"version",7:"asig",8:"StringLiteral",9:"encoding",10:"gteq",12:"EOF",13:"lt",14:"identifier",16:"gt",18:"div",22:"DoubleLiteral",23:"IntegerLiteral",24:"CharLiteral",25:"menor",26:"mayorque",27:"ampersand",28:"apostrofe",29:"quot",30:"content",31:"punto",32:"csimple",33:"fecha",34:"coma",35:"dospuntos",36:"numeral",37:"mas",38:"guion"},
 productions_: [0,[3,11],[11,9],[11,8],[17,2],[17,1],[19,9],[19,9],[19,8],[19,8],[20,2],[20,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[15,2],[15,1],[39,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
@@ -84,18 +84,13 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- 
-    var nodo = new Objeto('RAIZ','',0, 0,null,null); 
-    nodo.agregarObjeto($$[$0-1]);
-    var arreglo =[nodo];
-    return arreglo;
-
+ return $$[$0-1];
 break;
 case 2: case 6:
- this.$= new Objeto($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4]); 
+ this.$= new Objeto($$[$0-7],'',0,0,$$[$0-6],$$[$0-4]); 
 break;
-case 3: case 8:
-this.$= new Objeto($$[$0-6],'',_$[$0-7].first_line, _$[$0-7].first_column,null,$$[$0-4]);
+case 3:
+this.$= new Objeto($$[$0-6],'',0,0,null);
 break;
 case 4:
 this.$= $$[$0-1];  this.$.push($$[$0]);
@@ -104,19 +99,21 @@ case 5:
 this.$= [];  this.$.push($$[$0]);
 break;
 case 7:
- this.$= new Objeto($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],null); 
+ this.$= new Objeto($$[$0-7],$$[$0-4],0,0,$$[$0-6],null); 
 break;
-case 9:
- this.$= new Objeto($$[$0-6],$$[$0-4],_$[$0-7].first_line, _$[$0-7].first_column,null,null);
+case 8: case 9:
+this.$= new Objeto($$[$0-6],'',0,0,null,$$[$0-4]);
 break;
 case 10:
-this.$=$$[$0-1]+" "+$$[$0]
+this.$=$$[$0-1]+" "+$$[$0];
 break;
-case 11: case 31:
+case 11:
 this.$=$$[$0];
 break;
-case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30:
-this.$= $$[$0];
+case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30: case 31:
+
+                this.$=$$[$0];
+            
 break;
 case 32:
 this.$=$$[$0-1]; this.$.push($$[$0]);
@@ -125,7 +122,7 @@ case 33:
 this.$=[]; this.$.push($$[$0]);
 break;
 case 34:
-this.$= new Atributo($$[$0-2],$$[$0],_$[$0-2].first_line, _$[$0-2].first_column);
+this.$= new Atributo($$[$0-2],$$[$0]);
 break;
 }
 },
@@ -645,7 +642,7 @@ case 18:return 36;
 break;
 case 19:return 37;
 break;
-case 20:return 38;
+case 20:return 38
 break;
 case 21:return 25;
 break;
@@ -677,7 +674,7 @@ case 33:return 12
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:<\?)/i,/^(?:\?>)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\/)/i,/^(?:!)/i,/^(?:\.)/i,/^(?:')/i,/^(?:,)/i,/^(?::)/i,/^(?:#)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:[0-9]+\.[0-9]*)/i,/^(?:[0-9]+)/i,/^(?:[0-9]{2}[0-9]{2}[0-9]{4})/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑ]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/i,/^(?:.)/i,/^(?:$)/i],
+rules: [/^(?:\s+)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:<\?)/i,/^(?:\?>)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\/)/i,/^(?:!)/i,/^(?:\.)/i,/^(?:')/i,/^(?:,)/i,/^(?::)/i,/^(?:#)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:[0-9]+\.[0-9]*)/i,/^(?:[0-9]+)/i,/^(?:[0-9]{2}[0-9]{2}[0-9]{4})/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/i,/^(?:.)/i,/^(?:$)/i],
 conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],"inclusive":true},"INITIAL":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],"inclusive":true}}
 });
 return lexer;
@@ -692,9 +689,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramaticaXML;
-exports.Parser = gramaticaXML.Parser;
-exports.parse = function () { return gramaticaXML.parse.apply(gramaticaXML, arguments); };
+exports.parser = gramaticaXMLCST;
+exports.Parser = gramaticaXMLCST.Parser;
+exports.parse = function () { return gramaticaXMLCST.parse.apply(gramaticaXMLCST, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
