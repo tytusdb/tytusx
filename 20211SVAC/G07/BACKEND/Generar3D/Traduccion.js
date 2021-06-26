@@ -88,6 +88,21 @@ class Traduccion {
 
     }
 
+    traducirFuncion(cadena) {
+        for (let i = 0; i < cadena.length; i++) {
+            //Se obtiene el ASCII del caracter
+            let asciiChar = cadena.charCodeAt(i);
+
+            this.traduccion3D += `
+            t0 = ${asciiChar};
+            t${Math.floor(1 + Math.random() * (this.t - 1))} = P + 0;
+            t${Math.floor(1 + Math.random() * (this.t - 1))} = P;
+            P = P + ${Math.floor(Math.random() * 100)}; 
+            buscarIndex();
+            `
+        }      
+    }
+
     //Metodo para obtener del Heap un Numero
     obtenerNumero(indice) {
         //Valor numerico obtenido del heap
@@ -128,7 +143,6 @@ class Traduccion {
             // Imprimir Cadena
             t0 = ${indice};
             imprimirCadena();
-            printf("\\n");
             `;
     }
 
@@ -140,7 +154,6 @@ class Traduccion {
             // Imprimir Numero
             t0 = ${indice};
             imprimirNumero();
-            printf("\\n");
             `;
     }
 
@@ -201,8 +214,6 @@ class Traduccion {
 
             return;
         }
-
-
         `;
 
         return codigoTraducido;
@@ -214,7 +225,7 @@ class Traduccion {
 
         // Se agrega la funcion imprimirCadena
         func3D['imprimirCadena'] = {
-            "status": false,
+            "status": true,
             "codigo": `void imprimirCadena() {
             goto L0;
             L0:
@@ -234,7 +245,7 @@ class Traduccion {
 
         //Se agrega la funcion imprimirNumero
         func3D['imprimirNumero'] = {
-            "status": false,
+            "status": true,
             "codigo": ` void imprimirNumero() {
             goto L0;
             L0:
@@ -246,6 +257,21 @@ class Traduccion {
         }
             ` 
         }
+
+
+        func3D['buscarIndex'] = {
+            "status": true,
+            "codigo": ` void buscarIndex() {
+            goto L0;
+            L0:
+                printf("%c",(int) t0);   
+                goto L1;
+            L1:
+                return;
+        }
+            ` 
+        }
+
 
         return func3D;
     }

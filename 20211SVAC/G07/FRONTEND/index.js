@@ -9,6 +9,7 @@ let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
+let parserXPATHDER;
 let globalencod;
 let codificador = document.getElementById("codencod");
 
@@ -252,6 +253,11 @@ editorXML.value = textoEntrada;
 let consolaC3D = document.getElementById('consola3D');
 
 
+// ======================================
+//BOTON DE XML DESCENDENTE
+// ======================================
+
+
 // Analizar la entrada XML al hacer CLICK al boton
 botonCargar.addEventListener("click", () => {
     alert("Ejecutando XML Descendente");
@@ -276,6 +282,11 @@ botonCargar.addEventListener("click", () => {
 
 })
 
+// ======================================
+//BOTON DE XML ASCENDENTE
+// ======================================
+
+
 botonCargar2.addEventListener("click", () => {
   alert("Ejecutando XML Ascendente");
 
@@ -294,10 +305,12 @@ botonCargar2.addEventListener("click", () => {
   // Se genera la Tabla de Simbolos
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
-
-
-
 })
+
+
+// ======================================
+//BOTON DE XPATH ARBOL AST
+// ======================================
 
 
 document.getElementById("ast").addEventListener("click", () => {
@@ -310,6 +323,11 @@ document.getElementById("ast").addEventListener("click", () => {
     graficarArbol(AST_xPath);
   
 })
+
+// ======================================
+//BOTON DE XPATH ARBOL CST
+// ======================================
+
 
 document.getElementById("btnReporteXPATHcst").addEventListener("click", () => {
   let AST_xPath2=analizador_xpath.parse(document.getElementById("editor").value);
@@ -371,6 +389,10 @@ btnReporteXML.addEventListener("click", () => {
   });
 });
 
+// ======================================
+//BOTON DE XML DE REPORTE DE ARBOL CST
+// ======================================
+
 // REPORTE DEL CST
 btnReporteXMLCST.addEventListener("click", () => {
 
@@ -380,8 +402,11 @@ btnReporteXMLCST.addEventListener("click", () => {
   // Generar el arbol con Treant JS
   graficarArbol(parserXML.json.nodo);
 
-  
 });
+
+// ======================================
+//BOTON DE REPORTE DE GRAMATICA
+// ======================================
 
 // REPORTE DE LA GRAMATICA
 btnReporteGram.addEventListener('click', () => {
@@ -391,6 +416,10 @@ btnReporteGram.addEventListener('click', () => {
   <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
   `;
 });
+
+// ======================================
+//BOTON DE REPORTE DE ERRORES
+// ======================================
 
 //REPORTE DE ERRORES
 btnReporteXMLErrores.addEventListener("click", () => {
@@ -553,7 +582,12 @@ document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
 
 })
 
+document.getElementById("btnReporteOptimizar").addEventListener("click", () => {
+  let GramaticaOP = grammar.parse(consola3D.value);
 
+  console.log(GramaticaOP);
+
+})
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));
