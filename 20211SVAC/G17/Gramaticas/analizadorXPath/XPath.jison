@@ -1,13 +1,13 @@
 %{
   const { Tipo, TipoPath, Comando } = require("./AST/Entorno");
   const { Logical } = require("./Expresion/Logical");
-  const { Arithmetic, Unary, RangeExp } = require("./Expresion/Arithmetics")
+  const { Arithmetic, Unary, RangeExp, Concat } = require("./Expresion/Arithmetics")
   const { Literal, PathExp, Variable, Parentesis } = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo, Camino, Child, Descendant, Attribute, Self, DescSelf, FollowSibling, Follow } = require('./Expresion/axes')
   const { CaminoInverso, Parent, Ancestor, PrecedingSibling, AncestorSelf, Preceding } = require('./Expresion/axes')
   const { ContextItemExpr, CallFunction } = require('./Expresion/postfix')
-  const { Declaracion, Let, Return } = require('./Instruccion/Xquery')
+  const { Declaracion, Let, Return, For, ForDeclaracion } = require('./Instruccion/Xquery')
   const { grafoCST } = require('../CST')
   
   var grafo = new grafoCST(); 
@@ -97,6 +97,7 @@
 ">"         return "MAYOR"
 ":="        return "DOSPUNTOSIGUAL"
 "="         return "IGUAL"
+"||"        return "CONCAT"
 "|"         return "PIPE"
 ","         return "COMA"
 "!"         return "ADMIRACION"
@@ -241,7 +242,7 @@ ExprSingle
 FLWORExpr
 	: InitialClause IntermediateClauseR ReturnClause    
   | InitialClause ReturnClause {
-    $$=$1;$$.return=$2;
+    $$=$1;$$.expReturn=$2;
     grafo.generarPadre(2,"ReturnClause");
     grafo.generarPadre(1,"InitialClause");
     grafo.generarHijos("InitialClause","ReturnClause");
@@ -255,7 +256,11 @@ IntermediateClauseR
 ;
 
 InitialClause
-	: ForClause 
+	: ForClause {  
+    $$=$1
+    grafo.generarPadre(1,"ForClause")
+    grafo.generarHijos("ForClause")
+    grafo.generarTexto(`InitialClouse.valor=ForClause.valor`) }
   | LetClause { 
     $$=$1;
     grafo.generarPadre(1,"LetClause");
@@ -272,17 +277,36 @@ IntermediateClause
 ;
 
 ForClause
-	: RFOR ForBinding
-  | ForClause COMA ForBinding
+	: RFOR ForBinding           {
+    $$=new For([$2])
+    grafo.generarPadre(2,"ForBinding")
+    grafo.generarHijos($1,"ForBinding")
+    grafo.generarTexto(`ForClause.valor = new For();ForClouse.valor.declaraciones.push(ForBinding.valor)`) }
+  | ForClause COMA ForBinding {
+    $$ = $1
+    $$.declaraciones.push($3)
+    grafo.generarPadre(3,"ForBinding")
+    grafo.generarPadre(1,"ForClouse")
+    grafo.generarHijos("ForClause",$2,"ForBinding")
+    grafo.generarTexto("ForClause.valor.declaraciones.push(ForBiding.valor)") }
 ;
 
 ForBinding
-	: DOLAR NOMBRE PositionalVar RIN ExprSingle
-  | DOLAR NOMBRE RIN ExprSingle
+	: DOLAR NOMBRE PositionalVar RIN ExprSingle {
+    $$=new ForDeclaracion($1+$2,$3,$5);
+    grafo.generarPadre(5,"ExprSingle")
+    grafo.generarPadre(3,"PositionalVar")
+    grafo.generarHijos($1,$2,"PositionalVar",$4,"ExprSingle")
+    grafo.generarTexto(`ForBinding.valor = new Declaracion(${$1+$2,$3,$5})`)}
+  | DOLAR NOMBRE RIN ExprSingle {
+    $$=new ForDeclaracion($1+$2,'',$4);
+    grafo.generarPadre(4,"ExprSingle")
+    grafo.generarHijos($1,$2,$3,"ExprSingle")
+    grafo.generarTexto(`ForBinding.valor = new Declaracion(${$1+$2,'',$4})`)}
 ;
 
 PositionalVar	   
-  : RAT DOLAR NOMBRE
+  : RAT DOLAR NOMBRE {$$ = ($2+$3);grafo.generarHijos($1,$2,$3);grafo.generarTexto(`PositionalVar.varlor=$+NOMBRE.val`)}
 ;
 
 LetClause
@@ -343,7 +367,7 @@ OrderOrder
 
 ReturnClause	   
   : RRETURN ExprSingle  { 
-    $$=new Return($2); 
+    $$=$2; 
     grafo.generarPadre(2,"ExprSingle")
     grafo.generarHijos($1,"ExprSingle")
     grafo.generarTexto("ReturnClause.valor=ExprSingle.valor")}
@@ -386,22 +410,18 @@ AndExpr
 ;
 
 ComparisonExpr    
-  : RangeExpr                              
-  { 
+  : StringConcatExpr { 
     $$=$1; 
-    grafo.generarPadre(1, "RangeExpr");
-    grafo.generarHijos("RangeExpr");
-    grafo.generarTexto(`ComparisonExpr.valor = RangeExpr.valor`);
-  }
-  | RangeExpr GeneralComp RangeExpr 
-  { 
+    grafo.generarPadre(1, "StringConcatExpr");
+    grafo.generarHijos("StringConcatExpr");
+    grafo.generarTexto(`ComparisonExpr.valor = StringConcatExpr.valor`); }
+  | StringConcatExpr GeneralComp StringConcatExpr { 
     $$ = new ComparisonExp($1,$2,$3); 
-    grafo.generarPadre(3, "RangeExpr");
+    grafo.generarPadre(3, "StringConcatExpr");
     grafo.generarPadre(2, "GeneralComp");
-    grafo.generarPadre(1, "RangeExpr");
-    grafo.generarHijos("RangeExpr","GeneralComp","RangeExpr");
-    grafo.generarTexto(`ComparisonExpr.valor = new ComparisonExp(RangeExpr.valor, GeneralComp.valor, RangeExpr.valor)`);
-  } 
+    grafo.generarPadre(1, "StringConcatExpr");
+    grafo.generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr");
+    grafo.generarTexto(`ComparisonExpr.valor = new ComparisonExp(StringConcatExpr.valor, GeneralComp.valor, StringConcatExpr.valor)`); } 
 ;
 
 GeneralComp       // signo
@@ -411,6 +431,20 @@ GeneralComp       // signo
 	| MENORIG   { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 	| MAYOR     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 	| MAYORIG   { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
+;
+
+StringConcatExpr
+  :RangeExpr {
+    $$=$1;
+    grafo.generarPadre(1, "RangeExpr");
+    grafo.generarHijos("RangeExpr");
+    grafo.generarTexto(`StringConcatExpr.valor = RangeExpr.valor`); }
+  |StringConcatExpr CONCAT RangeExpr {
+    $$=new Concat($1,$3);
+    grafo.generarPadre(3,"RangeExpr")
+    grafo.generarPadre(1,"StringConcatExpr")
+    grafo.generarHijos("StringConcatExpr",$1,"RangeExpr")
+    grafo.generarTexto(`StringConcatExpr.Valor = new CONCAT(StringConcatExpr1.valor,RangeExpr.valor`) }
 ;
 
 RangeExpr

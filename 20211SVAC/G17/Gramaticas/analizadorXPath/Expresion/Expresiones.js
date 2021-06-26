@@ -139,15 +139,15 @@ export class PathExp
         }
     }
 
-    getC3D()
+    getC3D(objetos)
     {
         var retornos = []
         for (const camino of this.caminos){
-            retornos = retornos.concat(camino.getC3D())
+            retornos = retornos.concat(camino.getC3D(objetos))
         }
 
-        
 
+        
         return retornos
     }
 

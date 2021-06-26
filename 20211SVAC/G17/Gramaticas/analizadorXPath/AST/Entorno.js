@@ -122,13 +122,13 @@ export class Comando
   }
 
   // función para generar c3d
-  EjecutarC3D(XML){
+  EjecutarC3D(xml){
     C3D.clearXPTC3D()
     var salida = ""
     var retornos=[]
     for (const instruccion of this.Instrucciones) {
-      //var {Retorno} = require('../AST/C3D')
-      retornos = retornos.concat(instruccion.getC3D())
+      var {Nodo} = require('../Expresion/Expresiones')
+      retornos = retornos.concat(instruccion.getC3D([new Nodo(Tipo.NODO,xml,[],"",1)]))
     }
 
 
