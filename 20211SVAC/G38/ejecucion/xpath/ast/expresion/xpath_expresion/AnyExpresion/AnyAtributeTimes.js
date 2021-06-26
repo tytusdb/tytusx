@@ -5,10 +5,10 @@ class AnyAtributeTimes {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         let ts = ent.findAllAtributesInObjectsRecursive();
         return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }

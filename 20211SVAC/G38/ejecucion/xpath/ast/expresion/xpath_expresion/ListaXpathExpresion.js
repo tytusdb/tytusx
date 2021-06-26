@@ -5,25 +5,14 @@ class ListaXpathExpresion {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ts, ent) {
-        if (this.expresionesXpath.length == 1) {
-            let tipo = this.expresionesXpath[0].getTipo(ts, ent);
-            if (!tipo.esError())
-                return tipo;
-        }
+    getTipo(ent) {
         return new Tipo(TipoDato.xpathValue);
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         var ts = XpathUtil.crearTablaSimbolos([]);
         this.expresionesXpath.forEach(function (expresion) {
-            let valorExpresion = expresion.getValor(tsXquery, ent);
-            if (valorExpresion instanceof TablaSimbolos) {
-                let nuevoResultado = ts.listaSimbolos.concat(valorExpresion.listaSimbolos);
-                ts.listaSimbolos = nuevoResultado;
-            }
-            else {
-                ts = valorExpresion;
-            }
+            let nuevoResultado = ts.listaSimbolos.concat(expresion.getValor(ent).listaSimbolos);
+            ts.listaSimbolos = nuevoResultado;
         });
         return ts;
     }

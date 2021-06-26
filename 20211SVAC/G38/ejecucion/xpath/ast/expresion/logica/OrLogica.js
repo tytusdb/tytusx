@@ -6,10 +6,10 @@ class OrLogica {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(tsXquery, ent);
-        let tipoDerecha = this.derecha.getTipo(tsXquery, ent);
+        let tipoIzquierda = this.izquierdo.getTipo(ent);
+        let tipoDerecha = this.derecha.getTipo(ent);
         if (tipoIzquierda.esBoolean() && tipoDerecha.esBoolean()) {
             tipo = new Tipo(TipoDato.booleano);
         }
@@ -18,11 +18,11 @@ class OrLogica {
         }
         return tipo;
     }
-    getValor(tsXquery, ent) {
-        let tipo = this.getTipo(tsXquery, ent);
+    getValor(ent) {
+        let tipo = this.getTipo(ent);
         let valor;
         if (!tipo.esError()) {
-            valor = this.izquierdo.getValor(tsXquery, ent) || this.derecha.getValor(tsXquery, ent);
+            valor = this.izquierdo.getValor(ent) || this.derecha.getValor(ent);
         }
         return valor;
     }

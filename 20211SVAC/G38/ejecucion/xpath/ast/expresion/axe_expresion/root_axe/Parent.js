@@ -8,10 +8,10 @@ class Parent {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         return new Tipo(TipoDato.xpathValue);
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         let ts = new TablaSimbolos(null);
         switch (this.axeOperation) {
             case AxeOperation.identifier:

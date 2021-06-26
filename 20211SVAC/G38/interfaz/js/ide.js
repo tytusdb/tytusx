@@ -270,7 +270,7 @@ const ejecutar= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXPATH(cadEntradaXpath);
-        let nodoAImprimir = _rootXpath.getValor(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        let nodoAImprimir = _rootXpath.getValor(_tsXml);
         let result = XpathUtil.convertirNodosXpathATexto(nodoAImprimir);
         print(result);
         print('FIN EJECUCION');

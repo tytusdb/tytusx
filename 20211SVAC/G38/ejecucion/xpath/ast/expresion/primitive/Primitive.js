@@ -6,10 +6,10 @@ class Primitive {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(tsXquery, ent) {
+    getTipo(ent) {
         return this.tipo;
     }
-    getValor(tsXquery, ent) {
+    getValor(ent) {
         return this.valor;
     }
 }
