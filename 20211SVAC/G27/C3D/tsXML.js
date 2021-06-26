@@ -12,29 +12,27 @@ var tsXML = /** @class */ (function () {
         }
         return null;
     };
-    tsXML.prototype.insertarObjeto = function (id, tipo, entorno, sp) {
-        var objeto = new tsObjeto(id, tipo, entorno);
+    tsXML.prototype.insertarObjeto = function (id, tipo, entorno, padre) {
+        var i = this.getCantidadObjetos();
+        var objeto = new tsObjeto(i, id, tipo, entorno, padre);
         this.listaObjetos.push(objeto);
     };
     tsXML.prototype.getCantidadObjetos = function () {
         return this.listaObjetos.length;
     };
-    tsXML.prototype.generaEncabezadoXML3D = function () {
-        var texto = "";
-        texto += "/***********HEADER**********/";
-        texto += "#include <stdio.h>\n\n";
-        texto += "double heap[30101999]";
-        texto += "double stack[30101999]";
-        texto += "double S;\n";
-        texto += "double H; \n\n";
-        texto += "Ejemplo\n";
-        texto += "/*--------MAIN---------*/\n";
-        texto += "void main(){\n";
-        texto += "S = 0; H = 0;\n\n";
-        texto += "" + this.listaObjetos[0].identificador;
-        texto += "\nreturn;\n";
-        texto += "}";
-        return texto;
+    //funcion para insertar el temporal generado en el C3D al símbolo que se está construyendo
+    tsXML.prototype.insertaTemporal = function (posicion, identificador, temporal) {
+        var cantidadObjetos = this.getCantidadObjetos();
+        if (cantidadObjetos > 0) {
+            //se recorre el listado de símbolos
+            for (var i = 0; i < cantidadObjetos; i++) {
+                //si el símbolo.identificador es igual al parámetro identificador, se asigna el temporal
+                if (this.listaObjetos[i].i == posicion) {
+                    this.listaObjetos[i].sp = temporal;
+                    i = cantidadObjetos;
+                }
+            }
+        }
     };
     return tsXML;
 }());
