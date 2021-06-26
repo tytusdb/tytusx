@@ -4311,9 +4311,7 @@ function AppComponent_div_13_Template(rf, ctx) { if (rf & 1) {
     const _r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
-    HEAD
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8); const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r7.recorrer(); });
-
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente XML");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
@@ -4323,9 +4321,8 @@ function AppComponent_div_13_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
-    HEAD
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8); const ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r10.xprecorrerDes(); });
-_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 } }
@@ -4346,9 +4343,8 @@ function AppComponent_div_18_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 23);
-    HEAD
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r12); const ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r13.openPage("TablaSim", 2); });
-_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\u00E1ntico");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\u00E1ntico");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
@@ -6638,74 +6634,58 @@ class Objeto {
         return ts_local;
     }
     gethtml(tab) {
-        /* const generator = GeneradorC3D.getInstancia();
-         generator.genPrint('c', '60');
- 
-         generator.genSetStack('p', this.posicionid3d);
-         generator.genCall('nativa_print_str');
- 
-         let xml=tab+"<"+this.identificador;
-         for(let at of this.listaAtributos ){
-             generator.genPrint('c', '32');
- 
-             generator.genSetStack('p', at.posicionId3d);
-             generator.genCall('nativa_print_str');
-             
-             generator.genPrint('c', '61');
-             generator.genPrint('c', '34');
- 
-             generator.genSetStack('p', at.posicion3d);
-             generator.genCall('nativa_print_str');
- 
-             generator.genPrint('c', '34');
- 
-             xml+=" "+at.identificador+"=\""+at.valor+"\" ";
-         }
-         if(this.tipoetiqueta==1){
-             generator.genPrint('c', '47');
-             generator.genPrint('c', '62');
-             xml+= "/>";
-         }else{
-             if(this.texto.length>0){
-                 generator.genPrint('c', '62');
- 
-                 generator.genSetStack('p', this.posiciontext3d);
-                 generator.genCall('nativa_print_str');
- 
-                 generator.genPrint('c', '60');
- 
-                 generator.genSetStack('p', this.posicionid3d);
-                 generator.genCall('nativa_print_str');
- 
-                 generator.genPrint('c', '47');
-                 generator.genPrint('c', '62');
- 
- 
-                 xml+=">"+this.texto+"<"+this.identificador+"/>";
-             }else{
-                 tab=tab+"   ";
-                 generator.genPrint('c', '62');
-                 xml+=">";
-                 for(let at of this.listaObjetos ){
-                     xml+="\n";
-                     generator.genPrint('c', '10');
-                     xml+=at.gethtml(tab);
-                 }
-                 generator.genPrint('c', '10');
-                 generator.genPrint('c', '60');
- 
-                 generator.genSetStack('p', this.posicionid3d);
-                 generator.genCall('nativa_print_str');
- 
-                 generator.genPrint('c', '47');
-                 generator.genPrint('c', '62');
- 
- 
-                 xml+=tab+"\n<"+this.identificador+"/>";
-             }
-         }
-         */
-        return "";
+        const generator = _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__["GeneradorC3D"].getInstancia();
+        generator.genPrint('c', '60');
+        generator.genSetStack('p', this.posicionid3d);
+        generator.genCall('nativa_print_str');
+        let xml = tab + "<" + this.identificador;
+        for (let at of this.listaAtributos) {
+            generator.genPrint('c', '32');
+            generator.genSetStack('p', at.posicionId3d);
+            generator.genCall('nativa_print_str');
+            generator.genPrint('c', '61');
+            generator.genPrint('c', '34');
+            generator.genSetStack('p', at.posicion3d);
+            generator.genCall('nativa_print_str');
+            generator.genPrint('c', '34');
+            xml += " " + at.identificador + "=\"" + at.valor + "\" ";
+        }
+        if (this.tipoetiqueta == 1) {
+            generator.genPrint('c', '47');
+            generator.genPrint('c', '62');
+            xml += "/>";
+        }
+        else {
+            if (this.texto.length > 0) {
+                generator.genPrint('c', '62');
+                generator.genSetStack('p', this.posiciontext3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '60');
+                generator.genSetStack('p', this.posicionid3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '47');
+                generator.genPrint('c', '62');
+                xml += ">" + this.texto + "<" + this.identificador + "/>";
+            }
+            else {
+                tab = tab + "   ";
+                generator.genPrint('c', '62');
+                xml += ">";
+                for (let at of this.listaObjetos) {
+                    xml += "\n";
+                    generator.genPrint('c', '10');
+                    xml += at.gethtml(tab);
+                }
+                generator.genPrint('c', '10');
+                generator.genPrint('c', '60');
+                generator.genSetStack('p', this.posicionid3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '47');
+                generator.genPrint('c', '62');
+                xml += tab + "\n<" + this.identificador + "/>";
+            }
+        }
+        return xml;
     }
     recorrer() {
         let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("objeto", "");

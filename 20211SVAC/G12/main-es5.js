@@ -10269,58 +10269,82 @@
         }, {
           key: "gethtml",
           value: function gethtml(tab) {
-            /* const generator = GeneradorC3D.getInstancia();
-             generator.genPrint('c', '60');
+            var generator = _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__["GeneradorC3D"].getInstancia();
+
+            generator.genPrint('c', '60');
+            generator.genSetStack('p', this.posicionid3d);
+            generator.genCall('nativa_print_str');
+            var xml = tab + "<" + this.identificador;
+
+            var _iterator43 = _createForOfIteratorHelper(this.listaAtributos),
+                _step43;
+
+            try {
+              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
+                var _at2 = _step43.value;
+                generator.genPrint('c', '32');
+                generator.genSetStack('p', _at2.posicionId3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '61');
+                generator.genPrint('c', '34');
+                generator.genSetStack('p', _at2.posicion3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '34');
+                xml += " " + _at2.identificador + "=\"" + _at2.valor + "\" ";
+              }
+            } catch (err) {
+              _iterator43.e(err);
+            } finally {
+              _iterator43.f();
+            }
+
+            if (this.tipoetiqueta == 1) {
+              generator.genPrint('c', '47');
+              generator.genPrint('c', '62');
+              xml += "/>";
+            } else {
+              if (this.texto.length > 0) {
+                generator.genPrint('c', '62');
+                generator.genSetStack('p', this.posiciontext3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '60');
                 generator.genSetStack('p', this.posicionid3d);
-             generator.genCall('nativa_print_str');
-                let xml=tab+"<"+this.identificador;
-             for(let at of this.listaAtributos ){
-                 generator.genPrint('c', '32');
-                    generator.genSetStack('p', at.posicionId3d);
-                 generator.genCall('nativa_print_str');
-                 
-                 generator.genPrint('c', '61');
-                 generator.genPrint('c', '34');
-                    generator.genSetStack('p', at.posicion3d);
-                 generator.genCall('nativa_print_str');
-                    generator.genPrint('c', '34');
-                    xml+=" "+at.identificador+"=\""+at.valor+"\" ";
-             }
-             if(this.tipoetiqueta==1){
-                 generator.genPrint('c', '47');
-                 generator.genPrint('c', '62');
-                 xml+= "/>";
-             }else{
-                 if(this.texto.length>0){
-                     generator.genPrint('c', '62');
-                        generator.genSetStack('p', this.posiciontext3d);
-                     generator.genCall('nativa_print_str');
-                        generator.genPrint('c', '60');
-                        generator.genSetStack('p', this.posicionid3d);
-                     generator.genCall('nativa_print_str');
-                        generator.genPrint('c', '47');
-                     generator.genPrint('c', '62');
-                           xml+=">"+this.texto+"<"+this.identificador+"/>";
-                 }else{
-                     tab=tab+"   ";
-                     generator.genPrint('c', '62');
-                     xml+=">";
-                     for(let at of this.listaObjetos ){
-                         xml+="\n";
-                         generator.genPrint('c', '10');
-                         xml+=at.gethtml(tab);
-                     }
-                     generator.genPrint('c', '10');
-                     generator.genPrint('c', '60');
-                        generator.genSetStack('p', this.posicionid3d);
-                     generator.genCall('nativa_print_str');
-                        generator.genPrint('c', '47');
-                     generator.genPrint('c', '62');
-                           xml+=tab+"\n<"+this.identificador+"/>";
-                 }
-             }
-             */
-            return "";
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '47');
+                generator.genPrint('c', '62');
+                xml += ">" + this.texto + "<" + this.identificador + "/>";
+              } else {
+                tab = tab + "   ";
+                generator.genPrint('c', '62');
+                xml += ">";
+
+                var _iterator44 = _createForOfIteratorHelper(this.listaObjetos),
+                    _step44;
+
+                try {
+                  for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
+                    var at = _step44.value;
+                    xml += "\n";
+                    generator.genPrint('c', '10');
+                    xml += at.gethtml(tab);
+                  }
+                } catch (err) {
+                  _iterator44.e(err);
+                } finally {
+                  _iterator44.f();
+                }
+
+                generator.genPrint('c', '10');
+                generator.genPrint('c', '60');
+                generator.genSetStack('p', this.posicionid3d);
+                generator.genCall('nativa_print_str');
+                generator.genPrint('c', '47');
+                generator.genPrint('c', '62');
+                xml += tab + "\n<" + this.identificador + "/>";
+              }
+            }
+
+            return xml;
           }
         }, {
           key: "recorrer",
@@ -10332,32 +10356,32 @@
               hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.texto, ""));
             }
 
-            var _iterator43 = _createForOfIteratorHelper(this.listaAtributos),
-                _step43;
+            var _iterator45 = _createForOfIteratorHelper(this.listaAtributos),
+                _step45;
 
             try {
-              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
-                var at = _step43.value;
+              for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
+                var at = _step45.value;
                 hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](at.identificador, ""));
               }
             } catch (err) {
-              _iterator43.e(err);
+              _iterator45.e(err);
             } finally {
-              _iterator43.f();
+              _iterator45.f();
             }
 
-            var _iterator44 = _createForOfIteratorHelper(this.listaObjetos),
-                _step44;
+            var _iterator46 = _createForOfIteratorHelper(this.listaObjetos),
+                _step46;
 
             try {
-              for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
-                var _at2 = _step44.value;
-                hijo.AddHijo(_at2.recorrer());
+              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
+                var _at3 = _step46.value;
+                hijo.AddHijo(_at3.recorrer());
               }
             } catch (err) {
-              _iterator44.e(err);
+              _iterator46.e(err);
             } finally {
-              _iterator44.f();
+              _iterator46.f();
             }
 
             padre.AddHijo(hijo);
@@ -10877,28 +10901,28 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-            var _iterator45 = _createForOfIteratorHelper(this.Lista_case),
-                _step45;
+            var _iterator47 = _createForOfIteratorHelper(this.Lista_case),
+                _step47;
 
             try {
-              for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
-                var sw = _step45.value;
+              for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
+                var sw = _step47.value;
                 sw.valor_sw = this.valor_sw.getValor(controlador, ts_local);
               }
             } catch (err) {
-              _iterator45.e(err);
+              _iterator47.e(err);
             } finally {
-              _iterator45.f();
+              _iterator47.f();
             }
 
             var x = 0;
 
-            var _iterator46 = _createForOfIteratorHelper(this.Lista_case),
-                _step46;
+            var _iterator48 = _createForOfIteratorHelper(this.Lista_case),
+                _step48;
 
             try {
-              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
-                var _ins3 = _step46.value;
+              for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
+                var _ins3 = _step48.value;
 
                 var _res2 = _ins3.ejecutar(controlador, ts_local);
 
@@ -10914,18 +10938,18 @@
                 }
               }
             } catch (err) {
-              _iterator46.e(err);
+              _iterator48.e(err);
             } finally {
-              _iterator46.f();
+              _iterator48.f();
             }
 
             if (x == 0) {
-              var _iterator47 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step47;
+              var _iterator49 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step49;
 
               try {
-                for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
-                  var ins = _step47.value;
+                for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
+                  var ins = _step49.value;
                   var res = ins.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -10939,9 +10963,9 @@
                   }
                 }
               } catch (err) {
-                _iterator47.e(err);
+                _iterator49.e(err);
               } finally {
-                _iterator47.f();
+                _iterator49.f();
               }
             }
 
@@ -10957,35 +10981,35 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator48 = _createForOfIteratorHelper(this.Lista_case),
-                _step48;
+            var _iterator50 = _createForOfIteratorHelper(this.Lista_case),
+                _step50;
 
             try {
-              for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
-                var _ins4 = _step48.value;
+              for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
+                var _ins4 = _step50.value;
                 padre.AddHijo(_ins4.recorrer());
               }
             } catch (err) {
-              _iterator48.e(err);
+              _iterator50.e(err);
             } finally {
-              _iterator48.f();
+              _iterator50.f();
             }
 
             if (this.Lista_defaul.length > 0) {
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("default:", ""));
 
-              var _iterator49 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step49;
+              var _iterator51 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step51;
 
               try {
-                for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
-                  var ins = _step49.value;
+                for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
+                  var ins = _step51.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator49.e(err);
+                _iterator51.e(err);
               } finally {
-                _iterator49.f();
+                _iterator51.f();
               }
             }
 
@@ -11069,12 +11093,12 @@
               while (this.condicion.getValor(controlador, ts)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator50 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step50;
+                var _iterator52 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step52;
 
                 try {
-                  for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
-                    var ins = _step50.value;
+                  for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
+                    var ins = _step52.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -11092,9 +11116,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator50.e(err);
+                  _iterator52.e(err);
                 } finally {
-                  _iterator50.f();
+                  _iterator52.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (While)");
@@ -11111,18 +11135,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator51 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step51;
+            var _iterator53 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step53;
 
             try {
-              for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
-                var ins = _step51.value;
+              for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
+                var ins = _step53.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator51.e(err);
+              _iterator53.e(err);
             } finally {
-              _iterator51.f();
+              _iterator53.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -11187,12 +11211,12 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator52 = _createForOfIteratorHelper(ts.sig),
-                    _step52;
+                var _iterator54 = _createForOfIteratorHelper(ts.sig),
+                    _step54;
 
                 try {
-                  for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
-                    var tssig = _step52.value;
+                  for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
+                    var tssig = _step54.value;
 
                     if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
@@ -11203,17 +11227,17 @@
                     }
                   }
                 } catch (err) {
-                  _iterator52.e(err);
+                  _iterator54.e(err);
                 } finally {
-                  _iterator52.f();
+                  _iterator54.f();
                 }
               } else {
-                var _iterator53 = _createForOfIteratorHelper(ts.tabla),
-                    _step53;
+                var _iterator55 = _createForOfIteratorHelper(ts.tabla),
+                    _step55;
 
                 try {
-                  for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
-                    var informacion = _step53.value;
+                  for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
+                    var informacion = _step55.value;
 
                     if (this.exprecion.tipo == 1) {
                       if (this.exprecion.id == "*") {
@@ -11234,9 +11258,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator53.e(err);
+                  _iterator55.e(err);
                 } finally {
-                  _iterator53.f();
+                  _iterator55.f();
                 }
               }
             }
@@ -11259,57 +11283,6 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator54 = _createForOfIteratorHelper(ts.sig),
-                  _step54;
-
-              try {
-                for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
-                  var tssig = _step54.value;
-
-                  if (this.exprecion.id == tssig.identificador) {
-                    if (cont == posicion) {
-                      this.sig.ejecutar(controlador, tssig.sig);
-                    }
-
-                    cont++;
-                  }
-                }
-              } catch (err) {
-                _iterator54.e(err);
-              } finally {
-                _iterator54.f();
-              }
-            } else {
-              var _iterator55 = _createForOfIteratorHelper(ts.tabla),
-                  _step55;
-
-              try {
-                for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
-                  var informacion = _step55.value;
-
-                  if (informacion.identificador == this.exprecion.id) {
-                    if (cont == posicion) {
-                      controlador.append(informacion.sim.objeto.gethtml(""));
-                    }
-
-                    cont++;
-                  }
-                }
-              } catch (err) {
-                _iterator55.e(err);
-              } finally {
-                _iterator55.f();
-              }
-            }
-          }
-        }, {
-          key: "isboolean",
-          value: function isboolean(controlador, ts) {
-            var posicion = 1;
-            console.log("entre");
-            var cont = 1;
-
-            if (this.sig != null) {
               var _iterator56 = _createForOfIteratorHelper(ts.sig),
                   _step56;
 
@@ -11318,17 +11291,12 @@
                   var tssig = _step56.value;
 
                   if (this.exprecion.id == tssig.identificador) {
-                    controlador.position = cont;
-                    controlador.posicionid = posicion;
-
-                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                    if (cont == posicion) {
                       this.sig.ejecutar(controlador, tssig.sig);
                     }
 
                     cont++;
                   }
-
-                  posicion++;
                 }
               } catch (err) {
                 _iterator56.e(err);
@@ -11344,6 +11312,62 @@
                   var informacion = _step57.value;
 
                   if (informacion.identificador == this.exprecion.id) {
+                    if (cont == posicion) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+                }
+              } catch (err) {
+                _iterator57.e(err);
+              } finally {
+                _iterator57.f();
+              }
+            }
+          }
+        }, {
+          key: "isboolean",
+          value: function isboolean(controlador, ts) {
+            var posicion = 1;
+            console.log("entre");
+            var cont = 1;
+
+            if (this.sig != null) {
+              var _iterator58 = _createForOfIteratorHelper(ts.sig),
+                  _step58;
+
+              try {
+                for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
+                  var tssig = _step58.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator58.e(err);
+              } finally {
+                _iterator58.f();
+              }
+            } else {
+              var _iterator59 = _createForOfIteratorHelper(ts.tabla),
+                  _step59;
+
+              try {
+                for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
+                  var informacion = _step59.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
                     controlador.posicionid = posicion;
 
@@ -11357,9 +11381,9 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator57.e(err);
+                _iterator59.e(err);
               } finally {
-                _iterator57.f();
+                _iterator59.f();
               }
             }
           }
@@ -11458,12 +11482,12 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts);
 
-            var _iterator58 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step58;
+            var _iterator60 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step60;
 
             try {
-              for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
-                var ins = _step58.value;
+              for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
+                var ins = _step60.value;
                 var r = ins.ejecutar(controlador, ts_local);
 
                 if (r != null) {
@@ -11473,9 +11497,9 @@
                 }
               }
             } catch (err) {
-              _iterator58.e(err);
+              _iterator60.e(err);
             } finally {
-              _iterator58.f();
+              _iterator60.f();
             }
 
             controlador.ambito = "Funcion: \n" + this.identificador;
@@ -11500,18 +11524,18 @@
             padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
             var hijo_instrucciones = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Instrucciones", "");
 
-            var _iterator59 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step59;
+            var _iterator61 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step61;
 
             try {
-              for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
-                var inst = _step59.value;
+              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
+                var inst = _step61.value;
                 hijo_instrucciones.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator59.e(err);
+              _iterator61.e(err);
             } finally {
-              _iterator59.f();
+              _iterator61.f();
             }
 
             padre.AddHijo(hijo_instrucciones);
@@ -13958,18 +13982,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator60 = _createForOfIteratorHelper(ts.tabla),
-                _step60;
+            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
+                _step62;
 
             try {
-              for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
-                var sim = _step60.value;
+              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
+                var sim = _step62.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator60.e(err);
+              _iterator62.e(err);
             } finally {
-              _iterator60.f();
+              _iterator62.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -13979,19 +14003,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator61 = _createForOfIteratorHelper(controlador.errores),
-                _step61;
+            var _iterator63 = _createForOfIteratorHelper(controlador.errores),
+                _step63;
 
             try {
-              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
-                var sim = _step61.value;
+              for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
+                var sim = _step63.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator61.e(err);
+              _iterator63.e(err);
             } finally {
-              _iterator61.f();
+              _iterator63.f();
             }
 
             return cuerpohtml;
@@ -14179,21 +14203,21 @@
           value: function getValor(controlador, ts) {
             var cont = 0;
 
-            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
-                _step62;
+            var _iterator64 = _createForOfIteratorHelper(ts.tabla),
+                _step64;
 
             try {
-              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
-                var informacion = _step62.value;
+              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
+                var informacion = _step64.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator62.e(err);
+              _iterator64.e(err);
             } finally {
-              _iterator62.f();
+              _iterator64.f();
             }
 
             return cont;
@@ -14373,12 +14397,12 @@
               while (this.condicion.getValor(controlador, ts_for)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts_for);
 
-                var _iterator63 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step63;
+                var _iterator65 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step65;
 
                 try {
-                  for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
-                    var ins = _step63.value;
+                  for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
+                    var ins = _step65.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -14397,9 +14421,9 @@
 
                   }
                 } catch (err) {
-                  _iterator63.e(err);
+                  _iterator65.e(err);
                 } finally {
-                  _iterator63.f();
+                  _iterator65.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (FOR)");
@@ -14423,18 +14447,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator64 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step64;
+            var _iterator66 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step66;
 
             try {
-              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
-                var ins = _step64.value;
+              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
+                var ins = _step66.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator64.e(err);
+              _iterator66.e(err);
             } finally {
-              _iterator64.f();
+              _iterator66.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -14836,12 +14860,12 @@
         _createClass(Declaracion, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator65 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step65;
+            var _iterator67 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step67;
 
             try {
-              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
-                var simbolo = _step65.value;
+              for (_iterator67.s(); !(_step67 = _iterator67.n()).done;) {
+                var simbolo = _step67.value;
                 var variable = simbolo;
 
                 if (ts.existeEnActual(variable.identificador)) {
@@ -14883,9 +14907,9 @@
                 }
               }
             } catch (err) {
-              _iterator65.e(err);
+              _iterator67.e(err);
             } finally {
-              _iterator65.f();
+              _iterator67.f();
             }
           }
         }, {
@@ -14893,21 +14917,21 @@
           value: function recorrer() {
             var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaraciones", "");
 
-            var _iterator66 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step66;
+            var _iterator68 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step68;
 
             try {
-              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
-                var simbolo = _step66.value;
+              for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
+                var simbolo = _step68.value;
                 var p = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaracion", "");
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](simbolo.identificador, ""));
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](";", ""));
                 padre.AddHijo(p);
               }
             } catch (err) {
-              _iterator66.e(err);
+              _iterator68.e(err);
             } finally {
-              _iterator66.f();
+              _iterator68.f();
             }
 
             return padre;
