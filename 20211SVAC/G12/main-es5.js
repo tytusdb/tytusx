@@ -1268,6 +1268,23 @@
             return retorno;
           }
         }, {
+          key: "traducirxml",
+          value: function traducirxml(entradaxml, entradaxpath) {
+            var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
+
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_3__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__["TablaSimbolos"](null, "Global");
+            controlador.acceso = 2;
+            controlador.entrada = entradaxpath;
+            astxml.ejecutar(controlador, ts_globla);
+            var ts_html = controlador.graficar_ts(controlador, ts_globla);
+            var retorno = {
+              "ts": ts_html,
+              "consola": controlador.consola
+            };
+            return retorno;
+          }
+        }, {
           key: "recorrer",
           value: function recorrer(input) {
             try {
@@ -1283,6 +1300,18 @@
             try {
               var ast = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](input);
 
+              console.log(ast);
+              var nodo_ast = ast.recorrer();
+              return nodo_ast;
+            } catch (error) {}
+          }
+        }, {
+          key: "recorrerDesxpath",
+          value: function recorrerDesxpath(input) {
+            try {
+              var ast = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](input);
+
+              console.log(ast);
               console.log(ast);
               var nodo_ast = ast.recorrer();
               return nodo_ast;
@@ -1307,7 +1336,7 @@
     /***/
     function _(module, exports, __webpack_require__) {
       module.exports = __webpack_require__(
-      /*! C:\Users\h\Documents\GitHub\Compi2\Compiladores2Proyecto1\src\main.ts */
+      /*! C:\Users\fuent\Desktop\Compiladores 2 Proyecto 1 final\Compiladores2Proyecto1\src\main.ts */
       "zUnb");
       /***/
     },
@@ -1406,6 +1435,840 @@
       /* (ignored) */
 
       /***/
+    },
+
+    /***/
+    "3Bn/":
+    /*!********************************************!*\
+      !*** ./src/Clases/GeneradorC3D/Nativas.ts ***!
+      \********************************************/
+
+    /*! exports provided: Nativas */
+
+    /***/
+    function Bn(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Nativas", function () {
+        return Nativas;
+      });
+      /* harmony import */
+
+
+      var _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ./GeneradorC3D */
+      "cg4T");
+
+      var Nativas = /*#__PURE__*/function () {
+        function Nativas() {
+          _classCallCheck(this, Nativas);
+        }
+
+        _createClass(Nativas, [{
+          key: "generarNativas",
+          value: function generarNativas() {
+            this.nativa_print_str(); //this.nativa_print_integer();
+
+            /* this.nativa_compararIgual_str_str();
+             this.nativa_compararNoIgual_str_str();
+             this.nativa_ToUpperCase();
+             this.nativa_ToLowerCase();
+             this.nativa_concat_str_str();
+             this.nativa_concat_dbl_str();
+             this.nativa_concat_str_dbl();
+             this.nativa_concat_int_str();
+             this.nativa_concat_str_int();
+             this.nativa_concat_str_bol();
+             this.nativa_concat_bol_str();
+             this.nativa_lenght_str();*/
+
+            return _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia().getNativas();
+          }
+        }, {
+          key: "nativa_lenght_str",
+          value: function nativa_lenght_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var next = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_lenght_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t0, 'p', '1', '+');
+            gen.genGetStack(t1, t0);
+            gen.genAsignacion(t3, '0');
+            gen.genLabel(next);
+            gen.genGetHeap(t2, t1);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genExpresion(t1, t1, '1', '+');
+            gen.genGoto(next);
+            gen.genLabel(fin);
+            gen.genSetStack('p', t3);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t0);
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+          }
+        }, {
+          key: "nativa_print_str",
+          value: function nativa_print_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var next = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_print_str');
+            gen.isFunc = '\t';
+            gen.genGetStack(t1, 'p');
+            gen.genLabel(next);
+            gen.genGetHeap(t2, t1);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genPrint('c', t2);
+            gen.genExpresion(t1, t1, '1', '+');
+            gen.genGoto(next);
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+          }
+          /*
+              nativa_print_integer() {
+                  const gen = GeneradorC3D.getInstancia();
+                  let t1 = gen.newTemporal();
+                  let t2 = gen.newTemporal();
+                  let t3 = gen.newTemporal();
+                  let inicio = gen.newLabel();
+                  let nextPos = gen.newLabel();
+                  let nextPrt = gen.newLabel();
+                  let fin = gen.newLabel();
+          
+                  gen.genFuncion('nativa_print_integer');
+                  gen.isFunc = '\t';
+                  gen.genGetStack(t1, 'p');
+                  gen.genIf(t1, '0', '>=', inicio);
+                  gen.genPrint('c', '45');
+                  gen.genExpresion(t1, t1, '-1', '*');
+                  gen.genLabel(inicio);
+                  gen.genAsignacion(t3, 'p');
+                  gen.genSetStack(t3, '-1');
+                  gen.genExpresion(t3, t3, '1', '+');
+                  gen.genLabel(nextPos);
+                  gen.genIf(t1, '0', '==', nextPrt);
+                  gen.genCode(`${t2} = fmod(${t1}, 10);`);
+                  gen.genSetStack(t3, t2);
+                  gen.genExpresion(t3, t3, '1', '+');
+                  gen.genExpresion(t1, t1, '10', '/');
+                  gen.genGoto(nextPos);
+                  gen.genLabel(nextPrt);
+                  gen.genExpresion(t3, t3, '1', '-');
+                  gen.genGetStack(t1, t3);
+                  gen.genIf(t1, '-1', '==', fin);
+                  gen.genPrint('i', t1);
+                  gen.genGoto(nextPrt);
+                  gen.genLabel(fin);
+                  gen.genCode('return;');
+                  gen.genEndFuncion();
+                  gen.isFunc = '';
+                  gen.freeTemp(t1);
+                  gen.freeTemp(t2);
+                  gen.freeTemp(t3);
+              }*/
+
+        }, {
+          key: "nativa_compararIgual_str_str",
+          value: function nativa_compararIgual_str_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var c1 = gen.newTemporal();
+            var c2 = gen.newTemporal();
+            var lblfalse = gen.newLabel();
+            var lbltrue = gen.newLabel();
+            var l2 = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_compararIgual_str_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t0, 'p', '1', '+');
+            gen.genGetStack(p1, t0);
+            gen.genExpresion(t0, 'p', '2', '+');
+            gen.genGetStack(p2, t0);
+            gen.genIf(p1, '-1', '==', l2);
+            gen.genIf(p2, '-1', '==', lblfalse);
+            gen.genGoto(inicio);
+            gen.genLabel(l2);
+            gen.genIf(p2, '-1', '==', lbltrue);
+            gen.genGoto(lblfalse);
+            gen.genLabel(inicio);
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genLabel(nextPos);
+            gen.genIf(c1, c2, '!=', lblfalse);
+            gen.genIf(c1, '-1', '==', lbltrue);
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genGoto(nextPos);
+            gen.genLabel(lbltrue);
+            gen.genSetStack('p', '1');
+            gen.genGoto(fin);
+            gen.genLabel(lblfalse);
+            gen.genSetStack('p', '0');
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+            gen.freeTemp(c1);
+            gen.freeTemp(c2);
+          }
+        }, {
+          key: "nativa_compararNoIgual_str_str",
+          value: function nativa_compararNoIgual_str_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var c1 = gen.newTemporal();
+            var c2 = gen.newTemporal();
+            var lblfalse = gen.newLabel();
+            var lbltrue = gen.newLabel();
+            var l2 = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_compararNoIgual_str_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genIf(p1, '-1', '==', l2);
+            gen.genIf(p2, '-1', '==', lbltrue);
+            gen.genGoto(inicio);
+            gen.genLabel(l2);
+            gen.genIf(p2, '-1', '==', lblfalse);
+            gen.genGoto(lbltrue);
+            gen.genLabel(inicio);
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genLabel(nextPos);
+            gen.genIf(c1, c2, '!=', lbltrue);
+            gen.genIf(c1, '-1', '==', lblfalse);
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genGoto(nextPos);
+            gen.genLabel(lbltrue);
+            gen.genSetStack('p', '1');
+            gen.genGoto(fin);
+            gen.genLabel(lblfalse);
+            gen.genSetStack('p', '0');
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+            gen.freeTemp(c1);
+            gen.freeTemp(c2);
+          }
+        }, {
+          key: "nativa_ToUpperCase",
+          value: function nativa_ToUpperCase() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var nextPos = gen.newLabel();
+            var setChar = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_ToUpperCase');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(t2, t1); // carga la referencia del string
+
+            gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
+
+            gen.genLabel(nextPos);
+            gen.genGetHeap(t4, t2);
+            gen.genIf(t4, '-1', '==', fin);
+            gen.genIf(t4, '97', '<', setChar);
+            gen.genIf(t4, '122', '>', setChar);
+            gen.genExpresion(t4, t4, '32', '-');
+            gen.genLabel(setChar);
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t2, t2, '1', '+');
+            gen.genGoto(nextPos);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t3);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+          }
+        }, {
+          key: "nativa_ToLowerCase",
+          value: function nativa_ToLowerCase() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var nextPos = gen.newLabel();
+            var setChar = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_ToLowerCase');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(t2, t1); // carga la referencia del string
+
+            gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
+
+            gen.genLabel(nextPos);
+            gen.genGetHeap(t4, t2);
+            gen.genIf(t4, '-1', '==', fin);
+            gen.genIf(t4, '65', '<', setChar);
+            gen.genIf(t4, '90', '>', setChar);
+            gen.genExpresion(t4, t4, '32', '+');
+            gen.genLabel(setChar);
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t2, t2, '1', '+');
+            gen.genGoto(nextPos);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t3);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+          }
+        }, {
+          key: "nativa_concat_str_str",
+          value: function nativa_concat_str_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var str1 = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t1, 'h');
+            gen.genLabel(str1);
+            gen.genGetHeap(t2, p1);
+            gen.genIf(t2, '-1', '==', str2);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str1);
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p2);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t1);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_int_str",
+          value: function nativa_concat_int_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_int_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genIf(p1, '0', '>=', inicio);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '-1', '*');
+            gen.genLabel(inicio);
+            gen.genAsignacion(t1, '0');
+            gen.genLabel(nextPos);
+            gen.genIf(p1, '0', '==', validar);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(p1, ", 10);")); //gen.genExpresion(t2, '(int)' + p1, '10', '%');
+
+            gen.genExpresion(t1, t1, t2, '+');
+            gen.genExpresion(p1, p1, '10', '/');
+            gen.genCode(p1 + ' = (int)' + p1 + ';');
+            gen.genGoto(nextPos);
+            gen.genLabel(validar);
+            gen.genIf(t1, '0', '!=', str1);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(str1);
+            gen.genIf(t1, '0', '==', str2);
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);")); //gen.genExpresion(t2, '(int)' + t1, '10', '%');
+
+            gen.genExpresion(t2, t2, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode(t1 + ' = (int)' + t1 + ';');
+            gen.genGoto(str1);
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p2);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_str_int",
+          value: function nativa_concat_str_int() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var pre = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_int');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p1);
+            gen.genIf(t2, '-1', '==', pre);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(pre);
+            gen.genIf(p2, '0', '>=', inicio);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '-1', '*');
+            gen.genLabel(inicio);
+            gen.genAsignacion(t1, '0');
+            gen.genLabel(nextPos);
+            gen.genIf(p2, '0', '==', validar);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(p2, ", 10);")); //gen.genExpresion(t2, '(int)' + p2, '10', '%');
+
+            gen.genExpresion(t1, t1, t2, '+');
+            gen.genExpresion(p2, p2, '10', '/');
+            gen.genCode(p2 + ' = (int)' + p2 + ';');
+            gen.genGoto(nextPos);
+            gen.genLabel(validar);
+            gen.genIf(t1, '0', '!=', str1);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(str1);
+            gen.genIf(t1, '0', '==', fin);
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);")); //gen.genExpresion(t2, '(int)' + t1, '10', '%');
+
+            gen.genExpresion(t2, t2, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode(t1 + ' = (int)' + t1 + ';');
+            gen.genGoto(str1);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_dbl_str",
+          value: function nativa_concat_dbl_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var pre = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var strd = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_dbl_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genIf(p1, '0', '>=', pre);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '-1', '*');
+            gen.genLabel(pre);
+            gen.genCode("".concat(t1, " = (int)").concat(p1, ";")); //gen.genCode(`${t2} = fmod(${p1}, 1);`);
+
+            gen.genAsignacion(t3, '0');
+            gen.genLabel(inicio);
+            gen.genIf(t1, '0', '==', validar);
+            gen.genExpresion(t3, t3, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genExpresion(t3, t3, t2, '+');
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode("".concat(t1, " = (int)").concat(t1, ";"));
+            gen.genGoto(inicio);
+            gen.genLabel(validar);
+            gen.genIf(t3, '0', '!=', nextPos);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(nextPos);
+            gen.genIf(t3, '0', '==', str1);
+            gen.genCode("".concat(t1, " = fmod(").concat(t3, ", 10);"));
+            gen.genExpresion(t3, t3, '10', '/');
+            gen.genCode("".concat(t3, " = (int)").concat(t3, ";"));
+            gen.genExpresion(t2, t1, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genGoto(nextPos);
+            gen.genLabel(str1);
+            gen.genSetHeap('h', '46');
+            gen.avanzarHeap();
+            gen.genAsignacion(t3, '0');
+            gen.genCode("".concat(t1, " = fmod(").concat(p1, ", 1);"));
+            gen.genLabel(strd);
+            gen.genIf(t3, '3', '==', str2);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genCode("".concat(t2, " = (int)").concat(t2, ";"));
+            gen.genExpresion(t4, t2, '48', '+');
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genGoto(strd);
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p2);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_str_dbl",
+          value: function nativa_concat_str_dbl() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var pre = gen.newLabel();
+            var sig = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var strd = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_dbl');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p1);
+            gen.genIf(t2, '-1', '==', sig);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(sig);
+            gen.genIf(p2, '0', '>=', pre);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '-1', '*');
+            gen.genLabel(pre);
+            gen.genCode("".concat(t1, " = (int)").concat(p2, ";")); //gen.genCode(`${t2} = fmod(${p2}, 1);`);
+
+            gen.genAsignacion(t3, '0');
+            gen.genLabel(inicio);
+            gen.genIf(t1, '0', '==', validar);
+            gen.genExpresion(t3, t3, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genExpresion(t3, t3, t2, '+');
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode("".concat(t1, " = (int)").concat(t1, ";"));
+            gen.genGoto(inicio);
+            gen.genLabel(validar);
+            gen.genIf(t3, '0', '!=', nextPos);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(nextPos);
+            gen.genIf(t3, '0', '==', str1);
+            gen.genCode("".concat(t1, " = fmod(").concat(t3, ", 10);"));
+            gen.genExpresion(t3, t3, '10', '/');
+            gen.genCode("".concat(t3, " = (int)").concat(t3, ";"));
+            gen.genExpresion(t2, t1, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genGoto(nextPos);
+            gen.genLabel(str1);
+            gen.genSetHeap('h', '46');
+            gen.avanzarHeap();
+            gen.genAsignacion(t3, '0');
+            gen.genCode("".concat(t1, " = fmod(").concat(p2, ", 1);"));
+            gen.genLabel(strd);
+            gen.genIf(t3, '3', '==', fin);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genCode("".concat(t2, " = (int)").concat(t2, ";"));
+            gen.genExpresion(t4, t2, '48', '+');
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genGoto(strd);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_str_bol",
+          value: function nativa_concat_str_bol() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var str1 = gen.newLabel();
+            var bol = gen.newLabel();
+            var lblf = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_bol');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genLabel(str1);
+            gen.genGetHeap(t1, p1);
+            gen.genIf(t1, '-1', '==', bol);
+            gen.genSetHeap('h', t1);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str1);
+            gen.genLabel(bol);
+            gen.genIf(p2, '1', '!=', lblf);
+            gen.genSetHeap('h', '116');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '114');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '117');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genGoto(fin);
+            gen.genLabel(lblf);
+            gen.genSetHeap('h', '102');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '97');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '108');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '115');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_bol_str",
+          value: function nativa_concat_bol_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var str2 = gen.newLabel();
+            var lblf = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_bol_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genIf(p1, '1', '!=', lblf);
+            gen.genSetHeap('h', '116');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '114');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '117');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genGoto(str2);
+            gen.genLabel(lblf);
+            gen.genSetHeap('h', '102');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '97');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '108');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '115');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genLabel(str2);
+            gen.genGetHeap(t1, p2);
+            gen.genIf(t1, '-1', '==', fin);
+            gen.genSetHeap('h', t1);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }]);
+
+        return Nativas;
+      }();
+      /***/
+
     },
 
     /***/
@@ -1569,6 +2432,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return instrucciondoble;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var instrucciondoble = /*#__PURE__*/function () {
         function instrucciondoble(i1, i2) {
@@ -1593,7 +2462,10 @@
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("|", "");
+            padre.AddHijo(this.i1.recorrer());
+            padre.AddHijo(this.i2.recorrer());
+            return padre;
           }
         }]);
 
@@ -2594,6 +3466,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return barrabarra;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var barrabarra = /*#__PURE__*/function () {
         function barrabarra(exprecion, sig) {
@@ -2698,6 +3576,8 @@
 
             if (typeof valor == 'number') {
               this.isNumero(controlador, ts, valor);
+            } else {
+              this.esbool(controlador, ts);
             }
           }
         }, {
@@ -2707,6 +3587,15 @@
               this.siguienteNumero(controlador, ts, valor);
             } else {
               this.obtenerallNumero(controlador, ts, valor);
+            }
+          }
+        }, {
+          key: "esbool",
+          value: function esbool(controlador, ts) {
+            if (this.sig != null) {
+              this.siguienteBool(controlador, ts);
+            } else {
+              this.obtenerBool(controlador, ts);
             }
           }
         }, {
@@ -2786,9 +3675,106 @@
             }
           }
         }, {
+          key: "siguienteBool",
+          value: function siguienteBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator7 = _createForOfIteratorHelper(ts.sig),
+                  _step7;
+
+              try {
+                for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+                  var tssig = _step7.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  } else {
+                    this.siguienteBool(controlador, tssig.sig);
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator7.e(err);
+              } finally {
+                _iterator7.f();
+              }
+            }
+          }
+        }, {
+          key: "obtenerBool",
+          value: function obtenerBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator8 = _createForOfIteratorHelper(ts.tabla),
+                  _step8;
+
+              try {
+                for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+                  var informacion = _step8.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator8.e(err);
+              } finally {
+                _iterator8.f();
+              }
+
+              var _iterator9 = _createForOfIteratorHelper(ts.sig),
+                  _step9;
+
+              try {
+                for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+                  var tssig = _step9.value;
+                  this.obtenerBool(controlador, tssig.sig);
+                }
+              } catch (err) {
+                _iterator9.e(err);
+              } finally {
+                _iterator9.f();
+              }
+            }
+          }
+        }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("//", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -2963,12 +3949,12 @@
             var ts = this;
             console.log("-----------------");
 
-            var _iterator7 = _createForOfIteratorHelper(ts.tabla),
-                _step7;
+            var _iterator10 = _createForOfIteratorHelper(ts.tabla),
+                _step10;
 
             try {
-              for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-                var informacion = _step7.value;
+              for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+                var informacion = _step10.value;
                 console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
 
                 if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
@@ -2976,9 +3962,9 @@
                 }
               }
             } catch (err) {
-              _iterator7.e(err);
+              _iterator10.e(err);
             } finally {
-              _iterator7.f();
+              _iterator10.f();
             }
 
             return null;
@@ -3079,12 +4065,12 @@
             var existe_id;
             var contador = 1;
 
-            var _iterator8 = _createForOfIteratorHelper(ts.sig),
-                _step8;
+            var _iterator11 = _createForOfIteratorHelper(ts.sig),
+                _step11;
 
             try {
-              for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-                var tssig = _step8.value;
+              for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
+                var tssig = _step11.value;
 
                 if (contador == controlador.posicionid) {
                   existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
@@ -3093,9 +4079,9 @@
                 contador++;
               }
             } catch (err) {
-              _iterator8.e(err);
+              _iterator11.e(err);
             } finally {
-              _iterator8.f();
+              _iterator11.f();
             }
 
             if (existe_id != null) {
@@ -3191,12 +4177,12 @@
               do {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator9 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step9;
+                var _iterator12 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step12;
 
                 try {
-                  for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-                    var ins = _step9.value;
+                  for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+                    var ins = _step12.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -3214,9 +4200,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator9.e(err);
+                  _iterator12.e(err);
                 } finally {
-                  _iterator9.f();
+                  _iterator12.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (doWhile)");
@@ -3230,18 +4216,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("do", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator10 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step10;
+            var _iterator13 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step13;
 
             try {
-              for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-                var ins = _step10.value;
+              for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+                var ins = _step13.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator10.e(err);
+              _iterator13.e(err);
             } finally {
-              _iterator10.f();
+              _iterator13.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -3323,12 +4309,12 @@
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
             if (this.valor_sw == this.valor_case.getValor(controlador, ts)) {
-              var _iterator11 = _createForOfIteratorHelper(this.lista_instrucciones),
-                  _step11;
+              var _iterator14 = _createForOfIteratorHelper(this.lista_instrucciones),
+                  _step14;
 
               try {
-                for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-                  var res = _step11.value;
+                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+                  var res = _step14.value;
                   var ins = res.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -3347,9 +4333,9 @@
                   }
                 }
               } catch (err) {
-                _iterator11.e(err);
+                _iterator14.e(err);
               } finally {
-                _iterator11.f();
+                _iterator14.f();
               }
             }
 
@@ -3363,18 +4349,18 @@
             padre.AddHijo(this.valor_case.recorrer());
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](":", ""));
 
-            var _iterator12 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step12;
+            var _iterator15 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step15;
 
             try {
-              for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                var ins = _step12.value;
+              for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
+                var ins = _step15.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator12.e(err);
+              _iterator15.e(err);
             } finally {
-              _iterator12.f();
+              _iterator15.f();
             }
 
             return padre;
@@ -4492,6 +5478,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return axesbarrabarra;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var axesbarrabarra = /*#__PURE__*/function () {
         function axesbarrabarra(tipo, exprecion, sig) {
@@ -4528,35 +5520,49 @@
           key: "obtenerall",
           value: function obtenerall(controlador, ts) {
             if (ts != null) {
-              var _iterator13 = _createForOfIteratorHelper(ts.tabla),
-                  _step13;
+              var _iterator16 = _createForOfIteratorHelper(ts.tabla),
+                  _step16;
 
               try {
-                for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-                  var informacion = _step13.value;
+                for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
+                  var informacion = _step16.value;
 
-                  if (informacion.identificador == this.exprecion.id) {
-                    controlador.append(informacion.sim.objeto.gethtml(""));
+                  if (this.exprecion.tipo == 1) {
+                    if (this.exprecion.id == "*" && informacion.sim.simbolo == 1) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    } else {
+                      if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 1) {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                      }
+                    }
+                  } else {
+                    if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 2) {
+                      controlador.append(informacion.sim.valor + "\n");
+                    } else {
+                      if (this.exprecion.id == "*" && informacion.sim.simbolo == 2) {
+                        controlador.append(informacion.sim.valor);
+                      }
+                    }
                   }
                 }
               } catch (err) {
-                _iterator13.e(err);
+                _iterator16.e(err);
               } finally {
-                _iterator13.f();
+                _iterator16.f();
               }
 
-              var _iterator14 = _createForOfIteratorHelper(ts.sig),
-                  _step14;
+              var _iterator17 = _createForOfIteratorHelper(ts.sig),
+                  _step17;
 
               try {
-                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
-                  var tssig = _step14.value;
+                for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
+                  var tssig = _step17.value;
                   this.obtenerall(controlador, tssig.sig);
                 }
               } catch (err) {
-                _iterator14.e(err);
+                _iterator17.e(err);
               } finally {
-                _iterator14.f();
+                _iterator17.f();
               }
             }
           }
@@ -4564,24 +5570,23 @@
           key: "siguiente",
           value: function siguiente(controlador, ts) {
             if (ts != null) {
-              var _iterator15 = _createForOfIteratorHelper(ts.sig),
-                  _step15;
+              var _iterator18 = _createForOfIteratorHelper(ts.sig),
+                  _step18;
 
               try {
-                for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
-                  var tssig = _step15.value;
+                for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
+                  var tssig = _step18.value;
 
-                  if (this.exprecion.id == tssig.identificador) {
-                    console.log(this.exprecion.id);
+                  if (this.exprecion.id == tssig.identificador || this.exprecion.id == "*") {
                     this.sig.ejecutar(controlador, tssig.sig);
                   } else {
                     this.siguiente(controlador, tssig.sig);
                   }
                 }
               } catch (err) {
-                _iterator15.e(err);
+                _iterator18.e(err);
               } finally {
-                _iterator15.f();
+                _iterator18.f();
               }
             }
           }
@@ -4593,6 +5598,8 @@
 
             if (typeof valor == 'number') {
               this.isNumero(controlador, ts, valor);
+            } else {
+              this.esbool(controlador, ts);
             }
           }
         }, {
@@ -4605,17 +5612,26 @@
             }
           }
         }, {
+          key: "esbool",
+          value: function esbool(controlador, ts) {
+            if (this.sig != null) {
+              this.siguienteBool(controlador, ts);
+            } else {
+              this.obtenerBool(controlador, ts);
+            }
+          }
+        }, {
           key: "siguienteNumero",
           value: function siguienteNumero(controlador, ts, valor) {
             var cont = 1;
 
             if (ts != null) {
-              var _iterator16 = _createForOfIteratorHelper(ts.sig),
-                  _step16;
+              var _iterator19 = _createForOfIteratorHelper(ts.sig),
+                  _step19;
 
               try {
-                for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-                  var tssig = _step16.value;
+                for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
+                  var tssig = _step19.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     valor = this.exprecion.exprecion.getValor(controlador, ts);
@@ -4630,9 +5646,9 @@
                   }
                 }
               } catch (err) {
-                _iterator16.e(err);
+                _iterator19.e(err);
               } finally {
-                _iterator16.f();
+                _iterator19.f();
               }
             }
           }
@@ -4642,12 +5658,12 @@
             var cont = 1;
 
             if (ts != null) {
-              var _iterator17 = _createForOfIteratorHelper(ts.tabla),
-                  _step17;
+              var _iterator20 = _createForOfIteratorHelper(ts.tabla),
+                  _step20;
 
               try {
-                for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
-                  var informacion = _step17.value;
+                for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
+                  var informacion = _step20.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     valor = this.exprecion.exprecion.getValor(controlador, ts);
@@ -4660,30 +5676,127 @@
                   }
                 }
               } catch (err) {
-                _iterator17.e(err);
+                _iterator20.e(err);
               } finally {
-                _iterator17.f();
+                _iterator20.f();
               }
 
-              var _iterator18 = _createForOfIteratorHelper(ts.sig),
-                  _step18;
+              var _iterator21 = _createForOfIteratorHelper(ts.sig),
+                  _step21;
 
               try {
-                for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
-                  var tssig = _step18.value;
+                for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
+                  var tssig = _step21.value;
                   this.obtenerallNumero(controlador, tssig.sig, valor);
                 }
               } catch (err) {
-                _iterator18.e(err);
+                _iterator21.e(err);
               } finally {
-                _iterator18.f();
+                _iterator21.f();
+              }
+            }
+          }
+        }, {
+          key: "siguienteBool",
+          value: function siguienteBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator22 = _createForOfIteratorHelper(ts.sig),
+                  _step22;
+
+              try {
+                for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
+                  var tssig = _step22.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  } else {
+                    this.siguienteBool(controlador, tssig.sig);
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator22.e(err);
+              } finally {
+                _iterator22.f();
+              }
+            }
+          }
+        }, {
+          key: "obtenerBool",
+          value: function obtenerBool(controlador, ts) {
+            var cont = 1;
+            var posicion = 1;
+
+            if (ts != null) {
+              var _iterator23 = _createForOfIteratorHelper(ts.tabla),
+                  _step23;
+
+              try {
+                for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
+                  var informacion = _step23.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator23.e(err);
+              } finally {
+                _iterator23.f();
+              }
+
+              var _iterator24 = _createForOfIteratorHelper(ts.sig),
+                  _step24;
+
+              try {
+                for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
+                  var tssig = _step24.value;
+                  this.obtenerBool(controlador, tssig.sig);
+                }
+              } catch (err) {
+                _iterator24.e(err);
+              } finally {
+                _iterator24.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("//", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Child::" + this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -4762,6 +5875,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return acceso;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var acceso = /*#__PURE__*/function () {
         function acceso(exprecion, sig) {
@@ -4778,12 +5897,12 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator19 = _createForOfIteratorHelper(ts.sig),
-                    _step19;
+                var _iterator25 = _createForOfIteratorHelper(ts.sig),
+                    _step25;
 
                 try {
-                  for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
-                    var tssig = _step19.value;
+                  for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
+                    var tssig = _step25.value;
 
                     if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
@@ -4794,17 +5913,17 @@
                     }
                   }
                 } catch (err) {
-                  _iterator19.e(err);
+                  _iterator25.e(err);
                 } finally {
-                  _iterator19.f();
+                  _iterator25.f();
                 }
               } else {
-                var _iterator20 = _createForOfIteratorHelper(ts.tabla),
-                    _step20;
+                var _iterator26 = _createForOfIteratorHelper(ts.tabla),
+                    _step26;
 
                 try {
-                  for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
-                    var informacion = _step20.value;
+                  for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
+                    var informacion = _step26.value;
 
                     if (this.exprecion.tipo == 1) {
                       if (this.exprecion.id == "*") {
@@ -4825,9 +5944,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator20.e(err);
+                  _iterator26.e(err);
                 } finally {
-                  _iterator20.f();
+                  _iterator26.f();
                 }
               }
             }
@@ -4850,12 +5969,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator21 = _createForOfIteratorHelper(ts.sig),
-                  _step21;
+              var _iterator27 = _createForOfIteratorHelper(ts.sig),
+                  _step27;
 
               try {
-                for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
-                  var tssig = _step21.value;
+                for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
+                  var tssig = _step27.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -4866,17 +5985,17 @@
                   }
                 }
               } catch (err) {
-                _iterator21.e(err);
+                _iterator27.e(err);
               } finally {
-                _iterator21.f();
+                _iterator27.f();
               }
             } else {
-              var _iterator22 = _createForOfIteratorHelper(ts.tabla),
-                  _step22;
+              var _iterator28 = _createForOfIteratorHelper(ts.tabla),
+                  _step28;
 
               try {
-                for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
-                  var informacion = _step22.value;
+                for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
+                  var informacion = _step28.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
@@ -4887,9 +6006,9 @@
                   }
                 }
               } catch (err) {
-                _iterator22.e(err);
+                _iterator28.e(err);
               } finally {
-                _iterator22.f();
+                _iterator28.f();
               }
             }
           }
@@ -4901,12 +6020,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator23 = _createForOfIteratorHelper(ts.sig),
-                  _step23;
+              var _iterator29 = _createForOfIteratorHelper(ts.sig),
+                  _step29;
 
               try {
-                for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
-                  var tssig = _step23.value;
+                for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
+                  var tssig = _step29.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     controlador.position = cont;
@@ -4922,17 +6041,17 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator23.e(err);
+                _iterator29.e(err);
               } finally {
-                _iterator23.f();
+                _iterator29.f();
               }
             } else {
-              var _iterator24 = _createForOfIteratorHelper(ts.tabla),
-                  _step24;
+              var _iterator30 = _createForOfIteratorHelper(ts.tabla),
+                  _step30;
 
               try {
-                for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
-                  var informacion = _step24.value;
+                for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
+                  var informacion = _step30.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
@@ -4948,16 +6067,29 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator24.e(err);
+                _iterator30.e(err);
               } finally {
-                _iterator24.f();
+                _iterator30.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -5113,27 +6245,43 @@
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_7_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
+
+            var ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r6.traducir3D();
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         }
       }
 
       function AppComponent_div_13_Template(rf, ctx) {
         if (rf & 1) {
-          var _r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+          var _r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8);
 
-            var ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
 
-            return ctx_r6.recorrer();
+            return ctx_r7.recorrer();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente XML");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -5142,14 +6290,30 @@
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r7);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8);
 
-            var ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
 
-            return ctx_r8.ejecutarDescendente();
+            return ctx_r9.ejecutarDescendente();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente XML");
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() {
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8);
+
+            var ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+
+            return ctx_r10.xprecorrerDes();
+          });
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -5159,18 +6323,18 @@
 
       function AppComponent_div_18_Template(rf, ctx) {
         if (rf & 1) {
-          var _r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+          var _r12 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r12);
 
-            var ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
 
-            return ctx_r9.imprimirTabla();
+            return ctx_r11.imprimirTabla();
           });
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Gramatical");
@@ -5198,11 +6362,11 @@
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 23);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() {
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r10);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r12);
 
-            var ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
+            var ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
 
-            return ctx_r11.openPage("TablaSim", 2);
+            return ctx_r13.openPage("TablaSim", 2);
           });
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\xE1ntico");
@@ -5293,6 +6457,33 @@
             }
           }
         }, {
+          key: "xprecorrerDes",
+          value: function xprecorrerDes() {
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+
+            if (this.entradaxpath != "") {
+              console.log("Vamos a graficar");
+              var nodo_ast = ana.recorrerDesxpath(this.entradaxpath);
+              var grafo = nodo_ast.GraficarSintactico(); //Aqui tenemos la cadena de graphviz para graficar
+
+              console.log(grafo);
+              var container = document.getElementById("app");
+              var parsedData = vis__WEBPACK_IMPORTED_MODULE_3__["network"].convertDot(grafo);
+              var data = {
+                nodes: parsedData.nodes,
+                edges: parsedData.edges
+              };
+              var options = parsedData.options;
+              options.layout = {
+                "hierarchical": true
+              };
+              options.nodes = {
+                color: "cyan"
+              };
+              var network = new vis__WEBPACK_IMPORTED_MODULE_3__["Network"](container, data, options);
+            }
+          }
+        }, {
           key: "ejecutar",
           value: function ejecutar() {
             var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
@@ -5303,6 +6494,16 @@
               this.consola = ejecutar.consola;
               this.htmlts = ejecutar.ts;
               /* this.htmlerrores = ejecutar.errores;*/
+            }
+          }
+        }, {
+          key: "traducir3D",
+          value: function traducir3D() {
+            var ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+
+            if (this.entradaxml != null) {
+              var ejecutar = ana.traducirxml(this.entradaxml, this.entradaxpath);
+              this.consola = ejecutar.consola;
             }
           }
         }, {
@@ -5399,7 +6600,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 6, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 9, 0, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -5413,7 +6614,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 6, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](13, AppComponent_div_13_Template, 9, 0, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -5715,6 +6916,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return position;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var position = /*#__PURE__*/function () {
         function position() {
@@ -5734,7 +6941,8 @@
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("position();", "");
+            return padre;
           }
         }]);
 
@@ -7928,12 +9136,12 @@
 
             if (this.condicion.getTipo(controlador, ts) == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].BOOLEANO) {
               if (valor_condicion) {
-                var _iterator25 = _createForOfIteratorHelper(this.lista_ifs),
-                    _step25;
+                var _iterator31 = _createForOfIteratorHelper(this.lista_ifs),
+                    _step31;
 
                 try {
-                  for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
-                    var ins = _step25.value;
+                  for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
+                    var ins = _step31.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"]) {
@@ -7953,19 +9161,19 @@
 
                   }
                 } catch (err) {
-                  _iterator25.e(err);
+                  _iterator31.e(err);
                 } finally {
-                  _iterator25.f();
+                  _iterator31.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
               } else {
-                var _iterator26 = _createForOfIteratorHelper(this.lista_elses),
-                    _step26;
+                var _iterator32 = _createForOfIteratorHelper(this.lista_elses),
+                    _step32;
 
                 try {
-                  for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
-                    var _ins = _step26.value;
+                  for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
+                    var _ins = _step32.value;
 
                     var _res = _ins.ejecutar(controlador, ts_local);
 
@@ -7986,9 +9194,9 @@
 
                   }
                 } catch (err) {
-                  _iterator26.e(err);
+                  _iterator32.e(err);
                 } finally {
-                  _iterator26.f();
+                  _iterator32.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
@@ -8007,18 +9215,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator27 = _createForOfIteratorHelper(this.lista_ifs),
-                _step27;
+            var _iterator33 = _createForOfIteratorHelper(this.lista_ifs),
+                _step33;
 
             try {
-              for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
-                var _ins2 = _step27.value;
+              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
+                var _ins2 = _step33.value;
                 padre.AddHijo(_ins2.recorrer());
               }
             } catch (err) {
-              _iterator27.e(err);
+              _iterator33.e(err);
             } finally {
-              _iterator27.f();
+              _iterator33.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -8028,18 +9236,18 @@
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("else", ""));
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-              var _iterator28 = _createForOfIteratorHelper(this.lista_elses),
-                  _step28;
+              var _iterator34 = _createForOfIteratorHelper(this.lista_elses),
+                  _step34;
 
               try {
-                for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
-                  var ins = _step28.value;
+                for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
+                  var ins = _step34.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator28.e(err);
+                _iterator34.e(err);
               } finally {
-                _iterator28.f();
+                _iterator34.f();
               }
 
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -8212,6 +9420,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return puntopunto;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var puntopunto = /*#__PURE__*/function () {
         function puntopunto(exprecion, sig) {
@@ -8232,30 +9446,40 @@
 
               this.contador = 1;
             } else {
-              ts = ts.ant;
+              if (this.contador == 0) {
+                ts = ts.ant;
 
-              var _iterator29 = _createForOfIteratorHelper(ts.tabla),
-                  _step29;
+                var _iterator35 = _createForOfIteratorHelper(ts.tabla),
+                    _step35;
 
-              try {
-                for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
-                  var informacion = _step29.value;
+                try {
+                  for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
+                    var informacion = _step35.value;
 
-                  if (informacion.sim.simbolo == 1) {
-                    controlador.append(informacion.sim.objeto.gethtml(""));
+                    if (informacion.sim.simbolo == 1) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
                   }
+                } catch (err) {
+                  _iterator35.e(err);
+                } finally {
+                  _iterator35.f();
                 }
-              } catch (err) {
-                _iterator29.e(err);
-              } finally {
-                _iterator29.f();
               }
+
+              this.contador = 1;
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/..", "");
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -8478,6 +9702,22 @@
       var _Nodo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ./Nodo */
       "Zr6O");
+      /* harmony import */
+
+
+      var _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ../GeneradorC3D/GeneradorC3D */
+      "cg4T");
+      /* harmony import */
+
+
+      var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      /*! ../../Analizadores/gramatica */
+      "lbnd");
+      /* harmony import */
+
+
+      var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_5__);
 
       var Ast = /*#__PURE__*/function () {
         function Ast(lista_instrucciones) {
@@ -8489,14 +9729,18 @@
         _createClass(Ast, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
+            _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__["GeneradorC3D"].getInstancia().clearCode();
+
             console.log("vamos a compilar la entrada");
 
-            var _iterator30 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step30;
+            _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__["GeneradorC3D"].getInstancia();
+
+            var _iterator36 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step36;
 
             try {
-              for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
-                var instruccion = _step30.value;
+              for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
+                var instruccion = _step36.value;
 
                 if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
                   var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
@@ -8506,25 +9750,36 @@
                 }
               }
             } catch (err) {
-              _iterator30.e(err);
+              _iterator36.e(err);
             } finally {
-              _iterator30.f();
+              _iterator36.f();
             }
 
             this.graficar(controlador, ts);
             console.log(ts);
+
+            if (controlador.acceso == 2) {
+              if (controlador.entrada.length > 0) {
+                var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_5__["parse"](controlador.entrada);
+
+                console.log(astxpaht);
+                this.ejecutarXPath(controlador, ts, astxpaht);
+              }
+
+              controlador.consola = _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__["GeneradorC3D"].getInstancia().getCode();
+            }
           }
         }, {
           key: "ejecutarDescendente",
           value: function ejecutarDescendente(controlador, ts) {
             console.log("vamos a compilar la entrada");
 
-            var _iterator31 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step31;
+            var _iterator37 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step37;
 
             try {
-              for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
-                var instruccion = _step31.value;
+              for (_iterator37.s(); !(_step37 = _iterator37.n()).done;) {
+                var instruccion = _step37.value;
 
                 if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
                   var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
@@ -8534,9 +9789,9 @@
                 }
               }
             } catch (err) {
-              _iterator31.e(err);
+              _iterator37.e(err);
             } finally {
-              _iterator31.f();
+              _iterator37.f();
             }
 
             this.graficar(controlador, ts);
@@ -8555,18 +9810,18 @@
             if (ts != null) {
               controlador.graficarEntornos(controlador, ts, ts.ambito);
 
-              var _iterator32 = _createForOfIteratorHelper(ts.sig),
-                  _step32;
+              var _iterator38 = _createForOfIteratorHelper(ts.sig),
+                  _step38;
 
               try {
-                for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
-                  var tssig = _step32.value;
+                for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
+                  var tssig = _step38.value;
                   this.graficar(controlador, tssig.sig);
                 }
               } catch (err) {
-                _iterator32.e(err);
+                _iterator38.e(err);
               } finally {
-                _iterator32.f();
+                _iterator38.f();
               }
             }
           }
@@ -8575,18 +9830,18 @@
           value: function recorrer() {
             var raiz = new _Nodo__WEBPACK_IMPORTED_MODULE_3__["default"]("INICIO", "");
 
-            var _iterator33 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step33;
+            var _iterator39 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step39;
 
             try {
-              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
-                var inst = _step33.value;
+              for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
+                var inst = _step39.value;
                 raiz.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator33.e(err);
+              _iterator39.e(err);
             } finally {
-              _iterator33.f();
+              _iterator39.f();
             }
 
             return raiz;
@@ -8820,12 +10075,12 @@
             var ts = this;
             console.log("-----------------");
 
-            var _iterator34 = _createForOfIteratorHelper(ts.tabla),
-                _step34;
+            var _iterator40 = _createForOfIteratorHelper(ts.tabla),
+                _step40;
 
             try {
-              for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
-                var informacion = _step34.value;
+              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
+                var informacion = _step40.value;
                 console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
 
                 if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
@@ -8833,9 +10088,9 @@
                 }
               }
             } catch (err) {
-              _iterator34.e(err);
+              _iterator40.e(err);
             } finally {
-              _iterator34.f();
+              _iterator40.f();
             }
 
             return null;
@@ -8931,6 +10186,12 @@
       var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ../TablaSimbolos/Tipo */
       "lKex");
+      /* harmony import */
+
+
+      var _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ../GeneradorC3D/GeneradorC3D */
+      "cg4T");
 
       var Objeto = /*#__PURE__*/function () {
         function Objeto(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta) {
@@ -8948,30 +10209,37 @@
         _createClass(Objeto, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
+            this.posicionid3d = this.generar3d(this.identificador);
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts, this.identificador);
 
-            var _iterator35 = _createForOfIteratorHelper(this.listaAtributos),
-                _step35;
+            if (this.texto.length > 0) {
+              this.posiciontext3d = this.generar3d(this.texto);
+            }
+
+            var _iterator41 = _createForOfIteratorHelper(this.listaAtributos),
+                _step41;
 
             try {
-              for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
-                var at = _step35.value;
+              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
+                var at = _step41.value;
                 var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("IDENTIFICADOR");
                 var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](2, tipo, at.identificador, at.valor);
+                at.posicion3d = this.generar3d(at.valor);
+                at.posicionId3d = this.generar3d(at.identificador);
                 ts_local.agregar(at.identificador, sim);
               }
             } catch (err) {
-              _iterator35.e(err);
+              _iterator41.e(err);
             } finally {
-              _iterator35.f();
+              _iterator41.f();
             }
 
-            var _iterator36 = _createForOfIteratorHelper(this.listaObjetos),
-                _step36;
+            var _iterator42 = _createForOfIteratorHelper(this.listaObjetos),
+                _step42;
 
             try {
-              for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
-                var _at = _step36.value;
+              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
+                var _at = _step42.value;
 
                 var _tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("OBJETO");
 
@@ -8991,9 +10259,9 @@
                 ts_local.agregarSiguiente(_at.identificador, _at.ejecutar(controlador, ts_local));
               }
             } catch (err) {
-              _iterator36.e(err);
+              _iterator42.e(err);
             } finally {
-              _iterator36.f();
+              _iterator42.f();
             }
 
             return ts_local;
@@ -9001,51 +10269,58 @@
         }, {
           key: "gethtml",
           value: function gethtml(tab) {
-            var xml = tab + "<" + this.identificador;
-
-            var _iterator37 = _createForOfIteratorHelper(this.listaAtributos),
-                _step37;
-
-            try {
-              for (_iterator37.s(); !(_step37 = _iterator37.n()).done;) {
-                var _at2 = _step37.value;
-                xml += " " + _at2.identificador + "=\"" + _at2.valor + "\" ";
-              }
-            } catch (err) {
-              _iterator37.e(err);
-            } finally {
-              _iterator37.f();
-            }
-
-            if (this.tipoetiqueta == 1) {
-              xml += "/>";
-            } else {
-              if (this.texto.length > 0) {
-                xml += ">" + this.texto + "<" + this.identificador + "/>";
-              } else {
-                tab = tab + "   ";
-                xml += ">";
-
-                var _iterator38 = _createForOfIteratorHelper(this.listaObjetos),
-                    _step38;
-
-                try {
-                  for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
-                    var at = _step38.value;
-                    xml += "\n";
-                    xml += at.gethtml(tab);
-                  }
-                } catch (err) {
-                  _iterator38.e(err);
-                } finally {
-                  _iterator38.f();
-                }
-
-                xml += tab + "\n<" + this.identificador + "/>";
-              }
-            }
-
-            return xml;
+            /* const generator = GeneradorC3D.getInstancia();
+             generator.genPrint('c', '60');
+                generator.genSetStack('p', this.posicionid3d);
+             generator.genCall('nativa_print_str');
+                let xml=tab+"<"+this.identificador;
+             for(let at of this.listaAtributos ){
+                 generator.genPrint('c', '32');
+                    generator.genSetStack('p', at.posicionId3d);
+                 generator.genCall('nativa_print_str');
+                 
+                 generator.genPrint('c', '61');
+                 generator.genPrint('c', '34');
+                    generator.genSetStack('p', at.posicion3d);
+                 generator.genCall('nativa_print_str');
+                    generator.genPrint('c', '34');
+                    xml+=" "+at.identificador+"=\""+at.valor+"\" ";
+             }
+             if(this.tipoetiqueta==1){
+                 generator.genPrint('c', '47');
+                 generator.genPrint('c', '62');
+                 xml+= "/>";
+             }else{
+                 if(this.texto.length>0){
+                     generator.genPrint('c', '62');
+                        generator.genSetStack('p', this.posiciontext3d);
+                     generator.genCall('nativa_print_str');
+                        generator.genPrint('c', '60');
+                        generator.genSetStack('p', this.posicionid3d);
+                     generator.genCall('nativa_print_str');
+                        generator.genPrint('c', '47');
+                     generator.genPrint('c', '62');
+                           xml+=">"+this.texto+"<"+this.identificador+"/>";
+                 }else{
+                     tab=tab+"   ";
+                     generator.genPrint('c', '62');
+                     xml+=">";
+                     for(let at of this.listaObjetos ){
+                         xml+="\n";
+                         generator.genPrint('c', '10');
+                         xml+=at.gethtml(tab);
+                     }
+                     generator.genPrint('c', '10');
+                     generator.genPrint('c', '60');
+                        generator.genSetStack('p', this.posicionid3d);
+                     generator.genCall('nativa_print_str');
+                        generator.genPrint('c', '47');
+                     generator.genPrint('c', '62');
+                           xml+=tab+"\n<"+this.identificador+"/>";
+                 }
+             }
+             */
+            return "";
           }
         }, {
           key: "recorrer",
@@ -9057,40 +10332,488 @@
               hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.texto, ""));
             }
 
-            var _iterator39 = _createForOfIteratorHelper(this.listaAtributos),
-                _step39;
+            var _iterator43 = _createForOfIteratorHelper(this.listaAtributos),
+                _step43;
 
             try {
-              for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
-                var at = _step39.value;
+              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
+                var at = _step43.value;
                 hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](at.identificador, ""));
               }
             } catch (err) {
-              _iterator39.e(err);
+              _iterator43.e(err);
             } finally {
-              _iterator39.f();
+              _iterator43.f();
             }
 
-            var _iterator40 = _createForOfIteratorHelper(this.listaObjetos),
-                _step40;
+            var _iterator44 = _createForOfIteratorHelper(this.listaObjetos),
+                _step44;
 
             try {
-              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
-                var _at3 = _step40.value;
-                hijo.AddHijo(_at3.recorrer());
+              for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
+                var _at2 = _step44.value;
+                hijo.AddHijo(_at2.recorrer());
               }
             } catch (err) {
-              _iterator40.e(err);
+              _iterator44.e(err);
             } finally {
-              _iterator40.f();
+              _iterator44.f();
             }
 
             padre.AddHijo(hijo);
             return padre;
           }
+        }, {
+          key: "generar3d",
+          value: function generar3d(entrada) {
+            var generator = _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_4__["GeneradorC3D"].getInstancia();
+
+            var temp = generator.newTemporal();
+            generator.genAsignacion(temp, 'h');
+
+            for (var i = 0; i < entrada.length; i++) {
+              generator.genSetHeap('h', entrada.charCodeAt(i));
+              generator.avanzarHeap();
+            }
+
+            generator.genSetHeap('h', '-1');
+            generator.avanzarHeap();
+            return temp;
+          }
         }]);
 
         return Objeto;
+      }();
+      /***/
+
+    },
+
+    /***/
+    "cg4T":
+    /*!*************************************************!*\
+      !*** ./src/Clases/GeneradorC3D/GeneradorC3D.ts ***!
+      \*************************************************/
+
+    /*! exports provided: GeneradorC3D */
+
+    /***/
+    function cg4T(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "GeneradorC3D", function () {
+        return GeneradorC3D;
+      });
+      /* harmony import */
+
+
+      var _Nativas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ./Nativas */
+      "3Bn/");
+
+      var GeneradorC3D = /*#__PURE__*/function () {
+        /**
+         * constructor de la clase singleton
+         */
+        function GeneradorC3D() {
+          _classCallCheck(this, GeneradorC3D);
+
+          this.isFunc = '';
+          this.temporal = this.label = 0;
+          this.code = [];
+          this.codeFuncion = [];
+          this.tempStorage = new Set();
+        }
+
+        _createClass(GeneradorC3D, [{
+          key: "agregarFuncion",
+          value: function agregarFuncion(funcion) {
+            var _this = this;
+
+            funcion.forEach(function (fun) {
+              _this.codeFuncion.push(fun);
+            });
+          }
+          /**
+           * Obtiene la instancia de la clase singleton
+           */
+
+        }, {
+          key: "getTempStorage",
+          value:
+          /**
+           * Retorna el set de los temporales que estan en uso
+           */
+          function getTempStorage() {
+            return this.tempStorage;
+          }
+          /**
+           * Vacia el set de los temporales
+           */
+
+        }, {
+          key: "clearTempStorage",
+          value: function clearTempStorage() {
+            this.tempStorage.clear();
+          }
+          /**
+           * asigna el set al set local de temporales
+           * @param tempStorage lista tipo Set que se asignara al set local
+           */
+
+        }, {
+          key: "setTempStorage",
+          value: function setTempStorage(tempStorage) {
+            this.tempStorage = tempStorage;
+          }
+          /**
+           * borra el C3D que tenga guardado la clase y reinicia los temporales y labels
+           */
+
+        }, {
+          key: "clearCode",
+          value: function clearCode() {
+            this.temporal = this.label = 0;
+            this.code = [];
+            this.codeFuncion = [];
+            this.tempStorage = new Set();
+          }
+        }, {
+          key: "clearSoloCode",
+          value: function clearSoloCode() {
+            this.code = [];
+          }
+          /**
+           * Ingresa en el C3D el valor que se asigna como parametro
+           * @param code valor que se asignara al C3D de la clase
+           */
+
+        }, {
+          key: "genCode",
+          value: function genCode(code) {
+            this.code.push(this.isFunc + code);
+          }
+          /**
+           * Retorna el C3D que se haya generado en la clase singleton
+           */
+
+        }, {
+          key: "getCode",
+          value: function getCode() {
+            var nativas = new _Nativas__WEBPACK_IMPORTED_MODULE_0__["Nativas"]();
+            var encabezado = '#include <stdio.h>\n#include <math.h>\ndouble Stack[60000]; double Heap[60000];\nint p; int h;\n';
+            var main = "\nint main() {\n".concat(this.code.join('\n'), "\n\nreturn 0;\n}\n");
+            var funciones = this.codeFuncion.join('\n');
+            this.code = [];
+            var strNativas = nativas.generarNativas(); //strNativas = ''; // comentar despues de terminar
+
+            var c3d = "".concat(encabezado).concat(this.getTemporales(), ";\n").concat(strNativas, "\n").concat(funciones, "\n").concat(main);
+            return c3d;
+          }
+        }, {
+          key: "getSoloCode",
+          value: function getSoloCode() {
+            return this.code;
+          }
+        }, {
+          key: "setSoloCode",
+          value: function setSoloCode(codeA) {
+            this.code = codeA;
+          }
+        }, {
+          key: "getNativas",
+          value: function getNativas() {
+            return this.code.join('\n');
+          }
+        }, {
+          key: "getTemporales",
+          value: function getTemporales() {
+            var lista = 'double ';
+
+            for (var i = 0; i < this.temporal; i++) {
+              lista += 'T' + i;
+              lista += i < this.temporal - 1 ? ',' : '';
+            }
+
+            return lista;
+          }
+          /**
+           * Crea un nuevo temporal y lo retorna
+           */
+
+        }, {
+          key: "newTemporal",
+          value: function newTemporal() {
+            var temp = 'T' + this.temporal++;
+            this.tempStorage.add(temp);
+            return temp;
+          }
+          /**
+           * Crea una nueva etiqueta y la retorna
+           */
+
+        }, {
+          key: "newLabel",
+          value: function newLabel() {
+            return 'L' + this.label++;
+          }
+          /**
+           * funcion que agrega una nueva etiqueta el C3D
+           * @param label valor que se agregara al C3D como tipo etiqueta
+           */
+
+        }, {
+          key: "genLabel",
+          value: function genLabel(label) {
+            this.code.push("".concat(this.isFunc).concat(label, ":"));
+          }
+          /**
+           * Genera una nueva expresion y la agrega al C3D
+           * @param tem Temporal al que se le asignara la expresion
+           * @param izq Expresion izquierda que se asignara al temporal
+           * @param der Expresion derecha que se asignara al temporal
+           * @param operator Operador de la expresion
+           */
+
+        }, {
+          key: "genExpresion",
+          value: function genExpresion(tem, iqz) {
+            var der = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+            var operator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+            this.code.push("".concat(this.isFunc).concat(tem, " = ").concat(iqz, " ").concat(operator, " ").concat(der, ";"));
+          }
+          /**
+           * asigna un valor a un temporal o puntero
+           * @param tem variable que recibira el valor
+           * @param val valor que sera asignado
+           */
+
+        }, {
+          key: "genAsignacion",
+          value: function genAsignacion(tem, val) {
+            this.code.push("".concat(this.isFunc).concat(tem, " = ").concat(val, ";"));
+          }
+          /**
+           * genera un goto con el valor de label y lo agrega el C3D
+           * @param label valor de etiqueta al cual se hara el goto
+           */
+
+        }, {
+          key: "genGoto",
+          value: function genGoto(label) {
+            this.code.push("".concat(this.isFunc, "goto ").concat(label, ";"));
+          }
+          /**
+           * genera un if y lo agrega al C3D
+           * @param iqz Expresion izquierda de la condicion if
+           * @param der Expresion derecha de la condicion if
+           * @param operator Operador boleano de la condicion
+           * @param label Etiqueta de salto si la condicion es verdadera
+           */
+
+        }, {
+          key: "genIf",
+          value: function genIf(iqz, der, operator, label) {
+            this.code.push("".concat(this.isFunc, "if (").concat(iqz, " ").concat(operator, " ").concat(der, ") goto ").concat(label, ";"));
+          }
+          /**
+           * Intruccion que hace avanzar el puntero heap a su siguite posicion
+           */
+
+        }, {
+          key: "avanzarHeap",
+          value: function avanzarHeap() {
+            this.code.push(this.isFunc + 'h = h + 1;');
+          }
+          /**
+           * genera un acceso al heap en la posicion index y lo asiga al tem
+           * @param tem temporal que recibira el valor del heap
+           * @param index posicion del heap al cual se accedera
+           */
+
+        }, {
+          key: "genGetHeap",
+          value: function genGetHeap(tem, index) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc).concat(tem, " = Heap[").concat(index, "];"));
+          }
+          /**
+           * genera una asignacion de valor al heap en la posicion index
+           * @param index posicion del heap al cual se desea acceder
+           * @param valor valor que se asignara a la posicion del heap
+           */
+
+        }, {
+          key: "genSetHeap",
+          value: function genSetHeap(index, valor) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc, "Heap[").concat(index, "] = ").concat(valor, ";"));
+          }
+          /**
+           * genera una asignacion a tem del valor del stack en la posicion index
+           * @param tem temporal al cual se asignara el valor del stack
+           * @param index posicion del stack al cual se desea acceder
+           */
+
+        }, {
+          key: "genGetStack",
+          value: function genGetStack(tem, index) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc).concat(tem, " = Stack[").concat(index, "];"));
+          }
+          /**
+           * genera una asignacion al stack en la posicion index
+           * @param index posicion del stack al cual se desea acceder
+           * @param value valor que sera asignado al stack
+           */
+
+        }, {
+          key: "genSetStack",
+          value: function genSetStack(index, value) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc, "Stack[").concat(index, "] = ").concat(value, ";"));
+          }
+          /**
+           * genera un desplazamiento del stack para generar un nuevo ambito
+           * @param size posiciones que se desplazara el stack
+           */
+
+        }, {
+          key: "genNextEnv",
+          value: function genNextEnv(size) {
+            this.code.push("".concat(this.isFunc, "p = p + ").concat(size, ";"));
+          }
+          /**
+           * genera un desplazamiento del stack para volver a un ambito anterios
+           * @param size posiciones que se desplazara el stack
+           */
+
+        }, {
+          key: "genAntEnv",
+          value: function genAntEnv(size) {
+            this.code.push("".concat(this.isFunc, "p = p - ").concat(size, ";"));
+          }
+          /**
+           * genera una llamada a una funcion
+           * @param id nombre de la funcion
+           */
+
+        }, {
+          key: "genCall",
+          value: function genCall(id) {
+            this.code.push("".concat(this.isFunc).concat(id, "();"));
+          }
+          /**
+           * Genera el encabezado de una funcion
+           * @param id nombre de la funcion
+           */
+
+        }, {
+          key: "genFuncion",
+          value: function genFuncion(id) {
+            this.code.push("\nvoid ".concat(id, "() {"));
+          }
+          /**
+           * Genera el cierre de la definicion de una funcion
+           */
+
+        }, {
+          key: "genEndFuncion",
+          value: function genEndFuncion() {
+            this.code.push('}');
+          }
+          /**
+           * genera un printf con el tipo de dato y el valor
+           * @param formato tipo de dato que se va a imprimir
+           * @param valor valor que se va a imprimir
+           */
+
+        }, {
+          key: "genPrint",
+          value: function genPrint(formato, valor) {
+            valor = valor[0] === 'T' && formato !== 'f' ? '(int)' + valor : valor;
+            this.code.push("".concat(this.isFunc, "printf(\"%").concat(formato, "\",").concat(valor, ");"));
+          }
+          /**
+           * genera un print del valor true
+           */
+
+        }, {
+          key: "genPrintTrue",
+          value: function genPrintTrue() {
+            this.genPrint('c', 't'.charCodeAt(0));
+            this.genPrint('c', 'r'.charCodeAt(0));
+            this.genPrint('c', 'u'.charCodeAt(0));
+            this.genPrint('c', 'e'.charCodeAt(0));
+          }
+          /**
+           * genera un print del valor false
+           */
+
+        }, {
+          key: "genPrintFalse",
+          value: function genPrintFalse() {
+            this.genPrint('c', 'f'.charCodeAt(0));
+            this.genPrint('c', 'a'.charCodeAt(0));
+            this.genPrint('c', 'l'.charCodeAt(0));
+            this.genPrint('c', 's'.charCodeAt(0));
+            this.genPrint('c', 'e'.charCodeAt(0));
+          }
+          /**
+           * genera un print del valor null
+           */
+
+        }, {
+          key: "genPrintNull",
+          value: function genPrintNull() {
+            this.genPrint('c', 'n'.charCodeAt(0));
+            this.genPrint('c', 'u'.charCodeAt(0));
+            this.genPrint('c', 'l'.charCodeAt(0));
+            this.genPrint('c', 'l'.charCodeAt(0));
+          }
+          /**
+           * genera un nuevo comentario
+           * @param comment valor del comentario
+           */
+
+        }, {
+          key: "genComentario",
+          value: function genComentario(comment) {
+            this.code.push("".concat(this.isFunc, "// ----- ").concat(comment, " -----"));
+          }
+          /**
+           * borra un temporal del storage
+           * @param temp temporal que ya no se utilizara
+           */
+
+        }, {
+          key: "freeTemp",
+          value: function freeTemp(temp) {
+            if (this.tempStorage.has(temp)) {
+              this.tempStorage["delete"](temp);
+            }
+          }
+          /**
+           * agrega un temporal al storage
+           * @param temp temporal que se agregara al storage
+           */
+
+        }, {
+          key: "genTemp",
+          value: function genTemp(temp) {
+            if (!this.tempStorage.has(temp)) this.tempStorage.add(temp);
+          }
+        }], [{
+          key: "getInstancia",
+          value: function getInstancia() {
+            return this.generador || (this.generador = new this());
+          }
+        }]);
+
+        return GeneradorC3D;
       }();
       /***/
 
@@ -9154,28 +10877,28 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-            var _iterator41 = _createForOfIteratorHelper(this.Lista_case),
-                _step41;
+            var _iterator45 = _createForOfIteratorHelper(this.Lista_case),
+                _step45;
 
             try {
-              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
-                var sw = _step41.value;
+              for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
+                var sw = _step45.value;
                 sw.valor_sw = this.valor_sw.getValor(controlador, ts_local);
               }
             } catch (err) {
-              _iterator41.e(err);
+              _iterator45.e(err);
             } finally {
-              _iterator41.f();
+              _iterator45.f();
             }
 
             var x = 0;
 
-            var _iterator42 = _createForOfIteratorHelper(this.Lista_case),
-                _step42;
+            var _iterator46 = _createForOfIteratorHelper(this.Lista_case),
+                _step46;
 
             try {
-              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
-                var _ins3 = _step42.value;
+              for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
+                var _ins3 = _step46.value;
 
                 var _res2 = _ins3.ejecutar(controlador, ts_local);
 
@@ -9191,18 +10914,18 @@
                 }
               }
             } catch (err) {
-              _iterator42.e(err);
+              _iterator46.e(err);
             } finally {
-              _iterator42.f();
+              _iterator46.f();
             }
 
             if (x == 0) {
-              var _iterator43 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step43;
+              var _iterator47 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step47;
 
               try {
-                for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
-                  var ins = _step43.value;
+                for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
+                  var ins = _step47.value;
                   var res = ins.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -9216,9 +10939,9 @@
                   }
                 }
               } catch (err) {
-                _iterator43.e(err);
+                _iterator47.e(err);
               } finally {
-                _iterator43.f();
+                _iterator47.f();
               }
             }
 
@@ -9234,35 +10957,35 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator44 = _createForOfIteratorHelper(this.Lista_case),
-                _step44;
+            var _iterator48 = _createForOfIteratorHelper(this.Lista_case),
+                _step48;
 
             try {
-              for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
-                var _ins4 = _step44.value;
+              for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
+                var _ins4 = _step48.value;
                 padre.AddHijo(_ins4.recorrer());
               }
             } catch (err) {
-              _iterator44.e(err);
+              _iterator48.e(err);
             } finally {
-              _iterator44.f();
+              _iterator48.f();
             }
 
             if (this.Lista_defaul.length > 0) {
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("default:", ""));
 
-              var _iterator45 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step45;
+              var _iterator49 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step49;
 
               try {
-                for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
-                  var ins = _step45.value;
+                for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
+                  var ins = _step49.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator45.e(err);
+                _iterator49.e(err);
               } finally {
-                _iterator45.f();
+                _iterator49.f();
               }
             }
 
@@ -9346,12 +11069,12 @@
               while (this.condicion.getValor(controlador, ts)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator46 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step46;
+                var _iterator50 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step50;
 
                 try {
-                  for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
-                    var ins = _step46.value;
+                  for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
+                    var ins = _step50.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -9369,9 +11092,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator46.e(err);
+                  _iterator50.e(err);
                 } finally {
-                  _iterator46.f();
+                  _iterator50.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (While)");
@@ -9388,18 +11111,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator47 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step47;
+            var _iterator51 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step51;
 
             try {
-              for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
-                var ins = _step47.value;
+              for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
+                var ins = _step51.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator47.e(err);
+              _iterator51.e(err);
             } finally {
-              _iterator47.f();
+              _iterator51.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -9432,6 +11155,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return axes;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var axes = /*#__PURE__*/function () {
         function axes(tipo, exprecion, sig) {
@@ -9458,38 +11187,56 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator48 = _createForOfIteratorHelper(ts.sig),
-                    _step48;
+                var _iterator52 = _createForOfIteratorHelper(ts.sig),
+                    _step52;
 
                 try {
-                  for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
-                    var tssig = _step48.value;
+                  for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
+                    var tssig = _step52.value;
 
-                    if (this.exprecion.id == tssig.identificador) {
+                    if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
+                    } else {
+                      if (this.exprecion.id == tssig.identificador) {
+                        this.sig.ejecutar(controlador, tssig.sig);
+                      }
                     }
                   }
                 } catch (err) {
-                  _iterator48.e(err);
+                  _iterator52.e(err);
                 } finally {
-                  _iterator48.f();
+                  _iterator52.f();
                 }
               } else {
-                var _iterator49 = _createForOfIteratorHelper(ts.tabla),
-                    _step49;
+                var _iterator53 = _createForOfIteratorHelper(ts.tabla),
+                    _step53;
 
                 try {
-                  for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
-                    var informacion = _step49.value;
+                  for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
+                    var informacion = _step53.value;
 
-                    if (informacion.identificador == this.exprecion.id) {
-                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    if (this.exprecion.tipo == 1) {
+                      if (this.exprecion.id == "*") {
+                        controlador.append(informacion.sim.objeto.gethtml(""));
+                      } else {
+                        if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 1) {
+                          controlador.append(informacion.sim.objeto.gethtml(""));
+                        }
+                      }
+                    } else {
+                      if (informacion.identificador == this.exprecion.id && informacion.sim.simbolo == 2) {
+                        controlador.append(informacion.sim.valor + "\n");
+                      } else {
+                        if (this.exprecion.id == "*" && informacion.sim.simbolo == 2) {
+                          controlador.append(informacion.sim.valor);
+                        }
+                      }
                     }
                   }
                 } catch (err) {
-                  _iterator49.e(err);
+                  _iterator53.e(err);
                 } finally {
-                  _iterator49.f();
+                  _iterator53.f();
                 }
               }
             }
@@ -9502,6 +11249,8 @@
 
             if (typeof valor == 'number') {
               this.isNumero(controlador, ts, valor);
+            } else {
+              this.isboolean(controlador, ts);
             }
           }
         }, {
@@ -9510,12 +11259,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator50 = _createForOfIteratorHelper(ts.sig),
-                  _step50;
+              var _iterator54 = _createForOfIteratorHelper(ts.sig),
+                  _step54;
 
               try {
-                for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
-                  var tssig = _step50.value;
+                for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
+                  var tssig = _step54.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -9526,17 +11275,17 @@
                   }
                 }
               } catch (err) {
-                _iterator50.e(err);
+                _iterator54.e(err);
               } finally {
-                _iterator50.f();
+                _iterator54.f();
               }
             } else {
-              var _iterator51 = _createForOfIteratorHelper(ts.tabla),
-                  _step51;
+              var _iterator55 = _createForOfIteratorHelper(ts.tabla),
+                  _step55;
 
               try {
-                for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
-                  var informacion = _step51.value;
+                for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
+                  var informacion = _step55.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
@@ -9547,16 +11296,90 @@
                   }
                 }
               } catch (err) {
-                _iterator51.e(err);
+                _iterator55.e(err);
               } finally {
-                _iterator51.f();
+                _iterator55.f();
+              }
+            }
+          }
+        }, {
+          key: "isboolean",
+          value: function isboolean(controlador, ts) {
+            var posicion = 1;
+            console.log("entre");
+            var cont = 1;
+
+            if (this.sig != null) {
+              var _iterator56 = _createForOfIteratorHelper(ts.sig),
+                  _step56;
+
+              try {
+                for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
+                  var tssig = _step56.value;
+
+                  if (this.exprecion.id == tssig.identificador) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      this.sig.ejecutar(controlador, tssig.sig);
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator56.e(err);
+              } finally {
+                _iterator56.f();
+              }
+            } else {
+              var _iterator57 = _createForOfIteratorHelper(ts.tabla),
+                  _step57;
+
+              try {
+                for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
+                  var informacion = _step57.value;
+
+                  if (informacion.identificador == this.exprecion.id) {
+                    controlador.position = cont;
+                    controlador.posicionid = posicion;
+
+                    if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      controlador.append(informacion.sim.objeto.gethtml(""));
+                    }
+
+                    cont++;
+                  }
+
+                  posicion++;
+                }
+              } catch (err) {
+                _iterator57.e(err);
+              } finally {
+                _iterator57.f();
               }
             }
           }
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("/", "");
+            padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Child::" + this.exprecion.id, ""));
+
+            if (this.exprecion.exprecion != null) {
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("[", ""));
+              padre.AddHijo(this.exprecion.exprecion.recorrer());
+              padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("]", ""));
+            }
+
+            if (this.sig != null) {
+              padre.AddHijo(this.sig.recorrer());
+            }
+
+            return padre;
           }
         }]);
 
@@ -9610,15 +11433,15 @@
         var _super3 = _createSuper(Funcion);
 
         function Funcion(simbolo, tipo, identificador, lista_params, metodo, lista_instrucciones, linea, columna) {
-          var _this;
+          var _this2;
 
           _classCallCheck(this, Funcion);
 
-          _this = _super3.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
-          _this.lista_instrucciones = lista_instrucciones;
-          _this.linea = linea;
-          _this.columna = columna;
-          return _this;
+          _this2 = _super3.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
+          _this2.lista_instrucciones = lista_instrucciones;
+          _this2.linea = linea;
+          _this2.columna = columna;
+          return _this2;
         }
 
         _createClass(Funcion, [{
@@ -9635,12 +11458,12 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts);
 
-            var _iterator52 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step52;
+            var _iterator58 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step58;
 
             try {
-              for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
-                var ins = _step52.value;
+              for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
+                var ins = _step58.value;
                 var r = ins.ejecutar(controlador, ts_local);
 
                 if (r != null) {
@@ -9650,9 +11473,9 @@
                 }
               }
             } catch (err) {
-              _iterator52.e(err);
+              _iterator58.e(err);
             } finally {
-              _iterator52.f();
+              _iterator58.f();
             }
 
             controlador.ambito = "Funcion: \n" + this.identificador;
@@ -9677,18 +11500,18 @@
             padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
             var hijo_instrucciones = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Instrucciones", "");
 
-            var _iterator53 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step53;
+            var _iterator59 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step59;
 
             try {
-              for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
-                var inst = _step53.value;
+              for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
+                var inst = _step59.value;
                 hijo_instrucciones.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator53.e(err);
+              _iterator59.e(err);
             } finally {
-              _iterator53.f();
+              _iterator59.f();
             }
 
             padre.AddHijo(hijo_instrucciones);
@@ -10085,6 +11908,11 @@
             } else if (typeof valor_exp1 == 'boolean') {//Erro semantico
             } else if (typeof valor_exp1 == 'string') {// Error semantico
             }
+          }
+        }, {
+          key: "suma3D",
+          value: function suma3D(valor_exp1, valor_exp2) {
+            if (typeof valor_exp1 == 'number') {}
           }
         }]);
 
@@ -12110,6 +13938,7 @@
           this.cuerpo;
           this.idlast = "";
           this.position = 0;
+          this.acceso = 1;
         }
 
         _createClass(Controlador, [{
@@ -12129,18 +13958,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator54 = _createForOfIteratorHelper(ts.tabla),
-                _step54;
+            var _iterator60 = _createForOfIteratorHelper(ts.tabla),
+                _step60;
 
             try {
-              for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
-                var sim = _step54.value;
+              for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
+                var sim = _step60.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator54.e(err);
+              _iterator60.e(err);
             } finally {
-              _iterator54.f();
+              _iterator60.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -12150,19 +13979,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator55 = _createForOfIteratorHelper(controlador.errores),
-                _step55;
+            var _iterator61 = _createForOfIteratorHelper(controlador.errores),
+                _step61;
 
             try {
-              for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
-                var sim = _step55.value;
+              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
+                var sim = _step61.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator55.e(err);
+              _iterator61.e(err);
             } finally {
-              _iterator55.f();
+              _iterator61.f();
             }
 
             return cuerpohtml;
@@ -12330,6 +14159,12 @@
       __webpack_require__.d(__webpack_exports__, "default", function () {
         return last;
       });
+      /* harmony import */
+
+
+      var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../AST/Nodo */
+      "Zr6O");
 
       var last = /*#__PURE__*/function () {
         function last() {
@@ -12344,21 +14179,21 @@
           value: function getValor(controlador, ts) {
             var cont = 0;
 
-            var _iterator56 = _createForOfIteratorHelper(ts.tabla),
-                _step56;
+            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
+                _step62;
 
             try {
-              for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
-                var informacion = _step56.value;
+              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
+                var informacion = _step62.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator56.e(err);
+              _iterator62.e(err);
             } finally {
-              _iterator56.f();
+              _iterator62.f();
             }
 
             return cont;
@@ -12366,7 +14201,8 @@
         }, {
           key: "recorrer",
           value: function recorrer() {
-            throw new Error("Method not implemented.");
+            var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("LAST();", "");
+            return padre;
           }
         }]);
 
@@ -12537,12 +14373,12 @@
               while (this.condicion.getValor(controlador, ts_for)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts_for);
 
-                var _iterator57 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step57;
+                var _iterator63 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step63;
 
                 try {
-                  for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
-                    var ins = _step57.value;
+                  for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
+                    var ins = _step63.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -12561,9 +14397,9 @@
 
                   }
                 } catch (err) {
-                  _iterator57.e(err);
+                  _iterator63.e(err);
                 } finally {
-                  _iterator57.f();
+                  _iterator63.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (FOR)");
@@ -12587,18 +14423,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator58 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step58;
+            var _iterator64 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step64;
 
             try {
-              for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
-                var ins = _step58.value;
+              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
+                var ins = _step64.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator58.e(err);
+              _iterator64.e(err);
             } finally {
-              _iterator58.f();
+              _iterator64.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -13000,12 +14836,12 @@
         _createClass(Declaracion, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator59 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step59;
+            var _iterator65 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step65;
 
             try {
-              for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
-                var simbolo = _step59.value;
+              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
+                var simbolo = _step65.value;
                 var variable = simbolo;
 
                 if (ts.existeEnActual(variable.identificador)) {
@@ -13047,9 +14883,9 @@
                 }
               }
             } catch (err) {
-              _iterator59.e(err);
+              _iterator65.e(err);
             } finally {
-              _iterator59.f();
+              _iterator65.f();
             }
           }
         }, {
@@ -13057,21 +14893,21 @@
           value: function recorrer() {
             var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaraciones", "");
 
-            var _iterator60 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step60;
+            var _iterator66 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step66;
 
             try {
-              for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
-                var simbolo = _step60.value;
+              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
+                var simbolo = _step66.value;
                 var p = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaracion", "");
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](simbolo.identificador, ""));
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](";", ""));
                 padre.AddHijo(p);
               }
             } catch (err) {
-              _iterator60.e(err);
+              _iterator66.e(err);
             } finally {
-              _iterator60.f();
+              _iterator66.f();
             }
 
             return padre;
