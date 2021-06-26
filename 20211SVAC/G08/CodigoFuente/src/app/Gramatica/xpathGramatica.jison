@@ -75,9 +75,22 @@ escape                              \\{escapechar}
 "amp"                       return 'amp'
 "quot"                      return 'quot'
 "apos"                      return 'apos'
-
+"lower-case"                return 'lowercase'
+"upper-case"                return 'uppercase'
+"string"                    return 'tostring'
+"number"                    return 'tonumber'
+"substring"                 return 'substring'
+"declare"                   return 'declare'
+"variable"                  return 'variable'
+"function"                  return 'function'
+'xs:string'                 return 'xsString'
+'xs:date'                   return 'xsDate'
+'xs:decimal'                return 'xsDecimal'
+'xs:boolean'                return 'xsBoolean'
+'as'                        return 'as'
 ":"                         return ':';
 ","                         return ',';
+"?"                         return '?';
 ";"                         return 'semicolon';
 "then"                      return 'then';
 "else"                      return 'else';
@@ -143,9 +156,46 @@ expressions
     | XQUERY EOF;
 
 XQUERY : FLWORExpr
-        |DirectConstructor;
+        |DirectConstructor
+        |AnnotatedDecl;
 
-//*************
+//*************** User defined functions
+
+AnnotatedDecl : declare  VarDecl 
+			|declare FunctionDecl;
+
+VarDecl: variable '$' nodename  ':=' VarValue ;
+
+VarValue: ExprSingle;
+
+FunctionDecl: function FunctionName lparen EParamList rparen TypeDeclaration FunctionBody;
+
+FunctionName : nodename ':' nodename
+        | nodename;
+
+EParamList: ParamList
+	|;
+
+ParamList: ParamList ',' Param 
+		|Param;
+		
+Param: '$' nodename TypeDeclaration;
+
+TypeDeclaration: 'as' SequenceType
+	|;
+
+SequenceType: ItemType OccurrenceIndicator;
+
+OccurrenceIndicator: '?'| '*' | '+'|;
+
+ItemType: xsString
+|xsDate
+|xsDecimal
+|xsBoolean;
+
+FunctionBody: EnclosedExpr;
+
+//************* HTML Clause
 DirectConstructor : DirElemConstructor;
 
 DirElemConstructor: '<' nodename DirAttributeList BARRASIMPLE '>'
@@ -184,13 +234,33 @@ ForBinding: '$'nodename in SENTENCIA;
 
 ExprSingle: FLWORExpr
 	| IfExpr
-        |StringConcatExpr
         | lparen entero to entero rparen
-        | DirectConstructor;
-	
+        | DirectConstructor
+        | NativeFuntion
+        | XPARAM
+        | LPathExpresion
+        ;
+
+LPathExpresion : LPathExpresion ',' PathExpresion
+|PathExpresion;
+
+PathExpresion : '$' nodename SENTENCIA;
+
+
+
+NativeFuntion: NativeFunctionName lparen ExprSingle rparen;//funcion definida
+
+NativeFunctionName: uppercase
+        | lowercase
+        | tostring
+        | tonumber
+        | substring
+        | FunctionName
+        ;
+ 
 FLWORExpr : InitialClause ELIntermediateClause ReturnClause;
 
-QuantifiedExpr: '$' nodename;
+QuantifiedExpr: '$' nodename ;
 
 InitialClause: ForClause 
 | LetClause;
@@ -233,21 +303,23 @@ LComparisonExpr : LComparisonExpr and  ComparisonExpr
         | LComparisonExpr or  ComparisonExpr
         | ComparisonExpr;
 
-ComparisonExpr : StringConcatExpr ComparisonValue XPARAM;
+ComparisonExpr : QuantifiedExpr ComparisonValue ExprSingle
+| QuantifiedExpr SENTENCIA ComparisonValue ExprSingle;
 
 XPARAM : numberLiteral
+| QuantifiedExpr
 |  XOPERACION ;
 
 XOPERACION: XPARAM '+' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mas);}
         |XPARAM '-' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menos);}
         |XPARAM '*' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Por);}
         |XPARAM mod XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mod);}
-        |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);};
+        |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);}
+        |lparen XPARAM rparen ;
 
 
 
-StringConcatExpr : '$' nodename SENTENCIA
-		| '$' nodename;
+
 
 ComparisonValue : GeneralComp | ValueComp;
 
@@ -259,7 +331,6 @@ GeneralComp : '=' | '!=' | '<' | '<=' | '>' | '>=';
 XCOMPARISON : $ SENTENCIA ComparisonValue PARAMETRO;
 
         
-IF : if lparen xvar BARRASIMPLE  OPERACION rparen SIMPLE_EXPRESION then else SIMPLE_EXPRESION;
 
 
 XPath : LSENTENCIA {$$ = salida; salida = []; return $$;};

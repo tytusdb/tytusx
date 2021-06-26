@@ -8,9 +8,9 @@ export class PostFixExpr extends Nodo {
   public primaryExpr: Nodo;
   public predicateList: Array<Nodo>;
 
-  constructor(tipo: Tipo, primaryExpr: Nodo, predicateList: Array<Nodo>,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, primaryExpr: Nodo, predicateList: Array<Nodo>,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ, tipo, linea, columna);
 
     this.primaryExpr = primaryExpr;
     this.predicateList = predicateList;
@@ -20,5 +20,7 @@ export class PostFixExpr extends Nodo {
     throw new Error('Method not implemented in PostFixExpr');
   }
 
-
+  public c3d(tabla: Tabla, arbol: Arbol) {
+    throw new Error('Method not implemented in PostFixExpr');
+  }
 }

@@ -1,7 +1,8 @@
 import logo from '../logo.svg';
 import { Link } from 'react-router-dom'
 import React from 'react';
-import { parse as parseXPath } from '../code/analizadorXPath/Xpath'
+import {  parse as parseXPath } from '../code/analizadorXPath/Xpath'
+import { parse as parseXQuery } from '../code/analizadorXQuery/ascendente';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { CD3 } from '../code/codigo3D/cd3';
 
@@ -27,6 +28,7 @@ class Navigation extends React.Component{
             XMLTextarea: "",
             InputTextarea: "",
             TraductorTextArea: "", 
+            resultadoConsulta: [], 
             XML: {
                 tipo : '',
                 texto : '',
@@ -82,7 +84,8 @@ class Navigation extends React.Component{
             Mistakes: [],
             MistakesXPath: [],
             TablaGramatical: [],
-            TablaGramticalXPath: []
+            TablaGramticalXPath: [], 
+            ErroresXQuery: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -110,6 +113,7 @@ class Navigation extends React.Component{
         this.setState({datosCST:datos}) 
         this.setState({MistakesXPath: funcion.errores})
         this.setState({TablaGramticalXPath: funcion.tablaGramatica});
+        this.ejecutarConsulta(text); 
     }
 
     setTextDesc(){  // DESCENDENTE XPATH 
@@ -141,6 +145,7 @@ class Navigation extends React.Component{
         {
             alert("Errores en el analisis Desc del XML")
             console.log(resultado.errores);
+            return 
         }
         console.log(resultado)
         this.setState({XML:resultado.datos})
@@ -156,6 +161,7 @@ class Navigation extends React.Component{
         if(resultado.errores.length>0)
         {
             alert("Errores en el analisis del XML")
+            return
         }
         resultado.datos = this.getC3D(resultado.datos); 
         this.setState({XML:resultado.datos}) // resultado.datos estan los objetos // this.state.XML el entorno
@@ -166,10 +172,9 @@ class Navigation extends React.Component{
 
     getC3D(xml){
         var traducir = new CD3(); 
-        var codigo = traducir.getTraduccion(xml)
-        console.log('getCD3', codigo)
+        var codigo = traducir.getTraduccion(xml); 
         this.setState({TraductorTextArea: codigo.traduccion})
-        return codigo.entorno
+        return codigo.objeto
     }
 
     handleOnChange = e => {
@@ -254,6 +259,33 @@ class Navigation extends React.Component{
         this.setState({TablaGramatical: resultado.tabla});
     }
 
+    ejecutarXQuery(){
+        var texto = this.state.InputTextarea; 
+        console.log('Hola', texto)
+        if(texto == "") return  
+        var resultado = parseXQuery(texto); 
+        console.log(resultado); 
+    }
+
+    ejecutarConsulta(consulta){
+        if(consulta == '') return 
+        var funcion = parseXPath(consulta); 
+        if(funcion.errores.length > 0)
+        {
+            alert(`No se pudo realizar la consulta -> ${consulta}`); 
+            console.log(funcion.errores); 
+        }
+        //console.log('Resultado gramatica XPATH -> ',funcion); 
+        var respuesta = funcion.Ejecutar(this.state.XML); 
+       // console.log(respuesta); 
+        var xmlNuevo = grammar.parse(respuesta); 
+        this.setState({ resultadoConsulta: xmlNuevo.datos});
+        //console.log('Estos son los datos de la consulta', xmlNuevo); 
+        //console.log('DATOS', xmlNuevo.datos);   
+
+        return xmlNuevo.datos
+    }
+
 
     render(){
         return(
@@ -262,29 +294,29 @@ class Navigation extends React.Component{
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
                             Arboles
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporteTabla", XML:this.state.XML }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteTabla", XML:this.state.XML }}>
                             Tabla Simbolos
                         </Link>                         
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporteGramatical", TablaGramatical:this.state.TablaGramatical, TablaGramticalXPath: this.state.TablaGramticalXPath }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteGramatical", TablaGramatical:this.state.TablaGramatical, TablaGramticalXPath: this.state.TablaGramticalXPath }}>
                             Gramaticales
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G17/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath }}>
                             Errores
                         </Link>                        
                     </li>
                 </ul>
             </nav>
 
-            <img src={logo} className="App-logo" alt="logo" />
+            
                 Organización de Lenguajes y Compiladores 2
             <p></p>
             
@@ -324,16 +356,9 @@ class Navigation extends React.Component{
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-6 block">
-                        <div className="row">
-                           {/* <div className="col-6 block"> 
-                                <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.xmlDesc() }>XML Desc</button>
-                            </div> */ }
-                            <div className="col-12 block">
-                                <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }>XML Asc</button> 
-                            </div>
-                        </div>
+                        
                         <div className="row container">
-                            <label className="labelClass">Xml Input</label>
+                            <label className="labelClass">Editor de XML </label>
                             {/* <textarea className="Text" placeholder="Bienvenido" defaultValue={this.state.XMLTextarea} onChange={this.handleXML} onBlur={this.handleFocus} /> */}
                             <CodeMirror
                              className="codeMirror"
@@ -351,18 +376,16 @@ class Navigation extends React.Component{
                              placeholder="Bienvenido"
                              />
                         </div>
-                    </div>
-                    <div className="col-6 block">
                         <div className="row">
-                            <div className="col-6 block"> 
-                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Asc</button>
-                            </div>
-                            <div className="col-6 block">
-                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setTextDesc() }>Ejecutar Desc</button>
+                        <p></p>
+                            <div className="col-12 block">
+                                <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }> Ejecutar XML </button> 
                             </div>
                         </div>
+                    </div>
+                    <div className="col-6 block">
                         <div className="row container">
-                            <label className="labelClass">Xpath Input</label> 
+                            <label className="labelClass"> Editor de XQUERY / XPATH </label> 
                             <CodeMirror
                              className="codeMirror"
                              value = {this.state.InputTextarea}
@@ -380,6 +403,16 @@ class Navigation extends React.Component{
                              placeholder="Bienvenido"
                              />
                         </div>
+                        <div className="row">
+                            <p></p>
+                            <div className="col-6 block"> 
+                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Ascendente </button>
+                            </div>                            
+                            <div className="col-6 block">
+                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.ejecutarXQuery() }> Ejecutar XQuery </button>
+                            </div>
+                        </div>
+
                     </div>                    
                 </div>
             </div>
@@ -408,7 +441,7 @@ class Navigation extends React.Component{
             </div>
             <div className="container">
                 <div className="row">
-                    <label className="labelClass">Output</label>
+                    <label className="labelClass"> Consola </label>
                     <div className="text-center">
                         <CodeMirror
                              className="codeMirror"
@@ -440,10 +473,10 @@ class Navigation extends React.Component{
             <div className="text-center p-3 text-light ">
                 <font size="3">
                 <p>
-                Grupo 17 <br/>
-                Jorge Ambrocio - Marcelo Marroquín - Viany Juárez<br/>
+                Grupo 31 <br/>
+                Jacqueline Méndez - Stefany Coromac <br/>
                 Organización de Lenguajes y Compiladores 2<br/>
-                Escuela de Vacaciones Junio 2021<br/>                
+                Escuela de Vacaciones Junio 2021 ( Fase 2 ) <br/>                
                 </p>
                 </font>   
             </div>

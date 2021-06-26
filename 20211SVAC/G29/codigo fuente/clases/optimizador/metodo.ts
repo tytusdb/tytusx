@@ -1,23 +1,37 @@
 import {instruccion_3d} from "./instruccion_3d";
 
 export default class metodo implements instruccion_3d{
-  public metodo : string;
+  public met : string;
+  intrucciones_3d : Array<instruccion_3d>;
 
-  constructor(metodo : string ) {
-    this.metodo = metodo;
+  constructor(met : string ) {
+    this.intrucciones_3d = new Array<instruccion_3d>();
+    this.met = met;
   }
 
   getText(){
-    return  + this.metodo + '{';
+    return "void "+ this.met + '(){' + this.recolectar_string() + '}';
   }
-
-  intrucciones_3d: Array<instruccion_3d>;
 
   ejecutar() {
   }
 
-  insertar(instruccion: instruccion_3d) {
+  insertar(instruccion: any) {
     this.intrucciones_3d.push(instruccion);
+  }
+
+  insertar_lista(lista: Array<any>) {
+    for(let x of lista){
+      this.intrucciones_3d.push(x);
+    }
+  }
+
+  recolectar_string(): string{
+    let r : string = "";
+    for(let t of this.intrucciones_3d){
+       r+= t.getText() + "\n";
+    }
+    return r;
   }
 
 }

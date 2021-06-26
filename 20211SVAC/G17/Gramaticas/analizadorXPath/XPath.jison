@@ -1,12 +1,13 @@
 %{
-  const {Tipo,TipoPath,Comando} = require("./AST/Entorno");
-  const {Logical} = require("./Expresion/Logical");
-  const {Arithmetic, Unary} = require("./Expresion/Arithmetics")
-  const {Literal,PathExp} = require("./Expresion/Expresiones");
+  const { Tipo, TipoPath, Comando } = require("./AST/Entorno");
+  const { Logical } = require("./Expresion/Logical");
+  const { Arithmetic, Unary, RangeExp, Concat } = require("./Expresion/Arithmetics")
+  const { Literal, PathExp, Variable, Parentesis } = require("./Expresion/Expresiones");
   const { ComparisonExp } = require('./Expresion/Comparison')
-  const { Atributo,Camino,Child,Descendant,Attribute,Self,DescSelf,FollowSibling,Follow } = require('./Expresion/axes')
-  const { CaminoInverso,Parent,Ancestor,PrecedingSibling,AncestorSelf,Preceding } = require('./Expresion/axes')
-  const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
+  const { Atributo, Camino, Child, Descendant, Attribute, Self, DescSelf, FollowSibling, Follow } = require('./Expresion/axes')
+  const { CaminoInverso, Parent, Ancestor, PrecedingSibling, AncestorSelf, Preceding } = require('./Expresion/axes')
+  const { ContextItemExpr, CallFunction } = require('./Expresion/postfix')
+  const { Declaracion, Let, Return, For, ForDeclaracion } = require('./Instruccion/Xquery')
   const { grafoCST } = require('../CST')
   
   var grafo = new grafoCST(); 
@@ -26,10 +27,7 @@
 "idiv"  return "IDIV"
 "div"   return "DIV"
 "mod"   return "MOD"
-"return" return "RRETURN"
-"for" return "RFOR"
 "in"  return "RIN"
-"to"  return "RTO"
 "eq"  return "EQ"
 "ne"  return "NE"
 "lt"  return "LT"
@@ -50,6 +48,34 @@
 "preceding-sibling" return "RPRECEDSIBLING"
 "preceding" return "RPRECED"
 
+/* Lexico XQuery */
+"return"    return "RRETURN"
+"function"   return "RFUNCTION"
+"let"        return "RLET"
+"declare"    return "RDECLARE"
+"variable"   return "RVARIABLE"
+"doc"        return "RDOC"
+"for"        return "RFOR"
+"where"      return "RWHERE"
+"stable"     return "RSTABLE"
+"order"      return "RORDER"
+"by"         return "RBY"
+"to"         return "RTO"
+"at"         return "RAT"
+"{"          return "LLAVEA"
+"}"          return "LLAVEC"
+"%"          return "PERCENTAGE"
+"external"   return "REXTERNAL"
+"as"         return "RAS"
+"ascending"  return "RASCENDING"
+"descending" return "RDESCENDING"
+"if"         return "RIF"
+"then"       return "RTHEN"
+"else"       return "RELSE"
+"empty"      return "REMPTY" 
+"greatest"   return "RGREATEST"
+"least"      return "RLEAST"
+
 ("."[0-9]+)|([0-9]+"."[0-9]+) 				    return "DECIMAL"
 [0-9]+      								              return "INTEGER"
 ('"'[^"]*'"')|("'"[^']*"'")         		  { yytext = yytext.substr(1,yyleng-2); return "CADENA" }
@@ -69,10 +95,11 @@
 "!="        return "DIFERENTE"
 "<"         return "MENOR"
 ">"         return "MAYOR"
+":="        return "DOSPUNTOSIGUAL"
 "="         return "IGUAL"
+"||"        return "CONCAT"
 "|"         return "PIPE"
 ","         return "COMA"
-"$"         return "DOLAR"
 "!"         return "ADMIRACION"
 "@"         return "ARROBA"
 ".."        return "DOBLEPUNTO"
@@ -82,6 +109,7 @@
 "."         return "PUNTO"
 "::"        return "DOBLEDOSPUNTOS"
 ":"         return "DOSPUNTOS"
+"$"         return "DOLAR"
 
 /* Espacios en blanco */
 [ \r\t]+{}
@@ -111,6 +139,10 @@ XPath
     $$=new Comando($1,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
     return $$ 
   }
+  | AnnotatedDecl 
+  {
+    return new Comando([],[],[],"",retornoErrores,[])
+  }
   | error 
     {  
       ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
@@ -129,7 +161,7 @@ Expr
     grafo.generarHijos("ExprSingle");
     grafo.generarTexto(`expr = []; expr.push(ExprSingle.valor);`);
   }
-  | Expr PIPE ExprSingle  
+  | Expr Separador ExprSingle  
   { 
     $$=$1;$$.push($3);
     grafo.generarPadre(3, "ExprSingle");
@@ -137,14 +169,14 @@ Expr
     grafo.generarHijos("Expr",$2,"ExprSingle");
     grafo.generarTexto(`expr.push(ExprSingle.valor);`);
   }
-  | Expr PIPE error       
+  | Expr Separador error       
   { 
     $$=$1;grafo.generarPadre(1, "Expr");
     ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
     grafo.generarHijos("Expt",$2,"error");
     grafo.generarTexto(`return expr; new Error();`); 
   }
-  | error PIPE ExprSingle    
+  | error Separador ExprSingle    
   { 
     $$=[];$$.push($3); grafo.generarPadre(3, "ExprSingle");
     grafo.generarHijos("error",$2,"ExprSingle");
@@ -154,13 +186,195 @@ Expr
   }
 ; 
 
+Separador
+  : PIPE  {$$=$1}
+  | COMA  {$$=$1}
+;
+
+AnnotatedDecl	   
+  : RDECLARE FunctionDecl
+;
+
+TypeDeclaration
+	: RAS //I don't know  -> Datatype
+;
+
+VarValue 
+  : ExprSingle	
+;
+
+FunctionDecl
+  : RFUNCTION NOMBRE PARENTESISA ParamList PARENTESISC TypeDeclaration FunctionBody
+  | RFUNCTION NOMBRE PARENTESISA PARENTESISC TypeDeclaration FunctionBody
+  | RFUNCTION NOMBRE PARENTESISA ParamList PARENTESISC FunctionBody
+  | RFUNCTION NOMBRE PARENTESISA PARENTESISC FunctionBody 
+;
+
+ParamList
+  : ParamList COMA Param
+  | Param  	
+;
+
+Param
+  : DOLAR NOMBRE TypeDeclaration
+  | DOLAR NOMBRE 	
+;
+
+FunctionBody
+  : LLAVEA Expr LLAVEC
+  | LLAVEA LLAVEC	
+;
+
 ExprSingle  
-  : OrExpr  
-  { 
+  : OrExpr  { 
     $$=$1; grafo.generarPadre(1, "OrExpr");
     grafo.generarHijos("OrExpr");
-    grafo.generarTexto(`ExprSingle.valor = OrExpr.valor`);
+    grafo.generarTexto(`ExprSingle.valor = OrExpr.valor`); }
+  | FLWORExpr { 
+      $$=$1;
+      grafo.generarPadre(1,"FLWORExpr");
+      grafo.generarHijos("FLWORExpr");
+      grafo.generarTexto(`ExprSingle.valor=FLWORExpr.valor`) 
+    }
+  | IfExpr
+;
+
+FLWORExpr
+	: InitialClause IntermediateClauseR ReturnClause    
+  | InitialClause ReturnClause {
+    $$=$1;$$.expReturn=$2;
+    grafo.generarPadre(2,"ReturnClause");
+    grafo.generarPadre(1,"InitialClause");
+    grafo.generarHijos("InitialClause","ReturnClause");
+    grafo.generarTexto(`FLWORExpr.valor=InitialClause.valor;FLWORExpr.retorno=ReturnClause.valor`)
   }
+;
+
+IntermediateClauseR
+  : IntermediateClause
+  | IntermediateClauseR IntermediateClause
+;
+
+InitialClause
+	: ForClause {  
+    $$=$1
+    grafo.generarPadre(1,"ForClause")
+    grafo.generarHijos("ForClause")
+    grafo.generarTexto(`InitialClouse.valor=ForClause.valor`) }
+  | LetClause { 
+    $$=$1;
+    grafo.generarPadre(1,"LetClause");
+    grafo.generarHijos("LetClause");
+    grafo.generarTexto(`InitialClouse.valor=LetClause.valor`) }
+;
+
+IntermediateClause
+  : InitialClause 
+  | WhereClause 
+  | GroupByClause 
+  | OrderByClause 
+  | CountClause
+;
+
+ForClause
+	: RFOR ForBinding           {
+    $$=new For([$2])
+    grafo.generarPadre(2,"ForBinding")
+    grafo.generarHijos($1,"ForBinding")
+    grafo.generarTexto(`ForClause.valor = new For();ForClouse.valor.declaraciones.push(ForBinding.valor)`) }
+  | ForClause COMA ForBinding {
+    $$ = $1
+    $$.declaraciones.push($3)
+    grafo.generarPadre(3,"ForBinding")
+    grafo.generarPadre(1,"ForClouse")
+    grafo.generarHijos("ForClause",$2,"ForBinding")
+    grafo.generarTexto("ForClause.valor.declaraciones.push(ForBiding.valor)") }
+;
+
+ForBinding
+	: DOLAR NOMBRE PositionalVar RIN ExprSingle {
+    $$=new ForDeclaracion($1+$2,$3,$5);
+    grafo.generarPadre(5,"ExprSingle")
+    grafo.generarPadre(3,"PositionalVar")
+    grafo.generarHijos($1,$2,"PositionalVar",$4,"ExprSingle")
+    grafo.generarTexto(`ForBinding.valor = new Declaracion(${$1+$2,$3,$5})`)}
+  | DOLAR NOMBRE RIN ExprSingle {
+    $$=new ForDeclaracion($1+$2,'',$4);
+    grafo.generarPadre(4,"ExprSingle")
+    grafo.generarHijos($1,$2,$3,"ExprSingle")
+    grafo.generarTexto(`ForBinding.valor = new Declaracion(${$1+$2,'',$4})`)}
+;
+
+PositionalVar	   
+  : RAT DOLAR NOMBRE {$$ = ($2+$3);grafo.generarHijos($1,$2,$3);grafo.generarTexto(`PositionalVar.varlor=$+NOMBRE.val`)}
+;
+
+LetClause
+  : RLET LetBinding               { 
+    $$=new Let($2);
+    grafo.generarPadre(2,"LetBinding");
+    grafo.generarHijos($1,"LetBinding");
+    grafo.generarTexto(`LetClouse.valor=[];LetClouse.valor.push(LetBinding.valor)`) }
+  | LetClause COMA LetBinding     { 
+    $$=$1;$$.declaraciones.push($3);
+    grafo.generarPadre(3,"LetBinding");
+    grafo.generarPadre(1,"LetClause");
+    grafo.generarHijos("LetClause",$2,"LetBinding");
+    grafo.generarTexto(`LetClause1.valor.push(LetBinding.valor);LetClouse.valor=LetClause1.valor`) }
+;
+
+LetBinding	   
+  : DOLAR NOMBRE DOSPUNTOSIGUAL ExprSingle    { 
+    $$=new Declaracion($1+$2,$4);
+    grafo.generarPadre(4,"ExprSingle");
+    grafo.generarHijos($1,$2,$3,"ExprSingle");
+    grafo.generarTexto(`LetBinding.nombre=${$1};LetBinding.valor=ExptrSingle.valor`); }
+;
+
+WhereClause
+	: RWHERE ExprSingle
+;
+
+OrderByClause
+	: RORDER RBY OrderSpecList
+  | RSTABLE RORDER RBY OrderSpecList
+;
+
+OrderSpecList
+  : OrderSpecList COMA OrderSpec
+	| OrderSpec
+;	
+
+OrderSpec
+	: ExprSingle OrderModifier
+;
+
+OrderModifier
+	: OrderOrder OrderEmpty
+  | OrderEmpty	
+  | OrderOrder	
+;
+
+OrderEmpty
+  : REMPTY RGREATEST
+  | REMPTY RLEAST
+;
+
+OrderOrder
+  : RASCENDING
+  | RDESCENDING
+;
+
+ReturnClause	   
+  : RRETURN ExprSingle  { 
+    $$=$2; 
+    grafo.generarPadre(2,"ExprSingle")
+    grafo.generarHijos($1,"ExprSingle")
+    grafo.generarTexto("ReturnClause.valor=ExprSingle.valor")}
+;
+
+IfExpr	   
+  : RIF PARENTESISA Expr PARENTESISC RTHEN ExprSingle RELSE ExprSingle
 ;
 
 OrExpr      
@@ -196,34 +410,19 @@ AndExpr
 ;
 
 ComparisonExpr    
-  : AdditiveExpr                              
-  { 
-    $$=$1; grafo.generarPadre(1, "AdditiveExpr");
+  : StringConcatExpr { 
+    $$=$1; 
+    grafo.generarPadre(1, "StringConcatExpr");
     grafo.generarHijos("StringConcatExpr");
-    grafo.generarTexto(`ComparisonExpr.valor = AdditiveExpr.valor`);
-  }
-  | AdditiveExpr GeneralComp AdditiveExpr 
-  { 
-    $$ = new ComparisonExp($1,$2,$3); grafo.generarPadre(3, "AdditiveExpr");
+    grafo.generarTexto(`ComparisonExpr.valor = StringConcatExpr.valor`); }
+  | StringConcatExpr GeneralComp StringConcatExpr { 
+    $$ = new ComparisonExp($1,$2,$3); 
+    grafo.generarPadre(3, "StringConcatExpr");
     grafo.generarPadre(2, "GeneralComp");
-    grafo.generarPadre(1, "AdditiveExpr");
+    grafo.generarPadre(1, "StringConcatExpr");
     grafo.generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr");
-    grafo.generarTexto(`ComparisonExpr.valor = new ComparisonExp(AdditiveExpr.valor, GeneralComp.valor, AdditiveExpr.valor)`);
-  } 
-//| StringConcatExpr ValueComp StringConcatExpr   {} 
-// falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
+    grafo.generarTexto(`ComparisonExpr.valor = new ComparisonExp(StringConcatExpr.valor, GeneralComp.valor, StringConcatExpr.valor)`); } 
 ;
-
-/*
-ValueComp    // palabras reservadas     
-    : EQ  {}  // 5 EQ 5
-	| NE  {}  
-	| LT  {}
-	| LE  {}
-	| GT  {}
-	| GE  {}  
-;
-*/
 
 GeneralComp       // signo
   : IGUAL     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); } // 5 = 5 | nodo = nodo
@@ -234,12 +433,34 @@ GeneralComp       // signo
 	| MAYORIG   { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 ;
 
+StringConcatExpr
+  :RangeExpr {
+    $$=$1;
+    grafo.generarPadre(1, "RangeExpr");
+    grafo.generarHijos("RangeExpr");
+    grafo.generarTexto(`StringConcatExpr.valor = RangeExpr.valor`); }
+  |StringConcatExpr CONCAT RangeExpr {
+    $$=new Concat($1,$3);
+    grafo.generarPadre(3,"RangeExpr")
+    grafo.generarPadre(1,"StringConcatExpr")
+    grafo.generarHijos("StringConcatExpr",$1,"RangeExpr")
+    grafo.generarTexto(`StringConcatExpr.Valor = new CONCAT(StringConcatExpr1.valor,RangeExpr.valor`) }
+;
 
-
-// StringConcatExpr  
-//   : AdditiveExpr                         { $$=$1; grafo.generarPadre(1);grafo.generarHijos("AdditiveExpr") }
-// 	| StringConcatExpr OR_EXP AdditiveExpr { }
-// ;
+RangeExpr
+  : AdditiveExpr { 
+    $$=$1; 
+    grafo.generarPadre(1, "AdditiveExpr");
+    grafo.generarHijos("AdditiveExpr");
+    grafo.generarTexto(`ComparisonExpr.valor = AdditiveExpr.valor`);
+    }
+  | AdditiveExpr RTO AdditiveExpr {
+    $$=new RangeExp($1,$3);
+    grafo.generarPadre(3,"AdditiveExpr")
+    grafo.generarPadre(1,"AdditiveExpr")
+    grafo.generarHijos("AdditiveExpr",$1,"AdditiveExpr")
+    grafo.generarTexto(`RangeExp.Valor = new Range(AdditiveExpr.valor,AdditiveExpr1.valor`)} 
+;
 
 AdditiveExpr      
   : MultiplicativeExpr                    
@@ -323,15 +544,6 @@ UnaryExpr
     grafo.generarTexto(`UnaryExp.valor = new Unary(${$1},UnaryExpr.valor);`);
   }
 ;
-
-// ValueExpr   
-//   : SimpleMapExpr                     { $$=$1 }
-// ;
-
-// SimpleMapExpr     
-//   : PathExpr                            { $$=$1 }
-// 	| SimpleLetClause ADMIRACION PathExpr {}
-// ;
 
  //  /emplyee/name//id
 PathExpr    
@@ -532,16 +744,6 @@ PostfixExpr
   }
 ;
 
-//Falta crear los demas metodos de argumentos para las primaryEXpr
-// PostfixExprL      
-//     : Predicate                 { $$=$1; grafo.generarPadre(1); grafo.generarHijos("Predicate") }
-//   //| ArgumentList
-//   //| Lookup
-// 	  | PostfixExprL        { $$=$1+$2; grafo.generarPadre(2); grafo.generarPadre(1); grafo.generarHijos("PostfixExprL","Predicate") }
-//   //| PostfixExprL ArgumentList
-//   //| PostfixExprL Lookup
-// ;
-
 Predicate   
   : CORA ExprSingle CORB            
   { 
@@ -556,6 +758,11 @@ PrimaryExpr
 	| FunctionCall              { $$=$1; grafo.generarPadre(1, "FunctionCall"); grafo.generarHijos("FunctionCall"); grafo.generarTexto("PrimaryExpr.valor = functionCall.valor");}
 	| ContextItemExpr           { $$=$1; grafo.generarPadre(1, "ContextItemExpr"); grafo.generarHijos("ContextItemExpr"); grafo.generarTexto("PrimaryExpr.valor = contextItemExpr.valor");}
 	| ParenthesizedExpr         { $$=$1; grafo.generarPadre(1, "ParenthesizedExpr"); grafo.generarHijos("ParenthesizedExpr"); grafo.generarTexto("PrimaryExpr.valor = ParenthesizedExpr.valor"); }
+  | Variable                  { $$=$1; grafo.generarPadre(1, "Variable"); grafo.generarHijos("Variable"); grafo.generarTexto("PrimaryExpr.valor = Variable.valor");}
+;
+
+Variable 
+  : DOLAR NOMBRE { $$=new Variable(null,$1+$2); grafo.generarHijos($1,$2); grafo.generarTexto(`Variable.valor = ${$1+$2}`) }
 ;
 
 Literal     
@@ -563,7 +770,6 @@ Literal
 	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1); grafo.generarHijos($1); grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = DECIMAL;`); }
 	| CADENA                    { $$=new Literal(Tipo.STRING,$1);  grafo.generarHijos($1); grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = STRING;`); }
 ;
-
 
 FunctionCall      
   : NOMBRE PARENTESISA PARENTESISC              
@@ -573,7 +779,7 @@ FunctionCall
     grafo.generarTexto(`functionCall = new CallFunction(); functionCall.tipo = Absoluto;`);
   }  //NODE() TEXT() POSITION() LAST() FIST()
 
-	//| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
+	| NOMBRE PARENTESISA CADENA PARENTESISC {  }
 ;
 
 ContextItemExpr   
@@ -581,6 +787,6 @@ ContextItemExpr
 ;
 
 ParenthesizedExpr 
-  : PARENTESISA PARENTESISC             { $$=[]; grafo.generarHijos($1,$2); grafo.generarTexto(`ParenthesizedExpr.valor = [];`);}
-	| PARENTESISA ExprSingle PARENTESISC  { $$=$2; grafo.generarHijos($1,$2,$3); grafo.generarTexto(`ParenthesizedExpr.valor = ExprSingle.valor;`); }
+  : PARENTESISA PARENTESISC             { $$=new Parentesis([]); grafo.generarHijos($1,$2); grafo.generarTexto(`ParenthesizedExpr.valor = [];`);}
+	| PARENTESISA Expr PARENTESISC  { $$=new Parentesis($2); grafo.generarHijos($1,$2,$3); grafo.generarTexto(`ParenthesizedExpr.valor = ExprSingle.valor;`); }
 ;	

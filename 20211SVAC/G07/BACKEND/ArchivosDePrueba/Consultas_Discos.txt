@@ -1,0 +1,137 @@
+
+doc("Discos.xml")
+
+1) Consulta 1, ESPERADA archivo Discos.xml ***********************************
+
+    /CATALOG/CD[5]/TITLE | /CATALOG/CD[6]/TITLE  | /CATALOG/CD[7]/TITLE
+
+	for $x in /CATALOG
+return $x /CD[5]/TITLE
+
+	for $x in /CATALOG
+return $x /CD[6]/TITLE
+	
+	for $x in /CATALOG
+return $x /CD[7]/TITLE
+	
+	
+	Salida Esperada
+        Eros & Eros"Esto tiene que salir bien"'Esto tiene que salir muy bien tambien'
+
+1) Consulta 1, MOSTRADA archivo Discos.xml ***********************************
+
+    /CATALOG/CD[5]/TITLE | /CATALOG/CD[6]/TITLE  | /CATALOG/CD[7]/TITLE
+
+    Salida Esperada
+        <TITLE >Eros & Eros</TITLE>
+		<TITLE >" Esto tiene que salir bien "</TITLE>
+		<TITLE >' Esto tiene que salir muy bien tambien '</TITLE>
+
+
+2) Consulta 2, ESPERADA archivo Discos.xml ***********************************
+
+    /CATALOG/CD/PRICE/../../CD[last()-5+2-2*1 div 2]
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY: 
+    for $x in /CATALOG/CD/PRICE/../..
+    return $x/CD[last()-5+2-2*1 div 2]
+	
+    Salida Esperada
+
+            <CD>
+                <TITLE>Pavarotti Gala Concert</TITLE>
+                <ARTIST>Luciano Pavarotti</ARTIST>
+                <COUNTRY>UK</COUNTRY>
+                <COMPANY>DECCA</COMPANY>
+                <PRICE>9.90</PRICE>
+                <YEAR>1991</YEAR>
+            </CD>
+
+2) Consulta 2, MOSTRADA archivo Discos.xml ***********************************
+
+			/CATALOG/CD[last()-5+2-2*1 div 2]
+    
+	Salida Esperada
+
+		<CD >     
+			<TITLE >Pavarotti Gala Concert</TITLE>
+			<ARTIST >Luciano Pavarotti</ARTIST>
+			<COUNTRY >UK</COUNTRY>
+			<COMPANY >DECCA</COMPANY>
+			<PRICE >9.90</PRICE>
+			<YEAR >1991</YEAR>
+		</CD>			
+
+3) Consulta 3, ESPERADA archivo Discos.xml ***********************************
+
+    //CD[TITLE="Romanza"]/PRICE/@calificacion
+
+    Salida Esperada
+         
+        Hola
+
+3) Consulta 3, MOSTRADA archivo Discos.xml ***********************************
+
+    //@*
+	/CATALOG/CD/PRICE[9]
+	/CATALOG/CD/PRICE[last()-5+16 div 2*1]
+    //CD/PRICE[last()-5+16 div 2*1]
+	
+	Salida Esperada
+         
+        calificacion="hola"
+		<PRICE calificacion="hola">10.80</PRICE>
+
+4) Consulta 4, ESPERADA archivo Discos.xml ***********************************
+
+    //child::PRICE[@calificacion="hola"]/text()
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY: 
+    for $x in //child::PRICE[@calificacion="hola"]
+    return $x/text()
+
+    Salida Esperada
+
+        10.80
+
+4) Consulta 4, MOSTRADA archivo Discos.xml ***********************************
+
+****es la misma de arriba
+    /CATALOG/CD/PRICE[9]
+
+    Salida Esperada
+
+        10.80
+
+5) Consulta 5, Archivo Discos.xml
+****es la misma de arriba
+    //attribute::calificacion
+
+     Salida Esperada
+
+        10.80
+
+6) Consulta 6, ESPERADA archivo Discos.xml ***********************************
+    
+	//ancestor-or-self::CD[YEAR=1998]/TITLE/text()
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY: 
+    for $x in //ancestor-or-self::CD[YEAR=1998]
+    return $x/TITLE/text()
+
+    Salida Esperada
+
+        "Esto tiene que salir bien"
+
+6) Consulta 6, MOSTRADA archivo Discos.xml ***********************************
+    
+	//CD/TITLE[6]
+	//CD/TITLE[last()-10+5*2]
+	
+    Salida Esperada
+
+        <TITLE >" Esto tiene que salir bien "</TITLE>
+

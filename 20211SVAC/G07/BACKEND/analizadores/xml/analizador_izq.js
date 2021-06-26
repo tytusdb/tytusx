@@ -231,7 +231,7 @@ case 14:
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
         this.$["tipo"] = "unica";
-        this.$["atributos"] = $$[$0-1];
+        this.$["atributos"] = [];
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;    
 
@@ -240,6 +240,7 @@ case 14:
         nodoPadre.agregarHijo(new Nodo("APERTURA", $$[$0-3]));
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $$[$0-2]));
         if ($$[$0-1]) {
+            this.$['atributos'] = $$[$0-1]['atributos'];
             nodoPadre.agregarHijo($$[$0-1]['nodo']);
         }
         nodoPadre.agregarHijo(new Nodo("CIERRE", $$[$0]));
@@ -257,7 +258,7 @@ case 15:
         this.$ = {}
         this.$["etiqueta"] = $$[$0-2];
         this.$["tipo"] = "completa";
-        this.$["atributos"] = $$[$0-1];
+        this.$["atributos"] = [];
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;
 
@@ -267,6 +268,7 @@ case 15:
         nodoPadre.agregarHijo(new Nodo("ETIQUETA", $$[$0-2]));
 
         if($$[$0-1]) {
+            this.$['atributos'] = $$[$0-1]['atributos'];
             nodoPadre.agregarHijo($$[$0-1]['nodo']);
         } 
         nodoPadre.agregarHijo(new Nodo("CIERRE",$$[$0]));
@@ -280,6 +282,8 @@ case 15:
 
         // Verificar Etiqueta
         verificarEtiquetas.push(new Token("ETIQUETA",$$[$0-2] , _$[$0-2].first_line, _$[$0-2].first_column ));
+
+        console.log("ATRIBUTO APERT",$$[$0-1]);
 
     
 break;
@@ -318,18 +322,25 @@ case 17:
         }
 
         // GUARDAR LOS DATOS
-        if ($$[$0-1]) {
-            for(let key in $$[$0-1]) {
-                $$[$0][key] = $$[$0-1][key];
-            }
+        this.$ = {
+            'atributos': [$$[$0]]
         }
-        this.$ = $$[$0];
+
+        if ($$[$0-1]) {
+            $$[$0-1]['atributos'].forEach(atributo => {
+                this.$['atributos'].push(atributo);
+            });
+        }
+
+
         // ALMACENANDO EL NODO
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
         gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTOS.VAL ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTOS> <ATRIBUTO>\n` + gramatical;
+
+        console.log("ATRIBUTO LIST", this.$);
 
     
 break;
@@ -340,13 +351,17 @@ case 18:
         nodoPadre.agregarHijo($$[$0]['nodo']);
 
         // GUARDAR LOS DATOS
-        this.$ = $$[$0];
+        this.$ = {
+            'atributos':  [$$[$0]]
+        };
         // ALMACENANDO EL NODO
         this.$['nodo'] = nodoPadre;
 
         //REPORTE GRAMATICA
         gramaticapp = `ATRIBUTOS.VAL -> ATRIBUTO.VAL \n` + gramaticapp;
         gramatical = `<ATRIBUTOS> := <ATRIBUTO>\n` + gramatical;
+
+        
     
 break;
 case 19:
@@ -359,16 +374,21 @@ case 19:
     
         // GUARDAR LOS DATOS
         this.$ = {};
-        this.$[$$[$0-2]] = $$[$0].replaceAll('"','');
+        this.$["valorAtributo"] = $$[$0].replaceAll('"','');
+        this.$["nombreAtributo"]=$$[$0-2];
         this.$["tipo"] = "atributo";
         this.$["linea"] = _$[$0-2].first_line;
         this.$["columna"] = _$[$0-2].first_column;
+
+
         // ALMACENANDO EL CST
         this.$["nodo"] = nodoPadre;
 
         //REPORTE GRAMATICA
         gramaticapp = `ATRIBUTO.VAL -> etiqueta.lexval igual.lexval cadena.lexval \n` + gramaticapp;
         gramatical = `<ATRIBUTO> := ${$$[$0-2]} ${$$[$0-1]} ${$$[$0]} \n` + gramatical;
+
+        
     
 break;
 case 20:

@@ -1,3 +1,37 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@Luiskr1993 
+Luiskr1993
+/
+Compi2G27Proyecto
+3
+0
+0
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+Compi2G27Proyecto/index.html
+@Luiskr1993
+Luiskr1993 Se modificaron las clases de tsObjeto y tsXML, también se implementó …
+…
+Latest commit 46dc2f6 22 hours ago
+ History
+ 3 contributors
+@Luiskr1993@alwuud@carlos093aquino
+247 lines (228 sloc)  13.4 KB
+  
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +64,8 @@
     <script src="Arbol/Nodo.js"></script>
     <script src="Arbol/Arbol.js"></script>
     <script src="Errores/Error.js"></script>
+    <script src="C3D/tsXML.js"></script>
+    <script src="C3D/tsObjeto.js"></script>
 
 </head>
 
@@ -91,6 +127,9 @@
             <button type="button" class="btn btn-info" onclick="" title="Ejecuta el código XQUERY">
                 XQUERY
             </button>
+            <button type="button" class="btn btn-info" onclick="pruebaC3D();" title="Ejecuta el código XQUERY">
+                TEST
+            </button>
         </div>
         <table style="width:80%;">
             <tr>
@@ -104,6 +143,7 @@
                 </td>
             </tr>
         </table>
+        
         <table style="width:100%">
             <tr cols="3">
                 <td colspan="1" align="left"><label>Ingrese el código aquí:</label><br></td>
@@ -237,4 +277,5 @@
 <script src="Gramatica/gramaticaXMLArbol.js"></script>
 <script src="Gramatica/gramaticaXMLArbolCST.js"></script>
 <script src="Gramatica/erroresXML.js"></script>
+<script src="Traduccion/traductorXML.js"></script>
 </html>
