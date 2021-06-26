@@ -1,0 +1,28 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/4.1.0/tablesort.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/4.1.0/src/sorts/tablesort.number.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/1.3.0/viz.js"></script>
+
+<div class="container-fluid">
+  <div class="alert alert-danger text-center" role="alert">
+    <h1>CST XML</h1>
+  </div>
+  <div class="container-fluid" id="main" style="overflow: auto;"></div>
+</div>
+
+<script>
+
+  var sample = localStorage.getItem('cst');
+
+  var options = {
+    format: 'svg'
+    // format: 'png-image-element'
+  }
+
+  var image = Viz(sample, options);
+  var main = document.getElementById('main');
+
+  main.innerHTML = image;		// SVG
+  main.appendChild(image);	// PNG
+
+</script>

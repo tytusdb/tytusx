@@ -9,7 +9,6 @@ var Global = /** @class */ (function () {
     function Global(expresiones, ambito) {
         this.expresiones = expresiones;
         this.ambito = ambito;
-        console.log(expresiones, 89999);
         Hijos_1.default.exec(expresiones, this.ambito);
     }
     return Global;

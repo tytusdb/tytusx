@@ -13,6 +13,7 @@ import { NodoFinal }from 'src/app/models/AST/nodoAST.model';
 
 //BOTH OF THEM
 import { Excepcion } from 'src/app/models/excepcion.model';
+import { Simbolo } from 'src/app/models/CST/simbolo.model';
  
 
 @Component({
@@ -29,24 +30,21 @@ export class HomeComponent implements OnInit {
   
   //XML
   public resAnalisisXML: Paquete;
-  public autoResize: boolean;
   public exceptions: Array<Excepcion>;
+  public simbol: Simbolo;
+  public simbolosXML: Array<Simbolo>;
   public chartOption: any;
 
   //XPATH
   public resultadoAnalisisXPath: Paquete2;
   public exceptions2: Array<Excepcion>;
-
-
   public chartOption2: any;
-  public autoResize2: boolean;
 
   //BOTH OF THEM
   public erroresXPath: string;
   public erroresXML: string;
   public simbolosXPath: string;
-  public simbolosXML: string;
-  
+
 
   constructor() { 
     this.contentXML = '';
@@ -55,21 +53,20 @@ export class HomeComponent implements OnInit {
     this.grammarOutput = '';
     
     //XML
-    this.resAnalisisXML = new Paquete([], new NodoCST('INICIO', []), "", "", "");
-    this.autoResize = true;
+    this.simbol = new Simbolo("", "", "", 0, 0, []);
+    this.resAnalisisXML = new Paquete([], new NodoCST('INICIO', []), "", "", "", this.simbol);
     this.exceptions = [];
-    this.exceptions2 = [];
+    this.simbolosXML = [];
     this.setChartOption({});
     
     //XPATH
     this.resultadoAnalisisXPath = new Paquete2([], [],new NodoFinal('INICIO', []), '');
-    this.autoResize2 = true;
+    this.exceptions2 = [];
     this.setChartOption2({});
 
     //BOTH OF THEM
     this.erroresXML = '';
     this.erroresXPath = '';
-    this.simbolosXML = '';
     this.simbolosXPath = '';
 
    }
@@ -138,13 +135,15 @@ export class HomeComponent implements OnInit {
 
   public executeXML(): void {
     this.erroresXML = '';
-    this.simbolosXML = '';
     this.resAnalisisXML = parser.parse(this.contentXML);
     console.log(this.resAnalisisXML);
 
     this.exceptions = this.resAnalisisXML.getErrores();
     this.setChartOption(this.resAnalisisXML.getArbol());
     this.grammarOutput = this.resAnalisisXML.getGramaticaRecorrida();
+    this.simbol = this.resAnalisisXML.getSimbolo();
+
+    this.setSimbolsList(this.simbol);
     
     console.log(this.resAnalisisXML.getXmlVersion());
     console.log(this.resAnalisisXML.getXmlEncoding());
@@ -169,10 +168,29 @@ export class HomeComponent implements OnInit {
 
   }
 
+  public setSimbolsList(simbolo: Simbolo):void{
+    simbolo.sAmbito = "Global";
+    this.simbolosXML.push(simbolo);
+    
+    this.setInternSimbols(simbolo.sIdentificador,simbolo.getSimbolosInternos());
+    
+    console.log(this.simbolosXML);
+  }
+
+  public setInternSimbols(entorno: string, internos: Array<Simbolo>){
+    internos.forEach(element => {
+      element.sAmbito = entorno;
+      this.simbolosXML.push(element);
+      console.log(element);
+      if(element.getSimbolosInternos().length != 0){
+        this.setInternSimbols(element.sIdentificador, element.getSimbolosInternos());
+      }
+    });
+  }
+
   //#region FUNCIONES BÁSICAS
   public cleanXmlEditor():void {
     this.contentXML = '';
-    this.simbolosXML = '';
 }
   public cleanXpathEditor(): void {
     this.contentXPATH = '';
@@ -201,15 +219,13 @@ export class HomeComponent implements OnInit {
     }
     fileReader.readAsText(this.file);
   }
-  private uploadXpathEditor(): void {
-  }
+
   //#endregion FUNCIONES BÁSICAS
 
   public downloadXmlFile(): void{}
   public downloadXpathFile(): void{}
 
   public setChartOption(data: Object){
-    console.log(data);
     this.chartOption = {
       backgroundColor: 'black',
       tooltip: {

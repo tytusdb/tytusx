@@ -1,0 +1,89 @@
+<div class="row justify-content-center tabla">
+    <div class="col-md-8 tab">
+        <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item active">
+                <a class="nav-link active" data-toggle="tab" href="#simbolos">Tabla de Símbolos</a>
+            </li>
+        </ul>
+       
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active show" id="simbolos">
+                <div class="col-md-12">
+                    <br>
+                    <div style="width: auto; height: auto;">
+                        <table class="table table-hover table-hover">
+                            <thead>
+                                <tr>
+                                    <td>NOMBRE</td>
+                                    <td>TIPO_SIMBOLO</td>
+                                    <td>AMBITO</td>
+                                    <td>COLUMNA</td>
+                                    <td>FILA</td>
+                                    <td>VALOR</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let fila of tablaSimbolos">
+                                    <td>{{fila.nombre}}</td>
+                                    <td>{{fila.tipo}}</td>
+                                    <td>-{{fila.listaAmbito.join("-")}}-</td>
+                                    <td>{{fila.columna}}</td>
+                                    <td>{{fila.fila}}</td>
+                                    <td>--{{fila.valor}}--</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="width: auto; height: auto;">
+                        <ul class="nav nav-tabs justify-content-center">
+                            <li class="nav-item active">
+                                <a class="nav-link active" data-toggle="tab" href="#simbolos">Tabla de Símbolos</a>
+                            </li>
+                        </ul>
+                        <table class="table table-primary table-hover">
+                            <thead>
+                                <tr>
+                                    <td>PRODUCCION</td>
+                                    <td>regla_semantica</td>
+                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let fila of ReporteGramatica">
+                                    <td>{{fila.produccion}}</td>
+                                    <td>{{fila.regla_semantica}}</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="errores">
+                <div class="col-md-12">
+                    <br>
+                    <div style="width: auto; height: auto;">
+                        <table class="table table-danger table-hover">
+                            <thead>
+                                <tr>
+                                    <td>hola</td>
+                                    <td>mundo</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,7 +10,7 @@ import  AnalizarXPathAsc, { recorrerXpathAsc }  from '../analizador/XPath/dist/a
 	
 
 	var RespuestaXML;
-	var RespuestaXPath
+	var RespuestaXPath;
 	
 //--------------XML
 	//--------------Errores
@@ -97,7 +97,7 @@ class Interfaz extends React.Component {
 				
 				//document.getElementById("ConsolaSalida").value =AnalizarXPathAsc.RUN(RespuestaXPathAsc.nodo,RespuestaXML.entornoGlobal,RespuestaXML.ecoding);
 	
-	
+				
 				var sal = AnalizarXPathAsc.RUN(RespuestaXPath.nodo,RespuestaXML.entornoGlobal,RespuestaXML.ecoding);
 				  
 				if(sal == ""){
