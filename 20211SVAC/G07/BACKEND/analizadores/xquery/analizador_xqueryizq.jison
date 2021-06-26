@@ -168,7 +168,12 @@
 INICIO  
         :XQUERYGRA EOF                                                                   {return $1;}  
         |HTML  EOF                                                                       {return {instr:"HTML",valor:$1};}
+        |INSTRUCCIONES EOF                                                               {return {instr:"MULTIPLES",valor:$1};}
         |FUNCACKERMAN EOF 
+;
+INSTRUCCIONES
+        :INSTRUCCIONES INSTRUCCION                                                      {$1.push($2); $$=$1;}
+        |INSTRUCCION                                                                    {$$=[$1];}
 ;
 XQUERYGRA
         :FOR_IN WHERE ORDEN RETURN                                                      {$$={instr:"FOR_IN",iterador:$FOR_IN,retorno:$RETURN,where:$WHERE,order:$ORDEN};}
@@ -176,11 +181,26 @@ XQUERYGRA
         |F_DATA                                                                         {$$={instr:"F_DATA",valor:$1};}
         |F_UPPER                                                                        {$$={instr:"F_UPPER",valor:$1};}
         |F_LOWER                                                                        {$$={instr:"F_LOWER",valor:$1};}   
-        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};}                       
-        
+        |F_SUBSTRING                                                                    {$$={instr:"F_SUBSTRING",valor:$1};}                                                                       
+;
+INSTRUCCION
+        :CREAR_V                                                                        {$$={instr:"CREAR",valor:$1};}  
+        |ASIGNAR_V                                                                      {$$={instr:"ASIGNAR",valor:$1};}
+        |IF_                                                                            {$$={instr:"IF_",valor:$1};}
+;
+IF_
+        :tk_if tk_parentesis_izq DATO tk_parentesis_der THEN ELSE
+;
+CREAR_V
+        :tk_let VARIABLE                                                                {$$={id:$2,valor:null};}
+        |tk_let VARIABLE tk_let_igual DATO                                              {$$={id:$2,valor:$4};}
+;
+ASIGNAR_V
+        :VARIABLE tk_let_igual DATO                                                     {$$={id:$1,valor:$3};}
 ;
 FOR_IN
-        :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4}}
+        :tk_for VARIABLE tk_in LLAMADA                                                  {$$={variable:$2,consulta:$4,contador:null}}
+        |tk_for VARIABLE tk_at VARIABLE tk_in LLAMADA                                   {$$={variable:$2,consulta:$6,contador:$4}}
 ;
 ORDEN
         :                                                                               {$$=null;}  
@@ -196,6 +216,7 @@ CONDICIONAL
         |VARIABLE                                                                       {$$={tipo:"VARIABLE",variable:$VARIABLE,consulta:null}}
         |tk_numero                                                                      {$$={tipo:"NUMERO",valor:$tk_numero}}
         |tk_hilera                                                                      {$$={tipo:"CADENA",valor:$1.slice(1,-1)}}
+        //
         |CONDICIONAL tk_mayor CONDICIONAL                                               {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_menor CONDICIONAL                                               {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_mayor_igual CONDICIONAL                                         {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
@@ -209,6 +230,8 @@ CONDICIONAL
         |CONDICIONAL tk_le CONDICIONAL                                                  {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_eq CONDICIONAL                                                  {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_ne CONDICIONAL                                                  {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}
+        //
+
 ;
 RETURN
         :tk_return VARIABLE                                                             {$$={tipo:"VAR",variable:$VARIABLE,consulta:null}}
@@ -222,6 +245,7 @@ LLAMADA
         |XPATHGRA                                                                       {$$=$1;}
         |VARIABLE XPATHGRA                                                              {$$={variable:$VARIABLE,consulta:$XPATHGRA}}
         |VARIABLE                                                                       {$$={variable:$VARIABLE,consulta:null}}
+        |tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der                  {$$={tipo:"TO",inicio:$2,fin:$4}}
 ;
 VARIABLE
         :tk_dolar tk_identificador                                                      {$$=$tk_identificador;}
@@ -272,13 +296,14 @@ DATO
         |tk_hilera                                                                      {$$= {tipo:"CADENA",valor:$1}}                                                                   
         |tk_arroba tk_identificador                                                     {$$= {tipo:"ATRIBUTO",valor:$2}}                                                
         |tk_last tk_parentesis_izq tk_parentesis_der                                    {$$= {tipo:"LAST"}} 
+        |VARIABLE                                                                       {$$= {tipo:"VARIABLE",valor:$1}} 
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
         |DATO tk_menos DATO                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
         |DATO tk_asterisco DATO                                                         {$$= {tipo:"OP_MUL",valor1:$1,valor2:$3}}                                                 
         |DATO tk_div DATO                                                               {$$= {tipo:"OP_DIV",valor1:$1,valor2:$3}}  
         |DATO tk_mod DATO                                                               {$$= {tipo:"OP_MOD",valor1:$1,valor2:$3}}                                                                                                          
-        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$1}}
+        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$2}}
 //Operaciones Logicas
         |DATO tk_igual DATO       	                                                {$$= {tipo:"OP_IGUAL",valor1:$1,valor2:$3}}                                   
         |DATO tk_indiferente DATO                                                       {$$= {tipo:"OP_DIFERENTE",valor1:$1,valor2:$3}}                   
