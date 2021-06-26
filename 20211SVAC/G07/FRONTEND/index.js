@@ -2,13 +2,14 @@
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/*");
+let editorXPATH = (document.getElementById("editor").value = "/bookstore");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
 let listaTokens=[];
 let parserXML;
+let parserXPATHDER;
 let globalencod;
 let codificador = document.getElementById("codencod");
 
@@ -23,7 +24,7 @@ let parserXQUERYder;
 
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 <bookstore>
-   <book category="AMONG US">
+   <book category="COOKING">
       <title>Empire Burlesque</title>
       <author>Bob Dylan</author>
       <country>USA</country>
@@ -31,7 +32,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>10.90</price>
       <year>1985</year>
    </book>
-   <book category="CHILDREN">
+   <book category="EL BICHO">
       <title>Hide your heart</title>
       <author>Bonnie Tyler</author>
       <country>UK</country>
@@ -39,7 +40,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>9.90</price>
       <year>1988</year>
    </book>
-   <book category="WEB">
+   <book category="EL BICHO">
       <title>Greatest Hits</title>
       <author>Dolly Parton</author>
       <country>USA</country>
@@ -55,7 +56,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>10.20</price>
       <year>1990</year>
    </book>
-   <book category="SITES">
+   <book category="COOKING" category="SITES">
       <!-- Este titulo tiene un & -->
       <title>Eros &amp; Eros</title>
       <author>Eros Ramazzotti</author>
@@ -82,7 +83,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>8.10</price>
       <year>1973</year>
    </book>
-   <book category="COMIC">
+   <book category="EL BICHO">
       <title>Maggie May</title>
       <author>Rod Stewart</author>
       <country>UK</country>
@@ -90,7 +91,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>8.50</price>
       <year>1990</year>
    </book>
-   <book category="FANTASY">
+   <book category="COOKING" category="FANTASY">
       <title>Romanza</title>
       <author>Andrea Bocelli</author>
       <country>EU</country>
@@ -130,7 +131,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>8.70</price>
       <year>1995</year>
    </book>
-   <book category="WIGETTA">
+   <book category="EL BICHO">
       <title>Big Willie style</title>
       <author>Will Smith</author>
       <country>USA</country>
@@ -170,7 +171,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>8.90</price>
       <year>1988</year>
    </book>
-   <book category="AMONG US">
+   <book category="EL BICHO">
       <title>Bridge of Spies</title>
       <author>T&apos;Pau</author>
       <country>UK</country>
@@ -202,7 +203,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>9.90</price>
       <year>1991</year>
    </book>
-   <book category="AMONG US">
+   <book category="ROCK">
       <title>The dock of the bay</title>
       <author>Otis Redding</author>
       <country>USA</country>
@@ -210,7 +211,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>7.90</price>
       <year>1968</year>
    </book>
-   <book category="IMAGENES">
+   <book category="EL BICHO">
       <title>Picture book</title>
       <author>Simply Red</author>
       <country>EU</country>
@@ -226,7 +227,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>7.80</price>
       <year>1987</year>
    </book>
-   <book category="AMONG US">
+   <book category="EL BICHO">
       <title>Unchain my heart</title>
       <author>Joe Cocker</author>
       <country>USA</country>
@@ -238,8 +239,8 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 `
 
 let XQuery = `for $x in doc("books.xml")/bookstore/book
-return if ($x/@category="AMONG US")
-then <AMONG_US>{data($x/title)}</AMONG_US>
+return if ($x/@category="EL BICHO")
+then <SIUUUUUUUUUUUUU>{data($x/title)}</SIUUUUUUUUUUUUU>
 else <NO>{data($x/title)}</NO>
 `
 
@@ -250,6 +251,11 @@ editorXQUERY.value=XQuery;
 
 editorXML.value = textoEntrada;
 let consolaC3D = document.getElementById('consola3D');
+
+
+// ======================================
+//BOTON DE XML DESCENDENTE
+// ======================================
 
 
 // Analizar la entrada XML al hacer CLICK al boton
@@ -276,6 +282,11 @@ botonCargar.addEventListener("click", () => {
 
 })
 
+// ======================================
+//BOTON DE XML ASCENDENTE
+// ======================================
+
+
 botonCargar2.addEventListener("click", () => {
   alert("Ejecutando XML Ascendente");
 
@@ -294,10 +305,12 @@ botonCargar2.addEventListener("click", () => {
   // Se genera la Tabla de Simbolos
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
-
-
-
 })
+
+
+// ======================================
+//BOTON DE XPATH ARBOL AST
+// ======================================
 
 
 document.getElementById("ast").addEventListener("click", () => {
@@ -310,6 +323,11 @@ document.getElementById("ast").addEventListener("click", () => {
     graficarArbol(AST_xPath);
   
 })
+
+// ======================================
+//BOTON DE XPATH ARBOL CST
+// ======================================
+
 
 document.getElementById("btnReporteXPATHcst").addEventListener("click", () => {
   let AST_xPath2=analizador_xpath.parse(document.getElementById("editor").value);
@@ -371,6 +389,10 @@ btnReporteXML.addEventListener("click", () => {
   });
 });
 
+// ======================================
+//BOTON DE XML DE REPORTE DE ARBOL CST
+// ======================================
+
 // REPORTE DEL CST
 btnReporteXMLCST.addEventListener("click", () => {
 
@@ -380,8 +402,11 @@ btnReporteXMLCST.addEventListener("click", () => {
   // Generar el arbol con Treant JS
   graficarArbol(parserXML.json.nodo);
 
-  
 });
+
+// ======================================
+//BOTON DE REPORTE DE GRAMATICA
+// ======================================
 
 // REPORTE DE LA GRAMATICA
 btnReporteGram.addEventListener('click', () => {
@@ -391,6 +416,10 @@ btnReporteGram.addEventListener('click', () => {
   <textarea style="width: 60%; height: 700px; resize: none;">${parserXML.gramaticapp}</textarea>
   `;
 });
+
+// ======================================
+//BOTON DE REPORTE DE ERRORES
+// ======================================
 
 //REPORTE DE ERRORES
 btnReporteXMLErrores.addEventListener("click", () => {
@@ -529,7 +558,7 @@ boton3D.addEventListener("click", () => {
 
 
 })
-
+/*
 btnCargarxqueryder.addEventListener("click", () => {
   console.log("Analizando XQUERY ")
   tipoAnalizadorXML = "DESCENDENTE";
@@ -541,7 +570,7 @@ btnCargarxqueryder.addEventListener("click", () => {
   console.log(parserXQUERYder);
 
 
-})
+})*/
 document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
   let AST_xQuery=analizador_xquery_ast.parse(editorXQUERY.value);
 
@@ -553,7 +582,12 @@ document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
 
 })
 
+document.getElementById("btnReporteOptimizar").addEventListener("click", () => {
+  let GramaticaOP = grammar.parse(consola3D.value);
 
+  console.log(GramaticaOP);
+
+})
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));

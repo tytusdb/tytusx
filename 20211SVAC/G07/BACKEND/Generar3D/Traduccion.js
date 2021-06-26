@@ -214,8 +214,6 @@ class Traduccion {
 
             return;
         }
-
-
         `;
 
         return codigoTraducido;

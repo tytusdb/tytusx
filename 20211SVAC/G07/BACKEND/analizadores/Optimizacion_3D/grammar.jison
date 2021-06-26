@@ -6,20 +6,23 @@
 %options case-insensitive
 
 comment ("#"[^\r\n]* [^\r\n])                   
+                 
 
 %%
 \s+                                         %{ /* Omitir espacios en blanco */ %}
 [\t\r]+                                     %{ /* Omitir saltos de linea, tabs y retornos*/ %}
 \n					{}
 {comment} {} // comentario simple línea
+"//".*										// comentario simple línea
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]   /* IGNORE */
 
 "void"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_void';%}
 "main"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_main';%}
 
 "var"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_var';%}
+"return"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_return';%}
 
-"double"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_double';%}
+"float"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_float';%}
 "heap"                %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_heap';%}
 "stack"               %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_stack';%}
 "goto"                %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_goto';%}
@@ -202,6 +205,12 @@ SENTENCIA
 	$$.agregarHijo(new Nodo($2,$2));
 	$$.agregarHijo(new Nodo($3,$3));
 	}
+	| tk_return tk_punto_coma
+	{
+    $$= new Nodo("SEN","SEN");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo(new Nodo($2,$2));
+	}
 	| tk_end
 	{
     $$= new Nodo("SEN","SEN");
@@ -270,7 +279,7 @@ OP_REL
 ;
 
 DECLARACION
-	: tk_double LISTA_IDS
+	:tk_float LISTA_IDS
 	{
     $$= new Nodo("DEC","DEC");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -301,7 +310,7 @@ DECLARACION
 	$$.agregarHijo($4);
 	}
 
-	// Nunca pasa: | tk_double tk_identificador tk_igual EXP (var t5=3+2; )
+	// Nunca pasa: |  tk_float tk_identificador tk_igual EXP (var t5=3+2; )
 ;
 LISTA_IDS
 	: LISTA_IDS tk_coma tk_identificador 
@@ -327,7 +336,7 @@ ASIGNACION:
 	$$.agregarHijo($2);
 	$$.agregarHijo($3);
 	}
-	| tk_double ASIGNACIONSIGNO tk_heap tk_corchete_izq VALOR tk_corchete_der
+	|tk_float ASIGNACIONSIGNO tk_heap tk_corchete_izq VALOR tk_corchete_der
 	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -337,7 +346,7 @@ ASIGNACION:
 	$$.agregarHijo($5);
 	$$.agregarHijo(new Nodo($6,$6));
 	}
-	| tk_double ASIGNACIONSIGNO tk_stack tk_corchete_izq VALOR tk_corchete_der
+	|tk_float ASIGNACIONSIGNO tk_stack tk_corchete_izq VALOR tk_corchete_der
 	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
