@@ -640,7 +640,7 @@ function imprimiConsola(txt){
 let copyButton = document.getElementById('copyBtn');
 copyButton.addEventListener('click', () => {
 
-  if (consolaC3D.value.trim() !== "") {
+  if (consolaC3D.value.trim() !== '') {
     alert("Copiado");
     consolaC3D.select();
     document.execCommand('copy');
