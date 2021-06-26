@@ -1,0 +1,84 @@
+.contentContainer {
+    border: 1px solid black;
+    height: 600px;
+    background: #fff;
+}
+
+#tree-simple{
+    overflow: visible !important;
+}
+
+.node.nodeStyle {
+    background: rgb(117, 121, 124);
+    color: black;
+    padding: 5px;
+}
+
+
+.Treant .node.collapsed .collapse-switch { background: none; }
+
+.Treant .collapse-switch { width: 100%; height: 100%; border: none; }
+
+
+.modalAST {
+    background: rgba(0,0,0,0.9);
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    z-index: 100;
+    padding-top: 50px;
+    display: flex;
+    top: -200vh;
+}
+
+.modalContainer {
+    background: white;
+    width: 1200px; /*1200px*/
+}
+
+.headerContainer {
+    background: #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.titleContainer {
+    font-size: 20px;
+    margin: 0;
+}
+
+#closeASTContainer {
+    border: none;
+    background: transparent;
+    color: red;
+}
+
+.contentModal {
+    background: rgb(255, 255, 255);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.controls {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btnControl {
+    border: none;
+    padding: 10px;
+    color: #fff;
+    background: steelblue;
+}
+
+.modalAST.isActive {
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0; 
+}

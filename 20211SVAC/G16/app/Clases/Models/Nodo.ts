@@ -2,15 +2,15 @@ export default class Nodo{
 
     Etiqueta:string;
     Valor:string;
-    Hijos:Array<Nodo>;
-  
+    Hijos:Array<any>;
+
     public constructor(etiqueta:string, valor:string){
         this.Etiqueta=etiqueta;
         this.Valor=valor;
-        this.Hijos=new Array<Nodo>();
+        this.Hijos=new Array<any>();
     }
-    
-    public AgregarHijo(nodohijo:Nodo){
+
+    public AgregarHijo(nodohijo:any){
         this.Hijos.push(nodohijo);
     }
 

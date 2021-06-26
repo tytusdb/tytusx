@@ -48,7 +48,7 @@ var NodoXpath = /** @class */ (function () {
             for (var i=0; i < this.listaSelectores.length;i++ ){
                 
                 if ((this.listaSelectores[i] == TipoSelector.DOBLE_SLASH) || 
-                (this.listaSelectores[i] == TipoSelector.PUNTO_DOSSLASH) ){
+                (this.listaSelectores[i] == TipoSelector.PUNTO_DOSSLASH)){
                                 busquedaGlobal = 14;
                 } else if ((this.listaSelectores[i] == TipoSelector.DOSPUNTOS_DOSSLASH) || 
                 (this.listaSelectores[i] == TipoSelector.DOSPUNTOS_SLASH)){
@@ -58,7 +58,6 @@ var NodoXpath = /** @class */ (function () {
                     entornoActual.forEach(function (entorno){
 
                         if(entorno.getAnterior()!=null){
-
                             if(EntornoYaExiste(entornoAux,entorno.getAnterior().getID())==false){
                                 entornoAux.push(entorno.getAnterior());
                             }

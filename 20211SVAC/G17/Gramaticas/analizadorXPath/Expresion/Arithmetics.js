@@ -143,3 +143,30 @@ export class Unary {
         return NodosActuales
     }
 }
+
+export class RangeExp
+{
+    constructor(inicio,fin)
+    {
+        this.inicio = inicio
+        this.fin = fin
+    }
+
+    getValor(Objetos)
+    {
+        var retorno = []
+        var valinicio = this.inicio.getValor(Objetos)
+        var valfin = this.fin.getValor(Objetos)
+            // plano cartesiano entre valores izq y valores 
+        if(valinicio.length != 1 || valfin.length != 1 || valfin[0].tipo!=Tipo.INTEGER || valinicio[0].tipo!=Tipo.INTEGER)
+        {
+            ErroresGlobal.push({Error:`Se esperaba entero to entero`,tipo:"Semantico",Linea:0,columna:0})
+            return []
+        }
+        for (let index = valinicio[0].valor; index <= valfin[0].valor; index++) {
+            retorno.push(new Literal(Tipo.INTEGER,index))
+        }
+        return retorno
+    }
+  
+}
