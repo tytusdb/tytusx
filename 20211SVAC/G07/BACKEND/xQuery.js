@@ -1,7 +1,7 @@
 function ejecutarXQuery(instruccion,entorno){
-    console.log("Iniciando ejecucion");
-    
-    let consulta=getConsultaXQuery(instruccion, entorno,null);
+    let tablaSimbolos=new Entorno(null);
+    let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
+    console.log(tablaSimbolos);
     if(consulta){
         imprimiConsola(consulta);
     }else{
@@ -9,35 +9,124 @@ function ejecutarXQuery(instruccion,entorno){
     }
 }
 
-function getConsultaXQuery(instruccion, entorno,padre){
+function getConsultaXQuery(instruccion, entorno,tablaSimbolos){
     switch (instruccion.instr) {
         case "FOR_IN":
-
-            return ejecutarForIn(instruccion,entorno,padre);
+            return ejecutarForIn(instruccion,entorno,tablaSimbolos);
         case "HTML":
-            
-            return procesarHTML(instruccion.valor,entorno,null)
+            return procesarHTML(instruccion.valor,entorno,tablaSimbolos)
         case "LLAMADA":
-            return ejecutarLLamada(instruccion.valor,entorno,padre);
+            return ejecutarLLamada(instruccion.valor,entorno,tablaSimbolos);
         case "F_DATA":
-            return ejecutarData(instruccion.valor,entorno,padre);
+            return ejecutarData(instruccion.valor,entorno,tablaSimbolos);
         case "F_UPPER":
-            return ejecutarUpper(instruccion.valor,entorno,padre);
+            return ejecutarUpper(instruccion.valor,entorno,tablaSimbolos);
         case "F_LOWER":
-            return ejecutarLower(instruccion.valor,entorno,padre);
+            return ejecutarLower(instruccion.valor,entorno,tablaSimbolos);
         case "F_SUBSTRING":
-            return ejecutarSubstring(instruccion.valor,entorno,padre);
+            return ejecutarSubstring(instruccion.valor,entorno,tablaSimbolos);
+        case "MULTIPLES":
+            return ejecutarInstrucciones(instruccion.valor,entorno,tablaSimbolos);
         default:
             return null
     }
 }
+function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
+    for (const instruccion of instrucciones) {
+        switch (instruccion.instr) {
+            case "CREAR":
+                crear_Variable(instruccion.valor,entorno,tablaSimbolos);
+                break;
+            case "ASIGNAR":
+                asignar_variable(instruccion.valor,entorno,tablaSimbolos);
+                break;
+            default:
+                return null
+        }
+    }
+}
+function crear_Variable(instrucciones,entorno,tablaSimbolos){
+    if(!tablaSimbolos.existeEnActual(instrucciones.id)){
+        let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
+        tablaSimbolos.agregar(instrucciones.id,valor);
+    }else{
+        console.error("La variable "+instrucciones.id+" ya existe en el entorno actual");
+    }
+    
+}
+function asignar_variable(instrucciones,entorno,tablaSimbolos){
+    if(tablaSimbolos.existeEnActual(instrucciones.id)){
+        let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
+        
+        tablaSimbolos.reemplazar(instrucciones.id,valor);
+    }else{
+        console.error("La variable "+instrucciones.id+" ya existe en el entorno actual");
+    }
 
+}
+function procesarDato(instruccion,entorno,tablaSimbolos){
+    let valor1;
+    let valor2;
+    switch (instruccion.tipo) {
+        case "NUMERO":
+            return parseInt(instruccion.valor);
+        case "CADENA":
+            return instruccion.valor;
+        case "VARIABLE":
+            let valor=tablaSimbolos.getSimbolo(instruccion.valor);
+            if(valor){
+                return valor;
+            }
+            console.error("La variable "+instruccion.valor+" no existe ");
+            return null;
+        case "OP_MAS":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1+valor2;
+        case "OP_RES":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1-valor2;
+        case "OP_MUL":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1*valor2;
+        case "OP_DIV":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1/valor2;
+        case "OP_NEG":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            return -1*valor1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function crearVariable(instruccion,entorno,padre){
+    console.log(instruccion);
+}
 function ejecutarForIn(instruccion,entorno,padre){
-
     
     let consulta=instruccion.iterador.consulta;
-    let entornos=procesarXpath(consulta,entorno,padre);
+    
+    
+    let entornos=procesarXpath(consulta,entorno,null);
     entornos=procesarEtorno(entornos);
+    
+    
     
     //Orden by
     if(instruccion.order){
@@ -45,9 +134,12 @@ function ejecutarForIn(instruccion,entorno,padre){
     }
     let where=instruccion.where;
     let respuesta="";
+    let contador=1;
     for (const x of entornos) {
         let var_= new Entorno(padre);
         var_.agregar(instruccion.iterador.variable,x);
+        var_.agregar(instruccion.iterador.contador,contador);
+        contador++;
         let retorno=null;
         if(where==null||validarWhere(where.condicion,var_)){
             retorno=procesarReturn(instruccion.retorno,var_);
@@ -281,6 +373,9 @@ function imprimirEntorno(entorno){
     let contenido="";
     let atributo;
     let arregloAtributo=[];
+    if (!isNaN(entorno)) {
+        return entorno.toString();;
+      }
     if(entorno.valorAtributo){
         let txt =entorno.nombreAtributo +'="' +entorno.valorAtributo +'"\n';
         return txt;
@@ -424,3 +519,4 @@ function ejecutarSubstring(instruccion,entorno,padre){
     }
     return  null;
 }
+

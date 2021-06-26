@@ -240,7 +240,7 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 
 let XQuery = `for $x in doc("books.xml")/bookstore/book
 return if ($x/@category="EL BICHO")
-then <SIUUUUUUUUUUUUU>{data($x/title)}</SIUUUUUUUUUUUUU>
+then <SIUUUUUUUUUUUUU>{data($x/title)}</Siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu>
 else <NO>{data($x/title)}</NO>
 `
 
@@ -470,11 +470,10 @@ function analizar_xpath_izq(){
   listaTokens = [];
   listaErrores = [];
 
-  parserXML = xmlDerecha.parse(editorXML.value);
+  
 
   console.log("Analizando XPATH...");
-  let AST_xPathizq=analizadorizq_xpath.parse(document.getElementById("editor").value);//Decendente
-  
+ 
   let AST_xPath=analizador_xpath_AST.parse(document.getElementById("editor").value);//Decendente
 
   contenidoModal2.innerHTML = `
@@ -497,7 +496,7 @@ function analizar_xpath() {
   
 
   console.log("Analizando XPATH...");
-  parserXML = xmlDerecha.parse(editorXML.value);
+  
   console.log("Analizando XPATH por la derecha");
 
   
@@ -580,6 +579,12 @@ document.getElementById("btnReporteXQUERYcst").addEventListener("click", () => {
   // Generar el arbol con Treant JS
   graficarArbol(AST_xQuery);
 
+})
+
+let botonCargar3 = document.getElementById("btnCargar3");
+botonCargar3.addEventListener("click", () => {
+  alert("Vaciaste el consola");
+  editorXML.value = " ";
 })
 
 document.getElementById("btnReporteOptimizar").addEventListener("click", () => {

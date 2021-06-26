@@ -1,7 +1,7 @@
 class Entorno {
-  constructor(entorno_anterior) {
+  constructor(padre) {
     this.tabla = new Map();
-    this.entorno_anterior = entorno_anterior;
+    this.padre = padre;
   }
 
   agregar(id, simbolo) {
@@ -13,7 +13,7 @@ class Entorno {
   }
 
   existe(id) {
-    for (let e = this; e != null; e = e.anterior) {
+    for (let e = this; e != null; e = e.padre) {
       let simbolo = e.tabla.get(id);
       if (simbolo) {
         return true;
@@ -36,9 +36,9 @@ class Entorno {
 
   reemplazar(id, nuevoValor) {
     for (let e = this; e != null; e = e.anterior) {
-      const value = e.tabla[id];
+      const value = e.tabla.get(id);
       if (value !== undefined) {
-        e.tabla[id] = nuevoValor;
+        e.tabla.set(id,nuevoValor);
       }
     }
   }

@@ -186,23 +186,56 @@ class Acceso {
         let atributo=[];
         if (entorno.atributos) {
           for (const atr of entorno.atributos) {
+            console.log(atr);
             atributo.push({
               etiqueta: atr.nombreAtributo,
               valor: atr.valorAtributo,
+              ref:atr.referenciaHeap
             });
           }
         } else {
           atributo = "";
         }
 
+    
         if (entorno.tipo == "completa") {
-          for (const iterator of entorno.hijos) {
-            contenido += this.getValorImplicito(iterator, ast, entorno);
-          }
+          if(entorno.hijos){
+            traductorC3D.traducirFuncion("<" + entorno.etiqueta );
 
+            for (const atr of atributo) {
+              traductorC3D.traducirFuncion(" "+atr.etiqueta+"=\"");
+              if(traductorC3D.esNumero(atr.valor)){
+                traductorC3D.traducirNumero(atr.ref);
+              }else{
+                traductorC3D.imprimirCadena(atr.ref);
+              }
+              traductorC3D.traducirFuncion("\" ");
+            }
+
+
+            traductorC3D.traducirFuncion( ">");
+
+            if(traductorC3D.esNumero(entorno.texto)){
+   
+              traductorC3D.traducirNumero(entorno.referenciaHeap);
+            }else{
+              traductorC3D.imprimirCadena(entorno.referenciaHeap);
+            }
+          }
+          
+          
+          for (const iterator of entorno.hijos) {
+            
+            contenido += this.getValorImplicito(iterator, ast, entorno);
+           
+          }
+          
+          if(entorno.hijos){
+            traductorC3D.traducirFuncion("</" + entorno.etiqueta + ">");
+          }
           let retorno = new Etiqueta(
             entorno.etiqueta,
-            entorno.texto,
+            {txt:entorno.texto,ref:entorno.referenciaHeap},
             contenido,
             atributo
           ); //nombre,texto,contenido
