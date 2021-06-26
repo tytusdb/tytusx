@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
 var Entorno = /** @class */ (function () {
-    function Entorno(Padre) {
+    function Entorno(anterior) {
         this.entornos = new Array();
-        this.Padre = Padre;
+        this.anterior = anterior;
     }
     Entorno.prototype.Add = function (Simbolo) {
         Simbolo.Nombre = Simbolo.Nombre;

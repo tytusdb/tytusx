@@ -4,22 +4,34 @@ import { Errores } from './../Clases/Models/ListaError';
 import { Component, OnInit } from '@angular/core';
 //import datos from '../../assets/json/estado.json';
 import Nodo from '../Clases/Models/Nodo';
-const parser = require('../../Gramaticas/gramaticaXML')
-const parserDesc = require('../../Gramaticas/Analyzer')
-const parserXpathAsc = require('../../Gramaticas/XPathASC')
-const parserXpathDesc = require('../../Gramaticas/XPathDESC')
-const errores = require('../Clases/Models/ListaError.js')
-const Estado = require('../Clases/Models/Estado.js')
-const ListaGramatica = require('../Clases/Models/ListaGramatica.js')
+const parser=require('../../Gramaticas/gramaticaXML')
+const parserDesc=require('../../Gramaticas/Analyzer')
+const parserXpathAsc=require('../../Gramaticas/XPathASC')
+const parserXpathDesc=require('../../Gramaticas/XPathDESC')
+const errores=require('../Clases/Models/ListaError.js')
+const Estado=require('../Clases/Models/Estado.js')
+const ListaGramatica=require('../Clases/Models/ListaGramatica.js')
+const parserXQuery=require("../../Gramaticas/xquery")
+import {Recorrer} from '../Clases/Models/Recorrer'
 const tradXML = require('../Clases/Models/TraductorXML.js')
-
 
 import Crear from '../Clases/AST/CrearTS'
 import { Router } from '@angular/router';
+import Entorno from '../Clases/AST/Entorno';
 const defaults = {
   xml:
     '',
 };
+const defaults2 = {
+  xquery:
+    '',
+};
+
+const defaults3 = {
+  go:
+    '',
+};
+
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
@@ -35,9 +47,11 @@ export class PrincipalComponent implements OnInit {
   public xpath: string = "";
   title = 'frontend';
   readOnly = false;
-  tipo: string = ""
-  archivo: string = "";
-  xquery: string = "";
+  tipo:string=""
+  archivo:string="";
+  xquery:string="";
+  traduccion:string=""
+
   mode: keyof typeof defaults = 'xml';
   options = {
     lineNumbers: true,
@@ -45,21 +59,21 @@ export class PrincipalComponent implements OnInit {
   };
   defaults = defaults;
 
-  changeMode(): void {
-    this.options = {
-      ...this.options,
-      mode: this.mode,
-    };
-  }
 
-  handleChange($event: Event): void {
-    console.log('ngModelChange', $event);
-  }
+  mode2: keyof typeof defaults2 = 'xquery';
+  options2 = {
+    lineNumbers: true,
+    mode: this.mode2,
+  };
 
-  clear(): void {
-    this.defaults[this.mode] = '';
-  }
+  defaults2 = defaults2;
 
+  mode3: keyof typeof defaults3 = 'go';
+  options3 = {
+    lineNumbers: true,
+    mode: this.mode2,
+  };
+  defaults3 = defaults3;
 
   contador: number;
   array: any[];
@@ -217,7 +231,6 @@ export class PrincipalComponent implements OnInit {
         this.archivo = contenido.toString();
       } else {
         this.nuevo();
-        this.clear();
         this.archivo = contenido.toString();
       }
     };
@@ -238,12 +251,19 @@ export class PrincipalComponent implements OnInit {
         this.xquery = contenido.toString();
       } else {
         this.nuevo();
-        this.clear();
-        this.xquery = contenido.toString();
+
+        this.xquery= contenido.toString();
       }
     };
 
     lector.readAsText(archivo);
+  }
+
+
+  AnalizarXQuery(){
+    let resultado=parserXQuery.parse(this.xquery);
+    let recorrer=new Recorrer();
+    recorrer.Recorrido(resultado,new Entorno(null),"Global")
   }
 
   TablaSimbolos() {
@@ -276,6 +296,7 @@ export class PrincipalComponent implements OnInit {
   traducirXML() {
     let trad = new tradXML.default(JSON.parse(localStorage.getItem("tablaSimboloAux")));
     let cadena: string = trad.getTraduccion();
+    this.traduccion=cadena;
   }
 
 }
