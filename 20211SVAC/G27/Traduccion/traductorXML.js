@@ -11,14 +11,24 @@ function generarXMLC3D(ts){
     //si la tabla de símbolos si tiene objetos se procede a recorrer los nodos
     var cantidadObjetos = ts.getCantidadObjetos();
     var texto = "";
+    var texto2 = "";
 
     alert("Cantidad de Objetos XML: "+cantidadObjetos);
     if (cantidadObjetos > 0){
+        //se escribe el encabezado de la traducción a lenguaje C
         texto += generaEncabezadoXML3D();
+
+        //En texto2 se construye todo el codigo 3D de las etiquetas de la tabla de símbolos
         for (var i = 0; i < cantidadObjetos; i++){
-            texto += generarCodigo3DEtiqueta(ts.listaObjetos[i], ts);
+            texto2 += generarCodigo3DEtiqueta(ts.listaObjetos[i], ts);
         }
+        //Se asigna la declaracion de temporales
+        texto += creaAsignacionDeTemporales(ts);
+        //Se agrega todo el C3D de etiquetas generado dentro del for.
+        texto += texto2;
+        //Se crea el cierre de la clase C que representará el código
         texto += generaCierreXML3D();
+
         console.log("Codigo 3D: \n"+texto);
         var tablaSimbolosContenido = imprimeTablaSimbolos3D(ts);
         console.log(tablaSimbolosContenido);
@@ -56,7 +66,16 @@ function generaCierreXML3D(){
 
 function generarCodigo3DEtiqueta(objeto, ts){
     var texto = "";
-    
+    /*
+    tipo: any;
+    apuntadorNombre: any;
+    apuntadorAtributos: any;
+    apuntadorHijos: any;
+    apuntadorContenido: any;
+    */
+    var objetoS = new tsObjetoStack("","","","","");
+    //objetoS.setTipo(objeto.tipo);
+
     var longitud = obtieneLongitudCadena(objeto.identificador);
     alert("Longitud: "+ longitud);
     var cadena = objeto.identificador; //Etiqueta1
@@ -67,7 +86,7 @@ function generarCodigo3DEtiqueta(objeto, ts){
     texto += "t"+contadorTemporal+" = S;\n"; // t0 = S;
 
     //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
-    ts.insertaTemporal(objeto.identificador, "t"+contadorTemporal);
+    ts.insertaTemporal(objeto.i, objeto.identificador, "t"+contadorTemporal);
 
     contadorTemporal++; //1
     tmpHeap = contadorTemporal; //1
@@ -78,6 +97,7 @@ function generarCodigo3DEtiqueta(objeto, ts){
     tmpStack = contadorTemporal; //1
     contadorTemporal++; //2
 
+    objetoS.setApuntadorNombre(tmpHeap);
     arregloCadena.forEach(element => {
         var asciiCaracter = element.charCodeAt(0);
         texto += "HEAP[t"+tmpHeap+"] = " + asciiCaracter + ";\n"; // HEAP[t1] = ascii; Heap[t2] = ascii;
@@ -103,6 +123,29 @@ function generarCodigo3DEtiqueta(objeto, ts){
    
 }
 
+function creaAsignacionDeTemporales(ts){
+    //se recorre la tabla de símbolos y para cada uno de ellos se obtiene el temporal y se estructura su código en C
+    var texto = "\n";
+    // cantidadObjetos = ts.getCantidadObjetos();
+    //var ultimoObjeto = ts.listaObjetos[cantidadObjetos-1];
+    //var temporalObjeto = ultimoObjeto.sp.split('t');
+    //alert("CantidadObjetosTemporalSeparado: "+temporalObjeto.length);
+    //alert("literal de ultimo temporal: "+temporalObjeto[1]);
+    //for (var i = 0; i <= temporalObjeto[1]; i++){
+
+    //En la variable contadorTemporal se lleva el contedo de temporales creados
+    for (var i = 0; i < contadorTemporal; i++)
+    {
+        texto += "Double t" + i + ";\n";
+    }
+    
+    return texto;
+}
+
+//función simple para retornar el conteo de temporales creados y poder utilizar ese dato en otras clases para continuar la creación de temporales a partir de ese número.
+function getConteoTemporales(){
+    return contadorTemporal;
+}
 const obtieneLongitudCadena = function(cadena){
     "use strict";
 
@@ -139,6 +182,8 @@ function pruebaC3D(){
 
     tablaSimbolos.insertarObjeto('Etiquetas', 'Nodo','Global',0);
     tablaSimbolos.insertarObjeto('ABC', 'Nodo','Etiquetas', 0);
+    tablaSimbolos.insertarObjeto('ABC', 'Nodo','Etiquetas', 0);
+
     //tablaSimbolos.insertarObjeto('Nombre', 'Atributo','Etiqueta1');
 
     generarXMLC3D(tablaSimbolos);
