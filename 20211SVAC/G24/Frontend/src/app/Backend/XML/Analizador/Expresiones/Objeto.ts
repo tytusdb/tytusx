@@ -157,8 +157,8 @@ export default class Objeto extends Instruccion {
       let contador = arbol.getContadort();
       let stack = arbol.getSTACK();
       arbol.codigo3d.push(`// declaracion ${this.identificador}`);
-      arbol.codigo3d.push(`t${contador}=s+${stack};`);
-      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"" ,ts, `t${contador}`);
+      arbol.codigo3d.push(`$t${contador}=$s+${stack};`);
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"" ,ts, `$t${contador}`);
 
     }
 
@@ -182,7 +182,7 @@ export default class Objeto extends Instruccion {
       let stackID = arbol.getSTACK();
       let contadorID = arbol.getContadort(); //temporales
       arbol.codigo3d.push(`// declaracion ${this.identificador}`);
-      arbol.codigo3d.push(`t${contadorID}=s+${stackID};`);
+      arbol.codigo3d.push(`$t${contadorID}=$s+${stackID};`);
 
       let data: string = this.contenido + "";
       let estado = 0;
@@ -192,9 +192,9 @@ export default class Objeto extends Instruccion {
           case 0: {
             if (iterator == "\\") { estado = 1; continue; }
             arbol.codigo3d.push(`//agregamos el string al heap ${iterator}`);
-            arbol.codigo3d.push("t0=p;");
+            arbol.codigo3d.push("$t0=$p;");
 
-            arbol.codigo3d.push("t1=" + iterator.charCodeAt(0) + ";");
+            arbol.codigo3d.push("$t1=" + iterator.charCodeAt(0) + ";");
             arbol.codigo3d.push("guardarString();");
             break;
           }
@@ -208,20 +208,20 @@ export default class Objeto extends Instruccion {
               else if (iterator == "t") { assci = 9; }
               else {
                 arbol.codigo3d.push("//agregamos el string al heap");
-                arbol.codigo3d.push("t0=p;");
+                arbol.codigo3d.push("$t0=$p;");
 
-                arbol.codigo3d.push("t1=" + 34 + ";");
+                arbol.codigo3d.push("$t1=" + 34 + ";");
                 arbol.codigo3d.push("guardarString();");
                 arbol.codigo3d.push("//agregamos el string al heap");
-                arbol.codigo3d.push("t0=p;");
+                arbol.codigo3d.push("$t0=$p;");
 
-                arbol.codigo3d.push("t1=" + iterator.charAt(0) + ";");
+                arbol.codigo3d.push("$t1=" + iterator.charAt(0) + ";");
                 arbol.codigo3d.push("guardarString();");
               }
               arbol.codigo3d.push("//agregamos el string al heap");
-              arbol.codigo3d.push("t0=p;");
+              arbol.codigo3d.push("$t0=$p;");
 
-              arbol.codigo3d.push("t1=" + assci + ";");
+              arbol.codigo3d.push("$t1=" + assci + ";");
               arbol.codigo3d.push("guardarString();");
               estado = 0;
               break;
@@ -229,13 +229,13 @@ export default class Objeto extends Instruccion {
         }
 
       }
-      arbol.codigo3d.push("t0=p;");
-      arbol.codigo3d.push("t1=-1;");
+      arbol.codigo3d.push("$t0=$p;");
+      arbol.codigo3d.push("$t1=-1;");
       arbol.codigo3d.push("guardarString();");
       const contadort = arbol.getContadort();
-      arbol.codigo3d.push("t" + contadort + "=p-" + (data.length + 1) + ";");
-      arbol.codigo3d.push(`stack[(int)t${contadorID}]= t${contadort};`);
-      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"", this.contenido, `t${contadorID}`);
+      arbol.codigo3d.push("$t" + contadort + "=$p-" + (data.length + 1) + ";");
+      arbol.codigo3d.push(`stack[(int)$t${contadorID}]= $t${contadort};`);
+      simbolo = new Simbolo(new Tipo(tipoDato.OBJETO), this.identificador, this.linea.toString(), this.columna.toString(),"", this.contenido, `$t${contadorID}`);
 
     }
 

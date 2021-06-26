@@ -1,3 +1,34 @@
+%{
+
+
+const CErrores= require("./Excepciones/Errores")
+const CNodoErrores= require("./Excepciones/NodoErrores")
+const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.component")
+const Tipo= require("./Simbolo/Tipo");
+const aritmetica= require("./Expresion/Aritmetica");
+const logica= require("./Expresion/Logica");
+const bit= require("./Expresion/Bit");
+const concatenacion= require("./Expresion/Concatenar");
+const relacional= require("./Expresion/Relacional");
+const conversion= require("./Expresion/Conversion");
+const unario= require("./Expresion/Unario");
+const Sentencia= require("./Expresion/Sentencia");
+const termino= require("./Expresion/Termino");
+const identificador= require("./Expresion/Identificador");
+//instrucciones
+const Llamada= require("./Instrucciones/Llamada");
+const Asignacion= require("./Instrucciones/Asignacion");
+const Declaracion= require("./Instrucciones/Declaracion");
+const Funcion= require("./Instrucciones/Funcion");
+const AsignacionEstructura= require("./Instrucciones/AsignacionEstructura");
+const Estructura= require("./Instrucciones/Estructura");
+const Etiqueta= require("./Instrucciones/Etiqueta");
+const Exit= require("./Instrucciones/Exit");
+const Print= require("./Instrucciones/Print");
+const SaltoCondicional= require("./Instrucciones/SaltoCondicional");
+const SaltoIncondicional= require("./Instrucciones/SaltoIncondicional");
+const Unset= require("./Instrucciones/Unset");
+%}
 %lex
 %options case-insensitive
 
@@ -23,6 +54,7 @@ escape                              \\{escapechar}
 "abs"                   return 'ABS'
 "print"                 return 'IMPRIMIR'
 "printf"                return 'IMPRIMIRF'
+"snprintf"              return 'SNPRINT'
 "unset"                 return 'UNSET'
 "if"                    return 'IF'
 "xor"                   return 'XOR'
@@ -37,11 +69,11 @@ escape                              \\{escapechar}
 
 
 [0-9]+("."[0-9]+)?\b            return 'NUMBER'
-[t]([a-zA-Z_0-9])+              return 'TEMPORAL'
-[v]([0-9]+)?                    return 'VALOR_RET'
-[s]([0-9]+)?                    return 'PILA'
-[r][a]([0-9]+)?                 return 'RA'
-[p]                             return 'PUNTERO'
+[$][t]([a-zA-Z_0-9])+              return 'TEMPORAL'
+[$][v]([0-9]+)?                    return 'VALOR_RET'
+[$][s]([0-9]+)?                    return 'PILA'
+[$][r][a]([0-9]+)?                 return 'RA'
+[$][p]                             return 'PUNTERO'
 [<]([a-zA-Z"."]+)[>]                return 'LIBRERIA'
 "#include"                      return 'INCLUDE'
 
@@ -94,7 +126,7 @@ escape                              \\{escapechar}
 "<<"                  return 'SHIFTIZQ'
 
 <<EOF>>               return 'EOF'
-.                     console.log("ERROR LEXICO")
+.                     {inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yytext +" Linea: "+ yylloc.first_line + "Columna: " + yylloc.first_column);}
 /lex
 
 // DEFINIMOS PRECEDENCIA DE OPERADORES
@@ -118,30 +150,29 @@ START
         : FUNCION  EOF                   {return $1;}
         ;
 FUNCION
-        : FUNCION VOIDS                 {$$=$1+$2}
-        | VOIDS                         {$$=$1}
+        : FUNCION VOIDS                 {$1.push($2); $$ = $1;}
+        | VOIDS                         {$$ = [$1];}
         ;
 
 VOIDS
-        : VOID MAIN PARIZQ PARDER LLAVEIZQ INSTRUCCIONES LLAVEDER               {$$=$6;}
-        | VOID IDENTIFICADOR PARIZQ PARDER LLAVEIZQ INSTRUCCIONES LLAVEDER      {$$=$6;}
+        : TIPO MAIN PARIZQ PARDER LLAVEIZQ INSTRUCCIONES LLAVEDER               {$$= new Funcion.default($1+" "+$2+" "+$3+" "+$4+" "+$5+"\n",$6,@1.first_line,@1.first_column);}
+        | TIPO IDENTIFICADOR PARIZQ PARDER LLAVEIZQ INSTRUCCIONES LLAVEDER      {$$= new Funcion.default($1+" "+$2+" "+$3+" "+$4+" "+$5+"\n",$6,@1.first_line,@1.first_column);}
         | INCLUDE LIBRERIA                                                      {$$=$1+$2}
         | DECLARACION_MULTIPLE                                                  {$$=$1}
         | DECLARACION                                                           {$$=$1}
         ;
 
 DECLARACION_MULTIPLE
-        : TIPO TERMINO COMA                                                     {$$=$1+$2+$3}
-        | TIPO TERMINO PTCOMA                                                   {$$=$1+$2+$3}
-        | DECLARACION_MULTIPLE                                                  {$$=$1}
-        | TERMINO COMA                                                          {$$=$1+$2}
+        : TIPO TERMINO COMA                                                     {$$=$1+" "+$2+$3+" "}
+        | TIPO TERMINO PTCOMA                                                   {$$=$1+" "+$2+$3}
+        | TERMINO COMA                                                          {$$=$1+$2+" "}
         | TERMINO PTCOMA                                                        {$$=$1+$2}
         ;
 
 DECLARACION
-        : TIPO IDENTIFICADOR L_CORCHETES PTCOMA                 {$$=$1+$2+$3}
-        | DOUBLE STACK L_CORCHETES PTCOMA                       {$$=$1+$2+$3}
-        | DOUBLE HEAP L_CORCHETES PTCOMA                        {$$=$1+$2+$3}
+        : TIPO IDENTIFICADOR L_CORCHETES PTCOMA                 {$$= new Declaracion.default($1+" "+$2,$3,@1.first_line,@1.first_column);}
+        | DOUBLE STACK L_CORCHETES PTCOMA                       {$$= new Declaracion.default($1+" "+$2,$3,@1.first_line,@1.first_column);}
+        | DOUBLE HEAP L_CORCHETES PTCOMA                        {$$= new Declaracion.default($1+" "+$2,$3,@1.first_line,@1.first_column);}
         ;
 
 
@@ -153,77 +184,81 @@ INSTRUCCIONES
 
 INSTRUCCION 
         : ASIGNACION                                            {$$=$1}
-        | ASIGNACION PTCOMA                                     {$$=$1+$2}
-        | EXIT PTCOMA                                           {$$=$1+$2}
-        | EXIT                                                  {$$=$1}
-        | GOTO IDENTIFICADOR PTCOMA                             {$$=$1+$2+$3}
-        | GOTO IDENTIFICADOR                                    {$$=$1+$2}
-        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR PTCOMA  {$$=$1+$2+$3+$4+$5+$6+$7}
-        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR         {$$=$1+$2+$3+$4+$5+$6}
-        | IDENTIFICADOR DOSPUNTOS PTCOMA                        {$$=$1+$2+$3}
-        | IDENTIFICADOR DOSPUNTOS                               {$$=$1+$2}
-        | TIPO_PRINT PARIZQ EXPRESION PARDER PTCOMA             {$$=$1+$2+$3+$4+$5}
-        | TIPO_PRINT PARIZQ EXPRESION PARDER                    {$$=$1+$2+$3+$4}
-        | UNSET PARIZQ TERMINO PARDER PTCOMA                    {$$=$1+$2+$3+$4+$5}
-        | UNSET PARIZQ TERMINO PARDER                           {$$=$1+$2+$3+$4}
-        | RETURN_INS PTCOMA                                     {$$=$1}
+        | ASIGNACION PTCOMA                                     {$$=$1}
+        | EXIT PTCOMA                                           {$$= new Exit.default(@1.first_line,@1.first_column);}
+        | EXIT                                                  {$$= new Exit.default(@1.first_line,@1.first_column);}
+        | GOTO IDENTIFICADOR PTCOMA                             {$$= new SaltoIncondicional.default($1,@1.first_line,@1.first_column);}
+        | GOTO IDENTIFICADOR                                    {$$= new SaltoIncondicional.default($1,@1.first_line,@1.first_column);}
+        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR PTCOMA  {$$= new SaltoCondicional.default($3,$6,@1.first_line,@1.first_column);}
+        | IF PARIZQ EXPRESION PARDER GOTO IDENTIFICADOR         {$$= new SaltoCondicional.default($3,$6,@1.first_line,@1.first_column);}
+        | IDENTIFICADOR DOSPUNTOS PTCOMA                        {$$= new Etiqueta.default($1,@1.first_line,@1.first_column);}
+        | IDENTIFICADOR DOSPUNTOS                               {$$= new Etiqueta.default($1,@1.first_line,@1.first_column);}
+        | TIPO_PRINT PARIZQ EXPRESION PARDER PTCOMA             {$$= new Print.default($3,@1.first_line,@1.first_column);}
+        | TIPO_PRINT PARIZQ EXPRESION PARDER                    {$$= new Print.default($3,@1.first_line,@1.first_column);}
+        | UNSET PARIZQ TERMINO PARDER PTCOMA                    {$$= new Unset.default($3,@1.first_line,@1.first_column);}
+        | UNSET PARIZQ TERMINO PARDER                           {$$= new Unset.default($3,@1.first_line,@1.first_column);}
+        | RETURN_INS PTCOMA                                     {$$= new Sentencia.default(null,@1.first_line,@1.first_column);}
+        | RETURN_INS EXPRESION PTCOMA                           {$$= new Sentencia.default($2,@1.first_line,@1.first_column);}
         ;
+
 TIPO_PRINT
         : IMPRIMIR              {$$=$1}
         | IMPRIMIRF             {$$=$1}
+        | SNPRINT               {$$=$1}
         ;
 
 ASIGNACION
-        : TEMPORALES IGUAL EXPRESION                      {$$=$1+"="+$3}
-        | TEMPORALES L_CORCHETES IGUAL EXPRESION          {$$=$1+$2+$3+$4}
-        | IDENTIFICADOR PARIZQ PARDER                     {$$=$1+$2+$3}
+        : TEMPORALES IGUAL EXPRESION                      {$$= new Asignacion.default($1,$3,@1.first_line,@1.first_column);}
+        | TEMPORALES L_CORCHETES IGUAL EXPRESION          {$$= new AsignacionEstructura.default($1,$3,@1.first_line,@1.first_column);}
+        | IDENTIFICADOR PARIZQ PARDER                     {$$= new Llamada.default($1,@1.first_line,@1.first_column);}
         ;
 
 L_CORCHETES
-        : L_CORCHETES CORCHETEIZQ EXPRESION CORCHETEDER   {$$=$1+$2+$3+$4}
-        | CORCHETEIZQ EXPRESION CORCHETEDER               {$$=$1+$2+$3}
+        : L_CORCHETES CORCHETEIZQ EXPRESION CORCHETEDER   {$1.push($3); $$ = $1;}
+        | CORCHETEIZQ EXPRESION CORCHETEDER               {$$ = [$2];}
         ;
 
 
 EXPRESION
         : TERMINO                                       {$$=$1}
-        | TERMINO OPLOGICA TERMINO                      {$$=$1+$2+$3}
-        | TERMINO OPBIT TERMINO                         {$$=$1+$2+$3}
-        | TERMINO OPRELACIONAL TERMINO                  {$$=$1+$2+$3}
-        | MENOS TERMINO %prec UMENOS                    {$$=$1+$2}
-        | NOT_BIT TERMINO %prec NOT                     {$$=$1+$2}
-        | NOT TERMINO %prec NOTR                        {$$=$1+$2}
-        | TERMINO OPARITMETICA TERMINO                  {$$=$1+$2+$3}
-        | READ PARIZQ PARDER                            {$$=$1+$2+$3}
-        | ABS PARIZQ TERMINO PARDER                     {$$=$1+$2+$3}
-        | ARRAY PARIZQ PARDER                           {$$=$1}
-        | PARIZQ TIPO PARDER TERMINO                    {$$=$1+$2+$3+$4}
-        | CADENA COMA PARIZQ TIPO PARDER TERMINO        {$$=$1+$2+$4+$6}
+        | TERMINO COMA TERMINO                          {$$=$1+$2+$3}
+        | TERMINO OPLOGICA TERMINO                      {$$= new logica.default($1,$2,$3,@1.first_line,@1.first_column);}
+        | TERMINO OPBIT TERMINO                         {$$= new bit.default($1,$2,$3,@1.first_line,@1.first_column);}
+        | TERMINO OPRELACIONAL TERMINO                  {$$= new relacional.default($1,$2,$3,@1.first_line,@1.first_column);}
+        | MENOS TERMINO %prec UMENOS                    {$$= new unario.default($1,$2,@1.first_line,@1.first_column);}
+        | NOT_BIT TERMINO %prec NOT                     {$$= new unario.default($1,$2,@1.first_line,@1.first_column);}
+        | NOT TERMINO %prec NOTR                        {$$= new unario.default($1,$2,@1.first_line,@1.first_column);}
+        | TERMINO OPARITMETICA TERMINO                  {$$= new aritmetica.default($1,$2,$3,@1.first_line,@1.first_column);}
+        | PARIZQ TIPO PARDER TERMINO                    {$$= new conversion.default($1,$2,$3,@1.first_line,@1.first_column);}
         ;
 
+
+
+
 TERMINO
-        : TEMPORAL                              {$$=$1}
+        : TEMPORAL                              {$$=new termino.default(new Tipo.default(Tipo.tipoDato.TEMPORAL),$1,@1.first_line,@1.first_column);}
         | RA                                    {$$=$1}
         | PILA                                  {$$=$1}
-        | ENTERO                                {$$=$1}
-        | IDENTIFICADOR                         {$$=$1}
-        | DECIMAL                               {$$=$1}
-        | CADENA                                {$$=$1}
-        | PUNTERO                               {$$=$1}
+        | ENTERO                                {$$=new termino.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
+        | IDENTIFICADOR L_CORCHETES             {$$= new Estructura.default($1,$2,@1.first_line,@1.first_column);}
+        | IDENTIFICADOR                         {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
+        | DECIMAL                               {$$=new termino.default(new Tipo.default(Tipo.tipoDato.DECIMAL),$1,@1.first_line,@1.first_column);}
+        | CADENA                                {$$=new termino.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);} 
+        | PUNTERO                               {$$=new termino.default(new Tipo.default(Tipo.tipoDato.PUNTERO),$1,@1.first_line,@1.first_column);}
         | VALOR_RET                             {$$=$1}
         | AND_BIT  TEMPORAL                     {$$=$1}
-        | TEMPORALES L_CORCHETES                {$$=$1+$2}
+        | TEMPORALES L_CORCHETES                {$$= new Estructura.default($1,$2,@1.first_line,@1.first_column);}
         | EXPRESION                             {$$=$1}
         ;
 
 TEMPORALES
-        : TEMPORAL                              {$$=$1}
+        : TEMPORAL                              {$$=new termino.default(new Tipo.default(Tipo.tipoDato.TEMPORAL),$1,@1.first_line,@1.first_column);}
         | VALOR_RET                             {$$=$1}
         | RA                                    {$$=$1}
         | PILA                                  {$$=$1}
-        | PUNTERO                               {$$=$1}
-        | STACK                                 {$$=$1}
-        | HEAP                               {$$=$1}
+        | PUNTERO                               {$$=new termino.default(new Tipo.default(Tipo.tipoDato.PUNTERO),$1,@1.first_line,@1.first_column);}
+        | STACK                                 {$$=new termino.default(new Tipo.default(Tipo.tipoDato.STACK),$1,@1.first_line,@1.first_column);}
+        | HEAP                                  {$$=new termino.default(new Tipo.default(Tipo.tipoDato.HEAP),$1,@1.first_line,@1.first_column);}
         ;
 
 
@@ -269,5 +304,6 @@ TIPO
         | FLOAT                 {$$=$1}
         | CHAR                  {$$=$1}
         | DOUBLE                {$$=$1}
+        | VOID                  {$$=$1}
         ;
 
