@@ -16,9 +16,11 @@ class tsXML{
         return null;
     }
 
-    public insertarObjeto(id:string, tipo:string, entorno:string, sp:any)
+    public insertarObjeto(id:string, tipo:string, entorno:string, padre:any)
     {
-        var objeto = new tsObjeto(id, tipo, entorno, sp);
+        var i = this.getCantidadObjetos();
+        var objeto = new tsObjeto(i,id,tipo,entorno,padre);
+
         this.listaObjetos.push(objeto);
     }
 
@@ -28,7 +30,7 @@ class tsXML{
     }
 
     //funcion para insertar el temporal generado en el C3D al símbolo que se está construyendo
-    public insertaTemporal(identificador:string, temporal:string)
+    public insertaTemporal(posicion:number, identificador:string, temporal:string)
     {
         var cantidadObjetos = this.getCantidadObjetos();
         if (cantidadObjetos > 0)
@@ -37,7 +39,7 @@ class tsXML{
             for (var i = 0; i < cantidadObjetos; i++)
             {
                 //si el símbolo.identificador es igual al parámetro identificador, se asigna el temporal
-                if(this.listaObjetos[i].identificador == identificador)
+                if(this.listaObjetos[i].i == posicion)
                 {
                     this.listaObjetos[i].sp = temporal;
                     i = cantidadObjetos;

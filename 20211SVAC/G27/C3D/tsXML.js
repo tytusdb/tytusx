@@ -12,21 +12,22 @@ var tsXML = /** @class */ (function () {
         }
         return null;
     };
-    tsXML.prototype.insertarObjeto = function (id, tipo, entorno, sp) {
-        var objeto = new tsObjeto(id, tipo, entorno, sp);
+    tsXML.prototype.insertarObjeto = function (id, tipo, entorno, padre) {
+        var i = this.getCantidadObjetos();
+        var objeto = new tsObjeto(i, id, tipo, entorno, padre);
         this.listaObjetos.push(objeto);
     };
     tsXML.prototype.getCantidadObjetos = function () {
         return this.listaObjetos.length;
     };
     //funcion para insertar el temporal generado en el C3D al símbolo que se está construyendo
-    tsXML.prototype.insertaTemporal = function (identificador, temporal) {
+    tsXML.prototype.insertaTemporal = function (posicion, identificador, temporal) {
         var cantidadObjetos = this.getCantidadObjetos();
         if (cantidadObjetos > 0) {
             //se recorre el listado de símbolos
             for (var i = 0; i < cantidadObjetos; i++) {
                 //si el símbolo.identificador es igual al parámetro identificador, se asigna el temporal
-                if (this.listaObjetos[i].identificador == identificador) {
+                if (this.listaObjetos[i].i == posicion) {
                     this.listaObjetos[i].sp = temporal;
                     i = cantidadObjetos;
                 }
