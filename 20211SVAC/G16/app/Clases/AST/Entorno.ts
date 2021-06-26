@@ -1,12 +1,12 @@
 import Simbolo from "./Simbolo";
 
 export default class Entorno{
-    private Padre:Entorno;
+    private anterior:Entorno;
     public entornos:Array<Simbolo>;
 
-    constructor(Padre:Entorno){
+    constructor(anterior:Entorno){
         this.entornos = new Array<Simbolo>();
-        this.Padre = Padre;
+        this.anterior = anterior;
     }
 
     Add(Simbolo:Simbolo){
