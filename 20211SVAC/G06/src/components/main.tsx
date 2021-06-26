@@ -5,14 +5,14 @@ import { Nav, Navbar, Form, Button, Row, Col, NavDropdown } from 'react-bootstra
 import { Graphviz } from 'graphviz-react';
 import { crearTextoReporteErrorXML } from "../xmlAST/ClaseError";
 import { crearTablaSimbolos, crearTextoGraphvizTablaSimbolos, SimboloTabla } from "../Reportes/SimboloTabla";
-import { traducirXml } from "../xmlAST/xml3d";
+import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
 //import { OptimizadorMirilla } from '../Optimizador/OptimizadorMirilla';
 import { traduccion } from '../Traduccion/traduccion';
 const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
-const parseQuery = require('../Grammar/xQueryGrammar');
+//const parseQuery = require('../Grammar/xQueryGrammar');
 //const parseC3D = require('../Grammar/C3DGrammar');
 
 
@@ -52,10 +52,7 @@ export default class Main extends Component {
             encoding = result.encoding;
             listaErrores = result.listaErrores;
             entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
-            var buf = new Buffer("Hello World");
-            console.log(buf.toString("ascii"));
-            console.log("---------------------");
-            console.log(buf.toString("utf8"));
+            
             if (listaErrores.length === 0) {
                 var xmlResRep = parserReport.parse(this.state.xml);
                 this.setState({
@@ -105,7 +102,7 @@ export default class Main extends Component {
             this.setState({
                 repAstXpath: "digraph G {" + texto + "}",
             });
-
+///----------------------------------------------------------------------------------------------------------------------------------------------
             var erroresSemanticos: string[] = [];
             var salida = "";
             for (const query of querysXpath) {
@@ -129,15 +126,27 @@ export default class Main extends Component {
             console.log(error);
         }
     }
-    traducir = () => {
+        traducir = () => {
         if (this.state.xml==="") {
             return;
         }
-        const result = parser.parse(this.state.xml)
+        const result = parser.parse(this.state.xml);
+        const querys = parseXPATH.parse(this.state.xpath);
+        var querysXpath = querys.xpath; 
         var ast = result.ast;
+        var respuesta ="";
         traducirXml(ast);
-        console.log(traduccion.getTranslate());
-        console.log(ast);
+        for (const query of querysXpath) {
+            try {
+                respuesta += query.execute(ast[0]).value;
+                //TraducirXPATH(query);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        this.setState({
+            consoleResult: "//CONSULTA-----------------\n\n/*\n"+ respuesta + "*/\n\n//TRADUCCION-----------------\n\n"+traduccion.getTranslate(),
+        });
     }
     handleFileChange = file => {
 
@@ -296,7 +305,7 @@ export default class Main extends Component {
 
 
                 <div className="mt-3 px-5">
-                    <Form.Control as="textarea" rows={6} value={this.state.consoleResult} readOnly />
+                    <Form.Control as="textarea" rows={30} value={this.state.consoleResult} readOnly />
                 </div>
             </>
         )
