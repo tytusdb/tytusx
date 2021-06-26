@@ -14,6 +14,7 @@ var _rootXml;
 var _tsXml;
 
 var _rootXpath;
+var _rootXquery;
 
 /**
  * Metodo que analiza el xml
@@ -177,8 +178,8 @@ const analizarXQUERY= function (cadEntrada){
         print("Iniciando ejecucion: "+new Date());
         try {
             ListaErrores.InicializarXquery();
-            let rootXpath = XqueryAnalyzer.parse(cadEntrada);
-            if(rootXpath){
+            let rootXquery = XqueryAnalyzer.parse(cadEntrada);
+            if(rootXquery){
                 console.info('Se genero correctamente el árbol xquery. ');
             }else{
                 throw "No se pudo generar correctamente el árbol de xquery. ";
@@ -186,7 +187,7 @@ const analizarXQUERY= function (cadEntrada){
             if(ListaErrores.hayErroresXquery()){
                 print("Hubieron errores durante el analisis en XQUERY");
             }
-            _rootXpath = rootXpath;
+            _rootXquery = rootXquery;
         }catch (e){
             throw ('Error al generar el AST. '+e);
         }
@@ -280,11 +281,28 @@ const ejecutar= function (cadEntradaXml, cadEntradaXpath){
 };
 
 
-const print = function (strTexto){
+/**
+ * Metodo que ejecuta la entrada
+ * @param entrada
+ */
+const ejecutarXquery= function (cadEntradaXml, cadEntradaXpath){
+    try {
+        analizarXML(cadEntradaXml);
+        analizarXQUERY(cadEntradaXpath);
+        let listaDeImpresion = _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        let result = XpathUtil.convertirNodosXqueryATexto(listaDeImpresion);
+        print(result);
+        print('FIN EJECUCION');
+    }catch (e){
+        print('error en ejecucion: '+e);
+        console.log(e);
+    }
+};
+
+ const print = function (strTexto){
     let strCad=_txtConsola.val();
     _txtConsola.val(strCad+strTexto+ENTER+CONSOLE_LINE_MARK);
 };
-
 
 
 const getStringAst = function (){
@@ -294,4 +312,27 @@ const getStringAst = function (){
 
     _graphicUtil = new GraphicUtil();
     return _graphicUtil.generarGrafo(_backEnd.root);
+};
+
+function  generar3D(cadEntradaXml){
+    var tablaSimbolosXml;
+    try {
+        analizarXML(cadEntradaXml);
+        CodeUtil.init();
+        tablaSimbolosXml = _tsXml;
+        tablaSimbolosXml.cargarXml_3d();
+        CodeUtil.finalizeCad();
+        print('Fin de generación');
+    }catch (e){
+        print('error en ejecucion: '+e);
+        console.log(e);
+    }
+};
+
+
+function descargarArchivo(cadEntradaXml){
+    generar3D(cadEntradaXml);
+    var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "XPath.c");
+
 };

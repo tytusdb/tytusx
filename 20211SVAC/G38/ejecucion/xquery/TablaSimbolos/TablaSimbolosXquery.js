@@ -29,11 +29,13 @@ class TablaSimbolosXquery {
         return false;
     }
     modifySimbol(simbolo) {
+        let i = 0;
         for (let actual of this._listaSimbolos) {
             if (actual.equals(simbolo)) {
-                actual = simbolo;
+                this._listaSimbolos[i] = simbolo;
                 return true;
             }
+            i++;
         }
         return false;
     }

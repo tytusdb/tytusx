@@ -6,5 +6,7 @@ class Imprimir {
         this.linea = linea;
     }
     ejecutar(ent, xmlData) {
+        let valor = this.expresion.getValor(ent, xmlData);
+        return valor;
     }
 }

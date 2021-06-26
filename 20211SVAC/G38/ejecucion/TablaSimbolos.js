@@ -353,12 +353,6 @@ class TablaSimbolos {
     get listaSimbolos() {
         return this._listaSimbolos;
     }
-    set esGlobal(esGlobal) {
-        this._esGlobal = esGlobal;
-    }
-    get esGlobal() {
-        return this._esGlobal;
-    }
     toStr() {
         let i = 1;
         let cad = "";
@@ -502,5 +496,15 @@ class TablaSimbolos {
         //cadena += "rankdir=LR;\n";
         cadena += "}\n";
         return cadena;
+    }
+    cargarXml_3d() {
+        var ambitoGlobal;
+        CodeUtil.printWithComment("void cargarXml()", "Carga el xml al stack,heap y repository");
+        CodeUtil.print("{");
+        ambitoGlobal = this.listaSimbolos[0].sub_entorno[0].generarCodigo_3d("-1");
+        CodeUtil.printComment("Dejamos el entorno global en la primera pos del stack");
+        CodeUtil.printWithComment("Stack[0] = " + ambitoGlobal + " ; ", "Stack[0] = Ambito Global ;");
+        CodeUtil.printWithComment("}", "Fin de cargarXml()");
+        CodeUtil.print("");
     }
 }

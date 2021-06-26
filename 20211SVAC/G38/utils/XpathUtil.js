@@ -63,6 +63,11 @@ class XpathUtil {
         ts.listaSimbolos = listSimbolos;
         return ts;
     }
+    static crearTablaSimbolos3D(listSimbolos) {
+        let ts = new TablaSimbolos3D(null);
+        ts.listaSimbolos = listSimbolos;
+        return ts;
+    }
     static generarIdUnicoTsRow() {
         let cad = "#tsRow" + this.contador;
         this.contador += 1;
@@ -79,6 +84,24 @@ class XpathUtil {
             simbolos.chageTypeTsRowAttribute();
             simbolos.eliminarDuplicados();
             salida = simbolos.toStr();
+        }
+        return salida;
+    }
+    static convertirNodosXqueryATexto(valoresImpresion) {
+        let salida = "";
+        if (valoresImpresion != null && valoresImpresion != undefined) {
+            for (let valor of valoresImpresion) {
+                if (valor instanceof TablaSimbolos) {
+                    if (valor != null) {
+                        valor.chageTypeTsRowAttribute();
+                        valor.eliminarDuplicados();
+                        salida += valor.toStr() + '\n';
+                    }
+                }
+                else {
+                    salida += valor;
+                }
+            }
         }
         return salida;
     }
