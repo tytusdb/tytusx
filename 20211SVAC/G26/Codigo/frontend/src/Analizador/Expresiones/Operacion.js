@@ -39,6 +39,14 @@ export class Operacion {
             valDer = this.op_der.getValor(entorno);
         }
         typeDer = this.op_der.getTipo(entorno);
+        if (valIzq === null) {
+            if (this.op_izq.getValorInicial(entorno) === entorno.nombre) {
+                valIzq = entorno.obtenerSimbolo(this.op_izq.getValorInicial(entorno));
+            }
+            else {
+                return;
+            }
+        }
         switch (this.operacion) {
             case TipoOperacion.SUMA:
                 this.tipo = this.tipoDominanteAritmetica(typeIzq, typeDer);
@@ -728,7 +736,7 @@ export class Operacion {
                         break;
                 }
                 break;
-            case TipoOperacion.IGUALQUE:
+            case TipoOperacion.IGUAL:
                 switch (typeIzq) {
                     case TipoPrim.INTEGER:
                         switch (typeDer) {
@@ -768,7 +776,7 @@ export class Operacion {
                                 }
                             case TipoPrim.IDENTIFIER:
                                 this.tipo = TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.INTEGER);
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER);
                             default:
                                 break;
                         }
@@ -777,7 +785,7 @@ export class Operacion {
                         switch (typeIzq) {
                             case TipoPrim.IDENTIFIER:
                                 this.tipo = TipoPrim.FUNCION;
-                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE);
+                                return this.resolverOperacionNumeroId(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
                             default:
                                 break;
                         }
@@ -925,16 +933,14 @@ export class Operacion {
                         }
                         break;
                     case TipoPrim.IDENTIFIER:
-                        console.log("OK ID");
                         this.tipo = TipoPrim.FUNCION;
                         switch (typeDer) {
                             case TipoPrim.INTEGER:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.INTEGER);
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.INTEGER);
                             case TipoPrim.DOUBLE:
-                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUALQUE, TipoPrim.DOUBLE);
+                                return this.resolverOperacionIdNumero(valIzq, valDer, entorno, TipoOperacion.IGUAL, TipoPrim.DOUBLE);
                             case TipoPrim.CADENA:
-                                console.log("Hmmm");
-                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUALQUE);
+                                return this.resolverOperacionIdCadena(valIzq, valDer, entorno, TipoOperacion.IGUAL);
                             case TipoPrim.IDENTIFIER:
                                 break;
                         }
@@ -949,7 +955,7 @@ export class Operacion {
                                 let fromR = l[l.length - 1].isFromRoot();
                                 let lastNodeName = l[l.length - 1].getNombre();
                                 let entConsultaTemp = this.op_izq.getValor(entorno);
-                                entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUALQUE);
+                                entTemporal = this.resolverConsultaRecursiva(entConsultaTemp, valDer, lastNodeName, fromR, TipoOperacion.IGUAL);
                                 return entTemporal;
                             default:
                                 return null;
@@ -1149,8 +1155,15 @@ export class Operacion {
                 return 'atributo';
             case TipoPrim.DOT:
                 return 'dot';
+            case TipoPrim.BOOLEAN:
+                return 'boolean';
+            case TipoPrim.FUNCION:
+                return "Funcion mae";
+            case TipoPrim.CONSULTA:
+                return "Consulta";
+            default:
+                return "ERROR";
         }
-        return '';
     }
     buscarTexto(elem) {
         for (let i = 0; i < elem.valor.tsimbolos.length; i++) {
@@ -1232,7 +1245,7 @@ export class Operacion {
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if (numCompare === der) {
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1260,21 +1273,17 @@ export class Operacion {
         //1. Obtener entorno padre.
         let padre = entorno.padre;
         //2. Sobre el padre, buscar el que tenga nombre entorno.nombre
-        console.log("LIONG: ", entorno.padre.tsimbolos.length);
         padre.tsimbolos.forEach((e) => {
-            console.log("wat: ", e.valor.nombre);
             let elem = e.valor;
             if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === entorno.nombre) {
                 //Se encontro, ahora buscar en los simbolos de este elem
                 //si se encuentra el identificador (valIzq)
-                console.log("WOAH: ", elem.valor.tsimbolos.length);
                 elem.valor.tsimbolos.forEach((insd) => {
                     let elin = insd.valor;
                     if (elin.getNombre() === izq) {
                         //Buscar el texto de este elemento.
                         let texto = this.buscarTexto(elin);
                         der = der.replace("\"", "");
-                        console.log("TEXTO : ", texto + " == ", der);
                         if (texto != null) {
                             //Comparar los textos
                             switch (relacional) {
@@ -1302,7 +1311,7 @@ export class Operacion {
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if (texto === der) {
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1334,7 +1343,7 @@ export class Operacion {
                 if (elem.getTipo() === Tipo.ETIQUETA) {
                     elem.valor.tsimbolos.forEach((c2) => {
                         let elemfinal = c2.valor;
-                        if (op === TipoOperacion.IGUALQUE) {
+                        if (op === TipoOperacion.IGUAL) {
                             if (elemfinal.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || elemfinal.getNombre() === lastNodeName) && elemfinal.getValor() === valDer) {
                                 if (!flag) {
                                     entTemporal.agregarSimbolo(elemEnt.nombre, elemEnt);
@@ -1378,7 +1387,7 @@ export class Operacion {
     buscarAtributosRecursivamente(elem, valDer, lastNodeName, op) {
         for (let i = 0; i < elem.valor.tsimbolos.length; i++) {
             let at = elem.valor.tsimbolos[i].valor;
-            if (op === TipoOperacion.IGUALQUE) {
+            if (op === TipoOperacion.IGUAL) {
                 if (at.getTipo() === Tipo.ATRIBUTO && (lastNodeName === "*" || at.getNombre() === lastNodeName) && at.getValor() === valDer) {
                     return true;
                 }
@@ -1458,7 +1467,7 @@ export class Operacion {
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
                                     }
                                     break;
-                                case TipoOperacion.IGUALQUE:
+                                case TipoOperacion.IGUAL:
                                     if (izq === numCompare) {
                                         //Si lo es, meter al entorno temporal.
                                         entTemporal.agregarSimbolo(elem.nombre, elem);
@@ -1489,7 +1498,7 @@ export var TipoOperacion;
     TipoOperacion[TipoOperacion["MENORQUE"] = 5] = "MENORQUE";
     TipoOperacion[TipoOperacion["MAYORIGUALQUE"] = 6] = "MAYORIGUALQUE";
     TipoOperacion[TipoOperacion["MENORIGUALQUE"] = 7] = "MENORIGUALQUE";
-    TipoOperacion[TipoOperacion["IGUALQUE"] = 8] = "IGUALQUE";
+    TipoOperacion[TipoOperacion["IGUAL"] = 8] = "IGUAL";
     TipoOperacion[TipoOperacion["DIFERENTEQUE"] = 9] = "DIFERENTEQUE";
     TipoOperacion[TipoOperacion["OR"] = 10] = "OR";
     TipoOperacion[TipoOperacion["AND"] = 11] = "AND";

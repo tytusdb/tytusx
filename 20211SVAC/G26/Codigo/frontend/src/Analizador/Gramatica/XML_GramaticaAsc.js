@@ -319,7 +319,7 @@ var XML_GramaticaAsc = (function () {
                     cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'apostrofe', null, [new Nodo(cst.cstXmlAsc.getId(), $$[$0].toString().replaceAll("\"", ""), null, [])])]));
                     break;
                 case 30:
-                    this.$ = "\"";
+                    this.$ = "''";
                     /* CONSTRUCCION DE CST */
                     cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, [new Nodo(cst.cstXmlAsc.getId(), 'comilla doble', null, [new Nodo(cst.cstXmlAsc.getId(), '"', null, [])])]));
                     break;
