@@ -32,12 +32,14 @@ cadena      (\"({escape} | {aceptacion})*\")
 ">"                     { console.log("Reconocio : "+ yytext); return 'MAYOR'}
 "!="                    { console.log("Reconocio : "+ yytext); return 'DIFERENTE'}
 ":"                    { console.log("Reconocio : "+ yytext); return 'DOSPUNTOS'}
+","                    { console.log("Reconocio : "+ yytext); return 'COMA'}
 
 /* Operadores Aritmeticos */
 "+"                     { console.log("Reconocio : "+ yytext); return 'MAS'}
 "-"                     { console.log("Reconocio : "+ yytext); return 'MENOS'}
 "*"                     { console.log("Reconocio : "+ yytext); return 'POR'}
 "div"                   { console.log("Reconocio : "+ yytext); return 'DIV'}
+"@"                     { console.log("Reconocio : "+ yytext); return 'ARROBA'}
 
 /* Operadores Logicos */
 "and"                   { console.log("Reconocio : "+ yytext); return 'AND'}
@@ -54,7 +56,10 @@ cadena      (\"({escape} | {aceptacion})*\")
 "if"                    { console.log("Reconocio : "+ yytext); return 'IF'}
 "then"                  { console.log("Reconocio : "+ yytext); return 'THEN'}
 "else"                  { console.log("Reconocio : "+ yytext); return 'ELSE'}
-"@"                     { console.log("Reconocio : "+ yytext); return 'ARROBA'}
+"declare"               { console.log("Reconocio : "+ yytext); return 'DECLARE'}
+"function"              { console.log("Reconocio : "+ yytext); return 'FUNCTION'}
+"as"                    { console.log("Reconocio : "+ yytext); return 'AS'}
+"let"                   { console.log("Reconocio : "+ yytext); return 'LET'}
 
 
 /* SIMBOLOS ER */
@@ -152,6 +157,8 @@ INSTRUCCION: FOR E IN INSTRUCCION
 SENTECIAS_CONTROL: IF PARA PARAMETROS PARC
     | THEN MENOR ID MAYOR LLAVEA PARAMETROS LLAVEC MENOR BARRA ID MAYOR
     | ELSE MENOR ID MAYOR LLAVEA PARAMETROS LLAVEC MENOR BARRA ID MAYOR
+    | DECLARE FUNCTION ID DOSPUNTOS ID PARA  PARAMETROS PARC
+    | AS ID DOSPUNTOS ID LLAVEA PARAMETROS LLAVEC
     ;
 
 PARAMETROS: PARAMETROS LISTA_PARAMETROS
@@ -163,7 +170,12 @@ LISTA_PARAMETROS: DOLAR ID
     | BARRA BARRA E
     | BARRA ARROBA E
     | ID
+    | AS ID DOSPUNTOS ID COMA
+    | AS ID DOSPUNTOS ID
     | ID PARA PARAMETROS PARC
+    | LET DOLAR ID DOSPUNTOS IGUAL E
+    //OTROS
+    | RETURN E
     ;
 
 E: E MAS E
