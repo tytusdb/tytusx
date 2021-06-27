@@ -171,7 +171,7 @@ export class ContenidoInicioComponent implements OnInit {
       for (let x = 0; x < Tree.contadort; x++) {
         if (x == 0) { contenidocd3 = contenidocd3 + "double " }
         else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
-        contenidocd3 = contenidocd3 + "t" + x;
+        contenidocd3 = contenidocd3 + "$t" + x;
         if (Tree.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
 
       }
