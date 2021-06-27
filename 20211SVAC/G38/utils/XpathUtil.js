@@ -121,6 +121,41 @@ class XpathUtil {
         }
         return salida;
     }
+    static createSimbolo(identificador, valor, tipo, ent, xmlData) {
+        if (valor != null && valor != undefined) {
+            let simbolo;
+            if (valor instanceof Primitive)
+                simbolo = new Simbolo(identificador, tipo, valor.getValor(ent, xmlData), null);
+            else if (valor instanceof TablaSimbolos)
+                simbolo = new Simbolo(identificador, tipo, null, valor);
+            else
+                simbolo = new Simbolo(identificador, tipo, valor, null);
+            return ent.agregarSimbolo(simbolo);
+        }
+        return false;
+    }
+    static cargarValoresParametros(entornoFuncion, entornoParametros, xmlData, listaParametros, valoresParametros) {
+        let i = 0;
+        if (listaParametros.length > valoresParametros.length) {
+            return false;
+        }
+        for (let parametro of listaParametros) {
+            if (!this.insertarParametro(entornoFuncion, entornoParametros, xmlData, parametro, valoresParametros[i]))
+                return false;
+            i++;
+        }
+        return true;
+    }
+    static insertarParametro(entornoFuncion, entornoParametros, xmlData, parametro, valor) {
+        if (!parametro.tipo.esEquivalente(valor.getTipo(entornoFuncion, xmlData))) {
+            return false;
+        }
+        let value = valor.getValor(entornoFuncion, xmlData);
+        if (value != null || value != undefined) {
+            return XpathUtil.createSimbolo(parametro.identificador, value, parametro.tipo, entornoParametros, xmlData);
+        }
+        return false;
+    }
 }
 XpathUtil.contador = 0;
 XpathUtil.contador_nodo = 0;

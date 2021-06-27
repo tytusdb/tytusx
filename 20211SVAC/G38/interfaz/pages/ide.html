@@ -103,6 +103,9 @@
     <script src="../../ejecucion/xquery/instruccion/Imprimir.js"></script>
     <script src="../../ejecucion/xquery/instruccion/Retorno.js"></script>
     <script src="../../ejecucion/xquery/instruccion/ReturnException.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/LlamadaFuncionInstruccion.js"></script>
+
+    <script src="../../ejecucion/ListaFunciones.js"></script>
     <script src="../../ejecucion/xquery/XqueryList.js"></script>
     <script src="../../ejecucion/xquery/XqueryXpath.js"></script>
 
@@ -154,10 +157,18 @@
         <td>
             <div id="divEntradaXPath" align="center" >
                 <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
-for $x in /biblioteca/libro
-where $x/precio > 20
-order by $x/autor
-return $x
+declare function local:hanoi($discos as xs:int?,$origen as xs:string?, $aux as xs:string?,$destino as xs:string?)
+as xs:decimal? {
+	if( $discos = 1) then(
+		imprimir("Mover Disco de "+$origen+" A "+$destino)
+	)else(
+		local:hanoi($discos-1,$origen,$destino,$aux)
+	    imprimir("Mover Disco de "+$origen+" A "+$destino)
+		local:hanoi($discos-1,$aux,$origen,$destino)
+	)
+};
+imprimir("Funcion Hanoi")
+local:hanoi(3,"a","b","c")
                 </textarea>
             </div>
         </td>
