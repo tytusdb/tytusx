@@ -1,4 +1,5 @@
 %{
+  const { concat } = require("lodash")
   const { Tipo, TipoPath, Comando } = require("./AST/Entorno");
   const { Logical } = require("./Expresion/Logical");
   const { Arithmetic, Unary, RangeExp, Concat } = require("./Expresion/Arithmetics")
@@ -6,13 +7,24 @@
   const { ComparisonExp } = require('./Expresion/Comparison')
   const { Atributo, Camino, Child, Descendant, Attribute, Self, DescSelf, FollowSibling, Follow } = require('./Expresion/axes')
   const { CaminoInverso, Parent, Ancestor, PrecedingSibling, AncestorSelf, Preceding } = require('./Expresion/axes')
-  const { ContextItemExpr, CallFunction } = require('./Expresion/postfix')
-  const { Declaracion, Let, Return, For, ForDeclaracion } = require('./Instruccion/Xquery')
+  const { ContextItemExpr, CallFunction, CallFunctionPrefix } = require('./Expresion/postfix')
+  const { Flower } = require('./Instruccion/Xquery')
   const { grafoCST } = require('../CST')
-  
+
   var grafo = new grafoCST(); 
 
   var ListaErrores = []
+
+  parser.trace = function(err)
+  {
+    ListaErrores.push({Error:err,Linea:0,columna:0});
+  }
+
+  function setLineaColumna(linea,columna)
+  {
+    ListaErrores[ListaErrores.length-1].Linea=linea
+    ListaErrores[ListaErrores.length-1].Linea=columna
+  }
 %}
 
 /* Definición Léxica */
@@ -129,66 +141,57 @@
 %%
 
 XPath 
-  : Expr  
-  { 
+  : Expr { 
     grafo.generarPadre(1, "INICIO");grafo.generarHijos("Expr");
     var retornoErrores = Object.assign([], ListaErrores);
     ListaErrores = [];
     var retornoGrafo = Object.assign({}, grafo);
     grafo = new grafoCST();
     $$=new Comando($1,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
-    return $$ 
-  }
-  | AnnotatedDecl 
-  {
-    return new Comando([],[],[],"",retornoErrores,[])
-  }
-  | error 
-    {  
-      ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
+    return $$ }
+  | AnnotatedDecl {
+    return new Comando([],[],[],"",retornoErrores,[]) }
+  | error {  
+      setLineaColumna(this._$.first_line,this._$.first_column)
+      //ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
       var retornoErrores = Object.assign([], ListaErrores);
       ListaErrores = [];
       grafo = new grafoCST(); 
-      return new Comando([],[],[],"",retornoErrores,[])
-    }
+      return new Comando([],[],[],"",retornoErrores,[]) }
 ;
 
 Expr 
-  : ExprSingle            
-  { 
+  : ExprSingle { 
     $$=[];$$.push($1); 
     grafo.generarPadre(1, "ExprSingle");
     grafo.generarHijos("ExprSingle");
-    grafo.generarTexto(`expr = []; expr.push(ExprSingle.valor);`);
-  }
-  | Expr Separador ExprSingle  
-  { 
+    grafo.generarTexto(`expr = []; expr.push(ExprSingle.valor);`); }
+  | Expr Separador ExprSingle { 
     $$=$1;$$.push($3);
     grafo.generarPadre(3, "ExprSingle");
     grafo.generarPadre(1, "Expr");
     grafo.generarHijos("Expr",$2,"ExprSingle");
-    grafo.generarTexto(`expr.push(ExprSingle.valor);`);
-  }
-  | Expr Separador error       
-  { 
+    grafo.generarTexto(`expr.push(ExprSingle.valor);`); }
+  | Expr Separador error { 
     $$=$1;grafo.generarPadre(1, "Expr");
-    ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
+    setLineaColumna(this._$.first_line,this._$.first_column)
+    //ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
     grafo.generarHijos("Expt",$2,"error");
-    grafo.generarTexto(`return expr; new Error();`); 
-  }
-  | error Separador ExprSingle    
-  { 
+    grafo.generarTexto(`return expr; new Error();`); }
+  | error Separador ExprSingle { 
     $$=[];$$.push($3); grafo.generarPadre(3, "ExprSingle");
     grafo.generarHijos("error",$2,"ExprSingle");
-    ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
+    setLineaColumna(this._$.first_line,this._$.first_column)
+    //ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
     grafo.generarPadre(1, "error"); grafo.generarHijos("error",$2);
-    grafo.generarTexto(`expr = []; new Error();`);
-  }
+    grafo.generarTexto(`expr = []; new Error();`); }
 ; 
 
 Separador
-  : PIPE  {$$=$1}
-  | COMA  {$$=$1}
+  : PIPE  {
+    $$=$1}
+  | COMA  {
+    $$=$1}
 ;
 
 AnnotatedDecl	   
@@ -240,19 +243,38 @@ ExprSingle
 ;
 
 FLWORExpr
-	: InitialClause IntermediateClauseR ReturnClause    
+	: InitialClause IntermediateClauseR ReturnClause  {
+    // $$=$1.exp;
+    // $$.expReturn=$3;
+    // $$.intermediate=$2;
+    $$ = new Flower(concat($1,$2),$3)
+    grafo.generarPadre(3,"ReturnClause")
+    grafo.generarPadre(2,"IntermediateClauseR")
+    grafo.generarPadre(1,"InitialClause")
+    grafo.generarHijos("InitialClause","IntermediateClauseR","ReturnClause");
+    grafo.generarTexto(`FLWORExpr.valor=InitialClause.valor;FLWORExpr.retorno=ReturnClause.valor;FLWORExpr.intermediate=IntermediateClauseR.valor`) }  
   | InitialClause ReturnClause {
-    $$=$1;$$.expReturn=$2;
+    // $$=$1.exp;
+    // $$.expReturn=$2;
+    $$ = new Flower([$1],$2)
     grafo.generarPadre(2,"ReturnClause");
     grafo.generarPadre(1,"InitialClause");
     grafo.generarHijos("InitialClause","ReturnClause");
-    grafo.generarTexto(`FLWORExpr.valor=InitialClause.valor;FLWORExpr.retorno=ReturnClause.valor`)
-  }
+    grafo.generarTexto(`FLWORExpr.valor=InitialClause.valor;FLWORExpr.retorno=ReturnClause.valor`) }
 ;
 
 IntermediateClauseR
-  : IntermediateClause
-  | IntermediateClauseR IntermediateClause
+  : IntermediateClause                        { 
+    $$=[$1]
+    grafo.generarPadre(1,"IntermediateClause");
+    grafo.generarHijos("IntermediateClause");
+    grafo.generarTexto("IntermediateClauseR.valor = [IntermediateClause.valor]") }
+  | IntermediateClauseR IntermediateClause    { 
+    $$=$1; 
+    $$.push($2);
+    grafo.generarPadre(2,"IntermediateClause")
+    grafo.generarPadre(1,"IntermediateClauseR")
+    grafo.generarHijos("IntermediateClauseR.valor=IntermediateClauseR1.valor;IntermediateClauseR.valor.push(IntermediateClause.valor)") }
 ;
 
 InitialClause
@@ -269,22 +291,37 @@ InitialClause
 ;
 
 IntermediateClause
-  : InitialClause 
-  | WhereClause 
-  | GroupByClause 
-  | OrderByClause 
-  | CountClause
+  : InitialClause   {
+    $$=$1;
+    grafo.generarPadre(1,"InitialClause");
+    grafo.generarHijos("InitialClause")
+    grafo.generarTexto("IntermediateClause.valor=InitialClause.valor") }
+  | WhereClause     {
+    $$=$1;
+    grafo.generarPadre(1,"WhereClause");
+    grafo.generarHijos("WhereClause")
+    grafo.generarTexto("IntermediateClause.valor=WhereClause.valor") }
+  | GroupByClause   {
+    $$=$1;
+    grafo.generarPadre(1,"GroupByClause");
+    grafo.generarHijos("GroupByClause")
+    grafo.generarTexto("IntermediateClause.valor=GroupByClause.valor") }
+  | OrderByClause {
+    $$=$1;
+    grafo.generarPadre(1,"OrderByClause");
+    grafo.generarHijos("OrderByClause")
+    grafo.generarTexto("IntermediateClause.valor=OrderByClause.valor") }
 ;
 
 ForClause
 	: RFOR ForBinding           {
-    $$=new For([$2])
+    $$={name:'For',exp:[$2] }
     grafo.generarPadre(2,"ForBinding")
     grafo.generarHijos($1,"ForBinding")
     grafo.generarTexto(`ForClause.valor = new For();ForClouse.valor.declaraciones.push(ForBinding.valor)`) }
   | ForClause COMA ForBinding {
     $$ = $1
-    $$.declaraciones.push($3)
+    $$.exp.push($3)
     grafo.generarPadre(3,"ForBinding")
     grafo.generarPadre(1,"ForClouse")
     grafo.generarHijos("ForClause",$2,"ForBinding")
@@ -293,30 +330,34 @@ ForClause
 
 ForBinding
 	: DOLAR NOMBRE PositionalVar RIN ExprSingle {
-    $$=new ForDeclaracion($1+$2,$3,$5);
+    $$={name:$1+$2,posicion:$3,exp:$5};
     grafo.generarPadre(5,"ExprSingle")
     grafo.generarPadre(3,"PositionalVar")
     grafo.generarHijos($1,$2,"PositionalVar",$4,"ExprSingle")
     grafo.generarTexto(`ForBinding.valor = new Declaracion(${$1+$2,$3,$5})`)}
   | DOLAR NOMBRE RIN ExprSingle {
-    $$=new ForDeclaracion($1+$2,'',$4);
+    $$={name:$1+$2,posicion:'',exp:$4};
     grafo.generarPadre(4,"ExprSingle")
     grafo.generarHijos($1,$2,$3,"ExprSingle")
     grafo.generarTexto(`ForBinding.valor = new Declaracion(${$1+$2,'',$4})`)}
 ;
 
 PositionalVar	   
-  : RAT DOLAR NOMBRE {$$ = ($2+$3);grafo.generarHijos($1,$2,$3);grafo.generarTexto(`PositionalVar.varlor=$+NOMBRE.val`)}
+  : RAT DOLAR NOMBRE {
+    $$ = ($2+$3);
+    grafo.generarHijos($1,$2,$3);
+    grafo.generarTexto(`PositionalVar.varlor=$+NOMBRE.val`)}
 ;
 
-LetClause
+LetClause 
   : RLET LetBinding               { 
-    $$=new Let($2);
+    $$={ name:'Let', exp:[$2] };
     grafo.generarPadre(2,"LetBinding");
     grafo.generarHijos($1,"LetBinding");
     grafo.generarTexto(`LetClouse.valor=[];LetClouse.valor.push(LetBinding.valor)`) }
   | LetClause COMA LetBinding     { 
-    $$=$1;$$.declaraciones.push($3);
+    $$=$1;
+    $$.exp.push($3);
     grafo.generarPadre(3,"LetBinding");
     grafo.generarPadre(1,"LetClause");
     grafo.generarHijos("LetClause",$2,"LetBinding");
@@ -325,44 +366,73 @@ LetClause
 
 LetBinding	   
   : DOLAR NOMBRE DOSPUNTOSIGUAL ExprSingle    { 
-    $$=new Declaracion($1+$2,$4);
+    $$={name:$1+$2,exp:$4};
     grafo.generarPadre(4,"ExprSingle");
     grafo.generarHijos($1,$2,$3,"ExprSingle");
     grafo.generarTexto(`LetBinding.nombre=${$1};LetBinding.valor=ExptrSingle.valor`); }
 ;
 
 WhereClause
-	: RWHERE ExprSingle
+	: RWHERE ExprSingle { 
+    $$={name:'Where',exp:$2} 
+    grafo.generarPadre(2,"ExprSingle")
+    grafo.generarHijos($1,"ExprSingle")
+    grafo.generarTexto(`WhereClause.valor = ExprSingle.valor`)}
 ;
 
 OrderByClause
-	: RORDER RBY OrderSpecList
-  | RSTABLE RORDER RBY OrderSpecList
+	: RORDER RBY OrderSpecList           { 
+    $$={name:'Order',exp:$3} 
+    grafo.generarPadre(3,"OrderSpecList")
+    grafo.generarHijos($1,$2,"OrderSpecList") 
+    grafo.generarTexto(`OrderByClause.valor = OrderSpecList.valor`)} 
 ;
 
 OrderSpecList
-  : OrderSpecList COMA OrderSpec
-	| OrderSpec
+  : OrderSpecList COMA OrderSpec  {
+    $$=$1;$$.push($3)
+    grafo.generarPadre(3,"OrderSpec")
+    grafo.generarPadre(1,"OrderSpecList")
+    grafo.generarHijos("OrderSpecList",$1,"OrderSpec")
+    grafo.generarTexto("OrderSpecList.valor=OrderSpecList1.valor;OrderSpecList.valor.push(OrderSpec.valor)")}
+	| OrderSpec                     {
+    $$=[$1]
+    grafo.generarPadre(1,"OrderSpec")
+    grafo.generarHijos("OrderSpec")
+    grafo.generarTexto("OrderSpecList.valor=[OrderSpec.valor];")}
 ;	
 
 OrderSpec
-	: ExprSingle OrderModifier
+	: ExprSingle OrderModifier      { $$={exp:$1,mode:$2} }
+  | ExprSingle                    { $$={exp:$1,mode:{order:'asc',empty:'g'}} }
 ;
 
 OrderModifier
-	: OrderOrder OrderEmpty
-  | OrderEmpty	
-  | OrderOrder	
+	: OrderOrder OrderEmpty         { $$={order:$1.order,empty:$2.empty} }
+  | OrderEmpty	                  { $$=$1 }
+  | OrderOrder	                  { $$=$1 }
 ;
 
 OrderEmpty
-  : REMPTY RGREATEST
-  | REMPTY RLEAST
+  : REMPTY RGREATEST              { 
+    $$={order:'asc',empty:'g'}
+    grafo.generarHijos($1,$2) 
+    grafo.generarTexto(`OrderEmpty.empty=${$2}`)}
+  | REMPTY RLEAST                 { 
+    $$={order:'asc',empty:'l'} 
+    grafo.generarHijos($1,$2) 
+    grafo.generarTexto(`OrderEmpty.empty=${$2}`)}
 ;
 
 OrderOrder
-  : RASCENDING
-  | RDESCENDING
+  : RASCENDING                    { 
+    $$={order:'asc',empty:'g'}
+    grafo.generarHijos($1)
+    grafo.generarTexto(`OrderOrder.order = ${$1}`) }
+  | RDESCENDING                   { 
+    $$={order:'desc',empty:'l'} 
+    grafo.generarHijos($1)
+    grafo.generarTexto(`OrderOrder.order = ${$1}`) }
 ;
 
 ReturnClause	   
@@ -378,35 +448,27 @@ IfExpr
 ;
 
 OrExpr      
-  : AndExpr                 
-  { 
+  : AndExpr { 
     $$ = $1; grafo.generarPadre(1,"AndExpr");
     grafo.generarHijos("AndExpr");
-    grafo.generarTexto(`OrExpr.valor = AndExpr.valor`);
-  }
-  | OrExpr ROR AndExpr      
-  { 
+    grafo.generarTexto(`OrExpr.valor = AndExpr.valor`); }
+  | OrExpr ROR AndExpr { 
     $$ = new Logical($1,$2,$3); grafo.generarPadre(3, "AndExpr");
     grafo.generarPadre(1, "OrExpr");
     grafo.generarHijos("OrExpr",$2,"AndExpr");
-    grafo.generarTexto(`OrExpr.valor = new Logical(OrExpr.valor,${$2},AndExpr.valor);`);
-  }
+    grafo.generarTexto(`OrExpr.valor = new Logical(OrExpr.valor,${$2},AndExpr.valor);`); }
 ;
 
 AndExpr     
-  : ComparisonExpr                
-  { 
+  : ComparisonExpr { 
     $$ = $1; grafo.generarPadre(1, "ComparisonExpr");
     grafo.generarHijos("ComparisonExpr");
-    grafo.generarTexto(`AndExpr.valor = ComparisonExpr.valor`);
-  }
-	| AndExpr RAND ComparisonExpr   
-  { 
+    grafo.generarTexto(`AndExpr.valor = ComparisonExpr.valor`); }
+	| AndExpr RAND ComparisonExpr { 
     $$ = new Logical($1,$2,$3); grafo.generarPadre(3, "ComparisonExpr");
     grafo.generarPadre(1, "AndExpr");
     grafo.generarHijos("AndExpr",$2,"ComparisonExpr");
-    grafo.generarTexto(`AndExpr.valor = new Logical(AndExpr.valor,${$2},ComparisonExpr.valor);`);
-  }
+    grafo.generarTexto(`AndExpr.valor = new Logical(AndExpr.valor,${$2},ComparisonExpr.valor);`); }
 ;
 
 ComparisonExpr    
@@ -425,12 +487,30 @@ ComparisonExpr
 ;
 
 GeneralComp       // signo
-  : IGUAL     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); } // 5 = 5 | nodo = nodo
-	| DIFERENTE { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
-	| MENOR     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
-	| MENORIG   { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
-	| MAYOR     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
-	| MAYORIG   { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
+  : IGUAL     { 
+    $$ = $1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`GeneralComp.valor = ${$1}`); } // 5 = 5 | nodo = nodo
+	| DIFERENTE { 
+    $$ = $1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
+	| MENOR     { 
+    $$ = $1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
+	| MENORIG   { 
+    $$ = $1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
+	| MAYOR     { 
+    $$ = $1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
+	| MAYORIG   { 
+    $$ = $1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 ;
 
 StringConcatExpr
@@ -463,330 +543,404 @@ RangeExpr
 ;
 
 AdditiveExpr      
-  : MultiplicativeExpr                    
-  { 
+  : MultiplicativeExpr { 
     $$=$1; grafo.generarPadre(1, "MultiplicativeExpr"); grafo.generarHijos("MultiplicativeExpr");
-    grafo.generarTexto(`AdditiveExpr.valor = MultiplicativeExpr.valor`);
-  }
-	| AdditiveExpr MAS MultiplicativeExpr   
-  { 
+    grafo.generarTexto(`AdditiveExpr.valor = MultiplicativeExpr.valor`); }
+	| AdditiveExpr MAS MultiplicativeExpr { 
     $$= new Arithmetic($1,$2,$3); grafo.generarPadre(3, "MultiplicativeExpr");
     grafo.generarPadre(1, "AdditiveExpr");
     grafo.generarHijos("AdditiveExpr",$2,"MultiplicativeExpr");
-    grafo.generarTexto(`AdditiveExpr.valor = new Arithmetic(AdditiveExpr.valor, ${$2}, MultiplicativeExpr.valor);`);
-  }
-	| AdditiveExpr MENOS MultiplicativeExpr 
-  { 
+    grafo.generarTexto(`AdditiveExpr.valor = new Arithmetic(AdditiveExpr.valor, ${$2}, MultiplicativeExpr.valor);`); }
+	| AdditiveExpr MENOS MultiplicativeExpr { 
     $$= new Arithmetic($1,$2,$3); grafo.generarPadre(3, "MultiplicativeExpr");
     grafo.generarPadre(1, "AdditiveExpr");
     grafo.generarHijos("AdditiveExpr",$2,"MultiplicativeExpr");
-    grafo.generarTexto(`AdditiveExpr.valor = new Arithmetic(AdditiveExpr.valor, ${$2}, MultiplicativeExpr.valor);`);
-  }
+    grafo.generarTexto(`AdditiveExpr.valor = new Arithmetic(AdditiveExpr.valor, ${$2}, MultiplicativeExpr.valor);`); }
 ;
 
 //Aca se intercambio UnoinExpr por Unary Expresion cambiar en el futuro
 MultiplicativeExpr      
-  : UnaryExpr                         
-  { 
-    $$=$1; grafo.generarPadre(1, "UnaryExpr");
+  : UnaryExpr { 
+    $$=$1; 
+    grafo.generarPadre(1, "UnaryExpr");
     grafo.generarHijos("UnaryExpr");
-    grafo.generarTexto(`MultiplicativeExpr.valor = UnaryExpr.valor;`);
-  }
-	| MultiplicativeExpr POR UnaryExpr  
-  { 
+    grafo.generarTexto(`MultiplicativeExpr.valor = UnaryExpr.valor;`); }
+	| MultiplicativeExpr POR UnaryExpr { 
     $$= new Arithmetic($1,$2,$3);
     grafo.generarPadre(3, "UnaryExpr");
     grafo.generarPadre(1, "MultiplicativeExpr");
     grafo.generarHijos("MultiplicativeExpr",$2,"UnaryExpr");
-    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`);
-  }
-	| MultiplicativeExpr DIV UnaryExpr  
-  { 
-    $$= new Arithmetic($1,$2,$3); grafo.generarPadre(3, "UnaryExpr");
+    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`); }
+	| MultiplicativeExpr DIV UnaryExpr { 
+    $$= new Arithmetic($1,$2,$3); 
+    grafo.generarPadre(3, "UnaryExpr");
     grafo.generarPadre(1, "MultiplicativeExpr");
     grafo.generarHijos("MultiplicativeExpr",$2,"UnaryExpr");
-    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`);
-  }
-	| MultiplicativeExpr IDIV UnaryExpr 
-  { 
-    $$= new Arithmetic($1,$2,$3); grafo.generarPadre(3, "UnaryExpr");
+    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`); }
+	| MultiplicativeExpr IDIV UnaryExpr { 
+    $$= new Arithmetic($1,$2,$3); 
+    grafo.generarPadre(3, "UnaryExpr");
     grafo.generarPadre(1, "MultiplicativeExpr");
     grafo.generarHijos("MultiplicativeExpr",$2,"UnaryExpr");
-    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`);
-  }
-	| MultiplicativeExpr MOD UnaryExpr  
-  { 
-    $$= new Arithmetic($1,$2,$3); grafo.generarPadre(3, "UnaryExpr");
+    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`); }
+	| MultiplicativeExpr MOD UnaryExpr { 
+    $$= new Arithmetic($1,$2,$3); 
+    grafo.generarPadre(3, "UnaryExpr");
     grafo.generarPadre(1, "MultiplicativeExpr");
     grafo.generarHijos("MultiplicativeExpr",$2,"UnaryExpr");
-    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`);
-  }
+    grafo.generarTexto(`MultiplicativeExpr.valor = new Arithmetic(MultiplicativeExpr.valor,${$2},UnaryExpr.valor);`); }
 ;
 
 UnaryExpr   
-  : PathExpr                         
-  { 
+  : PathExpr { 
     $$=$1; grafo.generarPadre(1, "PathExpr");
     grafo.generarHijos("PathExpr");
-    grafo.generarTexto(`UnaryExpr.valor = PathExpr.valor;`);
-  }
-	| MAS UnaryExpr                    
-  { 
+    grafo.generarTexto(`UnaryExpr.valor = PathExpr.valor;`); }
+	| MAS UnaryExpr { 
     $$=new Unary($1, $2); grafo.generarPadre(2, "UnaryExpr");
     grafo.generarHijos($1,"UnaryExp");
-    grafo.generarTexto(`UnaryExp.valor = new Unary(${$1},UnaryExpr.valor);`);
-  }
-	| MENOS UnaryExpr                  
-  { 
+    grafo.generarTexto(`UnaryExp.valor = new Unary(${$1},UnaryExpr.valor);`); }
+	| MENOS UnaryExpr { 
     $$=new Unary($1, $2);
     grafo.generarPadre(2, "UnaryExpr");
     grafo.generarHijos($1,"UnaryExp");
-    grafo.generarTexto(`UnaryExp.valor = new Unary(${$1},UnaryExpr.valor);`);
-  }
+    grafo.generarTexto(`UnaryExp.valor = new Unary(${$1},UnaryExpr.valor);`); }
 ;
 
  //  /emplyee/name//id
 PathExpr    
-  : BARRA RelativePathExpr              
-  { 
+  : BARRA RelativePathExpr { 
     $2[0].tipo=TipoPath.ABS;
     $$=new PathExp($2); 
     grafo.generarPadre(2, "RelativePathExpr");
     grafo.generarHijos($1,"RelativePathExpr");
-    grafo.generarTexto(`path[0].tipo = Absoluto; PathExpr.valor = new PathExp(path.valor);`);
-  }
-	| DOBLEBARRA RelativePathExpr         
-  { 
+    grafo.generarTexto(`path[0].tipo = Absoluto; PathExpr.valor = new PathExp(path.valor);`); }
+	| DOBLEBARRA RelativePathExpr { 
     $2[0].tipo=TipoPath.REL;
     $$=new PathExp($2);
     grafo.generarPadre(2, "RelativePathExpr");
     grafo.generarHijos($1,"RelativePathExpr");
-    grafo.generarTexto(`path[0].tipo = Relativo; PathExpr.valor = new PathExp(path.valor);`);
-  }
-	| RelativePathExpr                    
-  { 
+    grafo.generarTexto(`path[0].tipo = Relativo; PathExpr.valor = new PathExp(path.valor);`); }
+	| RelativePathExpr { 
     $$=new PathExp($1); 
     grafo.generarPadre(1, "RelativePathExpr");
     grafo.generarHijos("RelativePathExpr");
-    grafo.generarTexto(`PathExpr.valor = new PathExp(path.valor);`);
-  }
-	| BARRA                               
-  { 
+    grafo.generarTexto(`PathExpr.valor = new PathExp(path.valor);`); }
+	| BARRA { 
     $$=new PathExp([]);
     grafo.generarHijos($1);
-    grafo.generarTexto(`PathExpr.valor = new PathExp();`);
-  }
+    grafo.generarTexto(`PathExpr.valor = new PathExp();`); }
 ;
 
 RelativePathExpr  
-  : StepExpr                              
-  { 
+  : StepExpr { 
     $$ = []; $$.push($1); grafo.generarPadre(1, "StepExpr");
     grafo.generarHijos("StepExpr");
-    grafo.generarTexto(`path = []; path.push(StepExpr.valor);`);
-  }
-	| RelativePathExpr BARRA StepExpr       
-  { 
+    grafo.generarTexto(`path = []; path.push(StepExpr.valor);`); }
+	| RelativePathExpr BARRA StepExpr { 
     $$ = $1; $3.tipo=TipoPath.ABS; $$.push($3); 
     grafo.generarPadre(3, "StepExpr");
     grafo.generarPadre(1, "RelativePathExpr");
     grafo.generarHijos("RelativePathExpr",$2,"StepExpr");
-    grafo.generarTexto(`StepExpr.tipo = Absoluto; path.push(StepExpr.valor); `);
-  }
-	| RelativePathExpr DOBLEBARRA StepExpr  
-  { 
+    grafo.generarTexto(`StepExpr.tipo = Absoluto; path.push(StepExpr.valor); `); }
+	| RelativePathExpr DOBLEBARRA StepExpr { 
     $$ = $1; $3.tipo=TipoPath.REL; $$.push($3);
     grafo.generarPadre(3,"StepExpr");
     grafo.generarPadre(1, "RelativePathExpr");
     grafo.generarHijos("RelativePathExpr",$2,"StepExpr");
-    grafo.generarTexto(`StepExpr.tipo = Relativo; path.push(StepExpr.valor);`);
-  }
+    grafo.generarTexto(`StepExpr.tipo = Relativo; path.push(StepExpr.valor);`); }
 ;
 
 StepExpr    
-  : PostfixExpr { $$=$1; grafo.generarPadre(1, "PostfixExpr"); grafo.generarHijos("PostfixExpr"); grafo.generarTexto(`StepExpr.valor = PostfixExpr.valor;`); }
-	| AxisStep    { $$=$1; grafo.generarPadre(1, "AxisStep"); grafo.generarHijos("AxisStep"); grafo.generarTexto(`StepExpr.valor = AxisStep.valor`);  }
+  : PostfixExpr { 
+    $$=$1; 
+    grafo.generarPadre(1, "PostfixExpr"); 
+    grafo.generarHijos("PostfixExpr"); 
+    grafo.generarTexto(`StepExpr.valor = PostfixExpr.valor;`); }
+	| AxisStep    { 
+    $$=$1; 
+    grafo.generarPadre(1, "AxisStep"); 
+    grafo.generarHijos("AxisStep"); 
+    grafo.generarTexto(`StepExpr.valor = AxisStep.valor`);  }
 ;
 
 AxisStep    
-  : ReverseStep               { $$=$1; grafo.generarPadre(1, "ReverseStep");grafo.generarHijos("ReverseStep"); grafo.generarTexto(`AxisStep.valor = ReverseStep.valor;`); }
-	| ForwardStep               { $$=$1; grafo.generarPadre(1, "ForwardStep");grafo.generarHijos("ForwardStep"); grafo.generarTexto(`AxisStep.valor = ForwardStep.valor;`);}
-	| ReverseStep PredicateList 
-  { 
-    $$=$1; $$.predicado=$2; grafo.generarPadre(2, "PredicateList");
+  : ReverseStep               { 
+    $$=$1; 
+    grafo.generarPadre(1, "ReverseStep");
+    grafo.generarHijos("ReverseStep"); 
+    grafo.generarTexto(`AxisStep.valor = ReverseStep.valor;`); }
+	| ForwardStep               { 
+    $$=$1; 
+    grafo.generarPadre(1, "ForwardStep");
+    grafo.generarHijos("ForwardStep"); 
+    grafo.generarTexto(`AxisStep.valor = ForwardStep.valor;`);}
+	| ReverseStep PredicateList { 
+    $$=$1; 
+    $$.predicado=$2; 
+    grafo.generarPadre(2, "PredicateList");
     grafo.generarPadre(1, "ReverseStep"); 
     grafo.generarHijos("ReverseStep","PredicateList");
-    grafo.generarTexto(`ReverseStep.predicado = PredicateList.valor; AxisStep.valor = ReverseStep;`);
-  }
-	| ForwardStep PredicateList 
-  { 
-    $$=$1; $$.predicado=$2; grafo.generarPadre(2, "PredicateList");
+    grafo.generarTexto(`ReverseStep.predicado = PredicateList.valor; AxisStep.valor = ReverseStep;`); }
+	| ForwardStep PredicateList { 
+    $$=$1; 
+    $$.predicado=$2; 
+    grafo.generarPadre(2, "PredicateList");
     grafo.generarPadre(1, "ForwardStep"); 
     grafo.generarHijos("ForwardStep","PredicateList");
-    grafo.generarTexto(`ForwardStep.predicado = PredicateList.valor; AxisStep.valor = ForwardStep;`);
-  }
+    grafo.generarTexto(`ForwardStep.predicado = PredicateList.valor; AxisStep.valor = ForwardStep;`); }
 ;
 
 PredicateList     
-  : Predicate                 
-  { 
+  : Predicate { 
     $$=[];$$.push($1);
     grafo.generarPadre(1, "Predicate");
     grafo.generarHijos("Predicate");
-    grafo.generarTexto(`predicateList = []; predicateList.push(Predicate.valor);`);  
-  }
-  | PredicateList Predicate   
-  { 
+    grafo.generarTexto(`predicateList = []; predicateList.push(Predicate.valor);`); }
+  | PredicateList Predicate { 
     $$=$1;$$.push($2); grafo.generarPadre(2, "Predicate");
     grafo.generarPadre(1, "PredicateList");
     grafo.generarHijos("PredicateList","Predicate");
-    grafo.generarTexto(`predicateList.push(Predicate.valor);`);
-  }
+    grafo.generarTexto(`predicateList.push(Predicate.valor);`); }
 ;
 
 //Faltan las formas no abreviadas
 ForwardStep 
-  : AbbrevForwardStep    
-  { 
+  : AbbrevForwardStep { 
     $$=$1; grafo.generarPadre(1, "AbbrevForwardStep");
     grafo.generarHijos("AbbrevForwardStep");
-    grafo.generarTexto(`ForwardStep.valor = AbbrevForwardStep.valor`);
-  }
-  | ForwardAxis NameTest 
-  { 
+    grafo.generarTexto(`ForwardStep.valor = AbbrevForwardStep.valor`); }
+  | ForwardAxis NameTest { 
     $$=$1; $$.nombre=$2; grafo.generarPadre(2, "NameTest");
     grafo.generarPadre(1, "ForwardAxis");
     grafo.generarHijos("ForwardAxis","NameTest");
-    grafo.generarTexto(`ForwardAxis.nombre = NameTest.valor; ForwardStep.valor = ForwardAxis.valor`);
-  }
+    grafo.generarTexto(`ForwardAxis.nombre = NameTest.valor; ForwardStep.valor = ForwardAxis.valor`); }
 ;
 
 AbbrevForwardStep 
-  : ARROBA NameTest 
-  { 
+  : ARROBA NameTest { 
     $$=new Atributo($2,[],TipoPath.ABS);
     grafo.generarPadre(2, "NameTest");
     grafo.generarHijos($1,"NameTest");
-    grafo.generarTexto(`AbbrevForwardStep.valor = new Atributo(NameTest.valor);`);
-  }
-  | NameTest        
-  { 
+    grafo.generarTexto(`AbbrevForwardStep.valor = new Atributo(NameTest.valor);`); }
+  | NameTest { 
     $$=new Camino($1,[],TipoPath.ABS);
     grafo.generarPadre(1, "NameTest");
     grafo.generarHijos("NameTest");
-    grafo.generarTexto(`AbbrevForwardStep.valor = new Camino(NameTest.valor);`);
-  }
+    grafo.generarTexto(`AbbrevForwardStep.valor = new Camino(NameTest.valor);`); }
 ;
 
 ForwardAxis
-  : RCHILD DOBLEDOSPUNTOS         { $$=new Child(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new Child();`); }
-  | RDESCENDANT DOBLEDOSPUNTOS    { $$=new Descendant(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new Descendant();`); }
-  | RATTRIBUTE DOBLEDOSPUNTOS     { $$=new Attribute(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new Attribute();`); }
-  | RSELF DOBLEDOSPUNTOS          { $$=new Self(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new Self();`); }
-  | RDESSELF DOBLEDOSPUNTOS       { $$=new DescSelf(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new DescSelf();`); }
-  | RFOLLOWSIBLING DOBLEDOSPUNTOS { $$=new FollowSibling(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new FollowSibling();`); }
-  | RFOLLOW DOBLEDOSPUNTOS        { $$=new Follow(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ForwardAxis.valor = new Follow();`);  }
+  : RCHILD DOBLEDOSPUNTOS         { 
+    $$=new Child(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new Child();`); }
+  | RDESCENDANT DOBLEDOSPUNTOS    { 
+    $$=new Descendant(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new Descendant();`); }
+  | RATTRIBUTE DOBLEDOSPUNTOS     { 
+    $$=new Attribute(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new Attribute();`); }
+  | RSELF DOBLEDOSPUNTOS          { 
+    $$=new Self(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new Self();`); }
+  | RDESSELF DOBLEDOSPUNTOS       { 
+    $$=new DescSelf(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new DescSelf();`); }
+  | RFOLLOWSIBLING DOBLEDOSPUNTOS { 
+    $$=new FollowSibling(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new FollowSibling();`); }
+  | RFOLLOW DOBLEDOSPUNTOS        { 
+    $$=new Follow(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ForwardAxis.valor = new Follow();`);  }
   | RNAMESPACE DOBLEDOSPUNTOS     {}
 ;
 
 //KindText no implementado todavia
 NodeTest    
-  : NameTest    { $$=$1; grafo.generarPadre(1, "NameTest"); grafo.generarHijos("NameTest"); grafo.generarTexto(`NodeTest.valor = NameTest.valor;`); }
-  //| KindTest
+  : NameTest    { 
+    $$=$1; grafo.generarPadre(1, "NameTest"); 
+    grafo.generarHijos("NameTest"); 
+    grafo.generarTexto(`NodeTest.valor = NameTest.valor;`); }
 ;
 
 NameTest    
-  : NOMBRE    { $$=$1; grafo.generarHijos($1); grafo.generarTexto(`NameTest.valor = ${$1};`); }
-	| POR       { $$=$1; grafo.generarHijos($1); grafo.generarTexto(`NameTest.valor = ${$1};`); }
+  : NOMBRE    { 
+    $$=$1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`NameTest.valor = ${$1};`); }
+	| POR       { 
+    $$=$1; 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`NameTest.valor = ${$1};`); }
 ;
 
 //Faltan las formas no abrevidas
 ReverseStep 
-  :  AbbrevReverseStep    
-  { 
+  :  AbbrevReverseStep { 
     $$=$1; grafo.generarPadre(1, "AbbrevReverseStep");
     grafo.generarHijos("AbbrevReverseStep");
-    grafo.generarTexto(`ReverseStep.valor = AbbrevReverseStep.valor`);
- }
-  |  ReverseAxis NameTest 
-  { $$=$1; $$.nombre=$2;
+    grafo.generarTexto(`ReverseStep.valor = AbbrevReverseStep.valor`); }
+  |  ReverseAxis NameTest { 
+    $$=$1; 
+    $$.nombre=$2;
     grafo.generarPadre(2, "NameTest");
     grafo.generarPadre(1, "ReverseAxis");
     grafo.generarHijos("ReverseAxis","NameTest");
-    grafo.generarTexto(`ReverseAxis.nombre = NameTest; ReverseStep.valor = ReverseAxis;`);
-  }
+    grafo.generarTexto(`ReverseAxis.nombre = NameTest; ReverseStep.valor = ReverseAxis;`); }
 ;
 
 AbbrevReverseStep 
-  : DOBLEPUNTO  { $$=new CaminoInverso("*",[],TipoPath.ABS); grafo.generarHijos($1); grafo.generarTexto(`caminoInverso = new CaminoInverso(); caminoInverso.tipo = Absoluto; AbbrevReverseStep.valor = caminoInverso;`); }
+  : DOBLEPUNTO  { 
+    $$=new CaminoInverso("*",[],TipoPath.ABS); 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`caminoInverso = new CaminoInverso(); caminoInverso.tipo = Absoluto; AbbrevReverseStep.valor = caminoInverso;`); }
 ;
 
 ReverseAxis
-  : RPARENT DOBLEDOSPUNTOS            { $$=new Parent(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`parent = new Parent(); parent.tipo = Absoluto; ReverseAxis.valor = parent;`); }
-  | RANCESTOR DOBLEDOSPUNTOS          { $$=new Ancestor(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ancestor = new Ancestor(); ancestor.tipo = Absoluto; ReverseAxis.valor = ancestor;`); }
-  | RPRECEDSIBLING DOBLEDOSPUNTOS     { $$=new PrecedingSibling(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`precedingS = new PrecedingSibling(); precedingS.tipo = Absoluto; ReverseAxis.valor = precedingS;`); }
-  | RPRECED DOBLEDOSPUNTOS            { $$=new Preceding(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`preceding = new Preceding(); preceding.tipo = Absoluto; ReverseAxis.valor = preceding;`);}
-  | RANCESTORORSELF DOBLEDOSPUNTOS    { $$=new AncestorSelf(null,[],TipoPath.ABS); grafo.generarHijos($1,$2); grafo.generarTexto(`ancestorS = new AncestorSelf(); ancestorS.tipo = Absoluto; ReverseAxis.valor = ancestorS;`); }
+  : RPARENT DOBLEDOSPUNTOS            { 
+    $$=new Parent(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`parent = new Parent(); parent.tipo = Absoluto; ReverseAxis.valor = parent;`); }
+  | RANCESTOR DOBLEDOSPUNTOS          { 
+    $$=new Ancestor(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ancestor = new Ancestor(); ancestor.tipo = Absoluto; ReverseAxis.valor = ancestor;`); }
+  | RPRECEDSIBLING DOBLEDOSPUNTOS     { 
+    $$=new PrecedingSibling(null,[],TipoPath.ABS);
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`precedingS = new PrecedingSibling(); precedingS.tipo = Absoluto; ReverseAxis.valor = precedingS;`); }
+  | RPRECED DOBLEDOSPUNTOS            { 
+    $$=new Preceding(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`preceding = new Preceding(); preceding.tipo = Absoluto; ReverseAxis.valor = preceding;`);}
+  | RANCESTORORSELF DOBLEDOSPUNTOS    { 
+    $$=new AncestorSelf(null,[],TipoPath.ABS); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ancestorS = new AncestorSelf(); ancestorS.tipo = Absoluto; ReverseAxis.valor = ancestorS;`); }
 ;
 
 PostfixExpr   
-  : PrimaryExpr               
-  { 
+  : PrimaryExpr { 
     $$=$1; grafo.generarPadre(1, "PrimaryExpr"); 
     grafo.generarHijos("PrimaryExpr");
-    grafo.generarTexto(`PostfixExpr.valor = PrimaryExpr.valor;`);
-  }
-	| PrimaryExpr PredicateList 
-  { $$=$1; $$.predicado = $2; grafo.generarPadre(2, "PredicateList");
+    grafo.generarTexto(`PostfixExpr.valor = PrimaryExpr.valor;`); }
+	| PrimaryExpr PredicateList { 
+    $$=$1; 
+    $$.predicado = $2; 
+    grafo.generarPadre(2, "PredicateList");
     grafo.generarPadre(1, "PrimaryExpr");
     grafo.generarHijos("PrimaryExpr","PostfixExprL");
-    grafo.generarTexto(`PrimaryExpr.predicado = predicateList.valor; PostfixExpr.valor = PrimaryExpr.valor`);
-  }
+    grafo.generarTexto(`PrimaryExpr.predicado = predicateList.valor; PostfixExpr.valor = PrimaryExpr.valor`); }
 ;
 
 Predicate   
-  : CORA ExprSingle CORB            
-  { 
+  : CORA ExprSingle CORB { 
     $$=$2; grafo.generarPadre(2, "ExprSingle");
     grafo.generarHijos($1,"ExprSingle",$3);
-    grafo.generarTexto(`Predicate.valor = ExprSingle.valor;`);
-  }
+    grafo.generarTexto(`Predicate.valor = ExprSingle.valor;`); }
 ;
 
 PrimaryExpr 
-  : Literal                   { $$=$1; grafo.generarPadre(1, "Literal"); grafo.generarHijos("Literal"); grafo.generarTexto("PrimaryExpr.valor = literal.valor"); }
-	| FunctionCall              { $$=$1; grafo.generarPadre(1, "FunctionCall"); grafo.generarHijos("FunctionCall"); grafo.generarTexto("PrimaryExpr.valor = functionCall.valor");}
-	| ContextItemExpr           { $$=$1; grafo.generarPadre(1, "ContextItemExpr"); grafo.generarHijos("ContextItemExpr"); grafo.generarTexto("PrimaryExpr.valor = contextItemExpr.valor");}
-	| ParenthesizedExpr         { $$=$1; grafo.generarPadre(1, "ParenthesizedExpr"); grafo.generarHijos("ParenthesizedExpr"); grafo.generarTexto("PrimaryExpr.valor = ParenthesizedExpr.valor"); }
-  | Variable                  { $$=$1; grafo.generarPadre(1, "Variable"); grafo.generarHijos("Variable"); grafo.generarTexto("PrimaryExpr.valor = Variable.valor");}
+  : Literal                   { 
+    $$=$1; grafo.generarPadre(1, "Literal"); 
+    grafo.generarHijos("Literal"); 
+    grafo.generarTexto("PrimaryExpr.valor = literal.valor"); }
+	| FunctionCall              { 
+    $$=$1; grafo.generarPadre(1, "FunctionCall"); 
+    grafo.generarHijos("FunctionCall"); 
+    grafo.generarTexto("PrimaryExpr.valor = functionCall.valor");}
+	| ContextItemExpr           { 
+    $$=$1; grafo.generarPadre(1, "ContextItemExpr"); 
+    grafo.generarHijos("ContextItemExpr"); 
+    grafo.generarTexto("PrimaryExpr.valor = contextItemExpr.valor");}
+	| ParenthesizedExpr         { 
+    $$=$1; grafo.generarPadre(1, "ParenthesizedExpr"); 
+    grafo.generarHijos("ParenthesizedExpr"); 
+    grafo.generarTexto("PrimaryExpr.valor = ParenthesizedExpr.valor"); }
+  | Variable                  { 
+    $$=$1; grafo.generarPadre(1, "Variable"); 
+    grafo.generarHijos("Variable"); 
+    grafo.generarTexto("PrimaryExpr.valor = Variable.valor");}
 ;
 
 Variable 
-  : DOLAR NOMBRE { $$=new Variable(null,$1+$2); grafo.generarHijos($1,$2); grafo.generarTexto(`Variable.valor = ${$1+$2}`) }
+  : DOLAR NOMBRE { 
+    $$=new Variable(null,$1+$2); 
+    grafo.generarHijos($1,$2);
+    grafo.generarTexto(`Variable.valor = ${$1+$2}`) }
 ;
 
 Literal     
-  : INTEGER                   { $$=new Literal(Tipo.INTEGER,$1); grafo.generarHijos($1); grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = INTEGER;`); }
-	| DECIMAL                   { $$=new Literal(Tipo.DECIMAL,$1); grafo.generarHijos($1); grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = DECIMAL;`); }
-	| CADENA                    { $$=new Literal(Tipo.STRING,$1);  grafo.generarHijos($1); grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = STRING;`); }
+  : INTEGER                   { 
+    $$=new Literal(Tipo.INTEGER,$1); 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = INTEGER;`); }
+	| DECIMAL                   { 
+    $$=new Literal(Tipo.DECIMAL,$1); 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = DECIMAL;`); }
+	| CADENA                    { 
+    $$=new Literal(Tipo.STRING,$1);  
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = STRING;`); }
 ;
 
 FunctionCall      
-  : NOMBRE PARENTESISA PARENTESISC              
-  {
-    $$ = new CallFunction([],TipoPath.ABS,$1);
+  : NOMBRE PARENTESISA PARENTESISC {
+    $$ = new CallFunction([],TipoPath.ABS,$1,[]);
     grafo.generarHijos($1,$2,$3);
-    grafo.generarTexto(`functionCall = new CallFunction(); functionCall.tipo = Absoluto;`);
-  }  //NODE() TEXT() POSITION() LAST() FIST()
+    grafo.generarTexto(`FunctionCall = new CallFunction(); functionCall.tipo = Absoluto;`); }  //NODE() TEXT() POSITION() LAST() FIST()
+	| NOMBRE PARENTESISA ArgumentList PARENTESISC {  
+    $$ = new CallFunction([],TipoPath.ABS,$1,$3) 
+    grafo.generarPadre(3,"ArgumentList")
+    grafo.generarHijos($1,$2,"ArgumentList",$4)
+    grafo.generarTexto(`FunctionCall = new CallFunction(ArgumentList.Valor)`)}
+  | NOMBRE DOSPUNTOS NOMBRE PARENTESISA PARENTESISC { 
+     $$ = new CallFunctionPrefix([],TipoPath.ABS,$1,$3,[]);
+    grafo.generarHijos($1,$2,$3,$4,$5);
+    grafo.generarTexto(`FunctionCall = new CallFunction(); functionCall.tipo = Absoluto;`); }  //NODE() TEXT() POSITION() LAST() FIST()
+  | NOMBRE DOSPUNTOS NOMBRE PARENTESISA ArgumentList PARENTESISC  {  
+    $$ = new CallFunction([],TipoPath.ABS,$1,$3,$5) 
+    grafo.generarPadre(5,"ArgumentList")
+    grafo.generarHijos($1,$2,$3,$4,"ArgumentList",$6)
+    grafo.generarTexto(`FunctionCall = new CallFunction(ArgumentList.Valor)`)}
+;
 
-	| NOMBRE PARENTESISA CADENA PARENTESISC {  }
+ArgumentList
+  : ExprSingle  { 
+    $$=[$1] 
+    grafo.generarPadre(1,"ExprSingle")
+    grafo.generarHijos("ExprSingle")
+    grafo.generarTexto("ArgumentList.valor = [];ArgumentList.valor.push(ExprSingle.valor)") }
+  | ArgumentList COMA ExprSingle { 
+    $$=$1;$$.push($3) 
+    grafo.generarPadre(3,"ExprSingle")
+    grafo.generarPadre(1,"ArgumentList")
+    grafo.generarHijos("ArgumentList",$2,"ExprSingle")
+    grafo.generarTexto("ArgumentList.valor = ArgumentList1.valor;ArgumentList.valor.push(ExprSingle.valor)") }
 ;
 
 ContextItemExpr   
-  : PUNTO  { $$=new ContextItemExpr([],TipoPath.ABS); grafo.generarHijos($1); grafo.generarTexto(`contextItemExpr =  new ContextItemExpr(); contextItemExpr.tipo = Absoluto;`);}
+  : PUNTO  { 
+    $$=new ContextItemExpr([],TipoPath.ABS); 
+    grafo.generarHijos($1); 
+    grafo.generarTexto(`contextItemExpr =  new ContextItemExpr(); contextItemExpr.tipo = Absoluto;`);}
 ;
 
 ParenthesizedExpr 
-  : PARENTESISA PARENTESISC             { $$=new Parentesis([]); grafo.generarHijos($1,$2); grafo.generarTexto(`ParenthesizedExpr.valor = [];`);}
-	| PARENTESISA Expr PARENTESISC  { $$=new Parentesis($2); grafo.generarHijos($1,$2,$3); grafo.generarTexto(`ParenthesizedExpr.valor = ExprSingle.valor;`); }
+  : PARENTESISA PARENTESISC { 
+    $$=new Parentesis([]); 
+    grafo.generarHijos($1,$2); 
+    grafo.generarTexto(`ParenthesizedExpr.valor = [];`); }
+	| PARENTESISA Expr PARENTESISC { 
+    $$=new Parentesis($2); 
+    grafo.generarHijos($1,$2,$3); 
+    grafo.generarTexto(`ParenthesizedExpr.valor = ExprSingle.valor;`); }
 ;	

@@ -39,3 +39,20 @@ export class Comparacion extends Expresion{
         this.der = der
     }
 }
+
+export class Aritmetico extends Expresion{
+    constructor(izq, op, der){
+        super()
+        this.izq = izq
+        this.op = op
+        this.der = der
+    }
+}
+
+export class Unario extends Expresion{
+    constructor(op, izq){
+        super()
+        this.op = op
+        this.izq = izq
+    }
+}
