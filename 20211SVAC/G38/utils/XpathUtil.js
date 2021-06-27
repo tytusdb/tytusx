@@ -105,6 +105,22 @@ class XpathUtil {
         }
         return salida;
     }
+    static convertirXqueryAString(valor) {
+        let salida = "";
+        if (valor != null && valor != undefined) {
+            if (valor instanceof TablaSimbolos) {
+                if (valor != null) {
+                    valor.chageTypeTsRowAttribute();
+                    valor.eliminarDuplicados();
+                    salida = valor.toStr();
+                }
+            }
+            else {
+                salida = valor;
+            }
+        }
+        return salida;
+    }
 }
 XpathUtil.contador = 0;
 XpathUtil.contador_nodo = 0;

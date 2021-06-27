@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>XPath</title>
     <link href="../styles/styleIde.css" rel="stylesheet"/>
+    <script src="../../utils/InterfazGrafica.js"></script>
     <script src="../../errores/TokenError.js"></script>
     <script src="../../errores/ListaErrores.js"></script>
     <script src="../../errores/CrearError.js"></script>
@@ -82,6 +83,29 @@
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
     <script src="../../utils/CodeUtil.js"></script>
+
+    <script src="../../ejecucion/xquery/NodoXquery.js"></script>
+    <script src="../../ejecucion/xquery/TablaSimbolos/Simbolo.js"></script>
+    <script src="../../ejecucion/xquery/TablaSimbolos/TablaSimbolosXquery.js"></script>
+    <script src="../../ejecucion/xquery/expresion/ListaXqueryExpresion.js"></script>
+    <script src="../../ejecucion/xquery/expresion/LlamadaFuncion.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/SentenciaFor.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor/FilterResult.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/InstruccionIf.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/SentenciaIf.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/SentenciaElse.js"></script>
+
+    <script src="../../ejecucion/xquery/expresion/Variable.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Funcion/Parametro.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Funcion/Funcion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Asignacion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Declaracion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Imprimir.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Retorno.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/ReturnException.js"></script>
+    <script src="../../ejecucion/xquery/XqueryList.js"></script>
+    <script src="../../ejecucion/xquery/XqueryXpath.js"></script>
+
     <!--
 
     -->
@@ -97,31 +121,32 @@
         <td>
             <div id="divEntradaXML" align="center">
                 <textarea id="txtEntradaXML" cols="80" rows="28" style="background-color:#CCC;font-style:italic">
-
-
-
-
 <biblioteca>
 	<libro>
+        <precio>35</precio>
 		<titulo>La vida está en otra parte</titulo>
 		<autor>Milan Kundera</autor>
 		<fechaPublicacion año="1973"/>
 	</libro>
 	<libro>
+        <precio>20</precio>
 		<titulo>Pantaleón y las visitadoras</titulo>
 		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
 		<fechaPublicacion año="1973"/>
 	</libro>
 	<libro>
-		<titulo>Conversación en la catedral</titulo>
+        <precio>21</precio>
+        <titulo>Conversación en la catedral</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1969"/>
+	</libro>
+    <libro>
+        <precio>10</precio>
+		<titulo>Conversación a la catedral</titulo>
 		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
 		<fechaPublicacion año="1969"/>
 	</libro>
 </biblioteca>
-
-
-
-
                 </textarea>
             </div>
 
@@ -129,7 +154,10 @@
         <td>
             <div id="divEntradaXPath" align="center" >
                 <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
-/biblioteca
+for $x in /biblioteca/libro
+where $x/precio > 20
+order by $x/autor
+return $x
                 </textarea>
             </div>
         </td>
@@ -154,6 +182,7 @@
     <button id="btnGraficarCstXmlAscendente" class="button">Graficar CST XML Ascendente</button>
     <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
     <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
+    <button id="btnEjecutarXquery" class="button">Ejecutar XQUERY</button>
     <button id="btnAnalizarXquery" class="button">Analizar XQUERY</button>
     <button id="btnTablaErroresXQuery" class="button">Errores XQUERY</button>
     <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
@@ -177,6 +206,21 @@
             //PASAMOS EL OBJETO DE CONSOLA
             _txtConsola = $("#txtConsola");
             $("#txtConsola").val(CONSOLE_LINE_MARK);
+
+            /**
+             * paso de referencia txtConsola
+             * */
+            InterfazGrafica.txtConsola = _txtConsola;
+
+            /**
+             * Ejecucion Xquery
+             * */
+            $("#btnEjecutarXquery").click(function(){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                ejecutarXquery(entradaXml,entradaXpath);
+            });
+
             /**
             * Ejecucion
             * */
@@ -216,13 +260,13 @@
 
             $("#btnRGXML").click(function(){
 
-                print("Renderizando Reporte gramtical.  "+new Date());
+                InterfazGrafica.print("Renderizando Reporte gramtical.  "+new Date());
                 if(ReporteGramatical._reporteXML==undefined){
-                    print("No existen datos para reporte gramatical xml");
+                    InterfazGrafica.print("No existen datos para reporte gramatical xml");
                     return;
                 }
                 XpathUtil.printTabHtml(ReporteGramatical.getHtmlTableXml());
-                print("Reporte gramatical XML OK");
+                InterfazGrafica.print("Reporte gramatical XML OK");
 
 
             });
@@ -250,13 +294,13 @@
 
             $("#btnRGXPath").click(function(){
 
-                print("Renderizando Reporte gramtical.  "+new Date());
+                InterfazGrafica.print("Renderizando Reporte gramtical.  "+new Date());
                 if(ReporteGramatical._reporteXpath==undefined){
-                    print("No existen datos para reporte gramatical XPath");
+                    InterfazGrafica.print("No existen datos para reporte gramatical XPath");
                     return;
                 }
                 XpathUtil.printTabHtml(ReporteGramatical.getHtmlTableXPath());
-                print("Reporte gramatical XPath OK");
+                InterfazGrafica.print("Reporte gramatical XPath OK");
 
 
             });
@@ -303,26 +347,26 @@
              * Ver Tabla de Simbolos
              */
             $("#btnTablaSimbolos").click(function(){
-                print("Renderizando tabla de Simbolos.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de Simbolos.  "+new Date());
                 if(_tsXml==undefined || _tsXml == null){
-                    print("No hay tabla de simbolos que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de simbolos que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(_tsXml.getHtmlTable());
-                print("OK");
+                InterfazGrafica.print("OK");
             });
 
             /**
              * Ver Tabla Errores XML
              */
             $("#btnTablaErroresXML").click(function(){
-                print("Renderizando tabla de errores XML.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de errores XML.  "+new Date());
                 if(ListaErrores==undefined){
-                    print("No hay tabla de errores que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(ListaErrores.getHtmlTableXml());
-                print("Tabla Errores XML OK");
+                InterfazGrafica.print("Tabla Errores XML OK");
             });
 
 
@@ -330,26 +374,26 @@
              * Ver Tabla Errores XPath
              */
             $("#btnTablaErroresXPath").click(function(){
-                print("Renderizando tabla de errores XPath.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de errores XPath.  "+new Date());
                 if(ListaErrores==undefined){
-                    print("No hay tabla de errores que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(ListaErrores.getHtmlTableXPath());
-                print("Tabla Errores XPath OK");
+                InterfazGrafica.print("Tabla Errores XPath OK");
             });
 
             /**
              * Ver Tabla Errores XQuery
              */
             $("#btnTablaErroresXQuery").click(function(){
-                print("Renderizando tabla de errores XQuery.  "+new Date());
+                InterfazGrafica.print("Renderizando tabla de errores XQuery.  "+new Date());
                 if(ListaErrores==undefined){
-                    print("No hay tabla de errores que mostrar. ");
+                    InterfazGrafica.print("No hay tabla de errores que mostrar. ");
                     return;
                 }
                 XpathUtil.printTabHtml(ListaErrores.getHtmlTableXQuery());
-                print("Tabla Errores XQuery OK");
+                InterfazGrafica.print("Tabla Errores XQuery OK");
             });
 
             /**

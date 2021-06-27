@@ -4,17 +4,15 @@ class XqueryList {
         this.xqueryInstruccions = xqueryInstruccions;
     }
     ejecutar(ent, xmlData) {
-        let salidas = [];
         this.xqueryInstruccions.forEach(function (instruccion) {
-            if (instruccion instanceof Imprimir) {
-                let salida = instruccion.ejecutar(ent, xmlData);
-                if (salida != null && salida != undefined)
-                    salidas.push(salida);
-            }
-            else {
+            try {
                 instruccion.ejecutar(ent, xmlData);
             }
+            catch (exception) {
+                if (exception instanceof ReturnException) {
+                    InterfazGrafica.print(XpathUtil.convertirXqueryAString(exception.valor));
+                }
+            }
         });
-        return salidas;
     }
 }

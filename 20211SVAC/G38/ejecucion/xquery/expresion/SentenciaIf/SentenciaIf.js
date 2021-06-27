@@ -11,8 +11,9 @@ class SentenciaIf {
         if (tipo != null && tipo != undefined && tipo.esBoolean()) {
             let valor = this.condicion.getValor(ent, xmlData);
             if (valor) {
+                let entornoIf = new TablaSimbolosXquery(ent, "entorno if");
                 for (let sentencia of this.sentencias) {
-                    sentencia.ejecutar(ent, xmlData);
+                    sentencia.ejecutar(entornoIf, xmlData);
                 }
                 return true;
             }

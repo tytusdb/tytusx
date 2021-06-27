@@ -55,27 +55,20 @@ class Tipo {
     esGlobal() {
         return this.tipoDato == TipoDato.global;
     }
-    getTipo() {
-        switch (this.tipoDato) {
-            case TipoDato.objeto:
-                return TipoDato3D.objeto;
-            case TipoDato.atributo:
-                return TipoDato3D.atributo;
-            case TipoDato.cadena:
-                return TipoDato3D.cadena;
-            case TipoDato.booleano:
-                return TipoDato3D.booleano;
-            case TipoDato.numero:
-                return TipoDato3D.numero;
-            case TipoDato.err:
-                return TipoDato3D.err;
-            case TipoDato.global:
-                return TipoDato3D.global;
-            case TipoDato.xpathValue:
-                return TipoDato3D.xpathValue;
-            default:
-                throw new Error("Tipo de dato no reconocido: " + this.tipoDato);
-        }
+    equals(tipo) {
+        return this.tipoDato == tipo.tipoDato;
+    }
+    esEquivalente(tipo) {
+        let esEquivalente = false;
+        if (this.esBoolean() && tipo.esBoolean())
+            esEquivalente = true;
+        else if (this.esNumero() && (tipo.esNumero() || tipo.esBoolean()))
+            esEquivalente = true;
+        else if (this.esCadena() && (tipo.esCadena() || tipo.esNumero() || tipo.esBoolean()))
+            esEquivalente = true;
+        else if (this.tipoDato == tipo.tipoDato)
+            esEquivalente = true;
+        return esEquivalente;
     }
     getTipo() {
         switch (this.tipoDato) {
