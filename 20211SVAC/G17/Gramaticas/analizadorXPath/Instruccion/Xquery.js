@@ -1,171 +1,214 @@
+import { concat, map } from "lodash";
 import { Tipo } from "../AST/Entorno";
 import { Literal, Nodo } from "../Expresion/Expresiones";
 
-
-export class Declaracion
+export class Flower
 {
-  constructor(nombre,expresion)
+  constructor(clauseexp,returnexp)
   {
-    this.nombre=nombre
-    this.expresion=expresion
+    this.clauseexp=clauseexp  
+    this.returnexp=returnexp
+    this.EntornoLocal = [[]]
   }
 
   getValor(nodos)
   {
-    var retornos = this.expresion.getValor(nodos)
-    if(retornos[0] && retornos[0].tipo==Tipo.ERROR) return
-    if(this.contains(nodos,retornos)) return
-    var Entorno =
+    this.EntornoLocal[0] = this.EntornoLocal[0].concat(nodos)
+    for (const clause of this.clauseexp) {
+      this.EjecutarClouse(clause,nodos)
+    }
+    return this.EjecutarReturn()
+  }
+
+  EjecutarClouse(clause,nodos)
+  {
+    switch(clause.name)
     {
-      tipo : `${this.nombre}`,
-      atributos : [],
-      hijos:retornos,
-      texto:'',
-      posTipo : 0,
-      posTexto : 0,
+      case 'Let':
+        for (const exp of clause.exp) {
+          this.DeclararLet(exp.name,exp.exp)
+        }
+        break;
+      case 'For':
+        for (const exp of clause.exp) {
+          this.DeclararFor(exp.name,exp.posicion,exp.exp)
+        }
+        break;
+      case 'Where':
+        this.EjecutarWhere(clause.exp,nodos)
+        break;
+      case 'Order':
+        for (const exp of clause.exp) { 
+          this.EjecutarOrder(exp.exp,exp.mode.order,exp.mode.empty)
+        }
+        break;
     }
-    nodos.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
   }
 
-  contains(nodos,retornos)
+  DeclararLet(nombre,exp)
   {
-    for (const nodo of nodos) {
-      if(nodo.entorno.tipo==this.nombre){
-        nodo.entorno.hijos = retornos
-        return true
-      } 
+    for (const entorno of this.EntornoLocal) {
+      var retornos = exp.getValor(entorno) 
+      if(retornos[0] && retornos[0].tipo==Tipo.ERROR) return 
+      if(this.contains(entorno,retornos,nombre)) return
+      var Entorno =
+      {
+        tipo : nombre,
+        atributos : [],
+        hijos:retornos,
+        texto:'',
+        posTipo : 0,
+        posTexto : 0,
+      }
+      entorno.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
+    } 
+  }
+
+  DeclararFor(nombre,posicion,exp)
+  {
+    var NuevoEntornoLocal = []
+    for (const entorno of this.EntornoLocal) {
+      var retornos = exp.getValor(entorno)
+      if(retornos[0] && retornos[0].tipo==Tipo.ERROR) return 
+      var index = 1;
+      for (const retorno of retornos) {
+        var nuevoEntorno = [...entorno]
+        if(this.contains(nuevoEntorno,[retorno],nombre)) continue
+        var Entorno =
+        {
+          tipo : nombre,
+          atributos : [],
+          hijos: [retorno],
+          texto: '',
+          posTipo : 0,
+          posTexto : 0,
+        }
+        nuevoEntorno.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
+        if(posicion!='')
+        {
+          var posicionEntorno =
+          {
+            tipo: posicion,
+            atributos: [],
+            hijos: [new Literal(Tipo.INTEGER,index)],
+            posTipo: 0,
+            posTexto: 0,
+          }
+          nuevoEntorno.push(new Nodo(Tipo.NODO,posicionEntorno,[],'',1))
+        }
+        NuevoEntornoLocal.push(nuevoEntorno)
+        index++
+      }
     }
-    return false
+    this.EntornoLocal=NuevoEntornoLocal
   }
 
-  getValor
-}
-
-export class Let{
-  constructor(declaracion)
-  {
-    this.declaraciones = []
-    this.declaraciones.push(declaracion)
-    this.intermediate = []
-    this.expReturn=null
-  }
-
-  getValor(nodos)
-  {
-    var newEntorno = [...nodos]
-    for (const declaracion of this.declaraciones) {
-      declaracion.getValor(newEntorno)
-    }
-    for (const intermedia of this.intermediate) {
-      intermedia.getValor(newEntorno)
-    }
-    var retorno = this.return(newEntorno)
-    return retorno
-  }
-
-  return(nodos)
-  {
-    return this.expReturn.getValor(nodos)
-  }
-}
-
-export class ForDeclaracion
-{
-  constructor(nombre,posicion='',expresion)
-  {
-    this.nombre = nombre
-    this.posicion = posicion
-    this.expresion = expresion
-  }
-
-  getValor(nodos=[])
-  {
-    var retornos = this.expresion.getValor(nodos)
-    if(retornos[0] && retornos[0].tipo==Tipo.ERROR) return {valor:[],posicion:[],largo:0}
-    var Iterador = []
-    if(this.posicion!='')
-    { 
-      for (let index = 0; index < retornos.length; index++) {
-        Iterador.push(new Literal(Tipo.INTEGER,index+1))  
-      } 
-    }
-    return {valor:retornos,posicion:Iterador,largo:retornos.length,nombreValor:this.nombre,nombrePosicion:this.posicion}
-  }
-
-  contains(nodos,nombre,retornos)
+  contains(nodos,nuevoValor,nombre)
   {
     for (const nodo of nodos) {
       if(nodo.entorno.tipo==nombre){
-        nodo.entorno.hijos = retornos
+        nodo.entorno.hijos = nuevoValor
         return true
       } 
     }
     return false
   }
-}
 
-export class For{
-  constructor(declaraciones=[])
+  EjecutarWhere(exp)
   {
-    this.declaraciones = declaraciones
-    this.intermediate = []
-    this.expReturn = null
+    var EntornoFiltrado = []
+    for (const entorno of this.EntornoLocal) {
+      var retorno = exp.getValor(entorno)
+      if(retorno.length>0)
+      {
+        EntornoFiltrado.push(entorno)
+      }
+    }
+    this.EntornoLocal=EntornoFiltrado
   }
 
-  getValor(nodos)
-  {
-    var nuevos = []
-    for (const declaracion of this.declaraciones) {
-      nuevos.push(declaracion.getValor(nodos))
+  EjecutarOrder(exp,order,empty)
+  { 
+    var mapa = []
+    for (const entorno of this.EntornoLocal) {
+      var retorno = exp.getValor(entorno)
+      mapa = this.insertarOrden({valor:retorno[0].tipo!=Tipo.ERROR ? retorno[0].valor : undefined ,nodo:entorno},mapa,order,empty)
     }
-    for (const intermedia of this.intermediate) {
-      intermedia.getValor(nodos)
+    var LocalEnOrden = []
+    for (const valor of mapa) {
+      LocalEnOrden.push(valor.nodo)
     }
-    var pila = nuevos.map(function(val){return 0})
-    return this.return(nodos,nuevos,0,pila)
+    this.EntornoLocal=LocalEnOrden
   }
 
-  return(nodos,nuevos,posicion,pila)
+  insertarOrden(nodo,mapa,order,empty)
+  {
+    var tempmapa = []
+    let bandera = false
+    let i = 0
+    for (; i < mapa.length; i++) {
+      if(this.comparacion(nodo.valor,mapa[i].valor,order,empty))
+      {
+        tempmapa.push(nodo)
+        bandera=true
+        break
+      }
+      tempmapa.push(mapa[i])   
+    } 
+    for (; i < mapa.length; i++) {
+      tempmapa.push(mapa[i])   
+    }
+    if(!bandera)
+    {
+      tempmapa.push(nodo)
+    }
+   return tempmapa
+  }
+  //Valor 1 es el valor entrante
+  comparacion(valor1,valor2,order,empty)
+  {
+    switch(empty)
+    {
+      case 'g':
+        switch(order)
+        {
+          case 'asc':
+            if(!valor1) return false
+            if(!valor2) return true
+            if(valor1<valor2) return true
+            return false
+          case 'desc':
+            if(!valor1 && !valor2) return false
+            if(!valor1) return true
+            if(valor1>valor2) return true
+            return false
+        }
+        break;
+      case 'l':
+        switch(order)
+        {
+          case 'asc':
+            if(!valor1 && !valor2) return false
+            if(!valor1) return true
+            if(valor1<valor2) return true
+            return false
+          case 'desc':
+            if(!valor1) return false
+            if(!valor2) return true
+            if(valor1>valor2) return true
+            return false
+        }
+        break;
+    }
+  }
+
+  EjecutarReturn()
   {
     var retornos = []
-    for (let i = 0; i < nuevos[posicion].valor.length; i++) {
-      var tempnodos = [...nodos]
-      tempnodos.push(
-        new Nodo(
-          Tipo.NODO, 
-          {
-            tipo : nuevos[posicion].nombreValor,
-            atributos : [],
-            hijos:nuevos[posicion].valor[i],
-            valor:'',
-            posTipo : 0,
-            posTexto : 0,
-          }
-        )
-      )
-      if(nuevos[posicion].posicion.length>0)
-      {
-        tempnodos.push(
-          new Nodo(
-            Tipo.NODO, 
-            {
-              tipo : nuevos[posicion].nombrePosicion,
-              atributos : [],
-              hijos:nuevos[posicion].posicion[i],
-              texto:'',
-              posTipo : 0,
-              posTexto : 0,
-            }
-          )
-        )
-      }
-      if(nuevos.length-1>posicion) {
-        retornos = retornos.concat(this.return(tempnodos,nuevos,posicion+1,pila))
-      }
-      else {
-        retornos = retornos.concat(this.expReturn.getValor(tempnodos))
-      }
+    for (const entorno of this.EntornoLocal) {
+      retornos = retornos.concat(this.returnexp.getValor(entorno))
     }
     return retornos
   }
+  
 }
