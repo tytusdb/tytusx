@@ -14650,11 +14650,22 @@
           key: "getvalor3d",
           value: function getvalor3d(controlador, ts) {
             var valor = this.getValor(controlador, ts);
+            var generator = controlador.generador;
 
             if (typeof valor == 'number') {
               return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](this.primitivo, false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
             } else if (typeof valor == 'string') {
-              return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA;
+              var temp = generator.newTemporal();
+              generator.genAsignacion(temp, 'h');
+
+              for (var i = 0; i < valor.length; i++) {
+                generator.genSetHeap('h', valor.charCodeAt(i));
+                generator.avanzarHeap();
+              }
+
+              generator.genSetHeap('h', '-1');
+              generator.avanzarHeap();
+              return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("STRING"));
             } else if (typeof valor == 'boolean') {
               return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO;
             }

@@ -9224,11 +9224,20 @@ class Primitivo {
     }
     getvalor3d(controlador, ts) {
         let valor = this.getValor(controlador, ts);
+        const generator = controlador.generador;
         if (typeof valor == 'number') {
             return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](this.primitivo, false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
         }
         else if (typeof valor == 'string') {
-            return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA;
+            const temp = generator.newTemporal();
+            generator.genAsignacion(temp, 'h');
+            for (let i = 0; i < valor.length; i++) {
+                generator.genSetHeap('h', valor.charCodeAt(i));
+                generator.avanzarHeap();
+            }
+            generator.genSetHeap('h', '-1');
+            generator.avanzarHeap();
+            return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("STRING"));
         }
         else if (typeof valor == 'boolean') {
             return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO;
