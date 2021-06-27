@@ -71,13 +71,13 @@
 
 /* Asociación de operadores y precedencia */
 %left JError
-%left 'OR'
-%left 'AND'
-%right 'NOT'
-%left 'IGUALADAD' 'DIFERENTE'
-%left 'MENOR' 'MAYOR' 'MAYORI' 'MENORI'
-%left 'MAS' 'MENOS'
-%left 'POR' 'DIV' 'MOD'
+%left 'or'
+%left 'and'
+%right 'not'
+%left 'igualdad' 'diferente'
+%left 'menor' 'mayor' 'mayori' 'menori'
+%left 'mas' 'menos'
+%left 'por' 'div' 'mod'
 %right UMENOS
 
 %start INI
@@ -150,7 +150,7 @@ INSTRUCCION
 ;
 
 ASIGNACION
-    : id igual EXP                  {$$=new cAsignacion.Asignacion($1, $3)}
+    : id igual EXPASIGNACION         {$$=new cAsignacion.Asignacion($1, $3)}
     | EXPARRAY igual EXPBASICO      {$$=new cAsignacion.AsignacionArray($1, $3)}
 ;
 
@@ -167,8 +167,25 @@ ETIQUETA
 ;
 
 // expresiones
+EXPASIGNACION
+    : EXP                           {$$=$1}
+    | EXPARITMETICO                 {$$=$1}
+;
+
 EXPCOMPARACION
     : EXPBASICO COMPARADOR EXPBASICO    {$$=new cExpresion.Comparacion($1, $2, $3)}
+;
+
+EXPARITMETICO
+    :  EXPBASICO ARITMETICO EXPBASICO   {$$=new cExpresion.Aritmetico($1,$2,$3)}
+;
+
+ARITMETICO
+    : mas                           {$$=$1}
+    | menos                         {$$=$1}
+    | por                           {$$=$1}
+    | div                           {$$=$1}
+    | mod                           {$$=$1}
 ;
 
 COMPARADOR
@@ -190,7 +207,8 @@ EXPARRAY
 ;
 
 EXPBASICO
-    : EXPBASICONUMERO                       {$$=$1}
+    : EXPBASICONUMERO                       {$$= $1}
+    | menos EXPBASICO  %prec UMENOS         {$$= new cExpresion.Unario($1, $2)}
     | cadena                                {$$= new cExpresion.Literal('',$1)} 
 ;
 
