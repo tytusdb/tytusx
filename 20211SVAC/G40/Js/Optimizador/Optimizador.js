@@ -152,6 +152,11 @@ class Optimizador{
      */
     Regla3(){
 
+        function EsNumero(str) {
+            if (typeof str != "string") return false 
+            return !isNaN(str) && !isNaN(parseFloat(str)) 
+        }
+
         var bloques = this.bloques;
 
         bloques.forEach(function (bloque){
@@ -162,31 +167,39 @@ class Optimizador{
 
                     if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
 
-                        if((i+1) < bloque.getInstrucciones().length){
+                        if((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == true) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == true))) || 
+                        ((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == false) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == false))) && 
+                        ((bloque.getInstrucciones()[i].getOperando1()) == (bloque.getInstrucciones()[i].getOperando2())) )){
 
-                            if((bloque.getInstrucciones()[i].esConstantePositiva()== true) &&
-                            (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
+                            if((i+1) < bloque.getInstrucciones().length){
 
-                                var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
-                                    codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
-                          
-                                bloque.getInstrucciones()[i+1].setEtiqueta(bloque.getInstrucciones()[i].getGOTO());
-                                bloque.getInstrucciones()[i+1].GenerarC3D();
-
-                                var codigoDespues = bloque.getInstrucciones()[i+1].getCodigo3D();
-
-                                ListaOptimizaciones.push(new Optimizacion(
-                                    bloque.getInstrucciones()[i].getLinea(),
-                                    bloque.getInstrucciones()[i].getColumna(),
-                                    "Bloques",
-                                    codigoAntes,
-                                    codigoDespues,
-                                    "Regla 3"));
-                                bloque.getInstrucciones().splice(i,1);
-                                i--; 
-
+                                if((bloque.getInstrucciones()[i].esConstantePositiva()== true) &&
+                                (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
+    
+                                    var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                        codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
+                              
+                                    bloque.getInstrucciones()[i+1].setEtiqueta(bloque.getInstrucciones()[i].getGOTO());
+                                    bloque.getInstrucciones()[i+1].GenerarC3D();
+    
+                                    var codigoDespues = bloque.getInstrucciones()[i+1].getCodigo3D();
+    
+                                    ListaOptimizaciones.push(new Optimizacion(
+                                        bloque.getInstrucciones()[i].getLinea(),
+                                        bloque.getInstrucciones()[i].getColumna(),
+                                        "Bloques",
+                                        codigoAntes,
+                                        codigoDespues,
+                                        "Regla 3"));
+                                    bloque.getInstrucciones().splice(i,1);
+                                    i--; 
+    
+                                }
                             }
+
                         }
+
+                        
                     }
                 }
             }
@@ -199,6 +212,11 @@ class Optimizador{
     */
     Regla4(){
 
+        function EsNumero(str) {
+            if (typeof str != "string") return false 
+            return !isNaN(str) && !isNaN(parseFloat(str)) 
+        }
+
         var bloques = this.bloques;
 
         bloques.forEach(function (bloque){
@@ -209,7 +227,13 @@ class Optimizador{
 
                     if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
 
+                        if((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == true) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == true))) || 
+                        ((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == false) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == false))) && 
+                        ((bloque.getInstrucciones()[i].getOperando1()) == (bloque.getInstrucciones()[i].getOperando2())) )){
+
+                        
                         if((i+1) < bloque.getInstrucciones().length){
+                      
 
                             if((bloque.getInstrucciones()[i].esConstantePositiva()== false) &&
                             (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
@@ -231,6 +255,11 @@ class Optimizador{
 
                             }
                         }
+
+
+
+                        }
+                        
                     }
                 }
             }
