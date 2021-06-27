@@ -11,10 +11,10 @@ class NativeFunctionExpresion {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         return new Tipo(TipoDato.numero);
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         let position;
         switch (this.nativeFunction) {
             case NativeFunction.position:

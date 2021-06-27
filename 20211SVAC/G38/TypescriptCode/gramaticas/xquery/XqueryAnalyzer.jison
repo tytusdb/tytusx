@@ -10,8 +10,26 @@
 <comment>":)"                       this.popState();
 <comment>.                          /* skip comment content*/
 \s+                   /* skip whitespace */
+
 /*WORD RESERVED*/
-'data'                       return 'data';
+'imprimir'                  return 'imprimir';
+'declare'                   return 'declare_terminal';
+'function'                  return 'function_terminal';
+'local'                     return 'local';
+'as'                        return 'as_terminal';
+'xs'                        return 'xs';
+'decimal'                   return 'decimal_t';
+'float'                     return 'float_t';
+'boolean'                   return 'boolean_t';
+'string'                    return 'string_t';
+'int'                       return 'int_t';
+'anyURI'                    return 'anyURI';
+'to'                        return 'to';
+'at'                        return 'at';
+'if'                        return 'if';
+'else'                      return 'else';
+'then'                      return 'then';
+'data'                      return 'data';
 'for'                       return 'for_terminal';
 'in'                        return 'in';
 'where'                     return 'where';
@@ -37,13 +55,15 @@
 'preceding'                 return 'preceding';
 'self'                      return 'self';
 "::"                        return 'axe_connector';
-":"                        return 'colon';
+":"                         return 'colon';
+";"                         return 'semicolon';
 "//"                        return 'any_expresion';
 "/"                         return 'root_expresion';
 ".."                        return 'parent_expresion';
 "."                         return 'current_expresion';
 "@"                         return 'atribute_expresion';
 
+"?"                         return 'question';
 "+"                         return 'plus';
 "-"                         return 'minus';
 "*"                         return 'times';
@@ -68,7 +88,7 @@
 "}"                         return 'rllave';
 
 "|"                         return 'node_set';
-
+","                         return 'coma';
 
 /*REGULAR EXPRESSIONS*/
 "“"[^\"\n]*"”" 				return 'str'
@@ -82,11 +102,9 @@
 [0-9]+                              return 'IntegerLiteral';
 "$"[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]|"_"|"-")*			return 'variable'
 [a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]|"_"|"-")*			return 'identifier'
-"\\="|"\\<"|"\\>"|"\\/"|"\\“"|"\\\""|"\\'"|"\\’"|"\\`"|"\\`"|"\\‘"|.                         return 'signo_especial'
-[^a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ/<>=]                     return 'signo'
 
 .                                   {
-                                        ListaErrores.AgregarErrorXPATH(new TokenError(TipoError.Lexico,"No se reconocio el token "+yytext,yylloc.first_line,yylloc.first_column));
+                                        ListaErrores.AgregarErrorXQUERY(new TokenError(TipoError.Lexico,"No se reconocio el token "+yytext,yylloc.first_line,yylloc.first_column));
                                     }
 <<EOF>>               return 'EOF'
 
@@ -99,118 +117,140 @@
 %left 'plus' 'minus'
 %left 'times' 'div' 'mod'
 %left 'lparen' 'rparen'
+%left LISTA_NUM
 
 %start S
 
 %% /* language grammar */
 
-S   :  HTML_TAGS EOF
-        {
-        }
-      |XQUERY EOF
+S   :  XQUERY_XPATH EOF { $$ = $1; return $$; }
     ;
 
-HTML_TAGS  : HTML_TAGS HTML_TAG
-                {
-                }
-              | HTML_TAG
-                {
+XQUERY_XPATH : XQUERY { $$ = new XqueryList($1); }
+             | PREDICATE { $$ = new XqueryXpath($1); }
+             ;
 
-                }
-                ;
-
-HTML_TAG       :   lt identifier gt TEXTO lt root_expresion identifier gt
-                {
-                }
-                |  lt identifier gt HTML_TAGS lt root_expresion identifier gt
-                |  lt identifier gt lllave XQUERY rllave lt root_expresion identifier gt
-                ;
-
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++     CONTENIDO   ++++++++++++*/
-
-
-TEXTO          :  TEXTO VALOR
-                {
-                    ReporteGramatical.agregarProduccionXML("CONTENIDO -> CONTENIDO VALOR"
-                                    ,"$$=$1+$2;");
-                    $$=$1+$2;
-                }
-                | VALOR
-                {
-                    ReporteGramatical.agregarProduccionXML("CONTENIDO -> VALOR"
-                                    ,"$$=$1;");
-                    $$=$1;
-                }
-                ;
-
-VALOR           : identifier
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> id"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
-                }
-                | str
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> str"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
-                }
-                | signo_especial
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> signo_especial"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
-                }
-                |caracter_especial
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> caracter_especial"
-                                    ,'$$=$1+" "');
-                    $$=$1.toLowerCase()+" ";
-                }
-                | signo
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> signo"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
-                }
-                | DoubleLiteral
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> num"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
-                }
-                | IntegerLiteral
-                {
-                    ReporteGramatical.agregarProduccionXML("VALOR -> num"
-                                    ,'$$=$1+" "');
-                    $$=$1+" ";
-                }
-                ;
-
-XQUERY: INSTRUCCIONES INSTRUCCION
-      | INSTRUCCION
+XQUERY: XQUERY INSTRUCCION { $$ = $1; $$.push($2); }
+      | INSTRUCCION { $$ = []; $$.push($1); }
         ;
 
-INSTRUCCION : DECLARACION
-            | FLOWER
-            | FUNCIONES_XQUERY
+INSTRUCCION : DECLARACION { $$ = $1; }
+            | ASIGNACION { $$ = $1; }
+            | FLOWER { $$ = $1; }
+            | FUNCIONES_NATIVAS_XQUERY { $$ = $1; }
+            | IF_XQUERY { $$ = $1; }
+            | RETURN_QUERY { $$ = $1; }
+            | DECLARACION_FUNCION { $$ = $1; }
+            | LLAMADA_FUNCION { $$ = $1; }
+            | IMPRESION { $$ = $1; }
             ;
 
-DECLARACION : let variable colon equal LISTA-XPATH
+SENTENCIAS : SENTENCIAS SENTENCIA { $$ = $1; $$.push($2); }
+           | SENTENCIA {  $$ = []; $$.push($1); }
+           ;
+
+SENTENCIA  :  DECLARACION { $$ = $1; }
+            | ASIGNACION { $$ = $1; }
+            | RETURN_QUERY { $$ = $1; }
+            | IMPRESION { $$ = $1; }
+            | FLOWER { $$ = $1; }
+            | FUNCIONES_NATIVAS_XQUERY { $$ = $1; }
+            | IF_XQUERY { $$ = $1; }
             ;
+
+IMPRESION: imprimir lparen INSTRUCCION_RETORNO  rparen { $$ = new Imprimir($3,@1.first_line,@1.first_column); }
+          ;
+
+INSTRUCCION_RETORNO : FLOWER { $$ = $1; }
+                  | FUNCIONES_NATIVAS_XQUERY { $$ = $1; }
+                  | IF_XQUERY { $$ = $1; }
+                  | PREDICATE { $$ = $1; }
+                  | LLAMADA_FUNCION { $$ = $1; }
+                  ;
+
+DECLARACION : let variable colon equal PREDICATE { $$ = new Declaracion($2,$5,@2.first_line,@2.first_column); }
+            ;
+
+ASIGNACION  : variable colon equal PREDICATE { $$ = new Asignacion($1,$4,@1.first_line,@1.first_column); }
+            ;
+
+LLAMADA_FUNCION : local colon identifier lparen rparen
+                | local colon identifier lparen LISTA_VALORES rparen
+                ;
+
+LISTA_VALORES : LISTA_VALORES coma PREDICATE
+              | PREDICATE
+              ;
+
+DECLARACION_FUNCION : declare_terminal function_terminal local colon
+                      identifier lparen LISTA_PARAMETROS rparen as_terminal TIPO_DATO
+                      lllave XQUERY rllave semicolon
+                    | declare_terminal function_terminal local colon
+                      identifier lparen rparen as_terminal TIPO_DATO
+                      lllave XQUERY rllave semicolon
+                    ;
 
 FLOWER : for_terminal variable in LISTA-XPATH where PREDICATE order by PREDICATE RETURN_QUERY
        | for_terminal variable in LISTA-XPATH where PREDICATE RETURN_QUERY
        | for_terminal variable in LISTA-XPATH order by PREDICATE RETURN_QUERY
        | for_terminal variable in LISTA-XPATH RETURN_QUERY
+
+       | for_terminal variable at variable in LISTA-XPATH where PREDICATE order by PREDICATE RETURN_QUERY
+       | for_terminal variable at variable in LISTA-XPATH where PREDICATE RETURN_QUERY
+       | for_terminal variable at variable in LISTA-XPATH order by PREDICATE RETURN_QUERY
+       | for_terminal variable at variable in LISTA-XPATH RETURN_QUERY
+
+       | for_terminal LISTA_VALORES_FLOWER where PREDICATE order by PREDICATE RETURN_QUERY
+       | for_terminal LISTA_VALORES_FLOWER where PREDICATE RETURN_QUERY
+       | for_terminal LISTA_VALORES_FLOWER order by PREDICATE RETURN_QUERY
+       | for_terminal LISTA_VALORES_FLOWER RETURN_QUERY
        ;
 
-RETURN_QUERY :  return_terminal HTML_TAG
-             |  return_terminal PREDICATE
+LISTA_VALORES_FLOWER : LISTA_VALORES_FLOWER coma VALOR_FLOWER
+                     | VALOR_FLOWER
+                     ;
+
+VALOR_FLOWER : variable in lparen IntegerLiteral to IntegerLiteral rparen
+             | variable in lparen LISTA_NUMEROS rparen
+              ;
+
+
+LISTA_NUMEROS : LISTA_NUMEROS coma IntegerLiteral
+              | IntegerLiteral
+              ;
+
+IF_XQUERY : SENTENCIA_IF  LISTA_ELSE_IF { $$ = $2;  $$.agregarPrimerIf($1); }
+           ;
+
+SENTENCIA_IF : if lparen PREDICATE rparen then lparen SENTENCIAS  rparen { $$ = new SentenciaIf($3,$7,@1.first_line,@1.first_column); }
              ;
 
-FUNCIONES_XQUERY : data lparen LISTA-XPATH  rparen
+LISTA_ELSE_IF : LISTA_ELSE_IF else SENTENCIA_IF { $$=$1; $$.agregarElseIf($3); }
+              | LISTA_ELSE_IF else lparen SENTENCIAS  rparen { $$ = $1; $$.agregarElse(new SentenciaElse($4,@2.first_line,@2.first_column)) }
+              | else SENTENCIA_IF { $$ = new InstruccionIf(@1.first_line,@1.first_column); $$.agregarElseIf($2); }
+              | else lparen SENTENCIAS  rparen { $$ = new InstruccionIf(@1.first_line,@1.first_column); $$.agregarElse(new SentenciaElse($3,@1.first_line,@1.first_column)); }
+              ;
+
+RETURN_QUERY :  return_terminal INSTRUCCION_RETORNO
+             ;
+
+LISTA_PARAMETROS : LISTA_PARAMETROS coma PARAMETRO
+                 | PARAMETRO
                  ;
+
+PARAMETRO : variable as_terminal TIPO_DATO
+          ;
+
+TIPO_DATO : xs colon anyURI question
+          | xs colon decimal_t question
+          | xs colon float_t question
+          | xs colon boolean_t question
+          | xs colon string_t question
+          | xs colon int_t question
+          ;
+
+FUNCIONES_NATIVAS_XQUERY : data lparen LISTA-XPATH  rparen
+                         ;
 
 LISTA-XPATH: LISTA-XPATH node_set XPATH-EXPRESION { ReporteGramatical.agregarProduccionXpath("LISTA-XPATH -> LISTA-XPATH | XPATH","LISTA-XPATH1.LISTA.ADD( XPATH );</br>LISTA-XPATH.LISTA = LISTA-XPATH1.LISTA;");
                                                     var expresion = new XpathExpresion($3, @3.first_line,@3.first_column);
@@ -236,10 +276,8 @@ XPATH-EXPRESION : XPATH-EXPRESION EXPRESION { ReporteGramatical.agregarProduccio
 
 FIRST_EXPRESION : identifier { ReporteGramatical.agregarProduccionXpath("EXPRESION -> id","EXPRESION = NodoXpath(id);");
                                 $$ = new RootIdentifier($1,[],@1.first_line,@1.first_column); }
-                  | variable { ReporteGramatical.agregarProduccionXpath("EXPRESION -> id","EXPRESION = NodoXpath(id);");
-                                                             $$ = new RootIdentifier($1,[],@1.first_line,@1.first_column); }
-                  | times { ReporteGramatical.agregarProduccionXpath("EXPRESION -> *","EXPRESION = NodoXpath('*');");
-                            $$ = new RootTimes([],@1.first_line,@1.first_column); }
+                  | variable { ReporteGramatical.agregarProduccionXpath("EXPRESION -> $id","EXPRESION = NodoXquery($id);");
+                               $$ = new Variable($1,@1.first_line,@1.first_column); }
                   | node lparen rparen { ReporteGramatical.agregarProduccionXpath("EXPRESION -> node()","EXPRESION = NodoXpath('node');");
                                          $$ = new RootNode([],@1.first_line,@1.first_column); }
                   | current_expresion { ReporteGramatical.agregarProduccionXpath("EXPRESION -> .","EXPRESION = NodoXpath('.');");
@@ -260,8 +298,6 @@ FIRST_EXPRESION : identifier { ReporteGramatical.agregarProduccionXpath("EXPRESI
                                                   $$ = new RootIdentifier($1,$2,@1.first_line,@1.first_column); }
                   | node lparen rparen LISTA_PREDICATES { ReporteGramatical.agregarProduccionXpath("EXPRESION -> node LISTA_PREDICADOS","EXPRESION = NodoXpath('node', LISTA_PREDICADOS);");
                                                           $$ = new RootNode($4,@1.first_line,@1.first_column); }
-                  | times LISTA_PREDICATES { ReporteGramatical.agregarProduccionXpath("EXPRESION -> * LISTA_PREDICADOS","EXPRESION = NodoXpath('*', LISTA_PREDICADOS);");
-                                             $$ = new RootTimes($2,@1.first_line,@1.first_column); }
 
                   | AXES_NAME axe_connector identifier { ReporteGramatical.agregarProduccionXpath("EXPRESION -> AXES_NAME :: id","EXPRESION = new AxeExpresion('"+AxeType[$1]+"', "+$3+" );");
                                                               $$ = AxeFabric.createAxeExpresion($1,AxeOperation.identifier, $3,[],@2.first_line, @2.first_column);
@@ -418,7 +454,7 @@ EXPRESION : root_expresion identifier { ReporteGramatical.agregarProduccionXpath
           |error
           {
               ReporteGramatical.agregarProduccionXpath("EXPRESION -> error","ListaErrores.agregar(error)");
-              ListaErrores.AgregarErrorXPATH(new TokenError(TipoError.Sintactico,"No se esperaba: "+yytext+".",@1.first_line,@1.first_column));
+              ListaErrores.AgregarErrorXQUERY(new TokenError(TipoError.Sintactico,"No se esperaba: "+yytext,@1.first_line,@1.first_column));
               $$ = new NodoError(@1.first_line,@1.first_column);
           }
           ;

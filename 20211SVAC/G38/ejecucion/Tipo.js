@@ -55,6 +55,21 @@ class Tipo {
     esGlobal() {
         return this.tipoDato == TipoDato.global;
     }
+    equals(tipo) {
+        return this.tipoDato == tipo.tipoDato;
+    }
+    esEquivalente(tipo) {
+        let esEquivalente = false;
+        if (this.esBoolean() && tipo.esBoolean())
+            esEquivalente = true;
+        else if (this.esNumero() && (tipo.esNumero() || tipo.esBoolean()))
+            esEquivalente = true;
+        else if (this.esCadena() && (tipo.esCadena() || tipo.esNumero() || tipo.esBoolean()))
+            esEquivalente = true;
+        else if (this.tipoDato == tipo.tipoDato)
+            esEquivalente = true;
+        return esEquivalente;
+    }
     getTipo() {
         switch (this.tipoDato) {
             case TipoDato.objeto:

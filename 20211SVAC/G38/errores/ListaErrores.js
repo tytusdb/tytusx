@@ -63,6 +63,9 @@ class ListaErrores {
     static getHtmlTableXPath() {
         return this.getCadHtmlFromReprote(ListaErrores._erroresXpath, "Errores XPath");
     }
+    static getHtmlTableXQuery() {
+        return this.getCadHtmlFromReprote(ListaErrores._erroresXquery, "Errores XQuery");
+    }
     static getCadHtmlFromReprote(listaErrores, encabezado) {
         let cad;
         var index = 1;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>XPath</title>
     <link href="../styles/styleIde.css" rel="stylesheet"/>
+    <script src="../../utils/InterfazGrafica.js"></script>
     <script src="../../errores/TokenError.js"></script>
     <script src="../../errores/ListaErrores.js"></script>
     <script src="../../errores/CrearError.js"></script>
@@ -82,6 +83,26 @@
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
     <script src="../../utils/CodeUtil.js"></script>
+
+    <script src="../../ejecucion/xquery/NodoXquery.js"></script>
+    <script src="../../ejecucion/xquery/TablaSimbolos/Simbolo.js"></script>
+    <script src="../../ejecucion/xquery/TablaSimbolos/TablaSimbolosXquery.js"></script>
+    <script src="../../ejecucion/xquery/expresion/ListaXqueryExpresion.js"></script>
+    <script src="../../ejecucion/xquery/expresion/LlamadaFuncion.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaFor.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/InstruccionIf.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/SentenciaIf.js"></script>
+    <script src="../../ejecucion/xquery/expresion/SentenciaIf/SentenciaElse.js"></script>
+
+    <script src="../../ejecucion/xquery/expresion/Variable.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Funcion/Parametro.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Funcion/Funcion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Asignacion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Declaracion.js"></script>
+    <script src="../../ejecucion/xquery/instruccion/Imprimir.js"></script>
+    <script src="../../ejecucion/xquery/XqueryList.js"></script>
+    <script src="../../ejecucion/xquery/XqueryXpath.js"></script>
+
     <!--
 
     -->
@@ -154,6 +175,7 @@
     <button id="btnGraficarCstXmlAscendente" class="button">Graficar CST XML Ascendente</button>
     <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
     <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
+    <button id="btnEjecutarXquery" class="button">Ejecutar XQUERY</button>
     <button id="btnAnalizarXquery" class="button">Analizar XQUERY</button>
     <button id="btnTablaErroresXQuery" class="button">Errores XQUERY</button>
     <button id="btnLimpiarConsola" class="button">Limpiar Consola</button>
@@ -177,6 +199,21 @@
             //PASAMOS EL OBJETO DE CONSOLA
             _txtConsola = $("#txtConsola");
             $("#txtConsola").val(CONSOLE_LINE_MARK);
+
+            /**
+             * paso de referencia txtConsola
+             * */
+            InterfazGrafica.txtConsola = _txtConsola;
+
+            /**
+             * Ejecucion Xquery
+             * */
+            $("#btnEjecutarXquery").click(function(){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                ejecutarXquery(entradaXml,entradaXpath);
+            });
+
             /**
             * Ejecucion
             * */

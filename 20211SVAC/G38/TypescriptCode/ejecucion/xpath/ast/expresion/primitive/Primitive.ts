@@ -12,11 +12,11 @@ class Primitive implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return this.tipo;
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         return this.valor;
     }
 

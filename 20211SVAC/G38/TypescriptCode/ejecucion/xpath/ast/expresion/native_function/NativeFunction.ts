@@ -16,11 +16,11 @@ class NativeFunctionExpresion implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return new Tipo(TipoDato.numero);
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         let position;
         switch (this.nativeFunction){
             case NativeFunction.position:

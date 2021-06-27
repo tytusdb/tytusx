@@ -7,10 +7,10 @@ class Comparison {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierdo.getTipo(tsXquery, ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery, ent);
         if (tipoIzquierda.esNumero() && tipoDerecha.esNumero()) {
             tipo = new Tipo(TipoDato.booleano);
         }
@@ -25,11 +25,11 @@ class Comparison {
         }
         return tipo;
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         let valor;
-        let tipo = this.getTipo(ent);
-        let valorIzquierda = this.izquierdo.getValor(ent);
-        let valorDerecha = this.derecha.getValor(ent);
+        let tipo = this.getTipo(tsXquery, ent);
+        let valorIzquierda = this.izquierdo.getValor(tsXquery, ent);
+        let valorDerecha = this.derecha.getValor(tsXquery, ent);
         if (valorIzquierda instanceof TablaSimbolos) {
             valorIzquierda = PredicateExpresion.getPrimitiveOfAtributeOrObject(valorIzquierda);
             if (valorIzquierda != null) {

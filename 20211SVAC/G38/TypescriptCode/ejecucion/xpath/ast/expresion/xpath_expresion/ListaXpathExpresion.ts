@@ -9,15 +9,25 @@ class ListaXpathExpresion implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(ts:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
+        if(this.expresionesXpath.length == 1){
+           let tipo = this.expresionesXpath[0].getTipo(ts,ent)
+           if(!tipo.esError()) return tipo;
+        }
+
         return new Tipo(TipoDato.xpathValue);
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         var ts = XpathUtil.crearTablaSimbolos([]);
         this.expresionesXpath.forEach( function (expresion) {
-            let nuevoResultado:Array<TsRow> = ts.listaSimbolos.concat(expresion.getValor(ent).listaSimbolos);
-            ts.listaSimbolos = nuevoResultado;
+            let valorExpresion = expresion.getValor(tsXquery,ent)
+            if(valorExpresion instanceof TablaSimbolos){
+                let nuevoResultado:Array<TsRow> = ts.listaSimbolos.concat(valorExpresion.listaSimbolos);
+                ts.listaSimbolos = nuevoResultado;
+            }else{
+               ts = valorExpresion;
+            }
 
         });
         return ts;

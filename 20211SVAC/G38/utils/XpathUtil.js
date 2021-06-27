@@ -87,6 +87,24 @@ class XpathUtil {
         }
         return salida;
     }
+    static convertirNodosXqueryATexto(valoresImpresion) {
+        let salida = "";
+        if (valoresImpresion != null && valoresImpresion != undefined) {
+            for (let valor of valoresImpresion) {
+                if (valor instanceof TablaSimbolos) {
+                    if (valor != null) {
+                        valor.chageTypeTsRowAttribute();
+                        valor.eliminarDuplicados();
+                        salida += valor.toStr() + '\n';
+                    }
+                }
+                else {
+                    salida += valor;
+                }
+            }
+        }
+        return salida;
+    }
 }
 XpathUtil.contador = 0;
 XpathUtil.contador_nodo = 0;

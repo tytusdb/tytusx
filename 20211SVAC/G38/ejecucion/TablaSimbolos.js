@@ -353,12 +353,6 @@ class TablaSimbolos {
     get listaSimbolos() {
         return this._listaSimbolos;
     }
-    set esGlobal(esGlobal) {
-        this._esGlobal = esGlobal;
-    }
-    get esGlobal() {
-        return this._esGlobal;
-    }
     toStr() {
         let i = 1;
         let cad = "";

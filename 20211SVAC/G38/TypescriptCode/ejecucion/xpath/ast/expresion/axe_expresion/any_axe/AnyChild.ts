@@ -16,11 +16,11 @@ class AnyChild implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return new Tipo(TipoDato.err);
     }
 
-    getValor(ent: TablaSimbolos): any {  // child :: axeOperation enum
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {  // child :: axeOperation enum
         var ts = new TablaSimbolos(null);
         switch (this.axeOperation){
             case AxeOperation.identifier:
