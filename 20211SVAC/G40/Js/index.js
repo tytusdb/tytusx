@@ -82,6 +82,7 @@ function CargarXML(){
             stack = [];
             contadorStack = 0;
             contadorTemporales = 0;
+            contadorEtiquetas = 0;
             SP = 2;
             HP = 0;
             T0 = 0;
