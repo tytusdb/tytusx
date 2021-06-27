@@ -1,16 +1,36 @@
 <html lang="en">
 <head>
-<title>ARBOL </title>
+<title>Puzzle AStar</title>
 <script type="text/javascript" src="vis-network.min.js"></script>
 <script type="text/javascript" src="05_astar.js"></script>
 
 </head>
 <body>
-<div id="div_arbol"></div>
+<h1 id='miTitulo'></h1>
+<div id="mynetwork"></div>
 <script type="text/javascript">
       // create a network
-      var container = document.getElementById("div_arbol");
-	var DOTstring = '';
+      var container = document.getElementById("mynetwork");
+	var DOTstring = 'graph{'+
+'1 [label="kiki"];'+
+'2 [label="lolo"];'+
+'3 [label="/"];'+
+'3--2;'+
+'3--1;'+
+'4 [label="lok"];'+
+'5 [label="/"];'+
+'5--4;'+
+'5--3;'+
+'}';
+
+      var url_string = window.location.href; //
+      var url = new URL(url_string);
+      var arbol = url.searchParams.get("arbol");
+      var tit = url.searchParams.get("titulo");
+      console.log(arbol);
+      console.log(tit);
+      var DOTstring = arbol;
+
 	var parsedData = vis.parseDOTNetwork(DOTstring);
 	var data = {
 	  nodes: parsedData.nodes,
@@ -29,6 +49,12 @@
             },                        
       };
       var network = new vis.Network(container, data, options);
+      function titular(){
+            var tituloM = document.getElementById('miTitulo');
+            tituloM.innerHTML(tit);
+      }
+      
+
     </script>  
 </body>
 </html>
