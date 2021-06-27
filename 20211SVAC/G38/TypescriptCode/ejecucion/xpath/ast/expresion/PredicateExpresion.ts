@@ -6,7 +6,7 @@ class PredicateExpresion {
             ent.listaSimbolos.filter(function (simbolo) {
                 for(let predicado of listaPredicados){
                     let expresion =
-                        predicado.getValor(XpathUtil.crearTablaSimbolosAndSetLastPosition([simbolo],ultimaPosicion));
+                        predicado.getValor(null,XpathUtil.crearTablaSimbolosAndSetLastPosition([simbolo],ultimaPosicion));
                     return PredicateExpresion.validatePredicateExpresion(expresion, simbolo, ent);
                 }
                 return true;
@@ -17,13 +17,13 @@ class PredicateExpresion {
 
     static validatePredicateExpresion(expresion:any,simbolo:TsRow,ent:TablaSimbolos){
         if(expresion instanceof Primitive) {
-            if (expresion.getTipo(ent).esNumero()) {
-                if (!(simbolo.indice == expresion.getValor(ent))) {
+            if (expresion.getTipo(null,ent).esNumero()) {
+                if (!(simbolo.indice == expresion.getValor(null,ent))) {
                     return false;
                 }
-            } else if (expresion.getTipo(ent).esBoolean()) {
-                return expresion.getValor(ent);
-            }else if (!expresion.getTipo(ent).esBoolean()) {
+            } else if (expresion.getTipo(null,ent).esBoolean()) {
+                return expresion.getValor(null,ent);
+            }else if (!expresion.getTipo(null,ent).esBoolean()) {
                 return false;
             }
         }
@@ -52,6 +52,6 @@ class PredicateExpresion {
     }
 
     static isPrimitiveNumber(valor:Primitive){
-        return valor.getTipo(XpathUtil.crearTablaSimbolos([])).esNumero();
+        return valor.getTipo(null,XpathUtil.crearTablaSimbolos([])).esNumero();
     }
 }

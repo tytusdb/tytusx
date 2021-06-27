@@ -101,5 +101,23 @@ class XpathUtil{
         return salida;
     }
 
+    static convertirNodosXqueryATexto(valoresImpresion: any[]) {
+        let salida = "";
+        if(valoresImpresion != null && valoresImpresion != undefined){
+            for(let valor of valoresImpresion){
+                if(valor instanceof TablaSimbolos){
+                    if (valor != null) {
+                        valor.chageTypeTsRowAttribute();
+                        valor.eliminarDuplicados();
+                        salida += valor.toStr() + '\n';
+                    }
+                }else{
+                    salida += valor;
+                }
+            }
+        }
+        return salida;
+    }
+
 
 }

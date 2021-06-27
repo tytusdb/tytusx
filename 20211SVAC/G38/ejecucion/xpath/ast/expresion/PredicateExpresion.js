@@ -1,47 +1,44 @@
 "use strict";
 class PredicateExpresion {
     static filterXpathExpresion(ent, listaPredicados) {
-        return PredicateExpresion.filterXpathXqueryExpresion(null, ent, listaPredicados);
-    }
-    static filterXpathXqueryExpresion(xqueryEnt, ent, listaPredicados) {
         let ultimaPosicion = ent.getLastPosition();
         let tablaFiltrada = XpathUtil.crearTablaSimbolos(ent.listaSimbolos.filter(function (simbolo) {
             for (let predicado of listaPredicados) {
-                let expresion = predicado.getValor(xqueryEnt, XpathUtil.crearTablaSimbolosAndSetLastPosition([simbolo], ultimaPosicion));
-                return PredicateExpresion.validatePredicateExpresion(expresion, simbolo, xqueryEnt, ent);
+                let expresion = predicado.getValor(null, XpathUtil.crearTablaSimbolosAndSetLastPosition([simbolo], ultimaPosicion));
+                return PredicateExpresion.validatePredicateExpresion(expresion, simbolo, ent);
             }
             return true;
         }));
         return tablaFiltrada;
     }
-    static validatePredicateExpresion(predicateExpresion, simbolo, xqueryEnt, ent) {
-        if (predicateExpresion instanceof Primitive) {
-            if (predicateExpresion.getTipo(xqueryEnt, ent).esNumero()) {
-                if (!(simbolo.indice == predicateExpresion.getValor(xqueryEnt, ent))) {
+    static validatePredicateExpresion(expresion, simbolo, ent) {
+        if (expresion instanceof Primitive) {
+            if (expresion.getTipo(null, ent).esNumero()) {
+                if (!(simbolo.indice == expresion.getValor(null, ent))) {
                     return false;
                 }
             }
-            else if (predicateExpresion.getTipo(xqueryEnt, ent).esBoolean()) {
-                return predicateExpresion.getValor(xqueryEnt, ent);
+            else if (expresion.getTipo(null, ent).esBoolean()) {
+                return expresion.getValor(null, ent);
             }
-            else if (!predicateExpresion.getTipo(xqueryEnt, ent).esBoolean()) {
+            else if (!expresion.getTipo(null, ent).esBoolean()) {
                 return false;
             }
         }
-        if (typeof predicateExpresion == "number") {
-            if (!(simbolo.indice == predicateExpresion)) {
+        if (typeof expresion == "number") {
+            if (!(simbolo.indice == expresion)) {
                 return false;
             }
         }
-        else if (typeof predicateExpresion == "boolean") {
-            return predicateExpresion;
+        else if (typeof expresion == "boolean") {
+            return expresion;
         }
-        else if (predicateExpresion instanceof TablaSimbolos) {
-            if (predicateExpresion.esVacia()) {
+        else if (expresion instanceof TablaSimbolos) {
+            if (expresion.esVacia()) {
                 return false;
             }
         }
-        else if (predicateExpresion == null || predicateExpresion == undefined) {
+        else if (expresion == null || expresion == undefined) {
             return false;
         }
         return true;

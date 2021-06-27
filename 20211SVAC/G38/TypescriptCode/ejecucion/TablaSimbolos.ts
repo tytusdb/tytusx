@@ -2,7 +2,6 @@
 class TablaSimbolos {
 
     private _listaSimbolos:Array<TsRow>;
-    private _esGlobal:boolean;
     private _last:number;
 
     constructor(rootAST : XmlObjectInt) {
@@ -426,13 +425,6 @@ class TablaSimbolos {
         return this._listaSimbolos;
     }
 
-    set esGlobal(esGlobal: boolean){
-        this._esGlobal = esGlobal;
-    }
-
-    get esGlobal(){
-        return this._esGlobal;
-    }
 
     public toStr():string{
         let i:number = 1;

@@ -64,6 +64,23 @@ class Tipo{
         return this.tipoDato == TipoDato.global;
     }
 
+    public equals(tipo: Tipo):boolean{
+        return this.tipoDato == tipo.tipoDato;
+    }
+
+    public esEquivalente(tipo: Tipo):boolean{
+        let esEquivalente = false;
+        if(this.esBoolean()  && tipo.esBoolean())
+            esEquivalente = true;
+        else if(this.esNumero() && (tipo.esNumero() || tipo.esBoolean()))
+            esEquivalente = true;
+        else if(this.esCadena() && (tipo.esCadena() || tipo.esNumero() || tipo.esBoolean()) )
+            esEquivalente = true;
+        else if( this.tipoDato == tipo.tipoDato)
+            esEquivalente = true;
+        return esEquivalente;
+    }
+
     public getTipo():number{
         switch (this.tipoDato){
             case TipoDato.objeto:
