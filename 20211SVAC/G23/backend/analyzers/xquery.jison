@@ -25,7 +25,7 @@ element_content                     ([^<>&\"{}] | '&lt;' | '&gt;' | '&amp;' | '&
 "<="					return 'tk_menorigual'
 ">="                    return 'tk_mayorigual'
 "<"                     return 'tk_menor'
-">"                     { this.pushState('content');  return 'tk_mayor';}
+">"                     return 'tk_mayor'
 "//"                    return 'tk_2bar'
 "/"                     return 'tk_bar'
 ":="                    return 'tk_2puntos_igual'
@@ -40,7 +40,7 @@ element_content                     ([^<>&\"{}] | '&lt;' | '&gt;' | '&amp;' | '&
 "("                     return 'tk_ParA'
 ")"                     return 'tk_ParC'
 "{"                     return 'tk_labre'
-"}"                     { this.pushState('content');  return 'tk_lcierra';}
+"}"                     return 'tk_lcierra'
 "*"                     return 'tk_asterisco'
 "div"                   return 'tk_div'
 "ancestor-or-self"      return 'tk_ancestor2'
@@ -103,12 +103,12 @@ element_content                     ([^<>&\"{}] | '&lt;' | '&gt;' | '&amp;' | '&
 <string_singleq>"\\r"           { attribute += "\r"; }
 <string_singleq>[']	            { yytext = attribute; this.popState(); return 'tk_string_s'; }
 
-<content>"<!--"([^-]|\-[^-])*"-->"	    /* MultiLineComment*/
-<content>{element_content}       { if(yytext.match(re)) { return 'tk_content';} }
-<content>"{"                     { this.popState(); return 'tk_labre'; }
-<content>"<"                     { this.popState(); return 'tk_menor'; }
-<content><<EOF>>               	 return 'EOF'
-<content>.                     	 { errors.push({ tipo: "Léxico", error: yytext, origen: "XQuery", linea: yylloc.first_line, columna: yylloc.first_column+1 }); return 'INVALID'; }
+// <content>"<!--"([^-]|\-[^-])*"-->"	    /* MultiLineComment*/
+// <content>{element_content}       { if(yytext.match(re)) { return 'tk_content';} }
+// <content>"{"                     { this.popState(); return 'tk_labre'; }
+// <content>"<"                     { this.popState(); return 'tk_menor'; }
+// <content><<EOF>>               	 return 'EOF'
+// <content>.                     	 { errors.push({ tipo: "Léxico", error: yytext, origen: "XQuery", linea: yylloc.first_line, columna: yylloc.first_column+1 }); return 'INVALID'; }
 
 
 [\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+ return 'tk_id'
@@ -125,7 +125,9 @@ element_content                     ([^<>&\"{}] | '&lt;' | '&gt;' | '&amp;' | '&
     var builder = new Objeto();
     var queryBuilder = new XQObjeto();
     // const getASTTree = require('./ast_xpath');
-	
+	function insert_current(_variable, _linea, _columna) {
+		return builder.newAxis(builder.newExpression(builder.newCurrent(_variable, _linea, _columna), null, _linea, _columna), _linea, _columna)
+	}
 %}
 
 /* operator associations and precedence */
@@ -150,54 +152,55 @@ ini: XPATH_U EOF{   prod_1 = grammar_stack.pop();
 					ast = { ast: $1, errors: errors, cst: "cst", grammar_report: "grammar_report",  arbolAST : "arbol_ast" }; return ast;
                 }
     | XQUERY EOF { ast = { ast: $1, errors: errors, cst: "cst", grammar_report: "grammar_report",  arbolAST : "arbol_ast" }; return ast; }
-    | tk_menor tk_id ATTRIBUTE_LIST tk_mayor tk_labre XQUERY tk_lcierra tk_menor tk_bar tk_id tk_mayor EOF { ast = { ast: $1, errors: errors, cst: "cst", grammar_report: "grammar_report",  arbolAST : "arbol_ast" }; return ast; }
 ;
 
 XQUERY: XQUERY INSTR_QUERY  { $1.push($2); $$=$1; }
         | INSTR_QUERY { $$=[$1]; }
+		// | LET_CLAUSE
 ;
 
 INSTR_QUERY: IF_ELSE_IF
-            | FLWOR { $$=$1; }
+            | FOR_LOOP { $$=$1; }
+			| LET_CLAUSE
             | FUNCIONES
 ;
 
-FLWOR: FOR_LOOP { $$ = $1; }
-        | LET_CLAUSE { $$ = $1; }
-        | WHERE_CONDITION { $$ = $1; }
-        | ORDER_BY { $$ = queryBuilder.nuevoOrderBy($1, this._$.first_line, this._$.first_column+1); }
-        | RETURN_STATEMENT { $$ = $1; }
+// FLWOR: FOR_LOOP { $$ = $1; }
+//         | LET_CLAUSE { $$ = $1; }
+//         | WHERE_CONDITION { $$ = $1; }
+//         | ORDER_BY { $$ = queryBuilder.nuevoOrderBy($1, this._$.first_line, this._$.first_column+1); }
+//         | RETURN_STATEMENT { $$ = $1; }
+// ;
+
+FOR_LOOP: tk_for DECLARACION INSTRUCCIONES_FOR { $$ = queryBuilder.nuevoFor($2, $3, this._$.first_line, this._$.first_column+1); }
 ;
 
-FOR_LOOP: tk_for DECLARACION INSTR_FOR { $$ = queryBuilder.nuevoFor($2, $3, this._$.first_line, this._$.first_column+1); }
-;
-
-INSTR_FOR: INSTRUCCIONES_FOR INSTR_FOR_P { $1.push($2); $$=$1; }
+INSTRUCCIONES_FOR: INSTRUCCIONES_FOR INSTR_FOR_P { $1.push($2); $$=$1; }
                 | INSTR_FOR_P { $$=[$1]; }
 ;
 
-INSTR_FOR_P: LET_CLAUSE { $$=$1; }
-            | WHERE_CONDITION { $$ = $1; }
+INSTR_FOR_P: WHERE_CONDITION { $$ = $1; }
             | ORDER_BY { $$ = queryBuilder.nuevoOrderBy($1, this._$.first_line, this._$.first_column+1); }
             | RETURN_STATEMENT { $$ = $1; }
+			// | LET_CLAUSE
 ;
 
-LET_CLAUSE: tk_let VARIABLE tk_2puntos_igual DECLARACION { $$ = queryBuilder.nuevoLet($2, $4, this._$.first_line, this._$.first_column+1); }
+LET_CLAUSE: tk_let VARIABLE tk_2puntos_igual DECLARACIONPP { $$ = queryBuilder.nuevoLet($2, $4, this._$.first_line, this._$.first_column+1); }
+			| tk_let DECLARACIONP
 ;
 
 WHERE_CONDITION: tk_where E { $$ = queryBuilder.nuevoWhere($2, this._$.first_line, this._$.first_column+1); }
-                // | tk_where XPATH
 ;
 
 ORDER_BY: ORDER_BY tk_coma E { $1.push($3); $$=$1; }
         | tk_order tk_by E { $$=[$3]; }
 ;
 
-RETURN_STATEMENT: tk_return EXP_HTML { $$ = queryBuilder.nuevoReturn($2, this._$.first_line, this._$.first_column+1); }
-                | tk_return E { $$ = queryBuilder.nuevoReturn($2, this._$.first_line, this._$.first_column+1); }
+RETURN_STATEMENT: tk_return HTML { $$ = queryBuilder.nuevoReturn($2, this._$.first_line, this._$.first_column+1); }
+                | tk_return XPATH { $$ = queryBuilder.nuevoReturn($2, this._$.first_line, this._$.first_column+1); }
 ;
 
-VARIABLE: tk_dolar tk_id { $$=builder.newNodename("$"+$2, this._$.first_line, this._$.first_column+1); }
+VARIABLE: tk_dolar tk_id { $$=queryBuilder.nuevaVariable("$"+$2, this._$.first_line, this._$.first_column+1); }
 ;
 
 DECLARACION: DECLARACION tk_coma DECLARACIONP { $1.push($3); $$=$1; }
@@ -217,9 +220,9 @@ VALORES_COMA: VALORES_COMA tk_coma E { $1.push($3); $$=$1; }
             | E { $$=[$1]; }
 ;
 
-EXP_HTML: EXP_HTML HTML { $1.push($2); $$=$1; }
-        | HTML { $$=[$1]; }
-;
+// EXP_HTML: EXP_HTML HTML { $1.push($2); $$=$1; }
+//         | HTML { $$=[$1]; }
+// ;
 
 HTML: tk_menor tk_id ATTRIBUTE_LIST tk_mayor CONTENT_LL tk_menor tk_bar tk_id tk_mayor { $$ = queryBuilder.nuevoHTML($2, $3, $5, $8, this._$.first_line, this._$.first_column+1); }
     | tk_menor tk_id ATTRIBUTE_LIST tk_mayor tk_menor tk_bar tk_id tk_mayor { $$ = queryBuilder.nuevoHTML($2, $3, null, $7, this._$.first_line, this._$.first_column+1); }
@@ -228,10 +231,10 @@ HTML: tk_menor tk_id ATTRIBUTE_LIST tk_mayor CONTENT_LL tk_menor tk_bar tk_id tk
 
 CONTENT_LL: CONTENT_LL CONTENT_TAG { $1.push($2); $$=$1; }
         | CONTENT_TAG { $$=[$1]; }
-        | HTML
+        // | HTML
 ;
 
-CONTENT_TAG: tk_content { $$ = queryBuilder.nuevoContenido($1, this._$.first_line, this._$.first_column+1); }
+CONTENT_TAG: tk_id { $$ = queryBuilder.nuevoContenido($1, this._$.first_line, this._$.first_column+1); } // era tk_content
             | tk_labre XPATH tk_lcierra { $$ = queryBuilder.nuevaInyeccion($2, false, this._$.first_line, this._$.first_column+1); }
             | tk_labre tk_data tk_ParA XPATH tk_ParC tk_lcierra { $$ = queryBuilder.nuevaInyeccion($4, true, this._$.first_line, this._$.first_column+1); }
 ;
@@ -265,12 +268,18 @@ QUERY: tk_2bar QUERY { $$=builder.newDoubleAxis($2, this._$.first_line, this._$.
 	| tk_bar QUERY { $$=builder.newAxis($2, this._$.first_line, this._$.first_column+1);
 					 prod_1 = grammar_stack.pop();
 			 		 grammar_stack.push({'QUERY -> tk_bar QUERY {SS=builder.newAxis(Param);}': ['token: tk_bar\t Lexema: ' + $1, prod_1]}); }
-	| EXP_PR { $$=$1;
-			   prod_1 = grammar_stack.pop();
-			   grammar_stack.push({'QUERY -> EXP_PR {SS=S1}': [prod_1]}); }
-	| AXIS { $$=$1;
-			 prod_1 = grammar_stack.pop();
-			 grammar_stack.push({'QUERY -> AXIS {SS=S1}': [prod_1]}); }
+	| tk_bar tk_asterisco CORCHETP {
+			var linea = this._$.first_line;
+			var columna = this._$.first_column+1;
+			$$=builder.newAxis(builder.newExpression(builder.newValue($2, Tipos.ASTERISCO, linea, columna), $3, linea, columna), linea, columna);
+		}
+	| tk_2bar tk_asterisco CORCHETP {
+			var linea = this._$.first_line;
+			var columna = this._$.first_column+1;
+			$$=builder.newDoubleAxis(builder.newExpression(builder.newValue($2, Tipos.ASTERISCO, linea, columna), $3, linea, columna), linea, columna);
+		}
+	| EXP_PR { $$=$1; }
+	| AXIS { $$=$1; }
 ;
 
 CORCHET: CORCHET tk_corA E tk_corC { $1.push(builder.newPredicate($3, this._$.first_line, this._$.first_column+1)); $$=$1;
@@ -346,13 +355,8 @@ E:	E tk_menorigual E { $$=builder.newOperation($1, $3, Tipos.RELACIONAL_MENORIGU
 	| E tk_diferent E { $$=builder.newOperation($1, $3, Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
 						prod_1 = grammar_stack.pop();
 						prod_2 = grammar_stack.pop();
-						grammar_stack.push({'E -> E tk_diferent E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_diferent\t Lexema: ' + $2, prod_1]}); }	
-    // | tk_bar E { $$=builder.newAxis($2, this._$.first_line, this._$.first_column+1); }
-    // | tk_2bar E { $$=builder.newDoubleAxis($2, this._$.first_line, this._$.first_column+1); }
-    | EXP_PR { $$=$1; }
-	// | QUERY { $$=$1;
-	// 		  prod_1 = grammar_stack.pop();
-	// 		  grammar_stack.push({'E -> QUERY {SS=S1}': [prod_1]}); }
+						grammar_stack.push({'E -> E tk_diferent E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_diferent\t Lexema: ' + $2, prod_1]}); }
+    | XPATH { $$=$1; }
 ;
 
 EXP_PR: FUNC CORCHETP { $$=builder.newExpression($1, $2, this._$.first_line, this._$.first_column+1);
@@ -367,12 +371,11 @@ EXP_PR: FUNC CORCHETP { $$=builder.newExpression($1, $2, this._$.first_line, thi
 
 PRIMITIVO: tk_id { $$=builder.newNodename($1, this._$.first_line, this._$.first_column+1);
 				   grammar_stack.push({'PRIMITIVO -> tk_id {SS=builder.newNodename(Param)}':['token: tk_text\t Lexema: ' + $1]}); }
-        | VARIABLE { $$ = $1; }
+        | VARIABLE	{ $$=builder.newAxis(builder.newCurrent($1.variable, this._$.first_line, this._$.first_column+1), this._$.first_line, this._$.first_column+1); }
         | STRING { $$ = $1; }
 		| num { $$=builder.newValue(Number($1), Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
 				grammar_stack.push({'PRIMITIVO -> num {SS=builder.newValue(Param)}':['token: num\t Lexema: ' + $1]}); }
-		| tk_asterisco { $$=builder.newValue($1, Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
-				   grammar_stack.push({'PRIMITIVO -> tk_asterisco {SS=builder.newValue(Param)}':['token: tk_asterisco\t Lexema: ' + $1]}); }
+		// | tk_asterisco { $$=builder.newValue($1, Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1); grammar_stack.push({'PRIMITIVO -> tk_asterisco {SS=builder.newValue(Param)}':['token: tk_asterisco\t Lexema: ' + $1]}); }
 		| tk_punto { $$=builder.newCurrent($1, this._$.first_line, this._$.first_column+1); 
 					 grammar_stack.push({'PRIMITIVO -> tk_punto {SS=builder.newCurrent(Param)}':['token: tk_punto\t Lexema: ' + $1]}); }
 		| tk_2puntos { $$=builder.newParent($1, this._$.first_line, this._$.first_column+1);
@@ -381,7 +384,7 @@ PRIMITIVO: tk_id { $$=builder.newNodename($1, this._$.first_line, this._$.first_
 							grammar_stack.push({'PRIMITIVO -> tk_arroba tk_id {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $1, 'token: tk_id\t Lexema: ' + $2]}); }
 		| tk_arroba tk_asterisco { $$=builder.newAttribute($2, this._$.first_line, this._$.first_column+1); 
 							 grammar_stack.push({'PRIMITIVO -> tk_arroba tk_asterisco {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $1, 'token: tk_asterisco\t Lexema: ' + $2]});}
-        | tk_content
+        // | tk_content
 ;
 
 STRING: tk_string_d { $$=builder.newValue($1, Tipos.STRING, this._$.first_line, this._$.first_column+1);
