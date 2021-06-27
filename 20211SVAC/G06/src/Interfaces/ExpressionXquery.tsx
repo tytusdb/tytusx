@@ -6,5 +6,5 @@ export interface ExpressionXquery {
 
     line: Number;
     column: Number;
-   // executeXquery(entAct : EntornoXQuery, RaizXML: Entorno) : Retorno
+    //executeXquery(entAct : EntornoXQuery, RaizXML: Entorno) : Retorno
 }

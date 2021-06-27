@@ -135,11 +135,11 @@ export default class Main extends Component {
         var querysXpath = querys.xpath; 
         var ast = result.ast;
         var respuesta ="";
+        console.log(querysXpath);
         traducirXml(ast);
         for (const query of querysXpath) {
             try {
                 respuesta += query.execute(ast[0]).value;
-                //TraducirXPATH(query);
             } catch (error) {
                 console.log(error);
             }
