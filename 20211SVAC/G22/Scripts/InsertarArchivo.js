@@ -1,25 +1,11 @@
 
 var nombreEntrada ='';
-var textA = document.getElementById("editor");
-var editor = CodeMirror.fromTextArea(textA, {
-  lineNumbers: true,
-mode: "text/html",
-matchBrackets: true
-});
-
-
 
 var contenidoGeneral ;
 
-var inputElement = document.getElementById("abrir");
-inputElement.addEventListener("change", leerArchivo, false);
-
-function ingresarTexto(item) {
-    contenido = document.getElementById(item).firstChild.value;
-    //console.log(contenido + '88')
-}
 
 
+//------------LECTOR DEL ARCHIVO DE ENTRADA XML-------------------------------
 function leerArchivo(e) {
     
     var archivo = e.target.files[0];
@@ -44,13 +30,23 @@ function mostrarContenido(contenido){
 }
 
 
+var inputElement = document.getElementById("abrir");
+inputElement.addEventListener("change", leerArchivo, false);
+
+function ingresarTexto(item) {
+    contenido = document.getElementById(item).firstChild.value;
+    //console.log(contenido + '88')
+}
+
+
+//============FUNCION LIMPIAR TABLAS==============================
 function limpiar() {
   editor.setValue('');
   nombreEntrada = null;
   document.getElementById("abrir").value = '';
   reiniciarArreglos();
 }
-
+//================GUARDADORES ENTRADAS SALIDAS===========================
 
 var num = 0;
 function guardarEntrada() {
