@@ -8,9 +8,9 @@ export class ReverseStep extends Nodo {
   public instruccion: string;
   public NodeTest: Nodo | undefined;
 
-  constructor(tipo: Tipo, instruccion: string, NodeTest: Nodo | undefined,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, instruccion: string, NodeTest: Nodo | undefined,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ, tipo, linea, columna);
 
     this.instruccion = instruccion;
     this.NodeTest = NodeTest;
@@ -20,5 +20,8 @@ export class ReverseStep extends Nodo {
     throw new Error('Method not implemented in ReverseStep');
   }
 
+  public c3d(tabla: Tabla, arbol: Arbol) {
+    throw new Error('Method not implemented in ReverseStep');
+  }
 
 }

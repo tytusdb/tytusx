@@ -95,15 +95,18 @@ BSL                         "\\".
 %%
 
 /* Definición de la gramática */
-INICIO : INSTRUCCION EOF     {  console.log("TODO CORRECTO :D XQUERY ASC VERSION");
-                                instruccion = $1[0];
+INICIO : INSTRUCCIONES EOF     {  console.log("TODO CORRECTO :D XQUERY ASC VERSION");
+                                instrucciones = $1[0];
                                 nodo = $1[1];
-                                $$ =[instruccion,nodo];
+                                $$ =[instrucciones,nodo];
                                 return $$; } ;
 
-INSTRUCCION: SETS { instruccionXPath = new XPath(@1.first_line, @1.first_column, $1[0]);
-                    $$ = [instruccionXPath,$1[1]]; }
-        | FLOWER  { $$ = $1; };
+INSTRUCCIONES: INSTRUCCIONES INSTRUCCION { $1[0].push($2[0]);
+                                           $1[1].agregarHijo($2[1]);
+                                           $$ = [$1[0],$1[1]]; }
+        | INSTRUCCION { $$ = [[$1[0]],$1[1]]; };
+
+INSTRUCCION: FLOWER  { $$ = $1; };
 
 
 SETS: SETS SET { $1[1].agregarHijo($2[1]);
@@ -455,9 +458,10 @@ SENTENCIAS: SENTENCIAS SENTENCIA {
 
 
 SENTENCIA: tk_let tk_idflower tk_dospuntosigual EXPRESION_LOGICAX {  nodoaux = new NodoArbol(":=","");
-                                                                     nodoaux.agregarHijo(new NodoArbol($1,""));
+                                                                     nodoaux.agregarHijo(new NodoArbol($2,""));
                                                                      nodoaux.agregarHijo($4[1]);
-                                                                     $$ = [null,nodoaux]; }
+                                                                     declaracionAux = new Declaracion(TipoSentencia.LET, $4[0], $2,  @1.first_line, @1.first_column);
+                                                                     $$ = [declaracionAux,nodoaux]; }
 
         | tk_where tk_idflower tk_slash EXPRESION_LOGICAX  { 
                                         nodoaux = new NodoArbol("Where","");
@@ -513,7 +517,6 @@ EXPRESION_LOGICAX : EXPRESION_LOGICAX tk_and EXPRESION_RELACIONALX { operacionAu
                                                                    nodoaux.agregarHijo($1[1]);
                                                                    nodoaux.agregarHijo($3[1]);
                                                                    $$ = [operacionAux,nodoaux]; }     
-                |  EXPRESION_XQUERY { $$ = $1; }
                 |  EXPRESION_RELACIONALX { $$ = $1;};
 
 
@@ -605,6 +608,10 @@ EXPRESION_NUMERICAX : tk_menos EXPRESION_NUMERICAX %prec UMENOS	{ negativo = new
 	| tk_decimal						{ primitivoAux = new Primitivo(Number($1), @1.first_line, @1.first_column);
                                                                   nodoaux = new NodoArbol($1,"");
                                                                   $$ = [primitivoAux,nodoaux]; } 
+
+        | tk_idflower	                                        {  primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol($1,"");
+                                                                   $$ = [primitivoAux, nodoaux]; }
 
 	| tk_identificador	                                {  primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
                                                                    nodoaux = new NodoArbol($1,"");

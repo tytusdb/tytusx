@@ -69,7 +69,9 @@ toggle between hiding and showing the dropdown content */
 function Descargar() {
   document.getElementById("myDropdown2").classList.toggle("show");
 }
-
+function ReportesFase2() {
+  document.getElementById("myDropdown3").classList.toggle("show");
+}
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
   if (!event.target.matches('.dropbtn')) {

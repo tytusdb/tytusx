@@ -7,11 +7,11 @@ export default class asignacion implements instruccion_3d{
   public der : string;
 
   constructor(variable, izq, operador, der) {
+    this.intrucciones_3d = new Array<instruccion_3d>();
     this.variable = variable;
     this.izq = izq;
     this.operador = operador;
     this.der = der;
-
   }
 
   getText(){
@@ -25,6 +25,12 @@ export default class asignacion implements instruccion_3d{
 
   insertar(instruccion: instruccion_3d) {
     this.intrucciones_3d.push(instruccion);
+  }
+
+  insertar_lista(lista: Array<instruccion_3d>) {
+    for(let x of lista){
+      this.intrucciones_3d.push(x);
+    }
   }
 
 }

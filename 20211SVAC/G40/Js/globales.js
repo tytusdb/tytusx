@@ -80,6 +80,13 @@ const init = function(e){
         window.open('./reportes/stack.html','_blank');
     });
 
+    let btn_opC3D = document.querySelector("#opC3D");
+
+    btn_opC3D.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/optimizaciones.html','_blank');
+    });
+
 };
 
 
