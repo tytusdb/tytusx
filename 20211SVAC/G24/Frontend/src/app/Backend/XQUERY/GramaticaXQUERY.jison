@@ -45,16 +45,6 @@
 "upper-case"        return 'FUPPER';
 "substring"         return 'FSUBS';
 
-"<html>"        return 'AHTML';
-"</html>"       return 'CHTML';
-"<body>"        return 'ABODY';
-"</body>"       return 'CBODY';
-"<h1>"          return 'AH1';
-"</h1>"         return 'CH1';
-"<ul>"          return 'AUL';
-"</ul>"         return 'CUL';
-
-
 
 "*"         return 'ASTERISCO';
 "("         return 'PARIZQ';
@@ -115,7 +105,6 @@ INICIO
 ;
 
 INSTRUCCIONES
-   //| //html
     :INSTRUCCION    {$$=$1}
 ;
 
@@ -130,23 +119,23 @@ LET
 
 FOR
     :RFOR VARIABLE SENTENCIA L_CONDICIONALES  RRETURN RESULTADO {$$="for "+$2+$3+$4+" return "+$6}
-    |RFOR VARIABLE SENTENCIA  RRETURN RESULTADO {$$="for "+$2+$3+" return "+$5} 
+    |RFOR VARIABLE SENTENCIA  RRETURN RESULTADO                 {$$="for "+$2+$3+" return "+$5} 
     ;
 
 L_CONDICIONALES
-    :L_CONDICIONALES CONDICIONALES {$1.push($2); $$=$1;}
-    |CONDICIONALES  {$$=[$1];}
+    :L_CONDICIONALES CONDICIONALES  {$1.push($2); $$=$1;}
+    |CONDICIONALES                  {$$=[$1];}
     ;
 
 CONDICIONALES
-    :RWHERE CONDICION {$$="where "+$2;}
+    :RWHERE CONDICION   {$$="where "+$2;}
     |RORDERBY CONDICION {$$="order by "+$2;}
     ;
 
 CONDICION
-    :VARIABLE L_CONSULTAS CONECTOR CONDICION   {$$=$1+$2+" "+$3+$4}
-    |VARIABLE L_CONSULTAS                      {$$=$1+$2}
-    |VARIABLE                               {$$=$1}
+    :VARIABLE L_CONSULTAS CONECTOR CONDICION    {$$=$1+$2+" "+$3+$4}
+    |VARIABLE L_CONSULTAS                       {$$=$1+$2}
+    |VARIABLE                                   {$$=$1}
     ;
 
 
@@ -164,8 +153,8 @@ L_CLAUSULA
     ;
 
 CLAUSULA
-    :PARIZQ ENTERO CONECTOR ENTERO PARDER {$$=$2+" to "+$4}
-    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR {$$=$2+" to "+$4+$6}
+    :PARIZQ ENTERO CONECTOR ENTERO PARDER              {$$=$2+" to "+$4}
+    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR     {$$=$2+" to "+$4+$6}
     ;
 
 VARIABLE
@@ -187,23 +176,25 @@ CONECTOR
 
 RESULTADO
     :CONDICION  {$$=$1}
-    |ABERTURA L_RESULT  CIERRE {$$=$1+$2+$3}
     |IF         {$$=$1}
+    |LLAVES 
+    |ASIGNESPECIAL
     ;
 
-L_RESULT
-    :L_RESULT RESULT {$1.push($2); $$=$1;}
-    |RESULT  {$$=[$1];}
-    ;
-
-RESULT
-    :LLAVEIZQ CONDICION LLAVEDER {$$=" {"+$2+"} "}
-    |LLAVEIZQ CONDICION LLAVEDER CONECTOR RESULT {$$=" {"+$2+"} "+$4+$5}
-    |LLAVEIZQ RDATA PARIZQ CONDICION PARDER LLAVEDER {$$=" {data("+$4+")} "}
-    |LLAVEIZQ RDATA PARIZQ CONDICION PARDER LLAVEDER CONECTOR ASIGNACION RESULT {$$=" {data("+$4+")} "+$7+$8+$9}
-    |ASIGNACION RESULT  {$$=$1+$2}
-    |//IF
+ASIGNESPECIAL
+    :IDENTIFICADOR IGUAL LLAVES CONECTOR ASIGNESPECIAL
+    |IDENTIFICADOR IGUAL LLAVES FINASIGN
     ;    
+
+FINASIGN
+    :ASIGNESPECIAL
+    |
+    ;
+
+LLAVES
+    :LLAVEIZQ RDATA PARIZQ VARIABLE L_CONSULTAS PARDER LLAVEDER
+    |LLAVEIZQ  VARIABLE LLAVEDER
+    ;
 
 ASIGNACION
     :IDENTIFICADOR DOSPUNTOS    {$$=$1+" : "}
@@ -211,22 +202,11 @@ ASIGNACION
     ;
 
 IF  
-    :RIF PARIZQ VARIABLE CONSULTA PARDER RTHEN RESULTADO RELSE RESULTADO
-    |RIF PARIZQ VARIABLE CONSULTA PARDER RTHEN RESULTADO RELSE PARIZQ PARDER
+    :RIF PARIZQ VARIABLE  L_CONSULTAS PARDER RTHEN RESULTADO RELSE RESULTADO
+    |RIF PARIZQ VARIABLE  L_CONSULTAS PARDER RTHEN RESULTADO RELSE PARIZQ PARDER
     ;
 
-ABERTURA
-    :MENORQUE IDENTIFICADOR ATRIBUTO MAYORQUE {$$="<"+$2+$3+">"}
-    |MENORQUE IDENTIFICADOR MAYORQUE    {$$="<"+$2+">"}
-    ;    
 
-CIERRE
-    :MENORQUECIERRE IDENTIFICADOR MAYORQUE {$$="</"+$2+">"}
-    ;
-
-ATRIBUTO
-    :IDENTIFICADOR IGUAL CADENA  {$$=$1+"="+$3}
-    ;
 
 //XPATH
     
@@ -237,6 +217,7 @@ L_CONSULTAS
 
 CONSULTA
     :OPCIONESCONSULT PREDICADO SALIDA            {$$="/"+$2}  //AQUI HAY QUE AGREGAR TODO LO QUE PUEDE VENIR DE XPATH
+    |OPCIONESCONSULT EXPRESION SALIDA
     |EXPRESION SALIDA                            
 ;
 
@@ -256,7 +237,6 @@ OPCIONESCONSULT
 
 PREDICADO
     :CORIZQ EXPRESION CORDER    {$$="["+$2+"]"}
-    |EXPRESION                  {$$=$1}
     ;
 
 EXPRESION
@@ -264,6 +244,7 @@ EXPRESION
     |IDENTIFICADOR              {$$=$1}
     |CADENA                     {$$=$1}
     |ARROBA IDENTIFICADOR       {$$="@ "+$2}
+    |ARROBA IDENTIFICADOR IGUAL CADENA
     |RLAST PARIZQ PARDER        {$$=$1+"()"}
     |EXPRESION MAS EXPRESION    {$$=$1+" + "+$3}
     |EXPRESION MENOS EXPRESION  {$$=$1+" - "+$3}
