@@ -24,6 +24,15 @@ const parseXML = function (entrada) {
                 console.info('Entrada fue parseada correctamente!!!!');
                 document.getElementById('consola').value += ">Entrada parseada correctamente! \n";
 
+                console.log("\n\n\n#############EMPIEZA A CREAR TS TRADUCCION###################");
+                let resultadoTS = gramaticaXML3D.parse(entrada);
+                for (var i = 0; i < resultadoTS.listaObjetos.length; i+=1) {                
+                    console.log("Objeto traduccion id: "+resultadoTS.listaObjetos[i].identificador+"  tipo : "+resultadoTS.listaObjetos[i].tipo);                    
+                }  
+                generarXMLC3D(resultadoTS);
+                console.log("\n\n\n############# Codigo traducido ###################\n\n");                                
+                console.log("\n\n\n#################SALIO DE TS DE TRADUCCION########################");
+
                 //Si la entrada fue parseada correctamente, se procede a generar el reporte de Tabla de Símbolos
                 console.log("\n\n\n################################################################");
                 var codigoTablaSimbolos = construyeGraficaTS(resultado[0].listaObjetos[0]);
