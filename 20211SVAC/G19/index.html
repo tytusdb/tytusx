@@ -41,6 +41,7 @@
         <script src="./Fase2/Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Fase2/Js/Interprete/Instrucciones/XPath.js"></script>
         <script src="./Fase2/Js/Interprete/Traductor/TraductorXML.js"></script>
+        <script src="./Fase2/Js/Interprete/Traductor/TraductorXPATH.js"></script>
 
         <script>
 
@@ -57,6 +58,9 @@
             var globalC3D = "";
             var xpathC3D = "";
             var xmlC3D = "";
+            var xpathC3D="";
+            var funcionesALlamar="";
+            var inicioXPath,finXPath,inicioXML,finXML=0;
             var C3DXML = new TraductorXML();
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
@@ -151,11 +155,17 @@
                     </div> 
                 </div>
                 
+                
             </div>
             
         
             <div class="editores">
+            <span>
+                        <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>
             <div class="consola">
+
         <div class="labelConsola"><label class="label info">XPath</label></div>
             <!-- ENTRADA XPATH -->
             <textarea id="entrada_xpath"></textarea>
@@ -170,21 +180,23 @@
                           document.getElementById("pagina1").click();
                        });
                       </script>
-                    <button class="tablinks" onclick="openTag(event, 'p2'); SetearDos()">Pestaña 2</button>
-                    <button class="tablinks" onclick="openTag(event, 'p3'); SetearTres()">Pagina 3</button>
+                    <button class="tablinks" onclick="openTag(event, 'p2'); SetearDos()">New Tab</button>
+                    
                     
                 </div>
                 <!-- Tab content -->
                 <div id="p1" class="tabcontent">
                     <!-- EDITOR 1 -->
                     <textarea id="editor" ></textarea>
-                    <span>
-                        <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
-                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
-                    </span>   
+                       
                     <!-- FIN EDITOR 1 -->                 
                 </div>                   
-  
+                <div id="p2" class="tabcontent">
+                    <!-- EDITOR 2 -->
+                    <textarea id="editor2"></textarea>
+
+                    <!-- FIN EDITOR 2 -->
+                </div>
                 <script src="Fase2/Js/Codemirrors.js"></script>
                 <script>DefaultTag('p1');</script>
                <!-- FIN TAGS -->
