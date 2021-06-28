@@ -8,7 +8,7 @@ export class Simbolo implements Nodo{
   public linea: number;
   public columna: number;
   public valor: any;
-  private tipo: Tipo;
+  public tipo: Tipo;
   public entorno: Entorno | undefined;
   public ambito: string;
   public valorObj: string;

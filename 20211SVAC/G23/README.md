@@ -15,8 +15,6 @@
 **Proyecto de OLC2 Junio 2021**
 
 <br>
-<br>
 
-## GitHub Pages:
-
-## https://tytusdb.github.io/tytusx/20211SVAC/G23/
+# GitHub Pages
+## https://ldecast.github.io/tytusx-G23/

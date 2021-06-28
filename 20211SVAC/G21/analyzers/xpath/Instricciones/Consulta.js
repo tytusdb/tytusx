@@ -8,22 +8,23 @@ class Consulta {
     }
     ejecutar(ent, arbol) {
         //entorno global
-        console.log(this.listaAccesos)
         if (ent.id === this.listaAccesos[0]) {
             //eliminando valor de raiz de consulta
             this.listaAccesos.splice(0, 1);
             //salida
             var resultado = this.funcionRecursiva(ent, this.listaAccesos);
             console.log('Salida: \n' + resultado);
+            return resultado;
         }
         else {
             //error semantico
             console.log('Error semantico, no existe la raiz');
+            return 'Error semantico, no existe la raiz'
         }
     }
     funcionRecursiva(ent, keys) {
         //llave
-        var key = keys[0][1];
+        var key = keys[0];
         var salida = '';
         keys.splice(0, 1);
         //validando simbolo en enterno

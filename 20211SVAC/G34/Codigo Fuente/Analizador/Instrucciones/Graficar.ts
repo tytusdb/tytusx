@@ -13,7 +13,7 @@ class Graficar{
         {
         rankdir=TB; 
         node[shape = box, style = filled, color = white];
-        node${NUMID}[label="AST XML"];
+        node${NUMID}[label="CST XML"];
         `;    
 
         let str = [];
@@ -34,6 +34,62 @@ class Graficar{
         return str.join("");
     }
 
+
+    graficarXPATHAST() : string{
+        const NUMID = this.incrementarContador();
+        const encabezado:string =  `digraph AST 
+        {
+        rankdir=TB; 
+        node[shape = box, style = filled, color = white];
+        node${NUMID}[label="AST XPATH"];
+        `;    
+
+        let str = [];
+        str.push(encabezado);
+
+        let numaux = 0;
+        let g = new Graficar();
+        g.incrementarContador();
+        
+        for(let aux of listaDirecciones)
+        {
+            numaux = graphXPathRuta(str, aux, g);
+            str.push(`
+            node${NUMID} -> node${numaux};
+            `);
+        }
+        str.push("\n}\n");
+        return str.join("");
+    }
+
+    graficarXPATHCST() : string{
+        const NUMID = this.incrementarContador();
+        const encabezado:string =  `digraph AST 
+        {
+        rankdir=TB; 
+        node[shape = box, style = filled, color = white];
+        node${NUMID}[label="CST XPATH"];
+        `;    
+
+        let str = [];
+        str.push(encabezado);
+
+        let numaux = 0;
+        let g = new Graficar();
+        g.incrementarContador();
+        
+        for(let aux of listaDirecciones)
+        {
+            numaux = graphXPathRuta2(str, aux, g);
+            str.push(`
+            node${NUMID} -> node${numaux};
+            `);
+        }
+        str.push("\n}\n");
+        return str.join("");
+    }
+
+
     incrementarContador():number{
         return this.contador ++;
     }
@@ -41,4 +97,6 @@ class Graficar{
     getContador():number{
         return this.contador;
     }
+
+
 }

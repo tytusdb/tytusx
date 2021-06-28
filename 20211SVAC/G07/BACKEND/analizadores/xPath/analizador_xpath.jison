@@ -119,7 +119,7 @@ ELEMENTO_P:
         }
         
         |  
-         {
+        {
         $$= new Nodo("ELEP","ELEP");
         $$.agregarHijo(new Nodo("ε","ε"));
         }

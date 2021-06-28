@@ -20,14 +20,13 @@ function generateReport(req: any) {
                 parser_xPath = require('../analyzers/xpath_down');
                 break;
         }
-        // Puede ser uno de los tres descritos
         switch (report) {
             case "XML-CST":
                 return CST_xml(parser_xml, xml);
             case "XML-GRAMMAR":
                 return GrammarReport_xml(parser_xml, xml);
             case "XPATH-AST":
-                return AST_xpath(parser_xPath, xPath);
+                return AST_xml(parser_xml, xml); // Se dejó el del xml
             default:
                 return { output: "Algo salió mal." };
         }
@@ -85,16 +84,37 @@ function GrammarReport_xml(parser_xml: any, xml: string) {
     return output;
 }
 
+function AST_xml(parser_xml: any, xml: string) {
+    let errors = [];
+    // Análisis de XML
+    let xpath_xml = parser_xml.parse(xml);
+    let _ast = xpath_xml.ast;
+    if (xpath_xml.errors.length > 0 || xpath_xml.ast === null || xpath_xml === true) {
+        if (xpath_xml.errors.length > 0) errors = xpath_xml.errors;
+        if (xpath_xml.ast === null || xpath_xml === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    let str = _ast[0].getASTXMLTree();
+    let output = {
+        arreglo_errores: errors,
+        output: "AST generado.",
+        ast: str
+    }
+    return output;
+}
+
 function AST_xpath(parser_xpath: any, xpath: string) {
     let errors = [];
     // Análisis de XPath
     let xpath_ast = parser_xpath.parse(xpath);
-    let _ast = xpath_ast.ast_report; //Confirmar nombre de propiedad
+    let _ast = xpath_ast.arbolAST;
     if (xpath_ast.errors.length > 0 || xpath_ast.ast === null || xpath_ast === true) {
         if (xpath_ast.errors.length > 0) errors = xpath_ast.errors;
         if (xpath_ast.ast === null || xpath_ast === true) {
-            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
-            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta.", origen: "XPath", linea: 1, columna: 1 });
+            return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
         }
     }
     let output = {

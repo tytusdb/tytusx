@@ -1,0 +1,228 @@
+
+doc("Libros.xml")
+1) Consulta 1	ESPERADA ************************* Archivo Libros.xml
+
+    /catalog/book[@id="bk101"]/./*/text()
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:
+for $x in doc("Libros.xml")/catalog/book[@id="bk101"]
+return $x/./*/text()
+
+    Salida Esperada
+
+        GÃ¡mbardellÃ¤, MÃ¡tthew
+        XML Developer's Guide
+        Computer
+        44.95
+        2000-10-01
+        An in-depth look at creating applications 
+            with XML.
+
+/////TRADUCCION DE XQUERY
+		for $x in doc("Libros.xml")/catalog/book[@id="bk101"]
+		where $x/./*
+		return $x/text()
+
+
+
+1) Consulta 1	MOSTRADA ************************* Archivo Libros.xml
+
+    /catalog/book[1]
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:
+
+for $x in /catalog
+return $x/book[1]
+
+for $x in doc("Libros.xml")/catalog
+return $x/book[1]
+
+
+    Salida Esperada
+	
+<book id="bk101">     
+<author >GÃ mbardellÃ MÃ tthew</author>
+<title >XML Developer ' s Guide</title>
+<genre >Computer</genre>
+<price >44.95</price>
+<publish_date >2000 10 01</publish_date>
+<description >An in-depth look at creating applications with XML.</description>
+</book>
+
+
+2) Consulta 2	ESPERADA ************************* Archivo Libros.xml
+
+        //catalog/book/descendant::price
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:
+
+for $x in //catalog/book
+return $x/descendant::price
+
+        Salida Esperada
+            <price>44.95</price>
+            <price>5.95</price>
+            <price>5.95</price>
+            <price>5.95</price>
+            <price>5.95</price>
+            <price>4.95</price>
+            <price>4.95</price>
+            <price>4.95</price>
+            <price>6.95</price>
+            <price>36.95</price>
+            <price>36.95</price>
+            <price>49.95</price>
+
+2) Consulta 2	MOSTRADA ************************* Archivo Libros.xml
+        
+			/catalog/book/price
+			//price
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:
+for $x in //catalog/book
+order by $x/price<=100
+return $x/descendant::price
+			
+        Salida Esperada
+            <price >44.95</price>
+			<price >5.95</price>
+			<price >5.95</price>
+			<price >5.95</price>
+			<price >5.95</price>
+			<price >4.95</price>
+			<price >4.95</price>
+			<price >4.95</price>
+			<price >6.95</price>
+			<price >36.95</price>
+			<price >36.95</price>
+			<price >49.95</price>
+
+3) Consulta 3	ESPERADA ************************* Archivo Libros.xml
+
+        //book[publish_date/@cali="hola"]/title/.
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:
+for $x in //book[publish_date/@cali="hola"]
+return $x/title/.
+ 
+ Salida Esperada
+            <title>Visual Studio 7: A Comprehensive Guide</title>
+
+3) Consulta 3	MOSTRADA ************************* Archivo Libros.xml
+   
+        /catalog/book[last()]/title
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:
+for $x in /catalog/book[last()]
+order by $x /book[last()]
+return $x/title
+
+        Salida Esperada
+		
+            <title >Visual Studio 7 A Comprehensive Guide</title>
+
+
+4) Consulta 4	ESPERADA ************************* Archivo Libros.xml
+ 
+        /catalog/book[price>(2*2+8+10)]/price[position()<2]/node()
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:            
+for $x in /catalog/book[price>(2*2+8+10)]
+where $x /price[position()<2]
+return $x/price
+
+        Salida Esperada    
+            44.95
+            36.95
+            36.95
+            49.95
+
+4) Consulta 4	MOSTRADA ************************* Archivo Libros.xml
+ 
+        /catalog/book[1]/price|/catalog/book[last()-2]/price|/catalog/book[11]/price|/catalog/book[last()]/price
+		
+        Salida Esperada    
+            <price >44.95</price>
+			<price >36.95</price>
+			<price >36.95</price>
+			<price >49.95</price>
+
+5) Consulta 5	ESPERADA ************************* Archivo Libros.xml
+
+        //@*
+        
+        Salida Esperada 
+            bk101
+            bk102
+            bk103
+            bk104
+            bk105
+            cali
+            bk106
+            cali
+            bk107
+            bk108
+            bk109
+            bk110
+            cali
+            bk111
+            bk112
+            hola
+
+5) Consulta 5	MOSTRADA ************************* Archivo Libros.xml
+
+        //@*
+        
+        Salida Esperada 
+			id="bk101"
+			id="bk102"
+			id="bk103"
+			id="bk104"
+			top="cali"
+			id="bk105"
+			top="cali"
+			id="bk106"
+			id="bk107"
+			id="bk108"
+			id="bk109"
+			top="cali"
+			id="bk110"
+			id="bk111"
+			cali="hola"
+			id="bk112"
+
+
+
+6) Consulta 6	ESPERADA ************************* Archivo Libros.xml
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY: 
+DUDA CON RESPECTO A LA LECTURA DE ATRIBUTOS
+for $x in //@top/..
+return $x /@*
+  
+  //@top/../@*
+
+    Salida Esperada 
+
+        cali
+        cali
+        cali
+		
+6) Consulta 6	MOSTRADA ************************* Archivo Libros.xml
+
+    //@top
+
+    Salida Esperada 
+
+		top="cali"
+		top="cali"
+		top="cali"	
+	

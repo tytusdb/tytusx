@@ -11,14 +11,27 @@ const parserXpathDesc=require('../../Gramaticas/XPathDESC')
 const errores=require('../Clases/Models/ListaError.js')
 const Estado=require('../Clases/Models/Estado.js')
 const ListaGramatica=require('../Clases/Models/ListaGramatica.js')
-
+const parserXQuery=require("../../Gramaticas/xquery")
+import {Recorrer} from '../Clases/Models/Recorrer'
+const tradXML = require('../Clases/Models/TraductorXML.js')
 
 import Crear from '../Clases/AST/CrearTS'
 import { Router } from '@angular/router';
+import Entorno from '../Clases/AST/Entorno';
 const defaults = {
   xml:
     '',
 };
+const defaults2 = {
+  xquery:
+    '',
+};
+
+const defaults3 = {
+  go:
+    '',
+};
+
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
@@ -27,7 +40,7 @@ const defaults = {
 
 export class PrincipalComponent implements OnInit {
 
-  nodoraiz:any;
+  nodoraiz: any;
   tablaSimbolo: Crear = null;
   salida: string = ""
   errores: string = ""
@@ -36,6 +49,8 @@ export class PrincipalComponent implements OnInit {
   readOnly = false;
   tipo:string=""
   archivo:string="";
+  xquery:string="";
+  traduccion:string=""
 
   mode: keyof typeof defaults = 'xml';
   options = {
@@ -44,27 +59,27 @@ export class PrincipalComponent implements OnInit {
   };
   defaults = defaults;
 
-  changeMode(): void {
-    this.options = {
-      ...this.options,
-      mode: this.mode,
-    };
-  }
 
-  handleChange($event: Event): void {
-    console.log('ngModelChange', $event);
-  }
+  mode2: keyof typeof defaults2 = 'xquery';
+  options2 = {
+    lineNumbers: true,
+    mode: this.mode2,
+  };
 
-  clear(): void {
-    this.defaults[this.mode] = '';
-  }
+  defaults2 = defaults2;
 
+  mode3: keyof typeof defaults3 = 'go';
+  options3 = {
+    lineNumbers: true,
+    mode: this.mode2,
+  };
+  defaults3 = defaults3;
 
-  contador:number;
-  array:any[];
-  constructor(private router: Router, private toastr:ToastrService) {
-    this.contador=0;
-    this.array=[]
+  contador: number;
+  array: any[];
+  constructor(private router: Router, private toastr: ToastrService) {
+    this.contador = 0;
+    this.array = []
     this.array.push({
       name: "nuevo",
       indice: this.contador,
@@ -82,7 +97,7 @@ export class PrincipalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tipo=localStorage.getItem("TIPO")
+    this.tipo = localStorage.getItem("TIPO")
     Estado.Estado.Cambio(2)
     //console.log(Estado.Estado.cambio)
   }
@@ -103,21 +118,21 @@ export class PrincipalComponent implements OnInit {
   }
 
 
-  compilar(){
+  compilar() {
     ListaGramatica.ReporteGramatical.clear()
     errores.Errores.clear();
-    let cadena =this.archivo;
-    try{
-    Estado.Estado.Cambio(1)
-    const CST = parser.parse(cadena);
-    this.GenerarTablaSimbolos(CST.list)
-    Estado.Estado.Cambio(2)
-    this.nodoraiz = parser.parse(cadena);
-    localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz.list))
-    localStorage.setItem("encoding",CST.encoding)
-    console.log(CST.encoding)
-    localStorage.setItem("TIPO", "Ascendente")
-    }catch(Error){
+    let cadena = this.archivo;
+    try {
+      Estado.Estado.Cambio(1)
+      const CST = parser.parse(cadena);
+      this.GenerarTablaSimbolos(CST.list)
+      Estado.Estado.Cambio(2)
+      this.nodoraiz = parser.parse(cadena);
+      localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz.list))
+      localStorage.setItem("encoding", CST.encoding)
+      console.log(CST.encoding)
+      localStorage.setItem("TIPO", "Ascendente")
+    } catch (Error) {
       this.toastr.error("No se ha podido generar correctamente el análisis")
     }
   }
@@ -126,7 +141,7 @@ export class PrincipalComponent implements OnInit {
     ListaGramatica.ReporteGramatical.clear()
     errores.Errores.clear();
 
-    try{
+    try {
       Estado.Estado.Cambio(1)
       const CST = parserDesc.parse(this.archivo);
       this.GenerarTablaSimbolos(CST.list)
@@ -134,72 +149,72 @@ export class PrincipalComponent implements OnInit {
       this.nodoraiz = parserDesc.parse(this.archivo);
       localStorage.setItem("CSTA", JSON.stringify(this.nodoraiz.list))
       localStorage.setItem("TIPO", "Descendente")
-    }catch(Error){
+    } catch (Error) {
       this.toastr.error("No se ha podido generar correctamente el análisis")
     }
   }
 
 
   xpathASC() {
-  // try{
+    // try{
     const AST = parserXpathAsc.parse(this.xpath);
 
-    localStorage.setItem("ASTXPATH",JSON.stringify(AST));
-    let tabla=[]
-    tabla=JSON.parse(localStorage.getItem("tablaSimbolo"));
-    if(tabla.length!=0){
-    let buscar=new Buscar(this.toastr);
-    this.toastr.success("Análisis completado")
-    this.salida=buscar.darFormato()
-    }else{
+    localStorage.setItem("ASTXPATH", JSON.stringify(AST));
+    let tabla = []
+    tabla = JSON.parse(localStorage.getItem("tablaSimbolo"));
+    if (tabla.length != 0) {
+      let buscar = new Buscar(this.toastr);
+      this.toastr.success("Análisis completado")
+      this.errores = buscar.darFormato()
+    } else {
       this.toastr.warning("Se debe ingresar un archivo XML primero");
     }
-   /*}catch(Error){
-    this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
-    }*/
+    /*}catch(Error){
+     this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
+     }*/
   }
 
   xpathDESC() {
-    try{
+    try {
       const AST = parserXpathDesc.parse(this.xpath);
-      localStorage.setItem("ASTXPATH",JSON.stringify(AST));
+      localStorage.setItem("ASTXPATH", JSON.stringify(AST));
       this.toastr.success("Análisis completado")
-    }catch(Error){
-      this.toastr.error("Error","Hay un error en la sintáxis, compruebe su cadena de entrada" )
+    } catch (Error) {
+      this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
     }
 
   }
 
-  GenerarTablaSimbolos(CST:any){
-    let array=[]
-    this.salida=">>Analizando archivo XML\n";
-    try{
-      if(CST!=null){
-        this.tablaSimbolo=new Crear();
-        let lista=[];
+  GenerarTablaSimbolos(CST: any) {
+    let array = []
+    this.salida = ">>Analizando archivo XML\n";
+    try {
+      if (CST != null) {
+        this.tablaSimbolo = new Crear();
+        let lista = [];
         lista.push(CST)
-        this.tablaSimbolo.agregar(lista,"Global");
+        this.tablaSimbolo.agregar(lista, "Global");
         this.TablaSimbolos();
-        array=errores.Errores.geterror();
-        if(array.length!=0){
-          this.toastr.warning("atención","Se han detectado errores en el archivo");
-          this.salida+=">>Se ha analizado el código, errores detectados...\n";
+        array = errores.Errores.geterror();
+        if (array.length != 0) {
+          this.toastr.warning("atención", "Se han detectado errores en el archivo");
+          this.salida += ">>Se ha analizado el código, errores detectados...\n";
           array.forEach(element => {
-          this.salida+=">>Tipo de error: "+element.tipo+", "+element.valor+", "+". línea "+element.linea+" y columna "
-            +element.columna+"\n";
+            this.salida += ">>Tipo de error: " + element.tipo + ", " + element.valor + ", " + ". línea " + element.linea + " y columna "
+              + element.columna + "\n";
           });
-        }else{
-        this.salida+=">>Análisis satisfactorio"
-        this.toastr.success("Se ha analizado el archivo XML correctamente")
+        } else {
+          this.salida += ">>Análisis satisfactorio"
+          this.toastr.success("Se ha analizado el archivo XML correctamente")
         }
-      }else{
-       this.toastr.warning("No se ha generado el análisis")
-       this.errores=">>No se ha podido generar el análisis"
+      } else {
+        this.toastr.warning("No se ha generado el análisis")
+        this.errores = ">>No se ha podido generar el análisis"
       }
 
-    }catch(Error){
-      this.toastr.error('Error',"Existe(n) error(es) sintáctico(s) irrecuperables, compruebe el archivo e inténtelo de nuevo. ")
-      this.errores+=">>Existe(n) error(es) sintáctico(s) irrecuperables, compruebe el archivo e inténtelo de nuevo."
+    } catch (Error) {
+      this.toastr.error('Error', "Existe(n) error(es) sintáctico(s) irrecuperables, compruebe el archivo e inténtelo de nuevo. ")
+      this.errores += ">>Existe(n) error(es) sintáctico(s) irrecuperables, compruebe el archivo e inténtelo de nuevo."
     }
   }
 
@@ -212,11 +227,10 @@ export class PrincipalComponent implements OnInit {
     lector.onload = (e) => {
       var contenido = e.target.result;
       if (this.archivo == '') {
-       // var a = (<HTMLInputElement>document.getElementById('text0')).value = contenido.toString();
+        // var a = (<HTMLInputElement>document.getElementById('text0')).value = contenido.toString();
         this.archivo = contenido.toString();
       } else {
         this.nuevo();
-        this.clear();
         this.archivo = contenido.toString();
       }
     };
@@ -224,8 +238,37 @@ export class PrincipalComponent implements OnInit {
     lector.readAsText(archivo);
   }
 
+  leerArchivox(e: any) {
+    var archivo = e.target.files[0];
+    if (!archivo) {
+      return;
+    }
+    var lector = new FileReader();
+    lector.onload = (e) => {
+      var contenido = e.target.result;
+      if (this.xquery == '') {
+        // var a = (<HTMLInputElement>document.getElementById('text0')).value = contenido.toString();
+        this.xquery = contenido.toString();
+      } else {
+        this.nuevo();
+
+        this.xquery= contenido.toString();
+      }
+    };
+
+    lector.readAsText(archivo);
+  }
+
+
+  AnalizarXQuery(){
+    let resultado=parserXQuery.parse(this.xquery);
+    let recorrer=new Recorrer();
+    recorrer.Recorrido(resultado,new Entorno(null),"Global")
+  }
+
   TablaSimbolos() {
     localStorage.setItem("tablaSimbolo", JSON.stringify(this.tablaSimbolo.getTabla()))
+    localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
   }
 
   repoSimbolos() {
@@ -238,16 +281,22 @@ export class PrincipalComponent implements OnInit {
   ASTXPATH() {
     this.router.navigate(['./astASC']);
   }
-  Errores(){
+  Errores() {
     this.router.navigate(['./errores']);
   }
 
-  ReporteGram(){
+  ReporteGram() {
     this.router.navigate(['./gramatical']);
   }
 
   getJSON() {
     //return (data as any); // aqui obtenemos el JSON completo
+  }
+
+  traducirXML() {
+    let trad = new tradXML.default(JSON.parse(localStorage.getItem("tablaSimboloAux")));
+    let cadena: string = trad.getTraduccion();
+    this.traduccion=cadena;
   }
 
 }

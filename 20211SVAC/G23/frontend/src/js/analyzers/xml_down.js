@@ -249,10 +249,12 @@ case 20:
 if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
                                                                                 let hasConflict = $$[$0-4].verificateNames();
                                                                                 if(hasConflict === "") {
-																					$$[$0-4].childs.forEach(child => {
-																					child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
-																					});
-																					this.$ = $$[$0-4];
+                                                                                    if($$[$0-4].childs){
+                                                                                        $$[$0-4].childs.forEach(child => {
+                                                                                        child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
+                                                                                        });
+                                                                                        this.$ = $$[$0-4];
+                                                                                    }
 																				}
                                                                                 else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });

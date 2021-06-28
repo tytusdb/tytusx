@@ -488,174 +488,315 @@ module.exports = Bloque;
   }
 */
 var xpath_up = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[5,6],$Vs=[5,6,9,10,24,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,60],$Vt=[5,6,9,10,16,18,19,20,21,22,23,24,25,26,28,29,30,31,32,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,60],$Vu=[2,13],$Vv=[1,44],$Vw=[5,6,9,10,14,16,18,19,20,21,22,23,24,25,26,28,29,30,31,32,35,36,37,38,39,40,41,42,43,44,45,48,49,50,51,52,53,54,55,56,57,58,59,60],$Vx=[1,56],$Vy=[1,57],$Vz=[1,66],$VA=[1,67],$VB=[1,68],$VC=[1,69],$VD=[1,70],$VE=[1,71],$VF=[1,72],$VG=[1,73],$VH=[1,74],$VI=[1,75],$VJ=[1,76],$VK=[1,77],$VL=[1,78],$VM=[16,18,19,20,21,22,23,24,25,26,28,29,30,31,32],$VN=[16,18,19,20,21,28,29,30,31,32],$VO=[16,18,19,20,21,22,23,28,29,30,31,32];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[5,6,8],$Vs=[5,6,8,10,11,25,36,37,38,39,40,41,42,43,44,45,46,49,50,51,52,53,54,55,56,57,58,59,60,61],$Vt=[5,6,8,10,11,17,19,20,21,22,23,24,25,26,27,29,30,31,32,33,36,37,38,39,40,41,42,43,44,45,46,49,50,51,52,53,54,55,56,57,58,59,60,61],$Vu=[2,14],$Vv=[1,45],$Vw=[5,6,8,10,11,15,17,19,20,21,22,23,24,25,26,27,29,30,31,32,33,36,37,38,39,40,41,42,43,44,45,46,49,50,51,52,53,54,55,56,57,58,59,60,61],$Vx=[1,58],$Vy=[1,59],$Vz=[1,68],$VA=[1,69],$VB=[1,70],$VC=[1,71],$VD=[1,72],$VE=[1,73],$VF=[1,74],$VG=[1,75],$VH=[1,76],$VI=[1,77],$VJ=[1,78],$VK=[1,79],$VL=[1,80],$VM=[17,19,20,21,22,23,24,25,26,27,29,30,31,32,33],$VN=[17,19,20,21,22,29,30,31,32,33],$VO=[17,19,20,21,22,23,24,29,30,31,32,33];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"tk_line":6,"XPATH":7,"QUERY":8,"tk_2bar":9,"tk_bar":10,"EXP_PR":11,"AXIS":12,"CORCHET":13,"tk_corA":14,"E":15,"tk_corC":16,"CORCHETP":17,"tk_menorigual":18,"tk_menor":19,"tk_mayorigual":20,"tk_mayor":21,"tk_mas":22,"tk_menos":23,"tk_asterisco":24,"tk_div":25,"tk_mod":26,"tk_ParA":27,"tk_ParC":28,"tk_or":29,"tk_and":30,"tk_equal":31,"tk_diferent":32,"FUNC":33,"PRIMITIVO":34,"tk_id":35,"tk_attribute_d":36,"tk_attribute_s":37,"num":38,"tk_punto":39,"tk_2puntos":40,"tk_arroba":41,"tk_text":42,"tk_last":43,"tk_position":44,"tk_node":45,"AXISNAME":46,"tk_4puntos":47,"tk_ancestor":48,"tk_ancestor2":49,"tk_attribute":50,"tk_child":51,"tk_descendant":52,"tk_descendant2":53,"tk_following":54,"tk_following2":55,"tk_namespace":56,"tk_parent":57,"tk_preceding":58,"tk_preceding2":59,"tk_self":60,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",6:"tk_line",9:"tk_2bar",10:"tk_bar",14:"tk_corA",16:"tk_corC",18:"tk_menorigual",19:"tk_menor",20:"tk_mayorigual",21:"tk_mayor",22:"tk_mas",23:"tk_menos",24:"tk_asterisco",25:"tk_div",26:"tk_mod",27:"tk_ParA",28:"tk_ParC",29:"tk_or",30:"tk_and",31:"tk_equal",32:"tk_diferent",35:"tk_id",36:"tk_attribute_d",37:"tk_attribute_s",38:"num",39:"tk_punto",40:"tk_2puntos",41:"tk_arroba",42:"tk_text",43:"tk_last",44:"tk_position",45:"tk_node",47:"tk_4puntos",48:"tk_ancestor",49:"tk_ancestor2",50:"tk_attribute",51:"tk_child",52:"tk_descendant",53:"tk_descendant2",54:"tk_following",55:"tk_following2",56:"tk_namespace",57:"tk_parent",58:"tk_preceding",59:"tk_preceding2",60:"tk_self"},
-productions_: [0,[3,2],[4,3],[4,1],[7,2],[7,1],[8,2],[8,2],[8,1],[8,1],[13,4],[13,3],[17,1],[17,0],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,3],[15,2],[15,3],[15,3],[15,3],[15,3],[15,3],[15,1],[11,2],[11,2],[34,1],[34,1],[34,1],[34,1],[34,1],[34,1],[34,1],[34,2],[34,2],[33,3],[33,3],[33,3],[33,3],[12,3],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1],[46,1]],
+symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"tk_line":6,"XPATH":7,"tk_2line":8,"QUERY":9,"tk_2bar":10,"tk_bar":11,"EXP_PR":12,"AXIS":13,"CORCHET":14,"tk_corA":15,"E":16,"tk_corC":17,"CORCHETP":18,"tk_menorigual":19,"tk_menor":20,"tk_mayorigual":21,"tk_mayor":22,"tk_mas":23,"tk_menos":24,"tk_asterisco":25,"tk_div":26,"tk_mod":27,"tk_ParA":28,"tk_ParC":29,"tk_or":30,"tk_and":31,"tk_equal":32,"tk_diferent":33,"FUNC":34,"PRIMITIVO":35,"tk_id":36,"tk_attribute_d":37,"tk_attribute_s":38,"num":39,"tk_punto":40,"tk_2puntos":41,"tk_arroba":42,"tk_text":43,"tk_last":44,"tk_position":45,"tk_node":46,"AXISNAME":47,"tk_4puntos":48,"tk_ancestor":49,"tk_ancestor2":50,"tk_attribute":51,"tk_child":52,"tk_descendant":53,"tk_descendant2":54,"tk_following":55,"tk_following2":56,"tk_namespace":57,"tk_parent":58,"tk_preceding":59,"tk_preceding2":60,"tk_self":61,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",6:"tk_line",8:"tk_2line",10:"tk_2bar",11:"tk_bar",15:"tk_corA",17:"tk_corC",19:"tk_menorigual",20:"tk_menor",21:"tk_mayorigual",22:"tk_mayor",23:"tk_mas",24:"tk_menos",25:"tk_asterisco",26:"tk_div",27:"tk_mod",28:"tk_ParA",29:"tk_ParC",30:"tk_or",31:"tk_and",32:"tk_equal",33:"tk_diferent",36:"tk_id",37:"tk_attribute_d",38:"tk_attribute_s",39:"num",40:"tk_punto",41:"tk_2puntos",42:"tk_arroba",43:"tk_text",44:"tk_last",45:"tk_position",46:"tk_node",48:"tk_4puntos",49:"tk_ancestor",50:"tk_ancestor2",51:"tk_attribute",52:"tk_child",53:"tk_descendant",54:"tk_descendant2",55:"tk_following",56:"tk_following2",57:"tk_namespace",58:"tk_parent",59:"tk_preceding",60:"tk_preceding2",61:"tk_self"},
+productions_: [0,[3,2],[4,3],[4,3],[4,1],[7,2],[7,1],[9,2],[9,2],[9,1],[9,1],[14,4],[14,3],[18,1],[18,0],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,3],[16,2],[16,3],[16,3],[16,3],[16,3],[16,3],[16,1],[12,2],[12,2],[35,1],[35,1],[35,1],[35,1],[35,1],[35,1],[35,1],[35,2],[35,2],[34,3],[34,3],[34,3],[34,3],[13,3],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1],[47,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- ast = { ast: $$[$0-1], errors: errors }; errors = []; return ast; 
+ 	prod_1 = grammar_stack.pop();
+					prod_2 = grammar_stack.pop();
+			 		grammar_stack.push({'ini -> XPATH_U EOF': [prod_2, prod_1]});
+					grammar_report =  getGrammarReport(grammar_stack);
+                    cst = getCST(grammar_stack);
+                    console.log(grammar_report);
+                    let arbol_ast = getASTTree($$[$0-1]);
+					ast = { ast: $$[$0-1], errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : arbol_ast }; return ast;
+					
 break;
 case 2:
- $$[$0-2].push($$[$0]); this.$=$$[$0-2]; 
+ $$[$0-2].push($$[$0]); this.$=$$[$0-2];
+								 prod_1 = grammar_stack.pop();
+								 prod_2 = grammar_stack.pop();
+			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_line\t Lexema: ' + $$[$0-2], prod_1]}); 
 break;
-case 3: case 5:
- this.$=[$$[$0]]; 
+case 3:
+ $$[$0-2].push($$[$0]); this.$=$$[$0-2];
+								 prod_1 = grammar_stack.pop();
+								 prod_2 = grammar_stack.pop();
+			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_2line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_2line\t Lexema: ' + $$[$0-2], prod_1]}); 
 break;
 case 4:
- $$[$0-1].push($$[$0]); this.$=$$[$0-1]; 
+ this.$=[$$[$0]];
+				  prod_1 = grammar_stack.pop();
+			 	  grammar_stack.push({'XPATH_U -> XPATH {SS = [S1]}': [prod_1]}); 
+break;
+case 5:
+ $$[$0-1].push($$[$0]); this.$=$$[$0-1];
+					  prod_1 = grammar_stack.pop();
+					  prod_2 = grammar_stack.pop();
+			 		  grammar_stack.push({'XPATH -> XPATH QUERY {S1.push(S2); SS = S1;}': [prod_2, prod_1]}); 
 break;
 case 6:
- this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=[$$[$0]];
+			   prod_1 = grammar_stack.pop();
+			   grammar_stack.push({'XPATH -> QUERY {SS = [S1]}': [prod_1]}); 
 break;
 case 7:
- this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					   prod_1 = grammar_stack.pop();
+			 		   grammar_stack.push({'QUERY -> tk_2bar QUERY SS=builder.newDoubleAxis(Param);': ['token: tk_2bar\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 8: case 9: case 12: case 29:
- this.$=$$[$0]; 
+case 8:
+ this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+			 		 grammar_stack.push({'QUERY -> tk_bar QUERY {SS=builder.newAxis(Param);}': ['token: tk_bar\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 9:
+ this.$=$$[$0];
+			   prod_1 = grammar_stack.pop();
+			   grammar_stack.push({'QUERY -> EXP_PR {SS=S1}': [prod_1]}); 
 break;
 case 10:
- $$[$0-3].push(builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)); this.$=$$[$0-3]; 
+ this.$=$$[$0];
+			 prod_1 = grammar_stack.pop();
+			 grammar_stack.push({'QUERY -> AXIS {SS=S1}': [prod_1]}); 
 break;
 case 11:
- this.$=[builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)]; 
+ $$[$0-3].push(builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)); this.$=$$[$0-3];
+									 prod_1 = grammar_stack.pop();
+									 prod_2 = grammar_stack.pop();
+						 			 grammar_stack.push({'CORCHET -> CORCHET tk_ParA E tk_ParC {S1.push(builder.NewPredicate(Param))}': [prod_2, 'token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
+break;
+case 12:
+ this.$=[builder.newPredicate($$[$0-1], this._$.first_line, this._$.first_column+1)];
+						 prod_1 = grammar_stack.pop();
+						 grammar_stack.push({'CORCHET -> tk_corA E tk_corC {SS=builder.newPredicate(Param)}': ['token: tk_corA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_corC\t Lexema: ' + $$[$0]]}); 
 break;
 case 13:
- this.$=null; 
+ this.$=$$[$0];
+					prod_1 = grammar_stack.pop();
+					grammar_stack.push({'CORCHETP -> CORCHET {SS=S1;}': [prod_1]}); 
 break;
 case 14:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1); 
+ this.$=null;
+			grammar_stack.push({'CORCHETP -> Empty {SS=null}': ['EMPTY'] }); 
 break;
 case 15:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+				 		prod_2 = grammar_stack.pop();
+					    grammar_stack.push({'E -> E tk_menorigual E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 16:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -> E tk_menor E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_menor\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 17:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1);
+						  prod_1 = grammar_stack.pop();
+				 		  prod_2 = grammar_stack.pop();
+						  grammar_stack.push({'E -> E tk_mayorigual E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mayorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 18:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				 	 grammar_stack.push({'E -> E tk_mayor E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mayor\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 19:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_mas E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mas\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 20:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1);
+					 prod_1 = grammar_stack.pop();
+				 	 prod_2 = grammar_stack.pop();
+				  	 grammar_stack.push({'E -> E tk_menos E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 21:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1);
+						 prod_1 = grammar_stack.pop();
+				 		 prod_2 = grammar_stack.pop();
+				  		 grammar_stack.push({'E -> E tk_asterisco E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_asterisco\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 22:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_div E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_div\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 23:
- this.$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this._$.first_line, this._$.first_column+1), $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_mod E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_mod\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 24:
- this.$=$$[$0-1] 
+ this.$=builder.newOperation(builder.newValue(0, Tipos.NUMBER, this.$.first_line, this.$.first_column+1), $$[$0], Tipos.OPERACION_RESTA, this.$.first_line, this.$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+						  		grammar_stack.push({'E -: tk_menos E': ['token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]});
 break;
 case 25:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1); 
+ this.$=$$[$0-1];
+						  prod_1 = grammar_stack.pop();
+						  grammar_stack.push({'E -> tk_ParA E tk_ParC {SS=S2}': ['token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
 case 26:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1);
+				  prod_1 = grammar_stack.pop();
+				  prod_2 = grammar_stack.pop();
+				  grammar_stack.push({'E -> E tk_or E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_or\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 27:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1);
+				   prod_1 = grammar_stack.pop();
+				   prod_2 = grammar_stack.pop();
+				   grammar_stack.push({'E -> E tk_and E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_and\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 28:
- this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
+					 prod_1 = grammar_stack.pop();
+					 prod_2 = grammar_stack.pop();
+					 grammar_stack.push({'E -> E tk_equal E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_equal\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 30: case 31:
- this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+case 29:
+ this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'E -> E tk_diferent E {SS=builder.newOperation(Param)}': [prod_2, 'token: tk_diferent\t Lexema: ' + $$[$0-1], prod_1]}); 
+break;
+case 30:
+ this.$=$$[$0];
+			  prod_1 = grammar_stack.pop();
+			  grammar_stack.push({'E -> QUERY {SS=S1}': [prod_1]}); 
+break;
+case 31:
+ this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1);
+						prod_1 = grammar_stack.pop();
+						prod_2 = grammar_stack.pop();
+						grammar_stack.push({'EXP_PR -> FUNC CORCHETP {SS=builder.newExpression(Param)}': [prod_2, prod_1]}); 
 break;
 case 32:
- this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'EXP_PR -> PRIMITIVO CORCHETP {SS=builder.newExpression(Param)}': [prod_2, prod_1]}); 
 break;
-case 33: case 34:
- this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+case 33:
+ this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -> tk_id {SS=builder.newNodename(Param)}':['token: tk_text\t Lexema: ' + $$[$0]]}); 
+break;
+case 34:
+ this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1);
+						   grammar_stack.push({'PRIMITIVO -> tk_attribute_d {SS=builder.newValue(Param)}':['token: tk_attribute_d\t Lexema: ' + $$[$0]]}); 
 break;
 case 35:
- this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
+						   grammar_stack.push({'PRIMITIVO -> tk_attribute_s {SS=builder.newValue(Param)}':['token: tk_attribute_s\t Lexema: ' + $$[$0]]}); 
 break;
 case 36:
- this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
+				grammar_stack.push({'PRIMITIVO -> num {SS=builder.newValue(Param)}':['token: num\t Lexema: ' + $$[$0]]}); 
 break;
 case 37:
- this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
+				   grammar_stack.push({'PRIMITIVO -> tk_asterisco {SS=builder.newValue(Param)}':['token: tk_asterisco\t Lexema: ' + $$[$0]]}); 
 break;
 case 38:
- this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
+					 grammar_stack.push({'PRIMITIVO -> tk_punto {SS=builder.newCurrent(Param)}':['token: tk_punto\t Lexema: ' + $$[$0]]}); 
 break;
-case 39: case 40:
- this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+case 39:
+ this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1);
+					   grammar_stack.push({'PRIMITIVO -> tk_2puntos {SS=builder.newParent(Param)}':['token: tk_2puntos\t Lexema: ' + $$[$0]]}); 
+break;
+case 40:
+ this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1);
+							grammar_stack.push({'PRIMITIVO -> tk_arroba tk_id {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_id\t Lexema: ' + $$[$0]]}); 
 break;
 case 41:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
+							 grammar_stack.push({'PRIMITIVO -> tk_arroba tk_asterisco {SS=builder.newAttribute(Param)}':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_asterisco\t Lexema: ' + $$[$0]]});
 break;
 case 42:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -> tk_text tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_text\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
 case 43:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1);
+								grammar_stack.push({'FUNC -> tk_last tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_last\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
 case 44:
- this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
+									grammar_stack.push({'FUNC -> tk_position tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_position\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
 case 45:
- this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1); 
+ this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
+								grammar_stack.push({'FUNC -> tk_node tk_ParA tk_ParC {SS=builder.newValue(Param)}':['token: tk_node\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
 case 46:
- this.$ = Tipos.AXIS_ANCESTOR 
+ this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
+								prod_1 = grammar_stack.pop();
+								prod_2 = grammar_stack.pop();
+								grammar_stack.push({'AXIS -> AXISNAME tk_4puntos QUERY {SS=builder.newAxisObject(Param)}':[prod_2, 'token: tk_4puntos\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
 case 47:
- this.$ = Tipos.AXIS_ANCESTOR_OR_SELF 
+ this.$ = Tipos.AXIS_ANCESTOR;
+						grammar_stack.push({'AXISNAME -> tk_ancestor {SS = Tipos.AxisTipo}':['token: tk_ancestor\t Lexema: ' + $$[$0]]}); 
 break;
 case 48:
- this.$ = Tipos.AXIS_ATTRIBUTE 
+ this.$ = Tipos.AXIS_ANCESTOR_OR_SELF;
+						grammar_stack.push({'AXISNAME -> tk_ancestor2 {SS = Tipos.AxisTipo}':['token: tk_ancestor2\t Lexema: ' + $$[$0]]}); 
 break;
 case 49:
- this.$ = Tipos.AXIS_CHILD 
+ this.$ = Tipos.AXIS_ATTRIBUTE;
+						grammar_stack.push({'AXISNAME -> tk_attribute {SS = Tipos.AxisTipo}':['token: tk_attribute\t Lexema: ' + $$[$0]]}); 
 break;
 case 50:
- this.$ = Tipos.AXIS_DESCENDANT 
+ this.$ = Tipos.AXIS_CHILD;
+						grammar_stack.push({'AXISNAME -> tk_child {SS = Tipos.AxisTipo}':['token: tk_child\t Lexema: ' + $$[$0]]}); 
 break;
 case 51:
- this.$ = Tipos.AXIS_DESCENDANT_OR_SELF 
+ this.$ = Tipos.AXIS_DESCENDANT;
+						grammar_stack.push({'AXISNAME -> tk_descendant {SS = Tipos.AxisTipo}':['token: tk_descendant\t Lexema: ' + $$[$0]]}); 
 break;
 case 52:
- this.$ = Tipos.AXIS_FOLLOWING 
+ this.$ = Tipos.AXIS_DESCENDANT_OR_SELF;
+						grammar_stack.push({'AXISNAME -> tk_descendant2 {SS = Tipos.AxisTipo}':['token: tk_descendant2\t Lexema: ' + $$[$0]]}); 
 break;
 case 53:
- this.$ = Tipos.AXIS_FOLLOWING_SIBLING 
+ this.$ = Tipos.AXIS_FOLLOWING;
+						grammar_stack.push({'AXISNAME -> tk_following {SS = Tipos.AxisTipo}':['token: tk_following\t Lexema: ' + $$[$0]]}); 
 break;
 case 54:
- this.$ = Tipos.AXIS_NAMESPACE 
+ this.$ = Tipos.AXIS_FOLLOWING_SIBLING;
+						grammar_stack.push({'AXISNAME -> tk_following2 {SS = Tipos.AxisTipo}':['token: tk_follownig2\t Lexema: ' + $$[$0]]}); 
 break;
 case 55:
- this.$ = Tipos.AXIS_PARENT 
+ this.$ = Tipos.AXIS_NAMESPACE;
+						grammar_stack.push({'AXISNAME -> tk_namespace {SS = Tipos.AxisTipo}':['token: tk_namespace\t Lexema: ' + $$[$0]]}); 
 break;
 case 56:
- this.$ = Tipos.AXIS_PRECEDING 
+ this.$ = Tipos.AXIS_PARENT;
+						grammar_stack.push({'AXISNAME -> tk_parent {SS = Tipos.AxisTipo}':['token: tk_parent\t Lexema: ' + $$[$0]]}); 
 break;
 case 57:
- this.$ = Tipos.AXIS_PRECEDING_SIBLING 
+ this.$ = Tipos.AXIS_PRECEDING;
+						grammar_stack.push({'AXISNAME -> tk_preceding {SS = Tipos.AxisTipo}':['token: tk_preceding\t Lexema: ' + $$[$0]]}); 
 break;
 case 58:
- this.$ = Tipos.AXIS_SELF 
+ this.$ = Tipos.AXIS_PRECEDING_SIBLING;
+						grammar_stack.push({'AXISNAME -> tk_preceding2 {SS = Tipos.AxisTipo}':['token: tk_preceding2\t Lexema: ' + $$[$0]]}); 
+break;
+case 59:
+ this.$ = Tipos.AXIS_SELF;
+						grammar_stack.push({'AXISNAME -> tk_self {SS = Tipos.AxisTipo}':['token: tk_self\t Lexema: ' + $$[$0]]}); 
 break;
 }
 },
-table: [{3:1,4:2,7:3,8:4,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{1:[3]},{5:[1,37],6:[1,38]},o($Vr,[2,3],{11:7,12:8,33:9,34:10,46:11,8:39,9:$V0,10:$V1,24:$V2,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq}),o($Vs,[2,5]),{8:40,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:41,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($Vt,[2,8]),o($Vt,[2,9]),o($Vt,$Vu,{17:42,13:43,14:$Vv}),o($Vt,$Vu,{13:43,17:45,14:$Vv}),{47:[1,46]},{27:[1,47]},{27:[1,48]},{27:[1,49]},{27:[1,50]},o($Vw,[2,32]),o($Vw,[2,33]),o($Vw,[2,34]),o($Vw,[2,35]),o($Vw,[2,36]),o($Vw,[2,37]),o($Vw,[2,38]),{24:[1,52],35:[1,51]},{47:[2,46]},{47:[2,47]},{47:[2,48]},{47:[2,49]},{47:[2,50]},{47:[2,51]},{47:[2,52]},{47:[2,53]},{47:[2,54]},{47:[2,55]},{47:[2,56]},{47:[2,57]},{47:[2,58]},{1:[2,1]},{7:53,8:4,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($Vs,[2,4]),o($Vt,[2,6]),o($Vt,[2,7]),o($Vt,[2,30]),o($Vt,[2,12],{14:[1,54]}),{8:58,9:$V0,10:$V1,11:7,12:8,15:55,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($Vt,[2,31]),{8:59,9:$V0,10:$V1,11:7,12:8,24:$V2,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{28:[1,60]},{28:[1,61]},{28:[1,62]},{28:[1,63]},o($Vw,[2,39]),o($Vw,[2,40]),o($Vr,[2,2],{11:7,12:8,33:9,34:10,46:11,8:39,9:$V0,10:$V1,24:$V2,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq}),{8:58,9:$V0,10:$V1,11:7,12:8,15:64,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{16:[1,65],18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,29:$VI,30:$VJ,31:$VK,32:$VL},{8:58,9:$V0,10:$V1,11:7,12:8,15:79,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:80,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($VM,[2,29]),o($Vt,[2,45]),o($Vw,[2,41]),o($Vw,[2,42]),o($Vw,[2,43]),o($Vw,[2,44]),{16:[1,81],18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,29:$VI,30:$VJ,31:$VK,32:$VL},o($Vw,[2,11]),{8:58,9:$V0,10:$V1,11:7,12:8,15:82,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:83,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:84,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:85,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:86,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:87,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:88,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:89,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:90,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:91,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:92,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:93,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},{8:58,9:$V0,10:$V1,11:7,12:8,15:94,23:$Vx,24:$V2,27:$Vy,33:9,34:10,35:$V3,36:$V4,37:$V5,38:$V6,39:$V7,40:$V8,41:$V9,42:$Va,43:$Vb,44:$Vc,45:$Vd,46:11,48:$Ve,49:$Vf,50:$Vg,51:$Vh,52:$Vi,53:$Vj,54:$Vk,55:$Vl,56:$Vm,57:$Vn,58:$Vo,59:$Vp,60:$Vq},o($VM,[2,23]),{18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,28:[1,95],29:$VI,30:$VJ,31:$VK,32:$VL},o($Vw,[2,10]),o($VN,[2,14],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,15],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,16],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,17],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VO,[2,18],{24:$VF,25:$VG,26:$VH}),o($VO,[2,19],{24:$VF,25:$VG,26:$VH}),o($VM,[2,20]),o($VM,[2,21]),o($VM,[2,22]),o([16,28,29],[2,25],{18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,30:$VJ,31:$VK,32:$VL}),o([16,28,29,30],[2,26],{18:$Vz,19:$VA,20:$VB,21:$VC,22:$VD,23:$VE,24:$VF,25:$VG,26:$VH,31:$VK,32:$VL}),o($VN,[2,27],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VN,[2,28],{22:$VD,23:$VE,24:$VF,25:$VG,26:$VH}),o($VM,[2,24])],
-defaultActions: {24:[2,46],25:[2,47],26:[2,48],27:[2,49],28:[2,50],29:[2,51],30:[2,52],31:[2,53],32:[2,54],33:[2,55],34:[2,56],35:[2,57],36:[2,58],37:[2,1]},
+table: [{3:1,4:2,7:3,9:4,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{1:[3]},{5:[1,37],6:[1,38],8:[1,39]},o($Vr,[2,4],{12:7,13:8,34:9,35:10,47:11,9:40,10:$V0,11:$V1,25:$V2,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq}),o($Vs,[2,6]),{9:41,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:42,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($Vt,[2,9]),o($Vt,[2,10]),o($Vt,$Vu,{18:43,14:44,15:$Vv}),o($Vt,$Vu,{14:44,18:46,15:$Vv}),{48:[1,47]},{28:[1,48]},{28:[1,49]},{28:[1,50]},{28:[1,51]},o($Vw,[2,33]),o($Vw,[2,34]),o($Vw,[2,35]),o($Vw,[2,36]),o($Vw,[2,37]),o($Vw,[2,38]),o($Vw,[2,39]),{25:[1,53],36:[1,52]},{48:[2,47]},{48:[2,48]},{48:[2,49]},{48:[2,50]},{48:[2,51]},{48:[2,52]},{48:[2,53]},{48:[2,54]},{48:[2,55]},{48:[2,56]},{48:[2,57]},{48:[2,58]},{48:[2,59]},{1:[2,1]},{7:54,9:4,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{7:55,9:4,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($Vs,[2,5]),o($Vt,[2,7]),o($Vt,[2,8]),o($Vt,[2,31]),o($Vt,[2,13],{15:[1,56]}),{9:60,10:$V0,11:$V1,12:7,13:8,16:57,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($Vt,[2,32]),{9:61,10:$V0,11:$V1,12:7,13:8,25:$V2,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{29:[1,62]},{29:[1,63]},{29:[1,64]},{29:[1,65]},o($Vw,[2,40]),o($Vw,[2,41]),o($Vr,[2,2],{12:7,13:8,34:9,35:10,47:11,9:40,10:$V0,11:$V1,25:$V2,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq}),o($Vr,[2,3],{12:7,13:8,34:9,35:10,47:11,9:40,10:$V0,11:$V1,25:$V2,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq}),{9:60,10:$V0,11:$V1,12:7,13:8,16:66,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{17:[1,67],19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,30:$VI,31:$VJ,32:$VK,33:$VL},{9:60,10:$V0,11:$V1,12:7,13:8,16:81,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:82,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($VM,[2,30]),o($Vt,[2,46]),o($Vw,[2,42]),o($Vw,[2,43]),o($Vw,[2,44]),o($Vw,[2,45]),{17:[1,83],19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,30:$VI,31:$VJ,32:$VK,33:$VL},o($Vw,[2,12]),{9:60,10:$V0,11:$V1,12:7,13:8,16:84,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:85,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:86,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:87,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:88,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:89,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:90,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:91,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:92,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:93,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:94,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:95,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},{9:60,10:$V0,11:$V1,12:7,13:8,16:96,24:$Vx,25:$V2,28:$Vy,34:9,35:10,36:$V3,37:$V4,38:$V5,39:$V6,40:$V7,41:$V8,42:$V9,43:$Va,44:$Vb,45:$Vc,46:$Vd,47:11,49:$Ve,50:$Vf,51:$Vg,52:$Vh,53:$Vi,54:$Vj,55:$Vk,56:$Vl,57:$Vm,58:$Vn,59:$Vo,60:$Vp,61:$Vq},o($VM,[2,24]),{19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,29:[1,97],30:$VI,31:$VJ,32:$VK,33:$VL},o($Vw,[2,11]),o($VN,[2,15],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,16],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,17],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,18],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VO,[2,19],{25:$VF,26:$VG,27:$VH}),o($VO,[2,20],{25:$VF,26:$VG,27:$VH}),o($VM,[2,21]),o($VM,[2,22]),o($VM,[2,23]),o([17,29,30],[2,26],{19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,31:$VJ,32:$VK,33:$VL}),o([17,29,30,31],[2,27],{19:$Vz,20:$VA,21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,32:$VK,33:$VL}),o($VN,[2,28],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VN,[2,29],{23:$VD,24:$VE,25:$VF,26:$VG,27:$VH}),o($VM,[2,25])],
+defaultActions: {24:[2,47],25:[2,48],26:[2,49],27:[2,50],28:[2,51],29:[2,52],30:[2,53],31:[2,54],32:[2,55],33:[2,56],34:[2,57],35:[2,58],36:[2,59],37:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -807,318 +948,495 @@ parse: function parse(input) {
     return true;
 }};
 
-	var attribute = '';
+  var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
 	let grammar_stack = [];
-	function printstrack(obj, lines){
-        if(Array.isArray(obj)){ //IS ARRAY
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            obj.forEach((value)=>{
-                if(typeof value === 'string' ){
-                     str = ""
-                     for(let i = 0; i < lines; i++){str = str + "- ";}
-                     console.log(str + value);
-                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-                    str = ""
-                    for(let i = 0; i < lines; i++){ str = str + "- ";}
-                    for(let key in value){
-                       console.log(`${str}${key}`);
-                       printstrack(value[key], lines + 1);
-                    }
-                }
 
-                //printstrack(value, lines +1);
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Title</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+
+        str = str + buildGrammarReport(obj);
+
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+
+                     <div id="div-table">
+                     <table style="width:100%">
+
+                     <tr><th>Produccion</th><th>Cuerpo</th><th>Accion</th></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>ini</th><td>XPATH_U EOF</td><td>SS= S1</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>XPATH_U</th><td>XPATH_U tk_line XPATH</td><td>S1.push(S3); SS = S1;</td></tr>
+                     <tr><th></th><td>XPATH_U tk_2line XPATH</td><td>S1.push(S3); SS = S1;</td></tr>
+                     <tr><th></th><td>XPATH</td><td>SS = [S1]</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>XPATH</th><td>XPATH QUERY</td><td>S1.push(S2); SS = S1;</td></tr>
+                     <tr><th></th><td>QUERY</td><td>SS = [S1]</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>QUERY</th><td>tk_2bar QUERY</td><td>SS=builder.newDoubleAxis(Param);</td></tr>
+                     <tr><th></th><td>tk_bar QUERY</td><td>SS=builder.newAxis(Param);</td></tr>
+                     <tr><th></th><td>EXP_PR</td><td>SS=S1</td></tr>
+                     <tr><th></th><td>AXIS</td><td>SS=S1</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>CORCHET</th><td>CORCHET tk_corA E tk_corC</td><td>S1.push(builder.NewPredicate(Param))</td></tr>
+                     <tr><th></th><td>tk_corA E tk_corC</td><td>SS=builder.newPredicate(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>CORCHETP</th><td>CORCHET</td><td>SS=S1</td></tr>
+                     <tr><th></th><td>Empty</td><td>SS=null</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>E</th><td>E tk_menorigual E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_menor E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mayorigual E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mayor E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mas E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_menos E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_asterisco E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_div E </td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_mod E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>tk_menos E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>tk_ParA E tk_ParC</td><td>SS=S2</td></tr>
+                     <tr><th></th><td>E tk_or E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_and E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_equal E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>E tk_diferent E</td><td>SS=builder.newOperation(Param)</td></tr>
+                     <tr><th></th><td>QUERY</td><td>SS=S1</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>EXP_PR</th><td>FUNC CORCHETP</td><td>SS=builder.newExpression(Param)</td></tr>
+                     <tr><th></th><td>PRIMITIVO CORCHETEP</td><td>SS=builder.newExpression(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>PRIMITIVO</th><td>tk_id</td><td>SS=builder.newNodename(Param)</td></tr>
+                     <tr><th></th><td>tk_attribute_d</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_attribute_s</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>num</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_asterisco</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_punto</td><td>SS=builder.newCurrent(Param)</td></tr>
+                     <tr><th></th><td>tk_2puntos</td><td>SS=builder.newParent(Param)</td></tr>
+                     <tr><th></th><td>tk_arroba tk_id</td><td>SS=builder.newAttribute(Param)</td></tr>
+                     <tr><th></th><td>tk_arroba tk_asterisco</td><td>SS=builder.newAttribute(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>FUNC</th><td>tk_text tk_ParA tk_tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_last tk_ParA tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_position tk_ParA tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><th></th><td>tk_node tk_ParA tk_ParC</td><td>SS=builder.newValue(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>AXIS</th><td>AXISNAME tk_4puntos QUERY</td><td>SS=builder.newAxisObject(Param)</td></tr>
+                     <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                     <tr><th>AXISNAME</th><td>tk_ancestor</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_ancestor2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_attribute</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_child</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_descendant</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_descendant2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_following</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_following2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_namespace</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_parent</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_preceding</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_preceding2</td><td>SS = Tipos.'AxisTipo'</td></tr>
+                     <tr><th></th><td>tk_self</td><td>SS = Tipos.'AxisTipo'</td></tr>
+
+                         </table>
+                     </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                        function fun1() {
+                                            if ($("#tree-root").length > 0) {
+
+                                                $("#tree-root").find("li").each
+                                                (
+                                                    function () {
+                                                        var $span = $("<span></span>");
+                                                        //$(this).toggleClass("expanded");
+                                                        if ($(this).find("ul:first").length > 0) {
+                                                            $span.removeAttr("class");
+                                                            $span.attr("class", "expanded");
+                                                            $(this).find("ul:first").css("display", "block");
+                                                            $(this).append($span);
+                                                        }
+
+                                                    }
+                                                )
+                                            }
+
+                                        }
+
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+    function buildGrammarReport(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                str = str + `<li class= "string">
+                ${value}
+                </li>
+                `;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildGrammarReport(value);
+                }
+            }
             });
         }else if(typeof obj === 'string' ){ // IS STRING
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            console.log(str + obj);
+            return "";
         }else{// IS OBJECT
-            str = ""
-            for(let i = 0; i < lines; i++){ str = str + "- ";}
             for(let key in obj){
-                console.log(`${str}Key: ${key}`);
-                //console.log(obj[key]);
-                printstrack(obj[key], lines + 1);
+
+                str = `<li class="grammar-tree"><span class="caret">
+                ${key}
+                </span>
+                <ul class="nested">
+                `;
+                str = str + buildGrammarReport(obj[key]);
+                str = str + `
+                </ul>
+                </li>`;
             }
         }
-	}
-	
-function getASTTree(obj){
-    let str = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-  <!-- Bootstrap CSS -->
-  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
-  <title>Title</title>
-  <style>
-    #divheight{
-      height: 400px;
-      width: 1050px;
-    }
-    .nav-tabs > li .close {
-      margin: -2px 0 0 10px;
-      font-size: 18px;
-    }
-    .nav-tabs2 > li .close {
-      margin: -2px 0 0 10px;
-      font-size: 18px;
+        return str;
     }
 
-  </style>
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>Title</title>
+            <style>
 
-  <style>
-    body {
-      font-family: sans-serif;
-      font-size: 15px;
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+            </style>
+        </head>
+        <body>
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
     }
 
-    .tree ul {
-      position: relative;
-      padding: 1em 0;
-      white-space: nowrap;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .tree ul::after {
-      content: "";
-      display: table;
-      clear: both;
-    }
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
 
-    .tree li {
-      display: inline-block;
-      vertical-align: top;
-      text-align: center;
-      list-style-type: none;
-      position: relative;
-      padding: 1em 0.5em 0 0.5em;
-    }
-    .tree li::before, .tree li::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 50%;
-      border-top: 1px solid #ccc;
-      width: 50%;
-      height: 1em;
-    }
-    .tree li::after {
-      right: auto;
-      left: 50%;
-      border-left: 1px solid #ccc;
-    }
-    /*
-    ul:hover::after  {
-        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
-    }*/
-
-    .tree li:only-child::after, .tree li:only-child::before {
-      display: none;
-    }
-    .tree li:only-child {
-      padding-top: 0;
-    }
-    .tree li:first-child::before, .tree li:last-child::after {
-      border: 0 none;
-    }
-    .tree li:last-child::before {
-      border-right: 1px solid #ccc;
-      border-radius: 0 5px 0 0;
-    }
-    .tree li:first-child::after {
-      border-radius: 5px 0 0 0;
-    }
-
-    .tree ul ul::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 50%;
-      border-left: 1px solid #ccc;
-      width: 0;
-      height: 1em;
-    }
-
-    .tree li a {
-      border: 1px solid #ccc;
-      padding: 0.5em 0.75em;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 5px;
-      color: #333;
-      position: relative;
-      top: 1px;
-    }
-
-    .tree li a:hover,
-    .tree li a:hover + ul li a {
-      background: #e9453f;
-      color: #fff;
-      border: 1px solid #e9453f;
-    }
-
-    .tree li a:hover + ul li::after,
-    .tree li a:hover + ul li::before,
-    .tree li a:hover + ul::before,
-    .tree li a:hover + ul ul::before {
-      border-color: #e9453f;
-    }
-
-    /*# sourceMappingURL=sytle_.css.map */
-
-
-  </style>
-</head>
-<body>
-
-
-
-<div class="tree">
-  <ul id="tree-list">
-
-    <!--AQUI-->
-    `
-
-    str = str +printObj(obj, 0, "")
-    str =  str + `</ul>
-
-
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
-<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-</body>
-</html>
-`
-    return str;
-}
-
-
-function printObj(obj, lines, name){
-    console.log(obj)
-    let str = "";
-    let str_ = "";
-    if(Array.isArray(obj)) { //IS ARRAY
-        for (let i = 0; i < obj.length; i++){
-            str = str +printObj(obj[i], lines, "");
-        }
-    }else if (typeof obj === 'object' ){// IS OBJECT
-        if(obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT'){ // TODO select Parent
-            str = `<li>`;
-            str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT'? "/": "//" ));
-            str = str + getPredicados(obj.expresion);
-            str = str + `</li>`
-            console.log(str);
-        }else if(obj.tipo === 'EXPRESION'){
-            if (typeof obj.expresion === 'object'){
-                str = `<a>` + name + getName(obj.expresion) + `</a>`;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
             }
         }
-    } else { // IS STRING
-        for (let i = 0; i < lines; i++) {
-
-            str_ = str_ + "- ";
-        }
+        return str;
     }
-    return str;
-}
-
-
-
-function getName(obj){
-
-    let str = "";
-    if (obj.tipo ==='NODENAME'){
-        //console.log(obj)
-        return obj.nodename;
-    }else if(obj.tipo === 'SELECT_PARENT'){
-        return  obj.expresion;
-    }else if(obj.tipo === 'SELECT_CURRENT'){
-        return obj.expresion;
-    }else if(obj.tipo === 'ASTERISCO'){
-        return obj.valor;
-    }else if(obj.tipo === 'FUNCION_TEXT'){
-        return obj.valor;
-    }else if(obj.tipo === 'FUNCION_NODE'){
-        return obj.valor;
-    }else if(obj.tipo === 'SELECT_ATTRIBUTES'){
-        return obj.expresion;
-    }else {
-        console.log("Error 1")
-        console.log(obj)
-    }
-    return str
-}
-
-function getPredicados(obj){
-    let str = "";
-    console.log(obj)
-    if (obj.predicate !== null && obj.predicate !== undefined){
-
-        str = `<ul>\n`;
-        for (let i = 0; i < obj.predicate.length;i++){
-            str = str + getPredicado(obj.predicate[i]);
-        }
-        str = str + `</ul>`;
-    }
-    return str;
-}
-
-
-function getPredicado(obj){
-    let str = ""
-    if(obj.tipo === 'PREDICATE'){
-        //str = `<li><a> ` + obj.condicion.tipo + `</a>
-        //<ul>`
-        str = str + getPredicado(obj.condicion);
-        //str = str + `
-        //</ul></li>`;
-    }else if(obj.tipo === 'EXPRESION'){ //TODO to check
-        if('valor' in obj.expresion){
-            str = `<li><a>` + obj.expresion.valor + `</a></li>
-            `;
-
-        }else if('nodename' in obj.expresion){
-            str = `<li><a>` + obj.expresion.nodename + `</a></li>
-            `;
-
-        }else if(obj.expresion.tipo === 'SELECT_ATTRIBUTES'){
-            str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
-            `;
-
-        }else {
-            console.log("error 2")
-            console.log(obj)
-        }
-
-
-    }else{
-        str = `<li><a>` + obj.tipo + `</a>
-                <ul>`
-        str = str + getPredicado(obj.opIzq);
-        str = str + getPredicado(obj.opDer);
-        str = str + `</ul></li>`
-    }
-
-    return str;
-}
-
-
-
-
-
 
 	const { Objeto } = __webpack_require__(/*! ../model/xpath/Objeto */ "YKiq");
 	const { Tipos } = __webpack_require__(/*! ../model/xpath/Enum */ "MEUw");
+  const getASTTree = __webpack_require__(/*! ./ast_xpath */ "JxJB");
 	var builder = new Objeto();
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
@@ -1456,91 +1774,91 @@ case 2:// MultiLineComment
 break;
 case 3:// Declaration XML
 break;
-case 4:return 25
+case 4:return 26
 break;
-case 5:return 38
+case 5:return 39
 break;
-case 6:return 18
+case 6:return 19
 break;
-case 7:return 20
+case 7:return 21
 break;
-case 8:return 19
+case 8:return 20
 break;
-case 9:return 21
+case 9:return 22
 break;
-case 10:return 9
+case 10:return 10
 break;
-case 11:return 10
+case 11:return 11
 break;
-case 12:return 31
+case 12:return 32
 break;
-case 13:return 40
+case 13:return 41
 break;
-case 14:return 39
+case 14:return 40
 break;
-case 15:return 47
+case 15:return 48
 break;
-case 16:return 41
+case 16:return 42
 break;
-case 17:return 14
+case 17:return 15
 break;
-case 18:return 16
+case 18:return 17
 break;
-case 19:return 27
+case 19:return 28
 break;
-case 20:return 28
+case 20:return 29
 break;
-case 21:return 24
+case 21:return 25
 break;
-case 22:return 49
+case 22:return 50
 break;
-case 23:return 48
+case 23:return 49
 break;
-case 24:return 50
+case 24:return 51
 break;
-case 25:return 51
+case 25:return 52
 break;
-case 26:return 53
+case 26:return 54
 break;
-case 27:return 52
+case 27:return 53
 break;
-case 28:return 55
+case 28:return 56
 break;
-case 29:return 54
+case 29:return 55
 break;
-case 30:return 56
+case 30:return 57
 break;
-case 31:return 57
+case 31:return 58
 break;
-case 32:return 59
+case 32:return 60
 break;
-case 33:return 58
+case 33:return 59
 break;
-case 34:return 60
+case 34:return 61
 break;
-case 35:return 45
+case 35:return 46
 break;
-case 36:return 43
+case 36:return 44
 break;
-case 37:return 42
+case 37:return 43
 break;
-case 38:return 44
+case 38:return 45
 break;
 case 39:return 6
 break;
-case 40:return 22
+case 40:return 23
 break;
-case 41:return 23
+case 41:return 24
 break;
-case 42:return 32
+case 42:return 33
 break;
-case 43:return 29
+case 43:return 30
 break;
-case 44:return 30
+case 44:return 31
 break;
-case 45:return 26
+case 45:return 27
 break;
-case 46:return 35
+case 46:return 36
 break;
 case 47: attribute = ''; this.begin("string_doubleq"); 
 break;
@@ -1560,7 +1878,7 @@ case 54: attribute += "\'";
 break;
 case 55: attribute += "\r"; 
 break;
-case 56: yy_.yytext = attribute; this.popState(); return 36; 
+case 56: yy_.yytext = attribute; this.popState(); return 37; 
 break;
 case 57: attribute = ''; this.begin("string_singleq"); 
 break;
@@ -1580,7 +1898,7 @@ case 64: attribute += "\'";
 break;
 case 65: attribute += "\r"; 
 break;
-case 66: yy_.yytext = attribute; this.popState(); return 37; 
+case 66: yy_.yytext = attribute; this.popState(); return 38; 
 break;
 case 67:return 5
 break;
@@ -2429,6 +2747,288 @@ exports.Predicate = Predicate;
 
 /***/ }),
 
+/***/ "JxJB":
+/*!***************************************!*\
+  !*** ./src/js/analyzers/ast_xpath.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function getASTTree(obj) {
+  try {
+    let str = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+      <!-- Bootstrap CSS -->
+      <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+      <title>Title</title>
+      <style>
+        #divheight{
+          height: 400px;
+          width: 1050px;
+        }
+        .nav-tabs > li .close {
+          margin: -2px 0 0 10px;
+          font-size: 18px;
+        }
+        .nav-tabs2 > li .close {
+          margin: -2px 0 0 10px;
+          font-size: 18px;
+        }
+    
+      </style>
+    
+      <style>
+        body {
+          font-family: sans-serif;
+          font-size: 15px;
+        }
+    
+        .tree ul {
+          position: relative;
+          padding: 1em 0;
+          white-space: nowrap;
+          margin: 0 auto;
+          text-align: center;
+        }
+        .tree ul::after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+    
+        .tree li {
+          display: inline-block;
+          vertical-align: top;
+          text-align: center;
+          list-style-type: none;
+          position: relative;
+          padding: 1em 0.5em 0 0.5em;
+        }
+        .tree li::before, .tree li::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 50%;
+          border-top: 1px solid #ccc;
+          width: 50%;
+          height: 1em;
+        }
+        .tree li::after {
+          right: auto;
+          left: 50%;
+          border-left: 1px solid #ccc;
+        }
+        /*
+        ul:hover::after  {
+            transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+        }*/
+    
+        .tree li:only-child::after, .tree li:only-child::before {
+          display: none;
+        }
+        .tree li:only-child {
+          padding-top: 0;
+        }
+        .tree li:first-child::before, .tree li:last-child::after {
+          border: 0 none;
+        }
+        .tree li:last-child::before {
+          border-right: 1px solid #ccc;
+          border-radius: 0 5px 0 0;
+        }
+        .tree li:first-child::after {
+          border-radius: 5px 0 0 0;
+        }
+    
+        .tree ul ul::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 50%;
+          border-left: 1px solid #ccc;
+          width: 0;
+          height: 1em;
+        }
+    
+        .tree li a {
+          border: 1px solid #ccc;
+          padding: 0.5em 0.75em;
+          text-decoration: none;
+          display: inline-block;
+          border-radius: 5px;
+          color: #333;
+          position: relative;
+          top: 1px;
+        }
+    
+        .tree li a:hover,
+        .tree li a:hover + ul li a {
+          background: #e9453f;
+          color: #fff;
+          border: 1px solid #e9453f;
+        }
+    
+        .tree li a:hover + ul li::after,
+        .tree li a:hover + ul li::before,
+        .tree li a:hover + ul::before,
+        .tree li a:hover + ul ul::before {
+          border-color: #e9453f;
+        }
+    
+        /*# sourceMappingURL=sytle_.css.map */
+    
+    
+      </style>
+    </head>
+    <body>
+    
+    
+    
+    <div class="tree">
+      <ul id="tree-list">
+    
+        <!--AQUI-->
+        `
+
+    str = str + printObj(obj, 0, "")
+    str = str + `</ul>
+    
+    
+    
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+    `
+    return str;
+  } catch (error) {
+    return "";
+  }
+}
+
+
+function printObj(obj, lines, name) {
+  console.log(obj)
+  let str = "";
+  let str_ = "";
+  if (Array.isArray(obj)) { //IS ARRAY
+    for (let i = 0; i < obj.length; i++) {
+      str = str + printObj(obj[i], lines, "");
+    }
+  } else if (typeof obj === 'object') {// IS OBJECT
+    if (obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT') { // TODO select Parent
+      str = `<li>`;
+      str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT' ? "/" : "//"));
+      str = str + getPredicados(obj.expresion);
+      str = str + `</li>`
+      console.log(str);
+    } else if (obj.tipo === 'EXPRESION') {
+      if (typeof obj.expresion === 'object') {
+        str = `<a>` + name + getName(obj.expresion) + `</a>`;
+      }
+    }
+  } else { // IS STRING
+    for (let i = 0; i < lines; i++) {
+
+      str_ = str_ + "- ";
+    }
+  }
+  return str;
+}
+
+
+
+function getName(obj) {
+
+  let str = "";
+  if (obj.tipo === 'NODENAME') {
+    //console.log(obj)
+    return obj.nodename;
+  } else if (obj.tipo === 'SELECT_PARENT') {
+    return obj.expresion;
+  } else if (obj.tipo === 'SELECT_CURRENT') {
+    return obj.expresion;
+  } else if (obj.tipo === 'ASTERISCO') {
+    return obj.valor;
+  } else if (obj.tipo === 'FUNCION_TEXT') {
+    return obj.valor;
+  } else if (obj.tipo === 'FUNCION_NODE') {
+    return obj.valor;
+  } else if (obj.tipo === 'SELECT_ATTRIBUTES') {
+    return obj.expresion;
+  } else {
+    console.log("Error 1")
+    console.log(obj)
+  }
+  return str
+}
+
+function getPredicados(obj) {
+  let str = "";
+  console.log(obj)
+  if (obj.predicate !== null && obj.predicate !== undefined) {
+
+    str = `<ul>\n`;
+    for (let i = 0; i < obj.predicate.length; i++) {
+      str = str + getPredicado(obj.predicate[i]);
+    }
+    str = str + `</ul>`;
+  }
+  return str;
+}
+
+
+function getPredicado(obj) {
+  let str = ""
+  if (obj.tipo === 'PREDICATE') {
+    //str = `<li><a> ` + obj.condicion.tipo + `</a>
+    //<ul>`
+    str = str + getPredicado(obj.condicion);
+    //str = str + `
+    //</ul></li>`;
+  } else if (obj.tipo === 'EXPRESION') { //TODO to check
+    if ('valor' in obj.expresion) {
+      str = `<li><a>` + obj.expresion.valor + `</a></li>
+            `;
+
+    } else if ('nodename' in obj.expresion) {
+      str = `<li><a>` + obj.expresion.nodename + `</a></li>
+            `;
+
+    } else if (obj.expresion.tipo === 'SELECT_ATTRIBUTES') {
+      str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
+            `;
+
+    } else {
+      console.log("error 2")
+      console.log(obj)
+    }
+
+
+  } else {
+    str = `<li><a>` + obj.tipo + `</a>
+                <ul>`
+    str = str + getPredicado(obj.opIzq);
+    str = str + getPredicado(obj.opDer);
+    str = str + `</ul></li>`
+  }
+
+  return str;
+}
+
+module.exports = getASTTree;
+
+/***/ }),
+
 /***/ "Kypw":
 /*!*************************************!*\
   !*** ./src/js/model/xml/Element.js ***!
@@ -3086,7 +3686,7 @@ class AppComponent {
     onSubmit() {
         var iconvlite = __webpack_require__(/*! iconv-lite */ "rPnE");
         let grammar_value = document.getElementById('grammar_selector').value;
-        if (this.entrada != "" && this.consulta != "") {
+        if (this.entrada != "" && this.consulta != "" && this.entrada != '<?xml version="1.0" encoding="UTF-8"?>') {
             const x = {
                 xml: this.entrada,
                 query: this.consulta,
@@ -3563,21 +4163,20 @@ function filterElements(e1, e2, desigualdad, _contexto) {
                 }
             }
         }
-        if (element.childs && tmp.length === 0) { // Hace match con algún hijo
+        if (element.childs) { // Hace match con algún hijo
             for (var j = 0; j < element.childs.length; j++) {
                 var child = element.childs[j];
                 condition = verificarDesigualdad(desigualdad, child.id_open, e1, child.value, e2);
+                console.log(desigualdad, child.id_open, e1, child.value, e2);
                 if (condition) {
                     tmp.push(element);
                     break;
                 }
             }
         }
-        if (tmp.length === 0) { // Hace match con el elemento
-            condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2);
-            if (condition)
-                tmp.push(element);
-        }
+        condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2); // Hace match con el elemento
+        if (condition)
+            tmp.push(element);
     }
     return tmp;
 }
@@ -4045,10 +4644,12 @@ case 20:
 if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
                                                                                 let hasConflict = $$[$0-4].verificateNames();
                                                                                 if(hasConflict === "") {
-																					$$[$0-4].childs.forEach(child => {
-																					child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
-																					});
-																					this.$ = $$[$0-4];
+                                                                                    if($$[$0-4].childs){
+                                                                                        $$[$0-4].childs.forEach(child => {
+                                                                                        child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
+                                                                                        });
+                                                                                        this.$ = $$[$0-4];
+                                                                                    }
 																				}
                                                                                 else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
@@ -5825,9 +6426,9 @@ function compile(req) {
         }
         if (xml_ast.errors.length > 0 || xml_ast.ast === null || xml_ast === true) {
             if (xml_ast.errors.length > 0)
-                errors = xml_ast.errors;
+                errors = errors.concat(xml_ast.errors);
             if (xml_ast.ast === null || xml_ast === true) {
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: "1", columna: "1" });
                 return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
             }
         }
@@ -5841,7 +6442,7 @@ function compile(req) {
             if (xPath_ast.errors.length > 0)
                 errors = xPath_ast.errors;
             if (xPath_ast.ast === null || xPath_ast === true) {
-                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta digitada.", origen: "XPath", linea: 1, columna: 1 });
+                errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta digitada.", origen: "XPath", linea: "1", columna: "1" });
                 return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
             }
         }
@@ -5868,7 +6469,7 @@ function compile(req) {
         var output = {
             arreglo_simbolos: [],
             arreglo_errores: errors,
-            output: (error.message) ? ("Error sintáctico:\n" + String(error.message)) : String(error),
+            output: (error.message) ? String(error.message) : String(error),
             encoding: "utf-8"
         };
         errors = [];
@@ -5892,11 +6493,13 @@ module.exports = { compile: compile };
 var Ambito_1 = __webpack_require__(/*! ./Ambito */ "QFP7");
 function exec(_expresiones, _ambito) {
     _expresiones.forEach(function (element) {
-        if (element.childs) {
-            var nuevoAmbito = new Ambito_1.Ambito(_ambito, "hijo");
-            exec(element.childs, nuevoAmbito);
+        if (element) {
+            if (element.childs) {
+                var nuevoAmbito = new Ambito_1.Ambito(_ambito, "hijo");
+                exec(element.childs, nuevoAmbito);
+            }
+            _ambito.addSimbolo(element);
         }
-        _ambito.addSimbolo(element);
     });
 }
 module.exports = { exec: exec };
@@ -5933,14 +6536,13 @@ function generateReport(req) {
                 parser_xPath = __webpack_require__(/*! ../analyzers/xpath_down */ "jiUV");
                 break;
         }
-        // Puede ser uno de los tres descritos
         switch (report) {
             case "XML-CST":
                 return CST_xml(parser_xml, xml);
             case "XML-GRAMMAR":
                 return GrammarReport_xml(parser_xml, xml);
             case "XPATH-AST":
-                return AST_xpath(parser_xPath, xPath);
+                return AST_xml(parser_xml, xml); // Se dejó el del xml
             default:
                 return { output: "Algo salió mal." };
         }
@@ -5997,17 +6599,38 @@ function GrammarReport_xml(parser_xml, xml) {
     };
     return output;
 }
+function AST_xml(parser_xml, xml) {
+    var errors = [];
+    // Análisis de XML
+    var xpath_xml = parser_xml.parse(xml);
+    var _ast = xpath_xml.ast;
+    if (xpath_xml.errors.length > 0 || xpath_xml.ast === null || xpath_xml === true) {
+        if (xpath_xml.errors.length > 0)
+            errors = xpath_xml.errors;
+        if (xpath_xml.ast === null || xpath_xml === true) {
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
+            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+        }
+    }
+    var str = _ast[0].getASTXMLTree();
+    var output = {
+        arreglo_errores: errors,
+        output: "AST generado.",
+        ast: str
+    };
+    return output;
+}
 function AST_xpath(parser_xpath, xpath) {
     var errors = [];
     // Análisis de XPath
     var xpath_ast = parser_xpath.parse(xpath);
-    var _ast = xpath_ast.ast_report; //Confirmar nombre de propiedad
+    var _ast = xpath_ast.arbolAST;
     if (xpath_ast.errors.length > 0 || xpath_ast.ast === null || xpath_ast === true) {
         if (xpath_ast.errors.length > 0)
             errors = xpath_ast.errors;
         if (xpath_ast.ast === null || xpath_ast === true) {
-            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea del documento XML.", origen: "XML", linea: 1, columna: 1 });
-            return { output: "El documento XML contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
+            errors.push({ tipo: "Sintáctico", error: "Sintaxis errónea de la consulta.", origen: "XPath", linea: 1, columna: 1 });
+            return { output: "La consulta contiene errores para analizar.\nIntente de nuevo.", arreglo_errores: errors };
         }
     }
     var output = {
@@ -6103,12 +6726,12 @@ module.exports = { generateReport: generateReport };
   }
 */
 var xpath_down = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[2,4],$Vs=[1,39],$Vt=[5,8],$Vu=[2,7],$Vv=[5,8,11,12,18,21,22,23,24,25,26,27,28,29,31,32,33,34,35,38,39,40,41,42,43,44,45,46,47,48,51,52,53,54,55,56,57,58,59,60,61,62,63],$Vw=[2,16],$Vx=[1,46],$Vy=[5,8,11,12,16,18,21,22,23,24,25,26,27,28,29,31,32,33,34,35,38,39,40,41,42,43,44,45,46,47,48,51,52,53,54,55,56,57,58,59,60,61,62,63],$Vz=[1,58],$VA=[1,59],$VB=[1,68],$VC=[1,69],$VD=[1,70],$VE=[1,71],$VF=[1,72],$VG=[1,73],$VH=[1,74],$VI=[1,75],$VJ=[1,76],$VK=[1,77],$VL=[1,78],$VM=[1,79],$VN=[1,80],$VO=[18,21,22,23,24,25,26,27,28,29,31,32,33,34,35],$VP=[2,14],$VQ=[1,84],$VR=[18,21,22,23,24,31,32,33,34,35],$VS=[18,21,22,23,24,25,26,31,32,33,34,35];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,20],$V3=[1,16],$V4=[1,17],$V5=[1,18],$V6=[1,19],$V7=[1,21],$V8=[1,22],$V9=[1,23],$Va=[1,12],$Vb=[1,13],$Vc=[1,14],$Vd=[1,15],$Ve=[1,24],$Vf=[1,25],$Vg=[1,26],$Vh=[1,27],$Vi=[1,28],$Vj=[1,29],$Vk=[1,30],$Vl=[1,31],$Vm=[1,32],$Vn=[1,33],$Vo=[1,34],$Vp=[1,35],$Vq=[1,36],$Vr=[2,5],$Vs=[1,39],$Vt=[1,40],$Vu=[5,8,9],$Vv=[2,8],$Vw=[5,8,9,12,13,19,22,23,24,25,26,27,28,29,30,32,33,34,35,36,39,40,41,42,43,44,45,46,47,48,49,52,53,54,55,56,57,58,59,60,61,62,63,64],$Vx=[2,17],$Vy=[1,47],$Vz=[5,8,9,12,13,17,19,22,23,24,25,26,27,28,29,30,32,33,34,35,36,39,40,41,42,43,44,45,46,47,48,49,52,53,54,55,56,57,58,59,60,61,62,63,64],$VA=[1,60],$VB=[1,61],$VC=[1,71],$VD=[1,72],$VE=[1,73],$VF=[1,74],$VG=[1,75],$VH=[1,76],$VI=[1,77],$VJ=[1,78],$VK=[1,79],$VL=[1,80],$VM=[1,81],$VN=[1,82],$VO=[1,83],$VP=[19,22,23,24,25,26,27,28,29,30,32,33,34,35,36],$VQ=[2,15],$VR=[1,87],$VS=[19,22,23,24,25,32,33,34,35,36],$VT=[19,22,23,24,25,26,27,32,33,34,35,36];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"XPATH":6,"XPATH_Up":7,"tk_line":8,"QUERY":9,"XPATHp":10,"tk_2bar":11,"tk_bar":12,"EXP_PR":13,"AXIS":14,"CORCHET":15,"tk_corA":16,"E":17,"tk_corC":18,"CORCHETpp":19,"CORCHETP":20,"tk_menorigual":21,"tk_menor":22,"tk_mayorigual":23,"tk_mayor":24,"tk_mas":25,"tk_menos":26,"tk_asterisco":27,"tk_div":28,"tk_mod":29,"tk_ParA":30,"tk_ParC":31,"tk_or":32,"tk_and":33,"tk_equal":34,"tk_diferent":35,"FUNC":36,"PRIMITIVO":37,"tk_id":38,"tk_attribute_d":39,"tk_attribute_s":40,"num":41,"tk_punto":42,"tk_2puntos":43,"tk_arroba":44,"tk_text":45,"tk_last":46,"tk_position":47,"tk_node":48,"AXISNAME":49,"tk_4puntos":50,"tk_ancestor":51,"tk_ancestor2":52,"tk_attribute":53,"tk_child":54,"tk_descendant":55,"tk_descendant2":56,"tk_following":57,"tk_following2":58,"tk_namespace":59,"tk_parent":60,"tk_preceding":61,"tk_preceding2":62,"tk_self":63,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"tk_line",11:"tk_2bar",12:"tk_bar",16:"tk_corA",18:"tk_corC",21:"tk_menorigual",22:"tk_menor",23:"tk_mayorigual",24:"tk_mayor",25:"tk_mas",26:"tk_menos",27:"tk_asterisco",28:"tk_div",29:"tk_mod",30:"tk_ParA",31:"tk_ParC",32:"tk_or",33:"tk_and",34:"tk_equal",35:"tk_diferent",38:"tk_id",39:"tk_attribute_d",40:"tk_attribute_s",41:"num",42:"tk_punto",43:"tk_2puntos",44:"tk_arroba",45:"tk_text",46:"tk_last",47:"tk_position",48:"tk_node",50:"tk_4puntos",51:"tk_ancestor",52:"tk_ancestor2",53:"tk_attribute",54:"tk_child",55:"tk_descendant",56:"tk_descendant2",57:"tk_following",58:"tk_following2",59:"tk_namespace",60:"tk_parent",61:"tk_preceding",62:"tk_preceding2",63:"tk_self"},
-productions_: [0,[3,2],[4,2],[7,3],[7,0],[6,2],[10,2],[10,0],[9,2],[9,2],[9,1],[9,1],[15,4],[19,4],[19,0],[20,1],[20,0],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,3],[17,2],[17,3],[17,3],[17,3],[17,3],[17,3],[17,1],[13,2],[13,2],[37,1],[37,1],[37,1],[37,1],[37,1],[37,1],[37,1],[37,2],[37,2],[36,3],[36,3],[36,3],[36,3],[14,3],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1],[49,1]],
+symbols_: {"error":2,"ini":3,"XPATH_U":4,"EOF":5,"XPATH":6,"XPATH_Up":7,"tk_line":8,"tk_2line":9,"QUERY":10,"XPATHp":11,"tk_2bar":12,"tk_bar":13,"EXP_PR":14,"AXIS":15,"CORCHET":16,"tk_corA":17,"E":18,"tk_corC":19,"CORCHETpp":20,"CORCHETP":21,"tk_menorigual":22,"tk_menor":23,"tk_mayorigual":24,"tk_mayor":25,"tk_mas":26,"tk_menos":27,"tk_asterisco":28,"tk_div":29,"tk_mod":30,"tk_ParA":31,"tk_ParC":32,"tk_or":33,"tk_and":34,"tk_equal":35,"tk_diferent":36,"FUNC":37,"PRIMITIVO":38,"tk_id":39,"tk_attribute_d":40,"tk_attribute_s":41,"num":42,"tk_punto":43,"tk_2puntos":44,"tk_arroba":45,"tk_text":46,"tk_last":47,"tk_position":48,"tk_node":49,"AXISNAME":50,"tk_4puntos":51,"tk_ancestor":52,"tk_ancestor2":53,"tk_attribute":54,"tk_child":55,"tk_descendant":56,"tk_descendant2":57,"tk_following":58,"tk_following2":59,"tk_namespace":60,"tk_parent":61,"tk_preceding":62,"tk_preceding2":63,"tk_self":64,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"tk_line",9:"tk_2line",12:"tk_2bar",13:"tk_bar",17:"tk_corA",19:"tk_corC",22:"tk_menorigual",23:"tk_menor",24:"tk_mayorigual",25:"tk_mayor",26:"tk_mas",27:"tk_menos",28:"tk_asterisco",29:"tk_div",30:"tk_mod",31:"tk_ParA",32:"tk_ParC",33:"tk_or",34:"tk_and",35:"tk_equal",36:"tk_diferent",39:"tk_id",40:"tk_attribute_d",41:"tk_attribute_s",42:"num",43:"tk_punto",44:"tk_2puntos",45:"tk_arroba",46:"tk_text",47:"tk_last",48:"tk_position",49:"tk_node",51:"tk_4puntos",52:"tk_ancestor",53:"tk_ancestor2",54:"tk_attribute",55:"tk_child",56:"tk_descendant",57:"tk_descendant2",58:"tk_following",59:"tk_following2",60:"tk_namespace",61:"tk_parent",62:"tk_preceding",63:"tk_preceding2",64:"tk_self"},
+productions_: [0,[3,2],[4,2],[7,3],[7,3],[7,0],[6,2],[11,2],[11,0],[10,2],[10,2],[10,1],[10,1],[16,4],[20,4],[20,0],[21,1],[21,0],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,3],[18,2],[18,3],[18,3],[18,3],[18,3],[18,3],[18,1],[14,2],[14,2],[38,1],[38,1],[38,1],[38,1],[38,1],[38,1],[38,1],[38,2],[38,2],[37,3],[37,3],[37,3],[37,3],[15,3],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1],[50,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -6135,291 +6758,296 @@ case 3:
 		prod_1 = grammar_stack.pop();
 		prod_2 = grammar_stack.pop();
 		grammar_stack.push({'XPATH_Up -: tk_line XPATH XPATH_Up ':['token: tk_line\t Lexema: ' + $$[$0-2], prod_2, prod_1]});
-
 break;
 case 4:
- grammar_stack.push({'XPATH_Up -: Empty': ['EMPTY']}); 
+
+            prod_1 = grammar_stack.pop();
+            prod_2 = grammar_stack.pop();
+            grammar_stack.push({'XPATH_Up -: tk_2line XPATH XPATH_Up ':['token: tk_2line\t Lexema: ' + $$[$0-2], prod_2, prod_1]});
 break;
 case 5:
+ grammar_stack.push({'XPATH_Up -: Empty': ['EMPTY']}); 
+break;
+case 6:
 
 		prod_1 = grammar_stack.pop();
 		prod_2 = grammar_stack.pop();
 		grammar_stack.push({'XPATH -: QUERY XPATHp ':[prod_2, prod_1]});
 
 break;
-case 6:
+case 7:
 
 		prod_1 = grammar_stack.pop();
 		prod_2 = grammar_stack.pop();
 		grammar_stack.push({'XPATHp -: QUERY XPATHp ':[prod_2, prod_1]});
 
 break;
-case 7:
+case 8:
  grammar_stack.push({'XPATHp -: Empty': ['EMPTY']}); 
 break;
-case 8:
+case 9:
  //this.$=builder.newDoubleAxis($$[$0], this._$.first_line, this._$.first_column+1);
 					   prod_1 = grammar_stack.pop();
 			 		   grammar_stack.push({'QUERY -: tk_2bar QUERY': ['token: tk_2bar\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 9:
+case 10:
  //this.$=builder.newAxis($$[$0], this._$.first_line, this._$.first_column+1);
 					 prod_1 = grammar_stack.pop();
 			 		 grammar_stack.push({'QUERY -: tk_bar QUERY': ['token: tk_bar\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 10:
+case 11:
  //this.$=$$[$0];
 			   prod_1 = grammar_stack.pop();
 			   grammar_stack.push({'QUERY -: EXP_PR': [prod_1]}); 
 break;
-case 11:
+case 12:
  //this.$=$$[$0];
 			 prod_1 = grammar_stack.pop();
 			 grammar_stack.push({'QUERY -: AXIS': [prod_1]}); 
 break;
-case 12:
+case 13:
 
 			prod_1 = grammar_stack.pop();
 			prod_2 = grammar_stack.pop();
 			grammar_stack.push({'CORCHET -: tk_corA E tk_corC CORCHETpp': ['token: tk_menorigual\t Lexema: ' + $$[$0-3], prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]});	
 
 break;
-case 13:
+case 14:
 
 										prod_1 = grammar_stack.pop();
 										prod_2 = grammar_stack.pop();
 										grammar_stack.push({'CORCHETpp -: tk_corA E tk_corC CORCHETpp ':['token: tk_menorigual\t Lexema: ' + $$[$0-3], prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]});	
 
 break;
-case 14:
+case 15:
  grammar_stack.push({'CORCHETpp -: Empty': ['EMPTY']}); 
 break;
-case 15:
+case 16:
  prod_1 = grammar_stack.pop();
 					grammar_stack.push({'CORCHETP -: CORCHET': [prod_1]}) 
 break;
-case 16:
+case 17:
  grammar_stack.push({'CORCHETP -: Empty': ['EMPTY']}); 
 break;
-case 17:
+case 18:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENORIGUAL, this._$.first_line, this._$.first_column+1);
 						prod_1 = grammar_stack.pop();
 				 		prod_2 = grammar_stack.pop();
 					    grammar_stack.push({'E -: E tk_menorigual E': [prod_2, 'token: tk_menorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 18:
+case 19:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MENOR, this._$.first_line, this._$.first_column+1);
 					 prod_1 = grammar_stack.pop();
 				 	 prod_2 = grammar_stack.pop();
 				 	 grammar_stack.push({'E -: E tk_menor E': [prod_2, 'token: tk_menor\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 19:
+case 20:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYORIGUAL, this._$.first_line, this._$.first_column+1);
 						  prod_1 = grammar_stack.pop();
 				 		  prod_2 = grammar_stack.pop();
 						  grammar_stack.push({'E -: E tk_mayorigual E': [prod_2, 'token: tk_mayorigual\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 20:
+case 21:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_MAYOR, this._$.first_line, this._$.first_column+1);
 					 prod_1 = grammar_stack.pop();
 				 	 prod_2 = grammar_stack.pop();
 				 	 grammar_stack.push({'E -: E tk_mayor E': [prod_2, 'token: tk_mayor\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 21:
+case 22:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_SUMA, this._$.first_line, this._$.first_column+1);
 				   prod_1 = grammar_stack.pop();
 				   prod_2 = grammar_stack.pop();
 				   grammar_stack.push({'E -: E tk_mas E': [prod_2, 'token: tk_mas\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 22:
+case 23:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_RESTA, this._$.first_line, this._$.first_column+1);
 					 prod_1 = grammar_stack.pop();
 				 	 prod_2 = grammar_stack.pop();
 				  	 grammar_stack.push({'E -: E tk_menos E': [prod_2, 'token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 23:
+case 24:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MULTIPLICACION, this._$.first_line, this._$.first_column+1);
 						 prod_1 = grammar_stack.pop();
 				 		 prod_2 = grammar_stack.pop();
 				  		 grammar_stack.push({'E -: E tk_asterisco E': [prod_2, 'token: tk_asterisco\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 24:
+case 25:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_DIVISION, this._$.first_line, this._$.first_column+1);
 				   prod_1 = grammar_stack.pop();
 				   prod_2 = grammar_stack.pop();
 				   grammar_stack.push({'E -: E tk_div E': [prod_2, 'token: tk_div\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 25:
+case 26:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.OPERACION_MODULO, this._$.first_line, this._$.first_column+1);
 				   prod_1 = grammar_stack.pop();
 				   prod_2 = grammar_stack.pop();
 				   grammar_stack.push({'E -: E tk_mod E': [prod_2, 'token: tk_mod\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 26:
+case 27:
  //this.$=builder.newOperation($$[$0], null, Tipos.OPERACION_NEGACION_UNARIA, this._$.first_line, this._$.first_column+1); 
 								prod_1 = grammar_stack.pop();
 						  		grammar_stack.push({'E -: tk_menos E': ['token: tk_menos\t Lexema: ' + $$[$0-1], prod_1]});
 break;
-case 27:
+case 28:
  //this.$=$$[$0-1];
 						  prod_1 = grammar_stack.pop();
 						  grammar_stack.push({'E -: tk_ParA E tk_ParC': ['token: tk_ParA\t Lexema: ' + $$[$0-2], prod_1, 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
-case 28:
+case 29:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_OR, this._$.first_line, this._$.first_column+1);
 				  prod_1 = grammar_stack.pop();
 				  prod_2 = grammar_stack.pop();
 				  grammar_stack.push({'E -: E tk_or E': [prod_2, 'token: tk_or\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 29:
+case 30:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.LOGICA_AND, this._$.first_line, this._$.first_column+1);
 				   prod_1 = grammar_stack.pop();
 				   prod_2 = grammar_stack.pop();
 				   grammar_stack.push({'E -: E tk_and E': [prod_2, 'token: tk_and\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 30:
+case 31:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_IGUAL, this._$.first_line, this._$.first_column+1); 
 					 prod_1 = grammar_stack.pop();
 					 prod_2 = grammar_stack.pop();
 					 grammar_stack.push({'E -: E tk_equal E': [prod_2, 'token: tk_equal\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 31:
+case 32:
  //this.$=builder.newOperation($$[$0-2], $$[$0], Tipos.RELACIONAL_DIFERENTE, this._$.first_line, this._$.first_column+1); 
 						prod_1 = grammar_stack.pop();
 						prod_2 = grammar_stack.pop();
 						grammar_stack.push({'E -: E tk_diferent E': [prod_2, 'token: tk_diferent\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 32:
+case 33:
  //this.$=$$[$0];
 			  prod_1 = grammar_stack.pop();
 			  grammar_stack.push({'E -: QUERY': [prod_1]}); 
 break;
-case 33:
+case 34:
  //this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1);
 						prod_1 = grammar_stack.pop();
 						prod_2 = grammar_stack.pop();
 						grammar_stack.push({'EXP_PR -: FUNC CORCHETP': [prod_2, prod_1]}); 
 break;
-case 34:
+case 35:
  //this.$=builder.newExpression($$[$0-1], $$[$0], this._$.first_line, this._$.first_column+1); 
 								prod_1 = grammar_stack.pop();
 								prod_2 = grammar_stack.pop();
 								grammar_stack.push({'EXP_PR -: PRIMITIVO CORCHETP': [prod_2, prod_1]}); 
 break;
-case 35:
+case 36:
  //this.$=builder.newNodename($$[$0], this._$.first_line, this._$.first_column+1);
 				   grammar_stack.push({'PRIMITIVO -: tk_id':['token: tk_text\t Lexema: ' + $$[$0]]}); 
 break;
-case 36:
+case 37:
  //this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1);
 						   grammar_stack.push({'PRIMITIVO -: tk_attribute_d':['token: tk_attribute_d\t Lexema: ' + $$[$0]]}); 
 break;
-case 37:
+case 38:
  //this.$=builder.newValue($$[$0], Tipos.STRING, this._$.first_line, this._$.first_column+1); 
 						   grammar_stack.push({'PRIMITIVO -: tk_attribute_s':['token: tk_attribute_s\t Lexema: ' + $$[$0]]}); 
 break;
-case 38:
+case 39:
  //this.$=builder.newValue($$[$0], Tipos.NUMBER, this._$.first_line, this._$.first_column+1);
 				grammar_stack.push({'PRIMITIVO -: num':['token: num\t Lexema: ' + $$[$0]]}); 
 break;
-case 39:
+case 40:
  //this.$=builder.newValue($$[$0], Tipos.ASTERISCO, this._$.first_line, this._$.first_column+1);
 				   grammar_stack.push({'PRIMITIVO -: tk_asterisco':['token: tk_asterisco\t Lexema: ' + $$[$0]]}); 
 break;
-case 40:
+case 41:
  //this.$=builder.newCurrent($$[$0], this._$.first_line, this._$.first_column+1); 
 					 grammar_stack.push({'PRIMITIVO -: tk_punto':['token: tk_punto\t Lexema: ' + $$[$0]]}); 
 break;
-case 41:
+case 42:
  //this.$=builder.newParent($$[$0], this._$.first_line, this._$.first_column+1);
 					   grammar_stack.push({'PRIMITIVO -: tk_2puntos':['token: tk_2puntos\t Lexema: ' + $$[$0]]}); 
 break;
-case 42:
+case 43:
  //this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1);
 							grammar_stack.push({'PRIMITIVO -: tk_arroba tk_id':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_id\t Lexema: ' + $$[$0]]}); 
 break;
-case 43:
+case 44:
  //this.$=builder.newAttribute($$[$0], this._$.first_line, this._$.first_column+1); 
 							 grammar_stack.push({'PRIMITIVO -: tk_arroba tk_asterisco':['token: tk_arroba\t Lexema: ' + $$[$0-1], 'token: tk_asterisco\t Lexema: ' + $$[$0]]});
 break;
-case 44:
+case 45:
  //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_TEXT, this._$.first_line, this._$.first_column+1);
 								grammar_stack.push({'FUNC -: tk_text tk_ParA tk_ParC':['token: tk_text\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
-case 45:
+case 46:
  //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_LAST, this._$.first_line, this._$.first_column+1);
 								grammar_stack.push({'FUNC -: tk_last tk_ParA tk_ParC':['token: tk_last\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]}); 
 break;
-case 46:
+case 47:
  //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_POSITION, this._$.first_line, this._$.first_column+1); 
 									grammar_stack.push({'FUNC -: tk_position tk_ParA tk_ParC':['token: tk_position\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
-case 47:
+case 48:
  //this.$=builder.newValue($$[$0-2], Tipos.FUNCION_NODE, this._$.first_line, this._$.first_column+1); 
 								grammar_stack.push({'FUNC -: tk_node tk_ParA tk_ParC':['token: tk_node\t Lexema: ' + $$[$0-2], 'token: tk_ParA\t Lexema: ' + $$[$0-1], 'token: tk_ParC\t Lexema: ' + $$[$0]]});
 break;
-case 48:
+case 49:
  //this.$=builder.newAxisObject($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1);
 								prod_1 = grammar_stack.pop();
 								prod_2 = grammar_stack.pop();
 								grammar_stack.push({'AXIS -: AXISNAME tk_4puntos QUERY':[prod_2, 'token: tk_4puntos\t Lexema: ' + $$[$0-1], prod_1]}); 
 break;
-case 49:
+case 50:
  //this.$ = Tipos.AXIS_ANCESTOR;
 						grammar_stack.push({'AXISNAME -: tk_ancestor':['token: tk_ancestor\t Lexema: ' + $$[$0]]}); 
 break;
-case 50:
+case 51:
  //this.$ = Tipos.AXIS_ANCESTOR_OR_SELF;
 						grammar_stack.push({'AXISNAME -: tk_ancestor2':['token: tk_ancestor2\t Lexema: ' + $$[$0]]}); 
 break;
-case 51:
+case 52:
  //this.$ = Tipos.AXIS_ATTRIBUTE;
 						grammar_stack.push({'AXISNAME -: tk_attribute':['token: tk_attribute\t Lexema: ' + $$[$0]]}); 
 break;
-case 52:
+case 53:
  //this.$ = Tipos.AXIS_CHILD;
 						grammar_stack.push({'AXISNAME -: tk_child':['token: tk_child\t Lexema: ' + $$[$0]]}); 
 break;
-case 53:
+case 54:
  //this.$ = Tipos.AXIS_DESCENDANT;
 						grammar_stack.push({'AXISNAME -: tk_descendant':['token: tk_descendant\t Lexema: ' + $$[$0]]}); 
 break;
-case 54:
+case 55:
  //this.$ = Tipos.AXIS_DESCENDANT_OR_SELF;
 						grammar_stack.push({'AXISNAME -: tk_descendant2':['token: tk_descendant2\t Lexema: ' + $$[$0]]}); 
 break;
-case 55:
+case 56:
  //this.$ = Tipos.AXIS_FOLLOWING;
 						grammar_stack.push({'AXISNAME -: tk_following':['token: tk_following\t Lexema: ' + $$[$0]]}); 
 break;
-case 56:
+case 57:
  //this.$ = Tipos.AXIS_FOLLOWING_SIBLING;
 						grammar_stack.push({'AXISNAME -: tk_following2':['token: tk_follownig2\t Lexema: ' + $$[$0]]}); 
 break;
-case 57:
+case 58:
  //this.$ = Tipos.AXIS_NAMESPACE;
 						grammar_stack.push({'AXISNAME -: tk_namespace':['token: tk_namespace\t Lexema: ' + $$[$0]]}); 
 break;
-case 58:
+case 59:
  //this.$ = Tipos.AXIS_PARENT;
 						grammar_stack.push({'AXISNAME -: tk_parent':['token: tk_parent\t Lexema: ' + $$[$0]]}); 
 break;
-case 59:
+case 60:
  //this.$ = Tipos.AXIS_PRECEDING;
 						grammar_stack.push({'AXISNAME -: tk_preceding':['token: tk_preceding\t Lexema: ' + $$[$0]]}); 
 break;
-case 60:
+case 61:
  //this.$ = Tipos.AXIS_PRECEDING_SIBLING;
 						grammar_stack.push({'AXISNAME -: tk_preceding2':['token: tk_preceding2\t Lexema: ' + $$[$0]]}); 
 break;
-case 61:
+case 62:
  //this.$ = Tipos.AXIS_SELF;
 						grammar_stack.push({'AXISNAME -: tk_self':['token: tk_self\t Lexema: ' + $$[$0]]}); 
 break;
 }
 },
-table: [{3:1,4:2,6:3,9:4,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{1:[3]},{5:[1,37]},{5:$Vr,7:38,8:$Vs},o($Vt,$Vu,{13:7,14:8,36:9,37:10,49:11,10:40,9:41,11:$V0,12:$V1,27:$V2,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq}),{9:42,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:43,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($Vv,[2,10]),o($Vv,[2,11]),o($Vv,$Vw,{20:44,15:45,16:$Vx}),o($Vv,$Vw,{15:45,20:47,16:$Vx}),{50:[1,48]},{30:[1,49]},{30:[1,50]},{30:[1,51]},{30:[1,52]},o($Vy,[2,35]),o($Vy,[2,36]),o($Vy,[2,37]),o($Vy,[2,38]),o($Vy,[2,39]),o($Vy,[2,40]),o($Vy,[2,41]),{27:[1,54],38:[1,53]},{50:[2,49]},{50:[2,50]},{50:[2,51]},{50:[2,52]},{50:[2,53]},{50:[2,54]},{50:[2,55]},{50:[2,56]},{50:[2,57]},{50:[2,58]},{50:[2,59]},{50:[2,60]},{50:[2,61]},{1:[2,1]},{5:[2,2]},{6:55,9:4,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($Vt,[2,5]),o($Vt,$Vu,{13:7,14:8,36:9,37:10,49:11,9:41,10:56,11:$V0,12:$V1,27:$V2,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq}),o($Vv,[2,8]),o($Vv,[2,9]),o($Vv,[2,33]),o($Vv,[2,15]),{9:60,11:$V0,12:$V1,13:7,14:8,17:57,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($Vv,[2,34]),{9:61,11:$V0,12:$V1,13:7,14:8,27:$V2,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{31:[1,62]},{31:[1,63]},{31:[1,64]},{31:[1,65]},o($Vy,[2,42]),o($Vy,[2,43]),{5:$Vr,7:66,8:$Vs},o($Vt,[2,6]),{18:[1,67],21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,32:$VK,33:$VL,34:$VM,35:$VN},{9:60,11:$V0,12:$V1,13:7,14:8,17:81,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:82,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($VO,[2,32]),o($Vv,[2,48]),o($Vy,[2,44]),o($Vy,[2,45]),o($Vy,[2,46]),o($Vy,[2,47]),{5:[2,3]},o($Vv,$VP,{19:83,16:$VQ}),{9:60,11:$V0,12:$V1,13:7,14:8,17:85,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:86,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:87,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:88,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:89,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:90,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:91,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:92,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:93,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:94,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:95,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:96,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},{9:60,11:$V0,12:$V1,13:7,14:8,17:97,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($VO,[2,26]),{21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,31:[1,98],32:$VK,33:$VL,34:$VM,35:$VN},o($Vv,[2,12]),{9:60,11:$V0,12:$V1,13:7,14:8,17:99,26:$Vz,27:$V2,30:$VA,36:9,37:10,38:$V3,39:$V4,40:$V5,41:$V6,42:$V7,43:$V8,44:$V9,45:$Va,46:$Vb,47:$Vc,48:$Vd,49:11,51:$Ve,52:$Vf,53:$Vg,54:$Vh,55:$Vi,56:$Vj,57:$Vk,58:$Vl,59:$Vm,60:$Vn,61:$Vo,62:$Vp,63:$Vq},o($VR,[2,17],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,18],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,19],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,20],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VS,[2,21],{27:$VH,28:$VI,29:$VJ}),o($VS,[2,22],{27:$VH,28:$VI,29:$VJ}),o($VO,[2,23]),o($VO,[2,24]),o($VO,[2,25]),o([18,31,32],[2,28],{21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,33:$VL,34:$VM,35:$VN}),o([18,31,32,33],[2,29],{21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,34:$VM,35:$VN}),o($VR,[2,30],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VR,[2,31],{25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ}),o($VO,[2,27]),{18:[1,100],21:$VB,22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,32:$VK,33:$VL,34:$VM,35:$VN},o($Vv,$VP,{19:101,16:$VQ}),o($Vv,[2,13])],
-defaultActions: {24:[2,49],25:[2,50],26:[2,51],27:[2,52],28:[2,53],29:[2,54],30:[2,55],31:[2,56],32:[2,57],33:[2,58],34:[2,59],35:[2,60],36:[2,61],37:[2,1],38:[2,2],66:[2,3]},
+table: [{3:1,4:2,6:3,10:4,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{1:[3]},{5:[1,37]},{5:$Vr,7:38,8:$Vs,9:$Vt},o($Vu,$Vv,{14:7,15:8,37:9,38:10,50:11,11:41,10:42,12:$V0,13:$V1,28:$V2,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq}),{10:43,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:44,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($Vw,[2,11]),o($Vw,[2,12]),o($Vw,$Vx,{21:45,16:46,17:$Vy}),o($Vw,$Vx,{16:46,21:48,17:$Vy}),{51:[1,49]},{31:[1,50]},{31:[1,51]},{31:[1,52]},{31:[1,53]},o($Vz,[2,36]),o($Vz,[2,37]),o($Vz,[2,38]),o($Vz,[2,39]),o($Vz,[2,40]),o($Vz,[2,41]),o($Vz,[2,42]),{28:[1,55],39:[1,54]},{51:[2,50]},{51:[2,51]},{51:[2,52]},{51:[2,53]},{51:[2,54]},{51:[2,55]},{51:[2,56]},{51:[2,57]},{51:[2,58]},{51:[2,59]},{51:[2,60]},{51:[2,61]},{51:[2,62]},{1:[2,1]},{5:[2,2]},{6:56,10:4,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{6:57,10:4,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($Vu,[2,6]),o($Vu,$Vv,{14:7,15:8,37:9,38:10,50:11,10:42,11:58,12:$V0,13:$V1,28:$V2,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq}),o($Vw,[2,9]),o($Vw,[2,10]),o($Vw,[2,34]),o($Vw,[2,16]),{10:62,12:$V0,13:$V1,14:7,15:8,18:59,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($Vw,[2,35]),{10:63,12:$V0,13:$V1,14:7,15:8,28:$V2,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{32:[1,64]},{32:[1,65]},{32:[1,66]},{32:[1,67]},o($Vz,[2,43]),o($Vz,[2,44]),{5:$Vr,7:68,8:$Vs,9:$Vt},{5:$Vr,7:69,8:$Vs,9:$Vt},o($Vu,[2,7]),{19:[1,70],22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,33:$VL,34:$VM,35:$VN,36:$VO},{10:62,12:$V0,13:$V1,14:7,15:8,18:84,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:85,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($VP,[2,33]),o($Vw,[2,49]),o($Vz,[2,45]),o($Vz,[2,46]),o($Vz,[2,47]),o($Vz,[2,48]),{5:[2,3]},{5:[2,4]},o($Vw,$VQ,{20:86,17:$VR}),{10:62,12:$V0,13:$V1,14:7,15:8,18:88,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:89,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:90,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:91,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:92,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:93,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:94,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:95,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:96,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:97,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:98,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:99,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},{10:62,12:$V0,13:$V1,14:7,15:8,18:100,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($VP,[2,27]),{22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,32:[1,101],33:$VL,34:$VM,35:$VN,36:$VO},o($Vw,[2,13]),{10:62,12:$V0,13:$V1,14:7,15:8,18:102,27:$VA,28:$V2,31:$VB,37:9,38:10,39:$V3,40:$V4,41:$V5,42:$V6,43:$V7,44:$V8,45:$V9,46:$Va,47:$Vb,48:$Vc,49:$Vd,50:11,52:$Ve,53:$Vf,54:$Vg,55:$Vh,56:$Vi,57:$Vj,58:$Vk,59:$Vl,60:$Vm,61:$Vn,62:$Vo,63:$Vp,64:$Vq},o($VS,[2,18],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,19],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,20],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,21],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VT,[2,22],{28:$VI,29:$VJ,30:$VK}),o($VT,[2,23],{28:$VI,29:$VJ,30:$VK}),o($VP,[2,24]),o($VP,[2,25]),o($VP,[2,26]),o([19,32,33],[2,29],{22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,34:$VM,35:$VN,36:$VO}),o([19,32,33,34],[2,30],{22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,35:$VN,36:$VO}),o($VS,[2,31],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VS,[2,32],{26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK}),o($VP,[2,28]),{19:[1,103],22:$VC,23:$VD,24:$VE,25:$VF,26:$VG,27:$VH,28:$VI,29:$VJ,30:$VK,33:$VL,34:$VM,35:$VN,36:$VO},o($Vw,$VQ,{20:104,17:$VR}),o($Vw,[2,14])],
+defaultActions: {24:[2,50],25:[2,51],26:[2,52],27:[2,53],28:[2,54],29:[2,55],30:[2,56],31:[2,57],32:[2,58],33:[2,59],34:[2,60],35:[2,61],36:[2,62],37:[2,1],38:[2,2],68:[2,3],69:[2,4]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -6573,8 +7201,303 @@ parse: function parse(input) {
 
 	var attribute = '';
 	var errors = [];
+	let re = /[^\n\t\r ]+/g
+	//let ast = null;
 	let grammar_stack = [];
+
+    function getGrammarReport(obj){
+        let str = `<!DOCTYPE html>
+                     <html lang="en" xmlns="http://www.w3.org/1999/html">
+                     <head>
+                         <meta charset="UTF-8">
+                         <meta
+                         content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                         name="viewport">
+                         <!-- Bootstrap CSS -->
+                         <link
+                         crossorigin="anonymous"
+                         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                               rel="stylesheet">
+                         <title>Title</title>
+                         <style>
+                             table, th, td {
+                                 border: 1px solid black;
+                             }
+                             ul, .ul-tree-view {
+                                 list-style-type: none;
+                             }
+
+                             #div-table{
+                                 width: 1200px;
+                                 margin: 100px;
+                                 border: 3px solid #73AD21;
+                             }
+
+                             .ul-tree-view {
+                                 margin: 0;
+                                 padding: 0;
+                             }
+
+                             .caret {
+                                 cursor: pointer;
+                                 -webkit-user-select: none; /* Safari 3.1+ */
+                                 -moz-user-select: none; /* Firefox 2+ */
+                                 -ms-user-select: none; /* IE 10+ */
+                                 user-select: none;
+                             }
+
+                             .caret::before {
+                                 content: "\u25B6";
+                                 color: black;
+                                 display: inline-block;
+                                 margin-right: 6px;
+                             }
+
+                             .caret-down::before {
+                                 -ms-transform: rotate(90deg); /* IE 9 */
+                                 -webkit-transform: rotate(90deg); /* Safari */'
+                             transform: rotate(90deg);
+                             }
+
+                             .nested {
+                                 display: none;
+                             }
+
+                             .active {
+                                 display: block;
+                             }
+
+                             li span:hover {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             li span:hover + ul li  {
+                                 font-weight: bold;
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+
+                             .tree-view{
+                                 display: inline-block;
+                             }
+
+                             li.string {
+                                 list-style-type: square;
+                             }
+                             li.string:hover {
+                                 color : white;
+                                 background-color: #dc5b27;
+                             }
+                             .center {
+                                margin: auto;
+                                width: 50%;
+                                border: 3px solid green;
+                                padding-left: 15%;
+                             }
+                         </style>
+                     </head>
+                     <body>
+                     <h1 class="center">Reporte Gramatical</h1>
+                     <div class="tree-view">
+                     <ul class="ul-tree-view" id="tree-root">`;
+
+        str = str + buildGrammarReport(obj);
+
+        str = str + `
+                    </ul>
+                    </ul>
+                    </div>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                             <br>
+                        <button onclick="fun1()">Expand Grammar Tree</button>
+
+                    <div id="div-table">
+                    <table style="width:100%">
+
+                    <tr><th>produccion</th><th>Cuerpo</th><th>Accion</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>ini</th><th>XPATH_U EOF</th><th>SS= S1</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATH_U</th><th>XPATH XPATH_Up</th><th>S1.push(S3); SS = S1;</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATH_Up</th><th>QUERY XPATHp</th><th>S1.push(S2); SS = S1;</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATH</th><th>QUERY XPATHp</th><th></th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>XPATHp</th><th>QUERY XPATHp</th><th>S1.push(S2); SS = S1;</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>QUERY</th><th>tk_2bar QUERY</th><th>SS=builder.newDoubleAxis(Param);</th></tr>
+                    <tr><th></th><th>tk_bar QUERY</th><th>SS=builder.newAxis(Param);</th></tr>
+                    <tr><th></th><th>EXP_PR</th><th>SS=S1</th></tr>
+                    <tr><th></th><th>AXIS</th><th>SS=S1</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>CORCHET</th><th>tk_corA E tk_corC CORCHETpp</th><th>SS=builder.newPredicate(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>CORCHETpp</th><th>tk_corA E tk_corC CORCHETpp</th><th>S1.push(builder.NewPredicate(Param))</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>CORCHETP</th><th>CORCHET</th><th>SS=S1</th></tr>
+                    <tr><th></th><th>Empty</th><th>SS=null</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>E</th><th>E tk_menorigual E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_menor E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mayorigual E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mayor E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mas E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_menos E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_asterisco E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_div E </th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_mod E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>tk_ParA E tk_ParC</th><th>SS=S2</th></tr>
+                    <tr><th></th><th>E tk_or E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_and E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_equal E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>E tk_diferent E</th><th>SS=builder.newOperation(Param)</th></tr>
+                    <tr><th></th><th>QUERY</th><th>SS = [S1]</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>EXP_PR</th><th>FUNC CORCHETP</th><th>SS=builder.newExpression(Param)</th></tr>
+                    <tr><th></th><th>PRIMITIVO CORCHETP</th><th>SS=builder.newExpression(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>PRIMITIVO</th><th>tk_id</th><th>SS=builder.newNodename(Param)</th></tr>
+                    <tr><th></th><th>tk_attribute_d</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_attribute_s</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>num</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_asterisco</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_punto</th><th>SS=builder.newCurrent(Param)</th></tr>
+                    <tr><th></th><th>tk_2puntos</th><th>SS=builder.newParent(Param)</th></tr>
+                    <tr><th></th><th>tk_arroba tk_id</th><th>SS=builder.newAttribute(Param)</th></tr>
+                    <tr><th></th><th>tk_arroba tk_asterisco</th><th>SS=builder.newAttribute(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>FUNC</th><th>tk_text tk_ParA tk_tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_last tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_position tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><th></th><th>tk_node tk_ParA tk_ParC</th><th>SS=builder.newValue(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>AXIS</th><th>AXISNAME tk_4puntos QUERY</th><th>SS=builder.newAxisObject(Param)</th></tr>
+                    <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
+                    <tr><th>AXISNAME</th><th>tk_ancestor</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_ancestor2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_attribute</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_child</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_descendant</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_descendant2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_following</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_following2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_namespace</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_parent</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_preceding</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_preceding2</th><th>SS = Tipos.'AxisTipo'</th></tr>
+                    <tr><th></th><th>tk_self</th><th>SS = Tipos.'AxisTipo'</th></tr>
+
+                        </table>
+                    </div>
+
+                     <script
+                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+                     </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                             src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+                             </script>
+                     <script
+                     crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                             src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+                             </script>
+
+                             <script>
+                                 var toggler = document.getElementsByClassName("caret");
+                                 var i;
+
+                                 for (i = 0; i < toggler.length; i++) {
+                                     toggler[i].addEventListener("click", function() {
+                                         this.parentElement
+                                         .querySelector(".nested")
+                                         .classList.toggle("active");
+                                         this.classList.toggle("caret-down");
+                                     });
+                                 }
+
+
+                                        function fun1() {
+                                            if ($("#tree-root").length > 0) {
+
+                                                $("#tree-root").find("li").each
+                                                (
+                                                    function () {
+                                                        var $span = $("<span></span>");
+                                                        //$(this).toggleClass("expanded");
+                                                        if ($(this).find("ul:first").length > 0) {
+                                                            $span.removeAttr("class");
+                                                            $span.attr("class", "expanded");
+                                                            $(this).find("ul:first").css("display", "block");
+                                                            $(this).append($span);
+                                                        }
+
+                                                    }
+                                                )
+                                            }
+
+                                        }
+
+
+
+
+                             </script>
+
+                     </body>
+                     </html>`;
+                     return str;
+    }
+    // .replace("₤","$")
+    function buildGrammarReport(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                str = str + `<li class= "string">
+                ${value}
+                </li>
+                `;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildGrammarReport(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+
+                str = `<li class="grammar-tree"><span class="caret">
+                ${key}
+                </span>
+                <ul class="nested">
+                `;
+                str = str + buildGrammarReport(obj[key]);
+                str = str + `
+                </ul>
+                </li>`;
+            }
+        }
+        return str;
+    }
+
+//just for testing purposes
 	function printstrack(obj, lines){
+	return;
+
         if(Array.isArray(obj)){ //IS ARRAY
             str = ""
             for(let i = 0; i < lines; i++){str = str + "- ";}
@@ -6609,279 +7532,205 @@ parse: function parse(input) {
         }
 	}
 
-function getASTTree(obj){
-    let str = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-  <!-- Bootstrap CSS -->
-  <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
-  <title>Title</title>
-  <style>
-    #divheight{
-      height: 400px;
-      width: 1050px;
+    function getCST(obj){
+        let str = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+            <!-- Bootstrap CSS -->
+            <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
+            <title>Title</title>
+            <style>
+
+                #divheight{
+                    height: 400px;
+                    width: 1050px;
+                }
+
+                .nav-tabs > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+                .nav-tabs2 > li .close {
+                    margin: -2px 0 0 10px;
+                    font-size: 18px;
+                }
+
+            </style>
+
+            <style>
+                body {
+                    font-family: sans-serif;
+                    font-size: 15px;
+                }
+
+                .tree ul {
+                    position: relative;
+                    padding: 1em 0;
+                    white-space: nowrap;
+                    margin: 0 auto;
+                    text-align: center;
+                }
+                .tree ul::after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+
+                .tree li {
+                    display: inline-block;
+                    vertical-align: top;
+                    text-align: center;
+                    list-style-type: none;
+                    position: relative;
+                    padding: 1em 0.5em 0 0.5em;
+                }
+                .tree li::before, .tree li::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: 50%;
+                    border-top: 1px solid #ccc;
+                    width: 50%;
+                    height: 1em;
+                }
+                .tree li::after {
+                    right: auto;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                }
+                /*
+                ul:hover::after  {
+                    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
+                }*/
+
+                .tree li:only-child::after, .tree li:only-child::before {
+                    display: none;
+                }
+                .tree li:only-child {
+                    padding-top: 0;
+                }
+                .tree li:first-child::before, .tree li:last-child::after {
+                    border: 0 none;
+                }
+                .tree li:last-child::before {
+                    border-right: 1px solid #ccc;
+                    border-radius: 0 5px 0 0;
+                }
+                .tree li:first-child::after {
+                    border-radius: 5px 0 0 0;
+                }
+
+                .tree ul ul::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    border-left: 1px solid #ccc;
+                    width: 0;
+                    height: 1em;
+                }
+
+                .tree li a {
+                    border: 1px solid #ccc;
+                    padding: 0.5em 0.75em;
+                    text-decoration: none;
+                    display: inline-block;
+                    border-radius: 5px;
+                    color: #333;
+                    position: relative;
+                    top: 1px;
+                }
+
+                .tree li a:hover,
+                .tree li a:hover + ul li a {
+                    background: #e9453f;
+                    color: #fff;
+                    border: 1px solid #e9453f;
+                }
+
+                .tree li a:hover + ul li::after,
+                .tree li a:hover + ul li::before,
+                .tree li a:hover + ul::before,
+                .tree li a:hover + ul ul::before {
+                    border-color: #e9453f;
+                }
+
+                /*# sourceMappingURL=sytle_.css.map */
+
+            </style>
+        </head>
+        <body>
+
+        <div class="tree">
+            <ul id="tree-list">
+
+            <!--AQUI-->
+        `;
+        str = str + buildCSTTree(obj);
+        str = str + `
+        </ul>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+        `;
+        return str;
     }
-    .nav-tabs > li .close {
-      margin: -2px 0 0 10px;
-      font-size: 18px;
-    }
-    .nav-tabs2 > li .close {
-      margin: -2px 0 0 10px;
-      font-size: 18px;
-    }
 
-  </style>
-
-  <style>
-    body {
-      font-family: sans-serif;
-      font-size: 15px;
-    }
-
-    .tree ul {
-      position: relative;
-      padding: 1em 0;
-      white-space: nowrap;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .tree ul::after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    .tree li {
-      display: inline-block;
-      vertical-align: top;
-      text-align: center;
-      list-style-type: none;
-      position: relative;
-      padding: 1em 0.5em 0 0.5em;
-    }
-    .tree li::before, .tree li::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 50%;
-      border-top: 1px solid #ccc;
-      width: 50%;
-      height: 1em;
-    }
-    .tree li::after {
-      right: auto;
-      left: 50%;
-      border-left: 1px solid #ccc;
-    }
-    /*
-    ul:hover::after  {
-        transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport)
-    }*/
-
-    .tree li:only-child::after, .tree li:only-child::before {
-      display: none;
-    }
-    .tree li:only-child {
-      padding-top: 0;
-    }
-    .tree li:first-child::before, .tree li:last-child::after {
-      border: 0 none;
-    }
-    .tree li:last-child::before {
-      border-right: 1px solid #ccc;
-      border-radius: 0 5px 0 0;
-    }
-    .tree li:first-child::after {
-      border-radius: 5px 0 0 0;
-    }
-
-    .tree ul ul::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 50%;
-      border-left: 1px solid #ccc;
-      width: 0;
-      height: 1em;
-    }
-
-    .tree li a {
-      border: 1px solid #ccc;
-      padding: 0.5em 0.75em;
-      text-decoration: none;
-      display: inline-block;
-      border-radius: 5px;
-      color: #333;
-      position: relative;
-      top: 1px;
-    }
-
-    .tree li a:hover,
-    .tree li a:hover + ul li a {
-      background: #e9453f;
-      color: #fff;
-      border: 1px solid #e9453f;
-    }
-
-    .tree li a:hover + ul li::after,
-    .tree li a:hover + ul li::before,
-    .tree li a:hover + ul::before,
-    .tree li a:hover + ul ul::before {
-      border-color: #e9453f;
-    }
-
-    /*# sourceMappingURL=sytle_.css.map */
+    function buildCSTTree(obj){
+        if(obj == null){return "";}
+        let str = "";
+        if(Array.isArray(obj)){ //IS ARRAY
+            obj.forEach((value)=>{
+            if(typeof value === 'string' ){
+                let words = value.split('Lexema:');
+                if(words.length == 2){
+                    let lex = words[1];     //TODO check not go out of bounds
+                    let token = words[0];
+                    str = str + `<li><a href="">${token}</a><ul>
+                    <li><a href="">${lex}
+                    </a></li>
+                    </ul></li>
+                    `;
+                }else{
+                    str = str + `<li><a href="">${value}</a></li>
+                    `;
+                }
 
 
-  </style>
-</head>
-<body>
-
-
-
-<div class="tree">
-  <ul id="tree-list">
-
-    <!--AQUI-->
-    `
-
-    str = str +printObj(obj, 0, "")
-    str =  str + `</ul>
-
-
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
-<script crossorigin="anonymous" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script crossorigin="anonymous" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-</body>
-</html>
-`
-    return str;
-}
-
-
-function printObj(obj, lines, name){
-    console.log(obj)
-    let str = "";
-    let str_ = "";
-    if(Array.isArray(obj)) { //IS ARRAY
-        for (let i = 0; i < obj.length; i++){
-            str = str +printObj(obj[i], lines, "");
-        }
-    }else if (typeof obj === 'object' ){// IS OBJECT
-        if(obj.tipo === 'SELECT_FROM_CURRENT' || obj.tipo === 'SELECT_FROM_ROOT'){ // TODO select Parent
-            str = `<li>`;
-            str = str + printObj(obj.expresion, 0, (obj.tipo === 'SELECT_FROM_ROOT'? "/": "//" ));
-            str = str + getPredicados(obj.expresion);
-            str = str + `</li>`
-            console.log(str);
-        }else if(obj.tipo === 'EXPRESION'){
-            if (typeof obj.expresion === 'object'){
-                str = `<a>` + name + getName(obj.expresion) + `</a>`;
+            }else if(Array.isArray(value)){console.log("ERROR 5: Arreglo de arreglos");}else{
+                for(let key in value){
+                    str = str + buildCSTTree(value);
+                }
+            }
+            });
+        }else if(typeof obj === 'string' ){ // IS STRING
+            return "";
+            console.log("ERROR**************************");
+        }else{// IS OBJECT
+            for(let key in obj){
+                const words = key.split('->');
+                //console.log(words[3]);
+                str = `<li><a href="">${words[0]}</a>
+                <ul>
+                `;
+                str = str + buildCSTTree(obj[key]) + `
+                </ul>
+                </li>`;
             }
         }
-    } else { // IS STRING
-        for (let i = 0; i < lines; i++) {
-
-            str_ = str_ + "- ";
-        }
+        return str;
     }
-    return str;
-}
-
-
-
-function getName(obj){
-
-    let str = "";
-    if (obj.tipo ==='NODENAME'){
-        //console.log(obj)
-        return obj.nodename;
-    }else if(obj.tipo === 'SELECT_PARENT'){
-        return  obj.expresion;
-    }else if(obj.tipo === 'SELECT_CURRENT'){
-        return obj.expresion;
-    }else if(obj.tipo === 'ASTERISCO'){
-        return obj.valor;
-    }else if(obj.tipo === 'FUNCION_TEXT'){
-        return obj.valor;
-    }else if(obj.tipo === 'FUNCION_NODE'){
-        return obj.valor;
-    }else if(obj.tipo === 'SELECT_ATTRIBUTES'){
-        return obj.expresion;
-    }else {
-        console.log("Error 1")
-        console.log(obj)
-    }
-    return str
-}
-
-function getPredicados(obj){
-    let str = "";
-    console.log(obj)
-    if (obj.predicate !== null && obj.predicate !== undefined){
-
-        str = `<ul>\n`;
-        for (let i = 0; i < obj.predicate.length;i++){
-            str = str + getPredicado(obj.predicate[i]);
-        }
-        str = str + `</ul>`;
-    }
-    return str;
-}
-
-
-function getPredicado(obj){
-    let str = ""
-    if(obj.tipo === 'PREDICATE'){
-        //str = `<li><a> ` + obj.condicion.tipo + `</a>
-        //<ul>`
-        str = str + getPredicado(obj.condicion);
-        //str = str + `
-        //</ul></li>`;
-    }else if(obj.tipo === 'EXPRESION'){ //TODO to check
-        if('valor' in obj.expresion){
-            str = `<li><a>` + obj.expresion.valor + `</a></li>
-            `;
-
-        }else if('nodename' in obj.expresion){
-            str = `<li><a>` + obj.expresion.nodename + `</a></li>
-            `;
-
-        }else if(obj.expresion.tipo === 'SELECT_ATTRIBUTES'){
-            str = `<li><a>` + "@" + obj.expresion.expresion + `</a></li>
-            `;
-
-        }else {
-            console.log("error 2")
-            console.log(obj)
-        }
-
-
-    }else{
-        str = `<li><a>` + obj.tipo + `</a>
-                <ul>`
-        str = str + getPredicado(obj.opIzq);
-        str = str + getPredicado(obj.opDer);
-        str = str + `</ul></li>`
-    }
-
-    return str;
-}
-
-
-
-
-	const { Objeto } = __webpack_require__(/*! ../model/xpath/Objeto */ "YKiq");
-	const { Tipos } = __webpack_require__(/*! ../model/xpath/Enum */ "MEUw");
-	var builder = new Objeto();
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -7218,142 +8067,142 @@ case 2:// MultiLineComment
 break;
 case 3:// Declaration XML
 break;
-case 4:return 28
+case 4:return 29
 break;
-case 5:return 41
+case 5:return 42
 break;
-case 6:return 21
+case 6:return 22
 break;
-case 7:return 23
+case 7:return 24
 break;
-case 8:return 22
+case 8:return 23
 break;
-case 9:return 24
+case 9:return 25
 break;
-case 10:return 11
+case 10:return 12
 break;
-case 11:return 12
+case 11:return 13
 break;
-case 12:return 34
+case 12:return 35
 break;
-case 13:return 43
+case 13:return 44
 break;
-case 14:return 42
+case 14:return 43
 break;
-case 15:return 50
+case 15:return 51
 break;
-case 16:return 44
+case 16:return 45
 break;
-case 17:return 16
+case 17:return 17
 break;
-case 18:return 18
+case 18:return 19
 break;
-case 19:return 30
+case 19:return 31
 break;
-case 20:return 31
+case 20:return 32
 break;
-case 21:return 27
+case 21:return 28
 break;
-case 22:return 52
+case 22:return 53
 break;
-case 23:return 51
+case 23:return 52
 break;
-case 24:return 53
+case 24:return 54
 break;
-case 25:return 54
+case 25:return 55
 break;
-case 26:return 56
+case 26:return 57
 break;
-case 27:return 55
+case 27:return 56
 break;
-case 28:return 58
+case 28:return 59
 break;
-case 29:return 57
+case 29:return 58
 break;
-case 30:return 59
+case 30:return 60
 break;
-case 31:return 60
+case 31:return 61
 break;
-case 32:return 62
+case 32:return 63
 break;
-case 33:return 61
+case 33:return 62
 break;
-case 34:return 63
+case 34:return 64
 break;
-case 35:return 48
+case 35:return 49
 break;
-case 36:return 46
+case 36:return 47
 break;
-case 37:return 45
+case 37:return 46
 break;
-case 38:return 47
+case 38:return 48
 break;
 case 39:return 8
 break;
-case 40:return 25
+case 40:return 9
 break;
 case 41:return 26
 break;
-case 42:return 35
+case 42:return 27
 break;
-case 43:return 32
+case 43:return 36
 break;
 case 44:return 33
 break;
-case 45:return 29
+case 45:return 34
 break;
-case 46:return 38
+case 46:return 30
 break;
-case 47: attribute = ''; this.begin("string_doubleq"); 
+case 47:return 39
 break;
-case 48: attribute += yy_.yytext; 
+case 48: attribute = ''; this.begin("string_doubleq"); 
 break;
-case 49: attribute += "\""; 
+case 49: attribute += yy_.yytext; 
 break;
-case 50: attribute += "\n"; 
+case 50: attribute += "\""; 
 break;
-case 51: attribute += " ";  
+case 51: attribute += "\n"; 
 break;
-case 52: attribute += "\t"; 
+case 52: attribute += " ";  
 break;
-case 53: attribute += "\\"; 
+case 53: attribute += "\t"; 
 break;
-case 54: attribute += "\'"; 
+case 54: attribute += "\\"; 
 break;
-case 55: attribute += "\r"; 
+case 55: attribute += "\'"; 
 break;
-case 56: yy_.yytext = attribute; this.popState(); return 39; 
+case 56: attribute += "\r"; 
 break;
-case 57: attribute = ''; this.begin("string_singleq"); 
+case 57: yy_.yytext = attribute; this.popState(); return 40; 
 break;
-case 58: attribute += yy_.yytext; 
+case 58: attribute = ''; this.begin("string_singleq"); 
 break;
-case 59: attribute += "\""; 
+case 59: attribute += yy_.yytext; 
 break;
-case 60: attribute += "\n"; 
+case 60: attribute += "\""; 
 break;
-case 61: attribute += " ";  
+case 61: attribute += "\n"; 
 break;
-case 62: attribute += "\t"; 
+case 62: attribute += " ";  
 break;
-case 63: attribute += "\\"; 
+case 63: attribute += "\t"; 
 break;
-case 64: attribute += "\'"; 
+case 64: attribute += "\\"; 
 break;
-case 65: attribute += "\r"; 
+case 65: attribute += "\'"; 
 break;
-case 66: yy_.yytext = attribute; this.popState(); return 40; 
+case 66: attribute += "\r"; 
 break;
-case 67:return 5
+case 67: yy_.yytext = attribute; this.popState(); return 41; 
 break;
-case 68:return 'anything'
+case 68:return 5
 break;
 case 69: errors.push({ tipo: "Léxico", error: yy_.yytext, origen: "XPath", linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:[^><\/]+)/i,/^(?:.)/i],
-conditions: {"string_singleq":{"rules":[58,59,60,61,62,63,64,65,66],"inclusive":false},"string_doubleq":{"rules":[48,49,50,51,52,53,54,55,56],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,57,67,68,69],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:\(:[\s\S\n]*?:\))/i,/^(?:<!--[\s\S\n]*?-->)/i,/^(?:<\?xml[\s\S\n]*?\?>)/i,/^(?:div\b)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:\*)/i,/^(?:ancestor-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant-or-self\b)/i,/^(?:descendant\b)/i,/^(?:following-sibling\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding-sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:last\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:\|)/i,/^(?:\|\|)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:!=)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:mod\b)/i,/^(?:[\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+)/i,/^(?:["])/i,/^(?:[^"\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:["])/i,/^(?:['])/i,/^(?:[^'\\]+)/i,/^(?:\\")/i,/^(?:\\n)/i,/^(?:\s)/i,/^(?:\\t)/i,/^(?:\\\\)/i,/^(?:\\\\')/i,/^(?:\\r)/i,/^(?:['])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"string_singleq":{"rules":[59,60,61,62,63,64,65,66,67],"inclusive":false},"string_doubleq":{"rules":[49,50,51,52,53,54,55,56,57],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,58,68,69],"inclusive":true}}
 });
 return lexer;
 })();
@@ -7503,8 +8352,8 @@ case 2:
                                             prod_1 = grammar_stack.pop();
                                             grammar_stack.push({'INI -> XML_DECLARATION  EOF {	errors.add(new Error()); ﹩﹩ = null;}': [prod_1, 'EOF' ]});
                                             grammar_report =  getGrammarReport(grammar_stack);
-
-                                            ast = { ast: null, encoding: null,  errors: errors, cst: null, grammar_report: grammar_report };
+                                            encoding = new Encoding($$[$0-1]);
+                                            ast = { ast: null, encoding: encoding,  errors: errors, cst: null, grammar_report: grammar_report };
                                             errors = [];
                                             return ast;
                                             
@@ -7644,10 +8493,12 @@ case 20:
 if($$[$0-4] != null){  $$[$0-4].Children = $$[$0-3]; $$[$0-4].Close = $$[$0-1]; this.$ = $$[$0-4];
                                                                                 let hasConflict = $$[$0-4].verificateNames();
                                                                                 if(hasConflict === "") {
-																					$$[$0-4].childs.forEach(child => {
-																					child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
-																					});
-																					this.$ = $$[$0-4];
+                                                                                    if($$[$0-4].childs){
+                                                                                        $$[$0-4].childs.forEach(child => {
+                                                                                        child.Father = {id: $$[$0-4].id_open, line: $$[$0-4].line, column: $$[$0-4].column};
+                                                                                        });
+                                                                                        this.$ = $$[$0-4];
+                                                                                    }
 																				}
                                                                                  else {
 																					errors.push({ tipo: "Semántico", error: hasConflict, origen: "XML", linea: _$[$0-1].first_line, columna: _$[$0-1].first_column+1 });
@@ -7693,7 +8544,7 @@ if($$[$0-3] != null){$$[$0-3].Close = $$[$0-1]; this.$ = $$[$0-3];
 break;
 case 24:
 this.$ =null;
-                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: '  + $$[$0]]});
@@ -7709,7 +8560,7 @@ this.$ =null;
 break;
 case 26:
 this.$ =null;
-                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+                                                                                errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
 	                                                                            grammar_stack.push({'XML -> XML_OPEN tk_content tk_open_end_tag tk_tag_name {errors.add(new Error()); ﹩﹩ = null;}':[prod_1, 'Token: tk_content\t Lexema: ' + $$[$0-2], 'Token: tk_open_end_tag\t Lexema: ' + '&lt;/', 'Token: tk_tag_name\t Lexema: ' + $$[$0]]});
@@ -7734,7 +8585,7 @@ this.$ =null;
 break;
 case 29:
 this.$ =null;
-	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiquta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
+	                                                                            errors.push({ tipo: "Sintáctico", error: "Falta etiqueta de cierre \">\". ", origen: "XML", linea: _$[$0].first_line, columna: _$[$0].first_column+1 });
 
                                                                                 prod_1 = grammar_stack.pop();
                                                                                 prod_2 = grammar_stack.pop();
@@ -9490,13 +10341,13 @@ function secondFilter(_elements, _atributos, _nodetest, _predicate, _cadena, _am
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    continue;
+                    continue; // break;
                 }
                 x = Funciones_1.default.f4(element, elements, text, valor, _nodetest.tipo, _isDoubleBar);
                 if (x.elementos.length > 0 || x.texto.length > 0) {
                     elements.concat(x.elementos);
                     text.concat(x.texto);
-                    break;
+                    break; //continue;
                 }
             }
             break;

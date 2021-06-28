@@ -2,3 +2,9 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; }
+/* Add application styles & imports to this file! */
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/idea.css";
+@import "~codemirror/addon/fold/foldgutter.css";
+@import "~codemirror/addon/lint/lint.css";
+

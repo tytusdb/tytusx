@@ -24,7 +24,8 @@ editorsalida.session.setUseSoftTabs(true);
 
 */
 function ejecutarCodigo(/*entrada: string*/) {
-  exepath(listaDirecciones);
+  //exepath(listaDirecciones);
+  document.getElementById("consola").value +=exepath(listaDirecciones);
 }
 
 
@@ -61,14 +62,8 @@ function InterpretarCodigoXPATH(entrada:string){
 function InterpretarCodigoXPATH_DESC(entrada:string){
   rg_path = new ReporteGramatical_XPATH();
   try{
-    //gramatica_xpath_desc.parse(entrada);
-    listaDirecciones = gramatica_xpath.parse(entrada);
-    /* PRUEBAS */
-    //let l = BusquedaXML(tds_xml_persistente[2], 'bookstore');
-    //console.log(l);
-    //BusquedaXML(l[0], 'book');
 
-    //BusquedaXMLD(tds_xml_persistente[2], 'bookstore')
+    listaDirecciones = gramatica_xpath.parse(entrada);
     
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
   }catch (error){
@@ -94,19 +89,16 @@ function InterpretarCodigo(entrada:string) {
     //tabla de simbolos que maneja la persistencia de todos los datos
     //tds_xml_persistente.push(tsGlobal);
     let etiquetasVerificadas = true;
-    for(let aux1 of listaObjetos){        
-      etiquetasVerificadas = aux1.verificarEtiquetas(aux1);  
+    for(let aux of listaObjetos){        
+      etiquetasVerificadas = aux.verificarEtiquetas(aux);  
       if(!etiquetasVerificadas){
-        let errores = new NodoError('Error en etiqueta', 'Semantico', 'Etiqueta de cierre no coincide con etiqueta que abre.', 'XML', aux1.fila, aux1.columna);
-        erroresXML.setError(errores);
-      }else{
-        for(let aux of listaObjetos){        
-          tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal,aux)); //aux.agregarTDS(tsGlobal,aux);
-          tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);
-        }
+        console.log("error en etiquetas");
       }
     }
-    
+    for(let aux of listaObjetos){        
+        tsGlobal.simbolos.push(aux.agregarTDS(tsGlobal,aux)); //aux.agregarTDS(tsGlobal,aux);
+        tds_xml_persistente.push(tsGlobal.simbolos[0].simbolos);
+    }
     //console.log( tsGlobal);
     //console.log(tds_xml_persistente);
     document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XML\n";
@@ -225,6 +217,18 @@ function GraficarXMLDESC(){
   let grafica = new Graficar();
   d3.select("#graph").graphviz()
                      .renderDot(`${grafica.graficarXML()}`);
+}
+
+function GraficarXPATHASC(){
+  let grafica = new Graficar();
+  d3.select("#graph").graphviz()
+                     .renderDot(`${grafica.graficarXPATHAST()}`);
+}
+
+function GraficarXPATHCST(){
+  let grafica = new Graficar();
+  d3.select("#graph").graphviz()
+                     .renderDot(`${grafica.graficarXPATHCST()}`);
 }
 
 //Reporte Gramatical
