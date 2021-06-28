@@ -4,8 +4,8 @@ import Arbol from "../Simbolo/Arbol";
 import Tipo, { tipoDato } from "../Simbolo/Tipo";
 
 export default class Print extends Instruccion {
-    public Expresion: Instruccion;
-    constructor(expresion:Instruccion, fila: number, columna: number) {
+    public Expresion: Instruccion[];
+    constructor(expresion:Instruccion[], fila: number, columna: number) {
         super(new Tipo(tipoDato.CADENA), fila, columna);
         this.Expresion= expresion
     }

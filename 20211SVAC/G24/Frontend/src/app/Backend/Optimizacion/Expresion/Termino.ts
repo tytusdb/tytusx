@@ -23,6 +23,18 @@ export default class Termino extends Instruccion {
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
         if (this.tipoDato.getTipo() == tipoDato.BOOLEANO) {
             return this.valor == 'true' ? true : false;
+        }else if(this.tipoDato.getTipo()== tipoDato.CADENA){
+            return {tipo: tipoDato.CADENA, contenido: "\""+this.valor+"\""}
+        }else if(this.tipoDato.getTipo()== tipoDato.TEMPORAL){
+            return {tipo: tipoDato.TEMPORAL, contenido:this.valor }
+        }else if(this.tipoDato.getTipo()== tipoDato.ENTERO){
+            return {tipo: tipoDato.ENTERO, contenido:parseInt(this.valor) }
+        }else if(this.tipoDato.getTipo()== tipoDato.PILA){
+            return {tipo: tipoDato.PILA, contenido:this.valor }
+        }else if(this.tipoDato.getTipo()== tipoDato.PUNTERO){
+            return {tipo: tipoDato.PUNTERO, contenido:this.valor }
+        }else if(this.tipoDato.getTipo()== tipoDato.DECIMAL){
+            return {tipo: tipoDato.DECIMAL, contenido:this.valor }
         }
         return this.valor;
     }

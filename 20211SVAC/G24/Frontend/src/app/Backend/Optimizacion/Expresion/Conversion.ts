@@ -4,9 +4,9 @@ import Arbol from "../Simbolo/Arbol";
 import Tipo, { tipoDato } from "../Simbolo/Tipo";
 
 export default class Conversion extends Instruccion {
-    private tipo: String;
+    private tipo: Tipo;
     private expresion: Instruccion;
-    constructor(operando:String, expresion2: Instruccion, fila: number, columna: number) {
+    constructor(operando:Tipo, expresion2: Instruccion, fila: number, columna: number) {
         super(new Tipo(tipoDato.CADENA), fila, columna);
         this.tipo=operando
         this.expresion= expresion2

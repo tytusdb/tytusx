@@ -1,48 +1,20 @@
 import tablaSimbolos from "../../XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";
 import NodoErrores from "../Errores/NodoErrores";
-import { reporteTabla } from "../Reportes/reporteTabla";
+import { reporteOp } from "../Reportes/reporteOp";
 
 export default class Arbol {
   private instrucciones: Array<Instruccion[]>;
   private NodoErrores: Array<NodoErrores>;
   private funciones: Array<Instruccion>;
-  public listaSimbolos: Array<reporteTabla>;
-
-  public getSimbolos(): Array<reporteTabla> {
+  public listaSimbolos: Array<reporteOp>;
+  public getSimbolos(): Array<reporteOp> {
     return this.listaSimbolos;
   }
-  public actualizarTabla(
-    identificador: string,
-    valor: string,
-    linea: string,
-    entorno: string,
-    columna: string
-  ): boolean {
-    for (var elemento of this.listaSimbolos) {
-      if (
-        elemento.getIdentificador().toString() == identificador.toLowerCase() &&
-        elemento.getEntorno().toString() == entorno.toString()
-      ) {
-        elemento.setValor(valor);
-        elemento.setLinea(linea);
-        elemento.setColumna(columna);
-        return true;
-      }
-    }
-    return false;
+  public setReporte(instruccion:reporteOp){
+    this.listaSimbolos.push(instruccion)
   }
-  public BuscarTipo(identificador: string): string {
-    for (var elemento of this.listaSimbolos) {
-      if (elemento.getIdentificador() == identificador.toLowerCase()) {
-        return elemento.getForma().toString();
-      }
-    }
-    return 'as';
-  }
-
   
-
  
   public getfunciones(): Array<Instruccion> {
     return this.funciones;
@@ -87,6 +59,6 @@ export default class Arbol {
     this.tablaGlobal = new tablaSimbolos();
     this.NodoErrores = new Array<NodoErrores>();
     this.funciones = new Array<Instruccion>();
-    this.listaSimbolos = new Array<reporteTabla>();
+    this.listaSimbolos = new Array<reporteOp>();
   }
 }
