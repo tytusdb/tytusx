@@ -29,12 +29,16 @@ function generarXMLC3D(ts){
         //Se crea el cierre de la clase C que representará el código
         texto += generaCierreXML3D();
 
+        
         console.log("Codigo 3D: \n"+texto);
         var tablaSimbolosContenido = imprimeTablaSimbolos3D(ts);
         console.log(tablaSimbolosContenido);
         console.log("\n\n*************DATOS DE STACK Y HEAP************************\n");
         console.log("Cantidad de elementos en stack: "+ stack.length + "\n");
         console.log("Cantidad de elementos en heap: " + heap.length + "\n");
+
+        /*prueba de casteo de digitos*/
+        pruebaParseoDigitosXpath(contadorTemporal);
     }
 }
 
