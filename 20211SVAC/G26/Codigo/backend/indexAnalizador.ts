@@ -1,4 +1,5 @@
 import * as XMLGramAsc from './Gramatica/XML_GramaticaAsc';
+import * as XQueryGram from './Gramatica/XQuery_GramaticaAsc';
 import {Entorno} from './AST/Entorno';
 import { Objeto } from './XML/Objeto';
 import { Atributo } from './XML/Atributo';
@@ -31,7 +32,7 @@ class Analizador{
     Analizador._instance = this;
     return this;
   }
-  
+
   public static getInstance() {
     return this._instance;
   }
@@ -106,6 +107,17 @@ class Analizador{
     return salida
   }
 
+  XQueryAscendente(entrada: string): String{
+    console.log("---- XQUERY ASCENDENTE ----- ")
+    const consultas = XQueryGram.parse(entrada);
+    let salida = "";
+    consultas.forEach((elem: any) => {
+      salida += elem;
+    })
+    console.log("SALIDA: ", salida);
+    return salida;
+  }
+
   getTablaSimbolos(){
     return this.global;
   }
@@ -155,7 +167,7 @@ class Analizador{
                 +            '<td>'+this.getTipoDato(elem.valor.tipo)+'</td>'
                 +            '<td>'+entrada.nombre+'</td>'
                 +            '<td>'+elem.nombre+'</td>'
-                +            '<td>'+elem.valor.valor.toString().replace('&','and')+'</td>'
+                +            '<td>Nodo</td>'
                 +            '<td>'+elem.valor.linea+'</td>'
                 +            '<td>'+elem.valor.columna+'</td>'
                 +        '</tr>';
@@ -197,14 +209,10 @@ class Analizador{
   getRepErrores():string{
     let cadenaDot:string = '';
     let indice:number = 0;
-    cadenaDot = 'digraph {'
-                +  'tbl ['
-                +    'shape=plaintext,'
-                +    'label=<'
-                +      '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+    cadenaDot = '<table class="tablaDatos" >'
                 +        '<tr>'
-                +            '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Linea</td><td>Columna</td>'
-                +        '</tr>';
+                +            '<th>No.</th><th>Tipo</th><th>Descripcion</th><th>Linea</th><th>Columna</th>'
+                +        '</th>';
     errores.listaError.forEach((elem:mierror) => {
       indice++;
       cadenaDot = cadenaDot
@@ -216,9 +224,7 @@ class Analizador{
                 +            '<td>'+elem.getColumna()+'</td>'
                 +        '</tr>';
     });
-    cadenaDot = cadenaDot +      '</table>'
-                          +    '>];'
-                          +'}';
+    cadenaDot = cadenaDot +      '</table>';
 
     return cadenaDot;
   }
@@ -276,27 +282,9 @@ bookstore/book
 |
 //@category
 `);
+*/
 
-xmlDescendente(`
-<?xml version="1.0" encoding="UTF-8"?>
-
-<bookstore>
-  <book category="children">
-  	<title>Harry Potter</title>
-    <author>J K. Rowlin</author>
-    <price at="asd"></price>
-    <hola> </Hola>
-  </book>
-  <!-- HOLAAA -->
-  <book category="web">
-    <title>Learning XML</title>
-    <author>Erik T. Ray</author>
-    <year>2003</year>
-    <price>39.95 &lt 30</price>
-  </book>
-</bookstore>
-`);
-
+/*
 xmlAscendente(`
 <?xml version="1.0" encoding="UTF-8"?>
 
