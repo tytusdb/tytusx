@@ -34,6 +34,7 @@ class App extends React.Component {
     fileName: '',
     xml: '',
     xpath: '',
+    listaErrores: '',
     fileDownloadUrl: null,
     selectedOption: '',
     dot:`digraph {}`,
@@ -61,6 +62,10 @@ class App extends React.Component {
 
   handleDot = (value) => {
     this.setState({dot: value});
+  }
+
+  handleDot = (value) => {
+    this.setState({listaErrores: value});
   }
 
   nuevo = () => {
@@ -176,7 +181,7 @@ class App extends React.Component {
   }
 
   reporteListaErrores = (event) => {
-    this.setState({dot:analizador.getRepErrores()});
+    this.setState({listaErrores:analizador.getRepErrores()});
   }
 
   mostrarCst = () => {
@@ -325,9 +330,17 @@ class App extends React.Component {
                     <Button className="btn bg-danger" onClick={this.reporteListaErrores}>Lista de Errores</Button> |
                     <Button className="btn bg-warning">GRAMATICA</Button>
                     <br></br>
-                    <div style={{borderStyle: 'solid', borderRadius: '2em'}}>
+                    <div id="pnlGraphviz" style={{borderStyle: 'solid', borderRadius: '2em'}}>
                       <Graphviz dot={this.state.dot} options={{fit:true, width:950,zoom: true}}/>
                     </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <Paper>
+                      <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>LISTA ERRORES</InputLabel> 
+                      <div id="pnlErorres" dangerouslySetInnerHTML={{ __html: this.state.listaErrores }} />
+                    </Paper>
                   </div>
                 </div>
               </Paper> 
