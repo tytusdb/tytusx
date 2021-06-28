@@ -82,8 +82,8 @@ function generarCodigo3DEtiqueta(objeto, ts){
     */        
     var objetoS = new tsObjetoStack("","","","","",0);
     var actualizaPadre=true;
+    var posicionInicialStack = 0;
     objetoS.numId=objeto.i;
-    objetoS.setTipo(getIntTipoObjeto(objeto.tipo));
 
     var longitud = obtieneLongitudCadena(objeto.identificador);
     //alert("Longitud: "+ longitud);
@@ -93,12 +93,22 @@ function generarCodigo3DEtiqueta(objeto, ts){
     texto += "\n/*----------------------*/\n";
     tmpStack = contadorTemporal; //0
     texto += "t"+contadorTemporal+" = S;\n"; // t0 = S;
+    posicionInicialStack = contadorTemporal;
+    contadorTemporal++;
+    
+    //se inserta en stack el tipo de objeto
+    texto += "t"+ contadorTemporal + " = " + getIntTipoObjeto(objeto.tipo) + ";\n"; // tx = tipoObjeto;
+    tmpStack = contadorTemporal;
+    //contadorTemporal++;
+    texto += "STACK[t" + posicionInicialStack + "] = t" + tmpStack + ";\n"; // STACK[tz] = tx;
+    objetoS.setTipo(getIntTipoObjeto(objeto.tipo));
 
+    
     //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
     ts.insertaTemporal(objeto.i, objeto.identificador, "t"+contadorTemporal);
-    //Actualiza posicion de objeto en el stack
-    objetoS.getApuntadorNombre(contadorTemporal);
 
+    //Se inserta en stack el apuntador al nombre de etiqueta
+    objetoS.setApuntadorNombre(contadorTemporal);//Actualiza posicion de objeto en el stack
     contadorTemporal++; //1
     tmpHeap = contadorTemporal; //1
     texto += "t"+contadorTemporal+" = H;\n" // t1 = H;
@@ -107,7 +117,6 @@ function generarCodigo3DEtiqueta(objeto, ts){
     tmpStack = contadorTemporal; //1
     contadorTemporal++; //2
 
-    objetoS.setApuntadorNombre(tmpHeap);
     arregloCadena.forEach(element => {
         var asciiCaracter = element.charCodeAt(0);
         texto += "HEAP[t"+tmpHeap+"] = " + asciiCaracter + ";\n"; // HEAP[t1] = ascii; Heap[t2] = ascii;
@@ -159,7 +168,6 @@ function generarCodigo3DEtiqueta(objeto, ts){
             actualizaPadre=false;
             
         }
-
         contadorTemporal++; //3 //4
     });    
     //INSERTA EL OBJETO STACK EN LA LISTA STACK 
@@ -172,9 +180,29 @@ function generarCodigo3DEtiqueta(objeto, ts){
     tmpHeap = contadorTemporal; //2 //3
     texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;
 
+    //Se inserta un -1 en el stack como referencia a los atributos
+    tmpStack = contadorTemporal;
+    contadorTemporal++;
+    texto += "t" + contadorTemporal + " = -1;\n"; //tx = -1;
+    objetoS.setApuntadorAtributos(-1); //al inicio se inserta -1 porque está vacío
+
+    //Se inserta un -1 en el stack como referencia a las etiquetas hijas
+    tmpStack = contadorTemporal;
+    contadorTemporal++;
+    texto += "t" + contadorTemporal + " = -1;\n"; // tx = -1;
+    objetoS.setApuntadorHijos(-1); //al inicio se inserta -1 porque está vacío
+
+    //Se inserta un -1 en el stack como referencia a cadena de contenido de etiqueta
+    tmpStack = contadorTemporal;
+    contadorTemporal++;
+    texto += "t" + contadorTemporal + " = -1;\n";
+    objetoS.setApuntadorContenido(-1);
+
+
     texto += "S = t"+contadorTemporal + " + 1;\n"; //P = tn + 1;
     contadorTemporal++;
     actualizaPadre=true;
+
     //CREA OBJETO HIP E INSERTA EN LISTA HEAP       
     var objetoH = new tsObjetoHeap(tmpHeap,-1);
     //INSERTA EL OBJETO HEAP EN LA LISTA HEAP
@@ -305,10 +333,10 @@ function recorreStackv2(tsStack){
     {
         texto += "\n\n*******************************************************************************\n";
         texto += "******************      RECORRER STACK V2       ***********************************\n";
-        texto += "  INDICE    |       TIPO        |   apuntadorNombre \n";
-        texto += "_______________________________________________________________________________\n";
+        texto += "  INDICE    |       TIPO        |   apuntadorNombre     |   apuntadorAtributos  |      apuntadorHijos    |     apuntadorContenido  | \n";
+        texto += "____________________________________________________________________________________________________________________________________\n";
         for (var i = 0; i < tsStack.listaObjetos.length; i++) {
-            texto += "    "+indice+"       "+ "|     " + tsStack.listaObjetos[i].tipo + "     |     " + tsStack.listaObjetos[i].apuntadorNombre + "   | \n";            
+            texto += "    "+indice+"       "+ "|         " + tsStack.listaObjetos[i].tipo + "         |             " + tsStack.listaObjetos[i].apuntadorNombre + "         |            " + tsStack.listaObjetos[i].apuntadorAtributos + "         |           " + tsStack.listaObjetos[i].apuntadorHijos + "          |           " + tsStack.listaObjetos[i].apuntadorContenido +  "           | \n";            
             /*texto += "\n\n******************      VALORES V2       ***********************************\n";
             texto += "  APUNTADOR \n";            
             for (var j = 0; j < tsStack.listaObjetos[i].apuntadorContenido.length; j++) {
