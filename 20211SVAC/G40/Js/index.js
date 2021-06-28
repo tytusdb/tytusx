@@ -40,8 +40,9 @@ function EjecutarOptimizador(contenidoC3D){
 
 function CargarXML(){
 
-
+    
     var contenido = "";
+    
 
     if(tab==1){
         contenido = editor.getValue();
@@ -81,6 +82,7 @@ function CargarXML(){
             stack = [];
             contadorStack = 0;
             contadorTemporales = 0;
+            contadorEtiquetas = 0;
             SP = 2;
             HP = 0;
             T0 = 0;
@@ -150,6 +152,17 @@ function CargarXML(){
                     
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                    /* TRADUCIENDO XPATH A C3D */
+                    xpathC3D = "";
+                    var funcionesXPath = contenidoXpath.split(/[ ]*\|[ ]*/g);
+
+                    for(var i = 0; i < resultadoXPath.length; i++) {
+                    
+                        var salida = C3DXPATH.traducir(funcionesXPath[i] ,resultadoXPath[i]);
+                        xpathC3D += salida + "\n\n";
+                    }
+
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -659,9 +672,14 @@ function SetearTraduccion(){
     
     double heap[30101999];
     double stack[30101999];
+    double xheap[30101999];
+    double xstack[30101999];
+    double resultados[3010199];
     double SP;
     double HP;
-    
+    double XSP;
+    double XHP;
+
     `;
 
     for(var i = 0; i< contadorTemporales;i++ ){
@@ -675,6 +693,8 @@ function SetearTraduccion(){
     globalC3D += `;
     
     `;
+
+    globalC3D += funcionesC3D;
     
     globalC3D += `int main(){
         
@@ -706,11 +726,12 @@ function SetearTraduccion(){
     
     globalC3D += xmlC3D;
 
+    globalC3D += "\n";
+
+    globalC3D += xpathC3D;
+
     globalC3D +=`
-    
-        for(int loop = 0; loop < stack[1]; loop++){
-            printf("%c", (char) heap[loop]);}
-    
+
         return 0;
 
     }`;    

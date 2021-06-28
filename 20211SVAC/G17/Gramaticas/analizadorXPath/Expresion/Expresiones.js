@@ -109,6 +109,7 @@ export class Variable extends NodoExp
         for (const nodo of nodos) {
             if(nodo.entorno.tipo==this.valor){
                 retornos=retornos.concat(nodo.entorno.hijos)
+                break
             }
         }
         return retornos
@@ -126,6 +127,7 @@ export class PathExp
     {
         var Retornos = Entorno
         for (const iterator of this.caminos) {
+            if(Retornos[0] && Retornos[0].tipo!=Tipo.NODO && Retornos[0].tipo!=Tipo.ATRIB) break
             Retornos = iterator.getValor(Retornos)
         }
         if(Retornos.length>0)
@@ -139,15 +141,15 @@ export class PathExp
         }
     }
 
-    getC3D()
+    getC3D(objetos)
     {
         var retornos = []
         for (const camino of this.caminos){
-            retornos = retornos.concat(camino.getC3D())
+            retornos = retornos.concat(camino.getC3D(objetos))
         }
 
-        
 
+        
         return retornos
     }
 

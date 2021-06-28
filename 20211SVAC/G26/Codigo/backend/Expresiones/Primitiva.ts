@@ -13,7 +13,7 @@ export class Primitiva implements Expresion {
         this.linea  = linea;
         this.columna = columna;
         this.tipo = tipo;
-        this.valor = valor;     
+        this.valor = valor;
     }
 
     getTipo(ent: Entorno){
@@ -30,8 +30,8 @@ export class Primitiva implements Expresion {
             if (ent.existeSimbolo(this.valor)){
                 return ent.obtenerSimbolo(this.valor);
             }else{
-                errores.agregarError('semantico', 'No existe el simbolo ' + this.valor, this.linea, this.columna);
-                this.tipo = TipoPrim.ERROR;
+                //errores.agregarError('semantico', 'No existe el simbolo ' + this.valor, this.linea, this.columna);
+                //this.tipo = TipoPrim.ERROR;
                 return null;
             }
         }else if (this.tipo === TipoPrim.ATRIBUTO){

@@ -1,6 +1,6 @@
 import { Tipo, TipoPath, concatenarNodos, concatenarNodosOrden , Predicado } from "../AST/Entorno"
 import { Nodo } from "./Expresiones"
-var { C3D } = require('../AST/C3D')
+var C3D = require('../AST/C3D')
 
 export class Axes 
 {
