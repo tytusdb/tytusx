@@ -12,16 +12,13 @@ stringliteral                       \"{stringdouble}*\"
 acceptedcharssingle                 [^\'\\]
 stringsingle                        {escape}|{acceptedcharssingle}
 charliteral                         \'{stringsingle}\'
-
-BSL                                 "\\".
+content                                [^<]
 %s                                  comment
 %%
-
-"//".*                              /* skip comments */
-"/*"                                this.begin('comment');
-<comment>"*/"                       this.popState();
-<comment>.                          /* skip comment content*/
 \s+                                 /* skip whitespace */
+"<!--"                              this.begin('comment');
+<comment>"-->"                      this.popState();
+<comment>.                          /* skip comment content*/
 
 
 
@@ -38,13 +35,27 @@ BSL                                 "\\".
 "="                         return 'asig';
 "/"                         return 'div';
 "!"                         return 'not';
+"."                         return 'punto';
+"'"                         return 'csimple';
+","                         return 'coma';
+":"                         return 'dospuntos';
+"#"                         return 'numeral';
+"+"                         return 'mas';
+"-"                         return 'guion'
 
+
+'&lt;'                              return 'menor';
+'&gt;'                              return 'mayorque';
+'&amp;'                             return 'ampersand';
+'&apos;'                            return "apostrofe";
+'&quot;'                            return "quot";
 
 /* Number literals */
-(([0-9]+"."[0-9]*)|("."[0-9]+))     return 'DoubleLiteral';
+[0-9]+"."[0-9]*                      return 'DoubleLiteral';
 [0-9]+                              return 'IntegerLiteral';
+[0-9]{2}-[0-9]{2}-[0-9]{4}          return 'fecha'
 
-[a-zA-Z_][a-zA-Z0-9_ñÑ]*            return 'identifier';
+[a-zA-Z_][a-zA-Z0-9_ñÑàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*            return 'identifier';
 
 {stringliteral}                     return 'StringLiteral'
 {charliteral}                       return 'CharLiteral'
@@ -89,11 +100,76 @@ RAICES:
   
 OBJETO:
            lt identifier ATRIBUTOS gt RAICES  lt div identifier gt  { $$= new Objeto($2,'',0,0,$3,$5); } 
-        |  lt identifier ATRIBUTOS gt identifier  lt div identifier gt   { $$= new Objeto($2,$5,0,0,$3,null); } 
+        |  lt identifier ATRIBUTOS gt VALOR_ETIQUETA  lt div identifier gt   { $$= new Objeto($2,$5,0,0,$3,null); } 
         |  lt identifier  gt RAICES  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}       
-        |  lt identifier  gt identifier  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}    
+        |  lt identifier  gt VALOR_ETIQUETA  lt div identifier gt  {$$= new Objeto($2,'',0,0,null,$4);}    
            
 ;
+
+
+VALOR_ETIQUETA: VALOR_ETIQUETA VALOR{$$=$1+" "+$2;} 
+        |VALOR {$$=$1;};
+
+VALOR:DoubleLiteral{
+                $$=$1;
+            }
+            |IntegerLiteral{
+                $$=$1;
+            }
+            |identifier{
+                $$=$1;
+            }
+            |StringLiteral{
+                $$=$1;
+            }
+            |CharLiteral{
+                $$=$1;
+            }
+            |menor{
+                $$=$1;
+            }
+            |mayorque{
+                $$=$1;
+            }
+            |ampersand{
+                $$=$1;
+            }
+            |apostrofe{
+                $$=$1;
+            }
+            |quot{
+                $$=$1;
+            }
+            |content{
+                $$=$1;
+            }
+            |punto{
+                $$=$1;
+            }
+            |csimple{
+                $$=$1;
+            }
+            |fecha{
+                $$=$1;
+            }
+            |coma{
+                $$=$1;
+            }
+            |dospuntos{
+                $$=$1;
+            }
+            |numeral{
+                $$=$1;
+            }
+            |mas{
+                $$=$1;
+            }
+            |xml{
+                $$=$1;
+            }
+            |guion{
+                $$=$1;
+            };
 
 
 ATRIBUTOS:

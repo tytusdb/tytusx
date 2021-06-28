@@ -1,22 +1,22 @@
 "use strict";
 //Object.defineProperty(exports, "__esModule", { value: true });
-//exports.Return = void 0;
-var Return = /** @class */ (function () {
-    function Return(linea, columna, codigo, tipo) {
+//exports.Print = void 0;
+var Print = /** @class */ (function () {
+    function Print(linea, columna, codigo, tipo) {
         this.linea = linea;
         this.columna = columna;
         this.codigo = codigo;
         this.tipo = tipo;
     }
-    Return.prototype.setCodigo = function (codigo) {
+    Print.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };
-    Return.prototype.getTipo = function () {
+    Print.prototype.getTipo = function () {
         return this.tipo;
     };
-    Return.prototype.getCodigo3D = function () {
+    Print.prototype.getCodigo3D = function () {
         return this.codigo;
     };
-    return Return;
+    return Print;
 }());
-//exports.Return = Return;
+//exports.Print = Print;

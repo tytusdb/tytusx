@@ -10,7 +10,7 @@
 
 .node.nodeStyle {
     background: rgb(117, 121, 124);
-    color: #fff;
+    color: black;
     padding: 5px;
 }
 
@@ -28,12 +28,12 @@
     z-index: 100;
     padding-top: 50px;
     display: flex;
+    top: -200vh;
 }
 
 .modalContainer {
     background: white;
-    width: 1200px;
-
+    width: 1200px; /*1200px*/
 }
 
 .headerContainer {

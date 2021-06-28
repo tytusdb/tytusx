@@ -30,7 +30,12 @@
     <script src="Arbol/Nodo.js"></script>
     <script src="Arbol/Arbol.js"></script>
     <script src="Errores/Error.js"></script>
-
+    <script src="C3D/tsXML.js"></script>
+    <script src="C3D/tsObjeto.js"></script>
+    <script src="C3D/tsObjetoStack.js"></script>
+    <script src="C3D/tsStack.js"></script>
+    <script src="C3D/tsObjetoHeap.js"></script>
+    <script src="C3D/tsHeap.js"></script>
 </head>
 
 <body>
@@ -91,6 +96,9 @@
             <button type="button" class="btn btn-info" onclick="" title="Ejecuta el código XQUERY">
                 XQUERY
             </button>
+            <button type="button" class="btn btn-info" onclick="pruebaC3D();" title="Ejecuta el código XQUERY">
+                TEST
+            </button>
         </div>
         <table style="width:80%;">
             <tr>
@@ -104,6 +112,7 @@
                 </td>
             </tr>
         </table>
+        
         <table style="width:100%">
             <tr cols="3">
                 <td colspan="1" align="left"><label>Ingrese el código aquí:</label><br></td>
@@ -237,4 +246,7 @@
 <script src="Gramatica/gramaticaXMLArbol.js"></script>
 <script src="Gramatica/gramaticaXMLArbolCST.js"></script>
 <script src="Gramatica/erroresXML.js"></script>
+<script src="Traduccion/traductorXML.js"></script>
+<script src="Traduccion/traductorXPATH.js"></script>
+<script src="Gramatica/gramaticaXML3D.js"></script>
 </html>
