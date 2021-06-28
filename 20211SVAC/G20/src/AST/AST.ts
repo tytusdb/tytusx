@@ -1,11 +1,4 @@
-import { Instruccion } from "../Interfaces/Instruccion";
-
-export class AST{
-    
-    public instrucciones:Array<Instruccion>
-
-    constructor(instrucciones:Array<Instruccion>){
-        this.instrucciones = instrucciones;
-    }
-
+export class AST {
+    public instrucciones : Instrucciones
+    constructor(instrucciones: Instrucciones) { this.instrucciones = instrucciones }
 }
