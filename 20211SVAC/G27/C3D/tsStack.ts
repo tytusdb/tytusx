@@ -13,11 +13,11 @@ class tsStack{
         return null;
     }
 
-    public insertarObjeto(tipo: any, apuntadorName: any, apuntadorAtributos: any, apuntadorHijos: any, apuntadorContenido: any)
+    /*public insertarObjeto(tipo: any, apuntadorName: any, apuntadorAtributos: any, apuntadorHijos: any, apuntadorContenido: any)
     {
-        var objeto = new tsObjetoStack(tipo, apuntadorName, apuntadorAtributos, apuntadorHijos,apuntadorContenido);
+        //var objeto = new tsObjetoStack(tipo, apuntadorName, apuntadorAtributos, apuntadorHijos,apuntadorContenido);
         this.listaObjetos.push(objeto);
-    }
+    }*/
 
     public getCantidadObjetos(): number
     {
