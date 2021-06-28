@@ -120,6 +120,9 @@ class TraductorXML{
         HP = HP + 1;`;
                 HP = HP + 1;
             }
+            xmlC3D += `
+        //disminuimos en 1 el Heap Pointer
+        HP = HP - 1;`;
             HP = HP - 1;
             if (objeto.getAtributos().length > 0){
                 objeto.getAtributos().forEach(function (atributo){
@@ -142,6 +145,8 @@ class TraductorXML{
                     T0 = HP;
                     T1 = SP;
  
+            var atributoAux = atributo.getID();
+
             xmlC3D += `
         //guardamos en el stack la referencia al heap de nuestro atributo: ` + atributoAux;
             xmlC3D += `
@@ -155,7 +160,7 @@ class TraductorXML{
                 T1 = T1 + 1;
                 SP = T1;
 
-                var atributoAux = atributo.getID();
+                
                 xmlC3D += `
         //iniciamos a guardar el identificador del atributo: ` + atributoAux;
                     
@@ -194,7 +199,9 @@ class TraductorXML{
         HP = HP + 1;`;
                         HP = HP + 1;
                     }
-
+                    xmlC3D += `
+        //disminuimos en 1 el Heap Pointer
+        HP = HP - 1;`;
                     HP = HP - 1;
                     
                 });

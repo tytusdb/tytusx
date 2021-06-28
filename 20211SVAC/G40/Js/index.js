@@ -1,9 +1,48 @@
 "use strict";
 
+function Optimizar(){
+    ListaOptimizaciones = [];
+    var contenido = SalidaTraduccion.getValue();
+    if (contenido == ""){
+        window.alert("No hay C3D para optimizar :O !");
+    } else {
+
+        analisisOptimizadorCorrecto = EjecutarOptimizador(contenido);
+
+        if (analisisOptimizadorCorrecto){
+            
+            console.log("↓ RESULTADO PARSER OPTIMIZADOR ↓");
+            console.log(resultadoOptimizador);
+            var Optimizar = new Optimizador(resultadoOptimizador);
+            var salida = Optimizar.Ejecutar();
+            SalidaTraduccion.setValue(salida);
+            window.alert("C3D optimizado exitosamente :D !");
+            console.log(ListaOptimizaciones);
+            localStorage.setItem('opJSON',JSON.stringify(ListaOptimizaciones, null, 2));
+        } else {
+            window.alert("El parser del Optimizador no pudo recuperarse de un error sintactico D: !");
+        }
+
+    }
+
+}
+
+function EjecutarOptimizador(contenidoC3D){ 
+    try {
+
+        resultadoOptimizador = GramaticaOptimizador.parse(contenidoC3D);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 function CargarXML(){
 
-
+    
     var contenido = "";
+    
 
     if(tab==1){
         contenido = editor.getValue();
@@ -43,6 +82,7 @@ function CargarXML(){
             stack = [];
             contadorStack = 0;
             contadorTemporales = 0;
+            contadorEtiquetas = 0;
             SP = 2;
             HP = 0;
             T0 = 0;
@@ -70,7 +110,7 @@ function CargarXML(){
             localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
             
         } else {
-            SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
+            SetSalida("El parser XML no pudo recuperarse de un error sintactico.");
         }
 
         if (analisisCorrecto) {
@@ -112,6 +152,17 @@ function CargarXML(){
                     
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                    /* TRADUCIENDO XPATH A C3D */
+                    xpathC3D = "";
+                    var funcionesXPath = contenidoXpath.split(/[ ]*\|[ ]*/g);
+
+                    for(var i = 0; i < resultadoXPath.length; i++) {
+                    
+                        var salida = C3DXPATH.traducir(funcionesXPath[i] ,resultadoXPath[i]);
+                        xpathC3D += salida + "\n\n";
+                    }
+
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -437,8 +488,6 @@ function ObtenerEntornos(entorno){
     return entornoArr;
 }
 
-
-
 function EntornoYaExiste(arreglo, id){
 
     var existe = false;
@@ -623,9 +672,14 @@ function SetearTraduccion(){
     
     double heap[30101999];
     double stack[30101999];
+    double xheap[30101999];
+    double xstack[30101999];
+    double resultados[3010199];
     double SP;
     double HP;
-    
+    double XSP;
+    double XHP;
+
     `;
 
     for(var i = 0; i< contadorTemporales;i++ ){
@@ -639,6 +693,8 @@ function SetearTraduccion(){
     globalC3D += `;
     
     `;
+
+    globalC3D += funcionesC3D;
     
     globalC3D += `int main(){
         
@@ -670,11 +726,12 @@ function SetearTraduccion(){
     
     globalC3D += xmlC3D;
 
+    globalC3D += "\n";
+
+    globalC3D += xpathC3D;
+
     globalC3D +=`
-    
-        for(int loop = 0; loop < stack[1]; loop++){
-            printf("%c", (char) heap[loop]);}
-    
+
         return 0;
 
     }`;    
@@ -686,3 +743,4 @@ function SetearTraduccion(){
     localStorage.setItem('stackJSON',JSON.stringify(stack, null, 2));
     window.alert("Traducción XML a C3D exitosa, scrollee hacia abajo para ver resultado. :D");
 }
+

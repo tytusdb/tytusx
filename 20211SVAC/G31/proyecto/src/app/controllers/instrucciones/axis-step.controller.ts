@@ -9,9 +9,9 @@ export class AxisStep extends Nodo {
   public step: Nodo;
   public predicateList: Array<Nodo>;
 
-  constructor(tipo: Tipo, step: Nodo, predicateList: Array<Nodo>,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, step: Nodo, predicateList: Array<Nodo>,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ, tipo, linea, columna);
 
     this.step = step;
     this.predicateList = predicateList;
@@ -21,5 +21,7 @@ export class AxisStep extends Nodo {
       return this.step.ejecutar(tabla, arbol)
   }
 
-
+  public c3d(tabla: Tabla, arbol: Arbol) {
+    return this.step.c3d(tabla, arbol)
+  }
 }

@@ -12,12 +12,47 @@ var AsignacionOperacion = /** @class */ (function () {
         this.operador = operador;
         this.temporal = temporal;
     }
+
+    AsignacionOperacion.prototype.getTemporal = function () {
+        return this.temporal;
+    };
+
+    AsignacionOperacion.prototype.getLinea = function () {
+        return this.linea;
+    };
+
+    AsignacionOperacion.prototype.getColumna = function () {
+        return this.columna;
+    };
+    
     AsignacionOperacion.prototype.setCodigo = function (codigo) {
         this.codigo = codigo;
     };
     AsignacionOperacion.prototype.getTipo = function () {
         return this.tipo;
     };
+
+    AsignacionOperacion.prototype.setOperando1 = function (op1) {
+        this.operando1 = op1;
+    };
+    AsignacionOperacion.prototype.getOperando1 = function () {
+        return this.operando1;
+    };
+
+    AsignacionOperacion.prototype.setOperando2 = function (op2) {
+        this.operando2 = op2;
+    };
+    AsignacionOperacion.prototype.getOperando2 = function () {
+        return this.operando2;
+    };
+
+    AsignacionOperacion.prototype.setOperador = function (op) {
+        this.operador = op;
+    };
+    AsignacionOperacion.prototype.getOperador = function () {
+        return this.operador;
+    };
+
     AsignacionOperacion.prototype.getCodigo3D = function () {
         return this.codigo;
     };

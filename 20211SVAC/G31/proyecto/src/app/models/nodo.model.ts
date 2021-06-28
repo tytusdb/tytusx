@@ -8,8 +8,10 @@ export abstract class Nodo {
   public linea: number;
   public columna: number;
   public tipo: Tipo;
+  public tipoOBJ: Tipo;
 
-  constructor(tipo: Tipo, linea: number, columna: number) {
+  constructor(tipoOBJ: Tipo, tipo: Tipo, linea: number, columna: number) {
+    this.tipoOBJ = tipoOBJ;
     this.tipo = tipo;
     this.linea = linea;
     this.columna = columna;
@@ -17,5 +19,5 @@ export abstract class Nodo {
 
   public abstract ejecutar(tabla: Tabla | Entorno, arbol: Arbol): any;
 
- // public abstract ejecutar2(tabla: Entorno, arbol: Arbol): any;
+  public abstract c3d(tabla: Tabla | Entorno, arbol: Arbol): any;
 }
