@@ -9,6 +9,8 @@ import * as AnalizarAscXpath from 'src/app/Backend/XPATH/GramaticaXPath'
 import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPathDesc'
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import * as GramaticalDes from 'src/app/Backend/XML/Analizador/XMLgraphDesc'
+import * as Optimizacion from 'src/app/Backend/Optimizacion/grammar'
+import TreeOptimo from 'src/app/Backend/Optimizacion/Simbolo/Arbol'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
@@ -25,6 +27,9 @@ import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNod
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import { ViewChild } from '@angular/core';
+import Declaracion from 'src/app/Backend/Optimizacion/Instrucciones/Declaracion';
+import Funcion from 'src/app/Backend/Optimizacion/Instrucciones/Funcion';
+import { reporteOp } from 'src/app/Backend/Optimizacion/Reportes/reporteOp';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -33,6 +38,7 @@ export let Ambito2: String;
 export let tabsim: Map<String, String>
 export var contenidocd3= ""
 export let ArbolGlobalReporte:reporteTabla[];
+export let ReporteOptimizacion: reporteOp[];
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -578,6 +584,33 @@ export class ContenidoInicioComponent implements OnInit {
     }
     return salida;
 
+  }
+  /**************************************************************************************************
+   * *********************************OPTIMIZACION***************************************************
+   * ***********************************************************************************************/
+  Optimizar(texto: string){
+    const Optimo = Optimizacion;
+    const objetos = Optimo.parse(texto);
+    let cadenaconcat= "";
+    var Tree: TreeOptimo = new TreeOptimo([objetos]);;
+    var tabla = new tablaSimbolos();                    //ejecucion
+    Tree.settablaGlobal(tabla); 
+    for(var instruction of Tree.getinstrucciones()){
+      instruction.forEach(element => {
+        if(element instanceof Declaracion){
+          cadenaconcat+= element.interpretar(Tree, tabla);
+        }else if(element instanceof Funcion){
+          cadenaconcat+= element.interpretar(Tree, tabla);
+        }else{
+          cadenaconcat+=element;
+        }
+      });
+        
+    }
+    this.mostrarContenido(cadenaconcat, 'resultado');
+    var reco = Tree.getSimbolos();
+    let reporte = JSON.stringify(reco);
+    localStorage.setItem("optimo", reporte);
   }
 }
 

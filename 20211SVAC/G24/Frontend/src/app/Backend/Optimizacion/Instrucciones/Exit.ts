@@ -9,6 +9,6 @@ export default class Exit extends Instruccion {
         super(new Tipo(tipoDato.CADENA), fila, columna);
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+        return "exit;"
     }
 }

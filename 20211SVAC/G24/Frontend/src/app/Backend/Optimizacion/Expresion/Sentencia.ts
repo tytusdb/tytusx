@@ -10,8 +10,15 @@ export default class Sentencia extends Instruccion {
         this.expresion= expresion
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        // operando1 operacion operando2
-        throw new Error("Method not implemented.");
+        // return; o return expresion;
+        let cadena=""
+        if(this.expresion!=null){
+            let temp= this.expresion.interpretar(arbol,tabla);
+            cadena+="return "+temp+";"
+        }else{
+            cadena+="return;"
+        }
+        return cadena;
     }
 
 }

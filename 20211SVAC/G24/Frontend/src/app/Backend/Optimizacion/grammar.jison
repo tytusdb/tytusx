@@ -1,9 +1,8 @@
 %{
 
 
-const CErrores= require("./Excepciones/Errores")
-const CNodoErrores= require("./Excepciones/NodoErrores")
-const inicio = require("../../../componentes/contenido-inicio/contenido-inicio.component")
+const CErrores= require("./Errores/NodoErrores")
+const inicio = require("../../componentes/contenido-inicio/contenido-inicio.component")
 const Tipo= require("./Simbolo/Tipo");
 const aritmetica= require("./Expresion/Aritmetica");
 const logica= require("./Expresion/Logica");
@@ -15,6 +14,7 @@ const unario= require("./Expresion/Unario");
 const Sentencia= require("./Expresion/Sentencia");
 const termino= require("./Expresion/Termino");
 const identificador= require("./Expresion/Identificador");
+const multiplecoma= require("./Expresion/MultipleComa");
 //instrucciones
 const Llamada= require("./Instrucciones/Llamada");
 const Asignacion= require("./Instrucciones/Asignacion");
@@ -157,22 +157,27 @@ FUNCION
 VOIDS
         : TIPO MAIN PARIZQ PARDER LLAVEIZQ INSTRUCCIONES LLAVEDER               {$$= new Funcion.default($1+" "+$2+" "+$3+" "+$4+" "+$5+"\n",$6,@1.first_line,@1.first_column);}
         | TIPO IDENTIFICADOR PARIZQ PARDER LLAVEIZQ INSTRUCCIONES LLAVEDER      {$$= new Funcion.default($1+" "+$2+" "+$3+" "+$4+" "+$5+"\n",$6,@1.first_line,@1.first_column);}
-        | INCLUDE LIBRERIA                                                      {$$=$1+$2}
+        | INCLUDE LIBRERIA                                                      {$$=$1+$2+"\n"}
         | DECLARACION_MULTIPLE                                                  {$$=$1}
         | DECLARACION                                                           {$$=$1}
         ;
 
 DECLARACION_MULTIPLE
-        : TIPO TERMINO COMA                                                     {$$=$1+" "+$2+$3+" "}
-        | TIPO TERMINO PTCOMA                                                   {$$=$1+" "+$2+$3}
-        | TERMINO COMA                                                          {$$=$1+$2+" "}
-        | TERMINO PTCOMA                                                        {$$=$1+$2}
+        : TIPO TIPODECLARACION COMA                                                     {$$=$1+" "+$2+$3+" "}
+        | TIPO TERMINO PTCOMA                                                           {$$= new Declaracion.default($1,$2,@1.first_line,@1.first_column);}
+        | TIPODECLARACION COMA                                                          {$$=$1+$2+" "}
+        | TIPODECLARACION PTCOMA                                                        {$$=$1+$2+"\n"}
+        ;
+
+TIPODECLARACION
+        : TEMPORAL                              {$$=$1}
+        | IDENTIFICADOR                         {$$=$1}
         ;
 
 DECLARACION
-        : TIPO IDENTIFICADOR L_CORCHETES PTCOMA                 {$$= new Declaracion.default($1+" "+$2,$3,@1.first_line,@1.first_column);}
-        | DOUBLE STACK L_CORCHETES PTCOMA                       {$$= new Declaracion.default($1+" "+$2,$3,@1.first_line,@1.first_column);}
-        | DOUBLE HEAP L_CORCHETES PTCOMA                        {$$= new Declaracion.default($1+" "+$2,$3,@1.first_line,@1.first_column);}
+        : TIPO IDENTIFICADOR L_CORCHETES PTCOMA                 {$$= new Declaracion.default($1+" "+$2+"[",$3,@1.first_line,@1.first_column);}
+        | DOUBLE STACK L_CORCHETES PTCOMA                       {$$= new Declaracion.default($1+" "+$2+"[",$3,@1.first_line,@1.first_column);}
+        | DOUBLE HEAP L_CORCHETES PTCOMA                        {$$= new Declaracion.default($1+" "+$2+"[",$3,@1.first_line,@1.first_column);}
         ;
 
 
@@ -221,7 +226,7 @@ L_CORCHETES
 
 EXPRESION
         : TERMINO                                       {$$=$1}
-        | TERMINO COMA TERMINO                          {$$=$1+$2+$3}
+        | TERMINO COMA TERMINO                          {$$= new multiplecoma.default($1,$2,$3,@1.first_line,@1.first_column);}
         | TERMINO OPLOGICA TERMINO                      {$$= new logica.default($1,$2,$3,@1.first_line,@1.first_column);}
         | TERMINO OPBIT TERMINO                         {$$= new bit.default($1,$2,$3,@1.first_line,@1.first_column);}
         | TERMINO OPRELACIONAL TERMINO                  {$$= new relacional.default($1,$2,$3,@1.first_line,@1.first_column);}
@@ -229,7 +234,7 @@ EXPRESION
         | NOT_BIT TERMINO %prec NOT                     {$$= new unario.default($1,$2,@1.first_line,@1.first_column);}
         | NOT TERMINO %prec NOTR                        {$$= new unario.default($1,$2,@1.first_line,@1.first_column);}
         | TERMINO OPARITMETICA TERMINO                  {$$= new aritmetica.default($1,$2,$3,@1.first_line,@1.first_column);}
-        | PARIZQ TIPO PARDER TERMINO                    {$$= new conversion.default($1,$2,$3,@1.first_line,@1.first_column);}
+        | PARIZQ TIPO PARDER TERMINO                    {$$= new conversion.default($2,$4,@1.first_line,@1.first_column);}
         ;
 
 
@@ -238,7 +243,7 @@ EXPRESION
 TERMINO
         : TEMPORAL                              {$$=new termino.default(new Tipo.default(Tipo.tipoDato.TEMPORAL),$1,@1.first_line,@1.first_column);}
         | RA                                    {$$=$1}
-        | PILA                                  {$$=$1}
+        | PILA                                  {$$=new termino.default(new Tipo.default(Tipo.tipoDato.PILA),$1,@1.first_line,@1.first_column);}
         | ENTERO                                {$$=new termino.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
         | IDENTIFICADOR L_CORCHETES             {$$= new Estructura.default($1,$2,@1.first_line,@1.first_column);}
         | IDENTIFICADOR                         {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
@@ -256,6 +261,7 @@ TEMPORALES
         | VALOR_RET                             {$$=$1}
         | RA                                    {$$=$1}
         | PILA                                  {$$=$1}
+        | IDENTIFICADOR                         {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
         | PUNTERO                               {$$=new termino.default(new Tipo.default(Tipo.tipoDato.PUNTERO),$1,@1.first_line,@1.first_column);}
         | STACK                                 {$$=new termino.default(new Tipo.default(Tipo.tipoDato.STACK),$1,@1.first_line,@1.first_column);}
         | HEAP                                  {$$=new termino.default(new Tipo.default(Tipo.tipoDato.HEAP),$1,@1.first_line,@1.first_column);}

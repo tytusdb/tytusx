@@ -9,7 +9,7 @@ export default class SaltoCondicional extends Instruccion {
     public Expresion: Instruccion;
     constructor(expresion:Instruccion, identificador: string, fila: number, columna: number) {
         super(new Tipo(tipoDato.CADENA), fila, columna);
-        this.identificador = identificador.toLowerCase();
+        this.identificador = identificador;
         this.Expresion= expresion
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
