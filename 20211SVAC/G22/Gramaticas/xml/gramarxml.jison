@@ -3,12 +3,16 @@
  */
 
 %{	
-    const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
-	const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
-	const Error = require('./Scripts/Errores/Error.js');
+	
+
+   // const {ObjetoNodo} = require("./Scripts/clasesXML/ObjetoNodo.js");
+	//const {Atributo} = require("./Scripts/clasesXML/Atributo.js");
+	//const Error = require('./Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
 	var erroresSintacticos = [];
+	var errorSemantico = [];
+	var etiquetas=[];
 %}
 /* DefINIción Léxica */
 %lex
@@ -59,8 +63,64 @@
 
 <<EOF>>                 return 'EOF';
 
-.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                       {
+						console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); 
+						var error =  new Error( this._$.first_line ,  this._$.first_column, 'lexico','xmldesc', yytext);
+						erroresLexicos.push(error);}
 /lex
+
+%{	
+
+	define('grammarXMLAsc',function () {
+			return {
+				getParser: function () {
+					return gramarxml;
+				}
+			};
+		});
+	
+	var AUXid=0;
+		
+	function unirErrores(){
+		erroresGramar[0]= erroresLexicos ;
+		erroresGramar[1]= erroresSintacticos;
+		erroresGramar[2]=errorSemantico;
+		
+		console.log(erroresGramar.length);
+		console.log(erroresGramar[0].length+'errores lexicos');
+		console.log(erroresGramar[1].length+'errores sintacticos');
+		console.log(erroresGramar[2].length +'errores semanticos');
+	}
+
+	function ingresarRegla(regla){
+		if(reglas.length>0){
+			var reglas2=[];
+			reglas2.push(regla);
+			reglas= reglas2.concat(reglas);
+			console.log('agregando regla'+reglas.length+' --- '+regla.getProduccion());
+		}else{
+			reglas.push(regla);
+			console.log('agregando regla'+reglas.length);
+		}
+	}
+
+	function validarEtiqueta(nombre, linea, columna){
+		if(etiquetas[etiquetas.length - 1] == nombre){
+			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
+			//console.log("iguales");
+			return true;
+		}else{
+			//console.log(nombre +' == '+ etiquetas[etiquetas.length - 1]);
+			console.log("error semantico"+linea + columna);
+			var errorSEM = new Error( linea, columna, 'semantico','xmldesc', nombre);
+			errorSemantico.push( errorSEM) ;
+			console.log(errorSEM);
+			return false;
+		}
+	}
+		
+%}
+
 
 /* Asociación de operadores y precedencia */
 
@@ -72,7 +132,12 @@
 
 %% /* Definición de la gramática */
 
-S : XML_GRAMAR EOF 	{ $$ = $1; return $$; }
+S : XML_GRAMAR EOF 	{ $$ = $1; unirErrores(); return $$; }
+	| error { 
+			console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+			var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
+			erroresSintacticos.push(error); ; 
+			}
 ;
 
 XML_GRAMAR :  
@@ -94,7 +159,7 @@ FORMAT
 ELEMENTOS :   
 	ELEMENTOS  ELEMENTO 	{ $1.push($2); $$ = $1;}
 	| ELEMENTO				{ $$ = [$1]; } 
-	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); erroresSintacticos.push(error); }
 ;
 
 ELEMENTO :  
@@ -103,7 +168,7 @@ ELEMENTO :
 
 
 ABRIR_ELEMENTO : 
-	menosque identificador  			{ $$ = $2 }
+	menosque identificador  			{ $$ = $2; etiquetas.push($2);}
 	| menosque inicoment menos menos 	{ $$ = 'comentario' } // COMENTARIO
 ; 
 
@@ -128,9 +193,17 @@ C_ATRIBUTO : C_ATRIBUTO TIPOCONTENIDO		{ $1.push($2); $$ = $1;}
 ;
 
 CIERRE_ELEMENTO : 
-	masque CONTENIDO_ETIQUETA menosque div identificador masque  	{ $$ = new ObjetoNodo($5,'', null,$2,@1.first_line, @1.first_column); }
-	| masque menosque div identificador masque						{ $$ = new ObjetoNodo($4,'', null,null,@1.first_line, @1.first_column); }
-	| div masque 													//{ $$ = new ObjetoNodo('','',null,null,@1.first_line, @1.first_column); }
+	masque CONTENIDO_ETIQUETA menosque div identificador masque  	{ 	if(validarEtiqueta($5, @1.first_line, @1.first_column)){
+																			$$ = new ObjetoNodo($5,'', null,$2,@1.first_line, @1.first_column); 
+																		}
+																		etiquetas.pop();
+																	}
+	| masque menosque div identificador masque						{ 	if(validarEtiqueta($4, @1.first_line, @1.first_column)){
+																			$$ = new ObjetoNodo($4,'', null,null,@1.first_line, @1.first_column);
+																		}		
+																		etiquetas.pop();
+																	}
+	| div masque 													{etiquetas.pop();}//{ $$ = new ObjetoNodo('','',null,null,@1.first_line, @1.first_column); }
 ;
 
 COMENTARIO : C_TEXTO menos menos masque  

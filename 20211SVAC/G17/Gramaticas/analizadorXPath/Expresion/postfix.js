@@ -1,4 +1,4 @@
-import { concat, pad, truncate } from "lodash"
+import { concat, lowerCase, pad, truncate, upperCase } from "lodash"
 import { Tipo, TipoPath, Predicado } from "../AST/Entorno"
 import { Camino } from "./axes"
 import { Literal, Nodo } from "./Expresiones"
@@ -107,33 +107,93 @@ function GenerarNodosHijos(padre)
 //CALLFUNCTION
 export class CallFunction extends PostFix 
 {
-  constructor(predicado,tipo,nombre)
+  constructor(predicado,tipo,nombre,argumentos)
   {
     super(predicado,tipo)
     this.nombre=nombre
+    this.argumentos = argumentos
   }
 
   getValor(nodos)
   {
+    let expArgumentos = []
+    for (const argumento of this.argumentos) {
+      expArgumentos = expArgumentos.concat(argumento.getValor(nodos))
+    }
     var retorno = []
     switch(this.nombre)
     {
       case 'text':
-        retorno = new Texto(this.predicado,this.tipo).getValor(nodos)
+        if(expArgumentos.length==0){
+          retorno = new Texto(this.predicado,this.tipo).getValor(nodos)
+          break
+        }
+        ErroresGlobal.push({Error:`La funcion text no recive argumentos`,tipo:"Semantico",Linea:0,columna:0})
         break;
       case 'last':
-        retorno = new Last(this.predicado,this.tipo).getValor(nodos)  
-        break;    
+        if(expArgumentos.length==0){
+          retorno = new Last(this.predicado,this.tipo).getValor(nodos)  
+          break;    
+        }
+        ErroresGlobal.push({Error:`La funcion text no recive argumentos`,tipo:"Semantico",Linea:0,columna:0})
+        break;
       case 'node':
-        retorno = new Node(this.predicado,this.tipo).getValor(nodos)
+        if(expArgumentos.length==0){
+          retorno = new Node(this.predicado,this.tipo).getValor(nodos)
+          break;
+        }
+        ErroresGlobal.push({Error:`La funcion text no recive argumentos`,tipo:"Semantico",Linea:0,columna:0})
         break;
       case 'position':
-        retorno = new Position(this.predicado,this.tipo).getValor(nodos)
+        if(expArgumentos.length==0){
+          retorno = new Position(this.predicado,this.tipo).getValor(nodos)
+          break;
+        }
+        ErroresGlobal.push({Error:`La funcion text no recive argumentos`,tipo:"Semantico",Linea:0,columna:0})
+        break;
+      case 'upper-case':
+        if(expArgumentos.length==1){
+          retorno = new Mayusculas(this.predicado,this.tipo).getValor(expArgumentos)
+          break
+        }
+        ErroresGlobal.push({Error:`La funcion uppercase necesita un argumento string`,tipo:"Semantico",Linea:0,columna:0})
+        break;
+      case 'lower-case':
+        if(expArgumentos.length==1){
+          retorno = new Minusculas(this.predicado,this.tipo).getValor(expArgumentos)
+          break
+        }
+        ErroresGlobal.push({Error:`La funcion uppercase necesita un argumento string`,tipo:"Semantico",Linea:0,columna:0})
+        break;
+      case 'string':
+        if(expArgumentos.length==1)
+        {
+          retorno = new toString(this.predicado,this.tipo).getValor(expArgumentos)
+          break 
+        }
+        ErroresGlobal.push({Error:`La funcion string necesita un argumento item`,tipo:"Semantico",Linea:0,columna:0})
+        break;
+      case 'number':
+        if(expArgumentos.length==1)
+        {
+          retorno = new toNumber(this.predicado,this.tipo).getValor(expArgumentos)
+          break
+        }
+        ErroresGlobal.push({Error:`La funcion string necesita un argumento item`,tipo:"Semantico",Linea:0,columna:0})
+        break;
+      case 'substring':
+        if(expArgumentos.length==2 || expArgumentos.length==3)
+        {
+          retorno = new subString(this.predicado,this.tipo).getValor(expArgumentos)
+          break
+        }
+        ErroresGlobal.push({Error:`La funcion subString Recive un string, Number o un String, Number, Number`,tipo:"Semantico",Linea:0,columna:0})
         break;
       default:
         ErroresGlobal.push({Error:`No existe la funcion ${this.nombre}`,tipo:"Semantico",Linea:0,columna:0})
         break;
     }
+    retorno = Predicado(this.predicado,retorno)
     return retorno
   }
 
@@ -158,6 +218,25 @@ export class CallFunction extends PostFix
       NodosActuales.push(nodoCorcheteC);ListaNodes.push(nodoCorcheteC);contador.num++
     }
     return NodosActuales
+  }
+}
+//CALLFUNCTIONPREFIX
+export class CallFunctionPrefix extends PostFix
+{
+  constructor(predicado,tipo,prefix,nombre,argumentos)
+  {
+    super(predicado,tipo)
+    this.prefix = prefix
+    this.nombre = nombre
+    this.argumentos = argumentos
+  }
+
+  getValor()
+  {
+    if(this.prefix == "fn")
+    {
+      return new CallFunction(this.predicado,this.tipo,this.nombre,this.argumentos) 
+    }
   }
 }
 // GET LAST
@@ -265,5 +344,125 @@ export class Node extends PostFix
       posiciones = posiciones.concat(new Camino("*",[],this.tipo).getValor([nodo]))
     }
     return posiciones
+  }
+}
+
+export class Mayusculas extends PostFix
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    var retornos = []
+    for (const nodo of nodos) {
+      if(nodo.tipo==Tipo.STRING)
+      {
+        nodo.valor= upperCase(nodo.valor)
+        retornos.push(nodo)
+      }
+      else
+      {
+        ErroresGlobal.push({Error:`La funcion upper-case recive argumentos de tipo string`,tipo:"Semantico",Linea:0,columna:0})
+      }
+    }
+    return retornos
+  }
+}
+
+export class Minusculas extends PostFix
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    var retornos = []
+    for (const nodo of nodos) {
+      if(nodo.tipo==Tipo.STRING)
+      {
+        nodo.valor= lowerCase(nodo.valor)
+        retornos.push(nodo)
+      }
+      else
+      {
+        ErroresGlobal.push({Error:`La funcion lower-case recive argumentos de tipo string`,tipo:"Semantico",Linea:0,columna:0})
+      }
+    }
+    return retornos
+  }
+}
+
+export class toString extends PostFix
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    var retornos = []
+    for (const nodo of nodos) {
+      nodo.valor = nodo.valor.toString()
+      nodo.tipo = Tipo.STRING
+      retornos.push(nodo)
+    }
+    return retornos
+  }
+}
+
+export class toNumber extends PostFix
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    var retornos = []
+    for (const nodo of nodos) {
+      nodo.valor = Number(nodo.valor)
+      if(nodo.valor)
+      {
+        nodo.tipo = Tipo.DECIMAL
+        retornos.push(nodo)
+      }
+      else
+      {
+        ErroresGlobal.push({Error:`La funcion Number no se pudo realizar`,tipo:"Semantico",Linea:0,columna:0})
+      }
+    }
+    return retornos
+  }
+}
+
+export class subString extends PostFix
+{
+  constructor (predicado, tipo) {
+    super(predicado, tipo)
+  }
+
+  getValor(nodos)
+  {
+    if(nodos.length==2)
+    {
+      if (nodos[0].tipo == Tipo.STRING && (nodos[1].tipo==Tipo.DECIMAL || nodos[1].tipo==Tipo.INTEGER)) {
+        let minimo = Number(nodos[1].valor) < 0 ? 0 : (Number(nodos[1].valor) )  
+        nodos[0].valor = nodos[0].valor.toString().substr(minimo)
+        return [nodos[0]]
+      }
+    }
+    else
+    {
+      if (nodos[0].tipo == Tipo.STRING  
+        && (nodos[1].tipo==Tipo.DECIMAL || nodos[1].tipo==Tipo.INTEGER)
+        && (nodos[2].tipo==Tipo.DECIMAL || nodos[2].tipo==Tipo.INTEGER) ) {
+        let minimo = Number(nodos[1].valor) < 0 ? 0 : (Number(nodos[1].valor) - 1)
+        nodos[0].valor = nodos[0].valor.toString().substr(minimo,Number(nodos[2].valor))
+        return [nodos[0]]
+      }
+    }
   }
 }

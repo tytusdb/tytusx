@@ -29,6 +29,7 @@ function generarAST_gramatical(intruccion){
     
 }
 
+
 let etiqueta=0;
 
 function  graficarNodo(AST_xPath,Padre){

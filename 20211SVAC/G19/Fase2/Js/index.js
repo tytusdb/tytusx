@@ -48,7 +48,7 @@ function CargarXML(){
             ExtraerCodificacion(resultadoXML[0]);       
             ErroresSemanticosXML(resultadoXML[0]);
            
-            xmlC3D = C3DXML.traducir(resultadoXML[0]);
+            xml3D = getTraduction(resultadoXML[0]);
             localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
@@ -149,7 +149,7 @@ function CargarXML(){
         }
     } 
 
- SetearTraduccion();
+ setTraduction();
  //console.log(stack);
     
 }
@@ -198,7 +198,7 @@ function CargarXMLDesc(){
             T0 = 0;
             T1 = 0;
             xmlC3D = "";
-            xmlC3D = C3DXML.traducir(resultadoXML[0]);    
+            xmlC3D = getTraduction(resultadoXML[0]);    
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
             tablaSimbolosXML = tablaSimbolosXMLAux;
@@ -595,7 +595,7 @@ function CambiarCodificacion(cadena){
  }
 }
 
-function SetearTraduccion(){
+function setTraduction(){
 
     globalC3D = "";
     globalC3D += `/* ------ HEADERS ------ */
@@ -604,12 +604,12 @@ function SetearTraduccion(){
     
     double heap[30101999];
     double stack[30101999];
-    double SP;
-    double HP;
+    double stackPointer;
+    double heapPointer;
     
     `;
 
-    for(var i = 0; i< contadorTemporales;i++ ){
+    for(var i = 0; i< contTemporal;i++ ){
         if(i==0){
             globalC3D += `double t`+i.toString();
         } else{
@@ -643,7 +643,7 @@ function SetearTraduccion(){
     }
 
     
-    globalC3D +=xmlC3D+'}\n'+ xpathC3D ;
+    globalC3D +=xml3D+'}\n'+ xpathC3D ;
 
    /* for(int loop = 0; loop < stack[1]; loop++){
         printf("%c", (char) heap[loop]);}

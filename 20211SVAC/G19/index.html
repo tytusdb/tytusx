@@ -40,28 +40,36 @@
         <script src="./Fase2/Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Fase2/Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Fase2/Js/Interprete/Instrucciones/XPath.js"></script>
-        <script src="./Fase2/Js/Interprete/Traductor/TraductorXML.js"></script>
+
+
         <script src="./Fase2/Js/Interprete/Traductor/TraductorXPATH.js"></script>
+
+        <script src="./Fase2/Js/Traductor/xml.js"></script>
+
 
         <script>
 
             var heap = [];
             var stack = [];
             var contadorStack = 0;
-            var contadorTemporales = 0;
-            var SP = 2;
-            var HP = 0;
-            var T0 = 0;
-            var T1 = 0;
-            var temporal0 = "";
-            var temporal1 = "";
             var globalC3D = "";
+
+            //xml translator
             var xpathC3D = "";
-            var xmlC3D = "";
-            var xpathC3D="";
             var funcionesALlamar="";
             var inicioXPath,finXPath,inicioXML,finXML=0;
-            var C3DXML = new TraductorXML();
+            var heapPointer = 0;
+            var xml3D = "";
+            var temp0 = "";
+            var t0 = 0;
+            var temp1 = "";
+            var t1 = 0;
+            var stackPointer = 2;
+            var contTemporal = 0;
+            var endXml=0;
+
+
+            
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();

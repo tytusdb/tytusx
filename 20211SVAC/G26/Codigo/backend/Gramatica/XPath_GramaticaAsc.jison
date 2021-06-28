@@ -264,8 +264,8 @@ PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line
         | cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         | cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         | identifier { $$ = new Primitiva($1, TipoPrim.IDENTIFIER, @1.first_line, @1.first_column); }
-        | attr identifier { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
-        | attr asterisco { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
+        | attr identifier { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
+        | attr asterisco { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
         | dot { $$ = new Primitiva($1, TipoPrim.DOT, @1.first_line, @1.first_column);}
         | identifier LISTANODOS { 
                 $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; 

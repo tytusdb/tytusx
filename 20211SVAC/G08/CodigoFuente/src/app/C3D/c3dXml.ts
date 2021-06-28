@@ -7,7 +7,7 @@ export interface Data {
     Columna: number;
     Padre: string;
     TipoEtiqueta: number;
-    stackPosition:number;
+    //stackPosition:number;
   }
 
 export class xmlFactory{

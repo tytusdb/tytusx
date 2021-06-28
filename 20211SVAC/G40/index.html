@@ -1,6 +1,7 @@
 
 <html> 
     <head>
+        <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">    
         <link rel="stylesheet" type="text/css" href="./Css/styles.css">\
@@ -41,28 +42,64 @@
         <script src="./Js/Interprete/Expresiones/ExpresionXPath.js"></script>
         <script src="./Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
+        <script src="./Js/Interprete/Expresiones/Declaracion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
         <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
-
+        <script src="./Js/Interprete/Traductor/TraductorXPath.js"></script>
+        <!--- SCRIPTS PARA OPTIMIZADOR --->
+        <script src="./Js/Optimizador/GramaticaOptimizador.js"></script>
+        <script src="./Js/Optimizador/Optimizacion.js"></script>
+        <script src="./Js/Optimizador/Tipo3D.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/ArregloAsignacion.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionArreglo.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionOperacion.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionSimple.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Etiqueta.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Goto.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/If.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Llamada.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Print.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Return.js"></script>
+        <script src="./Js/Optimizador/Bloques/Declaracion.js"></script>
+        <script src="./Js/Optimizador/Bloques/DeclaracionArreglo.js"></script>
+        <script src="./Js/Optimizador/Bloques/Include.js"></script>
+        <script src="./Js/Optimizador/Bloques/Main.js"></script>
+        <script src="./Js/Optimizador/Bloques/Void.js"></script>
+        <script src="./Js/Optimizador/Optimizador.js"></script>
         <script>
 
+            var pasada = 1;
             var heap = [];
             var stack = [];
             var finalXML = 0;
             var encodingXML = 0;
             var contadorStack = 0;
+            var contadorHeap = 0;
             var contadorTemporales = 0;
+            var contadorEtiquetas = 0;
             var SP = 2;
             var HP = 0;
             var T0 = 0;
             var T1 = 0;
             var temporal0 = "";
             var temporal1 = "";
+            var temporalXML = "";
+            var temporalXHP = "";
+            var temporalXHEAP = "";
+            var temporalFINXML = "";
+            var temporalNiveles = "";
+            var temporalValorHEAP = "";
+            var temporalValorXHEAP = "";
+            var temporalPos = "";
+            var temporalXSTACK = "";
+            var temporalContador = "";
             var globalC3D = "";
+            var funcionesC3D = "";
             var xpathC3D = "";
             var xmlC3D = "";
             var C3DXML = new TraductorXML();
+            var C3DXPATH = new TraductorXPath();
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();
@@ -72,9 +109,11 @@
             var resultadoXML = null;
             var resultadoXPath = null;
             var resultadoXQuery = null;
+            var resultadoOptimizador = null;
             var analisisCorrecto = true;
             var analisisXpathCorrecto = true;
             var analisisXqueryCorrecto = true;
+            var analisisOptimizadorCorrecto = true;
             var continuarXpath = true;
             var DOTxmlCSTasc = "";
             var DOTxmlCSTdesc = "";
@@ -86,6 +125,7 @@
             var RGxml = new ReporteGramatical();
             var RGxmlDesc = new ReporteGramatical();
             var ListaDAG = [];
+            var ListaOptimizaciones = [];
             var nodoxPATHASC = null;
             var nodoxPATHDESC = null;
             var nodoxQUERYASC = null;
@@ -98,7 +138,7 @@
             var salidaRecursiva = "";
             var salidaGlobal = "";
         </script>
-        <title> Compi 2 - Proyecto 1 | By Oscar Llamas</title>
+        <title> Compi 2 - TytusX | By Oscar Llamas</title>
         <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
         <script src="./codemirror/lib/codemirror.js"></script>
         <script src="./codemirror/mode/clike/clike.js"></script>
@@ -145,7 +185,8 @@
                         <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>
                         <a class="dropitem" id="heap">HEAP</a>  
                         <a class="dropitem" id="stack">STACK</a>        
-                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
+                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>
+                        <a class="dropitem" id="opC3D">OPTIMIZACIONES C3D</a>                        
                         </div>
                     </div> 
                 </div>
@@ -230,6 +271,7 @@
             <!-- ENTRADA XPATH -->
             <textarea id="salida_traduccion"></textarea>
             <!-- FIN ENTRADA XPATH -->
+            <button class="button3" onclick="Optimizar()">Optimizar</button>
         </div>       
         <script src="Js/Consolas.js"></script>
 

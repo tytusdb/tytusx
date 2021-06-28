@@ -115,5 +115,6 @@ var TipoSentencia;
     TipoSentencia[TipoSentencia["ORDERBY_ELEMENTO"] = 69] = "ORDERBY_ELEMENTO";
     TipoSentencia[TipoSentencia["ORDERBY_ATRIBUTO"] = 70] = "ORDERBY_ATRIBUTO";
     TipoSentencia[TipoSentencia["RETURN"] = 71] = "RETURN";
-    TipoSentencia[TipoSentencia["NULL"] = 72] = "NULL";
+    TipoSentencia[TipoSentencia["LET"] = 72] = "LET";
+    TipoSentencia[TipoSentencia["NULL"] = 73] = "NULL";
 })(TipoSentencia  || (TipoSentencia = {}));
