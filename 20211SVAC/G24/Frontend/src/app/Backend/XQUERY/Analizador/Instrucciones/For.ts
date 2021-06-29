@@ -7,19 +7,20 @@ export default class For extends Instruccion {
 
 
     private instrucciones: Array<Instruccion>;
-    private declarasignacion: Instruccion;
-    private condicion: Instruccion;
-    private actualizacion: Instruccion;
+    private asignacion: Instruccion;
+    private consulta:Instruccion;
+    private respuesta:Instruccion;
 
-    constructor(declarasignacion: Instruccion, condicion: Instruccion, actualizacion: Instruccion, instrucciones: Array<Instruccion>, linea: number, columna: number) {
+    constructor(asignacion: Instruccion,consulta:Instruccion, respuesta:Instruccion, linea: number, columna: number,instrucciones?: Array<Instruccion>) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
-        this.condicion = condicion;
-        this.declarasignacion = declarasignacion;
-        this.actualizacion = actualizacion;
+        this.asignacion = asignacion;
+        this.consulta = consulta;
         this.instrucciones = instrucciones;
+        this.respuesta=respuesta;
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+
+
     }
 }

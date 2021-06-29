@@ -82,18 +82,20 @@
 
 
 ([a-zA-Z_À-ÿ\u00F1\u00D1])[a-zA-Z0-9_^ÑñÀ-ÿ\-\.\u00F1\u00D10-9_]*  return 'IDENTIFICADOR';
-([a-zA-Z_À-ÿ\u00F1\u00D1])[a-zA-Z0-9_^ÑñÀ-ÿ\-\.\u00F1\u00D10-9_/?]*  return 'IDCONSULTA';
-
 [0-9]+("."[0-9]+)?\b                      return 'ENTERO';
 
 <<EOF>>               return 'EOF'
-
-.                      {inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yytext +" Linea: "+ yylloc.first_line + "Columna: " + yylloc.first_column);}
+.   console.log("Error Lexico");
 
 /lex
 
 %{
-    //requires
+    const thefor = require('./Instrucciones/For');
+    const atributosexpresion = require("./Instrucciones/AtributosExpresion")
+    const identificadorpredicado = require("./Instrucciones/IdentificadorPredicado")
+    const aritmetica= require("./Expresiones/Aritmetica");
+
+
 %}
 
 %start INICIO
@@ -101,70 +103,54 @@
 %%
 
 INICIO
-    :INSTRUCCIONES EOF {return $1;}
-;
+    :INSTRUCCIONES EOF      {$$=$1}
+    ;
 
 INSTRUCCIONES
-    :INSTRUCCION    {$$=$1}
-;
+    :INSTRUCCIONES INSTRUCCION {$1.push($2); $$=$1;}
+    |INSTRUCCION    {$$=[$1];}
+    ;
 
 INSTRUCCION
-    :FOR {$$=$1;}
-    |LET {$$=$1;}
-;
-
-LET
-    :RLET VARIABLE LETDOSPUNTOS L_CLAUSULA RRETURN RESULTADO {$$="res "+$2+" := "+$4+" return "+$6}
-    ;
+    :FOR {$$=$1}
+    |LET {$$=$1}
+    ;   
 
 FOR
-    :RFOR VARIABLE SENTENCIA L_CONDICIONALES  RRETURN RESULTADO {$$="for "+$2+$3+$4+" return "+$6}
-    |RFOR VARIABLE SENTENCIA  RRETURN RESULTADO                 {$$="for "+$2+$3+" return "+$5} 
+    :RFOR POSICIONAMIENTO RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO  
+    |RFOR POSICIONAMIENTO RWHERE CONDICION RRETURN RETORNO
+    |RFOR POSICIONAMIENTO RORDERBY CONDICION RRETURN RETORNO
+    |RFOR POSICIONAMIENTO RRETURN RETORNO
     ;
 
-L_CONDICIONALES
-    :L_CONDICIONALES CONDICIONALES  {$1.push($2); $$=$1;}
-    |CONDICIONALES                  {$$=[$1];}
+POSICIONAMIENTO
+    :VARIABLE LISTAPOSICION
     ;
 
-CONDICIONALES
-    :RWHERE CONDICION   {$$="where "+$2;}
-    |RORDERBY CONDICION {$$="order by "+$2;}
+LISTAPOSICION
+    :RIN FOPEN CONSULTA
+    |RIN L_FTO
+    |RAT VARIABLE LISTAPOSICION
+    |RIN L_FTO  POSICIONAMIENTO 
     ;
 
-CONDICION
-    :VARIABLE L_CONSULTAS CONECTOR CONDICION    {$$=$1+$2+" "+$3+$4}
-    |VARIABLE L_CONSULTAS                       {$$=$1+$2}
-    |VARIABLE                                   {$$=$1}
+L_FTO
+    :L_FTO FTO
+    |FTO
     ;
 
-
-SENTENCIA
-    : RIN FOPEN L_CONSULTAS {$$=" in "+$2+$3}
-    | RIN L_CONSULTAS {$$=" in "+$2}
-    | RIN L_CLAUSULA {$$=" in "+$2}
-    | RAT VARIABLE SENTENCIA {$$= "at "+$2+" in "}
-    | VARIABLE SENTENCIA {$$=$1+$2}
-    ;
-
-L_CLAUSULA
-    :L_CLAUSULA CLAUSULA {$1.push($2); $$=$1;}
-    |CLAUSULA {$$=[$1];}
-    ;
-
-CLAUSULA
-    :PARIZQ ENTERO CONECTOR ENTERO PARDER              {$$=$2+" to "+$4}
-    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR     {$$=$2+" to "+$4+$6}
+FTO
+    :PARIZQ ENTERO CONECTOR ENTERO PARDER
+    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR 
     ;
 
 VARIABLE
-    :DOLAR IDENTIFICADOR {$$="$"+$2}
-;
+    :DOLAR IDENTIFICADOR
+    ;    
 
 FOPEN
-    :RDOC PARIZQ CADENA PARDER  {$$="doc("+$3+")"}
-;
-
+    :RDOC PARIZQ CADENA PARDER 
+    ;
 
 CONECTOR
     :AND    {$$=$1}
@@ -174,55 +160,47 @@ CONECTOR
     |RTO    {$$=$1}
     ;    
 
-RESULTADO
-    :CONDICION  {$$=$1}
-    |IF         {$$=$1}
-    |LLAVES 
-    |ASIGNESPECIAL
+RETORNO
+    :CONDICION
+    |FUNCIONES
+    |IF
+    |ASIGNACION
     ;
 
-ASIGNESPECIAL
-    :IDENTIFICADOR IGUAL LLAVES CONECTOR ASIGNESPECIAL
-    |IDENTIFICADOR IGUAL LLAVES FINASIGN
-    ;    
-
-FINASIGN
-    :ASIGNESPECIAL
-    |
+IF
+    :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO
+    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER
     ;
 
-LLAVES
-    :LLAVEIZQ RDATA PARIZQ VARIABLE L_CONSULTAS PARDER LLAVEDER
-    |LLAVEIZQ  VARIABLE LLAVEDER
+FUNCIONES
+    :RDATA PARIZQ CONDICION PARDER
     ;
 
 ASIGNACION
-    :IDENTIFICADOR DOSPUNTOS    {$$=$1+" : "}
-    |IDENTIFICADOR IGUAL   {$$=$1+" = "}
+    :IDENTIFICADOR IGUAL VARIABLE
+    |IDENTIFICADOR IGUAL VARIABLE CONECTOR ASIGNACION
     ;
 
-IF  
-    :RIF PARIZQ VARIABLE  L_CONSULTAS PARDER RTHEN RESULTADO RELSE RESULTADO
-    |RIF PARIZQ VARIABLE  L_CONSULTAS PARDER RTHEN RESULTADO RELSE PARIZQ PARDER
+CONDICION
+    :VARIABLE L_CONSULTAS
+    |VARIABLE L_CONSULTAS CONECTOR CONDICION
+    |VARIABLE
     ;
 
-
-
-//XPATH
-    
 L_CONSULTAS
-    :L_CONSULTAS CONSULTA {$1.push($2); $$=$1;}
-    |CONSULTA                {$$=[$1];}
-    ;    
+    :L_CONSULTAS CONSULTA
+    |CONSULTA
+    ;
 
 CONSULTA
-    :OPCIONESCONSULT PREDICADO SALIDA            {$$="/"+$2}  //AQUI HAY QUE AGREGAR TODO LO QUE PUEDE VENIR DE XPATH
-    |OPCIONESCONSULT EXPRESION SALIDA
-    |EXPRESION SALIDA                            
-;
+    :OPCIONESCONSULT EXPRESION SALIDA
+    |OPCIONESCONSULT PREDICADO SALIDA
+    |EXPRESION SALIDA
+    ;
 
-SALIDA  
-    :CONSULTA
+
+SALIDA      
+    :CONSULTA   
     |
     ;
 
@@ -236,24 +214,36 @@ OPCIONESCONSULT
     ;
 
 PREDICADO
-    :CORIZQ EXPRESION CORDER    {$$="["+$2+"]"}
+    :CORIZQ EXPRESION CORDER    {$$=$2}
     ;
 
+
+
 EXPRESION
-    :ENTERO                     {$$=$1}
-    |IDENTIFICADOR              {$$=$1}
-    |CADENA                     {$$=$1}
-    |ARROBA IDENTIFICADOR       {$$="@ "+$2}
-    |ARROBA IDENTIFICADOR IGUAL CADENA
+    :ENTERO                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
+    |IDENTIFICADOR              {$$=new Identificador.default($1,@1.first_line,@1.first_column);}
+    |CADENA                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
+    |ARROBA EXPRESION           {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
+    |IDENTIFICADOR PREDICADO    {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}
     |RLAST PARIZQ PARDER        {$$=$1+"()"}
-    |EXPRESION MAS EXPRESION    {$$=$1+" + "+$3}
-    |EXPRESION MENOS EXPRESION  {$$=$1+" - "+$3}
-    |EXPRESION RDIV EXPRESION   {$$=$1+" div "+$3}
-    |EXPRESION MODULO EXPRESION {$$=$1+" % "+$3}
-    |EXPRESION IGUALACION EXPRESION {$$=$1+" == "+$3}
-    |EXPRESION DIFERENCIACION EXPRESION {$$=$1+"!="+$3}
-    |EXPRESION MENORIGUAL EXPRESION {$$=$1+"<="+$3}
-    |EXPRESION MAYORIGUAL EXPRESION {$$=$1+"=>"+$3}
-    |EXPRESION MENORQUE EXPRESION {$$=$1+"<"+$3}
-    |EXPRESION MAYORQUE EXPRESION {$$=$1+">"+$3}
+    |EXPRESION MAS EXPRESION    {$$=new aritmetica.default(aritmetica.Operadores.SUMA,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION MENOS EXPRESION  {$$=new aritmetica.default(aritmetica.Operadores.RESTA,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION RDIV EXPRESION   {$$=new aritmetica.default(aritmetica.Operadores.DIVISION,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION ASTERISCO EXPRESION {$$=new aritmetica.default(aritmetica.Operadores.MULTIPLICACION,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION MODULO EXPRESION {   $$=new aritmetica.default(aritmetica.Operadores.MODULADOR,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION IGUAL EXPRESION {$$=new asignacion.default($1,$3,@1.first_line,@1.first_column);}
+    |EXPRESION DIFERENCIACION EXPRESION {$$=new relacional.default(relacional.Relacionales.DIFERENTE,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION MENORIGUAL EXPRESION {$$=new relacional.default(relacional.Relacionales.MENORIGUAL,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION MAYORIGUAL EXPRESION {$$=new relacional.default(relacional.Relacionales.MAYORIGUAL,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION MENORQUE EXPRESION   {$$=new relacional.default(relacional.Relacionales.MENORQUE,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION MAYORQUE EXPRESION   {$$=new relacional.default(relacional.Relacionales.MAYORQUE,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION IGUALACION EXPRESION {$$=new relacional.default(relacional.Relacionales.IGUAL,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION REQUALS EXPRESION    {$$=new relacional.default(relacional.Relacionales.IGUAL,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION RNOTEQUALS EXPRESION {$$=new relacional.default(relacional.Relacionales.DIFERENTE,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION RMENORIGUAL EXPRESION {$$=new relacional.default(relacional.Relacionales.MENORIGUAL,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION RMAYORIGUAL EXPRESION {{$$=new relacional.default(relacional.Relacionales.MAYORIGUAL,@1.first_line,@1.first_column,$1,$3);}}
+    |EXPRESION RMENORQUE EXPRESION {$$=new relacional.default(relacional.Relacionales.MENORQUE,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION RMAYORQUE EXPRESION {$$=new relacional.default(relacional.Relacionales.MAYORQUE,@1.first_line,@1.first_column,$1,$3);}
+    |EXPRESION OR EXPRESION     {$$=new logica.default(logica.Logicas.OR,@1.first_line,@1.first_column,$1,$3);}   
+    |EXPRESION AND EXPRESION    {$$=new logica.default(logica.Logicas.AND,@1.first_line,@1.first_column,$1,$3);}
     ;    
