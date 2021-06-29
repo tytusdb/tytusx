@@ -255,6 +255,7 @@ editorXQUERY.value=XQuery;
 
 editorXML.value = textoEntrada;
 let consolaC3D = document.getElementById('consola3D');
+let consolaC3DOptimizada = document.getElementById('consola3DOptimizada');
 
 
 // ======================================
@@ -591,12 +592,9 @@ botonCargar3.addEventListener("click", () => {
   editorXML.value = " ";
 })
 
-document.getElementById("btnReporteOptimizar").addEventListener("click", () => {
-  let GramaticaOP = grammar.parse(consola3D.value);
 
-  console.log(GramaticaOP);
 
-})
+
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));
@@ -642,14 +640,45 @@ function imprimiConsola(txt){
 
 // FUNCION PARA COPIAR
 let copyButton = document.getElementById('copyBtn');
+let clearButton = document.getElementById('clearBtn');
+
 copyButton.addEventListener('click', () => {
 
   if (consolaC3D.value.trim() !== '') {
     alert("Copiado");
     consolaC3D.select();
-    document.execCommand('copy');
+    document.execCommand('Codigo Copiado');
   } else {
-    alert("No");
+    alert("No hay codigo");
   }
 
 });
+
+clearButton.addEventListener('click', () => {
+  consolaC3D.value = '';
+  consolaC3DOptimizada.value = '';
+})
+
+
+// Optimizacion de Codigo de 3D
+let optimizarButton = document.getElementById('optimizarBtn');
+let optimizarReporteButton = document.getElementById("btnReporteOptimizar");
+
+
+optimizarButton.addEventListener("click", () => {
+
+  if (consolaC3D.value.trim() !== '') {
+    alert('Optimizando C3D');
+  } else {
+    alert('No hay codigo en 3Direcciones para optimizar');
+  }
+
+});
+
+
+optimizarReporteButton.addEventListener("click", () => {
+
+  alert('Reporte Optimizacion');
+
+});
+
