@@ -87,6 +87,195 @@ case 1:
  salida = []; typeof console !== 'undefined' ? console.log($$[$0-1]) : print($$[$0-1]);
           return $$[$0-1]; 
 break;
+case 2:
+return $$[$0-1]; 
+break;
+case 3:
+this.$ = new SentenciaXquery($$[$0],null);
+break;
+case 4:
+this.$ = new SentenciaXquery(null,$$[$0]);
+break;
+case 6:
+this.$ = new DeclaracionXquery(TipoDeclaracionXquery.Varible, $$[$0]);
+break;
+case 7:
+this.$ = new DeclaracionXquery(TipoDeclaracionXquery.FuncionDefinida, $$[$0]);
+break;
+case 8:
+this.$ = new VariableXquery('$' + $$[$0-2],$$[$0]);
+break;
+case 9:
+this.$ = $$[$0]
+break;
+case 10:
+this.$ = new FuncionXquery($$[$0-5],$$[$0-3],$$[$0-1],$$[$0]);
+break;
+case 11:
+this.$ = new FunctionName($$[$0],$$[$0-2]);
+break;
+case 12:
+this.$ = new FunctionName($$[$0], '');
+break;
+case 13: case 18: case 29: case 41: case 57: case 86: case 101: case 110: case 119: case 120: case 146: case 149: case 153: case 160: case 161: case 164: case 165: case 190: case 191: case 192: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 200: case 201: case 202: case 204:
+this.$ = $$[$0];
+break;
+case 14: case 19: case 87: case 159:
+this.$ = null;
+break;
+case 15: case 68:
+$$[$0-2].push($$[$0]); this.$ = $$[$0-2];
+break;
+case 16: case 69: case 96: case 104:
+this.$ = []; this.$.push($$[$0]);
+break;
+case 17:
+this.$ = new ParametroXquery('$' + $$[$0-1], $$[$0]);
+break;
+case 20:
+this.$ = new TypeDeclaration($$[$0-1],$$[$0]);
+break;
+case 21:
+this.$ = '?';
+break;
+case 22:
+this.$ = '*';
+break;
+case 23:
+this.$ = '+';
+break;
+case 24:
+this.$ = '';
+break;
+case 25:
+this.$ = ParamType.xsString;
+break;
+case 26:
+this.$ = ParamType.xsDate;
+break;
+case 27:
+this.$ = ParamType.xsDecimal;
+break;
+case 28:
+this.$ = ParamType.xsBoolean;
+break;
+case 45: case 82: case 93: case 158:
+this.$ = $$[$0-1];
+break;
+case 58: case 83:
+$$[$0-2].Variables.push($$[$0]); this.$ = $$[$0-2];
+break;
+case 59:
+this.$ = new FLWORBinding(FLWORTipo.For,$$[$0]); 
+break;
+case 60:
+this.$ = new FLWORVariables('$' + $$[$0-2], $$[$0], null);
+break;
+case 61:
+this.$ = new SingleExpresion (SingleExpresionType.FLWORExpr, $$[$0],0,0);
+break;
+case 62:
+this.$ = new SingleExpresion (SingleExpresionType.IfExpr, $$[$0],0,0);
+break;
+case 63:
+this.$ = new SingleExpresion (SingleExpresionType.Contador, null,Number($$[$0-3]),Number($$[$0-1]));
+break;
+case 64:
+this.$ = new SingleExpresion (SingleExpresionType.HtmlSequence, $$[$0],0,0);
+break;
+case 65:
+this.$ = new SingleExpresion (SingleExpresionType.FuncionDefinida, $$[$0],0,0);
+break;
+case 66:
+this.$ = new SingleExpresion (SingleExpresionType.XPARAM, $$[$0],0,0);
+break;
+case 67:
+this.$ = new SingleExpresion (SingleExpresionType.Path, $$[$0],0,0);
+break;
+case 70:
+this.$ = new PathExpresion('$' + $$[$0-1],$$[$0]);
+break;
+case 71:
+this.$ = new NativeFunctionExpresion($$[$0-3],$$[$0-1]);
+break;
+case 72: case 73: case 74: case 75: case 76:
+this.$ = new Funcion(TipoFuncion.Nativa,$$[$0]);
+break;
+case 77:
+this.$ = new Funcion(TipoFuncion.Definida,$$[$0]);
+break;
+case 78:
+this.$ = new FLWORExpr($$[$0-2],$$[$0-1],$$[$0]);
+break;
+case 79:
+this.$ = '$'+$$[$0];
+break;
+case 80: case 81:
+this.$=$$[$0];
+break;
+case 84:
+this.$ = new FLWORBinding(FLWORTipo.Let, $$[$0]);
+break;
+case 85:
+this.$ = new FLWORVariables('$' + $$[$0-2], null, $$[$0]);
+break;
+case 88: case 103:
+$$[$0-1].push($$[$0]); this.$ = $$[$0-1];
+break;
+case 89:
+this.$ = []; this.$.push($$[$0]); 
+break;
+case 90:
+this.$ = new IntermediteClause(TipoClausulaIntermedia.InitialClause, $$[$0]);
+break;
+case 91:
+this.$ = new IntermediteClause(TipoClausulaIntermedia.WhereClause, $$[$0]);
+break;
+case 92:
+this.$ = new IntermediteClause(TipoClausulaIntermedia.OrderByClause, $$[$0]);
+break;
+case 94:
+this.$ = $$[$0-2]
+break;
+case 95:
+ $$[$0-2].push($$[$0]); this.$ = $$[$0-2];
+break;
+case 97:
+this.$ = new OrderSpec($$[$0-1],$$[$0]);
+break;
+case 98:
+this.$ = OrderModifierType.Ascendente
+break;
+case 99:
+this.$ = OrderModifierType.Descendente
+break;
+case 100:
+this.$ = OrderModifierType.Ninguno
+break;
+case 102:
+this.$ = new IfExpresion($$[$0-5],$$[$0-2],$$[$0]);
+break;
+case 105:
+this.$ = new parametroXpath($$[$0-2],$$[$0],null,TipoOperador.And);
+break;
+case 106:
+this.$ = new parametroXpath($$[$0-2],$$[$0],null,TipoOperador.Or);
+break;
+case 107:
+this.$ = new parametroXpath(null,null,$$[$0],TipoOperador.None);
+break;
+case 108:
+this.$ = new OperacionXpath($$[$0-2],$$[$0],$$[$0-1],null);
+break;
+case 109:
+this.$ = new OperacionXpath($$[$0-3],$$[$0],$$[$0-1],$$[$0-2]);
+break;
+case 111:
+this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Variable);
+break;
+case 112: case 166:
+this.$ = new ParametroOperacionXpath($$[$0],'',TipoParametro.Operacion);
+break;
 case 113: case 173:
 this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mas);
 break;
@@ -101,6 +290,27 @@ this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Mod);
 break;
 case 117: case 177:
 this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Div);
+break;
+case 118: case 186:
+this.$ = $$[$0-1].Operacion;
+break;
+case 121: case 127:
+this.$ = TipoOperador.Igual;
+break;
+case 122: case 128:
+this.$ = TipoOperador.Diferente;
+break;
+case 123: case 129:
+this.$ = TipoOperador.Menor;
+break;
+case 124: case 130:
+this.$ = TipoOperador.MenorIgual;
+break;
+case 125: case 131:
+this.$ = TipoOperador.Mayor;
+break;
+case 126: case 132:
+this.$ = TipoOperador.MayorIgual;
 break;
 case 134:
 this.$ = salida; salida = []; return this.$;
@@ -143,9 +353,6 @@ break;
 case 145: case 152:
 this.$ = new NodoXpath(TipoNodo.AutoReferencia,$$[$0],null);
 break;
-case 146: case 149: case 153: case 160: case 161: case 164: case 165: case 190: case 191: case 192: case 193: case 194: case 195: case 196: case 197: case 198: case 199: case 200: case 201: case 202: case 204:
-this.$ = $$[$0];
-break;
 case 150:
 this.$ = new NodoXpath(TipoNodo.Atributo,$$[$0],null);
 break;
@@ -158,20 +365,11 @@ break;
 case 157:
 this.$ = new NodoXpath(TipoNodo.Funcion_Text,$$[$0-2],null);
 break;
-case 158:
-this.$ = $$[$0-1];
-break;
-case 159:
-this.$ = null;
-break;
 case 162:
 this.$ = new ParametroOperacionXpath(null,$$[$0-2],TipoParametro.Funtion_Last); console.log($$[$0-2]);
 break;
 case 163:
 this.$ = new ParametroOperacionXpath(null,$$[$0-2],TipoParametro.Funtion_Position);
-break;
-case 166:
-this.$ = new ParametroOperacionXpath($$[$0],'',TipoParametro.Operacion);
 break;
 case 167:
 this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.DosPuntos);
@@ -214,9 +412,6 @@ this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.And);
 break;
 case 185:
 this.$ = new OperacionXpath($$[$0-2],$$[$0],TipoOperador.Or);
-break;
-case 186:
-this.$ = $$[$0-1].Operacion;
 break;
 case 187:
 this.$ = new ParametroOperacionXpath(null,$$[$0],TipoParametro.Decimal);
@@ -383,7 +578,14 @@ parse: function parse(input) {
         const {ParametroOperacionXpath} = require("../Estructuras/ParametroOperacionXpath.js");
         const {OperacionXpath} = require("../Estructuras/OperacionXpath.js");
         const {NodoXpath} = require("../Estructuras/NodoXpath.js");
-        const {TipoParametro, TipoOperador, TipoNodo} = require("../Estructuras/tipificacion.js");
+        const {DeclaracionXquery,FuncionXquery,VariableXquery,FunctionName,ParametroXquery,TypeDeclaration} = require("../Estructuras/Xquery/DeclaracionXquery.js");
+        const {FLWORExpr,FLWORVariables,FLWORBinding,IntermediteClause,OrderSpec} = require("../Estructuras/Xquery/FLWORExpr.js");
+        const {IfExpresion} = require("../Estructuras/Xquery/IfExpresion.js");
+        const {NativeFunctionExpresion,Funcion} = require("../Estructuras/Xquery/NativeFunctionExpresion.js");
+        const {PathExpresion} = require("../Estructuras/Xquery/PathExpresion.js");
+        const {SentenciaXquery} = require("../Estructuras/Xquery/SentenciaXquery.js");
+        const {SingleExpresion} = require("../Estructuras/Xquery/SingleExpresion.js");
+        const {TipoParametro, TipoOperador, TipoNodo, SingleExpresionType, FLWORTipo, TipoBinding, OrderModifierType, TipoClausulaIntermedia, TipoFuncion, TipoDeclaracionXquery, ParamType} = require("../Estructuras/tipificacion.js");
         let salida = [];
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){

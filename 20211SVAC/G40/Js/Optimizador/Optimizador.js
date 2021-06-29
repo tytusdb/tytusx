@@ -79,7 +79,8 @@ class Optimizador{
                                             "Bloques",
                                             codigoAntes,
                                             codigoDespues,
-                                            "Regla 1"));
+                                            "Regla 1",
+                                            pasada));
     
                                         bloque.getInstrucciones().splice(inicio,j-inicio);
                                         // OJO CON ESTOS INDICES
@@ -133,7 +134,8 @@ class Optimizador{
                                     "Bloques",
                                     codigoAntes,
                                     codigoDespues,
-                                    "Regla 2"));
+                                    "Regla 2",
+                                    pasada));
                                 bloque.getInstrucciones().splice(i+1,2);
                                 i--; 
 
@@ -152,6 +154,11 @@ class Optimizador{
      */
     Regla3(){
 
+        function EsNumero(str) {
+            if (typeof str != "string") return false 
+            return !isNaN(str) && !isNaN(parseFloat(str)) 
+        }
+
         var bloques = this.bloques;
 
         bloques.forEach(function (bloque){
@@ -162,31 +169,40 @@ class Optimizador{
 
                     if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
 
-                        if((i+1) < bloque.getInstrucciones().length){
+                        if((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == true) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == true))) || 
+                        ((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == false) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == false))) && 
+                        ((bloque.getInstrucciones()[i].getOperando1()) == (bloque.getInstrucciones()[i].getOperando2())) )){
 
-                            if((bloque.getInstrucciones()[i].esConstantePositiva()== true) &&
-                            (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
+                            if((i+1) < bloque.getInstrucciones().length){
 
-                                var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
-                                    codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
-                          
-                                bloque.getInstrucciones()[i+1].setEtiqueta(bloque.getInstrucciones()[i].getGOTO());
-                                bloque.getInstrucciones()[i+1].GenerarC3D();
-
-                                var codigoDespues = bloque.getInstrucciones()[i+1].getCodigo3D();
-
-                                ListaOptimizaciones.push(new Optimizacion(
-                                    bloque.getInstrucciones()[i].getLinea(),
-                                    bloque.getInstrucciones()[i].getColumna(),
-                                    "Bloques",
-                                    codigoAntes,
-                                    codigoDespues,
-                                    "Regla 3"));
-                                bloque.getInstrucciones().splice(i,1);
-                                i--; 
-
+                                if((bloque.getInstrucciones()[i].esConstantePositiva()== true) &&
+                                (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
+    
+                                    var codigoAntes =  bloque.getInstrucciones()[i].getCodigo3D();
+                                        codigoAntes += bloque.getInstrucciones()[i+1].getCodigo3D();
+                              
+                                    bloque.getInstrucciones()[i+1].setEtiqueta(bloque.getInstrucciones()[i].getGOTO());
+                                    bloque.getInstrucciones()[i+1].GenerarC3D();
+    
+                                    var codigoDespues = bloque.getInstrucciones()[i+1].getCodigo3D();
+    
+                                    ListaOptimizaciones.push(new Optimizacion(
+                                        bloque.getInstrucciones()[i].getLinea(),
+                                        bloque.getInstrucciones()[i].getColumna(),
+                                        "Bloques",
+                                        codigoAntes,
+                                        codigoDespues,
+                                        "Regla 3",
+                                        pasada));
+                                    bloque.getInstrucciones().splice(i,1);
+                                    i--; 
+    
+                                }
                             }
+
                         }
+
+                        
                     }
                 }
             }
@@ -199,6 +215,11 @@ class Optimizador{
     */
     Regla4(){
 
+        function EsNumero(str) {
+            if (typeof str != "string") return false 
+            return !isNaN(str) && !isNaN(parseFloat(str)) 
+        }
+
         var bloques = this.bloques;
 
         bloques.forEach(function (bloque){
@@ -209,7 +230,13 @@ class Optimizador{
 
                     if(bloque.getInstrucciones()[i].getTipo() == TipoInstruccion3D.IF){
 
+                        if((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == true) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == true))) || 
+                        ((((EsNumero(bloque.getInstrucciones()[i].getOperando1()) == false) && (EsNumero(bloque.getInstrucciones()[i].getOperando2()) == false))) && 
+                        ((bloque.getInstrucciones()[i].getOperando1()) == (bloque.getInstrucciones()[i].getOperando2())) )){
+
+                        
                         if((i+1) < bloque.getInstrucciones().length){
+                      
 
                             if((bloque.getInstrucciones()[i].esConstantePositiva()== false) &&
                             (bloque.getInstrucciones()[i+1].getTipo() == TipoInstruccion3D.GOTO)){
@@ -225,12 +252,18 @@ class Optimizador{
                                     "Bloques",
                                     codigoAntes,
                                     codigoDespues,
-                                    "Regla 4"));
+                                    "Regla 4",
+                                    pasada));
                                 bloque.getInstrucciones().splice(i,1);
                                 i--; 
 
                             }
                         }
+
+
+
+                        }
+                        
                     }
                 }
             }
@@ -310,7 +343,8 @@ class Optimizador{
                                             "Bloques",
                                             codigoAntes,
                                             codigoDespues,
-                                            "Regla 5"));
+                                            "Regla 5",
+                                            pasada));
                                         bloque.getInstrucciones().splice(j,1);
                                         j--; 
                                     }        
@@ -348,7 +382,8 @@ class Optimizador{
                                 "Bloques",
                                 bloque.getInstrucciones()[i].getCodigo3D(),
                                 "Se eliminó la instrucción.",
-                                "Regla 6"));
+                                "Regla 6",
+                                pasada));
                             bloque.getInstrucciones().splice(i,1);
                             i--;     
                         }
@@ -382,7 +417,8 @@ class Optimizador{
                                 "Bloques",
                                 bloque.getInstrucciones()[i].getCodigo3D(),
                                 "Se eliminó la instrucción.",
-                                "Regla 7"));
+                                "Regla 7",
+                                pasada));
                             bloque.getInstrucciones().splice(i,1);
                             i--;     
                         }
@@ -416,7 +452,8 @@ class Optimizador{
                                 "Bloques",
                                 bloque.getInstrucciones()[i].getCodigo3D(),
                                 "Se eliminó la instrucción.",
-                                "Regla 8"));
+                                "Regla 8",
+                                pasada));
                             bloque.getInstrucciones().splice(i,1);
                             i--;     
                         }
@@ -449,7 +486,8 @@ class Optimizador{
                                 "Bloques",
                                 bloque.getInstrucciones()[i].getCodigo3D(),
                                 "Se eliminó la instrucción.",
-                                "Regla 9"));
+                                "Regla 9",
+                                pasada));
                             bloque.getInstrucciones().splice(i,1);
                             i--;     
                         }
@@ -494,7 +532,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 10"));
+                                "Regla 10",
+                                pasada));
                                
                         }
                     }    
@@ -532,7 +571,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 11"));
+                                "Regla 11",
+                                pasada));
                                
                         }
                     }    
@@ -576,7 +616,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 12"));
+                                "Regla 12",
+                                pasada));
                                 
                         }
                     }    
@@ -615,7 +656,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 13"));
+                                "Regla 13",
+                                pasada));
                                 
                         }
                     }    
@@ -661,7 +703,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 14"));
+                                "Regla 14",
+                                pasada));
                                 
                         }
                     }    
@@ -700,7 +743,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 15"));
+                                "Regla 15",
+                                pasada));
                                 
                         }
                     }    
@@ -737,7 +781,8 @@ class Optimizador{
                                 "Bloques",
                                 codigoAntes,
                                 codigoAux,
-                                "Regla 16"));
+                                "Regla 16",
+                                pasada));
                                 
                         }
                     }    

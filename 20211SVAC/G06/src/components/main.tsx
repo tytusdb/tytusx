@@ -5,14 +5,14 @@ import { Nav, Navbar, Form, Button, Row, Col, NavDropdown } from 'react-bootstra
 import { Graphviz } from 'graphviz-react';
 import { crearTextoReporteErrorXML } from "../xmlAST/ClaseError";
 import { crearTablaSimbolos, crearTextoGraphvizTablaSimbolos, SimboloTabla } from "../Reportes/SimboloTabla";
-import { traducirXml } from "../xmlAST/xml3d";
+import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
 //import { OptimizadorMirilla } from '../Optimizador/OptimizadorMirilla';
 import { traduccion } from '../Traduccion/traduccion';
 const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
-const parseQuery = require('../Grammar/xQueryGrammar');
+const parseXQuery = require('../Grammar/xQueryGrammar');
 //const parseC3D = require('../Grammar/C3DGrammar');
 
 
@@ -24,6 +24,7 @@ export default class Main extends Component {
         consoleResult: "",
         xpath: "",
         xml: "",
+        xquery: "",
         repcsttxt: '',
         repgramtxt: '',
         repErrorXML: '',
@@ -52,10 +53,7 @@ export default class Main extends Component {
             encoding = result.encoding;
             listaErrores = result.listaErrores;
             entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
-            var buf = new Buffer("Hello World");
-            console.log(buf.toString("ascii"));
-            console.log("---------------------");
-            console.log(buf.toString("utf8"));
+
             if (listaErrores.length === 0) {
                 var xmlResRep = parserReport.parse(this.state.xml);
                 this.setState({
@@ -105,7 +103,7 @@ export default class Main extends Component {
             this.setState({
                 repAstXpath: "digraph G {" + texto + "}",
             });
-
+            ///----------------------------------------------------------------------------------------------------------------------------------------------
             var erroresSemanticos: string[] = [];
             var salida = "";
             for (const query of querysXpath) {
@@ -130,15 +128,37 @@ export default class Main extends Component {
         }
     }
     traducir = () => {
-        if (this.state.xml==="") {
+        if (this.state.xml === "") {
             return;
         }
-        const result = parser.parse(this.state.xml)
+        const result = parser.parse(this.state.xml);
+        const querys = parseXPATH.parse(this.state.xpath);
+        var querysXpath = querys.xpath;
         var ast = result.ast;
+        var respuesta = "";
+        console.log(querysXpath);
         traducirXml(ast);
-        console.log(traduccion.getTranslate());
-        console.log(ast);
+        for (const query of querysXpath) {
+            try {
+                respuesta += query.execute(ast[0]).value;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        this.setState({
+            consoleResult: "//CONSULTA-----------------\n\n/*\n" + respuesta + "*/\n\n//TRADUCCION-----------------\n\n" + traduccion.getTranslate(),
+        });
     }
+
+
+
+    //METODO PARA QUE DEIVID EJECUTE XQUERY################################################################
+    executeXquery = () =>{
+        console.log(this.state.xquery);
+    }
+    //######################################################################################################
+
+
     handleFileChange = file => {
 
         const reader = new FileReader();
@@ -246,7 +266,7 @@ export default class Main extends Component {
                         <Col xs={12} md={8}>
                             <Form.Control
                                 type="text"
-                                placeholder="Insert your commands here"
+                                placeholder="XPATH AREA"
                                 value={this.state.xpath}
                                 onChange={(e: any) => {
                                     this.setState({
@@ -255,20 +275,35 @@ export default class Main extends Component {
                                 }} />
                         </Col>
                         <Col xs={6} md={2}>
-                            <Button variant="primary" onClick={this.traducir}>Traducir</Button>
+                            <Button variant="primary" onClick={this.traducir}>TRANSALATE XPATH</Button>
                         </Col>
                         <Col xs={6} md={2}>
-                            <Button variant="primary" onClick={this.parse}>RUN ASC</Button>
+                            <Button variant="primary" onClick={this.executeXquery}>EXECUTE XQUERY</Button>
                         </Col>
                     </Row>
                     <br />
 
                     <br />
-                    <Form.Control as="textarea" placeholder="XML AREA" rows={15} value={this.state.xml} onChange={(e: any) => {
-                        this.setState({
-                            xml: e.target.value
-                        })
-                    }} />
+                    <Row>
+                        <Col xs={12} md={0}>
+
+                        </Col>
+                        <Col xs={6} md={6}>
+                            <Form.Control as="textarea" placeholder="XML AREA" rows={15} value={this.state.xml} onChange={(e: any) => {
+                                this.setState({
+                                    xml: e.target.value
+                                })
+                            }} />
+                        </Col>
+                        <Col xs={6} md={6}>
+                            <Form.Control as="textarea" placeholder="XQUERY AREA" rows={15} value={this.state.xquery} onChange={(e: any) => {
+                                this.setState({
+                                    xquery: e.target.value
+                                })
+                            }} />
+                        </Col>
+                    </Row>
+
                 </div>
 
                 <div className="mt-3 px-5">
@@ -296,7 +331,7 @@ export default class Main extends Component {
 
 
                 <div className="mt-3 px-5">
-                    <Form.Control as="textarea" rows={6} value={this.state.consoleResult} readOnly />
+                    <Form.Control as="textarea" rows={30} value={this.state.consoleResult} readOnly />
                 </div>
             </>
         )

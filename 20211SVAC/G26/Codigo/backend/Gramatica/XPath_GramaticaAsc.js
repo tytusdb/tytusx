@@ -303,7 +303,7 @@ case 66:
  this.$ = new Primitiva($$[$0], TipoPrim.IDENTIFIER, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 67: case 68:
- this.$ = new Primitiva($$[$0-1], TipoPrim.ATRIBUTO, _$[$0-1].first_line, _$[$0-1].first_column);
+ this.$ = new Primitiva($$[$0], TipoPrim.ATRIBUTO, _$[$0-1].first_line, _$[$0-1].first_column);
 break;
 case 69:
  this.$ = new Primitiva($$[$0], TipoPrim.DOT, _$[$0].first_line, _$[$0].first_column);

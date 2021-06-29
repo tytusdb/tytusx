@@ -1,6 +1,10 @@
 
 var erroresGramar = [];
 var reglas = [];
+var ASTtree = '';
+var CSTtree = '';
+var reglasxpath = [];
+
 
 var tablaErroresDesc = '';
 var tablaGramatical = '';
@@ -16,8 +20,11 @@ function AnalizarXMLasc() {
 }
 
 function reiniciarArreglos() {
-  erroresGramar = [];
+  erroresGramar[0] = [];
+  erroresGramar[1] = [];
+  erroresGramar[2] = [];
   reglas = [];
+  reglasxpath=[];
 }
 
 
@@ -29,6 +36,14 @@ class DefError {
     }
     return suma;
   }
+}
+
+function llenarArboles() {
+  var cst = document.getElementById('arbolcst');
+  var ast = document.getElementById('arbolast');
+
+  cst.value = CSTtree;
+  ast.value =  ASTtree;
 }
 
 function llenarTablaErrores() {
@@ -47,36 +62,58 @@ function llenarTablaErrores() {
   }
 }
 
-function reglasgg(){
-  var regla = new Regla('jj', 'dd','dd');
-  console.log(regla);
-}
-
+// ===========LLENANDO TABLA GRAMATICAL================
 function llenarTablaGramatical() {
   var cuerpo = '';
-  cuerpo = cuerpo + '<h1> Tabla de Simbolos </h1>\n';
-  var encabezado = '' +
-    '<table class=table table-bordered> ' +
-    '<thead class=thead-dark>' +
-    '<th scope = col > PRODUCCION </ th >' +
-    '<th scope = col> REGLA </ th > ' +
-    '</tr > </thead > <tbody>';
-  cuerpo = cuerpo + encabezado;
-  for (var i = 0; i < reglas.length; i++) {
-   
+  cuerpo = cuerpo + '<h1> REGLAS GRAMATICALES </h1>\n';
+  if(reglas.length >0){
+    var encabezado = '<h2>REGLAS XML</h2>' +
+      '<table class=table table-bordered> ' +
+      '<thead class=thead-dark>' +
+      '<th scope = col > PRODUCCION </ th >' +
+      '<th scope = col> REGLA </ th > ' +
+      '</tr > </thead > <tbody>';
+    cuerpo = cuerpo + encabezado;
+    for (var i = 0; i < reglas.length; i++) {
+
       cuerpo = cuerpo +
         '<tr> ' +
         '<td> ' + reglas[i].getProduccion() + ' </td >\n' +
         '<td> ' + reglas[i].getReglaSemantica() + ' </td >\n' +
         '</tr> ';
-    
+
+    }
+    cuerpo = cuerpo + '</tbody>\n</table>\n<br/> \n <br/>';
   }
-  cuerpo = cuerpo + '</tbody>\n</table>\n<br/> \n <br/>';
+  
+  if (reglasxpath.length > 0) {
+    var encabezado3 = '<br><br> <h2>REGLAS XPATH</h2>' +
+      '<table class=table table-bordered> ' +
+      '<thead class=thead-dark>' +
+      '<th scope = col > PRODUCCION </ th >' +
+      '<th scope = col> REGLA </ th > ' +
+      '</tr > </thead > <tbody>';
+    cuerpo = cuerpo + encabezado3;
+    for (var i = 0; i < reglasxpath.length; i++) {
+
+      cuerpo = cuerpo +
+        '<tr> ' +
+        '<td> ' + reglasxpath[i].getProduccion() + ' </td >\n' +
+        '<td> ' + reglasxpath[i].getReglaSemantica() + ' </td >\n' +
+        '</tr> ';
+    }
+    cuerpo = cuerpo + '</tbody>\n</table>\n<br/> \n <br/>';
+  }
+
+
+ 
   var gramatical = document.getElementById('gramaticaltb');
   tablaGramatical = cuerpo;
   gramatical.value = cuerpo;
   console.log(gramatical.value);
 }
+
+//==========LLENANDO TABLA ERRORES==============
 
 function llenarTablas(erroresEntero) {
   var cuerpo = '';
