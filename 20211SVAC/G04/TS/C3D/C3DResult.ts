@@ -3,12 +3,14 @@ class C3DResult {
     private codigo: Array<string>;
     private sp: number;
     private nextTemp: number;
+    private nextLabel: number;
     private entornos: Array<Entorno>;
 
-    constructor(codigo: Array<string>, sp: number, nextTemp: number, entornos: Array<Entorno>) {
+    constructor(codigo: Array<string>, sp: number, nextTemp: number, nextLabel: number, entornos: Array<Entorno>) {
         this.codigo = codigo;
         this.sp = sp;
         this.nextTemp = nextTemp;
+        this.nextLabel = nextLabel;
         this.entornos = entornos;
     }
 
@@ -34,6 +36,14 @@ class C3DResult {
 
     public setNextTemp(nextTemp: number): void {
         this.nextTemp = nextTemp;
+    }
+
+    public getNextLabel(): number {
+        return this.nextLabel;
+    }
+
+    public setNextLabel(nextLabel: number): void {
+        this.nextLabel = nextLabel;
     }
 
     public getEntornos(): Array<Entorno> {

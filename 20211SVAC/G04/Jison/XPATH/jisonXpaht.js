@@ -114,7 +114,7 @@ case 6:
     
 break;
 case 7:
-this.$ = [new ConsultaSimple($$[$0])];
+this.$ = [new ConsultaSimple(TipoConsulta.SIMPLE, $$[$0])];
 break;
 case 8: case 11: case 32: case 34: case 35: case 36: case 37: case 38: case 40: case 41: case 43: case 44: case 46: case 47: case 49:
 this.$ = $$[$0];
@@ -123,7 +123,7 @@ case 9:
 
         this.$= [];
         if ($$[$0-1] === "punto") {
-            this.$.push(new ConsultaPunto());
+            this.$.push(new ConsultaPunto(TipoConsulta.PUNTO, ""));
         }
         $$[$0].forEach(e => this.$.push(e));
     
@@ -141,7 +141,7 @@ case 13:
 
             this.$ = [];
             if (!($$[$0-2] === "")) {
-                this.$.push(new ConsultaSimple($$[$0-2]));
+                this.$.push(new ConsultaSimple(TipoConsulta.SIMPLE, $$[$0-2]));
             }
             this.$.push(FabricaConsulta.fabricar($$[$0-1], $$[$0].id, $$[$0].eje));
     

@@ -17,8 +17,9 @@ function analizar(): void {
     let entornoGlobal: Entorno = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
 
-    let result: C3DResult = new C3DResult(new Array(), 0, 0, null);
+    let result: C3DResult = new C3DResult(new Array(), 0, 0, 0, null);
     result = recorrerSimbolos(result, entornoGlobal);
+    result = entornoGlobal.generateC3D(result, "global");
     setSymbolTable(entornoGlobal);
     raizCST = auxResultado.raizCST;
     if(errores.getErrores().length>0){
@@ -59,7 +60,7 @@ function recorrerSimbolos(result: C3DResult, entorno: Entorno): C3DResult {
     entorno.getTable().forEach((s: Simbolo) => {
         if (s instanceof Nodo) {
             s.getAtributos().forEach(a => result = a.generateC3D(result));
-            result = s.getEntorno().generateC3DXML(result);
+            result = s.getEntorno().generateC3D(result, s.getNombre());
             result = s.setEntornoToChilds(result);
             result = s.generateC3D(result);
         }

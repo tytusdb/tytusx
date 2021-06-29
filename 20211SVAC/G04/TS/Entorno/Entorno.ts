@@ -37,13 +37,13 @@ class Entorno {
         this.stackPointer = stackPointer;
     }
 
-    public generateC3DXML(resultC3D: C3DResult): C3DResult{
+    public generateC3D(resultC3D: C3DResult, ambiente: string): C3DResult{
         let codigo: Array<string> = resultC3D.getCodigo();
         let i: number = resultC3D.getNextTemp();
         let p: number = resultC3D.getSp();
         this.stackPointer = p;
 
-        codigo.push(`\n\t//C3D entorno`);
+        codigo.push(`\n\t//C3D entorno ${ambiente}`);
         codigo.push(`\tt${i} = H;`);
         codigo.push(`\tt${i+1} = t${i};`);
         codigo.push(`\tH = H + 2;`);

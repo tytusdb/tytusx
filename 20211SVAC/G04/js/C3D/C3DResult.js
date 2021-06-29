@@ -1,8 +1,9 @@
 class C3DResult {
-    constructor(codigo, sp, nextTemp, entornos) {
+    constructor(codigo, sp, nextTemp, nextLabel, entornos) {
         this.codigo = codigo;
         this.sp = sp;
         this.nextTemp = nextTemp;
+        this.nextLabel = nextLabel;
         this.entornos = entornos;
     }
     getCodigo() {
@@ -22,6 +23,12 @@ class C3DResult {
     }
     setNextTemp(nextTemp) {
         this.nextTemp = nextTemp;
+    }
+    getNextLabel() {
+        return this.nextLabel;
+    }
+    setNextLabel(nextLabel) {
+        this.nextLabel = nextLabel;
     }
     getEntornos() {
         return this.entornos;

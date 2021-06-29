@@ -17,7 +17,7 @@ class Atributo extends Simbolo {
         codigo.push(`\n\t//C3D atributo ${super.getNombre()} : ${this.valor}`);
         codigo.push(`\tt${i} = H;`);
         codigo.push(`\tt${i + 1} = t${i};`);
-        codigo.push(`\tH = H + 2;`);
+        codigo.push(`\tH = H + 3;`);
         codigo.push(`\tt${i + 2} = H;`);
         Array.from(super.getNombre()).forEach(s => {
             codigo.push(`\theap[(int)H] = ${s.charCodeAt(0)};`);
@@ -35,6 +35,9 @@ class Atributo extends Simbolo {
         codigo.push(`\theap[(int)H] = -1;`);
         codigo.push(`\tH = H + 1;`);
         codigo.push(`\theap[(int)t${i + 1}] = t${i + 3};`);
+        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
+        //Tipo simbolo
+        codigo.push(`\theap[(int)t${i + 1}] = ${super.getType()};`);
         codigo.push(`\tstack[(int)${p++}] = t${i};`);
         resultC3D.setNextTemp(i + 4);
         resultC3D.setSp(p);

@@ -5,21 +5,18 @@ class ConsultaSimple extends Consulta {
     run(entornos) {
         let newEntornos = new Array();
         entornos.forEach((e) => {
-            let flag = false;
             let nuevoEntorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s) => {
                 if (s instanceof Nodo) {
                     if (super.getId() === "*") {
-                        flag = true;
                         nuevoEntorno.add(s);
                     }
                     else if (s.getNombre() == super.getId()) {
-                        flag = true;
                         nuevoEntorno.add(s);
                     }
                 }
             });
-            if (flag) {
+            if (nuevoEntorno.getTable().length > 0) {
                 newEntornos.push(nuevoEntorno);
             }
         });

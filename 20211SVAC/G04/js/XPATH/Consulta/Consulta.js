@@ -31,7 +31,7 @@ class Consulta {
         codigo.push(`\tt${i + 1} = t${i};`);
         codigo.push(`\tH = H + 2;`);
         //Tipo de consulta
-        codigo.push(`\theap[(int)t${i + 1} = ${this.type};]`);
+        codigo.push(`\theap[(int)t${i + 1}] = ${this.type};`);
         codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
         //Id a comparar
         codigo.push(`\tt${i + 2} = H;`);

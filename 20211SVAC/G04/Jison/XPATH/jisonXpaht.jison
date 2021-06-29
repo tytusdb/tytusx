@@ -273,12 +273,12 @@ CONSULTAS_XPATH
 ;
 
 CONSULTA_XPATH
-    : RELATIVA                  {$$ = [new ConsultaSimple($1)];}
+    : RELATIVA                  {$$ = [new ConsultaSimple(TipoConsulta.SIMPLE, $1)];}
     | EXPRESIONES_RUTA          {$$ = $1;}
     | PUNTOS EXPRESIONES_RUTA {
         $$= [];
         if ($1 === "punto") {
-            $$.push(new ConsultaPunto());
+            $$.push(new ConsultaPunto(TipoConsulta.PUNTO, ""));
         }
         $2.forEach(e => $$.push(e));
     }
@@ -297,7 +297,7 @@ EXPRESION_RUTA
     : RELATIVA DIAGONALES ACCESORES         {
             $$ = [];
             if (!($1 === "")) {
-                $$.push(new ConsultaSimple($1));
+                $$.push(new ConsultaSimple(TipoConsulta.SIMPLE, $1));
             }
             $$.push(FabricaConsulta.fabricar($2, $3.id, $3.eje));
     }

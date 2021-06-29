@@ -89,7 +89,7 @@ class Nodo extends Simbolo {
         codigo.push(`\n\t//C3D nodo ${super.getNombre()}`);
         codigo.push(`\tt${i} = H;`);
         codigo.push(`\tt${i + 1} = t${i};`);
-        codigo.push(`\tH = H + 4;`);
+        codigo.push(`\tH = H + 5;`);
         //Nombre
         codigo.push(`\tt${i + 2} = H;`);
         Array.from(super.getNombre()).forEach(s => {
@@ -128,6 +128,9 @@ class Nodo extends Simbolo {
         //Entorno
         codigo.push(`\n\tt${iTemp} = stack[(int)${this.entorno.getStackPointer()}];`);
         codigo.push(`\theap[(int)t${i + 1}] = t${iTemp++};`);
+        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
+        //Tipo simbolo
+        codigo.push(`\theap[(int)t${i + 1}] = ${super.getType()};`);
         codigo.push(`\tstack[(int)${p++}] = t${i};`);
         resultC3D.setNextTemp(iTemp);
         resultC3D.setSp(p);
