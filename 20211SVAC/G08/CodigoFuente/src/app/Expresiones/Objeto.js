@@ -21,7 +21,7 @@ var Objeto = /** @class */ (function () {
         this.texto = this.texto + " " + text;
     };
     ;
-    Objeto.prototype.SetearPosicion = function (pos) {
+    Objeto.prototype.setPosicion = function (pos) {
         if (this.posicion == -1)
             this.posicion = pos;
     };

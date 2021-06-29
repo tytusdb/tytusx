@@ -17,7 +17,7 @@ var Atributo = /** @class */ (function () {
         return this.valor;
     };
     ;
-    Atributo.prototype.SetearPosicion = function (pos) {
+    Atributo.prototype.setPosicion = function (pos) {
         if (this.posicion == -1)
             this.posicion = pos;
     };
