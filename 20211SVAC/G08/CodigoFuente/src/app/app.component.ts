@@ -3,6 +3,7 @@ import { ParsedProperty } from '@angular/compiler';
 import { Component, Inject} from '@angular/core';
 import { observable } from 'rxjs';
 import {sentenciaXpath} from '../app/Estructuras/sentenciaXpath'
+import {SentenciaXquery} from '../app/Estructuras/Xquery/SentenciaXquery'
 import {Objeto} from '../Expresiones/Objeto'
 import { OperacionXpath } from './Estructuras/OperacionXpath';
 import { ParametroOperacionXpath } from './Estructuras/ParametroOperacionXpath';
@@ -15,6 +16,7 @@ import {TablaSimbolosComponent} from '../app/Reportes/tabla-simbolos/tabla-simbo
 import { Error } from 'src/app/AST/Error';
 import {ErroresXMLComponent} from '../app/Reportes/errores-xml/errores-xml.component';
 import { ListaErrores } from 'src/app/AST/ListaErrores';
+
 declare var require: any;
 
 @Component({
@@ -97,6 +99,9 @@ c3dText = '';
 c3dTextGenerado = '';
 c3dTextFinal = `    return;
     }`;
+    objetosTraducir;
+    xmlTraductor;
+    xmlTraducido="";
   
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
@@ -107,39 +112,50 @@ c3dTextFinal = `    return;
     this.astXML= require("./Gramatica/gramaticaXMLAsc_Arbol");
     this.arbol=require("./AST/crearArbolDot");
 	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
+  this.xmlTraductor=require("./AST/traductorXMLC3D");
+  this.objetosTraducir=require("./Gramatica/gramatica");
   }
 
   Compilar() {
     this.consoleValue ="";
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
     console.log('parseando: ' + this.txtXpath);
-    var xPathObject = this.parser.parse(this.txtXpath) as sentenciaXpath[];
-    //console.log('xPathObject');
-    //console.log(xPathObject);
-    //Agregamos para cada sentencia su sentencia hija para simular lista doblemente enlazada (padre,hijo)
-    var elementoActual:sentenciaXpath; 
-   
-    var lista:Objeto[] = [];
-    lista.push(xmlObject);
-    this.xmlOriginal = lista;
-    console.log(xmlObject);
-    this.consoleValue = '';
-    xPathObject.forEach(element => {
-      elementoActual = element;
-      element.Hijo = null;
-      while(elementoActual.Padre !=null){
-        elementoActual.Padre.Hijo = elementoActual;
-        elementoActual = elementoActual.Padre;
-      }
-      this.listaDescendientes = [];
-      console.log(elementoActual);
-     
+    var xQueryObject = this.parser.parse(this.txtXpath) as SentenciaXquery;
+
+    console.log('xQueryObject');
+    console.log(typeof (xQueryObject));
+    console.log((xQueryObject));
+
+    if(true){
+      console.log(xQueryObject.FlworExpresion);
+    }else{
+      //Agregamos para cada sentencia su sentencia hija para simular lista doblemente enlazada (padre,hijo)
+      var xPathObject = this.parser.parse(this.txtXpath) as sentenciaXpath [];
+      var elementoActual:sentenciaXpath; 
+        
+      var lista:Objeto[] = [];
+      lista.push(xmlObject);
+      this.xmlOriginal = lista;
+      console.log(xmlObject);
+      this.consoleValue = '';
+      xPathObject.forEach(element => {
+        elementoActual = element;
+        element.Hijo = null;
+        while(elementoActual.Padre !=null){
+          elementoActual.Padre.Hijo = elementoActual;
+          elementoActual = elementoActual.Padre;
+        }
+        this.listaDescendientes = [];
+        console.log(elementoActual);
       
-      this.consoleValue += this.ProcesarNodoRaiz(elementoActual,lista,null);
-    });
-    //elementoActual en este momento es la raiz de la entrada Xpath
-   
-  this.c3dText = this.c3dTextInicial + '\n' + this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
+        
+        this.consoleValue += this.ProcesarNodoRaiz(elementoActual,lista,null);
+      });
+      //elementoActual en este momento es la raiz de la entrada Xpath
+    }
+    
+   this.traducirXml();
+  this.c3dText = this.c3dTextInicial + '\n' +this.xmlTraducido+ this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
   }
   openTablaSimbolos() {
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto[];
@@ -497,7 +513,7 @@ c3dTextFinal = `    return;
     return result;
   }
   
-  ResolverOperacion(operacion: parametroXpath,xml:Objeto[]):any[]{
+  ResolverOperacion(operacion: ParametroOperacionXpath,xml:Objeto[]):any[]{
     switch (operacion.Operacion.TipoOperador){
       case TipoOperador.Mas: {
         var izquierdo :number;
@@ -2010,6 +2026,16 @@ console.log();
     this.rgxmldesc=objetos[2].arreglo_elementos;
     graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
 console.log();
+    }
+
+    traducirXml(){
+      var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
+    console.log(objetos.listaObjetos);
+    const traduction= new this.xmlTraductor.TraductorXML_C3D();
+    var codigo= traduction.traducir(objetos.listaObjetos);
+    this.xmlTraducido=codigo;
+console.log("**************");
+console.log(objetos);
     }
 
 }

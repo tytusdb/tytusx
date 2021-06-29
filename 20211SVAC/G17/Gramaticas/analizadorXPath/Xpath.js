@@ -94,8 +94,7 @@ case 1:
     return this.$ 
 break;
 case 2:
-
-    return new Comando([],[],[],"",retornoErrores,[]) 
+ return new Comando([],[],[],"",retornoErrores,[]) 
 break;
 case 3:
   
@@ -155,6 +154,13 @@ case 24:
       grafo.generarHijos("FLWORExpr");
       grafo.generarTexto(`ExprSingle.valor=FLWORExpr.valor`) 
     
+break;
+case 25:
+
+    this.$=$$[$0];
+    grafo.generarPadre(1,"IfExpr")
+    grafo.generarHijos("IfExpr")
+    grafo.generarTexto(`ExprSingle.valor=IfExpr.valor`)
 break;
 case 26:
 
@@ -296,28 +302,70 @@ case 43:
     grafo.generarTexto(`LetBinding.nombre=${$$[$0-3]};LetBinding.valor=ExptrSingle.valor`); 
 break;
 case 44:
- this.$={name:'Where',exp:$$[$0]} 
+ 
+    this.$={name:'Where',exp:$$[$0]} 
+    grafo.generarPadre(2,"ExprSingle")
+    grafo.generarHijos($$[$0-1],"ExprSingle")
+    grafo.generarTexto(`WhereClause.valor = ExprSingle.valor`)
 break;
 case 45:
- this.$={name:'Order',exp:$$[$0]} 
+ 
+    this.$={name:'Order',exp:$$[$0]} 
+    grafo.generarPadre(3,"OrderSpecList")
+    grafo.generarHijos($$[$0-2],$$[$0-1],"OrderSpecList") 
+    grafo.generarTexto(`OrderByClause.valor = OrderSpecList.valor`)
 break;
 case 46:
-this.$=$$[$0-2];this.$.push($$[$0])
+
+    this.$=$$[$0-2];this.$.push($$[$0])
+    grafo.generarPadre(3,"OrderSpec")
+    grafo.generarPadre(1,"OrderSpecList")
+    grafo.generarHijos("OrderSpecList",$$[$0-2],"OrderSpec")
+    grafo.generarTexto("OrderSpecList.valor=OrderSpecList1.valor;OrderSpecList.valor.push(OrderSpec.valor)")
 break;
 case 47:
-this.$=[$$[$0]]
+
+    this.$=[$$[$0]]
+    grafo.generarPadre(1,"OrderSpec")
+    grafo.generarHijos("OrderSpec")
+    grafo.generarTexto("OrderSpecList.valor=[OrderSpec.valor];")
 break;
 case 48:
- this.$={exp:$$[$0-1],mode:$$[$0]} 
+ 
+    this.$={exp:$$[$0-1],mode:$$[$0]} 
+    grafo.generarPadre(2,"OrderModifier")
+    grafo.generarPadre(1,"ExprSingle")
+    grafo.generarHijos("ExprSingle","OrderModifier")
+    grafo.generarTexto("OrderSpec.valor=OrderModifier.valor;")
 break;
 case 49:
- this.$={exp:$$[$0],mode:{order:'asc',empty:'g'}} 
+ 
+    this.$={exp:$$[$0],mode:{order:'asc',empty:'g'}} 
+    grafo.generarPadre(1,"ExprSingle")
+    grafo.generarHijos("ExprSingle")
+    grafo.generarTexto("OrderSpec.valor = ExprSingle.valor;")
 break;
 case 50:
- this.$={order:$$[$0-1].order,empty:$$[$0].empty} 
+ 
+    this.$={order:$$[$0-1].order,empty:$$[$0].empty} 
+    grafo.generarPadre(2,"OrderEmpty")
+    grafo.generarPadre(1,"OrderOrder")
+    grafo.generarHijos("OrderOrder","OrderEmpty")
+    grafo.generarTexto("OrderModifier.order=OrderOrder.valor;OrderModifier.empty=OrderEmpty.valor;") 
 break;
-case 51: case 52:
- this.$=$$[$0] 
+case 51:
+ 
+    this.$=$$[$0]
+    grafo.generarPadre(1,"OrderEmpty")
+    grafo.generarHijos("OrderEmpty")
+    grafo.generarTexto("OrderModifier.order='asc';OrderModifier.empty=OrderEmpty.valor;") 
+break;
+case 52:
+ 
+    this.$=$$[$0]
+    grafo.generarPadre(1,"OrderOrder")
+    grafo.generarHijos("OrderOrder")
+    grafo.generarTexto("OrderModifier.order=OrderOrder.valor;OrderModifier.empty='g';") 
 break;
 case 53:
  
@@ -339,7 +387,7 @@ case 55:
 break;
 case 56:
  
-    this.$={order:'desc',empty:'l'} 
+    this.$={order:'desc',empty:'g'} 
     grafo.generarHijos($$[$0])
     grafo.generarTexto(`OrderOrder.order = ${$$[$0]}`) 
 break;
@@ -349,6 +397,15 @@ case 57:
     grafo.generarPadre(2,"ExprSingle")
     grafo.generarHijos($$[$0-1],"ExprSingle")
     grafo.generarTexto("ReturnClause.valor=ExprSingle.valor")
+break;
+case 58:
+
+    this.$=new IfThenElse($$[$0-5],$$[$0-2],$$[$0]) 
+    grafo.generarPadre(8,"ExprSingle")
+    grafo.generarPadre(6,"ExprSingle")
+    grafo.generarPadre(3,"Expr")
+    grafo.generarHijos($$[$0-7],$$[$0-6],"Expr",$$[$0-4],$$[$0-3],"ExprSingle",$$[$0-1],"ExprSingle")
+    grafo.generarTexto(`IfExpr.valor = new IF(Expr.valor,ExprSingle1.valor,ExprSingle2.valor)`)
 break;
 case 59:
  
@@ -1121,7 +1178,7 @@ _handle_error:
   const { Atributo, Camino, Child, Descendant, Attribute, Self, DescSelf, FollowSibling, Follow } = require('./Expresion/axes')
   const { CaminoInverso, Parent, Ancestor, PrecedingSibling, AncestorSelf, Preceding } = require('./Expresion/axes')
   const { ContextItemExpr, CallFunction, CallFunctionPrefix } = require('./Expresion/postfix')
-  const { Declaracion, Let, Return, For, ForDeclaracion,Flower } = require('./Instruccion/Xquery')
+  const { Flower,IfThenElse } = require('./Instruccion/Xquery')
   const { grafoCST } = require('../CST')
 
   var grafo = new grafoCST(); 

@@ -1,190 +1,280 @@
-/* Gramatica Ascendente de XQUERY */
+
 
 %{
+    const {Acceso} = require("../xqueryAST/ExpresionesXpath/Acceso");
+    const {Aritmetico, operacionAritmetica} = require("../xqueryAST/ExpresionesXpath/Aritmetico");
+    const {Logica, operacionLogica} = require("../xqueryAST/ExpresionesXpath/Logica");
+    const {Path} = require("../xqueryAST/ExpresionesXpath/Path");
+    const {Primitivo, tipoPrimitivo} = require("../xqueryAST/ExpresionesXpath/Primitivo");
+    const {Relacional, operacionRelacional} = require("../xqueryAST/ExpresionesXpath/Relacional");
+    const {ClaseError} = require("../xmlAST/ClaseError");
+
+    const {Let} = require("../xqueryAST/ExpresionesXquery/Let");
+    const {MultiXpaths} = require("../xqueryAST/ExpresionesXquery/MultiXpaths");
+    const {Return} = require("../xqueryAST/ExpresionesXquery/Return");
+    const {XqueryPath} = require("../xqueryAST/ExpresionesXquery/XqueryPath");
     
+    
+    var listaErrores = [];
+    var tmp="";
 %}
 
 /* lexical grammar */
-%lex
+%lex 
 %options case-insensitive
-
+%s string
 
 %%
-\s+                                         /* skip whitespace */
-"("                                         return 'parea';
-")"                                         return 'parec';
-"$"                                         return 'dolar';
-","                                         return 'coma';
-"/"                                         return 'barra';
-"{"                                         return 'corchetea';
-"}"                                         return 'corchetec';
-"@"                                         return 'arroba';
+<INITIAL>["]      {this.begin('string'); tmp=""; }           
+<string>[^"]      {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][n]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][t]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][r]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\]["]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][\\]  { tmp= tmp+yytext;   this.begin('string');}
+<string>[\"]      {
+                    this.begin('INITIAL');
+                    yytext= tmp;
+                    tmp = "";
+                    return 'cadena';
+                  }
 
-"<"
+<INITIAL>[']      {this.begin('string'); tmp=""; }           
+<string>[^']      {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][n]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][t]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][r]   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][']   {tmp=tmp+yytext; this.begin('string');}
+<string>[\\][\\]  { tmp= tmp+yytext;   this.begin('string');}
+<string>[\']      {
+                    this.begin('INITIAL');
+                    yytext= tmp;
+                    tmp = "";
+                    return 'scadena';
+                  }
 
-"!""="                                      return 'diferente';
-"="                                         return 'igual';
-"<""="                                      return 'meigual';
-"<"                                         return 'menor';
-">""="                                      return 'maigual';
-">"                                         return 'mayor';
+"//"                  return '//'
+"/"                   return '/'
+'..'                  return '..'
+"."                   return '.'
+"@"                   return '@'
+"["                   return '['
+"]"                   return ']'
+"("                   return '('
+")"                   return ')'
+[" "]+                {}
+"|"                   return '|'
+"+"                   return '+'
+"-"                   return '-'
+"*"                   return '*'
+"div"                 return 'div'
+"="                   return '='
+"!="                  return '!='
+"<="                  return '<='
+">="                  return '>='
+"<"                   return '<'
+">"                   return '>'
+"or"                  return 'or'
+"and"                 return 'and'
+"mod"                 return 'mod'
 
-"f""o""r"                                   return 'for';
-"i""n"                                      return 'in';
-"d""o""c"                                   return 'doc';
-"f""o""r"                                   return 'for';
-"w""h""e""r""e"                             return 'where';
-"o""r""d""e""r"                             return 'order';
-"b""y"                                      return 'by';
-"r""e""t""u""r""n"                          return 'return';
-"l""e""t"                                   return 'let';
-"i""f"                                      return 'if';
-"t""h""e""n"                                return 'then';
-"e""l""s""e"                                return 'else';
-"d""a""t""a"                                return 'data';
-"a""t"                                      return 'at';
 
-"a""n""d"                                   return 'and';
-"o""r"                                      return 'or';
 
-(\"([^\"\\])*\")                            return 'dstring';
-(\'([^\'\\])*\')                            return 'sstring';
+"::"                  return '::'
+"child"               return 'child'
+"attribute"           return 'attribute'
+"descendant"          return 'descendant'
+"text"                return 'text'
+"last"                return 'last' 
+"position"            return 'position'
 
-([a-zA-Z_]|"á"|"é"|"í"|"ó"|"ú"|"Á"|"É"|"Í"|"Ó"|"Ú")("-"|[a-zA-Z0-9_ñÑ]|"á"|"é"|"í"|"ó"|"ú"|"Á"|"É"|"Í"|"Ó"|"Ú"|"'")*            return 'id';
-(([0-9]+"."[0-9]+)|("."[0-9]+)|([0-9]+))    return 'number';
-[^ ]+                                     return 'random';
-<<EOF>>               return 'EOF';
 
-//error lexico
-.                                   {
-                                        console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);
-                                    }
+"return"              return 'return';
+"$"                   return '$';
+"let"                 return 'let';
+":="                  return ':=';
 
+        
+[0-9]+                                      return 'number'
+[a-zA-Z_][a-zA-Z0-9_ñÑ]*                    return 'id'
+<<EOF>>                                     return 'EOF'
+.             {console.log('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column);}
 /lex
 
-/* Precedencia de operadores */
-/*%left '+' '-'
-%left '*' '/'
-%left '^'
-%left UMINUS*/
+/* operator associations and precedence */
+%left 'or'
+%left 'and' 
+%left '=' '!='
+%left '>=' '<=' '<' '>'
+%left '+' '-'
+%left '*' 'div'
+%left 'mod'
 
-%start INIT
+/* definition of grammar */
+%start INIT 
 
-%% /* language grammar */
+%% 
 
 INIT
-    :   FOR LET WHERE ORDERBY RETURN EOF    {}
-    |   EOF                                 {}
+    : LQUERYS 'EOF'                                         {return $1;}
+    | 'EOF'                                                 {return $1;}
+    ;
+LQUERYS
+    : LQUERYS ',' QUERY                                     {$1.push($3); $$ = $1;}
+    | QUERY                                                 {$$ = [$1];}
+    ;    
+
+QUERY                                                     
+    : MULTIPATH                                             {$$ = new MultiXpaths(0, 0, $1);}
+    | XQUERY                                                {$$ = $1;}
     ;
 
-FOR 
-    :   for RETVAR in doc parea dstring parec PATH                {} 
-    |   for RETVAR at RETVAR in doc parea dstring parec PATH    {}
+XQUERY 
+    : cadena                                                {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
+    | scadena                                               {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
+    | RETURN                                                {$$ = $1}
+    | LET                                                   {$$ = $1}
     ;
 
-PATH 
-    :   PATH barra              {$$ = $1+$2}
-    |   PATH id                 {$$ = $1+$2}
-    |   barra                   {$$ = $1}
-    |   id                      {$$ = $1}
+RETURN  
+    : return '(' LXQUERYS ')'                               {$$ = new Return (@1.first_line, @1.first_column, $3);}
+    | return  XQUERY                                        {$$ = new Return (@1.first_line, @1.first_column, [$2]);}
     ;
+
+LXQUERYS 
+    : LXQUERYS ',' XQUERY                                   {$1.push($3); $$ = $1;}
+    | XQUERY                                                {$$ = [$1];}
+    ; 
 
 LET 
-    :   let           {}
-    |
+    : let '$' id ':=' PATHXQUERY                            {$5.accesos.tipoPath = 'sub'; $$ = new Let(@1.first_line, @1.first_column, $5);}
+    | let '$' id ':=' PATH                                  {$$ = new Let(@1.first_line, @1.first_column, $5);}
+    ; 
+
+PATHXQUERY
+    : '$' id '/' LACCESOSXQUERY                             {$4[0].tipoQuery = 'relativa';
+                                                             $$ = new XqueryPath(@2.first_line, @2.first_column, $2, new Path(@2.first_line, @2.first_column, $4));}
+    | '$' id '//' LACCESOSXQUERY                            {$4[0].tipoQuery = 'absoluta';
+                                                             $$ = new XqueryPath(@2.first_line, @2.first_column, $2, new Path(@2.first_line, @2.first_column, $4));}
+    | '$' id                                                {$$ = new XqueryPath(@2.first_line, @2.first_column, $2, new Path(@2.first_line, @2.first_column, []));}
     ;
 
-WHERE 
-    :   where WHERE2            {}
-    |                           {}
+LACCESOSXQUERY
+    : LACCESOSXQUERY '/' ACCESOXQUERY                       {$3.tipoQuery = 'relativa'; $1.push($3); $$ = $1;}
+    | LACCESOSXQUERY '//' ACCESOXQUERY                      {$3.tipoQuery = 'relativa'; $1.push($3); $$ = $1;}
+    | ACCESOXQUERY                                          {$$ = [$1];}
     ;
 
-WHERE2
-    :   WHERE2 and WHERE3               {}
-    |   WHERE2 or WHERE3                {}
-    |   WHERE3                          {}
+ACCESOXQUERY 
+    : id                                                    {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', []);}
+    | '*'                                                   {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
+    | '@' id                                                {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', []);}
+    | '@' '*'                                               {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', []);}
     ;
 
-WHERE3
-    :   RETVAR COMPARISON id         {}
-    |   RETVAR COMPARISON number     {}
-    |   RETVAR COMPARISON sstring    {}
-    |   RETVAR COMPARISON dstring    {}
+
+// ---------------------------------------------------------xpath------------------------------------------------------------------------------------------
+
+MULTIPATH
+    : MULTIPATH '|' PATH                            {$1.push($3); $$ = $1;}
+    | PATH                                          {$$ = [$1];}
     ;
 
-COMPARISON
-    :   igual       {$$=$1}
-    |   diferente   {$$=$1}
-    |   menor       {$$=$1}
-    |   meigual     {$$=$1}
-    |   mayor       {$$=$1}
-    |   maigual     {$$=$1}
+PATH
+    : '/' LACCESOS                                  {if($2[0].tipoQuery === undefined){$2[0].tipoQuery = 'relativa';}
+                                                     $$ = new Path(@1.first_line, @1.first_column, $2);}
+    | '//' LACCESOS                                 {if($2[0].tipoQuery === undefined){$2[0].tipoQuery = 'absoluta';}  
+                                                     $$ = new Path(@1.first_line, @1.first_column, $2);}
     ;
 
-ORDERBY 
-    :   order by ORDERBY2               {}
-    |                                   {}
+LACCESOS
+    : LACCESOS '/' ACCESO                           {if($3.tipoQuery === undefined){$3.tipoQuery = 'relativa'} $1.push($3); $$ = $1;}
+    | LACCESOS '//' ACCESO                          {if($3.tipoQuery === undefined){$3.tipoQuery = 'absoluta'} $1.push($3); $$ = $1;}
+    | ACCESO                                        {$$ = [$1];}
     ;
 
-ORDERBY2
-    :   ORDERBY2 coma RETVAR        {}
-    |   RETVAR                      {}
+ACCESO 
+//nodos
+    : id                                            {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', []);}
+    | '*'                                           {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
+    | '.'                                           {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'actual', []);}
+    | '..'                                          {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'padre', []);}
+    | text '(' ')'                                  {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'texto', []);}
+    | node '(' ')'                                  {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', []);}
+    | child '::' id                                 {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', []);}
+    | child '::' '*'                                {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', []);}
+    | descendant '::' id                            {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', [], 'absoluta');}
+    | descendant '::' '*'                           {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', [], 'absoluta');}
+//nodos con predicados
+    | id PREDICADOS                                 {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'nodo', $2);}
+    | '*' PREDICADOS                                {$$ = new Acceso(@1.first_line, @1.first_column, $1, 'todosNodos', $2);}
+    | child '::' id PREDICADOS                      {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', $4);}
+    | child '::' '*' PREDICADOS                     {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', $4);}
+    | descendant '::' id PREDICADOS                 {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'nodo', $4, 'absoluta');}
+    | descendant '::' '*' PREDICADOS                {$$ = new Acceso(@1.first_line, @1.first_column, $3, 'todosNodos', $4, 'absoluta');}
+//atributos
+    | '@' id                                        {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', []);}
+    | '@' '*'                                       {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', []);}
+    |  attribute '::' id                            {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'atributo', []);}
+    |  attribute '::' '*'                           {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'todosAtributos', []);}
+//atributos con predicados
+    | '@' id PREDICADOS                             {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'atributo', $3);}
+    | '@' '*' PREDICADOS                            {$$ = new Acceso(@2.first_line, @2.first_column, $2, 'todosAtributos', $3);}
+    |  attribute '::' id PREDICADOS                 {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'atributo', $4);}
+    |  attribute '::' '*' PREDICADOS                {$$ = new Acceso(@2.first_line, @2.first_column, $3, 'todosAtributos', $4);}
+    |  error                                        {listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',@1.first_line, @1.first_column))}
     ;
 
-RETURN 
-    :   return RETURN2          {}
+
+
+PREDICADOS
+    : PREDICADOS PREDI          {$1.push($2); $$ = $1;}
+    | PREDI                     {$$ = [$1];}
     ;
 
-RETURN2
-    :   RETURN3            {}
-    |   IFTHENELSE         {}
-    |   HTML               {}
+PREDI
+    : '[' EXP ']'               {$$ = $2;}
+    ;
+    
+EXP 
+    : EXP  '+'  EXP             {$$ = new Aritmetico(@2.first_line, @2.first_column, $1, $3, operacionAritmetica.SUMA, $2);}
+    | EXP  '-'  EXP             {$$ = new Aritmetico(@2.first_line, @2.first_column, $1, $3, operacionAritmetica.RESTA, $2);}
+    | EXP  '*'  EXP             {$$ = new Aritmetico(@2.first_line, @2.first_column, $1, $3, operacionAritmetica.MULT, $2);}
+    | EXP 'div' EXP             {$$ = new Aritmetico(@2.first_line, @2.first_column, $1, $3, operacionAritmetica.DIV, $2);}
+    | EXP 'mod' EXP             {$$ = new Aritmetico(@2.first_line, @2.first_column, $1, $3, operacionAritmetica.MOD, $2);}
+    | EXP  '='  EXP             {$$ = new Relacional(@2.first_line, @2.first_column, $1, $3, operacionRelacional.IGUAL, $2);}
+    | EXP '!='  EXP             {$$ = new Relacional(@2.first_line, @2.first_column, $1, $3, operacionRelacional.DIFERENCIACION, $2);}
+    | EXP  '<'  EXP             {$$ = new Relacional(@2.first_line, @2.first_column, $1, $3, operacionRelacional.MENOR, $2);}
+    | EXP '<='  EXP             {$$ = new Relacional(@2.first_line, @2.first_column, $1, $3, operacionRelacional.MENORIGUAL, $2);}
+    | EXP  '>'  EXP             {$$ = new Relacional(@2.first_line, @2.first_column, $1, $3, operacionRelacional.MAYOR, $2);}
+    | EXP '>='  EXP             {$$ = new Relacional(@2.first_line, @2.first_column, $1, $3, operacionRelacional.MAYORIGUAL, $2);}
+    | EXP 'and' EXP             {$$ = new Logica(@2.first_line, @2.first_column, $1, $3, operacionLogica.AND, $2);}
+    | EXP 'or'  EXP             {$$ = new Logica(@2.first_line, @2.first_column, $1, $3, operacionLogica.OR, $2);}
+    | VALOR                     {$$ = $1;}
+    ;
+ 
+VALOR 
+    
+    : '(' EXP ')'               {$$ = $2;}
+    | cadena                    {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
+    | scadena                   {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.STRING);}
+    | number                    {$$ = new Primitivo(@1.first_line, @1.first_column, $1, tipoPrimitivo.NUMBER);}
+    | 'position' '(' ')'        {$$ = new Primitivo(@1.first_line, @1.first_column, $1);}
+    | 'last' '(' ')'            {$$ = new Primitivo(@1.first_line, @1.first_column, $1);}
+//sub consultas
+    | LACCESOS                  {if($1[0].tipoQuery === undefined){$1[0].tipoQuery = 'relativa';}
+                                 $$ = new Path(@1.first_line, @1.first_column, $1, 'sub');}
+    | '//' LACCESOS             {if($2[0].tipoQuery === undefined){$2[0].tipoQuery ='relativa';}
+                                 $$ = new Path(@1.first_line, @1.first_column, $2, 'sub');}
     ;
 
-RETURN3
-    :   RETURN3 coma RETVAR   {}
-    |   RETVAR                {}
-    ;
 
-HTML
-    : menor id mayor CONTENIDOHTML menor barra id mayor  {}
-    | menor id LISTAATRIBUTOSHTML mayor CONTENIDOHTML  menor barra id mayor  {}  
-    ;
 
-LISTAATRIBUTOSHTML
-    : LISTAATRIBUTOSHTML ATRIBUTOHTML       {}
-    | ATRIBUTOHTML                          {}
-    ;
 
-ATRIBUTOHTML
-    : id '=' sstring                {}
-    | id '=' dstring                {}
-    ;
 
-CONTENIDOHTML
-    :   corchetea RETVAR corchetec  {}
-    ;
 
-IFTHENELSE
-    :   IF THEN ELSE    {}
-    ;
 
-IF
-    :   if  parea RETVAR COMPARISON dstring parec  {}
-    |   if  parea RETVAR COMPARISON sstring parec  {}
-    ;
 
-THEN
-    :   then HTML   {}
-    ;
 
-ELSE
-    :   else HTML   {}
-    ;
 
-RETVAR
-    :   dolar id barra id           {}
-    |   dolar id                    {}
-    |   dolar id barra arroba id    {}
-    |   data parea RETVAR parec     {}
-    ;
+

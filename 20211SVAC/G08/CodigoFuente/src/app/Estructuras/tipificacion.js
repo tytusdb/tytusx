@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.TipoOperador = exports.TipoNodo = exports.TipoParametro = void 0;
+exports.ParamType = exports.TipoDeclaracionXquery = exports.TipoFuncion = exports.TipoClausulaIntermedia = exports.OrderModifierType = exports.TipoBinding = exports.FLWORTipo = exports.SingleExpresionType = exports.TipoOperador = exports.TipoNodo = exports.TipoParametro = void 0;
 var TipoParametro;
 (function (TipoParametro) {
     TipoParametro[TipoParametro["Entero"] = 0] = "Entero";
@@ -14,6 +14,7 @@ var TipoParametro;
     TipoParametro[TipoParametro["Nodo"] = 8] = "Nodo";
     TipoParametro[TipoParametro["Operacion"] = 9] = "Operacion";
     TipoParametro[TipoParametro["Ruta"] = 10] = "Ruta";
+    TipoParametro[TipoParametro["Variable"] = 11] = "Variable";
 })(TipoParametro = exports.TipoParametro || (exports.TipoParametro = {}));
 var TipoNodo;
 (function (TipoNodo) {
@@ -45,3 +46,51 @@ var TipoOperador;
     TipoOperador[TipoOperador["Or"] = 12] = "Or";
     TipoOperador[TipoOperador["None"] = 13] = "None";
 })(TipoOperador = exports.TipoOperador || (exports.TipoOperador = {}));
+var SingleExpresionType;
+(function (SingleExpresionType) {
+    SingleExpresionType[SingleExpresionType["FLWORExpr"] = 0] = "FLWORExpr";
+    SingleExpresionType[SingleExpresionType["IfExpr"] = 1] = "IfExpr";
+    SingleExpresionType[SingleExpresionType["Contador"] = 2] = "Contador";
+    SingleExpresionType[SingleExpresionType["HtmlSequence"] = 3] = "HtmlSequence";
+    SingleExpresionType[SingleExpresionType["FuncionDefinida"] = 4] = "FuncionDefinida";
+    SingleExpresionType[SingleExpresionType["XPARAM"] = 5] = "XPARAM";
+    SingleExpresionType[SingleExpresionType["Path"] = 6] = "Path";
+})(SingleExpresionType = exports.SingleExpresionType || (exports.SingleExpresionType = {}));
+var FLWORTipo;
+(function (FLWORTipo) {
+    FLWORTipo[FLWORTipo["For"] = 0] = "For";
+    FLWORTipo[FLWORTipo["Let"] = 1] = "Let";
+})(FLWORTipo = exports.FLWORTipo || (exports.FLWORTipo = {}));
+var TipoBinding;
+(function (TipoBinding) {
+    TipoBinding[TipoBinding["VarInSentencia"] = 0] = "VarInSentencia";
+})(TipoBinding = exports.TipoBinding || (exports.TipoBinding = {}));
+var OrderModifierType;
+(function (OrderModifierType) {
+    OrderModifierType[OrderModifierType["Ascendente"] = 0] = "Ascendente";
+    OrderModifierType[OrderModifierType["Descendente"] = 1] = "Descendente";
+    OrderModifierType[OrderModifierType["Ninguno"] = 2] = "Ninguno";
+})(OrderModifierType = exports.OrderModifierType || (exports.OrderModifierType = {}));
+var TipoClausulaIntermedia;
+(function (TipoClausulaIntermedia) {
+    TipoClausulaIntermedia[TipoClausulaIntermedia["InitialClause"] = 0] = "InitialClause";
+    TipoClausulaIntermedia[TipoClausulaIntermedia["OrderByClause"] = 1] = "OrderByClause";
+    TipoClausulaIntermedia[TipoClausulaIntermedia["WhereClause"] = 2] = "WhereClause";
+})(TipoClausulaIntermedia = exports.TipoClausulaIntermedia || (exports.TipoClausulaIntermedia = {}));
+var TipoFuncion;
+(function (TipoFuncion) {
+    TipoFuncion[TipoFuncion["Definida"] = 0] = "Definida";
+    TipoFuncion[TipoFuncion["Nativa"] = 1] = "Nativa";
+})(TipoFuncion = exports.TipoFuncion || (exports.TipoFuncion = {}));
+var TipoDeclaracionXquery;
+(function (TipoDeclaracionXquery) {
+    TipoDeclaracionXquery[TipoDeclaracionXquery["Varible"] = 0] = "Varible";
+    TipoDeclaracionXquery[TipoDeclaracionXquery["FuncionDefinida"] = 1] = "FuncionDefinida";
+})(TipoDeclaracionXquery = exports.TipoDeclaracionXquery || (exports.TipoDeclaracionXquery = {}));
+var ParamType;
+(function (ParamType) {
+    ParamType[ParamType["xsString"] = 0] = "xsString";
+    ParamType[ParamType["xsDate"] = 1] = "xsDate";
+    ParamType[ParamType["xsDecimal"] = 2] = "xsDecimal";
+    ParamType[ParamType["xsBoolean"] = 3] = "xsBoolean";
+})(ParamType = exports.ParamType || (exports.ParamType = {}));
