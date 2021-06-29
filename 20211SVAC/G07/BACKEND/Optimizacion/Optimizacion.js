@@ -65,6 +65,57 @@ class Optimizacion {
         }
 
     }
+
+    /**
+     *  Eliminacion 
+     * ------------------
+     *  Regla 6: T1 = T1 + 0;     ----->   Se elimina la instruccion
+     *  Regla 7: T1 = T1 - 0;      ----->   Se elimina la instruccion
+     *  Regla 8: T1 = T1 * 1;      ----->   Se elimina la instruccion
+     *  Regla 9: T1 = T1 / 1;      ----->   Se elimina la instruccion
+     */
+     regla6_7_8_9() {
+        for (let i = 0; i < this.cadenaSplit.length; i++) {
+
+            let instruccion = this.cadenaSplit[i].trim();
+
+            if (this.reAsignacionOp01.test(instruccion)) {
+                console.log(instruccion);
+
+                let instruccionSplit = instruccion.replace(';','').split('=');
+                let id1 = instruccionSplit[0].trim();
+
+                // Regla 6
+                if (instruccionSplit[1].includes('+')) {
+                    let operacionSplit = instruccionSplit[1].split('+');
+                    let idOperacion = operacionSplit[0].trim();
+                    let valOperacion = operacionSplit[1].trim();
+
+                    if ((id1 === idOperacion) && (valOperacion === '0')) {
+                        this.cadenaOptimizada[i] = '';
+                        this.cadenaSplit[i] = '';
+                        this.bitacoraOptimizaciones.push({
+                            regla: 6,
+                            linea: i,
+                            instruccion: `${idOperacion} = ${idOperacion} + 0;`,
+                            cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    }
+                }
+
+                
+            }
+            this.cadenaOptimizada[i] = instruccion;
+        }
+    }
+    
+    obtenerOptimizacion() {
+        console.log(this.bitacoraOptimizaciones);
+
+        return this.cadenaOptimizada.join('\n');
+    }
+
     
     obtenerOptimizacion() {
         console.log(this.bitacoraOptimizaciones);
