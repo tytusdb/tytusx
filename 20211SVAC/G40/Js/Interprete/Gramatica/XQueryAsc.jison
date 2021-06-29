@@ -9,6 +9,11 @@ BSL                         "\\".
 
 
 ("$")([a-zA-ZáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*     %{ return 'tk_idflower'; %}
+"number"                      %{ return 'tk_number';  %}
+"substring"                   %{ return 'tk_substring';  %}
+"upper-case"                  %{ return 'tk_uppercase';  %}
+"lower-case"                  %{ return 'tk_lowercase';  %}
+"string"                      %{ return 'tk_string';  %}
 "node()"                      %{ return 'tk_node';  %}
 "last()"                      %{ return 'tk_last';  %}
 "position()"                  %{ return 'tk_position';  %}
@@ -49,6 +54,7 @@ BSL                         "\\".
 "="                         %{ return 'tk_igual'; %}
 ">"                         %{ return 'tk_mayor'; %}
 "<"                         %{ return 'tk_menor'; %}
+","                         %{ return 'tk_coma'; %}
 "?"                         %{ return 'tk_interrogacion'; %}
 "..//"                        %{ return 'tk_dpds'; %}
 ".//"                        %{ return 'tk_pds'; %}
@@ -106,7 +112,43 @@ INSTRUCCIONES: INSTRUCCIONES INSTRUCCION { $1[0].push($2[0]);
                                            $$ = [$1[0],$1[1]]; }
         | INSTRUCCION { $$ = [[$1[0]],$1[1]]; };
 
-INSTRUCCION: FLOWER  { $$ = $1; };
+INSTRUCCION: FLOWER  { $$ = $1; }
+        | FUNCION { $$ = $1; };
+
+
+FUNCION : tk_number tk_parentesisa EXPRESION_CADENA tk_parentesisc {
+                xNumberAux = new XNumber(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("number()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xNumberAux,nodoaux]; }
+        | tk_substring tk_parentesisa CADENA tk_coma tk_entero tk_parentesisc  { 
+                xSubAux = new XSubstring(@1.first_line, @1.first_column, $3[0], Number($5), 0, 0);
+                nodoaux = new NodoArbol("substring()","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo(new NodoArbol($5,""));
+                $$ = [xSubAux,nodoaux]; }            
+        | tk_substring tk_parentesisa CADENA tk_coma tk_entero tk_coma tk_entero tk_parentesisc { 
+                xSubAux = new XSubstring(@1.first_line, @1.first_column, $3[0], Number($5), Number($7), 1);
+                nodoaux = new NodoArbol("substring()","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo(new NodoArbol($5,""));
+                nodoaux.agregarHijo(new NodoArbol($7,""));
+                $$ = [xSubAux,nodoaux]; } 
+        | tk_uppercase tk_parentesisa CADENA tk_parentesisc {
+                xUpperAux = new XUpperCase(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("upper-case()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xUpperAux,nodoaux]; }
+        | tk_lowercase tk_parentesisa CADENA tk_parentesisc {
+                xUpperAux = new XLowerCase(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("lower-case()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xUpperAux,nodoaux]; }
+        | tk_string tk_parentesisa EXPRESION_CADENA tk_parentesisc {
+                xStringAux = new XString(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("string()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xStringAux,nodoaux]; } ;
 
 
 SETS: SETS SET { $1[1].agregarHijo($2[1]);

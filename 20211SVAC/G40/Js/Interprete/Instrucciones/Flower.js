@@ -1,6 +1,5 @@
 "use strict";
-//Object.defineProperty(exports, "__esModule", { value: true });
-//exports.Flower = void 0;
+
 var Flower = /** @class */ (function () {
     function Flower(linea, columna, id, funcion, sentencias) {
         this.linea = linea;
@@ -14,6 +13,7 @@ var Flower = /** @class */ (function () {
         this.temporal = null;
         this.resultadoAux = null;
         this.objetos = [];
+        this.tipo = TipoXInstruccion.XFLOWER;
     }
     Flower.prototype.ejecutar = function (ent, arbol) {
 
@@ -38,6 +38,9 @@ var Flower = /** @class */ (function () {
         return this.resultadoAux;
        
     };
+
+    Flower.prototype.getTipo = function (){
+        return this.tipo;
+    };
     return Flower;
 }());
-//exports.Flower = Flower;

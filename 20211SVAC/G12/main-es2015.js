@@ -839,8 +839,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Analizadores/XMLDescendente */ "EViG");
 /* harmony import */ var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Controlador__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Controlador */ "mXYb");
-/* harmony import */ var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TablaSimbolos/TablaSimbolos */ "arwD");
+/* harmony import */ var _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Analizadores/XQuery */ "9IBB");
+/* harmony import */ var _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Controlador__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Controlador */ "mXYb");
+/* harmony import */ var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TablaSimbolos/TablaSimbolos */ "arwD");
+
 
 
 
@@ -852,8 +855,8 @@ class Analizador {
         console.log("vamos a analizar la entrada");
         //Ejecutar xml 
         let astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
-        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__["TablaSimbolos"](null, "Global");
+        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
         astxml.ejecutar(controlador, ts_globla);
         //Ejecutar xpath
         let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
@@ -868,8 +871,8 @@ class Analizador {
         console.log("vamos a analizar la entrada");
         //Ejecutar xml 
         let astxml = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](entradaxml);
-        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__["TablaSimbolos"](null, "Global");
+        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
         astxml.ejecutarDescendente(controlador, ts_globla);
         //Ejecutar xpath
         let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
@@ -881,8 +884,8 @@ class Analizador {
     }
     traducirxml(entradaxml, entradaxpath) {
         let astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
-        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_3__["default"]();
-        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_4__["TablaSimbolos"](null, "Global");
+        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
         controlador.generador.clearCode();
         astxml.ejecutar(controlador, ts_globla);
         if (entradaxpath != null) {
@@ -922,6 +925,11 @@ class Analizador {
         }
         catch (error) {
         }
+    }
+    recorrerXquery(entradaxquery) {
+        console.log("vamos a analizar la entrada");
+        //Ejecutar Xquery
+        _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__["parse"](entradaxquery);
     }
 }
 
@@ -999,772 +1007,6 @@ class Ejecutar {
 /***/ (function(module, exports) {
 
 /* (ignored) */
-
-/***/ }),
-
-/***/ "3Bn/":
-/*!********************************************!*\
-  !*** ./src/Clases/GeneradorC3D/Nativas.ts ***!
-  \********************************************/
-/*! exports provided: Nativas */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Nativas", function() { return Nativas; });
-/* harmony import */ var _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GeneradorC3D */ "cg4T");
-
-class Nativas {
-    generarNativas() {
-        this.nativa_print_str();
-        //this.nativa_print_integer();
-        /* this.nativa_compararIgual_str_str();
-         this.nativa_compararNoIgual_str_str();
-         this.nativa_ToUpperCase();
-         this.nativa_ToLowerCase();
-         this.nativa_concat_str_str();
-         this.nativa_concat_dbl_str();
-         this.nativa_concat_str_dbl();
-         this.nativa_concat_int_str();
-         this.nativa_concat_str_int();
-         this.nativa_concat_str_bol();
-         this.nativa_concat_bol_str();
-         this.nativa_lenght_str();*/
-        return _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia().getNativas();
-    }
-    nativa_lenght_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let t3 = gen.newTemporal();
-        let next = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_lenght_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t0, 'p', '1', '+');
-        gen.genGetStack(t1, t0);
-        gen.genAsignacion(t3, '0');
-        gen.genLabel(next);
-        gen.genGetHeap(t2, t1);
-        gen.genIf(t2, '-1', '==', fin);
-        gen.genExpresion(t3, t3, '1', '+');
-        gen.genExpresion(t1, t1, '1', '+');
-        gen.genGoto(next);
-        gen.genLabel(fin);
-        gen.genSetStack('p', t3);
-        gen.genCode('return;');
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t0);
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(t3);
-    }
-    nativa_print_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let next = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_print_str');
-        gen.isFunc = '\t';
-        gen.genGetStack(t1, 'p');
-        gen.genLabel(next);
-        gen.genGetHeap(t2, t1);
-        gen.genIf(t2, '-1', '==', fin);
-        gen.genPrint('c', t2);
-        gen.genExpresion(t1, t1, '1', '+');
-        gen.genGoto(next);
-        gen.genLabel(fin);
-        gen.genCode('return;');
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-    }
-    /*
-        nativa_print_integer() {
-            const gen = GeneradorC3D.getInstancia();
-            let t1 = gen.newTemporal();
-            let t2 = gen.newTemporal();
-            let t3 = gen.newTemporal();
-            let inicio = gen.newLabel();
-            let nextPos = gen.newLabel();
-            let nextPrt = gen.newLabel();
-            let fin = gen.newLabel();
-    
-            gen.genFuncion('nativa_print_integer');
-            gen.isFunc = '\t';
-            gen.genGetStack(t1, 'p');
-            gen.genIf(t1, '0', '>=', inicio);
-            gen.genPrint('c', '45');
-            gen.genExpresion(t1, t1, '-1', '*');
-            gen.genLabel(inicio);
-            gen.genAsignacion(t3, 'p');
-            gen.genSetStack(t3, '-1');
-            gen.genExpresion(t3, t3, '1', '+');
-            gen.genLabel(nextPos);
-            gen.genIf(t1, '0', '==', nextPrt);
-            gen.genCode(`${t2} = fmod(${t1}, 10);`);
-            gen.genSetStack(t3, t2);
-            gen.genExpresion(t3, t3, '1', '+');
-            gen.genExpresion(t1, t1, '10', '/');
-            gen.genGoto(nextPos);
-            gen.genLabel(nextPrt);
-            gen.genExpresion(t3, t3, '1', '-');
-            gen.genGetStack(t1, t3);
-            gen.genIf(t1, '-1', '==', fin);
-            gen.genPrint('i', t1);
-            gen.genGoto(nextPrt);
-            gen.genLabel(fin);
-            gen.genCode('return;');
-            gen.genEndFuncion();
-            gen.isFunc = '';
-            gen.freeTemp(t1);
-            gen.freeTemp(t2);
-            gen.freeTemp(t3);
-        }*/
-    nativa_compararIgual_str_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let c1 = gen.newTemporal();
-        let c2 = gen.newTemporal();
-        let lblfalse = gen.newLabel();
-        let lbltrue = gen.newLabel();
-        let l2 = gen.newLabel();
-        let inicio = gen.newLabel();
-        let nextPos = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_compararIgual_str_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t0, 'p', '1', '+');
-        gen.genGetStack(p1, t0);
-        gen.genExpresion(t0, 'p', '2', '+');
-        gen.genGetStack(p2, t0);
-        gen.genIf(p1, '-1', '==', l2);
-        gen.genIf(p2, '-1', '==', lblfalse);
-        gen.genGoto(inicio);
-        gen.genLabel(l2);
-        gen.genIf(p2, '-1', '==', lbltrue);
-        gen.genGoto(lblfalse);
-        gen.genLabel(inicio);
-        gen.genGetHeap(c1, p1);
-        gen.genGetHeap(c2, p2);
-        gen.genLabel(nextPos);
-        gen.genIf(c1, c2, '!=', lblfalse);
-        gen.genIf(c1, '-1', '==', lbltrue);
-        gen.genExpresion(p1, p1, '1', '+');
-        gen.genExpresion(p2, p2, '1', '+');
-        gen.genGetHeap(c1, p1);
-        gen.genGetHeap(c2, p2);
-        gen.genGoto(nextPos);
-        gen.genLabel(lbltrue);
-        gen.genSetStack('p', '1');
-        gen.genGoto(fin);
-        gen.genLabel(lblfalse);
-        gen.genSetStack('p', '0');
-        gen.genLabel(fin);
-        gen.genCode('return;');
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-        gen.freeTemp(c1);
-        gen.freeTemp(c2);
-    }
-    nativa_compararNoIgual_str_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t1 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let c1 = gen.newTemporal();
-        let c2 = gen.newTemporal();
-        let lblfalse = gen.newLabel();
-        let lbltrue = gen.newLabel();
-        let l2 = gen.newLabel();
-        let inicio = gen.newLabel();
-        let nextPos = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_compararNoIgual_str_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genIf(p1, '-1', '==', l2);
-        gen.genIf(p2, '-1', '==', lbltrue);
-        gen.genGoto(inicio);
-        gen.genLabel(l2);
-        gen.genIf(p2, '-1', '==', lblfalse);
-        gen.genGoto(lbltrue);
-        gen.genLabel(inicio);
-        gen.genGetHeap(c1, p1);
-        gen.genGetHeap(c2, p2);
-        gen.genLabel(nextPos);
-        gen.genIf(c1, c2, '!=', lbltrue);
-        gen.genIf(c1, '-1', '==', lblfalse);
-        gen.genExpresion(p1, p1, '1', '+');
-        gen.genExpresion(p2, p2, '1', '+');
-        gen.genGetHeap(c1, p1);
-        gen.genGetHeap(c2, p2);
-        gen.genGoto(nextPos);
-        gen.genLabel(lbltrue);
-        gen.genSetStack('p', '1');
-        gen.genGoto(fin);
-        gen.genLabel(lblfalse);
-        gen.genSetStack('p', '0');
-        gen.genLabel(fin);
-        gen.genCode('return;');
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-        gen.freeTemp(c1);
-        gen.freeTemp(c2);
-    }
-    nativa_ToUpperCase() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let t3 = gen.newTemporal();
-        let t4 = gen.newTemporal();
-        let nextPos = gen.newLabel();
-        let setChar = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_ToUpperCase');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(t2, t1); // carga la referencia del string
-        gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
-        gen.genLabel(nextPos);
-        gen.genGetHeap(t4, t2);
-        gen.genIf(t4, '-1', '==', fin);
-        gen.genIf(t4, '97', '<', setChar);
-        gen.genIf(t4, '122', '>', setChar);
-        gen.genExpresion(t4, t4, '32', '-');
-        gen.genLabel(setChar);
-        gen.genSetHeap('h', t4);
-        gen.avanzarHeap();
-        gen.genExpresion(t2, t2, '1', '+');
-        gen.genGoto(nextPos);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t3);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(t3);
-        gen.freeTemp(t4);
-    }
-    nativa_ToLowerCase() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let t3 = gen.newTemporal();
-        let t4 = gen.newTemporal();
-        let nextPos = gen.newLabel();
-        let setChar = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_ToLowerCase');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(t2, t1); // carga la referencia del string
-        gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
-        gen.genLabel(nextPos);
-        gen.genGetHeap(t4, t2);
-        gen.genIf(t4, '-1', '==', fin);
-        gen.genIf(t4, '65', '<', setChar);
-        gen.genIf(t4, '90', '>', setChar);
-        gen.genExpresion(t4, t4, '32', '+');
-        gen.genLabel(setChar);
-        gen.genSetHeap('h', t4);
-        gen.avanzarHeap();
-        gen.genExpresion(t2, t2, '1', '+');
-        gen.genGoto(nextPos);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t3);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(t3);
-        gen.freeTemp(t4);
-    }
-    nativa_concat_str_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let str1 = gen.newLabel();
-        let str2 = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_str_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t1, 'h');
-        gen.genLabel(str1);
-        gen.genGetHeap(t2, p1);
-        gen.genIf(t2, '-1', '==', str2);
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(p1, p1, '1', '+');
-        gen.genGoto(str1);
-        gen.genLabel(str2);
-        gen.genGetHeap(t2, p2);
-        gen.genIf(t2, '-1', '==', fin);
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(p2, p2, '1', '+');
-        gen.genGoto(str2);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t1);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-    nativa_concat_int_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let inicio = gen.newLabel();
-        let nextPos = gen.newLabel();
-        let validar = gen.newLabel();
-        let str1 = gen.newLabel();
-        let str2 = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_int_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t0, 'h');
-        gen.genIf(p1, '0', '>=', inicio);
-        gen.genSetHeap('h', '45');
-        gen.avanzarHeap();
-        gen.genExpresion(p1, p1, '-1', '*');
-        gen.genLabel(inicio);
-        gen.genAsignacion(t1, '0');
-        gen.genLabel(nextPos);
-        gen.genIf(p1, '0', '==', validar);
-        gen.genExpresion(t1, t1, '10', '*');
-        gen.genCode(`${t2} = fmod(${p1}, 10);`);
-        //gen.genExpresion(t2, '(int)' + p1, '10', '%');
-        gen.genExpresion(t1, t1, t2, '+');
-        gen.genExpresion(p1, p1, '10', '/');
-        gen.genCode(p1 + ' = (int)' + p1 + ';');
-        gen.genGoto(nextPos);
-        gen.genLabel(validar);
-        gen.genIf(t1, '0', '!=', str1);
-        gen.genSetHeap('h', '48');
-        gen.avanzarHeap();
-        gen.genLabel(str1);
-        gen.genIf(t1, '0', '==', str2);
-        gen.genCode(`${t2} = fmod(${t1}, 10);`);
-        //gen.genExpresion(t2, '(int)' + t1, '10', '%');
-        gen.genExpresion(t2, t2, '48', '+');
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(t1, t1, '10', '/');
-        gen.genCode(t1 + ' = (int)' + t1 + ';');
-        gen.genGoto(str1);
-        gen.genLabel(str2);
-        gen.genGetHeap(t2, p2);
-        gen.genIf(t2, '-1', '==', fin);
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(p2, p2, '1', '+');
-        gen.genGoto(str2);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t0);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-    nativa_concat_str_int() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let pre = gen.newLabel();
-        let inicio = gen.newLabel();
-        let nextPos = gen.newLabel();
-        let validar = gen.newLabel();
-        let str1 = gen.newLabel();
-        let str2 = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_str_int');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t0, 'h');
-        gen.genLabel(str2);
-        gen.genGetHeap(t2, p1);
-        gen.genIf(t2, '-1', '==', pre);
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(p1, p1, '1', '+');
-        gen.genGoto(str2);
-        gen.genLabel(pre);
-        gen.genIf(p2, '0', '>=', inicio);
-        gen.genSetHeap('h', '45');
-        gen.avanzarHeap();
-        gen.genExpresion(p2, p2, '-1', '*');
-        gen.genLabel(inicio);
-        gen.genAsignacion(t1, '0');
-        gen.genLabel(nextPos);
-        gen.genIf(p2, '0', '==', validar);
-        gen.genExpresion(t1, t1, '10', '*');
-        gen.genCode(`${t2} = fmod(${p2}, 10);`);
-        //gen.genExpresion(t2, '(int)' + p2, '10', '%');
-        gen.genExpresion(t1, t1, t2, '+');
-        gen.genExpresion(p2, p2, '10', '/');
-        gen.genCode(p2 + ' = (int)' + p2 + ';');
-        gen.genGoto(nextPos);
-        gen.genLabel(validar);
-        gen.genIf(t1, '0', '!=', str1);
-        gen.genSetHeap('h', '48');
-        gen.avanzarHeap();
-        gen.genLabel(str1);
-        gen.genIf(t1, '0', '==', fin);
-        gen.genCode(`${t2} = fmod(${t1}, 10);`);
-        //gen.genExpresion(t2, '(int)' + t1, '10', '%');
-        gen.genExpresion(t2, t2, '48', '+');
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(t1, t1, '10', '/');
-        gen.genCode(t1 + ' = (int)' + t1 + ';');
-        gen.genGoto(str1);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t0);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-    nativa_concat_dbl_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let t3 = gen.newTemporal();
-        let t4 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let pre = gen.newLabel();
-        let inicio = gen.newLabel();
-        let nextPos = gen.newLabel();
-        let validar = gen.newLabel();
-        let str1 = gen.newLabel();
-        let strd = gen.newLabel();
-        let str2 = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_dbl_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t0, 'h');
-        gen.genIf(p1, '0', '>=', pre);
-        gen.genSetHeap('h', '45');
-        gen.avanzarHeap();
-        gen.genExpresion(p1, p1, '-1', '*');
-        gen.genLabel(pre);
-        gen.genCode(`${t1} = (int)${p1};`);
-        //gen.genCode(`${t2} = fmod(${p1}, 1);`);
-        gen.genAsignacion(t3, '0');
-        gen.genLabel(inicio);
-        gen.genIf(t1, '0', '==', validar);
-        gen.genExpresion(t3, t3, '10', '*');
-        gen.genCode(`${t2} = fmod(${t1}, 10);`);
-        gen.genExpresion(t3, t3, t2, '+');
-        gen.genExpresion(t1, t1, '10', '/');
-        gen.genCode(`${t1} = (int)${t1};`);
-        gen.genGoto(inicio);
-        gen.genLabel(validar);
-        gen.genIf(t3, '0', '!=', nextPos);
-        gen.genSetHeap('h', '48');
-        gen.avanzarHeap();
-        gen.genLabel(nextPos);
-        gen.genIf(t3, '0', '==', str1);
-        gen.genCode(`${t1} = fmod(${t3}, 10);`);
-        gen.genExpresion(t3, t3, '10', '/');
-        gen.genCode(`${t3} = (int)${t3};`);
-        gen.genExpresion(t2, t1, '48', '+');
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genGoto(nextPos);
-        gen.genLabel(str1);
-        gen.genSetHeap('h', '46');
-        gen.avanzarHeap();
-        gen.genAsignacion(t3, '0');
-        gen.genCode(`${t1} = fmod(${p1}, 1);`);
-        gen.genLabel(strd);
-        gen.genIf(t3, '3', '==', str2);
-        gen.genExpresion(t1, t1, '10', '*');
-        gen.genCode(`${t2} = fmod(${t1}, 10);`);
-        gen.genCode(`${t2} = (int)${t2};`);
-        gen.genExpresion(t4, t2, '48', '+');
-        gen.genSetHeap('h', t4);
-        gen.avanzarHeap();
-        gen.genExpresion(t3, t3, '1', '+');
-        gen.genGoto(strd);
-        gen.genLabel(str2);
-        gen.genGetHeap(t2, p2);
-        gen.genIf(t2, '-1', '==', fin);
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(p2, p2, '1', '+');
-        gen.genGoto(str2);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t0);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(t3);
-        gen.freeTemp(t4);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-    nativa_concat_str_dbl() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let t2 = gen.newTemporal();
-        let t3 = gen.newTemporal();
-        let t4 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let pre = gen.newLabel();
-        let sig = gen.newLabel();
-        let inicio = gen.newLabel();
-        let nextPos = gen.newLabel();
-        let validar = gen.newLabel();
-        let str1 = gen.newLabel();
-        let strd = gen.newLabel();
-        let str2 = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_str_dbl');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t0, 'h');
-        gen.genLabel(str2);
-        gen.genGetHeap(t2, p1);
-        gen.genIf(t2, '-1', '==', sig);
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genExpresion(p1, p1, '1', '+');
-        gen.genGoto(str2);
-        gen.genLabel(sig);
-        gen.genIf(p2, '0', '>=', pre);
-        gen.genSetHeap('h', '45');
-        gen.avanzarHeap();
-        gen.genExpresion(p2, p2, '-1', '*');
-        gen.genLabel(pre);
-        gen.genCode(`${t1} = (int)${p2};`);
-        //gen.genCode(`${t2} = fmod(${p2}, 1);`);
-        gen.genAsignacion(t3, '0');
-        gen.genLabel(inicio);
-        gen.genIf(t1, '0', '==', validar);
-        gen.genExpresion(t3, t3, '10', '*');
-        gen.genCode(`${t2} = fmod(${t1}, 10);`);
-        gen.genExpresion(t3, t3, t2, '+');
-        gen.genExpresion(t1, t1, '10', '/');
-        gen.genCode(`${t1} = (int)${t1};`);
-        gen.genGoto(inicio);
-        gen.genLabel(validar);
-        gen.genIf(t3, '0', '!=', nextPos);
-        gen.genSetHeap('h', '48');
-        gen.avanzarHeap();
-        gen.genLabel(nextPos);
-        gen.genIf(t3, '0', '==', str1);
-        gen.genCode(`${t1} = fmod(${t3}, 10);`);
-        gen.genExpresion(t3, t3, '10', '/');
-        gen.genCode(`${t3} = (int)${t3};`);
-        gen.genExpresion(t2, t1, '48', '+');
-        gen.genSetHeap('h', t2);
-        gen.avanzarHeap();
-        gen.genGoto(nextPos);
-        gen.genLabel(str1);
-        gen.genSetHeap('h', '46');
-        gen.avanzarHeap();
-        gen.genAsignacion(t3, '0');
-        gen.genCode(`${t1} = fmod(${p2}, 1);`);
-        gen.genLabel(strd);
-        gen.genIf(t3, '3', '==', fin);
-        gen.genExpresion(t1, t1, '10', '*');
-        gen.genCode(`${t2} = fmod(${t1}, 10);`);
-        gen.genCode(`${t2} = (int)${t2};`);
-        gen.genExpresion(t4, t2, '48', '+');
-        gen.genSetHeap('h', t4);
-        gen.avanzarHeap();
-        gen.genExpresion(t3, t3, '1', '+');
-        gen.genGoto(strd);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t0);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(t2);
-        gen.freeTemp(t3);
-        gen.freeTemp(t4);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-    nativa_concat_str_bol() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let str1 = gen.newLabel();
-        let bol = gen.newLabel();
-        let lblf = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_str_bol');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t0, 'h');
-        gen.genLabel(str1);
-        gen.genGetHeap(t1, p1);
-        gen.genIf(t1, '-1', '==', bol);
-        gen.genSetHeap('h', t1);
-        gen.avanzarHeap();
-        gen.genExpresion(p1, p1, '1', '+');
-        gen.genGoto(str1);
-        gen.genLabel(bol);
-        gen.genIf(p2, '1', '!=', lblf);
-        gen.genSetHeap('h', '116');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '114');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '117');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '101');
-        gen.avanzarHeap();
-        gen.genGoto(fin);
-        gen.genLabel(lblf);
-        gen.genSetHeap('h', '102');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '97');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '108');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '115');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '101');
-        gen.avanzarHeap();
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t0);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-    nativa_concat_bol_str() {
-        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
-        let t0 = gen.newTemporal();
-        let t1 = gen.newTemporal();
-        let p1 = gen.newTemporal();
-        let p2 = gen.newTemporal();
-        let str2 = gen.newLabel();
-        let lblf = gen.newLabel();
-        let fin = gen.newLabel();
-        gen.genFuncion('nativa_concat_bol_str');
-        gen.isFunc = '\t';
-        gen.genExpresion(t1, 'p', '1', '+');
-        gen.genGetStack(p1, t1);
-        gen.genExpresion(t1, 'p', '2', '+');
-        gen.genGetStack(p2, t1);
-        gen.genAsignacion(t0, 'h');
-        gen.genIf(p1, '1', '!=', lblf);
-        gen.genSetHeap('h', '116');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '114');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '117');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '101');
-        gen.avanzarHeap();
-        gen.genGoto(str2);
-        gen.genLabel(lblf);
-        gen.genSetHeap('h', '102');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '97');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '108');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '115');
-        gen.avanzarHeap();
-        gen.genSetHeap('h', '101');
-        gen.avanzarHeap();
-        gen.genLabel(str2);
-        gen.genGetHeap(t1, p2);
-        gen.genIf(t1, '-1', '==', fin);
-        gen.genSetHeap('h', t1);
-        gen.avanzarHeap();
-        gen.genExpresion(p2, p2, '1', '+');
-        gen.genGoto(str2);
-        gen.genLabel(fin);
-        gen.genSetHeap('h', '-1');
-        gen.avanzarHeap();
-        gen.genSetStack('p', t0);
-        gen.genEndFuncion();
-        gen.isFunc = '';
-        gen.freeTemp(t1);
-        gen.freeTemp(p1);
-        gen.freeTemp(p2);
-    }
-}
-
 
 /***/ }),
 
@@ -2780,6 +2022,732 @@ class barrabarra {
     }
 }
 
+
+/***/ }),
+
+/***/ "9IBB":
+/*!************************************!*\
+  !*** ./src/Analizadores/XQuery.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {/* parser generated by jison 0.4.18 */
+/*
+  Returns a Parser object of the following structure:
+
+  Parser: {
+    yy: {}
+  }
+
+  Parser.prototype: {
+    yy: {},
+    trace: function(),
+    symbols_: {associative list: name ==> number},
+    terminals_: {associative list: number ==> name},
+    productions_: [...],
+    performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$),
+    table: [...],
+    defaultActions: {...},
+    parseError: function(str, hash),
+    parse: function(input),
+
+    lexer: {
+        EOF: 1,
+        parseError: function(str, hash),
+        setInput: function(input),
+        input: function(),
+        unput: function(str),
+        more: function(),
+        less: function(n),
+        pastInput: function(),
+        upcomingInput: function(),
+        showPosition: function(),
+        test_match: function(regex_match_array, rule_index),
+        next: function(),
+        lex: function(),
+        begin: function(condition),
+        popState: function(),
+        _currentRules: function(),
+        topState: function(),
+        pushState: function(condition),
+
+        options: {
+            ranges: boolean           (optional: true ==> token location info will include a .range[] member)
+            flex: boolean             (optional: true ==> flex-like lexing behaviour where the rules are tested exhaustively to find the longest match)
+            backtrack_lexer: boolean  (optional: true ==> lexer regexes are tested in order and for each matching regex the action code is invoked; the lexer terminates the scan when a token is returned by the action code)
+        },
+
+        performAction: function(yy, yy_, $avoiding_name_collisions, YY_START),
+        rules: [...],
+        conditions: {associative list: name ==> set},
+    }
+  }
+
+
+  token location info (@$, _$, etc.): {
+    first_line: n,
+    last_line: n,
+    first_column: n,
+    last_column: n,
+    range: [start_number, end_number]       (where the numbers are indexes into the input string, regular zero-based)
+  }
+
+
+  the parseError function receives a 'hash' object with these members for lexer and parser errors: {
+    text:        (matched text)
+    token:       (the produced terminal token, if any)
+    line:        (yylineno)
+  }
+  while parser (grammar) errors will also provide these members, i.e. parser errors deliver a superset of attributes: {
+    loc:         (yylloc)
+    expected:    (string describing the set of expected tokens)
+    recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
+  }
+*/
+var XQuery = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,10],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[5,7,10,17,18,19,25,27,29,30],$Va=[1,17],$Vb=[1,23],$Vc=[1,20],$Vd=[1,19],$Ve=[1,18],$Vf=[1,21],$Vg=[1,22],$Vh=[1,44],$Vi=[1,40],$Vj=[1,42],$Vk=[1,36],$Vl=[1,37],$Vm=[1,38],$Vn=[1,39],$Vo=[1,41],$Vp=[1,43],$Vq=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,34,35,36,37,38,39,41],$Vr=[1,56],$Vs=[1,55],$Vt=[1,54],$Vu=[16,21,24,25,32],$Vv=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,34,35,38,39,41],$Vw=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,38,39,41];
+var parser = {trace: function trace () { },
+yy: {},
+symbols_: {"error":2,"INICIO":3,"RAIZ":4,"EOF":5,"INSTRUCCION":6,"FOR":7,"E":8,"IN":9,"LET":10,"DOSPUNTOS":11,"IGUAL":12,"PARA":13,"DECIMAL":14,"TO":15,"PARC":16,"WHERE":17,"ORDER":18,"RETURN":19,"MENOR":20,"ID":21,"MAYOR":22,"LLAVEA":23,"LLAVEC":24,"BARRA":25,"SENTECIAS_CONTROL":26,"IF":27,"PARAMETROS":28,"THEN":29,"ELSE":30,"LISTA_PARAMETROS":31,"DOLAR":32,"ARROBA":33,"MAS":34,"MENOS":35,"POR":36,"DIV":37,"MENOR_IGUAL":38,"MAYOR_IGUAL":39,"CORA":40,"CORC":41,"CADENA":42,"ENTERO":43,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"FOR",9:"IN",10:"LET",11:"DOSPUNTOS",12:"IGUAL",13:"PARA",14:"DECIMAL",15:"TO",16:"PARC",17:"WHERE",18:"ORDER",19:"RETURN",20:"MENOR",21:"ID",22:"MAYOR",23:"LLAVEA",24:"LLAVEC",25:"BARRA",27:"IF",29:"THEN",30:"ELSE",32:"DOLAR",33:"ARROBA",34:"MAS",35:"MENOS",36:"POR",37:"DIV",38:"MENOR_IGUAL",39:"MAYOR_IGUAL",40:"CORA",41:"CORC",42:"CADENA",43:"ENTERO"},
+productions_: [0,[3,2],[4,2],[4,1],[6,4],[6,9],[6,2],[6,2],[6,2],[6,11],[6,2],[6,1],[6,2],[6,3],[26,4],[26,11],[26,11],[28,2],[28,1],[31,2],[31,2],[31,3],[31,3],[31,1],[31,4],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,2],[8,4],[8,1],[8,1],[8,1],[8,1]],
+performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
+/* this == yyval */
+
+var $0 = $$.length - 1;
+switch (yystate) {
+case 1:
+  this.$=$$[$0-1]; return this.$ 
+break;
+}
+},
+table: [{3:1,4:2,6:3,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},{1:[3]},{5:[1,14],6:15,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},o($V9,[2,3]),{8:16,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:24,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:25,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:26,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:27,13:$Va,14:$Vb,20:[1,28],21:$Vc,26:29,27:$V6,29:$V7,30:$V8,32:$Vd,40:$Ve,42:$Vf,43:$Vg},o($V9,[2,11]),{8:30,13:$Va,14:$Vb,21:$Vc,25:[1,31],32:$Vd,40:$Ve,42:$Vf,43:$Vg},{13:[1,32]},{20:[1,33]},{20:[1,34]},{1:[2,1]},o($V9,[2,2]),{9:[1,35],12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{8:45,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:46,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:[1,47]},o($Vq,[2,38],{13:[1,48]}),o($Vq,[2,39]),o($Vq,[2,40]),o($Vq,[2,41]),{11:[1,49],12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},o($V9,[2,6],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($V9,[2,7],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($V9,[2,8],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{21:[1,50]},o($V9,[2,10]),o($V9,[2,12],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{8:51,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:$Vr,25:$Vs,28:52,31:53,32:$Vt},{21:[1,57]},{21:[1,58]},{6:59,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},{8:60,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:61,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:62,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:63,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:64,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:65,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:66,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:67,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:68,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{12:$Vh,16:[1,69],20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,41:[1,70]},o($Vq,[2,36]),{8:71,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{12:[1,72]},{22:[1,73]},o($V9,[2,13],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{16:[1,74],21:$Vr,25:$Vs,31:75,32:$Vt},o($Vu,[2,18]),{21:[1,76]},{8:77,13:$Va,14:$Vb,21:$Vc,25:[1,78],32:$Vd,33:[1,79],40:$Ve,42:$Vf,43:$Vg},o($Vu,[2,23],{13:[1,80]}),{22:[1,81]},{22:[1,82]},o($V9,[2,4]),o($Vv,[2,25],{36:$Vm,37:$Vn}),o($Vv,[2,26],{36:$Vm,37:$Vn}),o($Vq,[2,27]),o($Vq,[2,28]),o($Vw,[2,29],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,30],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,31],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,32],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,33],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vq,[2,34]),o($Vq,[2,35]),{12:$Vh,16:[1,83],20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{13:[1,84]},{23:[1,85]},o($V9,[2,14]),o($Vu,[2,17]),o($Vu,[2,19]),o($Vu,[2,20],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{8:86,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:87,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:$Vr,25:$Vs,28:88,31:53,32:$Vt},{23:[1,89]},{23:[1,90]},o($Vq,[2,37]),{14:[1,91]},{8:92,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},o($Vu,[2,21],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($Vu,[2,22],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{16:[1,93],21:$Vr,25:$Vs,31:75,32:$Vt},{21:$Vr,25:$Vs,28:94,31:53,32:$Vt},{21:$Vr,25:$Vs,28:95,31:53,32:$Vt},{15:[1,96]},{12:$Vh,20:$Vi,22:$Vj,24:[1,97],34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},o($Vu,[2,24]),{21:$Vr,24:[1,98],25:$Vs,31:75,32:$Vt},{21:$Vr,24:[1,99],25:$Vs,31:75,32:$Vt},{14:[1,100]},{20:[1,101]},{20:[1,102]},{20:[1,103]},{16:[1,104]},{25:[1,105]},{25:[1,106]},{25:[1,107]},o($V9,[2,5]),{21:[1,108]},{21:[1,109]},{21:[1,110]},{22:[1,111]},{22:[1,112]},{22:[1,113]},o($V9,[2,9]),o($V9,[2,15]),o($V9,[2,16])],
+defaultActions: {14:[2,1]},
+parseError: function parseError (str, hash) {
+    if (hash.recoverable) {
+        this.trace(str);
+    } else {
+        var error = new Error(str);
+        error.hash = hash;
+        throw error;
+    }
+},
+parse: function parse(input) {
+    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+    var args = lstack.slice.call(arguments, 1);
+    var lexer = Object.create(this.lexer);
+    var sharedState = { yy: {} };
+    for (var k in this.yy) {
+        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+            sharedState.yy[k] = this.yy[k];
+        }
+    }
+    lexer.setInput(input, sharedState.yy);
+    sharedState.yy.lexer = lexer;
+    sharedState.yy.parser = this;
+    if (typeof lexer.yylloc == 'undefined') {
+        lexer.yylloc = {};
+    }
+    var yyloc = lexer.yylloc;
+    lstack.push(yyloc);
+    var ranges = lexer.options && lexer.options.ranges;
+    if (typeof sharedState.yy.parseError === 'function') {
+        this.parseError = sharedState.yy.parseError;
+    } else {
+        this.parseError = Object.getPrototypeOf(this).parseError;
+    }
+    function popStack(n) {
+        stack.length = stack.length - 2 * n;
+        vstack.length = vstack.length - n;
+        lstack.length = lstack.length - n;
+    }
+    _token_stack:
+        var lex = function () {
+            var token;
+            token = lexer.lex() || EOF;
+            if (typeof token !== 'number') {
+                token = self.symbols_[token] || token;
+            }
+            return token;
+        };
+    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+    while (true) {
+        state = stack[stack.length - 1];
+        if (this.defaultActions[state]) {
+            action = this.defaultActions[state];
+        } else {
+            if (symbol === null || typeof symbol == 'undefined') {
+                symbol = lex();
+            }
+            action = table[state] && table[state][symbol];
+        }
+                    if (typeof action === 'undefined' || !action.length || !action[0]) {
+                var errStr = '';
+                expected = [];
+                for (p in table[state]) {
+                    if (this.terminals_[p] && p > TERROR) {
+                        expected.push('\'' + this.terminals_[p] + '\'');
+                    }
+                }
+                if (lexer.showPosition) {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                } else {
+                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                }
+                this.parseError(errStr, {
+                    text: lexer.match,
+                    token: this.terminals_[symbol] || symbol,
+                    line: lexer.yylineno,
+                    loc: yyloc,
+                    expected: expected
+                });
+            }
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+        }
+        switch (action[0]) {
+        case 1:
+            stack.push(symbol);
+            vstack.push(lexer.yytext);
+            lstack.push(lexer.yylloc);
+            stack.push(action[1]);
+            symbol = null;
+            if (!preErrorSymbol) {
+                yyleng = lexer.yyleng;
+                yytext = lexer.yytext;
+                yylineno = lexer.yylineno;
+                yyloc = lexer.yylloc;
+                if (recovering > 0) {
+                    recovering--;
+                }
+            } else {
+                symbol = preErrorSymbol;
+                preErrorSymbol = null;
+            }
+            break;
+        case 2:
+            len = this.productions_[action[1]][1];
+            yyval.$ = vstack[vstack.length - len];
+            yyval._$ = {
+                first_line: lstack[lstack.length - (len || 1)].first_line,
+                last_line: lstack[lstack.length - 1].last_line,
+                first_column: lstack[lstack.length - (len || 1)].first_column,
+                last_column: lstack[lstack.length - 1].last_column
+            };
+            if (ranges) {
+                yyval._$.range = [
+                    lstack[lstack.length - (len || 1)].range[0],
+                    lstack[lstack.length - 1].range[1]
+                ];
+            }
+            r = this.performAction.apply(yyval, [
+                yytext,
+                yyleng,
+                yylineno,
+                sharedState.yy,
+                action[1],
+                vstack,
+                lstack
+            ].concat(args));
+            if (typeof r !== 'undefined') {
+                return r;
+            }
+            if (len) {
+                stack = stack.slice(0, -1 * len * 2);
+                vstack = vstack.slice(0, -1 * len);
+                lstack = lstack.slice(0, -1 * len);
+            }
+            stack.push(this.productions_[action[1]][0]);
+            vstack.push(yyval.$);
+            lstack.push(yyval._$);
+            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
+            stack.push(newState);
+            break;
+        case 3:
+            return true;
+        }
+    }
+    return true;
+}};
+
+    const evaluar = __webpack_require__(/*! ../Clases/Evaluar */ "bGwg");
+    const aritmetica= __webpack_require__(/*! ../Clases/Expreciones/Operaciones/Aritmetica */ "jImf");
+    const relacional = __webpack_require__(/*! ../Clases/Expreciones/Operaciones/Relaciones */ "VEqm");
+    const logica = __webpack_require__(/*! ../Clases/Expreciones/Operaciones/Logicas */ "7KGZ");
+    const primitivo = __webpack_require__(/*! ../Clases/Expreciones/Primitivo */ "mcIB");
+    
+    const identificador= __webpack_require__(/*! ../Clases/Expreciones/Identificador */ "Byf3");
+    const last= __webpack_require__(/*! ../Clases/Expreciones/last */ "n/3T");
+    const position = __webpack_require__ (/*! ../Clases/Expreciones/position */ "T71e");
+    const ternario= __webpack_require__(/*! ../Clases/Expreciones/Ternario */ "qYeL");
+    const ast =__webpack_require__(/*! ../Clases/AST/Ast */ "ZSbs");
+    const declaracion = __webpack_require__ (/*! ../Clases/Instrucciones/Declaracion */ "zWDC");
+    const asignacion = __webpack_require__ (/*! ../Clases/Instrucciones/Asignacion */ "HGo+");
+    const funcion = __webpack_require__ (/*! ../Clases/Instrucciones/Funcion */ "h38I");
+    const llamada = __webpack_require__ (/*! ../Clases/Instrucciones/Llamada */ "/59w");
+    const ejecutar = __webpack_require__ (/*! ../Clases/Instrucciones/Ejecutar */ "1NQK");
+    const Print = __webpack_require__ (/*! ../Clases/Instrucciones/Print */ "l5Da");
+    const Ifs = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaControl/Ifs */ "WZOa");
+    const While = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaCiclos/While */ "fH/y");
+    const dowhile =__webpack_require__ (/*! ../Clases/Instrucciones/SentenciaCiclos/DoWhile */ "C4Lw");
+    const For =__webpack_require__ (/*! ../Clases/Instrucciones/SentenciaCiclos/For */ "sedW");
+    const simbolo= __webpack_require__ (/*! ../Clases/TablaSimbolos/Simbolos */ "hADQ");
+    const tipo= __webpack_require__ (/*! ../Clases/TablaSimbolos/Tipo */ "lKex");
+    const detener = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaTransferencia/Break */ "L2hm");
+    const continuar = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaTransferencia/continuar */ "vyXG");
+    const retornar = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaTransferencia/retornar */ "uHk2");
+    const sw = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaControl/SW */ "dzIM");
+    const cs = __webpack_require__ (/*! ../Clases/Instrucciones/SentenciaControl/CS */ "DwkX");
+    const acceso= __webpack_require__ (/*! ../Clases/xpath/acceso */ "LjH7");
+    const barrabarra= __webpack_require__ (/*! ../Clases/xpath/barrabarra */ "8VeP");
+    const informacion = __webpack_require__ (/*! ../Clases/xpath/informacion */ "9Smq");
+    const axes = __webpack_require__ (/*! ../Clases/xpath/axes */ "glYm");
+    const axesbarrabarra = __webpack_require__ (/*! ../Clases/xpath/axesbarrabarra */ "Hk5z");
+    const instrucciondoble =__webpack_require__ (/*! ../Clases/xpath/intrucciondoble */ "7VuF");
+    const puntopunto =__webpack_require__ (/*! ../Clases/xpath/puntopunto */ "Y/Ky");
+/* generated by jison-lex 0.3.4 */
+var lexer = (function(){
+var lexer = ({
+
+EOF:1,
+
+parseError:function parseError(str, hash) {
+        if (this.yy.parser) {
+            this.yy.parser.parseError(str, hash);
+        } else {
+            throw new Error(str);
+        }
+    },
+
+// resets the lexer, sets new input
+setInput:function (input, yy) {
+        this.yy = yy || this.yy || {};
+        this._input = input;
+        this._more = this._backtrack = this.done = false;
+        this.yylineno = this.yyleng = 0;
+        this.yytext = this.matched = this.match = '';
+        this.conditionStack = ['INITIAL'];
+        this.yylloc = {
+            first_line: 1,
+            first_column: 0,
+            last_line: 1,
+            last_column: 0
+        };
+        if (this.options.ranges) {
+            this.yylloc.range = [0,0];
+        }
+        this.offset = 0;
+        return this;
+    },
+
+// consumes and returns one char from the input
+input:function () {
+        var ch = this._input[0];
+        this.yytext += ch;
+        this.yyleng++;
+        this.offset++;
+        this.match += ch;
+        this.matched += ch;
+        var lines = ch.match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno++;
+            this.yylloc.last_line++;
+        } else {
+            this.yylloc.last_column++;
+        }
+        if (this.options.ranges) {
+            this.yylloc.range[1]++;
+        }
+
+        this._input = this._input.slice(1);
+        return ch;
+    },
+
+// unshifts one char (or a string) into the input
+unput:function (ch) {
+        var len = ch.length;
+        var lines = ch.split(/(?:\r\n?|\n)/g);
+
+        this._input = ch + this._input;
+        this.yytext = this.yytext.substr(0, this.yytext.length - len);
+        //this.yyleng -= len;
+        this.offset -= len;
+        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+        this.match = this.match.substr(0, this.match.length - 1);
+        this.matched = this.matched.substr(0, this.matched.length - 1);
+
+        if (lines.length - 1) {
+            this.yylineno -= lines.length - 1;
+        }
+        var r = this.yylloc.range;
+
+        this.yylloc = {
+            first_line: this.yylloc.first_line,
+            last_line: this.yylineno + 1,
+            first_column: this.yylloc.first_column,
+            last_column: lines ?
+                (lines.length === oldLines.length ? this.yylloc.first_column : 0)
+                 + oldLines[oldLines.length - lines.length].length - lines[0].length :
+              this.yylloc.first_column - len
+        };
+
+        if (this.options.ranges) {
+            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+        }
+        this.yyleng = this.yytext.length;
+        return this;
+    },
+
+// When called from action, caches matched text and appends it on next action
+more:function () {
+        this._more = true;
+        return this;
+    },
+
+// When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+reject:function () {
+        if (this.options.backtrack_lexer) {
+            this._backtrack = true;
+        } else {
+            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                text: "",
+                token: null,
+                line: this.yylineno
+            });
+
+        }
+        return this;
+    },
+
+// retain first n characters of the match
+less:function (n) {
+        this.unput(this.match.slice(n));
+    },
+
+// displays already matched input, i.e. for error messages
+pastInput:function () {
+        var past = this.matched.substr(0, this.matched.length - this.match.length);
+        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
+    },
+
+// displays upcoming input, i.e. for error messages
+upcomingInput:function () {
+        var next = this.match;
+        if (next.length < 20) {
+            next += this._input.substr(0, 20-next.length);
+        }
+        return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+    },
+
+// displays the character position where the lexing error occurred, i.e. for error messages
+showPosition:function () {
+        var pre = this.pastInput();
+        var c = new Array(pre.length + 1).join("-");
+        return pre + this.upcomingInput() + "\n" + c + "^";
+    },
+
+// test the lexed token: return FALSE when not a match, otherwise return token
+test_match:function(match, indexed_rule) {
+        var token,
+            lines,
+            backup;
+
+        if (this.options.backtrack_lexer) {
+            // save context
+            backup = {
+                yylineno: this.yylineno,
+                yylloc: {
+                    first_line: this.yylloc.first_line,
+                    last_line: this.last_line,
+                    first_column: this.yylloc.first_column,
+                    last_column: this.yylloc.last_column
+                },
+                yytext: this.yytext,
+                match: this.match,
+                matches: this.matches,
+                matched: this.matched,
+                yyleng: this.yyleng,
+                offset: this.offset,
+                _more: this._more,
+                _input: this._input,
+                yy: this.yy,
+                conditionStack: this.conditionStack.slice(0),
+                done: this.done
+            };
+            if (this.options.ranges) {
+                backup.yylloc.range = this.yylloc.range.slice(0);
+            }
+        }
+
+        lines = match[0].match(/(?:\r\n?|\n).*/g);
+        if (lines) {
+            this.yylineno += lines.length;
+        }
+        this.yylloc = {
+            first_line: this.yylloc.last_line,
+            last_line: this.yylineno + 1,
+            first_column: this.yylloc.last_column,
+            last_column: lines ?
+                         lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
+                         this.yylloc.last_column + match[0].length
+        };
+        this.yytext += match[0];
+        this.match += match[0];
+        this.matches = match;
+        this.yyleng = this.yytext.length;
+        if (this.options.ranges) {
+            this.yylloc.range = [this.offset, this.offset += this.yyleng];
+        }
+        this._more = false;
+        this._backtrack = false;
+        this._input = this._input.slice(match[0].length);
+        this.matched += match[0];
+        token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+        if (this.done && this._input) {
+            this.done = false;
+        }
+        if (token) {
+            return token;
+        } else if (this._backtrack) {
+            // recover context
+            for (var k in backup) {
+                this[k] = backup[k];
+            }
+            return false; // rule action called reject() implying the next rule should be tested instead.
+        }
+        return false;
+    },
+
+// return next match in input
+next:function () {
+        if (this.done) {
+            return this.EOF;
+        }
+        if (!this._input) {
+            this.done = true;
+        }
+
+        var token,
+            match,
+            tempMatch,
+            index;
+        if (!this._more) {
+            this.yytext = '';
+            this.match = '';
+        }
+        var rules = this._currentRules();
+        for (var i = 0; i < rules.length; i++) {
+            tempMatch = this._input.match(this.rules[rules[i]]);
+            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                match = tempMatch;
+                index = i;
+                if (this.options.backtrack_lexer) {
+                    token = this.test_match(tempMatch, rules[i]);
+                    if (token !== false) {
+                        return token;
+                    } else if (this._backtrack) {
+                        match = false;
+                        continue; // rule action called reject() implying a rule MISmatch.
+                    } else {
+                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                        return false;
+                    }
+                } else if (!this.options.flex) {
+                    break;
+                }
+            }
+        }
+        if (match) {
+            token = this.test_match(match, rules[index]);
+            if (token !== false) {
+                return token;
+            }
+            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+            return false;
+        }
+        if (this._input === "") {
+            return this.EOF;
+        } else {
+            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                text: "",
+                token: null,
+                line: this.yylineno
+            });
+        }
+    },
+
+// return next match that has a token
+lex:function lex () {
+        var r = this.next();
+        if (r) {
+            return r;
+        } else {
+            return this.lex();
+        }
+    },
+
+// activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+begin:function begin (condition) {
+        this.conditionStack.push(condition);
+    },
+
+// pop the previously active lexer condition state off the condition stack
+popState:function popState () {
+        var n = this.conditionStack.length - 1;
+        if (n > 0) {
+            return this.conditionStack.pop();
+        } else {
+            return this.conditionStack[0];
+        }
+    },
+
+// produce the lexer rule set which is active for the currently active lexer condition state
+_currentRules:function _currentRules () {
+        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+            return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+        } else {
+            return this.conditions["INITIAL"].rules;
+        }
+    },
+
+// return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+topState:function topState (n) {
+        n = this.conditionStack.length - 1 - Math.abs(n || 0);
+        if (n >= 0) {
+            return this.conditionStack[n];
+        } else {
+            return "INITIAL";
+        }
+    },
+
+// alias for begin(condition)
+pushState:function pushState (condition) {
+        this.begin(condition);
+    },
+
+// return the number of states currently on the stack
+stateStackSize:function stateStackSize() {
+        return this.conditionStack.length;
+    },
+options: {"case-insensitive":true},
+performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
+var YYSTATE=YY_START;
+switch($avoiding_name_collisions) {
+case 0: console.log("Reconocio : "+ yy_.yytext); return 13
+break;
+case 1: console.log("Reconocio : "+ yy_.yytext); return 25
+break;
+case 2: console.log("Reconocio : "+ yy_.yytext); return 16
+break;
+case 3: console.log("Reconocio : "+ yy_.yytext); return 32
+break;
+case 4: console.log("Reconocio : "+ yy_.yytext); return 23
+break;
+case 5: console.log("Reconocio : "+ yy_.yytext); return 24
+break;
+case 6: console.log("Reconocio : "+ yy_.yytext); return 40
+break;
+case 7: console.log("Reconocio : "+ yy_.yytext); return 41
+break;
+case 8: console.log("Reconocio : "+ yy_.yytext); return 38
+break;
+case 9: console.log("Reconocio : "+ yy_.yytext); return 39
+break;
+case 10: console.log("Reconocio : "+ yy_.yytext); return 12
+break;
+case 11: console.log("Reconocio : "+ yy_.yytext); return 20
+break;
+case 12: console.log("Reconocio : "+ yy_.yytext); return 22
+break;
+case 13: console.log("Reconocio : "+ yy_.yytext); return 'DIFERENTE'
+break;
+case 14: console.log("Reconocio : "+ yy_.yytext); return 11
+break;
+case 15: console.log("Reconocio : "+ yy_.yytext); return 34
+break;
+case 16: console.log("Reconocio : "+ yy_.yytext); return 35
+break;
+case 17: console.log("Reconocio : "+ yy_.yytext); return 36
+break;
+case 18: console.log("Reconocio : "+ yy_.yytext); return 37
+break;
+case 19: console.log("Reconocio : "+ yy_.yytext); return 'AND'
+break;
+case 20: console.log("Reconocio : "+ yy_.yytext); return 'OR'
+break;
+case 21: console.log("Reconocio : "+ yy_.yytext); return 7
+break;
+case 22: console.log("Reconocio : "+ yy_.yytext); return 9
+break;
+case 23: console.log("Reconocio : "+ yy_.yytext); return 10
+break;
+case 24: console.log("Reconocio : "+ yy_.yytext); return 17
+break;
+case 25: console.log("Reconocio : "+ yy_.yytext); return 18
+break;
+case 26: console.log("Reconocio : "+ yy_.yytext); return 19
+break;
+case 27: console.log("Reconocio : "+ yy_.yytext); return 15
+break;
+case 28: console.log("Reconocio : "+ yy_.yytext); return 27
+break;
+case 29: console.log("Reconocio : "+ yy_.yytext); return 29
+break;
+case 30: console.log("Reconocio : "+ yy_.yytext); return 30
+break;
+case 31: console.log("Reconocio : "+ yy_.yytext); return 33
+break;
+case 32: console.log("Reconocio : "+ yy_.yytext); return 14
+break;
+case 33: console.log("Reconocio : "+ yy_.yytext); return 43
+break;
+case 34: console.log("Reconocio id : "+ yy_.yytext); return 21
+break;
+case 35: console.log("Reconocio : "+ yy_.yytext); return 42
+break;
+case 36: /* skip whitespace */ 
+break;
+case 37:return 5
+break;
+case 38: console.log("Error Lexico "+yy_.yytext
+                        +" linea "+yy_.yylineno
+                        +" columna "+(yy_.yylloc.last_column+1));        
+                        
+break;
+}
+},
+rules: [/^(?:\()/i,/^(?:\/)/i,/^(?:\))/i,/^(?:\$)/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:!=)/i,/^(?::)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:and\b)/i,/^(?:or\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:let\b)/i,/^(?:where\b)/i,/^(?:order by\b)/i,/^(?:return\b)/i,/^(?:to\b)/i,/^(?:if\b)/i,/^(?:then\b)/i,/^(?:else\b)/i,/^(?:@)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:([0-9]+))/i,/^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i,/^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i,/^(?:[\s\r\n\t])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38],"inclusive":true}}
+});
+return lexer;
+})();
+parser.lexer = lexer;
+function Parser () {
+  this.yy = {};
+}
+Parser.prototype = parser;parser.Parser = Parser;
+return new Parser;
+})();
+
+
+if (true) {
+exports.parser = XQuery;
+exports.Parser = XQuery.Parser;
+exports.parse = function () { return XQuery.parse.apply(XQuery, arguments); };
+exports.main = function commonjsMain (args) {
+    if (!args[1]) {
+        console.log('Usage: '+args[0]+' FILE');
+        process.exit(1);
+    }
+    var source = __webpack_require__(/*! fs */ 1).readFileSync(__webpack_require__(/*! path */ 2).normalize(args[1]), "utf8");
+    return exports.parser.parse(source);
+};
+if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
+  exports.main(process.argv.slice(1));
+}
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ "YuTi")(module)))
 
 /***/ }),
 
@@ -4174,6 +4142,7 @@ class acceso {
     isxprecion(controlador, ts) {
         controlador.idlast = this.exprecion.id;
         let valor = this.exprecion.exprecion.getValor(controlador, ts);
+        // this.exprecion.exprecion.getvalor3d(controlador,ts);
         if (typeof valor == 'number') {
             this.isNumero(controlador, ts, valor);
         }
@@ -4321,32 +4290,37 @@ function AppComponent_div_8_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_7_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4); const ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r6.traducir3D(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](9, "a", 20);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_9_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4); const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r7.ejecutarXquery(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](10, "Ejecutar XQuery");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](11, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 } }
 function AppComponent_div_13_Template(rf, ctx) { if (rf & 1) {
-    const _r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+    const _r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8); const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r7.recorrer(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r9); const ctx_r8 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r8.recorrer(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Arbol AST Ascendente XML");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](4, "a", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8); const ctx_r9 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r9.ejecutarDescendente(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_4_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r9); const ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r10.ejecutarDescendente(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](5, "Arbol AST Descendente XML");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r8); const ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r10.xprecorrerDes(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_13_Template_a_click_7_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r9); const ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r11.xprecorrerDes(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Arbol AST Descendente XPAHT");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 } }
 function AppComponent_div_18_Template(rf, ctx) { if (rf & 1) {
-    const _r12 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
+    const _r13 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](0, "div", 19);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](1, "a", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r12); const ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r11.imprimirTabla(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r13); const ctx_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r12.imprimirTabla(); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](2, "Gramatical");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](3, "div", 21);
@@ -4359,7 +4333,7 @@ function AppComponent_div_18_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 23);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r12); const ctx_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r13.openPage("TablaSim", 2); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_18_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r13); const ctx_r14 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r14.openPage("TablaSim", 2); });
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Errores el sem\u00E1ntico");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
@@ -4506,6 +4480,13 @@ class AppComponent {
         }
         document.getElementById(pageName).style.display = "block";
     }
+    ejecutarXquery() {
+        let ana = new _clases_Analizar__WEBPACK_IMPORTED_MODULE_0__["Analizador"]();
+        this.consola = "";
+        if (this.entradaxpath != "") {
+            ana.recorrerXquery(this.entradaxpath);
+        }
+    }
 }
 AppComponent.ɵfac = function AppComponent_Factory(t) { return new (t || AppComponent)(); };
 AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineComponent"]({ type: AppComponent, selectors: [["app-root"]], decls: 80, vars: 15, consts: [[1, "nav", "grey", "lighten-4", "py-4"], [1, "nav-item"], ["href", "#!", 1, "nav-link", "disabled"], ["dropdown", "", 1, "nav-item", "dropdown"], ["dropdownToggle", "", "mdbWavesEffect", "", "type", "button", "mdbWavesEffect", "", 1, "nav-link", "dropdown-toggle", "waves-light"], [1, "caret"], ["class", "dropdown-menu dropdown dropdown-primary", "role", "menu", 4, "dropdownMenu"], ["mdbBtn", "", "type", "button", "color", "default", "rounded", "true", "outline", "true", "mdbWavesEffect", "", 3, "click"], [1, "container-fluid"], [1, "col"], [3, "ngModel", "options", "ngModelChange"], [1, "row"], [1, "col-sm-6", "mb-3", "mb-md-0"], [1, "col-sm-6"], ["id", "TablaSim", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["mdbTable", "", "id", "tablasimbols", "bordered", "true", 2, "width", "100%"], ["id", "ast", 1, "tabcontent", 2, "background-color", "#1b1d1c"], ["id", "graph", 1, "overflow-auto", 2, "text-align", "center"], ["id", "app"], ["role", "menu", 1, "dropdown-menu", "dropdown", "dropdown-primary"], ["mdbWavesEffect", "", 1, "dropdown-item", "waves-light", 3, "click"], [1, "divider", "dropdown-divider"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light"], ["mdbWavesEffect", "", "href", "#", 1, "dropdown-item", "waves-light", 3, "click"]], template: function AppComponent_Template(rf, ctx) { if (rf & 1) {
@@ -4520,7 +4501,7 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineCompo
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, " Ejecutar ");
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](7, "span", 5);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 9, 0, "div", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 12, 0, "div", 6);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](9, "li", 3);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 4);
@@ -4675,10 +4656,14 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineCompo
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return position; });
 /* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+/* harmony import */ var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TablaSimbolos/Tipo */ "lKex");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./retorno */ "munq");
+
+
 
 class position {
     getvalor3d(controlador, ts) {
-        throw new Error("Method not implemented.");
+        return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](controlador.position + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
     }
     getTipo(controlador, ts) {
         throw new Error("Method not implemented.");
@@ -6720,307 +6705,6 @@ class Objeto {
 
 /***/ }),
 
-/***/ "cg4T":
-/*!*************************************************!*\
-  !*** ./src/Clases/GeneradorC3D/GeneradorC3D.ts ***!
-  \*************************************************/
-/*! exports provided: GeneradorC3D */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GeneradorC3D", function() { return GeneradorC3D; });
-/* harmony import */ var _Nativas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nativas */ "3Bn/");
-
-class GeneradorC3D {
-    /**
-     * constructor de la clase singleton
-     */
-    constructor() {
-        this.isFunc = '';
-        this.temporal = this.label = 0;
-        this.code = [];
-        this.codeFuncion = [];
-        this.tempStorage = new Set();
-    }
-    agregarFuncion(funcion) {
-        funcion.forEach((fun) => {
-            this.codeFuncion.push(fun);
-        });
-    }
-    /**
-     * Obtiene la instancia de la clase singleton
-     */
-    static getInstancia() {
-        return this.generador || (this.generador = new this());
-    }
-    /**
-     * Retorna el set de los temporales que estan en uso
-     */
-    getTempStorage() {
-        return this.tempStorage;
-    }
-    /**
-     * Vacia el set de los temporales
-     */
-    clearTempStorage() {
-        this.tempStorage.clear();
-    }
-    /**
-     * asigna el set al set local de temporales
-     * @param tempStorage lista tipo Set que se asignara al set local
-     */
-    setTempStorage(tempStorage) {
-        this.tempStorage = tempStorage;
-    }
-    /**
-     * borra el C3D que tenga guardado la clase y reinicia los temporales y labels
-     */
-    clearCode() {
-        this.temporal = this.label = 0;
-        this.code = [];
-        this.codeFuncion = [];
-        this.tempStorage = new Set();
-    }
-    clearSoloCode() {
-        this.code = [];
-    }
-    /**
-     * Ingresa en el C3D el valor que se asigna como parametro
-     * @param code valor que se asignara al C3D de la clase
-     */
-    genCode(code) {
-        this.code.push(this.isFunc + code);
-    }
-    /**
-     * Retorna el C3D que se haya generado en la clase singleton
-     */
-    getCode() {
-        let nativas = new _Nativas__WEBPACK_IMPORTED_MODULE_0__["Nativas"]();
-        let encabezado = '#include <stdio.h>\n#include <math.h>\ndouble Stack[60000]; double Heap[60000];\nint p; int h;\n';
-        let main = `\nint main() {\n${this.code.join('\n')}\n\nreturn 0;\n}\n`;
-        const funciones = this.codeFuncion.join('\n');
-        this.code = [];
-        let strNativas = nativas.generarNativas();
-        //strNativas = ''; // comentar despues de terminar
-        let c3d = `${encabezado}${this.getTemporales()};\n${strNativas}\n${funciones}\n${main}`;
-        return c3d;
-    }
-    getSoloCode() {
-        return this.code;
-    }
-    setSoloCode(codeA) {
-        this.code = codeA;
-    }
-    getNativas() {
-        return this.code.join('\n');
-    }
-    getTemporales() {
-        let lista = 'double ';
-        for (let i = 0; i < this.temporal; i++) {
-            lista += 'T' + i;
-            lista += i < this.temporal - 1 ? ',' : '';
-        }
-        return lista;
-    }
-    /**
-     * Crea un nuevo temporal y lo retorna
-     */
-    newTemporal() {
-        const temp = 'T' + this.temporal++;
-        this.tempStorage.add(temp);
-        return temp;
-    }
-    /**
-     * Crea una nueva etiqueta y la retorna
-     */
-    newLabel() {
-        return 'L' + this.label++;
-    }
-    /**
-     * funcion que agrega una nueva etiqueta el C3D
-     * @param label valor que se agregara al C3D como tipo etiqueta
-     */
-    genLabel(label) {
-        this.code.push(`${this.isFunc}${label}:`);
-    }
-    /**
-     * Genera una nueva expresion y la agrega al C3D
-     * @param tem Temporal al que se le asignara la expresion
-     * @param izq Expresion izquierda que se asignara al temporal
-     * @param der Expresion derecha que se asignara al temporal
-     * @param operator Operador de la expresion
-     */
-    genExpresion(tem, iqz, der = '', operator = '') {
-        this.code.push(`${this.isFunc}${tem} = ${iqz} ${operator} ${der};`);
-    }
-    /**
-     * asigna un valor a un temporal o puntero
-     * @param tem variable que recibira el valor
-     * @param val valor que sera asignado
-     */
-    genAsignacion(tem, val) {
-        this.code.push(`${this.isFunc}${tem} = ${val};`);
-    }
-    /**
-     * genera un goto con el valor de label y lo agrega el C3D
-     * @param label valor de etiqueta al cual se hara el goto
-     */
-    genGoto(label) {
-        this.code.push(`${this.isFunc}goto ${label};`);
-    }
-    /**
-     * genera un if y lo agrega al C3D
-     * @param iqz Expresion izquierda de la condicion if
-     * @param der Expresion derecha de la condicion if
-     * @param operator Operador boleano de la condicion
-     * @param label Etiqueta de salto si la condicion es verdadera
-     */
-    genIf(iqz, der, operator, label) {
-        this.code.push(`${this.isFunc}if (${iqz} ${operator} ${der}) goto ${label};`);
-    }
-    /**
-     * Intruccion que hace avanzar el puntero heap a su siguite posicion
-     */
-    avanzarHeap() {
-        this.code.push(this.isFunc + 'h = h + 1;');
-    }
-    /**
-     * genera un acceso al heap en la posicion index y lo asiga al tem
-     * @param tem temporal que recibira el valor del heap
-     * @param index posicion del heap al cual se accedera
-     */
-    genGetHeap(tem, index) {
-        index = index[0] === 'T' ? '(int)' + index : index;
-        this.code.push(`${this.isFunc}${tem} = Heap[${index}];`);
-    }
-    /**
-     * genera una asignacion de valor al heap en la posicion index
-     * @param index posicion del heap al cual se desea acceder
-     * @param valor valor que se asignara a la posicion del heap
-     */
-    genSetHeap(index, valor) {
-        index = index[0] === 'T' ? '(int)' + index : index;
-        this.code.push(`${this.isFunc}Heap[${index}] = ${valor};`);
-    }
-    /**
-     * genera una asignacion a tem del valor del stack en la posicion index
-     * @param tem temporal al cual se asignara el valor del stack
-     * @param index posicion del stack al cual se desea acceder
-     */
-    genGetStack(tem, index) {
-        index = index[0] === 'T' ? '(int)' + index : index;
-        this.code.push(`${this.isFunc}${tem} = Stack[${index}];`);
-    }
-    /**
-     * genera una asignacion al stack en la posicion index
-     * @param index posicion del stack al cual se desea acceder
-     * @param value valor que sera asignado al stack
-     */
-    genSetStack(index, value) {
-        index = index[0] === 'T' ? '(int)' + index : index;
-        this.code.push(`${this.isFunc}Stack[${index}] = ${value};`);
-    }
-    /**
-     * genera un desplazamiento del stack para generar un nuevo ambito
-     * @param size posiciones que se desplazara el stack
-     */
-    genNextEnv(size) {
-        this.code.push(`${this.isFunc}p = p + ${size};`);
-    }
-    /**
-     * genera un desplazamiento del stack para volver a un ambito anterios
-     * @param size posiciones que se desplazara el stack
-     */
-    genAntEnv(size) {
-        this.code.push(`${this.isFunc}p = p - ${size};`);
-    }
-    /**
-     * genera una llamada a una funcion
-     * @param id nombre de la funcion
-     */
-    genCall(id) {
-        this.code.push(`${this.isFunc}${id}();`);
-    }
-    /**
-     * Genera el encabezado de una funcion
-     * @param id nombre de la funcion
-     */
-    genFuncion(id) {
-        this.code.push(`\nvoid ${id}() {`);
-    }
-    /**
-     * Genera el cierre de la definicion de una funcion
-     */
-    genEndFuncion() {
-        this.code.push('}');
-    }
-    /**
-     * genera un printf con el tipo de dato y el valor
-     * @param formato tipo de dato que se va a imprimir
-     * @param valor valor que se va a imprimir
-     */
-    genPrint(formato, valor) {
-        valor = valor[0] === 'T' && formato !== 'f' ? '(int)' + valor : valor;
-        this.code.push(`${this.isFunc}printf("%${formato}",${valor});`);
-    }
-    /**
-     * genera un print del valor true
-     */
-    genPrintTrue() {
-        this.genPrint('c', 't'.charCodeAt(0));
-        this.genPrint('c', 'r'.charCodeAt(0));
-        this.genPrint('c', 'u'.charCodeAt(0));
-        this.genPrint('c', 'e'.charCodeAt(0));
-    }
-    /**
-     * genera un print del valor false
-     */
-    genPrintFalse() {
-        this.genPrint('c', 'f'.charCodeAt(0));
-        this.genPrint('c', 'a'.charCodeAt(0));
-        this.genPrint('c', 'l'.charCodeAt(0));
-        this.genPrint('c', 's'.charCodeAt(0));
-        this.genPrint('c', 'e'.charCodeAt(0));
-    }
-    /**
-     * genera un print del valor null
-     */
-    genPrintNull() {
-        this.genPrint('c', 'n'.charCodeAt(0));
-        this.genPrint('c', 'u'.charCodeAt(0));
-        this.genPrint('c', 'l'.charCodeAt(0));
-        this.genPrint('c', 'l'.charCodeAt(0));
-    }
-    /**
-     * genera un nuevo comentario
-     * @param comment valor del comentario
-     */
-    genComentario(comment) {
-        this.code.push(`${this.isFunc}// ----- ${comment} -----`);
-    }
-    /**
-     * borra un temporal del storage
-     * @param temp temporal que ya no se utilizara
-     */
-    freeTemp(temp) {
-        if (this.tempStorage.has(temp)) {
-            this.tempStorage.delete(temp);
-        }
-    }
-    /**
-     * agrega un temporal al storage
-     * @param temp temporal que se agregara al storage
-     */
-    genTemp(temp) {
-        if (!this.tempStorage.has(temp))
-            this.tempStorage.add(temp);
-    }
-}
-
-
-/***/ }),
-
 /***/ "dzIM":
 /*!*********************************************************!*\
   !*** ./src/Clases/Instrucciones/SentenciaControl/SW.ts ***!
@@ -7792,11 +7476,11 @@ class Aritmetica extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
                 console.log("entre a suma");
                 return this.suma3D(valor_exp1, valor_exp2, controlador);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].RESTA:
-                return this.resta(valor_exp1, valor_exp2);
+                return this.resta3D(valor_exp1, valor_exp2, controlador);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MULTI:
-                return this.multiplicacion(valor_exp1, valor_exp2);
+                return this.multiplicacion3D(valor_exp1, valor_exp2, controlador);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIV:
-                return this.divicion(valor_exp1, valor_exp2);
+                return this.divicion3D(valor_exp1, valor_exp2, controlador);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].POT:
                 return this.potencia(valor_exp1, valor_exp2);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MODULO:
@@ -7811,14 +7495,92 @@ class Aritmetica extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
     suma3D(valor_exp1, valor_exp2, controlador) {
         const generador = controlador.generador;
         const temp = generador.newTemporal();
+        let tempAux;
         switch (valor_exp1.tipo.type) {
             case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE:
                 switch (valor_exp2.tipo.type) {
                     case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE:
                         generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '+');
                         return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
+                    case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA:
+                        let tempAux = generador.newTemporal();
+                        generador.freeTemp(tempAux);
+                        generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                        generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                        generador.genExpresion(tempAux, tempAux, '1', '+');
+                        generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                        generador.genNextEnv(1);
+                        generador.genCall('nativa_concat_int_str');
+                        generador.genGetStack(temp, 'p');
+                        generador.genAntEnv(1);
+                        return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("STRING"));
+                    case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO:
+                    default:
+                        break;
                 }
                 break;
+            case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA:
+                switch (valor_exp2.tipo.type) {
+                    case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE:
+                        tempAux = generador.newTemporal();
+                        generador.freeTemp(tempAux);
+                        generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                        generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                        generador.genExpresion(tempAux, tempAux, '1', '+');
+                        generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                        generador.genNextEnv(1);
+                        generador.genCall('nativa_concat_str_int');
+                        generador.genGetStack(temp, 'p');
+                        generador.genAntEnv(1);
+                        return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("STRING"));
+                    case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA:
+                        tempAux = generador.newTemporal();
+                        generador.freeTemp(tempAux);
+                        generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                        generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                        generador.genExpresion(tempAux, tempAux, '1', '+');
+                        generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                        generador.genNextEnv(1);
+                        generador.genCall('nativa_concat_str_str');
+                        generador.genGetStack(temp, 'p');
+                        generador.genAntEnv(1);
+                        return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("STRING"));
+                    case src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO:
+                    default:
+                        break;
+                }
+            default:
+                break;
+        }
+    }
+    resta3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '-');
+                return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+    multiplicacion3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '*');
+                return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+    divicion3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '/');
+                return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
+            }
         }
     }
 }
@@ -9263,8 +9025,6 @@ class Primitivo {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "retorno", function() { return retorno; });
-/* harmony import */ var _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../GeneradorC3D/GeneradorC3D */ "cg4T");
-
 class retorno {
     constructor(valor, istemp, tipo) {
         this.valor = valor;
@@ -9273,8 +9033,6 @@ class retorno {
         this.lblTrue = this.lblFalse = '';
     }
     getvalor3d() {
-        if (this.istemp)
-            _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia().freeTemp(this.valor);
         return this.valor;
     }
 }
@@ -9293,12 +9051,22 @@ class retorno {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return last; });
 /* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+/* harmony import */ var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../TablaSimbolos/Tipo */ "lKex");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./retorno */ "munq");
+
+
 
 class last {
     constructor() {
     }
     getvalor3d(controlador, ts) {
-        throw new Error("Method not implemented.");
+        let cont = 0;
+        for (let informacion of ts.tabla) {
+            if (informacion.identificador == controlador.idlast) {
+                cont++;
+            }
+        }
+        return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](cont + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
     }
     getTipo(controlador, ts) {
     }
@@ -9336,18 +9104,18 @@ class Nativas {
     generarNativas() {
         this.nativa_print_str();
         //this.nativa_print_integer();
-        /* this.nativa_compararIgual_str_str();
-         this.nativa_compararNoIgual_str_str();
-         this.nativa_ToUpperCase();
-         this.nativa_ToLowerCase();
-         this.nativa_concat_str_str();
-         this.nativa_concat_dbl_str();
-         this.nativa_concat_str_dbl();
-         this.nativa_concat_int_str();
-         this.nativa_concat_str_int();
-         this.nativa_concat_str_bol();
-         this.nativa_concat_bol_str();
-         this.nativa_lenght_str();*/
+        // this.nativa_compararIgual_str_str();
+        // this.nativa_compararNoIgual_str_str();
+        //this.nativa_ToUpperCase();
+        //this.nativa_ToLowerCase();
+        this.nativa_concat_str_str();
+        //this.nativa_concat_dbl_str();
+        //  this.nativa_concat_str_dbl();
+        this.nativa_concat_int_str();
+        this.nativa_concat_str_int();
+        //this.nativa_concat_str_bol();
+        // this.nativa_concat_bol_str();
+        //this.nativa_lenght_str();
         return _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia().getNativas();
     }
     nativa_lenght_str() {

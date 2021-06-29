@@ -8,7 +8,7 @@
   const { Atributo, Camino, Child, Descendant, Attribute, Self, DescSelf, FollowSibling, Follow } = require('./Expresion/axes')
   const { CaminoInverso, Parent, Ancestor, PrecedingSibling, AncestorSelf, Preceding } = require('./Expresion/axes')
   const { ContextItemExpr, CallFunction, CallFunctionPrefix } = require('./Expresion/postfix')
-  const { Flower } = require('./Instruccion/Xquery')
+  const { Flower,IfThenElse } = require('./Instruccion/Xquery')
   const { grafoCST } = require('../CST')
 
   var grafo = new grafoCST(); 
@@ -59,6 +59,14 @@
 "ancestor" return "RANCESTOR"
 "preceding-sibling" return "RPRECEDSIBLING"
 "preceding" return "RPRECED"
+"decimal" return "RDECIMAL"
+"integer" return "RINTEGER"
+"string"  return "RSTRING"
+"date"  return "RDATE"
+"time"  return "RTIME"
+"element" return "RELEMENT"
+"XS" return "RXS"
+
 
 /* Lexico XQuery */
 "return"    return "RRETURN"
@@ -149,8 +157,7 @@ XPath
     grafo = new grafoCST();
     $$=new Comando($1,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
     return $$ }
-  | AnnotatedDecl {
-    return new Comando([],[],[],"",retornoErrores,[]) }
+  | AnnotatedDecl { return new Comando([],[],[],"",retornoErrores,[]) }
   | error {  
       setLineaColumna(this._$.first_line,this._$.first_column)
       //ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
@@ -199,7 +206,26 @@ AnnotatedDecl
 ;
 
 TypeDeclaration
-	: RAS //I don't know  -> Datatype
+  : RAS RXS DOSPUNTOS RDECIMAL    { 
+    $$=Tipo.DECIMAL 
+    grafo.generarHijos($1,$2,$3,$4)
+    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
+  | RAS RXS DOSPUNTOS RINTEGER    { 
+    $$=Tipo.INTEGER
+    grafo.generarHijos($1,$2,$3,$4)
+    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
+  | RAS RXS DOSPUNTOS RSTRING     { 
+    $$=Tipo.STRING
+    grafo.generarHijos($1,$2,$3,$4)
+    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
+  | RAS RXS DOSPUNTOS RATTRIBUTE  { 
+    $$=Tipo.ATRIB
+    grafo.generarHijos($1,$2,$3,$4)
+    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
+  | RAS RXS DOSPUNTOS RELEMENT    { 
+    $$=Tipo.NODO
+    grafo.generarHijos($1,$2,$3,$4)
+    grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
 ;
 
 VarValue 
@@ -220,7 +246,7 @@ ParamList
 
 Param
   : DOLAR NOMBRE TypeDeclaration
-  | DOLAR NOMBRE 	
+  | DOLAR NOMBRE 	                
 ;
 
 FunctionBody
@@ -239,7 +265,11 @@ ExprSingle
       grafo.generarHijos("FLWORExpr");
       grafo.generarTexto(`ExprSingle.valor=FLWORExpr.valor`) 
     }
-  | IfExpr
+  | IfExpr  {
+    $$=$1;
+    grafo.generarPadre(1,"IfExpr")
+    grafo.generarHijos("IfExpr")
+    grafo.generarTexto(`ExprSingle.valor=IfExpr.valor`)}
 ;
 
 FLWORExpr
@@ -403,14 +433,36 @@ OrderSpecList
 ;	
 
 OrderSpec
-	: ExprSingle OrderModifier      { $$={exp:$1,mode:$2} }
-  | ExprSingle                    { $$={exp:$1,mode:{order:'asc',empty:'g'}} }
+	: ExprSingle OrderModifier      { 
+    $$={exp:$1,mode:$2} 
+    grafo.generarPadre(2,"OrderModifier")
+    grafo.generarPadre(1,"ExprSingle")
+    grafo.generarHijos("ExprSingle","OrderModifier")
+    grafo.generarTexto("OrderSpec.valor=OrderModifier.valor;")}
+  | ExprSingle                    { 
+    $$={exp:$1,mode:{order:'asc',empty:'g'}} 
+    grafo.generarPadre(1,"ExprSingle")
+    grafo.generarHijos("ExprSingle")
+    grafo.generarTexto("OrderSpec.valor = ExprSingle.valor;")}
 ;
 
 OrderModifier
-	: OrderOrder OrderEmpty         { $$={order:$1.order,empty:$2.empty} }
-  | OrderEmpty	                  { $$=$1 }
-  | OrderOrder	                  { $$=$1 }
+	: OrderOrder OrderEmpty         { 
+    $$={order:$1.order,empty:$2.empty} 
+    grafo.generarPadre(2,"OrderEmpty")
+    grafo.generarPadre(1,"OrderOrder")
+    grafo.generarHijos("OrderOrder","OrderEmpty")
+    grafo.generarTexto("OrderModifier.order=OrderOrder.valor;OrderModifier.empty=OrderEmpty.valor;") }
+  | OrderEmpty	                  { 
+    $$=$1
+    grafo.generarPadre(1,"OrderEmpty")
+    grafo.generarHijos("OrderEmpty")
+    grafo.generarTexto("OrderModifier.order='asc';OrderModifier.empty=OrderEmpty.valor;") }
+  | OrderOrder	                  { 
+    $$=$1
+    grafo.generarPadre(1,"OrderOrder")
+    grafo.generarHijos("OrderOrder")
+    grafo.generarTexto("OrderModifier.order=OrderOrder.valor;OrderModifier.empty='g';") }
 ;
 
 OrderEmpty
@@ -430,7 +482,7 @@ OrderOrder
     grafo.generarHijos($1)
     grafo.generarTexto(`OrderOrder.order = ${$1}`) }
   | RDESCENDING                   { 
-    $$={order:'desc',empty:'l'} 
+    $$={order:'desc',empty:'g'} 
     grafo.generarHijos($1)
     grafo.generarTexto(`OrderOrder.order = ${$1}`) }
 ;
@@ -444,7 +496,13 @@ ReturnClause
 ;
 
 IfExpr	   
-  : RIF PARENTESISA Expr PARENTESISC RTHEN ExprSingle RELSE ExprSingle
+  : RIF PARENTESISA Expr PARENTESISC RTHEN ExprSingle RELSE ExprSingle  {
+    $$=new IfThenElse($3,$6,$8) 
+    grafo.generarPadre(8,"ExprSingle")
+    grafo.generarPadre(6,"ExprSingle")
+    grafo.generarPadre(3,"Expr")
+    grafo.generarHijos($1,$2,"Expr",$4,$5,"ExprSingle",$7,"ExprSingle")
+    grafo.generarTexto(`IfExpr.valor = new IF(Expr.valor,ExprSingle1.valor,ExprSingle2.valor)`)}
 ;
 
 OrExpr      

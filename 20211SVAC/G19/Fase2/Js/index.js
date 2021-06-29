@@ -1,5 +1,13 @@
 "use strict";
-
+/*heap = [];
+stack = [];
+contadorStack = 0;
+contadorTemporales = 0;
+SP = 2;
+HP = 0;
+T0 = 0;
+T1 = 0;      
+xmlC3D = "";*/
 function CargarXML(){
 
 
@@ -48,6 +56,7 @@ function CargarXML(){
             t0 = 0;
             t1 = 0;      
             xml3D = "";
+
             xml3D = getTraduction(resultadoXML[0]);
             localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
@@ -92,6 +101,7 @@ function CargarXML(){
                     console.log(resultadoXPath);
                     
                     salidaGlobal = "";
+                    var salidaGlobal2="";
                     var contador = 1;
                     resultadoXPath.forEach(function (funcion){
 
@@ -109,7 +119,8 @@ function CargarXML(){
 
                         contador++;
                     } );
-                    
+                    salidaGlobal2=salidaGlobal;
+                    setTraduccionXPath(salidaGlobal2.replace("↓ Resultado consulta 1 ↓\n\n",""))
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
@@ -191,10 +202,10 @@ function CargarXMLDesc(){
             stack = [];
             contadorStack = 0;
             contadorTemporales = 0;
-            SP = 2;
-            HP = 0;
-            T0 = 0;
-            T1 = 0;
+            sp = 2;
+            hp = 0;
+            t0 = 0;
+            t1 = 0;
             xmlC3D = "";
             xmlC3D = getTraduction(resultadoXML[0]);    
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
@@ -256,7 +267,9 @@ function CargarXMLDesc(){
                         contador++;
                     } );
                     salidaGlobal = salidaGlobal.replaceAll(" =\"\"", "");
+                    
                     SetSalida(salidaGlobal);
+                    
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
@@ -594,7 +607,7 @@ function CambiarCodificacion(cadena){
 function setTraduction(){
 
     globalC3D = "";
-    globalC3D += `/* ------ HEADERS ------ */
+    globalC3D += `
     #include <stdio.h>
     #include <math.h>
     
@@ -612,16 +625,11 @@ function setTraduction(){
             globalC3D += `, t`+i.toString();
         }
     }
-
-    globalC3D += `;
-    
-    `;
     
     globalC3D += `void main(){
         sp = 2;
         hp = 0;
         
-        //guardamos el encoding en el stack en la posicion 0 (definida por default)
         `;
 
     if(codificacionGlobal == "UTF-8"){
@@ -639,7 +647,7 @@ function setTraduction(){
     }
 
     
-    globalC3D += xml3D;
+    globalC3D +=xml3D+'}\n'+ xpathC3D ;
 
     globalC3D +=`
     
@@ -654,8 +662,7 @@ function setTraduction(){
                     printf("\\n");
             }
         }
-    }
-    `;    
+    }`;    
 
     SalidaTraduccion.setValue(globalC3D);
     SalidaTraduccion.refresh();
