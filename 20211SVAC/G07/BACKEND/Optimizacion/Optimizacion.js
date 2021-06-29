@@ -123,6 +123,25 @@ class Optimizacion {
                     }
                 }
 
+                //Regla 8
+                if (instruccionSplit[1].includes('*')) {
+                    let operacionSplit = instruccionSplit[1].split('*');
+                    let idOperacion = operacionSplit[0].trim();
+                    let valOperacion = operacionSplit[1].trim();
+
+                    if ((id1 === idOperacion) && (valOperacion === '1')) {
+                        this.cadenaOptimizada[i] = '';
+                        this.cadenaSplit[i] = '';
+                        this.bitacoraOptimizaciones.push({
+                            regla: 8,
+                            linea: i,
+                            instruccion: `${idOperacion} = ${idOperacion} * 1;`,
+                            cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    }
+                }
+
                 
             }
             this.cadenaOptimizada[i] = instruccion;
