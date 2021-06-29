@@ -1,8 +1,9 @@
 import { Entorno } from "../AST/Entorno";
 import { Instruccion } from "../Interfaz/instruccion";
+import { InstruccionXQuery } from "../Interfaz/instruccionXQuery";
 import { DeclaracionFor } from "./DeclaracionFor";
 
-export class For implements Instruccion{
+export class For implements InstruccionXQuery{
     linea: number;
     columna: number;
     listaFor: Array<DeclaracionFor>;
@@ -13,7 +14,11 @@ export class For implements Instruccion{
 
     }
 
-    ejecutar(ent: Entorno){
-        
+    ejecutar(XQueryEnt: Entorno, xmlEnt: Entorno){
+        //Un for puede ser: for $x in //book, at $i in //bok (Separados por coma)
+        for(let i = 0; i < this.listaFor.length; i++){
+            let forElem = this.listaFor[i];
+            forElem.ejecutar(XQueryEnt, xmlEnt);
+        }
     }
 }

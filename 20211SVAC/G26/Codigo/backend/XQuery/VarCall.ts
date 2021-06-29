@@ -1,7 +1,7 @@
 import { Entorno } from "../AST/Entorno";
 import { Instruccion } from "../Interfaz/instruccion";
 import { Nodo } from "../XPath/Nodo";
-import { Flwor } from "./FLWOR";
+import { Flwor } from "./Flwor";
 
 
 export class VarCall implements Instruccion{
