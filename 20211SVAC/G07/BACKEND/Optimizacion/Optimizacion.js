@@ -10,7 +10,7 @@ class Optimizacion {
         this.reAsignacion = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z][a-zA-Z0-9_]*[\s]*[;]/;
 
         // t1 = t2 + 0;
-        this.reAsignacionOp01 = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z][0-9]*[\s]*[+|\-|*|/][\s]*[0|1][\s]*[;]/;
+        this.reAsignacionOp01 = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z][a-zA-Z0-9_]*[\s]*[+|\-|*|/][\s]*[0-9]+[\s]*[;]/;
     }
 
     /**
@@ -77,6 +77,13 @@ class Optimizacion {
      *  Regla 7: T1 = T1 - 0;      ----->   Se elimina la instruccion
      *  Regla 8: T1 = T1 * 1;      ----->   Se elimina la instruccion
      *  Regla 9: T1 = T1 / 1;      ----->   Se elimina la instruccion
+     *  
+     *  Reduccion
+     *  -------------------
+     *  Regla 10: T1 = T2 + 0;     ----->   T1 = T2;
+     *  Regla 11: T1 = T2 - 0;     ----->   T1 = T2;
+     *  Regla 12: T1 = T2 * 1;     ----->   T1 = T2;
+     *  Regla 13: T1 = T2 / 1;     ----->   T1 = T2;
      */
     regla6_7_8_9() {
         for (let i = 0; i < this.cadenaSplit.length; i++) {
@@ -88,20 +95,36 @@ class Optimizacion {
                 let instruccionSplit = instruccion.replace(';','').split('=');
                 let id1 = instruccionSplit[0].trim();
 
-                // Regla 6
+                // Regla 6 y 10
                 if (instruccionSplit[1].includes('+')) {
                     let operacionSplit = instruccionSplit[1].split('+');
                     let idOperacion = operacionSplit[0].trim();
                     let valOperacion = operacionSplit[1].trim();
 
+                    // Regla 6
                     if ((id1 === idOperacion) && (valOperacion === '0')) {
                         this.cadenaOptimizada[i] = '';
                         this.cadenaSplit[i] = '';
                         this.bitacoraOptimizaciones.push({
                             regla: 6,
                             linea: i,
-                            instruccion: `${idOperacion} = ${idOperacion} + 0;`,
+                            instruccion: `${instruccion}`,
                             cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    }
+
+                    // Regla 10
+                    if ((id1 !== idOperacion) && (valOperacion === '0')) {
+                        let nuevaInstruccion = `${id1} = ${idOperacion};`;
+
+                        this.cadenaOptimizada[i] = nuevaInstruccion;
+                        this.cadenaSplit[i] = nuevaInstruccion;
+                        this.bitacoraOptimizaciones.push({
+                            regla: 10,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `${nuevaInstruccion}`
                         });
                         continue;
                     }
