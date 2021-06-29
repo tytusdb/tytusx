@@ -212,3 +212,29 @@ export class Flower
   }
   
 }
+
+export class IfThenElse
+{
+  constructor( condiciones, bloqueverdadero,bloquefalso )
+  {
+    this.condiciones=condiciones
+    this.bloqueverdadero=bloqueverdadero
+    this.bloquefalso=bloquefalso
+  }
+
+  getValor(nodos)
+  {
+    var retorno = []
+    if(this.condiciones.length > 1) return retorno
+    var rescondicion = this.condiciones[0].getValor(nodos)
+    if(rescondicion.length>0)
+    {
+      retorno = retorno.concat(this.bloqueverdadero.getValor(nodos))
+    }
+    else
+    {
+      retorno = retorno.concat(this.bloquefalso.getValor(nodos))
+    }
+    return retorno
+  }
+}

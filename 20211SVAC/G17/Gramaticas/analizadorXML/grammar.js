@@ -91,7 +91,15 @@ case 1:
       ListaErrores = [];
       var retornoGrafo = Object.assign({}, grafo);
       grafo = new grafoCST();
-      return {datos:this.$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,tabla:retornoGrafo.TablaGramatica,errores:retornoErrores}
+      var c3d = C3D.getFullC3D()
+      return{
+        datos:this.$,
+        nodes:retornoGrafo.pilaNodos,
+        edges:retornoGrafo.PilaEdges,
+        tabla:retornoGrafo.TablaGramatica,
+        errores:retornoErrores,
+        c3d:c3d
+      }
     
 break;
 case 2:
@@ -106,7 +114,7 @@ case 2:
 break;
 case 3:
  
-      this.$ = new helpers.Objeto("/",[],$$[$0-1],this._$.first_line, this._$.first_column);  
+      this.$ = new helpers.ObjetoPrincipal("/",[],$$[$0-1],this._$.first_line, this._$.first_column);  
 			grafo.generarPadre(1,"LISTA_OBJETO");
       grafo.generarHijos("LISTA_OBJETO")
       grafo.generarTexto("Cuerpo.entorno = ListaObjeto.entorno")
@@ -114,7 +122,7 @@ case 3:
 break;
 case 4:
  
-      this.$ = new helpers.Objeto("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); 
+      this.$ = new helpers.ObjetoPrincipal("/",$$[$0-2],$$[$0-1],this._$.first_line, this._$.first_column); 
 			grafo.generarPadre(2,"LISTA_OBJETO");
       grafo.generarPadre(1,"ETIQUETACONFIGURACION");
       grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO");
@@ -574,6 +582,7 @@ _handle_error:
 }};
 
 	var helpers = require('./helpers')
+  var C3D = require('../C3D')
   const {grafoCST} = require('../CST')
   var grafo = new grafoCST; 
 	var atributosRaiz = []
