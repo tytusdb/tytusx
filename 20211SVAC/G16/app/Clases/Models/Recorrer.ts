@@ -3,25 +3,29 @@ import Nodo from "./Nodo";
 import Entorno from "../AST/Entorno";
 import Simbolo from "../AST/Simbolo";
 import Valor from "../AST/Valor";
+const TableSimbols=require("../AST/TSXQuery.js");
 export class Recorrer{
 
 
   constructor(){
   }
 
+  addSimbolsTable(object:any,entorno:Entorno):Entorno{
+   return object.insertSimbolsTable(object,"Global",entorno);
+  }
 
+/*
   Recorrido(Nodo:any,Entornito:Entorno,nombre:string){
-
-    if(Nodo.Hijos.length!=undefined){
-      console.log(Nodo.Hijos)
+    let aux=Entornito;
+    if(Nodo.Hijos!=undefined){
       Nodo.Hijos.forEach(elemento=>{
         if(Nodo.Etiqueta=="FUNCIONES_XQUERY"){
           console.log("Es una función");
           let valor=new Valor("FUNCION",elemento,"");
           let simbolito=new Simbolo(elemento.nombre,valor,nombre,elemento.linea,elemento.columna,-1);
           Entornito.Add(simbolito);
-          let Entorno_For=new Entorno(Entornito);
-          Entornito=Entorno_For;
+          let Entorno_Funcion=new Entorno(Entornito);
+          Entornito=Entorno_Funcion;
           nombre=elemento.nombre
           if(elemento.parametros!=null){
             this.Recorrido(elemento.parametros,Entornito,nombre);
@@ -80,20 +84,76 @@ export class Recorrer{
                 let valor=new Valor("If",elemento.Expresion.Hijos,"")
                 let simbolito=new Simbolo("Return",valor,nombre,elemento.linea,elemento.columna,-1);
                 Entornito.Add(simbolito);
-                let Entornito_If=new Entorno(Entornito);
-                Entornito=Entornito_If;
+                let Entornito_Return=new Entorno(Entornito);
+                Entornito=Entornito_Return;
                 this.Recorrido(elemento.Expresion,Entornito,"Return");
+              }else{
+                let valor=new Valor("Variables",elemento,"")
+                let simbolito=new Simbolo("Return",valor,nombre,elemento.linea,elemento.columna,-1);
+                Entornito.Add(simbolito);
               }
           }
         }else if(Nodo.Etiqueta=="IF"){
-          console.log(Nodo);
+          let valor=new Valor("If",elemento,"")
+          let simbolito=new Simbolo("If",valor,nombre,elemento.fila,elemento.columna,-1);
+          Entornito.Add(simbolito);
+          let Entornito_If=new Entorno(Entornito);
+          Entornito=Entornito_If;
+          if(elemento.sentencias!=null){
+            this.Recorrido(elemento.sentencias,Entornito,"If");
+          }
+          if(elemento.sino!=null){
+            this.Recorrido(elemento.sino,Entornito,"If");
+          }
         }else if(Nodo.Etiqueta=="FOR"){
-
+          let valor=new Valor("For",elemento,"")
+          let simbolito=new Simbolo("For",valor,nombre,elemento.linea,elemento.columna,-1);
+          Entornito.Add(simbolito);
+          let Entornito_For=new Entorno(Entornito);
+          Entornito=Entornito_For;
+          if(elemento.variable!=""){
+          let valor=new Valor("Variable",elemento.variable,"")
+          let simbolito=new Simbolo("Variable",valor,"For",elemento.linea,elemento.columna,-1);
+          Entornito.Add(simbolito);
+          }
+          if(elemento.variable2!=""){
+            let valor=new Valor("Variable",elemento.variable,"")
+            let simbolito=new Simbolo("Variable",valor,nombre,elemento.linea,elemento.columna,-1);
+            Entornito.Add(simbolito);
+          }
+          if(elemento.variable=="" && elemento.variable=="" && elemento.condiciones!=null){
+            this.Recorrido(elemento.condiciones,Entornito,"For");
+          }else{
+            //error semántico
+          }
+          if(elemento.contenido!=null){
+            for(let i=0;i<elemento.contenido.Hijos.length;i++){
+              this.Recorrido(elemento.contenido.Hijos[i],Entornito,"For");
+            }
+          }
+        }else if(Nodo.Etiqueta=="LOOP"){
+          if(elemento.variable!=undefined || elemento.variable!=""){
+            let valor=new Valor("Variable",elemento,"")
+            let simbolito=new Simbolo("Variable",valor,nombre,elemento.linea,elemento.columna,-1);
+            Entornito.Add(simbolito);
+          }else{
+            // error semántico
+          }
+        }else if(Nodo.Etiqueta=="ORDER_BY"){
+          let valor=new Valor("Order_By",elemento,"")
+          let simbolito=new Simbolo("Order_By",valor,nombre,elemento.linea,elemento.columna,-1);
+          Entornito.Add(simbolito);
+          console.log("pasó por el order by ")
+        }else if(Nodo.Etiqueta=="WHERE"){
+          let valor=new Valor("Where",elemento,"")
+          let simbolito=new Simbolo("Where",valor,nombre,elemento.linea,elemento.columna,-1);
+          Entornito.Add(simbolito);
+          console.log("pasó por el where")
         }
       });
     }
+    Entornito=aux;
+    return Entornito;
   }
-
-
-
+*/
 }

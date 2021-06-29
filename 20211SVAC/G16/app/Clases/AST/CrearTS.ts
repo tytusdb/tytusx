@@ -9,7 +9,7 @@ const nodoError = require('../Models/Errores.js')
 
 export default class Crear {
 
-  global: Entorno = new Entorno(null);
+  global: Entorno = new Entorno("Global",null);
   public static tablaux = []
   constructor() { }
 
