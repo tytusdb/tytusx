@@ -231,6 +231,7 @@ class Optimizacion {
                             linea: i,
                             instruccion: `${instruccion}`,
                             cambio: `${nuevaInstruccion}`
+                            
                         });
                         continue;
                     }
