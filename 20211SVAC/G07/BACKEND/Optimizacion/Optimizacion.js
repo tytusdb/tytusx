@@ -80,7 +80,6 @@ class Optimizacion {
             let instruccion = this.cadenaSplit[i].trim();
 
             if (this.reAsignacionOp01.test(instruccion)) {
-                console.log(instruccion);
 
                 let instruccionSplit = instruccion.replace(';','').split('=');
                 let id1 = instruccionSplit[0].trim();
@@ -142,7 +141,24 @@ class Optimizacion {
                     }
                 }
 
-                
+                //Regla 9
+                if (instruccionSplit[1].includes('/')) {
+                    let operacionSplit = instruccionSplit[1].split('/');
+                    let idOperacion = operacionSplit[0].trim();
+                    let valOperacion = operacionSplit[1].trim();
+
+                    if ((id1 === idOperacion) && (valOperacion === '1')) {
+                        this.cadenaOptimizada[i] = '';
+                        this.cadenaSplit[i] = '';
+                        this.bitacoraOptimizaciones.push({
+                            regla: 9,
+                            linea: i,
+                            instruccion: `${idOperacion} = ${idOperacion} / 1;`,
+                            cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    }
+                }
             }
             this.cadenaOptimizada[i] = instruccion;
         }
