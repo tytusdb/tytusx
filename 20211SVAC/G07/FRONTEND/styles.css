@@ -188,3 +188,23 @@ h1{
 #msgError{
     transition: 0.5s;
 }
+
+p {
+    margin-bottom: 0 !important;
+}
+
+.txtCopy {
+    margin-bottom: 10px !important;
+}
+
+.copyBtn {
+    background: steelblue;
+    padding: 5px;
+    color: white;
+    margin-left: 10px;
+}
+
+.copyBtn:hover {
+    background: rgb(45, 96, 138);
+    cursor: pointer;
+}
