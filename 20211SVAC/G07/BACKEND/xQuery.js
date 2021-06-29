@@ -1,7 +1,7 @@
 function ejecutarXQuery(instruccion,entorno){
     let tablaSimbolos=new Entorno(null);
     let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
-    console.log(tablaSimbolos);
+    
     if(consulta){
         imprimiConsola(consulta);
     }else{
@@ -31,8 +31,27 @@ function getConsultaXQuery(instruccion, entorno,tablaSimbolos){
             return null
     }
 }
+function ejecutarIfElse(instruccion,entorno,tablaSimbolos){
+   
+    let condicion=procesarDato(instruccion.condicion,entorno,tablaSimbolos);
+    
+    if(condicion){
+        return procesarDato(instruccion.accion.data,entorno,tablaSimbolos);
+    }else{
+        if(instruccion.siguiente){
+            if(instruccion.siguiente.regreso=="ELSEIF"){
+                return ejecutarIfElse(instruccion.siguiente.data,entorno,tablaSimbolos);
+            }else{
+                return procesarDato(instruccion.siguiente.data,entorno,tablaSimbolos);
+            }
+        }
+    }
+
+    return null
+}
 function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
     for (const instruccion of instrucciones) {
+        
         switch (instruccion.instr) {
             case "CREAR":
                 crear_Variable(instruccion.valor,entorno,tablaSimbolos);
@@ -40,17 +59,65 @@ function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
             case "ASIGNAR":
                 asignar_variable(instruccion.valor,entorno,tablaSimbolos);
                 break;
+            case "IF_":
+                return ejecutarIfElse(instruccion.valor,entorno,tablaSimbolos);
+            case "CREAR_F":
+                crear_funcion(instruccion.valor,entorno,tablaSimbolos);
+                break;
+            case "LLAMADA_F":
+                return llamada_funcion(instruccion.valor,entorno,tablaSimbolos);
+            case "NUEVO_ETR":
+                
+                tablaSimbolos=new Entorno(tablaSimbolos);
+                break;
             default:
                 return null
         }
     }
 }
+function crear_funcion(instrucciones,entorno,tablaSimbolos){
+    if(!tablaSimbolos.existeEnActual(instrucciones.id)){
+        let valor=instrucciones;
+        tablaSimbolos.agregar(instrucciones.id,valor);
+    }else{
+        console.error("La funcion "+instrucciones.id+" ya existe en el entorno actual");
+    }
+    
+}
+function llamada_funcion(instrucciones,entorno,tablaSimbolos){
+    
+    
+    if(tablaSimbolos.getFuncion(instrucciones.id)){
+        
+        let funcion=JSON.parse(JSON.stringify(tablaSimbolos.getFuncion(instrucciones.id)));
+
+        let index=0;   
+        
+        for (const parametro of instrucciones.parametros) {
+            
+            funcion.parametros[index].valor={tipo:"NUMERO",valor:procesarDato( parametro,entorno,tablaSimbolos)};
+            let nuevaVariable={instr:"CREAR",valor:funcion.parametros[index]};
+            funcion.instr.unshift(nuevaVariable);
+            index++;
+        }
+      
+        
+        funcion.instr.unshift({instr:"NUEVO_ETR"});
+        return ejecutarInstrucciones(funcion.instr,entorno,tablaSimbolos);
+    }else{
+        console.error("La funcion "+instrucciones.id+" no existe en el entorno actual");
+    }
+   return null 
+}
 function crear_Variable(instrucciones,entorno,tablaSimbolos){
+    
     if(!tablaSimbolos.existeEnActual(instrucciones.id)){
         let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
         tablaSimbolos.agregar(instrucciones.id,valor);
     }else{
         console.error("La variable "+instrucciones.id+" ya existe en el entorno actual");
+        var error = new Error("PARA");
+            throw error;
     }
     
 }
@@ -60,30 +127,37 @@ function asignar_variable(instrucciones,entorno,tablaSimbolos){
         
         tablaSimbolos.reemplazar(instrucciones.id,valor);
     }else{
-        console.error("La variable "+instrucciones.id+" ya existe en el entorno actual");
+        console.error("La variable "+instrucciones.id+" no existe en el entorno actual");
+        var error = new Error("PARA");
+            throw error;
     }
 
 }
 function procesarDato(instruccion,entorno,tablaSimbolos){
     let valor1;
     let valor2;
+    
     switch (instruccion.tipo) {
         case "NUMERO":
             return parseInt(instruccion.valor);
         case "CADENA":
             return instruccion.valor;
         case "VARIABLE":
+           
             let valor=tablaSimbolos.getSimbolo(instruccion.valor);
-            if(valor){
+            if(valor||valor===0){
                 return valor;
             }
-            console.error("La variable "+instruccion.valor+" no existe ");
-            return null;
+            var error = new Error("PARA");
+            throw error;
+        case "LLAMADA_F":
+            return llamada_funcion(instruccion.valor,entorno,tablaSimbolos);
         case "OP_MAS":
            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
            return valor1+valor2;
         case "OP_RES":
+        case "OP_MENOS":
            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
            return valor1-valor2;
@@ -98,7 +172,37 @@ function procesarDato(instruccion,entorno,tablaSimbolos){
         case "OP_NEG":
             valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
             return -1*valor1;
+        case "IGUAL":
+        case "OP_IGUAL":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 == valor2 ;
+        case "OP_MAYOR":
+        case "MAYOR":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 > valor2;
+        case "OP_MAYOR_IGUAL":
+        case "MAYOR_IGUAL":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 >= valor2;
+        case "OP_MENOR":
+        case "MENOR":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 < valor2;
+        case "OP_MENOR_IGUAL":
+        case "MENOR_IGUAL":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 <= valor2;
+        case "AND":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 && valor2 ;
     }
+    
 }
 
 
@@ -115,9 +219,6 @@ function procesarDato(instruccion,entorno,tablaSimbolos){
 
 
 
-function crearVariable(instruccion,entorno,padre){
-    console.log(instruccion);
-}
 function ejecutarForIn(instruccion,entorno,padre){
     
     let consulta=instruccion.iterador.consulta;
@@ -426,7 +527,7 @@ function procesarEtorno(entorno){
 }
 
 function procesarArreglo(entorno){
-    console.log(entorno);
+    
    if(entorno){
     if(!entorno.etiqueta||!entorno){
         if(entorno.valorAtributo){
@@ -458,15 +559,13 @@ function ordenar(instruccion,entornos){
 
 
 
-    console.log(entornosAux);
+    
     var n, i, k, aux,aux2;
     n = entornosAux.length;
     for (k = 1; k < n; k++) {
         for (i = 0; i < (n - k); i++) {
             if (parseFloat(entornosAux[i].texto) < parseFloat(entornosAux[i + 1].texto)) {
-                console.log(entornosAux[i].texto);
-                console.log(" CAMBIO POR ");
-                console.log(entornosAux[i+1].texto);
+
                 aux = entornosAux[i];
                 entornosAux[i] = entornosAux[i + 1];
                 entornosAux[i + 1] = aux;
@@ -478,7 +577,7 @@ function ordenar(instruccion,entornos){
             }
         }
     }
-    console.log(entornosAux);
+    
  
     return entornos;
 }
@@ -510,7 +609,7 @@ function ejecutarLower(instruccion,entorno,padre){
 
 function ejecutarSubstring(instruccion,entorno,padre){
     let res=ejecutarLLamada(instruccion.valor,entorno,entorno);
-    console.log(instruccion);
+    
     if(res){
         if(instruccion.fin){
             return  res.substring(instruccion.inicio,instruccion.fin);

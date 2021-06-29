@@ -169,7 +169,6 @@ INICIO
         :XQUERYGRA EOF                                                                   {return $1;}  
         |HTML  EOF                                                                       {return {instr:"HTML",valor:$1};}
         |INSTRUCCIONES EOF                                                               {return {instr:"MULTIPLES",valor:$1};}
-        |FUNCACKERMAN EOF 
 ;
 INSTRUCCIONES
         :INSTRUCCIONES INSTRUCCION                                                      {$1.push($2); $$=$1;}
@@ -187,9 +186,37 @@ INSTRUCCION
         :CREAR_V                                                                        {$$={instr:"CREAR",valor:$1};}  
         |ASIGNAR_V                                                                      {$$={instr:"ASIGNAR",valor:$1};}
         |IF_                                                                            {$$={instr:"IF_",valor:$1};}
+        |CREAR_F tk_punto_coma                                                          {$$={instr:"CREAR_F",valor:$1};}
+        |LLAMADA_F                                                                      {$$={instr:"LLAMADA_F",valor:$1};}
+;
+CREAR_F  //declare      function local    ID                    (                PARAM            )      tipoReturn   {             instr                    }
+        :tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der     {$$={id:$tk_identificador,parametros:$PARAMETROS,instr:$INSTRUCCIONES};}
+        |tk_declare tk_function tk_local tk_identificador tk_parentesis_izq            tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der     {$$={id:$tk_identificador,parametros:null,instr:$INSTRUCCIONES};}
+;
+LLAMADA_F
+        :tk_local tk_identificador tk_parentesis_izq  PARAMETROS_ENTRADA tk_parentesis_der {$$={id:$tk_identificador,parametros:$PARAMETROS_ENTRADA};}
+;
+PARAMETROS_ENTRADA
+        :PARAMETROS_ENTRADA tk_coma DATO                                                {$1.push($3); $$=$1;}
+        |DATO                                                                           {$$=[$1];}
+;
+PARAMETROS
+        :PARAMETROS tk_coma PARAMETRO                                                   {$1.push($3); $$=$1;}
+        |PARAMETRO                                                                      {$$=[$1];}
+;
+PARAMETRO       
+        :tk_dolar tk_identificador tk_as tk_xs tk_identificador                         {$$={id:$2,valor:null};}
 ;
 IF_
-        :tk_if tk_parentesis_izq DATO tk_parentesis_der THEN ELSE
+        :tk_if tk_parentesis_izq DATO tk_parentesis_der THEN_                           {$$={condicion:$DATO,accion:$THEN_,siguiente:null};}
+        |tk_if tk_parentesis_izq DATO tk_parentesis_der THEN_ ELSE_                     {$$={condicion:$DATO,accion:$THEN_,siguiente:$ELSE_};}
+;
+THEN_
+        :tk_then DATO                                                                   {$$={regreso:"DATA",data:$DATO};}
+;
+ELSE_
+        :tk_else DATO                                                                   {$$={regreso:"DATA",data:$DATO};}
+        |tk_else IF_                                                                    {$$={regreso:"ELSEIF",data:$IF_};}
 ;
 
 CREAR_V
@@ -298,6 +325,7 @@ DATO
         |tk_arroba tk_identificador                                                     {$$= {tipo:"ATRIBUTO",valor:$2}}                                                
         |tk_last tk_parentesis_izq tk_parentesis_der                                    {$$= {tipo:"LAST"}} 
         |VARIABLE                                                                       {$$= {tipo:"VARIABLE",valor:$1}} 
+        |LLAMADA_F                                                                      {$$= {tipo:"LLAMADA_F",valor:$1}} 
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
         |DATO tk_menos DATO                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
@@ -311,7 +339,15 @@ DATO
         |DATO tk_menor_igual DATO                                                       {$$= {tipo:"OP_MENOR_IGUAL",valor1:$1,valor2:$3}}
         |DATO tk_mayor_igual DATO                                                       {$$= {tipo:"OP_MAYOR_IGUAL",valor1:$1,valor2:$3}}
         |DATO tk_mayor DATO                                                             {$$= {tipo:"OP_MAYOR",valor1:$1,valor2:$3}}
-        |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}                  
+        |DATO tk_menor DATO                                                             {$$= {tipo:"OP_MENOR",valor1:$1,valor2:$3}}    
+        //
+        |DATO tk_gt DATO                                                                {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
+        |DATO tk_lt DATO                                                                {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
+        |DATO tk_ge DATO                                                                {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
+        |DATO tk_le DATO                                                                {$$={tipo:"MENOR_IGUAL",valor1:$1,valor2:$3};}
+        |DATO tk_eq DATO                                                                {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
+        |DATO tk_ne DATO                                                                {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}  
+        |DATO tk_and DATO                                                               {$$={tipo:"AND",valor1:$1,valor2:$3};}  
 ;
 F_DATA
         :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}
@@ -415,6 +451,9 @@ LLAFCONT
         |LLAFCONT LLAD
         |LLAD
 ;
+
+
+
 L_LLAFCONT
         :tk_menor tk_identificador tk_mayor                                             {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()};}
         |tk_menor tk_diagonal tk_identificador tk_mayor                                 {$$={tipo:"TXT",valor:$1.toString()+$2.toString()+$3.toString()+$4.toString()};}

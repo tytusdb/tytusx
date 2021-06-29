@@ -205,8 +205,8 @@ class Acceso {
             for (const atr of atributo) {
               traductorC3D.traducirFuncion(" "+atr.etiqueta+"=\"");
               if(traductorC3D.esNumero(atr.valor)){
-                traductorC3D.traducirNumero(atr.ref);
-              }else{
+                traductorC3D.imprimirNumero(atr.ref);
+              }else if(atr.valor){
                 traductorC3D.imprimirCadena(atr.ref);
               }
               traductorC3D.traducirFuncion("\" ");
@@ -217,7 +217,7 @@ class Acceso {
 
             if(traductorC3D.esNumero(entorno.texto)){
    
-              traductorC3D.traducirNumero(entorno.referenciaHeap);
+              traductorC3D.imprimirNumero(entorno.referenciaHeap);
             }else{
               traductorC3D.imprimirCadena(entorno.referenciaHeap);
             }

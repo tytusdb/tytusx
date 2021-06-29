@@ -238,10 +238,14 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
 </bookstore>
 `
 
-let XQuery = `for $x in doc("books.xml")/bookstore/book
-return if ($x/@category="EL BICHO")
-then <SIUUUUUUUUUUUUU>{data($x/title)}</Siuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu>
-else <NO>{data($x/title)}</NO>
+let XQuery = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
+{
+if ($m = 0) then $n+1
+else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
+else local:ackerman($m - 1, local:ackerman($m, $n -1))
+};
+
+local:ackerman(3,3)
 `
 
 
