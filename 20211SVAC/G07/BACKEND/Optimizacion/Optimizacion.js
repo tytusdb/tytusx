@@ -6,7 +6,11 @@ class Optimizacion {
         this.cadenaOptimizada = [];
         this.bitacoraOptimizaciones = [];
 
+        // t1 = t2;
         this.reAsignacion = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z][a-zA-Z0-9_]*[\s]*[;]/;
+
+        // t1 = t2 + 0;
+        this.reAsignacionOp01 = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z][0-9]*[\s]*[+|\-|*|/][\s]*[0|1][\s]*[;]/;
     }
 
     /**
