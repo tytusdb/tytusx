@@ -43,8 +43,8 @@ function CargarXML(){
             stack = [];
             contadorStack = 0;
             contTemporal= 0;
-            stackPointer = 2;
-            heapPointer = 0;
+            sp = 2;
+            hp = 0;
             t0 = 0;
             t1 = 0;      
             xml3D = "";
@@ -600,8 +600,8 @@ function setTraduction(){
     
     double heap[30101999];
     double stack[30101999];
-    double stackPointer;
-    double heapPointer;
+    double sp;
+    double hp;
     
     `;
 
@@ -618,8 +618,8 @@ function setTraduction(){
     `;
     
     globalC3D += `void main(){
-        stackPointer = 2;
-        heapPointer = 0;
+        sp = 2;
+        hp = 0;
         
         //guardamos el encoding en el stack en la posicion 0 (definida por default)
         `;
@@ -644,13 +644,26 @@ function setTraduction(){
     globalC3D +=`
     
         for(int loop = 0; loop < stack[1]; loop++){
-            printf("%c", (char) heap[loop]);}
-    
-        return;
-
-    }`;    
+            if(heap[loop]>0){
+                printf("%c", (char) heap[loop]);
+                
+            }else{
+                if(heap[loop]>-6)
+                    printf(" ");
+                else
+                    printf("\\n");
+            }
+        }
+    }
+    `;    
 
     SalidaTraduccion.setValue(globalC3D);
     SalidaTraduccion.refresh();
 
+}
+function Optimizar(){
+    var texto =SalidaTraduccion.getValue()
+    var ast =gramaticaOptimizador.parse(texto);
+    console.log(ast)
+    
 }
