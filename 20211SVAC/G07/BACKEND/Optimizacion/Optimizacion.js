@@ -200,12 +200,13 @@ class Optimizacion {
                     }
                 }
 
-                //Regla 9
+                //Regla 9 y 13
                 if (instruccionSplit[1].includes('/')) {
                     let operacionSplit = instruccionSplit[1].split('/');
                     let idOperacion = operacionSplit[0].trim();
                     let valOperacion = operacionSplit[1].trim();
 
+                    // Regla 9
                     if ((id1 === idOperacion) && (valOperacion === '1')) {
                         this.cadenaOptimizada[i] = '';
                         this.cadenaSplit[i] = '';
@@ -214,6 +215,21 @@ class Optimizacion {
                             linea: i,
                             instruccion: `${idOperacion} = ${idOperacion} / 1;`,
                             cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    }
+
+                    // Regla 13
+                    if ((id1 !== idOperacion) && (valOperacion === '1')) {
+                        let nuevaInstruccion = `${id1} = ${idOperacion};`;
+
+                        this.cadenaOptimizada[i] = nuevaInstruccion;
+                        this.cadenaSplit[i] = nuevaInstruccion;
+                        this.bitacoraOptimizaciones.push({
+                            regla: 13,
+                            linea: i,
+                            instruccion: `${instruccion}`,
+                            cambio: `${nuevaInstruccion}`
                         });
                         continue;
                     }
