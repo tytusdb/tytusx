@@ -23,10 +23,10 @@ function generarXMLC3D(ts){
 
         //En texto2 se construye todo el codigo 3D de las etiquetas de la tabla de símbolos
         for (var i = 0; i < cantidadObjetos; i++){
-            if (ts.listaObjetos[i].tipo != 3){
+            if (getIntTipoObjeto(ts.listaObjetos[i].tipo) != 3){
                 texto2 += generarCodigo3DEtiqueta(ts.listaObjetos[i], ts);
             }else{
-                texto2 += generarCodigo3DContenido(ts.listaObjetos[i], ts);
+                texto2 += generarCodigo3DContenido(ts.listaObjetos[i-1],ts.listaObjetos[i], ts);
             }
         }
         //Se asigna la declaracion de temporales
@@ -54,8 +54,8 @@ function generaEncabezadoXML3D(){
     var texto = "";
     texto  += "/***********HEADER**********/\n";
     texto  += "#include <stdio.h>\n\n";
-    texto  += "double heap[30101999];\n";
-    texto  += "double stack[30101999];\n";
+    texto  += "double HEAP[30101999];\n";
+    texto  += "double STACK[30101999];\n";
     texto  += "double S;\n";
     texto  += "double H; \n\n";
 
@@ -104,6 +104,9 @@ function generarCodigo3DEtiqueta(objeto, ts)
     posicionInicialStack = contadorTemporal;
     contadorTemporal++;
     
+    //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
+    ts.insertaTemporal(objeto.i, objeto.identificador, "t"+tmpStack);
+
     //se inserta en stack el tipo de objeto
     texto += "t"+ contadorTemporal + " = " + getIntTipoObjeto(objeto.tipo) + ";\n"; // tx = tipoObjeto;
     tmpStack = contadorTemporal;
@@ -112,8 +115,6 @@ function generarCodigo3DEtiqueta(objeto, ts)
     texto += "S = S + 1;\n";
     objetoS.setTipo(getIntTipoObjeto(objeto.tipo));
     
-    //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
-    ts.insertaTemporal(objeto.i, objeto.identificador, "t"+contadorTemporal);
 
     //Se inserta en stack el apuntador al nombre de etiqueta
     objetoS.setApuntadorNombre(contadorTemporal);//Actualiza posicion de objeto en el stack
@@ -257,7 +258,7 @@ function generarCodigo3DEtiqueta(objeto, ts)
    
 }
 
-function generarCodigo3DContenido(objeto, ts){
+function generarCodigo3DContenido(objetoAnterior,objeto, ts){
     var texto = "";  
     var objetoS = new tsObjetoStack("","","","","",0);
     var actualizaPadre=true;
@@ -272,38 +273,23 @@ function generarCodigo3DContenido(objeto, ts){
     var cadena = objeto.identificador; //Etiqueta1
     var arregloCadena = cadena.split('');
     
+    alert("Entro al 3DContenido");
     texto += "\n/*----------------------*/\n";
     tmpStack = contadorTemporal; //0
-    texto += "t"+contadorTemporal+" = S;\n"; // t0 = S;
+    //texto += "t"+contadorTemporal+" = S;\n"; // t0 = S;
+    texto += "t"+contadorTemporal+" = " + objetoAnterior.sp + " + 4;\n"; // t27 = t12 +4;
     posicionInicialStack = contadorTemporal;
     contadorTemporal++;
     
     //se inserta en stack el tipo de objeto
-    texto += "t"+ contadorTemporal + " = " + getIntTipoObjeto(objeto.tipo) + ";\n"; // tx = tipoObjeto;
+    texto += "t"+ contadorTemporal + " = H;\n"; // t28 = H;
     tmpStack = contadorTemporal;
     //contadorTemporal++;
-    texto += "STACK[t" + posicionInicialStack + "] = t" + tmpStack + ";\n"; // STACK[tz] = tx;
-    texto += "S = S + 1;\n";
-    objetoS.setTipo(getIntTipoObjeto(objeto.tipo));
-    
-    //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
-    ts.insertaTemporal(objeto.i, objeto.identificador, "t"+contadorTemporal);
+    texto += "STACK[t" + posicionInicialStack + "] = t" + tmpStack + ";\n"; // STACK[27] = t28;
 
-    //Se inserta en stack el apuntador al nombre de etiqueta
-    objetoS.setApuntadorNombre(contadorTemporal);//Actualiza posicion de objeto en el stack
-    contadorTemporal++; //1
-    tmpHeap = contadorTemporal; //1
-    texto += "t"+contadorTemporal+" = H;\n" // t1 = H;
-    
     tmpStack = contadorTemporal;
+    tmpHeap = contadorTemporal;
     contadorTemporal++;
-    texto += "t" + contadorTemporal + " = S;\n";
-    texto += "STACK[t"+contadorTemporal+"] = t"+tmpStack+";\n";  // Stack[t1] = t0
-    texto += "S = S + 1;\n";
-    stack.push(objeto.identificador);
-
-    tmpStack = contadorTemporal; //1
-    contadorTemporal++; //2
 
     arregloCadena.forEach(element => {
         var asciiCaracter = element.charCodeAt(0);
@@ -359,8 +345,6 @@ function generarCodigo3DContenido(objeto, ts){
         }
         contadorTemporal++; //3 //4
     });    
-    //INSERTA EL OBJETO STACK EN LA LISTA STACK 
-    stackv2.listaObjetos.push(objetoS);
 
     //Se agrega el -1 al final de la cadena en heap
     texto += "HEAP[t"+tmpHeap+"] = -1;\n"; // HEAP[t1] = ascii; Heap[t2] = -1;
@@ -369,53 +353,6 @@ function generarCodigo3DContenido(objeto, ts){
     tmpHeap = contadorTemporal; //2 //3
     //texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;
 
-    //Se inserta un -1 en el stack como referencia a los atributos
-    //tmpStack = contadorTemporal;
-    //contadorTemporal++;
-    texto += "t" + contadorTemporal + " = -1;\n"; //tx = -1;
-    temporalAtributos = contadorTemporal;
-    objetoS.setApuntadorAtributos(-1); //al inicio se inserta -1 porque está vacío
-
-    //Se inserta un -1 en el stack como referencia a las etiquetas hijas
-    tmpStack = contadorTemporal;
-    contadorTemporal++;
-    texto += "t" + contadorTemporal + " = -1;\n"; // tx = -1;
-    temporalHijos = contadorTemporal;
-    objetoS.setApuntadorHijos(-1); //al inicio se inserta -1 porque está vacío
-
-    //Se inserta un -1 en el stack como referencia a cadena de contenido de etiqueta
-    tmpStack = contadorTemporal;
-    contadorTemporal++;
-    texto += "t" + contadorTemporal + " = -1;\n";
-    temporalContenido = contadorTemporal;
-    objetoS.setApuntadorContenido(-1);
-
-    tmpStack = contadorTemporal;
-    contadorTemporal++;
-    //texto += "t"+contadorTemporal + " = S;\n";
-
-    //texto += "S = S + 1;\n"; //P = S + 1;
-    //tmpStack = contadorTemporal;
-    //contadorTemporal++;
-
-    //se inserta en stack el valor de los atributos
-    texto += "t" + contadorTemporal + " = S;\n"; //tx = S;
-    texto += "STACK[t"+contadorTemporal+"] = t"+temporalAtributos+";\n";  // Stack[t1] = t0
-    texto += "S = S + 1;\n"; //P = S + 1;
-    tmpStack = contadorTemporal;
-    contadorTemporal++;
-
-    //se inserta en stack el valor de los Hijos
-    texto += "t" + contadorTemporal + " = S;\n"; //tx = S;
-    texto += "STACK[t"+contadorTemporal+"] = t"+temporalHijos+";\n";  // Stack[t1] = t0
-    texto += "S = S + 1;\n"; //P = S + 1;
-    tmpStack = contadorTemporal;
-    contadorTemporal++;
-
-    //se inserta en stack el valor de los Hijos
-    texto += "t" + contadorTemporal + " = S;\n"; //tx = S;
-    texto += "STACK[t"+contadorTemporal+"] = t"+temporalContenido+";\n";  // Stack[t1] = t0
-    texto += "S = S + 1;\n"; //P = S + 1;
     tmpStack = contadorTemporal;
     contadorTemporal++;
     
