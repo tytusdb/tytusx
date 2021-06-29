@@ -1,18 +1,20 @@
-import * as XMLGramAsc from './Gramatica/XML_GramaticaAsc';
-import { Entorno } from './AST/Entorno';
-import { Objeto } from './XML/Objeto';
-import { Atributo } from './XML/Atributo';
-import * as XMLGramDesc from './Gramatica/XML_GramaticaDesc';
-import errores from './Global/ListaError';
-import * as XPathGramAsc from './Gramatica/XPath_GramaticaAsc';
-import * as XPathGramDesc from "./Gramatica/XPath_GramaticaDesc";
-import { cstXmlAsc, cstXmlDesc } from './Reporte/CST';
+"use strict";
+exports.__esModule = true;
+var XMLGramAsc = require("./Gramatica/XML_GramaticaAsc");
+var Entorno_1 = require("./AST/Entorno");
+var Objeto_1 = require("./XML/Objeto");
+var Atributo_1 = require("./XML/Atributo");
+var XMLGramDesc = require("./Gramatica/XML_GramaticaDesc");
+var ListaError_1 = require("./Global/ListaError");
+var XPathGramAsc = require("./Gramatica/XPath_GramaticaAsc");
+var XPathGramDesc = require("./Gramatica/XPath_GramaticaDesc");
+var CST_1 = require("./Reporte/CST");
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
-class Analizador {
-    constructor() {
-        this.global = new Entorno('global', null, null);
-        errores.limpiar();
+var Analizador = /** @class */ (function () {
+    function Analizador() {
+        this.global = new Entorno_1.Entorno('global', null, null);
+        ListaError_1["default"].limpiar();
         this.indice = 0;
         if (typeof Analizador._instance === "object") {
             return Analizador._instance;
@@ -20,87 +22,91 @@ class Analizador {
         Analizador._instance = this;
         return this;
     }
-    static getInstance() {
+    Analizador.getInstance = function () {
         return this._instance;
-    }
-    iniciarVariables() {
-        this.global = new Entorno('global', null, null);
-        errores.limpiar();
-    }
-    xmlDescendente(entrada) {
+    };
+    Analizador.prototype.iniciarVariables = function () {
+        this.global = new Entorno_1.Entorno('global', null, null);
+        ListaError_1["default"].limpiar();
+    };
+    Analizador.prototype.xmlDescendente = function (entrada) {
+        var _this = this;
         console.log("---GRAMATICA DESCENDENTE---");
-        cstXmlDesc.id = 0;
-        const objetos = XMLGramDesc.parse(entrada);
-        objetos.forEach((elem) => {
-            if (elem instanceof Objeto || elem instanceof Atributo) {
-                elem.ejecutar(this.global);
+        CST_1.cstXmlDesc.id = 0;
+        var objetos = XMLGramDesc.parse(entrada);
+        objetos.forEach(function (elem) {
+            if (elem instanceof Objeto_1.Objeto || elem instanceof Atributo_1.Atributo) {
+                elem.ejecutar(_this.global);
             }
         });
         console.log(this.global);
-        console.log(errores);
-    }
-    xmlAscendente(entrada) {
+        console.log(ListaError_1["default"]);
+    };
+    Analizador.prototype.xmlAscendente = function (entrada) {
+        var _this = this;
         console.log("---GRAMATICA ASCENDENTE---");
-        cstXmlAsc.id = 0;
-        const objetos = XMLGramAsc.parse(entrada);
-        this.global = new Entorno('global', null, null);
+        CST_1.cstXmlAsc.id = 0;
+        var objetos = XMLGramAsc.parse(entrada);
+        this.global = new Entorno_1.Entorno('global', null, null);
         if (objetos !== null) {
-            objetos.forEach((elem) => {
+            objetos.forEach(function (elem) {
                 console.log('Elemento: ' + elem);
-                if (elem instanceof Objeto || elem instanceof Atributo) {
-                    elem.ejecutar(this.global);
+                if (elem instanceof Objeto_1.Objeto || elem instanceof Atributo_1.Atributo) {
+                    elem.ejecutar(_this.global);
                 }
             });
         }
         console.log(this.global);
-        console.log(errores);
+        console.log(ListaError_1["default"]);
         /*global.tsimbolos.forEach((elem:any) => {
           console.log(elem);
         });*/
-    }
-    XPathAscendente(entrada) {
+    };
+    Analizador.prototype.XPathAscendente = function (entrada) {
+        var _this = this;
         console.log("-- XPATH ASCENDENTE -- ");
-        const consultas = XPathGramAsc.parse(entrada);
-        let salida = "";
+        var consultas = XPathGramAsc.parse(entrada);
+        var salida = "";
         console.log("---------------------------------------");
-        consultas.forEach((elem) => {
+        consultas.forEach(function (elem) {
             console.log("CONSULTA: " + elem.ToString());
-            let resultado = elem.ejecutar(this.global);
+            var resultado = elem.ejecutar(_this.global);
             salida += resultado;
             console.log("-----------RESULTADO----------------");
             console.log(resultado);
             console.log("---------------FIN---------------------");
         });
         return salida;
-    }
-    XPathDescendente(entrada) {
+    };
+    Analizador.prototype.XPathDescendente = function (entrada) {
+        var _this = this;
         console.log("-- XPATH DESCENDENTE -- ");
-        const consultas = XPathGramDesc.parse(entrada);
-        let salida = "";
+        var consultas = XPathGramDesc.parse(entrada);
+        var salida = "";
         console.log("---------------------------------------");
-        consultas.forEach((elem) => {
+        consultas.forEach(function (elem) {
             console.log("CONSULTA: " + elem.ToString());
-            let resultado = elem.ejecutar(this.global);
+            var resultado = elem.ejecutar(_this.global);
             salida += resultado;
             console.log("-----------RESULTADO----------------");
             console.log(resultado);
             console.log("---------------FIN---------------------");
         });
         return salida;
-    }
-    getTablaSimbolos() {
+    };
+    Analizador.prototype.getTablaSimbolos = function () {
         return this.global;
-    }
-    getErrores() {
-        let err = '';
-        errores.listaError.forEach((elem) => {
+    };
+    Analizador.prototype.getErrores = function () {
+        var err = '';
+        ListaError_1["default"].listaError.forEach(function (elem) {
             err = err + elem.getMensaje() + '\n';
         });
         return err;
-    }
-    getRepTablaSimbolos() {
-        let cadenaDot = '';
-        let tabla = this.global.tsimbolos;
+    };
+    Analizador.prototype.getRepTablaSimbolos = function () {
+        var cadenaDot = '';
+        var tabla = this.global.tsimbolos;
         this.indice = 0;
         cadenaDot = 'digraph {'
             + 'tbl ['
@@ -121,33 +127,34 @@ class Analizador {
             + '>];'
             + '}';
         return cadenaDot;
-    }
-    getSimbolosEntorno(entrada) {
-        let simbolos = '';
-        entrada.tsimbolos.forEach((elem) => {
-            if (elem.valor.valor instanceof Entorno) {
-                this.indice++;
+    };
+    Analizador.prototype.getSimbolosEntorno = function (entrada) {
+        var _this = this;
+        var simbolos = '';
+        entrada.tsimbolos.forEach(function (elem) {
+            if (elem.valor.valor instanceof Entorno_1.Entorno) {
+                _this.indice++;
                 simbolos = simbolos
                     + '<tr>'
-                    + '<td>' + this.indice + '</td>'
+                    + '<td>' + _this.indice + '</td>'
                     + '<td>' + elem.valor.nombre + '</td>'
-                    + '<td>' + this.getTipoDato(elem.valor.tipo) + '</td>'
+                    + '<td>' + _this.getTipoDato(elem.valor.tipo) + '</td>'
                     + '<td>' + entrada.nombre + '</td>'
                     + '<td>' + elem.nombre + '</td>'
-                    + '<td>' + elem.valor.valor.toString().replace('&', 'and') + '</td>'
+                    + '<td>Nodo</td>'
                     + '<td>' + elem.valor.linea + '</td>'
                     + '<td>' + elem.valor.columna + '</td>'
                     + '</tr>';
-                simbolos = simbolos + this.getSimbolosEntorno(elem.valor.valor);
+                simbolos = simbolos + _this.getSimbolosEntorno(elem.valor.valor);
             }
             else {
                 if (elem.valor.valor !== false) {
-                    this.indice++;
+                    _this.indice++;
                     simbolos = simbolos
                         + '<tr>'
-                        + '<td>' + this.indice + '</td>'
+                        + '<td>' + _this.indice + '</td>'
                         + '<td>' + elem.valor.nombre + '</td>'
-                        + '<td>' + this.getTipoDato(elem.valor.tipo) + '</td>'
+                        + '<td>' + _this.getTipoDato(elem.valor.tipo) + '</td>'
                         + '<td>' + entrada.nombre + '</td>'
                         + '<td>' + elem.nombre + '</td>'
                         + '<td>' + elem.valor.valor.toString().replace('&', 'and') + '</td>'
@@ -158,8 +165,8 @@ class Analizador {
             }
         });
         return simbolos;
-    }
-    getTipoDato(t) {
+    };
+    Analizador.prototype.getTipoDato = function (t) {
         switch (t) {
             case 0:
                 return 'Texto';
@@ -172,19 +179,15 @@ class Analizador {
         }
         ;
         return '';
-    }
-    getRepErrores() {
-        let cadenaDot = '';
-        let indice = 0;
-        cadenaDot = 'digraph {'
-            + 'tbl ['
-            + 'shape=plaintext,'
-            + 'label=<'
-            + '<table border="0" cellborder="1" color="blue" cellspacing="0">'
+    };
+    Analizador.prototype.getRepErrores = function () {
+        var cadenaDot = '';
+        var indice = 0;
+        cadenaDot = '<table class="tablaDatos" >'
             + '<tr>'
-            + '<td>No.</td><td>Tipo</td><td>Descripcion</td><td>Linea</td><td>Columna</td>'
-            + '</tr>';
-        errores.listaError.forEach((elem) => {
+            + '<th>No.</th><th>Tipo</th><th>Descripcion</th><th>Linea</th><th>Columna</th>'
+            + '</th>';
+        ListaError_1["default"].listaError.forEach(function (elem) {
             indice++;
             cadenaDot = cadenaDot
                 + '<tr>'
@@ -195,37 +198,37 @@ class Analizador {
                 + '<td>' + elem.getColumna() + '</td>'
                 + '</tr>';
         });
-        cadenaDot = cadenaDot + '</table>'
-            + '>];'
-            + '}';
+        cadenaDot = cadenaDot + '</table>';
         return cadenaDot;
-    }
-    getCSTXmlAsc() {
-        let cadenaDot = 'digraph {';
-        cadenaDot = cadenaDot + this.recorridoCst(cstXmlAsc.getRaiz());
+    };
+    Analizador.prototype.getCSTXmlAsc = function () {
+        var cadenaDot = 'digraph {';
+        cadenaDot = cadenaDot + this.recorridoCst(CST_1.cstXmlAsc.getRaiz());
         cadenaDot = cadenaDot + '}';
         return cadenaDot;
-    }
-    getCSTXmlDesc() {
-        let cadenaDot = 'digraph {';
-        cadenaDot += this.recorridoCst(cstXmlDesc.getRaiz());
+    };
+    Analizador.prototype.getCSTXmlDesc = function () {
+        var cadenaDot = 'digraph {';
+        cadenaDot += this.recorridoCst(CST_1.cstXmlDesc.getRaiz());
         cadenaDot += '}';
         return cadenaDot;
-    }
-    recorridoCst(nodo) {
-        let concatena = '';
+    };
+    Analizador.prototype.recorridoCst = function (nodo) {
+        var _this = this;
+        var concatena = '';
         if (nodo !== null) {
             concatena += nodo.id + '[label="' + nodo.valor + '"];\n';
-            nodo.hijos.forEach((hijo) => {
-                concatena += this.recorridoCst(hijo);
+            nodo.hijos.forEach(function (hijo) {
+                concatena += _this.recorridoCst(hijo);
                 concatena += nodo.id + ' -> ' + hijo.id + ';\n';
             });
         }
         return concatena;
-    }
-}
-const analizador = new Analizador();
-export default analizador;
+    };
+    return Analizador;
+}());
+var analizador = new Analizador();
+exports["default"] = analizador;
 /*
 function xpathAscendente(entrada:string){
   console.log("-- XPATH ASCENDENTE -- ")
@@ -250,27 +253,8 @@ bookstore/book
 |
 //@category
 `);
-
-xmlDescendente(`
-<?xml version="1.0" encoding="UTF-8"?>
-
-<bookstore>
-  <book category="children">
-    <title>Harry Potter</title>
-    <author>J K. Rowlin</author>
-    <price at="asd"></price>
-    <hola> </Hola>
-  </book>
-  <!-- HOLAAA -->
-  <book category="web">
-    <title>Learning XML</title>
-    <author>Erik T. Ray</author>
-    <year>2003</year>
-    <price>39.95 &lt 30</price>
-  </book>
-</bookstore>
-`);
-
+*/
+/*
 xmlAscendente(`
 <?xml version="1.0" encoding="UTF-8"?>
 

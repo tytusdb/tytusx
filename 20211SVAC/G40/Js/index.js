@@ -7,20 +7,33 @@ function Optimizar(){
         window.alert("No hay C3D para optimizar :O !");
     } else {
 
-        analisisOptimizadorCorrecto = EjecutarOptimizador(contenido);
+        pasada = 1;
+        contenidoOptimizar = contenido;
+        var backup = contenido;
+        for(var i = 0; i<3; i++){
+
+        analisisOptimizadorCorrecto = EjecutarOptimizador(contenidoOptimizar);
 
         if (analisisOptimizadorCorrecto){
-            
-            console.log("↓ RESULTADO PARSER OPTIMIZADOR ↓");
-            console.log(resultadoOptimizador);
+            console.log("Pasada numero: " + pasada);
+            //console.log("↓ RESULTADO PARSER OPTIMIZADOR ↓");
+            //console.log(resultadoOptimizador);
             var Optimizar = new Optimizador(resultadoOptimizador);
-            var salida = Optimizar.Ejecutar();
-            SalidaTraduccion.setValue(salida);
+            contenidoOptimizar = Optimizar.Ejecutar();
+            pasada++;           
+        } else {
+            break;
+            }          
+        }
+
+        if(analisisOptimizadorCorrecto){
+            SalidaTraduccion.setValue(contenidoOptimizar);
             window.alert("C3D optimizado exitosamente :D !");
             console.log(ListaOptimizaciones);
             localStorage.setItem('opJSON',JSON.stringify(ListaOptimizaciones, null, 2));
         } else {
             window.alert("El parser del Optimizador no pudo recuperarse de un error sintactico D: !");
+            SalidaTraduccion.setValue(backup);
         }
 
     }
@@ -40,8 +53,9 @@ function EjecutarOptimizador(contenidoC3D){
 
 function CargarXML(){
 
-
+    
     var contenido = "";
+    
 
     if(tab==1){
         contenido = editor.getValue();
@@ -81,6 +95,7 @@ function CargarXML(){
             stack = [];
             contadorStack = 0;
             contadorTemporales = 0;
+            contadorEtiquetas = 0;
             SP = 2;
             HP = 0;
             T0 = 0;
@@ -150,6 +165,17 @@ function CargarXML(){
                     
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                    /* TRADUCIENDO XPATH A C3D */
+                    xpathC3D = "";
+                    var funcionesXPath = contenidoXpath.split(/[ ]*\|[ ]*/g);
+
+                    for(var i = 0; i < resultadoXPath.length; i++) {
+                    
+                        var salida = C3DXPATH.traducir(funcionesXPath[i] ,resultadoXPath[i]);
+                        xpathC3D += salida + "\n\n";
+                    }
+
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -183,13 +209,20 @@ function CargarXML(){
                         salidaGlobal+="↓ Resultado consulta XQuery "+contador+" ↓\n\n";
                         salidaRecursiva = "";
                         salidaXQuery = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
-                        GenerarSalidaXPath(salidaXQuery);
 
-                        if(salidaRecursiva!=""){
-                            salidaGlobal+= salidaRecursiva + "\n\n";
+                        if(funcion.getTipo() == TipoXInstruccion.XPATH || funcion.getTipo() == TipoXInstruccion.XFLOWER){
+
+                            GenerarSalidaXPath(salidaXQuery);
+
+                            if(salidaRecursiva!=""){
+                                salidaGlobal+= salidaRecursiva + "\n\n";
+                            } else {
+                                salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                            }
+
                         } else {
-                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
-                        }
+                            salidaGlobal+= salidaXQuery.toString() + "\n\n";
+                        } 
 
                         contador++;
                     } );
@@ -659,9 +692,14 @@ function SetearTraduccion(){
     
     double heap[30101999];
     double stack[30101999];
+    double xheap[30101999];
+    double xstack[30101999];
+    double resultados[3010199];
     double SP;
     double HP;
-    
+    double XSP;
+    double XHP;
+
     `;
 
     for(var i = 0; i< contadorTemporales;i++ ){
@@ -675,6 +713,8 @@ function SetearTraduccion(){
     globalC3D += `;
     
     `;
+
+    globalC3D += funcionesC3D;
     
     globalC3D += `int main(){
         
@@ -706,11 +746,12 @@ function SetearTraduccion(){
     
     globalC3D += xmlC3D;
 
+    globalC3D += "\n";
+
+    globalC3D += xpathC3D;
+
     globalC3D +=`
-    
-        for(int loop = 0; loop < stack[1]; loop++){
-            printf("%c", (char) heap[loop]);}
-    
+
         return 0;
 
     }`;    

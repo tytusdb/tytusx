@@ -293,7 +293,7 @@ var XPath_GramaticaDesc = (function () {
                     break;
                 case 62:
                 case 63:
-                    this.$ = new Primitiva($$[$0 - 1], TipoPrim.ATRIBUTO, _$[$0 - 1].first_line, _$[$0 - 1].first_column);
+                    this.$ = new Primitiva($$[$0], TipoPrim.ATRIBUTO, _$[$0 - 1].first_line, _$[$0 - 1].first_column);
                     break;
                 case 64:
                     this.$ = new Primitiva($$[$0], TipoPrim.DOT, _$[$0].first_line, _$[$0].first_column);

@@ -45,7 +45,13 @@
         <script src="./Js/Interprete/Expresiones/Declaracion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
         <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XNumber.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XSubstring.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XString.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XLowerCase.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XUpperCase.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
+        <script src="./Js/Interprete/Traductor/TraductorXPath.js"></script>
         <!--- SCRIPTS PARA OPTIMIZADOR --->
         <script src="./Js/Optimizador/GramaticaOptimizador.js"></script>
         <script src="./Js/Optimizador/Optimizacion.js"></script>
@@ -83,10 +89,22 @@
             var T1 = 0;
             var temporal0 = "";
             var temporal1 = "";
+            var temporalXML = "";
+            var temporalXHP = "";
+            var temporalXHEAP = "";
+            var temporalFINXML = "";
+            var temporalNiveles = "";
+            var temporalValorHEAP = "";
+            var temporalValorXHEAP = "";
+            var temporalPos = "";
+            var temporalXSTACK = "";
+            var temporalContador = "";
             var globalC3D = "";
+            var funcionesC3D = "";
             var xpathC3D = "";
             var xmlC3D = "";
             var C3DXML = new TraductorXML();
+            var C3DXPATH = new TraductorXPath();
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();
@@ -102,6 +120,7 @@
             var analisisXqueryCorrecto = true;
             var analisisOptimizadorCorrecto = true;
             var continuarXpath = true;
+            var contenidoOptimizar = "";
             var DOTxmlCSTasc = "";
             var DOTxmlCSTdesc = "";
             var DOTxmlErrores = "";
