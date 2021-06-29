@@ -1,5 +1,7 @@
+import Entorno from "../AST/Entorno"
 export interface Instruccion{
 
-  ejecutar(entorno:any):any ;
+  t:string;
+  ejecutar(entorno:any, node:any):any;
 
 }

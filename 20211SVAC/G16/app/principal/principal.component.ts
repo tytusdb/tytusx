@@ -1,12 +1,10 @@
 import { Buscar } from './../Clases/Models/Buscar';
 import { ToastrService } from 'ngx-toastr';
-import { Errores } from './../Clases/Models/ListaError';
 import { Component, OnInit } from '@angular/core';
-//import datos from '../../assets/json/estado.json';
-import Nodo from '../Clases/Models/Nodo';
+import { Instruccion } from './../Clases/Interfaces/Instruccion';
 const parser=require('../../Gramaticas/gramaticaXML')
 const parserDesc=require('../../Gramaticas/Analyzer')
-const parserXpathAsc=require('../../Gramaticas/XPathASC')
+const parserXpathAsc=require('../../Gramaticas/XPathA')
 const parserXpathDesc=require('../../Gramaticas/XPathDESC')
 const errores=require('../Clases/Models/ListaError.js')
 const Estado=require('../Clases/Models/Estado.js')
@@ -14,10 +12,12 @@ const ListaGramatica=require('../Clases/Models/ListaGramatica.js')
 const parserXQuery=require("../../Gramaticas/xquery")
 import {Recorrer} from '../Clases/Models/Recorrer'
 const tradXML = require('../Clases/Models/TraductorXML.js')
-
+const Listita=require("../Clases/Hijos/Listita.js")
 import Crear from '../Clases/AST/CrearTS'
 import { Router } from '@angular/router';
 import Entorno from '../Clases/AST/Entorno';
+const TableSimbols=require("../Clases/AST/TSXQuery.js");
+
 const defaults = {
   xml:
     '',
@@ -156,22 +156,27 @@ export class PrincipalComponent implements OnInit {
 
 
   xpathASC() {
-    // try{
-    const AST = parserXpathAsc.parse(this.xpath);
-
-    localStorage.setItem("ASTXPATH", JSON.stringify(AST));
-    let tabla = []
-    tabla = JSON.parse(localStorage.getItem("tablaSimbolo"));
-    if (tabla.length != 0) {
-      let buscar = new Buscar(this.toastr);
-      this.toastr.success("Análisis completado")
-      this.errores = buscar.darFormato()
-    } else {
+  // try{
+    //const AST = parserXpathAsc.parse(this.xpath);
+    let x = parserXpathAsc.parse(this.xpath);
+    this.RecorrerAbstractas(x);
+    //localStorage.setItem("ASTXPATH",JSON.stringify(AST));
+    let tabla=[]
+    tabla=JSON.parse(localStorage.getItem("tablaSimbolo"));
+    if(tabla.length!=0){
+    let buscar=new Buscar(this.toastr);
+    this.toastr.success("Análisis completado")
+    this.salida=buscar.darFormato()
+    }else{
       this.toastr.warning("Se debe ingresar un archivo XML primero");
     }
     /*}catch(Error){
      this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
      }*/
+  }
+
+  RecorrerAbstractas(raiz:any){
+      
   }
 
   xpathDESC() {
@@ -261,14 +266,30 @@ export class PrincipalComponent implements OnInit {
 
 
   AnalizarXQuery(){
+    Listita.Listita.clear();
+    TableSimbols.TableSimbols.clear();
     let resultado=parserXQuery.parse(this.xquery);
-    let recorrer=new Recorrer();
-    recorrer.Recorrido(resultado,new Entorno(null),"Global")
+    let global=new Entorno("Global",null);
+    console.log(resultado)
+    if(resultado.length!=undefined){
+      resultado.forEach(element => {
+        if(element.t=="Instrucción"){
+           console.log("-------- iteración nueva -----------")
+          element.ejecutar(global,element);
+        }
+      })
+    }else{
+      if(resultado.t=="Instrucción"){
+        console.log("pasó por el objeto")
+        resultado.ejecutar(global,resultado);
+      }
+    }
+    console.log(TableSimbols.TableSimbols.getLista());
   }
 
   TablaSimbolos() {
     localStorage.setItem("tablaSimbolo", JSON.stringify(this.tablaSimbolo.getTabla()))
-    localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
+    //localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
   }
 
   repoSimbolos() {

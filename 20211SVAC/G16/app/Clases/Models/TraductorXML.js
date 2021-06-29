@@ -33,7 +33,7 @@ var TraductorXML = /** @class */ (function () {
             else if (ent[i].tipo == "Valor") {
                 this.cadenamain += "\n/*------SE INGRESA UN VALOR------*/\n";
             }
-            ent[i].posicion == this.ps;
+            ent[i].posicion = this.ph;
             var letras = ent[i].valor.split("");
             this.cadenamain += "    t" + this.t + " = H;\n";
             var t2 = this.t;
@@ -63,6 +63,8 @@ var TraductorXML = /** @class */ (function () {
         this.cadenamain += "    S = S - " + this.ps + ";\n";
         this.cadenamain += "    t" + this.t + " = stack[(int)S];\n";
         this.t++;
+        console.log(ent);
+        localStorage.setItem("tablaSimboloAux", JSON.stringify(ent));
     };
     TraductorXML.prototype.hacerHeader = function () {
         this.cadena += "/*------HEADER------*/\n";

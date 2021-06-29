@@ -37,7 +37,7 @@ export default class TraductorXML {
                 this.cadenamain += "\n/*------SE INGRESA UN VALOR------*/\n"
 
             }
-            ent[i].posicion == this.ps
+            ent[i].posicion = this.ph
             let letras = ent[i].valor.split("")
             this.cadenamain += "    t" + this.t + " = H;\n"
             let t2 = this.t
@@ -66,6 +66,8 @@ export default class TraductorXML {
         this.cadenamain += "    S = S - " + this.ps + ";\n"
         this.cadenamain += "    t" + this.t + " = stack[(int)S];\n"
         this.t++
+        console.log(ent)
+        localStorage.setItem("tablaSimboloAux",JSON.stringify(ent))
     }
 
     hacerHeader() {

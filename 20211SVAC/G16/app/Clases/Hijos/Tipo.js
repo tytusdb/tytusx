@@ -10,4 +10,6 @@ var Tipo;
     Tipo[Tipo["INTEGER"] = 4] = "INTEGER";
     Tipo[Tipo["FLOAT"] = 5] = "FLOAT";
     Tipo[Tipo["DATE"] = 6] = "DATE";
+    Tipo[Tipo["VARIABLE"] = 7] = "VARIABLE";
+    Tipo[Tipo["ID"] = 8] = "ID";
 })(Tipo = exports.Tipo || (exports.Tipo = {}));
