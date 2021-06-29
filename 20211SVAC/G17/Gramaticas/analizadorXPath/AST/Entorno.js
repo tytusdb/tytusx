@@ -1,5 +1,5 @@
 const { ErroresGlobal, LimpiarErrores } = require('./Global')
-var C3D = require('../AST/C3D')
+var C3D = require('../../C3D')
 //Enum de tipos
 export const Tipo = {
     "INTEGER" : 0,

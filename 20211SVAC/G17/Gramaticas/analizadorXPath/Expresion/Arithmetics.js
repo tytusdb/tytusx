@@ -1,5 +1,5 @@
-import { Retorno, newTemp } from '../AST/C3D';
-const C3D = require('../AST/C3D')
+import { Retorno, newTemp } from '../../C3D';
+const C3D = require('../../C3D')
 const { Colision, ColisionTipo, Tipo, getTipoById } = require('../AST/Entorno')
 const { ErroresGlobal } = require('../AST/Global')
 const { Literal } = require("./Expresiones");
