@@ -12,6 +12,7 @@ let parserXML;
 let parserXPATHDER;
 let globalencod;
 let codificador = document.getElementById("codencod");
+let optimizador;
 
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
@@ -668,7 +669,12 @@ let optimizarReporteButton = document.getElementById("btnReporteOptimizar");
 optimizarButton.addEventListener("click", () => {
 
   if (consolaC3D.value.trim() !== '') {
-    alert('Optimizando C3D');
+
+    alert('Optimizando');
+    optimizador = new Optimizacion(consolaC3D.value);
+    optimizador.regla5();
+    consolaC3DOptimizada.value = optimizador.obtenerOptimizacion();
+
   } else {
     alert('No hay codigo en 3Direcciones para optimizar');
   }
@@ -678,7 +684,34 @@ optimizarButton.addEventListener("click", () => {
 
 optimizarReporteButton.addEventListener("click", () => {
 
-  alert('Reporte Optimizacion');
+  tablaTitulo.innerHTML = 'Reporte Optimizaciones';
+  tabla.innerHTML = "";
+
+  if (optimizador) {
+    let bitacoraOptimizacion = optimizador.bitacoraOptimizaciones;
+
+    // Agregar las cabeceras
+    tablaCabeceras.innerHTML = `
+    <th scope="col">Linea</th>
+    <th scope="col">Regla</th>
+    <th scope="col">Instruccion</th>
+    <th scope="col">Cambio</th>
+    `;
+
+    console.log(bitacoraOptimizacion);
+
+    // Agregar contenido a la tabla
+    bitacoraOptimizacion.forEach(optimizacion => {
+      tabla.innerHTML += `
+        <tr>
+          <td>${optimizacion.linea}</td>
+          <td>${optimizacion.regla}</td>
+          <td>${optimizacion.instruccion}</td>
+          <td>${optimizacion.cambio}</td>
+        </tr>
+      `;
+    });
+    }
 
 });
 
