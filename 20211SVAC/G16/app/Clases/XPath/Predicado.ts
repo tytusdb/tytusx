@@ -2,12 +2,14 @@ import { Expresion } from "./Expresion";
 import { NodoAbs } from "./NodoAbs";
 
 export class Predicado implements NodoAbs {
-    constructor(TablaSimbolo:any, exp:Array<Expresion>) {
-        
+    expresion:any
+    constructor(exp:any) {
+       this.expresion=exp
     }
 
-    execute() {
-        console.log("es un indice normal")
+    execute(padre) {
+        let x = this.expresion.execute(padre)
+        return x
     }
 
 }
