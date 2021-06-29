@@ -9,7 +9,8 @@ export enum TipoParametro {
   Cadena,
   Nodo,
   Operacion,
-  Ruta
+  Ruta,
+  Variable
 }
 export enum TipoNodo {
   Raiz = "RAIZ",
@@ -39,4 +40,50 @@ export enum TipoOperador{
   And,
   Or,
   None
+}
+export enum SingleExpresionType{
+  FLWORExpr
+	,IfExpr
+  ,Contador
+  ,HtmlSequence
+  ,FuncionDefinida
+  ,XPARAM
+  ,Path
+}
+
+export enum FLWORTipo{
+  For,
+  Let
+} 
+
+
+export enum TipoBinding{
+  VarInSentencia
+} 
+
+export enum OrderModifierType{
+  Ascendente,
+  Descendente,
+  Ninguno
+}
+export enum TipoClausulaIntermedia{
+  InitialClause,
+  OrderByClause,
+  WhereClause
+}
+
+export enum TipoFuncion{
+  Definida,
+  Nativa
+}
+
+export enum TipoDeclaracionXquery{
+  Varible,
+  FuncionDefinida
+}
+export enum ParamType{
+  xsString, 
+  xsDate
+  ,xsDecimal
+  ,xsBoolean
 }
