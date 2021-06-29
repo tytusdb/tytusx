@@ -23,6 +23,11 @@ T1 = T2 + 0;
 T3 = T4 - 0;
 T5 = T6 * 1;
 T7 = T8 / 1;
+
+//Regla 14 - 16
+T9 = T10 * 2;
+T11 = T12 * 0;
+T13 = 0 / T14;
 `;
 
 consolaC3D.value = textoPrueba;
