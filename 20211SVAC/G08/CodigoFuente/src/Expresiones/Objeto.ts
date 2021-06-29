@@ -27,7 +27,7 @@ export class Objeto{
     getConcatenar(text) {
         this.texto = this.texto + " " + text;
     };
-    SetearPosicion(pos) {
+    setPosicion(pos) {
         if(this.posicion==-1) this.posicion = pos;    
     };
     getAtributos (){
