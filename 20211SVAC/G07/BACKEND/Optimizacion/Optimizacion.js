@@ -74,7 +74,7 @@ class Optimizacion {
      *  Regla 8: T1 = T1 * 1;      ----->   Se elimina la instruccion
      *  Regla 9: T1 = T1 / 1;      ----->   Se elimina la instruccion
      */
-     regla6_7_8_9() {
+    regla6_7_8_9() {
         for (let i = 0; i < this.cadenaSplit.length; i++) {
 
             let instruccion = this.cadenaSplit[i].trim();
@@ -98,6 +98,25 @@ class Optimizacion {
                             regla: 6,
                             linea: i,
                             instruccion: `${idOperacion} = ${idOperacion} + 0;`,
+                            cambio: `Se elimina la instruccion`
+                        });
+                        continue;
+                    }
+                }
+
+                //Regla 7
+                if (instruccionSplit[1].includes('-')) {
+                    let operacionSplit = instruccionSplit[1].split('-');
+                    let idOperacion = operacionSplit[0].trim();
+                    let valOperacion = operacionSplit[1].trim();
+
+                    if ((id1 === idOperacion) && (valOperacion === '0')) {
+                        this.cadenaOptimizada[i] = '';
+                        this.cadenaSplit[i] = '';
+                        this.bitacoraOptimizaciones.push({
+                            regla: 7,
+                            linea: i,
+                            instruccion: `${idOperacion} = ${idOperacion} - 0;`,
                             cambio: `Se elimina la instruccion`
                         });
                         continue;
