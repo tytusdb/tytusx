@@ -79,7 +79,7 @@ export function traducirXmlRecursive(raiz: Entorno) {
     }
 }
 //CREACION DEL METODO printString******************************
-export function createPrintText() {
+/*export function createPrintText() {
     traduccion.setPrintString("//Metodo printString\t--------------");
     traduccion.setPrintString("void printString() {");
     traduccion.t++;
@@ -99,11 +99,11 @@ export function createPrintText() {
     traduccion.setPrintString("return;");
     traduccion.setPrintString("}");
     traduccion.setPrintString("");
-    traduccion.printString = true;
-}
+    //traduccion.printString = true;
+}*/
 //LLAMADA AL METODO printString********************************
 export function printText(raiz: Entorno) {
-    if (traduccion.printString===false) {createPrintText();}
+    //if (traduccion.printString===false) {createPrintText();}
     if (raiz.texto!=="") {
         traduccion.setTranslate("//Imrpimir texto de: " + raiz.identificador + "\t--------------")
         traduccion.t++;

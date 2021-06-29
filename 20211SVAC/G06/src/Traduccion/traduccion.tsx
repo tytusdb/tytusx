@@ -3,8 +3,8 @@ export class traduccion {
     static stackCounter: number = -1;
     static etiquetaCounter: number = 0;
     static tranlate: string = "";
-    static printString: boolean = false;
-    static metodostring:string = "";
+    //static printString: boolean = false;
+    //static metodostring:string = "";
     static metodoConsultaXPATH:string = "";
     static compararCadenas3d:string="";
     static etiquetaTexto:string="";
@@ -13,6 +13,7 @@ export class traduccion {
     static etiquetaUnitaria:string="";
     static etiquetaAtributo:string="";
     static verificarAtributo:string="";
+    static printString:string="";
 
     public static getTranslate(): string {
         var content: string = "";
@@ -32,7 +33,8 @@ export class traduccion {
             }
             content += ";\n\n";
         }
-        content += this.metodostring;
+        //content += this.metodostring;
+        content += this.printString;
         content += this.metodoConsultaXPATH;
         content += this.compararCadenas3d;
         content += this.etiquetaTexto;
@@ -55,9 +57,9 @@ export class traduccion {
         this.tranlate += content + "\n";
     }
 
-    public static setPrintString(content:string) {
+    /*public static setPrintString(content:string) {
         this.metodostring += content + "\n";
-    }
+    }*/
 
     public static setConsultaXPATH(content:string) {
         this.metodoConsultaXPATH += content + "\n";
@@ -263,5 +265,26 @@ export class traduccion {
         this.verificarAtributo += "L"+(traduccion.etiquetaCounter)+":\n";
         this.verificarAtributo += "return;\n";
         this.verificarAtributo += "}\n\n";
+    }
+
+    public static crearPrintString() {
+        traduccion.printString += "//Metodo printString\t--------------\n\n";
+        traduccion.printString += "void printString() {\n";
+        traduccion.t++;
+        traduccion.printString += "t"+traduccion.t+" = S+1;\n";
+        traduccion.t++;
+        traduccion.printString += "t"+traduccion.t+" = stack[(int)t"+(traduccion.t-1).toString()+"];\n";
+        traduccion.etiquetaCounter++;
+        traduccion.t++;
+        traduccion.printString += "L"+traduccion.etiquetaCounter+":\n"; //L0
+        traduccion.printString += "t"+traduccion.t+" = heap[(int)t"+(traduccion.t-1)+"];\n";
+        traduccion.etiquetaCounter++;
+        traduccion.printString += "if(t"+traduccion.t+" == -1) goto L"+traduccion.etiquetaCounter+";\n"; //L1
+        traduccion.printString += "printf(\"%c\", (char)t"+traduccion.t+");\n";
+        traduccion.printString += "t"+(traduccion.t-1)+" = t"+(traduccion.t-1)+"+1;\n";
+        traduccion.printString += "goto L"+(traduccion.etiquetaCounter-1)+";\n";
+        traduccion.printString += "L"+traduccion.etiquetaCounter+":\n";
+        traduccion.printString += "return;\n";
+        traduccion.printString += "}\n\n";
     }
 }
