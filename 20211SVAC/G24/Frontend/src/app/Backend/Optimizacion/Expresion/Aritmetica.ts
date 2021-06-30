@@ -27,16 +27,12 @@ export default class Aritmetica extends Instruccion {
                         return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
                     } else if (operadorizq.contenido == 0) {
                         return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
                     }
                 } else if (this.operando === "-") {
                     // t0= t0-0   o   t0=0-t0
                     if (operadorder.contenido == 0) {
                         return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
                     } else if (operadorizq.contenido == 0) {
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
                         return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
                     }
                 } else if (this.operando === "*") {
@@ -53,8 +49,8 @@ export default class Aritmetica extends Instruccion {
                         return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
                     } else if (operadorizq.contenido == 0) {
                         return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                    } else {
+
                     }
                 } else if (this.operando === "/") {
                     // t0= t0/1   o   t0=1*t0
@@ -66,59 +62,78 @@ export default class Aritmetica extends Instruccion {
                         return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
                     } else if (operadorizq.contenido == 0) {
                         return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
                     }
 
                 }
             } else {
-                if (this.operando === "+") {
-                    // t0= t0+0   o   t0=0+t0
-                    if (operadorder == 0) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq == 0) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                // en este puede venir contenido ya sea de identificador cosa que no acepta el anterior
+                if (operadorder.contenido != null && operadorizq.contenido != null) {
+                    if (this.operando === "+") {
+                        // t0= t0+0   o   t0=0+t0
+                        if (operadorder.contenido == 0) {
+                            return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 0) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        }
+                    } else if (this.operando === "-") {
+                        // t0= t0-0   o   t0=0-t0
+                        if (operadorder.contenido == 0) {
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 0) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        }
+                    } else if (this.operando === "*") {
+                        // t0= t0*1   o   t0=1*t0
+                        if (operadorder.contenido == 1) {
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 1) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorder.contenido == 2) {
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 2) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorder.contenido == 0) {
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 0) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else {
+
+                        }
+                    } else if (this.operando === "/") {
+                        // t0= t0/1   o   t0=1*t0
+                        if (operadorder.contenido == 1) {
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 1) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        } if (operadorder.contenido != 0) {
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: operadorizq.contenido, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else if (operadorizq.contenido == 0) {
+                            return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        }
+
                     }
-                } else if (this.operando === "-") {
-                    // t0= t0-0   o   t0=0-t0
-                    if (operadorder == 0) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq == 0) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }
-                } else if (this.operando === "*") {
-                    // t0= t0*1   o   t0=1*t0
-                    if (operadorder == 1) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq== 1) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorder == 2) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq == 2) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorder == 0) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq == 0) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }
-                } else if (this.operando === "/") {
-                    // t0= t0/1   o   t0=1*t0
-                    if (operadorder == 1) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq == 1) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    } if (operadorder != 0) {
-                        return { operadorder: operadorder.toString(), operador: this.operando, operadorizq: operadorizq, linea: this.fila.toString(), columna: this.columna.toString() }
-                    } else if (operadorizq == 0) {
-                        return { operadorder: operadorder, operador: this.operando, operadorizq: operadorizq.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
-                    }else{
-                        return { operadorder: operadorder.contenido, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                } else {
+                    // en este acepta si hay uno anterior con la estructura 
+                    //{ operadorder: arm, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                    // analiza las posibilidades
+                    if (operadorder.operadorder != null) {
+                        if (this.expresion1 instanceof Termino) {
+                            let arm = operadorder.operadorder.toString() + operadorder.operador + operadorder.operadorizq.toString()
+                            return { operadorder: arm, operador: this.operando, operadorizq: operadorizq.contenido.toString(), linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else {
+                            let arm1 = operadorder.operadorder.toString() + operadorder.operador + operadorder.operadorizq.toString()
+                            let arm2 = operadorizq.operadorder.toString() + operadorizq.operador + operadorizq.operadorizq.toString()
+                            return { operadorder: arm1, operador: this.operando, operadorizq: arm2, linea: this.fila.toString(), columna: this.columna.toString() }
+                        }
+                    } else if (operadorizq.operadorder != null) {
+                        if (this.expresion2 instanceof Termino) {
+                            let arm = operadorizq.operadorder.toString() + operadorizq.operador + operadorizq.operadorizq.toString()
+                            return { operadorder: operadorder.contenido.toString(), operador: this.operando, operadorizq: arm, linea: this.fila.toString(), columna: this.columna.toString() }
+                        } else {
+                            let arm1 = operadorder.operadorder.toString() + operadorder.operador + operadorder.operadorizq.toString()
+                            let arm2 = operadorizq.operadorder.toString() + operadorizq.operador + operadorizq.operadorizq.toString()
+                            return { operadorder: arm1, operador: this.operando, operadorizq: arm2, linea: this.fila.toString(), columna: this.columna.toString() }
+                        }
                     }
                 }
             }

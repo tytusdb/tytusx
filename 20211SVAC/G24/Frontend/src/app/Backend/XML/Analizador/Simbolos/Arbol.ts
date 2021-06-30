@@ -154,8 +154,8 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("double stack[56394];");
     this.Encabezadocodigo3d.push("char Numero[500];");
 
-    this.Encabezadocodigo3d.push("double $p;");
-    this.Encabezadocodigo3d.push("double $s;");
+    this.Encabezadocodigo3d.push("double hp;");
+    this.Encabezadocodigo3d.push("double sp;");
 
     this.Encabezadocodigo3d.push("void potencia(){");
     this.Encabezadocodigo3d.push("goto L0;");
@@ -186,7 +186,7 @@ public BuscarTipo(identificador: string): string {
     // metodo guardar en hepp el string
     this.Encabezadocodigo3d.push("void guardarString(){");
     this.Encabezadocodigo3d.push("heap[(int)$t0]=$t1;");
-    this.Encabezadocodigo3d.push("$p=$p+1;");
+    this.Encabezadocodigo3d.push("hp=hp+1;");
     this.Encabezadocodigo3d.push("return;");
     this.Encabezadocodigo3d.push("}");
     // numero a string
@@ -198,7 +198,7 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("$t4=Numero[(int)$t3];");
     this.Encabezadocodigo3d.push("if($t4==0) goto L1;");
     this.Encabezadocodigo3d.push("if($t4==46) goto L2;"); // si es un punto
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=$t4;");
     this.Encabezadocodigo3d.push("guardarString();");
     this.Encabezadocodigo3d.push("$t3=$t3+1;");
@@ -217,7 +217,7 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("goto L1;");
     this.Encabezadocodigo3d.push("L5:");
     this.Encabezadocodigo3d.push("$t4=Numero[(int)$t6];");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=$t4;");
     this.Encabezadocodigo3d.push("guardarString();");
     this.Encabezadocodigo3d.push("$t6=$t6+1;");
@@ -235,33 +235,33 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("if($t4==49) goto L1;"); // 49 es 1
     this.Encabezadocodigo3d.push("goto L2;");
     this.Encabezadocodigo3d.push("L1:"); // imprimir true
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=116;"); //t
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=114;"); //r
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=117;"); //u
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=101;"); //e
     this.Encabezadocodigo3d.push("guardarString();");
     this.Encabezadocodigo3d.push("goto L3;");
     this.Encabezadocodigo3d.push("L2:"); // imprimir false
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=102;");  //f
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=97;"); //a
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=108;"); //l
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=115;"); //s
     this.Encabezadocodigo3d.push("guardarString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=101;"); //e
     this.Encabezadocodigo3d.push("guardarString();");
     this.Encabezadocodigo3d.push("L3:");
@@ -276,8 +276,8 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("if($t1!=-1) goto L1;");
     this.Encabezadocodigo3d.push("goto L2;");
     this.Encabezadocodigo3d.push("L1:");
-    this.Encabezadocodigo3d.push("heap[(int)$p]=$t1;");
-    this.Encabezadocodigo3d.push("$p=$p+1;");
+    this.Encabezadocodigo3d.push("heap[(int)hp]=$t1;");
+    this.Encabezadocodigo3d.push("hp=hp+1;");
     this.Encabezadocodigo3d.push("$t0=$t0+1;");
     this.Encabezadocodigo3d.push("goto L0;");
     this.Encabezadocodigo3d.push("L3:");
@@ -444,10 +444,10 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("if($t1==-2)goto L2;");
     this.Encabezadocodigo3d.push("$t8=$t0;");
     this.Encabezadocodigo3d.push("$t0=heap[(int)$t0];");// usar t7
-    this.Encabezadocodigo3d.push("$t7=$p;");
+    this.Encabezadocodigo3d.push("$t7=hp;");
     this.Encabezadocodigo3d.push("$t2=$t0;");
     this.Encabezadocodigo3d.push("NumberToString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=-1;");
     this.Encabezadocodigo3d.push("guardarString();");
     this.Encabezadocodigo3d.push("$t0=$t7;");
@@ -462,10 +462,10 @@ public BuscarTipo(identificador: string): string {
     this.Encabezadocodigo3d.push("if($t1==-2)goto L3;");
     this.Encabezadocodigo3d.push("$t8=$t0;");
     this.Encabezadocodigo3d.push("$t0=heap[(int)$t0];");// usar t7
-    this.Encabezadocodigo3d.push("$t7=$p;");
+    this.Encabezadocodigo3d.push("$t7=hp;");
     this.Encabezadocodigo3d.push("$t2=$t0;");
     this.Encabezadocodigo3d.push("BooleanToString();");
-    this.Encabezadocodigo3d.push("$t0=$p;");
+    this.Encabezadocodigo3d.push("$t0=hp;");
     this.Encabezadocodigo3d.push("$t1=-1;");
     this.Encabezadocodigo3d.push("guardarString();");
     this.Encabezadocodigo3d.push("$t0=$t7;");
