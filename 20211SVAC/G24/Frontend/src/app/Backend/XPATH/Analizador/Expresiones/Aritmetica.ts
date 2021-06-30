@@ -6,6 +6,9 @@ import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class Aritmetica extends Instruccion {
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
   private operando1: Instruccion | undefined;
   private operando2: Instruccion | undefined;
   private operandoUnico: Instruccion | undefined;

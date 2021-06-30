@@ -9,6 +9,8 @@ import * as AnalizarAscXpath from 'src/app/Backend/XPATH/GramaticaXPath'
 import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPathDesc'
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import * as GramaticalDes from 'src/app/Backend/XML/Analizador/XMLgraphDesc'
+import * as Optimizacion from 'src/app/Backend/Optimizacion/grammar'
+import TreeOptimo from 'src/app/Backend/Optimizacion/Simbolo/Arbol'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
@@ -23,13 +25,22 @@ import { reporteTabla } from 'src/app/Backend/XML/Analizador/Reportes/reporteTab
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
-
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import { ViewChild } from '@angular/core';
+import Declaracion from 'src/app/Backend/Optimizacion/Instrucciones/Declaracion';
+import Funcion from 'src/app/Backend/Optimizacion/Instrucciones/Funcion';
+import { reporteOp } from 'src/app/Backend/Optimizacion/Reportes/reporteOp';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
-export let Ambito:String;
+export let Ambito: String;
+export let Ambito2: String;
+export let tabsim: Map<String, String>
+export var contenidocd3 = ""
+export let ArbolGlobalReporte: reporteTabla[];
+export let ReporteOptimizacion: reporteOp[];
+export let cd3XPath: String[];
+export var TreeAsc: Arbol;
 @Component({
   selector: 'app-contenido-inicio',
   templateUrl: './contenido-inicio.component.html',
@@ -56,7 +67,7 @@ export class ContenidoInicioComponent implements OnInit {
   codeMirrorOptions2: any = {
     theme: '3024-night',
     mode: 'application/typescript',
-    readOnly:true,
+    readOnly: true,
     lineNumbers: true,
     lineWrapping: true,
     foldGutter: false,
@@ -68,21 +79,21 @@ export class ContenidoInicioComponent implements OnInit {
   };
   constructor(private inicioSrv: InicioService, private dialog: MatDialog) {
     this.code = 'asd';
-    
+
   }
   tablaGlobal: tablaSimbolos = new tablaSimbolos();
   code = '';
   contenido = '';
   ngOnInit(): void {
     console.log(document.querySelector('#codigo'))
-   /* var editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
-      mode: "javascript",
-      lineNumbers: true,
-  });
-  editor.save()*/
+    /* var editor = CodeMirror.fromTextArea(document.querySelector('#editor'), {
+       mode: "javascript",
+       lineNumbers: true,
+   });
+   editor.save()*/
   }
   ngAfterViewInit(): void {
-    
+
     this.editor.getEditor().setOptions({
       showLineNumbers: true,
       tabSize: 2
@@ -134,16 +145,15 @@ export class ContenidoInicioComponent implements OnInit {
       const analizador = Analizador;
       const objetos = analizador.parse(texto);
 
-      var Tree: Arbol = new Arbol([objetos]);
-      Tree.settablaGlobal(this.tablaGlobal);
+      TreeAsc = new Arbol([objetos]);
+      TreeAsc.settablaGlobal(this.tablaGlobal);
 
       //  PARA GUARDAR DATOS
       // TODO FOR INTERPRETAR
-      for (let i of Tree.getinstrucciones()) {
+      for (let i of TreeAsc.getinstrucciones()) {
         if (i instanceof Objeto) {
-          var objetito = i.interpretar(Tree, this.tablaGlobal); //retorna simbolo
-          this.tablaGlobal.setVariable(objetito);
-          //Tree.getFuncion(objetito);
+          var objetito = i.interpretar(TreeAsc, this.tablaGlobal); //retorna simbolo
+          //this.tablaGlobal.setVariable(objetito)
         }
       }
       console.log(this.tablaGlobal);
@@ -153,126 +163,57 @@ export class ContenidoInicioComponent implements OnInit {
      ************************* MANEJO DE CODIGO 3 DIRECCIONES ASCENDENTE *******************************
      * *************************************************************************************************
     */
-   
-    var contenidocd3="#include <stdio.h>\n#include<math.h>\n"
-    
-    Tree.codigo3d.push("int main(){\n");
-     
+      contenidocd3=""
+      TreeAsc.codigo3d.push("#include <stdio.h>\n#include<math.h>\n");
+      TreeAsc.codigo3d.push("int main(){\n");
 
-    for (let i of Tree.getinstrucciones()) {
-      if (i instanceof Objeto) {
-        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
-        this.tablaGlobal.setVariable(lista);
+
+      for (let i of TreeAsc.getinstrucciones()) {
+        if (i instanceof Objeto) {
+          var lista = i.codigo3D(TreeAsc, this.tablaGlobal); //retorna simbolo
+          this.tablaGlobal.setVariable(lista);
+        }
       }
-    }
-    //ES VARIABLES AL INICIO
-    for (let x = 0; x < Tree.contadort; x++) {
-      if(x==0){contenidocd3=contenidocd3+"double "}
-      else if(x%20==0){contenidocd3=contenidocd3+"\n"}
-     contenidocd3=contenidocd3+"t"+x;
-     if(Tree.contadort-1!==x){contenidocd3=contenidocd3+","}
-
-    }
-    if( Tree.contadort!==0){contenidocd3=contenidocd3+";\n"}
-    Tree.Encabezadocodigo3d.forEach(element => {
-      contenidocd3+=element+"\n"
-    });
-    //ITERA PARA EL CONTENIDO DEL MAIN
-    Tree.codigo3d.forEach(element => {
-      contenidocd3+=element+"\n"
-    });
-    contenidocd3+="return 1;\n}"
-    this.mostrarContenido(contenidocd3, 'cdirecciones');
-
       
+
+
+
       /* **********************L L E N A D O    T A B L A    D E    S I M B O L O S************************* */
-
-      Ambito="Global"
+      Ambito = "Global"
+      tabsim = new Map<String, String>();
       for (var key of this.tablaGlobal.tablaActual) {
-        var entorno= Ambito
-        var listaobjetitos = "";
-        var contenido = "";
-        var tipo = "";
-        var posicion = ""; //stack y heap
-        var linea = key.getLinea();
-        var columna = key.getColumna();
-        var nombre = key.getidentificador();
-        var atri = key.getAtributo();
-        var cd3direcciones= key.setcd3Value()
 
-
-       /* if(nombre!=null){
-          let objetos = key.getvalor();
-        if (objetos instanceof tablaSimbolos) {
-          for (var key3 of objetos.tablaActual) {
-            listaobjetitos += `${key3.}, `
-            if(listaobjetitos!=null){
-              entorno=listaobjetitos;
-              console.log(entorno);
-            }
-          }
-        }*/
-
-
-        /*for (var [key2, value2,] of key.getAtributo()) {
-          nombre = key.getidentificador();
-          if (key.getAtributo() != null) {
-            nombre = nombre;
-            atributos += ` ${key2}=>${value2}, `;
-            if (nombre != null) {
-              if (nombre == key.getidentificador()) {
-                nombre += atributos;
-              } else {
-                nombre = atributos;
-              }
-            }
-          }
-        }*/
-
-        let idEntorno=key.getidentificador();
-        
-        let objetos = key.getvalor();
-        if (objetos instanceof tablaSimbolos) {
-          for (var key3 of objetos.tablaActual) {
-            listaobjetitos += `${key3.getidentificador()}, `
-            if(listaobjetitos!=null){
-            
-              Ambito=nombre
-            }else{
-              Ambito=key3.getidentificador()
+        if (key.getvalor() instanceof tablaSimbolos) {
+          var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+          TreeAsc.listaSimbolos.push(Reporte);
+          if (key.getAtributo().size != 0) {
+            for (var [key2, value2,] of key.getAtributo()) {
+              var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
+              TreeAsc.listaSimbolos.push(Reporte);
             }
           }
 
-          this.llenarTablaSimbolos(objetos, Tree);
-
+          tabsim.set(Ambito, key.getidentificador())
+          Ambito = key.getidentificador();
+          this.ReportSimbolos(key.getvalor(), TreeAsc)
         } else {
-          contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
+          var Reporte = new reporteTabla(key.getidentificador(), "Objeto", key.getidentificador(), key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
+          TreeAsc.listaSimbolos.push(Reporte);
         }
-        if (key.gettipo().getTipo() == 1) {
-          tipo = "Objeto";
-        } else {
-          tipo = "Atributo";
-        }
-        
-          var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, 'pos');
-        
-
-
-        var Reporte = new reporteTabla(nombre, tipo,entorno, contenido, linea, columna, cd3direcciones);
-        Tree.listaSimbolos.push(Reporte);
       }
-
-      // TERMINA FOR 
-
-
+      ArbolGlobalReporte = TreeAsc.getSimbolos()
+      tabsim.clear();
+      /***************************************************************************************************************
+       * ***********************************************A R B O L ****************************************************
+       **************************************************************************************************************/
       var init = new nodoAST("RAIZ");
       var instrucciones = new nodoAST("HIJOS");
-      for (let i of Tree.getinstrucciones()) {
+      for (let i of TreeAsc.getinstrucciones()) {
         instrucciones.agregarHijoAST(i.getNodo());
 
       }
 
-      for (let i of Tree.getinstrucciones()) {
+      for (let i of TreeAsc.getinstrucciones()) {
 
         if (i instanceof Errores) {
           listaErrores.push(i);
@@ -294,7 +235,7 @@ export class ContenidoInicioComponent implements OnInit {
 
 
 
-      var reco = Tree.getSimbolos();
+      var reco = TreeAsc.getSimbolos();
       let tabla = JSON.stringify(reco);
       localStorage.setItem("symbol", tabla);
 
@@ -314,74 +255,76 @@ export class ContenidoInicioComponent implements OnInit {
       localStorage.setItem("errores", errores);
     }
 
-    
+
   }
+  ReportSimbolos(tablaGlobal: tablaSimbolos, Tree: Arbol) {
+    for (var key of tablaGlobal.tablaActual) {
 
-  llenarTablaSimbolos(t: tablaSimbolos, tri: Arbol) {
+      if (key.getvalor() instanceof tablaSimbolos) {
+        if (Ambito === key.getidentificador().toString()) {
+          for (var [key2, value2,] of tabsim) {
 
-    for (var key of t.tablaActual) {
-      var atributos = "";
+            if (value2 === key.getidentificador()) {
+              Ambito = key2
+            }
 
-      var entorno = Ambito;
-      var listaobjetitos = "";
-      var contenido = "";
-      var tipo = "";
-      var linea = key.getLinea();
-      var columna = key.getColumna();
-      var nombre = key.getidentificador();
-      var cd3direcciones= key.setcd3Value();
-
-      /*for (var [key2, value2,] of key.getAtributo()) {
-        nombre = key.getidentificador();
-        if (key.getAtributo() != null) {
-          atributos+=` ${key2} => ${value2}, `; 
-         // break;
-        }
-
-      }*/
-      let objetos = key.getvalor();
-      if (objetos instanceof tablaSimbolos) {
-        for (var key3 of objetos.tablaActual) {
-          listaobjetitos += `${key3.getidentificador()}, `
-          if(listaobjetitos!=null){
-
-            
-            Ambito=nombre
-            
-            //entorno=listaobjetitos;
-           // console.log(entorno);
-          }else{
-            console.log("ENTRA AL ELSE")
-            Ambito=key3.getidentificador()
           }
         }
-        
-        Ambito=nombre
-        listaobjetitos=""
-        this.llenarTablaSimbolos(objetos, tri);
+        var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+        Tree.listaSimbolos.push(Reporte);
+
+        for (var [key2, value2,] of tabsim) {
+          if (Ambito != key.getidentificador().toString()) {
+            if (key2 === Ambito && value2 === key.getidentificador()) {
+              Ambito = value2
+            } else {
+              tabsim.set(Ambito, key.getidentificador())
+              Ambito = key.getidentificador();
+            }
+
+          }
+        }
+        if (key.getAtributo().size != 0) {
+          for (var [key2, value2,] of key.getAtributo()) {
+            var Reporte = new reporteTabla(key2, "Atributo", key.getidentificador(), value2, key.getAtributoLinea(), key.getAtributoColumna(), key.get3DAtributo());
+            Tree.listaSimbolos.push(Reporte);
+          }
+        }
+        this.ReportSimbolos(key.getvalor(), Tree)
       } else {
-        contenido = objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
-        
-  
-
+        var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
+        Tree.listaSimbolos.push(Reporte);
       }
-      if (key.gettipo().getTipo() == 1) {
-        tipo = "Objeto";
-      } else {
-        tipo = "Atributo";
-      }
-     
-      
-
-      var Reporte = new reporteTabla(nombre, tipo, entorno, contenido, linea, columna, cd3direcciones);
-
-      tri.listaSimbolos.push(Reporte);
-
     }
   }
 
-  
+  /**%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FINALIZAR CD3 MOSTRAR EN PANTALLA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   */
+  finalizarCD3() {
+    //ES VARIABLES AL INICIO
+    contenidocd3=""
+    for (let x = 0; x < TreeAsc.contadort; x++) {
+      if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+      else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+      contenidocd3 = contenidocd3 + "$t" + x;
+      if (TreeAsc.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
 
+    }
+    if (TreeAsc.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
+    TreeAsc.Encabezadocodigo3d.forEach(element => {
+      contenidocd3 += element + "\n"
+    });
+    //ITERA PARA EL CONTENIDO DEL MAIN
+    TreeAsc.codigo3d.forEach(element => {
+      contenidocd3 += element + "\n"
+    });
+    cd3XPath.forEach(element => {
+      contenidocd3+= element+"\n"
+    });
+    this.mostrarContenido(contenidocd3 + "return 1;\n}", 'cdirecciones');
+  }
 
   /*A R B O L  D E S C E N D E N T E */
 
@@ -414,6 +357,40 @@ export class ContenidoInicioComponent implements OnInit {
 
     let sim_string = JSON.stringify(init2);
     localStorage.setItem("simbolos1", sim_string);
+
+    /***************************************************************************************************
+     ************************* MANEJO DE CODIGO 3 DIRECCIONES DESCENDENTE ******************************
+     * *************************************************************************************************
+    */
+
+    var contenidocd3 = "#include <stdio.h>\n#include<math.h>\n"
+
+    Tree.codigo3d.push("int main(){\n");
+
+
+    for (let i of Tree.getinstrucciones()) {
+      if (i instanceof Objeto) {
+        var lista = i.codigo3D(Tree, this.tablaGlobal); //retorna simbolo
+        this.tablaGlobal.setVariable(lista);
+      }
+    }
+    //ES VARIABLES AL INICIO
+    for (let x = 0; x < Tree.contadort; x++) {
+      if (x == 0) { contenidocd3 = contenidocd3 + "double " }
+      else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
+      contenidocd3 = contenidocd3 + "t" + x;
+      if (Tree.contadort - 1 !== x) { contenidocd3 = contenidocd3 + "," }
+
+    }
+    if (Tree.contadort !== 0) { contenidocd3 = contenidocd3 + ";\n" }
+    Tree.Encabezadocodigo3d.forEach(element => {
+      contenidocd3 += element + "\n"
+    });
+    //ITERA PARA EL CONTENIDO DEL MAIN
+    Tree.codigo3d.forEach(element => {
+      contenidocd3 += element + "\n"
+    });
+
     const gramat = GramaticalDes;
     const gramar = gramat.parse(texto);
     localStorage.setItem("gramatica1", gramar);
@@ -429,6 +406,8 @@ export class ContenidoInicioComponent implements OnInit {
   EjecutarAsc(texto: string) {
 
     // if (texto == null) return document.write('Error');
+    cd3XPath= null;
+    cd3XPath=[];
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
@@ -454,12 +433,15 @@ export class ContenidoInicioComponent implements OnInit {
         console.log(element)
         if (element instanceof BarrasNodo) {
           console.log("es barranodo")
+
           var resultador = element.interpretar(Tree, tablita);
           if (resultador instanceof tablaSimbolos) {
             tablita = resultador
             if (c == instructions.length) {
-              consolita += this.recorrerTabla(tablita);
-              consolita += "\n"
+              if (TreeAsc != null) {
+                consolita += this.recorrerTabla(tablita, TreeAsc);
+                consolita += "\n"
+              }
             }
           }
           else { //VIENE STRING
@@ -476,27 +458,6 @@ export class ContenidoInicioComponent implements OnInit {
     this.mostrarContenido(consolita, 'resultado');
 
 
-  }
-
-
-  ciclogetInstuciones(i: any, numero: number, Tree: ArbolXpath, tablita: tablaSimbolos, ast: ArbolXpath, consolita: string) {
-    if (i[numero] != null) {
-
-      if (i[numero] instanceof BarrasNodo) {
-        let temp: BarrasNodo = i[numero]
-        var resultador = temp.interpretar(Tree, tablita)
-        if (resultador instanceof tablaSimbolos) {
-          tablita = resultador
-          if (numero == ast.getinstrucciones().length) {
-            consolita = this.recorrerTabla(tablita);
-          } else {
-          }
-        }
-        else { //VIENE STRING
-          consolita = resultador
-        }
-      }
-    }
   }
 
   ArbolAscAST(texto: string) {
@@ -592,7 +553,12 @@ export class ContenidoInicioComponent implements OnInit {
     // #docregion focus-restoration
     this.dialog.open(Pruebas, {});
   }
-  recorrerTabla(t: tablaSimbolos) {
+  /**
+   * *********************************RECORRER TABLA PARA XPATH*************************************
+   * @param t 
+   * @returns 
+   */
+  recorrerTabla(t: tablaSimbolos, arbol: Arbol) {
     var salida = ''
     for (var key of t.tablaActual) {
 
@@ -603,15 +569,164 @@ export class ContenidoInicioComponent implements OnInit {
         for (var key3 of objetos.tablaActual) {
           listaobjetitos += `${key3.getidentificador()}, `
         }
+        //  let recorrido=
+        let atributos = ""
+       
+        /**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IMPRIMIR DATOS CD3 XPATH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+         */
 
-        salida += this.recorrerTabla(objetos);
-
+        let etiqueta1="<" + key.getidentificador() 
+        this.generarEtiquetascd3("<"+key.getidentificador(), arbol);
+        if (key.getAtributo().size != 0) {
+          for (var [key2, value2,] of key.getAtributo()) {
+            etiqueta1 += " " + key2 + "=" + value2
+            this.generarEtiquetascd3(" "+key2+"=", arbol);
+            let atrib= key.get3DAtributo()
+            this.printcd3Simple(atrib, arbol, key2);
+          }
+        }
+        etiqueta1+= ">"
+        this.generarEtiquetascd3(">", arbol);
+        cd3XPath.push(`printf("%c",10);`);
+        let etiqueta2="</" + key.getidentificador() + ">"
+        salida += etiqueta1+ "\n"+ this.recorrerTabla(objetos, arbol) + etiqueta2+"\n";
+        this.generarEtiquetascd3(etiqueta2, arbol);
+        cd3XPath.push(`printf("%c",10);`);
       } else {
-        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+        let atributos = ""
+        this.generarEtiquetascd3("<"+key.getidentificador(), arbol);
+        if (key.getAtributo().size != 0) {
+          for (var [key2, value2,] of key.getAtributo()) {
+            atributos += " " + key2 + "=" + value2
+            this.generarEtiquetascd3(" "+key2+"=", arbol);
+            let atrib= key.get3DAtributo()
+            this.printcd3Simple(atrib, arbol, key2);
+          }
+        }
+        let contain= key.setcd3Value()
+        this.generarEtiquetascd3(">", arbol);
+        this.printcd3Simple(contain, arbol, key.getidentificador());
+        salida += "<" + key.getidentificador() + atributos + ">"
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
+        let etiqueta2 ="</" + key.getidentificador() + ">"
+        salida += etiqueta2+"\n"
+        this.generarEtiquetascd3(etiqueta2, arbol);
+        cd3XPath.push(`printf("%c",10);`);
       }
     }
     return salida;
 
+  }
+  /**
+   * 
+   * @param contenido 
+   * @param arbol 
+   */
+  printcd3Simple(contenido: String, arbol: Arbol, identificador:String){
+    cd3XPath.push(`//***print  ${identificador}****`)
+    let countprint = arbol.getContadort();
+    cd3XPath.push(`$t${countprint}=stack[(int)${contenido}]; `);
+    cd3XPath.push(`$t0= $t${countprint}; `);
+    cd3XPath.push("imprimirString();");
+   
+  }
+  /**$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   * *****************************************GENERACION DE <ETIQUTA></ETIQUETA>***********************
+   * $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+   * @param contenido 
+   */
+  generarEtiquetascd3(contenido: String, arbol: Arbol) {
+    let stackID = arbol.getSTACK();
+    let contadorID = arbol.getContadort(); //temporales
+    cd3XPath.push(`// declaracion para imprimir etiquetas ${contenido}`);
+    cd3XPath.push(`$t${contadorID}=sp+${stackID};`);
+    let data: string = contenido + "";
+    let estado = 0;
+    for (let x = 0; x < data.length; x++) {
+      const iterator = data[x];
+      switch (estado) {
+        case 0: {
+          if (iterator == "\\") { estado = 1; continue; }
+          cd3XPath.push(`//agregamos el string al heap ${iterator}`);
+          cd3XPath.push("$t0=hp;");
+
+          cd3XPath.push("$t1=" + iterator.charCodeAt(0) + ";");
+          cd3XPath.push("guardarString();");
+          break;
+        }
+        case 1:
+          {
+            let assci = 0;
+            if (iterator == "n") { assci = 10; }
+            else if (iterator == "\"") { assci = 34; }
+            else if (iterator == "\\") { assci = 92 }
+            else if (iterator == "r") { assci = 10 }
+            else if (iterator == "t") { assci = 9; }
+            else {
+              cd3XPath.push("//agregamos el string al heap");
+              cd3XPath.push("$t0=hp;");
+
+              cd3XPath.push("$t1=" + 34 + ";");
+              cd3XPath.push("guardarString();");
+              cd3XPath.push("//agregamos el string al heap");
+              cd3XPath.push("$t0=hp;");
+
+              cd3XPath.push("$t1=" + iterator.charAt(0) + ";");
+              cd3XPath.push("guardarString();");
+            }
+            cd3XPath.push("//agregamos el string al heap");
+            cd3XPath.push("$t0=hp;");
+
+            cd3XPath.push("$t1=" + assci + ";");
+            cd3XPath.push("guardarString();");
+            estado = 0;
+            break;
+          }
+      }
+
+    }
+    cd3XPath.push("$t0=hp;");
+    cd3XPath.push("$t1=-1;");
+    cd3XPath.push("guardarString();");
+    const contadort = arbol.getContadort();
+    cd3XPath.push("$t" + contadort + "=hp-" + (data.length + 1) + ";");
+    cd3XPath.push(`stack[(int)$t${contadorID}]= $t${contadort};`);
+    cd3XPath.push("//***print****")
+    let countprint = arbol.getContadort();
+    cd3XPath.push(`$t${countprint}=stack[(int)$t${contadorID}]; `);
+    cd3XPath.push(`$t0= $t${countprint}; `);
+    cd3XPath.push("imprimirString();");
+
+  }
+
+  /**************************************************************************************************
+   * *********************************OPTIMIZACION***************************************************
+   * ***********************************************************************************************/
+  Optimizar(texto: string) {
+    const Optimo = Optimizacion;
+    const objetos = Optimo.parse(texto);
+    let cadenaconcat = "";
+    var Tree: TreeOptimo = new TreeOptimo([objetos]);;
+    var tabla = new tablaSimbolos();                    //ejecucion
+    Tree.settablaGlobal(tabla);
+    for (var instruction of Tree.getinstrucciones()) {
+      instruction.forEach(element => {
+        if (element instanceof Declaracion) {
+          cadenaconcat += element.interpretar(Tree, tabla);
+        } else if (element instanceof Funcion) {
+          cadenaconcat += element.interpretar(Tree, tabla);
+        } else {
+          cadenaconcat += element;
+        }
+      });
+
+    }
+    this.mostrarContenido(cadenaconcat, 'resultado');
+    var reco = Tree.getSimbolos();
+    let reporte = JSON.stringify(reco);
+    localStorage.setItem("optimo", reporte);
   }
 }
 

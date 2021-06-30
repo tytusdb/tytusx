@@ -31,5 +31,7 @@ export default class Axes extends Instruccion {
   interpretar(arbol: Arbol, tabla: tablaSimbolos) {
     throw new Error('Method not implemented.');
   }
-  
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }

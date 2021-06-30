@@ -26,14 +26,21 @@
         <mat-button-toggle value="Guardar">Guardar XML</mat-button-toggle>
       </mat-button-toggle-group>
       <textarea #contenido id="contenido" class="forma" (this.onload)="getConsola()"></textarea>
-      <label>SALIDA CD3</label>
-        <textarea  id="cdirecciones" class="textareanumber3"></textarea>
+      <label>SALIDA CONSULTAS</label>
+        <textarea  id="resultado" class="textareanumber3"></textarea>
+        <label>SALIDA CD3</label>
+        <br>
+        <mat-button-toggle id="mostrar" (click)="finalizarCD3()" value="Interpretar">MOSTRAR CD3
+        </mat-button-toggle>
+        <mat-button-toggle id="mostrar" (click)="Optimizar(cdirecciones.value)" value="Optimizar">OPTIMIZAR
+        </mat-button-toggle>
+        <textarea #cdirecciones id="cdirecciones" class="textareanumber4"></textarea>
       
     </div>
     <div><br></div>
     <div id="ediT">
       <label>EDITOR XQUERY</label>
-      <textarea #resultado id="resultado" class="textareanumber"></textarea>
+      <textarea #resultado id="XQUERY" class="textareanumber"></textarea>
       <br>
       
  

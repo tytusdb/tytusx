@@ -27,6 +27,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { GramaticalReportComponent } from './paginas/gramatical-report/gramatical-report.component';
 import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
 import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.component';
+import { ReporteOptimizacionComponent } from './paginas/reporte-optimizacion/reporte-optimizacion.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,8 @@ import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.comp
     ContenidoInicioComponent,
     GramaticalReportComponent,
     AstDescComponent,
-    XpathAscAstComponent
+    XpathAscAstComponent,
+    ReporteOptimizacionComponent
   ],
   imports: [
     BrowserModule,

@@ -49,7 +49,7 @@ export default class Atributo extends Instruccion {
     let stackID = arbol.getSTACK();
     let contadorID = arbol.getContadort(); //temporales
     arbol.codigo3d.push(`// declaracion atributo ${this.identificador}`);
-    arbol.codigo3d.push(`t${contadorID}=s+${stackID};`);
+    arbol.codigo3d.push(`$t${contadorID}=sp+${stackID};`);
 
     let data: string = this.valor + "";
     let estado = 0;
@@ -59,9 +59,9 @@ export default class Atributo extends Instruccion {
         case 0: {
           if (iterator == "\\") { estado = 1; continue; }
           arbol.codigo3d.push(`//agregamos el string al heap ${iterator}`);
-          arbol.codigo3d.push("t0=p;");
+          arbol.codigo3d.push("$t0=hp;");
 
-          arbol.codigo3d.push("t1=" + iterator.charCodeAt(0) + ";");
+          arbol.codigo3d.push("$t1=" + iterator.charCodeAt(0) + ";");
           arbol.codigo3d.push("guardarString();");
           break;
         }
@@ -75,20 +75,20 @@ export default class Atributo extends Instruccion {
             else if (iterator == "t") { assci = 9; }
             else {
               arbol.codigo3d.push("//agregamos el string al heap");
-              arbol.codigo3d.push("t0=p;");
+              arbol.codigo3d.push("$t0=hp;");
 
-              arbol.codigo3d.push("t1=" + 34 + ";");
+              arbol.codigo3d.push("$t1=" + 34 + ";");
               arbol.codigo3d.push("guardarString();");
               arbol.codigo3d.push("//agregamos el string al heap");
-              arbol.codigo3d.push("t0=p;");
+              arbol.codigo3d.push("$t0=hp;");
 
-              arbol.codigo3d.push("t1=" + iterator.charAt(0) + ";");
+              arbol.codigo3d.push("$t1=" + iterator.charAt(0) + ";");
               arbol.codigo3d.push("guardarString();");
             }
             arbol.codigo3d.push("//agregamos el string al heap");
-            arbol.codigo3d.push("t0=p;");
+            arbol.codigo3d.push("$t0=hp;");
 
-            arbol.codigo3d.push("t1=" + assci + ";");
+            arbol.codigo3d.push("$t1=" + assci + ";");
             arbol.codigo3d.push("guardarString();");
             estado = 0;
             break;
@@ -96,14 +96,14 @@ export default class Atributo extends Instruccion {
       }
 
     }
-    arbol.codigo3d.push("t0=p;");
-    arbol.codigo3d.push("t1=-1;");
+    arbol.codigo3d.push("$t0=hp;");
+    arbol.codigo3d.push("$t1=-1;");
     arbol.codigo3d.push("guardarString();");
     const contadort = arbol.getContadort();
-    arbol.codigo3d.push("t" + contadort + "=p-" + (data.length + 1) + ";");
-    arbol.codigo3d.push(`stack[(int)t${contadorID}]= t${contadort};`);
+    arbol.codigo3d.push("$t" + contadort + "=hp-" + (data.length + 1) + ";");
+    arbol.codigo3d.push(`stack[(int)$t${contadorID}]= $t${contadort};`);
    
     
-    return { identificador: this.identificador, valor: this.valor, linea: this.fila, columna: this.columna, cd3script: `t${contadorID}` }
+    return { identificador: this.identificador, valor: this.valor, linea: this.fila, columna: this.columna, cd3script: `$t${contadorID}` }
   }
 }
