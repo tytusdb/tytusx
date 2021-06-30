@@ -90,18 +90,19 @@
 /lex
 
 %{
-    const thefor = require('./Instrucciones/For');
+    const theforcompuesto = require('./Instrucciones/ForCompuesto');
+    const theforsimple = require('./Instrucciones/ForSimple');
     const atributosexpresion = require("./Instrucciones/AtributosExpresion")
     const identificadorpredicado = require("../../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
-    cont relacional = require("./Expresiones/Relacional");
+    const relacional = require("./Expresiones/Relacional");
     const barrasnodo= require("../../../XPATH/Analizador/Instrucciones/BarrasNodo")
     const identificador= require("./Expresiones/Identificador");
     const nativo= require("./Expresiones/Nativo");
     const asignacion= require("./Instrucciones/Asignacion")
-
-    
+    const theif = require('./Instrucciones/If')
+    const let=require('./Instrucciones/Let')
 
 
 %}
@@ -120,53 +121,69 @@ INSTRUCCIONES
     ;
 
 INSTRUCCION
-    :FOR {$$=$1}        
+    :FORSIMPLE {$$=$1}   
+    |FORCOMPUESTO {$$=$1}     
     |LET {$$=$1}
     ;   
 
-FOR
-    :RFOR VARIABLE POSICIONAMIENTO RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO  {$$=new thefor.default($2,$9,@1.first_line,@1.first_column,$3,$5,$7);}
-    |RFOR VARIABLE POSICIONAMIENTO RWHERE CONDICION RRETURN RETORNO  {$$=new thefor.default($2,$7,@1.first_line,@1.first_column,$3,$5,[]);}
-    |RFOR VARIABLE POSICIONAMIENTO RORDERBY CONDICION RRETURN RETORNO  {$$=new thefor.default($2,$7,@1.first_line,@1.first_column,$3,[],$7);}
-    |RFOR VARIABLE POSICIONAMIENTO RRETURN RETORNO  {$$=new thefor.default($2,$5,@1.first_line,@1.first_column,$3,[],[]);}
+FORCOMPUESTO
+    :RFOR CONDICIONCOMPUESTA RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO 
+    |RFOR CONDICIONCOMPUESTA RWHERE CONDICION RRETURN RETORNO
+    |RFOR CONDICIONCOMPUESTA RORDERBY CONDICION RRETURN RETORNO
+    |RFOR CONDICIONCOMPUESTA RRETURN RETORNO
+    ;
+
+FORSIMPLE
+    :RFOR CONDICIONSIMPLE  RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO  {$$=new theforsimple.default($2,$8,@1.first_line,@1.first_column,$4,$6);}
+    |RFOR CONDICIONSIMPLE  RWHERE CONDICION RRETURN RETORNO  {$$=new theforsimple.default($2,$6,@1.first_line,@1.first_column,$4,[]);}
+    |RFOR CONDICIONSIMPLE  RORDERBY CONDICION RRETURN RETORNO  {$$=new theforsimple.default($2,$6,@1.first_line,@1.first_column,[],$4);}
+    |RFOR CONDICIONSIMPLE  RRETURN RETORNO  {$$=new theforsimple.default($2,$5,@1.first_line,@1.first_column,[],[]);}
     ;
 
 LET 
-    :RLET VARIABLE LETDOSPUNTOS L_FTO RRETURN RETORNO {}
+    :RLET VARIABLE LETDOSPUNTOS L_FTO RRETURN RETORNO {$$=new let.default($2,$4,$6,@1.first_line,@1.first_column)}
     ;    
 
-POSICIONAMIENTO
-    :FORCONSULTA    {$$=$1}
-    |FORCONTEO      {$$=$1}
+CONDICIONCOMPUESTA
+    : CONDICIONCOMPUESTA COMA CONJUNCION 
+    | CONJUNCION                       
+    |                 
     ;
 
-FORCONSULTA
-    :RIN FOPEN CONSULTA     {$$=$3}
-    |RAT VARIABLE FORCONSULTA {$$=$2}
-    |VARIABLE POSICIONAMIENTO {$$=$1}
+CONDICIONSIMPLE
+    :CONDICIONSIMPLE UNION  {$1.push($2); $$ = $1;}
+    |UNION                  {$$ = [$1];}
     ;
 
-FORCONTEO
-    :RIN L_FTO                  {$$=$2}
-    |RIN L_FTO POSICIONAMIENTO  {$$=$2}
+UNION
+    :L_VARIABLES CONSULTASIMPLE {$$=$2}
+    ;    
+
+CONJUNCION
+    : L_VARIABLES L_IN    
+    ;    
+
+L_VARIABLES
+    : L_VARIABLES RAT VARIABLE   {$1.push($3); $$ = $1;}  
+    | VARIABLE                   {$$ = [$1];}
     ;
 
-L_FTO
-    :L_FTO FTO      {$1.push($2); $$=$1;}
-    |FTO            {$$=[$1];}
+L_IN
+    : RIN PARIZQ ENTERO CONECTOR ENTERO PARDER  
+    |PARIZQ ENTERO CONECTOR ENTERO PARDER  
     ;
 
-FTO
-    :PARIZQ ENTERO CONECTOR ENTERO PARDER               {$$=$2,$3,$4}
-    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR      {$$=$2,$3,$4}
-    ;
+CONSULTASIMPLE
+    :RIN FOPEN CONSULTA                                 {$$=$3}
+    ;    
 
 VARIABLE
     :DOLAR IDENTIFICADOR                                {$$=$2}
     ;    
 
 FOPEN
-    :RDOC PARIZQ CADENA PARDER                          {$$=$2}
+    :RDOC PARIZQ CADENA PARDER                          {$$=$3}
+    |
     ;
 
 CONECTOR
@@ -178,19 +195,19 @@ CONECTOR
     ;    
 
 RETORNO
-    :CONDICION
-    |FUNCIONES
-    |IF
-    |ASIGNACION
+    :CONDICION  {$$=$1}
+    |FUNCIONES  {$$=$1}
+    |IF         {$$=$1}
+    |ASIGNACION {$$=$1}
     ;
 
 IF
-    :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO
-    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER
+    :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO        {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
+    |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER  {$$=new theif.default($3,@1.first_line,@1.first_column,$6,[])}
     ;
 
 FUNCIONES
-    :RDATA PARIZQ CONDICION PARDER
+    :RDATA PARIZQ CONDICION PARDER {$$=$3}
     ;
 
 ASIGNACION
