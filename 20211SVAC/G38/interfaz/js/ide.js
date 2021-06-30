@@ -178,6 +178,7 @@ const analizarXQUERY= function (cadEntrada){
         InterfazGrafica.print("Iniciando ejecucion: "+new Date());
         try {
             ListaErrores.InicializarXquery();
+            ListaFunciones.limipiarFunciones();
             let rootXquery = XqueryAnalyzer.parse(cadEntrada);
             if(rootXquery){
                 console.info('Se genero correctamente el árbol xquery. ');
@@ -289,9 +290,10 @@ const ejecutarXquery= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXQUERY(cadEntradaXpath);
-        let listaDeImpresion = _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
-        let result = XpathUtil.convertirNodosXqueryATexto(listaDeImpresion);
-        InterfazGrafica.print(result);
+        _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        if(ListaErrores.hayErroresXquery()){
+            InterfazGrafica.print("Hubieron errores durante la ejecucion en XQUERY");
+        }
         InterfazGrafica.print('FIN EJECUCION');
     }catch (e){
         InterfazGrafica.print('error en ejecucion: '+e);

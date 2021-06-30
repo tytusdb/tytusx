@@ -1,19 +1,12 @@
 "use strict";
-class LlamadaFuncion {
+class LlamadaFuncionInstruccion {
     constructor(identifier, valoresParametros, linea, columna) {
         this.identifier = identifier;
         this.valoresParametros = valoresParametros;
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent, xmlData) {
-        let tipo = new Tipo(TipoDato.err);
-        let funcion = ListaFunciones.getFuncion(this.identifier);
-        if (funcion != null && funcion != undefined)
-            tipo = funcion.tipo;
-        return tipo;
-    }
-    getValor(ent, xmlData) {
+    ejecutar(ent, xmlData) {
         if (!ListaFunciones.existe(this.identifier)) {
             ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("No existe una funcion declarada con el nombre " + this.identifier, this.linea, this.columna));
             return;
@@ -34,9 +27,8 @@ class LlamadaFuncion {
         }
         catch (exception) {
             if (exception instanceof ReturnException) {
-                return XpathUtil.convertirXqueryAString(exception.valor);
+                InterfazGrafica.print(XpathUtil.convertirXqueryAString(exception.valor));
             }
         }
-        return null;
     }
 }
