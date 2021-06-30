@@ -1163,13 +1163,19 @@
       !*** ./src/clases/Analizar.ts ***!
       \********************************/
 
-    /*! exports provided: Analizador */
+    /*! exports provided: errorLex, Analizador */
 
     /***/
     function UlT(module, __webpack_exports__, __webpack_require__) {
       "use strict";
 
       __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "errorLex", function () {
+        return errorLex;
+      });
       /* harmony export (binding) */
 
 
@@ -1228,8 +1234,9 @@
       var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
       /*! ./TablaSimbolos/TablaSimbolos */
       "arwD");
-      /* let error_html = controlador.graficar_Semantico (controlador,ts_globla);  Metodos para lo errores*/
 
+      var errorLex = [];
+      /* let error_html = controlador.graficar_Semantico (controlador,ts_globla);  Metodos para lo errores*/
 
       var Analizador = /*#__PURE__*/function () {
         function Analizador() {
@@ -1245,12 +1252,14 @@
 
             var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
             var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            console.log(errorLex);
             astxml.ejecutar(controlador, ts_globla); //Ejecutar xpath
 
-            var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            if (entradaxpath.length > 0) {
+              var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
 
-            console.log(astxpaht);
-            astxml.ejecutarXPath(controlador, ts_globla, astxpaht); // console.log("aa");
+              astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+            }
 
             var ts_html = controlador.graficar_ts(controlador, ts_globla);
             var retorno = {
@@ -1270,9 +1279,12 @@
             var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
             astxml.ejecutarDescendente(controlador, ts_globla); //Ejecutar xpath
 
-            var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            if (entradaxpath.length > 0) {
+              var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
 
-            astxml.ejecutarXPath(controlador, ts_globla, astxpaht); // console.log("aa");
+              astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+            } // console.log("aa");
+
 
             var ts_html = controlador.graficar_ts(controlador, ts_globla);
             var retorno = {
@@ -1291,7 +1303,214 @@
             controlador.generador.clearCode();
             astxml.ejecutar(controlador, ts_globla);
 
-            if (entradaxpath != null) {
+            if (entradaxpath.length > 0) {
+              var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+
+              astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+            }
+
+            var ts_html = controlador.graficar_ts(controlador, ts_globla);
+            var retorno = {
+              "ts": ts_html,
+              "consola": controlador.generador.getCode()
+            };
+            return retorno;
+          }
+        }, {
+          key: "recorrer",
+          value: function recorrer(input) {
+            try {
+              var ast = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](input);
+
+              var nodo_ast = ast.recorrer();
+              return nodo_ast;
+            } catch (error) {}
+          }
+        }, {
+          key: "recorrerDes",
+          value: function recorrerDes(input) {
+            try {
+              var ast = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](input);
+
+              console.log(ast);
+              var nodo_ast = ast.recorrer();
+              return nodo_ast;
+            } catch (error) {}
+          }
+        }, {
+          key: "recorrerDesxpath",
+          value: function recorrerDesxpath(input) {
+            try {
+              var ast = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](input);
+
+              console.log(ast);
+              console.log(ast);
+              var nodo_ast = ast.recorrer();
+              return nodo_ast;
+            } catch (error) {}
+          }
+        }, {
+          key: "recorrerXquery",
+          value: function recorrerXquery(entradaxquery) {
+            console.log("vamos a analizar la entrada"); //Ejecutar Xquery
+
+            _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__["parse"](entradaxquery);
+          }
+        }]);
+
+        return Analizador;
+      }();
+      /***/
+
+    },
+
+    /***/
+    "/l+n":
+    /*!********************************!*\
+      !*** ./src/Clases/Analizar.ts ***!
+      \********************************/
+
+    /*! exports provided: errorLex, Analizador */
+
+    /***/
+    function lN(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "errorLex", function () {
+        return errorLex;
+      });
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Analizador", function () {
+        return Analizador;
+      });
+      /* harmony import */
+
+
+      var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../Analizadores/gramatica */
+      "lbnd");
+      /* harmony import */
+
+
+      var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__);
+      /* harmony import */
+
+
+      var _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ../Analizadores/XML */
+      "7krQ");
+      /* harmony import */
+
+
+      var _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__);
+      /* harmony import */
+
+
+      var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../Analizadores/XMLDescendente */
+      "EViG");
+      /* harmony import */
+
+
+      var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__);
+      /* harmony import */
+
+
+      var _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
+      /*! ../Analizadores/XQuery */
+      "9IBB");
+      /* harmony import */
+
+
+      var _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__);
+      /* harmony import */
+
+
+      var _Controlador__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! ./Controlador */
+      "iMxP");
+      /* harmony import */
+
+
+      var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      /*! ./TablaSimbolos/TablaSimbolos */
+      "AviG");
+
+      var errorLex = [];
+      /* let error_html = controlador.graficar_Semantico (controlador,ts_globla);  Metodos para lo errores*/
+
+      var Analizador = /*#__PURE__*/function () {
+        function Analizador() {
+          _classCallCheck(this, Analizador);
+        }
+
+        _createClass(Analizador, [{
+          key: "ejecutar",
+          value: function ejecutar(entradaxml, entradaxpath) {
+            console.log("vamos a analizar la entrada"); //Ejecutar xml 
+
+            var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
+
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            console.log(errorLex);
+            astxml.ejecutar(controlador, ts_globla); //Ejecutar xpath
+
+            if (entradaxpath.length > 0) {
+              var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+
+              astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+            }
+
+            var ts_html = controlador.graficar_ts(controlador, ts_globla);
+            var retorno = {
+              "ts": ts_html,
+              "consola": controlador.consola
+            };
+            return retorno;
+          }
+        }, {
+          key: "ejecutarDes",
+          value: function ejecutarDes(entradaxml, entradaxpath) {
+            console.log("vamos a analizar la entrada"); //Ejecutar xml 
+
+            var astxml = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](entradaxml);
+
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            astxml.ejecutarDescendente(controlador, ts_globla); //Ejecutar xpath
+
+            if (entradaxpath.length > 0) {
+              var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+
+              astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+            } // console.log("aa");
+
+
+            var ts_html = controlador.graficar_ts(controlador, ts_globla);
+            var retorno = {
+              "ts": ts_html,
+              "consola": controlador.consola
+            };
+            return retorno;
+          }
+        }, {
+          key: "traducirxml",
+          value: function traducirxml(entradaxml, entradaxpath) {
+            var astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
+
+            var controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+            var ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+            controlador.generador.clearCode();
+            astxml.ejecutar(controlador, ts_globla);
+
+            if (entradaxpath.length > 0) {
               var astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
 
               astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
@@ -1462,6 +1681,839 @@
       /* (ignored) */
 
       /***/
+    },
+
+    /***/
+    "3Bn/":
+    /*!********************************************!*\
+      !*** ./src/Clases/GeneradorC3D/Nativas.ts ***!
+      \********************************************/
+
+    /*! exports provided: Nativas */
+
+    /***/
+    function Bn(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "Nativas", function () {
+        return Nativas;
+      });
+      /* harmony import */
+
+
+      var _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ./GeneradorC3D */
+      "cg4T");
+
+      var Nativas = /*#__PURE__*/function () {
+        function Nativas() {
+          _classCallCheck(this, Nativas);
+        }
+
+        _createClass(Nativas, [{
+          key: "generarNativas",
+          value: function generarNativas() {
+            this.nativa_print_str(); //this.nativa_print_integer();
+            // this.nativa_compararIgual_str_str();
+            // this.nativa_compararNoIgual_str_str();
+            //this.nativa_ToUpperCase();
+            //this.nativa_ToLowerCase();
+
+            this.nativa_concat_str_str(); //this.nativa_concat_dbl_str();
+            //  this.nativa_concat_str_dbl();
+
+            this.nativa_concat_int_str();
+            this.nativa_concat_str_int(); //this.nativa_concat_str_bol();
+            // this.nativa_concat_bol_str();
+            //this.nativa_lenght_str();
+
+            return _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia().getNativas();
+          }
+        }, {
+          key: "nativa_lenght_str",
+          value: function nativa_lenght_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var next = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_lenght_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t0, 'p', '1', '+');
+            gen.genGetStack(t1, t0);
+            gen.genAsignacion(t3, '0');
+            gen.genLabel(next);
+            gen.genGetHeap(t2, t1);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genExpresion(t1, t1, '1', '+');
+            gen.genGoto(next);
+            gen.genLabel(fin);
+            gen.genSetStack('p', t3);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t0);
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+          }
+        }, {
+          key: "nativa_print_str",
+          value: function nativa_print_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var next = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_print_str');
+            gen.isFunc = '\t';
+            gen.genGetStack(t1, 'p');
+            gen.genLabel(next);
+            gen.genGetHeap(t2, t1);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genPrint('c', t2);
+            gen.genExpresion(t1, t1, '1', '+');
+            gen.genGoto(next);
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+          }
+          /*
+              nativa_print_integer() {
+                  const gen = GeneradorC3D.getInstancia();
+                  let t1 = gen.newTemporal();
+                  let t2 = gen.newTemporal();
+                  let t3 = gen.newTemporal();
+                  let inicio = gen.newLabel();
+                  let nextPos = gen.newLabel();
+                  let nextPrt = gen.newLabel();
+                  let fin = gen.newLabel();
+          
+                  gen.genFuncion('nativa_print_integer');
+                  gen.isFunc = '\t';
+                  gen.genGetStack(t1, 'p');
+                  gen.genIf(t1, '0', '>=', inicio);
+                  gen.genPrint('c', '45');
+                  gen.genExpresion(t1, t1, '-1', '*');
+                  gen.genLabel(inicio);
+                  gen.genAsignacion(t3, 'p');
+                  gen.genSetStack(t3, '-1');
+                  gen.genExpresion(t3, t3, '1', '+');
+                  gen.genLabel(nextPos);
+                  gen.genIf(t1, '0', '==', nextPrt);
+                  gen.genCode(`${t2} = fmod(${t1}, 10);`);
+                  gen.genSetStack(t3, t2);
+                  gen.genExpresion(t3, t3, '1', '+');
+                  gen.genExpresion(t1, t1, '10', '/');
+                  gen.genGoto(nextPos);
+                  gen.genLabel(nextPrt);
+                  gen.genExpresion(t3, t3, '1', '-');
+                  gen.genGetStack(t1, t3);
+                  gen.genIf(t1, '-1', '==', fin);
+                  gen.genPrint('i', t1);
+                  gen.genGoto(nextPrt);
+                  gen.genLabel(fin);
+                  gen.genCode('return;');
+                  gen.genEndFuncion();
+                  gen.isFunc = '';
+                  gen.freeTemp(t1);
+                  gen.freeTemp(t2);
+                  gen.freeTemp(t3);
+              }*/
+
+        }, {
+          key: "nativa_compararIgual_str_str",
+          value: function nativa_compararIgual_str_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var c1 = gen.newTemporal();
+            var c2 = gen.newTemporal();
+            var lblfalse = gen.newLabel();
+            var lbltrue = gen.newLabel();
+            var l2 = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_compararIgual_str_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t0, 'p', '1', '+');
+            gen.genGetStack(p1, t0);
+            gen.genExpresion(t0, 'p', '2', '+');
+            gen.genGetStack(p2, t0);
+            gen.genIf(p1, '-1', '==', l2);
+            gen.genIf(p2, '-1', '==', lblfalse);
+            gen.genGoto(inicio);
+            gen.genLabel(l2);
+            gen.genIf(p2, '-1', '==', lbltrue);
+            gen.genGoto(lblfalse);
+            gen.genLabel(inicio);
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genLabel(nextPos);
+            gen.genIf(c1, c2, '!=', lblfalse);
+            gen.genIf(c1, '-1', '==', lbltrue);
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genGoto(nextPos);
+            gen.genLabel(lbltrue);
+            gen.genSetStack('p', '1');
+            gen.genGoto(fin);
+            gen.genLabel(lblfalse);
+            gen.genSetStack('p', '0');
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+            gen.freeTemp(c1);
+            gen.freeTemp(c2);
+          }
+        }, {
+          key: "nativa_compararNoIgual_str_str",
+          value: function nativa_compararNoIgual_str_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var c1 = gen.newTemporal();
+            var c2 = gen.newTemporal();
+            var lblfalse = gen.newLabel();
+            var lbltrue = gen.newLabel();
+            var l2 = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_compararNoIgual_str_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genIf(p1, '-1', '==', l2);
+            gen.genIf(p2, '-1', '==', lbltrue);
+            gen.genGoto(inicio);
+            gen.genLabel(l2);
+            gen.genIf(p2, '-1', '==', lblfalse);
+            gen.genGoto(lbltrue);
+            gen.genLabel(inicio);
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genLabel(nextPos);
+            gen.genIf(c1, c2, '!=', lbltrue);
+            gen.genIf(c1, '-1', '==', lblfalse);
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGetHeap(c1, p1);
+            gen.genGetHeap(c2, p2);
+            gen.genGoto(nextPos);
+            gen.genLabel(lbltrue);
+            gen.genSetStack('p', '1');
+            gen.genGoto(fin);
+            gen.genLabel(lblfalse);
+            gen.genSetStack('p', '0');
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+            gen.freeTemp(c1);
+            gen.freeTemp(c2);
+          }
+        }, {
+          key: "nativa_ToUpperCase",
+          value: function nativa_ToUpperCase() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var nextPos = gen.newLabel();
+            var setChar = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_ToUpperCase');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(t2, t1); // carga la referencia del string
+
+            gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
+
+            gen.genLabel(nextPos);
+            gen.genGetHeap(t4, t2);
+            gen.genIf(t4, '-1', '==', fin);
+            gen.genIf(t4, '97', '<', setChar);
+            gen.genIf(t4, '122', '>', setChar);
+            gen.genExpresion(t4, t4, '32', '-');
+            gen.genLabel(setChar);
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t2, t2, '1', '+');
+            gen.genGoto(nextPos);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t3);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+          }
+        }, {
+          key: "nativa_ToLowerCase",
+          value: function nativa_ToLowerCase() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var nextPos = gen.newLabel();
+            var setChar = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_ToLowerCase');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(t2, t1); // carga la referencia del string
+
+            gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
+
+            gen.genLabel(nextPos);
+            gen.genGetHeap(t4, t2);
+            gen.genIf(t4, '-1', '==', fin);
+            gen.genIf(t4, '65', '<', setChar);
+            gen.genIf(t4, '90', '>', setChar);
+            gen.genExpresion(t4, t4, '32', '+');
+            gen.genLabel(setChar);
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t2, t2, '1', '+');
+            gen.genGoto(nextPos);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t3);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+          }
+        }, {
+          key: "nativa_concat_str_str",
+          value: function nativa_concat_str_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var str1 = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t1, 'h');
+            gen.genLabel(str1);
+            gen.genGetHeap(t2, p1);
+            gen.genIf(t2, '-1', '==', str2);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str1);
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p2);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t1);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_int_str",
+          value: function nativa_concat_int_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_int_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genIf(p1, '0', '>=', inicio);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '-1', '*');
+            gen.genLabel(inicio);
+            gen.genAsignacion(t1, '0');
+            gen.genLabel(nextPos);
+            gen.genIf(p1, '0', '==', validar);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(p1, ", 10);")); //gen.genExpresion(t2, '(int)' + p1, '10', '%');
+
+            gen.genExpresion(t1, t1, t2, '+');
+            gen.genExpresion(p1, p1, '10', '/');
+            gen.genCode(p1 + ' = (int)' + p1 + ';');
+            gen.genGoto(nextPos);
+            gen.genLabel(validar);
+            gen.genIf(t1, '0', '!=', str1);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(str1);
+            gen.genIf(t1, '0', '==', str2);
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);")); //gen.genExpresion(t2, '(int)' + t1, '10', '%');
+
+            gen.genExpresion(t2, t2, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode(t1 + ' = (int)' + t1 + ';');
+            gen.genGoto(str1);
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p2);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_str_int",
+          value: function nativa_concat_str_int() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var pre = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_int');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p1);
+            gen.genIf(t2, '-1', '==', pre);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(pre);
+            gen.genIf(p2, '0', '>=', inicio);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '-1', '*');
+            gen.genLabel(inicio);
+            gen.genAsignacion(t1, '0');
+            gen.genLabel(nextPos);
+            gen.genIf(p2, '0', '==', validar);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(p2, ", 10);")); //gen.genExpresion(t2, '(int)' + p2, '10', '%');
+
+            gen.genExpresion(t1, t1, t2, '+');
+            gen.genExpresion(p2, p2, '10', '/');
+            gen.genCode(p2 + ' = (int)' + p2 + ';');
+            gen.genGoto(nextPos);
+            gen.genLabel(validar);
+            gen.genIf(t1, '0', '!=', str1);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(str1);
+            gen.genIf(t1, '0', '==', fin);
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);")); //gen.genExpresion(t2, '(int)' + t1, '10', '%');
+
+            gen.genExpresion(t2, t2, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode(t1 + ' = (int)' + t1 + ';');
+            gen.genGoto(str1);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_dbl_str",
+          value: function nativa_concat_dbl_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var pre = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var strd = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_dbl_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genIf(p1, '0', '>=', pre);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '-1', '*');
+            gen.genLabel(pre);
+            gen.genCode("".concat(t1, " = (int)").concat(p1, ";")); //gen.genCode(`${t2} = fmod(${p1}, 1);`);
+
+            gen.genAsignacion(t3, '0');
+            gen.genLabel(inicio);
+            gen.genIf(t1, '0', '==', validar);
+            gen.genExpresion(t3, t3, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genExpresion(t3, t3, t2, '+');
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode("".concat(t1, " = (int)").concat(t1, ";"));
+            gen.genGoto(inicio);
+            gen.genLabel(validar);
+            gen.genIf(t3, '0', '!=', nextPos);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(nextPos);
+            gen.genIf(t3, '0', '==', str1);
+            gen.genCode("".concat(t1, " = fmod(").concat(t3, ", 10);"));
+            gen.genExpresion(t3, t3, '10', '/');
+            gen.genCode("".concat(t3, " = (int)").concat(t3, ";"));
+            gen.genExpresion(t2, t1, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genGoto(nextPos);
+            gen.genLabel(str1);
+            gen.genSetHeap('h', '46');
+            gen.avanzarHeap();
+            gen.genAsignacion(t3, '0');
+            gen.genCode("".concat(t1, " = fmod(").concat(p1, ", 1);"));
+            gen.genLabel(strd);
+            gen.genIf(t3, '3', '==', str2);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genCode("".concat(t2, " = (int)").concat(t2, ";"));
+            gen.genExpresion(t4, t2, '48', '+');
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genGoto(strd);
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p2);
+            gen.genIf(t2, '-1', '==', fin);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_str_dbl",
+          value: function nativa_concat_str_dbl() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var t2 = gen.newTemporal();
+            var t3 = gen.newTemporal();
+            var t4 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var pre = gen.newLabel();
+            var sig = gen.newLabel();
+            var inicio = gen.newLabel();
+            var nextPos = gen.newLabel();
+            var validar = gen.newLabel();
+            var str1 = gen.newLabel();
+            var strd = gen.newLabel();
+            var str2 = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_dbl');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genLabel(str2);
+            gen.genGetHeap(t2, p1);
+            gen.genIf(t2, '-1', '==', sig);
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(sig);
+            gen.genIf(p2, '0', '>=', pre);
+            gen.genSetHeap('h', '45');
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '-1', '*');
+            gen.genLabel(pre);
+            gen.genCode("".concat(t1, " = (int)").concat(p2, ";")); //gen.genCode(`${t2} = fmod(${p2}, 1);`);
+
+            gen.genAsignacion(t3, '0');
+            gen.genLabel(inicio);
+            gen.genIf(t1, '0', '==', validar);
+            gen.genExpresion(t3, t3, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genExpresion(t3, t3, t2, '+');
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genCode("".concat(t1, " = (int)").concat(t1, ";"));
+            gen.genGoto(inicio);
+            gen.genLabel(validar);
+            gen.genIf(t3, '0', '!=', nextPos);
+            gen.genSetHeap('h', '48');
+            gen.avanzarHeap();
+            gen.genLabel(nextPos);
+            gen.genIf(t3, '0', '==', str1);
+            gen.genCode("".concat(t1, " = fmod(").concat(t3, ", 10);"));
+            gen.genExpresion(t3, t3, '10', '/');
+            gen.genCode("".concat(t3, " = (int)").concat(t3, ";"));
+            gen.genExpresion(t2, t1, '48', '+');
+            gen.genSetHeap('h', t2);
+            gen.avanzarHeap();
+            gen.genGoto(nextPos);
+            gen.genLabel(str1);
+            gen.genSetHeap('h', '46');
+            gen.avanzarHeap();
+            gen.genAsignacion(t3, '0');
+            gen.genCode("".concat(t1, " = fmod(").concat(p2, ", 1);"));
+            gen.genLabel(strd);
+            gen.genIf(t3, '3', '==', fin);
+            gen.genExpresion(t1, t1, '10', '*');
+            gen.genCode("".concat(t2, " = fmod(").concat(t1, ", 10);"));
+            gen.genCode("".concat(t2, " = (int)").concat(t2, ";"));
+            gen.genExpresion(t4, t2, '48', '+');
+            gen.genSetHeap('h', t4);
+            gen.avanzarHeap();
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genGoto(strd);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+            gen.freeTemp(t4);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_str_bol",
+          value: function nativa_concat_str_bol() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var str1 = gen.newLabel();
+            var bol = gen.newLabel();
+            var lblf = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_str_bol');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genLabel(str1);
+            gen.genGetHeap(t1, p1);
+            gen.genIf(t1, '-1', '==', bol);
+            gen.genSetHeap('h', t1);
+            gen.avanzarHeap();
+            gen.genExpresion(p1, p1, '1', '+');
+            gen.genGoto(str1);
+            gen.genLabel(bol);
+            gen.genIf(p2, '1', '!=', lblf);
+            gen.genSetHeap('h', '116');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '114');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '117');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genGoto(fin);
+            gen.genLabel(lblf);
+            gen.genSetHeap('h', '102');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '97');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '108');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '115');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }, {
+          key: "nativa_concat_bol_str",
+          value: function nativa_concat_bol_str() {
+            var gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+
+            var t0 = gen.newTemporal();
+            var t1 = gen.newTemporal();
+            var p1 = gen.newTemporal();
+            var p2 = gen.newTemporal();
+            var str2 = gen.newLabel();
+            var lblf = gen.newLabel();
+            var fin = gen.newLabel();
+            gen.genFuncion('nativa_concat_bol_str');
+            gen.isFunc = '\t';
+            gen.genExpresion(t1, 'p', '1', '+');
+            gen.genGetStack(p1, t1);
+            gen.genExpresion(t1, 'p', '2', '+');
+            gen.genGetStack(p2, t1);
+            gen.genAsignacion(t0, 'h');
+            gen.genIf(p1, '1', '!=', lblf);
+            gen.genSetHeap('h', '116');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '114');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '117');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genGoto(str2);
+            gen.genLabel(lblf);
+            gen.genSetHeap('h', '102');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '97');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '108');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '115');
+            gen.avanzarHeap();
+            gen.genSetHeap('h', '101');
+            gen.avanzarHeap();
+            gen.genLabel(str2);
+            gen.genGetHeap(t1, p2);
+            gen.genIf(t1, '-1', '==', fin);
+            gen.genSetHeap('h', t1);
+            gen.avanzarHeap();
+            gen.genExpresion(p2, p2, '1', '+');
+            gen.genGoto(str2);
+            gen.genLabel(fin);
+            gen.genSetHeap('h', '-1');
+            gen.avanzarHeap();
+            gen.genSetStack('p', t0);
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(p1);
+            gen.freeTemp(p2);
+          }
+        }]);
+
+        return Nativas;
+      }();
+      /***/
+
     },
 
     /***/
@@ -1767,13 +2819,15 @@
 
             return _o2;
           },
-              $V0 = [1, 5],
-              $V1 = [5, 8],
-              $V2 = [1, 8],
-              $V3 = [11, 12],
-              $V4 = [1, 12],
-              $V5 = [9, 11, 12],
-              $V6 = [8, 19];
+              $V0 = [2, 12],
+              $V1 = [1, 8],
+              $V2 = [5, 6, 8, 13],
+              $V3 = [1, 18],
+              $V4 = [1, 17],
+              $V5 = [2, 4, 10],
+              $V6 = [2, 4],
+              $V7 = [1, 21],
+              $V8 = [4, 20];
 
           var parser = {
             trace: function trace() {},
@@ -1781,37 +2835,39 @@
             symbols_: {
               "error": 2,
               "inicio": 3,
-              "raices": 4,
-              "EOF": 5,
-              "raiz": 6,
-              "objeto": 7,
-              "<": 8,
-              "ID": 9,
-              "latributos": 10,
-              "/": 11,
-              ">": 12,
-              "texto_libre": 13,
-              "objetos": 14,
-              "atributos": 15,
-              "atributo": 16,
-              "=": 17,
-              "CADENA": 18,
-              "TEXTO": 19,
+              "<": 4,
+              "?": 5,
+              "ID": 6,
+              "latributos": 7,
+              ">": 8,
+              "raices": 9,
+              "EOF": 10,
+              "raiz": 11,
+              "objeto": 12,
+              "/": 13,
+              "texto_libre": 14,
+              "objetos": 15,
+              "atributos": 16,
+              "atributo": 17,
+              "=": 18,
+              "CADENA": 19,
+              "TEXTO": 20,
               "$accept": 0,
               "$end": 1
             },
             terminals_: {
               2: "error",
-              5: "EOF",
-              8: "<",
-              9: "ID",
-              11: "/",
-              12: ">",
-              17: "=",
-              18: "CADENA",
-              19: "TEXTO"
+              4: "<",
+              5: "?",
+              6: "ID",
+              8: ">",
+              10: "EOF",
+              13: "/",
+              18: "=",
+              19: "CADENA",
+              20: "TEXTO"
             },
-            productions_: [0, [3, 2], [4, 2], [4, 1], [6, 1], [7, 5], [7, 9], [7, 9], [14, 2], [14, 1], [10, 1], [10, 0], [15, 2], [15, 1], [16, 3], [13, 2], [13, 1]],
+            productions_: [0, [3, 8], [9, 2], [9, 1], [11, 1], [12, 5], [12, 9], [12, 9], [12, 1], [15, 2], [15, 1], [7, 1], [7, 0], [16, 2], [16, 1], [17, 3], [14, 2], [14, 1]],
             performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
             /* action[1] */
             , $$
@@ -1824,21 +2880,20 @@
 
               switch (yystate) {
                 case 1:
-                  console.log($$[$0 - 1]);
                   this.$ = new ast["default"]($$[$0 - 1]);
                   return this.$;
                   break;
 
                 case 2:
-                case 8:
-                case 12:
+                case 9:
+                case 13:
                   $$[$0 - 1].push($$[$0]);
                   this.$ = $$[$0 - 1];
                   break;
 
                 case 3:
-                case 9:
-                case 13:
+                case 10:
+                case 14:
                   this.$ = [$$[$0]];
                   break;
 
@@ -1851,100 +2906,118 @@
                   break;
 
                 case 6:
-                  this.$ = new Objeto["default"]($$[$0 - 7], $$[$0 - 4], _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], [], 2);
+                  this.$ = new Objeto["default"]($$[$0 - 7], $$[$0 - 4], _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], [], 2, $$[$0 - 1]);
                   break;
 
                 case 7:
-                  this.$ = new Objeto["default"]($$[$0 - 7], '', _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], $$[$0 - 4], 2);
+                  this.$ = new Objeto["default"]($$[$0 - 7], '', _$[$0 - 8].first_line, _$[$0 - 8].first_column, $$[$0 - 6], $$[$0 - 4], 2, $$[$0 - 1]);
                   break;
 
-                case 10:
-                case 16:
-                  this.$ = $$[$0];
+                case 8:
+                  new LErrores("Sintactico", "No se esperaba: " + yytext, "XML", this._$.first_line, this._$.first_column);
                   break;
 
                 case 11:
+                case 17:
+                  this.$ = $$[$0];
+                  break;
+
+                case 12:
                   this.$ = [];
                   break;
 
-                case 14:
+                case 15:
                   $$[$0] = $$[$0].slice(1, $$[$0].length - 1);
                   this.$ = new Atributo["default"]($$[$0 - 2], $$[$0], _$[$0 - 2].first_line, _$[$0 - 2].first_column);
                   break;
 
-                case 15:
+                case 16:
                   this.$ = $$[$0 - 1] + $$[$0];
                   break;
               }
             },
             table: [{
               3: 1,
-              4: 2,
-              6: 3,
-              7: 4,
-              8: $V0
+              4: [1, 2]
             }, {
               1: [3]
             }, {
-              5: [1, 6],
-              6: 7,
-              7: 4,
-              8: $V0
-            }, o($V1, [2, 3]), o($V1, [2, 4]), {
-              9: $V2
+              5: [1, 3]
             }, {
+              6: [1, 4]
+            }, {
+              5: $V0,
+              6: $V1,
+              7: 5,
+              16: 6,
+              17: 7
+            }, {
+              5: [1, 9]
+            }, o([5, 8, 13], [2, 11], {
+              17: 10,
+              6: $V1
+            }), o($V2, [2, 14]), {
+              18: [1, 11]
+            }, {
+              8: [1, 12]
+            }, o($V2, [2, 13]), {
+              19: [1, 13]
+            }, {
+              2: $V3,
+              4: $V4,
+              9: 14,
+              11: 15,
+              12: 16
+            }, o($V2, [2, 15]), {
+              2: $V3,
+              4: $V4,
+              10: [1, 19],
+              11: 20,
+              12: 16
+            }, o($V5, [2, 3]), o($V5, $V6), {
+              6: $V7
+            }, o($V5, [2, 8]), {
               1: [2, 1]
-            }, o($V1, [2, 2]), o($V3, [2, 11], {
-              10: 9,
-              15: 10,
-              16: 11,
-              9: $V4
+            }, o($V5, [2, 2]), o([8, 13], $V0, {
+              16: 6,
+              17: 7,
+              7: 22,
+              6: $V1
             }), {
-              11: [1, 13],
-              12: [1, 14]
-            }, o($V3, [2, 10], {
-              16: 15,
-              9: $V4
-            }), o($V5, [2, 13]), {
-              17: [1, 16]
+              8: [1, 24],
+              13: [1, 23]
             }, {
-              12: [1, 17]
-            }, {
-              7: 21,
-              8: $V0,
-              13: 18,
-              14: 19,
-              19: [1, 20]
-            }, o($V5, [2, 12]), {
-              18: [1, 22]
-            }, o($V1, [2, 5]), {
-              8: [1, 23],
-              19: [1, 24]
-            }, {
-              7: 26,
               8: [1, 25]
-            }, o($V6, [2, 16]), {
-              8: [2, 9]
-            }, o($V5, [2, 14]), {
-              11: [1, 27]
-            }, o($V6, [2, 15]), {
-              9: $V2,
-              11: [1, 28]
             }, {
-              8: [2, 8]
+              2: $V3,
+              4: $V4,
+              12: 29,
+              14: 26,
+              15: 27,
+              20: [1, 28]
+            }, o($V5, [2, 5]), {
+              4: [1, 30],
+              20: [1, 31]
             }, {
-              9: [1, 29]
+              2: $V3,
+              4: [1, 32],
+              12: 33
+            }, o($V8, [2, 17]), o($V6, [2, 10]), {
+              13: [1, 34]
+            }, o($V8, [2, 16]), {
+              6: $V7,
+              13: [1, 35]
+            }, o($V6, [2, 9]), {
+              6: [1, 36]
             }, {
-              9: [1, 30]
+              6: [1, 37]
             }, {
-              12: [1, 31]
+              8: [1, 38]
             }, {
-              12: [1, 32]
-            }, o($V1, [2, 6]), o($V1, [2, 7])],
+              8: [1, 39]
+            }, o($V5, [2, 6]), o($V5, [2, 7])],
             defaultActions: {
-              6: [2, 1],
-              21: [2, 9],
-              26: [2, 8]
+              19: [2, 1]
             },
             parseError: function parseError(str, hash) {
               if (hash.recoverable) {
@@ -1959,20 +3032,24 @@
               var self = this,
                   stack = [0],
                   tstack = [],
-                  vstack = [null],
-                  lstack = [],
-                  table = this.table,
+                  // token stack
+              vstack = [null],
+                  // semantic value stack
+              lstack = [],
+                  // location stack
+              table = this.table,
                   yytext = '',
                   yylineno = 0,
                   yyleng = 0,
                   recovering = 0,
                   TERROR = 2,
                   EOF = 1;
-              var args = lstack.slice.call(arguments, 1);
+              var args = lstack.slice.call(arguments, 1); //this.reductionCount = this.shiftCount = 0;
+
               var lexer = Object.create(this.lexer);
               var sharedState = {
                 yy: {}
-              };
+              }; // copy state
 
               for (var k in this.yy) {
                 if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
@@ -2006,7 +3083,7 @@
 
               _token_stack: var lex = function lex() {
                 var token;
-                token = lexer.lex() || EOF;
+                token = lexer.lex() || EOF; // if token isn't its numeric value, convert
 
                 if (typeof token !== 'number') {
                   token = self.symbols_[token] || token;
@@ -2028,42 +3105,107 @@
                   expected;
 
               while (true) {
-                state = stack[stack.length - 1];
+                // retreive state number from top of stack
+                state = stack[stack.length - 1]; // use default actions if available
 
                 if (this.defaultActions[state]) {
                   action = this.defaultActions[state];
                 } else {
                   if (symbol === null || typeof symbol == 'undefined') {
                     symbol = lex();
-                  }
+                  } // read action for current state and first input
+
 
                   action = table[state] && table[state][symbol];
                 }
 
+                _handle_error: // handle parse error
                 if (typeof action === 'undefined' || !action.length || !action[0]) {
-                  var errStr = '';
-                  expected = [];
+                  // Return the rule stack depth where the nearest error rule can be found.
+                  // Return FALSE when no error recovery rule was found.
+                  var locateNearestErrorRecoveryRule = function locateNearestErrorRecoveryRule(state) {
+                    var stack_probe = stack.length - 1;
+                    var depth = 0; // try to recover from error
 
-                  for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                      expected.push('\'' + this.terminals_[p] + '\'');
+                    for (;;) {
+                      // check for error recovery rule in this state
+                      if (TERROR.toString() in table[state]) {
+                        return depth;
+                      }
+
+                      if (state === 0 || stack_probe < 2) {
+                        return false; // No suitable error recovery rule available.
+                      }
+
+                      stack_probe -= 2; // popStack(1): [symbol, action]
+
+                      state = stack[stack_probe];
+                      ++depth;
                     }
+                  };
+
+                  var error_rule_depth;
+                  var errStr = '';
+
+                  if (!recovering) {
+                    // first see if there's any chance at hitting an error recovery rule:
+                    error_rule_depth = locateNearestErrorRecoveryRule(state); // Report error
+
+                    expected = [];
+
+                    for (p in table[state]) {
+                      if (this.terminals_[p] && p > TERROR) {
+                        expected.push("'" + this.terminals_[p] + "'");
+                      }
+                    }
+
+                    if (lexer.showPosition) {
+                      errStr = 'Parse error on line ' + (yylineno + 1) + ":\n" + lexer.showPosition() + "\nExpecting " + expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol) + "'";
+                    } else {
+                      errStr = 'Parse error on line ' + (yylineno + 1) + ": Unexpected " + (symbol == EOF ? "end of input" : "'" + (this.terminals_[symbol] || symbol) + "'");
+                    }
+
+                    this.parseError(errStr, {
+                      text: lexer.match,
+                      token: this.terminals_[symbol] || symbol,
+                      line: lexer.yylineno,
+                      loc: yyloc,
+                      expected: expected,
+                      recoverable: error_rule_depth !== false
+                    });
+                  } else if (preErrorSymbol !== EOF) {
+                    error_rule_depth = locateNearestErrorRecoveryRule(state);
+                  } // just recovered from another error
+
+
+                  if (recovering == 3) {
+                    if (symbol === EOF || preErrorSymbol === EOF) {
+                      throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
+                    } // discard current lookahead and grab another
+
+
+                    yyleng = lexer.yyleng;
+                    yytext = lexer.yytext;
+                    yylineno = lexer.yylineno;
+                    yyloc = lexer.yylloc;
+                    symbol = lex();
+                  } // try to recover from error
+
+
+                  if (error_rule_depth === false) {
+                    throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
                   }
 
-                  if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                  } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
-                  }
+                  popStack(error_rule_depth);
+                  preErrorSymbol = symbol == TERROR ? null : symbol; // save the lookahead token
 
-                  this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected
-                  });
-                }
+                  symbol = TERROR; // insert generic error symbol as new lookahead
+
+                  state = stack[stack.length - 1];
+                  action = table[state] && table[state][TERROR];
+                  recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
+                } // this shouldn't happen, unless resolve defaults are off
+
 
                 if (action[0] instanceof Array && action.length > 1) {
                   throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
@@ -2071,13 +3213,17 @@
 
                 switch (action[0]) {
                   case 1:
+                    // shift
+                    //this.shiftCount++;
                     stack.push(symbol);
                     vstack.push(lexer.yytext);
                     lstack.push(lexer.yylloc);
-                    stack.push(action[1]);
+                    stack.push(action[1]); // push state
+
                     symbol = null;
 
                     if (!preErrorSymbol) {
+                      // normal execution/no error
                       yyleng = lexer.yyleng;
                       yytext = lexer.yytext;
                       yylineno = lexer.yylineno;
@@ -2087,6 +3233,7 @@
                         recovering--;
                       }
                     } else {
+                      // error just occurred, resume old lookahead f/ before error
                       symbol = preErrorSymbol;
                       preErrorSymbol = null;
                     }
@@ -2094,8 +3241,13 @@
                     break;
 
                   case 2:
-                    len = this.productions_[action[1]][1];
-                    yyval.$ = vstack[vstack.length - len];
+                    // reduce
+                    //this.reductionCount++;
+                    len = this.productions_[action[1]][1]; // perform semantic action
+
+                    yyval.$ = vstack[vstack.length - len]; // default to $$ = $1
+                    // default location, uses first token for firsts, last for lasts
+
                     yyval._$ = {
                       first_line: lstack[lstack.length - (len || 1)].first_line,
                       last_line: lstack[lstack.length - 1].last_line,
@@ -2111,7 +3263,8 @@
 
                     if (typeof r !== 'undefined') {
                       return r;
-                    }
+                    } // pop off stack
+
 
                     if (len) {
                       stack = stack.slice(0, -1 * len * 2);
@@ -2119,14 +3272,17 @@
                       lstack = lstack.slice(0, -1 * len);
                     }
 
-                    stack.push(this.productions_[action[1]][0]);
+                    stack.push(this.productions_[action[1]][0]); // push nonterminal (reduce)
+
                     vstack.push(yyval.$);
-                    lstack.push(yyval._$);
+                    lstack.push(yyval._$); // goto new state = table[STATE][NONTERMINAL]
+
                     newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
                     stack.push(newState);
                     break;
 
                   case 3:
+                    // accept
                     return true;
                 }
               }
@@ -2147,6 +3303,11 @@
           var ast = __webpack_require__(
           /*! ../Clases/AST/Ast */
           "ZSbs");
+
+          var _webpack_require__ = __webpack_require__(
+          /*! ../Clases/AST/ListaError */
+          "wLeh"),
+              LErrores = _webpack_require__.LErrores;
           /* generated by jison-lex 0.3.4 */
 
 
@@ -2489,109 +3650,114 @@
 
                   case 2:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 18;
+                    return 19;
                     break;
 
                   case 3:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 9;
+                    return 6;
                     break;
 
                   case 4:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 8;
+                    return 4;
                     break;
 
                   case 5:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 17;
+                    return 18;
                     break;
 
                   case 6:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 11;
+                    return 13;
                     break;
 
                   case 7:
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 5;
+                    break;
+
+                  case 8:
                     this.begin("S1");
                     $ESPACIOS = "";
                     console.log("Reconocio : " + yy_.yytext);
                     return ">";
                     break;
 
-                  case 8:
+                  case 9:
                     yy_.yytext = $ESPACIOS + "<";
                     $ESPACIOS = "";
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
-                    break;
-
-                  case 9:
-                    yy_.yytext = $ESPACIOS + ">";
-                    $ESPACIOS = "";
-                    console.log("Reconocio : " + yy_.yytext);
-                    return 19;
+                    return 20;
                     break;
 
                   case 10:
-                    yy_.yytext = $ESPACIOS + "\&";
+                    yy_.yytext = $ESPACIOS + ">";
                     $ESPACIOS = "";
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
+                    return 20;
                     break;
 
                   case 11:
-                    yy_.yytext = $ESPACIOS + "\'";
+                    yy_.yytext = $ESPACIOS + "\&";
                     $ESPACIOS = "";
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
+                    return 20;
                     break;
 
                   case 12:
-                    yy_.yytext = $ESPACIOS + "\"";
+                    yy_.yytext = $ESPACIOS + "\'";
                     $ESPACIOS = "";
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
+                    return 20;
                     break;
 
                   case 13:
-                    /* Ignoro los comentarios simples */
+                    yy_.yytext = $ESPACIOS + "\"";
+                    $ESPACIOS = "";
+                    console.log("Reconocio : " + yy_.yytext);
+                    return 20;
                     break;
 
                   case 14:
-                    $ESPACIOS += yy.lexer.match;
+                    /* Ignoro los comentarios simples */
                     break;
 
                   case 15:
+                    $ESPACIOS += yy.lexer.match;
+                    break;
+
+                  case 16:
                     this.begin("INITIAL");
                     console.log("Reconocio : " + yy_.yytext);
                     return "<";
                     break;
 
-                  case 16:
+                  case 17:
                     yy_.yytext = $ESPACIOS + yy_.yytext;
                     $ESPACIOS = "";
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
-                    break;
-
-                  case 17:
-                    return 5;
+                    return 20;
                     break;
 
                   case 18:
+                    return 10;
+                    break;
+
+                  case 19:
                     console.log("Error Lexico " + yy_.yytext + " linea " + yy_.yylineno + " columna " + (yy_.yylloc.last_column + 1));
                     break;
                 }
               },
-              rules: [/^(?:<!--(.|\n)*-->)/i, /^(?:\s+)/i, /^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i, /^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i, /^(?:<)/i, /^(?:=)/i, /^(?:\/)/i, /^(?:>)/i, /^(?:&lt;)/i, /^(?:&gt;)/i, /^(?:&amp;)/i, /^(?:&apos;)/i, /^(?:&quot;)/i, /^(?:<!--(.|\n)*-->)/i, /^(?:\s)/i, /^(?:<)/i, /^(?:.)/i, /^(?:$)/i, /^(?:.)/i],
+              rules: [/^(?:<!--(.|\n)*-->)/i, /^(?:\s+)/i, /^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i, /^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i, /^(?:<)/i, /^(?:=)/i, /^(?:\/)/i, /^(?:\?)/i, /^(?:>)/i, /^(?:&lt;)/i, /^(?:&gt;)/i, /^(?:&amp;)/i, /^(?:&apos;)/i, /^(?:&quot;)/i, /^(?:<!--(.|\n)*-->)/i, /^(?:\s)/i, /^(?:<)/i, /^(?:.)/i, /^(?:$)/i, /^(?:.)/i],
               conditions: {
                 "S1": {
-                  "rules": [0, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+                  "rules": [0, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
                   "inclusive": true
                 },
                 "INITIAL": {
-                  "rules": [0, 1, 2, 3, 4, 5, 6, 7, 13, 17, 18],
+                  "rules": [0, 1, 2, 3, 4, 5, 6, 7, 8, 14, 18, 19],
                   "inclusive": true
                 }
               }
@@ -7160,13 +8326,15 @@
             return ctx_r6.traducir3D();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D XPAHT");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](9, "a", 20);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_9_listener() {
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 20);
+
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_10_listener() {
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4);
 
             var ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"]();
@@ -7174,11 +8342,11 @@
             return ctx_r7.ejecutarXquery();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](10, "Ejecutar XQuery");
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Ejecutar XQuery");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](11, "div", 21);
+          _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
 
           _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         }
@@ -7529,7 +8697,7 @@
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
-            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 12, 0, "div", 6);
+            _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 13, 0, "div", 6);
 
             _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 
@@ -11102,7 +12270,7 @@
       "lKex");
 
       var Objeto = /*#__PURE__*/function () {
-        function Objeto(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta) {
+        function Objeto(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta, etiquetaF) {
           _classCallCheck(this, Objeto);
 
           this.identificador = id;
@@ -11112,11 +12280,18 @@
           this.listaAtributos = listaAtributos;
           this.listaObjetos = listaO;
           this.tipoetiqueta = tipoetiqueta;
+          this.etiquetaF = etiquetaF;
         }
 
         _createClass(Objeto, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
+            if (this.tipoetiqueta == 2) {
+              if (this.identificador != this.etiquetaF) {
+                controlador.append("Error: La etiqueta de inicio y fin no coinciden:: inicio: " + this.identificador + " final: " + this.etiquetaF);
+              }
+            }
+
             this.posicionid3d = this.generar3d(this.identificador, controlador);
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts, this.identificador);
 
@@ -11313,6 +12488,437 @@
         }]);
 
         return Objeto;
+      }();
+      /***/
+
+    },
+
+    /***/
+    "cg4T":
+    /*!*************************************************!*\
+      !*** ./src/Clases/GeneradorC3D/GeneradorC3D.ts ***!
+      \*************************************************/
+
+    /*! exports provided: GeneradorC3D */
+
+    /***/
+    function cg4T(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "GeneradorC3D", function () {
+        return GeneradorC3D;
+      });
+      /* harmony import */
+
+
+      var _Nativas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ./Nativas */
+      "3Bn/");
+
+      var GeneradorC3D = /*#__PURE__*/function () {
+        /**
+         * constructor de la clase singleton
+         */
+        function GeneradorC3D() {
+          _classCallCheck(this, GeneradorC3D);
+
+          this.isFunc = '';
+          this.temporal = this.label = 0;
+          this.code = [];
+          this.codeFuncion = [];
+          this.tempStorage = new Set();
+        }
+
+        _createClass(GeneradorC3D, [{
+          key: "agregarFuncion",
+          value: function agregarFuncion(funcion) {
+            var _this = this;
+
+            funcion.forEach(function (fun) {
+              _this.codeFuncion.push(fun);
+            });
+          }
+          /**
+           * Obtiene la instancia de la clase singleton
+           */
+
+        }, {
+          key: "getTempStorage",
+          value:
+          /**
+           * Retorna el set de los temporales que estan en uso
+           */
+          function getTempStorage() {
+            return this.tempStorage;
+          }
+          /**
+           * Vacia el set de los temporales
+           */
+
+        }, {
+          key: "clearTempStorage",
+          value: function clearTempStorage() {
+            this.tempStorage.clear();
+          }
+          /**
+           * asigna el set al set local de temporales
+           * @param tempStorage lista tipo Set que se asignara al set local
+           */
+
+        }, {
+          key: "setTempStorage",
+          value: function setTempStorage(tempStorage) {
+            this.tempStorage = tempStorage;
+          }
+          /**
+           * borra el C3D que tenga guardado la clase y reinicia los temporales y labels
+           */
+
+        }, {
+          key: "clearCode",
+          value: function clearCode() {
+            this.temporal = this.label = 0;
+            this.code = [];
+            this.codeFuncion = [];
+            this.tempStorage = new Set();
+          }
+        }, {
+          key: "clearSoloCode",
+          value: function clearSoloCode() {
+            this.code = [];
+          }
+          /**
+           * Ingresa en el C3D el valor que se asigna como parametro
+           * @param code valor que se asignara al C3D de la clase
+           */
+
+        }, {
+          key: "genCode",
+          value: function genCode(code) {
+            this.code.push(this.isFunc + code);
+          }
+          /**
+           * Retorna el C3D que se haya generado en la clase singleton
+           */
+
+        }, {
+          key: "getCode",
+          value: function getCode() {
+            var nativas = new _Nativas__WEBPACK_IMPORTED_MODULE_0__["Nativas"]();
+            var encabezado = '#include <stdio.h>\n#include <math.h>\ndouble Stack[60000]; double Heap[60000];\nint p; int h;\n';
+            var main = "\nint main() {\n".concat(this.code.join('\n'), "\n\nreturn 0;\n}\n");
+            var funciones = this.codeFuncion.join('\n');
+            this.code = [];
+            var strNativas = nativas.generarNativas(); //strNativas = ''; // comentar despues de terminar
+
+            var c3d = "".concat(encabezado).concat(this.getTemporales(), ";\n").concat(strNativas, "\n").concat(funciones, "\n").concat(main);
+            return c3d;
+          }
+        }, {
+          key: "getSoloCode",
+          value: function getSoloCode() {
+            return this.code;
+          }
+        }, {
+          key: "setSoloCode",
+          value: function setSoloCode(codeA) {
+            this.code = codeA;
+          }
+        }, {
+          key: "getNativas",
+          value: function getNativas() {
+            return this.code.join('\n');
+          }
+        }, {
+          key: "getTemporales",
+          value: function getTemporales() {
+            var lista = 'double ';
+
+            for (var i = 0; i < this.temporal; i++) {
+              lista += 'T' + i;
+              lista += i < this.temporal - 1 ? ',' : '';
+            }
+
+            return lista;
+          }
+          /**
+           * Crea un nuevo temporal y lo retorna
+           */
+
+        }, {
+          key: "newTemporal",
+          value: function newTemporal() {
+            var temp = 'T' + this.temporal++;
+            this.tempStorage.add(temp);
+            return temp;
+          }
+          /**
+           * Crea una nueva etiqueta y la retorna
+           */
+
+        }, {
+          key: "newLabel",
+          value: function newLabel() {
+            return 'L' + this.label++;
+          }
+          /**
+           * funcion que agrega una nueva etiqueta el C3D
+           * @param label valor que se agregara al C3D como tipo etiqueta
+           */
+
+        }, {
+          key: "genLabel",
+          value: function genLabel(label) {
+            this.code.push("".concat(this.isFunc).concat(label, ":"));
+          }
+          /**
+           * Genera una nueva expresion y la agrega al C3D
+           * @param tem Temporal al que se le asignara la expresion
+           * @param izq Expresion izquierda que se asignara al temporal
+           * @param der Expresion derecha que se asignara al temporal
+           * @param operator Operador de la expresion
+           */
+
+        }, {
+          key: "genExpresion",
+          value: function genExpresion(tem, iqz) {
+            var der = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+            var operator = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+            this.code.push("".concat(this.isFunc).concat(tem, " = ").concat(iqz, " ").concat(operator, " ").concat(der, ";"));
+          }
+          /**
+           * asigna un valor a un temporal o puntero
+           * @param tem variable que recibira el valor
+           * @param val valor que sera asignado
+           */
+
+        }, {
+          key: "genAsignacion",
+          value: function genAsignacion(tem, val) {
+            this.code.push("".concat(this.isFunc).concat(tem, " = ").concat(val, ";"));
+          }
+          /**
+           * genera un goto con el valor de label y lo agrega el C3D
+           * @param label valor de etiqueta al cual se hara el goto
+           */
+
+        }, {
+          key: "genGoto",
+          value: function genGoto(label) {
+            this.code.push("".concat(this.isFunc, "goto ").concat(label, ";"));
+          }
+          /**
+           * genera un if y lo agrega al C3D
+           * @param iqz Expresion izquierda de la condicion if
+           * @param der Expresion derecha de la condicion if
+           * @param operator Operador boleano de la condicion
+           * @param label Etiqueta de salto si la condicion es verdadera
+           */
+
+        }, {
+          key: "genIf",
+          value: function genIf(iqz, der, operator, label) {
+            this.code.push("".concat(this.isFunc, "if (").concat(iqz, " ").concat(operator, " ").concat(der, ") goto ").concat(label, ";"));
+          }
+          /**
+           * Intruccion que hace avanzar el puntero heap a su siguite posicion
+           */
+
+        }, {
+          key: "avanzarHeap",
+          value: function avanzarHeap() {
+            this.code.push(this.isFunc + 'h = h + 1;');
+          }
+          /**
+           * genera un acceso al heap en la posicion index y lo asiga al tem
+           * @param tem temporal que recibira el valor del heap
+           * @param index posicion del heap al cual se accedera
+           */
+
+        }, {
+          key: "genGetHeap",
+          value: function genGetHeap(tem, index) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc).concat(tem, " = Heap[").concat(index, "];"));
+          }
+          /**
+           * genera una asignacion de valor al heap en la posicion index
+           * @param index posicion del heap al cual se desea acceder
+           * @param valor valor que se asignara a la posicion del heap
+           */
+
+        }, {
+          key: "genSetHeap",
+          value: function genSetHeap(index, valor) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc, "Heap[").concat(index, "] = ").concat(valor, ";"));
+          }
+          /**
+           * genera una asignacion a tem del valor del stack en la posicion index
+           * @param tem temporal al cual se asignara el valor del stack
+           * @param index posicion del stack al cual se desea acceder
+           */
+
+        }, {
+          key: "genGetStack",
+          value: function genGetStack(tem, index) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc).concat(tem, " = Stack[").concat(index, "];"));
+          }
+          /**
+           * genera una asignacion al stack en la posicion index
+           * @param index posicion del stack al cual se desea acceder
+           * @param value valor que sera asignado al stack
+           */
+
+        }, {
+          key: "genSetStack",
+          value: function genSetStack(index, value) {
+            index = index[0] === 'T' ? '(int)' + index : index;
+            this.code.push("".concat(this.isFunc, "Stack[").concat(index, "] = ").concat(value, ";"));
+          }
+          /**
+           * genera un desplazamiento del stack para generar un nuevo ambito
+           * @param size posiciones que se desplazara el stack
+           */
+
+        }, {
+          key: "genNextEnv",
+          value: function genNextEnv(size) {
+            this.code.push("".concat(this.isFunc, "p = p + ").concat(size, ";"));
+          }
+          /**
+           * genera un desplazamiento del stack para volver a un ambito anterios
+           * @param size posiciones que se desplazara el stack
+           */
+
+        }, {
+          key: "genAntEnv",
+          value: function genAntEnv(size) {
+            this.code.push("".concat(this.isFunc, "p = p - ").concat(size, ";"));
+          }
+          /**
+           * genera una llamada a una funcion
+           * @param id nombre de la funcion
+           */
+
+        }, {
+          key: "genCall",
+          value: function genCall(id) {
+            this.code.push("".concat(this.isFunc).concat(id, "();"));
+          }
+          /**
+           * Genera el encabezado de una funcion
+           * @param id nombre de la funcion
+           */
+
+        }, {
+          key: "genFuncion",
+          value: function genFuncion(id) {
+            this.code.push("\nvoid ".concat(id, "() {"));
+          }
+          /**
+           * Genera el cierre de la definicion de una funcion
+           */
+
+        }, {
+          key: "genEndFuncion",
+          value: function genEndFuncion() {
+            this.code.push('}');
+          }
+          /**
+           * genera un printf con el tipo de dato y el valor
+           * @param formato tipo de dato que se va a imprimir
+           * @param valor valor que se va a imprimir
+           */
+
+        }, {
+          key: "genPrint",
+          value: function genPrint(formato, valor) {
+            valor = valor[0] === 'T' && formato !== 'f' ? '(int)' + valor : valor;
+            this.code.push("".concat(this.isFunc, "printf(\"%").concat(formato, "\",").concat(valor, ");"));
+          }
+          /**
+           * genera un print del valor true
+           */
+
+        }, {
+          key: "genPrintTrue",
+          value: function genPrintTrue() {
+            this.genPrint('c', 't'.charCodeAt(0));
+            this.genPrint('c', 'r'.charCodeAt(0));
+            this.genPrint('c', 'u'.charCodeAt(0));
+            this.genPrint('c', 'e'.charCodeAt(0));
+          }
+          /**
+           * genera un print del valor false
+           */
+
+        }, {
+          key: "genPrintFalse",
+          value: function genPrintFalse() {
+            this.genPrint('c', 'f'.charCodeAt(0));
+            this.genPrint('c', 'a'.charCodeAt(0));
+            this.genPrint('c', 'l'.charCodeAt(0));
+            this.genPrint('c', 's'.charCodeAt(0));
+            this.genPrint('c', 'e'.charCodeAt(0));
+          }
+          /**
+           * genera un print del valor null
+           */
+
+        }, {
+          key: "genPrintNull",
+          value: function genPrintNull() {
+            this.genPrint('c', 'n'.charCodeAt(0));
+            this.genPrint('c', 'u'.charCodeAt(0));
+            this.genPrint('c', 'l'.charCodeAt(0));
+            this.genPrint('c', 'l'.charCodeAt(0));
+          }
+          /**
+           * genera un nuevo comentario
+           * @param comment valor del comentario
+           */
+
+        }, {
+          key: "genComentario",
+          value: function genComentario(comment) {
+            this.code.push("".concat(this.isFunc, "// ----- ").concat(comment, " -----"));
+          }
+          /**
+           * borra un temporal del storage
+           * @param temp temporal que ya no se utilizara
+           */
+
+        }, {
+          key: "freeTemp",
+          value: function freeTemp(temp) {
+            if (this.tempStorage.has(temp)) {
+              this.tempStorage["delete"](temp);
+            }
+          }
+          /**
+           * agrega un temporal al storage
+           * @param temp temporal que se agregara al storage
+           */
+
+        }, {
+          key: "genTemp",
+          value: function genTemp(temp) {
+            if (!this.tempStorage.has(temp)) this.tempStorage.add(temp);
+          }
+        }], [{
+          key: "getInstancia",
+          value: function getInstancia() {
+            return this.generador || (this.generador = new this());
+          }
+        }]);
+
+        return GeneradorC3D;
       }();
       /***/
 
@@ -11932,15 +13538,15 @@
         var _super3 = _createSuper(Funcion);
 
         function Funcion(simbolo, tipo, identificador, lista_params, metodo, lista_instrucciones, linea, columna) {
-          var _this;
+          var _this2;
 
           _classCallCheck(this, Funcion);
 
-          _this = _super3.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
-          _this.lista_instrucciones = lista_instrucciones;
-          _this.linea = linea;
-          _this.columna = columna;
-          return _this;
+          _this2 = _super3.call(this, simbolo, tipo, identificador, null, lista_params, metodo);
+          _this2.lista_instrucciones = lista_instrucciones;
+          _this2.linea = linea;
+          _this2.columna = columna;
+          return _this2;
         }
 
         _createClass(Funcion, [{
@@ -12066,6 +13672,169 @@
         }]);
 
         return Simbolos;
+      }();
+      /***/
+
+    },
+
+    /***/
+    "iMxP":
+    /*!***********************************!*\
+      !*** ./src/Clases/Controlador.ts ***!
+      \***********************************/
+
+    /*! exports provided: default */
+
+    /***/
+    function iMxP(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "default", function () {
+        return Controlador;
+      });
+      /* harmony import */
+
+
+      var _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ./GeneradorC3D/GeneradorC3D */
+      "cg4T");
+
+      var Controlador = /*#__PURE__*/function () {
+        function Controlador() {
+          _classCallCheck(this, Controlador);
+
+          this.errores = new Array();
+          this.consola = "";
+          this.cuerpo;
+          this.idlast = "";
+          this.position = 0;
+          this.acceso = 1;
+          this.generador = _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        }
+
+        _createClass(Controlador, [{
+          key: "append",
+          value: function append(consola) {
+            this.consola += consola + "\n";
+          }
+        }, {
+          key: "graficar_ts",
+          value: function graficar_ts(controlador, ts) {
+            var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"6\">Tabla de Simbolos </td></tr><tr><th>Tipo</th><th>Nombre</th><th>Ambito</th><th>Valor</th></tr></thead>";
+            cuerpohtml += this.cuerpo;
+            return cuerpohtml;
+          }
+        }, {
+          key: "graficarEntornos",
+          value: function graficarEntornos(controlador, ts, ubicacion) {
+            var cuerpohtml = "";
+
+            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
+                _step62;
+
+            try {
+              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
+                var sim = _step62.value;
+                cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
+              }
+            } catch (err) {
+              _iterator62.e(err);
+            } finally {
+              _iterator62.f();
+            }
+
+            this.cuerpo = this.cuerpo + cuerpohtml;
+          }
+        }, {
+          key: "graficar_Semantico",
+          value: function graficar_Semantico(controlador, ts) {
+            var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
+
+            var _iterator63 = _createForOfIteratorHelper(controlador.errores),
+                _step63;
+
+            try {
+              for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
+                var sim = _step63.value;
+                console.log("Errores");
+                cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
+              }
+            } catch (err) {
+              _iterator63.e(err);
+            } finally {
+              _iterator63.f();
+            }
+
+            return cuerpohtml;
+          }
+        }, {
+          key: "getValor",
+          value: function getValor(sim) {
+            if (sim.valor != null) {
+              return sim.valor.toString();
+            } else {
+              return '...';
+            }
+          }
+        }, {
+          key: "getTipo",
+          value: function getTipo(sim) {
+            return sim.tipo.stype.toLowerCase();
+          }
+        }, {
+          key: "getRol",
+          value: function getRol(sim) {
+            var rol = '';
+
+            switch (sim.simbolo) {
+              case 1:
+                rol = "objeto";
+                break;
+
+              case 2:
+                rol = "identificador";
+                break;
+
+              case 3:
+                rol = "metodo";
+                break;
+
+              case 4:
+                rol = "vector";
+                break;
+
+              case 5:
+                rol = "lista";
+                break;
+
+              case 6:
+                rol = "parametro";
+                break;
+            }
+
+            return rol;
+          }
+        }, {
+          key: "getAmbito",
+          value: function getAmbito() {
+            return 'global';
+          }
+        }, {
+          key: "parametros",
+          value: function parametros(sim) {
+            if (sim.lista_params != undefined) {
+              return sim.lista_params.length;
+            } else {
+              return "...";
+            }
+          }
+        }]);
+
+        return Controlador;
       }();
       /***/
 
@@ -12447,10 +14216,10 @@
                 return this.potencia(valor_exp1, valor_exp2);
 
               case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MODULO:
-                return this.modulo(valor_exp1, valor_exp2);
+                return this.modulo3D(valor_exp1, valor_exp2, controlador);
 
               case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].UNARIO:
-                return this.unario(valor_expU);
+                return this.unario3D(valor_expU, controlador);
 
               default:
                 //Se produjo un error inesperado
@@ -12566,6 +14335,30 @@
                 generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '/');
                 return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
               }
+            }
+          }
+        }, {
+          key: "modulo3D",
+          value: function modulo3D(valor_exp1, valor_exp2, controlador) {
+            var generador = controlador.generador;
+            var temp = generador.newTemporal();
+
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                generador.genCode(temp + ' = fmod(' + valor_exp1.getvalor3d() + ',' + valor_exp2.getvalor3d() + ');');
+                return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
+              }
+            }
+          }
+        }, {
+          key: "unario3D",
+          value: function unario3D(valor_exp1, controlador) {
+            var generador = controlador.generador;
+            var temp = generador.newTemporal();
+
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              generador.genExpresion(temp, valor_exp1.getvalor3d(), '-1', '*');
+              return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp1.tipo);
             }
           }
         }]);
@@ -12762,10 +14555,10 @@
         _createClass(GeneradorC3D, [{
           key: "agregarFuncion",
           value: function agregarFuncion(funcion) {
-            var _this2 = this;
+            var _this3 = this;
 
             funcion.forEach(function (fun) {
-              _this2.codeFuncion.push(fun);
+              _this3.codeFuncion.push(fun);
             });
           }
           /**
@@ -13268,29 +15061,31 @@
               $Vl = [1, 32],
               $Vm = [5, 7, 9, 11, 15, 16, 17, 18, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32],
               $Vn = [1, 37],
-              $Vo = [1, 57],
-              $Vp = [1, 58],
-              $Vq = [1, 59],
+              $Vo = [1, 58],
+              $Vp = [1, 59],
+              $Vq = [1, 60],
               $Vr = [1, 54],
-              $Vs = [1, 61],
+              $Vs = [1, 62],
               $Vt = [1, 55],
               $Vu = [1, 56],
-              $Vv = [1, 60],
-              $Vw = [1, 66],
+              $Vv = [1, 57],
+              $Vw = [1, 61],
               $Vx = [1, 67],
-              $Vy = [1, 65],
+              $Vy = [1, 72],
               $Vz = [1, 68],
-              $VA = [1, 69],
-              $VB = [1, 70],
-              $VC = [1, 72],
-              $VD = [1, 73],
-              $VE = [1, 74],
-              $VF = [1, 75],
-              $VG = [1, 76],
-              $VH = [1, 77],
-              $VI = [25, 33, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48],
-              $VJ = [25, 33, 38, 39, 42, 43, 44, 45, 46, 47, 48],
-              $VK = [33, 38, 42, 43, 44, 45, 46, 47, 48];
+              $VA = [1, 66],
+              $VB = [1, 69],
+              $VC = [1, 70],
+              $VD = [1, 71],
+              $VE = [1, 73],
+              $VF = [1, 74],
+              $VG = [1, 75],
+              $VH = [1, 76],
+              $VI = [1, 77],
+              $VJ = [1, 78],
+              $VK = [25, 33, 35, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 50],
+              $VL = [25, 33, 38, 39, 42, 43, 44, 45, 46, 47, 48, 50],
+              $VM = [33, 38, 42, 43, 44, 45, 46, 47, 48, 50];
 
           var parser = {
             trace: function trace() {},
@@ -13343,9 +15138,11 @@
               "MENORIGUAL": 46,
               "DIFERENTE": 47,
               "IGUAL": 48,
-              "DECIMAL": 49,
-              "ENTERO": 50,
-              "CADENA": 51,
+              "PARA": 49,
+              "PARC": 50,
+              "DECIMAL": 51,
+              "ENTERO": 52,
+              "CADENA": 53,
               "$accept": 0,
               "$end": 1
             },
@@ -13389,11 +15186,13 @@
               46: "MENORIGUAL",
               47: "DIFERENTE",
               48: "IGUAL",
-              49: "DECIMAL",
-              50: "ENTERO",
-              51: "CADENA"
+              49: "PARA",
+              50: "PARC",
+              51: "DECIMAL",
+              52: "ENTERO",
+              53: "CADENA"
             },
-            productions_: [0, [3, 2], [4, 3], [4, 1], [6, 2], [6, 1], [8, 2], [8, 2], [8, 3], [8, 4], [8, 2], [8, 4], [8, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 3], [12, 1], [12, 1], [12, 1], [12, 1], [12, 3], [12, 1], [12, 1], [12, 1], [12, 1], [19, 4], [19, 2], [10, 1], [10, 2], [10, 2], [10, 1], [10, 4], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 2], [37, 1], [37, 1], [37, 1], [37, 1], [37, 1], [37, 1], [37, 2]],
+            productions_: [0, [3, 2], [4, 3], [4, 1], [6, 2], [6, 1], [8, 2], [8, 2], [8, 3], [8, 4], [8, 2], [8, 4], [8, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 1], [12, 1], [12, 2], [12, 1], [12, 3], [12, 1], [12, 1], [12, 1], [12, 1], [12, 3], [12, 1], [12, 1], [12, 1], [12, 1], [19, 4], [19, 2], [10, 1], [10, 2], [10, 2], [10, 1], [10, 4], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 3], [37, 2], [37, 3], [37, 1], [37, 1], [37, 1], [37, 1], [37, 1], [37, 1], [37, 2]],
             performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
             /* action[1] */
             , $$
@@ -13558,28 +15357,32 @@
                   break;
 
                 case 52:
+                  this.$ = $$[$0 - 1];
+                  break;
+
                 case 53:
+                case 54:
                   this.$ = new primitivo["default"](Number(yytext), $$[$0].first_line, $$[$0].last_column, -1);
                   break;
 
-                case 54:
+                case 55:
                   this.$ = new identificador["default"]($$[$0], _$[$0].first_line, _$[$0].last_column, 1);
                   break;
 
-                case 55:
+                case 56:
                   this.$ = new last["default"]();
                   break;
 
-                case 56:
+                case 57:
                   this.$ = new position["default"]();
                   break;
 
-                case 57:
+                case 58:
                   $$[$0] = $$[$0].slice(1, $$[$0].length - 1);
                   this.$ = new primitivo["default"]($$[$0], $$[$0].first_line, $$[$0].last_column);
                   break;
 
-                case 58:
+                case 59:
                   this.$ = new identificador["default"]($$[$0], _$[$0 - 1].first_line, _$[$0 - 1].last_column, 2);
                   break;
               }
@@ -13781,15 +15584,16 @@
               34: $Vs,
               37: 53,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, o($Vm, [2, 34]), o($Vm, [2, 35]), {
-              10: 62,
+              10: 63,
               15: $Vj,
               34: $Vk,
               35: $Vl
             }, o($Vm, [2, 8]), {
-              25: [1, 63]
+              25: [1, 64]
             }, {
               13: [2, 32]
             }, {
@@ -13797,55 +15601,47 @@
             }, {
               13: [2, 26]
             }, o($Vm, [2, 9]), {
-              25: $Vw,
-              33: [1, 71],
-              35: $Vx,
-              38: [1, 64],
-              39: $Vy,
-              40: $Vz,
-              41: $VA,
-              42: $VB,
-              43: $VC,
-              44: $VD,
-              45: $VE,
-              46: $VF,
-              47: $VG,
-              48: $VH
+              25: $Vx,
+              33: $Vy,
+              35: $Vz,
+              38: [1, 65],
+              39: $VA,
+              40: $VB,
+              41: $VC,
+              42: $VD,
+              43: $VE,
+              44: $VF,
+              45: $VG,
+              46: $VH,
+              47: $VI,
+              48: $VJ
             }, {
               15: $Vo,
               16: $Vp,
               17: $Vq,
               25: $Vr,
               34: $Vs,
-              37: 78,
+              37: 79,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
-            }, o($VI, [2, 52]), o($VI, [2, 53]), o($VI, [2, 54]), o($VI, [2, 55]), o($VI, [2, 56]), o($VI, [2, 57]), {
-              15: [1, 79]
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
+            }, {
+              15: $Vo,
+              16: $Vp,
+              17: $Vq,
+              25: $Vr,
+              34: $Vs,
+              37: 80,
+              49: $Vt,
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
+            }, o($VK, [2, 53]), o($VK, [2, 54]), o($VK, [2, 55]), o($VK, [2, 56]), o($VK, [2, 57]), o($VK, [2, 58]), {
+              15: [1, 81]
             }, o($Vm, [2, 11]), {
-              30: [1, 80]
+              30: [1, 82]
             }, o($Vm, [2, 37]), {
-              15: $Vo,
-              16: $Vp,
-              17: $Vq,
-              25: $Vr,
-              34: $Vs,
-              37: 81,
-              49: $Vt,
-              50: $Vu,
-              51: $Vv
-            }, {
-              15: $Vo,
-              16: $Vp,
-              17: $Vq,
-              25: $Vr,
-              34: $Vs,
-              37: 82,
-              49: $Vt,
-              50: $Vu,
-              51: $Vv
-            }, {
               15: $Vo,
               16: $Vp,
               17: $Vq,
@@ -13853,8 +15649,9 @@
               34: $Vs,
               37: 83,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13863,8 +15660,9 @@
               34: $Vs,
               37: 84,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13873,8 +15671,9 @@
               34: $Vs,
               37: 85,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13883,8 +15682,9 @@
               34: $Vs,
               37: 86,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13893,8 +15693,9 @@
               34: $Vs,
               37: 87,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13903,8 +15704,9 @@
               34: $Vs,
               37: 88,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13913,8 +15715,9 @@
               34: $Vs,
               37: 89,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13923,8 +15726,9 @@
               34: $Vs,
               37: 90,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13933,8 +15737,9 @@
               34: $Vs,
               37: 91,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13943,8 +15748,9 @@
               34: $Vs,
               37: 92,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
             }, {
               15: $Vo,
               16: $Vp,
@@ -13953,80 +15759,118 @@
               34: $Vs,
               37: 93,
               49: $Vt,
-              50: $Vu,
-              51: $Vv
-            }, o($VI, [2, 51]), o($VI, [2, 58]), {
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
+            }, {
+              15: $Vo,
+              16: $Vp,
+              17: $Vq,
+              25: $Vr,
+              34: $Vs,
+              37: 94,
+              49: $Vt,
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
+            }, {
+              15: $Vo,
+              16: $Vp,
+              17: $Vq,
+              25: $Vr,
+              34: $Vs,
+              37: 95,
+              49: $Vt,
+              51: $Vu,
+              52: $Vv,
+              53: $Vw
+            }, o($VK, [2, 51]), {
+              25: $Vx,
+              33: $Vy,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC,
+              42: $VD,
+              43: $VE,
+              44: $VF,
+              45: $VG,
+              46: $VH,
+              47: $VI,
+              48: $VJ,
+              50: [1, 96]
+            }, o($VK, [2, 59]), {
               13: [2, 31]
-            }, o($VJ, [2, 38], {
-              35: $Vx,
-              40: $Vz,
-              41: $VA
-            }), o($VJ, [2, 39], {
-              35: $Vx,
-              40: $Vz,
-              41: $VA
-            }), o($VI, [2, 40]), o($VI, [2, 41]), o($VI, [2, 42]), o([33, 38, 42], [2, 43], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA,
-              43: $VC,
-              44: $VD,
-              45: $VE,
-              46: $VF,
-              47: $VG,
-              48: $VH
-            }), o([33, 38], [2, 44], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA,
-              42: $VB,
-              43: $VC,
-              44: $VD,
-              45: $VE,
-              46: $VF,
-              47: $VG,
-              48: $VH
-            }), o($VK, [2, 45], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA
-            }), o($VK, [2, 46], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA
-            }), o($VK, [2, 47], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA
-            }), o($VK, [2, 48], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA
-            }), o($VK, [2, 49], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA
-            }), o($VK, [2, 50], {
-              25: $Vw,
-              35: $Vx,
-              39: $Vy,
-              40: $Vz,
-              41: $VA
-            })],
+            }, o($VL, [2, 38], {
+              35: $Vz,
+              40: $VB,
+              41: $VC
+            }), o($VL, [2, 39], {
+              35: $Vz,
+              40: $VB,
+              41: $VC
+            }), o($VK, [2, 40]), o($VK, [2, 41]), o($VK, [2, 42]), o([33, 38, 42, 50], [2, 43], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC,
+              43: $VE,
+              44: $VF,
+              45: $VG,
+              46: $VH,
+              47: $VI,
+              48: $VJ
+            }), o([33, 38, 50], [2, 44], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC,
+              42: $VD,
+              43: $VE,
+              44: $VF,
+              45: $VG,
+              46: $VH,
+              47: $VI,
+              48: $VJ
+            }), o($VM, [2, 45], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC
+            }), o($VM, [2, 46], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC
+            }), o($VM, [2, 47], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC
+            }), o($VM, [2, 48], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC
+            }), o($VM, [2, 49], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC
+            }), o($VM, [2, 50], {
+              25: $Vx,
+              35: $Vz,
+              39: $VA,
+              40: $VB,
+              41: $VC
+            }), o($VK, [2, 52])],
             defaultActions: {
               9: [2, 13],
               10: [2, 14],
@@ -14046,7 +15890,7 @@
               49: [2, 32],
               50: [2, 21],
               51: [2, 26],
-              80: [2, 31]
+              82: [2, 31]
             },
             parseError: function parseError(str, hash) {
               if (hash.recoverable) {
@@ -14736,7 +16580,7 @@
 
                   case 6:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 'PARA';
+                    return 49;
                     break;
 
                   case 7:
@@ -14751,7 +16595,7 @@
 
                   case 9:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 'PARC';
+                    return 50;
                     break;
 
                   case 10:
@@ -14906,12 +16750,12 @@
 
                   case 40:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 49;
+                    return 51;
                     break;
 
                   case 41:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 50;
+                    return 52;
                     break;
 
                   case 42:
@@ -14921,7 +16765,7 @@
 
                   case 43:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 51;
+                    return 53;
                     break;
 
                   case 44:
@@ -15050,18 +16894,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
-                _step62;
+            var _iterator64 = _createForOfIteratorHelper(ts.tabla),
+                _step64;
 
             try {
-              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
-                var sim = _step62.value;
+              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
+                var sim = _step64.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator62.e(err);
+              _iterator64.e(err);
             } finally {
-              _iterator62.f();
+              _iterator64.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -15071,19 +16915,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator63 = _createForOfIteratorHelper(controlador.errores),
-                _step63;
+            var _iterator65 = _createForOfIteratorHelper(controlador.errores),
+                _step65;
 
             try {
-              for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
-                var sim = _step63.value;
+              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
+                var sim = _step65.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator63.e(err);
+              _iterator65.e(err);
             } finally {
-              _iterator63.f();
+              _iterator65.f();
             }
 
             return cuerpohtml;
@@ -15353,21 +17197,21 @@
           value: function getvalor3d(controlador, ts) {
             var cont = 0;
 
-            var _iterator64 = _createForOfIteratorHelper(ts.tabla),
-                _step64;
+            var _iterator66 = _createForOfIteratorHelper(ts.tabla),
+                _step66;
 
             try {
-              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
-                var informacion = _step64.value;
+              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
+                var informacion = _step66.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator64.e(err);
+              _iterator66.e(err);
             } finally {
-              _iterator64.f();
+              _iterator66.f();
             }
 
             return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](cont + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
@@ -15380,21 +17224,21 @@
           value: function getValor(controlador, ts) {
             var cont = 0;
 
-            var _iterator65 = _createForOfIteratorHelper(ts.tabla),
-                _step65;
+            var _iterator67 = _createForOfIteratorHelper(ts.tabla),
+                _step67;
 
             try {
-              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
-                var informacion = _step65.value;
+              for (_iterator67.s(); !(_step67 = _iterator67.n()).done;) {
+                var informacion = _step67.value;
 
                 if (informacion.identificador == controlador.idlast) {
                   cont++;
                 }
               }
             } catch (err) {
-              _iterator65.e(err);
+              _iterator67.e(err);
             } finally {
-              _iterator65.f();
+              _iterator67.f();
             }
 
             return cont;
@@ -16412,12 +18256,12 @@
               while (this.condicion.getValor(controlador, ts_for)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts_for);
 
-                var _iterator66 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step66;
+                var _iterator68 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step68;
 
                 try {
-                  for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
-                    var ins = _step66.value;
+                  for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
+                    var ins = _step68.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -16436,9 +18280,9 @@
 
                   }
                 } catch (err) {
-                  _iterator66.e(err);
+                  _iterator68.e(err);
                 } finally {
-                  _iterator66.f();
+                  _iterator68.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (FOR)");
@@ -16462,18 +18306,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator67 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step67;
+            var _iterator69 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step69;
 
             try {
-              for (_iterator67.s(); !(_step67 = _iterator67.n()).done;) {
-                var ins = _step67.value;
+              for (_iterator69.s(); !(_step69 = _iterator69.n()).done;) {
+                var ins = _step69.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator67.e(err);
+              _iterator69.e(err);
             } finally {
-              _iterator67.f();
+              _iterator69.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -16725,6 +18569,51 @@
     },
 
     /***/
+    "wLeh":
+    /*!**************************************!*\
+      !*** ./src/Clases/AST/ListaError.ts ***!
+      \**************************************/
+
+    /*! exports provided: LErrores */
+
+    /***/
+    function wLeh(module, __webpack_exports__, __webpack_require__) {
+      "use strict";
+
+      __webpack_require__.r(__webpack_exports__);
+      /* harmony export (binding) */
+
+
+      __webpack_require__.d(__webpack_exports__, "LErrores", function () {
+        return LErrores;
+      });
+      /* harmony import */
+
+
+      var _Analizar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+      /*! ../Analizar */
+      "/l+n");
+      /* harmony import */
+
+
+      var _Errores__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ./Errores */
+      "zZ//");
+
+      var LErrores = function LErrores(tipo, descripcion, analizador, linea, columna) {
+        _classCallCheck(this, LErrores);
+
+        console.log("hay un error");
+
+        _Analizar__WEBPACK_IMPORTED_MODULE_0__["errorLex"].push(new _Errores__WEBPACK_IMPORTED_MODULE_1__["default"](tipo, descripcion, linea, columna, analizador));
+
+        console.log(_Analizar__WEBPACK_IMPORTED_MODULE_0__["errorLex"]);
+      };
+      /***/
+
+    },
+
+    /***/
     "z8/j":
     /*!********************************************!*\
       !*** ./src/clases/TablaSimbolos/ambito.ts ***!
@@ -16880,12 +18769,12 @@
         _createClass(Declaracion, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator68 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step68;
+            var _iterator70 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step70;
 
             try {
-              for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
-                var simbolo = _step68.value;
+              for (_iterator70.s(); !(_step70 = _iterator70.n()).done;) {
+                var simbolo = _step70.value;
                 var variable = simbolo;
 
                 if (ts.existeEnActual(variable.identificador)) {
@@ -16927,9 +18816,9 @@
                 }
               }
             } catch (err) {
-              _iterator68.e(err);
+              _iterator70.e(err);
             } finally {
-              _iterator68.f();
+              _iterator70.f();
             }
           }
         }, {
@@ -16937,21 +18826,21 @@
           value: function recorrer() {
             var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaraciones", "");
 
-            var _iterator69 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step69;
+            var _iterator71 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step71;
 
             try {
-              for (_iterator69.s(); !(_step69 = _iterator69.n()).done;) {
-                var simbolo = _step69.value;
+              for (_iterator71.s(); !(_step71 = _iterator71.n()).done;) {
+                var simbolo = _step71.value;
                 var p = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaracion", "");
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](simbolo.identificador, ""));
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](";", ""));
                 padre.AddHijo(p);
               }
             } catch (err) {
-              _iterator69.e(err);
+              _iterator71.e(err);
             } finally {
-              _iterator69.f();
+              _iterator71.f();
             }
 
             return padre;
@@ -16984,13 +18873,14 @@
         return Errores;
       });
 
-      var Errores = function Errores(tipo, descripcion, linea, columna) {
+      var Errores = function Errores(tipo, descripcion, linea, columna, analizador) {
         _classCallCheck(this, Errores);
 
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.linea = linea;
         this.columna = columna;
+        this.analizador = analizador;
       };
       /***/
 
