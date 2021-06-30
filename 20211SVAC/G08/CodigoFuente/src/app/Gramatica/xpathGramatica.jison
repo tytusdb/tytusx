@@ -128,13 +128,14 @@ escape                              \\{escapechar}
         const {parametroXpath} = require("../Estructuras/parametroXpath.js");
         const {ParametroOperacionXpath} = require("../Estructuras/ParametroOperacionXpath.js");
         const {OperacionXpath} = require("../Estructuras/OperacionXpath.js");
+        const {Entrada} = require("../Estructuras/Entrada.js");
         const {NodoXpath} = require("../Estructuras/NodoXpath.js");
         const {DeclaracionXquery,FuncionXquery,VariableXquery,FunctionName,ParametroXquery,TypeDeclaration} = require("../Estructuras/Xquery/DeclaracionXquery.js");
         const {FLWORExpr,FLWORVariables,FLWORBinding,IntermediteClause,OrderSpec} = require("../Estructuras/Xquery/FLWORExpr.js");
         const {IfExpresion} = require("../Estructuras/Xquery/IfExpresion.js");
         const {NativeFunctionExpresion,Funcion} = require("../Estructuras/Xquery/NativeFunctionExpresion.js");
         const {PathExpresion} = require("../Estructuras/Xquery/PathExpresion.js");
-        const {SentenciaXquery} = require("../Estructuras/Xquery/SentenciaXquery.js");
+        const {SentenciaXquery,LlamadoFuncion} = require("../Estructuras/Xquery/SentenciaXquery.js");
         const {SingleExpresion} = require("../Estructuras/Xquery/SingleExpresion.js");
         const {TipoParametro, TipoOperador, TipoNodo, SingleExpresionType, FLWORTipo, TipoBinding, OrderModifierType, TipoClausulaIntermedia, TipoFuncion, TipoDeclaracionXquery, ParamType} = require("../Estructuras/tipificacion.js");
         let salida = [];
@@ -159,12 +160,18 @@ escape                              \\{escapechar}
 expressions
     : XPath EOF 
         { salida = []; typeof console !== 'undefined' ? console.log($1) : print($1);
-          return $1; }
-    | XQUERY EOF {return $1; };
+          return new Entrada(null,$1,0); }
+    | XQUERY EOF {return new Entrada($1,null,1); };
 
-XQUERY : FLWORExpr {$$ = new SentenciaXquery($1,null);}
-        |DirectConstructor {$$ = new SentenciaXquery(null,$1);}
-        |AnnotatedDecl ;
+XQUERY : XQUERY SENTENCIA_XQUERY {$1.push($2); $$ = $1;}
+        |  SENTENCIA_XQUERY {$$ = []; $$.push($1);};
+
+SENTENCIA_XQUERY : FLWORExpr {$$ = new SentenciaXquery($1,null,null);}
+        //|DirectConstructor //{$$ = new SentenciaXquery(null,$1);}
+        |AnnotatedDecl {$$ = new SentenciaXquery(null,$1,null);}
+        |LlamadoFuncion {$$ = new SentenciaXquery(null,null,$1);};
+
+LlamadoFuncion: FunctionName lparen Expr rparen {$$ = new LlamadoFuncion($3,$1);};
 
 //*************** User defined functions
 
@@ -201,7 +208,7 @@ ItemType: xsString {$$ = ParamType.xsString;}
 |xsDecimal {$$ = ParamType.xsDecimal;}
 |xsBoolean {$$ = ParamType.xsBoolean;};
 
-FunctionBody: EnclosedExpr {$$ = $1;};
+FunctionBody: EnclosedExpr semicolon {$$ = $1;};
 
 //************* HTML Clause
 DirectConstructor : DirElemConstructor;
@@ -239,7 +246,8 @@ LForBinding: LForBinding ',' ForBinding {$1.Variables.push($3); $$ = $1;}
 	|ForBinding {$$ = new FLWORBinding(FLWORTipo.For,$1); }
         ;
 
-ForBinding: '$'nodename in SENTENCIA {$$ = new FLWORVariables('$' + $2, $4, null);};
+ForBinding: '$'nodename in SENTENCIA {$$ = new FLWORVariables('$' + $2, $4, null);}
+           |'$'nodename in ExprSingle {$$ = new FLWORVariables('$' + $2, null, $4);};
 
 ExprSingle: FLWORExpr {$$ = new SingleExpresion (SingleExpresionType.FLWORExpr, $1,0,0);}
 	| IfExpr {$$ = new SingleExpresion (SingleExpresionType.IfExpr, $1,0,0);}
@@ -274,7 +282,7 @@ QuantifiedExpr: '$' nodename {$$ = '$'+$2;};
 InitialClause: ForClause {$$=$1;}
 | LetClause {$$=$1;};
 
-LetClause: let LLetBinding {$$ = $1;};
+LetClause: let LLetBinding {$$ = $2;};
 
 LLetBinding: LLetBinding ',' LetBinding  {$1.Variables.push($3); $$ = $1;}
 	|LetBinding {$$ = new FLWORBinding(FLWORTipo.Let, $1);}
@@ -293,9 +301,9 @@ IntermediateClause: InitialClause {$$ = new IntermediteClause(TipoClausulaInterm
 | OrderByClause {$$ = new IntermediteClause(TipoClausulaIntermedia.OrderByClause, $1);}
 ;
 
-WhereClause: where LComparisonExpr {$$ = $1;};
+WhereClause: where LComparisonExpr {$$ = $2;};
 
-OrderByClause: order by OrderSpecList {$$ = $1};
+OrderByClause: order by OrderSpecList {$$ = $3};
 
 OrderSpecList:OrderSpecList ',' OrderSpec { $1.push($3); $$ = $1;}
 	| OrderSpec {$$ = []; $$.push($1);};
@@ -311,14 +319,16 @@ ReturnClause: return ExprSingle {$$ = $2;};
 IfExpr: if lparen Expr rparen then ExprSingle else ExprSingle {$$ = new IfExpresion($3,$6,$8);};
 
 Expr: 	Expr ExprSingle {$1.push($2); $$ = $1;}
+        |Expr ',' ExprSingle {$1.push($3); $$ = $1;}
         |ExprSingle {$$ = []; $$.push($1);};
 
 LComparisonExpr : LComparisonExpr and  ComparisonExpr {$$ = new parametroXpath($1,$3,null,TipoOperador.And);}
         | LComparisonExpr or  ComparisonExpr {$$ = new parametroXpath($1,$3,null,TipoOperador.Or);}
         | ComparisonExpr {$$ = new parametroXpath(null,null,$1,TipoOperador.None);};
 
-ComparisonExpr : QuantifiedExpr ComparisonValue ExprSingle {$$ = new OperacionXpath($1,$3,$2,null);}
-| QuantifiedExpr SENTENCIA ComparisonValue ExprSingle {$$ = new OperacionXpath($1,$4,$3,$2);};
+ComparisonExpr : QuantifiedExpr ComparisonValue ExprSingle 
+{$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$3.Objeto,$2,null);}
+| QuantifiedExpr SENTENCIA ComparisonValue ExprSingle {$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$4.Objeto,$3,$2);};
 
 XPARAM : numberLiteral {$$ = $1;}
 | QuantifiedExpr {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Variable);}
@@ -359,7 +369,7 @@ XCOMPARISON : $ SENTENCIA ComparisonValue PARAMETRO;
         
 
 
-XPath : LSENTENCIA {$$ = salida; salida = []; return $$;};
+XPath : LSENTENCIA {$$ = salida; salida = []; return new Entrada(null,$$,0);};
 
 LSENTENCIA: LSENTENCIA '|' SENTENCIA { salida.push($3);}
         | SENTENCIA {  salida.push($1);};
