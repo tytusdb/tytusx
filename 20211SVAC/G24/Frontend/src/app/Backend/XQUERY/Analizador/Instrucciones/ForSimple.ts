@@ -22,7 +22,12 @@ export default class ForSimple extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-
+       this.consulta.interpretar(arbol,tabla);    
+       if(this.thewhere!=null){
+           while(this.thewhere.interpretar(arbol,tabla)){
+               
+           }
+       } 
 
     }
     getNodoAST(): nodoAST {

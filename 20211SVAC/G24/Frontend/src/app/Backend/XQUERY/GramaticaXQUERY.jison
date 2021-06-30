@@ -92,17 +92,17 @@
 %{
     const theforcompuesto = require('./Instrucciones/ForCompuesto');
     const theforsimple = require('./Instrucciones/ForSimple');
-    const atributosexpresion = require("./Instrucciones/AtributosExpresion")
-    const identificadorpredicado = require("../../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
+    const atributosexpresion = require("../../XPATH/Analizador/Instrucciones/AtributosExpresion")
+    const identificadorpredicado = require("../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
     const relacional = require("./Expresiones/Relacional");
-    const barrasnodo= require("../../../XPATH/Analizador/Instrucciones/BarrasNodo")
+    const barrasnodo= require("../../XPATH/Analizador/Instrucciones/BarrasNodo")
     const identificador= require("./Expresiones/Identificador");
     const nativo= require("./Expresiones/Nativo");
     const asignacion= require("./Instrucciones/Asignacion")
     const theif = require('./Instrucciones/If')
-    const let=require('./Instrucciones/Let')
+    const thelet=require('./Instrucciones/Let')
 
 
 %}
@@ -141,7 +141,7 @@ FORSIMPLE
     ;
 
 LET 
-    :RLET VARIABLE LETDOSPUNTOS L_FTO RRETURN RETORNO {$$=new let.default($2,$4,$6,@1.first_line,@1.first_column)}
+    :RLET VARIABLE LETDOSPUNTOS L_FTO RRETURN RETORNO {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
     ;    
 
 CONDICIONCOMPUESTA

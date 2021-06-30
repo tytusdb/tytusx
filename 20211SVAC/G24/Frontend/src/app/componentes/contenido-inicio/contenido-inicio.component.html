@@ -40,10 +40,13 @@
     <div><br></div>
     <div id="ediT">
       <label>EDITOR XQUERY</label>
-      <textarea #resultado id="XQUERY" class="textareanumber"></textarea>
       <br>
-      
- 
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+        <mat-button-toggle (click)="InterpretarXQUERY(resultado.value)" value="Interpretar">Consulta XQUERY
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <textarea #resultado id="XQUERY" class="textareanumber"></textarea>
+
   </div>
   
 </div>

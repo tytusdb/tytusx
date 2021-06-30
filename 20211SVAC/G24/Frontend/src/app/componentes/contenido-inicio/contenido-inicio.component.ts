@@ -10,11 +10,13 @@ import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPa
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import * as GramaticalDes from 'src/app/Backend/XML/Analizador/XMLgraphDesc'
 import * as Optimizacion from 'src/app/Backend/Optimizacion/grammar'
+import * as AnalizadorXQUERY from 'src/app/Backend/XQUERY/Analizador/GramaticaXQUERY'
 import TreeOptimo from 'src/app/Backend/Optimizacion/Simbolo/Arbol'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
 import ArbolXpath from 'src/app/Backend/XPATH/Analizador/Simbolos/Arbol';
+import ArbolXQUERY from 'src/app/Backend/XQUERY/Analizador/Simbolos/Arbol';
 import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
 import nodoAst from 'src/app/Backend/XPATH/Analizador/Abstracto/nodoAST'
 import { Instruccion } from 'src/app/Backend/XPATH/Analizador/Abstracto/Instruccion';
@@ -30,6 +32,7 @@ import { ViewChild } from '@angular/core';
 import Declaracion from 'src/app/Backend/Optimizacion/Instrucciones/Declaracion';
 import Funcion from 'src/app/Backend/Optimizacion/Instrucciones/Funcion';
 import { reporteOp } from 'src/app/Backend/Optimizacion/Reportes/reporteOp';
+import ForSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForSimple';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -163,7 +166,7 @@ export class ContenidoInicioComponent implements OnInit {
      ************************* MANEJO DE CODIGO 3 DIRECCIONES ASCENDENTE *******************************
      * *************************************************************************************************
     */
-      contenidocd3=""
+      contenidocd3 = ""
       TreeAsc.codigo3d.push("#include <stdio.h>\n#include<math.h>\n");
       TreeAsc.codigo3d.push("int main(){\n");
 
@@ -174,7 +177,7 @@ export class ContenidoInicioComponent implements OnInit {
           this.tablaGlobal.setVariable(lista);
         }
       }
-      
+
 
 
 
@@ -304,7 +307,7 @@ export class ContenidoInicioComponent implements OnInit {
    */
   finalizarCD3() {
     //ES VARIABLES AL INICIO
-    contenidocd3=""
+    contenidocd3 = ""
     for (let x = 0; x < TreeAsc.contadort; x++) {
       if (x == 0) { contenidocd3 = contenidocd3 + "double " }
       else if (x % 20 == 0) { contenidocd3 = contenidocd3 + "\n" }
@@ -321,7 +324,7 @@ export class ContenidoInicioComponent implements OnInit {
       contenidocd3 += element + "\n"
     });
     cd3XPath.forEach(element => {
-      contenidocd3+= element+"\n"
+      contenidocd3 += element + "\n"
     });
     this.mostrarContenido(contenidocd3 + "return 1;\n}", 'cdirecciones');
   }
@@ -398,6 +401,7 @@ export class ContenidoInicioComponent implements OnInit {
 
     //console.log(gramar);
   }
+
   /*********************************************************************************************************/
   /***********************************************XPATH ASCENDENTE******************************************/
   /*********************************************************************************************************/
@@ -406,8 +410,8 @@ export class ContenidoInicioComponent implements OnInit {
   EjecutarAsc(texto: string) {
 
     // if (texto == null) return document.write('Error');
-    cd3XPath= null;
-    cd3XPath=[];
+    cd3XPath = null;
+    cd3XPath = [];
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
@@ -571,47 +575,47 @@ export class ContenidoInicioComponent implements OnInit {
         }
         //  let recorrido=
         let atributos = ""
-       
+
         /**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
          * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IMPRIMIR DATOS CD3 XPATH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
          * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
          */
 
-        let etiqueta1="<" + key.getidentificador() 
-        this.generarEtiquetascd3("<"+key.getidentificador(), arbol);
+        let etiqueta1 = "<" + key.getidentificador()
+        this.generarEtiquetascd3("<" + key.getidentificador(), arbol);
         if (key.getAtributo().size != 0) {
           for (var [key2, value2,] of key.getAtributo()) {
             etiqueta1 += " " + key2 + "=" + value2
-            this.generarEtiquetascd3(" "+key2+"=", arbol);
-            let atrib= key.get3DAtributo()
+            this.generarEtiquetascd3(" " + key2 + "=", arbol);
+            let atrib = key.get3DAtributo()
             this.printcd3Simple(atrib, arbol, key2);
           }
         }
-        etiqueta1+= ">"
+        etiqueta1 += ">"
         this.generarEtiquetascd3(">", arbol);
         cd3XPath.push(`printf("%c",10);`);
-        let etiqueta2="</" + key.getidentificador() + ">"
-        salida += etiqueta1+ "\n"+ this.recorrerTabla(objetos, arbol) + etiqueta2+"\n";
+        let etiqueta2 = "</" + key.getidentificador() + ">"
+        salida += etiqueta1 + "\n" + this.recorrerTabla(objetos, arbol) + etiqueta2 + "\n";
         this.generarEtiquetascd3(etiqueta2, arbol);
         cd3XPath.push(`printf("%c",10);`);
       } else {
         let atributos = ""
-        this.generarEtiquetascd3("<"+key.getidentificador(), arbol);
+        this.generarEtiquetascd3("<" + key.getidentificador(), arbol);
         if (key.getAtributo().size != 0) {
           for (var [key2, value2,] of key.getAtributo()) {
             atributos += " " + key2 + "=" + value2
-            this.generarEtiquetascd3(" "+key2+"=", arbol);
-            let atrib= key.get3DAtributo()
+            this.generarEtiquetascd3(" " + key2 + "=", arbol);
+            let atrib = key.get3DAtributo()
             this.printcd3Simple(atrib, arbol, key2);
           }
         }
-        let contain= key.setcd3Value()
+        let contain = key.setcd3Value()
         this.generarEtiquetascd3(">", arbol);
         this.printcd3Simple(contain, arbol, key.getidentificador());
         salida += "<" + key.getidentificador() + atributos + ">"
         salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
-        let etiqueta2 ="</" + key.getidentificador() + ">"
-        salida += etiqueta2+"\n"
+        let etiqueta2 = "</" + key.getidentificador() + ">"
+        salida += etiqueta2 + "\n"
         this.generarEtiquetascd3(etiqueta2, arbol);
         cd3XPath.push(`printf("%c",10);`);
       }
@@ -624,13 +628,13 @@ export class ContenidoInicioComponent implements OnInit {
    * @param contenido 
    * @param arbol 
    */
-  printcd3Simple(contenido: String, arbol: Arbol, identificador:String){
+  printcd3Simple(contenido: String, arbol: Arbol, identificador: String) {
     cd3XPath.push(`//***print  ${identificador}****`)
     let countprint = arbol.getContadort();
     cd3XPath.push(`$t${countprint}=stack[(int)${contenido}]; `);
     cd3XPath.push(`$t0= $t${countprint}; `);
     cd3XPath.push("imprimirString();");
-   
+
   }
   /**$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
    * *****************************************GENERACION DE <ETIQUTA></ETIQUETA>***********************
@@ -700,6 +704,47 @@ export class ContenidoInicioComponent implements OnInit {
     cd3XPath.push("imprimirString();");
 
   }
+
+    /*********************************************************************************************************/
+  /***********************************************X  Q  U  E  R  Y*****************************************/
+  /*********************************************************************************************************/
+
+  InterpretarXQUERY(texto: string){
+    const analizador = AnalizadorXQUERY;
+    let objetos = analizador.parse(texto);
+    let ast = new ArbolXQUERY(analizador.parse(texto)); //ejecucion
+    console.log(listainstrucciones)
+    var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
+    var tabla = new tablaSimbolos();                    //ejecucion
+    ast.settablaGlobal(tabla);                        //ejecucion
+    var tablita = this.tablaGlobal;
+    var c = 0;
+    var consolita = ''
+
+    for (var key of tablita.getTabla()) {//SIMBOLOS
+      if (key.getidentificador() == 'xml') {
+        tablita = key.getvalor()
+      }
+    }
+
+    for (let index = 0; index < ast.getinstrucciones().length; index++) {
+      const instructions = ast.getinstrucciones()[index];
+
+      instructions.forEach(element => {
+        c++
+        console.log(element);
+        if (element instanceof ForSimple) {
+          console.log("es FORSIMPLE")
+
+          var resultador = element.interpretar(Tree, tablita);
+      }
+    });
+    c = 0; 
+    
+   }
+  }
+
+
 
   /**************************************************************************************************
    * *********************************OPTIMIZACION***************************************************
