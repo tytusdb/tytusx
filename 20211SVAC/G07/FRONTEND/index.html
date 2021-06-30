@@ -73,10 +73,12 @@
             <li class="menu-item" >Rep. XQUERY
                 <ul class="submenu">
                     <li class="subitem"><a id="btnReporteXQUERYcst">CST XQUERY</a></li>
-                    <li class="subitem"><a id="btnReporteOptimizar">OPTIMIZAR</a></li>
                 </ul>
             </li>
+
+            <li class="menu-item"><a id="btnReporteOptimizar" data-toggle="modal" data-target="#EpicModal">Rep.Optimizar</a></li>
         </ul>
+        
         
         <span>Compiladores 2 -- Grupo 7</span>
     </nav>
@@ -106,9 +108,11 @@
             <textarea  class="editor editorOutput" id="consolaPython"></textarea>
 
             <!-- EDITOR PARA MOSTRAR EL CODIGO DE 3DIRECCIONES -->
-            <p class="txtCopy">C3D <span class="copyBtn" id="copyBtn">Copiar</span></p>
-            <textarea  class="editor editorOutput" id="consola3D">
-            </textarea> 
+            <p class="txtCopy">C3D <span class="copyBtn" id="copyBtn">Copiar</span> <span class="copyBtn" id="clearBtn">Limpiar</span> <span class="copyBtn" id="optimizarBtn">Optimizar</span></p>
+            <textarea  class="editor editorOutput" id="consola3D"></textarea>
+            
+            <p class="txtCopy">C3D Optimizado </p>
+            <textarea  class="editor editorOutput" id="consola3DOptimizada"></textarea> 
         </div>
 
         
@@ -214,7 +218,6 @@
     <script src="../BACKEND/analizadores/xquery/analizador_xqueryizq.js"></script>
     <script src="../BACKEND/analizadores/xquery/analizador_xqueryder.js"></script>
     <script src="../BACKEND/analizadores/xquery/analizador_xquery_ast.js"></script>
-    <script src="../BACKEND/analizadores/Optimizacion_3D/grammar.js"></script>
 
     <script src="../BACKEND/Eriqueta.js"></script>
      <!-- xQuery -->
@@ -247,6 +250,10 @@
     <!-- TRADUCTOR 3D -->
     <script src="../BACKEND/Generar3D/Traduccion.js"></script>
     <script src="../BACKEND/Generar3D/pruebaTraduccion.js"></script>
+
+    <!-- Optimizador de Codigo de 3D -->
+    <script src="../BACKEND/Optimizacion/pruebaOptimizacion.js"></script>
+    <script src="../BACKEND/Optimizacion/Optimizacion.js"></script>
 
 </body>
 

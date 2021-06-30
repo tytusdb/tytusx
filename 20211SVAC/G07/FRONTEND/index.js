@@ -12,6 +12,7 @@ let parserXML;
 let parserXPATHDER;
 let globalencod;
 let codificador = document.getElementById("codencod");
+let optimizador;
 
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
@@ -280,6 +281,7 @@ editorXQUERY.value=XQuery;
 
 editorXML.value = textoEntrada;
 let consolaC3D = document.getElementById('consola3D');
+let consolaC3DOptimizada = document.getElementById('consola3DOptimizada');
 
 
 // ======================================
@@ -616,12 +618,9 @@ botonCargar3.addEventListener("click", () => {
   editorXML.value = " ";
 })
 
-document.getElementById("btnReporteOptimizar").addEventListener("click", () => {
-  let GramaticaOP = grammar.parse(consola3D.value);
 
-  console.log(GramaticaOP);
 
-})
+
     // Original
     function encode_utf8(s) {
       return unescape(encodeURIComponent(s));
@@ -667,14 +666,78 @@ function imprimiConsola(txt){
 
 // FUNCION PARA COPIAR
 let copyButton = document.getElementById('copyBtn');
+let clearButton = document.getElementById('clearBtn');
+
 copyButton.addEventListener('click', () => {
 
   if (consolaC3D.value.trim() !== '') {
     alert("Copiado");
     consolaC3D.select();
-    document.execCommand('copy');
+    document.execCommand('Codigo Copiado');
   } else {
-    alert("No");
+    alert("No hay codigo");
   }
 
 });
+
+clearButton.addEventListener('click', () => {
+  consolaC3D.value = '';
+  consolaC3DOptimizada.value = '';
+})
+
+
+// Optimizacion de Codigo de 3D
+let optimizarButton = document.getElementById('optimizarBtn');
+let optimizarReporteButton = document.getElementById("btnReporteOptimizar");
+
+
+optimizarButton.addEventListener("click", () => {
+
+  if (consolaC3D.value.trim() !== '') {
+
+    alert('Optimizando');
+    optimizador = new Optimizacion(consolaC3D.value);
+    optimizador.regla5();
+    optimizador.regla6_7_8_9();
+    consolaC3DOptimizada.value = optimizador.obtenerOptimizacion();
+
+  } else {
+    alert('No hay codigo en 3Direcciones para optimizar');
+  }
+
+});
+
+
+optimizarReporteButton.addEventListener("click", () => {
+
+  tablaTitulo.innerHTML = 'Reporte Optimizaciones';
+  tabla.innerHTML = "";
+
+  if (optimizador) {
+    let bitacoraOptimizacion = optimizador.bitacoraOptimizaciones;
+
+    // Agregar las cabeceras
+    tablaCabeceras.innerHTML = `
+    <th scope="col">Linea</th>
+    <th scope="col">Regla</th>
+    <th scope="col">Instruccion</th>
+    <th scope="col">Cambio</th>
+    `;
+
+    console.log(bitacoraOptimizacion);
+
+    // Agregar contenido a la tabla
+    bitacoraOptimizacion.forEach(optimizacion => {
+      tabla.innerHTML += `
+        <tr>
+          <td>${optimizacion.linea}</td>
+          <td>${optimizacion.regla}</td>
+          <td>${optimizacion.instruccion}</td>
+          <td>${optimizacion.cambio}</td>
+        </tr>
+      `;
+    });
+    }
+
+});
+
