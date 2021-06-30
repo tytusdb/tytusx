@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div class="col-2">
-                <button type="submit" class="btn btn-success btn-block" onclick="analizar();">
+                <button type="submit" class="btn btn-success btn-block" onclick="analizar();copiarTexto();">
                     <i class="fas fa-chevron-circle-right"></i> Analizar Xpath
                 </button>
             </div>
@@ -298,6 +298,13 @@
         }
         function reporteCST(){
             new ReporteCST().run(raizCST);
+        }
+    </script>
+    <script>
+        function copiarTexto() {
+            let ta = $('#resultC3D');
+            ta.select();
+            document.execCommand('copy');
         }
     </script>
 

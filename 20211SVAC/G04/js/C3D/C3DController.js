@@ -12,12 +12,15 @@ class C3DController {
     generateC3D(result, matriz, entorno) {
         result = this.generarC3DConsultas(result, matriz);
         result = this.generarArrayEntC3D(result, entorno);
-        let cP = this.info.find(e => e.name = "consultas").sp;
-        let eP = this.info.find(e => e.name = "entornos").sp;
-        result = this.funciones.recorrerConsultas(result, cP, eP);
+        let cP = this.info.find(e => e.name == "consultas").sp;
+        let eP = this.info.find(e => e.name == "entornos").sp;
+        result = this.funciones.analizarXpath(result, cP, eP);
         let resultFunciones = new C3DResult([""], 0, result.getNextTemp(), result.getNextLabel(), null);
         resultFunciones = this.funciones.compararStrings(resultFunciones);
         resultFunciones = this.funciones.consultaSimple(resultFunciones);
+        resultFunciones = this.funciones.recorrerConsultas(resultFunciones);
+        resultFunciones = this.funciones.toTag(resultFunciones);
+        resultFunciones = this.funciones.imprimirResultado(resultFunciones);
         let codigo = new Array();
         codigo.push("/*------HEADER------*/");
         codigo.push("#include <stdio.h>");

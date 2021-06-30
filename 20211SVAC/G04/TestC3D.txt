@@ -99,7 +99,7 @@ consultaSimple() {
     if (t17.2 == 1) goto L16
     goto L18;                   -> No es ni tipo 1 ni 0
 
-    L16:                        -> Consulta simple
+    L16:                        -> Nodo
     P = P + 3;                  -> Reservando espacio para return
     t18 = P + 1;                -> Moviendo puntero a espacio para 1er parametro
     stack[t18] = t8.1;          -> H.36 Enviando primer parametro (id consulta)
@@ -166,12 +166,17 @@ consultaSimple() {
 
 recorrerConsultas() {
     //obtener parametros
+    t0.1 = P + 1;
+    t0.2 = stack[t0.1];         -> Recuperando referencia a consultas
+    t0.1 = t0.1 + 1;
+    t0.3 = stack[t0.1];         -> Recuperando referencia a entornos
 
-    t0 = stack[6]               -> H.38 - referencia a consultas
-    t1 = heap[t0]               -> 1 - tamaño array consultas
+
+    //t0 = stack[6]               -> H.38 - referencia a consultas
+    t1 = heap[t0.2]               -> 1 - tamaño array consultas
     t2 = 1                      -> contador de tamaño consultas
-    t3 = t0 + 1                 -> t3 = (38+1) = H.39 - referencia a primera consulta
-    t4 = stack[7]               -> H.40 - referencia al array de entornos (referencia)
+    t3 = t0.2 + 1                 -> t3 = (38+1) = H.39 - referencia a primera consulta
+    //t4 = stack[7]               -> H.40 - referencia al array de entornos (referencia)
 
     if (t1 > 0) goto L1;
     goto L2;
@@ -185,19 +190,20 @@ recorrerConsultas() {
     t5.1 = heap[t5]             -> 1 - tipo de consulta
     t5.2 = t5 + 1;              -> H.35 referencia al segundo atributo de consulta
     t5.3 = heap[t5.2]           -> H.36 referencia al incio del id
+
     if (t5.1 == 1) goto L5;
     goto L6;
 
     L5:                         -> (Logica de consulta simple)
     P = noPosPila + 1;          -> espacio de return
     t6 = P + 1;                 -> espacio para el primer parametro
-    stack[t6] = t4;             -> H.40 envia parametro de inicio de entornos
+    stack[t6] = t0.3;             -> H.40 envia parametro de inicio de entornos
     t6 = t6 + 1;                -> espacio para el segundo parametro
     stack[t6] = t5.3;           -> H.36 - referencia al id de consulta
     consultaSimple();
     t25 = stack[P];             -> H.42 - Referencia a nuevo array de entornos
     P = P - noPosPila;          -> Regresamos puntero de P a 0
-    t4 = t25;                   -> H.42 - Referencia a nuevo array de entornos
+    t0.3 = t25;                 -> H.42 - Referencia a nuevo array de entornos
 
     L6:
     Comprobar los demas tipos
@@ -208,8 +214,8 @@ recorrerConsultas() {
 
     L4:
     //Fin recorrido consultas
-
     L2:
+    stack[P] = t0.3;
     //No hay consultas
     //Devolver array de entornos
 }
@@ -226,6 +232,151 @@ stack[t0] = t2;                     -> Seteando segundo parametro (referencia a 
 recorrerConsultas();
 t3 = stack[P];
 P = P -noP;
+
 //imprimir resultado
+P = P + noP;
+t4 = P + 1;
+stack[t4] = t3;
+imprimirResultado();
+t5 = stack[P];
+P = P - noP;
 
 
+
+
+
+
+
+<bookstore></bookstore>
+
+imprimirResultado() {
+    t0 = P + 1;                 -> Moviendo puntero para recuperar parametro
+    t1 = stack[t0]              -> Recuperando array de entornos
+
+    t2 = heap[t1];              -> tamaño del array de entornos
+    t3 = 1;                     -> contador entornos
+    t4 = t1 + 1;                -> primer entorno
+
+    //Validado que haya al menos un entorno
+    if (t2 > 0) goto L0;
+    goto L1;
+
+    L0:
+    if (t3 <= t2) goto L2;
+    goto L3;
+
+    L2:
+    t5 = heap[t4];              -> entorno actual
+    t6 = t5 + 1;                -> Referencia a segundo atributo (tabla)
+    t7 = heap[t6];              -> Referencia a tamaño tabla
+    t8 = heap[t7];              -> tamaño de la tabla
+    t9 = 1;                     -> contador de simbolos en tabla
+    t10 = t7 + 1;               -> Referencia al simbolo actual
+
+    if (t8 > 0) goto L4;
+    goto L5;
+
+    L4:
+    if (t9 <= t8) goto L6;
+    goto L7;
+
+    L6:
+    t11 = heap[t10];            -> Simbolo actual - Referencia a primer atributo
+    t12 = t11 + 4;              -> Referencia al tipo de simbolo
+    t13 = heap[t12];            -> Tipo de simbolo
+
+    if (t13 == 0) goto L8;
+    goto L9;
+
+    L8:
+    goto L10;
+
+    L9:
+    if (t13 == 1) goto L10;
+    goto L11;
+
+    L10:
+    P = P + 3;                  -> Reservando espacio para return
+    t14 = P + 1;                -> Moviendo puntero a espacio para parametro
+    stack[t14] = t11;           -> Referencia de simbolo actual
+    toTag();
+    t15 = stack[P];             -> Recuperando valor del return (vacio)
+    P = P - 3;
+
+    L11:
+    No es un nodo
+    t9 = t9 + 1;
+    t10 = t10 + 1;
+    goto L4;
+
+    L7:
+    Fin recorrido tabla
+
+    L5:
+    Tabla de simbolos vacia
+    t3 = t3 + 1;
+    t4 = t4 + 1;
+    goto L0;
+
+    L3:
+    Fin de recorrido entornos
+
+    L1:
+    Entornos vacios
+    Fin funcion
+    stack[P] = 1;
+}
+
+toTag() {
+    t0 = P + 1;                 -> Moviendo puntero para recuperar parametro
+    t1 = stack[t0];             -> H .19 - Recupeando referencia a simbolo
+
+    t2 = t1 + 4;                -> Referencia a tipo de simbolo
+    t3 = heap[t2];              -> Tipo de simbolo
+
+    if (t3 == 1) goto L0;
+    goto L1;
+
+    L0:                         -> Es etiqueta normal
+    printf("%c", (char)60);     -> "<"
+    t4 = heap[t1];              -> referencia a inicio de id simbolo
+    t5 = heap[t4];              -> primer caracter de id simbolo
+
+    L2:
+    if (t5 != -1) goto L3;
+    goto L4;
+
+    L3:
+    printf("%c", (char)t5);
+    t4 = t4 + 1;
+    t5 = heap[t4];
+    goto L2;
+
+    L4:
+    Fin imprimir id
+    printf("%c", (char)62);     -> ">"
+
+    //Etiqueta de cierre
+    printf("%c", (char)60);     -> "<"
+    printf("%c", (char)47);     -> "/"
+    t6 = heap[t1];              -> referencia a inicio de id simbolo
+    t7 = heap[t6];              -> primer caracter de id simbolo
+
+    L5:
+    if (t7 != -1) goto L6;
+    goto L7;
+
+    L6:
+    printf("%c", (char)t7);
+    t6 = t6 + 1;
+    t7 = heap[t6];
+    goto L5;
+
+    L7:
+    Fin imprimir id
+    printf("%c", (char)62);     -> ">"
+
+    L1:
+    stack[P] = 1;
+    Validar que sea etiqueta auto cerrada
+}
