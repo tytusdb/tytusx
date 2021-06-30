@@ -6,20 +6,23 @@ import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 export default class For extends Instruccion {
 
 
-    private instrucciones: Array<Instruccion>;
-    private declarasignacion: Instruccion;
-    private condicion: Instruccion;
-    private actualizacion: Instruccion;
+    private variable: Instruccion;
+    private respuesta:Instruccion;
+    private sentencia:Instruccion[];
+    private thewhere:Instruccion;
+    private theorderby:Instruccion;
 
-    constructor(declarasignacion: Instruccion, condicion: Instruccion, actualizacion: Instruccion, instrucciones: Array<Instruccion>, linea: number, columna: number) {
+    constructor(variable: Instruccion, respuesta:Instruccion, linea: number, columna: number,sentencia?: Instruccion[],thewhere?:Instruccion,theorderby?:Instruccion) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
-        this.condicion = condicion;
-        this.declarasignacion = declarasignacion;
-        this.actualizacion = actualizacion;
-        this.instrucciones = instrucciones;
+        this.variable = variable;
+        this.respuesta=respuesta;
+        this.sentencia=sentencia;
+        this.thewhere=thewhere;
+        this.theorderby=theorderby;
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        throw new Error("Method not implemented.");
+
+
     }
 }
