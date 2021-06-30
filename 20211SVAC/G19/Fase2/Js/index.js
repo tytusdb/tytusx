@@ -47,7 +47,16 @@ function CargarXML(){
             localStorage.setItem('cstXML',DOTxmlCSTasc);
             ExtraerCodificacion(resultadoXML[0]);       
             ErroresSemanticosXML(resultadoXML[0]);
-           
+            heap = [];
+            stack = [];
+            contadorStack = 0;
+            contTemporal= 0;
+            sp = 2;
+            hp = 0;
+            t0 = 0;
+            t1 = 0;      
+            xml3D = "";
+
             xml3D = getTraduction(resultadoXML[0]);
             localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
@@ -195,10 +204,10 @@ function CargarXMLDesc(){
             stack = [];
             contadorStack = 0;
             contadorTemporales = 0;
-            SP = 2;
-            HP = 0;
-            T0 = 0;
-            T1 = 0;
+            sp = 2;
+            hp = 0;
+            t0 = 0;
+            t1 = 0;
             xmlC3D = "";
             xmlC3D = getTraduction(resultadoXML[0]);    
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
@@ -600,14 +609,14 @@ function CambiarCodificacion(cadena){
 function setTraduction(){
 
     globalC3D = "";
-    globalC3D += `/* ------ HEADERS ------ */
+    globalC3D += `
     #include <stdio.h>
     #include <math.h>
     
     double heap[30101999];
     double stack[30101999];
-    double stackPointer;
-    double heapPointer;
+    double sp;
+    double hp;
     
     `;
 
@@ -618,17 +627,9 @@ function setTraduction(){
             globalC3D += `, t`+i.toString();
         }
     }
-
-    globalC3D += `;
     
-    `;
-    funcionesALlamar+=`cargarXML();\n`;
-    globalC3D += `void cargarXML(){
-        
-
-        
-        
-        `;
+    funcionesALlamar+=`CargarXML();\n`
+    globalC3D+=`; \n\n void CargarXML(){\n`
 
     if(codificacionGlobal == "UTF-8"){
         globalC3D += `stack[(int)0] = -1;
@@ -643,24 +644,18 @@ function setTraduction(){
         stack.push(-2);
         stack.push(-1);
     }
-
     
     globalC3D +=xml3D+'}\n'+concatenaXPath+ xpathC3D ;
 
-   /* for(int loop = 0; loop < stack[1]; loop++){
-        printf("%c", (char) heap[loop]);}
-
-    return;
-    }`*/
     globalC3D +=`
     
         \n \n
         void main() {
-            //el stack pointer inicia en 2 porque en la posicion 0 guardamos el encoding
+          
 
 
-            SP = 2;
-            HP = 0;
+            sp = 2;
+            hp = 0;
 
             `+funcionesALlamar+ `
 
@@ -673,4 +668,10 @@ function setTraduction(){
     SalidaTraduccion.setValue(globalC3D);
     SalidaTraduccion.refresh();
 
+}
+function Optimizar(){
+    var texto =SalidaTraduccion.getValue()
+    var ast =gramaticaOptimizador.parse(texto);
+    console.log(ast)
+    
 }
