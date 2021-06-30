@@ -3,8 +3,9 @@ class TsRow{
     public static readonly POS_PARENT="1";
     public static readonly POS_INDEX="2";
     public static readonly POS_SIZE="3";
-    public static readonly POS_LABEL="4";
+    public static readonly POS_LABEL_CONT_ATTRIBUTE="4";
     public static readonly SIZE_PROPERTIES_OBJECT = "5";
+    public static readonly  POS_INIT_CHILDS = TsRow.SIZE_PROPERTIES_OBJECT;
 
     private _identificador:string;
     private _indice:number;
@@ -276,7 +277,7 @@ class TsRow{
             "Guardamos el index del objeto");
         CodeUtil.printWithComment(tempPosSize+" = HP + "+TsRow.POS_SIZE+" ; ",
             "Guardamos el tamaño del objeto");
-        CodeUtil.printWithComment(tempPosCadena+" = HP + "+TsRow.POS_LABEL+" ; ",
+        CodeUtil.printWithComment(tempPosCadena+" = HP + "+TsRow.POS_LABEL_CONT_ATTRIBUTE+" ; ",
             "Guardamos el espacio para "
             +((this.nodo instanceof XmlElement)?"la etiqueta":(this.nodo instanceof XmlContent)?"el contenido":" el nombre del atributo"));
         //Reserva de espacio

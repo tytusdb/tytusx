@@ -226,7 +226,7 @@ class TsRow {
         CodeUtil.printWithComment(tempPosPadre + " = HP + " + TsRow.POS_PARENT + " ; ", "Guardamos la referencia del padre");
         CodeUtil.printWithComment(tempPosIndex + " = HP + " + TsRow.POS_INDEX + " ; ", "Guardamos el index del objeto");
         CodeUtil.printWithComment(tempPosSize + " = HP + " + TsRow.POS_SIZE + " ; ", "Guardamos el tamaño del objeto");
-        CodeUtil.printWithComment(tempPosCadena + " = HP + " + TsRow.POS_LABEL + " ; ", "Guardamos el espacio para "
+        CodeUtil.printWithComment(tempPosCadena + " = HP + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + " ; ", "Guardamos el espacio para "
             + ((this.nodo instanceof XmlElement) ? "la etiqueta" : (this.nodo instanceof XmlContent) ? "el contenido" : " el nombre del atributo"));
         //Reserva de espacio
         CodeUtil.printComment("Apartamos espacio para los atributos de " + this._identificador);
@@ -275,5 +275,6 @@ TsRow.POS_OBJECT = "0";
 TsRow.POS_PARENT = "1";
 TsRow.POS_INDEX = "2";
 TsRow.POS_SIZE = "3";
-TsRow.POS_LABEL = "4";
+TsRow.POS_LABEL_CONT_ATTRIBUTE = "4";
 TsRow.SIZE_PROPERTIES_OBJECT = "5";
+TsRow.POS_INIT_CHILDS = TsRow.SIZE_PROPERTIES_OBJECT;

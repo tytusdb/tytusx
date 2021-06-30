@@ -12,11 +12,31 @@ class CodeUtil {
         this.initCad();
         this.generarFuncionesNativas();
     }
+    static generarDefinicionFunciones() {
+        CodeUtil.print("/*************************************/");
+        this.print("void imprimirObjeto();");
+        this.print("void concatenarObjeto();");
+        this.print("void crarLista();");
+        this.print("void equalString();");
+        this.print("void printString();");
+        this.print("void printLnString();");
+        this.print("void imprimirAtributos();");
+        this.print("void imprimirAtributo();");
+        this.print("void imprimirHijos();");
+        CodeUtil.print("/*************************************/");
+        this.print("");
+    }
     static generarFuncionesNativas() {
+        this.generarDefinicionFunciones();
+        this.imprimrObjeto();
+        this.imprimirHijos();
+        this.imprimirAtributo();
+        this.imprimirAtributos();
         this.concatenarObjeto();
         this.crearLista();
         this.genEqualsFunction();
         this.genPrintstring();
+        this.genPrintLnString();
         CodeUtil.print("/*************************************/");
         CodeUtil.print("");
     }
@@ -52,11 +72,12 @@ class CodeUtil {
             }
         }
         cad += ";";
+        cad = (cad == "float ;") ? "" : cad;
         cadFinal += cad;
         return cadFinal;
     }
     static generarTemporal() {
-        var temporal = "t" + this._temporal;
+        var temporal = this.T + this._temporal;
         this._temporal += 1;
         return temporal;
     }
@@ -73,6 +94,11 @@ class CodeUtil {
         CodeUtil.print("int main()");
         CodeUtil.print("{");
         CodeUtil.print(CodeUtil.METHOD_CARGARXML + ";");
+        this.print("SP = SP + 1;\n" +
+            "Stack[SP] = 0 ;\n" +
+            "Stack[SP + 1 ] = 0 ;\n" +
+            "imprimirObjeto();\n" +
+            "SP = SP - 1; ");
         CodeUtil.print("}");
     }
     static createTemps() {
@@ -92,6 +118,32 @@ class CodeUtil {
         this.print("cadena1->stack[P]");
         this.print("**************************************/");
         this.print("void " + this.METHOD_PRINT_STRING);
+        this.print("{");
+        var temporalPosParametro1 = this.generarTemporal();
+        this.printWithComment(temporalPosParametro1 + " = SP + 0 ; ", "Pos parametro 1 (Cadena1)");
+        var temporalRefCadena = this.generarTemporal();
+        this.printWithComment(temporalRefCadena + " = Stack[(int)" + temporalPosParametro1 + "] ; ", "Obtenemos el valor del parametro");
+        var lInicio = this.generarEtiqueta();
+        var lFinl = this.generarEtiqueta();
+        var temporalChar1 = this.generarTemporal();
+        this.printWithComment(lInicio + ":", "Etiqueta Inicio");
+        this.printWithComment(temporalChar1 + " = Repository[(int)" + temporalRefCadena + "] ; ", "Caracter de la cadena.");
+        this.print("if ( " + temporalChar1 + " == -1 ) goto " + lFinl + " ;");
+        this.print('printf("%c",(int)' + temporalChar1 + ');');
+        this.print(temporalRefCadena + " = " + temporalRefCadena + " + " + 1 + " ;");
+        this.print("goto " + lInicio + " ;");
+        this.printWithComment(lFinl + ":", "Etiqueta Fin");
+        //this.print('printf("\\n"); ');
+        this.print("return ;");
+        this.print("}");
+        this.print("");
+    }
+    static genPrintLnString() {
+        this.print("/**************************************");
+        this.print("printLnString(string cadena1 ):void");
+        this.print("cadena1->stack[P]");
+        this.print("**************************************/");
+        this.print("void printLnString()");
         this.print("{");
         var temporalPosParametro1 = this.generarTemporal();
         this.printWithComment(temporalPosParametro1 + " = SP + 0 ; ", "Pos parametro 1 (Cadena1)");
@@ -237,22 +289,253 @@ class CodeUtil {
     }
     static imprimrObjeto() {
         this.print("/**************************************");
-        this.print("concatenarObjeto(Object objetoImprimir ):void");
-        this.print("objetoNuevo->stack[P]");
+        this.print("imprimirObjeto(Object objetoImprimir, boolean imprimirSiEsObjeto ):void");
+        this.print("objetoImprimir->stack[P]");
+        this.print("imprimirSiEsObjeto->stack[P+1]");
         this.print("**************************************/");
         this.print("void imprimirObjeto()");
         this.print("{");
-        var tmpPostParametro1 = this.generarTemporal();
-        this.print(tmpPostParametro1 + " = SP + 0 ;");
-        var tmpParametro1 = this.generarTemporal();
-        this.print(tmpParametro1 + " = Stack[(int)" + tmpPostParametro1 + "]; ");
+        var etiquetaAtributo = this.generarEtiqueta();
+        var etiquetaContenido = this.generarEtiqueta();
+        var etiquetaFin = this.generarEtiqueta();
+        let tmpPostParametro1 = this.generarTemporal();
+        this.printWithComment(tmpPostParametro1 + " = SP + 0 ;", "Posicion del parametro");
+        let tmpPostParametro2 = this.generarTemporal();
+        this.printWithComment(tmpPostParametro2 + " = SP + 1 ;", "Posicion del parametro");
+        let tmpParametro1 = this.generarTemporal();
+        this.printWithComment(tmpParametro1 + " = Stack[(int)" + tmpPostParametro1 + "]; ", "Objeto enviado por parametro");
+        let tmpParametro2 = this.generarTemporal();
+        this.printWithComment(tmpParametro2 + " = Stack[(int)" + tmpPostParametro2 + "]; ", "Indicador enviado por parametro");
+        var tmpPosTipoObjeto = this.generarTemporal();
+        this.printWithComment(tmpPosTipoObjeto + " = " + tmpParametro1 + " + " + TsRow.POS_OBJECT + " ;", "Obtenemos la posicion donde se guarda el tipo de objeto");
         var tmpTipoObjeto = this.generarTemporal();
-        this.print(tmpTipoObjeto + " = Heap[(int)" + tmpParametro1 + "]; ");
+        this.print(tmpTipoObjeto + " = Heap[(int)" + tmpPosTipoObjeto + "]; ");
+        this.print("if ( " + tmpTipoObjeto + " != " + TipoDato3D.objeto + " ) goto " + etiquetaAtributo + " ;");
+        //**********************************************IMPRESION DE OBJETOS
+        this.printComment("Inicia a imprimr un objeto");
+        let tmpPosCadena = this.generarTemporal();
+        this.print(tmpPosCadena + " = " + tmpParametro1 + " + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + " ;");
+        let tmpCadena = this.generarTemporal();
+        this.printWithComment(tmpCadena + " = Heap[(int)" + tmpPosCadena + "];", "Se obtiene la referencia de la etiqueta");
+        //Se imprime el tag de apertura
+        this.printComment("Imrimimos el tag de apertura");
+        this.print('printf("<");');
+        this.printWithComment("SP = SP + 2 ; ", "Se cambia de ambito");
+        //this.guardarTemporales(tmpPostParametro1,tmpCadena)
+        this.printWithComment("Stack[SP] = " + tmpCadena + " ; ", "Se pasa de referncia la etiqueta a imprimir.");
+        this.printWithComment("printString();", "Call: Se llama metodo para imprimir la etiqueta del elemento xml");
+        //this.recuperarTemporales(tmpPostParametro1,tmpCadena)
+        this.printWithComment("SP = SP - 2 ; ", "Se recupera el ambito");
+        //Se imprime los atributos
+        this.printComment("Se imprime los atributos");
+        this.print('printf(" ");');
+        this.printWithComment("SP = SP + 2 ; ", "Se cambia de ambito");
+        //this.guardarTemporales(tmpPostParametro1,tmpCadena);
+        this.printWithComment("Stack[SP] = " + tmpParametro1 + " ;", "Se para la referencia del objeto actual para imprimir sus atributos ");
+        this.printWithComment("imprimirAtributos();", "Call: Se llama funcion para imprimir atributos");
+        //this.recuperarTemporales(tmpPostParametro1,tmpCadena);
+        this.printWithComment("SP = SP - 2 ; ", "Se recupera el ambito");
+        this.print('printf(">\\n");');
+        //Se Imprime el contenido
+        this.printComment("Se Imprime el contenido");
+        this.printWithComment("SP = SP + 2 ; ", "Se cambia de ambito");
+        this.guardarTemporales(tmpPostParametro1, tmpCadena);
+        this.printWithComment("Stack[SP] = " + tmpParametro1 + " ;", "Se para la referencia del objeto actual para imprimir sus hijos ");
+        this.printWithComment("imprimirHijos();", "Imprimimos los hijos del objeto");
+        this.recuperarTemporales(tmpPostParametro1, tmpCadena);
+        this.printWithComment("SP = SP - 2 ; ", "Se recupera el ambito");
+        //Se imprime el tag de cierre
+        this.printComment("Imrimimos el tag de cierre");
+        this.print('printf("</");');
+        this.printWithComment("SP = SP + 2 ; ", "Cambiamos de ambito");
+        //this.guardarTemporales(tmpPostParametro1,tmpCadena);
+        this.printWithComment("Stack[SP] = " + tmpCadena + " ; ", "Se pasa de referncia la etiqueta a imprimir.");
+        this.printWithComment("printString();", "Call: Se llama metodo para imprimir la etiqueta del elemento xml");
+        //this.recuperarTemporales(tmpPostParametro1,tmpCadena);
+        this.printWithComment("SP = SP - 2 ; ", "Recuperamos el ambito");
+        this.print('printf(">\\n");');
+        this.print("goto " + etiquetaFin + " ;");
+        this.printComment("Finaliza a imprimr un objeto");
+        this.print(etiquetaAtributo + ":");
+        this.print("if ( " + tmpTipoObjeto + " != " + TipoDato3D.atributo + " ) goto " + etiquetaContenido + " ;");
+        //**********************************************IMPRESION DE ATRIBUTOS
+        this.printComment("Inicio impresion atributo");
+        this.printWithComment("if ( " + tmpParametro2 + " == 0 ) goto " + etiquetaFin + " ;", "Si el indicador es 0 no imprimimos");
+        let tmpPosValorAtributo = this.generarTemporal();
+        this.printWithComment(tmpPosValorAtributo + " = " + tmpParametro1 + " + " + TsRow.POS_INIT_CHILDS + " ;", "Posicion del apuntador del valor del atributo");
+        let tmpValorAtributo = this.generarTemporal();
+        this.printWithComment(tmpValorAtributo + " = Heap[(int)" + tmpPosValorAtributo + "] ; ", "Referncia del valor del atributo. ");
+        this.print("SP = SP + 2 ; ");
+        //this.guardarTemporales(tmpPostParametro1,tmpValorAtributo);
+        this.printWithComment("Stack[SP] = " + tmpValorAtributo + " ;", "Paso de la cadena a imprimrir como parametro");
+        this.printWithComment("printLnString();", "Call: Imprimri valor atributo");
+        //this.recuperarTemporales(tmpPostParametro1,tmpValorAtributo);
+        this.print("SP = SP - 2 ; ");
+        this.printComment("Finaliza impresion atributo");
+        //**********************************************IMPRESION DE CONTENIDO
+        this.printComment("Inicio Impresion de Contenido");
+        this.print(etiquetaContenido + ":");
+        let tmpPosContenido = this.generarTemporal();
+        this.print(tmpPosContenido + " = " + tmpParametro1 + " + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + " ;");
+        let tmpContenido = this.generarTemporal();
+        this.printWithComment(tmpContenido + " = Heap[(int)" + tmpPosContenido + "];", "Se obtiene la referencia del contenido");
+        this.print("SP = SP + 2 ; ");
+        //this.guardarTemporales(tmpPostParametro1,tmpContenido)
+        this.printWithComment("Stack[SP] = " + tmpContenido + " ; ", "Se pasa de referncia el contenido a imprimir.");
+        this.printWithComment("printLnString();", "Call: Se llama metodo para imprimir contenido ");
+        //this.recuperarTemporales(tmpParametro1,tmpContenido)
+        this.print("SP = SP - 2 ; ");
+        this.printComment("Fin Impresion de Contenido");
+        this.printWithComment(etiquetaFin + ": ", "Etiqueta fin");
+        this.print("return ;");
         this.print("}");
         this.print("");
+    }
+    static imprimirAtributos() {
+        this.print("/**************************************");
+        this.print("imprimirAtributos(Object objetoPadre ):void");
+        this.print("objetoPadre->stack[P]");
+        this.print("**************************************/");
+        this.print("void imprimirAtributos()");
+        this.print("{");
+        var tmpPostParametro1 = this.generarTemporal();
+        this.printWithComment(tmpPostParametro1 + " = SP + 0 ;", "Posicion del parametro");
+        var tmpParametro1 = this.generarTemporal();
+        this.printWithComment(tmpParametro1 + " = Stack[(int)" + tmpPostParametro1 + "]; ", "Objeto enviado por parametro");
+        var tmpPosTamañoObjeto = this.generarTemporal();
+        this.printWithComment(tmpPosTamañoObjeto + " = " + tmpParametro1 + " + " + TsRow.POS_SIZE + " ;", "Obtenemos la posicion donde se guarda el tamaño de objeto");
+        var tmpTamañoObjeto = this.generarTemporal();
+        this.printWithComment(tmpTamañoObjeto + " = Heap[(int)" + tmpPosTamañoObjeto + "] ;", "Obtenemos el tamaño del objeto");
+        var i = this.generarTemporal();
+        this.print(i + " = 0 ;");
+        var lInicio = this.generarEtiqueta();
+        var lFin = this.generarEtiqueta();
+        this.print(lInicio + ": ");
+        this.printWithComment("if (" + i + " >= " + tmpTamañoObjeto + " ) goto " + lFin + " ;", "Recorremos hasta que i>=tamaño objeto");
+        var tmpPosInicioHijos = this.generarTemporal();
+        this.print(tmpPosInicioHijos + " = " + tmpParametro1 + " + " + TsRow.SIZE_PROPERTIES_OBJECT + " ;");
+        var tmpPosHijo = this.generarTemporal();
+        this.print(tmpPosHijo + " = " + tmpPosInicioHijos + " + " + i + " ;");
+        var tmpHijo = this.generarTemporal();
+        this.printWithComment(tmpHijo + " = Heap[(int)" + tmpPosHijo + "];", "Obtenemos el hijo para mandar a imprimir");
+        this.print("SP = SP + 1 ;");
+        this.print("Stack[SP] = " + tmpHijo + ";");
+        this.print("imprimirAtributo();");
+        this.print("SP = SP - 1 ;");
+        this.print(i + " = " + i + " + 1 ;");
+        this.print("goto " + lInicio + " ;");
+        this.printWithComment(lFin + ":", "Etiqueta fin");
+        this.print("return ;");
+        this.print("}");
+        this.print("");
+    }
+    static imprimirAtributo() {
+        this.print("/**************************************");
+        this.print("imprimirAtributo(Attribute atributo ):void");
+        this.print("atributo->stack[P]");
+        this.print("**************************************/");
+        this.print("void imprimirAtributo()");
+        this.print("{");
+        var etiquetaFin = this.generarEtiqueta();
+        var tmpPostParametro1 = this.generarTemporal();
+        this.printWithComment(tmpPostParametro1 + " = SP + 0 ;", "Posicion del parametro");
+        var tmpParametro1 = this.generarTemporal();
+        this.printWithComment(tmpParametro1 + " = Stack[(int)" + tmpPostParametro1 + "]; ", "Objeto enviado por parametro");
+        var tmpPosTipoObjeto = this.generarTemporal();
+        this.printWithComment(tmpPosTipoObjeto + " = " + tmpParametro1 + " + " + TsRow.POS_OBJECT + " ;", "Obtenemos la posicion donde se guarda el tipo de objeto");
+        var tmpTipoObjeto = this.generarTemporal();
+        this.print(tmpTipoObjeto + " = Heap[(int)" + tmpPosTipoObjeto + "]; ");
+        this.print("if ( " + tmpTipoObjeto + " != " + TipoDato3D.atributo + " ) goto " + etiquetaFin + " ;");
+        var tmpRefNombreAtributo = this.generarTemporal();
+        var tmpNombreAributo = this.generarTemporal();
+        var tmpRefValorAtributo = this.generarTemporal();
+        var tmpValorAtributo = this.generarTemporal();
+        this.printWithComment(tmpRefNombreAtributo + " = " + tmpParametro1 + " + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + ";", "Posicion del nombre");
+        this.printWithComment(tmpNombreAributo + " = Heap[(int)" + tmpRefNombreAtributo + "];", "Referenia al nombre");
+        this.print("SP = SP + 1 ; ");
+        this.printWithComment("Stack[SP] = " + tmpNombreAributo + " ;", "Se para referencia del nombre");
+        this.print("printString();");
+        this.print("SP = SP - 1 ; ");
+        this.print('printf("=");');
+        this.print('printf("\\\"");');
+        this.print(tmpRefValorAtributo + " = " + tmpParametro1 + " + " + TsRow.SIZE_PROPERTIES_OBJECT + " ;");
+        this.printWithComment(tmpValorAtributo + " = Heap[(int)" + tmpRefValorAtributo + "];", "Referenia al valor");
+        this.print("SP = SP + 1 ; ");
+        this.printWithComment("Stack[SP] = " + tmpValorAtributo + "; ", "Pasamos el valor del atributo para imprimir");
+        this.print("printString();");
+        this.print("SP = SP - 1 ; ");
+        this.print('printf("\\\" ");');
+        this.print(etiquetaFin + ": ");
+        this.print("return ;");
+        this.print("}");
+        this.print("");
+    }
+    static imprimirHijos() {
+        this.print("/**************************************");
+        this.print("imprimirHijos(Object objetoPadre ):void");
+        this.print("objetoPadre->stack[P]");
+        this.print("**************************************/");
+        this.print("void imprimirHijos()");
+        this.print("{");
+        var tmpPostParametro1 = this.generarTemporal();
+        this.printWithComment(tmpPostParametro1 + " = SP + 0 ;", "Posicion del parametro");
+        var tmpParametro1 = this.generarTemporal();
+        this.printWithComment(tmpParametro1 + " = Stack[(int)" + tmpPostParametro1 + "]; ", "Objeto enviado por parametro");
+        var tmpPosTamañoObjeto = this.generarTemporal();
+        this.printWithComment(tmpPosTamañoObjeto + " = " + tmpParametro1 + " + " + TsRow.POS_SIZE + " ;", "Obtenemos la posicion donde se guarda el tamaño de objeto");
+        var tmpTamañoObjeto = this.generarTemporal();
+        this.printWithComment(tmpTamañoObjeto + " = Heap[(int)" + tmpPosTamañoObjeto + "] ;", "Obtenemos el tamaño del objeto");
+        var i = this.generarTemporal();
+        this.print(i + " = 0 ;");
+        let lInicio = this.generarEtiqueta();
+        var lFin = this.generarEtiqueta();
+        this.print(lInicio + ": ");
+        this.printWithComment("if (" + i + " >= " + tmpTamañoObjeto + " ) goto " + lFin + " ;", "Recorremos hasta que i>=tamaño objeto");
+        var tmpPosInicioHijos = this.generarTemporal();
+        this.print(tmpPosInicioHijos + " = " + tmpParametro1 + " + " + TsRow.POS_INIT_CHILDS + " ;");
+        var tmpPosHijo = this.generarTemporal();
+        this.print(tmpPosHijo + " = " + tmpPosInicioHijos + " + " + i + " ;");
+        var tmpHijo = this.generarTemporal();
+        this.printWithComment(tmpHijo + " = Heap[(int)" + tmpPosHijo + "];", "Obtenemos el hijo para mandar a imprimir");
+        this.printWithComment("SP = SP + 1 ;", "Se cambia el ambito");
+        this.guardarTemporales(tmpPostParametro1, tmpHijo);
+        this.print("Stack[SP] = " + tmpHijo + ";");
+        let tmpParametro2 = this.generarTemporal();
+        this.printWithComment(tmpParametro2 + " = SP + 1 ;", "Parametro para imprimir atributos.");
+        this.printWithComment("Stack[(int)" + tmpParametro2 + "] = 0 ;", " En este caso enviamos 0 default porque son hijos");
+        this.print("imprimirObjeto();");
+        this.recuperarTemporales(tmpPostParametro1, tmpHijo);
+        this.printWithComment("SP = SP - 1 ;", "Se recupera el ambito");
+        this.printWithComment(i + " = " + i + " + 1 ;", "Incrementamos el contador (i++)");
+        this.print("goto " + lInicio + " ;");
+        this.printWithComment(lFin + ":", "Etiqueta fin");
+        this.print("return ;");
+        this.print("}");
+        this.print("");
+    }
+    static guardarTemporales(tmpMenor, tmpMayor) {
+        let inicio = +(tmpMenor.replace(this.T, ""));
+        let final = +(tmpMayor.replace(this.T, ""));
+        this.printComment("Guardamos los temporales en la pila");
+        for (let i = inicio; i <= final; i++) {
+            this.print("Stack[SP] = " + this.T + i + " ;");
+            this.print("SP = SP + 1 ;");
+        }
+        this.printComment("Fin de guardar temporales en la pila");
+    }
+    static recuperarTemporales(tmpMenor, tmpMayor) {
+        let inicio = +(tmpMenor.replace(this.T, ""));
+        let final = +(tmpMayor.replace(this.T, ""));
+        this.printComment("Recuperamos los temporales en la pila");
+        for (let i = final; i >= inicio; i--) {
+            this.print("SP = SP - 1 ;");
+            this.print(this.T + i + " = Stack[SP] ;");
+        }
+        this.printComment("Fin de recuperacion de temporales en la pila");
     }
 }
 CodeUtil.METHOD_CARGARXML = "cargarXml()";
 CodeUtil.METHOD_EQUAL_ = "equalString()";
 CodeUtil.METHOD_PRINT_STRING = "printString()";
 CodeUtil._cadSalida = "";
+CodeUtil.T = "t";
