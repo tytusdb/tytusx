@@ -92,8 +92,16 @@
 %{
     const thefor = require('./Instrucciones/For');
     const atributosexpresion = require("./Instrucciones/AtributosExpresion")
-    const identificadorpredicado = require("./Instrucciones/IdentificadorPredicado")
+    const identificadorpredicado = require("../../../XPATH/Analizador/Instrucciones/IdentificadorPredicado")
     const aritmetica= require("./Expresiones/Aritmetica");
+    const logica = require ("./Expresiones/Logica");
+    cont relacional = require("./Expresiones/Relacional");
+    const barrasnodo= require("../../../XPATH/Analizador/Instrucciones/BarrasNodo")
+    const identificador= require("./Expresiones/Identificador");
+    const nativo= require("./Expresiones/Nativo");
+    const asignacion= require("./Instrucciones/Asignacion")
+
+    
 
 
 %}
@@ -112,44 +120,53 @@ INSTRUCCIONES
     ;
 
 INSTRUCCION
-    :FOR {$$=$1}
+    :FOR {$$=$1}        
     |LET {$$=$1}
     ;   
 
 FOR
-    :RFOR POSICIONAMIENTO RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO  
-    |RFOR POSICIONAMIENTO RWHERE CONDICION RRETURN RETORNO
-    |RFOR POSICIONAMIENTO RORDERBY CONDICION RRETURN RETORNO
-    |RFOR POSICIONAMIENTO RRETURN RETORNO
+    :RFOR VARIABLE POSICIONAMIENTO RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO  {$$=new thefor.default($2,$9,@1.first_line,@1.first_column,$3,$5,$7);}
+    |RFOR VARIABLE POSICIONAMIENTO RWHERE CONDICION RRETURN RETORNO  {$$=new thefor.default($2,$7,@1.first_line,@1.first_column,$3,$5,[]);}
+    |RFOR VARIABLE POSICIONAMIENTO RORDERBY CONDICION RRETURN RETORNO  {$$=new thefor.default($2,$7,@1.first_line,@1.first_column,$3,[],$7);}
+    |RFOR VARIABLE POSICIONAMIENTO RRETURN RETORNO  {$$=new thefor.default($2,$5,@1.first_line,@1.first_column,$3,[],[]);}
     ;
+
+LET 
+    :RLET VARIABLE LETDOSPUNTOS L_FTO RRETURN RETORNO {}
+    ;    
 
 POSICIONAMIENTO
-    :VARIABLE LISTAPOSICION
+    :FORCONSULTA    {$$=$1}
+    |FORCONTEO      {$$=$1}
     ;
 
-LISTAPOSICION
-    :RIN FOPEN CONSULTA
-    |RIN L_FTO
-    |RAT VARIABLE LISTAPOSICION
-    |RIN L_FTO  POSICIONAMIENTO 
+FORCONSULTA
+    :RIN FOPEN CONSULTA     {$$=$3}
+    |RAT VARIABLE FORCONSULTA {$$=$2}
+    |VARIABLE POSICIONAMIENTO {$$=$1}
+    ;
+
+FORCONTEO
+    :RIN L_FTO                  {$$=$2}
+    |RIN L_FTO POSICIONAMIENTO  {$$=$2}
     ;
 
 L_FTO
-    :L_FTO FTO
-    |FTO
+    :L_FTO FTO      {$1.push($2); $$=$1;}
+    |FTO            {$$=[$1];}
     ;
 
 FTO
-    :PARIZQ ENTERO CONECTOR ENTERO PARDER
-    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR 
+    :PARIZQ ENTERO CONECTOR ENTERO PARDER               {$$=$2,$3,$4}
+    |PARIZQ ENTERO CONECTOR ENTERO PARDER CONECTOR      {$$=$2,$3,$4}
     ;
 
 VARIABLE
-    :DOLAR IDENTIFICADOR
+    :DOLAR IDENTIFICADOR                                {$$=$2}
     ;    
 
 FOPEN
-    :RDOC PARIZQ CADENA PARDER 
+    :RDOC PARIZQ CADENA PARDER                          {$$=$2}
     ;
 
 CONECTOR
@@ -177,30 +194,32 @@ FUNCIONES
     ;
 
 ASIGNACION
-    :IDENTIFICADOR IGUAL VARIABLE
-    |IDENTIFICADOR IGUAL VARIABLE CONECTOR ASIGNACION
+    :IDENTIFICADOR IGUAL VARIABLE {$$=new asignacion.default($1,$3,@1.first_line,@1.first_column);}
+    |IDENTIFICADOR IGUAL VARIABLE CONECTOR ASIGNACION {$$=new asignacion.default($1,$3,@1.first_line,@1.first_column);}
     ;
 
 CONDICION
-    :VARIABLE L_CONSULTAS
-    |VARIABLE L_CONSULTAS CONECTOR CONDICION
-    |VARIABLE
+    :VARIABLE L_CONSULTAS    {$$=$2}                   
+    |VARIABLE L_CONSULTAS CONECTOR CONDICION  {$$=$2}    
+    |VARIABLE               {$$=$1}
     ;
 
 L_CONSULTAS
-    :L_CONSULTAS CONSULTA
-    |CONSULTA
+    :L_CONSULTAS CONSULTA   {$1.push($2); $$=$1;}
+    |CONSULTA               {$$=[$1];}
     ;
 
 CONSULTA
-    :OPCIONESCONSULT EXPRESION SALIDA
-    |OPCIONESCONSULT PREDICADO SALIDA
-    |EXPRESION SALIDA
+    :DOBLEBARRA EXPRESION   {$$ = new barrasnodo.default($1,$3,@1.first_line,@1.first_column, $2);}
+    |BARRA EXPRESION        {$$ = new barrasnodo.default($1,$2,@1.first_line,@1.first_column, null);}
+    |OPCIONESCONSULT EXPRESION SALIDA   {$$=$1+$2}
+    |OPCIONESCONSULT PREDICADO SALIDA   {$$=$1+$2}
+    |EXPRESION SALIDA                   {$$=$1}
     ;
 
 
 SALIDA      
-    :CONSULTA   
+    :CONSULTA               {$$=$1}
     |
     ;
 
@@ -221,7 +240,7 @@ PREDICADO
 
 EXPRESION
     :ENTERO                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
-    |IDENTIFICADOR              {$$=new Identificador.default($1,@1.first_line,@1.first_column);}
+    |IDENTIFICADOR              {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
     |CADENA                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
     |ARROBA EXPRESION           {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO    {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}
