@@ -320,12 +320,13 @@ PREDICADO
 DATO
 //Tipos de datos
         :tk_numero                                                                      {$$= {tipo:"NUMERO",valor:$1}}  
-        |tk_identificador                                                               {$$= {tipo:"ID",valor:$1}}                                                         
+        |tk_identificador F_NATIVAS                                                     {$$= {tipo:"ID",valor:$1}}                                                         
         |tk_hilera                                                                      {$$= {tipo:"CADENA",valor:$1}}                                                                   
         |tk_arroba tk_identificador                                                     {$$= {tipo:"ATRIBUTO",valor:$2}}                                                
         |tk_last tk_parentesis_izq tk_parentesis_der                                    {$$= {tipo:"LAST"}} 
-        |VARIABLE                                                                       {$$= {tipo:"VARIABLE",valor:$1}} 
+        |VARIABLE F_NATIVAS                                                             {$$= {tipo:"VARIABLE",valor:$1}} 
         |LLAMADA_F                                                                      {$$= {tipo:"LLAMADA_F",valor:$1}} 
+        |XPATHGRA                                                                       {$$= {tipo:"xPath",valor:$1}} 
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
         |DATO tk_menos DATO                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
@@ -349,6 +350,10 @@ DATO
         |DATO tk_ne DATO                                                                {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}  
         |DATO tk_and DATO                                                               {$$={tipo:"AND",valor1:$1,valor2:$3};}  
         |DATO tk_or DATO                                                                {$$={tipo:"OR",valor1:$1,valor2:$3};}  
+;
+F_NATIVAS
+        :tk_punto tk_to tk_identificador tk_parentesis_izq tk_parentesis_der
+        |
 ;
 F_DATA
         :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}

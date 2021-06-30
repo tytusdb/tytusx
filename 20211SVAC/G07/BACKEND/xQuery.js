@@ -205,6 +205,15 @@ function procesarDato(instruccion,entorno,tablaSimbolos){
             valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
             valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
             return valor1 || valor2 ;
+        case "xPath":        
+            let arregloEntornos=procesarXpath(instruccion.valor,entorno,null)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            for (const iterator of arregloEntornos) {
+                if(iterator.valorAtributo){
+                    return iterator.valorAtributo;
+                }
+                return iterator.texto
+            }
     }
     
 }
