@@ -83,20 +83,21 @@ function CargarXML(){
                 analisisXpathCorrecto = EjecutarXpathAsc(contenidoXpath);
 
                 if (analisisXpathCorrecto){
-
+                    
                     DOTXPATHASTasc = GenerarDOT.recorrerDOT(nodoxPATHASC);
                     DOTXPATHASTasc = "digraph {" + DOTXPATHASTasc + "}";
                     localStorage.setItem('astXPATH',DOTXPATHASTasc);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    
+                    traducirXPath(nodoxPATHASC);
+                    console.log(concatenaXPath)
                     salidaGlobal = "";
                     var salidaGlobal2="";
                     var contador = 1;
                     resultadoXPath.forEach(function (funcion){
 
-                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaGlobal+="↓ Resultado consulta\n\n";
                         salidaRecursiva = "";
                         salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
                         //console.log(salidaXPath);
@@ -111,7 +112,8 @@ function CargarXML(){
                         contador++;
                     } );
                     salidaGlobal2=salidaGlobal;
-                    setTraduccionXPath(salidaGlobal2.replace("↓ Resultado consulta 1 ↓\n\n",""))
+                    setTraduccionXPath(salidaGlobal2.replace("↓ Resultado consulta\n\n","")
+                    .replace("↓ Resultado consulta\n\n",""))
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
@@ -609,7 +611,7 @@ function setTraduction(){
     
     `;
 
-    for(var i = 0; i< contTemporal;i++ ){
+    for(var i = 0; i< contTemporal+1;i++ ){
         if(i==0){
             globalC3D += `double t`+i.toString();
         } else{
@@ -643,7 +645,7 @@ function setTraduction(){
     }
 
     
-    globalC3D +=xml3D+'}\n'+ xpathC3D ;
+    globalC3D +=xml3D+'}\n'+concatenaXPath+ xpathC3D ;
 
    /* for(int loop = 0; loop < stack[1]; loop++){
         printf("%c", (char) heap[loop]);}
@@ -655,8 +657,8 @@ function setTraduction(){
         \n \n
         void main() {
             //el stack pointer inicia en 2 porque en la posicion 0 guardamos el encoding
-            //y la posicion 1 indicara donde termina el xml en el heap
-            //El heap pointer inicia en cero.
+
+
             SP = 2;
             HP = 0;
 
