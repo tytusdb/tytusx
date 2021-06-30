@@ -3,8 +3,12 @@
 import tablaSimbolos from "../../XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";
 import Aritmetica from "../Expresion/Aritmetica";
+import Bit from "../Expresion/Bit";
 import Identificador from "../Expresion/Identificador";
+import Logica from "../Expresion/Logica";
+import Relacional from "../Expresion/Relacional";
 import Termino from "../Expresion/Termino";
+import Unario from "../Expresion/Unario";
 import { reporteOp } from "../Reportes/reporteOp";
 import Arbol from "../Simbolo/Arbol";
 import Tipo, { tipoDato } from "../Simbolo/Tipo";
@@ -28,9 +32,9 @@ export default class Asignacion extends Instruccion {
                 idtemp = a.contenido;
                 cadena += a.contenido + "="
 
-            } else if(this.Temporales instanceof Identificador){
+            } else if (this.Temporales instanceof Identificador) {
                 let a = this.Temporales.interpretar(arbol, tabla)
-                idtemp= a.contenido;
+                idtemp = a.contenido;
                 cadena += a.contenido + "="
             }
         }
@@ -38,92 +42,111 @@ export default class Asignacion extends Instruccion {
             if (this.Expresion instanceof Aritmetica) {
                 let a = this.Expresion.interpretar(arbol, tabla)
                 if (a.operadorder == idtemp || a.operadorizq == idtemp) {
-                    if (a.operadorder === "0" && a.operador === "+") {
+                    if (a.operadorder === "0" && a.operador === "+" || a.operadorder == 0 && a.operador === "+") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 8", idtemp + "=" + idtemp + "+0" + ";", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorizq === "0" && a.operador === "+") {
+                    } else if (a.operadorizq === "0" && a.operador === "+" || a.operadorizq == 0 && a.operador === "+") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 8", idtemp + "=" + "0+" + idtemp + ";", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorder === "0" && a.operador === "-") {
+                    } else if (a.operadorder === "0" && a.operador === "-" || a.operadorder == 0 && a.operador === "-") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 9", idtemp + "=" + idtemp + "-0" + ";", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorizq === "0" && a.operador === "-") {
+                    } else if (a.operadorizq === "0" && a.operador === "-" || a.operadorizq == 0 && a.operador === "-") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 9", idtemp + "=" + "0-" + idtemp + ";", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorder === "1" && a.operador === "*") {
+                    } else if (a.operadorder === "1" && a.operador === "*" || a.operadorder == 1 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 10", idtemp + "=" + idtemp + "*1" + ";", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorizq === "1" && a.operador === "*") {
+                    } else if (a.operadorizq === "1" && a.operador === "*" || a.operadorizq == 1 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 10", idtemp + "=" + "1*" + idtemp + ";", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorder === "1" && a.operador === "/") {
+                    } else if (a.operadorder === "1" && a.operador === "/" || a.operadorder == 1 && a.operador === "/") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 11", idtemp + "=" + idtemp + "/1;", "", a.linea, a.columna)
                         arbol.setReporte(report)
                         return ""
-                    } else if (a.operadorizq === "1" && a.operador === "/") {
+                    } else if (a.operadorizq === "1" && a.operador === "/" || a.operadorizq == 1 && a.operador === "/") {
+                        return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
+                    } else {
                         return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
                     }
                 } else {
-                    if (a.operadorder === "0" && a.operador === "+") {
+                    if (a.operadorder === "0" && a.operador === "+" || a.operadorder == 0 && a.operador === "+") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 12", idtemp + "= " + a.operadorizq + "+0;", idtemp + "=" + a.operadorizq + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorizq + ";"
-                    } else if (a.operadorizq === "0" && a.operador === "+") {
+                    } else if (a.operadorizq === "0" && a.operador === "+" || a.operadorizq == 0 && a.operador === "+") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 12", idtemp + "= 0+" + a.operadorder + ";", idtemp + "=" + a.operadorder + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorder + ";"
-                    } else if (a.operadorder === "0" && a.operador === "-") {
+                    } else if (a.operadorder === "0" && a.operador === "-" || a.operadorder == 0 && a.operador === "-") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 13", idtemp + "=" + a.operadorizq + "-0;", idtemp + "=" + a.operadorizq + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorizq + ";"
-                    } else if (a.operadorizq === "0" && a.operador === "-") {
+                    } else if (a.operadorizq === "0" && a.operador === "-" || a.operadorizq == 0 && a.operador === "-") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 13", idtemp + "= 0-" + a.operadorder + ";", idtemp + "=" + a.operadorder + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorder + ";"
-                    } else if (a.operadorder === "1" && a.operador === "*") {
+                    } else if (a.operadorder === "1" && a.operador === "*" || a.operadorder == 1 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 14", idtemp + "=" + a.operadorizq + "*1;", idtemp + "=" + a.operadorizq + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorizq + ";"
-                    } else if (a.operadorizq === "1" && a.operador === "*") {
+                    } else if (a.operadorizq === "1" && a.operador === "*" || a.operadorizq == 1 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 14", idtemp + "= 1*" + a.operadorder + ";", idtemp + "=" + a.operadorder + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorder + ";"
-                    } else if (a.operadorder === "2" && a.operador === "*") {
+                    } else if (a.operadorder === "2" && a.operador === "*" || a.operadorder == 2 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 16", idtemp + "=" + a.operadorizq + "*2;", idtemp + "=" + a.operadorizq + "+" + a.operadorizq + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorizq + "+" + a.operadorizq + ";"
-                    } else if (a.operadorizq === "2" && a.operador === "*") {
+                    } else if (a.operadorizq === "2" && a.operador === "*" || a.operadorizq == 2 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 16", idtemp + "= 2*" + a.operadorder + ";", idtemp + "=" + a.operadorder + "+" + a.operadorder + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorizq + "+" + a.operadorizq + ";"
-                    } else if (a.operadorder === "0" && a.operador === "*") {
+                    } else if (a.operadorder === "0" && a.operador === "*" || a.operadorder == 0 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 17", idtemp + "=" + a.operadorizq + "*0;", idtemp + "=" + "0;", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + "0;"
-                    } else if (a.operadorizq === "0" && a.operador === "*") {
+                    } else if (a.operadorizq === "0" && a.operador === "*" || a.operadorizq == 0 && a.operador === "*") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 17", idtemp + "= 0*" + a.operadorder + ";", idtemp + "=" + "0;", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + "0;"
-                    } else if (a.operadorder === "1" && a.operador === "/") {
+                    } else if (a.operadorder === "1" && a.operador === "/" || a.operadorder == 1 && a.operador === "/") {
                         let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 15", idtemp + "=" + a.operadorizq + "/1;", idtemp + "=" + a.operadorizq + ";", a.linea, a.columna)
                         arbol.setReporte(report)
                         return idtemp + "=" + a.operadorizq + ";"
-                    } else if (a.operadorizq === "0" && a.operador === "/"|| a.operadorizq==0) {
-                        let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 18", idtemp + "= 0/" + a.operadorder + ";", idtemp + "=" +"0;", a.linea, a.columna)
+                    } else if (a.operadorizq === "0" && a.operador === "/" || a.operadorizq == 0 && a.operador === "/") {
+                        let report = new reporteOp("Simplificación algebraica y por fuerza", "Regla 18", idtemp + "= 0/" + a.operadorder + ";", idtemp + "=" + "0;", a.linea, a.columna)
                         arbol.setReporte(report)
-                        return idtemp + "=" +"0;"
-                    } else if (a.operadorizq === "1" && a.operador === "/") {
+                        return idtemp + "=" + "0;"
+                    } else if (a.operadorizq === "1" && a.operador === "/" || a.operadorder == 1 && a.operador === "/") {
+                        return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
+                    } else {
                         return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
                     }
                 }
+            } else if (this.Expresion instanceof Logica) {
+                let a = this.Expresion.interpretar(arbol, tabla)
+                return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
+            } else if (this.Expresion instanceof Relacional) {
+                let a = this.Expresion.interpretar(arbol, tabla)
+                return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
+            } else if (this.Expresion instanceof Bit) {
+                let a = this.Expresion.interpretar(arbol, tabla)
+                return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
+            } else if (this.Expresion instanceof Unario) {
+                let a = this.Expresion.interpretar(arbol, tabla)
+                return idtemp + "=" + a.operadorizq + a.operador + a.operadorder + ";"
+            } else if (this.Expresion instanceof Identificador) {
+                //SE HACE OTRO PROCEDIMIENTO
+            } else if (this.Expresion instanceof Termino) {
+                //SE HACE OTRO PROCEDIMIENTO
             }
-
 
 
         }

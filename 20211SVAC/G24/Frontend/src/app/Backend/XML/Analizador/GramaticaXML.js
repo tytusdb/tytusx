@@ -102,10 +102,22 @@ case 7: case 8:
 this.$ = new objeto.default($$[$0-3],null,$$[$0-2],$$[$0],_$[$0-4].first_line,_$[$0-4].first_column);
 break;
 case 9:
-this.$ = new objeto.default($$[$0-6],null,$$[$0-5],$$[$0-3],_$[$0-7].first_line,_$[$0-7].first_column);
+
+                this.$ = new objeto.default($$[$0-6],null,$$[$0-5],$$[$0-3],_$[$0-7].first_line,_$[$0-7].first_column);
+                if($$[$0-6].toString() != $$[$0-1].toString()){
+                        console.log("ERROR SEMANTICO")
+                        inicio.listaErrores.push(new CNodoErrores.default("Semantico XML","Error nombre Etiqueta "+$$[$0-6].toString()+", con "+$$[$0-1].toString(),_$[$0-7].first_line,_$[$0-7].first_column)); 
+                }
+        
 break;
 case 10:
-this.$ = new objeto.default($$[$0-5],$$[$0-2],$$[$0-4],null,_$[$0-6].first_line,_$[$0-6].first_column);
+
+                this.$ = new objeto.default($$[$0-5],$$[$0-2],$$[$0-4],null,_$[$0-6].first_line,_$[$0-6].first_column);
+                if($$[$0-5].toString() != $$[$0-1].toString()){
+                        console.log("ERROR SEMANTICO")
+                        inicio.listaErrores.push(new CNodoErrores.default("Semantico XML","Error nombre Etiqueta "+$$[$0-5].toString()+", con "+$$[$0-1].toString(),_$[$0-6].first_line,_$[$0-6].first_column)); 
+                }
+        
 break;
 case 11:
 $$[$0-1].push($$[$0]);this.$=$$[$0-1];

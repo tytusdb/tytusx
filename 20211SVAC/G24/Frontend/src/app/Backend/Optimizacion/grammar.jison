@@ -71,9 +71,9 @@ escape                              \\{escapechar}
 [0-9]+("."[0-9]+)?\b            return 'NUMBER'
 [$][t]([a-zA-Z_0-9])+              return 'TEMPORAL'
 [$][v]([0-9]+)?                    return 'VALOR_RET'
-[$][s]([0-9]+)?                    return 'PILA'
+[s][p]                              return 'PILA'
 [$][r][a]([0-9]+)?                 return 'RA'
-[$][p]                             return 'PUNTERO'
+[h][p]                             return 'PUNTERO'
 [<]([a-zA-Z"."]+)[>]                return 'LIBRERIA'
 "#include"                      return 'INCLUDE'
 
@@ -126,7 +126,7 @@ escape                              \\{escapechar}
 "<<"                  return 'SHIFTIZQ'
 
 <<EOF>>               return 'EOF'
-.                     {inicio.listaErrores.push(new CNodoErrores.default("Lexico","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yytext +" Linea: "+ yylloc.first_line + "Columna: " + yylloc.first_column);}
+.                     {inicio.listaErrores.push(new CNodoErrores.default("Lexico Optimizacion","No se esperaba el caracter: "+yytext,yylloc.first_line,yylloc.first_column)); console.log("Lexico, No se esperaba el caracter: "+yytext +" Linea: "+ yylloc.first_line + "Columna: " + yylloc.first_column);}
 /lex
 
 // DEFINIMOS PRECEDENCIA DE OPERADORES

@@ -19,7 +19,7 @@ export default class MultipleComa extends Instruccion {
         var operadorizq = this.expresion1.interpretar(arbol, tabla);
         var operadorder = this.expresion2.interpretar(arbol, tabla);
         let cadena=""
-        cadena+= operadorizq+","+operadorder;
+        cadena+= operadorizq.contenido+","+operadorder.contenido;
         return cadena
     }
 

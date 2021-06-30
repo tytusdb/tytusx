@@ -10,7 +10,7 @@ export default class Llamada extends Instruccion {
         this.identificador = identificador;
     }
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        return this
+        return this.identificador+"();"
     }
 
 }
