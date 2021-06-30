@@ -18,19 +18,11 @@ class TraductorXML{
         xmlC3D = "";
         temporal0 = "t"+contadorTemporales;
         contadorTemporales++;
-        xmlC3D += `//El temporal ` + temporal0 + ` tiene la posicion inicial del Heap Pointer :D
-        `;
-        xmlC3D += temporal0 + ` = HP;
-        `;
-        T0 = HP;
         temporal1 = "t"+contadorTemporales;
         contadorTemporales++;
-        xmlC3D += `//El temporal ` + temporal1 + ` tiene la primera posicion disponible en el stack :O
-        `;
-        xmlC3D += temporal1 + ` = SP;
 
+        xmlC3D += `
         //en la primera posicion del heap iniciara nuestro XML mapeado en el heap`;
-        T1 = SP;
 
         this.recorrerObjetos(objetosAux)
 
@@ -47,8 +39,7 @@ class TraductorXML{
         //guardamos en la posicion 1 (definida por default) del stack, 
         //donde termina el xml en el heap
         stack[(int)1]= t0;`;
-        stack[1] = T0;
-
+        finalXML = T0;
         return xmlC3D;
 
     }
@@ -80,35 +71,59 @@ class TraductorXML{
         //guardamos un -1 para indicar que empieza un objeto
         heap[(int)HP] = -1;`;
             heap.push(-1);
-            var etiquetaAux = objeto.getID();
-        
             xmlC3D += `
-        //empezamos a guardar la etiqueta: ` + etiquetaAux;
-            
-            for(var i = 0; i<etiquetaAux.length; i++){
-                xmlC3D += `
         //aumentamos en 1 el Heap Pointer
         HP = HP + 1;`;
-                HP = HP + 1;
-                xmlC3D += `
-        //guardamos la ` + etiquetaAux[i];
-                xmlC3D += `
-        heap[(int)HP] = ` + etiquetaAux.codePointAt(i) + `;`;
-                heap.push(etiquetaAux.codePointAt(i));
-            }
+            HP = HP + 1;
+
+            xmlC3D += `
+        //El temporal ` + temporal0 + ` tiene el valor del Heap Pointer :D
+        `;
+                xmlC3D += temporal0 + ` = HP;
+        `;
+                T0 = HP;
+                
+                xmlC3D += `//El temporal ` + temporal1 + ` tiene el valor del stack :O
+        `;
+                xmlC3D += temporal1 + ` = SP;
+        `;
+                T1 = SP;
+
+                var etiquetaAux = objeto.getID();
 
             xmlC3D += `
         //guardamos en el stack la referencia al heap de nuestro objeto: ` + etiquetaAux;
-            xmlC3D += `
+                        xmlC3D += `
         stack[(int)`+ temporal1 + `] = `+ temporal0 + `;`;
             stack.push(T0);
-            objeto.SetearPosicion(T0);
+            objeto.SetearPosicion(T1);
             xmlC3D += `
         //aumentamos en 1 el temporal: `+ temporal1;
             xmlC3D += `
         ` + temporal1 + ` = ` + temporal1 + ` + 1;` ;
             T1 = T1 + 1;
-
+            SP = T1;
+    
+            
+               
+            xmlC3D += `
+        //empezamos a guardar la etiqueta: ` + etiquetaAux;
+            
+            for(var i = 0; i<etiquetaAux.length; i++){
+                xmlC3D += `
+        //guardamos la ` + etiquetaAux[i];
+                xmlC3D += `
+        heap[(int)HP] = ` + etiquetaAux.codePointAt(i) + `;`;
+                heap.push(etiquetaAux.codePointAt(i));
+                xmlC3D += `
+        //aumentamos en 1 el Heap Pointer
+        HP = HP + 1;`;
+                HP = HP + 1;
+            }
+            xmlC3D += `
+        //disminuimos en 1 el Heap Pointer
+        HP = HP - 1;`;
+            HP = HP - 1;
             if (objeto.getAtributos().length > 0){
                 objeto.getAtributos().forEach(function (atributo){
                     xmlC3D += `
@@ -128,8 +143,25 @@ class TraductorXML{
                     xmlC3D += `
         ` + temporal0 + ` = HP;`;
                     T0 = HP;
-                    var atributoAux = atributo.getID();
-                    xmlC3D += `
+                    T1 = SP;
+ 
+            var atributoAux = atributo.getID();
+
+            xmlC3D += `
+        //guardamos en el stack la referencia al heap de nuestro atributo: ` + atributoAux;
+            xmlC3D += `
+        stack[(int)`+ temporal1 + `] = `+ temporal0 + `;`;
+            stack.push(T0);
+            atributo.SetearPosicion(T1);
+            xmlC3D += `
+        //aumentamos en 1 el temporal: `+ temporal1;
+                xmlC3D += `
+        ` + temporal1 + ` = ` + temporal1 + ` + 1;` ;
+                T1 = T1 + 1;
+                SP = T1;
+
+                
+                xmlC3D += `
         //iniciamos a guardar el identificador del atributo: ` + atributoAux;
                     
                     for(var i = 0; i<atributoAux.length; i++){                      
@@ -167,19 +199,11 @@ class TraductorXML{
         HP = HP + 1;`;
                         HP = HP + 1;
                     }
-
+                    xmlC3D += `
+        //disminuimos en 1 el Heap Pointer
+        HP = HP - 1;`;
                     HP = HP - 1;
-                    xmlC3D += `
-        //guardamos en el stack la referencia al heap de nuestro atributo: ` + atributoAux;
-                    xmlC3D += `
-        stack[(int)`+ temporal1 + `] = `+ temporal0 + `;`;
-                    stack.push(T0);
-                    atributo.SetearPosicion(T0);
-                    xmlC3D += `
-        //aumentamos en 1 el temporal: `+ temporal1;
-                    xmlC3D += `
-                    ` + temporal1 + ` = ` + temporal1 + ` + 1;` ;
-                    T1 = T1 + 1;
+                    
                 });
             }
             

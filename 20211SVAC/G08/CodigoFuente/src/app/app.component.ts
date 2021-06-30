@@ -92,6 +92,9 @@ c3dText = '';
 c3dTextGenerado = '';
 c3dTextFinal = `    return;
     }`;
+    objetosTraducir;
+    xmlTraductor;
+    xmlTraducido="";
   
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
@@ -102,6 +105,8 @@ c3dTextFinal = `    return;
     this.astXML= require("./Gramatica/gramaticaXMLAsc_Arbol");
     this.arbol=require("./AST/crearArbolDot");
 	this.cstxml= require("./Gramatica/gramaticaXMLDesc_Arbol");
+  this.xmlTraductor=require("./AST/traductorXMLC3D");
+  this.objetosTraducir=require("./Gramatica/gramatica");
   }
 
   Compilar() {
@@ -141,8 +146,8 @@ c3dTextFinal = `    return;
       //elementoActual en este momento es la raiz de la entrada Xpath
     }
     
-   
-  this.c3dText = this.c3dTextInicial + '\n' + this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
+   this.traducirXml();
+  this.c3dText = this.c3dTextInicial + '\n' +this.xmlTraducido+ this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
   }
 
   ProcesarXquery(sentencias:SentenciaXquery[]){
@@ -2691,6 +2696,16 @@ console.log();
     this.rgxmldesc=objetos[2].arreglo_elementos;
     graphviz('#graph2').renderDot('digraph {'+recorrido+'}');
 console.log();
+    }
+
+    traducirXml(){
+      var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
+    console.log(objetos.listaObjetos);
+    const traduction= new this.xmlTraductor.TraductorXML_C3D();
+    var codigo= traduction.traducir(objetos.listaObjetos);
+    this.xmlTraducido=codigo;
+console.log("**************");
+console.log(objetos);
     }
 
 }

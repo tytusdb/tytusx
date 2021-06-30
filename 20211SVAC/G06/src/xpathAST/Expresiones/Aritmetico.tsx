@@ -26,12 +26,15 @@ export class Aritmetico implements Expression{
         let valorIzq = this.hijoIzq.execute(ent, simboloPadre);
         let valorDer = this.hijoDer.execute(ent, simboloPadre);
 
-        if((valorIzq.type === tipoPrimitivo.STRING  || valorIzq.type === tipoPrimitivo.NUMBER )&&(valorDer.type === tipoPrimitivo.STRING || valorDer.type === tipoPrimitivo.NUMBER)&&(this.tipoOperacion === operacionAritmetica.SUMA)) {
-            return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.NUMBER };
-        }
-        else if ((valorIzq.type === tipoPrimitivo.NUMBER) && (valorDer.type === tipoPrimitivo.NUMBER)) {
+        if(valorIzq.type === tipoPrimitivo.RESP || valorDer.type === tipoPrimitivo.RESP){
+            throw new Error("Error Semantico: incompatibilidad de tipos: tipo varlor 1: "+valorDer.type+", tipo valor2 "+valorDer.type +", Linea: "+this.line+"Column: "+this.column);
+        }else if((valorIzq.type === tipoPrimitivo.STRING || valorDer.type === tipoPrimitivo.STRING) && this.tipoOperacion === operacionAritmetica.SUMA) {
+            return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.STRING };
+        }else if ((valorIzq.type === tipoPrimitivo.NUMBER) && (valorDer.type === tipoPrimitivo.NUMBER)) {
            
-            if(this.tipoOperacion === operacionAritmetica.RESTA){
+            if (this.tipoOperacion === operacionAritmetica.SUMA){
+                return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.NUMBER };
+            }else if(this.tipoOperacion === operacionAritmetica.RESTA){
                 return { value: (valorIzq.value - valorDer.value) , type: tipoPrimitivo.NUMBER };
             }else if(this.tipoOperacion === operacionAritmetica.MULT){
                 return { value: (valorIzq.value * valorDer.value) , type: tipoPrimitivo.NUMBER };;

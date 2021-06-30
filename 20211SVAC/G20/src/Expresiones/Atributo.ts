@@ -1,33 +1,22 @@
-export enum Comilla {
-    SIMPLE,
-    DOBLE
-}
-
 export class Atributo {
     identificador: string;
     valor: string;
     linea: number;
     columna: number;
-    comilla: Comilla;
 
-    textWithoutSpecial: string;
-
-    constructor(id: string, valor: string, linea: number, columna: number, comilla: Comilla) {
+    constructor(id: string, valor: string, linea: number, columna: number) {
         this.identificador = id;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
-        this.comilla = comilla;
-
-        this.textWithoutSpecial = this.setCaracteresEspeciales(valor);
     }
 
-    setCaracteresEspeciales(valor: string) {
-        let value = valor.split("&lt;").join("<");
-        value = value.split("&gt;").join(">");
-        value = value.split("&amp;").join("&");
-        value = value.split("&apos;").join("'");
-        value = value.split("&quot;").join('"');
-        return value;
-    }
+    public getID() : string { return this.identificador }
+    public setID(identificador : string) : void { this.identificador = identificador }
+    public getValor() : string { return this.valor }
+    public setValor(valor : string) : void { this.valor = valor }
+    public getLinea() : number { return this.linea }
+    public setLinea(linea : number) : void { this.linea = linea }
+    public getColumna() : number { return this.columna }
+    public setColumna(columna : number) : void { this.columna = columna }
 }

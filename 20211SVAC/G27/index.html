@@ -30,7 +30,12 @@
     <script src="Arbol/Nodo.js"></script>
     <script src="Arbol/Arbol.js"></script>
     <script src="Errores/Error.js"></script>
-
+    <script src="C3D/tsXML.js"></script>
+    <script src="C3D/tsObjeto.js"></script>
+    <script src="C3D/tsObjetoStack.js"></script>
+    <script src="C3D/tsStack.js"></script>
+    <script src="C3D/tsObjetoHeap.js"></script>
+    <script src="C3D/tsHeap.js"></script>
 </head>
 
 <body>
@@ -86,9 +91,13 @@
                 </svg>
             </button>
             <button type="button" class="btn btn-success" onclick="AnalyzeXML()" title="Ejecuta el código XML">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
-                    <path d="M10.804 8 5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"/>
-                </svg>
+                XML
+            </button>
+            <button type="button" class="btn btn-info" onclick="" title="Ejecuta el código XQUERY">
+                XQUERY
+            </button>
+            <button type="button" class="btn btn-info" onclick="pruebaC3D();" title="Ejecuta el código XQUERY">
+                TEST
             </button>
         </div>
         <table style="width:80%;">
@@ -97,25 +106,28 @@
                     <input type="text" class="form-control" id="EntradaXPath" placeholder="Escriba instrucciones de XPath aquí...">
                 </td>
                 <td colspan="1" align="left">
-                    <button type="button" class="btn btn-success" onclick="AnalyzeXPath();" title="Ejecuta el código XML">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                        </svg>
+                    <button type="button" class="btn btn-success" onclick="AnalyzeXPath();" title="Ejecuta el código XPATH">
+                        XPATH
                     </button>
                 </td>
             </tr>
         </table>
+        
         <table style="width:100%">
-            <tr>
-                <td><label>Ingrese el código aquí:</label><br></td>
-                <td><label>Resultado de ejecución:</label><br></td>
+            <tr cols="3">
+                <td colspan="1" align="left"><label>Ingrese el código aquí:</label><br></td>
+                <td colspan="1" align="left"><label>Ingrese el código XQuery aquí:</label></td>
+                <td colspan="1" align="left"><label>Resultado de ejecución:</label><br></td>
             </tr>
-            <tr cols="2">
-                <td align="left" colspan="1" style="width:50%;">
-                    <textarea id="Entrada" class="codemirror-textarea" rows="50" cols="100"></textarea>
+            <tr cols="3">
+                <td align="left" colspan="1" style="width:34%;">
+                    <textarea id="Entrada" class="codemirror-textarea" rows="50" cols="65"></textarea>
                 </td>
-                <td align="left" colspan="1" style="width:50%;">
-                    <textarea id="Salida" class="CodigoSalida" rows="50" cols="100"></textarea>
+                <td align="left" colspan="1" style="width:35%;">
+                    <textarea id="EntradaXQuery"  rows="50" cols="65"></textarea>
+                </td>
+                <td align="left" colspan="1" style="width:33.33%;">
+                    <textarea id="Salida" class="CodigoSalida" rows="50" cols="55"></textarea>
                 </td>
             </tr>
             <tr></tr>
@@ -123,7 +135,7 @@
                 <td><label>Consola:</label><br></td>
             </tr>
             <tr>
-                <td align="center" colspan="2">
+                <td align="center" colspan="3">
                     <textarea id="consola" rows="10" cols="100" class="consola" readonly></textarea>
                 </td>
             </tr>
@@ -160,6 +172,7 @@
 <script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
 <script type="text/javascript" src="js/default.js"></script>
 <script type="text/javascript" src="js/xml.js"></script>
+<script type="text/javascript" src="js/sql.js"></script>
 </body>
 <script>
     function AnalyzeXML() {
@@ -196,15 +209,9 @@
         let entradaXpath = document.getElementById("EntradaXPath").value;        
         let arrayObjetos = parseXML(entradaXML);        
         let arrayElementos = parseXPath(entradaXpath);                                                
-        if (arrayElementos && arrayObjetos){     
-            let arrayResultado =[];
-            // e.ejecutar(arrayObjetos);  
-            for (var j=0; j<arrayElementos.length; j+=1){
-
-                arrayResultado= arrayResultado.concat(arrayElementos[j].ejecutar(arrayObjetos));
-            } 
-            
-            
+        if (arrayElementos && arrayObjetos){      
+            var e = new Ejecutar(arrayElementos,arrayObjetos);   
+            let arrayResultado = e.ejecutar(arrayObjetos);   
             for (var i = 0; i < arrayResultado.length; i+=1) {                
                 cadenaResultado+=arrayResultado[i].texto+"\n";
             }            
@@ -227,6 +234,7 @@
 </script>
 <script src="js/funcionesXPath.js"></script>
 <script src="js/funcionesXML.js"></script>
+<script src="js/funcionesXQUERY.js"></script>
 <script src="Reportes/graficaCST.js"></script>
 <script src="Reportes/graficaAST.js"></script>
 <script src="Reportes/reporteTS.js"></script>
@@ -238,4 +246,7 @@
 <script src="Gramatica/gramaticaXMLArbol.js"></script>
 <script src="Gramatica/gramaticaXMLArbolCST.js"></script>
 <script src="Gramatica/erroresXML.js"></script>
+<script src="Traduccion/traductorXML.js"></script>
+<script src="Traduccion/traductorXPATH.js"></script>
+<script src="Gramatica/gramaticaXML3D.js"></script>
 </html>

@@ -1,9 +1,61 @@
 "use strict";
 
+function Optimizar(){
+    ListaOptimizaciones = [];
+    var contenido = SalidaTraduccion.getValue();
+    if (contenido == ""){
+        window.alert("No hay C3D para optimizar :O !");
+    } else {
+
+        pasada = 1;
+        contenidoOptimizar = contenido;
+        var backup = contenido;
+        for(var i = 0; i<3; i++){
+
+        analisisOptimizadorCorrecto = EjecutarOptimizador(contenidoOptimizar);
+
+        if (analisisOptimizadorCorrecto){
+            console.log("Pasada numero: " + pasada);
+            //console.log("↓ RESULTADO PARSER OPTIMIZADOR ↓");
+            //console.log(resultadoOptimizador);
+            var Optimizar = new Optimizador(resultadoOptimizador);
+            contenidoOptimizar = Optimizar.Ejecutar();
+            pasada++;           
+        } else {
+            break;
+            }          
+        }
+
+        if(analisisOptimizadorCorrecto){
+            SalidaTraduccion.setValue(contenidoOptimizar);
+            window.alert("C3D optimizado exitosamente :D !");
+            console.log(ListaOptimizaciones);
+            localStorage.setItem('opJSON',JSON.stringify(ListaOptimizaciones, null, 2));
+        } else {
+            window.alert("El parser del Optimizador no pudo recuperarse de un error sintactico D: !");
+            SalidaTraduccion.setValue(backup);
+        }
+
+    }
+
+}
+
+function EjecutarOptimizador(contenidoC3D){ 
+    try {
+
+        resultadoOptimizador = GramaticaOptimizador.parse(contenidoC3D);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 function CargarXML(){
 
-
+    
     var contenido = "";
+    
 
     if(tab==1){
         contenido = editor.getValue();
@@ -38,9 +90,19 @@ function CargarXML(){
             DOTxmlCSTasc = "digraph {" + DOTxmlCSTasc + "}";
             localStorage.setItem('cstXML',DOTxmlCSTasc);
             ExtraerCodificacion(resultadoXML[0]);       
-            ErroresSemanticosXML(resultadoXML[0]);      
+            ErroresSemanticosXML(resultadoXML[0]);
+            heap = [];
+            stack = [];
+            contadorStack = 0;
+            contadorTemporales = 0;
+            contadorEtiquetas = 0;
+            SP = 2;
+            HP = 0;
+            T0 = 0;
+            T1 = 0;      
             xmlC3D = "";
             xmlC3D = C3DXML.traducir(resultadoXML[0]);
+            localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));          
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
             tablaSimbolosXMLAux.LlenarTabla(tablaSimbolosXMLAux.entornoGlobal,resultadoXML[0]);
             tablaSimbolosXML = tablaSimbolosXMLAux;          
@@ -61,7 +123,7 @@ function CargarXML(){
             localStorage.setItem('rgJSON',JSON.stringify(RGxml.arreglo, null, 2));
             
         } else {
-            SetSalida("El parser XML no pudo recuperarse de un error sintactico en el parser.");
+            SetSalida("El parser XML no pudo recuperarse de un error sintactico.");
         }
 
         if (analisisCorrecto) {
@@ -86,7 +148,7 @@ function CargarXML(){
                     var contador = 1;
                     resultadoXPath.forEach(function (funcion){
 
-                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaGlobal+="↓ Resultado consulta XPath "+contador+" ↓\n\n";
                         salidaRecursiva = "";
                         salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
                         //console.log(salidaXPath);
@@ -103,6 +165,17 @@ function CargarXML(){
                     
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                    /* TRADUCIENDO XPATH A C3D */
+                    xpathC3D = "";
+                    var funcionesXPath = contenidoXpath.split(/[ ]*\|[ ]*/g);
+
+                    for(var i = 0; i < resultadoXPath.length; i++) {
+                    
+                        var salida = C3DXPATH.traducir(funcionesXPath[i] ,resultadoXPath[i]);
+                        xpathC3D += salida + "\n\n";
+                    }
+
                 } else {
                     SetSalida("El parser Xpath no pudo recuperarse de un error sintactico.");
                 }
@@ -128,6 +201,34 @@ function CargarXML(){
                     //localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XQuery ↓");
                     console.log(resultadoXQuery[0]);
+
+
+                    var contador = 1;
+                    resultadoXQuery[0].forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta XQuery "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXQuery = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+
+                        if(funcion.getTipo() == TipoXInstruccion.XPATH || funcion.getTipo() == TipoXInstruccion.XFLOWER){
+
+                            GenerarSalidaXPath(salidaXQuery);
+
+                            if(salidaRecursiva!=""){
+                                salidaGlobal+= salidaRecursiva + "\n\n";
+                            } else {
+                                salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                            }
+
+                        } else {
+                            salidaGlobal+= salidaXQuery.toString() + "\n\n";
+                        } 
+
+                        contador++;
+                    } );
+                    
+                    SetSalida(salidaGlobal);
+             
 
                 } else {                   
                     SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
@@ -176,7 +277,15 @@ function CargarXMLDesc(){
             DOTxmlCSTdesc = "digraph {" + DOTxmlCSTdesc + "}";
             localStorage.setItem('cstXMLDesc',DOTxmlCSTdesc);
             ExtraerCodificacion(resultadoXML[0]);       
-            ErroresSemanticosXML(resultadoXML[0]);  
+            ErroresSemanticosXML(resultadoXML[0]);
+            heap = [];
+            stack = [];
+            contadorStack = 0;
+            contadorTemporales = 0;
+            SP = 2;
+            HP = 0;
+            T0 = 0;
+            T1 = 0;
             xmlC3D = "";
             xmlC3D = C3DXML.traducir(resultadoXML[0]);    
             var tablaSimbolosXMLAux = new TablaSimbolosXML();                     
@@ -506,6 +615,7 @@ function GenerarSalidaXPath(objetos){
     }
 
 }
+
 function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();
@@ -582,9 +692,14 @@ function SetearTraduccion(){
     
     double heap[30101999];
     double stack[30101999];
+    double xheap[30101999];
+    double xstack[30101999];
+    double resultados[3010199];
     double SP;
     double HP;
-    
+    double XSP;
+    double XHP;
+
     `;
 
     for(var i = 0; i< contadorTemporales;i++ ){
@@ -598,8 +713,10 @@ function SetearTraduccion(){
     globalC3D += `;
     
     `;
+
+    globalC3D += funcionesC3D;
     
-    globalC3D += `void main(){
+    globalC3D += `int main(){
         
         //el stack pointer inicia en 2 porque en la posicion 0 guardamos el encoding
         //y la posicion 1 indicara donde termina el xml en el heap
@@ -618,29 +735,32 @@ function SetearTraduccion(){
         globalC3D += `stack[(int)0] = -1;
         
         `;
-        stack.push(-1);
-        stack.push(-1);
+        encodingXML = -1;
     } else {
         globalC3D += `stack[(int)0] = -2;
         
         `;
-        stack.push(-2);
-        stack.push(-1);
+        encodingXML = -1;
     }
 
     
     globalC3D += xmlC3D;
 
+    globalC3D += "\n";
+
+    globalC3D += xpathC3D;
+
     globalC3D +=`
-    
-        for(int loop = 0; loop < stack[1]; loop++){
-            printf("%c", (char) heap[loop]);}
-    
-        return;
+
+        return 0;
 
     }`;    
 
     SalidaTraduccion.setValue(globalC3D);
     SalidaTraduccion.refresh();
 
+    stack.unshift(encodingXML,finalXML);
+    localStorage.setItem('stackJSON',JSON.stringify(stack, null, 2));
+    window.alert("Traducción XML a C3D exitosa, scrollee hacia abajo para ver resultado. :D");
 }
+

@@ -9,6 +9,11 @@ BSL                         "\\".
 
 
 ("$")([a-zA-ZáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*     %{ return 'tk_idflower'; %}
+"number"                      %{ return 'tk_number';  %}
+"substring"                   %{ return 'tk_substring';  %}
+"upper-case"                  %{ return 'tk_uppercase';  %}
+"lower-case"                  %{ return 'tk_lowercase';  %}
+"string"                      %{ return 'tk_string';  %}
 "node()"                      %{ return 'tk_node';  %}
 "last()"                      %{ return 'tk_last';  %}
 "position()"                  %{ return 'tk_position';  %}
@@ -49,6 +54,7 @@ BSL                         "\\".
 "="                         %{ return 'tk_igual'; %}
 ">"                         %{ return 'tk_mayor'; %}
 "<"                         %{ return 'tk_menor'; %}
+","                         %{ return 'tk_coma'; %}
 "?"                         %{ return 'tk_interrogacion'; %}
 "..//"                        %{ return 'tk_dpds'; %}
 ".//"                        %{ return 'tk_pds'; %}
@@ -95,14 +101,54 @@ BSL                         "\\".
 %%
 
 /* Definición de la gramática */
-INICIO : INSTRUCCION EOF     {  console.log("TODO CORRECTO :D XQUERY ASC VERSION");
-                                instruccion = $1[0];
+INICIO : INSTRUCCIONES EOF     {  console.log("TODO CORRECTO :D XQUERY ASC VERSION");
+                                instrucciones = $1[0];
                                 nodo = $1[1];
-                                $$ =[instruccion,nodo];
+                                $$ =[instrucciones,nodo];
                                 return $$; } ;
 
-INSTRUCCION: SETS { $$ = $1; }
-        | FLOWER  { $$ = $1; };
+INSTRUCCIONES: INSTRUCCIONES INSTRUCCION { $1[0].push($2[0]);
+                                           $1[1].agregarHijo($2[1]);
+                                           $$ = [$1[0],$1[1]]; }
+        | INSTRUCCION { $$ = [[$1[0]],$1[1]]; };
+
+INSTRUCCION: FLOWER  { $$ = $1; }
+        | FUNCION { $$ = $1; };
+
+
+FUNCION : tk_number tk_parentesisa EXPRESION_CADENA tk_parentesisc {
+                xNumberAux = new XNumber(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("number()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xNumberAux,nodoaux]; }
+        | tk_substring tk_parentesisa CADENA tk_coma tk_entero tk_parentesisc  { 
+                xSubAux = new XSubstring(@1.first_line, @1.first_column, $3[0], Number($5), 0, 0);
+                nodoaux = new NodoArbol("substring()","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo(new NodoArbol($5,""));
+                $$ = [xSubAux,nodoaux]; }            
+        | tk_substring tk_parentesisa CADENA tk_coma tk_entero tk_coma tk_entero tk_parentesisc { 
+                xSubAux = new XSubstring(@1.first_line, @1.first_column, $3[0], Number($5), Number($7), 1);
+                nodoaux = new NodoArbol("substring()","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo(new NodoArbol($5,""));
+                nodoaux.agregarHijo(new NodoArbol($7,""));
+                $$ = [xSubAux,nodoaux]; } 
+        | tk_uppercase tk_parentesisa CADENA tk_parentesisc {
+                xUpperAux = new XUpperCase(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("upper-case()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xUpperAux,nodoaux]; }
+        | tk_lowercase tk_parentesisa CADENA tk_parentesisc {
+                xUpperAux = new XLowerCase(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("lower-case()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xUpperAux,nodoaux]; }
+        | tk_string tk_parentesisa EXPRESION_CADENA tk_parentesisc {
+                xStringAux = new XString(@1.first_line, @1.first_column, $3[0]);
+                nodoaux = new NodoArbol("string()","");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [xStringAux,nodoaux]; } ;
 
 
 SETS: SETS SET { $1[1].agregarHijo($2[1]);
@@ -111,18 +157,21 @@ SETS: SETS SET { $1[1].agregarHijo($2[1]);
 
     | SET { $$ = [[$1[0]],$1[1]] } ;
 
-SET:    SELECTORES EXPRESION { nodoaux= new NodoArbol($1[1],"");
+SET:    SELECTORES EXPRESION { nodoXPath = new NodoXpath("", TipoNodo.SELECTOR_EXPRESION, null, $1[0], $2[0], @1.first_line, @1.first_column); 
+                               nodoaux= new NodoArbol($1[1],"");
                                nodoaux.agregarHijo($2[1]);
-                               $$ = [null,nodoaux]; }
+                               $$ = [nodoXPath,nodoaux]; }
 
-        |    EXPRESION { $$ = [null,$1[1]] }
+        |    EXPRESION {nodoXPath = new NodoXpath("", TipoNodo.EXPRESION, null, [], $1[0], @1.first_line, @1.first_column);  
+                        $$ = [nodoXPath,$1[1]] }
 
-        |    AXES {     $$ = [null,$1[1]]; }
+        |    AXES {     nodoXPath = new NodoXpath("", TipoNodo.AXES, $1[0], [], null, @1.first_line, @1.first_column); 
+                        $$ = [nodoXPath,$1[1]]; }
 
-        |    SELECTORES AXES {       
+        |    SELECTORES AXES {  nodoXPath = new NodoXpath("", TipoNodo.SELECTOR_AXES, $2[0], $1[0], null, @1.first_line, @1.first_column);    
                                 nodoaux= new NodoArbol($1[1],"");
                                 nodoaux.agregarHijo($2[1]);
-                                $$ = [null,nodoaux]; };
+                                $$ = [nodoXPath,nodoaux]; };
 
 
 
@@ -166,39 +215,47 @@ AGREGAR_SELECTOR:  OTRO_SELECTOR { $$ = [$1[0],$1[1]];  }
 
                 | { $$ = [[TipoSelector.FIN],""];  };
 
-EXPRESION : tk_identificador PREDICADO { nodoaux = new NodoArbol($1,"");
+EXPRESION : tk_identificador PREDICADO { expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.IDENTIFICADOR, $2[0]);
+                                         nodoaux = new NodoArbol($1,"");
                                          nodoaux.agregarHijo($2[1]);
-                                         $$ = [null,nodoaux];}
+                                         $$ = [expresionAux,nodoaux];}
 
-        |  tk_asterisco PREDICADO {     nodoaux = new NodoArbol($1,"");
+        |  tk_asterisco PREDICADO {     expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.ASTERISCO, $2[0]);
+                                        nodoaux = new NodoArbol($1,"");
                                         nodoaux.agregarHijo($2[1]);
-                                        $$ = [null,nodoaux];}
+                                        $$ = [expresionAux,nodoaux];}
 
-        |  tk_punto PREDICADO { nodoaux = new NodoArbol($1,"");
-                                $$ = [null,nodoaux]; }
+        |  tk_punto PREDICADO { expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.PUNTO, null);
+                                nodoaux = new NodoArbol($1,"");
+                                $$ = [expresionAux,nodoaux]; }
 
-        |  tk_arrobaasterisco PREDICADO { nodoaux = new NodoArbol($1,"");
-                                          $$ = [null,nodoaux];}
+        |  tk_arrobaasterisco PREDICADO { expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.ARROBA, null);
+                                          nodoaux = new NodoArbol($1,"");
+                                          $$ = [expresionAux,nodoaux];}
 
-        |  tk_arroba tk_identificador PREDICADO { nodoaux = new NodoArbol($1+""+$2,"");
-                                                  $$ = [null,nodoaux]; }
+        |  tk_arroba tk_identificador PREDICADO { expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $2, TipoExpresionXPath.ARROBA_ID, null);
+                                                  nodoaux = new NodoArbol($1+""+$2,"");
+                                                  $$ = [expresionAux,nodoaux]; }
 
-        |  tk_texto PREDICADO { nodoaux = new NodoArbol($1,"");
+        |  tk_texto PREDICADO { expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.TEXT, $2[0]);
+                                nodoaux = new NodoArbol($1,"");
                                 nodoaux.agregarHijo($2[1]);
-                                $$ = [null,nodoaux]; }
+                                $$ = [expresionAux,nodoaux]; }
 
-        |  tk_doblepunto PREDICADO {    nodoaux = new NodoArbol($1,"");
-                                         $$ = [null,nodoaux];}
+        |  tk_doblepunto PREDICADO {    expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.DOBLEPUNTO, null);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux];}
 
-        |  tk_node PREDICADO { nodoaux = new NodoArbol($1,"");
-                               nodoaux.agregarHijo($2[1]);
-                               $$ = [null,nodoaux]; };
+        |  tk_node PREDICADO {  expresionAux = new ExpresionXPath(@1.first_line, @1.first_column, $1, TipoExpresionXPath.NODE, $2[0]);
+                                nodoaux = new NodoArbol($1,"");
+                                nodoaux.agregarHijo($2[1]);
+                                $$ = [expresionAux,nodoaux]; };
 
 PREDICADO : tk_corchetea EXPRESION_FILTRO tk_corchetec { nodoaux = new NodoArbol("Predicado","");
                                                          nodoaux.agregarHijo(new NodoArbol("[",""));
                                                          nodoaux.agregarHijo($2[1]);
                                                          nodoaux.agregarHijo(new NodoArbol("]",""));
-                                                         $$ = [null,nodoaux]; } 
+                                                         $$ = [$2[0],nodoaux]; } 
         |  {    nodoaux = new NodoArbol("Predicado","");
                 nodoaux.agregarHijo(new NodoArbol("[",""));
                 nodoaux.agregarHijo(new NodoArbol("]",""));
@@ -207,185 +264,232 @@ PREDICADO : tk_corchetea EXPRESION_FILTRO tk_corchetec { nodoaux = new NodoArbol
 
 EXPRESION_FILTRO : EXPRESION_LOGICA { };
 
-AXES :          tk_ancestorself   EXPRESION      { nodoaux = new NodoArbol($1,"");
+AXES :          tk_ancestorself   EXPRESION      { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.ANCESTOR_OR_SELF, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_ancestor   EXPRESION          { nodoaux = new NodoArbol($1,"");
+        |       tk_ancestor   EXPRESION          { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.ANCESTOR, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_child      EXPRESION          { nodoaux = new NodoArbol($1,"");
+        |       tk_child      EXPRESION          { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.CHILD, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_descendantself EXPRESION      { nodoaux = new NodoArbol($1,"");
+        |       tk_descendantself EXPRESION      { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.DESCENDANT_OR_SELF, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_descendant  EXPRESION         { nodoaux = new NodoArbol($1,"");
+        |       tk_descendant  EXPRESION         { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.DESCENDANT, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_followingsibling EXPRESION    { nodoaux = new NodoArbol($1,"");
+        |       tk_followingsibling EXPRESION    { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.FOLLOWING_SIBLING, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux]; }
+                                                   $$ = [axesAux,nodoaux]; }
 
-        |       tk_following  EXPRESION          { nodoaux = new NodoArbol($1,"");
+        |       tk_following  EXPRESION          { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.FOLLOWING, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_self  EXPRESION               { nodoaux = new NodoArbol($1,"");
+        |       tk_self  EXPRESION               { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.SELF, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_parent  EXPRESION             { nodoaux = new NodoArbol($1,"");
+        |       tk_parent  EXPRESION             { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.PARENT, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_precedingsibling EXPRESION    { nodoaux = new NodoArbol($1,"");
+        |       tk_precedingsibling EXPRESION    { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.PRECEDING_SIBLING, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux];}
+                                                   $$ = [axesAux,nodoaux];}
 
-        |       tk_preceding  EXPRESION          { nodoaux = new NodoArbol($1,"");
+        |       tk_preceding  EXPRESION          { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.PRECEDING, $2[0]);
+                                                   nodoaux = new NodoArbol($1,"");
                                                    nodoaux.agregarHijo($2[1]);
-                                                   $$ = [null,nodoaux]; };
+                                                   $$ = [axesAux,nodoaux]; };
 
-ATRIBUTO : tk_arroba tk_identificador tk_igual CADENA {    nodoaux = new NodoArbol("=","");
+ATRIBUTO : tk_arroba tk_identificador tk_igual CADENA {    idAux = new Primitivo($2, @1.first_line, @1.first_column);
+                                                           operacionAux = new Operacion(TipoOperadores.ATRIBUTOS, idAux, $4[0], Operador.IGUAL, @1.first_line, @1.first_column);
+                                                           nodoaux = new NodoArbol("=","");
+                                                           nodoaux.agregarHijo(new NodoArbol("@"+$2,""));
+                                                           nodoaux.agregarHijo($4[1]);
+                                                           $$ = [operacionAux,nodoaux]; }
+
+        |  tk_attribute tk_identificador tk_igual CADENA { idAux = new Primitivo($2, @1.first_line, @1.first_column);
+                                                           operacionAux = new Operacion(TipoOperadores.ATRIBUTOS, idAux, $4[0], Operador.IGUAL, @1.first_line, @1.first_column);
+                                                           nodoaux = new NodoArbol("=","");
                                                            nodoaux.agregarHijo(new NodoArbol("attribute::"+$2,""));
                                                            nodoaux.agregarHijo($4[1]);
-                                                           $$ = [null,nodoaux]; }
-
-        |  tk_attribute tk_identificador tk_igual CADENA { nodoaux = new NodoArbol("=","");
-                                                           nodoaux.agregarHijo(new NodoArbol("attribute::"+$2,""));
-                                                           nodoaux.agregarHijo($4[1]);
-                                                           $$ = [null,nodoaux]; } ;
+                                                           $$ = [operacionAux,nodoaux]; } ;
 
 
-EXPRESION_LOGICA : EXPRESION_LOGICA tk_and EXPRESION_RELACIONAL { nodoaux = new NodoArbol("and","");
+EXPRESION_LOGICA : EXPRESION_LOGICA tk_and EXPRESION_RELACIONAL { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.AND, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("and","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux]; }
+                                                                  $$ = [operacionAux,nodoaux]; }
 
-                |  EXPRESION_LOGICA tk_or EXPRESION_RELACIONAL {  nodoaux = new NodoArbol("or","");
+                |  EXPRESION_LOGICA tk_or EXPRESION_RELACIONAL {  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.OR, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("or","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux]; }     
+                                                                  $$ = [operacionAux,nodoaux]; }     
                 |  EXPRESION_RELACIONAL { $$ = $1;  };
 
 
-EXPRESION_RELACIONAL :  EXPRESION_NUMERICA tk_mayor EXPRESION_NUMERICA { nodoaux = new NodoArbol(">","");
+EXPRESION_RELACIONAL :  EXPRESION_NUMERICA tk_mayor EXPRESION_NUMERICA { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MAYOR_QUE, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol(">","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux]; }
+                                                                         $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICA tk_menor EXPRESION_NUMERICA { nodoaux = new NodoArbol("<","");
+                |       EXPRESION_NUMERICA tk_menor EXPRESION_NUMERICA { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MENOR_QUE, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol("<","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux]; }
+                                                                         $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICA tk_mayorigual EXPRESION_NUMERICA { nodoaux = new NodoArbol(">=","");
+                |       EXPRESION_NUMERICA tk_mayorigual EXPRESION_NUMERICA { 
+                                                                         operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MAYOR_IGUAL_QUE, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol(">=","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux];}
+                                                                         $$ = [operacionAux,nodoaux];}
 
-                |       EXPRESION_NUMERICA tk_menorigual EXPRESION_NUMERICA { nodoaux = new NodoArbol("<=","");
+                |       EXPRESION_NUMERICA tk_menorigual EXPRESION_NUMERICA { 
+                                                                         operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MENOR_IGUAL_QUE, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol("<=","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux]; }
+                                                                         $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICA tk_igual EXPRESION_CADENA { nodoaux = new NodoArbol("=","");
+                |       EXPRESION_NUMERICA tk_igual EXPRESION_CADENA {   operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.IGUAL, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol("=","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux]; } 
+                                                                         $$ = [operacionAux,nodoaux]; } 
 
-                |       EXPRESION_NUMERICA tk_noigual EXPRESION_CADENA { nodoaux = new NodoArbol("!=","");
+                |       EXPRESION_NUMERICA tk_noigual EXPRESION_CADENA { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.DIFERENTE_QUE, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol("!=","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux]; }  
+                                                                         $$ = [operacionAux,nodoaux]; }  
                 |       EXPRESION_NUMERICA { $$ = $1; }   
 
                 |       ATRIBUTO { $$ = $1; }
 
-                |       tk_asterisco { nodoaux = new NodoArbol("*","");
-                                        $$ = [null,nodoaux]; }
+                |       tk_asterisco {  expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.ASTERISCO);
+                                        nodoaux = new NodoArbol("*","");
+                                        $$ = [expresionAux,nodoaux]; }
 
-                |       tk_texto {      nodoaux = new NodoArbol($1,"");
-                                        $$ = [null,nodoaux]; }  
+                |       tk_texto {      expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.TEXT);
+                                        nodoaux = new NodoArbol($1,"");
+                                        $$ = [expresionAux,nodoaux]; }  
 
-                |       tk_arrobaasterisco { nodoaux = new NodoArbol("@*","");
-                                             $$ = [null,nodoaux];}
+                |       tk_arrobaasterisco { expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.ARROBA);
+                                             nodoaux = new NodoArbol("@*","");
+                                             $$ = [expresionAux,nodoaux];}
 
-                |       tk_node { nodoaux = new NodoArbol($1,"");
-                                  $$ = [null,nodoaux]; }  ;
+                |       tk_node { expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.NODE);
+                                  nodoaux = new NodoArbol($1,"");
+                                  $$ = [expresionAux,nodoaux]; }  ;
 
 
 EXPRESION_CADENA :      CADENA { $$ = $1; }
                 |      EXPRESION_NUMERICA { $$ = $1; };
 
-EXPRESION_NUMERICA : tk_menos EXPRESION_NUMERICA %prec UMENOS	{ nodoaux = new NodoArbol("*","");
+EXPRESION_NUMERICA : tk_menos EXPRESION_NUMERICA %prec UMENOS	{ negativo = new Primitivo(-1, @1.first_line, @1.first_column);
+                                                                  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $2[0], negativo, Operador.MULTIPLICACION, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("*","");
                                                                   nodoaux.agregarHijo(new NodoArbol("-1",""));
                                                                   nodoaux.agregarHijo($2[1]);
-                                                                  $$ = [null,nodoaux]; }
+                                                                  $$ = [operacionAux,nodoaux]; }
 
-	| EXPRESION_NUMERICA tk_mas EXPRESION_NUMERICA		{ nodoaux = new NodoArbol("+","");
+	| EXPRESION_NUMERICA tk_mas EXPRESION_NUMERICA		{ operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.SUMA, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("+","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux];  }
+                                                                  $$ = [operacionAux,nodoaux];  }
 
-	| EXPRESION_NUMERICA tk_menos EXPRESION_NUMERICA	{ nodoaux = new NodoArbol("-","");
+	| EXPRESION_NUMERICA tk_menos EXPRESION_NUMERICA	{ operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.RESTA, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("-","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux];  }
+                                                                  $$ = [operacionAux,nodoaux];  }
 
-	| EXPRESION_NUMERICA tk_asterisco EXPRESION_NUMERICA	{ nodoaux = new NodoArbol("*","");
+	| EXPRESION_NUMERICA tk_asterisco EXPRESION_NUMERICA	{ operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MULTIPLICACION, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("*","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux];  }
+                                                                  $$ = [operacionAux,nodoaux];  }
 
-        | EXPRESION_NUMERICA tk_mod EXPRESION_NUMERICA	        { nodoaux = new NodoArbol("%","");
+        | EXPRESION_NUMERICA tk_mod EXPRESION_NUMERICA	        { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MODULO, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("%","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux];   }
+                                                                  $$ = [operacionAux,nodoaux];   }
 
-	| EXPRESION_NUMERICA tk_division EXPRESION_NUMERICA	{ nodoaux = new NodoArbol("÷","");
+	| EXPRESION_NUMERICA tk_division EXPRESION_NUMERICA	{ operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.DIVISION, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("÷","");
                                                                   nodoaux.agregarHijo($1[1]);
                                                                   nodoaux.agregarHijo($3[1]);
-                                                                  $$ = [null,nodoaux]; }
+                                                                  $$ = [operacionAux,nodoaux]; }
 
 	| tk_parentesisa EXPRESION_NUMERICA tk_parentesisc	{ $$ = $2; }
 
-	| tk_entero						{ nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; }
+	| tk_entero						{ primitivoAux = new Primitivo(Number($1), @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [primitivoAux,nodoaux]; }
 
-	| tk_decimal						{ nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; }
+	| tk_decimal						{ primitivoAux = new Primitivo(Number($1), @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [primitivoAux,nodoaux]; }
 
-        | tk_last                                               { nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; }
+        | tk_last                                               { expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.LAST);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [expresionAux,nodoaux]; }
 
         | AXES                                                  { $$ = $1; }
 
-        | tk_position                                           { nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; }
+        | tk_position                                           {  expresionAux = new ExpresionDefinida(@1.first_line, @1.first_column, TipoExpresionDefinida.POSITION);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [expresionAux,nodoaux]; }
 
-	| tk_identificador	                                { nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; };
-
-
-CADENA :         tk_cadena1 { nodoaux = new NodoArbol($1,"");
-                              $$ = [null,nodoaux]; }
-
-        |        tk_cadena2 { nodoaux = new NodoArbol($1,"");
-                              $$ = [null,nodoaux]; };
+	| tk_identificador	                                { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [primitivoAux,nodoaux]; };
 
 
+CADENA :         tk_cadena1 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
+                              nodoaux = new NodoArbol($1,"");
+                              $$ = [primitivoAux,nodoaux]; }
 
-FLOWER: tk_for tk_idflower tk_in SETS SENTENCIAS { nodoaux = new NodoArbol("for","");
+        |        tk_cadena2 { primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                              primitivoAux.setCadena(true);
+                              nodoaux = new NodoArbol($1,"");
+                              $$ = [primitivoAux,nodoaux]; };
+
+
+
+FLOWER: tk_for tk_idflower tk_in SETS SENTENCIAS { instruccionAux = new XPath(@1.first_line, @1.first_column, $4[0]);
+                                                   flowerAux = new Flower(@1.first_line, @1.first_column, $2, instruccionAux, $5[0]);
+                                                   nodoaux = new NodoArbol("for","");
                                                    nodoaux.agregarHijo(new NodoArbol($2,""));
                                                    nodoaux.agregarHijo($4[1]);
                                                    nodoaux.agregarHijo($5[1]);
-                                                   $$ = [null,nodoaux]; };
+                                                   $$ = [flowerAux,nodoaux]; };
 
 SENTENCIAS: SENTENCIAS SENTENCIA {                                   
                                    $1[1].agregarHijo($2[1]);
@@ -396,62 +500,103 @@ SENTENCIAS: SENTENCIAS SENTENCIA {
 
 
 SENTENCIA: tk_let tk_idflower tk_dospuntosigual EXPRESION_LOGICAX {  nodoaux = new NodoArbol(":=","");
-                                                                     nodoaux.agregarHijo(new NodoArbol($1,""));
+                                                                     nodoaux.agregarHijo(new NodoArbol($2,""));
                                                                      nodoaux.agregarHijo($4[1]);
-                                                                     $$ = [null,nodoaux]; }
-        | tk_where EXPRESION_LOGICAX  {
-                                        $$ = [null,$2[1]]; }
-        | tk_order tk_by EXPRESION_LOGICAX { $$ = [null,$3[1]]; }
-        | tk_return RETURN { $$ = [null,$2[1]];  };
+                                                                     declaracionAux = new Declaracion(TipoSentencia.LET, $4[0], $2,  @1.first_line, @1.first_column);
+                                                                     $$ = [declaracionAux,nodoaux]; }
+
+        | tk_where tk_idflower tk_slash EXPRESION_LOGICAX  { 
+                                        nodoaux = new NodoArbol("Where","");
+                                        nodoaux.agregarHijo($4[1]);
+                                        sentenciaAux = new Sentencia(TipoSentencia.WHERE, $4[0], @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
+
+        | tk_order tk_by tk_idflower tk_slash tk_identificador {    
+                                        nodoaux = new NodoArbol("OrderBy","");
+                                        nodoaux.agregarHijo(new NodoArbol($5,""));
+                                        sentenciaAux = new Sentencia(TipoSentencia.ORDERBY_ELEMENTO, $5, @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
+
+        | tk_order tk_by tk_idflower tk_slash tk_arroba tk_identificador {  
+                                        nodoaux = new NodoArbol("OrderBy","");
+                                        nodoaux.agregarHijo(new NodoArbol("@"+$6,""));  
+                                        sentenciaAux = new Sentencia(TipoSentencia.ORDERBY_ATRIBUTO, $6, @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
+
+        | tk_order tk_by tk_idflower  {  
+                                        nodoaux = new NodoArbol("OrderBy","");
+                                        nodoaux.agregarHijo(new NodoArbol($3,""));  
+                                        sentenciaAux = new Sentencia(TipoSentencia.ORDERBY, $3, @1.first_line, @1.first_column);
+                                        $$ = [sentenciaAux,nodoaux]; }
+
+        | tk_return tk_idflower  {  
+                                nodoaux = new NodoArbol("Return","");
+                                nodoaux.agregarHijo(new NodoArbol($2,""));
+                                sentenciaAux = new Sentencia(TipoSentencia.RETURN, null, @1.first_line, @1.first_column);
+                                $$ = [sentenciaAux,nodoaux];  }
+
+        | tk_return tk_idflower tk_slash EXPRESION_LOGICAX {  
+                                nodoaux = new NodoArbol("Return","");
+                                nodoaux.agregarHijo($4[1]);
+                                sentenciaAux = new Sentencia(TipoSentencia.RETURN, $4[0], @1.first_line, @1.first_column);
+                                $$ = [sentenciaAux,nodoaux];  };
 
 
-RETURN : EXPRESION_LOGICAX { $$ = $1; };
 
-EXPRESION_XQUERY : tk_idflower SETS { nodoaux = new NodoArbol($1,"");
+EXPRESION_XQUERY : tk_idflower SETS { expresionAux = new ExpresionXQuery(@1.first_line, @1.first_column, $1, $2[0]);
+                                      nodoaux = new NodoArbol($1,"");
                                       nodoaux.agregarHijo($2[1]);
-                                      $$ = [null,nodoaux]; };
+                                      $$ = [expresionAux,nodoaux]; };
 
-EXPRESION_LOGICAX : EXPRESION_LOGICAX tk_and EXPRESION_RELACIONALX { nodoaux = new NodoArbol("and","");
+EXPRESION_LOGICAX : EXPRESION_LOGICAX tk_and EXPRESION_RELACIONALX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.AND, @1.first_line, @1.first_column);
+                                                                     nodoaux = new NodoArbol("and","");
                                                                      nodoaux.agregarHijo($1[1]);
                                                                      nodoaux.agregarHijo($3[1]);
-                                                                     $$ = [null,nodoaux]; }
-                |  EXPRESION_LOGICAX tk_or EXPRESION_RELACIONALX { nodoaux = new NodoArbol("or","");
+                                                                     $$ = [operacionAux,nodoaux]; }
+
+                |  EXPRESION_LOGICAX tk_or EXPRESION_RELACIONALX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.OR, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol("or","");
                                                                    nodoaux.agregarHijo($1[1]);
                                                                    nodoaux.agregarHijo($3[1]);
-                                                                   $$ = [null,nodoaux]; }     
-                |  EXPRESION_XQUERY { $$ = $1; }
+                                                                   $$ = [operacionAux,nodoaux]; }     
                 |  EXPRESION_RELACIONALX { $$ = $1;};
 
 
-EXPRESION_RELACIONALX :  EXPRESION_NUMERICAX tk_mayor EXPRESION_NUMERICAX { nodoaux = new NodoArbol(">","");
+EXPRESION_RELACIONALX :  EXPRESION_NUMERICAX tk_mayor EXPRESION_NUMERICAX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MAYOR_QUE, @1.first_line, @1.first_column);
+                                                                            nodoaux = new NodoArbol(">","");
                                                                             nodoaux.agregarHijo($1[1]);
                                                                             nodoaux.agregarHijo($3[1]);
-                                                                            $$ = [null,nodoaux]; }
+                                                                            $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICAX tk_menor EXPRESION_NUMERICAX {  nodoaux = new NodoArbol("<","");
+                |       EXPRESION_NUMERICAX tk_menor EXPRESION_NUMERICAX {  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MENOR_QUE, @1.first_line, @1.first_column);
+                                                                            nodoaux = new NodoArbol("<","");
                                                                             nodoaux.agregarHijo($1[1]);
                                                                             nodoaux.agregarHijo($3[1]);
-                                                                            $$ = [null,nodoaux]; }
+                                                                            $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICAX tk_mayorigual EXPRESION_NUMERICAX { nodoaux = new NodoArbol(">=","");
+                |       EXPRESION_NUMERICAX tk_mayorigual EXPRESION_NUMERICAX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MAYOR_IGUAL_QUE, @1.first_line, @1.first_column);
+                                                                                nodoaux = new NodoArbol(">=","");
                                                                                 nodoaux.agregarHijo($1[1]);
                                                                                 nodoaux.agregarHijo($3[1]);
-                                                                                $$ = [null,nodoaux]; }
+                                                                                $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICAX tk_menorigual EXPRESION_NUMERICAX { nodoaux = new NodoArbol("<=","");
+                |       EXPRESION_NUMERICAX tk_menorigual EXPRESION_NUMERICAX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MENOR_IGUAL_QUE, @1.first_line, @1.first_column);
+                                                                                nodoaux = new NodoArbol("<=","");
                                                                                 nodoaux.agregarHijo($1[1]);
                                                                                 nodoaux.agregarHijo($3[1]);
-                                                                                $$ = [null,nodoaux]; }
+                                                                                $$ = [operacionAux,nodoaux]; }
 
-                |       EXPRESION_NUMERICAX tk_igual EXPRESION_CADENAX { nodoaux = new NodoArbol("=","");
+                |       EXPRESION_NUMERICAX tk_igual EXPRESION_CADENAX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.IGUAL, @1.first_line, @1.first_column);
+                                                                         nodoaux = new NodoArbol("=","");
                                                                          nodoaux.agregarHijo($1[1]);
                                                                          nodoaux.agregarHijo($3[1]);
-                                                                         $$ = [null,nodoaux]; }    
+                                                                         $$ = [operacionAux,nodoaux]; }    
 
-                |       EXPRESION_NUMERICAX tk_noigual EXPRESION_CADENAX { nodoaux = new NodoArbol("=","");
+                |       EXPRESION_NUMERICAX tk_noigual EXPRESION_CADENAX { operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.DIFERENTE_QUE, @1.first_line, @1.first_column);
+                                                                           nodoaux = new NodoArbol("=","");
                                                                            nodoaux.agregarHijo($1[1]);
                                                                            nodoaux.agregarHijo($3[1]);
-                                                                           $$ = [null,nodoaux]; }  
+                                                                           $$ = [operacionAux,nodoaux]; }  
 
                 |       EXPRESION_NUMERICAX { $$ = $1; }  ;     
 
@@ -459,51 +604,60 @@ EXPRESION_RELACIONALX :  EXPRESION_NUMERICAX tk_mayor EXPRESION_NUMERICAX { nodo
 EXPRESION_CADENAX :      CADENA { $$ = $1; }
                 |      EXPRESION_NUMERICAX { $$ = $1; };
 
-EXPRESION_NUMERICAX : tk_menos EXPRESION_NUMERICAX %prec UMENOS	{ nodoaux = new NodoArbol("*","");
+EXPRESION_NUMERICAX : tk_menos EXPRESION_NUMERICAX %prec UMENOS	{ negativo = new Primitivo(-1, @1.first_line, @1.first_column);
+                                                                  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $2[0], negativo, Operador.MULTIPLICACION, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("*","");
                                                                   nodoaux.agregarHijo(new NodoArbol("-1",""));
                                                                   nodoaux.agregarHijo($2[1]);
-                                                                  $$ = [null,nodoaux]; }
+                                                                  $$ = [operacionAux,nodoaux]; }
 
-	| EXPRESION_NUMERICAX tk_mas EXPRESION_NUMERICAX	{  
-                                                                nodoaux = new NodoArbol("+","");
-                                                                nodoaux.agregarHijo($1[1]);
-                                                                nodoaux.agregarHijo($3[1]);
-                                                                $$ = [null,nodoaux]; }
+	| EXPRESION_NUMERICAX tk_mas EXPRESION_NUMERICAX	{  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.SUMA, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol("+","");
+                                                                   nodoaux.agregarHijo($1[1]);
+                                                                   nodoaux.agregarHijo($3[1]);
+                                                                  $$ = [operacionAux,nodoaux]; }
 
-	| EXPRESION_NUMERICAX tk_menos EXPRESION_NUMERICAX	{  
-                                                                nodoaux = new NodoArbol("-","");
-                                                                nodoaux.agregarHijo($1[1]);
-                                                                nodoaux.agregarHijo($3[1]);
-                                                                $$ = [null,nodoaux]; }
+	| EXPRESION_NUMERICAX tk_menos EXPRESION_NUMERICAX	{ operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.RESTA, @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol("-","");
+                                                                  nodoaux.agregarHijo($1[1]);
+                                                                  nodoaux.agregarHijo($3[1]);
+                                                                  $$ = [operacionAux,nodoaux]; }
 
-	| EXPRESION_NUMERICAX tk_asterisco EXPRESION_NUMERICAX	{  
-                                                                nodoaux = new NodoArbol("*","");
-                                                                nodoaux.agregarHijo($1[1]);
-                                                                nodoaux.agregarHijo($3[1]);
-                                                                $$ = [null,nodoaux]; }
+	| EXPRESION_NUMERICAX tk_asterisco EXPRESION_NUMERICAX	{ operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MULTIPLICACION, @1.first_line, @1.first_column); 
+                                                                  nodoaux = new NodoArbol("*","");
+                                                                  nodoaux.agregarHijo($1[1]);
+                                                                  nodoaux.agregarHijo($3[1]);
+                                                                  $$ = [operacionAux,nodoaux]; }
 
-        | EXPRESION_NUMERICAX tk_mod EXPRESION_NUMERICAX	{  
-                                                                nodoaux = new NodoArbol("%","");
-                                                                nodoaux.agregarHijo($1[1]);
-                                                                nodoaux.agregarHijo($3[1]);
-                                                                $$ = [null,nodoaux]; }
+        | EXPRESION_NUMERICAX tk_mod EXPRESION_NUMERICAX	{  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.MODULO, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol("%","");
+                                                                   nodoaux.agregarHijo($1[1]);
+                                                                   nodoaux.agregarHijo($3[1]);
+                                                                   $$ = [operacionAux,nodoaux]; }
 
-	| EXPRESION_NUMERICAX tk_division EXPRESION_NUMERICAX	{  
-                                                                nodoaux = new NodoArbol("÷","");
-                                                                nodoaux.agregarHijo($1[1]);
-                                                                nodoaux.agregarHijo($3[1]);
-                                                                $$ = [null,nodoaux]; }
+	| EXPRESION_NUMERICAX tk_division EXPRESION_NUMERICAX	{  operacionAux = new Operacion(TipoOperadores.ELEMENTOS, $1[0], $3[0], Operador.DIVISION, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol("÷","");
+                                                                   nodoaux.agregarHijo($1[1]);
+                                                                   nodoaux.agregarHijo($3[1]);
+                                                                   $$ = [operacionAux,nodoaux]; }
 
 	| tk_parentesisa EXPRESION_NUMERICAX tk_parentesisc	{ $$ = $2; }
 
-	| tk_entero						{ nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; }
+	| tk_entero						{ primitivoAux = new Primitivo(Number($1), @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [primitivoAux,nodoaux]; }
 
-	| tk_decimal						{ nodoaux = new NodoArbol($1,"");
-                                                                  $$ = [null,nodoaux]; } 
+	| tk_decimal						{ primitivoAux = new Primitivo(Number($1), @1.first_line, @1.first_column);
+                                                                  nodoaux = new NodoArbol($1,"");
+                                                                  $$ = [primitivoAux,nodoaux]; } 
 
-	| tk_identificador	                                {  nodoaux = new NodoArbol($1,"");
-                                                                   $$ = [null,nodoaux];};
+        | tk_idflower	                                        {  primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol($1,"");
+                                                                   $$ = [primitivoAux, nodoaux]; }
+
+	| tk_identificador	                                {  primitivoAux = new Primitivo($1, @1.first_line, @1.first_column);
+                                                                   nodoaux = new NodoArbol($1,"");
+                                                                   $$ = [primitivoAux, nodoaux]; };
 
 
                 

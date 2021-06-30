@@ -101,3 +101,31 @@ var TipoOperadores;
     TipoOperadores[TipoOperadores["ELEMENTOS"] = 65] = "ELEMENTOS";
     TipoOperadores[TipoOperadores["ATRIBUTOS"] = 66] = "ATRIBUTOS";
 })(TipoOperadores || (TipoOperadores = {}));
+
+var TipoOperadores;
+(function (TipoOperadores) {
+    TipoOperadores[TipoOperadores["ELEMENTOS"] = 65] = "ELEMENTOS";
+    TipoOperadores[TipoOperadores["ATRIBUTOS"] = 66] = "ATRIBUTOS";
+})(TipoOperadores || (TipoOperadores = {}));
+
+var TipoSentencia;
+(function (TipoSentencia) {
+    TipoSentencia[TipoSentencia["WHERE"] = 67] = "WHERE";
+    TipoSentencia[TipoSentencia["ORDERBY"] = 68] = "ORDERBY";
+    TipoSentencia[TipoSentencia["ORDERBY_ELEMENTO"] = 69] = "ORDERBY_ELEMENTO";
+    TipoSentencia[TipoSentencia["ORDERBY_ATRIBUTO"] = 70] = "ORDERBY_ATRIBUTO";
+    TipoSentencia[TipoSentencia["RETURN"] = 71] = "RETURN";
+    TipoSentencia[TipoSentencia["LET"] = 72] = "LET";
+    TipoSentencia[TipoSentencia["NULL"] = 73] = "NULL";
+})(TipoSentencia  || (TipoSentencia = {}));
+
+var TipoXInstruccion;
+(function (TipoXInstruccion) {
+    TipoXInstruccion[TipoXInstruccion["XPATH"] = 74] = "XPATH";
+    TipoXInstruccion[TipoXInstruccion["XNUMBER"] = 75] = "XNUMBER";
+    TipoXInstruccion[TipoXInstruccion["XFLOWER"] = 76] = "XFLOWER";
+    TipoXInstruccion[TipoXInstruccion["XLOWER"] = 77] = "XLOWER";
+    TipoXInstruccion[TipoXInstruccion["XUPPER"] = 78] = "XUPPER";
+    TipoXInstruccion[TipoXInstruccion["XSTRING"] = 79] = "XSTRING";
+    TipoXInstruccion[TipoXInstruccion["XSUBSTRING"] = 80] = "XSUBSTRING";
+})(TipoXInstruccion || (TipoXInstruccion = {}));

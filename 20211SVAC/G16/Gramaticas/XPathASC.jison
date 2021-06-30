@@ -27,7 +27,7 @@
 ">"		return 'mayor';
 "or"	return 'or';
 "and"	return 'and';
-"mon"	return 'mod';
+"mod"	return 'mod';
 "["		return 'corizq';
 "]"		return 'corder';
 "("		return 'parizq';
@@ -68,8 +68,10 @@
 /lex
 
 /*Precedencia de operadores*/
+
 %left 'or' 'and'
 %left 'dif' 'igual'
+%left 'rlast' 'rposition' 'rnode' 'rtext'
 %left 'menor' 'mayor' 'menori' 'mayori'
 %left 'mas' 'menos'
 %left 'por' 'div'
@@ -86,51 +88,51 @@ INICIO:
 	 INICIO diagonal id PREDICADO	{ $$=new NodoAST.default("/");
 	 								  let nodo1=new NodoAST.default($3); nodo1.AgregarHijo($4);
 	 								  $$.AgregarHijo($1); $$.AgregarHijo(nodo1); }
-	|diagonal id PREDICADO 			{ $$=new NodoAST.default("/"); 
+	|diagonal id PREDICADO 			{ $$=new NodoAST.default("/");
 									  let nodo2=new NodoAST.default($2); nodo2.AgregarHijo($3);
 									  $$.AgregarHijo(nodo2); }
-	|INICIO diagonal id 			{ $$=new NodoAST.default("/"); 
+	|INICIO diagonal id 			{ $$=new NodoAST.default("/");
 									  let nodo3=new NodoAST.default($3);
 									  $$.AgregarHijo($1); $$.AgregarHijo(nodo3); }
 	|diagonal id 					{ $$=new NodoAST.default("/");
 									  let nodo4=new NodoAST.default($2);
 									  $$.AgregarHijo(nodo4); }
-	|INICIO diagonal EXPRESION 		{ $$=new NodoAST.default("/"); 
+	|INICIO diagonal EXPRESION 		{ $$=new NodoAST.default("/");
 									  $$.AgregarHijo($1); $$.AgregarHijo($3); }
 	|diagonal EXPRESION PREDICADO 	{ $$=new NodoAST.default("/");
 									  $2.AgregarHijo($3); $$.AgregarHijo($2); }
-	|diagonal EXPRESION 		 	{ $$=new NodoAST.default("/"); 
+	|diagonal EXPRESION 		 	{ $$=new NodoAST.default("/");
 									  $$.AgregarHijo($2); }
-	|INICIO diagonal EJES 			{ $$=new NodoAST.default("/"); 
+	|INICIO diagonal EJES 			{ $$=new NodoAST.default("/");
 									  $$.AgregarHijo($1); $$.AgregarHijo($3); }
-	|diagonal EJES					{ $$=new NodoAST.default("/"); 
+	|diagonal EJES					{ $$=new NodoAST.default("/");
 									  $$.AgregarHijo($2); }
-	|INICIO dobled id PREDICADO 	{ $$=new NodoAST.default("//"); 
+	|INICIO dobled id PREDICADO 	{ $$=new NodoAST.default("//");
 									  let nodo5=new NodoAST.default($3); nodo5.AgregarHijo($4);
 									  $$.AgregarHijo($1); $$.AgregarHijo(nodo5); }
-	|dobled id PREDICADO 			{ $$=new NodoAST.default("//"); 
+	|dobled id PREDICADO 			{ $$=new NodoAST.default("//");
 									  let nodo6=new NodoAST.default($2); nodo6.AgregarHijo($3);
 									  $$.AgregarHijo(nodo6); }
-	|INICIO dobled id 				{ $$=new NodoAST.default("//"); 
+	|INICIO dobled id 				{ $$=new NodoAST.default("//");
 									  let nodo7=new NodoAST.default($3);
 									  $$.AgregarHijo($1); $$.AgregarHijo(nodo7); }
 	|dobled id 						{ $$=new NodoAST.default("//");
 									  let nodo8=new NodoAST.default($2);
 									  $$.AgregarHijo(nodo8); }
-	|INICIO dobled EXPRESION 		{ $$=new NodoAST.default("//"); 
+	|INICIO dobled EXPRESION 		{ $$=new NodoAST.default("//");
 									  $$.AgregarHijo($1); $$.AgregarHijo($3); }
-	|dobled EXPRESION PREDICADO		{ $$=new NodoAST.default("//"); 
+	|dobled EXPRESION PREDICADO		{ $$=new NodoAST.default("//");
 									  $2.AgregarHijo($3); $$.AgregarHijo($2); }
-	|dobled EXPRESION 				{ $$=new NodoAST.default("//"); 
+	|dobled EXPRESION 				{ $$=new NodoAST.default("//");
 									  $$.AgregarHijo($2); }
-	|INICIO dobled EJES 			{ $$=new NodoAST.default("//"); 
+	|INICIO dobled EJES 			{ $$=new NodoAST.default("//");
 									  $$.AgregarHijo($1); $$.AgregarHijo($3); }
-	|dobled EJES 					{ $$=new NodoAST.default("//"); 
+	|dobled EJES 					{ $$=new NodoAST.default("//");
 									  $$.AgregarHijo($2); }
-	|INICIO barra INICIO 			{ $$=new NodoAST.default("|"); 
+	|INICIO barra INICIO 			{ $$=new NodoAST.default("|");
 									  $$.AgregarHijo($1); $$.AgregarHijo($3); }
 	|id								{ $$=new NodoAST.default($1); }
-	|id PREDICADO					{ $$=new NodoAST.default($1); $$.AgregarHijo($1); }
+	|id PREDICADO					{ $$=new NodoAST.default($1); $$.AgregarHijo($2); }
 	|punto 							{ $$=new NodoAST.default($1); }
 	|doblep 						{ $$=new NodoAST.default($1); }
 	|INICIO diagonal punto			{ $$=new NodoAST.default("/");
@@ -197,7 +199,7 @@ EXPRESION:
 ;
 
 FUNCIONES:
-	 FUNCION parizq parder 	{ $$=new NodoAST.default("Funcion"); 
+	 FUNCION parizq parder 	{ $$=new NodoAST.default("Funcion");
 	 						  let nodof=new NodoAST.default($1); $$.AgregarHijo(nodof); }
 ;
 
@@ -210,7 +212,7 @@ FUNCION:
 ;
 
 EJES:
-	 EJE dospuntos dospuntos CONTENIDO 			{ $$=new NodoAST.default("Eje"); 
+	 EJE dospuntos dospuntos CONTENIDO 			{ $$=new NodoAST.default("Eje");
 	 											  let nodoe=new NodoAST.default($1); nodoe.AgregarHijo($4);
 												  $$.AgregarHijo(nodoe); }
 	|EJES EJE dospuntos dospuntos CONTENIDO 	{ $$=new NodoAST.default($2); $$.AgregarHijo($1); $$.AgregarHijo($5); }
@@ -238,7 +240,7 @@ CONTENIDO:
 	 					  let nodoc1=new NodoAST.default($1); $$.AgregarHijo(nodoc1); }
 	|id parizq parder 	{ $$=new NodoAST.default("Contenido");
 	 					  let nodoc2=new NodoAST.default($1); $$.AgregarHijo(nodoc2); }
-	|id PREDICADO		{ $$=new NodoAST.default("Contenido"); 
+	|id PREDICADO		{ $$=new NodoAST.default("Contenido");
 						  let nodoc6=new NodoAST.default($1); nodoc6.AgregarHijo($2);
 						  $$.AgregarHijo(nodoc6); }
 	|por 				{ $$=new NodoAST.default("Contenido");

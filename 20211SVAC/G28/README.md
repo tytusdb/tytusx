@@ -122,7 +122,7 @@ Imports Generales:
 ![Back](./manuales/t10.png)
 
 ## Data interna
-- Grupo Numero 28 
+- Grupo Numero : 28
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

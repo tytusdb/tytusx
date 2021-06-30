@@ -29,11 +29,15 @@
 
   </div>
   <div class="col-md-4">
-    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="parseValueXML()">NUEVO</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="parseValueXML()">ASC</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="parseValueXML()">DESC</button>
     <input type="file" id="file" (change)="fileChanged($event,1)" /> 
     <label for="file" style="width: 100px; padding-top: 8px;margin-right: 2px;">ABRIR</label>
     <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="SaveDemo1()">GUARDAR</button>
     <button mat-raised-button color="primary" style="margin-right: 2px;"(click)="CleanEditor1()">LIMPIAR</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;">REPORTES</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;" (click)="D3()">AST</button>
+    <button mat-raised-button color="primary" style="margin-right: 2px;">TABLA DE SIMBOLOS</button>
   </div>
 
   <div class="col-md-1">
@@ -48,13 +52,46 @@
 </div>
 
 <br/>
+
+<div class="row"> 
+  <div class="col-md-1">
+
+  </div>
+  <div class="col-md-4">
+    <button mat-raised-button color="primary" style="margin-right: 2px;background-color: blueviolet;"(click)="parseValueXML()">TRANSLATE</button>
+  </div>
+
+</div>
+
+<br/>
 <br/>
 
+<div class="row"> 
+  
+  <div class="col-md-1">
+  </div>
+
+  <div class="col-md-10">
+    <span class="Titulo" style="color: black;font-size: 16px;">XPATH:</span>
+  </div>
+</div>
+<div class="row"> 
+  
+  <div class="col-md-1">
+  </div>
+
+  <div class="col-md-10">
+    <textarea matInput placeholder="" [(ngModel)]="this.dat.Cod_tab3" cols="151" rows="1" style="resize: none;"></textarea>
+  </div>
+</div>
+
+<br/>
+<br/>
 <div class="row"> 
   <div class="col-md-1">
   </div>
   <div class="col-md-4">
-    <textarea matInput placeholder="XPATH CODE HERE" [(ngModel)]="this.dat.Cod_tab1"  cols="70" rows="30" style="resize: none;"></textarea>
+    <textarea matInput placeholder="XML HERE" [(ngModel)]="this.dat.Cod_tab1"  cols="70" rows="30" style="resize: none;"></textarea>
   </div>
 
   <div class="col-md-1">
@@ -71,6 +108,34 @@
   </div>
 
   <div class="col-md-10">
+    <span class="Titulo" style="color: black;font-size: 16px;">SALIDA:</span>
+  </div>
+</div>
+<div class="row"> 
+  
+  <div class="col-md-1">
+  </div>
+
+  <div class="col-md-10">
     <textarea matInput placeholder="" [(ngModel)]="this.dat.Cod_tab3" cols="151" rows="20" style="resize: none;"></textarea>
+  </div>
+</div>
+
+<br/>
+<div class="row"> 
+  
+  <div class="col-md-1">
+  </div>
+
+  <div class="col-md-10">
+    <span class="Titulo" style="color: black;font-size: 16px;">AST GRAPH</span>
+  </div>
+</div>
+<div class="row"> 
+  
+  <div class="col-md-1">
+  </div>
+
+  <div id = "graph" class="col-md-10">
   </div>
 </div>

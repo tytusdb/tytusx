@@ -433,7 +433,7 @@ case 29:
 break;
 case 30:
  
-            this.$ = "\""; 
+            this.$ = "''"; 
             /* CONSTRUCCION DE CST */
             cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, 
                                                 [new Nodo(cst.cstXmlAsc.getId(), 'comilla doble', null, 

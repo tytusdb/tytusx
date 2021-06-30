@@ -66,6 +66,27 @@ const init = function(e){
         window.open('./reportes/astXQUERY.html','_blank');
     });
 
+    let btn_heap = document.querySelector("#heap");
+
+    btn_heap.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/heap.html','_blank');
+    });
+
+    let btn_stack = document.querySelector("#stack");
+
+    btn_stack.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/stack.html','_blank');
+    });
+
+    let btn_opC3D = document.querySelector("#opC3D");
+
+    btn_opC3D.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./reportes/optimizaciones.html','_blank');
+    });
+
 };
 
 
