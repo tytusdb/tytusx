@@ -235,17 +235,42 @@ let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
       <price>8.20</price>
       <year>1987</year>
    </book>
+   <book category="COOKING">
+  <title lang="en">Everyday Italian</title>
+  <author>Giada De Laurentiis</author>
+  <year>2005</year>
+  <price>30.00</price>
+</book>
+
+<book category="CHILDREN">
+  <title lang="en">Harry Potter</title>
+  <author>J K. Rowling</author>
+  <year>2005</year>
+  <price>29.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">XQuery Kick Start</title>
+  <author>James McGovern</author>
+  <author>Per Bothner</author>
+  <author>Kurt Cagle</author>
+  <author>James Linn</author>
+  <author>Vaidyanathan Nagarajan</author>
+  <year>2003</year>
+  <price>49.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">Learning XML</title>
+  <author>Erik T. Ray</author>
+  <year>2003</year>
+  <price>39.95</price>
+</book>
 </bookstore>
 `
 
-let XQuery = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
-{
-if ($m = 0) then $n+1
-else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
-else local:ackerman($m - 1, local:ackerman($m, $n -1))
-};
-
-local:ackerman(3,3)
+let XQuery = `for $x in (1 to 5)
+return <test>{$x}</test>
 `
 
 

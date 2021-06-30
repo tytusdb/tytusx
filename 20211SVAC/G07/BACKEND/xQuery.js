@@ -136,7 +136,7 @@ function asignar_variable(instrucciones,entorno,tablaSimbolos){
 function procesarDato(instruccion,entorno,tablaSimbolos){
     let valor1;
     let valor2;
-    
+   
     switch (instruccion.tipo) {
         case "NUMERO":
             return parseInt(instruccion.valor);
@@ -201,8 +201,34 @@ function procesarDato(instruccion,entorno,tablaSimbolos){
             valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
             valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
             return valor1 && valor2 ;
+        case "OR":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 || valor2 ;
     }
     
+}
+
+function comparar(palabra1,palabra2){
+    if(!isNaN(palabra1)&&!isNaN(palabra2)){
+        if(parseFloat(palabra1)<parseFloat(palabra2)){
+            return true;
+        } 
+    }else{
+        return alfabeto(palabra1,palabra2,0);
+    }
+
+    return false;
+}
+
+function alfabeto(palabra1,palabra2,i){
+
+    if(palabra1.charCodeAt(i)>palabra2.charCodeAt(i)){
+        return true
+    }else if(palabra1.charCodeAt(i)==palabra2.charCodeAt(i)){
+        return alfabeto(palabra1,palabra2,i+1);
+    }
+    return false;
 }
 
 
@@ -216,18 +242,25 @@ function procesarDato(instruccion,entorno,tablaSimbolos){
 
 
 
-
-
-
 function ejecutarForIn(instruccion,entorno,padre){
-    
+    console.log(instruccion.iterador.consulta);
+    let respuesta="";
+    if(instruccion.iterador.consulta.tipo=="TO"){
+        for (let index = instruccion.iterador.consulta.inicio; index <= instruccion.iterador.consulta.fin; index++) {
+            let var_= new Entorno(padre);
+            var_.agregar(instruccion.iterador.variable,index);
+            retorno=procesarReturn(instruccion.retorno,var_);
+            if(retorno){
+                respuesta+=retorno+'\n';
+            }
+        }
+        if(respuesta!=""){
+            return respuesta;
+        }
+    }else{
     let consulta=instruccion.iterador.consulta;
-    
-    
     let entornos=procesarXpath(consulta,entorno,null);
     entornos=procesarEtorno(entornos);
-    
-    
     
     //Orden by
     if(instruccion.order){
@@ -254,6 +287,7 @@ function ejecutarForIn(instruccion,entorno,padre){
         return respuesta;
     }
     console.error("A  QUI");
+}
     return null;
     
 }
@@ -496,6 +530,7 @@ function imprimirEntorno(entorno){
       for (const iterator of entorno.hijos) {
           contenido += imprimirEntorno(iterator);
       }
+      
       let retorno = new Etiqueta(
           entorno.etiqueta,
           entorno.texto,
@@ -503,6 +538,7 @@ function imprimirEntorno(entorno){
           arregloAtributo
         ); //nombre,texto,contenido
         if (retorno) {
+            
           return retorno.obtenerXML();
         }
     }
@@ -564,8 +600,8 @@ function ordenar(instruccion,entornos){
     n = entornosAux.length;
     for (k = 1; k < n; k++) {
         for (i = 0; i < (n - k); i++) {
-            if (parseFloat(entornosAux[i].texto) < parseFloat(entornosAux[i + 1].texto)) {
-
+            if (comparar(entornosAux[i].texto,entornosAux[i + 1].texto)) {
+                
                 aux = entornosAux[i];
                 entornosAux[i] = entornosAux[i + 1];
                 entornosAux[i + 1] = aux;

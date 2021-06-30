@@ -348,6 +348,7 @@ DATO
         |DATO tk_eq DATO                                                                {$$={tipo:"IGUAL",valor1:$1,valor2:$3};}
         |DATO tk_ne DATO                                                                {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}  
         |DATO tk_and DATO                                                               {$$={tipo:"AND",valor1:$1,valor2:$3};}  
+        |DATO tk_or DATO                                                                {$$={tipo:"OR",valor1:$1,valor2:$3};}  
 ;
 F_DATA
         :tk_data tk_parentesis_izq CONS tk_parentesis_der                               {$$=$3;}
