@@ -9,6 +9,7 @@ var tmpHeap = 0;
 //Cambio
 var stackv2 = new tsStack();
 var heapv2 = new tsHeap();
+var actualizaPadre=true;
 
 function generarXMLC3D(ts){
     //si la tabla de símbolos si tiene objetos se procede a recorrer los nodos
@@ -16,7 +17,7 @@ function generarXMLC3D(ts){
     var texto = "";
     var texto2 = "";
 
-    alert("Cantidad de Objetos XML: "+cantidadObjetos);
+    //alert("Cantidad de Objetos XML: "+cantidadObjetos);
     if (cantidadObjetos > 0){
         //se escribe el encabezado de la traducción a lenguaje C
         texto += generaEncabezadoXML3D();
@@ -29,23 +30,21 @@ function generarXMLC3D(ts){
                 texto2 += generarCodigo3DContenido(ts.listaObjetos[i-1],ts.listaObjetos[i], ts);
             }
         }
+ 
         //Se asigna la declaracion de temporales
         texto += creaAsignacionDeTemporales(ts);
         //Se agrega todo el C3D de etiquetas generado dentro del for.
-        texto += texto2;
+        texto += texto2;        
+        texto += actualizaC3D(ts, tmpStack,tmpHeap);        
         //Se crea el cierre de la clase C que representará el código
-        texto += generaCierreXML3D();
-
+        texto += generaCierreXML3D();        
         console.log("Codigo 3D: \n"+texto);
         var tablaSimbolosContenido = imprimeTablaSimbolos3D(ts);
         console.log(tablaSimbolosContenido);
         console.log("\n\n*************DATOS DE STACK Y HEAP************************\n");
         console.log("Cantidad de elementos en stack: "+ stack.length + "\n");
         console.log("Cantidad de elementos en heap: " + heap.length + "\n");
-        var txtStackv2 = recorreStackv2(stackv2);
-        console.log(txtStackv2);
-        var txtHeap2 = recorreHeapV2(heapv2);
-        console.log(txtHeap2);
+
     }
 }
 
@@ -97,16 +96,16 @@ function generarCodigo3DEtiqueta(objeto, ts)
     //alert("Longitud: "+ longitud);
     var cadena = objeto.identificador; //Etiqueta1
     var arregloCadena = cadena.split('');
+
     
     texto += "\n/*----------------------*/\n";
     tmpStack = contadorTemporal; //0
     texto += "t"+contadorTemporal+" = S;\n"; // t0 = S;
     posicionInicialStack = contadorTemporal;
+    //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
+    ts.insertaTemporal(objeto.i, objeto.identificador, "t"+contadorTemporal);    
     contadorTemporal++;
     
-    //se envía a la tabla de símbolos el temporal o SP que corresponde al objeto.
-    ts.insertaTemporal(objeto.i, objeto.identificador, "t"+tmpStack);
-
     //se inserta en stack el tipo de objeto
     texto += "t"+ contadorTemporal + " = " + getIntTipoObjeto(objeto.tipo) + ";\n"; // tx = tipoObjeto;
     tmpStack = contadorTemporal;
@@ -143,59 +142,16 @@ function generarCodigo3DEtiqueta(objeto, ts)
         texto += "H = H + 1;\n"; //H = H + 1;
         tmpHeap = contadorTemporal; //2 //3
         //contadorTemporal++;
-        texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;
-        //VEFIFICA SI DEBE DE ACTUALIZAR EL PADRE
-        if(actualizaPadre){ 
-            var hijo = tmpHeap;
-            for(var j=0;j<stackv2.listaObjetos.length;j++){
-                if(objeto.padre.numId==stackv2.listaObjetos[j].numId){
-                    if(objetoS.tipo==1){
-                        if(Array.isArray(stackv2.listaObjetos[j].apuntadorHijos)){
-                            stackv2.listaObjetos[j].apuntadorHijos.push(tmpHeap);
-                        }
-                        else{
-                            stackv2.listaObjetos[j].apuntadorHijos=new Array();
-                            stackv2.listaObjetos[j].apuntadorHijos.push(tmpHeap);
-                        }
-                    }
-                    if(objetoS.tipo==2){
-                        if(Array.isArray(stackv2.listaObjetos[j].apuntadorAtributos)){
-                            stackv2.listaObjetos[j].apuntadorAtributos.push(tmpHeap);
-                        }
-                        else{
-                            stackv2.listaObjetos[j].apuntadorAtributos=new Array();
-                            stackv2.listaObjetos[j].apuntadorAtributos.push(tmpHeap);
-                        } 
-                    }
-                    if(objetoS.tipo!=1 && objetoS.tipo!=2){                        
-                        if(Array.isArray(stackv2.listaObjetos[j].apuntadorContenido)){
-                            stackv2.listaObjetos[j].apuntadorContenido.push(tmpHeap);
-                        }
-                        else{
-                            stackv2.listaObjetos[j].apuntadorContenido=new Array();
-                            stackv2.listaObjetos[j].apuntadorContenido.push(tmpHeap);
-                        } 
-                    }
-
-                    break;
-
-                }
-            }
-            actualizaPadre=false;
-            
-        }
+        texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;                
         contadorTemporal++; //3 //4
-    });    
-    //INSERTA EL OBJETO STACK EN LA LISTA STACK 
-    stackv2.listaObjetos.push(objetoS);
-
+    });        
     //Se agrega el -1 al final de la cadena en heap
     texto += "HEAP[t"+tmpHeap+"] = -1;\n"; // HEAP[t1] = ascii; Heap[t2] = -1;
     heap.push("-1");
     texto += "H = H + 1;\n"; //H = t1 + 1;
     tmpHeap = contadorTemporal; //2 //3
     //texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;
-
+    actualizaPadre=true;
     //Se inserta un -1 en el stack como referencia a los atributos
     //tmpStack = contadorTemporal;
     //contadorTemporal++;
@@ -244,15 +200,13 @@ function generarCodigo3DEtiqueta(objeto, ts)
     texto += "STACK[t"+contadorTemporal+"] = t"+temporalContenido+";\n";  // Stack[t1] = t0
     texto += "S = S + 1;\n"; //P = S + 1;
     tmpStack = contadorTemporal;
-    contadorTemporal++;
+    contadorTemporal++;   
     
-    actualizaPadre=true;
 
     //CREA OBJETO HIP E INSERTA EN LISTA HEAP       
     var objetoH = new tsObjetoHeap(tmpHeap,-1);
     //INSERTA EL OBJETO HEAP EN LA LISTA HEAP
     heapv2.listaObjetos.push(objetoH);
-
     //finaliza la traducción a C3D de una etiqueta
     return texto;
    
@@ -268,12 +222,9 @@ function generarCodigo3DContenido(objetoAnterior,objeto, ts){
     var temporalContenido = 0;
     objetoS.numId=objeto.i;
 
-    var longitud = obtieneLongitudCadena(objeto.identificador);
-    //alert("Longitud: "+ longitud);
+    var longitud = obtieneLongitudCadena(objeto.identificador);    
     var cadena = objeto.identificador; //Etiqueta1
     var arregloCadena = cadena.split('');
-    
-    alert("Entro al 3DContenido");
     texto += "\n/*----------------------*/\n";
     tmpStack = contadorTemporal; //0
     //texto += "t"+contadorTemporal+" = S;\n"; // t0 = S;
@@ -302,48 +253,8 @@ function generarCodigo3DContenido(objetoAnterior,objeto, ts){
         texto += "H = H + 1;\n"; //H = H + 1;
         tmpHeap = contadorTemporal; //2 //3
         //contadorTemporal++;
-        texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;
-        //VEFIFICA SI DEBE DE ACTUALIZAR EL PADRE
-        if(actualizaPadre){ 
-            var hijo = tmpHeap;
-            for(var j=0;j<stackv2.listaObjetos.length;j++){
-                if(objeto.padre.numId==stackv2.listaObjetos[j].numId){
-                    if(objetoS.tipo==1){
-                        if(Array.isArray(stackv2.listaObjetos[j].apuntadorHijos)){
-                            stackv2.listaObjetos[j].apuntadorHijos.push(tmpHeap);
-                        }
-                        else{
-                            stackv2.listaObjetos[j].apuntadorHijos=new Array();
-                            stackv2.listaObjetos[j].apuntadorHijos.push(tmpHeap);
-                        }
-                    }
-                    if(objetoS.tipo==2){
-                        if(Array.isArray(stackv2.listaObjetos[j].apuntadorAtributos)){
-                            stackv2.listaObjetos[j].apuntadorAtributos.push(tmpHeap);
-                        }
-                        else{
-                            stackv2.listaObjetos[j].apuntadorAtributos=new Array();
-                            stackv2.listaObjetos[j].apuntadorAtributos.push(tmpHeap);
-                        } 
-                    }
-                    if(objetoS.tipo!=1 && objetoS.tipo!=2){                        
-                        if(Array.isArray(stackv2.listaObjetos[j].apuntadorContenido)){
-                            stackv2.listaObjetos[j].apuntadorContenido.push(tmpHeap);
-                        }
-                        else{
-                            stackv2.listaObjetos[j].apuntadorContenido=new Array();
-                            stackv2.listaObjetos[j].apuntadorContenido.push(tmpHeap);
-                        } 
-                    }
-
-                    break;
-
-                }
-            }
-            actualizaPadre=false;
-            
-        }
-        contadorTemporal++; //3 //4
+        texto += "t"+contadorTemporal + " = H;\n" //t3 = H; // t4 = H;        
+        contadorTemporal++; //3 //4        
     });    
 
     //Se agrega el -1 al final de la cadena en heap
@@ -461,7 +372,6 @@ function imprimeTablaSimbolos3D(ts){
 //CAMBIO
 function getIntTipoObjeto(strTipoObjeto){
     var tipoObjeto=0;
-
     switch(strTipoObjeto){
         case "Etiqueta":
             tipoObjeto=1;
@@ -472,77 +382,88 @@ function getIntTipoObjeto(strTipoObjeto){
         default:
             tipoObjeto=3;
         break;
-
     }
     return tipoObjeto;
 }
 
 
+function actualizaC3D(ts, temporalStack, temporalHeap){
+    var texto="\n\n/*------------------------------------------*/\n\n";
+    var boolAgregaEtiqueta=false;
+    var boolAgregaAtributo=false; 
+    var tmptxt3dAtributo="";
+    var tmptxt3dEtiqueta="";
+    for(var i=0;i<ts.listaObjetos.length;i++){
 
-function recorreStackv2(tsStack){
+        if(getIntTipoObjeto(ts.listaObjetos[i].tipo)==1 || getIntTipoObjeto(ts.listaObjetos[i].tipo)==2)
+        {
+            var temporal = ts.listaObjetos[i].sp.slice(1);                     
+            if(ts.listaObjetos[i].listaAtributos.length>0)
+            {                
+                tmptxt3dAtributo+="t"+temporalStack+"= t"+temporal+"+2;\n";
+                tmptxt3dAtributo+="STACK[t"+temporalStack+"]=H;\n";
+                tmptxt3dAtributo+="S=S+1;\n";                
+                ts.listaObjetos[i].listaAtributos.forEach(  function(value)
+                {
+                    if(temporalStack>temporalHeap){                        
+                        temporalHeap=temporalStack+1;
+                    }
+                    else{
+                        temporalHeap++;                        
+                    }                                                                
+                    tmptxt3dAtributo+="t"+temporalHeap+"=H;\n";
+                    tmptxt3dAtributo+="HEAP[t"+temporalHeap+"]="+ value +";\n";
+                    tmptxt3dAtributo+="H=H+1;\n";                    
+                    boolAgregaAtributo=true;
+                });                  
+                temporalHeap++;                
+                tmptxt3dAtributo+="t"+temporalHeap+"=H;\n";
+                tmptxt3dAtributo+="HEAP[t"+temporalHeap+"]=-1;\n";
+                tmptxt3dAtributo+="H=H+1;\n";             
+                temporalHeap++;
+                temporalStack=temporalHeap;                
+                temporalHeap++;
+            }
+           
 
-    var texto = "";
-    var indice = 0;
-    var cantidadObjetos = tsStack.getCantidadObjetos();
-    if (cantidadObjetos > 0)
-    {
-        texto += "\n\n*******************************************************************************\n";
-        texto += "******************      RECORRER STACK V2       ***********************************\n";
-        texto += "  INDICE    |       TIPO        |   apuntadorNombre     |   apuntadorAtributos  |      apuntadorHijos    |     apuntadorContenido  | \n";
-        texto += "____________________________________________________________________________________________________________________________________\n";
-        for (var i = 0; i < tsStack.listaObjetos.length; i++) {
-            texto += "    "+indice+"       "+ "|         " + tsStack.listaObjetos[i].tipo + "         |             " + tsStack.listaObjetos[i].apuntadorNombre + "         |            " + tsStack.listaObjetos[i].apuntadorAtributos + "         |           " + tsStack.listaObjetos[i].apuntadorHijos + "          |           " + tsStack.listaObjetos[i].apuntadorContenido +  "           | \n";            
-            /*texto += "\n\n******************      VALORES V2       ***********************************\n";
-            texto += "  APUNTADOR \n";            
-            for (var j = 0; j < tsStack.listaObjetos[i].apuntadorContenido.length; j++) {
-                texto += "  "+tsStack.listaObjetos[i].apuntadorContenido[j]+ "   | \n";                            
-                indice++;
-            }*/
-            indice++;
+            if(ts.listaObjetos[i].listaEtiquetasHijas.length>0)
+            {        
+                var temporal = ts.listaObjetos[i].sp.slice(1);                
+                tmptxt3dEtiqueta+="t"+temporalStack+"= t"+temporal+"+ 3;\n";
+                tmptxt3dEtiqueta+="STACK[t"+temporalStack+"]=H;\n";
+                tmptxt3dEtiqueta+="S=S+1;\n";                               
+                ts.listaObjetos[i].listaEtiquetasHijas.forEach(  function(value)
+                {
+                    if(temporalStack>temporalHeap){                        
+                        temporalHeap=temporalStack+1;
+                    }
+                    else{
+                        temporalHeap++;                     
+                    }
+                    tmptxt3dEtiqueta+="t"+temporalHeap+"=H;\n";
+                    tmptxt3dEtiqueta+="HEAP[t"+temporalHeap+"]="+ value +";\n";
+                    tmptxt3dEtiqueta+="H=H+1;\n";                    
+                    boolAgregaEtiqueta=true;
+                });                
+                temporalHeap++;
+                tmptxt3dEtiqueta+="t"+temporalHeap+"=H;\n";
+                tmptxt3dEtiqueta+="HEAP[t"+temporalHeap+"]=-1;\n";
+                tmptxt3dEtiqueta+="H=H+1;\n";             
+                temporalHeap++;
+                temporalStack=temporalHeap;                
+                //temporalHeap++;
+            }
         }
+
     }
-
-    return texto;
-    
-}
-
-
-function recorreHeapV2(tsHeap){
-
-    var texto = "";
-    var indice = 0;
-    var cantidadObjetos = tsHeap.getCantidadObjetos();
-    if (cantidadObjetos > 0)
+    if(boolAgregaEtiqueta)
     {
-        texto += "\n\n*******************************************************************************\n";
-        texto += "******************      RECORRER HEAP V2       ***********************************\n";
-        texto += "     POSICION        |   VALOR    \n";
-        texto += "_______________________________________________________________________________\n";
-        tsHeap.listaObjetos.forEach(element => {
-            texto += "    " + element.posicion + "     |     " + element.valor + "   | \n";            
-        });
-    }
-
+        texto+=tmptxt3dEtiqueta;                
+    }    
+    if(boolAgregaAtributo)
+    {
+        texto+=tmptxt3dAtributo;        
+    }    
     return texto;
-    
 }
 
-
-/*function repetido(num){
-    var repe = false;
-    for (i=0; i<=usados.length; i++) {
-        if (num == usados[i]) {
-            repe = true;
-        }
-    }
-    return repe;
-}
-
-function aleatorio(min, max) {
-    while (repe != false) {
-        var num = Math.floor(Math.random()*(max-min+1))+min;
-        var repe = repetido(num);
-    }
-    usados.push(num);
-    return num;
-}*/
