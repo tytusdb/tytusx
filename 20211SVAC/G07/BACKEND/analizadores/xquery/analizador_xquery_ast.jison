@@ -179,8 +179,19 @@ INICIO :
         {$$= new Nodo("INI", "INI" );
         $$.agregarHijo($1);
 	}
-        |FUNCACKERMAN 
+        |INSTRUCCIONES 
         {$$= new Nodo("INI", "INI" );
+        $$.agregarHijo($1);
+	}        
+;
+INSTRUCCIONES:
+        INSTRUCCIONES INSTRUCCION
+       {$$= new Nodo("INS", "INS" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+	}        
+        | INSTRUCCION
+       {$$= new Nodo("INS", "INS" );
         $$.agregarHijo($1);
 	}        
 ;
@@ -213,6 +224,162 @@ XQUERYGRA
         $$.agregarHijo($1);
 	} 
 ;
+INSTRUCCION:
+        CREAR_V
+        {$$= new Nodo("INST", "INST" );
+        $$.agregarHijo($1);
+	}         
+        |ASIGNAR_V
+        {$$= new Nodo("INST", "INST" );
+        $$.agregarHijo($1);
+	}         
+        |IF_
+        {$$= new Nodo("INST", "INST" );
+        $$.agregarHijo($1);
+	}         
+        |CREAR_F tk_punto_coma
+        {$$= new Nodo("INST", "INST" );
+        $$.agregarHijo($1);
+	$$.agregarHijo(new Nodo($2,$2));
+        }         
+        |LLAMADA_F
+        {$$= new Nodo("INST", "INST" );
+        $$.agregarHijo($1);
+	}         
+;
+CREAR_F:
+        tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq INSTRUCCIONES tk_llave_der
+        {$$= new Nodo("CF", "CF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+        $$.agregarHijo($6);
+        $$.agregarHijo(new Nodo($7,$7));
+        $$.agregarHijo($8);
+        $$.agregarHijo(new Nodo($9,$9));
+        $$.agregarHijo($10);
+        $$.agregarHijo(new Nodo($11,$11));        
+	} 
+        | tk_declare tk_function tk_local tk_identificador tk_parentesis_izq tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der
+        {$$= new Nodo("CF", "CF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+        $$.agregarHijo(new Nodo($6,$6));
+        $$.agregarHijo($7);
+        $$.agregarHijo(new Nodo($8,$8));
+        $$.agregarHijo($9);
+        $$.agregarHijo(new Nodo($10,$10));        
+	} 
+;
+LLAMADA_F:
+        tk_local tk_identificador tk_parentesis_izq PARAMETROS_ENTRADA tk_parentesis_der
+        {$$= new Nodo("CF", "CF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo($4);
+        $$.agregarHijo(new Nodo($5,$5));       
+	} 
+;
+PARAMETROS_ENTRADA:
+        PARAMETROS_ENTRADA tk_coma DATO
+        {$$= new Nodo("PENT", "PENT" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        } 
+        |DATO
+        {$$= new Nodo("PENT", "PENT" );
+        $$.agregarHijo($1);
+        }
+;
+PARAMETROS:
+        PARAMETROS tk_coma PARAMETRO
+        {$$= new Nodo("PMS", "PMS" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        } 
+        |PARAMETRO
+        {$$= new Nodo("PMS", "PMS" );
+        $$.agregarHijo($1);
+        }
+;
+PARAMETRO:
+        tk_dolar tk_identificador tk_as tk_xs tk_identificador
+        {$$= new Nodo("PMS", "PMS" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+        }
+;
+IF_
+        :tk_if tk_parentesis_izq DATO tk_parentesis_der THEN_                 
+        {$$= new Nodo("IF", "IF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+        }         
+        |tk_if tk_parentesis_izq DATO tk_parentesis_der THEN_ ELSE_                     
+        {$$= new Nodo("IF", "IF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+        $$.agregarHijo($6);
+        } 
+;
+THEN_
+        :tk_then DATO
+        {$$= new Nodo("THEN", "THEN" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+;
+ELSE_
+        :tk_else DATO
+        {$$= new Nodo("ELSE", "ELSE" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+        |tk_else IF_   
+        {$$= new Nodo("ELSE", "ELSE" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }                                                                                                                                              
+;
+CREAR_V:
+        tk_let VARIABLE
+        {$$= new Nodo("CRV", "CRV" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        }
+        | tk_let VARIABLE tk_let_igual DATO
+        {$$= new Nodo("CRV", "CRV" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo($4);        
+        }
+;
+ASIGNAR_V:
+        VARIABLE tk_let_igual DATO
+        {$$= new Nodo("ASV", "ASV" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);        
+        }        
+;
 FOR_IN
         :tk_for VARIABLE tk_in LLAMADA                                                  
         {$$= new Nodo("FOR", "FOR" );
@@ -220,7 +387,16 @@ FOR_IN
         $$.agregarHijo($2);
         $$.agregarHijo(new Nodo($3,$3));
         $$.agregarHijo($4);
-	} 
+	}
+        |tk_for VARIABLE tk_at VARIABLE tk_in LLAMADA                                                  
+        {$$= new Nodo("FOR", "FOR" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo($4);
+        $$.agregarHijo(new Nodo($5,$5));
+        $$.agregarHijo($6);
+        } 
 ;
 ORDEN
         :                                                                               
@@ -391,6 +567,14 @@ LLAMADA
         {$$= new Nodo("LLA","LLA");
         $$.agregarHijo($1);
         }
+        |tk_parentesis_izq tk_numero tk_to tk_numero tk_parentesis_der 
+        {$$= new Nodo("LLA","LLA");
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));        
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));                
+        }
 ;
 
 VARIABLE
@@ -555,6 +739,15 @@ DATO
         $$.agregarHijo(new Nodo($2,$2));
         $$.agregarHijo(new Nodo($3,$3));
 	}
+        |VARIABLE
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+	}
+        |LLAMADA_F
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+	}
+
 
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               
@@ -630,6 +823,52 @@ DATO
         $$.agregarHijo(new Nodo($2,$2));
         $$.agregarHijo($3);
 	}
+        
+        //
+
+        |DATO tk_gt DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+        |DATO tk_lt DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}        
+        |DATO tk_ge DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+        |DATO tk_le DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+        |DATO tk_eq DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+        |DATO tk_ne DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+        |DATO tk_and DATO                                                            
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+
 ;
 
 F_DATA
@@ -791,3 +1030,164 @@ ELSE
         }                                                                                                                                              
 ;
 
+
+
+
+
+
+
+FUNCACKERMAN
+        : CABEZAFUNC tk_parentesis_izq LISTAFUNC tk_parentesis_der RETURNFUNC FUNCOPERACION tk_punto_coma LLAMADAFUNCION
+        {$$= new Nodo("FACE", "FACE" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+        $$.agregarHijo($6);
+        $$.agregarHijo(new Nodo($7,$7));
+        $$.agregarHijo($8);
+        } 
+;
+CABEZAFUNC
+        : tk_declare tk_function tk_local tk_identificador
+        {$$= new Nodo("CABF", "CABF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        } 
+;
+
+LISTAFUNC
+        : LISTAFUNC tk_coma LISTACONF
+        {$$= new Nodo("LISTF", "LISTF" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+        } 
+        |LISTACONF
+        {$$= new Nodo("LISTF", "LISTF" );
+        $$.agregarHijo($1);
+        } 
+;
+
+LISTACONF
+        : tk_dolar tk_identificador tk_as tk_xs tk_identificador
+        {$$= new Nodo("LISTCF", "LISTCF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+        } 
+;
+
+RETURNFUNC
+        :tk_as tk_xs tk_identificador
+        {$$= new Nodo("RETF", "RETF" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        }
+;
+
+FUNCOPERACION
+        :tk_llave_izq CODIGOFUNCION tk_llave_der
+        {$$= new Nodo("FNR", "FNR" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+        }
+;
+
+CODIGOFUNCION
+        :XQUERYGRA
+        {$$= new Nodo("CFR", "CFR" );
+        $$.agregarHijo($1);
+        }
+        |
+        {
+        $$= new Nodo("CFR","CFR");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }        
+;
+LLAMADAFUNCION
+        :LLAFCONT
+        {$$= new Nodo("LLFA", "LLFA" );
+        $$.agregarHijo($1);
+        }
+;
+
+LLAFCONT
+        :LLAFCONT L_LLAFCONT
+        {$$= new Nodo("LLFAC", "LLFAC" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        } 
+        |L_LLAFCONT
+        {$$= new Nodo("LLFAC", "LLFAC" );
+        $$.agregarHijo($1);
+        }         
+        |LLAFCONT LLAD
+        {$$= new Nodo("LLFAC", "LLFAC" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        } 
+        |LLAD
+        {$$= new Nodo("LLFAC", "LLFAC" );
+        $$.agregarHijo($1);
+        } 
+;
+
+
+
+L_LLAFCONT
+        :tk_menor tk_identificador tk_mayor                                            
+        {$$= new Nodo("L_LLFAC", "L_LLFAC" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        } 
+        |tk_menor tk_diagonal tk_identificador tk_mayor                                
+        {$$= new Nodo("L_LLFAC", "L_LLFAC" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        }
+        |tk_identificador                                                              
+        {$$= new Nodo("L_LLFAC", "L_LLFAC" );
+        $$.agregarHijo(new Nodo($1,$1));
+        }
+;
+LLAD
+        :tk_llave_izq tk_local tk_identificador tk_parentesis_izq FF tk_parentesis_der tk_llave_der                                              
+        {$$= new Nodo("LLAD", "LLAD" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo($5);
+        $$.agregarHijo(new Nodo($6,$6));
+        $$.agregarHijo(new Nodo($7,$7));
+        }
+;
+FF
+        :XQUERYGRA
+        {$$= new Nodo("FF", "FF" );
+        $$.agregarHijo($1);
+        }
+        |tk_identificador tk_coma tk_identificador
+        {$$= new Nodo("FF", "FF" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+        }
+        |tk_numero tk_coma tk_numero
+        {$$= new Nodo("FF", "FF" );
+        $$.agregarHijo($1);
+        $$.agregarHijo($2);
+        $$.agregarHijo($3);
+        }
+;

@@ -429,11 +429,24 @@ function imprimiConsola(txt){
   }
 
 
-
-
 // FUNCION PARA COPIAR
 let copyButton = document.getElementById('copyBtn');
 let clearButton = document.getElementById('clearBtn');
+
+let copyButton2 = document.getElementById('copyBtn2');
+
+copyButton2.addEventListener('click', () => {
+
+  if (consola3DOptimizada.value.trim() !== '') {
+    alert("Copiado");
+    consola3DOptimizada.select();
+    document.execCommand('Codigo Copiado');
+  } else {
+    alert("No hay codigo");
+  }
+
+});
+
 
 copyButton.addEventListener('click', () => {
 
