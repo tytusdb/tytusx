@@ -10,6 +10,22 @@ function tablaEcabezado(encabezadoEntrada:string[],nombreTabla:string){
     encabezado.innerHTML = aux.join("");
 }
 
+function agregarReporteOptimizacion(entrada:Array<any>){
+    let encabezadoOptimizacion = ["Anterior","Optimizacion"];
+    tablaEcabezado(encabezadoOptimizacion,"tableHeadReporteOptimizacion");
+    let body = document.getElementById("tableBodyReporteOptimizacion");
+    body.innerHTML = "";
+    let aux = new Array();
+    entrada.forEach(e =>{
+        aux.push("<tr>");
+        aux.push("\t<td>"+e.anterior+"</td>");
+        if(e.optimizado == "")aux.push("\t<td>--eliminado--</td>");
+        else aux.push("\t<td>"+e.optimizado+"</td>");
+        aux.push("</tr>");
+    });
+    body.innerHTML = aux.join("");
+}
+
 function agregarContenidoErrores(){
     let encabezadoErrores = ["Tipo","Descripcion","Linea","Columna"];
     tablaEcabezado(encabezadoErrores,"tableHead");
