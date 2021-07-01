@@ -7,13 +7,12 @@ import { crearTextoReporteErrorXML } from "../xmlAST/ClaseError";
 import { crearTablaSimbolos, crearTextoGraphvizTablaSimbolos, SimboloTabla } from "../Reportes/SimboloTabla";
 import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
-//import { OptimizadorMirilla } from '../Optimizador/OptimizadorMirilla';
 import { traduccion } from '../Traduccion/traduccion';
 const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
-const parseXQuery = require('../Grammar/xQueryGrammar');
-//const parseC3D = require('../Grammar/C3DGrammar');
+const parseQuery = require('../Grammar/xQueryGrammar');
+const parseC3D = require('../Grammar/C3DGrammar');
 
 
 
@@ -31,7 +30,8 @@ export default class Main extends Component {
         repErrorXPATH: '',
         repTablaSimbolos: '',
         repAstXpath: '',
-        graphvizContent: ''
+        graphvizContent: '',
+        repOptimizaciones: ''
     }
     parse = () => {
         let ast;
@@ -128,7 +128,7 @@ export default class Main extends Component {
         }
     }
     traducir = () => {
-        if (this.state.xml === "") {
+        if (this.state.xml==="") {
             return;
         }
         const result = parser.parse(this.state.xml);
@@ -158,6 +158,16 @@ export default class Main extends Component {
     }
     //######################################################################################################
 
+    optimizar = () => {
+        //const optimizado = parseC3D.parse(this.state.xml);
+        const optimizado = parseC3D.parse(this.state.consoleResult);
+        this.setState({
+            consoleResult: "//OPTIMIZACION-----------------\n"+optimizado.Optimizado,
+        });
+        this.setState({
+            repOptimizaciones: "digraph G {" + optimizado.TextGraphviz + "}",
+        });
+    }
 
     handleFileChange = file => {
 
@@ -217,7 +227,12 @@ export default class Main extends Component {
             this.setState({
                 graphvizContent: this.state.repErrorXPATH
             })
+        } else if (e.target.value === "Reporte de Optimizaciones") {
+            this.setState({
+                graphvizContent: this.state.repOptimizaciones
+            })
         }
+        
     }
     render() {
         return (
@@ -280,6 +295,7 @@ export default class Main extends Component {
                         <Col xs={6} md={2}>
                             <Button variant="primary" onClick={this.executeXquery}>EXECUTE XQUERY</Button>
                         </Col>
+                        <Button variant="primary" onClick={this.optimizar}>Optimizar</Button>
                     </Row>
                     <br />
 
@@ -316,6 +332,7 @@ export default class Main extends Component {
                             <option>Reporte gramatical XML</option>
                             <option>AST XPath</option>
                             <option>Reporte de errores XPath</option>
+                            <option>Reporte de Optimizaciones</option>
                         </Form.Control>
                     </Form.Group>
                 </div>
@@ -328,7 +345,6 @@ export default class Main extends Component {
                         </div>
                     ) : <div></div>
                 }
-
 
                 <div className="mt-3 px-5">
                     <Form.Control as="textarea" rows={30} value={this.state.consoleResult} readOnly />

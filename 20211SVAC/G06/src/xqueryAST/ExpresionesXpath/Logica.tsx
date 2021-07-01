@@ -9,7 +9,6 @@ export enum operacionLogica {
 }
 
 export class Logica implements Expression{
-    
 
     constructor (
     public line : Number,
@@ -27,10 +26,10 @@ export class Logica implements Expression{
 
             if (valorIzq.value === false && this.tipoOperacion === operacionLogica.AND) {
                 //console.log("pase por el corto circuito del and")
-                return  { value: valorIzq.value, type: tipoPrimitivo.BOOL, SP: -1 };
+                return  { value: valorIzq.value, type: tipoPrimitivo.BOOL };
             } else if (valorIzq.value === true && this.tipoOperacion === operacionLogica.OR) {
                 //console.log("pase por el corto circuito del or")
-                return  { value: valorIzq.value, type: tipoPrimitivo.BOOL, SP: -1 };
+                return  { value: valorIzq.value, type: tipoPrimitivo.BOOL };
             }
             
             let valorDer = this.hijoDer.execute(ent, simboloPadre);
@@ -39,10 +38,10 @@ export class Logica implements Expression{
 
                 if (this.tipoOperacion === operacionLogica.AND) {
                     const result = valorIzq.value && valorDer.value;
-                    return { value: result, type: tipoPrimitivo.BOOL, SP: -1 };
+                    return { value: result, type: tipoPrimitivo.BOOL };
                 }else if (this.tipoOperacion === operacionLogica.OR) {
                     const result = valorIzq.value || valorDer.value;
-                    return { value: result, type: tipoPrimitivo.BOOL, SP: -1 };
+                    return { value: result, type: tipoPrimitivo.BOOL };
                 }else {
                     throw new Error("Error Semantico: no se reconoce el operador  " + this.sym + ", Linea: "+this.line+"Column: "+this.column);;
                 }

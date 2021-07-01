@@ -37,14 +37,14 @@ export class Relacional implements Expression{
                     if (valIzq.type === tipoPrimitivo.NODO && valDer.type === tipoPrimitivo.NODO){
 
                         if (this.validar(valIzq.value.identificador, valDer.value.identificador)){
-                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
+                            return {value: true, type: tipoPrimitivo.BOOL}
                         }
                     }else if (valIzq.type === tipoPrimitivo.NODO){
                         
                         if (valIzq.value.listaEntornos.length === 0 && valIzq.value.texto !== ''){
                             
                             if (this.validar(valIzq.value.texto, valDer.value)){
-                                return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                                return {value: true, type: tipoPrimitivo.BOOL}    
                             }
                         }
                     }
@@ -53,19 +53,19 @@ export class Relacional implements Expression{
                         if (valDer.value.listaEntornos.length === 0 && valDer.value.texto !== ''){
                             
                             if (this.validar(valDer.value.texto, valIzq.value)){
-                                return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                                return {value: true, type: tipoPrimitivo.BOOL}    
                             }
                         }
 
                     } else {
 
                         if (this.validar(valIzq.value, valDer.value)){
-                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
+                            return {value: true, type: tipoPrimitivo.BOOL}
                         }
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL, SP: -1}; 
+            return {value: false , type : tipoPrimitivo.BOOL}; 
             
         }else if (valorIzq.type === tipoPrimitivo.RESP){
 
@@ -75,17 +75,17 @@ export class Relacional implements Expression{
                     if (valIzq.value.listaEntornos.length === 0 && valIzq.value.texto !== ''){
                         
                         if (this.validar(valIzq.value.texto, valorDer.value)){
-                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                            return {value: true, type: tipoPrimitivo.BOOL}    
                         }
                     }
                 }else {
                    
                     if (this.validar(valIzq.value, valorDer.value)){
-                        return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
+                        return {value: true, type: tipoPrimitivo.BOOL}
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL, SP: -1};
+            return {value: false , type : tipoPrimitivo.BOOL};
 
         }else if (valorDer.type === tipoPrimitivo.RESP){
 
@@ -95,20 +95,20 @@ export class Relacional implements Expression{
                     if (valDer.value.listaEntornos.length === 0 && valDer.value.texto !== ''){
                         
                         if (this.validar(valDer.value.texto, valorIzq.value)){
-                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                            return {value: true, type: tipoPrimitivo.BOOL}    
                         }
                     }
                 }else {
                     
                     if (this.validar(valorIzq.value, valDer.value)){
-                        return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
+                        return {value: true, type: tipoPrimitivo.BOOL}
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL, SP: -1};
+            return {value: false , type : tipoPrimitivo.BOOL};
             
         } else {
-            return { value: this.validar(valorIzq.value, valorDer.value), type: tipoPrimitivo.BOOL, SP: -1}
+            return { value: this.validar(valorIzq.value, valorDer.value), type: tipoPrimitivo.BOOL}
         }
 
     }
