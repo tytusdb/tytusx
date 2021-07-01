@@ -9,8 +9,18 @@ var declaracionArray = /**@class */(function(){
         this.digito = digito
 
     }
-    declaracionArray.prototype.get3D = function(){
+    declaracionArray.prototype.getTipo = function () {
+        return this.tipo
+    }
+    declaracionArray.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    declaracionArray.prototype.set3D = function(){
         this.codigo = this.tipo_dato+" "+ this.id+"["+this.digito+"];\n"
+        return this.codigo
+    }
+    declaracionArray.prototype.getOptimizado=function () {
         return this.codigo
     }
     return declaracionArray

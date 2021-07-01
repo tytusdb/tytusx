@@ -633,15 +633,11 @@ function setTraduction(){
         `;
 
     if(codificacionGlobal == "UTF-8"){
-        globalC3D += `stack[(int)0] = -1;
-        
-        `;
+        globalC3D += "stack[(int)0] = -1;\n";
         stack.push(-1);
         stack.push(-1);
     } else {
-        globalC3D += `stack[(int)0] = -2;
-        
-        `;
+        globalC3D += "stack[(int)0] = -2;\n"
         stack.push(-2);
         stack.push(-1);
     }
@@ -671,6 +667,11 @@ function setTraduction(){
 function Optimizar(){
     var texto =SalidaTraduccion.getValue()
     var ast =gramaticaOptimizador.parse(texto);
-    console.log(ast)
+    var op = new optimizador(ast)
     
+    op.optimizar()
+    op.optimizar()
+    for(let i=0; i<ast.length; i++){
+       console.log( ast[i].getOptimizado())
+     }
 }
