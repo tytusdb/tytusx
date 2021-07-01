@@ -7,7 +7,7 @@ import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
-export default class Axes extends Instruccion {
+export default class Especiales extends Instruccion {
  
   public Funcion: string;
   public Expresion: Instruccion
@@ -24,6 +24,9 @@ export default class Axes extends Instruccion {
     return nodo;
   }
   interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
     throw new Error('Method not implemented.');
   }
   

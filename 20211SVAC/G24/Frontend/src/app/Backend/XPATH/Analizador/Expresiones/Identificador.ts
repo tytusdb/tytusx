@@ -19,4 +19,7 @@ export default class Identificador extends Instruccion {
   public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
     return this.identificador;
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }

@@ -48,4 +48,7 @@ export default class ParentesisExpresion extends Instruccion {
       );
     }
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }
