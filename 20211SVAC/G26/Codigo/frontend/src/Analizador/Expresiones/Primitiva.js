@@ -1,12 +1,16 @@
-import { Entorno } from "../AST/Entorno";
-import { Tipo } from "../AST/Tipo";
-import { Consulta } from "../XPath/Consulta";
-export class Primitiva {
-    constructor(valor, tipo, linea, columna) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TipoPrim = exports.Primitiva = void 0;
+const Entorno_1 = require("../AST/Entorno");
+const Tipo_1 = require("../AST/Tipo");
+const Consulta_1 = require("../XPath/Consulta");
+class Primitiva {
+    constructor(valor, tipo, linea, columna, isXQuery) {
         this.linea = linea;
         this.columna = columna;
         this.tipo = tipo;
         this.valor = valor;
+        this.isXQuery = isXQuery;
     }
     getTipo(ent) {
         return this.tipo;
@@ -27,27 +31,41 @@ export class Primitiva {
             }
         }
         else if (this.tipo === TipoPrim.ATRIBUTO) {
-            /* SE BUSCAN LOS ATRIBUTOS CON ESTE NOMBRE */
-            this.tipo = TipoPrim.FUNCION;
-            //0. Se devolver un entorno temporal, que contendra todos los que coinciden con la busqueda.
-            let entTemporal = new Entorno("Temporal", null, null);
-            //1. Obtener el padre.
-            let padre = ent.padre;
-            //2. Sobre el padre buscar todos los que sean ent.nombre
-            padre.tsimbolos.forEach((e) => {
-                let elem = e.valor;
-                if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === ent.nombre) {
-                    //Ahora en este entorno ver si tiene un atributo como el que se busca.
-                    elem.valor.tsimbolos.forEach((c2) => {
-                        let aux = c2.valor;
-                        if (aux.getTipo() === Tipo.ATRIBUTO && (this.valor === "*" || this.valor === aux.getNombre())) {
-                            //Si se encuentra el atributo o es *, ingresar al entorno temporal
-                            entTemporal.agregarSimbolo(elem.getNombre(), elem);
-                        }
-                    });
+            if (!this.isXQuery) {
+                /* SE BUSCAN LOS ATRIBUTOS CON ESTE NOMBRE */
+                this.tipo = TipoPrim.FUNCION;
+                //0. Se devolver un entorno temporal, que contendra todos los que coinciden con la busqueda.
+                let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                //1. Obtener el padre.
+                let padre = ent.padre;
+                //2. Sobre el padre buscar todos los que sean ent.nombre
+                padre.tsimbolos.forEach((e) => {
+                    let elem = e.valor;
+                    if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === ent.nombre) {
+                        //Ahora en este entorno ver si tiene un atributo como el que se busca.
+                        elem.valor.tsimbolos.forEach((c2) => {
+                            let aux = c2.valor;
+                            if (aux.getTipo() === Tipo_1.Tipo.ATRIBUTO && (this.valor === "*" || this.valor === aux.getNombre())) {
+                                //Si se encuentra el atributo o es *, ingresar al entorno temporal
+                                entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                            }
+                        });
+                    }
+                });
+                return entTemporal;
+            }
+            else {
+                //Obtener solo si el atributo existe en este entorno (no buscar en el padre)
+                let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
+                for (let i = 0; i < ent.tsimbolos.length; i++) {
+                    let elem = ent.tsimbolos[i].valor;
+                    if (elem.getTipo() === Tipo_1.Tipo.ATRIBUTO && elem.getNombre() === this.valor) {
+                        entTemporal.agregarSimbolo(elem.getNombre(), elem);
+                        return entTemporal;
+                    }
                 }
-            });
-            return entTemporal;
+                return null;
+            }
         }
         else if (this.tipo === TipoPrim.FUNCION) {
             //Si es funcion, ver de cual funcion se trata
@@ -61,7 +79,7 @@ export class Primitiva {
                     let indice = 0; //Se empieza en 0, por si no se encuentra devuelva 0. (y asi retornaria nada en la consulta)
                     padre.tsimbolos.forEach((e) => {
                         let elem = e.valor;
-                        if (elem.getTipo() === Tipo.ETIQUETA && elem.getNombre() === ent.nombre) {
+                        if (elem.getTipo() === Tipo_1.Tipo.ETIQUETA && elem.getNombre() === ent.nombre) {
                             //Se encontro, sumar al indice
                             indice++;
                         }
@@ -84,9 +102,9 @@ export class Primitiva {
             this.tipo = TipoPrim.FUNCION;
             //Consulta devuelve TRUE si la ruta existe
             //Es una lista de nodos. entonces crear una consulta 
-            let tempConsulta = new Consulta(this.valor, this.linea, this.columna);
+            let tempConsulta = new Consulta_1.Consulta(this.valor, this.linea, this.columna);
             //Obtener padre, porque se deben buscar en todos los que tengan ent.nombre
-            let entTemporal = new Entorno("Temporal", null, null);
+            let entTemporal = new Entorno_1.Entorno("Temporal", null, null);
             let padre = ent.padre;
             padre.tsimbolos.forEach((e) => {
                 let elem = e.valor;
@@ -107,7 +125,8 @@ export class Primitiva {
             return this.valor;
     }
 }
-export var TipoPrim;
+exports.Primitiva = Primitiva;
+var TipoPrim;
 (function (TipoPrim) {
     TipoPrim[TipoPrim["INTEGER"] = 0] = "INTEGER";
     TipoPrim[TipoPrim["DOUBLE"] = 1] = "DOUBLE";
@@ -119,4 +138,5 @@ export var TipoPrim;
     TipoPrim[TipoPrim["BOOLEAN"] = 7] = "BOOLEAN";
     TipoPrim[TipoPrim["CONSULTA"] = 8] = "CONSULTA";
     TipoPrim[TipoPrim["ERROR"] = 9] = "ERROR";
-})(TipoPrim || (TipoPrim = {}));
+    TipoPrim[TipoPrim["FUNCIONXQUERY"] = 10] = "FUNCIONXQUERY";
+})(TipoPrim = exports.TipoPrim || (exports.TipoPrim = {}));

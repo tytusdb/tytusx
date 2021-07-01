@@ -1,6 +1,12 @@
-import errores from "../Global/ListaError";
-import { Tipo } from "./Tipo";
-export class Entorno {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Entorno = void 0;
+const ListaError_1 = __importDefault(require("../Global/ListaError"));
+const Tipo_1 = require("./Tipo");
+class Entorno {
     constructor(nombre, padre, global) {
         this.tsimbolos = new Array();
         this.nombre = nombre;
@@ -13,13 +19,26 @@ export class Entorno {
     agregarSimbolo(nombre, simbolo) {
         this.tsimbolos.push({ 'nombre': nombre, 'valor': simbolo });
     }
+    sobreEscribirSimbolo(nombre, simbolo) {
+        for (let a = this; a != null; a = a.padre) {
+            for (let i = 0; i < a.tsimbolos.length; i++) {
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
+                    let nuevo = { 'nombre': nombre, 'valor': simbolo };
+                    a.tsimbolos[i] = nuevo;
+                    return true;
+                }
+            }
+        }
+        ListaError_1.default.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        return false;
+    }
     getStringTipo(t) {
         switch (t) {
-            case Tipo.STRING:
+            case Tipo_1.Tipo.STRING:
                 return 'Cadena';
-            case Tipo.ETIQUETA:
+            case Tipo_1.Tipo.ETIQUETA:
                 return 'Etiqueta';
-            case Tipo.ATRIBUTO:
+            case Tipo_1.Tipo.ATRIBUTO:
                 return 'Atributo';
         }
         return '';
@@ -32,7 +51,7 @@ export class Entorno {
                 }
             }
         }
-        errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        ListaError_1.default.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
         return null;
     }
     /* Metodo para cambiar el valor del simbolo */
@@ -61,3 +80,4 @@ export class Entorno {
         return false;
     }
 }
+exports.Entorno = Entorno;
