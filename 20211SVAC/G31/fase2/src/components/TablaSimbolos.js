@@ -72,7 +72,7 @@ class TablaSimbolos extends React.Component{
                 fila: hijo.linea,
                 columna: hijo.columna
             });  
-            
+            hijo.padre = entActual
             this.readSimbols(hijo);
         }
 
