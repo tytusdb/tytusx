@@ -1,4 +1,4 @@
-export enum Operador{
+export enum Operador {
   SUMA,
   RESTA,
   MULTIPLICACION,
@@ -17,5 +17,6 @@ export enum Operador{
   DIFERENTE,
   DIFERENTEU,
   AND,
-  OR
+  OR,
+  TO
 }

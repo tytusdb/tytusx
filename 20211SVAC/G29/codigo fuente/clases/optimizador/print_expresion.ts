@@ -17,6 +17,10 @@ export default class asignacion implements instruccion_3d{
   ejecutar() {
   }
 
+  getLogica(): string {
+    return '';
+  }
+
   insertar(instruccion: instruccion_3d) {
     this.intrucciones_3d.push(instruccion);
   }
@@ -26,5 +30,7 @@ export default class asignacion implements instruccion_3d{
       this.intrucciones_3d.push(x);
     }
   }
+
+  etiqueta : string;
 
 }

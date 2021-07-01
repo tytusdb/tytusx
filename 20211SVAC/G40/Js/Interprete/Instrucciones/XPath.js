@@ -10,6 +10,7 @@ var XPath = /** @class */ (function () {
         this.temporal = null;
         this.resultadoAux = null;
         this.objetos = [];
+        this.tipo = TipoXInstruccion.XPATH;
     }
     XPath.prototype.ejecutar = function (ent, arbol) {
 
@@ -47,7 +48,9 @@ var XPath = /** @class */ (function () {
 
     };
 
-    
+    XPath.prototype.getTipo = function (){
+        return this.tipo;
+    };
 
     return XPath;
 }());

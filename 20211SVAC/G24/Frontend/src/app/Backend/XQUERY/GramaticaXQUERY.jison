@@ -227,7 +227,7 @@ CONDICION
 
 L_CONSULTAS
     :L_CONSULTAS CONSULTA   {$1.push($2); $$=$1;}
-    |CONSULTA               {$$=[$1];}
+    |CONSULTA               {$$=[$1];}              
     ;
 
 CONSULTA

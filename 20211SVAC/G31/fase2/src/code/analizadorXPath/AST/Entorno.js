@@ -8,7 +8,8 @@ export const Tipo = {
     "BOOLEAN" : 4,
     "ATRIB"   : 5,
     "ERROR"   : 6,
-    "SIBLING" : 7
+    "SIBLING" : 7, 
+    "FLWOR": 8, 
 } 
 
 export function getTipoById(numero)
