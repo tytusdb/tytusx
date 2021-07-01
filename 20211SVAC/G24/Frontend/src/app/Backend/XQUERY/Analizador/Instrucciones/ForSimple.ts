@@ -6,8 +6,6 @@ import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 
 export default class ForSimple extends Instruccion {
   
-
-
     private consulta: Instruccion;
     private respuesta:Instruccion;
     private thewhere:Instruccion;
@@ -22,12 +20,9 @@ export default class ForSimple extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-       this.consulta.interpretar(arbol,tabla);    
-       if(this.thewhere!=null){
-           while(this.thewhere.interpretar(arbol,tabla)){
-               
-           }
-       } 
+    let info= this.consulta.interpretar(arbol,tabla);    
+    console.log("aqui iria la consulta");
+      console.log(tabla);
 
     }
     getNodoAST(): nodoAST {

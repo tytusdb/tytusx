@@ -103,6 +103,8 @@
     const asignacion= require("./Instrucciones/Asignacion")
     const theif = require('./Instrucciones/If')
     const thelet=require('./Instrucciones/Let')
+    const Tipo= require("./Simbolos/Tipo");
+
 
 
 %}
@@ -141,7 +143,7 @@ FORSIMPLE
     ;
 
 LET 
-    :RLET VARIABLE LETDOSPUNTOS L_FTO RRETURN RETORNO {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
+    :RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
     ;    
 
 CONDICIONCOMPUESTA
@@ -171,6 +173,7 @@ L_VARIABLES
 L_IN
     : RIN PARIZQ ENTERO CONECTOR ENTERO PARDER  
     |PARIZQ ENTERO CONECTOR ENTERO PARDER  
+    |PARIZQ EXPRESION PARDER
     ;
 
 CONSULTASIMPLE
@@ -199,6 +202,7 @@ RETORNO
     |FUNCIONES  {$$=$1}
     |IF         {$$=$1}
     |ASIGNACION {$$=$1}
+    |EXPRESION  {$$=$1}
     ;
 
 IF
@@ -227,8 +231,8 @@ L_CONSULTAS
     ;
 
 CONSULTA
-    :DOBLEBARRA EXPRESION   {$$ = new barrasnodo.default($1,$3,@1.first_line,@1.first_column, $2);}
-    |BARRA EXPRESION        {$$ = new barrasnodo.default($1,$2,@1.first_line,@1.first_column, null);}
+    :BARRA BARRA EXPRESION SALIDA   {$$ = new barrasnodo.default($1,$3,@1.first_line,@1.first_column, $2);}
+    |BARRA EXPRESION SALIDA       {$$ = new barrasnodo.default($1,$2,@1.first_line,@1.first_column, null);}
     |OPCIONESCONSULT EXPRESION SALIDA   {$$=$1+$2}
     |OPCIONESCONSULT PREDICADO SALIDA   {$$=$1+$2}
     |EXPRESION SALIDA                   {$$=$1}
@@ -258,6 +262,7 @@ PREDICADO
 EXPRESION
     :ENTERO                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
     |IDENTIFICADOR              {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
+    |VARIABLE
     |CADENA                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
     |ARROBA EXPRESION           {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO    {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}

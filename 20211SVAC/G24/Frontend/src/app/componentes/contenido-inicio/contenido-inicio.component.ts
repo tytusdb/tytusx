@@ -33,6 +33,7 @@ import Declaracion from 'src/app/Backend/Optimizacion/Instrucciones/Declaracion'
 import Funcion from 'src/app/Backend/Optimizacion/Instrucciones/Funcion';
 import { reporteOp } from 'src/app/Backend/Optimizacion/Reportes/reporteOp';
 import ForSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForSimple';
+import { collectExternalReferences } from '@angular/compiler';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -436,7 +437,7 @@ export class ContenidoInicioComponent implements OnInit {
         c++
         console.log(element)
         if (element instanceof BarrasNodo) {
-          console.log("es barranodo")
+          console.log("es barranodo");
 
           var resultador = element.interpretar(Tree, tablita);
           if (resultador instanceof tablaSimbolos) {
@@ -705,11 +706,11 @@ export class ContenidoInicioComponent implements OnInit {
 
   }
 
-    /*********************************************************************************************************/
+  /*********************************************************************************************************/
   /***********************************************X  Q  U  E  R  Y*****************************************/
   /*********************************************************************************************************/
 
-  InterpretarXQUERY(texto: string){
+  InterpretarXQUERY(texto: string) {
     const analizador = AnalizadorXQUERY;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXQUERY(analizador.parse(texto)); //ejecucion
@@ -720,28 +721,64 @@ export class ContenidoInicioComponent implements OnInit {
     var tablita = this.tablaGlobal;
     var c = 0;
     var consolita = ''
+    console.log("ecskueri on")
+    console.log(tablita);
+
+    /**cd3XPath = null;
+    cd3XPath = [];
+    const analizador = AnalizarAscXpath;
+    let objetos = analizador.parse(texto);
+    let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
+    console.log(listainstrucciones)
+    var Tree: ArbolXpath = new ArbolXpath([objetos]);
+    var tabla = new tablaSimbolos();                    //ejecucion
+    ast.settablaGlobal(tabla);                        //ejecucion
+    var tablita = this.tablaGlobal;
+    var c = 0;
+    var consolita = ''
+ */
+    
 
     for (var key of tablita.getTabla()) {//SIMBOLOS
       if (key.getidentificador() == 'xml') {
         tablita = key.getvalor()
+        console.log("ecskueri on 2")
+        console.log(tablita);
       }
     }
 
+    console.log(ast.getinstrucciones().length)
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
-
+      console.log("entramos a las instrucciones")
       instructions.forEach(element => {
         c++
-        console.log(element);
+        console.log(element)
         if (element instanceof ForSimple) {
-          console.log("es FORSIMPLE")
+          console.log("es barranodo");
 
-          var resultador = element.interpretar(Tree, tablita);
-      }
-    });
-    c = 0; 
+          var resultador:any = element.interpretar(Tree, tablita);
+          if (resultador instanceof tablaSimbolos) {
+            tablita = resultador
+            if (c == instructions.length) {
+              if (TreeAsc != null) {
+                consolita += this.recorrerTabla(tablita, TreeAsc);
+                consolita += "\n"
+              }
+            }
+          }
+          else { //VIENE STRING
+            consolita += resultador + "\n"
+          }
+        }
+      });
+      c = 0;
+      console.log("SIGUIENTE")
+    } 
+
     
-   }
+
+
   }
 
 
