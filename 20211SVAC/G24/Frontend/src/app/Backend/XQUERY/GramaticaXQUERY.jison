@@ -97,7 +97,7 @@
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
     const relacional = require("./Expresiones/Relacional");
-    const barrasnodo= require("../../XPATH/Analizador/Instrucciones/BarrasNodo")
+    const barrasnodo= require('./Instrucciones/BarrasNodo')
     const identificador= require("./Expresiones/Identificador");
     const nativo= require("./Expresiones/Nativo");
     const asignacion= require("./Instrucciones/Asignacion")

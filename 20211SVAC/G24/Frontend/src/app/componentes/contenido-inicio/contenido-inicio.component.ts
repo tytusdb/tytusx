@@ -20,6 +20,7 @@ import ArbolXQUERY from 'src/app/Backend/XQUERY/Analizador/Simbolos/Arbol';
 import nodoAST from 'src/app/Backend/XML/Analizador/Abstracto/nodoAST';
 import nodoAst from 'src/app/Backend/XPATH/Analizador/Abstracto/nodoAST'
 import { Instruccion } from 'src/app/Backend/XPATH/Analizador/Abstracto/Instruccion';
+
 import NodoErrores from 'src/app/Backend/XML/Analizador/Excepciones/NodoErrores';
 import Objeto from 'src/app/Backend/XML/Analizador/Expresiones/Objeto';
 
@@ -416,6 +417,7 @@ export class ContenidoInicioComponent implements OnInit {
     const analizador = AnalizarAscXpath;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
+    console.log("lista ins xpath")
     console.log(listainstrucciones)
     var Tree: ArbolXpath = new ArbolXpath([objetos]);
     var tabla = new tablaSimbolos();                    //ejecucion
@@ -714,6 +716,7 @@ export class ContenidoInicioComponent implements OnInit {
     const analizador = AnalizadorXQUERY;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXQUERY(analizador.parse(texto)); //ejecucion
+    console.log("aqui viene la lista de instrucciones")
     console.log(listainstrucciones)
     var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
     var tabla = new tablaSimbolos();                    //ejecucion

@@ -6,10 +6,10 @@ import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos
 
 export default class ForSimple extends Instruccion {
   
-    private consulta: Instruccion;
-    private respuesta:Instruccion;
-    private thewhere:Instruccion;
-    private theorderby:Instruccion;
+    public consulta: Instruccion;
+    public respuesta:Instruccion;
+    public thewhere:Instruccion;
+    public theorderby:Instruccion;
 
     constructor(consulta: Instruccion, respuesta:Instruccion, linea: number, columna: number,thewhere?:Instruccion,theorderby?:Instruccion) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
@@ -19,16 +19,15 @@ export default class ForSimple extends Instruccion {
         this.theorderby=theorderby;
     }
 
-    interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-    let info= this.consulta.interpretar(arbol,tabla);    
+    public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
     console.log("aqui iria la consulta");
       console.log(tabla);
 
     }
-    getNodoAST(): nodoAST {
+    public getNodoAST(): nodoAST {
         throw new Error("Method not implemented.");
     }
-    codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    public codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
         throw new Error("Method not implemented.");
     }
 }

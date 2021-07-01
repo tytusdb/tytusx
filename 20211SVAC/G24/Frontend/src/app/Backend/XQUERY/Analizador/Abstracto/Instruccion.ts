@@ -2,7 +2,7 @@ import Arbol from '../Simbolos/Arbol';
 import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo from '../Simbolos/Tipo';
 import nodoAST from './nodoAST';
-export abstract class Instruccion {
+export abstract class  Instruccion{
   public tipoDato: Tipo;
   public fila: number;
   public columna: number;
