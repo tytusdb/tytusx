@@ -34,14 +34,24 @@ class tsXML{
     {
         var cantidadObjetos = this.getCantidadObjetos();
         if (cantidadObjetos > 0)
-        {
+        {            
             //se recorre el listado de símbolos
             for (var i = 0; i < cantidadObjetos; i++)
-            {
+            {         
                 //si el símbolo.identificador es igual al parámetro identificador, se asigna el temporal
                 if(this.listaObjetos[i].i == posicion)
-                {
+                {             
                     this.listaObjetos[i].sp = temporal;
+                    //INICIO MODIFICACION 28062021
+                    if(this.listaObjetos[i].tipo=="Etiqueta"){                 
+                        if(this.listaObjetos[i].padre){
+                            this.listaObjetos[i].padre.agregarEtiquetaHija(temporal);
+                        }
+                    }
+                    if(this.listaObjetos[i].tipo=="Atributo"){
+                        this.listaObjetos[i].padre.agregarAtributo(temporal);
+                    }
+                    //FIN MODIFICACION 28062021
                     i = cantidadObjetos;
                 }
             }

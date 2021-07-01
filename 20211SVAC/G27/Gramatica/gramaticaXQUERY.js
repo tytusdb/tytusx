@@ -71,209 +71,53 @@
     recoverable: (boolean: TRUE when the parser has a error recovery rule available for this particular error)
   }
 */
-var gramaticaXML3D = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,18],$V1=[1,23],$V2=[14,16],$V3=[1,28],$V4=[1,58],$V5=[1,43],$V6=[1,42],$V7=[1,40],$V8=[1,41],$V9=[1,44],$Va=[1,45],$Vb=[1,46],$Vc=[1,47],$Vd=[1,48],$Ve=[1,49],$Vf=[1,50],$Vg=[1,51],$Vh=[1,52],$Vi=[1,53],$Vj=[1,54],$Vk=[1,55],$Vl=[1,56],$Vm=[1,57],$Vn=[1,59],$Vo=[5,8,13,14,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38];
+var gramaticaXQUERY = (function(){
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,7],$V3=[1,11],$V4=[1,16],$V5=[1,17],$V6=[1,18],$V7=[1,19],$V8=[1,20],$V9=[1,21],$Va=[1,22],$Vb=[1,23],$Vc=[1,24],$Vd=[1,12],$Ve=[1,13],$Vf=[1,14],$Vg=[1,15],$Vh=[10,12,13,18,25,27,30,31,32,34,35,36,37,41,44,45,46],$Vi=[5,8,9,10,12,13,18,25,27,30,31,32,34,35,36,37,41,44,45,46],$Vj=[1,34],$Vk=[1,35],$Vl=[1,31],$Vm=[1,33],$Vn=[1,32],$Vo=[2,17],$Vp=[1,39],$Vq=[1,40],$Vr=[1,41],$Vs=[1,48],$Vt=[1,47],$Vu=[1,54],$Vv=[1,53],$Vw=[1,60],$Vx=[1,62],$Vy=[1,71],$Vz=[1,74],$VA=[1,72],$VB=[1,75],$VC=[1,68],$VD=[1,69],$VE=[1,70],$VF=[1,73],$VG=[1,85],$VH=[1,97],$VI=[1,96],$VJ=[1,95],$VK=[1,98],$VL=[1,99],$VM=[1,100],$VN=[1,101],$VO=[1,102],$VP=[1,103],$VQ=[21,24,38,43,50,51,55,56,57,58,59],$VR=[5,8,9,10,12,13,18,21,24,25,27,30,31,32,34,35,36,37,38,41,43,44,45,46,50,51,55,56,57,58,59],$VS=[21,24,43,51,55,56,57,58,59],$VT=[21,43,55,56,57,58,59];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"START":3,"lteq":4,"xml":5,"version":6,"asig":7,"StringLiteral":8,"encoding":9,"gteq":10,"RAIZ":11,"EOF":12,"lt":13,"identifier":14,"ATRIBUTOS":15,"gt":16,"RAICES":17,"div":18,"OBJETO":19,"VALORES":20,"VALOR":21,"DoubleLiteral":22,"IntegerLiteral":23,"CharLiteral":24,"menor":25,"mayorque":26,"ampersand":27,"apostrofe":28,"quot":29,"content":30,"punto":31,"csimple":32,"fecha":33,"coma":34,"dospuntos":35,"numeral":36,"mas":37,"guion":38,"ATRIBUTO":39,"$accept":0,"$end":1},
-terminals_: {2:"error",4:"lteq",5:"xml",6:"version",7:"asig",8:"StringLiteral",9:"encoding",10:"gteq",12:"EOF",13:"lt",14:"identifier",16:"gt",18:"div",22:"DoubleLiteral",23:"IntegerLiteral",24:"CharLiteral",25:"menor",26:"mayorque",27:"ampersand",28:"apostrofe",29:"quot",30:"content",31:"punto",32:"csimple",33:"fecha",34:"coma",35:"dospuntos",36:"numeral",37:"mas",38:"guion"},
-productions_: [0,[3,11],[11,9],[11,8],[17,2],[17,1],[19,9],[19,9],[19,8],[19,8],[20,2],[20,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[21,1],[15,2],[15,1],[39,3]],
+symbols_: {"error":2,"START":3,"LISTA_NODOS":4,"EOF":5,"OPERADOR":6,"NODO":7,"union":8,"or":9,"ddoble":10,"VALOR_NODO":11,"dsimple":12,"nodoid":13,"NODO_COMPLEMENTO":14,"FUNCION":15,"SELECT":16,"EJE":17,"arroba":18,"cora":19,"EXPRESION":20,"corc":21,"punto":22,"SELECT_ARGUMENTO":23,"por":24,"ancestor":25,"OR_SELF":26,"attribute":27,"ddpuntos":28,"EJE_COMPLEMENTO":29,"child":30,"descendant":31,"following":32,"SIBLING":33,"namespace":34,"parent":35,"preceding":36,"self":37,"menos":38,"sibling":39,"EJE_COMPLEMENTO_2":40,"position":41,"parentesisa":42,"parentesisc":43,"last":44,"text":45,"node":46,"ARITMETICA":47,"LOGICA":48,"PRIMITIVO":49,"mas":50,"div":51,"entero":52,"decimal":53,"STRING":54,"menor":55,"mayor":56,"igual":57,"menorigual":58,"mayorigual":59,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"union",9:"or",10:"ddoble",12:"dsimple",13:"nodoid",18:"arroba",19:"cora",21:"corc",22:"punto",24:"por",25:"ancestor",27:"attribute",28:"ddpuntos",30:"child",31:"descendant",32:"following",34:"namespace",35:"parent",36:"preceding",37:"self",38:"menos",39:"sibling",41:"position",42:"parentesisa",43:"parentesisc",44:"last",45:"text",46:"node",50:"mas",51:"div",52:"entero",53:"decimal",54:"STRING",55:"menor",56:"mayor",57:"igual",58:"menorigual",59:"mayorigual"},
+productions_: [0,[3,2],[4,3],[4,1],[6,1],[6,1],[6,0],[7,2],[7,2],[7,1],[11,2],[11,1],[11,1],[11,1],[11,3],[14,3],[14,2],[14,0],[16,2],[16,2],[23,2],[23,1],[23,1],[23,2],[17,2],[17,3],[17,3],[17,2],[17,2],[17,3],[17,3],[17,2],[17,3],[26,6],[26,2],[33,4],[33,2],[29,1],[29,2],[29,1],[40,3],[40,0],[15,3],[15,3],[15,3],[15,3],[20,1],[20,1],[20,1],[20,1],[47,3],[47,3],[47,3],[47,3],[47,3],[49,1],[49,1],[49,1],[49,1],[49,1],[49,2],[49,1],[48,3],[48,3],[48,3],[48,3],[48,3]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- 
-    var tablaSimbolos = new tsXML();     
-    let arr = new Array();    
-    for (var i = 0; i < $$[$0-1].length; i+=1) {  
-        arr.push($$[$0-1][i]);        
-    }      
-    tablaSimbolos.listaObjetos=arr;
-    return tablaSimbolos;
+
+       return $$[$0-1];
 
 break;
 case 2:
- 
-                                                        var num_id=aleatorio();
-                                                        var id = new tsObjeto(num_id,$$[$0-7], "Etiqueta","GLOBAL",null);
-                                                        let array_raiz = new Array();
-                                                        array_raiz.push(id);
-                                                        for (var i = 0; i < $$[$0-6].length; i+=1) {
-                                                            if($$[$0-6][i].padre==null)
-                                                            {
-                                                                $$[$0-6][i].padre=id;
-                                                            }
-                                                            if($$[$0-6][i].entorno==""){
-                                                                $$[$0-6][i].entorno=$$[$0-7];
-                                                            }                                                              
-                                                            array_raiz.push($$[$0-6][i]);
-                                                        }  
-                                                        for (var i = 0; i < $$[$0-4].length; i+=1) {  
-                                                            if($$[$0-4][i].padre==null)
-                                                            {
-                                                                $$[$0-4][i].padre=id;
-                                                            }
-                                                            if($$[$0-4][i].entorno==""){
-                                                                $$[$0-4][i].entorno=$$[$0-7];
-                                                            }
-                                                            array_raiz.push($$[$0-4][i]);
-                                                        }  
-                                                        this.$=array_raiz;
-                                                    
+
+                     $$[$0-2].push($$[$0]);
+                     this.$=$$[$0-2];
+              
 break;
 case 3:
 
-                                                        var num_id=aleatorio();
-                                                        var id = new tsObjeto(num_id,$$[$0-6], "Etiqueta","GLOBAL",null);
-                                                        let array8 = new Array();
-                                                        array8.push(id);
-                                                        for (var i = 0; i < $$[$0-4].length; i+=1) {  
-                                                            if($$[$0-4][i].padre==null){
-                                                                $$[$0-4][i].padre=id;
-                                                            }
-                                                            if($$[$0-4][i].entorno==""){
-                                                                $$[$0-4][i].entorno=$$[$0-6];
-                                                            }
-                                                            array8.push($$[$0-4][i]);
-                                                        }  
-                                                        this.$=array8;
-                                                    
-break;
-case 4:
-
-            let array_raices = new Array();            
-            for (var i = 0; i < $$[$0-1].length; i+=1) {                                                                      
-                array_raices.push($$[$0-1][i]);
-            }  
-            for (var i = 0; i < $$[$0].length; i+=1) {                                                                      
-                array_raices.push($$[$0][i]);
-            }              
-            this.$=array_raices;            
-
-    
-break;
-case 5: case 12: case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30:
-this.$= $$[$0];
-break;
-case 6:
- 
-                                                                var num_id=aleatorio();
-                                                                var id = new tsObjeto(num_id,$$[$0-7], "Etiqueta","",null);
-                                                                let arrayo = new Array();
-                                                                arrayo.push(id);
-                                                                    for (var i = 0; i < $$[$0-6].length; i+=1)
-                                                                    {  
-                                                                        if($$[$0-6][i].padre==null)
-                                                                        {
-                                                                            $$[$0-6][i].padre=id;
-                                                                        }
-                                                                        if($$[$0-6][i].entorno==""){
-                                                                            $$[$0-6][i].entorno=$$[$0-7];
-                                                                        }
-                                                                        arrayo.push($$[$0-6][i]);
-                                                                    }  
-                                                                    for (var i = 0; i < $$[$0-4].length; i+=1)
-                                                                    {
-                                                                        if($$[$0-4][i].padre==null)
-                                                                        {
-                                                                            $$[$0-4][i].padre=id;
-                                                                        }
-                                                                        if($$[$0-4][i].entorno==""){
-                                                                            $$[$0-4][i].entorno=$$[$0-7];
-                                                                        }
-                                                                        arrayo.push($$[$0-4][i]);
-                                                                    }                                                                  
-                                                                this.$=arrayo;
-                                                            
+                     this.$=[$$[$0]];
+              
 break;
 case 7:
- 
-                                                                var num_id=aleatorio();
-                                                                var id = new tsObjeto(num_id,$$[$0-7], "Etiqueta","",null);                                                                
-                                                                num_id=aleatorio();
-                                                                var valor = new tsObjeto(num_id,$$[$0-4], "Cadena",$$[$0-7],id);
-                                                                let array2 = new Array();
-                                                                array2.push(id);
-                                                                for (var i = 0; i < $$[$0-6].length; i+=1) {  
-                                                                    if($$[$0-6][i].padre==null){
-                                                                        $$[$0-6][i].padre=id;
-                                                                    }
-                                                                    if($$[$0-6][i].entorno==""){
-                                                                        $$[$0-6][i].entorno=$$[$0-7];
-                                                                    }
-                                                                    array2.push($$[$0-6][i]);                                                                    
-                                                                }  
-                                                                array2.push(valor);
 
-                                                                this.$=array2;         
-                                                            
+              this.$=new Elemento($$[$0],tipoElemento.DOBLE_DIAGONAL);
+       
 break;
 case 8:
 
-                                                                var num_id=aleatorio();
-                                                                var id = new tsObjeto(num_id,$$[$0-6], "Etiqueta","",null);
-                                                                let array3 = new Array();
-                                                                array3.push(id);
-                                                                for (var i = 0; i < $$[$0-4].length; i+=1) {                                                                      
-                                                                    if($$[$0-4][i].padre==null){
-                                                                        $$[$0-4][i].padre=id;
-                                                                    }
-                                                                    if($$[$0-4][i].entorno==""){
-                                                                        $$[$0-4][i].entorno=$$[$0-6];
-                                                                    }
-                                                                    array3.push($$[$0-4][i]);                                                                    
-                                                                }                                                                  
-                                                                this.$=array3;
-                                                            
-break;
-case 9:
- 
-                                                                var num_id=aleatorio();
-                                                                var id = new tsObjeto(num_id,$$[$0-6],"Etiqueta","",null);
-                                                                num_id=aleatorio();
-                                                                var valor = new tsObjeto(num_id,$$[$0-4], "Cadena",$$[$0-6],id);                                     
-                                                                let array4 = new Array();
-                                                                array4.push(id);
-                                                                array4.push(valor);
-                                                                this.$=array4;
-                                                            
+              this.$=new Elemento($$[$0],tipoElemento.DIAGONAL);
+       
 break;
 case 10:
-this.$=$$[$0-1]+" "+$$[$0]
-break;
-case 11: case 31: case 33:
-this.$=$$[$0];
-break;
-case 32:
 
-            let array_atributos = new Array();            
-            for (var i = 0; i < $$[$0-1].length; i+=1) {                                                                      
-                array_atributos.push($$[$0-1][i]);
-            }  
-            for (var i = 0; i < $$[$0].length; i+=1) {                                                                      
-                array_atributos.push($$[$0][i]);
-            }              
-            this.$=array_atributos;            
-        
-break;
-case 34:
-
-                                    var num_id=aleatorio();
-                                    var id = new tsObjeto(num_id,$$[$0-2], "Atributo","",null);                                    
-                                    num_id=aleatorio();
-                                    var valor = new tsObjeto(num_id,$$[$0], "Cadena","",null);                                                                         
-                                    let array5 = new Array();                                    
-                                    array5.push(id);
-                                    array5.push(valor);                                    
-                                    this.$=array5;                                    
-    
+              this.$ = $$[$0-1];              
+              
 break;
 }
 },
-table: [{3:1,4:[1,2]},{1:[3]},{5:[1,3]},{6:[1,4]},{7:[1,5]},{8:[1,6]},{9:[1,7]},{7:[1,8]},{8:[1,9]},{10:[1,10]},{11:11,13:[1,12]},{12:[1,13]},{14:[1,14]},{1:[2,1]},{14:$V0,15:15,16:[1,16],39:17},{14:$V0,16:[1,19],39:20},{13:$V1,17:21,19:22},o($V2,[2,33]),{7:[1,24]},{13:$V1,17:25,19:22},o($V2,[2,32]),{13:[1,26],19:27},{13:[2,5]},{14:$V3},{8:[1,29]},{13:[1,30],19:27},{14:$V3,18:[1,31]},{13:[2,4]},{14:$V0,15:32,16:[1,33],39:17},o($V2,[2,34]),{14:$V3,18:[1,34]},{14:[1,35]},{14:$V0,16:[1,36],39:20},{5:$V4,8:$V5,13:$V1,14:$V6,17:37,19:22,20:38,21:39,22:$V7,23:$V8,24:$V9,25:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,33:$Vi,34:$Vj,35:$Vk,36:$Vl,37:$Vm,38:$Vn},{14:[1,60]},{16:[1,61]},{5:$V4,8:$V5,13:$V1,14:$V6,17:62,19:22,20:63,21:39,22:$V7,23:$V8,24:$V9,25:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,33:$Vi,34:$Vj,35:$Vk,36:$Vl,37:$Vm,38:$Vn},{13:[1,64],19:27},{5:$V4,8:$V5,13:[1,65],14:$V6,21:66,22:$V7,23:$V8,24:$V9,25:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,33:$Vi,34:$Vj,35:$Vk,36:$Vl,37:$Vm,38:$Vn},o($Vo,[2,11]),o($Vo,[2,12]),o($Vo,[2,13]),o($Vo,[2,14]),o($Vo,[2,15]),o($Vo,[2,16]),o($Vo,[2,17]),o($Vo,[2,18]),o($Vo,[2,19]),o($Vo,[2,20]),o($Vo,[2,21]),o($Vo,[2,22]),o($Vo,[2,23]),o($Vo,[2,24]),o($Vo,[2,25]),o($Vo,[2,26]),o($Vo,[2,27]),o($Vo,[2,28]),o($Vo,[2,29]),o($Vo,[2,30]),o($Vo,[2,31]),{16:[1,67]},{12:[2,3]},{13:[1,68],19:27},{5:$V4,8:$V5,13:[1,69],14:$V6,21:66,22:$V7,23:$V8,24:$V9,25:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,33:$Vi,34:$Vj,35:$Vk,36:$Vl,37:$Vm,38:$Vn},{14:$V3,18:[1,70]},{18:[1,71]},o($Vo,[2,10]),{12:[2,2]},{14:$V3,18:[1,72]},{18:[1,73]},{14:[1,74]},{14:[1,75]},{14:[1,76]},{14:[1,77]},{16:[1,78]},{16:[1,79]},{16:[1,80]},{16:[1,81]},{13:[2,8]},{13:[2,9]},{13:[2,6]},{13:[2,7]}],
-defaultActions: {13:[2,1],22:[2,5],27:[2,4],61:[2,3],67:[2,2],78:[2,8],79:[2,9],80:[2,6],81:[2,7]},
+table: [{3:1,4:2,7:3,10:$V0,11:6,12:$V1,13:$V2,15:8,16:9,17:10,18:$V3,25:$V4,27:$V5,30:$V6,31:$V7,32:$V8,34:$V9,35:$Va,36:$Vb,37:$Vc,41:$Vd,44:$Ve,45:$Vf,46:$Vg},{1:[3]},o($Vh,[2,6],{6:26,5:[1,25],8:[1,27],9:[1,28]}),o($Vi,[2,3]),{10:$Vj,11:29,12:$Vk,13:$V2,15:8,16:9,17:10,18:$Vl,22:$Vm,23:30,24:$Vn,25:$V4,27:$V5,30:$V6,31:$V7,32:$V8,34:$V9,35:$Va,36:$Vb,37:$Vc,41:$Vd,44:$Ve,45:$Vf,46:$Vg},{10:$Vj,11:36,12:$Vk,13:$V2,15:8,16:9,17:10,18:$Vl,22:$Vm,23:37,24:$Vn,25:$V4,27:$V5,30:$V6,31:$V7,32:$V8,34:$V9,35:$Va,36:$Vb,37:$Vc,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($Vi,[2,9]),o($Vi,$Vo,{14:38,19:$Vp,22:$Vq}),o($Vi,[2,11]),o($Vi,[2,12]),o($Vi,[2,13]),{13:$Vr},{42:[1,42]},{42:[1,43]},{42:[1,44]},{42:[1,45]},{26:46,28:$Vs,38:$Vt},{28:[1,49]},{28:[1,50]},{26:51,28:$Vs,38:$Vt},{28:$Vu,33:52,38:$Vv},{28:[1,55]},{28:[1,56]},{28:$Vu,33:57,38:$Vv},{28:[1,58]},{1:[2,1]},{7:59,10:$V0,11:6,12:$V1,13:$V2,15:8,16:9,17:10,18:$V3,25:$V4,27:$V5,30:$V6,31:$V7,32:$V8,34:$V9,35:$Va,36:$Vb,37:$Vc,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($Vh,[2,4]),o($Vh,[2,5]),o($Vi,[2,7]),o($Vi,[2,18]),{13:$Vr,24:$Vw},o($Vi,[2,21]),o($Vi,[2,22],{22:[1,61]}),{18:$Vx,22:$Vm,23:30,24:$Vn},{18:$Vx,22:$Vm,23:37,24:$Vn},o($Vi,[2,8]),o($Vi,[2,19]),o($Vi,[2,10]),{13:$Vy,15:67,18:$Vz,20:63,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{22:[1,76]},o($Vi,$Vo,{14:77,19:$Vp,22:$Vq}),{43:[1,78]},{43:[1,79]},{43:[1,80]},{43:[1,81]},o($Vi,[2,24]),{9:[1,82]},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:83,41:$Vd,44:$Ve,45:$Vf,46:$Vg},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:87,41:$Vd,44:$Ve,45:$Vf,46:$Vg},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:88,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($Vi,[2,27]),o($Vi,[2,28]),{39:[1,89]},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:90,41:$Vd,44:$Ve,45:$Vf,46:$Vg},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:91,41:$Vd,44:$Ve,45:$Vf,46:$Vg},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:92,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($Vi,[2,31]),{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:93,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($Vi,[2,2]),o($Vi,[2,20]),o($Vi,[2,23]),{24:$Vw},{21:[1,94],24:$VH,38:$VI,50:$VJ,51:$VK,55:$VL,56:$VM,57:$VN,58:$VO,59:$VP},o($VQ,[2,46]),o($VQ,[2,47]),o($VQ,[2,48]),o($VQ,[2,49]),{13:$Vy,15:67,18:$Vz,20:104,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},o($VQ,[2,55]),o($VQ,[2,56]),o($VQ,[2,57]),o($VQ,[2,58]),o($VQ,[2,59]),{13:[1,105]},o($VQ,[2,61]),o($Vi,[2,16]),o($Vi,[2,14]),o($VR,[2,42]),o($VR,[2,43]),o($VR,[2,44]),o($VR,[2,45]),{38:[1,106]},o($Vi,[2,34]),o($Vi,[2,37]),o($Vi,[2,41],{40:107,19:[1,108]}),o($Vi,[2,39]),o($Vi,[2,25]),o($Vi,[2,26]),{28:[1,109]},o($Vi,[2,36]),o($Vi,[2,29]),o($Vi,[2,30]),o($Vi,[2,32]),o($Vi,[2,15]),{13:$Vy,15:67,18:$Vz,20:110,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:111,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:112,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:113,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:114,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:115,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:116,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:117,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$Vy,15:67,18:$Vz,20:118,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{24:$VH,38:$VI,43:[1,119],50:$VJ,51:$VK,55:$VL,56:$VM,57:$VN,58:$VO,59:$VP},o($VQ,[2,60]),{37:[1,120]},o($Vi,[2,38]),{13:$Vy,15:67,18:$Vz,20:121,22:$VA,24:$VB,41:$Vd,42:$VC,44:$Ve,45:$Vf,46:$Vg,47:64,48:65,49:66,52:$VD,53:$VE,54:$VF},{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:122,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($VQ,[2,50]),o($VQ,[2,51]),o($VS,[2,52],{38:$VI,50:$VJ}),o($VS,[2,53],{38:$VI,50:$VJ}),o($VT,[2,62],{24:$VH,38:$VI,50:$VJ,51:$VK}),o($VT,[2,63],{24:$VH,38:$VI,50:$VJ,51:$VK}),o([21,43,57],[2,64],{24:$VH,38:$VI,50:$VJ,51:$VK,55:$VL,56:$VM,58:$VO,59:$VP}),o($VT,[2,65],{24:$VH,38:$VI,50:$VJ,51:$VK}),o($VT,[2,66],{24:$VH,38:$VI,50:$VJ,51:$VK}),o($VQ,[2,54]),{28:[1,123]},{21:[1,124],24:$VH,38:$VI,50:$VJ,51:$VK,55:$VL,56:$VM,57:$VN,58:$VO,59:$VP},o($Vi,[2,35]),{13:$VG,15:84,18:$Vx,22:$Vm,23:86,24:$Vn,29:125,41:$Vd,44:$Ve,45:$Vf,46:$Vg},o($Vi,[2,40]),o($Vi,[2,33])],
+defaultActions: {25:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -420,27 +264,6 @@ parse: function parse(input) {
     }
     return true;
 }};
-
-    var usados = new Array();
-
-    function repetido(num){
-        var repe = false;
-        for (i=0; i<=usados.length; i++) {
-            if (num == usados[i]) {
-                repe = true;
-            }
-        }
-        return repe;
-    }
-
-    function aleatorio() {
-        while (repe != false) {
-            var num = Math.floor(Math.random()*(100000-1+1))+1;
-            var repe = repetido(num);
-        }
-        usados.push(num);
-        return num;
-    }
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -771,78 +594,110 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespace */
 break;
-case 1:this.begin('comment');
+case 1:return  'last';
 break;
-case 2:this.popState();
+case 2:return  'position';
 break;
-case 3:/* skip comment content*/
+case 3:return  'text';
 break;
-case 4:return 4;
+case 4:return  'ancestor'; 
 break;
-case 5:return 10;
+case 5:return  'attribute'
 break;
-case 6:return 5;
+case 6:return  'child'
 break;
-case 7:return 6;
+case 7:return  'descendant'
 break;
-case 8:return 9
+case 8:return  'following'
 break;
-case 9:return 13;
+case 9:return  'namespace'
 break;
-case 10:return 16;
+case 10:return  'parent'
 break;
-case 11:return 7;
+case 11:return  'preceding'
 break;
-case 12:return 18;
+case 12:return  'sibling'
 break;
-case 13:return 'not';
+case 13:return  'self'
 break;
-case 14:return 31;
+case 14:return  'node'
 break;
-case 15:return 32;
+case 15:yy_.yytext = yy_.yytext.slice(1,-1); return 54;
 break;
-case 16:return 34;
+case 16:return 50;
 break;
-case 17:return 35;
+case 17:return 38;
 break;
-case 18:return 36;
+case 18:return 24;
 break;
-case 19:return 37;
+case 19:return 'mod';
 break;
-case 20:return 38;
+case 20:return 51;
 break;
-case 21:return 25;
+case 21:return 58;
 break;
-case 22:return 26;
+case 22:return 59;
 break;
-case 23:return 27;
+case 23:return 55;
 break;
-case 24:return "apostrofe";
+case 24:return 56;
 break;
-case 25:return "quot";
+case 25:return 57;
 break;
-case 26:return 22;
+case 26:return 'digual';
 break;
-case 27:return 23;
+case 27:return 'noigual';
 break;
-case 28:return 33
+case 28:return 'and';
 break;
-case 29:return 14;
+case 29:return 9;
 break;
-case 30:return 8
+case 30:return 'not';
 break;
-case 31:return 24
+case 31:return 'semicolon';
 break;
-case 32:
+case 32:return 42;
+break;
+case 33:return 43;
+break;
+case 34:return 'and';
+break;
+case 35:return 9;
+break;
+case 36:return 'not';
+break;
+case 37:return 8;
+break;
+case 38:return 19;
+break;
+case 39:return 21;
+break;
+case 40:return 22;
+break;
+case 41:return 28;
+break;
+case 42:return 18;
+break;
+case 43:return 53;
+break;
+case 44:return 52;
+break;
+case 45:return 13;
+break;
+case 46:return 10;
+break;
+case 47:return 12;
+break;
+case 48:
                                         console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column);
                                     
 break;
-case 33:return 12
+case 49:return 5
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--)/i,/^(?:-->)/i,/^(?:.)/i,/^(?:<\?)/i,/^(?:\?>)/i,/^(?:xml\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:\/)/i,/^(?:!)/i,/^(?:\.)/i,/^(?:')/i,/^(?:,)/i,/^(?::)/i,/^(?:#)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:[0-9]+\.[0-9]*)/i,/^(?:[0-9]+)/i,/^(?:[0-9]{2}[0-9]{2}[0-9]{4})/i,/^(?:[a-zA-Z_][a-zA-Z0-9_ñÑàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:('((\\([\'\"\\bfnrtv]))|([^\'\\]))'))/i,/^(?:.)/i,/^(?:$)/i],
-conditions: {"comment":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],"inclusive":true},"INITIAL":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:last\b)/i,/^(?:position\b)/i,/^(?:text\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:following\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:sibling\b)/i,/^(?:self\b)/i,/^(?:node\b)/i,/^(?:"[^"]+")/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:%)/i,/^(?:div\b)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:==)/i,/^(?:!=)/i,/^(?:&&)/i,/^(?:or\b)/i,/^(?:!)/i,/^(?:;)/i,/^(?:\()/i,/^(?:\))/i,/^(?:&&)/i,/^(?:\|\|)/i,/^(?:!)/i,/^(?:\|)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:[a-zA-Z0-9_nÑ]+)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:.)/i,/^(?:$)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49],"inclusive":true}}
 });
 return lexer;
 })();
@@ -856,9 +711,9 @@ return new Parser;
 
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramaticaXML3D;
-exports.Parser = gramaticaXML3D.Parser;
-exports.parse = function () { return gramaticaXML3D.parse.apply(gramaticaXML3D, arguments); };
+exports.parser = gramaticaXQUERY;
+exports.Parser = gramaticaXQUERY.Parser;
+exports.parse = function () { return gramaticaXQUERY.parse.apply(gramaticaXQUERY, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {
         console.log('Usage: '+args[0]+' FILE');
