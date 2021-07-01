@@ -17,7 +17,7 @@ export class Let implements ExpressionXquery{
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
 
-        var content : Retorno = {value:[], type: tipoPrimitivo.RESP, SP: -1} 
+        var content : Retorno = {value:[], type: tipoPrimitivo.RESP} 
 
         if (entAct.existeLocalVar(this.idVar)){
 
@@ -32,7 +32,7 @@ export class Let implements ExpressionXquery{
         }else {
             throw new Error("Error Semantico: Se encuentra en uso el id: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
         }
-        return {value : "", type: tipoPrimitivo.STRING, SP: -1}
+        return {value : "", type: tipoPrimitivo.STRING}
     }
 
 }
