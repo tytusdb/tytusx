@@ -73,7 +73,7 @@ export class Path implements Expression{
                 this.construirNodos(ent, "")
             }
         } 
-        return {value: this.salida, type: tipoPrimitivo.RESP};
+        return {value: this.salida, type: tipoPrimitivo.RESP, SP: -1};
     }
 
     private getQuery(entPadre: Entorno, posActAcceso: number, simboloPadre?:Simbolo) {

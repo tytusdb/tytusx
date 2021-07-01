@@ -21,7 +21,7 @@ export class MultiXpaths implements ExpressionXquery{
         for (const path of this.paths) {
             content.concat(path.execute(RaizXML).value)
         }
-        return {value: showXquery.buildXquery(content), type : tipoPrimitivo.STRING}
+        return {value: showXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
     }
 
 }

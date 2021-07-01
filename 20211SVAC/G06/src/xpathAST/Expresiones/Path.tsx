@@ -4,7 +4,7 @@ import { Expression, Retorno } from "../../Interfaces/Expresion";
 import { tipoPrimitivo } from './Primitivo';
 import { Simbolo } from '../../xmlAST/Simbolo';
 import { traduccion } from '../../Traduccion/traduccion';
-import { traducirXmlRecursive } from '../../Traduccion/xml3d';
+//import { traducirXmlRecursive } from '../../Traduccion/xml3d';
 
 export class Path implements Expression {
 
@@ -102,9 +102,9 @@ export class Path implements Expression {
 
             this.salida = [];
             this.getQuery(ent, 0, simboloPadre);
-            return { value: this.salida, type: tipoPrimitivo.RESP };
+            return { value: this.salida, type: tipoPrimitivo.RESP , SP: -1};
         }
-        return { value: this.unirSalida(), type: tipoPrimitivo.STRING };
+        return { value: this.unirSalida(), type: tipoPrimitivo.STRING , SP: -1};
     }
 
     private getQuery(entPadre: Entorno, posActAcceso: number, simboloPadre?: Simbolo) {
@@ -630,6 +630,8 @@ export class Path implements Expression {
                     traduccion.setTranslate("H = H + 1;");
                 }
             }
+
+
             traduccion.setTranslate("\n//Ingresando tipo de acceso\t--------------");
             traduccion.stackCounter++;
             key.SP_tipoAcceso = traduccion.stackCounter;

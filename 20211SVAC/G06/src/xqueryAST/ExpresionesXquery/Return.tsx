@@ -16,6 +16,6 @@ export class Return implements ExpressionXquery{
         for (const Xquery of this.L_Xqueys) {
             salida += Xquery.executeXquery(entAct, RaizXML).value 
         }
-        return {value : salida, type: tipoPrimitivo.STRING}
+        return {value : salida, type: tipoPrimitivo.STRING, SP: -1}
     }
 }

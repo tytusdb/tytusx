@@ -33,9 +33,9 @@ export class XqueryPath implements ExpressionXquery{
             }
 
             if (this.accesos.tipoPath === 'sub'){
-                return {value : content, type: tipoPrimitivo.RESP}
+                return {value : content, type: tipoPrimitivo.RESP, SP: -1}
             }else {
-                return {value: showXquery.buildXquery(content), type : tipoPrimitivo.STRING}
+                return {value: showXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
             }
 
         }else {

@@ -13,6 +13,7 @@ export enum operacionAritmetica {
 
 export class Aritmetico implements Expression{
 
+    
     constructor (
     public line: Number,
     public column: Number,
@@ -29,25 +30,25 @@ export class Aritmetico implements Expression{
         if(valorIzq.type === tipoPrimitivo.RESP || valorDer.type === tipoPrimitivo.RESP){
             throw new Error("Error Semantico: incompatibilidad de tipos: tipo varlor 1: "+valorDer.type+", tipo valor2 "+valorDer.type +", Linea: "+this.line+"Column: "+this.column);
         }else if((valorIzq.type === tipoPrimitivo.STRING || valorDer.type === tipoPrimitivo.STRING) && this.tipoOperacion === operacionAritmetica.SUMA) {
-            return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.STRING };
+            return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.STRING, SP: -1 };
         }else if ((valorIzq.type === tipoPrimitivo.NUMBER) && (valorDer.type === tipoPrimitivo.NUMBER)) {
            
             if (this.tipoOperacion === operacionAritmetica.SUMA){
-                return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.NUMBER };
+                return  { value: (valorIzq.value + valorDer.value), type: tipoPrimitivo.NUMBER , SP: -1};
             }else if(this.tipoOperacion === operacionAritmetica.RESTA){
-                return { value: (valorIzq.value - valorDer.value) , type: tipoPrimitivo.NUMBER };
+                return { value: (valorIzq.value - valorDer.value) , type: tipoPrimitivo.NUMBER, SP: -1 };
             }else if(this.tipoOperacion === operacionAritmetica.MULT){
-                return { value: (valorIzq.value * valorDer.value) , type: tipoPrimitivo.NUMBER };;
+                return { value: (valorIzq.value * valorDer.value) , type: tipoPrimitivo.NUMBER, SP: -1 };;
             }else if(this.tipoOperacion === operacionAritmetica.DIV){
 
                 if(Number(valorDer.value) >= 0){
-                    return { value: (valorIzq.value / valorDer.value) , type: tipoPrimitivo.NUMBER };
+                    return { value: (valorIzq.value / valorDer.value) , type: tipoPrimitivo.NUMBER, SP: -1 };
                 }else {
                     throw new Error("Error Semantico: El valor "+valorDer+", debe ser mayor o igual que cero,  Linea: "+this.line+"Column: "+this.column);
                 }
 
             }else if (this.tipoOperacion === operacionAritmetica.MOD){
-                return  { value: (valorIzq.value % valorDer.value) , type: tipoPrimitivo.NUMBER };
+                return  { value: (valorIzq.value % valorDer.value) , type: tipoPrimitivo.NUMBER, SP: -1 };
             }else {
                 throw new Error("Error Semantico: no se reconoce el operador  " + this.sym + ", Linea: "+this.line+"Column: "+this.column);
             }
