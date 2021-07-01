@@ -12,8 +12,18 @@ var asignacionArray = /**@class */ (function(){
     asignacionArray.prototype.getTipo = function(){
         return this.tipo
     }
-    asignacionArray.prototype.get3D = function(){
-        this.codigo=this.id +"[("+this.tipo_dato+")"+this.expr1+"]= "+this.expr2+";\n"
+    asignacionArray.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    asignacionArray.prototype.set3D = function(){
+        if(this.tipo!=tipoInstr.NULL)
+            this.codigo=this.id +"[("+this.tipo_dato+")"+this.expr1+"]= "+this.expr2+";\n"
+        else    
+            this.codigo=""
+        return this.codigo
+    }
+    asignacionArray.prototype.getOptimizado=function () {
         return this.codigo
     }
     return asignacionArray
