@@ -23,9 +23,9 @@ var XDeclararFuncion = /** @class */ (function () {
 
         if(existe == false){
             funcionesXQuery.push(XFunctionAux);
-            return "Funcion \"" + XFunctionAux.getID() + "\" declarada y creada con exito! :D";
+            return "Función \"" + XFunctionAux.getID() + "\" declarada y creada con éxito! :D";
         } else {
-            return "Ya existe una funcion llamada " + XFunctionAux.getID() + " :O";
+            return "Ya existe una función llamada " + XFunctionAux.getID() + " :O";
         }
   
         
