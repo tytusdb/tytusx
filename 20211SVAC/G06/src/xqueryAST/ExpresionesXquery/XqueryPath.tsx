@@ -1,10 +1,10 @@
-import { Retorno } from "../../Interfaces/Expresion";
+import { Retorno } from "../../Interfaces/ExpressionXquery";
 import { ExpressionXquery } from "../../Interfaces/ExpressionXquery";
 import { Entorno } from "../../xmlAST/Entorno";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
-import { Path } from "../../xpathAST/Expresiones/Path";
-import { tipoPrimitivo } from "../../xpathAST/Expresiones/Primitivo";
-import { showXquery } from "../manejadores/showXquery";
+import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
+import { Path } from "../ExpresionesXpath/Path";
+import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
 export class XqueryPath implements ExpressionXquery{
     
@@ -12,34 +12,43 @@ export class XqueryPath implements ExpressionXquery{
         public line: number,
         public column: number,
         public idVar: string,
-        public accesos: Path){
-             
-        }
-
-    executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
+        public accesos: Path){}
+   
+    public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
         
         var content : Retorno[] = [];
         
         var varFind = entAct.getVar(this.idVar);  
         if (varFind != null){
 
-            for (const element of varFind.value) {
+            if (varFind.type === tipoPrimitivo.RESP){
 
-                if (element.type === tipoPrimitivo.NODO){
-                    content.concat(this.accesos.execute(element.value).value);
+                for (const element of varFind.value) {
+
+                    if (element.type === tipoPrimitivo.NODO){
+                        ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, element.value).value) ;
+                    }else {
+                        content.push(element)
+                    }
+                }
+            }else {
+
+                if (varFind.type === tipoPrimitivo.NODO){
+                    ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, varFind.value).value) ;
                 }else {
-                    content.push(element)
+                    content.push(varFind)
                 }
             }
 
-            if (this.accesos.tipoPath === 'sub'){
-                return {value : content, type: tipoPrimitivo.RESP}
-            }else {
-                return {value: showXquery.buildXquery(content), type : tipoPrimitivo.STRING}
-            }
+            return {value : content, type: tipoPrimitivo.RESP}
 
         }else {
             throw new Error("Error Semantico: No se encuentra el id: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
         }
     }
+    
+    GraficarAST(texto: string): string {
+        throw new Error("Method not implemented.");
+    }
+//return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
 }

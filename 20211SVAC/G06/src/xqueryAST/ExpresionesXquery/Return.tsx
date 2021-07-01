@@ -1,8 +1,9 @@
-import { Retorno } from "../../Interfaces/Expresion";
-import { ExpressionXquery } from "../../Interfaces/ExpressionXquery";
+import { ExpressionXquery, Retorno } from "../../Interfaces/ExpressionXquery";
 import { Entorno } from "../../xmlAST/Entorno";
-import { tipoPrimitivo } from "../../xpathAST/Expresiones/Primitivo";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
+import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
+import { Path } from "../ExpresionesXpath/Path";
+import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
 export class Return implements ExpressionXquery{
     
@@ -10,12 +11,20 @@ export class Return implements ExpressionXquery{
         public line: Number,
         public column: Number, 
         public L_Xqueys: ExpressionXquery[]){}
+    
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
-        var salida : string = "";
+       
+        var content : Retorno[] = [];
+        
         for (const Xquery of this.L_Xqueys) {
-            salida += Xquery.executeXquery(entAct, RaizXML).value 
+            ManejadorXquery.concatenar(content, Xquery.executeXquery(entAct, RaizXML).value);
         }
-        return {value : salida, type: tipoPrimitivo.STRING}
+        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
     }
+
+    GraficarAST(texto: string): string {
+        throw new Error("Method not implemented.");
+    }
+
 }

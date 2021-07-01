@@ -4,7 +4,8 @@ import { tipoPrimitivo } from '../xpathAST/Expresiones/Primitivo';
 
 export type Retorno ={
     value : any,
-    type : tipoPrimitivo
+    type : tipoPrimitivo,
+    SP:Number
 }
 
 export interface  Expression {
