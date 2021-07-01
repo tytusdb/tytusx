@@ -198,7 +198,7 @@ FUNCION : tk_number tk_parentesisa EXPRESION_CADENA tk_parentesisc {
                 nodoaux.agregarHijo($6[1]);
                 nodoaux.agregarHijo($10[1]);
                 $$ = [xDeclararFuncionAux,nodoaux]; } 
-          | tk_menor tk_identificador tk_mayor tk_llavea tk_local tk_identificador tk_parentesisa VALORES tk_parentesisc tk_llavec tk_menor tk_slash tk_identificador tk_mayor {
+        | tk_menor tk_identificador tk_mayor tk_llavea tk_local tk_identificador tk_parentesisa VALORESXPATH tk_parentesisc tk_llavec tk_menor tk_slash tk_identificador tk_mayor {
                 xLlamadaAux = new XLlamada($6, @1.first_line, @1.first_column, $8[0], "");
                 XLlamadaFuncionAux = new XLlamadaFuncion(@1.first_line, @1.first_column, xLlamadaAux, $2, $13);
                 nodoaux = new NodoArbol($1+""+$2+""+$3+""+$4+""+$10+""+$11+""+$12+""+$13+""+$14,"");
@@ -206,6 +206,14 @@ FUNCION : tk_number tk_parentesisa EXPRESION_CADENA tk_parentesisc {
                 nodoLlamadaAux.agregarHijo($8[1]);  
                 nodoaux.agregarHijo(nodoLlamadaAux);    
                 $$ = [XLlamadaFuncionAux,nodoaux];
+
+        }
+        |  tk_local tk_identificador tk_parentesisa VALORESXPATH tk_parentesisc {
+                xLlamadaAux = new XLlamada($2, @1.first_line, @1.first_column, $4[0], "");
+                XLlamadaFuncionSimpleAux = new XLlamadaFuncionSimple(@1.first_line, @1.first_column, xLlamadaAux);
+                nodoaux = new NodoArbol($2+"()","");
+                nodoaux.agregarHijo($4[1]);    
+                $$ = [XLlamadaFuncionSimpleAux,nodoaux];
 
         };
 
@@ -266,7 +274,7 @@ SENFUNCION: tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_
                 nodoaux.agregarHijo(elseifaux);
                 elseifaux.agregarHijo(elseaux);
                 $$ = [XIFAux,nodoaux];
- };
+ } ;
 
 
 RETURN_IF:      EXP_CADENA { $$ = $1; };
@@ -387,12 +395,12 @@ EXP_NUMERICA :  tk_menos EXP_NUMERICA %prec EXPMENOS {
         |       tk_idflower {      primitivoAux = new XPrimitivo($1, @1.first_line, @1.first_column,TipoXPrimitivo.IDFLOWER);
                                    nodoaux = new NodoArbol($1,"");
                                    $$ = [primitivoAux,nodoaux]; }                           
+       
         |       tk_local tk_identificador tk_parentesisa VALORES tk_parentesisc { 
                                 xLlamadaAux = new XLlamada($2, @1.first_line, @1.first_column, $4[0], "");
                                 nodoaux = new NodoArbol($2+"()","");
                                 nodoaux.agregarHijo($4[1]);    
-                                $$ = [xLlamadaAux,nodoaux];
-        };
+                                $$ = [xLlamadaAux,nodoaux];};
 
 VALORES : VALORES tk_coma VALOR {       $1[1].agregarHijo($3[1]);
                                         $1[0].push($3[0]); 
@@ -400,9 +408,33 @@ VALORES : VALORES tk_coma VALOR {       $1[1].agregarHijo($3[1]);
         |       VALOR  { $$ = [[$1[0]],$1[1]]; };
 
 VALOR: EXP_CADENA {     xValorAux = new XValor($1[0], @1.first_line, @1.first_column, TipoXValor.PRIMITIVO);
-                        $$ = [xValorAux, $1[1]]; }
-        |       {     xValorAux = new XValor($1[0], @1.first_line, @1.first_column, TipoXValor.XPATH);
                         $$ = [xValorAux, $1[1]]; };
+
+
+
+VALORESXPATH: VALORESXPATH tk_coma VALORXPATH {  $1[1].agregarHijo($3[1]);
+                                                 $1[0].push($3[0]); 
+                                                 $$ = [$1[0],$1[1]]; }
+        |  VALORXPATH { $$ = [[$1[0]],$1[1]]; };
+
+VALORXPATH: SETS {      instruccionAux = new XPath(@1.first_line, @1.first_column, $1[0]);
+                        xValorAux = new XValor(instruccionAux, @1.first_line, @1.first_column, TipoXValor.XPATH);
+                        $$ = [xValorAux, $1[1]]; }
+        |  tk_entero {  
+                        primitivoAux = new XPrimitivo(Number($1), @1.first_line, @1.first_column,TipoXPrimitivo.NUMERO);
+                        nodoaux = new NodoArbol($1,"");
+                        xValorAux = new XValor(primitivoAux, @1.first_line, @1.first_column, TipoXValor.PRIMITIVO);
+                        $$ = [xValorAux, nodoaux];
+        }
+        |  tk_decimal{  
+                        primitivoAux = new XPrimitivo(Number($1), @1.first_line, @1.first_column,TipoXPrimitivo.NUMERO);
+                        nodoaux = new NodoArbol($1,"");
+                        xValorAux = new XValor(primitivoAux, @1.first_line, @1.first_column, TipoXValor.PRIMITIVO);
+                        $$ = [xValorAux, nodoaux];
+        }
+        |  XCADENA {     xValorAux = new XValor($1[0], @1.first_line, @1.first_column, TipoXValor.PRIMITIVO);
+                        $$ = [xValorAux, $1[1]];
+        };
 
 
 SETS: SETS SET { $1[1].agregarHijo($2[1]);
@@ -516,7 +548,7 @@ PREDICADO : tk_corchetea EXPRESION_FILTRO tk_corchetec { nodoaux = new NodoArbol
                 $$ = [null,nodoaux];} ;
 
 
-EXPRESION_FILTRO : EXPRESION_LOGICA { };
+EXPRESION_FILTRO : EXPRESION_LOGICA { $$ = $1; };
 
 AXES :          tk_ancestorself   EXPRESION      { axesAux = new Axes(@1.first_line, @1.first_column, TipoAxes.ANCESTOR_OR_SELF, $2[0]);
                                                    nodoaux = new NodoArbol($1,"");
