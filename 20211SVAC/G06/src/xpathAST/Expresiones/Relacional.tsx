@@ -34,74 +34,104 @@ export class Relacional implements Expression{
             for (const valIzq of valorIzq.value ) {
                 for (const valDer of valorDer.value) {
                     
-                    if (valIzq.type !== tipoPrimitivo.NODO && valDer.type !== tipoPrimitivo.NODO){
+                    if (valIzq.type === tipoPrimitivo.NODO && valDer.type === tipoPrimitivo.NODO){
 
-                        if (this.validar(valIzq, valDer)){
-                            return {value: true, type: tipoPrimitivo.BOOL}
+                        if (this.validar(valIzq.value.identificador, valDer.value.identificador)){
+                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
+                        }
+                    }else if (valIzq.type === tipoPrimitivo.NODO){
+                        
+                        if (valIzq.value.listaEntornos.length === 0 && valIzq.value.texto !== ''){
+                            
+                            if (this.validar(valIzq.value.texto, valDer.value)){
+                                return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                            }
                         }
                     }
-                    else if (valIzq.type === tipoPrimitivo.NODO && valDer.type === tipoPrimitivo.NODO){
+                    else if ( valDer.type === tipoPrimitivo.NODO){
 
-                        if (this.validar(valIzq, valDer)){
-                            return {value: true, type: tipoPrimitivo.BOOL}
+                        if (valDer.value.listaEntornos.length === 0 && valDer.value.texto !== ''){
+                            
+                            if (this.validar(valDer.value.texto, valIzq.value)){
+                                return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                            }
                         }
-                    }else {
 
-                        if (this.validar(valIzq, valDer)){
-                            return {value: true, type: tipoPrimitivo.BOOL}
+                    } else {
+
+                        if (this.validar(valIzq.value, valDer.value)){
+                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
                         }
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL}; 
+            return {value: false , type : tipoPrimitivo.BOOL, SP: -1}; 
             
         }else if (valorIzq.type === tipoPrimitivo.RESP){
 
             for (const valIzq of valorIzq.value) {
-                if (valIzq.type !== tipoPrimitivo.NODO){
-                    if (this.validar(valIzq, valorDer)){
-                        return {value: true, type: tipoPrimitivo.BOOL}
+                if (valIzq.type === tipoPrimitivo.NODO){
+                        
+                    if (valIzq.value.listaEntornos.length === 0 && valIzq.value.texto !== ''){
+                        
+                        if (this.validar(valIzq.value.texto, valorDer.value)){
+                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                        }
+                    }
+                }else {
+                   
+                    if (this.validar(valIzq.value, valorDer.value)){
+                        return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL};
+            return {value: false , type : tipoPrimitivo.BOOL, SP: -1};
 
         }else if (valorDer.type === tipoPrimitivo.RESP){
 
             for (const valDer of valorDer.value) {
-                if (valDer.type !== tipoPrimitivo.NODO){
-                    if (this.validar(valorIzq, valDer)){
-                        return {value: true, type: tipoPrimitivo.BOOL}
+                if ( valDer.type === tipoPrimitivo.NODO){
+
+                    if (valDer.value.listaEntornos.length === 0 && valDer.value.texto !== ''){
+                        
+                        if (this.validar(valDer.value.texto, valorIzq.value)){
+                            return {value: true, type: tipoPrimitivo.BOOL, SP: -1}    
+                        }
+                    }
+                }else {
+                    
+                    if (this.validar(valorIzq.value, valDer.value)){
+                        return {value: true, type: tipoPrimitivo.BOOL, SP: -1}
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL};
+            return {value: false , type : tipoPrimitivo.BOOL, SP: -1};
             
-        }else {
-            return { value: this.validar(valorIzq, valorDer), type: tipoPrimitivo.BOOL }
+        } else {
+            return { value: this.validar(valorIzq.value, valorDer.value), type: tipoPrimitivo.BOOL, SP: -1}
         }
 
     }
 
-    private validar(valorIzq : Retorno, valorDer: Retorno): boolean{
+    private validar(valorIzq : String, valorDer: String): boolean{
         
         if (this.tipoOperacion === operacionRelacional.IGUAL) {
-            const result = valorIzq.value === valorDer.value;
+            const result = valorIzq == valorDer;
             return result
         } else if (this.tipoOperacion === operacionRelacional.DIFERENCIACION) {
-            const result = valorIzq.value !== valorDer.value;
+            const result = valorIzq != valorDer;
             return result
         }else if (this.tipoOperacion === operacionRelacional.MENOR) { 
-            const result = valorIzq.value < valorDer.value;
+            const result = valorIzq < valorDer;
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MENORIGUAL) {
-            const result = valorIzq.value <= valorDer.value;
+            const result = valorIzq <= valorDer;
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MAYOR) {
-            const result = valorIzq.value > valorDer.value;
+            const result = valorIzq > valorDer;
             return result
         } else if (this.tipoOperacion === operacionRelacional.MAYORIGUAL) {
-            const result = valorIzq.value >= valorDer.value;
+            const result = valorIzq >= valorDer;
             return result;
         }
         else {

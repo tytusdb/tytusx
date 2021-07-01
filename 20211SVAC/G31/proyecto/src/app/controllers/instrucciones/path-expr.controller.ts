@@ -10,10 +10,10 @@ export class PathExpr extends Nodo {
   public pathExprIZQ: Nodo | undefined;
   public pathExprDCH: Nodo | undefined;
 
-  constructor(tipo: Tipo, simbolo: string,
+  constructor(tipoOBJ: Tipo, tipo: Tipo, simbolo: string,
     pathExprIZQ: Nodo | undefined, pathExprDCH: Nodo | undefined,
     linea: number, columna: number) {
-    super(tipo, linea, columna);
+    super(tipoOBJ, tipo, linea, columna);
 
     this.simbolo = simbolo;
     this.pathExprIZQ = pathExprIZQ;
@@ -21,6 +21,15 @@ export class PathExpr extends Nodo {
   }
 
   public ejecutar(tabla:Entorno, arbol :Arbol){
+    if(this.simbolo = '//')
+
+
+    if(this.simbolo == '/')
+      console.log('Buscar solo en el entorno')
+
+  }
+
+  public c3d(tabla:Entorno, arbol :Arbol){
     if(this.simbolo = '//')
 
 

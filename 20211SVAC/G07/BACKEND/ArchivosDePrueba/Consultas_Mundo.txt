@@ -1,0 +1,110 @@
+
+doc("Mundo.xml")
+
+Consulta 1	ESPERADA *****************************************
+
+    //mundo/continente/pais[@moneda="Quetzal"]/nombre
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY: 
+for $x in //mundo/continente/pais[@moneda="Quetzal"]
+return $x/nombre
+
+NO ME FUNCIONA :(
+for $x in //mundo/continente
+where $x /pais[@moneda="Quetzal"]
+return $x/nombre
+	
+
+    Salida
+
+        <nombre>Guatemala</nombre>
+
+Consulta 1	MOSTRADA *****************************************
+
+    /mundo/continente/pais/nombre[8]
+	/mundo//pais/nombre[8]
+	/mundo//pais/nombre[9+6 * 2 div 2 - 7]
+    Salida
+
+		<nombre >Guatemala</nombre>		
+
+Consulta 2	ESPERADA *****************************************
+
+    //mundo/continente/pais/poblacion[@unit="units"]/../nombre
+
+    Salida
+
+        <nombre>Estados unidos</nombre>
+
+Consulta 2	MOSTRADA *****************************************
+
+ME APARECE VACIA LA CONSULTA
+for $x in /mundo//pais
+return $x/nombre[7]
+
+	/mundo//pais/nombre[9+6 * 2 div 2 - 8]
+	/mundo//pais/nombre[7]
+	Salida
+
+        <nombre >Estados unidos</nombre>
+
+
+Consulta 3	ESPERADA *****************************************
+
+        /mundo/continente/pais/poblacion[@unit="units"]/../../@name | /mundo/continente/pais/poblacion[@unit="thousands"]/../idioma/text()
+
+NO ME DEVUELVE NADA
+for $x in /mundo/continente/pais/poblacion[@unit="units"]/../..   
+return $x/@name
+	
+SI DEVUELVE FRANCES :0
+for $x in /mundo/continente/pais/poblacion[@unit="thousands"]/../idioma
+return $x/text()
+	FRANCES
+    
+
+    Salida
+        
+        Frances
+        America
+
+Consulta 3	MOSTRADA *****************************************
+
+		/mundo//pais/idioma[8-6 * 2 div 2 - 1] | //@name 
+		
+		/mundo//pais/idioma[8-6 * 2 div 2 - 1] | /mundo/continente[2]/@name
+		
+	Salida
+        
+        <idioma >Frances</idioma>
+		name="Europa"
+		name="America"
+
+Consulta 4	ESPERADA *****************************************
+
+        /mundo/continente/pais[idioma="Español"]/poblacion/./..//idioma/text()
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY:        
+for $x in /mundo/continente/pais[idioma="Español"]/poblacion/./..//idioma
+return $x/text()
+
+    Salida
+       
+		Español
+        Español
+        Español
+        Español
+
+Consulta 4	MOSTRADA *****************************************
+
+        /mundo/continente/pais[last()]/idioma | /mundo/continente/pais[last()+2]/idioma | /mundo/continente/pais[8]/idioma |/mundo/continente/pais[9]/idioma 
+
+    Salida
+       
+		<idioma>Español</idioma>
+		<idioma>Español</idioma>
+		<idioma>Español</idioma>
+		<idioma>Español</idioma>
+		

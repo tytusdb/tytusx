@@ -75,9 +75,22 @@ escape                              \\{escapechar}
 "amp"                       return 'amp'
 "quot"                      return 'quot'
 "apos"                      return 'apos'
-
+"lower-case"                return 'lowercase'
+"upper-case"                return 'uppercase'
+"string"                    return 'tostring'
+"number"                    return 'tonumber'
+"substring"                 return 'substring'
+"declare"                   return 'declare'
+"variable"                  return 'variable'
+"function"                  return 'function'
+'xs:string'                 return 'xsString'
+'xs:date'                   return 'xsDate'
+'xs:decimal'                return 'xsDecimal'
+'xs:boolean'                return 'xsBoolean'
+'as'                        return 'as'
 ":"                         return ':';
 ","                         return ',';
+"?"                         return '?';
 ";"                         return 'semicolon';
 "then"                      return 'then';
 "else"                      return 'else';
@@ -115,8 +128,16 @@ escape                              \\{escapechar}
         const {parametroXpath} = require("../Estructuras/parametroXpath.js");
         const {ParametroOperacionXpath} = require("../Estructuras/ParametroOperacionXpath.js");
         const {OperacionXpath} = require("../Estructuras/OperacionXpath.js");
+        const {Entrada} = require("../Estructuras/Entrada.js");
         const {NodoXpath} = require("../Estructuras/NodoXpath.js");
-        const {TipoParametro, TipoOperador, TipoNodo} = require("../Estructuras/tipificacion.js");
+        const {DeclaracionXquery,FuncionXquery,VariableXquery,FunctionName,ParametroXquery,TypeDeclaration} = require("../Estructuras/Xquery/DeclaracionXquery.js");
+        const {FLWORExpr,FLWORVariables,FLWORBinding,IntermediteClause,OrderSpec} = require("../Estructuras/Xquery/FLWORExpr.js");
+        const {IfExpresion} = require("../Estructuras/Xquery/IfExpresion.js");
+        const {NativeFunctionExpresion,Funcion} = require("../Estructuras/Xquery/NativeFunctionExpresion.js");
+        const {PathExpresion} = require("../Estructuras/Xquery/PathExpresion.js");
+        const {SentenciaXquery,LlamadoFuncion} = require("../Estructuras/Xquery/SentenciaXquery.js");
+        const {SingleExpresion} = require("../Estructuras/Xquery/SingleExpresion.js");
+        const {TipoParametro, TipoOperador, TipoNodo, SingleExpresionType, FLWORTipo, TipoBinding, OrderModifierType, TipoClausulaIntermedia, TipoFuncion, TipoDeclaracionXquery, ParamType} = require("../Estructuras/tipificacion.js");
         let salida = [];
 %}
 
@@ -139,13 +160,57 @@ escape                              \\{escapechar}
 expressions
     : XPath EOF 
         { salida = []; typeof console !== 'undefined' ? console.log($1) : print($1);
-          return $1; }
-    | XQUERY EOF;
+          return new Entrada(null,$1,0); }
+    | XQUERY EOF {return new Entrada($1,null,1); };
 
-XQUERY : FLWORExpr
-        |DirectConstructor;
+XQUERY : XQUERY SENTENCIA_XQUERY {$1.push($2); $$ = $1;}
+        |  SENTENCIA_XQUERY {$$ = []; $$.push($1);};
 
-//*************
+SENTENCIA_XQUERY : FLWORExpr {$$ = new SentenciaXquery($1,null,null);}
+        //|DirectConstructor //{$$ = new SentenciaXquery(null,$1);}
+        |AnnotatedDecl {$$ = new SentenciaXquery(null,$1,null);}
+        |LlamadoFuncion {$$ = new SentenciaXquery(null,null,$1);};
+
+LlamadoFuncion: FunctionName lparen Expr rparen {$$ = new LlamadoFuncion($3,$1);};
+
+//*************** User defined functions
+
+AnnotatedDecl : declare  VarDecl {$$ = new DeclaracionXquery(TipoDeclaracionXquery.Varible, $2);}
+	|declare FunctionDecl {$$ = new DeclaracionXquery(TipoDeclaracionXquery.FuncionDefinida, $2);};
+
+VarDecl: variable '$' nodename  ':=' VarValue {$$ = new VariableXquery('$' + $3,$5);};
+
+VarValue: ExprSingle {$$ = $1};
+
+FunctionDecl: function FunctionName lparen EParamList rparen TypeDeclaration FunctionBody 
+{$$ = new FuncionXquery($2,$4,$6,$7);};
+
+FunctionName : nodename ':' nodename {$$ = new FunctionName($3,$1);}
+        | nodename {$$ = new FunctionName($1, '');};
+
+EParamList: ParamList {$$ = $1;}
+	| {$$ = null;};
+
+ParamList: ParamList ',' Param {$1.push($3); $$ = $1;}
+		|Param {$$ = []; $$.push($1);};
+		
+Param: '$' nodename TypeDeclaration {$$ = new ParametroXquery('$' + $2, $3);};
+
+TypeDeclaration: 'as' SequenceType {$$ = $2;}
+	| {$$ = null;};
+
+SequenceType: ItemType OccurrenceIndicator {$$ = new TypeDeclaration($1,$2);};
+
+OccurrenceIndicator: '?' {$$ = '?';}| '*' {$$ = '*';}| '+' {$$ = '+';}|{$$ = '';};
+
+ItemType: xsString {$$ = ParamType.xsString;}
+|xsDate {$$ = ParamType.xsDate;}
+|xsDecimal {$$ = ParamType.xsDecimal;}
+|xsBoolean {$$ = ParamType.xsBoolean;};
+
+FunctionBody: EnclosedExpr semicolon {$$ = $1;};
+
+//************* HTML Clause
 DirectConstructor : DirElemConstructor;
 
 DirElemConstructor: '<' nodename DirAttributeList BARRASIMPLE '>'
@@ -160,9 +225,9 @@ LDirElemContent : LDirElemContent DirElemContent
 DirElemContent : DirectConstructor
 | CommonContent;
 
-CommonContent : PredefinedEntityRef  | nodename | EnclosedExpr| CharRef | DOT| ':';
+CommonContent : PredefinedEntityRef  | nodename | EnclosedExpr {$$ = $1;}| CharRef | DOT| ':';
 
- EnclosedExpr: '{' Expr '}';
+ EnclosedExpr: '{' Expr '}' {$$ = $2;};
  
  PredefinedEntityRef: '&' REF semicolon;
  
@@ -175,94 +240,136 @@ LAtr: LAtr Atr
 Atr: nodename '=' STRING_LITERAL;
 
 //******************* INICIO
-ForClause: for LForBinding;
+ForClause: for LForBinding {$$ = $2;};
 
-LForBinding: LForBinding ',' ForBinding
-	|ForBinding;
+LForBinding: LForBinding ',' ForBinding {$1.Variables.push($3); $$ = $1;}
+	|ForBinding {$$ = new FLWORBinding(FLWORTipo.For,$1); }
+        ;
 
-ForBinding: '$'nodename in SENTENCIA;
+ForBinding: '$'nodename in SENTENCIA {$$ = new FLWORVariables('$' + $2, $4, null);}
+           |'$'nodename in ExprSingle {$$ = new FLWORVariables('$' + $2, null, $4);};
 
-ExprSingle: FLWORExpr
-	| IfExpr
-        |StringConcatExpr
-        | lparen entero to entero rparen
-        | DirectConstructor;
-	
-FLWORExpr : InitialClause ELIntermediateClause ReturnClause;
+ExprSingle: FLWORExpr {$$ = new SingleExpresion (SingleExpresionType.FLWORExpr, $1,0,0);}
+	| IfExpr {$$ = new SingleExpresion (SingleExpresionType.IfExpr, $1,0,0);}
+        | lparen entero to entero rparen {$$ = new SingleExpresion (SingleExpresionType.Contador, null,Number($2),Number($4));}
+        | DirectConstructor {$$ = new SingleExpresion (SingleExpresionType.HtmlSequence, $1,0,0);}
+        | NativeFuntion {$$ = new SingleExpresion (SingleExpresionType.FuncionDefinida, $1,0,0);}
+        | XPARAM {$$ = new SingleExpresion (SingleExpresionType.XPARAM, $1,0,0);}
+        | LPathExpresion {$$ = new SingleExpresion (SingleExpresionType.Path, $1,0,0);}
+        ;
 
-QuantifiedExpr: '$' nodename;
+LPathExpresion : LPathExpresion ',' PathExpresion {$1.push($3); $$ = $1;}
+|PathExpresion {$$ = []; $$.push($1);};
 
-InitialClause: ForClause 
-| LetClause;
+PathExpresion : '$' nodename SENTENCIA {$$ = new PathExpresion('$' + $2,$3);};
 
-LetClause: let LLetBinding;
 
-LLetBinding: LLetBinding ',' LetBinding
-	|LetBinding;
+
+NativeFuntion: NativeFunctionName lparen ExprSingle rparen {$$ = new NativeFunctionExpresion($1,$3);}; //funcion definida
+
+NativeFunctionName: uppercase {$$ = new Funcion(TipoFuncion.Nativa,$1);}
+        | lowercase {$$ = new Funcion(TipoFuncion.Nativa,$1);}
+        | tostring {$$ = new Funcion(TipoFuncion.Nativa,$1);}
+        | tonumber {$$ = new Funcion(TipoFuncion.Nativa,$1);}
+        | substring {$$ = new Funcion(TipoFuncion.Nativa,$1);}
+        | FunctionName {$$ = new Funcion(TipoFuncion.Definida,$1);}
+        ;
+ 
+FLWORExpr : InitialClause ELIntermediateClause ReturnClause {$$ = new FLWORExpr($1,$2,$3);};
+
+QuantifiedExpr: '$' nodename {$$ = '$'+$2;}; 
+
+InitialClause: ForClause {$$=$1;}
+| LetClause {$$=$1;};
+
+LetClause: let LLetBinding {$$ = $2;};
+
+LLetBinding: LLetBinding ',' LetBinding  {$1.Variables.push($3); $$ = $1;}
+	|LetBinding {$$ = new FLWORBinding(FLWORTipo.Let, $1);}
+        ;
 			
-LetBinding: '$' nodename ':=' ExprSingle;
+LetBinding: '$' nodename ':=' ExprSingle  {$$ = new FLWORVariables('$' + $2, null, $4);};
 
-ELIntermediateClause : LIntermediateClause
-        |;
+ELIntermediateClause : LIntermediateClause {$$ = $1;}
+        |{$$ = null;};
 
-LIntermediateClause : LIntermediateClause IntermediateClause
-                |IntermediateClause;
+LIntermediateClause : LIntermediateClause IntermediateClause {$1.push($2); $$ = $1;}
+                |IntermediateClause {$$ = []; $$.push($1); };
 
-IntermediateClause: InitialClause | WhereClause | OrderByClause;
+IntermediateClause: InitialClause {$$ = new IntermediteClause(TipoClausulaIntermedia.InitialClause, $1);}
+| WhereClause {$$ = new IntermediteClause(TipoClausulaIntermedia.WhereClause, $1);}
+| OrderByClause {$$ = new IntermediteClause(TipoClausulaIntermedia.OrderByClause, $1);}
+;
 
-WhereClause: where LComparisonExpr;
+WhereClause: where LComparisonExpr {$$ = $2;};
 
-OrderByClause: order by OrderSpecList;
+OrderByClause: order by OrderSpecList {$$ = $3};
 
-OrderSpecList:OrderSpecList ',' OrderSpec
-	| OrderSpec;
-OrderSpec : ExprSingle OrderModifier;
+OrderSpecList:OrderSpecList ',' OrderSpec { $1.push($3); $$ = $1;}
+	| OrderSpec {$$ = []; $$.push($1);};
 
-OrderModifier: ascending
-	| descending
-        | ;
+OrderSpec : ExprSingle OrderModifier {$$ = new OrderSpec($1,$2);};
+
+OrderModifier: ascending {$$ = OrderModifierType.Ascendente}
+	| descending {$$ = OrderModifierType.Descendente}
+        | {$$ = OrderModifierType.Ninguno};
 			
-ReturnClause: return ExprSingle;
+ReturnClause: return ExprSingle {$$ = $2;};
 
-IfExpr: if lparen Expr rparen then ExprSingle else ExprSingle;
+IfExpr: if lparen Expr rparen then ExprSingle else ExprSingle {$$ = new IfExpresion($3,$6,$8);};
 
-Expr: 	Expr ExprSingle
-        |ExprSingle;
+Expr: 	Expr ExprSingle {$1.push($2); $$ = $1;}
+        |Expr ',' ExprSingle {$1.push($3); $$ = $1;}
+        |ExprSingle {$$ = []; $$.push($1);};
 
-LComparisonExpr : LComparisonExpr and  ComparisonExpr
-        | LComparisonExpr or  ComparisonExpr
-        | ComparisonExpr;
+LComparisonExpr : LComparisonExpr and  ComparisonExpr {$$ = new parametroXpath($1,$3,null,TipoOperador.And);}
+        | LComparisonExpr or  ComparisonExpr {$$ = new parametroXpath($1,$3,null,TipoOperador.Or);}
+        | ComparisonExpr {$$ = new parametroXpath(null,null,$1,TipoOperador.None);};
 
-ComparisonExpr : StringConcatExpr ComparisonValue XPARAM;
+ComparisonExpr : QuantifiedExpr ComparisonValue ExprSingle 
+{$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$3.Objeto,$2,null);}
+| QuantifiedExpr SENTENCIA ComparisonValue ExprSingle {$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$4.Objeto,$3,$2);};
 
-XPARAM : numberLiteral
-|  XOPERACION ;
+XPARAM : numberLiteral {$$ = $1;}
+| QuantifiedExpr {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Variable);}
+|  XOPERACION  {$$ = new ParametroOperacionXpath($1,'',TipoParametro.Operacion);};
 
 XOPERACION: XPARAM '+' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mas);}
         |XPARAM '-' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menos);}
         |XPARAM '*' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Por);}
         |XPARAM mod XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mod);}
-        |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);};
+        |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);}
+        |lparen XPARAM rparen {$$ = $2.Operacion;};
 
 
 
-StringConcatExpr : '$' nodename SENTENCIA
-		| '$' nodename;
 
-ComparisonValue : GeneralComp | ValueComp;
 
-ValueComp : 'eq' | 'ne' | 'lt' | 'le' | 'gt' | 'ge';
+ComparisonValue : GeneralComp {$$ = $1;}| ValueComp{$$ = $1;};
 
-GeneralComp : '=' | '!=' | '<' | '<=' | '>' | '>=';
+ValueComp : 'eq' {$$ = TipoOperador.Igual;}
+        | 'ne' {$$ = TipoOperador.Diferente;}
+        | 'lt' {$$ = TipoOperador.Menor;}
+        | 'le' {$$ = TipoOperador.MenorIgual;}
+        | 'gt' {$$ = TipoOperador.Mayor;}
+        | 'ge'{$$ = TipoOperador.MayorIgual;}
+        ;
+
+GeneralComp : '=' {$$ = TipoOperador.Igual;}
+        | '!=' {$$ = TipoOperador.Diferente;}
+        | '<' {$$ = TipoOperador.Menor;}
+        | '<=' {$$ = TipoOperador.MenorIgual;}
+        | '>' {$$ = TipoOperador.Mayor;}
+        | '>=' {$$ = TipoOperador.MayorIgual;}
+        ;
 
 //******************* FIN
 XCOMPARISON : $ SENTENCIA ComparisonValue PARAMETRO;
 
         
-IF : if lparen xvar BARRASIMPLE  OPERACION rparen SIMPLE_EXPRESION then else SIMPLE_EXPRESION;
 
 
-XPath : LSENTENCIA {$$ = salida; salida = []; return $$;};
+XPath : LSENTENCIA {$$ = salida; salida = []; return new Entrada(null,$$,0);};
 
 LSENTENCIA: LSENTENCIA '|' SENTENCIA { salida.push($3);}
         | SENTENCIA {  salida.push($1);};

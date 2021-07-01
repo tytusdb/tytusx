@@ -1,0 +1,117 @@
+Archivos de prueba para analziador XQUERY
+
+XQUERY TUTORIAL:
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+where $x/price>30
+order by $x/title
+return $x/title
+
+//YAFUNCIONA
+doc("books.xml")/bookstore/book/title
+
+//YAFUNCIONA
+doc("books.xml")/bookstore/book[price<=30]
+// falta verificar el < y * y numeros negativos como el UMENOS
+
+//YAFUNCIONA
+doc("books.xml")/bookstore/book[price>30]/title
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+where $x/price>30
+return $x/title
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+where $x/price>30
+order by $x/title
+return $x/title
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book/title
+order by $x
+return $x
+
+//YAFUNCIONA
+<ul>
+{
+for $x in doc("books.xml")/bookstore/book/title
+order by $x
+return <li>{$x}</li>
+}
+</ul>
+
+
+//YAFUNCIONA
+<html>
+<body>
+
+<h1>Bookstore</h1>
+
+<ul>
+{
+for $x in doc("books.xml")/bookstore/book
+order by $x/title
+return <li>{data($x/title)}.  {data($x/@category)}</li>
+}
+</ul>
+
+</body>
+</html>
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+return if ($x/@category="children")
+then <child>{data($x/title)}</child>
+else <adult>{data($x/title)}</adult>
+
+//YAFUNCIONA
+for $x in doc("books.xml")bookstore//book/@q > 10
+return if ($x/@category="children")
+then <childo>{data($x/title)}</childo>
+else <adult>{data($x/title)}</adult>
+
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book/title
+order by $x
+return $x
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+return $x/title
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+where $x/price>30
+order by $x/title
+return $x/title
+
+//YAFUNCIONA
+for $x in (1 to 5)
+return <test>{$x}</test>
+
+//YAFUNCIONA
+for $x at $i in doc("books.xml")/bookstore/book/title
+return <book>{$i}. {data($x)}</book>
+
+//YAFUNCIONA
+for $x in (10,20), $y in (100,200)
+return <test>x={$x} and y={$y}</test>
+
+//YAFUNCIONA
+let $x := (1 to 5)
+return <test>{$x}</test>
+
+//YAFUNCIONA
+for $x in doc("books.xml")/bookstore/book
+return $x/title
+
+//YAFUNCIONA
+(:estoesun comentario:)
+for $x in doc("books.xml")/catalog(:estoesun comentario:)
+(:estoesun comentario:)
+return $x/book[1](:estoesun comentario:)
+

@@ -27,7 +27,7 @@ class TablaErrores extends React.Component{
 
                 <div className="col-2 block">
                     <div className ="row">
-                        <Link to= {{ pathname: "/tytusx/20211SVAC/G17" }}>
+                        <Link to= {{ pathname: "/tytusx/20211SVAC/G31" }}>
                             <button type="button" className="btn btn-primary btn-lg">Atrás</button>
                         </Link>
                     </div>
@@ -132,8 +132,8 @@ class TablaErrores extends React.Component{
             <div className="text-center p-3 text-light ">
                 <font size="3">
                 <p>
-                Grupo 17 <br/>
-                Jorge Ambrocio - Marcelo Marroquín - Viany Juárez<br/>
+                Grupo 31 <br/>
+                Jacqueline Méndez - Stefany Coromac <br/>
                 Organización de Lenguajes y Compiladores 2<br/>
                 Escuela de Vacaciones Junio 2021<br/>                
                 </p>

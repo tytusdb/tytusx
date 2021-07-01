@@ -6,6 +6,7 @@ export class Simbolo{
     valor:any;
     linea:number;
     columna:number;
+    posicion:number;
 
     constructor(tipo:Tipo, nombre:string, valor:any, linea:number, columna:number){
         this.tipo = tipo;
@@ -13,6 +14,7 @@ export class Simbolo{
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
+        this.posicion = 0;
     }
 
     getTipo():Tipo{
@@ -33,5 +35,13 @@ export class Simbolo{
 
     getColumna():number{
         return this.columna;
+    }
+
+    getPosicion():number{
+        return this.posicion;
+    }
+
+    setPosicion(posicion:number):void{
+        this.posicion = posicion;
     }
 }

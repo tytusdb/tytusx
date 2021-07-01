@@ -13,8 +13,10 @@ export class Objeto extends nodo {
     texto = ''
     atributos = []
     hijos = []
-    posicion = 0   // posicion en el stack o heap (aun no se xd)
-    
+    posicion = 0   // posicion en el stack 
+    tamanio = 0    // tamanio en el heap 
+    padre = null; 
+
     constructor(tipo, atributos, hijos, linea, columna, texto = ''){
         super(linea,columna)
         this.tipo = tipo.replace('<','')
@@ -26,6 +28,7 @@ export class Objeto extends nodo {
             this.texto = hijos
         }
         this.posicion = 0
+        this.padre = null; 
     }
 
     setTipo(tipo){
@@ -50,12 +53,14 @@ export class Atributo extends nodo {
     nombre =''
     valor = ''
     posicion = 0
+    tamanio = 0 
 
     constructor(nombre, valor, linea, columna){
         super(linea,columna)
         this.nombre = nombre
         this.valor = valor
         this.posicion = 0
+        this.tamanio = 0
     }
 }
 

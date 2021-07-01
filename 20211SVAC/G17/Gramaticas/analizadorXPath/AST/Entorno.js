@@ -1,4 +1,5 @@
 const { ErroresGlobal, LimpiarErrores } = require('./Global')
+var C3D = require('../../C3D')
 //Enum de tipos
 export const Tipo = {
     "INTEGER" : 0,
@@ -88,12 +89,19 @@ export class Comando
 
   Ejecutar(XML)
   {
+    
     LimpiarErrores()
     var Salida = ""
     var retornos=[]
     for (const iterator of this.Instrucciones) {
       var {Nodo} = require('../Expresion/Expresiones')
-      retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
+      retornos = retornos.concat(
+        iterator.getValor(
+          [
+            new Nodo(Tipo.NODO,XML,[],"",1)
+          ]
+        )
+      )
     }
     for (const retorno of retornos) {
       if(retorno.tipo == Tipo.NODO)
@@ -111,6 +119,23 @@ export class Comando
     }
     this.errores = this.errores.concat(ErroresGlobal)
     return Salida;
+  }
+
+  // función para generar c3d
+  EjecutarC3D(xml){
+    C3D.clearXPTC3D()
+    var salida = ""
+    var retornos=[]
+    for (const instruccion of this.Instrucciones) {
+      var {Nodo} = require('../Expresion/Expresiones')
+      retornos = retornos.concat(instruccion.getC3D([new Nodo(Tipo.NODO,xml,[],"",1)]))
+    }
+
+
+    // imprimir 
+    console.log(retornos)
+    salida = C3D.getFullC3D()
+    return salida
   }
 
   Graficar()

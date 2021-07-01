@@ -21,16 +21,16 @@ var Main = /** @class */ (function () {
     Main.prototype.getCodigo3D = function () {
 
         var codigoAux = `
-        /*------ METODO MAIN ------*/
-        int main(){
-            `;
+/*------ METODO MAIN ------*/
+int main(){
+`;
 
         for (var i = 0; i < this.instrucciones.length; i++) {
-            codigoAux += this.instrucciones[i].getCodigo3D() + "\n";
+            codigoAux += "  " + this.instrucciones[i].getCodigo3D();
           }
 
-        codigoAux += "}\n";
-
+          
+          codigoAux += "}\n";
         this.codigo = codigoAux;
 
         return this.codigo;

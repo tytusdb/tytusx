@@ -40,24 +40,51 @@
         <script src="./Fase2/Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Fase2/Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Fase2/Js/Interprete/Instrucciones/XPath.js"></script>
-        <script src="./Fase2/Js/Interprete/Traductor/TraductorXML.js"></script>
+        <!-- JS TRANSLATOR XML-->
+        <script src="./Fase2/Js/Traductor/xml.js"></script>
+        <!-- JS OPTIMIZADOR-->
+        <script src="./gramaticaOptimizador.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionAsig.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionS.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/function.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/include.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/main.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/parametro.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionOp.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignarIdArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/call.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/etiqueta.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/goto.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/if.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/print.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/return.js"></script>
+        <script src="./Fase2/Js/Optimizador/Tipo3D.js"></script>
+        <script src="./Fase2/Js/Optimizador/optimizador.js"></script>
+
 
         <script>
 
             var heap = [];
             var stack = [];
             var contadorStack = 0;
-            var contadorTemporales = 0;
-            var SP = 2;
-            var HP = 0;
-            var T0 = 0;
-            var T1 = 0;
-            var temporal0 = "";
-            var temporal1 = "";
             var globalC3D = "";
+
+            //xml translator
             var xpathC3D = "";
-            var xmlC3D = "";
-            var C3DXML = new TraductorXML();
+            var hp = 0;
+            var xml3D = "";
+            var temp0 = "";
+            var t0 = 0;
+            var temp1 = "";
+            var t1 = 0;
+            var sp = 2;
+            var contTemporal = 0;
+            var endXml=0;
+
+
+            
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();
@@ -151,11 +178,17 @@
                     </div> 
                 </div>
                 
+                
             </div>
             
         
             <div class="editores">
+            <span>
+                        <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>
             <div class="consola">
+
         <div class="labelConsola"><label class="label info">XPath</label></div>
             <!-- ENTRADA XPATH -->
             <textarea id="entrada_xpath"></textarea>
@@ -170,21 +203,23 @@
                           document.getElementById("pagina1").click();
                        });
                       </script>
-                    <button class="tablinks" onclick="openTag(event, 'p2'); SetearDos()">Pestaña 2</button>
-                    <button class="tablinks" onclick="openTag(event, 'p3'); SetearTres()">Pagina 3</button>
+                    <button class="tablinks" onclick="openTag(event, 'p2'); SetearDos()">New Tab</button>
+                    
                     
                 </div>
                 <!-- Tab content -->
                 <div id="p1" class="tabcontent">
                     <!-- EDITOR 1 -->
                     <textarea id="editor" ></textarea>
-                    <span>
-                        <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
-                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
-                    </span>   
+                       
                     <!-- FIN EDITOR 1 -->                 
                 </div>                   
-  
+                <div id="p2" class="tabcontent">
+                    <!-- EDITOR 2 -->
+                    <textarea id="editor2"></textarea>
+
+                    <!-- FIN EDITOR 2 -->
+                </div>
                 <script src="Fase2/Js/Codemirrors.js"></script>
                 <script>DefaultTag('p1');</script>
                <!-- FIN TAGS -->
@@ -204,6 +239,7 @@
         </div>
         
         <div class="labelConsola"><label class="label info">Traduccion</label></div>
+        <button class="button3" onclick="Optimizar()">Optimizar</button>
         <div class="consola">
             <!-- ENTRADA XPATH -->
             <textarea id="salida_traduccion"></textarea>

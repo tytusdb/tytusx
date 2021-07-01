@@ -219,13 +219,6 @@ DATO:
         |tk_menos DATO %prec UMENOS		                 {$$= new Nodo("Porduccion","NEG",[ $1,$2]); }
 ;
 
-
-
-
-
-
-
-
 OPERACIONES:
         ITEMINICIO OPERADOR ITEMFINAL OPERACIONES_L             {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO, $OPERADOR, $ITEMFINAL, $OPERACIONES_L ] );}
         | ITEMINICIO                                            {$$= new Nodo("Porduccion","OPERACIONES",[$ITEMINICIO ] );}

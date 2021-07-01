@@ -14,4 +14,6 @@ export abstract class Instruccion {
 
   abstract interpretar(arbol: Arbol, tabla: tablaSimbolos): any;
   abstract getNodosAST(): nodoAST;
+  abstract codigo3D(arbol: Arbol, tabla: tablaSimbolos):any;
+  
 }

@@ -428,7 +428,7 @@ TEXT: identifier
         }
         | quot              
         { 
-            $$ = "\""; 
+            $$ = "''"; 
             /* CONSTRUCCION DE CST */
             cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TEXT', null, 
                                                 [new Nodo(cst.cstXmlAsc.getId(), 'comilla doble', null, 

@@ -8,10 +8,15 @@ export default class if_expresion implements instruccion_3d{
 
 
   constructor(izq, operador, der, etiqueta) {
+    this.intrucciones_3d = new Array<instruccion_3d>();
     this.izq = izq;
     this.operadorlogico = operador;
     this.der = der;
     this.etiqueta = etiqueta;
+  }
+
+  getLogica(){
+    return this.izq + this.operadorlogico + this.der;
   }
 
   getText(){
@@ -25,6 +30,12 @@ export default class if_expresion implements instruccion_3d{
 
   insertar(instruccion: instruccion_3d) {
     this.intrucciones_3d.push(instruccion);
+  }
+
+  insertar_lista(lista: Array<instruccion_3d>) {
+    for(let x of lista){
+      this.intrucciones_3d.push(x);
+    }
   }
 
 }

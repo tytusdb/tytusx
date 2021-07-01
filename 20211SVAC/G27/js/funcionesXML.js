@@ -1,5 +1,6 @@
 /***********************************************FUNCIONES ESPECÍFICAS DE XML*********************************************************** */
 listaErroresXML = [];
+tablaSimbolosV2 =[];
 
 //Función para ejecutar el parser del analizador XML de jison
 const parseXML = function (entrada) {
@@ -23,6 +24,15 @@ const parseXML = function (entrada) {
                 document.getElementById('consola').value += ">Se ejecutó el parser";
                 console.info('Entrada fue parseada correctamente!!!!');
                 document.getElementById('consola').value += ">Entrada parseada correctamente! \n";
+
+                console.log("\n\n\n#############EMPIEZA A CREAR TS TRADUCCION###################");
+                tablaSimbolosV2 = gramaticaXML3D.parse(entrada);
+                for (var i = 0; i < tablaSimbolosV2.listaObjetos.length; i+=1) {                
+                    console.log("Objeto traduccion id: "+tablaSimbolosV2.listaObjetos[i].identificador+"  tipo : "+tablaSimbolosV2.listaObjetos[i].tipo);                    
+                }  
+                generarXMLC3D(tablaSimbolosV2);
+                console.log("\n\n\n############# Codigo traducido ###################\n\n");                                
+                console.log("\n\n\n#################SALIO DE TS DE TRADUCCION########################");
 
                 //Si la entrada fue parseada correctamente, se procede a generar el reporte de Tabla de Símbolos
                 console.log("\n\n\n################################################################");

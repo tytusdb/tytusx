@@ -10,7 +10,8 @@
     "e2e": "ng e2e",
     "jisonasc": "jison src/app/Backend/XML/GramaticaXML.jison",
     "jisondesc": "jison src/app/Backend/XML/GramaticaXMLDescPRUEBA.jison",
-    "jisonast": "jison src/app/Backend/XML/XMLgraph.jison"
+    "jisonast": "jison src/app/Backend/XML/XMLgraph.jison",
+    "jisonXQUERY": "jison src/app/Backend/XQUERY/GramaticaXQUERY.jison"
   },
   "private": true,
   "dependencies": {
