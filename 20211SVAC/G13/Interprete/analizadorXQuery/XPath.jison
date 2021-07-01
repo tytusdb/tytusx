@@ -9,6 +9,12 @@
   const { ContextItemExpr,CallFunction } = require('./Expresion/postfix')
   const { grafoCST } = require('../CST')
   
+  const { AST } = require('./XQuery/ts/Arbol/AST')
+  const { TipoXQ, EnumTipo } = require('./XQuery/ts/Entorno/TipoXQ')
+  const { LiteralXQ } = require('./XQuery/ts/Expresiones/LiteralXQ')
+  const { DeclaracionXQ } = require('./XQuery/ts/Instrucciones/DeclaracionXQ')
+  const { AsignacionXQ } = require('./XQuery/ts/Instrucciones/AsignacionXQ')
+  
   var grafo = new grafoCST(); 
 
   var ListaErrores = []
@@ -20,6 +26,10 @@
       %options case-insensitive
 
 %%
+
+"let"    return "RLET"
+"at"  return "RAT"
+":="        return "ASIGNAR"
 
 "or"    return "ROR"
 "and"   return "RAND"
@@ -67,6 +77,7 @@
 ">="        return "MAYORIG"
 "<="        return "MENORIG"
 "!="        return "DIFERENTE"
+
 "<"         return "MENOR"
 ">"         return "MAYOR"
 "="         return "IGUAL"
@@ -86,6 +97,7 @@
 /* Espacios en blanco */
 [ \r\t]+{}
 \n{}
+['('][':'][^':']*[':']+([^'('':'][^':']*[':']+)*[')'] {}
 
 
 .	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
@@ -96,9 +108,40 @@
 %left 'POR' 'DIV' 'IDIV' 'MOD'
 %left UMENOS UMAS
 
-%start XPath
+%start XQuery
 
 %%
+
+XQuery: LInstrucciones
+  {
+    $$ = new AST($1);
+    return $$;
+  }
+;
+
+LInstrucciones: LInstrucciones Instruccion { $1.push($2); $$ = $1; }
+  | Instruccion { $$ = [$1] }
+;
+
+Instruccion:
+  Declaracion { $$ = $1; }
+  | Asignacion { $$ = $1; }
+;
+
+Declaracion: RLET DOLAR NOMBRE ASIGNAR E { $$ = new DeclaracionXQ($3, $5, @3.first_line, @3.first_column); }
+;
+
+Asignacion: DOLAR NOMBRE ASIGNAR E { $$ = new AsignacionXQ($2, @2.first_line, @2.first_column, $4); }
+;
+
+E: INTEGER  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.entero), $1, @1.first_line, @1.first_column); }
+  | DECIMAL { $$ = new LiteralXQ(new TipoXQ(EnumTipo.doble), $1, @1.first_line, @1.first_column); }
+  | CADENA  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.cadena), $1, @1.first_line, @1.first_column); }
+  | XPath   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.XPath), $1, @1.first_column, @1.first_column); }
+;
+
+//======================================================
+
 
 XPath 
   : Expr  
@@ -108,8 +151,8 @@ XPath
     ListaErrores = [];
     var retornoGrafo = Object.assign({}, grafo);
     grafo = new grafoCST();
-    $$=new Comando($1,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
-    return $$ 
+    $$ = new Comando($1,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
+    //return $$ 
   }
   | error 
     {  
@@ -117,7 +160,8 @@ XPath
       var retornoErrores = Object.assign([], ListaErrores);
       ListaErrores = [];
       grafo = new grafoCST(); 
-      return new Comando([],[],[],"",retornoErrores,[])
+      $$ = new Comando([],[],[],"",retornoErrores,[])
+      //return new Comando([],[],[],"",retornoErrores,[])
     }
 ;
 
