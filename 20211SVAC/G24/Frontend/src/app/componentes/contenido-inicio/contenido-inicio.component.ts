@@ -10,7 +10,7 @@ import * as AnalizarDscXpath from 'src/app/Backend/XPATH/Analizador/GramaticaXPa
 import * as Gramatical from 'src/app/Backend/XML/Analizador/XMLgraph'
 import * as GramaticalDes from 'src/app/Backend/XML/Analizador/XMLgraphDesc'
 import * as Optimizacion from 'src/app/Backend/Optimizacion/grammar'
-import * as AnalizadorXQUERY from 'src/app/Backend/XQUERY/Analizador/GramaticaXQUERY'
+import * as AnalizadorXQUERY from 'src/app/Backend/XQUERY/Analizador/GrammXQuery'
 import TreeOptimo from 'src/app/Backend/Optimizacion/Simbolo/Arbol'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
@@ -720,66 +720,13 @@ export class ContenidoInicioComponent implements OnInit {
     console.log(listainstrucciones)
     var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
     var tabla = new tablaSimbolos();                    //ejecucion
-    ast.settablaGlobal(tabla);                        //ejecucion
-    var tablita = this.tablaGlobal;
-    var c = 0;
-    var consolita = ''
-    console.log("ecskueri on")
-    console.log(tablita);
-
-    /**cd3XPath = null;
-    cd3XPath = [];
-    const analizador = AnalizarAscXpath;
-    let objetos = analizador.parse(texto);
-    let ast = new ArbolXpath(analizador.parse(texto)); //ejecucion
-    console.log(listainstrucciones)
-    var Tree: ArbolXpath = new ArbolXpath([objetos]);
-    var tabla = new tablaSimbolos();                    //ejecucion
-    ast.settablaGlobal(tabla);                        //ejecucion
-    var tablita = this.tablaGlobal;
-    var c = 0;
-    var consolita = ''
- */
+    console.log(Tree);
     
-
-    for (var key of tablita.getTabla()) {//SIMBOLOS
-      if (key.getidentificador() == 'xml') {
-        tablita = key.getvalor()
-        console.log("ecskueri on 2")
-        console.log(tablita);
-      }
-    }
-
-    console.log(ast.getinstrucciones().length)
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
-      console.log("entramos a las instrucciones")
-      instructions.forEach(element => {
-        c++
-        console.log(element)
-        if (element instanceof ForSimple) {
-          console.log("es barranodo");
+      console.log(instructions);
+    }
 
-          var resultador:any = element.interpretar(Tree, tablita);
-          if (resultador instanceof tablaSimbolos) {
-            tablita = resultador
-            if (c == instructions.length) {
-              if (TreeAsc != null) {
-                consolita += this.recorrerTabla(tablita, TreeAsc);
-                consolita += "\n"
-              }
-            }
-          }
-          else { //VIENE STRING
-            consolita += resultador + "\n"
-          }
-        }
-      });
-      c = 0;
-      console.log("SIGUIENTE")
-    } 
-
-    
 
 
   }

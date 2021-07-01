@@ -115,7 +115,9 @@
     const llamada= require("./Instrucciones/Llamada")
     const theif = require('./Instrucciones/If')
     const thelet=require('./Instrucciones/Let')
-
+    const Tipo= require("./Simbolos/Tipo");
+    const condicionsimple= require("./Instrucciones/CondicionSimple");
+    const condicion= require("./Instrucciones/Condicion");
 %}
 
 %left 'PARIZQ' 'PARDER'
@@ -132,7 +134,7 @@
 %%
 
 INICIO
-    :FUNCTION EOF      {$$=$1}
+    :FUNCTION EOF      {return $1;}
     ;
 
 FUNCTION
@@ -142,6 +144,7 @@ FUNCTION
 
 METODOS
     : METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARAMETROS PARDER TIPO BLOQUE PTCOMA {$$=new funciones.default($6,$8,$10,$11,@1.first_line,@1.first_column);}
+    | METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARDER TIPO BLOQUE PTCOMA {$$=new funciones.default($6,null,$9,$10,@1.first_line,@1.first_column);}
     | LLAMADAFUNCION            {$$=$1}
     | LET                       {$$=$1}
     |                           {$$=""}
@@ -172,11 +175,15 @@ BLOQUE
             ;
 
 TIPO
-        : AS XS DOSPUNTOS INT QUESTION                  {$$=$3}
-        | AS XS DOSPUNTOS FLOAT QUESTION                {$$=$3}
-        | AS XS DOSPUNTOS CHAR QUESTION                 {$$=$3}
-        | AS XS DOSPUNTOS DOUBLE QUESTION               {$$=$3}
-        |                                               {$$=null}
+        : AS XS DOSPUNTOS INT QUESTION                  {$$=$4}
+        | AS XS DOSPUNTOS FLOAT QUESTION                {$$=$4}
+        | AS XS DOSPUNTOS CHAR QUESTION                 {$$=$4}
+        | AS XS DOSPUNTOS DOUBLE QUESTION               {$$=$4}
+        | INT                                           {$$=$1}
+        | FLOAT                                         {$$=$1}
+        | CHAR                                          {$$=$1}
+        | DOUBLE                                        {$$=$1}
+        | %empty                                        {$$=null}
         ;
 
 INSTRUCCIONES
@@ -217,7 +224,7 @@ CONDICIONSIMPLE
     ;
 
 UNION
-        : L_VARIABLES CONSULTASIMPLE         {$$=$1+$2}
+        : VARIABLE RIN L_CONSULTAS          {$$=new condicionsimple.default($1,$3,@1.first_line,@1.first_column);}      
         ;
 
 CONJUNCION
@@ -229,10 +236,7 @@ L_VARIABLES
     | VARIABLE                              {$$=[$1];}           
     ;
 
-CONSULTASIMPLE
-        :RIN FOPEN CONSULTA                 {$$=$1+$2+$3}
-        ;
-  
+
 LET
     : RLET VARIABLE LETDOSPUNTOS L_IN RRETURN RETORNO            {$$=new thelet.default($2,$4,$6,@1.first_line,@1.first_column)}
     ;
@@ -253,10 +257,6 @@ VARIABLE
     :DOLAR IDENTIFICADOR                    {$$=$1+$2}
     ;    
 
-FOPEN
-    :RDOC PARIZQ CADENA PARDER              {$$=$1+$2+$3+$4}
-    |
-    ;
 
 CONECTOR
     :AND    {$$=$1}
@@ -289,8 +289,8 @@ ASIGNACION
     ;
 
 CONDICION
-    :VARIABLE L_CONSULTAS                           {$$=$1+$2}
-    |VARIABLE L_CONSULTAS CONECTOR CONDICION        {$$=$1+$2+$3+$4}
+    :VARIABLE L_CONSULTAS                           {$$=new condicionsimple.default($1,$2,@1.first_line,@1.first_column);}
+    |CONDICION CONECTOR CONDICION                   {$$=new condicion.default($2,@1.first_line,@1.first_column,$1,$3);}
     |VARIABLE                                       {$$=$1}
     ;
 
@@ -300,16 +300,13 @@ L_CONSULTAS
     ;
 
 CONSULTA
-    :OPCIONESCONSULT EXPRESION SALIDA           {$$=$1+$2+$3}
-    |OPCIONESCONSULT PREDICADO SALIDA           {$$=$1+$2+$3}
-    |EXPRESION SALIDA                           {$$=$1+$2}
+    :BARRA BARRA EXPRESION              {$$ = new barrasnodo.default($1,$3,@1.first_line,@1.first_column, $2);}
+    |BARRA EXPRESION                    {$$ = new barrasnodo.default($1,$2,@1.first_line,@1.first_column, null);}
+    |OPCIONESCONSULT EXPRESION          {$$=$1+$2}
+    |OPCIONESCONSULT PREDICADO          {$$=$1+$2}
+    |EXPRESION                          {$$=$1}
     ;
 
-
-SALIDA  
-    :CONSULTA                           {$$=$1}
-    |
-    ;
 
 OPCIONESCONSULT
     :BARRA                  {$$=$1}
@@ -321,7 +318,7 @@ OPCIONESCONSULT
     ;
 
 PREDICADO
-    :CORIZQ EXPRESION CORDER    {$$="["+$2+"]"}
+    :CORIZQ EXPRESION CORDER    {$$=$2}
     ;
 
 EXPRESION
