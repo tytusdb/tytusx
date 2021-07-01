@@ -40,11 +40,28 @@
         <script src="./Fase2/Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Fase2/Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Fase2/Js/Interprete/Instrucciones/XPath.js"></script>
-
-
-        <script src="./Fase2/Js/Interprete/Traductor/TraductorXPATH.js"></script>
-
+        <!-- JS TRANSLATOR XML-->
         <script src="./Fase2/Js/Traductor/xml.js"></script>
+        <!-- JS OPTIMIZADOR-->
+        <script src="./gramaticaOptimizador.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionAsig.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionS.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/function.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/include.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/main.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/parametro.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionOp.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignarIdArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/call.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/etiqueta.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/goto.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/if.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/print.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/return.js"></script>
+        <script src="./Fase2/Js/Optimizador/Tipo3D.js"></script>
+        <script src="./Fase2/Js/Optimizador/oper.js"></script>
 
 
         <script>
@@ -56,15 +73,13 @@
 
             //xml translator
             var xpathC3D = "";
-            var funcionesALlamar="";
-            var inicioXPath,finXPath,inicioXML,finXML=0;
-            var heapPointer = 0;
+            var hp = 0;
             var xml3D = "";
             var temp0 = "";
             var t0 = 0;
             var temp1 = "";
             var t1 = 0;
-            var stackPointer = 2;
+            var sp = 2;
             var contTemporal = 0;
             var endXml=0;
 
@@ -224,6 +239,7 @@
         </div>
         
         <div class="labelConsola"><label class="label info">Traduccion</label></div>
+        <button class="button3" onclick="Optimizar()">Optimizar</button>
         <div class="consola">
             <!-- ENTRADA XPATH -->
             <textarea id="salida_traduccion"></textarea>

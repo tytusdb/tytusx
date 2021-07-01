@@ -22,6 +22,20 @@ export class Entorno{
         this.tsimbolos.push({'nombre':nombre,'valor': simbolo});
     }
 
+    sobreEscribirSimbolo(nombre:string, simbolo:Simbolo):boolean{
+        for(let a:Entorno = this; a != null; a = a.padre){
+            for(let i = 0; i < a.tsimbolos.length; i++){
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()){
+                    let nuevo = {'nombre':nombre,'valor': simbolo}
+                    a.tsimbolos[i] = nuevo;
+                    return true;
+                }
+            }
+        }
+        errores.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        return false;        
+    }
+
     private getStringTipo(t:Tipo):string{
         switch(t){
             case Tipo.STRING:

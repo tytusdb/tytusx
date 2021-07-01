@@ -27,7 +27,7 @@ export class CstascendenteComponent implements OnInit {
   ngOnInit(): void {
       this.tiporeporte=localStorage.getItem("TIPO")
       this.nodoraiz=JSON.parse(localStorage.getItem("CSTA"));
-      console.log(this.nodoraiz)
+      //console.log(this.nodoraiz)
       try{
         if (this.nodoraiz!=null || this.nodoraiz!= undefined){
           this.Graficar(this.nodoraiz);

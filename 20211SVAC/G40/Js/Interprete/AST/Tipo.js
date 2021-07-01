@@ -118,3 +118,14 @@ var TipoSentencia;
     TipoSentencia[TipoSentencia["LET"] = 72] = "LET";
     TipoSentencia[TipoSentencia["NULL"] = 73] = "NULL";
 })(TipoSentencia  || (TipoSentencia = {}));
+
+var TipoXInstruccion;
+(function (TipoXInstruccion) {
+    TipoXInstruccion[TipoXInstruccion["XPATH"] = 74] = "XPATH";
+    TipoXInstruccion[TipoXInstruccion["XNUMBER"] = 75] = "XNUMBER";
+    TipoXInstruccion[TipoXInstruccion["XFLOWER"] = 76] = "XFLOWER";
+    TipoXInstruccion[TipoXInstruccion["XLOWER"] = 77] = "XLOWER";
+    TipoXInstruccion[TipoXInstruccion["XUPPER"] = 78] = "XUPPER";
+    TipoXInstruccion[TipoXInstruccion["XSTRING"] = 79] = "XSTRING";
+    TipoXInstruccion[TipoXInstruccion["XSUBSTRING"] = 80] = "XSUBSTRING";
+})(TipoXInstruccion || (TipoXInstruccion = {}));

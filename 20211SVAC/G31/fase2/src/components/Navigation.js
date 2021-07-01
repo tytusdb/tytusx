@@ -5,6 +5,8 @@ import {  parse as parseXPath } from '../code/analizadorXPath/Xpath'
 import { parse as parseXQuery } from '../code/analizadorXQuery/ascendente';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { CD3 } from '../code/codigo3D/cd3';
+import { Entorno } from '../code/analizadorXQuery/Tabla/TablaSimbolos';
+import { Error } from '../code/analizadorXQuery/Tabla/Error';
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
 require('../../node_modules/codemirror/mode/xml/xml')
@@ -113,10 +115,10 @@ class Navigation extends React.Component{
         this.setState({datosCST:datos}) 
         this.setState({MistakesXPath: funcion.errores})
         this.setState({TablaGramticalXPath: funcion.tablaGramatica});
-        this.ejecutarConsulta(text); 
+       // this.ejecutarConsulta(text); 
     }
 
-    setTextDesc(){  // DESCENDENTE XPATH 
+ /*   setTextDesc(){  // DESCENDENTE XPATH 
         console.log("setTextDesc Button clicked");
         let text = this.state.InputTextarea;
         if(text=="") return
@@ -136,7 +138,7 @@ class Navigation extends React.Component{
         this.setState({graphvizCST:funcion.graphviz})
         this.setState({MistakesXPath: funcion.errores})
         this.setState({TablaGramticalXPath: funcion.tablaGramatica.reverse()});
-    }
+    }*/
 
     xmlDesc(){
         var x = this.state.XMLTextarea;
@@ -260,31 +262,27 @@ class Navigation extends React.Component{
     }
 
     ejecutarXQuery(){
-        var texto = this.state.InputTextarea; 
-        console.log('Hola', texto)
+        this.setState({OutputTextarea: ''})
+        var texto = this.state.InputTextarea;         
         if(texto == "") return  
         var resultado = parseXQuery(texto); 
         console.log(resultado); 
-    }
-
-    ejecutarConsulta(consulta){
-        if(consulta == '') return 
-        var funcion = parseXPath(consulta); 
-        if(funcion.errores.length > 0)
-        {
-            alert(`No se pudo realizar la consulta -> ${consulta}`); 
-            console.log(funcion.errores); 
+        let consola = ""
+        let entornoGlobal = new Entorno(null, 'global')
+        if(resultado.instrucciones instanceof Array){
+            for(let instruccion of resultado.instrucciones){
+                consola += instruccion.getValor(entornoGlobal)
+            }
+        }else{
+            consola =  resultado.instrucciones.getValor(entornoGlobal)
         }
-        //console.log('Resultado gramatica XPATH -> ',funcion); 
-        var respuesta = funcion.Ejecutar(this.state.XML); 
-       // console.log(respuesta); 
-        var xmlNuevo = grammar.parse(respuesta); 
-        this.setState({ resultadoConsulta: xmlNuevo.datos});
-        //console.log('Estos son los datos de la consulta', xmlNuevo); 
-        //console.log('DATOS', xmlNuevo.datos);   
-
-        return xmlNuevo.datos
+        if(consola instanceof Error){
+            consola = 'Se encontraron errores en la ejecución de XQuery'
+        }
+        this.setState({OutputTextarea: consola}); 
     }
+
+
 
 
     render(){

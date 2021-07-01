@@ -147,7 +147,7 @@ RAIZ:
                                                         array8.push(id);
                                                         for (var i = 0; i < $4.length; i+=1) {  
                                                             if($4[i].padre==null){
-                                                                $4[i].padre=$2;
+                                                                $4[i].padre=id;
                                                             }
                                                             if($4[i].entorno==""){
                                                                 $4[i].entorno=$2;
