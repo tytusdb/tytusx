@@ -4,7 +4,7 @@ import Arbol from "../Simbolos/Arbol";
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
 
-export default class ForSimple extends Instruccion {
+export default class Funcion extends Instruccion {
   
 
 
@@ -22,7 +22,11 @@ export default class ForSimple extends Instruccion {
     }
 
     interpretar(arbol: Arbol, tabla: tablaSimbolos) {
-        
+        if(this.Parametros!=null){
+            
+        }else{
+
+        }
 
     }
     getNodoAST(): nodoAST {

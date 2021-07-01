@@ -262,7 +262,7 @@ PREDICADO
 EXPRESION
     :ENTERO                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1,@1.first_line,@1.first_column);}
     |IDENTIFICADOR              {$$ = new identificador.default($1,@1.first_line,@1.first_column);}
-    |VARIABLE
+    |VARIABLE                   {$$=$1}
     |CADENA                     {$$=new nativo.default(new Tipo.default(Tipo.tipoDato.CADENA),$1,@1.first_line,@1.first_column);}
     |ARROBA EXPRESION           {$$ = new atributosexpresion.default($1,$2,@1.first_line,@1.first_column);}
     |IDENTIFICADOR PREDICADO    {$$ = new identificadorpredicado.default($1,$2,@1.first_line,@1.first_column);}

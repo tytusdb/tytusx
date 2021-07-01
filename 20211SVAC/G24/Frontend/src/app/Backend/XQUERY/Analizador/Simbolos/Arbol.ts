@@ -2,7 +2,6 @@ import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import { Instruccion } from '../Abstracto/Instruccion';
 import NodoErrores from '../Excepciones/NodoErrores';
 import { reporteTabla } from '../Reportes/reporteTabla';
-import obtenerValor from '../Reportes/cambiarTipo';
 import Atributo from 'src/app/Backend/XML/Analizador/Expresiones/Atributo';
 export default class Arbol {
   private instrucciones: Array<Instruccion[]>;
