@@ -58,8 +58,9 @@
 "||"                return 'or';
 "!"                 return 'not';
 
-[a-zA-Z][a-zA-Z0-9_]*   return 'id'
-[0-9]+("."[0-9]+)?\b    return 'numero';
+[a-zA-Z][a-zA-Z0-9_]*  return 'id';
+[0-9]+("."[0-9]+)\b    return 'numero';
+[0-9]+\b               return 'entero';
 \"((\\\")|[^\n\"])*\"   { yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 \'((\\\')|[^\n\'])*\'	{ yytext = yytext.substr(1,yyleng-2); return 'cadena'; }
 
@@ -105,7 +106,7 @@ DECLARACION
 
 DECLARACIONVARIABLE
     : TIPO LIDS ptcoma                      {$$=new cDeclaracion.DeclaracionVariable($1, $2)}
-    | TIPO id corizq numero corder ptcoma   {$$=new cDeclaracion.DeclaracionArray($1,$2,$4) }
+    | TIPO id corizq entero corder ptcoma   {$$=new cDeclaracion.DeclaracionArray($1,$2,$4) }
 ;
 
 LDECLARACIONVARIABLE
@@ -155,7 +156,8 @@ ASIGNACION
 ;
 
 SI
-    : rif parizq EXPCOMPARACION parder IRA  {$$=new cSi.Si($3,$5)}
+    : rif parizq EXPCOMPARACION parder IRA              {$$=new cSi.Si($3,$5, false)}
+    //| rif parizq EXPCOMPARACION parder IRA ptcoma IRA   {$$=new cSi.Si($3, $5, $7)}
 ;
 
 IRA
@@ -209,13 +211,14 @@ EXPARRAY
 EXPBASICO
     : EXPBASICONUMERO                       {$$= $1}
     | menos EXPBASICO  %prec UMENOS         {$$= new cExpresion.Unario($1, $2)}
-    | cadena                                {$$= new cExpresion.Literal('',$1)} 
+    | cadena                                {$$= new cExpresion.Literal('char',$1)} 
 ;
 
 EXPBASICONUMERO
     : id                                    {$$= new cExpresion.Id($1)}
-    | numero                                {$$= new cExpresion.Literal('',$1)}
-    | parizq TIPO parder  EXP               {$$= new cExpresion.Casteo('', $4)}
+    | numero                                {$$= new cExpresion.Literal('float',$1)}
+    | entero                                {$$= new cExpresion.Literal('int',$1)}
+    | parizq TIPO parder  EXP               {$$= new cExpresion.Casteo($2, $4)}
 ;
 
 

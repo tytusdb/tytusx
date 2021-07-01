@@ -17,6 +17,7 @@ const init = function(e){
                             <td>${data[i].regla}</td>
 							<td>${data[i].antes}</td>
 							<td>${data[i].despues}</td>
+							<td>${data[i].iteracion}</td>
 					  </tr>`
 			table.innerHTML += row
 

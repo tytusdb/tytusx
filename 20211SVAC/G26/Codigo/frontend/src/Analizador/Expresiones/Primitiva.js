@@ -1,6 +1,5 @@
 import { Entorno } from "../AST/Entorno";
 import { Tipo } from "../AST/Tipo";
-import errores from "../Global/ListaError";
 import { Consulta } from "../XPath/Consulta";
 export class Primitiva {
     constructor(valor, tipo, linea, columna) {
@@ -22,8 +21,8 @@ export class Primitiva {
                 return ent.obtenerSimbolo(this.valor);
             }
             else {
-                errores.agregarError('semantico', 'No existe el simbolo ' + this.valor, this.linea, this.columna);
-                this.tipo = TipoPrim.ERROR;
+                //errores.agregarError('semantico', 'No existe el simbolo ' + this.valor, this.linea, this.columna);
+                //this.tipo = TipoPrim.ERROR;
                 return null;
             }
         }

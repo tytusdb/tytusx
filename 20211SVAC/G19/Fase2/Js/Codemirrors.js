@@ -10,7 +10,7 @@ var editor = CodeMirror.fromTextArea
     autoRefresh:true
 });
 
-editor.setSize(720, 650);
+editor.setSize(640, 650);
 editor.refresh();
 
 var editor2 = CodeMirror.fromTextArea
@@ -23,9 +23,9 @@ var editor2 = CodeMirror.fromTextArea
     autoRefresh:true
 });
 
-editor2.setSize(720, 650);
+editor2.setSize(640, 650);
 editor2.refresh();
-
+/*
 var editor3 = CodeMirror.fromTextArea
 (document.getElementById('editor3'),{
     mode : "text/html",
@@ -36,7 +36,7 @@ var editor3 = CodeMirror.fromTextArea
     autoRefresh:true
 });
 
-editor3.setSize(720, 650);
+editor3.setSize(640, 650);
 editor3.refresh();
 
 var editor4 = CodeMirror.fromTextArea
@@ -47,11 +47,11 @@ var editor4 = CodeMirror.fromTextArea
     lineNumbers: true,
     fixedGutter: false,
     autoRefresh:true
-});
 
-editor4.setSize(720, 650);
+
+editor4.setSize(640, 650);
 editor4.refresh();
-
+});*/
 function SetearUno(){
     tab = 1;
 }
