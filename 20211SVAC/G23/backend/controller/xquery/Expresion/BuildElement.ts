@@ -1,7 +1,6 @@
-import { Element } from "../../model/xml/Element";
-import { Atributo } from "../../model/xml/Atributo";
-import { Tipos } from "../../model/xpath/Enum";
-import { Contexto } from "../Contexto";
+import { Element } from "../../../model/xml/Element";
+import { Atributo } from "../../../model/xml/Atributo";
+import { Tipos } from "../../../model/xpath/Enum";
 
 function pushIterators(input: Array<any>): Array<any> {
     let iterators: Array<string> = [];
