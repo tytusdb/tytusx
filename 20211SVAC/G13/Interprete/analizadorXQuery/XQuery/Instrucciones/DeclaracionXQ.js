@@ -27,13 +27,16 @@ var DeclaracionXQ = /** @class */ (function (_super) {
         _this.valor = v;
         _this.linea = l;
         _this.columna = c;
-        _this.tipo = v.tipo;
         return _this;
     }
-    DeclaracionXQ.prototype.agregarValor = function (v) {
-        this.valor = v;
+    DeclaracionXQ.prototype.setTipo = function (t) {
+        this.tipo = t;
     };
     DeclaracionXQ.prototype.ejecutar = function (ent) {
+        var _a;
+        if (this.tipo == null || this.tipo == undefined) {
+            this.tipo = (_a = this.valor) === null || _a === void 0 ? void 0 : _a.tipo;
+        }
         if (this.valor != null && this.valor != undefined) {
             var res = this.valor.getValor(ent);
             var sim = void 0;
@@ -43,11 +46,17 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
                         ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                     }
+                    else {
+                        console.log("ERROR: no se puede asignar a un entero un " + res.tipo.tipo);
+                    }
                     break;
                 case TipoXQ_1.EnumTipo.caracter:
                     if (res.tipo.tipo == TipoXQ_1.EnumTipo.caracter) {
                         sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
                         ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                    }
+                    else {
+                        console.log("ERROR: no se puede asignar a un caracter un " + res.tipo.tipo);
                     }
                     break;
                 case TipoXQ_1.EnumTipo.booleano:
@@ -55,11 +64,17 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
                         ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                     }
+                    else {
+                        console.log("ERROR: no se puede asignar a un booleano un " + res.tipo.tipo);
+                    }
                     break;
                 case TipoXQ_1.EnumTipo.doble:
                     if (res.tipo.tipo == TipoXQ_1.EnumTipo.doble) {
                         sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
                         ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                    }
+                    else {
+                        console.log("ERROR: no se puede asignar a un doble un " + res.tipo.tipo);
                     }
                     break;
                 case TipoXQ_1.EnumTipo.cadena:
@@ -67,11 +82,17 @@ var DeclaracionXQ = /** @class */ (function (_super) {
                         sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
                         ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
                     }
+                    else {
+                        console.log("ERROR: no se puede asignar a un string un " + res.tipo.tipo);
+                    }
                     break;
                 case TipoXQ_1.EnumTipo.XPath:
                     if (res.tipo.tipo == TipoXQ_1.EnumTipo.XPath) {
                         sim = new SimboloXQ_1.SimboloXQ(this.tipo, res.valor);
                         ent.insertar(this.id, sim, this.linea, this.columna, "La variable");
+                    }
+                    else {
+                        console.log("ERROR: no se puede asignar a un XPath un " + res.tipo.tipo);
                     }
                     break;
             }
