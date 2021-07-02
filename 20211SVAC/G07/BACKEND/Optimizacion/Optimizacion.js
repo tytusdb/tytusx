@@ -11,6 +11,289 @@ class Optimizacion {
 
         // t1 = t2 + 0;
         this.reAsignacionOp01 = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z0-9][a-zA-Z0-9_]*[\s]*[+|\-|*|/][\s]*[a-zA-Z0-9][a-zA-Z0-9_]*[\s]*[;]/;
+
+        // etiquetas
+        this.reEtiqueta = /[L][0-9]+[\s]*[:][\s]*/
+        this.reEtiqueta2 = /(.)*[\s]*[L][0-9]+[\s]*[:][\s]*/
+
+        // If 
+        this.reIf = /(if)[\s]*[(][\s]*[0-9]+[\s]*(==)[\s]*[0-9]+[\s]*[)][\s]*(goto)[\s]*[L][0-9]+[\s]*[;]/
+        this.reIfCond = /(if)[\s]*[(][\s]*[0-9]+[\s]*(==|>|<|>=|<=|!=)[\s]*[0-9]+[\s]*[)][\s]*(goto)[\s]*[L][0-9]+[\s]*[;]/;
+
+        // goto L1;
+        this.reGoTo = /(goto)[\s]*[L][0-9]+[\s]*[;]/g;
+    }
+
+
+    /* 
+     * Regla 1
+     */
+    regla1() {
+        for (let i = 0; i < this.cadenaSplit.length; i++) {
+            let instruccion = this.cadenaSplit[i].trim();
+
+            let auxInstrucciones = [{indice: i, instruccion: instruccion}];
+
+            //Verificar que sea un salto goto
+            if (instruccion.startsWith('goto') && this.reGoTo.test(instruccion)) {
+
+                // Buscar si existe la etiqueta  
+                for (let j = i + 1; j < this.cadenaSplit.length; j++) {
+                    let instruccionSiguiente = this.cadenaSplit[j].trim();
+                    auxInstrucciones.push({indice: j, instruccion: instruccionSiguiente});
+
+                    if (instruccionSiguiente.startsWith('L')) {
+
+                        let etiquetaSalto = [...instruccion.matchAll(/[L][0-9]+/g)];
+                        let etiqueta = [...instruccionSiguiente.matchAll(/[L][0-9]+/g)];
+
+                        etiquetaSalto = etiquetaSalto[0][0];
+                        etiqueta = etiqueta[0][0];
+
+
+                        if (etiquetaSalto === etiqueta) {
+                            console.log('Puedo optimizar por regla 1', auxInstrucciones);
+
+                            auxInstrucciones.forEach(ins => {
+                                this.cadenaSplit[ins.indice] = '';
+                                this.cadenaOptimizada[ins.indice] = '';
+                            });
+
+                            this.cadenaSplit[j] = instruccionSiguiente;
+                            this.cadenaOptimizada[j] = instruccionSiguiente;
+
+                            this.bitacoraOptimizaciones.push({
+                                regla: 1,
+                                linea: i,
+                                instruccion: `
+                                ${instruccion} <br/>
+                                ...instrucciones... <br/>
+                                ${instruccionSiguiente}
+                                `,
+                                cambio: `${instruccionSiguiente}`
+                            });
+
+                            i == j;
+                            break;
+
+                        } else {
+                            console.log('no puedo optimizar');
+
+                            auxInstrucciones.forEach(ins => {
+                                this.cadenaSplit[ins.indice] = ins.instruccion;
+                                this.cadenaOptimizada[ins.indice] = ins.instruccion;
+                            });
+
+                            i == j;
+                            break;
+                        }
+
+                        
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Regla 2
+     */
+    //REGLA 2
+    regla2() {
+        for (let i = 0; i < this.cadenaSplit.length; i++) {
+            let instruccion = this.cadenaSplit[i].trim();
+            
+
+            if (this.reIfCond.test(instruccion)) {
+                let instruccionSiguiente = this.cadenaSplit[i + 1].trim();
+
+
+                if (instruccionSiguiente.startsWith('goto')) {
+
+                    let vals = [...instruccion.matchAll(/[0-9]+/g)];
+                    let val1 = parseInt(vals[0][0]);
+                    let val2 = parseInt(vals[1][0]);
+
+
+                    let nInstrucc = instruccion;
+                    let evalCond = false;
+                    // Evaluar la condicion
+                    if (instruccion.includes('==')) {
+                        nInstrucc = instruccion.replace('==', '!=');
+                        evalCond = val1 === val2;
+                    } else if (instruccion.includes('>')) {
+                        nInstrucc = instruccion.replace('>', '<');
+                        evalCond = val1 > val2;
+                    } else if (instruccion.includes('<')) {
+                        nInstrucc = instruccion.replace('<', '>');
+                        evalCond = val1 < val2;
+                    } else if (instruccion.includes('>=')) {
+                        nInstrucc = instruccion.replace('>=', '<=');
+                        evalCond = val1 >= val2;
+                    } else if (instruccion.includes('<=')) {
+                        nInstrucc = instruccion.replace('<=', '>=');
+                        evalCond = val1 <= val2;
+                    } else if (instruccion.includes('!=')) {
+                        nInstrucc = instruccion.replace('!=', '==');
+                        evalCond = val1 !== val2;
+                    } else {
+                        break;
+                    }
+
+                    let goto1 = [...instruccion.matchAll(/[L][0-9]+/g)];
+                    goto1 = goto1[0][0].trim();
+                    
+
+                    let instruccionTercera = this.cadenaSplit[i + 2].trim();
+                    if (instruccionTercera.startsWith(goto1)) {
+
+                        let goto2 = [...instruccionSiguiente.matchAll(/[L][0-9]+/g)];
+                        goto2 = goto2[0][0].trim();
+
+                        let auxInstrucciones = [];
+                        for (let j = i + 3; j < this.cadenaSplit.length; j++) {
+
+                            let auxInstruccion = this.cadenaSplit[j].trim();
+                            auxInstrucciones.push({indice: j, instruccion: auxInstruccion});
+
+
+                            if (auxInstruccion.startsWith(goto2) && evalCond) {
+                                
+                                // Remplazando la linea condicional
+                                instruccion = nInstrucc.replace(goto1, goto2);
+                                this.cadenaSplit[i] = nInstrucc.replace(goto1, goto2);
+                                this.cadenaOptimizada[i] = nInstrucc.replace(goto1, goto2);
+
+                                // Eliminando el segundo goto
+                                this.cadenaSplit[i + 1] = '';
+                                this.cadenaOptimizada[i + 1] = '';
+
+                                // Eliminar la primera etiqueta
+                                this.cadenaSplit[i + 2] = '';
+                                this.cadenaOptimizada[i + 2] = '';
+
+                                // Agregar las instrucciones de primera etiqueta
+                                auxInstrucciones.forEach(ins => {
+                                    this.cadenaSplit[ins.indice] = ins.instruccion;
+                                    this.cadenaOptimizada[ins.indice] = ins.instruccion;
+                                });
+
+                                this.bitacoraOptimizaciones.push({
+                                    regla: 2,
+                                    linea: i,
+                                    instruccion: `
+                                    ${instruccion} <br/>
+                                    ${instruccionSiguiente} <br/>
+                                    ${instruccionTercera} <br/>
+                                    ...instrucciones... <br/>
+                                    ${auxInstruccion}
+                                    `,
+                                    cambio: `${this.cadenaSplit[i]} <br/>
+                                    ...instrucciones...
+                                    ${auxInstruccion}
+                                    `
+                                });
+
+                                console.log(auxInstrucciones);
+                                break;
+
+                            }
+
+                        }
+
+                    }
+                }
+
+            }
+
+            this.cadenaSplit[i] = instruccion;
+            this.cadenaOptimizada[i] = instruccion;
+        }
+    }
+
+
+    /*
+     *  Regla 3 y Regla 4
+     */
+    regla3_4() {
+        for (let i = 0; i < this.cadenaSplit.length; i++) {
+            let instruccion = this.cadenaSplit[i].trim();
+            
+
+            if (this.reIfCond.test(instruccion)) {
+                let instruccionSiguiente = this.cadenaSplit[i + 1].trim();
+
+
+                if (instruccionSiguiente.startsWith('goto')) {
+                    
+                    let vals = [...instruccion.matchAll(/[0-9]+/g)];
+                    let val1 = parseInt(vals[0][0]);
+                    let val2 = parseInt(vals[1][0]);
+
+                    let evalCond = false;
+                    // Evaluar la condicion
+                    if (instruccion.includes('==')) {
+                        evalCond = val1 === val2;
+                    } else if (instruccion.includes('>')) {
+                        evalCond = val1 > val2;
+                    } else if (instruccion.includes('<')) {
+                        evalCond = val1 < val2;
+                    } else if (instruccion.includes('>=')) {
+                        evalCond = val1 >= val2;
+                    } else if (instruccion.includes('<=')) {
+                        evalCond = val1 <= val2;
+                    } else if (instruccion.includes('!=')) {
+                        evalCond = val1 !== val2;
+                    } else {
+                        break;
+                    }
+
+                    if (evalCond) { // Regla 3
+
+                        let goto = [...instruccion.matchAll(this.reGoTo)];
+                        let goEtiqueta = goto[0][0];
+
+                        this.cadenaOptimizada[i] = goEtiqueta;
+                        this.cadenaOptimizada[i + 1] = '';
+
+                        i = i + 1;
+
+                        this.bitacoraOptimizaciones.push({
+                            regla: 3,
+                            linea: i,
+                            instruccion: `
+                            ${instruccion} <br/>
+                            ${instruccionSiguiente}
+                            `,
+                            cambio: `${goEtiqueta}`
+                        });
+
+                    } else { // Regla 4
+
+                        this.cadenaOptimizada[i] = instruccionSiguiente;
+                        this.cadenaOptimizada[i + 1] = '';
+
+                        i = i + 1;
+
+                        this.bitacoraOptimizaciones.push({
+                            regla: 4,
+                            linea: i,
+                            instruccion: `
+                            ${instruccion} <br/>
+                            ${instruccionSiguiente}
+                            `,
+                            cambio: `${instruccionSiguiente}`
+                        });
+
+                        
+                    }
+
+                }
+
+            }
+        }
     }
 
     /**
