@@ -25,11 +25,11 @@ var funcion = /**@class*/ (function(){
     funcion.prototype.set3D = function(){
         var codigoAux = this.tipo_func +" "+ this.name + " ("
         //for (let i=0; i<this.parametros.length; i++){
-            codigoAux += " "+this.parametros.get3D()
+            codigoAux += " "+this.parametros.set3D()
        // }
         codigoAux +="){\n"
         for (let i=0; i<this.instrucciones.length; i++){
-            codigoAux += "\t"+this.instrucciones[i].get3D()
+            codigoAux += "\t"+this.instrucciones[i].set3D()
         }
         codigoAux += "}\n"
         this.codigo = codigoAux

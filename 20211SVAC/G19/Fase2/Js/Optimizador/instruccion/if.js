@@ -8,17 +8,22 @@ var _if =/**@class */ (function(){
         this.id = id
         this.codigo = ""
         this.tipo = tipo
+        this.optimizado=false
     }
     _if.prototype.getTipo=function(){
         return this.tipo
     }
-    _if.prototype.setOptimizado = function (codigo) {
+    _if.prototype.setOptimizado = function (codigo,optim) {
+        if(optim==true)
+             this.optimizado=optim
         this.codigo=codigo
         return 
     }
     _if.prototype.set3D = function(){
-        if(this.tipo!= tipoInstr.NULL)
+        if(this.tipo!= tipoInstr.NULL&&this.optimizado==false)
             this.codigo="if("+this.expr1+" "+this.comparador+" "+this.expr2+") goto "+this.id+";\n"
+        else if(this.tipo!= tipoInstr.NULL&&this.optimizado==true)
+            this.codigo= this.codigo
         else    
             this.codigo=""
         return this.codigo

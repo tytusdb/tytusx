@@ -9,7 +9,7 @@
         const { If } = require('./Instrucciones/If')
         const { Parametro } = require('./Expresiones/Parametro')
         const { Funcion, CallFuncion } = require('./Instrucciones/Funcion')
-        const { Declaracion } = require('./Expresiones/Declaracion')
+        const { Declaracion, Asignacion } = require('./Expresiones/Declaracion')
         const { Consulta } = require('./Expresiones/Consulta')
         const { grafoCST } = require('../CST'); 
         const { Error } = require('./Tabla/Error')
@@ -152,6 +152,10 @@ RAIZ : DECLARACIONES EOF                {
                                                 return $$
                                         }
     | EOF                               { return 'Entrada vacia' }
+ /*   | error                             {
+                                                ListaErrores.push(new Error('Sintáctico', `Se obtuvo ${yytext}`, this._$.first_line, this._$.first_column));
+                                                console.log(`Error Sintáctico: ${yytext} en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
+                                        }*/
     ;
 
 
@@ -234,7 +238,9 @@ TYPE_DECL : 'as' ITEM_TYPE  {
         ;
 
 ITEM_TYPE : KIND_TEST
-          | PARENTHESIZED_EXPR
+          | PARENTHESIZED_EXPR          {
+                                                        console.log('PASO POR AQUI')
+                                        }
           | 'xs' '':' 'integer'                   {
                                                 $$ = {
                                                         tipo: Tipo.INTEGER
@@ -318,7 +324,7 @@ FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE       {
                                                                                         instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
                                                                                 }
                                                                         }
-	|INITIAL_CLAUSE RETURN_CLAUSE                                   {
+	|INITIAL_CLAUSE RETURN_CLAUSE                                   {       // Aqui tengo que cambiar estooo para el Let pero ya me voy a mimir
                                                                                 $$ = {
                                                                                         instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, null, $2.instrucciones, this._$.first_line, this._$.first_column)
                                                                                 }
@@ -401,7 +407,7 @@ FOR_BINDING :  VAR_NAME  'at' VAR_NAME 'in' QUERY     {
                                                              }
 		| VAR_NAME 'in' QUERY                      {      
                                                                    $$ = {
-                                                                           variables: new VariableFor(this._$.first_line, this._$.first_column, $1.consulta, $3.consulta, null)
+                                                                        variables: new VariableFor(this._$.first_line, this._$.first_column, $1.consulta, $3.consulta, null)
                                                                    }
                                                            }
 		;
@@ -409,18 +415,24 @@ FOR_BINDING :  VAR_NAME  'at' VAR_NAME 'in' QUERY     {
 
 LET_CLAUSE: 'let'  LET_BINDING_LIST             {
                                                         $$ = {
-
+                                                                instrucciones: $2.instrucciones
                                                         }
                                                 }
 ;
 
-LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING
-		|LET_BINDING
+LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING      {     $1.instrucciones.push($3.instrucciones)
+
+                                                        }
+		|LET_BINDING                            {
+                                                                $$ = {
+                                                                        instrucciones: [$1.instrucciones]
+                                                                }
+                                                        }
 ;
 
 LET_BINDING	 :  VAR_NAME ':=' EXPR_SINGLE   {
                                                         $$ = {
-
+                                                                instrucciones: new Asignacion($1.consulta, $2.instrucciones, this._$.first_line, this.first_column)
                                                         }
                                                 }
 ;
@@ -640,6 +652,7 @@ UNARY_EXPR  : QUERY                          {
                                                 }
             | CALL_FUNCT        {
                                         $$ = {
+                                                consulta: $1.consulta, 
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
@@ -650,19 +663,19 @@ UNARY_EXPR  : QUERY                          {
 QUERY :  '/' PATH_EXPR                  {
                                                 $$ = {
                                                         consulta: `${$1}${$2.consulta}`, 
-                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $2.instrucciones)
+                                                        instrucciones: $2.instrucciones
                                                 }
                                         }
       | '//' PATH_EXPR                  {       
                                                 $$ = {
                                                         consulta: `${$1}${$2.consulta}`, 
-                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $2.instrucciones)
+                                                        instrucciones: $2.instrucciones
                                                 }
                                         }
       | PATH_EXPR                       {
                                                 $$ = {
                                                         consulta: `${$1.consulta}`, 
-                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $1.instrucciones)
+                                                        instrucciones: $1.instrucciones
                                                 }
                                         }
 ;   
@@ -770,13 +783,13 @@ FORWARD_STEP : 'attribute' '::' NODE_TEST               {
              | '@' NODE_TEST                            {
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2.consulta} `, 
-                                                                        instrucciones: new Atributo($2.consulta, [], TipoPath.ABS, this._$.first_line, this._$.first_column)
+                                                                        instrucciones: $2.instrucciones
                                                                 }
                                                         }   
              | NODE_TEST                                {
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}`, 
-                                                                        instrucciones: new Camino($1.consulta, [], TipoPath.ABS, this._$.first_line, this._$.first_column)
+                                                                        instrucciones: $1.instrucciones
                                                                 }
                                                         }      
         ;
@@ -838,7 +851,8 @@ POST_FIX_EXPR : PRIMARY_EXPR                    {
                                                 }
               | PRIMARY_EXPR PREDICATE_LIST     {
                                                         $$ = {
-                                                                consulta: `${$1.consulta} ${$2.consulta}`
+                                                                consulta: `${$1.consulta} ${$2.consulta}`, 
+                                                                instrucciones: $1.instrucciones
                                                         }
                                                 }
               ;
@@ -911,14 +925,16 @@ PARENTHESIZED_EXPR : '(' ')'                            {
                                                                         consulta: `()`
                                                                 }
                                                         }
-                   | '(' EXPR ')'                       {
+                   | '(' EXPR ')'                       {      
                                                                 $$ = {
-                                                                        consulta: `(${$2.consulta})`
+                                                                        consulta: `(${$2.consulta})`, 
+                                                                        instrucciones: $2.instrucciones
                                                                 }
                                                         }
                    | '('  '$' 'VAR_NAME' 'EXPR' ')'        {
                                                                 $$ = {
-                                                                        consulta: `($${$3.consulta}${$4.consulta})`
+                                                                        consulta: `($${$3.consulta}${$4.consulta})`, 
+                                                                        instrucciones: $4.instrucciones
                                                                 }
                    }
                    ;
@@ -930,7 +946,8 @@ QUERY_LIST : QUERY_LIST ',' QUERY               {
                                                 }
            | QUERY                              {
                                                         $$ = {
-                                                                consulta: `${$1.consulta}`
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: $1.instrucciones
                                                         }
                                                 }         
            ;

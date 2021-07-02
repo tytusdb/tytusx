@@ -7,8 +7,8 @@ var OrderBy = /** @class */ (function () {
         this.linea = linea;
         this.columna = columna;
     }
-    OrderBy.prototype.ejecutar = function (entorno) {
-        throw new Error('Method not implemented.');
+    OrderBy.prototype.ejecutar = function (entorno, node) {
+        console.log("pasó por el order by");
     };
     return OrderBy;
 }());

@@ -1,4 +1,5 @@
 import { Objeto } from "../../analizadorXML/helpers";
+import { parse } from "../../analizadorXPath/Xpath";
 import { Error } from "../Tabla/Error";
 
 export class Suma {
@@ -17,6 +18,7 @@ export class Suma {
     }
 
     getValor(tabla, xml){
+        
         let resultIzq = this.opeIzq.getValor(tabla, xml)
         if(resultIzq instanceof Error){
             return resultIzq
@@ -26,8 +28,13 @@ export class Suma {
         if(resultDer instanceof Error){
             return resultDer
         }
-
-        return (Number(resultIzq) + Number(resultDer)).toString()
+        console.log('SUMA', resultIzq, resultDer)
+        console.log(typeof resultIzq)
+        console.log(typeof resultDer)
+        let retorno = parseFloat(resultIzq) + parseFloat(resultDer)
+        console.log(retorno)
+        
+        return  (Number(resultIzq) + Number(resultDer)).toString()
     }
 
 }
@@ -104,7 +111,7 @@ export class Positivo {
             return resultIzq
         }
 
-        return (Number(resultIzq)).toString()
+        return (+Number(resultIzq)).toString()
     }
 }
 

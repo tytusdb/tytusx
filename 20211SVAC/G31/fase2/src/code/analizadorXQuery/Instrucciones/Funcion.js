@@ -50,7 +50,7 @@ export class CallFuncion{
         this.columna = columna
     }
 
-    getValor(entorno){
+    getValor(entorno, xml){
         if(entorno.buscar(this.idFuncion)){
             let funcion = entorno.getFuncion(this.idFuncion)
             if(funcion instanceof Funcion){
@@ -66,7 +66,8 @@ export class CallFuncion{
                             if(funcion.entorno instanceof Entorno){
                                 let parametro = funcion.parametros[i]
                                 let expresion = this.parametros[i]
-                                let valor = expresion.getValor(entorno); 
+                                console.log('ewxpresion para variable', this.parametros[i])
+                                let valor = expresion.getValor(entorno, xml); 
                                 console.log('VALOR', valor)
                                 entornoFuncion.declarar(parametro.id, valor, parametro.linea, parametro.columna, parametro.tipo)
                                 console.log('ENTORNO DE FUNCION', funcion, entornoFuncion)
@@ -79,7 +80,7 @@ export class CallFuncion{
                         if(Array.isArray(funcion.instrucciones)){
                             for(let instruccion of funcion.instrucciones){
                                 console.log('Ejecutando las instrucciones de la consulta')
-                                retorno = instruccion.getValor(entornoFuncion)
+                                retorno = instruccion.getValor(entornoFuncion, xml)
                                 console.log(`Retorno de la funcion ${funcion.id}`, retorno)
                             }
                         }else{

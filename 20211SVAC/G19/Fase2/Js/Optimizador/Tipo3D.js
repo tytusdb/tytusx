@@ -18,6 +18,7 @@ var TipoBloque;
 var tipoInstr;
 (function (tipoInstr) {
     tipoInstr[tipoInstr["ASIGNACION_OPERACION"] = 0] = "ASIGNACION_OPERACION";
+    tipoInstr[tipoInstr["ASIGNACION_DOS_EXPR"] = 1] = "ASIGNACION_DOS_EXPR";
     tipoInstr[tipoInstr["ASIGNACION_ARREGLO"] = 2] = "ASIGNACION_ARREGLO";
     tipoInstr[tipoInstr["ASIGNACION_ID_ARRAY"] = 3] = "ASIGNACION_ID_ARRAY";
     tipoInstr[tipoInstr["ETIQUETA"] = 4] = "ETIQUETA";

@@ -12,28 +12,21 @@ var Parametros = /** @class */ (function () {
         this.columna = columna;
         this.params = params;
     }
-    Parametros.prototype.ejecutar = function (entorno) {
-        throw new Error('Method not implemented.');
-    };
-    Parametros.prototype.insertSimbolsTable = function (node, anterior, eEntorno) {
-        var repetido = false;
-        var lista = TableSimbols.TableSimbols.getLista();
-        lista.forEach(function (element) {
-            if (element.Valor.Tipo == "Parámetro" && element.Nombre == node.variable && element.Padre == anterior) {
-                console.log("error semántico");
-                repetido = true;
+    Parametros.prototype.ejecutar = function (entorno, node) {
+        var _this = this;
+        entorno.variables.forEach(function (variable) {
+            if (variable.Nombre == _this.variable) {
+                console.log("LA VARIABLE YA EXISTE");
+                return null;
             }
         });
-        if (!repetido) {
-            var valor = new Valor_1["default"]("Parámetro", node, "");
-            var simbolo = new Simbolo_1["default"](node.variable, valor, anterior, node.linea, node.columna, -1);
-            eEntorno.Add(simbolo);
-            // TableSimbols.TableSimbols.add(simbolo);
-            if (node.params != null) {
-                node.params.insertSimbolsTable(node.params, anterior, eEntorno);
-            }
+        var valor = new Valor_1["default"]("Parámetro", null, "");
+        var simbolo = new Simbolo_1["default"](this.getVariable(), valor, entorno.nombre, node.linea, node.columna, -1);
+        entorno.AddVariables(simbolo);
+        TableSimbols.TableSimbols.add(simbolo);
+        if (this.params != null) {
+            this.params.ejecutar(entorno, this.params);
         }
-        return eEntorno;
     };
     Parametros.prototype.getTipo = function () {
         return this.tipo;

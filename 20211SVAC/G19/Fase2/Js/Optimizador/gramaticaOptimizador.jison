@@ -1,9 +1,12 @@
 %lex
  
 %options case-insensitive
-
+%s                                  comment
 %%
 "//".*                              /* skip comments */
+"/*"                                this.begin('comment');
+<comment>"*/"                       this.popState();
+<comment>.                          /* skip comment content*/
 ".h"        return 'puntoH';
 "*"         return 'asterisk';
 "/"         return 'div';
@@ -22,10 +25,12 @@
 "=="        return 'equalequal'
 "="         return 'equal';
 "!="        return 'diferent';
-"<"         return 'menor';
-"<="        return 'menorIgual';
-">"         return 'mayor';
 ">="        return 'mayorIgual';
+"<="        return 'menorIgual';
+"<"         return 'menor';
+
+">"         return 'mayor';
+
 "#include"  return 'include';
 "goto"      return 'goto';
 "if"        return 'if';
@@ -115,12 +120,12 @@ IDS
     |id                                                                         {$$=[$1]}
 ;
 EXPR    
-    :EXPR add EXPR                                                              {$$=$1+" + "+$3}
+   /* :EXPR add EXPR                                                              {$$=$1+" + "+$3}
     |EXPR minus EXPR                                                            {$$=$1+" - "+$3}
     |EXPR asterisk EXPR                                                         {$$=$1+" * "+$3}
     |EXPR div EXPR                                                              {$$=$1+" / "+$3}
-    |EXPR mod EXPR                                                              {$$=$1+" % "+$3}
-    |minus id                                                                   {$$="-"+$2}
+    |EXPR mod EXPR                                                              {$$=$1+" % "+$3}*/
+    :minus id                                                                   {$$="-"+$2}
     |minus decimal                                                              {$$="-"+$2}
     |minus digits                                                               {$$="-"+$2}
     |id                                                                         {$$=$1}
@@ -135,7 +140,8 @@ INSTRUCCIONES
 
 ;
 INSTRUCCION
-    :id equal EXPR ptcoma                                                       {$$= new asignacionOp(@1.first_line, @1.first_column,$1, $3, tipoInstr.ASIGNACION_OPERACION) }
+    :id equal EXPR OPERADOR EXPR ptcoma                                         {$$= new asignacionDosExpr(@1.first_line, @1.first_column, tipoInstr.ASIGNACION_DOS_EXPR,$1, $3,$4,$5)}
+    |id equal EXPR ptcoma                                                       {$$= new asignacionOp(@1.first_line, @1.first_column,$1, $3, tipoInstr.ASIGNACION_OPERACION) }
     |id corcheteIzq parIzq TIPO_DATO parDer EXPR corcheteDer equal EXPR ptcoma  {$$ = new asignacionArray(@1.first_line, @1.first_column, tipoInstr.ASIGNACION_ARREGLO,$1,$4, $6, $9)}
     |id equal id corcheteIzq parIzq TIPO_DATO parDer EXPR corcheteDer ptcoma    {$$=  new asignarIdArray(@1.first_line, @1.first_column,tipoInstr.ASIGNACION_ID_ARRAY, $1, $3, $6,$8)}
     |id dospuntos                                                               {$$ = new etiqueta(@1.first_line, @1.first_column,tipoInstr.ETIQUETA, $1)}

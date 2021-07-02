@@ -33,7 +33,8 @@ export class CD3 {
         traduccion += traducir.traduccion; 
         traduccion += '\t return ; \n} // Fin de la traducción de XML '
 
-        traducir.traduccion = this.getEncabezado() + traduccion; 
+        //traducir.traduccion = this.getEncabezado() + traduccion; 
+        traducir.traduccion = traduccion; 
         console.log('HEAP ---->', this.heap.lista)
         console.log('STACK -->', this.stack.lista)
         return traducir
@@ -234,5 +235,17 @@ export class CD3 {
 
     imprimirCD3(){
 
+    }
+
+    getHeap(){
+        return this.heap;
+    }
+
+    getStack(){
+        return this.stack;
+    }
+
+    getTemporal(){ 
+        return this.contadorTemporales;
     }
 }
