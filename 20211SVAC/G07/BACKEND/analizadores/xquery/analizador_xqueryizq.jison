@@ -188,6 +188,9 @@ INSTRUCCION
         |IF_                                                                            {$$={instr:"IF_",valor:$1};}
         |CREAR_F tk_punto_coma                                                          {$$={instr:"CREAR_F",valor:$1};}
         |LLAMADA_F                                                                      {$$={instr:"LLAMADA_F",valor:$1};}
+        |error tk_punto_coma{
+            listaErrores.push(new TokenError("XQUERY",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
+        }
 ;
 CREAR_F  //declare      function local    ID                    (                PARAM            )      tipoReturn   {             instr                    }
         :tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq  INSTRUCCIONES tk_llave_der     {$$={id:$tk_identificador,parametros:$PARAMETROS,instr:$INSTRUCCIONES};}

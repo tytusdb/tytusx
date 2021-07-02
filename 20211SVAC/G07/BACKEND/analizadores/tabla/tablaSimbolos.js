@@ -1,8 +1,17 @@
 class TablaSimbolos {
 
-    constructor(jsonStruct) {
+    constructor(jsonStruct=null) {
         this.jsonStruct = jsonStruct
         this.simbolos = []
+    }
+
+
+    agregarSimbolo(simbolo) {
+        /**
+         * let tablaSimbolos2 = new TablaSimbolos();
+         * tablaSimbolos2.agregarSimbolo(new Simbolo(nombre, tipo, ambito, fila, columna, valor, indice));
+         */
+        this.simbolos.push(simbolo);    
     }
 
     generarTablaRecursivo(ambito, ambitoPadre) {
@@ -70,11 +79,11 @@ class TablaSimbolos {
 
     generarTabla() {
         this.generarTablaRecursivo(this.jsonStruct, "global");
-
-
-
         return this.simbolos;
     }
 
+    // generarTabla2() {
+    //     return  this.simbolos;   
+    // }
 
 }

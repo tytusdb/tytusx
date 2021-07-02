@@ -295,6 +295,7 @@ function ejecutarForIn(instruccion,entorno,padre){
         entornos=ordenar(instruccion.order,entornos);
     }
     let where=instruccion.where;
+    console.log(instruccion);
     let respuesta="";
     let contador=1;
     for (const x of entornos) {
@@ -303,9 +304,11 @@ function ejecutarForIn(instruccion,entorno,padre){
         var_.agregar(instruccion.iterador.contador,contador);
         contador++;
         let retorno=null;
-        tem=traductorC3D.t;
-        traducirOperacionW(where.condicion,var_);
-        traductorC3D.t+=tem;
+        if(where){
+            tem=traductorC3D.t;
+            traducirOperacionW(where.condicion,var_);
+            traductorC3D.t+=tem;
+        }
         if(where==null||validarWhere(where.condicion,var_)){
             retorno=procesarReturn(instruccion.retorno,var_);
         }

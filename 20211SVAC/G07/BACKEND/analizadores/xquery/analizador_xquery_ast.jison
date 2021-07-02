@@ -245,7 +245,10 @@ INSTRUCCION:
         |LLAMADA_F
         {$$= new Nodo("INST", "INST" );
         $$.agregarHijo($1);
-	}         
+	}  
+        |error tk_punto_coma{
+            listaErrores.push(new TokenError("XQUERY",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
+        }       
 ;
 CREAR_F:
         tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq INSTRUCCIONES tk_llave_der
@@ -720,9 +723,10 @@ DATO
         {$$= new Nodo("DATO", "DATO" );
         $$.agregarHijo(new Nodo($1,$1));
 	}
-        |tk_identificador                                                               
+        |tk_identificador F_NATIVAS                                                              
         {$$= new Nodo("DATO", "DATO" );
         $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
 	}
         |tk_hilera                                                                      
         {$$= new Nodo("DATO", "DATO" );
@@ -739,16 +743,20 @@ DATO
         $$.agregarHijo(new Nodo($2,$2));
         $$.agregarHijo(new Nodo($3,$3));
 	}
-        |VARIABLE
+        |VARIABLE  F_NATIVAS
         {$$= new Nodo("DATO", "DATO" );
         $$.agregarHijo($1);
-	}
+	$$.agregarHijo($2);
+        }
         |LLAMADA_F
         {$$= new Nodo("DATO", "DATO" );
         $$.agregarHijo($1);
 	}
-
-
+        |XPATHGRA
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+	}
+        
 //Operaciones aritmeticas                      
         |DATO tk_mas DATO                                                               
         {$$= new Nodo("DATO", "DATO" );
@@ -868,7 +876,28 @@ DATO
         $$.agregarHijo(new Nodo($2,$2));
         $$.agregarHijo($3);
 	}
+        |DATO tk_or DATO 
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}
+;
 
+F_NATIVAS
+        : tk_punto tk_to tk_identificador tk_parentesis_izq tk_parentesis_der
+        {$$= new Nodo("FNAT", "FNAT" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo(new Nodo($3,$3));
+        $$.agregarHijo(new Nodo($4,$4));
+        $$.agregarHijo(new Nodo($5,$5));
+	}        
+        |
+        {
+        $$= new Nodo("FNAT","FNAT");
+        $$.agregarHijo(new Nodo("ε","ε"));
+        }         
 ;
 
 F_DATA
