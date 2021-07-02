@@ -21,11 +21,11 @@ var main = /**@class*/ (function(){
     main.prototype.set3D = function(){
         var codigoAux = this.tipo_func + " main ("
         for (let i=0; i<this.parametros.length; i++){
-            codigoAux += " "+this.parametros[i].getOptimizado()
+            codigoAux += " "+this.parametros[i].set3D()
         }
         codigoAux +="){\n"
         for (let i=0; i<this.instrucciones.length; i++){
-            codigoAux += "\t "+this.instrucciones[i].getOptimizado()
+            codigoAux += this.instrucciones[i].set3D()
         }
         codigoAux += "}\n"
         this.codigo = codigoAux

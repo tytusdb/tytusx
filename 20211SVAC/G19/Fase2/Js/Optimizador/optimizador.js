@@ -3,13 +3,44 @@ var optimizador =/**@class */ (function(){
     function optimizador(bloque) {
         this.bloque = bloque
     }
-
+    optimizador.prototype.print = function(num){
+        console.log("****************"+ num+"*********************")
+        for(let i=0; i<this.bloque.length; i++){
+            console.log( this.bloque[i].getOptimizado())
+          }
+    }
     optimizador.prototype.optimizar= function() {
-        //this.regla1()
-        //this.regla2()
-       // this.regla3()
-        //this.regla4()
+        this.regla1()
+        this.regla2()
+        this.regla3()
+        this.regla4()
         this.regla5()
+        this.regla6()
+        this.regla7()
+        
+        this.regla8()
+        
+        this.regla9()
+        
+        this.regla10()
+        
+        this.regla11()
+        
+        this.regla12()
+        
+        this.regla13()
+        
+        this.regla14()
+        
+        this.regla15()
+        
+        this.regla16()
+        
+        this.regla17()
+        
+        this.regla18()
+        
+        
     }
   //  t2 = b;
     //b = t2;
@@ -25,26 +56,27 @@ var optimizador =/**@class */ (function(){
                             if(instr2.getTipo() == tipoInstr.ASIGNACION_OPERACION){//toma la segunda tipo asig_operacion
                                 if(instr1.id != instr2.id){
                                     if(instr1.id== instr2.expr && instr2.id == instr1.expr){//compara
-                                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(), true)
                                         bl.getInstrucciones()[i].tipo=tipoInstr.NULL
+                                        bl.getInstrucciones()[i].optimizado=true
                                         break;
                                     }else{
-                                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                        bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                        bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                     }
                                 }else{
-                                    bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                    bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                    bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                    bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                     break
                                 }
                                 
                                 
                             }else
-                                bl.getInstrucciones()[i].setOptimizado(instr2.set3D())
+                                bl.getInstrucciones()[i].setOptimizado(instr2.set3D(),false)
                         }
                     
                     }else
-                        bl.getInstrucciones()[k].setOptimizado(instr1.set3D())
+                        bl.getInstrucciones()[k].setOptimizado(instr1.set3D(),false)
 
                     
                 }
@@ -58,7 +90,7 @@ var optimizador =/**@class */ (function(){
    // goto L1;
    //<instrucciones>
    //L1: ----------------------> L1:
-    optimizador.prototype.regla4=function(){
+    optimizador.prototype.regla2=function(){
         this.bloque.forEach(bl=>{
             if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
@@ -68,21 +100,22 @@ var optimizador =/**@class */ (function(){
                             var instr2=bl.getInstrucciones()[i]
                             if(instr2.getTipo()==tipoInstr.ETIQUETA){
                                 if(instr1.id == instr2.id){
-                                    bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                    bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),true)
                                     bl.getInstrucciones()[k].tipo=tipoInstr.NULL
+                                    bl.getInstrucciones()[k].optimizado=true
                                     break
                                 }else{
-                                    bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                    bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                    bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                    bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                     break
                                 }
                             }else
-                                bl.getInstrucciones()[i].setOptimizado(instr2.set3D())
+                                bl.getInstrucciones()[i].setOptimizado(instr2.set3D(),false)
 
                             
                         }
                     }else
-                        bl.getInstrucciones()[k].setOptimizado(instr1.set3D())
+                        bl.getInstrucciones()[k].setOptimizado(instr1.set3D(),false)
                 }
             }
             bl.setOptimizado(bl.set3D())
@@ -98,7 +131,7 @@ var optimizador =/**@class */ (function(){
     <instrucciones>
     L2:*/
 
-    optimizador.prototype.regla3 = function(){
+    optimizador.prototype.regla4 = function(){
         this.bloque.forEach(bl=>{
             if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
@@ -114,38 +147,38 @@ var optimizador =/**@class */ (function(){
                                         if(instr4.id== instr2.id){
                                             bl.getInstrucciones()[k].invertirSigno()
                                             bl.getInstrucciones()[k].id=instr4.id
-                                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),true)
                                             bl.getInstrucciones()[k+1].tipo = tipoInstr.NULL
                                             bl.getInstrucciones()[k+2].tipo = tipoInstr.NULL
-                                            bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                            bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),true)
                                             break
                                         }else{
-                                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                            bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D())
-                                            bl.getInstrucciones()[k+2].setOptimizado(bl.getInstrucciones()[k+2].set3D())
-                                            bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                            bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),false)
+                                            bl.getInstrucciones()[k+2].setOptimizado(bl.getInstrucciones()[k+2].set3D(),false)
+                                            bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                             
                                         }
                                     }else{
-                                        bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D())
+                                        bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                     }
                                 }
                             }else{
-                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D())
-                                bl.getInstrucciones()[k+2].setOptimizado(bl.getInstrucciones()[k+2].set3D())
+                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),false)
+                                bl.getInstrucciones()[k+2].setOptimizado(bl.getInstrucciones()[k+2].set3D(),false)
                                 break;
                             }
                             
                             
                         }else{
-                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                            bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D())
-                            bl.getInstrucciones()[k+2].setOptimizado(bl.getInstrucciones()[k+2].set3D())
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                            bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),false)
+                            bl.getInstrucciones()[k+2].setOptimizado(bl.getInstrucciones()[k+2].set3D(),false)
                             break
                         }
                     }else{
-                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }
 
                 }
@@ -157,7 +190,7 @@ var optimizador =/**@class */ (function(){
     /*if 1 == 1 goto L1;
     goto L2;*/
     
-    optimizador.prototype.regla2 = function(){
+    optimizador.prototype.regla3 = function(){
         this.bloque.forEach(bl=>{
             if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
@@ -169,17 +202,19 @@ var optimizador =/**@class */ (function(){
                             var instr2=bl.getInstrucciones()[k+1]
                             if(instr2.getTipo()==tipoInstr.GOTO && instr2.id != instr1.id){
                                 bl.getInstrucciones()[k].tipo = tipoInstr.NULL
-                                bl.getInstrucciones()[k+1].setOptimizado("goto "+instr1.id+";\n")
-                                break
+                                bl.getInstrucciones()[k].optimizado=true
+                                bl.getInstrucciones()[k+1].id=instr1.id
+                                bl.getInstrucciones()[k+1].setOptimizado("goto "+instr1.id+";\n",true)
+                               
                             }else{
-                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D())
+                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),false)
                             }
                         }else{
-                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                         }
                     }else{
-                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }
                 }
             }
@@ -202,23 +237,296 @@ var optimizador =/**@class */ (function(){
                             var instr2=bl.getInstrucciones()[k+1]
                             if(instr2.getTipo()==tipoInstr.GOTO && instr2.id != instr1.id){
                                 bl.getInstrucciones()[k].tipo = tipoInstr.NULL
-                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D())
+                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),true)
                                 break
                             }else{
-                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
-                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D())
+                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                                bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),false)
                             }
                         }else{
-                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                         }
                     }else{
-                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                        bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }
                 }
             }
             bl.setOptimizado(bl.set3D())
         })
     }
+/* 
+ goto L1;
+<instrucciones>
+L1:
+goto L2;
 
+*/
+    optimizador.prototype.regla6 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()==tipoInstr.GOTO){
+                        for(let i=k+1; i<bl.getInstrucciones().length; i++){
+                            var instr2=bl.getInstrucciones()[i]
+                            if(instr2.getTipo()==tipoInstr.ETIQUETA && instr1.id==instr2.id){
+                                var instr3=bl.getInstrucciones()[i+1]
+                                if(instr3.getTipo()==tipoInstr.GOTO)
+                                        instr1.id= instr3.id
+                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),true)
+                                bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
+                                bl.getInstrucciones()[i+1].setOptimizado(bl.getInstrucciones()[i+1].set3D(),false)
+                                break;
+                            }else{
+                                bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
+                            }
+
+                        }
+                    }else
+                      bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    /*
+
+    if t9 >= t10 goto L1;
+    <instrucciones>
+    L1:
+    goto L2;
+
+    */
+    optimizador.prototype.regla7 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()==tipoInstr.IF){
+                        for(let i=k+1; i<bl.getInstrucciones().length; i++){
+                            var instr2=bl.getInstrucciones()[i]
+                            if(instr2.getTipo()==tipoInstr.ETIQUETA && instr1.id==instr2.id){
+                                var instr3=bl.getInstrucciones()[i+1]
+                                if(instr3.getTipo()==tipoInstr.GOTO)
+                                        instr1.id= instr3.id
+                                bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),true)
+                                bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
+                                bl.getInstrucciones()[i+1].setOptimizado(bl.getInstrucciones()[i+1].set3D(),false)
+                                break;
+                            }else{
+                                bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
+                            }
+
+                        }
+                    }else
+                      bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+//x = x + 0; 
+    optimizador.prototype.regla8 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id == instr1.expr1 && instr1.operador =="+" && instr1.expr2=="0")
+                            bl.getInstrucciones()[k].tipo = tipoInstr.NULL
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = x - 0; 
+    optimizador.prototype.regla9 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id == instr1.expr1 && instr1.operador =="-" && instr1.expr2=="0")
+                            bl.getInstrucciones()[k].tipo = tipoInstr.NULL
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = x *1; 
+    optimizador.prototype.regla10 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id == instr1.expr1 && instr1.operador =="*" && instr1.expr2=="1")
+                            bl.getInstrucciones()[k].tipo = tipoInstr.NULL
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = x /1; 
+    optimizador.prototype.regla11 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id == instr1.expr1 && instr1.operador =="/" && instr1.expr2=="1")
+                            bl.getInstrucciones()[k].tipo = tipoInstr.NULL
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+
+    //x = y + 0; 
+    optimizador.prototype.regla12 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr1 && instr1.operador =="+" && instr1.expr2=="0")
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = y - 0; 
+    optimizador.prototype.regla13 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr1 && instr1.operador =="-" && instr1.expr2=="0")
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = y *1; 
+    optimizador.prototype.regla14 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="1")
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n",true)
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = y /1; 
+    optimizador.prototype.regla15 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr1 && instr1.operador =="/" && instr1.expr2=="1")
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
+                        else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = y *2; 
+    optimizador.prototype.regla16 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="2"){
+                            bl.getInstrucciones()[k].expr2= bl.getInstrucciones()[k].expr1
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+ " + "+ instr1.expr2+";\n")
+                        }else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = y *0; 
+    optimizador.prototype.regla17 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="0"){
+                            bl.getInstrucciones()[k].expr1= bl.getInstrucciones()[k].expr2
+                            bl.getInstrucciones()[k].expr2=""
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
+                        }else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
+    //x = 0/y; 
+    optimizador.prototype.regla18 = function(){
+        this.bloque.forEach(bl=>{
+            if(bl.getTipo() == TipoBloque.MAIN ||bl.getTipo() == TipoBloque.FUNCTION ){//
+                for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
+                    var instr1=bl.getInstrucciones()[k]
+                    if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
+                        if(instr1.id != instr1.expr2 && instr1.operador =="/" && instr1.expr1=="0"){
+                           bl.getInstrucciones()[k].expr2=""
+                            bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n",true)
+                        }else
+                            bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                    }else
+                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
+                }
+            }
+            bl.setOptimizado(bl.set3D())
+        })
+    }
     return optimizador
 }())
