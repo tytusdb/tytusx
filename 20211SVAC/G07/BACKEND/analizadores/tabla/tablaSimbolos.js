@@ -5,17 +5,17 @@ class TablaSimbolos {
         this.simbolos = []
     }
 
-    constructor() {
-        this.simbolos = [];
-    }
+    // constructor() {
+    //     this.simbolos = [];
+    // }
 
-    agregarSimbolo(simbolo) {
-        /**
-         * let tablaSimbolos2 = new TablaSimbolos();
-         * tablaSimbolos2.agregarSimbolo(new Simbolo(nombre, tipo, ambito, fila, columna, valor, indice));
-         */
-        this.simbolos.push(simbolo);    
-    }
+    // agregarSimbolo(simbolo) {
+    //     /**
+    //      * let tablaSimbolos2 = new TablaSimbolos();
+    //      * tablaSimbolos2.agregarSimbolo(new Simbolo(nombre, tipo, ambito, fila, columna, valor, indice));
+    //      */
+    //     this.simbolos.push(simbolo);    
+    // }
 
     generarTablaRecursivo(ambito, ambitoPadre) {
         if (ambito) {
@@ -85,8 +85,8 @@ class TablaSimbolos {
         return this.simbolos;
     }
 
-    generarTabla2() {
-        return  this.simbolos;   
-    }
+    // generarTabla2() {
+    //     return  this.simbolos;   
+    // }
 
 }

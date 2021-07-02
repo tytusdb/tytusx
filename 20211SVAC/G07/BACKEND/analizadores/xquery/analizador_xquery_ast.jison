@@ -245,7 +245,10 @@ INSTRUCCION:
         |LLAMADA_F
         {$$= new Nodo("INST", "INST" );
         $$.agregarHijo($1);
-	}         
+	}  
+        |error tk_punto_coma{
+            listaErrores.push(new TokenError("XQUERY",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
+        }       
 ;
 CREAR_F:
         tk_declare tk_function tk_local tk_identificador tk_parentesis_izq PARAMETROS tk_parentesis_der RETURNFUNC tk_llave_izq INSTRUCCIONES tk_llave_der
