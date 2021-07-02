@@ -4,6 +4,7 @@ class CodeUtil{
     public static readonly METHOD_PRINT_STRING:string="printString()";
     public static readonly T = "t";
     public static readonly TMP_SIZE_TS_XML:string=CodeUtil.T+"0";
+    public static readonly VAL_INDEX_DEFAULT:string = "-1";
 
     private static _cadSalida:string="";
     private static _sp:number;
@@ -44,7 +45,10 @@ class CodeUtil{
         this.print("void imprimirHijos();")
         this.print("void crearLista();")
         this.print("void imprimirListaObjetos();");
-        this.print("void findObjectsByNombre();")
+        //this.print("void findObjectsByNombre();");
+        this.print("void buscarObjeto();")
+        this.print("void buscarByPadreTipoValorIndex();");
+        this.print("void concatenarListas();")
         CodeUtil.print("/*************************************/");
         this.print("")
     }
@@ -52,7 +56,10 @@ class CodeUtil{
     public static generarFuncionesNativas(){
         this.generarDefinicionFunciones();
 
-        RootIdentifier.findObjectsByNombre();
+        this.concatenarListas();
+        this.buscarByPadreTipoValorIndex();
+        this.buscarObjeto();
+        //RootIdentifier.findObjectsByNombre();
         this.imprimirListaObjetos();
         this.imprimrObjeto();
         this.imprimirHijos();
@@ -89,7 +96,7 @@ class CodeUtil{
         this._cadSalida+="int RP=0;\n";
         CodeUtil.print("");
         CodeUtil.print("");
-        
+
     }
 
     public static getDefinitionTemps():string{
@@ -246,6 +253,10 @@ class CodeUtil{
         this.printWithComment(temporalPosParametro1+" = SP + 0 ; ","Pos parametro 1 (Cadena1)");
         var temporalPosParametro2 = this.generarTemporal();
         this.printWithComment(temporalPosParametro2+" = SP + 1 ; ","Pos parametro 2 (Cadena2)");
+        var temporalParametro1 = this.generarTemporal();
+        var temporalParametro2 = this.generarTemporal();
+        this.print(temporalParametro1+" = Stack[(int)"+temporalPosParametro1+"];")
+        this.print(temporalParametro2+" = Stack[(int)"+temporalPosParametro2+"];")
         var temporalChar1 = this.generarTemporal();
         var temporalChar2 = this.generarTemporal();
         var lInicio = this.generarEtiqueta();
@@ -254,8 +265,8 @@ class CodeUtil{
         var lIfEof = this.generarEtiqueta();
         this.printWithComment(lInicio+":","Etiqueta Inicio" );
         //this.printWithComment("if ("+temporalIgual+"!= 1 ) goto "+lFin+" ;"," Ciclo");
-        this.print(temporalPosParametro1+" = "+temporalPosParametro1+" + "+temporalI+" ;");
-        this.print(temporalPosParametro2+" = "+temporalPosParametro2+" + "+temporalI+" ;");
+        this.print(temporalPosParametro1+" = "+temporalParametro1+" + "+temporalI+" ;");
+        this.print(temporalPosParametro2+" = "+temporalParametro2+" + "+temporalI+" ;");
         this.printWithComment(temporalChar1 + " = Repository[(int)"+temporalPosParametro1+"] ; ",
             "Caracter de la cadena 1");
         this.printWithComment(temporalChar2 + " = Repository[(int)"+temporalPosParametro2+"] ; ",
@@ -687,5 +698,288 @@ class CodeUtil{
     }
 
 
+    public static buscarObjeto(){
+        this.print("/**************************************")
+        this.print("buscarObjeto(int refPadre, int tipoObjeto, string valor, int index ):ListObject")
+        this.print("refPadre->Stack[P]")
+        this.print("tipoObjeto->Stack[P+1]")
+        this.print("valor->Stack[P+2]")
+        this.print("index->Stack[P+3]")
+        this.print("return -> Stack[P]")
+        this.print("**************************************/")
+        this.print("void buscarObjeto()")
+        this.print("{")
+        this.printComment("Recuperamos los parametros")
+        let tmpPosRefPadre = this.generarTemporal();
+        this.print(tmpPosRefPadre + " = SP + 0 ;")
+        let tmpRefPadre = this.generarTemporal();
+        this.printWithComment(tmpRefPadre+ " = Stack[(int)"+tmpPosRefPadre+"]; ","REF PADRE")
+        let tmpPosTipoObjeto = this.generarTemporal();
+        this.print(tmpPosTipoObjeto+ " = SP + 1 ;")
+        let tmpTipoObjeto = this.generarTemporal();
+        this.printWithComment(tmpTipoObjeto + " = Stack[(int)"+tmpPosTipoObjeto+"]; ","TIPO OBJETO")
+        let tmpPosValor = this.generarTemporal();
+        this.print(tmpPosValor + " = SP + 2 ;")
+        let tmpValor = this.generarTemporal();
+        this.printWithComment(tmpValor + " = Stack[(int)"+tmpPosValor+"];","VALOR")
+        let tmpPosIndex = this.generarTemporal()
+        this.print(tmpPosIndex+ " = SP + 3 ;")
+        let tmpIndex = this.generarTemporal();
+        this.printWithComment(tmpIndex+ " = Stack[(int)"+tmpPosIndex+"];","INDEX")
+        this.printComment("Creamos la lista que se retornara")
+        this.print("SP = SP + 4 ;")
+        this.print("crearLista();")
+        let tmpLista = this.generarTemporal();
+        this.print(tmpLista+" = Stack[SP];")
+        this.print("SP = SP - 4 ;")
+        this.printComment("Inicializamos contador I")
+        let tmpContador = this.generarTemporal();
+        this.print(tmpContador+" = "+tmpRefPadre+" + 1 ;")
+        let lInicio = this.generarEtiqueta()
+        let lInsertar = this.generarEtiqueta()
+        let lContinuar = this.generarEtiqueta()
+        let lfin = this.generarEtiqueta();
+        this.printWithComment(lInicio+":","Etiqueta de inicio")
+        this.printWithComment("if( "+tmpContador+" > "+this.TMP_SIZE_TS_XML+" ) goto "+lfin+";",
+            "Validamos hasta que el contador sea mayor que la carga xml")
+        let tmpTipo = this.generarTemporal();
+        this.printWithComment(tmpTipo+" = Heap[(int)"+tmpContador+"];","Obtenemos el tipo en base a la posicion del contador")
+        this.printComment("Buscamos hacer match por el tipo de objeto")
+        this.printWithComment("if( "+tmpTipo+" != "+tmpTipoObjeto+" ) goto "+lContinuar+";",
+            "Si no es el tipo del recibido por parametro continuamos")
+        this.printComment("Si corresponde al tipo Buscamos la cadena del objeto ")
+        let tmpPosCadena = this.generarTemporal()
+        this.printWithComment(tmpPosCadena+" = "+tmpContador+" + "+TsRow.POS_LABEL_CONT_ATTRIBUTE+";","Posicion de la cadena del objeto")
+        let tmpCadena = this.generarTemporal()
+        this.printWithComment(tmpCadena+" = Heap[(int)"+tmpPosCadena+"];","Obtenemos la referencia de la cadena")
+        this.printComment("Comparamos la cadena con la funcion")
+        this.print("SP = SP + 4 ;")
+        this.print("Stack[SP] = "+tmpCadena+";")
+        let t1 = this.generarTemporal();
+        this.print(t1+" = SP + 1 ;")
+        this.print("Stack[(int)"+t1+"] = "+tmpValor+";")
+        this.print("equalString();")
+        let tComparacionCadena = this.generarTemporal()
+        this.print(tComparacionCadena+" = Stack[SP];")
+        this.print("SP = SP - 4 ;")
+        this.printComment("Validamos resultado de la comparacion")
+        this.printWithComment("if( "+tComparacionCadena+" != 1 ) goto "+lContinuar+";","Si la cadena no es igual")
+        this.printWithComment("if( "+tmpIndex+" == "+CodeUtil.VAL_INDEX_DEFAULT+" ) goto "+lInsertar+";","Si no se envia index se inserta")
+        this.printComment("Validamos index")
+        let tmpPosCorrelativo = this.generarTemporal()
+        this.printWithComment(tmpPosCorrelativo+" = "+tmpContador+" + "+TsRow.POS_INDEX+";","Posicion del Index del objeto")
+        let tmpCorrelativo = this.generarTemporal()
+        this.printWithComment(tmpCorrelativo+" = Heap[(int)"+tmpPosCorrelativo+"];","Obtenemos el correlativo")
+        this.printWithComment("if( "+tmpCorrelativo+" != "+tmpIndex+" ) goto "+lContinuar+";",
+            "Si el correlativo no corresponde al index enviado por parametro no insertar, continuar con ciclo")
+        this.printWithComment(lInsertar+":","Insertamos objeto")
+        this.printComment("Llamamos a metodo para concatenar")
+        this.print("SP = SP + 4 ;")
+        this.print("Stack[SP] = "+tmpLista+";")
+        let tmpParametro2Concatenar = this.generarTemporal()
+        this.print(tmpParametro2Concatenar+" = SP + 1 ;")
+        this.print("Stack[(int)"+tmpParametro2Concatenar+"] = "+tmpContador+" ;")
+        this.print("concatenarObjeto();")
+        this.print("SP = SP - 4 ;")
+        this.printComment("Se itera de nuevo")
+        this.printWithComment(lContinuar+":","lContinuar")
+        this.printWithComment(tmpContador+" = "+tmpContador+" + 1;", "Incrementamos el contador")
+        this.printWithComment("goto "+lInicio+";","goto a lInicio")
+        this.printWithComment(lfin+":","lFin")
+        this.printComment("Retornamos lista")
+        this.print("Stack[SP] = "+tmpLista+" ;")
+        this.print("return ;")
+        this.print("}")
+        this.print("")
+    }
+
+
+
+
+    public static buscarByPadreTipoValorIndex(){
+        this.print("/**************************************")
+        this.print("buscarByPadreTipoValorIndex(int refPadre, int tipoObjeto, string valor, int index ):ListObject")
+        this.print("refPadre->Stack[P]")
+        this.print("tipoObjeto->Stack[P+1]")
+        this.print("valor->Stack[P+2]")
+        this.print("index->Stack[P+3]")
+        this.print("return -> Stack[P]")
+        this.print("**************************************/")
+        this.print("void buscarByPadreTipoValorIndex()")
+        this.print("{")
+        this.printComment("Recuperamos los parametros")
+        let tmpPosRefPadre = this.generarTemporal();
+        this.print(tmpPosRefPadre + " = SP + 0 ;")
+        let tmpRefPadre = this.generarTemporal();
+        this.printWithComment(tmpRefPadre+ " = Stack[(int)"+tmpPosRefPadre+"]; ","REF PADRE")
+        let tmpPosTipoObjeto = this.generarTemporal();
+        this.print(tmpPosTipoObjeto+ " = SP + 1 ;")
+        let tmpTipoObjeto = this.generarTemporal();
+        this.printWithComment(tmpTipoObjeto + " = Stack[(int)"+tmpPosTipoObjeto+"]; ","TIPO OBJETO")
+        let tmpPosValor = this.generarTemporal();
+        this.print(tmpPosValor + " = SP + 2 ;")
+        let tmpValor = this.generarTemporal();
+        this.printWithComment(tmpValor + " = Stack[(int)"+tmpPosValor+"];","VALOR")
+        let tmpPosIndex = this.generarTemporal()
+        this.print(tmpPosIndex+ " = SP + 3 ;")
+        let tmpIndex = this.generarTemporal();
+        this.printWithComment(tmpIndex+ " = Stack[(int)"+tmpPosIndex+"];","INDEX")
+        this.printComment("Creamos la lista que se retornara")
+        this.print("SP = SP + 4 ;")
+        this.print("crearLista();")
+        let tmpLista = this.generarTemporal();
+        this.print(tmpLista+" = Stack[SP];")
+        this.print("SP = SP - 4 ;")
+        this.printComment("Inicializamos contador I")
+        let tmpContador = this.generarTemporal();
+        this.print(tmpContador+" = "+tmpRefPadre+" + 1 ;")
+        let lInicio = this.generarEtiqueta()
+        let lInsertar = this.generarEtiqueta()
+        let lContinuar = this.generarEtiqueta()
+        let lfin = this.generarEtiqueta();
+        this.printWithComment(lInicio+":","Etiqueta de inicio")
+        this.printWithComment("if( "+tmpContador+" > "+this.TMP_SIZE_TS_XML+" ) goto "+lfin+";",
+            "Validamos hasta que el contador sea mayor que la carga xml")
+        let tmpTipo = this.generarTemporal();
+        this.printWithComment(tmpTipo+" = Heap[(int)"+tmpContador+"];","Obtenemos el tipo en base a la posicion del contador")
+        this.printComment("Buscamos hacer match por el tipo de objeto")
+        this.printWithComment("if( "+tmpTipo+" != "+tmpTipoObjeto+" ) goto "+lContinuar+";",
+            "Si no es el tipo del recibido por parametro continuamos")
+
+        this.printWithComment("","Buscamos hacer match con el padre, sino continuamos")
+        let tmpPosPadre = this.generarTemporal();
+        this.printWithComment(tmpPosPadre+" = "+tmpContador+" + "+TsRow.POS_PARENT+" ;",
+            "Buscamos la posicion del padre")
+        let tmpPadre = this.generarTemporal();
+        this.printWithComment(tmpPadre+ " = Heap[(int)"+tmpPosPadre+"];","Buscamos la referencia del padre")
+        this.printWithComment("if ( "+tmpPadre+" != "+tmpRefPadre+" ) goto "+lContinuar+" ;",
+            "Sino se hace match el padre se continua")
+
+        this.printComment("Si corresponde al tipo Buscamos la cadena del objeto ")
+        let tmpPosCadena = this.generarTemporal()
+        this.printWithComment(tmpPosCadena+" = "+tmpContador+" + "+TsRow.POS_LABEL_CONT_ATTRIBUTE+";","Posicion de la cadena del objeto")
+        let tmpCadena = this.generarTemporal()
+        this.printWithComment(tmpCadena+" = Heap[(int)"+tmpPosCadena+"];","Obtenemos la referencia de la cadena")
+        this.printComment("Comparamos la cadena con la funcion")
+        this.print("SP = SP + 4 ;")
+        this.print("Stack[SP] = "+tmpCadena+";")
+        let t1 = this.generarTemporal();
+        this.print(t1+" = SP + 1 ;")
+        this.print("Stack[(int)"+t1+"] = "+tmpValor+";")
+        this.print("equalString();")
+        let tComparacionCadena = this.generarTemporal()
+        this.print(tComparacionCadena+" = Stack[SP];")
+        this.print("SP = SP - 4 ;")
+        this.printComment("Validamos resultado de la comparacion")
+        this.printWithComment("if( "+tComparacionCadena+" != 1 ) goto "+lContinuar+";","Si la cadena no es igual")
+        this.printWithComment("if( "+tmpIndex+" == "+CodeUtil.VAL_INDEX_DEFAULT+" ) goto "+lInsertar+";","Si no se envia index se inserta")
+        this.printComment("Validamos index")
+        let tmpPosCorrelativo = this.generarTemporal()
+        this.printWithComment(tmpPosCorrelativo+" = "+tmpContador+" + "+TsRow.POS_INDEX+";","Posicion del Index del objeto")
+        let tmpCorrelativo = this.generarTemporal()
+        this.printWithComment(tmpCorrelativo+" = Heap[(int)"+tmpPosCorrelativo+"];","Obtenemos el correlativo")
+        this.printWithComment("if( "+tmpCorrelativo+" != "+tmpIndex+" ) goto "+lContinuar+";",
+            "Si el correlativo no corresponde al index enviado por parametro no insertar, continuar con ciclo")
+        this.printWithComment(lInsertar+":","Insertamos objeto")
+        this.printComment("Llamamos a metodo para concatenar")
+        this.print("SP = SP + 4 ;")
+        this.print("Stack[SP] = "+tmpLista+";")
+        let tmpParametro2Concatenar = this.generarTemporal()
+        this.print(tmpParametro2Concatenar+" = SP + 1 ;")
+        this.print("Stack[(int)"+tmpParametro2Concatenar+"] = "+tmpContador+" ;")
+        this.print("concatenarObjeto();")
+        this.print("SP = SP - 4 ;")
+        this.printComment("Se itera de nuevo")
+        this.printWithComment(lContinuar+":","lContinuar")
+        this.printWithComment(tmpContador+" = "+tmpContador+" + 1;", "Incrementamos el contador")
+        this.printWithComment("goto "+lInicio+";","goto a lInicio")
+        this.printWithComment(lfin+":","lFin")
+        this.printComment("Retornamos lista")
+        this.print("Stack[SP] = "+tmpLista+" ;")
+        this.print("return ;")
+        this.print("}")
+        this.print("")
+    }
+
+    public static concatenarListas():void{
+        this.print("/**************************************")
+        this.print("concatenarListas(ListObject lista1, ListObject lista2):ListObject")
+        this.print("lista1->Stack[P]")
+        this.print("lista2->Stack[P+1]")
+        this.print("return -> Stack[P]")
+        this.print("**************************************/")
+        this.print("void concatenarListas()")
+        this.print("{")
+        let tmpPosParametro1 = this.generarTemporal()
+        let tmpPosParametro2 = this.generarTemporal()
+        let tmpParametro1 = this.generarTemporal();
+        let tmpParametro2 = this.generarTemporal();
+        this.print(tmpPosParametro1+" = SP + 0 ;")
+        this.print(tmpPosParametro2+" = SP + 1 ;")
+        this.printWithComment(tmpParametro1+" = Stack[(int)"+tmpPosParametro1+"] ; ","Se obtiene la lista 1")
+        this.printWithComment(tmpParametro2+" = Stack[(int)"+tmpPosParametro2+"] ; ","Se obtiene la lista 2")
+        this.printComment("Creamos la nueva lista que vamos a retornar")
+        this.print("SP = SP + 2 ;")
+        this.print("crearLista();")
+        let tmpLista = this.generarTemporal();
+        this.print(tmpLista+" = Stack[SP];")
+        this.print("SP = SP - 2 ;")
+        this.printComment("Se recorre la primera lista y se concatena a la lista que se creo")
+        let lLista1 = this.generarEtiqueta()
+        let lSiguiente = this.generarEtiqueta()
+        let lLista2 = this.generarEtiqueta()
+        let lFin = this.generarEtiqueta()
+        this.print(lLista1+ ":")
+        let tmpPosObjeto1 = this.generarTemporal()
+        this.print(tmpPosObjeto1 + " = "+ tmpParametro1 +" ;")
+        let tmpPosReferencia1 = this.generarTemporal();
+        this.print(tmpPosReferencia1+ " = "+tmpParametro1+" + 1 ;")
+        let tmpObjeto1 = this.generarTemporal()
+        this.print(tmpObjeto1+" = Heap[(int)"+tmpPosObjeto1+"];")
+        this.printWithComment("if( "+tmpObjeto1+" == -1) goto "+lSiguiente+" ;","Si es -1 continuamos con la otra lista en lSiguiente")
+        this.printComment("Concatenamos objeto 1")
+        let tmpArg1Obj1 = this.generarTemporal()
+        this.print(tmpArg1Obj1+" = SP + 0 ;")
+        let tmpArg2Obj1 = this.generarTemporal()
+        this.print(tmpArg2Obj1+" = SP + 1 ;")
+        this.print("SP = SP + 2 ;")
+        this.print("Stack[(int)"+tmpArg1Obj1+"] = "+tmpLista+";")
+        this.print("Stack[(int)"+tmpArg2Obj1+"] = "+tmpObjeto1+";")
+        this.print("concatenarObjeto() ;")
+        this.print("SP = SP - 2 ;")
+        this.print(tmpParametro1+" = "+tmpPosReferencia1+" ;")
+        this.print("goto "+lLista1+" ;")
+        this.print("")
+        this.printWithComment(lSiguiente+":","Lsiguiente")
+        this.printComment("Se recorre la segunda lista y se concatena a la lista que se creo")
+        this.printWithComment(lLista2+":","lLista2")
+        let tmpPosObjeto2 = this.generarTemporal()
+        this.print(tmpPosObjeto2+" = "+tmpParametro2+" ;")
+        let tmpPosReferencia2 = this.generarTemporal()
+        this.print(tmpPosReferencia2+" = "+tmpParametro2+" + 1 ;")
+        let tmpObjeto2 = this.generarTemporal();
+        this.print(tmpObjeto2+" = Heap[(int)"+tmpPosObjeto2+"];")
+        this.printWithComment("if( "+tmpObjeto2+" == -1 ) goto "+lFin+" ;","Si es -1 terminamos y retornamos la lista final")
+        this.printComment("Concatenamos objeto 2")
+        let tmpArg1Obj2 = this.generarTemporal()
+        this.print(tmpArg1Obj2+" = SP + 0 ;")
+        let tmpArg2Obj2 = this.generarTemporal()
+        this.print(tmpArg2Obj2+" = SP + 1 ;")
+        this.print("SP = SP + 2 ;")
+        this.print("Stack[(int)"+tmpArg1Obj2+"] = "+tmpLista+" ;")
+        this.print("Stack[(int)"+tmpArg2Obj2+"] = "+tmpObjeto2+" ;")
+        this.print("concatenarObjeto() ;")
+        this.print("SP = SP - 2 ;")
+        this.print(tmpParametro1+" = "+tmpPosReferencia1+" ;")
+        this.print("goto "+lLista2+" ;")
+        this.print("")
+        this.print(lFin+":")
+        this.printComment("Retornamos lista")
+        this.print("Stack[SP] = "+tmpLista+"  ;")
+
+        this.print("return ;")
+        this.print("}")
+        this.print("")
+    }
 
 }

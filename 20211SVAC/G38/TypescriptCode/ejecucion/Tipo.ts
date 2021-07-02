@@ -11,11 +11,11 @@ enum TipoDato{
 }
 
 enum TipoDato3D{
-    objeto = 0,
-    atributo = 1,
-    cadena = 2,
-    numero = 3,
-    booleano = 4,
+    objeto = -5,
+    atributo = -10,
+    cadena = -20,
+    numero = -30,
+    booleano = -40,
     err = 5,
     global = 6,
     xpathValue = 7,

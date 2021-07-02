@@ -602,6 +602,7 @@ class TablaSimbolos {
             "Pasamos la referencia del objeto global para ser agregada a la lista. ");
         CodeUtil.printWithComment("concatenarObjeto();","El resultado se queda en Stack[SP]");
         CodeUtil.print("SP = SP - 1 ;")
+        CodeUtil.registrarTamañoHeapCargaXML("HP");
         CodeUtil.printWithComment("}","Fin de cargarXml()");
         CodeUtil.print("");
 

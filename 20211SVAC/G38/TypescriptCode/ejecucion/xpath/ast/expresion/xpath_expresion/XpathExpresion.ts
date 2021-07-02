@@ -30,13 +30,39 @@ class XpathExpresion extends ExpresionAncestor{
 
 
     traducir3D(ambito:string, sizeScope:string):string{
-        let entornoActual = ambito;
+        let entornoActual = null;
+        CodeUtil.print("");
+        CodeUtil.printComment("Inicio de traduccion XpathExpresion")
+        let tmpPadre = CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPadre + " = -1 ;");
+
         for(let expression of this.expresionesXpath){
-            if(ambito == undefined || ambito == null) {
-                throw Error("Ambito es nulo");
+            if(entornoActual == null ){
+                entornoActual = expression.traducir3D(tmpPadre,sizeScope);//Si se ejecuta la primera vez
+            }else{
+                let temp = CodeUtil.generarTemporal();
+                CodeUtil.print(temp + " = " + entornoActual + ";")
+                let lInicio = CodeUtil.generarEtiqueta();
+                let lFinal = CodeUtil.generarEtiqueta();
+                CodeUtil.print(lInicio+":");
+                let tmpPosObjeto = CodeUtil.generarTemporal();
+                let tmpPosSiguienteObjeto = CodeUtil.generarTemporal();
+                CodeUtil.printWithComment(tmpPosObjeto + " = " + temp + " ;", "Pos de la referencia al objeto de la lista")
+                CodeUtil.printWithComment(tmpPosSiguienteObjeto + " = " + temp + " + 1 ;","Pos de la ref al siguiente objeto")
+                CodeUtil.print(tmpPadre + " = Heap[(int)"+temp+"] ;");
+                CodeUtil.print("if ( "+tmpPadre+" == -1 ) goto "+lFinal+" ; ")
+                entornoActual = expression.traducir3D(tmpPadre,sizeScope);
+                CodeUtil.print(temp + " = "+ tmpPosSiguienteObjeto+ ";");
+                CodeUtil.print("goto "+lInicio + "; ")
+                CodeUtil.print(lFinal + ": ")
+
             }
-            entornoActual = expression.traducir3D(ambito,sizeScope);
+
         }
+
+
+        CodeUtil.printComment("Fin de traduccion XpathExpresion")
+        CodeUtil.print("");
         return entornoActual;
     }
 

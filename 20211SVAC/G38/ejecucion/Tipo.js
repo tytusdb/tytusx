@@ -12,11 +12,11 @@ var TipoDato;
 })(TipoDato || (TipoDato = {}));
 var TipoDato3D;
 (function (TipoDato3D) {
-    TipoDato3D[TipoDato3D["objeto"] = 0] = "objeto";
-    TipoDato3D[TipoDato3D["atributo"] = 1] = "atributo";
-    TipoDato3D[TipoDato3D["cadena"] = 2] = "cadena";
-    TipoDato3D[TipoDato3D["numero"] = 3] = "numero";
-    TipoDato3D[TipoDato3D["booleano"] = 4] = "booleano";
+    TipoDato3D[TipoDato3D["objeto"] = -5] = "objeto";
+    TipoDato3D[TipoDato3D["atributo"] = -10] = "atributo";
+    TipoDato3D[TipoDato3D["cadena"] = -20] = "cadena";
+    TipoDato3D[TipoDato3D["numero"] = -30] = "numero";
+    TipoDato3D[TipoDato3D["booleano"] = -40] = "booleano";
     TipoDato3D[TipoDato3D["err"] = 5] = "err";
     TipoDato3D[TipoDato3D["global"] = 6] = "global";
     TipoDato3D[TipoDato3D["xpathValue"] = 7] = "xpathValue";

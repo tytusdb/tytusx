@@ -137,15 +137,25 @@ class RootIdentifier extends ExpresionAncestor{
         CodeUtil.printComment("Traduccion de RootIdentifier :"+this.identifier);
         let posCadena = CodeUtil.guardarTexto(this.identifier);
         CodeUtil.printComment("Buscamos en la lista por nombre")
+
         CodeUtil.printWithComment("SP = SP + "+sizeScope + " ;", "Cambiamos ambito")
-        CodeUtil.printWithComment("Stack[SP] = "+ambito+" ;","Pasamos la lista del ambito actual como parametro")
-        let tmpPosParametro2 = CodeUtil.generarTemporal();
-        CodeUtil.print(tmpPosParametro2 + " = SP + 1 ;")
-        CodeUtil.printWithComment("Stack[(int)"+tmpPosParametro2+"] = "+posCadena+" ;","Pasamos la cadena como segundo parametro")
-        CodeUtil.print("findObjectsByNombre();")
+        //Calculamos las posiciones
+        let tmpPosPar1=CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPosPar1+"= SP + 0 ;")
+        let tmpPosPar2=CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPosPar2+"= SP + 1 ;")
+        let tmpPosPar3=CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPosPar3+"= SP + 2 ;")
+        let tmpPosPar4=CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPosPar4+"= SP + 3 ;")
+        //Pasamos los parametros
+        CodeUtil.print("Stack[(int)"+tmpPosPar1+"] = "+ambito+" ;");
+        CodeUtil.print("Stack[(int)"+tmpPosPar2+"] = "+TipoDato3D.objeto+" ;");
+        CodeUtil.print("Stack[(int)"+tmpPosPar3+"] = "+posCadena+" ;");
+        CodeUtil.print("Stack[(int)"+tmpPosPar4+"] = "+CodeUtil.VAL_INDEX_DEFAULT+" ;");
+        CodeUtil.print("buscarByPadreTipoValorIndex();")
         let tmpPosReturn = CodeUtil.generarTemporal();
-        CodeUtil.printWithComment(tmpPosReturn + " = Stack[SP] ;","Se guarda el return");
-        //findObjectsByNombre(ListObject ambito, string identificador):ListObject
+        CodeUtil.printWithComment(tmpPosReturn + " = Stack[SP] ;","Se recupera el return")
         CodeUtil.printWithComment("SP = SP - "+sizeScope + " ;", "Recuperamos ambito")
         //return tmpPosReturn;
         CodeUtil.printComment("Fin de RootIdentifier :"+this.identifier);
