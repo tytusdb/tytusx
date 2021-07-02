@@ -12,7 +12,7 @@ var Sentencia = /** @class */ (function () {
             this.lista.ejecutar(entorno, this.lista);
         }
         if (this.sentencia != null) {
-            this.sentencia.ejecutar(entorno, this.sentencia);
+            return this.sentencia.ejecutar(entorno, this.sentencia);
         }
     };
     return Sentencia;

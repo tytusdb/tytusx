@@ -18,8 +18,8 @@ export default class TraductorXML {
     }
 
     antesMain(stack, heap, tabla) {
-        //console.log(stack)
-        //console.log(heap)
+        console.log(stack)
+        console.log(heap)
     }
 
     traducir(ent) {
@@ -74,12 +74,12 @@ export default class TraductorXML {
         this.cadena += "/*------HEADER------*/\n"
         this.cadena += "#include <stdio.h>\n"
         this.cadena += "#include <math.h>\n\n"
-        this.cadena += "float stack[30062021];\n"
-        this.cadena += "float heap[30062021];\n"
-        this.cadena += "float S;\n"
-        this.cadena += "float H;\n"
+        this.cadena += "double stack[30062021];\n"
+        this.cadena += "double heap[30062021];\n"
+        this.cadena += "double S;\n"
+        this.cadena += "double H;\n"
         if (this.t > 0) {
-            this.cadena += "float "
+            this.cadena += "double "
             for (let i = 0; i < this.t; i++) {
                 if (i < (this.t - 1)) {
                     this.cadena += "t" + i + ", "
@@ -93,7 +93,7 @@ export default class TraductorXML {
         } else {
             this.cadena += "\n\n"
         }
-        this.cadena += this.cadena2
+        this.cadena += this.cadena2 + "\n\n"
         this.cadena += "/*------MAIN------*/\n"
         this.cadena += "void main() {\n"
         this.cadena += "    S = 0; H = 0;\n"

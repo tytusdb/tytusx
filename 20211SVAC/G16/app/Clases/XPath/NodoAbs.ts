@@ -1,5 +1,5 @@
 
 
 export interface NodoAbs{
-    execute(padre:any): any;
+    execute(idPadre:any): any;
 }

@@ -2,12 +2,10 @@
 exports.__esModule = true;
 exports.Predicado = void 0;
 var Predicado = /** @class */ (function () {
-    function Predicado(exp) {
-        this.expresion = exp;
+    function Predicado(TablaSimbolo, exp) {
     }
-    Predicado.prototype.execute = function (padre) {
-        var x = this.expresion.execute(padre);
-        return x;
+    Predicado.prototype.execute = function () {
+        console.log("es un indice normal");
     };
     return Predicado;
 }());

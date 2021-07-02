@@ -13,10 +13,6 @@ const parserXQuery=require("../../Gramaticas/xquery")
 import {Recorrer} from '../Clases/Models/Recorrer'
 const tradXML = require('../Clases/Models/TraductorXML.js')
 const Listita=require("../Clases/Hijos/Listita.js")
-const TablaSim=require('../Clases/XPath/TablaSimbolosXP.js')
-const parserOp = require('../../Gramaticas/Optimizar.js')
-const Optimizador = require('../Clases/Models/Optimizador.js')
-
 import Crear from '../Clases/AST/CrearTS'
 import { Router } from '@angular/router';
 import Entorno from '../Clases/AST/Entorno';
@@ -55,11 +51,7 @@ export class PrincipalComponent implements OnInit {
   archivo:string="";
   xquery:string="";
   traduccion:string=""
-  //USO PARA ABSTRACTAS
-  lista=[];
-  entornoact=[]
-  padre=""
-  //-----------------
+
   mode: keyof typeof defaults = 'xml';
   options = {
     lineNumbers: true,
@@ -107,7 +99,7 @@ export class PrincipalComponent implements OnInit {
   ngOnInit(): void {
     this.tipo = localStorage.getItem("TIPO")
     Estado.Estado.Cambio(2)
-    TablaSim.TablaSimbolosXP.clear()
+    //console.log(Estado.Estado.cambio)
   }
 
   nuevo() {
@@ -164,18 +156,18 @@ export class PrincipalComponent implements OnInit {
 
 
   xpathASC() {
-    // try{
+  // try{
     //const AST = parserXpathAsc.parse(this.xpath);
     let x = parserXpathAsc.parse(this.xpath);
-    this.RecorrerAbstractas();
+    this.RecorrerAbstractas(x);
     //localStorage.setItem("ASTXPATH",JSON.stringify(AST));
-    let tabla = []
-    tabla = JSON.parse(localStorage.getItem("tablaSimbolo"));
-    if (tabla.length != 0) {
-      let buscar = new Buscar(this.toastr);
-      this.toastr.success("Análisis completado")
-      this.salida = buscar.darFormato()
-    } else {
+    let tabla=[]
+    tabla=JSON.parse(localStorage.getItem("tablaSimbolo"));
+    if(tabla.length!=0){
+    let buscar=new Buscar(this.toastr);
+    this.toastr.success("Análisis completado")
+    this.salida=buscar.darFormato()
+    }else{
       this.toastr.warning("Se debe ingresar un archivo XML primero");
     }
     /*}catch(Error){
@@ -183,17 +175,8 @@ export class PrincipalComponent implements OnInit {
      }*/
   }
 
-  RecorrerAbstractas(){
-    if(TablaSim.TablaSimbolosXP.getSimbolos().length>0){
-      for (let i=0; i < TablaSim.TablaSimbolosXP.getSimbolos().length; i++){
-        this.lista.push(TablaSim.TablaSimbolosXP.getSimbolos()[i])
-      }
-    }
-    localStorage.setItem("dad", "Global")
-    this.lista.forEach(element => {
-      this.padre =localStorage.getItem("dad")
-      element.execute(this.padre);
-    });
+  RecorrerAbstractas(raiz:any){
+
   }
 
   xpathDESC() {
@@ -274,7 +257,7 @@ export class PrincipalComponent implements OnInit {
       } else {
         this.nuevo();
 
-        this.xquery = contenido.toString();
+        this.xquery= contenido.toString();
       }
     };
 
@@ -287,12 +270,18 @@ export class PrincipalComponent implements OnInit {
     TableSimbols.TableSimbols.clear();
     let resultado=parserXQuery.parse(this.xquery);
     let global=new Entorno("Global",null);
-    console.log(resultado)
     if(resultado.length!=undefined){
+      console.log(resultado)
       resultado.forEach(element => {
         if(element.t=="Instrucción"){
            console.log("-------- iteración nueva -----------")
-          element.ejecutar(global,element);
+          let retorno=element.ejecutar(global,element);
+          if(retorno!=undefined){
+            if(retorno=="return"){
+              return
+            }
+            this.salida=retorno;
+          }
         }
       })
     }else{
@@ -306,7 +295,7 @@ export class PrincipalComponent implements OnInit {
 
   TablaSimbolos() {
     localStorage.setItem("tablaSimbolo", JSON.stringify(this.tablaSimbolo.getTabla()))
-    localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
+    //localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
   }
 
   repoSimbolos() {
@@ -334,39 +323,7 @@ export class PrincipalComponent implements OnInit {
   traducirXML() {
     let trad = new tradXML.default(JSON.parse(localStorage.getItem("tablaSimboloAux")));
     let cadena: string = trad.getTraduccion();
-    this.traduccion = cadena;
-  }
-
-  optimizarC3D() {
-    //let prueba = parserOp.parse(this.traduccion)
-    let prueba = parserOp.parse(`#include <stdio.h>
-    #include <math.h>
-    
-    float P;
-    float H;
-    
-    void main(){
-      if (1 == 1) goto L1;
-      goto L2;
-    
-      if (1 == 0) goto L1;
-      goto L2;
-    
-      x = x + 0;
-      x=x- 0;
-      x=x* 1;
-      x=x/1;
-      x=y+ 0;
-      x=y- 0;
-      x=y* 1;
-      x=y/1;
-      x=y* 2;
-      x=y* 0;
-      x=0/y;
-    }`)
-    console.log(prueba.cadena)
-    let repo = prueba.reporte.getReporte()
-    console.log(repo)
+    this.traduccion=cadena;
   }
 
 }
