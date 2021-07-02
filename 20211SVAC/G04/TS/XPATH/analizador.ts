@@ -27,6 +27,7 @@ function analizarXpath(entornoGlobal: Entorno, resultC3D: C3DResult) {
     }
         let i: number = 1;
         let resultConsulta: Array<string> = new Array();
+        let matrizEntornos: Array<Array<Entorno>> = new Array();
         matrizConsultas.forEach(listC => {
             let entornos: Array<Entorno> = [entornoGlobal];
             entornos = recorrerConsultas(listC, entornos, 0);
@@ -42,10 +43,12 @@ function analizarXpath(entornoGlobal: Entorno, resultC3D: C3DResult) {
                     }
                 });
             });
+            matrizEntornos.push(entornos);
+            console.log(entornos);
         });
         result.value = resultConsulta.join("\n");
         let controller: C3DController = new C3DController();
-        consola.value = controller.generateC3D(resultC3D, matrizConsultas, entornoGlobal);
+        consola.value = controller.generateC3D(resultC3D, matrizConsultas, entornoGlobal, matrizEntornos);
 }
 
 function recorrerConsultas(consultas: Array<Consulta>, entornos: Array<Entorno>, index: number): Array<Entorno> {

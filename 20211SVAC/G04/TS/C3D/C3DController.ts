@@ -9,13 +9,31 @@ class C3DController {
         this.info = info;
     }
 
-    public generateC3D(result: C3DResult, matriz: Array<Array<Consulta>>, entorno: Entorno): string {
-        result = this.generarC3DConsultas(result, matriz);
-        result = this.generarArrayEntC3D(result, entorno);
+    public generateC3D(result: C3DResult, matrizConsultas: Array<Array<Consulta>>, entorno: Entorno, matrizEntornos: Array<Array<Entorno>>): string {
 
-        let cP: number = this.info.find(e => e.name == "consultas").sp;
-        let eP: number = this.info.find(e => e.name == "entornos").sp;
-        result = FunctionRepository.generate(TipoFuncion.ANALIZAR, result, cP, eP);
+        let areSimple: boolean = true;
+
+        matrizConsultas.forEach(cs => {
+            cs.forEach(c => {
+                if (c.getType() != TipoConsulta.SIMPLE) {
+                    areSimple = false;
+                }
+            });
+        });
+
+        if (areSimple) {
+            result = this.generarC3DConsultas(result, matrizConsultas);
+            result = this.generarArrayEntC3D(result, entorno);
+            let cP: number = this.info.find(e => e.name == "consultas").sp;
+            let eP: number = this.info.find(e => e.name == "entornos").sp;
+            result = FunctionRepository.generate(TipoFuncion.ANALIZAR, result, cP, eP);
+        } else {
+            matrizEntornos.forEach(ents => {
+                result = this.generateC3DArrayEnt(result, ents);
+            });
+        }
+
+
 
         let resultFunciones: C3DResult = new C3DResult([""], 0, result.getNextTemp(), result.getNextLabel(), null);
         resultFunciones = FunctionRepository.generate(TipoFuncion.COMPARE, resultFunciones);
@@ -60,31 +78,82 @@ class C3DController {
         return codigo.join("\n");
     }
 
+    private generateC3DArrayEnt(resultC3D: C3DResult, entornos: Array<Entorno>): C3DResult {
+        entornos.forEach(e => {
+            resultC3D = e.generateC3D(resultC3D, "resultado");
+        });
+        let codigo: Array<string> = resultC3D.getCodigo();
+        let t: number = resultC3D.getNextTemp();
+        let p: number = resultC3D.getSp();
+
+
+        codigo.push(`\t\n//Generando array de entornos;`);
+        codigo.push(`\tt${t} = H;`);
+        codigo.push(`\tt${t+1} = t${t} + 1;`);
+        codigo.push(`\theap[(int)H] = ${entornos.length};`);
+        codigo.push(`\tH = H + ${entornos.length + 1};`);
+
+        let tTemp: number = t + 2;
+        entornos.forEach(e => {
+            codigo.push(`\tt${tTemp} = stack[(int)${e.getStackPointer()}];`);
+            codigo.push(`\theap[(int)t${t+1}] = t${tTemp};`);
+            codigo.push(`\tt${t+1} = t${t+1} + 1;`);
+            tTemp++;
+        });
+
+        codigo.push(`\tstack[(int)${p}] = t${t};`);
+
+        //Imprimir resultado
+        codigo.push(`\t//Imprimir resultado`);
+        codigo.push(`\tP = P + ${p+1};`);
+        codigo.push(`\tt${tTemp} = P + 1;`);
+        codigo.push(`\tstack[(int)t${tTemp}] = t${t};`);
+        codigo.push(`\timprimirResultado();`);
+        codigo.push(`\tt${tTemp+1} = stack[(int)P];`);
+        codigo.push(`\tP = P - ${p+1};`);
+        codigo.push(`\tprintf("\\n\\n");`);
+
+        resultC3D.setNextTemp(tTemp+2);
+        resultC3D.setSp(p+1);
+        resultC3D.setCodigo(codigo);
+
+        return resultC3D;
+    }
+
     private generarC3DConsultas(result: C3DResult, matriz: Array<Array<Consulta>>): C3DResult {
 
-        matriz[0].forEach(c => {
-            result = c.generateC3D(result);
+        matriz.forEach(cs => {
+            cs.forEach(c => {
+                result = c.generateC3D(result);
+            });
         });
 
         let codigo: Array<string> = result.getCodigo();
         let i: number = result.getNextTemp();
         let p: number = result.getSp();
-        this.info.push({name: "consultas", sp: p});
+        this.info.push({ name: "consultas", sp: p });
 
-        codigo.push(`\n\t//C3D Arreglo de consultas`);
+        codigo.push(`\n\t//C3D Matriz de consultas`);
         codigo.push(`\tt${i} = H;`);
         codigo.push(`\tt${i+1} = t${i} + 1;`);
-        codigo.push(`\theap[(int)H] = ${matriz[0].length};`);
-        codigo.push(`\tH = H + ${matriz[0].length + 1};`);
+        codigo.push(`\theap[(int)H] = ${matriz.length};`);
+        codigo.push(`\tH = H + ${matriz.length + 1};`);
 
-        let iTemp: number = i+1;
-        matriz[0].forEach(c => {
-            codigo.push(`\n\tt${iTemp+1} = stack[(int)${c.getStackPointer()}];`);
-            codigo.push(`\theap[(int)t${i+1}] = t${iTemp+1};`);
+        let iTemp: number = i + 2;
+        matriz.forEach(cs => {
+            codigo.push(`\tt${iTemp} = H;`);
+            codigo.push(`\tt${iTemp+1} = t${iTemp} + 1;`);
+            codigo.push(`\theap[(int)H] = ${cs.length};`);
+            codigo.push(`\tH = H + ${cs.length + 1};`);
+            cs.forEach(c => {
+                codigo.push(`\tt${iTemp+2} = stack[(int)${c.getStackPointer()}];`);
+                codigo.push(`\theap[(int)t${iTemp+1}] = t${iTemp+2};`);
+                codigo.push(`\tt${iTemp+1} = t${iTemp+1} + 1;`);
+            });
+            codigo.push(`\theap[(int)t${i+1}] = t${iTemp};`);
             codigo.push(`\tt${i+1} = t${i+1} + 1;`);
-            iTemp++;
+            iTemp+=3;
         });
-        iTemp++;
 
         codigo.push(`\tstack[(int)${p++}] = t${i};`);
 

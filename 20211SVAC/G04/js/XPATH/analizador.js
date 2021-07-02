@@ -27,6 +27,7 @@ function analizarXpath(entornoGlobal, resultC3D) {
     }
     let i = 1;
     let resultConsulta = new Array();
+    let matrizEntornos = new Array();
     matrizConsultas.forEach(listC => {
         let entornos = [entornoGlobal];
         entornos = recorrerConsultas(listC, entornos, 0);
@@ -42,10 +43,12 @@ function analizarXpath(entornoGlobal, resultC3D) {
                 }
             });
         });
+        matrizEntornos.push(entornos);
+        console.log(entornos);
     });
     result.value = resultConsulta.join("\n");
     let controller = new C3DController();
-    consola.value = controller.generateC3D(resultC3D, matrizConsultas, entornoGlobal);
+    consola.value = controller.generateC3D(resultC3D, matrizConsultas, entornoGlobal, matrizEntornos);
 }
 function recorrerConsultas(consultas, entornos, index) {
     let newEntornos = new Array();
