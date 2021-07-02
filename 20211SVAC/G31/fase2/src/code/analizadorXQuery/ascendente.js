@@ -87,9 +87,9 @@ case 1:
 
                                                 this.$ = {
                                                         instrucciones: $$[$0-1].instrucciones, 
-                                                        
-
+                                                        errores: ListaErrores
                                                 }
+                                                ListaErrores = []
                                                 return this.$
                                         
 break;
@@ -175,6 +175,11 @@ case 13:
                                         }
                                 
 break;
+case 15:
+
+                                                        console.log('PASO POR AQUI')
+                                        
+break;
 case 16:
 
                                                 this.$ = {
@@ -213,7 +218,7 @@ case 21:
                                 }
                         
 break;
-case 22: case 23: case 25: case 78:
+case 22: case 23: case 25:
 
                                         this.$ = {
                                                 instrucciones: $$[$0].instrucciones
@@ -315,14 +320,33 @@ break;
 case 41:
       
                                                                    this.$ = {
-                                                                           variables: new VariableFor(this._$.first_line, this._$.first_column, $$[$0-2].consulta, $$[$0].consulta, null)
+                                                                        variables: new VariableFor(this._$.first_line, this._$.first_column, $$[$0-2].consulta, $$[$0].consulta, null)
                                                                    }
                                                            
 break;
-case 42: case 45:
+case 42:
 
                                                         this.$ = {
+                                                                instrucciones: $$[$0].instrucciones
+                                                        }
+                                                
+break;
+case 43:
+     $$[$0-2].instrucciones.push($$[$0].instrucciones)
 
+                                                        
+break;
+case 44: case 49:
+
+                                                                this.$ = {
+                                                                        instrucciones: [$$[$0].instrucciones]
+                                                                }
+                                                        
+break;
+case 45:
+
+                                                        this.$ = {
+                                                                instrucciones: new Asignacion($$[$0-2].consulta, $$[$0-1].instrucciones, this._$.first_line, this.first_column)
                                                         }
                                                 
 break;
@@ -345,13 +369,6 @@ case 48:
                                                                 $$[$0-2].instrucciones.push($$[$0].instrucciones)
                                                                 this.$  = {
                                                                         instrucciones: $$[$0-2].instrucciones
-                                                                }
-                                                        
-break;
-case 49:
-
-                                                                this.$ = {
-                                                                        instrucciones: [$$[$0].instrucciones]
                                                                 }
                                                         
 break;
@@ -402,7 +419,7 @@ case 55:
                                                         }
                                                 
 break;
-case 56:
+case 56: case 100:
 
                                                                 this.$ = {
                                                                         consulta: `${$$[$0].consulta}`, 
@@ -580,11 +597,19 @@ case 77:
                                                         }
                                                 
 break;
+case 78:
+
+                                        this.$ = {
+                                                consulta: $$[$0].consulta, 
+                                                instrucciones: $$[$0].instrucciones
+                                        }
+                                
+break;
 case 79:
 
                                                 this.$ = {
                                                         consulta: `${$$[$0-1]}${$$[$0].consulta}`, 
-                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $$[$0].instrucciones)
+                                                        instrucciones: $$[$0].instrucciones
                                                 }
                                         
 break;
@@ -592,7 +617,7 @@ case 80:
        
                                                 this.$ = {
                                                         consulta: `${$$[$0-1]}${$$[$0].consulta}`, 
-                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $$[$0].instrucciones)
+                                                        instrucciones: $$[$0].instrucciones
                                                 }
                                         
 break;
@@ -600,7 +625,7 @@ case 81:
 
                                                 this.$ = {
                                                         consulta: `${$$[$0].consulta}`, 
-                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $$[$0].instrucciones)
+                                                        instrucciones: $$[$0].instrucciones
                                                 }
                                         
 break;
@@ -620,7 +645,7 @@ case 84:
                                                         }
                                                 
 break;
-case 85: case 86: case 87: case 89: case 110:
+case 85: case 86: case 87: case 89: case 110: case 126:
 
                                                         this.$ = {
                                                                 consulta: `${$$[$0].consulta}`, 
@@ -662,15 +687,7 @@ case 99:
 
                                                                 this.$ = {
                                                                         consulta: `${$$[$0-1]} ${$$[$0].consulta} `, 
-                                                                        instrucciones: new Atributo($$[$0].consulta, [], TipoPath.ABS, this._$.first_line, this._$.first_column)
-                                                                }
-                                                        
-break;
-case 100:
-
-                                                                this.$ = {
-                                                                        consulta: `${$$[$0].consulta}`, 
-                                                                        instrucciones: new Camino($$[$0].consulta, [], TipoPath.ABS, this._$.first_line, this._$.first_column)
+                                                                        instrucciones: $$[$0].instrucciones
                                                                 }
                                                         
 break;
@@ -688,7 +705,15 @@ case 106:
                                                                 }
                                                         
 break;
-case 111: case 112:
+case 111:
+
+                                                        this.$ = {
+                                                                consulta: `${$$[$0-1].consulta} ${$$[$0].consulta}`, 
+                                                                instrucciones: $$[$0-1].instrucciones
+                                                        }
+                                                
+break;
+case 112:
 
                                                         this.$ = {
                                                                 consulta: `${$$[$0-1].consulta} ${$$[$0].consulta}`
@@ -773,16 +798,18 @@ case 122:
                                                         
 break;
 case 123:
-
+      
                                                                 this.$ = {
-                                                                        consulta: `(${$$[$0-1].consulta})`
+                                                                        consulta: `(${$$[$0-1].consulta})`, 
+                                                                        instrucciones: $$[$0-1].instrucciones
                                                                 }
                                                         
 break;
 case 124:
 
                                                                 this.$ = {
-                                                                        consulta: `(this.${$$[$0-2].consulta}${$$[$0-1].consulta})`
+                                                                        consulta: `(this.${$$[$0-2].consulta}${$$[$0-1].consulta})`, 
+                                                                        instrucciones: $$[$0-1].instrucciones
                                                                 }
                    
 break;
@@ -790,13 +817,6 @@ case 125:
 
                                                         this.$ = {
                                                                 consulta: `${$$[$0-2].consulta}${$$[$0-1]}${$$[$0].consulta}`
-                                                        }
-                                                
-break;
-case 126:
-
-                                                        this.$ = {
-                                                                consulta: `${$$[$0].consulta}`
                                                         }
                                                 
 break;
@@ -989,9 +1009,10 @@ parse: function parse(input) {
         const { If } = require('./Instrucciones/If')
         const { Parametro } = require('./Expresiones/Parametro')
         const { Funcion, CallFuncion } = require('./Instrucciones/Funcion')
-        const { Declaracion } = require('./Expresiones/Declaracion')
+        const { Declaracion, Asignacion } = require('./Expresiones/Declaracion')
         const { Consulta } = require('./Expresiones/Consulta')
         const { grafoCST } = require('../CST'); 
+        const { Error } = require('./Tabla/Error')
         var grafo = new grafoCST(); 
         var ListaErrores = []
 
@@ -1487,7 +1508,7 @@ break;
 case 80:return 5;
 break;
 case 81:
-                           // excepciones.push(new Excepcion('Léxico', `Patrón desconocido ${yy_.yytext}`, yy_.yylloc.first_line, yy_.yylloc.first_column));
+                            ListaErrores.push(new Error('Léxico', `Patrón desconocido ${yy_.yytext}`, yy_.yylloc.first_line, yy_.yylloc.first_column));
                             console.log(`Error Léxico: ${yy_.yytext} en la linea ${yy_.yylloc.first_line} y columna ${yy_.yylloc.first_column}`);
                           
 break;

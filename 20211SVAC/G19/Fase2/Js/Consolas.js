@@ -66,5 +66,20 @@ var SalidaTraduccion = CodeMirror.fromTextArea
     autoRefresh:true
 });
 
-SalidaTraduccion.setSize(null, 600);
+SalidaTraduccion.setSize(null, 800);
 SalidaTraduccion.refresh();
+var SalidaXPath = CodeMirror.fromTextArea
+(document.getElementById('salida_xpath'),{
+    mode : "text/html",
+    htmlMode: true,
+    theme: "ayu-dark",
+    lineNumbers: false,
+    fixedGutter: false,
+    autoRefresh: true,
+    readOnly: true,
+    readOnly: "nocursor"
+});
+
+SalidaXPath.setSize(null, 425);
+SalidaXPath.refresh();
+

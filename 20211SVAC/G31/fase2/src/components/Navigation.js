@@ -175,7 +175,8 @@ class Navigation extends React.Component{
         var resultado = grammar.parse(x)
         if(resultado.errores.length>0)
         {
-            alert("Errores en el analisis del XML")
+            //alert("Errores en el analisis del XML")
+            console.log(`Errores en el analisis del XML`)
             return
         }
         resultado.datos = this.getC3D(resultado.datos); 
@@ -285,7 +286,8 @@ class Navigation extends React.Component{
         console.log(resultado)
         if(resultado.errores.length>0)
         {
-            alert("Errores en el analisis del XML")
+            //alert("Errores en el analisis del XML")
+            console.log(`Errores en el analisis del XML`)
         }
         resultado.datos = this.getC3D(resultado.datos);
         this.setState({XML:resultado.datos}) // Esto es lo que se envia para ejecutar el XPATH 
@@ -333,10 +335,11 @@ class Navigation extends React.Component{
         let entornoGlobal = new Entorno(null, 'global')
         if(resultado.instrucciones instanceof Array){
             for(let instruccion of resultado.instrucciones){
-                consola += instruccion.getValor(entornoGlobal)
+                consola += instruccion.getValor(entornoGlobal, this.state.XML)
+                consola += '\n'
             }
         }else{
-            consola =  resultado.instrucciones.getValor(entornoGlobal)
+            consola =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)
         }
         if(consola instanceof Error){
             consola = 'Se encontraron errores en la ejecución de XQuery'

@@ -13,7 +13,7 @@ export class Primitivo {
         this.valor = valor; 
     }
 
-    getValor(){
+    getValor(entorno, xml){
         return this.valor; 
     }
     

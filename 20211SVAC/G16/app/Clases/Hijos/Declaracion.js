@@ -14,8 +14,7 @@ var Declaracion = /** @class */ (function () {
         this.t = t;
     }
     Declaracion.prototype.ejecutar = function (entorno, node) {
-        console.log("pasó por declaración");
-        if (entorno.buscarVariable(this.nombre, entorno) != null) {
+        if (entorno.buscarVariableEntorno(this.nombre, entorno) != null) {
             console.log("Ya existe una variable con este nombre");
         }
         else {

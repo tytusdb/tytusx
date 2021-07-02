@@ -287,12 +287,18 @@ export class PrincipalComponent implements OnInit {
     TableSimbols.TableSimbols.clear();
     let resultado=parserXQuery.parse(this.xquery);
     let global=new Entorno("Global",null);
-    console.log(resultado)
     if(resultado.length!=undefined){
+      console.log(resultado)
       resultado.forEach(element => {
         if(element.t=="Instrucción"){
            console.log("-------- iteración nueva -----------")
-          element.ejecutar(global,element);
+          let retorno=element.ejecutar(global,element);
+          if(retorno!=undefined){
+            if(retorno=="return"){
+              return
+            }
+            this.salida=retorno;
+          }
         }
       })
     }else{
