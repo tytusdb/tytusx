@@ -110,6 +110,9 @@ class Nodo extends Simbolo {
         codigo.push(`\tH = H + 1;`);
         codigo.push(`\theap[(int)t${i + 1}] = t${i + 3};`);
         codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
+        //Tipo simbolo
+        codigo.push(`\theap[(int)t${i + 1}] = ${super.getType()};`);
+        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
         //Atributos
         codigo.push(`\tt${i + 4} = H;`);
         codigo.push(`\tt${i + 5} = t${i + 4} + 1;`);
@@ -128,9 +131,6 @@ class Nodo extends Simbolo {
         //Entorno
         codigo.push(`\n\tt${iTemp} = stack[(int)${this.entorno.getStackPointer()}];`);
         codigo.push(`\theap[(int)t${i + 1}] = t${iTemp++};`);
-        codigo.push(`\tt${i + 1} = t${i + 1} + 1;`);
-        //Tipo simbolo
-        codigo.push(`\theap[(int)t${i + 1}] = ${super.getType()};`);
         codigo.push(`\tstack[(int)${p++}] = t${i};`);
         resultC3D.setNextTemp(iTemp);
         resultC3D.setSp(p);

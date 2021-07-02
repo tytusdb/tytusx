@@ -1,7 +1,6 @@
 class C3DController {
     constructor() {
         this.info = new Array();
-        this.funciones = new FuncionesC3D();
     }
     getInfo() {
         return this.info;
@@ -14,13 +13,15 @@ class C3DController {
         result = this.generarArrayEntC3D(result, entorno);
         let cP = this.info.find(e => e.name == "consultas").sp;
         let eP = this.info.find(e => e.name == "entornos").sp;
-        result = this.funciones.analizarXpath(result, cP, eP);
+        result = FunctionRepository.generate(TipoFuncion.ANALIZAR, result, cP, eP);
         let resultFunciones = new C3DResult([""], 0, result.getNextTemp(), result.getNextLabel(), null);
-        resultFunciones = this.funciones.compararStrings(resultFunciones);
-        resultFunciones = this.funciones.consultaSimple(resultFunciones);
-        resultFunciones = this.funciones.recorrerConsultas(resultFunciones);
-        resultFunciones = this.funciones.toTag(resultFunciones);
-        resultFunciones = this.funciones.imprimirResultado(resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.COMPARE, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.SIMPLE, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.RECORRER, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.PRINT_S, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.PRINT_AT, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.TO_TAG, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.PRINT_R, resultFunciones);
         let codigo = new Array();
         codigo.push("/*------HEADER------*/");
         codigo.push("#include <stdio.h>");
