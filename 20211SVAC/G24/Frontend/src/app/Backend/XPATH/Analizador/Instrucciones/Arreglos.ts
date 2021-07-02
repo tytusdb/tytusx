@@ -47,4 +47,7 @@ export default class Arreglos extends Instruccion {
       );
     }*/
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    return null
+  }
 }

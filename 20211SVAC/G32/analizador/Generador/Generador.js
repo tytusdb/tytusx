@@ -72,6 +72,34 @@ class Generador {
         //Se agrega un comentario al código
         this.cadxml.push(`\t/*********** ${texto} ***********/`);
     }
+    Addnumconsulta(num) {
+        let cast = num.toString();
+        /*
+        Se introduce al heapxpath en la posición Hxpath la cadena ' -----(num_consulta)-----\n '
+        */
+        for (let i = 0; i < 15; i++) {
+            this.Addxml(`heapxpath[(int)Hxpath] = ${"-".charCodeAt(0)};`);
+            this.Addxml('Hxpath = Hxpath + 1;');
+            this.Incphxpath(1);
+        }
+        this.Addxml(`heapxpath[(int)Hxpath] = ${"(".charCodeAt(0)};`);
+        this.Addxml('Hxpath = Hxpath + 1;');
+        this.Incphxpath(1);
+        this.Addxml(`heapxpath[(int)Hxpath] = ${cast.charCodeAt(0)};`);
+        this.Addxml('Hxpath = Hxpath + 1;');
+        this.Incphxpath(1);
+        this.Addxml(`heapxpath[(int)Hxpath] = ${")".charCodeAt(0)};`);
+        this.Addxml('Hxpath = Hxpath + 1;');
+        this.Incphxpath(1);
+        for (let i = 0; i < 15; i++) {
+            this.Addxml(`heapxpath[(int)Hxpath] = ${"-".charCodeAt(0)};`);
+            this.Addxml('Hxpath = Hxpath + 1;');
+            this.Incphxpath(1);
+        }
+        this.Addxml(`heapxpath[(int)Hxpath] = ${"\n".charCodeAt(0)};`);
+        this.Addxml('Hxpath = Hxpath + 1;');
+        this.Incphxpath(1);
+    }
     Addcodfunc(texto) {
         this.cod_funcs.push(`${texto}`);
     }
@@ -101,6 +129,7 @@ class Generador {
     Joinfunc() {
         let cadena = this.cod_funcs.join('\n');
         //Se agrega al código inicial
+        this.Addcomentario('Funciones nativas');
         this.codigo.push(cadena);
     }
     /*Modificaciones de registros*/
@@ -179,7 +208,6 @@ class Generador {
         this.Addxml(`Sxpath = Sxpath + ${this.GetStackposxpath()};`);
         //Llamado de función
         this.Addxml('Printconsulta();\n');
-        this.Addcomentario('Funciones nativas');
         this.Addcodfunc('void Printconsulta() {');
         //En la posición del puntero + 1 está el contenido a imprimir (colocado antes del llamado a la función)
         this.Addcodfuncidentado(`${temp_sp_pos} = Sxpath + 1;`);

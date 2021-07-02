@@ -11,8 +11,19 @@ var asignacionOp = /**@class*/(function(){
     asignacionOp.prototype.getTipo=function(){
         return this.tipo
     }
-    asignacionOp.prototype.get3D = function(){
-        this.codigo = this.id + " = "+this.expr+" ;\n"
+    asignacionOp.prototype.set3D = function(){
+        if(this.tipo!= tipoInstr.NULL)
+            this.codigo = this.id + " = "+this.expr+" ;\n"
+        else    
+            this.codigo=""
+        return this.codigo
+    }
+    asignacionOp.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    
+    asignacionOp.prototype.getOptimizado = function () {
         return this.codigo
     }
     return asignacionOp

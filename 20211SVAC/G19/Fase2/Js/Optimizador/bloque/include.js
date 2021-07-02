@@ -5,12 +5,18 @@ var include = /**@class */(function(){
         this.codigo = codigo
         this.tipo = tipo
     }
-    include.prototype.get3D = function(){
+    include.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    include.prototype.set3D = function(){
         return this.codigo 
     }
     include.prototype.getTipo = function(){
         return this.tipo
     }
-    
+    include.prototype.getOptimizado=function () {
+        return this.codigo
+    }
     return include
 }())

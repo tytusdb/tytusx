@@ -1,27 +1,29 @@
-import { Retorno } from "../../Interfaces/Expresion";
+import { Retorno } from "../../Interfaces/ExpressionXquery";
 import { ExpressionXquery } from "../../Interfaces/ExpressionXquery";
 import { Entorno } from "../../xmlAST/Entorno";
-import { Path } from "../../xpathAST/Expresiones/Path";
-import { tipoPrimitivo } from "../../xpathAST/Expresiones/Primitivo";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
-import { showXquery } from "../manejadores/showXquery";
+import { Path } from "../ExpresionesXpath/Path";
+import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
+import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
 export class MultiXpaths implements ExpressionXquery{
     
-
     constructor(
         public line: number,
         public column: number,
         public paths : Path[]){}
+    
 
-    executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
+    public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
        
         var content : Retorno[] = [];
-       
         for (const path of this.paths) {
-            content.concat(path.execute(RaizXML).value)
+            ManejadorXquery.concatenar(content, path.executeXquery(entAct, RaizXML).value);
         }
-        return {value: showXquery.buildXquery(content), type : tipoPrimitivo.STRING}
+        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
     }
 
+    GraficarAST(texto: string): string {
+        throw new Error("Method not implemented.");
+    }
 }

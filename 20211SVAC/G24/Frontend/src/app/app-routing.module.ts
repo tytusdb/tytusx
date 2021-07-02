@@ -7,6 +7,7 @@ import { TablaSimbolosComponent } from './paginas/tabla-simbolos/tabla-simbolos.
 import {GramaticalReportComponent} from './paginas/gramatical-report/gramatical-report.component'
 import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
 import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.component';
+import { ReporteOptimizacionComponent } from './paginas/reporte-optimizacion/reporte-optimizacion.component';
 const routes: Routes = [
   { path: 'gramatical', component: GramaticalReportComponent },
  // { path: 'gramatical', component: ErroresComponent },
@@ -15,7 +16,7 @@ const routes: Routes = [
   { path: 'xpath-ast', component: XpathAscAstComponent },
   { path: 'errores', component: ErroresComponent },
   { path: 'inicio', component: InicioComponent },
- // { path: 'cst', component: InicioComponent },
+  { path: 'optimo', component: ReporteOptimizacionComponent },
   { path: 'simbolos', component: TablaSimbolosComponent },
   { path: '', component: InicioComponent },
   { path: '**', redirectTo: '' },

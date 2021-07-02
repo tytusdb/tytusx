@@ -9,8 +9,18 @@ var goto =/**@class */ (function(){
     goto.prototype.getTipo = function(){
         return this.tipo
     }
-    goto.prototype.get3D = function(){
-        this.codigo = "goto "+this.id+";\n"
+    goto.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    goto.prototype.set3D = function(){
+        if(this.tipo!= tipoInstr.NULL)
+            this.codigo = "goto "+this.id+";\n"
+        else    
+            this.codigo=""
+        return this.codigo
+    }
+    goto.prototype.getOptimizado=function () {
         return this.codigo
     }
     return goto
