@@ -480,6 +480,7 @@ optimizarButton.addEventListener("click", () => {
     optimizador.regla5();
     optimizador.regla6_7_8_9();
     optimizador.regla3_4();
+    optimizador.regla1();
     consolaC3DOptimizada.value = optimizador.obtenerOptimizacion();
 
   } else {

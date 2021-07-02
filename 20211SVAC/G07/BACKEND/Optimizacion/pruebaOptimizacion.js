@@ -15,7 +15,6 @@ t9 = t5;
 t5 = t5 + 0;
 t7=t7-0;
 t9 = t9* 1 ;
-t2 = t3 + 3;
 t8 = t8 / 1;
 
 //Regla 10 - 13
@@ -39,6 +38,14 @@ goto L2;
 if (1 == 0 ) goto L1;
 goto L3;
 
+
+// Regla 1
+goto L1;
+<INSTRUCCIONES>
+//L3:
+//print("Hola mundo");
+L1:
+printf("%f", 5.33);
 `;
 
 consolaC3D.value = textoPrueba;

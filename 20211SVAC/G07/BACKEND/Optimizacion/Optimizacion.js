@@ -24,6 +24,82 @@ class Optimizacion {
     }
 
 
+    /* 
+     * Regla 1
+     */
+    regla1() {
+        for (let i = 0; i < this.cadenaSplit.length; i++) {
+            let instruccion = this.cadenaSplit[i].trim();
+
+            let auxInstrucciones = [{indice: i, instruccion: instruccion}];
+
+            //Verificar que sea un salto goto
+            if (instruccion.startsWith('goto') && this.reGoTo.test(instruccion)) {
+
+                // Buscar si existe la etiqueta  
+                for (let j = i + 1; j < this.cadenaSplit.length; j++) {
+                    let instruccionSiguiente = this.cadenaSplit[j].trim();
+                    auxInstrucciones.push({indice: j, instruccion: instruccionSiguiente});
+
+                    if (instruccionSiguiente.startsWith('L')) {
+
+                        let etiquetaSalto = [...instruccion.matchAll(/[L][0-9]+/g)];
+                        let etiqueta = [...instruccionSiguiente.matchAll(/[L][0-9]+/g)];
+
+                        etiquetaSalto = etiquetaSalto[0][0];
+                        etiqueta = etiqueta[0][0];
+
+
+                        if (etiquetaSalto === etiqueta) {
+                            console.log('Puedo optimizar por regla 1', auxInstrucciones);
+
+                            auxInstrucciones.forEach(ins => {
+                                this.cadenaSplit[ins.indice] = '';
+                                this.cadenaOptimizada[ins.indice] = '';
+                            });
+
+                            this.cadenaSplit[j] = instruccionSiguiente;
+                            this.cadenaOptimizada[j] = instruccionSiguiente;
+
+                            this.bitacoraOptimizaciones.push({
+                                regla: 1,
+                                linea: i,
+                                instruccion: `
+                                ${instruccion} <br/>
+                                ...instrucciones... <br/>
+                                ${instruccionSiguiente}
+                                `,
+                                cambio: `${instruccionSiguiente}`
+                            });
+
+                            i == j;
+                            break;
+
+                        } else {
+                            console.log('no puedo optimizar');
+
+                            auxInstrucciones.forEach(ins => {
+                                this.cadenaSplit[ins.indice] = ins.instruccion;
+                                this.cadenaOptimizada[ins.indice] = ins.instruccion;
+                            });
+
+                            i == j;
+                            break;
+                        }
+
+                        
+                    }
+
+                }
+
+            }
+        }
+    }
+
+
+    /*
+     *  Regla 3 y Regla 4
+     */
     regla3_4() {
         for (let i = 0; i < this.cadenaSplit.length; i++) {
             let instruccion = this.cadenaSplit[i].trim();
