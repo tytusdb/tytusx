@@ -674,7 +674,5 @@ function Optimizar(){
     
     op.optimizar()
     op.optimizar()
-    for(let i=0; i<ast.length; i++){
-       console.log( ast[i].getOptimizado())
-     }
+    op.print()
 }
