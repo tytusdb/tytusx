@@ -19,10 +19,7 @@ export default class CondicionSimple extends Instruccion {
     }
 
     public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
-        if(this.consulta instanceof BarrasNodo){
-            console.log("ahi vamos")
-        }
-
+        return {variables: this.variables, consulta: this.consulta}
     }
     public getNodoAST(): nodoAST {
         throw new Error("Method not implemented.");
