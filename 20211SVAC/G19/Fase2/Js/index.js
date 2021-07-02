@@ -73,6 +73,7 @@ function CargarXML(){
             console.log(tablaSimbolosXML);
             console.log("↓ Arreglo Simbolos ↓");
             console.log(ReportesTSXML.arreglo);
+            arbolito2=ReportesTSXML.arreglo;
             RGxml.arreglo = RGxml.arreglo.reverse();
             localStorage.setItem('tsJSON',JSON.stringify(ReportesTSXML.arreglo, null, 2));
             localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
@@ -100,7 +101,7 @@ function CargarXML(){
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
                     traducirXPath(nodoxPATHASC);
-                    console.log(concatenaXPath)
+                    //console.log(concatenaXPath)
                     salidaGlobal = "";
                     var salidaGlobal2="";
                     var contador = 1;
@@ -115,14 +116,15 @@ function CargarXML(){
                         if(salidaRecursiva!=""){
                             salidaGlobal+= salidaRecursiva + "\n\n";
                         } else {
-                            salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                           // salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
                         }
 
                         contador++;
                     } );
                     salidaGlobal2=salidaGlobal;
-                    setTraduccionXPath(salidaGlobal2.replace("↓ Resultado consulta\n\n","")
-                    .replace("↓ Resultado consulta\n\n",""))
+                    
+                    setTraduccionXPath(CambiarCodificacion(salidaGlobal2.replace("↓ Resultado consulta\n\n","")
+                    .replace("↓ Resultado consulta\n\n","")))
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
@@ -628,8 +630,8 @@ function setTraduction(){
         }
     }
     
-    funcionesALlamar+=`CargarXML();\n`
-    globalC3D+=`; \n\n void CargarXML(){\n`
+    funcionesALlamar=`CargarXML();\n`+funcionesALlamar;
+    globalC3D+=`; \n`+concatenaXPath+` \n void CargarXML(){\n`
 
     if(codificacionGlobal == "UTF-8"){
         globalC3D += "stack[(int)0] = -1;\n";
@@ -641,7 +643,7 @@ function setTraduction(){
         stack.push(-1);
     }
     
-    globalC3D +=xml3D+'}\n'+concatenaXPath+ xpathC3D ;
+    globalC3D +=xml3D+'\n'+ xpathC3D+'\n}\n' ;
 
     globalC3D +=`
     
