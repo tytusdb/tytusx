@@ -6,6 +6,7 @@ import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
 import Simbolo from "../Simbolos/Simbolo";
 import Aritmetica from "../Expresiones/Aritmetica";
+import BarrasNodo from "./BarrasNodo";
 
 export default class Let extends Instruccion {
 
@@ -47,10 +48,60 @@ export default class Let extends Instruccion {
                 //SI SE ENCONTRO COINCIDENCIA POR ENDE NO SE PUEDE VOLVER A DECLARAR ESE LET
             }
 
-        } else {
+        } else if (this.expresion instanceof Array) {
+            var sim;
+            let c = 0;
+            var cadena = '';
+            var retornoscadena = null;
+            let salidas: tablaSimbolos = new tablaSimbolos();
+            var longitud = this.expresion.length
+            this.expresion.forEach(element => {
+                c++
+                if (element as BarrasNodo) {
+                    //se compara el tablaxml para hacer validar los datos
+                    var resultador = element.interpretar(arbol, tabla, tablaxml)
+                    if (resultador instanceof tablaSimbolosxml) {
+                        tablaxml = resultador
+                        if (c == longitud) {
+                            if (arbol != null) {
+                                console.log("LOS ELEMENTOS DE EL RESULTADO DE LA CONSULTA\n")
+                                sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
+                                tabla.setVariable(sim)
+                                var buscar = tabla.getVariable(this.retorno.toString());
+                                if (buscar != null) {
+                                    retornoscadena = buscar.getvalor()
+                                    return buscar
+                                }
+                            }
+                        }
 
-            var simbolo = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), this.expresion.toString());
-            tabla.setVariable(simbolo)
+                    }
+                    if (resultador instanceof Array) {
+                        console.log(resultador)
+                        if (this.retorno as string) {
+                            console.log(typeof this.retorno)
+                            sim = new Simbolo(new Tipo(tipoDato.FUNCION), this.variable, this.fila.toString(), this.columna.toString(), "", resultador);
+                            tabla.setVariable(sim)
+                            var buscar = tabla.getVariable(this.retorno.toString());
+                            if (buscar != null) {
+                                retornoscadena = buscar.getvalor()
+                                return buscar
+                            }
+                        }
+                    }
+
+                }
+            });
+            if (cadena != '') {
+                return cadena
+            }
+            if (retornoscadena != null) {
+                return retornoscadena
+            }
+            if (salidas != null) {
+                return salidas
+            }
+
         }
 
 
