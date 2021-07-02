@@ -16,9 +16,10 @@
 
 
 %%
-[/][/][^\n]*                                 /*skip single line comments*/
-[/][*][^*/]*[*][/]                          /*skip multi line comments*/
-\s+                                         /* skip whitespace */
+
+[/][/][^\n]*                                /*skip single line comments*/
+\s+                                         /*skip whitespace*/
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]         /*skip multi line comments*/
 
 ":"                                         return ':';
 "="                                         return '=';
