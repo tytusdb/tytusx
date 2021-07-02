@@ -18,5 +18,6 @@ export enum tipoDato {
   CADENA,
   OBJETO,
   QUOTE,
-  ATRIBUTO
+  ATRIBUTO,
+  FUNCION
 }

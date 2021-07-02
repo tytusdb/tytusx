@@ -9,25 +9,33 @@ var funcion = /**@class*/ (function(){
         this.name = name
         this.tipo_func = tipo_func
     }
+    funcion.prototype.getTipo = function () {
+        return this.tipo
+    }
 
     funcion.prototype.getInstrucciones = function(){
         return this.instrucciones
     }
     
-    funcion.prototype.getCodigo= function(){
-        return this.codigo
+    
+    funcion.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
     }
-    funcion.prototype.get3D = function(){
+    funcion.prototype.set3D = function(){
         var codigoAux = this.tipo_func +" "+ this.name + " ("
-        for (let i=0; i<this.parametros.length; i++){
-            codigoAux += " "+this.parametros[i].get3D()
-        }
+        //for (let i=0; i<this.parametros.length; i++){
+            codigoAux += " "+this.parametros.get3D()
+       // }
         codigoAux +="){\n"
         for (let i=0; i<this.instrucciones.length; i++){
             codigoAux += "\t"+this.instrucciones[i].get3D()
         }
         codigoAux += "}\n"
         this.codigo = codigoAux
+        return this.codigo
+    }
+    funcion.prototype.getOptimizado=function () {
         return this.codigo
     }
     return funcion

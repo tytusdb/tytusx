@@ -1,6 +1,5 @@
 "use strict";
-//Object.defineProperty(exports, "__esModule", { value: true });
-//exports.ExpresionXQuery = void 0;
+
 var ExpresionXQuery = /** @class */ (function () {
     function ExpresionXQuery(linea, columna, identificador, funcion) {
         this.linea = linea;
@@ -14,4 +13,4 @@ var ExpresionXQuery = /** @class */ (function () {
     };
     return ExpresionXQuery;
 }());
-//exports.ExpresionXQuery = ExpresionXQuery;
+

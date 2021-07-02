@@ -128,4 +128,37 @@ var TipoXInstruccion;
     TipoXInstruccion[TipoXInstruccion["XUPPER"] = 78] = "XUPPER";
     TipoXInstruccion[TipoXInstruccion["XSTRING"] = 79] = "XSTRING";
     TipoXInstruccion[TipoXInstruccion["XSUBSTRING"] = 80] = "XSUBSTRING";
+    TipoXInstruccion[TipoXInstruccion["XFOR"] = 81] = "XFOR";
+    TipoXInstruccion[TipoXInstruccion["XDECLARARFUNCION"] = 82] = "XDECLARARFUNCION";
+    TipoXInstruccion[TipoXInstruccion["XLLAMADARFUNCION"] = 83] = "XLLAMADARFUNCION";
 })(TipoXInstruccion || (TipoXInstruccion = {}));
+
+
+var TipoXPrimitivo;
+(function (TipoXPrimitivo) {
+    TipoXPrimitivo[TipoXPrimitivo["NUMERO"] = 84] = "NUMERO";
+    TipoXPrimitivo[TipoXPrimitivo["IDENTIFICADOR"] = 85] = "IDENTIFICADOR";
+    TipoXPrimitivo[TipoXPrimitivo["CADENA"] = 86] = "CADENA";
+    TipoXPrimitivo[TipoXPrimitivo["IDFLOWER"] = 87] = "IDFLOWER";
+})(TipoXPrimitivo || (TipoXPrimitivo = {}));
+
+var TipoXIF;
+(function (TipoXIF) {
+    TipoXIF[TipoXIF["IF"] = 88] = "IF";
+    TipoXIF[TipoXIF["IFELSE"] = 89] = "IFELSE";
+})(TipoXIF || (TipoXIF = {}));
+
+var TipoXDataType;
+(function (TipoXDataType) {
+    TipoXDataType[TipoXDataType["INTEGER"] = 90] = "INTEGER";
+    TipoXDataType[TipoXDataType["DOUBLE"] = 91] = "DOUBLE";
+    TipoXDataType[TipoXDataType["FLOAT"] = 92] = "FLOAT";
+    TipoXDataType[TipoXDataType["BOOLEAN"] = 93] = "BOOLEAN";
+    TipoXDataType[TipoXDataType["STRING"] = 94] = "STRING";
+})(TipoXDataType || (TipoXDataType = {}));
+
+var TipoXValor;
+(function (TipoXValor) {
+    TipoXValor[TipoXValor["PRIMITIVO"] = 95] = "PRIMITIVO";
+    TipoXValor[TipoXValor["XPATH"] = 96] = "XPATH";
+})(TipoXValor || (TipoXValor = {}));

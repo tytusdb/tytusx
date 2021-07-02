@@ -1,8 +1,10 @@
 
-import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";
 import nodoAST from "../Abstracto/nodoAST";
 import Arbol from "../Simbolos/Arbol";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class Declaracion extends Instruccion {
@@ -14,7 +16,7 @@ export default class Declaracion extends Instruccion {
         this.identificador = identificador;
         this.Tipo = expresion
     }
-    interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+    public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
 
     }
     getNodoAST(): nodoAST {

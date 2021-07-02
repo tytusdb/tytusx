@@ -92,20 +92,21 @@ function CargarXML(){
                 analisisXpathCorrecto = EjecutarXpathAsc(contenidoXpath);
 
                 if (analisisXpathCorrecto){
-
+                    
                     DOTXPATHASTasc = GenerarDOT.recorrerDOT(nodoxPATHASC);
                     DOTXPATHASTasc = "digraph {" + DOTXPATHASTasc + "}";
                     localStorage.setItem('astXPATH',DOTXPATHASTasc);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
-                    
+                    traducirXPath(nodoxPATHASC);
+                    console.log(concatenaXPath)
                     salidaGlobal = "";
                     var salidaGlobal2="";
                     var contador = 1;
                     resultadoXPath.forEach(function (funcion){
 
-                        salidaGlobal+="↓ Resultado consulta "+contador+" ↓\n\n";
+                        salidaGlobal+="↓ Resultado consulta\n\n";
                         salidaRecursiva = "";
                         salidaXPath = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
                         //console.log(salidaXPath);
@@ -120,7 +121,8 @@ function CargarXML(){
                         contador++;
                     } );
                     salidaGlobal2=salidaGlobal;
-                    setTraduccionXPath(salidaGlobal2.replace("↓ Resultado consulta 1 ↓\n\n",""))
+                    setTraduccionXPath(salidaGlobal2.replace("↓ Resultado consulta\n\n","")
+                    .replace("↓ Resultado consulta\n\n",""))
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
@@ -618,7 +620,7 @@ function setTraduction(){
     
     `;
 
-    for(var i = 0; i< contTemporal;i++ ){
+    for(var i = 0; i< contTemporal+1;i++ ){
         if(i==0){
             globalC3D += `double t`+i.toString();
         } else{
@@ -626,42 +628,37 @@ function setTraduction(){
         }
     }
     
-    globalC3D += `void main(){
-        sp = 2;
-        hp = 0;
-        
-        `;
+    funcionesALlamar+=`CargarXML();\n`
+    globalC3D+=`; \n\n void CargarXML(){\n`
 
     if(codificacionGlobal == "UTF-8"){
-        globalC3D += `stack[(int)0] = -1;
-        
-        `;
+        globalC3D += "stack[(int)0] = -1;\n";
         stack.push(-1);
         stack.push(-1);
     } else {
-        globalC3D += `stack[(int)0] = -2;
-        
-        `;
+        globalC3D += "stack[(int)0] = -2;\n"
         stack.push(-2);
         stack.push(-1);
     }
-
     
-    globalC3D +=xml3D+'}\n'+ xpathC3D ;
+    globalC3D +=xml3D+'}\n'+concatenaXPath+ xpathC3D ;
 
     globalC3D +=`
     
-        for(int loop = 0; loop < stack[1]; loop++){
-            if(heap[loop]>0){
-                printf("%c", (char) heap[loop]);
-                
-            }else{
-                if(heap[loop]>-6)
-                    printf(" ");
-                else
-                    printf("\\n");
-            }
-        }
+        \n \n
+        void main() {
+          
+
+
+            sp = 2;
+            hp = 0;
+
+            `+funcionesALlamar+ `
+
+    
+
+        return 0;
+
     }`;    
 
     SalidaTraduccion.setValue(globalC3D);
@@ -671,6 +668,11 @@ function setTraduction(){
 function Optimizar(){
     var texto =SalidaTraduccion.getValue()
     var ast =gramaticaOptimizador.parse(texto);
-    console.log(ast)
+    var op = new optimizador(ast)
     
+    op.optimizar()
+    op.optimizar()
+    for(let i=0; i<ast.length; i++){
+       console.log( ast[i].getOptimizado())
+     }
 }

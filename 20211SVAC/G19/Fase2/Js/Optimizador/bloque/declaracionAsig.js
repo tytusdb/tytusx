@@ -11,7 +11,11 @@ var declaracionAsig =/**@class */(function(){
     declaracionAsig.prototype.getTipo = function(){
         return this.tipo
     }
-    declaracionAsig.prototype.get3D = function(){
+    declaracionAsig.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    declaracionAsig.prototype.set3D = function(){
         this.codigo = this.tipo_dato
         for (let i=0; i<this.ids.length; i++){
             if(i==0)
@@ -20,6 +24,9 @@ var declaracionAsig =/**@class */(function(){
                 this.codigo+= ", "+this.ids[i]
         }
         this.codigo += " = "+this.expr.get3D()+";\n"
+        return this.codigo
+    }
+    declaracionAsig.prototype.getOptimizado=function () {
         return this.codigo
     }
     return declaracionAsig

@@ -1,6 +1,5 @@
 "use strict";
-//Object.defineProperty(exports, "__esModule", { value: true });
-//exports.XPath = void 0;
+
 var XPath = /** @class */ (function () {
     function XPath(linea, columna, lista) {
         this.linea = linea;
@@ -54,4 +53,4 @@ var XPath = /** @class */ (function () {
 
     return XPath;
 }());
-//exports.XPath = XPath;
+

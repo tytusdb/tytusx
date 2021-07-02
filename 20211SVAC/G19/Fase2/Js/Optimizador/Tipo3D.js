@@ -12,6 +12,7 @@ var TipoBloque;
     TipoBloque[TipoBloque["INT"] = 8] = "INT";
     TipoBloque[TipoBloque["DECLARACION_ASIG"] = 9] = "DECLARACION_ASIG";
     TipoBloque[TipoBloque["FUNCTION"] = 10] = "FUNCTION";
+    TipoBloque[TipoBloque["PARAM"] = 11] = "PARAM";
 })(TipoBloque || (TipoBloque = {}));
 
 var tipoInstr;
@@ -25,4 +26,5 @@ var tipoInstr;
     tipoInstr[tipoInstr["IF"] = 7] = "IF";
     tipoInstr[tipoInstr["CALL"] = 8] = "CALL";
     tipoInstr[tipoInstr["PRINT"] = 9] = "PRINT";
+    tipoInstr[tipoInstr["NULL"]=10]="NULL";
 })(tipoInstr || (tipoInstr = {}));

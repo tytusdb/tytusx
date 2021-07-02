@@ -12,8 +12,18 @@ var asignarIdArray = /**@class */(function(){
     asignarIdArray.prototype.getTipo = function(){
         return this.tipo
     }
-    asignarIdArray.prototype.get3D = function(){
-        this.codigo= this.id1 +" = "+this.id2 +"[("+this.tipo_dato+")"+this.expr+"];\n"
+    asignarIdArray.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    asignarIdArray.prototype.set3D = function(){
+        if(this.tipo!= tipoInstr.NULL)
+            this.codigo= this.id1 +" = "+this.id2 +"[("+this.tipo_dato+")"+this.expr+"];\n"
+        else    
+            this.codigo=""
+        return this.codigo
+    }
+    asignarIdArray.prototype.getOptimizado=function () {
         return this.codigo
     }
     return asignarIdArray

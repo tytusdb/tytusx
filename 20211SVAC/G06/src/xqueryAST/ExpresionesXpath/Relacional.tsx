@@ -1,7 +1,8 @@
 import { Entorno } from '../../xmlAST/Entorno';
-import { Expression, Retorno } from "../../Interfaces/Expresion";
+import { ExpressionXquery, Retorno } from "../../Interfaces/ExpressionXquery";
 import { tipoPrimitivo } from './Primitivo';
 import { Simbolo } from '../../xmlAST/Simbolo';
+import { EntornoXQuery } from '../AmbientesXquery/EntornoXQuery';
 
 
 export enum operacionRelacional {
@@ -14,20 +15,20 @@ export enum operacionRelacional {
 }
 ////fechaPublicacion[@año>/biblioteca[1]/libro[3]/fechaPublicacion[1]/@año]     
 
-export class Relacional implements Expression{
+export class Relacional implements ExpressionXquery{
 
     constructor (
     public line : Number,
     public column: Number,
-    public hijoIzq: Expression,
-    public hijoDer: Expression,
+    public hijoIzq: ExpressionXquery,
+    public hijoDer: ExpressionXquery,
     public tipoOperacion: operacionRelacional,
     public sym: string){}
 
-    public execute(ent : Entorno, simboloPadre?:Simbolo): Retorno {
+    public executeXquery(entXquery: EntornoXQuery, ent: Entorno, simboloPadre?:Simbolo): Retorno {
 
-        let valorIzq = this.hijoIzq.execute(ent, simboloPadre);
-        let valorDer = this.hijoDer.execute(ent, simboloPadre);
+        let valorIzq = this.hijoIzq.executeXquery(entXquery, ent, simboloPadre);
+        let valorDer = this.hijoDer.executeXquery(entXquery, ent, simboloPadre);
 
         if (valorIzq.type === tipoPrimitivo.RESP && valorDer.type === tipoPrimitivo.RESP) {
 

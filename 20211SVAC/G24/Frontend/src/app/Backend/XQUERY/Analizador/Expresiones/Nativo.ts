@@ -1,8 +1,10 @@
-import { Instruccion } from '../Abstracto/Instruccion';
-import nodoAST from '../Abstracto/nodoAST';
-import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
-import Tipo, { tipoDato } from '../Simbolos/Tipo';
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import { Instruccion } from "../Abstracto/Instruccion";
+import nodoAST from "../Abstracto/nodoAST";
+import Arbol from "../Simbolos/Arbol";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
+import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class Nativo extends Instruccion {
 
@@ -27,7 +29,7 @@ export default class Nativo extends Instruccion {
     nodo.agregarHijo(this.valor + '');
     return nodo;
   }
-  interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+  public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     if (this.tipoDato.getTipo() == tipoDato.BOOLEANO) {
       return this.valor == 'true' ? true : false;
     }

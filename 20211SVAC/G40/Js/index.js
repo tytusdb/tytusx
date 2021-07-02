@@ -55,7 +55,7 @@ function CargarXML(){
 
     
     var contenido = "";
-    
+    salidaGlobal = "";
 
     if(tab==1){
         contenido = editor.getValue();
@@ -198,10 +198,10 @@ function CargarXML(){
                     DOTXQUERYASTAsc = GenerarDOT.recorrerDOT(resultadoXQuery[1]);
                     DOTXQUERYASTAsc = "digraph {" + DOTXQUERYASTAsc + "}";
                     localStorage.setItem('astXQUERY', DOTXQUERYASTAsc);
-                    //localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+                    
                     console.log("↓ Funcion XQuery ↓");
                     console.log(resultadoXQuery[0]);
-
+                    funcionesXQuery = [];
 
                     var contador = 1;
                     resultadoXQuery[0].forEach(function (funcion){
@@ -228,7 +228,7 @@ function CargarXML(){
                     } );
                     
                     SetSalida(salidaGlobal);
-             
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
 
                 } else {                   
                     SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
@@ -522,6 +522,8 @@ function EntornoYaExiste(arreglo, id){
     return existe;
 
 }
+
+
 
 function ObjetoYaExiste(arreglo, id){
 
