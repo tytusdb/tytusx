@@ -70,7 +70,7 @@ export class Logica implements Expression {
                     traduccion.t++;
                     traduccion.setTranslate("t" + traduccion.t + " = stack[(int)" + (valorDer.value ? "1" : "0") + "];");
                     traduccion.t++;
-                    traduccion.setTranslate("t" + traduccion.t + " = t" + (traduccion.t - 2) + " && t" + (traduccion.t - 1) + ";");
+                    traduccion.setTranslate("t" + traduccion.t + " = t" + (traduccion.t - 2) + " || t" + (traduccion.t - 1) + ";");
                     traduccion.stackCounter++;
                     traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = t" + traduccion.t + ";");
                     //###############################################################################################################
