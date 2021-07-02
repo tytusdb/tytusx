@@ -28,6 +28,17 @@ T7 = T8 / 1;
 T9 = T10 * 2;
 T11 = T12 * 0;
 T13 = 0 / T14;
+
+
+//Regla 3
+if (1 == 1 ) goto L1;
+goto L2;
+
+
+//Regla 4
+if (1 == 0 ) goto L1;
+goto L3;
+
 `;
 
 consolaC3D.value = textoPrueba;

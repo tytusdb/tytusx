@@ -1,13 +1,10 @@
 class TablaSimbolos {
 
-    constructor(jsonStruct) {
+    constructor(jsonStruct=null) {
         this.jsonStruct = jsonStruct
         this.simbolos = []
     }
 
-    constructor() {
-        this.simbolos = [];
-    }
 
     agregarSimbolo(simbolo) {
         /**

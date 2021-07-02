@@ -11,6 +11,78 @@ class Optimizacion {
 
         // t1 = t2 + 0;
         this.reAsignacionOp01 = /[a-zA-Z][a-zA-Z0-9_]*[\s]*[=][\s]*[a-zA-Z0-9][a-zA-Z0-9_]*[\s]*[+|\-|*|/][\s]*[a-zA-Z0-9][a-zA-Z0-9_]*[\s]*[;]/;
+
+        // etiquetas
+        this.reEtiqueta = /[L][0-9]+[\s]*[:][\s]*/
+        this.reEtiqueta2 = /(.)*[\s]*[L][0-9]+[\s]*[:][\s]*/
+
+        // If 
+        this.reIf = /(if)[\s]*[(][\s]*[0-9]+[\s]*(==)[\s]*[0-9]+[\s]*[)][\s]*(goto)[\s]*[L][0-9]+[\s]*[;]/
+
+        // goto L1;
+        this.reGoTo = /(goto)[\s]*[L][0-9]+[\s]*[;]/g;
+    }
+
+
+    regla3_4() {
+        for (let i = 0; i < this.cadenaSplit.length; i++) {
+            let instruccion = this.cadenaSplit[i].trim();
+            
+
+            if (this.reIf.test(instruccion)) {
+                let instruccionSiguiente = this.cadenaSplit[i + 1].trim();
+
+
+                if (instruccionSiguiente.startsWith('goto')) {
+                    
+                    let vals = [...instruccion.matchAll(/[0-9]+/g)];
+                    let val1 = parseInt(vals[0][0]);
+                    let val2 = parseInt(vals[1][0]);
+
+                    if (val1 === val2) { // Regla 3
+
+                        let goto = [...instruccion.matchAll(this.reGoTo)];
+                        let goEtiqueta = goto[0][0];
+
+                        this.cadenaOptimizada[i] = goEtiqueta;
+                        this.cadenaOptimizada[i + 1] = '';
+
+                        i = i + 1;
+
+                        this.bitacoraOptimizaciones.push({
+                            regla: 3,
+                            linea: i,
+                            instruccion: `
+                            ${instruccion} <br/>
+                            ${instruccionSiguiente}
+                            `,
+                            cambio: `${goEtiqueta}`
+                        });
+
+                    } else { // Regla 4
+
+                        this.cadenaOptimizada[i] = instruccionSiguiente;
+                        this.cadenaOptimizada[i + 1] = '';
+
+                        i = i + 1;
+
+                        this.bitacoraOptimizaciones.push({
+                            regla: 4,
+                            linea: i,
+                            instruccion: `
+                            ${instruccion} <br/>
+                            ${instruccionSiguiente}
+                            `,
+                            cambio: `${instruccionSiguiente}`
+                        });
+
+                        
+                    }
+
+                }
+
+            }
+        }
     }
 
     /**
