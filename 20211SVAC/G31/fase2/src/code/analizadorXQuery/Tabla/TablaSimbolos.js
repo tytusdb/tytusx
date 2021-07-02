@@ -117,8 +117,18 @@ export class Entorno{
             return ""
         }else{
             let nuevoError = new Error('Semantico', `La variable ${id} ya existe en el entorno`, linea, columna)
-            return nuevoError.toString()
+            return nuevoError
         }       
+    }
+
+    asignar(id, valor, linea, columna){
+        let simbolo = this.getVariable(id)
+        if(simbolo instanceof SimboloXQuery){
+            simbolo.valor = valor
+        }else{
+            let nuevoError = new Error('Semantico', 'La variable '+id+ 'no se pudo asignar su nuevo valor', linea, columna)
+            return nuevoError
+        }
     }
 
     guardarFuncion(funcion){
