@@ -1,7 +1,8 @@
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
-import Tipo from '../Simbolos/Tipo';
+import tablaSimbolosxml from '../../../XML/Analizador/Simbolos/tablaSimbolos';
+import tablaSimbolos from '../Simbolos/tablaSimbolos'
 import nodoAST from './nodoAST';
+import Tipo from '../Simbolos/Tipo';
 export abstract class  Instruccion
 {
   public tipoDato: Tipo;
@@ -12,7 +13,7 @@ export abstract class  Instruccion
     this.fila = fila;
     this.columna = columna;
   }
-  abstract interpretar(arbol: Arbol, tabla: tablaSimbolos): any;
+  abstract interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml:tablaSimbolosxml): any;
   abstract getNodoAST(): nodoAST;
   abstract codigo3D(arbol: Arbol, tabla:tablaSimbolos):any;
 }

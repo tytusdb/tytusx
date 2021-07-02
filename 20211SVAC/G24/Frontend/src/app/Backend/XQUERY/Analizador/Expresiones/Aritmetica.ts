@@ -1,9 +1,11 @@
-import { Instruccion } from '../Abstracto/Instruccion';
-import nodoAST from '../Abstracto/nodoAST';
-import NodoErrores from '../Excepciones/NodoErrores';
-import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
-import Tipo, { tipoDato } from '../Simbolos/Tipo';
+import NodoErrores from "src/app/Backend/XML/Analizador/Excepciones/NodoErrores";
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import { Instruccion } from "../Abstracto/Instruccion";
+import nodoAST from "../Abstracto/nodoAST";
+import Arbol from "../Simbolos/Arbol";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
+import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class Aritmetica extends Instruccion {
  
@@ -42,16 +44,16 @@ export default class Aritmetica extends Instruccion {
     }
     return nodo;
   }
-  public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+  public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     let izq, der, uno;
     izq = der = uno = null;
     if (this.operandoUnico != null) {
-      uno = this.operandoUnico.interpretar(arbol, tabla);
+      uno = this.operandoUnico.interpretar(arbol, tabla, tablaxml)
       if (uno instanceof NodoErrores) return uno;
     } else {
-      izq = this.operando1?.interpretar(arbol, tabla);
+      izq = this.operando1?.interpretar(arbol, tabla, tablaxml)
       if (izq instanceof NodoErrores) return izq;
-      der = this.operando2?.interpretar(arbol, tabla);
+      der = this.operando2?.interpretar(arbol, tabla, tablaxml)
       if (der instanceof NodoErrores) return der;
     }
     switch (this.operador) {

@@ -1,13 +1,12 @@
-
-import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
-import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos';
-import { Instruccion } from '../Abstracto/Instruccion';
-import nodoAST from '../Abstracto/nodoAST';
-import NodoErrores from '../Excepciones/NodoErrores';
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import { Instruccion } from "../Abstracto/Instruccion";
+import nodoAST from "../Abstracto/nodoAST";
+import Arbol from "../Simbolos/Arbol";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
+import Tipo, { tipoDato } from "../Simbolos/Tipo";
 import Aritmetica from '../Expresiones/Aritmetica';
 import Identificador from '../Expresiones/Identificador';
-import Arbol from '../Simbolos/Arbol';
-import Tipo, { tipoDato } from '../Simbolos/Tipo';
 import AtributoSimple from '../../../XPATH/Analizador/Instrucciones/AtributosSimples'
 import SelectRoot from '../../../XPATH/Analizador/Instrucciones/SelectRoot';
 import Todo from '../../../XPATH/Analizador/Instrucciones/Todo';
@@ -46,12 +45,12 @@ export default class BarrasNodo extends Instruccion {
 
   //BARRA: SELECCIONA DESDE EL NODO RAIZ
   //DOBLE BARRA: SELECCIONA LOS NODOS QUE HAGAN MATCH EN EL DOCUMENTO NO IMPORTANDO DONDE ESTEN DESDE EL NODO ACTUAL 
-  public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+  public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     //arbol.gettablaGlobal();
     //BARRA
     console.log('BARRA')
     console.log(tabla)
-    let variable = this.Operacion.interpretar(arbol, tabla);
+    let variable = this.Operacion.interpretar(arbol, tabla, tablaxml)
     console.log(this.Operacion)
     //if (variable != null) {
     if (this.Barra2 == null) {

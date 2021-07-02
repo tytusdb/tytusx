@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import Errores from 'src/app/Backend/XML/Analizador/Excepciones/NodoErrores';
 import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos';
+import tablaSimbolosXQuery from 'src/app/Backend/XQUERY/Analizador/Simbolos/tablaSimbolos';
 import { InicioService } from 'src/app/servicios/inicio.service';
 import * as Analizador from 'src/app/Backend/XML/Analizador/GramaticaXML';
 import * as AnalizadorD from 'src/app/Backend/XML/Analizador/GramaticaXMLDescPRUEBA';
@@ -13,6 +14,7 @@ import * as Optimizacion from 'src/app/Backend/Optimizacion/grammar'
 import * as AnalizadorXQUERY from 'src/app/Backend/XQUERY/Analizador/GrammXQuery'
 import TreeOptimo from 'src/app/Backend/Optimizacion/Simbolo/Arbol'
 import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
+import SimboloXQuery from 'src/app/Backend/XQUERY/Analizador/Simbolos/Simbolo';
 import Tipo, { tipoDato } from 'src/app/Backend/XML/Analizador/Simbolos/Tipo';
 import Arbol from 'src/app/Backend/XML/Analizador/Simbolos/Arbol';
 import ArbolXpath from 'src/app/Backend/XPATH/Analizador/Simbolos/Arbol';
@@ -35,6 +37,9 @@ import Funcion from 'src/app/Backend/Optimizacion/Instrucciones/Funcion';
 import { reporteOp } from 'src/app/Backend/Optimizacion/Reportes/reporteOp';
 import ForSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForSimple';
 import { collectExternalReferences } from '@angular/compiler';
+import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
+import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
+import Llamada from 'src/app/Backend/Optimizacion/Instrucciones/Llamada';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -719,15 +724,28 @@ export class ContenidoInicioComponent implements OnInit {
     console.log("aqui viene la lista de instrucciones")
     console.log(listainstrucciones)
     var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
-    var tabla = new tablaSimbolos();                    //ejecucion
+    var tabla = new tablaSimbolosXQuery();                    //ejecucion
     console.log(Tree);
-    
+    var cadena=""
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
-      console.log(instructions);
+      if(instructions instanceof Funcion){
+
+      }else if(instructions instanceof Let){
+        var respuesta= instructions.interpretar(Tree,tabla, this.tablaGlobal)
+        if(respuesta instanceof SimboloXQuery){
+          cadena+= respuesta.getvalor()
+        }
+      }else if(instructions instanceof ForSimple){
+        instructions.interpretar(Tree,tabla, this.tablaGlobal);
+      }else if(instructions instanceof ForCompuesto){
+
+      }else if(instructions instanceof Llamada){
+
+      }
     }
 
-
+    this.mostrarContenido(cadena,'resultado');
 
   }
 

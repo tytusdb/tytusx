@@ -22,6 +22,7 @@ export enum tipoDato {
   BOOLEANO,
   CARACTER,
   SELECT,
-  ATRIBUTO
+  ATRIBUTO,
+  FUNCION
 
 }

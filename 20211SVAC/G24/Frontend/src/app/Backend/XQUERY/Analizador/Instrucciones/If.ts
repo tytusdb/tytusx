@@ -1,11 +1,13 @@
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";
 import nodoAST from "../Abstracto/nodoAST";
 import Arbol from "../Simbolos/Arbol";
-import Tipo, { tipoDato } from '../Simbolos/Tipo';
-import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
+import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class If extends Instruccion {
-    interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+    public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
         throw new Error("Method not implemented.");
     }
     getNodoAST(): nodoAST {
