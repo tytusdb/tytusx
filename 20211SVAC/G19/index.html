@@ -176,6 +176,7 @@
                     <div class="dropdown">
                         <button onclick="ReportesFase2()" class="dropbtn">Reportes Fase2</button>
                         <div id="myDropdown3" class="dropdown-content">
+                        <a class="dropitem" id="tsXML3D">Tabla de Simbolos XML</a>
                         <a class="dropitem" id="heap">HEAP</a>        
                         <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
                         </div>
@@ -235,6 +236,8 @@
             <textarea id="salida_xpath"></textarea>
             <!-- FIN CONSOLA JS -->
         </div>
+
+        
         <div class="labelConsola"><label class="label info">XQuery</label></div>
         <div class="consola">
             <!-- ENTRADA XPATH -->
@@ -251,8 +254,14 @@
             
             <!-- FIN ENTRADA XPATH -->
         </div>  
-        
-             
+
+                <div class="labelConsola"><label class="label info">Reporte optimizar</label></div>
+        <div class="consola">
+            <!-- CONSOLA Python -->
+            <textarea id="reporte"></textarea>
+            <!-- FIN CONSOLA JS -->
+        </div>     
+
         <script src="Fase2/Js/Consolas.js"></script>
         
         

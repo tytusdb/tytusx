@@ -545,7 +545,10 @@ function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();
 }
-
+function SetReporteOptimizar(texto){
+    ReporteOptimizar.setValue(texto);
+    ReporteOptimizar.refresh();
+}
 function ReemplazarEspeciales(cadena){
 
     var pattern = /(?<=[a-zA-ZñÑ]+)'/gi;
@@ -609,7 +612,7 @@ function CambiarCodificacion(cadena){
 }
 
 function setTraduction(){
-
+SetReporteOptimizar('hola')
     globalC3D = "";
     globalC3D += `
     #include <stdio.h>
