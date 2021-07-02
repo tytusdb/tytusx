@@ -9,8 +9,18 @@ var etiqueta =/**@class */(function(){
     etiqueta.prototype.getTipo = function(){
         return this.tipo
     }
-    etiqueta.prototype.get3D = function(){
-        this.codigo=this.id+":\n"
+    etiqueta.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    etiqueta.prototype.set3D = function(){
+        if(this.tipo!= tipoInstr.NULL)
+            this.codigo=this.id+":\n"
+        else    
+            this.codigo=""
+        return this.codigo
+    }
+    etiqueta.prototype.getOptimizado=function () {
         return this.codigo
     }
     return etiqueta

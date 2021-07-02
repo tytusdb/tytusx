@@ -1,6 +1,5 @@
 "use strict";
-//Object.defineProperty(exports, "__esModule", { value: true });
-//exports.Sentencia = void 0;
+
 var Declaracion = /** @class */ (function () {
     function Declaracion(tipo, expresion, id, linea, columna) {
         this.linea = linea;
@@ -21,4 +20,4 @@ var Declaracion = /** @class */ (function () {
     };
     return Declaracion;
 }());
-//exports.Sentencia = Sentencia;
+
