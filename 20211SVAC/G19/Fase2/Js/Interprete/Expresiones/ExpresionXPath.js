@@ -1290,11 +1290,17 @@ var ExpresionXPath = /** @class */ (function () {
                 }
                                                         
             } else {
+                try {
+                    
+                
                 objetosAux = resultadoOperacion[1];
                 entornosAux = resultadoOperacion[0];
                 objetosGlobal = objetosAux;
                 entornosGlobal = entornosAux;                                         
                 return [entornosAux, objetosAux];
+            } catch (error) {
+                    
+            }
             }
 
         } else if (this.predicado.getTipo()==TipoExpresionDefinida.ASTERISCO){
