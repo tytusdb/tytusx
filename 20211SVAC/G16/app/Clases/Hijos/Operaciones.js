@@ -9,7 +9,6 @@ var Operacion = /** @class */ (function () {
         this.operador2 = operador2;
     }
     Operacion.prototype.ejecutar = function (Entorno, node) {
-        console.log("Pasó por operación");
         var op1 = this.operador1.ejecutar(Entorno, this.operador1);
         var op2 = this.operador2.ejecutar(Entorno, this.operador2);
         if (op1 == null && op2 == null) {
@@ -21,7 +20,6 @@ var Operacion = /** @class */ (function () {
                     Number(op1);
                     Number(op2);
                     var array = [];
-                    console.log(op1);
                     if (op1 < op2) {
                         while (op1 <= op2) {
                             array.push(op1);
@@ -34,13 +32,49 @@ var Operacion = /** @class */ (function () {
                     }
                 }
                 catch (Error) {
-                    console.log("Solo números we");
                 }
                 break;
             case TipoOperacion_js_1.Operador.SUMA:
+                var arreglito = [];
+                if (op1.length != undefined && this.operador1.tipo != 0 && op2.length != undefined &&
+                    this.operador2.tipo != 0) {
+                    for (var index = 0; index < op1.length; index++) {
+                        var element = op1[index];
+                        arreglito.push(element + op2[index]);
+                    }
+                }
+                else if (op1.length != undefined && this.operador1.tipo != 0) {
+                    for (var index = 0; index < op1.length; index++) {
+                        var element = op1[index];
+                        arreglito.push(element + op2);
+                    }
+                    return arreglito;
+                }
+                else if (op2.length != undefined && this.operador2.tipo != 0) {
+                    for (var index = 0; index < op2.length; index++) {
+                        var element = op2[index];
+                        arreglito.push(op1 + element);
+                    }
+                    return arreglito;
+                }
                 return op1 + op2;
             case TipoOperacion_js_1.Operador.RESTA:
                 try {
+                    var arreglito_1 = [];
+                    if (op1.length != undefined) {
+                        for (var index = 0; index < op1.length; index++) {
+                            var element = op1[index];
+                            arreglito_1.push(element - op2);
+                        }
+                        return arreglito_1;
+                    }
+                    else if (op2.length != undefined) {
+                        for (var index = 0; index < op2.length; index++) {
+                            var element = op2[index];
+                            arreglito_1.push(op1 - element);
+                        }
+                        return arreglito_1;
+                    }
                     Number(op1);
                     Number(op2);
                     return op1 - op2;
@@ -51,6 +85,21 @@ var Operacion = /** @class */ (function () {
                 break;
             case TipoOperacion_js_1.Operador.MULTIPLICACION:
                 try {
+                    var arreglito_2 = [];
+                    if (op1.length != undefined) {
+                        for (var index = 0; index < op1.length; index++) {
+                            var element = op1[index];
+                            arreglito_2.push(element * op2);
+                        }
+                        return arreglito_2;
+                    }
+                    else if (op2.length != undefined) {
+                        for (var index = 0; index < op2.length; index++) {
+                            var element = op2[index];
+                            arreglito_2.push(op1 * element);
+                        }
+                        return arreglito_2;
+                    }
                     Number(op1);
                     Number(op2);
                     return op1 * op2;
@@ -61,12 +110,33 @@ var Operacion = /** @class */ (function () {
                 break;
             case TipoOperacion_js_1.Operador.DIVISION:
                 try {
+                    var arreglito_3 = [];
+                    if (op1.length != undefined) {
+                        Number(op2);
+                        if (op2 == 0) {
+                            // error semántico, división por 0
+                            return null;
+                        }
+                        for (var index = 0; index < op1.length; index++) {
+                            var element = Number(op1[index]);
+                            arreglito_3.push(element / op2);
+                        }
+                        return arreglito_3;
+                    }
+                    else if (op2.length != undefined) {
+                        Number(op1);
+                        for (var index = 0; index < op2.length; index++) {
+                            var element = Number(op2[index]);
+                            if (element == 0) {
+                                // error semántico, división por 0
+                                return null;
+                            }
+                            arreglito_3.push(op1 / element);
+                        }
+                        return arreglito_3;
+                    }
                     Number(op1);
                     Number(op2);
-                    if (op2 == 0) {
-                        // error semántico, división por 0
-                        return null;
-                    }
                     return op1 / op2;
                 }
                 catch (Error) {
@@ -75,6 +145,31 @@ var Operacion = /** @class */ (function () {
                 break;
             case TipoOperacion_js_1.Operador.MODAL:
                 try {
+                    var arreglito_4 = [];
+                    if (op1.length != undefined) {
+                        Number(op2);
+                        if (op2 == 0) {
+                            // error semántico, división por 0
+                            return null;
+                        }
+                        for (var index = 0; index < op1.length; index++) {
+                            var element = Number(op1[index]);
+                            arreglito_4.push(element % op2);
+                        }
+                        return arreglito_4;
+                    }
+                    else if (op2.length != undefined) {
+                        Number(op1);
+                        for (var index = 0; index < op2.length; index++) {
+                            var element = Number(op2[index]);
+                            if (element == 0) {
+                                // error semántico, división por 0
+                                return null;
+                            }
+                            arreglito_4.push(op1 % element);
+                        }
+                        return arreglito_4;
+                    }
                     Number(op1);
                     Number(op2);
                     return op1 % op2;
@@ -84,7 +179,6 @@ var Operacion = /** @class */ (function () {
                 }
                 break;
             case TipoOperacion_js_1.Operador.AND:
-                console.log(op1 + "and" + op2);
                 if (op1 && op2) {
                     return true;
                 }
@@ -100,7 +194,6 @@ var Operacion = /** @class */ (function () {
                 }
                 return false;
             case TipoOperacion_js_1.Operador.IGUAL:
-                console.log(op1 + "=" + op2);
                 if (op1 == op2) {
                     return true;
                 }
