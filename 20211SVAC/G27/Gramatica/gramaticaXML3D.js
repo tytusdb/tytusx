@@ -131,7 +131,7 @@ case 3:
                                                         array8.push(id);
                                                         for (var i = 0; i < $$[$0-4].length; i+=1) {  
                                                             if($$[$0-4][i].padre==null){
-                                                                $$[$0-4][i].padre=$$[$0-6];
+                                                                $$[$0-4][i].padre=id;
                                                             }
                                                             if($$[$0-4][i].entorno==""){
                                                                 $$[$0-4][i].entorno=$$[$0-6];

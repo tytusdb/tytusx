@@ -9,6 +9,9 @@ var If = /** @class */ (function () {
         this.fila = fila;
         this.columna = columna;
     }
+    If.prototype.insertSimbolsTable = function (node) {
+        console.log("pasó por el if");
+    };
     If.prototype.ejecutar = function (entorno) {
         throw new Error('Method not implemented.');
     };

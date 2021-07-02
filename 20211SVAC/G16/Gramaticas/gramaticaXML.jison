@@ -9,7 +9,7 @@
   var ErrorL=require("../app/Clases/Models/ListaError.js")
   var Nodo=require("../app/Clases/Models/Nodo.js")
   texto=""
-
+  encoding="";
 %}
 
 /*-------------------------Léxico------------------*/
@@ -74,12 +74,12 @@ S
                         if(Estado.Estado.cambio==1){
                           Gram.ReporteGramatical.add( new NodoGram.NodoGramatica("S -> INIT EOF", "S.val := INIT.val"));
                           $$=$1;
-                          return $$;
+                          return {list:$$,encoding:encoding};
                         }else if(Estado.Estado.cambio==2){//ESTADO DOS PARA CST
                           let NodoS = new Nodo.default("S", "");
                           NodoS.AgregarHijo($1);
                           $$=NodoS;
-                          return $$;
+                          return {list:$$,encoding:encoding};
                         }
                     }
 ;
@@ -141,6 +141,7 @@ FORMATO
                   $$ = new Nodo.default("FORMATO", "FORMATO -> utf");
                   $$.AgregarHijo(new Nodo.default($1,""));
                 }
+                encoding="utf"
     }
   | ascii       {
                     //ESTADO 1 ES PARA TS
@@ -152,6 +153,7 @@ FORMATO
                     $$ = new Nodo.default("FORMATO", "FORMATO -> ascii");
                     $$.AgregarHijo(new Nodo.default($1,""));
                   }
+                  encoding="ascii"
                 }
   | iso         {
                     //ESTADO 1 ES PARA TS
@@ -163,6 +165,7 @@ FORMATO
                     $$ = new Nodo.default("FORMATO", "FORMATO -> iso");
                     $$.AgregarHijo(new Nodo.default($1,""));
                   }
+                  encoding="iso"
                 }
   |error EOF {
                 //ESTADO 1 ES PARA TS

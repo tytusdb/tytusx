@@ -22,4 +22,5 @@ var Operador;
     Operador[Operador["DIFERENTEU"] = 16] = "DIFERENTEU";
     Operador[Operador["AND"] = 17] = "AND";
     Operador[Operador["OR"] = 18] = "OR";
+    Operador[Operador["TO"] = 19] = "TO";
 })(Operador = exports.Operador || (exports.Operador = {}));

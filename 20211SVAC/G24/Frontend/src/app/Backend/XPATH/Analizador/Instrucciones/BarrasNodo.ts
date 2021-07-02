@@ -1,4 +1,5 @@
 
+import Simbolo from 'src/app/Backend/XML/Analizador/Simbolos/Simbolo';
 import tablaSimbolos from 'src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos';
 import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
@@ -8,6 +9,9 @@ import Identificador from '../Expresiones/Identificador';
 import Arbol from '../Simbolos/Arbol';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 import AtributoSimple from './AtributosSimples';
+import SelectRoot from './SelectRoot';
+import Todo from './todo';
+const inicio = require("../../../../componentes/contenido-inicio/contenido-inicio.component")
 
 export default class BarrasNodo extends Instruccion {
   public Barra: string;
@@ -51,6 +55,187 @@ export default class BarrasNodo extends Instruccion {
     //if (variable != null) {
     if (this.Barra2 == null) {
       console.log("Aqui esta el arbol");
+      let salidas:tablaSimbolos = new tablaSimbolos();
+      let cadena = ''
+      let error = ''
+
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          console.log(this.Operacion.cadena)
+          return this.Operacion.cadena
+        } else {
+          return "No hay atributos"
+        }
+      } else if (this.Operacion instanceof Aritmetica) {
+
+      } else if (this.Operacion instanceof SelectRoot){
+        if(variable==="."){
+          for (var key of tabla.getTabla()) {
+            salidas.setVariable(key)
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }else{
+          //SI EN CASO FUERA .. ENTONCES REGRESA AL NODO ANTERIOR
+          var temporal=tabla.tablaAnterior
+          if(temporal!=null){
+            
+            for(var i of temporal.tablaActual){
+              console.log(inicio.ArbolGlobalReporte)
+              for(var b of inicio.ArbolGlobalReporte){
+                if( b.identificador=== i.identificador && b.entorno=="Global"){
+                  return "Nodo no encontado: [object XMLDocument]"
+                }
+              }
+              salidas.setVariable(i)
+            }
+          }else{
+            cadena="Nodo no encontado: [object XMLDocument]"
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }
+      }else if (this.Operacion instanceof Todo) {
+        for (var key of tabla.getTabla()) {
+          salidas.setVariable(key)
+        }
+        if (cadena != '') {
+          return cadena
+        }
+        return salidas
+      } else {
+        for (var key of tabla.getTabla()) {
+         
+          if (key.getidentificador() == variable) {
+            
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          } else {
+            error = "Nodo no encontrado ";
+            console.log(error);
+          }
+
+        }
+        if (cadena != '') {
+          return cadena
+        } else if (error != '') {
+          return error
+        }
+        console.log("OBJETOSSALIDA")
+        console.log(salidas)
+        salidas.setAnterior(tabla)
+        return salidas
+
+      }
+
+    } else {         // **************************************ESTE ES DOBLE BARRA******************************
+      console.log("entro doble barra")
+      //DOBLE BARRA
+      let salidas = new tablaSimbolos();
+      let cadena = ''
+
+      /**ESTE SERVIRIA CUANDO ES TRIPO ATRIBUTO SIMPLE */
+      if (this.Operacion instanceof AtributoSimple) {
+        //SECCION DE LO QUE DEVUELVA ATRIBUTOS SIMPLES QUE SON * Y .
+        if (this.Operacion.cadena != '') {
+          return this.Operacion.cadena
+        }
+        return variable
+      } else if (this.Operacion instanceof Todo) {
+      } else if (this.Operacion instanceof SelectRoot){
+        if(variable==="."){
+          for (var key of tabla.getTabla()) {
+            salidas.setVariable(key)
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }else{
+          //SI EN CASO FUERA .. ENTONCES REGRESA AL NODO ANTERIOR
+          var temporal=tabla.tablaAnterior
+          if(temporal!=null){
+            
+            for(var i of temporal.tablaActual){
+              console.log(inicio.ArbolGlobalReporte)
+              for(var b of inicio.ArbolGlobalReporte){
+                if( b.identificador=== i.identificador && b.entorno=="Global"){
+                  return "Nodo no encontado: [object XMLDocument]"
+                }
+              }
+              salidas.setVariable(i)
+            }
+          }else{
+            cadena="Nodo no encontado: [object XMLDocument]"
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          return salidas
+        }
+      }else {
+
+        for (var key of tabla.getTabla()) {
+          if (key.getidentificador() == variable) {
+            console.log(key.getidentificador())
+            if (key.getvalor() instanceof tablaSimbolos) {
+              for (let sim of key.getvalor().getTabla()) {
+                salidas.setVariable(sim)
+              }
+
+            }
+            else {
+              cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
+            }
+          }
+          if (cadena != '') {
+            return cadena
+          }
+          console.log("OBJETOSSALIDA")
+          console.log(salidas)
+          salidas.setAnterior(tabla)
+          return salidas
+        }
+      }
+    }
+
+  }
+  CollectAll(key: Simbolo, cad: string, salidas: tablaSimbolos) {
+    if (key.getvalor().getTabla() != null) {
+      for (let sim of key.getvalor().getTabla()) {
+        salidas.setVariable(sim)
+        if (sim instanceof Simbolo) {
+          if (sim.getAtributo().size != 0) {
+            sim.getAtributo().forEach(element => {
+              cad += element.trim() + "\n"
+            });
+          }
+          if (sim.getvalor() instanceof tablaSimbolos) {
+            this.CollectAll(sim, cad, salidas)
+          }
+        }
+      }
+    }
+  }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    let variable = this.Operacion.codigo3D(arbol, tabla);
+    console.log(this.Operacion)
+    //if (variable != null) {
+    if (this.Barra2 == null) {
+      console.log("Aqui esta el arbol");
       let salidas = new tablaSimbolos();
       let cadena = ''
       let error = ''
@@ -62,8 +247,8 @@ export default class BarrasNodo extends Instruccion {
           return this.Operacion.cadena
         }
         return variable
-      }else if(this.Operacion instanceof Aritmetica){
-        
+      } else if (this.Operacion instanceof Aritmetica) {
+
       } else {
         for (var key of tabla.getTabla()) {
           if (key.getidentificador() == variable) {
@@ -131,44 +316,6 @@ export default class BarrasNodo extends Instruccion {
         }
       }
     }
-
-  }
-  //localStorage.setItem("consulta", this.contenido);
-
-  /*} else {
-    return new NodoErrores(
-      'SEMANTICO',
-      'VARIABLE ' + this.Operacion + ' NO EXISTE',
-      this.fila,
-      this.columna
-    );
-  }*/
-
-
-  buscarTablaSimbolos(t: tablaSimbolos, tri: Arbol): string {
-    for (var key of t.tablaActual) {
-      //alert(key + " = " + value);
-      var listaobjetitos = "";
-      var nombre = key.getidentificador();
-
-      let objetos = key.getvalor();
-      if (objetos instanceof tablaSimbolos) {
-        for (var key3 of objetos.tablaActual) {
-          listaobjetitos += `${key3.getidentificador()}, `
-        }
-
-        this.buscarTablaSimbolos(objetos, tri);
-
-      } else {
-        this.contenido += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
-      }
-
-
-    }
-    return this.contenido;
-    console.log(this.contenido);
-    localStorage.setItem("consulta", this.contenido);
-
   }
 
 

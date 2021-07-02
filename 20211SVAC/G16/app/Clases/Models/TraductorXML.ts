@@ -18,8 +18,8 @@ export default class TraductorXML {
     }
 
     antesMain(stack, heap, tabla) {
-        console.log(stack)
-        console.log(heap)
+        //console.log(stack)
+        //console.log(heap)
     }
 
     traducir(ent) {
@@ -37,7 +37,7 @@ export default class TraductorXML {
                 this.cadenamain += "\n/*------SE INGRESA UN VALOR------*/\n"
 
             }
-            ent[i].posicion == this.ps
+            ent[i].posicion = this.ph
             let letras = ent[i].valor.split("")
             this.cadenamain += "    t" + this.t + " = H;\n"
             let t2 = this.t
@@ -66,18 +66,20 @@ export default class TraductorXML {
         this.cadenamain += "    S = S - " + this.ps + ";\n"
         this.cadenamain += "    t" + this.t + " = stack[(int)S];\n"
         this.t++
+        console.log(ent)
+        localStorage.setItem("tablaSimboloAux",JSON.stringify(ent))
     }
 
     hacerHeader() {
         this.cadena += "/*------HEADER------*/\n"
         this.cadena += "#include <stdio.h>\n"
         this.cadena += "#include <math.h>\n\n"
-        this.cadena += "double stack[30062021];\n"
-        this.cadena += "double heap[30062021];\n"
-        this.cadena += "double S;\n"
-        this.cadena += "double H;\n"
+        this.cadena += "float stack[30062021];\n"
+        this.cadena += "float heap[30062021];\n"
+        this.cadena += "float S;\n"
+        this.cadena += "float H;\n"
         if (this.t > 0) {
-            this.cadena += "double "
+            this.cadena += "float "
             for (let i = 0; i < this.t; i++) {
                 if (i < (this.t - 1)) {
                     this.cadena += "t" + i + ", "
@@ -91,7 +93,7 @@ export default class TraductorXML {
         } else {
             this.cadena += "\n\n"
         }
-        this.cadena += this.cadena2 + "\n\n"
+        this.cadena += this.cadena2
         this.cadena += "/*------MAIN------*/\n"
         this.cadena += "void main() {\n"
         this.cadena += "    S = 0; H = 0;\n"

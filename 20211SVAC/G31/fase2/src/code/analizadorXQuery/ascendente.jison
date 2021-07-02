@@ -1,10 +1,30 @@
 %{
+        const { Flwor, VariableFor, Where, Return, OrderBy } = require('./Instrucciones/Flwor'); 
+        const { Tipo, TipoPath, PathExpresion, Camino } = require('./Expresiones/Expresion'); 
+        const { Atributo } = require('./Expresiones/Axes')
+        const { Primitivo } = require('./Expresiones/Primitivo'); 
+        const { And, Or } = require('./Expresiones/Logicas') ; 
+        const { Suma, Resta, Multiplicacion, Division, Positivo, Negativo } = require('./Expresiones/Aritmeticas')
+        const { Menor, Mayor, MenorIgual, MayorIgual, Igualdad, Desigualdad } = require('./Expresiones/Relacional')
+        const { If } = require('./Instrucciones/If')
+        const { Parametro } = require('./Expresiones/Parametro')
+        const { Funcion, CallFuncion } = require('./Instrucciones/Funcion')
+        const { Declaracion } = require('./Expresiones/Declaracion')
+        const { Consulta } = require('./Expresiones/Consulta')
+        const { grafoCST } = require('../CST'); 
+        const { Error } = require('./Tabla/Error')
+        var grafo = new grafoCST(); 
+        var ListaErrores = []
+
+
 %}
 
 /* Análisis Lexico */
 %lex
 %options case-sensitive
-// comentarios       (\(\:[\s\S]*?\:\))
+
+comentarios       (\(\:[\s\S]*?\:\))
+variable          "$"([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*
 nodename          ([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*
 digito            [0-9]+
 decimal           {digito}?"."{digito}+
@@ -12,16 +32,18 @@ comillaSimple     "'"
 comillaDoble      "\""
 comillas          {comillaDoble}|{comillaSimple}
 cadena            {comillas}((?:\\{comillas}|(?:(?!{comillas}).))*){comillas}
+comentarios       "(:"[^]*":)"
 
 %%
 \s+               /* ignorar espacios en blanco */
-// {comentarios}     /* ignorar comentarios */
+{comentarios}     /* ignorar comentarios */
 
 "//"                    return '//'
 "/"                     return '/'
 ".."                    return '..'
 "."                     return '.'
 "::"                    return '::'
+","                     return ','
 ":="                    return ':='
 ":"                     return ':'
 "@"                     return '@'
@@ -30,9 +52,13 @@ cadena            {comillas}((?:\\{comillas}|(?:(?!{comillas}).))*){comillas}
 "["                     return '['
 "]"                     return ']'
 "|"                     return '|'
-"$"                     return '$'
+"{"                     return '{'
+"}"                     return '}'
+";"                     return ';'
+//"$"                     return '$'
 
-
+"integer"                 return 'integer'
+"decimal"                 return 'prdecimal'
 "function"                return 'function'
 "local"                   return 'local'
 "ancestor-or-self"        return 'ancestor-or-self'
@@ -68,6 +94,7 @@ cadena            {comillas}((?:\\{comillas}|(?:(?!{comillas}).))*){comillas}
 "to"                      return 'to'
 "variable"                return 'variable'
 "where"                   return 'where'
+"xs"                      return 'xs'
 
 "eq"                      return 'eq'
 "ne"                      return 'ne'
@@ -90,7 +117,7 @@ cadena            {comillas}((?:\\{comillas}|(?:(?!{comillas}).))*){comillas}
 "+"                       return '+'
 "-"                       return '-'
 
-
+{variable}                return 'variable'
 {nodename}                return 'nodename'
 {decimal}                 return 'decimal'
 {digito}                  return 'digito'
@@ -98,7 +125,7 @@ cadena            {comillas}((?:\\{comillas}|(?:(?!{comillas}).))*){comillas}
 <<EOF>>                   return 'EOF';
 
 .                         {
-                           // excepciones.push(new Excepcion('Léxico', `Patrón desconocido ${yytext}`, yylloc.first_line, yylloc.first_column));
+                            ListaErrores.push(new Error('Léxico', `Patrón desconocido ${yytext}`, yylloc.first_line, yylloc.first_column));
                             console.log(`Error Léxico: ${yytext} en la linea ${yylloc.first_line} y columna ${yylloc.first_column}`);
                           }
 /lex
@@ -116,113 +143,818 @@ cadena            {comillas}((?:\\{comillas}|(?:(?!{comillas}).))*){comillas}
 %start RAIZ
 %% /* Gramática */
 
-RAIZ : DECLARACIONES EOF  
-    | EOF   
-	  ;
+RAIZ : DECLARACIONES EOF                {
+                                                $$ = {
+                                                        instrucciones: $1.instrucciones, 
+                                                        errores: ListaErrores
+                                                }
+                                                ListaErrores = []
+                                                return $$
+                                        }
+    | EOF                               { return 'Entrada vacia' }
+    ;
 
-DECLARACIONES: 'declare' VAR_DECL
-              | EXPR_SINGLE
-              ;
-			
-VAR_DECL : 'variable' '$' VAR_NAME ':=' VAR_VALUE
-	|'variable' '$' VAR_NAME TYPE_DECL ':=' VAR_VALUE
+
+
+DECLARACIONES: EXPR                    {
+                                                $$ = {
+                                                        instrucciones: $1.instrucciones
+                                                }
+                                        } 
+             ;
+	
+
+VAR_DECL : 'variable' VAR_NAME ':=' EXPR_SINGLE         {
+                                                                $$ = {
+                                                                        instrucciones: new Declaracion($2.consulta, Tipo.STRING, $4.instrucciones, this._$.first_line, this._$.first_column)
+                                                                }
+                                                        }
+	|  'variable' VAR_NAME TYPE_DECL ':=' EXPR_SINGLE       {
+                                                                        $$ = {
+                                                                                instrucciones: new Declaracion($2.consulta, $3.tipo, $4.instrucciones, this._$.first_line, this._$.first_column)
+                                                                        }
+                                                                }
 	;
-		
-TYPE_DECL : 'as' SEQUENCE_TYPE
-          ;
 
-SEQUENCE_TYPE : ITEM_TYPE OCCURRENCE_INDICATOR
-              | ITEM_TYPE
-              ;
+FUNC_DECL: 'function' 'local' ':' 'VAR_NAME' '(' PARAMS_LIST ')'  TYPE_DECL '{' EXPR '}'  
+                                                                                                {
+                                                                                                
+                                                                                                        $$ = {
+                                                                                                                instrucciones: new Funcion($4.consulta, $6.instrucciones, $10.instrucciones,  $8.tipo)
+                                                                                                        }
+                                                                                                }
+        | 'function' 'local' ':' 'VAR_NAME' '(' ')'  TYPE_DECL '{' EXPR '}'  
+                                                                                                {
+                                                                                                
+                                                                                                        $$ = {
+                                                                                                                instrucciones: new Funcion($4.consulta, [] , $10.instrucciones,  $8.tipo)
+                                                                                                        }
+                                                                                                }
+; 
+
+PARAMS_LIST: PARAMS_LIST ',' PARAMS     {       $1.instrucciones.push($3.instrucciones)
+                                                $$ = {
+                                                        instrucciones: $1.instrucciones
+                                                }
+                                        }
+        | PARAMS                        {
+                                                $$ = {
+                                                        instrucciones: [$1.instrucciones]
+                                                }
+                                        }
+        ; 
+
+PARAMS: VAR_NAME TYPE_DECL              {
+                                                $$ = {
+                                                        instrucciones: new Parametro($1.consulta, $2.tipo, this._$.first_line, this._$.first_column)
+                                                }
+                                        }
+        ; 
+
+
+CALL_FUNCT: 'local' ':' VAR_NAME '(' EXPR  ')'          {
+                                                                $$ = {
+                                                                        instrucciones: new CallFuncion($3.consulta, $5.instrucciones, this._$.first_line, this._$.first_column)
+                                                                }
+                                                        }
+        | 'local' ':' VAR_NAME '('  ')'                 {
+                                                                $$ = {
+                                                                        instrucciones: new CallFuncion($3.consulta, [], this._$.first_line, this._$.first_column)
+                                                                }
+                                                        }
+        ; 
+
+
+		
+TYPE_DECL : 'as' ITEM_TYPE  {
+                                        $$ = {
+                                                tipo: $2.tipo
+                                        }
+                                }
+        ;
 
 ITEM_TYPE : KIND_TEST
-          |PARENTHESIZED_EXPR
+          | PARENTHESIZED_EXPR
+          | 'xs' '':' 'integer'                   {
+                                                $$ = {
+                                                        tipo: Tipo.INTEGER
+                                                }
+                                        }
+          | 'xs' '':' 'prdecimal'                   {
+                                                $$ = {
+                                                        tipo: Tipo.DECIMAL
+                                                }
+                                        }
           ;
 
-VAR_VALUE : EXPR_SINGLE
+
+VAR_NAME : EQNAME       {
+                                $$ = {
+                                        consulta: `${$1}`
+                                }
+                        }
 ;
 
-VAR_NAME : EQNAME
+
+EXPR : EXPR ',' EXPR_SINGLE     {
+                                        $1.instrucciones.push($3.instrucciones)
+                                        $$ = {
+                                                consulta: `${$1.consulta},${$3.consulta}`, 
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+     | EXPR ';' EXPR_SINGLE     {
+                                        $1.instrucciones.push($3.instrucciones)
+                                        $$ = {
+                                                consulta: `${$1.consulta},${$3.consulta}`, 
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+     | EXPR_SINGLE      {
+                                $$ = {
+                                        consulta: $1.consulta,
+                                        instrucciones: [$1.instrucciones]
+                                }
+                        }
+     ;
+
+EXPR_SINGLE : FLWOR_EXPR        {
+                                        $$ = {
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+            | IF_EXPR           {
+                                        $$ = {
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+            | OR_EXPR           {
+                                        $$ = {
+                                                consulta: $1.consulta,
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+
+            | RETURN_CLAUSE     {
+                                        $$ = {
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+        
+            |  'declare' FUNC_DECL     {
+                                                $$ = {
+                                                        instrucciones: $2.instrucciones
+                                                }
+                                        }
+            | 'declare' VAR_DECL        {
+                                                $$ = {
+                                                        instrucciones: $2.instrucciones
+                                                }
+            }
+            ;
+			
+FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE       {
+                                                                                $$ = {
+                                                                                        instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                }
+                                                                        }
+	|INITIAL_CLAUSE RETURN_CLAUSE                                   {
+                                                                                $$ = {
+                                                                                        instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, null, $2.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                }
+                                                                        }
+	;
+			
+INITIAL_CLAUSE : FOR_CLAUSE     {
+                                        $$ = {
+                                                instrucciones: $1.instrucciones, 
+                                                tipo: 'FOR_CLAUSE', 
+                                                listaVaribles: $1.variables
+                                        }
+                                }
+		|LET_CLAUSE     {
+                                        $$ = {
+                                                instrucciones: $1.instrucciones, 
+                                                tipo: 'LET_CLAUSE'
+                                        }
+                                }
+		;
+		
+INTERMEDIATE_CLAUSE_LIST: INTERMEDIATE_CLAUSE_LIST INTERMEDIATE_CLAUSE           {
+                                                                                        $1.instrucciones.push($2.instrucciones)
+                                                                                        $$ = {
+                                                                                                instrucciones: $1.instrucciones
+                                                                                        }
+                                                                                }
+                        |INTERMEDIATE_CLAUSE                                    {
+                                                                                        $$ = {
+                                                                                                instrucciones: [$1.instrucciones]
+                                                                                        }
+                                                                                }
+                        ;
+
+
+INTERMEDIATE_CLAUSE : INITIAL_CLAUSE    {
+                                                $$ = {
+                                                        instrucciones: $1.instrucciones
+                                                }
+                                        }   
+		|WHERE_CLAUSE           {
+                                                $$ = {
+                                                        instrucciones: $1.instrucciones
+                                                }
+                                        }
+		|ORDERBY_CLAUSE         {
+                                                $$ = {
+                                                        instrucciones: $1.instrucciones
+                                                }
+                                        }
+		;
+
+					
+FOR_CLAUSE : 'for' FOR_BINDING_LIST      {     
+                                                $$ = {
+                                                        variables: $2.variables
+                                                }
+}
 ;
 
-QUERY :  '/' PATH_EXPR         
-      | '//' PATH_EXPR        
-      | PATH_EXPR   
-  //    | '/'              // Aqui da problema 
-   ;   
+FOR_BINDING_LIST: FOR_BINDING_LIST ',' FOR_BINDING      {       
 
-PATH_EXPR : PATH_EXPR '/' STEP_EXPR   
-          | PATH_EXPR '//' STEP_EXPR  
-          | STEP_EXPR                 
-    ;      
+                                                                $1.variables.push($3.variables); 
+                                                                $$ = {
+                                                                        variables: $1.variables
+                                                                }
+                                                        }       
+		| FOR_BINDING                           {
+                                                                $$ = {
+                                                                        variables: [$1.variables]
+                                                                }
+                                                        }
+		;
+			
+FOR_BINDING :  VAR_NAME  'at' VAR_NAME 'in' QUERY     {      
+                                                                    $$ = {
+                                                                        variables: new VariableFor(this._$.first_line, this._$.first_column, $1.consulta, $5.consulta, $3.consulta)
+                                                                    }
 
-STEP_EXPR : POST_FIX_EXPR  
-          | AXIS_STEP       
-     ;     
+                                                             }
+		| VAR_NAME 'in' QUERY                      {      
+                                                                   $$ = {
+                                                                           variables: new VariableFor(this._$.first_line, this._$.first_column, $1.consulta, $3.consulta, null)
+                                                                   }
+                                                           }
+		;
+			
 
-AXIS_STEP : REVERSE_STEP                    
-          | REVERSE_STEP PREDICATE_LIST     
-          | FORWARD_STEP                    
-          | FORWARD_STEP PREDICATE_LIST     
-          ;
+LET_CLAUSE: 'let'  LET_BINDING_LIST             {
+                                                        $$ = {
 
-FORWARD_STEP : 'attribute' '::' NODE_TEST             
-             | 'child' '::' NODE_TEST                 
-             | 'descendant' '::' NODE_TEST            
-             | 'descendant-or-self' '::' NODE_TEST    
-             | 'following' '::' NODE_TEST             
-             | 'following-sibling' '::' NODE_TEST     
-             | 'namespace' '::' NODE_TEST             
-             | 'self' '::' NODE_TEST                  
-             | '@' NODE_TEST                          
-             | NODE_TEST                              
-             ;
+                                                        }
+                                                }
+;
 
-REVERSE_STEP : 'ancestor' '::' NODE_TEST              
-             | 'ancestor-or-self' '::' NODE_TEST      
-             | 'parent' '::' NODE_TEST                
-             | 'preceding' '::' NODE_TEST             
-             | 'preceding-sibling' '::' NODE_TEST     
-             | '..'                                   
-             ;
+LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING
+		|LET_BINDING
+;
 
-NODE_TEST : KIND_TEST  
-          | EQNAME      
-          | '*'         
-          ;
+LET_BINDING	 :  VAR_NAME ':=' EXPR_SINGLE   {
+                                                        $$ = {
 
-POST_FIX_EXPR : PRIMARY_EXPR                  
-              | PRIMARY_EXPR PREDICATE_LIST   
+                                                        }
+                                                }
+;
+
+WHERE_CLAUSE : 'where' EXPR_SINGLE  {  
+                                                $$ = {
+                                                        instrucciones: new Where(this._$.first_line, this._$.first_column, $2.consulta, $2.instrucciones)
+                                                }
+                                        }
+;
+
+ORDERBY_CLAUSE : 'order' 'by'  ORDER_SPEC_LIST          {
+                                                                $$ = {
+                                                                        instrucciones: new OrderBy($3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                }
+                                                        }
+;
+
+ORDER_SPEC_LIST : ORDER_SPEC_LIST ',' EXPR_SINGLE       {       
+                                                                $1.instrucciones.push($3.instrucciones)
+                                                                $$  = {
+                                                                        instrucciones: $1.instrucciones
+                                                                }
+                                                        }
+		|EXPR_SINGLE                            {
+                                                                $$ = {
+                                                                        instrucciones: [$1.instrucciones]
+                                                                }
+                                                        }
+;
+
+
+RETURN_CLAUSE :  'return' EXPR_SINGLE   {
+                                                $$ = {
+                                                        instrucciones: new Return($2.instrucciones)
+                                                }
+                                        }
+;
+
+IF_EXPR : 'if' '(' EXPR ')' 'then' EXPR_SINGLE 'else' EXPR_SINGLE       {
+                                                                                $$ = {
+                                                                                        instrucciones: new If(this._$.first_line, this._$.first_column, $3.instrucciones, $6.instrucciones, $8.instrucciones )
+                                                                                }
+                                                                        }
+; 
+
+
+OR_EXPR : AND_EXPR                      {
+                                                $$ = {
+                                                        consulta: $1.consulta, 
+                                                        instrucciones: $1.instrucciones
+                                                }
+                                        }
+        | OR_EXPR 'or'  AND_EXPR         {     // console.log('OR', $1.instrucciones, $3.instrucciones)
+                                                $$ = {
+                                                        consulta: `${$1.consulta} or ${$3.consulta}` , 
+                                                        instrucciones: new Or(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones) 
+                                                }
+                                        }  
+;        
+
+AND_EXPR :  COMPARISON_EXPR                     {
+                                                        $$ = {
+                                                                consulta: $1.consulta, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+         | AND_EXPR 'and' COMPARISON_EXPR       {       
+                                                    //   console.log('AND', $1.instrucciones, $3.instrucciones)
+                                                        $$ = {
+                                                                consulta: `${$1.consulta} and ${$3.consulta}`, 
+                                                                instrucciones: new And(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones)
+                                                        }
+                                                }  
+        ;
+
+
+COMPARISON_EXPR : ADDITIVE_EXPR                         {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}`, 
+                                                                        instrucciones: $1.instrucciones
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR '<' ADDITIVE_EXPR       {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`,
+                                                                        instrucciones: new Menor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR '>' ADDITIVE_EXPR       {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Mayor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR '<=' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new MenorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR '>=' ADDITIVE_EXPR      {       
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new MayorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
+                                                                } 
+
+                                                        }
+                | ADDITIVE_EXPR '=' ADDITIVE_EXPR       {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Igualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR '!=' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Desigualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR 'eq' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Igualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR 'ne' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Desigualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR 'lt' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                         instrucciones: new Menor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR 'le' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new MenorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR 'gt' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Mayor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
+                                                                }
+                                                        }
+                | ADDITIVE_EXPR 'ge' ADDITIVE_EXPR      {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new MayorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
+                                                                }
+                                                        }
+                ;
+
+ADDITIVE_EXPR : MULTIPLICATIVE_EXPR                     {
+                                                                $$ = {
+                                                                        consulta: $1.consulta, 
+                                                                        instrucciones: $1.instrucciones
+                                                                }
+                                                        }   
+              | ADDITIVE_EXPR '+' MULTIPLICATIVE_EXPR   {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Suma(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones)
+                                                                }
+                                                        }  
+              | ADDITIVE_EXPR '-' MULTIPLICATIVE_EXPR   {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                        instrucciones: new Resta(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones )
+                                                                }
+                                                        } 
               ;
 
-PREDICATE_LIST : PREDICATE_LIST PREDICATE   
-               | PREDICATE                  
-               ;
+MULTIPLICATIVE_EXPR : UNARY_EXPR                                {
+                                                                        $$ = {
+                                                                                consulta: $1.consulta, 
+                                                                                instrucciones: $1.instrucciones
+                                                                        }
+                                                                }
+                    | MULTIPLICATIVE_EXPR '*' UNARY_EXPR        {
+                                                                        $$ = {
+                                                                                consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                                instrucciones: new Multiplicacion(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones)
+                                                                        }
+                                                                }
+                    | MULTIPLICATIVE_EXPR 'div' UNARY_EXPR      {
+                                                                        $$ = {
+                                                                                consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                                instrucciones: new Division(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones)
+                                                                        }
+                                                                }
+                    ;
 
-PREDICATE : '[' EXPR ']'    
+UNARY_EXPR  : QUERY                          {
+
+                                                $$ = {
+                                                        consulta: $1.consulta, 
+                                                        instrucciones: new Consulta(Tipo.STRING,  $1.consulta, '', $1.instrucciones, this._$.first_line, this._$.first_column)
+                                                }
+                                             }
+            | '-' UNARY_EXPR %prec UMINUS       {
+                                                        $$ = {
+                                                                consulta: `-${$2.consulta}`, 
+                                                                instrucciones: new Negativo(this._$.first_line,this._$.first_column, Tipo.STRING, $2.instrucciones) 
+                                                        }
+                                                }
+            | '+' UNARY_EXPR %prec UPLUS        {
+                                                        $$ = {
+                                                                consulta: `+${$2.consulta}`, 
+                                                                instrucciones: new Positivo(this._$.first_line, this._$.first_column, Tipo.STRING, $2.instrucciones)
+                                                        }
+                                                }
+            | CALL_FUNCT        {
+                                        $$ = {
+                                                instrucciones: $1.instrucciones
+                                        }
+                                }
+            ;
+
+
+// Gramatica para la Consulta en XQuery 
+QUERY :  '/' PATH_EXPR                  {
+                                                $$ = {
+                                                        consulta: `${$1}${$2.consulta}`, 
+                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $2.instrucciones)
+                                                }
+                                        }
+      | '//' PATH_EXPR                  {       
+                                                $$ = {
+                                                        consulta: `${$1}${$2.consulta}`, 
+                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $2.instrucciones)
+                                                }
+                                        }
+      | PATH_EXPR                       {
+                                                $$ = {
+                                                        consulta: `${$1.consulta}`, 
+                                                        instrucciones: new PathExpresion(this._$.first_line, this._$.first_column, $1.instrucciones)
+                                                }
+                                        }
+;   
+
+PATH_EXPR : PATH_EXPR '/' STEP_EXPR             {       $1.instrucciones.push($3.instrucciones); 
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+          | PATH_EXPR '//' STEP_EXPR            {       $1.instrucciones.push($3.instrucciones); 
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}${$2}${$3.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+          | STEP_EXPR                           {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: [$1.instrucciones] 
+                                                        }
+                                                }
+    ;      
+
+STEP_EXPR : POST_FIX_EXPR                       {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+          | AXIS_STEP                           {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+     ;     
+
+AXIS_STEP : REVERSE_STEP                        {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+          | REVERSE_STEP PREDICATE_LIST         {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}${$2.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+          | FORWARD_STEP                        {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+          | FORWARD_STEP PREDICATE_LIST         {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}${$2.consulta}`, 
+                                                                instrucciones: $1.instrucciones   // aqui arreglar 
+                                                        }
+                                                }
           ;
 
-PRIMARY_EXPR : PARENTHESIZED_EXPR   
-             | '.'                  
-             | 'cadena'             
-             | 'digito'             
-             | 'decimal'            
-             | '[' ']'             
-             | '[' QUERY_LIST ']'   
+FORWARD_STEP : 'attribute' '::' NODE_TEST               {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }
+             | 'child' '::' NODE_TEST                   {       
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }  
+             | 'descendant' '::' NODE_TEST              {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }  
+             | 'descendant-or-self' '::' NODE_TEST      {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        } 
+             | 'following' '::' NODE_TEST               {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }
+             | 'following-sibling' '::' NODE_TEST       {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }
+             | 'namespace' '::' NODE_TEST               {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }      
+             | 'self' '::' NODE_TEST                    {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3.consulta}`
+                                                                }
+                                                        }         
+             | '@' NODE_TEST                            {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2.consulta} `, 
+                                                                        instrucciones: new Atributo($2.consulta, [], TipoPath.ABS, this._$.first_line, this._$.first_column)
+                                                                }
+                                                        }   
+             | NODE_TEST                                {
+                                                                $$ = {
+                                                                        consulta: `${$1.consulta}`, 
+                                                                        instrucciones: new Camino($1.consulta, [], TipoPath.ABS, this._$.first_line, this._$.first_column)
+                                                                }
+                                                        }      
+        ;
+
+REVERSE_STEP : 'ancestor' '::' NODE_TEST                {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3}`
+                                                                }
+                                                        }   
+             | 'ancestor-or-self' '::' NODE_TEST        {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3}`
+                                                                }
+                                                        }      
+             | 'parent' '::' NODE_TEST                  {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3}`
+                                                                }
+                                                        }       
+             | 'preceding' '::' NODE_TEST               {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3}`
+                                                                }
+                                                        }   
+             | 'preceding-sibling' '::' NODE_TEST       {
+                                                                $$ = {
+                                                                        consulta: `${$1} ${$2} ${$3}`
+                                                                }
+                                                        }     
+             | '..'                                     {
+                                                                $$ = {
+                                                                        consulta: `${$1}`
+                                                                }
+                                                        }            
              ;
 
-PARENTHESIZED_EXPR : '(' ')'        
-                   | '(' EXPR ')'   
+NODE_TEST : KIND_TEST   {
+                                $$ = {
+                                        consulta: `${$1}`
+                                }
+                        }
+          | EQNAME      {
+                                $$ = {
+                                        consulta: `${$1}`
+                                }
+                        }
+          | '*'         {
+                                $$ = {
+                                        consulta: `${$1}`
+                                }
+                        }
+          ;
+
+POST_FIX_EXPR : PRIMARY_EXPR                    {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`, 
+                                                                instrucciones: $1.instrucciones
+                                                        }
+                                                }
+              | PRIMARY_EXPR PREDICATE_LIST     {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta} ${$2.consulta}`
+                                                        }
+                                                }
+              ;
+
+PREDICATE_LIST : PREDICATE_LIST PREDICATE       {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta} ${$2.consulta}`
+                                                        }
+                                                }
+               | PREDICATE                      {
+                                                        $$ = { 
+                                                                consulta: `${$1.consulta}`
+                                                        }
+                                                }
+               ;
+
+PREDICATE : '[' EXPR ']'        {
+                                        $$ = { 
+                                                consulta: `${$1}${$2.consulta}${$3}`
+                                        }
+                                }
+          ;
+
+PRIMARY_EXPR : PARENTHESIZED_EXPR       {
+                                                $$ = {
+                                                        consulta: `${$1.consulta}`,
+                                                        instrucciones: $1.instrucciones
+                                                }        
+                                        }
+             | '.'                      {
+                                                $$ = {
+                                                        consulta: `${$1}`, 
+                                                        instrucciones: null
+
+                                                }
+                                        }
+             | 'cadena'                 {
+                                                $$ = {
+                                                        consulta: `${$1}`, 
+                                                        instrucciones: new Primitivo(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.STRING, $1)
+                                                }
+                                        }
+             | 'digito'                 {
+                                                $$ = {
+                                                        consulta: `${$1}`, 
+                                                        instrucciones: new Primitivo(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.INTEGER, $1)
+                                                }
+                                        }
+             | 'decimal'                {
+                                                $$ = {
+                                                        consulta: `${$1}`, 
+                                                        instrucciones: new Primitivo(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.DECIMAL, $1)
+                                                }
+                                        } 
+             | '[' ']'                  {
+                                                $$ = {
+                                                        consulta: `${$1}`
+                                                }
+                                        }
+             | '[' QUERY_LIST ']'       {
+                                                $$ = { 
+                                                        consulta: `[${$2.consulta}]`, 
+                                                        instrucciones: $2.instrucciones
+                                                }
+                                        }
+             ;
+
+PARENTHESIZED_EXPR : '(' ')'                            {
+                                                                $$ = {
+                                                                        consulta: `()`
+                                                                }
+                                                        }
+                   | '(' EXPR ')'                       {
+                                                                $$ = {
+                                                                        consulta: `(${$2.consulta})`
+                                                                }
+                                                        }
+                   | '('  '$' 'VAR_NAME' 'EXPR' ')'        {
+                                                                $$ = {
+                                                                        consulta: `($${$3.consulta}${$4.consulta})`
+                                                                }
+                   }
                    ;
 
-QUERY_LIST : QUERY_LIST ',' QUERY   
-           | QUERY                  
+QUERY_LIST : QUERY_LIST ',' QUERY               {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}${$2}${$3.consulta}`
+                                                        }
+                                                }
+           | QUERY                              {
+                                                        $$ = {
+                                                                consulta: `${$1.consulta}`
+                                                        }
+                                                }         
            ;
 
-KIND_TEST : 'text' '(' ')'  
-          | 'node' '(' ')' 
-          | 'last' '(' ')'  
-          | 'position' '(' ')'  
+KIND_TEST : 'text' '(' ')'                      {
+                                                        $$ = {
+                                                                consulta: `text()`
+                                                        }
+                                                }
+          | 'node' '(' ')'                      {
+                                                        $$ = {
+                                                                consulta: `node()`
+                                                        }
+                                                }
+          | 'last' '(' ')'                      {
+                                                        $$ = {
+                                                                consulta: `last()`
+                                                        }
+                                                }
+          | 'position' '(' ')'                  {
+                                                        $$ = {
+                                                                consulta: `position()`
+                                                        }
+                                                }
           ;
 
 EQNAME : 'nodename'               
@@ -246,109 +978,10 @@ EQNAME : 'nodename'
        | 'and'                    
        | 'or'                     
        | 'div'                   
-       | 'mod'                    
+       | 'mod'   
+       | 'function'   
+       | 'variable'         
        ;
-
-EXPR : EXPR ',' EXPR_SINGLE   
-     | EXPR_SINGLE            
-     ;
-
-EXPR_SINGLE : FLWOR_EXPR
-            | IF_EXPR
-            | OR_EXPR 
-            ;
-			
-FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE
-	|INITIAL_CLAUSE RETURN_CLAUSE
-	;
-			
-INITIAL_CLAUSE : FOR_CLAUSE
-		|LET_CLAUSE
-		;
-		
-INTERMEDIATE_CLAUSE_LIST: INTERMEDIATE_CLAUSE_LIST INTERMEDIATE_CLAUSE
-                        |INTERMEDIATE_CLAUSE
-                        ;
-INTERMEDIATE_CLAUSE : INITIAL_CLAUSE
-		|WHERE_CLAUSE
-		|ORDERBY_CLAUSE
-		;
-					
-FOR_CLAUSE : 'for' FOR_BINDING_LIST 
-;
-
-FOR_BINDING_LIST: FOR_BINDING_LIST ',' FOR_BINDING
-			| FOR_BINDING
-			;
-			
-FOR_BINDING : '$' VAR_NAME  POSITIONAL_VAR 'in' EXPR_SINGLE
-		|'$' VAR_NAME 'in' EXPR_SINGLE
-		;
-			
-POSITIONAL_VAR : 'at' '$' VAR_NAME
-;
-
-LET_CLAUSE: 'let'  LET_BINDING_LIST
-;
-
-LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING
-				|LET_BINDING
-;
-
-LET_BINDING	 : '$' VAR_NAME ':=' EXPR_SINGLE
-;
-
-WHERE_CLAUSE : 'where' '$' EXPR_SINGLE
-;
-
-ORDERBY_CLAUSE : 'order' 'by' '$' ORDER_SPEC_LIST
-;
-
-ORDER_SPEC_LIST : ORDER_SPEC_LIST ',' ORDER_SPEC
-		|ORDER_SPEC
-;
-
-ORDER_SPEC : EXPR_SINGLE 
-;
-
-RETURN_CLAUSE : 'return' '$' EXPR_SINGLE
-        | 'return' EXPR_SINGLE
-;
-
-IF_EXPR : 'if' '(' EXPR ')' 'then' EXPR_SINGLE 'else' EXPR_SINGLE
-        ;
-
-OR_EXPR : AND_EXPR                  
-        | OR_EXPR 'or' AND_EXPR     
-;        
-
-AND_EXPR : COMPARISON_EXPR                         
-         | AND_EXPR 'and' COMPARISON_EXPR           
-         ;
-
-COMPARISON_EXPR : ADDITIVE_EXPR                       
-                | ADDITIVE_EXPR '<' ADDITIVE_EXPR     
-                | ADDITIVE_EXPR '>' ADDITIVE_EXPR     
-                | ADDITIVE_EXPR '<=' ADDITIVE_EXPR    
-                | ADDITIVE_EXPR '>=' ADDITIVE_EXPR    
-                | ADDITIVE_EXPR '=' ADDITIVE_EXPR     
-                | ADDITIVE_EXPR '!=' ADDITIVE_EXPR    
-                ;
-
-ADDITIVE_EXPR : MULTIPLICATIVE_EXPR                          
-              | ADDITIVE_EXPR '+' MULTIPLICATIVE_EXPR        
-              | ADDITIVE_EXPR '-' MULTIPLICATIVE_EXPR         
-              ;
-
-MULTIPLICATIVE_EXPR : UNARY_EXPR                            
-                    | MULTIPLICATIVE_EXPR '*' UNARY_EXPR      
-                    | MULTIPLICATIVE_EXPR 'div' UNARY_EXPR    
-                    ;
-
-UNARY_EXPR  : QUERY                        
-            | '-' UNARY_EXPR %prec UMINUS     
-            | '+' UNARY_EXPR %prec UPLUS     
-            ;
 
 ERROR : '/'
       | '//'

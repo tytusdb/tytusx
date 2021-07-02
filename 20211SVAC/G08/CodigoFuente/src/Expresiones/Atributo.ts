@@ -20,7 +20,7 @@ export class Atributo{
         return this.valor;
     };
 
-    SetearPosicion(pos){
+    setPosicion(pos){
         if(this.posicion==-1)this.posicion = pos;            
     };
 }

@@ -7,6 +7,9 @@ var Return = /** @class */ (function () {
         this.linea = linea;
         this.columna = columna;
     }
+    Return.prototype.insertSimbolsTable = function (node) {
+        console.log("pasó por el return");
+    };
     Return.prototype.ejecutar = function (Entorno) {
         throw new Error("Method not implemented.");
     };

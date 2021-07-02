@@ -1,5 +1,4 @@
-import { Expression } from "../../Interfaces/Expresion";
-
+import { ExpressionXquery } from "../../Interfaces/ExpressionXquery";
 
 export class Acceso {
 
@@ -11,7 +10,7 @@ export class Acceso {
     public column: Number,
     public id: string,
     public tipoAcceso: string,
-    public predicados: Expression[],
+    public predicados: ExpressionXquery[],
     public tipoQuery ?: string ){
         this.SP_id = -1;
         this.SP_tipoAcceso = -1

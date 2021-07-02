@@ -2,6 +2,8 @@ import {instruccion_3d} from "./instruccion_3d";
 
 export default class return_expresion implements instruccion_3d{
   public _return : string;
+
+  etiqueta : string;
   intrucciones_3d: Array<instruccion_3d>;
 
   constructor(_return : string ) {
@@ -11,6 +13,10 @@ export default class return_expresion implements instruccion_3d{
 
   getText(){
     return 'return ' + this._return + ';';
+  }
+
+  getLogica(): string {
+    return '';
   }
 
   ejecutar() {

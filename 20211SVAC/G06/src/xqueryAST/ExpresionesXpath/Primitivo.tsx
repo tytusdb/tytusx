@@ -1,7 +1,6 @@
 import { Entorno } from '../../xmlAST/Entorno';
-import { Expression, Retorno } from "../../Interfaces/Expresion";
+import { ExpressionXquery, Retorno } from "../../Interfaces/ExpressionXquery";
 import { Simbolo } from '../../xmlAST/Simbolo';
-import { ExpressionXquery } from '../../Interfaces/ExpressionXquery';
 import { EntornoXQuery } from '../AmbientesXquery/EntornoXQuery';
 
 
@@ -14,24 +13,16 @@ export enum tipoPrimitivo {
     error
 }
 
-export class Primitivo implements Expression, ExpressionXquery{
+export class Primitivo implements ExpressionXquery{
     
     constructor (
     public line : Number, 
     public column : Number, 
     public valor : any, 
     public tipoPrimitivo? : tipoPrimitivo) {}
-    executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
-        if (this.tipoPrimitivo === tipoPrimitivo.NUMBER) {
-            return { value: Number(this.valor), type: tipoPrimitivo.NUMBER };
-        }else if (this.tipoPrimitivo === tipoPrimitivo.STRING) {
-            return { value: String(this.valor), type: tipoPrimitivo.STRING };
-        }else {
-            throw new Error("Error Semantico: no se reconoce el valor, Linea: "+this.line+"Column: "+this.column);
-        }
-    }
-
-    public execute(ent: Entorno, simboloPadre?:Simbolo) : Retorno {
+    
+    
+    public executeXquery(entXquery: EntornoXQuery, ent: Entorno, simboloPadre?:Simbolo) : Retorno {
         
         if (this.tipoPrimitivo === tipoPrimitivo.NUMBER) {
             return { value: Number(this.valor), type: tipoPrimitivo.NUMBER };
