@@ -2,12 +2,14 @@ var optimizador =/**@class */ (function(){
     
     function optimizador(bloque) {
         this.bloque = bloque
+        this.reporte=""
     }
-    optimizador.prototype.print = function(num){
-        console.log("****************"+ num+"*********************")
+    optimizador.prototype.print = function(){
+        var codigo=""
         for(let i=0; i<this.bloque.length; i++){
-            console.log( this.bloque[i].getOptimizado())
+            codigo+= this.bloque[i].getOptimizado()
           }
+          return codigo;
     }
     optimizador.prototype.optimizar= function() {
         this.regla1()
@@ -56,6 +58,11 @@ var optimizador =/**@class */ (function(){
                             if(instr2.getTipo() == tipoInstr.ASIGNACION_OPERACION){//toma la segunda tipo asig_operacion
                                 if(instr1.id != instr2.id){
                                     if(instr1.id== instr2.expr && instr2.id == instr1.expr){//compara
+                                        this.reporte += "\n******original----REGLA 1-- --**\n"
+                                        this.reporte += bl.getInstrucciones()[k].set3D()+"\n"
+                                        this.reporte +=bl.getInstrucciones()[i].set3D()
+                                        this.reporte +="****OPTIMIZADO****\n"
+                                        this.reporte += bl.getInstrucciones()[k].set3D()+"\n"
                                         bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(), true)
                                         bl.getInstrucciones()[i].tipo=tipoInstr.NULL
                                         bl.getInstrucciones()[i].optimizado=true
@@ -100,6 +107,11 @@ var optimizador =/**@class */ (function(){
                             var instr2=bl.getInstrucciones()[i]
                             if(instr2.getTipo()==tipoInstr.ETIQUETA){
                                 if(instr1.id == instr2.id){
+                                    this.reporte += "\n******original----REGLA 2-- --**\n"
+                                    this.reporte += bl.getInstrucciones()[k].set3D()+"\n"
+                                    this.reporte +=bl.getInstrucciones()[i].set3D()
+                                    this.reporte +="****OPTIMIZADO****\n"
+                                    this.reporte += bl.getInstrucciones()[i].set3D()+"\n"
                                     bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),true)
                                     bl.getInstrucciones()[k].tipo=tipoInstr.NULL
                                     bl.getInstrucciones()[k].optimizado=true
@@ -145,8 +157,17 @@ var optimizador =/**@class */ (function(){
                                     var instr4=bl.getInstrucciones()[i]
                                     if(instr4.getTipo()==tipoInstr.ETIQUETA){//encontrar la siguiente etiqueta
                                         if(instr4.id== instr2.id){
+                                            this.reporte += "\n******original----REGLA 4-- --**\n"
+                                            this.reporte += bl.getInstrucciones()[k].set3D()+"\n"
+                                            this.reporte +=bl.getInstrucciones()[k+1].set3D()+"\n"
+                                            this.reporte +=bl.getInstrucciones()[k+2].set3D()+"\n"
+                                            this.reporte +=bl.getInstrucciones()[i].set3D()+"\n"
+                                            
                                             bl.getInstrucciones()[k].invertirSigno()
                                             bl.getInstrucciones()[k].id=instr4.id
+                                            this.reporte +="****OPTIMIZADO****\n"
+                                            this.reporte += bl.getInstrucciones()[k].set3D()+"\n"
+                                            this.reporte += bl.getInstrucciones()[i].set3D()+"\n"
                                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),true)
                                             bl.getInstrucciones()[k+1].tipo = tipoInstr.NULL
                                             bl.getInstrucciones()[k+2].tipo = tipoInstr.NULL
@@ -201,9 +222,15 @@ var optimizador =/**@class */ (function(){
                         if(instr1.validarCondicion()){//si son numeros
                             var instr2=bl.getInstrucciones()[k+1]
                             if(instr2.getTipo()==tipoInstr.GOTO && instr2.id != instr1.id){
+                                this.reporte += "\n******original----REGLA 3----****\n"
+                                this.reporte += instr1.set3D()+"\n"
+                                this.reporte +=instr2.set3D()+"\n"
+                                
                                 bl.getInstrucciones()[k].tipo = tipoInstr.NULL
                                 bl.getInstrucciones()[k].optimizado=true
                                 bl.getInstrucciones()[k+1].id=instr1.id
+                                this.reporte +="****OPTIMIZADO****\n"
+                                this.reporte += "goto "+instr1.id+";\n"
                                 bl.getInstrucciones()[k+1].setOptimizado("goto "+instr1.id+";\n",true)
                                
                             }else{
@@ -236,9 +263,14 @@ var optimizador =/**@class */ (function(){
                         if(!instr1.validarCondicion()){//si  no se cumple condicion
                             var instr2=bl.getInstrucciones()[k+1]
                             if(instr2.getTipo()==tipoInstr.GOTO && instr2.id != instr1.id){
+                                this.reporte += "\n******original----REGLA 5-- --**\n"
+                                    this.reporte += instr1.set3D()+"\n"
+                                    this.reporte += instr2.set3D()
+                                    this.reporte +="****OPTIMIZADO****\n"
+                                    this.reporte += instr2.set3D()+"\n"
                                 bl.getInstrucciones()[k].tipo = tipoInstr.NULL
                                 bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),true)
-                                break
+                                
                             }else{
                                 bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                                 bl.getInstrucciones()[k+1].setOptimizado(bl.getInstrucciones()[k+1].set3D(),false)
@@ -271,8 +303,19 @@ goto L2;
                             var instr2=bl.getInstrucciones()[i]
                             if(instr2.getTipo()==tipoInstr.ETIQUETA && instr1.id==instr2.id){
                                 var instr3=bl.getInstrucciones()[i+1]
-                                if(instr3.getTipo()==tipoInstr.GOTO)
-                                        instr1.id= instr3.id
+                                if(instr3.getTipo()==tipoInstr.GOTO){
+                                    this.reporte += "\n******original----REGLA 6-- --**\n"
+                                    this.reporte += instr1.set3D()+"\n"
+                                    this.reporte += instr2.set3D()+"\n"
+                                    this.reporte += instr3.set3D()+"\n"
+                                    
+                                    instr1.id= instr3.id
+                                    this.reporte +="****OPTIMIZADO****\n"
+                                    this.reporte += instr1.set3D()+"\n"
+                                    this.reporte += instr2.set3D()+"\n"
+                                    this.reporte += instr3.set3D()+"\n"
+                                }
+                                        
                                 bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),true)
                                 bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                 bl.getInstrucciones()[i+1].setOptimizado(bl.getInstrucciones()[i+1].set3D(),false)
@@ -307,8 +350,18 @@ goto L2;
                             var instr2=bl.getInstrucciones()[i]
                             if(instr2.getTipo()==tipoInstr.ETIQUETA && instr1.id==instr2.id){
                                 var instr3=bl.getInstrucciones()[i+1]
-                                if(instr3.getTipo()==tipoInstr.GOTO)
-                                        instr1.id= instr3.id
+                                if(instr3.getTipo()==tipoInstr.GOTO){
+                                    this.reporte += "\n******original----REGLA 7-- --**\n"
+                                    this.reporte += instr1.set3D()+"\n"
+                                    this.reporte += instr2.set3D()+"\n"
+                                    this.reporte += instr3.set3D()+"\n"
+                                    instr1.id= instr3.id
+                                    this.reporte +="****OPTIMIZADO****\n"
+                                    this.reporte += instr1.set3D()+"\n"
+                                    this.reporte += instr2.set3D()+"\n"
+                                    this.reporte += instr3.set3D()+"\n"
+                                }
+                                        
                                 bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),true)
                                 bl.getInstrucciones()[i].setOptimizado(bl.getInstrucciones()[i].set3D(),false)
                                 bl.getInstrucciones()[i+1].setOptimizado(bl.getInstrucciones()[i+1].set3D(),false)
@@ -332,9 +385,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id == instr1.expr1 && instr1.operador =="+" && instr1.expr2=="0")
+                        if(instr1.id == instr1.expr1 && instr1.operador =="+" && instr1.expr2=="0"){
+                            this.reporte += "\n******original----REGLA 8-- --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
+                            this.reporte += "--se elimina--\n"
                             bl.getInstrucciones()[k].tipo = tipoInstr.NULL
-                        else
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -350,9 +407,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id == instr1.expr1 && instr1.operador =="-" && instr1.expr2=="0")
+                        if(instr1.id == instr1.expr1 && instr1.operador =="-" && instr1.expr2=="0"){
+                            this.reporte += "\n******original----REGLA 9-- --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
+                            this.reporte += "--se elimina--\n"
                             bl.getInstrucciones()[k].tipo = tipoInstr.NULL
-                        else
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -368,9 +429,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id == instr1.expr1 && instr1.operador =="*" && instr1.expr2=="1")
+                        if(instr1.id == instr1.expr1 && instr1.operador =="*" && instr1.expr2=="1"){
+                            this.reporte += "\n******original----REGLA 1--0 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
+                            this.reporte += "--se elimina--\n"
                             bl.getInstrucciones()[k].tipo = tipoInstr.NULL
-                        else
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -386,9 +451,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id == instr1.expr1 && instr1.operador =="/" && instr1.expr2=="1")
+                        if(instr1.id == instr1.expr1 && instr1.operador =="/" && instr1.expr2=="1"){
+                            this.reporte += "\n******original----REGLA 1--1 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
+                            this.reporte += "--se elimina--\n"
                             bl.getInstrucciones()[k].tipo = tipoInstr.NULL
-                        else
+                         }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -405,9 +474,14 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id != instr1.expr1 && instr1.operador =="+" && instr1.expr2=="0")
+                        if(instr1.id != instr1.expr1 && instr1.operador =="+" && instr1.expr2=="0"){
+                            this.reporte += "\n******original----REGLA 1--2 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
+                            
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
-                        else
+                            this.reporte += instr1.getOptimizado()
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -423,9 +497,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id != instr1.expr1 && instr1.operador =="-" && instr1.expr2=="0")
+                        if(instr1.id != instr1.expr1 && instr1.operador =="-" && instr1.expr2=="0"){
+                            this.reporte += "\n******original----REGLA 1--3 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
-                        else
+                            this.reporte+= instr1.getOptimizado()
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -441,9 +519,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="1")
+                        if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="1"){
+                            this.reporte += "\n******original----REGLA 1--4 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n",true)
-                        else
+                            this.reporte+= instr1.getOptimizado()
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
@@ -459,9 +541,13 @@ goto L2;
                 for(let k=0; k<bl.getInstrucciones().length; k++){//busca en instrucciones dentro del bloque
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
-                        if(instr1.id != instr1.expr1 && instr1.operador =="/" && instr1.expr2=="1")
+                        if(instr1.id != instr1.expr1 && instr1.operador =="/" && instr1.expr2=="1"){
+                            this.reporte += "\n******original----REGLA 1--5 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
-                        else
+                            this.reporte+=instr1.getOptimizado()
+                        }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
                     }else
                          bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
@@ -478,8 +564,12 @@ goto L2;
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
                         if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="2"){
+                            this.reporte += "\n******original----REGLA 1--6 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
                             bl.getInstrucciones()[k].expr2= bl.getInstrucciones()[k].expr1
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+ " + "+ instr1.expr2+";\n")
+                            this.reporte+= instr1.getOptimizado()
                         }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
                     }else
@@ -497,9 +587,13 @@ goto L2;
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
                         if(instr1.id != instr1.expr1 && instr1.operador =="*" && instr1.expr2=="0"){
+                            this.reporte += "\n******original----REGLA 1--2 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
                             bl.getInstrucciones()[k].expr1= bl.getInstrucciones()[k].expr2
                             bl.getInstrucciones()[k].expr2=""
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n")
+                            this.reporte+= instr1.getOptimizado()
                         }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D())
                     }else
@@ -517,8 +611,12 @@ goto L2;
                     var instr1=bl.getInstrucciones()[k]
                     if(instr1.getTipo()== tipoInstr.ASIGNACION_DOS_EXPR){
                         if(instr1.id != instr1.expr2 && instr1.operador =="/" && instr1.expr1=="0"){
-                           bl.getInstrucciones()[k].expr2=""
+                            this.reporte += "\n******original----REGLA 1--2 --**\n"
+                            this.reporte += instr1.set3D()+"\n"
+                            this.reporte +="****OPTIMIZADO****\n"
+                            bl.getInstrucciones()[k].expr2=""
                             bl.getInstrucciones()[k].setOptimizado(instr1.id+" = "+instr1.expr1+";\n",true)
+                            this.reporte += instr1.getOptimizado()
                         }else
                             bl.getInstrucciones()[k].setOptimizado(bl.getInstrucciones()[k].set3D(),false)
                     }else

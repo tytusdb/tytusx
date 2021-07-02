@@ -664,12 +664,14 @@ function setTraduction(){
     SalidaTraduccion.refresh();
 
 }
+
 function Optimizar(){
     var texto =SalidaTraduccion.getValue()
     var ast =gramaticaOptimizador.parse(texto);
     var op = new optimizador(ast)
+    op.optimizar()
+    console.log(op.reporte)
+    op.optimizar()
+    SalidaTraduccion.setValue(op.print())
     
-    op.optimizar()
-    op.optimizar()
-    op.print()
 }
