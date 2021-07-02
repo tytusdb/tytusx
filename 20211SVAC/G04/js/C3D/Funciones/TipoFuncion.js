@@ -8,4 +8,5 @@ var TipoFuncion;
     TipoFuncion[TipoFuncion["TO_TAG"] = 5] = "TO_TAG";
     TipoFuncion[TipoFuncion["PRINT_R"] = 6] = "PRINT_R";
     TipoFuncion[TipoFuncion["ANALIZAR"] = 7] = "ANALIZAR";
+    TipoFuncion[TipoFuncion["ENNT_HIJOS"] = 8] = "ENNT_HIJOS";
 })(TipoFuncion || (TipoFuncion = {}));

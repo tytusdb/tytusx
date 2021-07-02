@@ -2,7 +2,6 @@ class PrintResult {
     generate(resultC3D) {
         let codigo = resultC3D.getCodigo();
         let t = resultC3D.getNextTemp();
-        let p = resultC3D.getSp();
         let l = resultC3D.getNextLabel();
         codigo.push(`void imprimirResultado() {\n`);
         //Recuperando array de entornos

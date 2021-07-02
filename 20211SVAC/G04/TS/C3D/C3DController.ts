@@ -20,6 +20,7 @@ class C3DController {
         let resultFunciones: C3DResult = new C3DResult([""], 0, result.getNextTemp(), result.getNextLabel(), null);
         resultFunciones = FunctionRepository.generate(TipoFuncion.COMPARE, resultFunciones);
         resultFunciones = FunctionRepository.generate(TipoFuncion.SIMPLE, resultFunciones);
+        resultFunciones = FunctionRepository.generate(TipoFuncion.ENNT_HIJOS, resultFunciones);
         resultFunciones = FunctionRepository.generate(TipoFuncion.RECORRER, resultFunciones);
         resultFunciones = FunctionRepository.generate(TipoFuncion.PRINT_S, resultFunciones);
         resultFunciones = FunctionRepository.generate(TipoFuncion.PRINT_AT, resultFunciones);

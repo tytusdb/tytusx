@@ -15,15 +15,6 @@ class AnalizarXpath {
         codigo.push(`\trecorrerConsultas();`);
         codigo.push(`\tt${t + 3} = stack[(int)P];`);
         codigo.push(`\tP = P - ${p};`);
-        codigo.push("for (int i = 0; i < 100; i++) {\n" +
-            "	    t5 = heap[(int)i];\n" +
-            "	    printf(\"%d\\t- %f\\n\", i, (float)t5);\n" +
-            "	}\n" +
-            "	printf(\"\\n\");\n" +
-            "	for (int i = 0; i < 25; i++) {\n" +
-            "	    t5 = stack[(int)i];\n" +
-            "	    printf(\"%d\\t- %f\\n\", i, (float)t5);\n" +
-            "	}");
         codigo.push(`\t//Imprimir resultado`);
         codigo.push(`\tP = P + ${p};`);
         codigo.push(`\tt${t + 4} = P + 1;`);

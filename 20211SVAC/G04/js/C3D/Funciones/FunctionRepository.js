@@ -9,6 +9,7 @@ class FunctionRepository {
             case TipoFuncion.RECORRER: return (new RecorrerConsultas).generate(resultC3D);
             case TipoFuncion.PRINT_S: return (new PrintString).generate(resultC3D);
             case TipoFuncion.PRINT_AT: return (new PrintAttribs).generate(resultC3D);
+            case TipoFuncion.ENNT_HIJOS: return (new EntornosHijos).generate(resultC3D);
         }
     }
 }

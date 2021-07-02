@@ -2,7 +2,6 @@ class PrintResult implements FunctionC3D {
     public generate(resultC3D: C3DResult): C3DResult {
         let codigo: Array<string> = resultC3D.getCodigo();
         let t: number = resultC3D.getNextTemp();
-        let p: number = resultC3D.getSp();
         let l: number = resultC3D.getNextLabel();
 
         codigo.push(`void imprimirResultado() {\n`);

@@ -141,15 +141,42 @@ class ToTag implements FunctionC3D {
         codigo.push(`\tP = P - 2;`);
         codigo.push(`\tprintf("%c", (char)62);`);
         codigo.push(`\tprintf("\\n");`);
+        codigo.push(`\tgoto L${l+10};`);
 
-        //Retornar 22222
-        codigo.push(`\n\t//Retornar valor (vacio)`);
+        codigo.push(`\n\t//Etiqueta autocerrada`);
         codigo.push(`\tL${l+1}:`);
+
+        codigo.push(`\tprintf("%c", (char)60);`);
+        codigo.push(`\tt${t+29} = heap[(int)t${t+1}];`);
+        //codigo.push(`\t temp = t${t+4};`);
+        //Imprimiendo id simbolo
+        codigo.push(`\n\t//Imprimiendo id simbolo`);
+        codigo.push(`\tP = P + 2;`);
+        codigo.push(`\tt${t+30} = P + 1;`);
+        codigo.push(`\tstack[(int)t${t+30}] = t${t+29};`);
+        codigo.push(`\tprintString();`);
+        codigo.push(`\tt${t+31} = stack[(int)P];`);
+        codigo.push(`\tP = P - 2;`);
+
+        //Imprimiendo atributos
+        codigo.push(`\n\t//Imprimiendo atributos`);
+        codigo.push(`\tP = P + 2;`);
+        codigo.push(`\tt${t+32} = P + 1;`);
+        codigo.push(`\tt${t+33} = t${t+1} + 3;`);
+        codigo.push(`\tt${t+34} = heap[(int)t${t+33}];`);
+        codigo.push(`\tstack[(int)t${t+32}] = t${t+34};`);
+        codigo.push(`\tprintAttribs();`);
+        codigo.push(`\tt${t+35} = stack[(int)P];`);
+        codigo.push(`\tP = P - 2;`);
+        codigo.push(`\tprintf("%c", (char)47);`);
+        codigo.push(`\tprintf("%c", (char)62);`);
+
+        codigo.push(`\tL${l+10}:`);
         codigo.push(`\tstack[(int)P] = 22222;`);
         codigo.push(`\treturn;\n}`);
 
-        resultC3D.setNextTemp(t+29);
-        resultC3D.setNextLabel(l+10);
+        resultC3D.setNextTemp(t+36);
+        resultC3D.setNextLabel(l+11);
         resultC3D.setCodigo(codigo);
 
         return resultC3D;

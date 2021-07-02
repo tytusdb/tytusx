@@ -6,5 +6,6 @@ enum TipoFuncion {
     PRINT_AT = 4,
     TO_TAG = 5,
     PRINT_R = 6,
-    ANALIZAR = 7
+    ANALIZAR = 7,
+    ENNT_HIJOS = 8
 }
