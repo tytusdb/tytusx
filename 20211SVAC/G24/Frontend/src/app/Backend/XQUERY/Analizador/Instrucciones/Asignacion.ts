@@ -1,3 +1,4 @@
+
 import NodoErrores from "src/app/Backend/XML/Analizador/Excepciones/NodoErrores";
 import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";

@@ -28,6 +28,7 @@ import { GramaticalReportComponent } from './paginas/gramatical-report/gramatica
 import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
 import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.component';
 import { ReporteOptimizacionComponent } from './paginas/reporte-optimizacion/reporte-optimizacion.component';
+import { TablasimbolosXqueryComponent } from './paginas/tablasimbolos-xquery/tablasimbolos-xquery.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,8 @@ import { ReporteOptimizacionComponent } from './paginas/reporte-optimizacion/rep
     GramaticalReportComponent,
     AstDescComponent,
     XpathAscAstComponent,
-    ReporteOptimizacionComponent
+    ReporteOptimizacionComponent,
+    TablasimbolosXqueryComponent
   ],
   imports: [
     BrowserModule,

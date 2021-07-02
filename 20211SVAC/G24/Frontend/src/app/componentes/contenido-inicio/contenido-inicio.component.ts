@@ -27,6 +27,8 @@ import NodoErrores from 'src/app/Backend/XML/Analizador/Excepciones/NodoErrores'
 import Objeto from 'src/app/Backend/XML/Analizador/Expresiones/Objeto';
 
 import { reporteTabla } from 'src/app/Backend/XML/Analizador/Reportes/reporteTabla';
+import { reporteTabla as reporteTablaX } from 'src/app/Backend/XQUERY/Analizador/Reportes/reporteTabla';
+
 import Identificador from 'src/app/Backend/XPATH/Analizador/Expresiones/Identificador';
 import BarrasNodo from 'src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo';
 import Axes from 'src/app/Backend/XPATH/Analizador/Funciones/Axes';
@@ -40,14 +42,19 @@ import { collectExternalReferences } from '@angular/compiler';
 import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
 import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
 import Llamada from 'src/app/Backend/Optimizacion/Instrucciones/Llamada';
+import CondicionSimple from 'src/app/Backend/XQUERY/Analizador/Instrucciones/CondicionSimple';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
 export let Ambito: String;
 export let Ambito2: String;
+export let Entorno: String;
+export let Entorno2: String;
 export let tabsim: Map<String, String>
+export let tabsimX: Map<String, String>
 export var contenidocd3 = ""
 export let ArbolGlobalReporte: reporteTabla[];
+export let ArbolXqueryReporte: reporteTablaX[];
 export let ReporteOptimizacion: reporteOp[];
 export let cd3XPath: String[];
 export var TreeAsc: Arbol;
@@ -92,6 +99,7 @@ export class ContenidoInicioComponent implements OnInit {
 
   }
   tablaGlobal: tablaSimbolos = new tablaSimbolos();
+  tablaGlobalX: tablaSimbolosXQuery = new tablaSimbolosXQuery();
   code = '';
   contenido = '';
   ngOnInit(): void {
@@ -721,51 +729,102 @@ export class ContenidoInicioComponent implements OnInit {
     const analizador = AnalizadorXQUERY;
     let objetos = analizador.parse(texto);
     let ast = new ArbolXQUERY(analizador.parse(texto)); //ejecucion
-    console.log("aqui viene la lista de instrucciones")
-    console.log(listainstrucciones)
+
     var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
     var tabla = new tablaSimbolosXQuery();                    //ejecucion
     console.log(Tree);
-<<<<<<< HEAD
 
+
+
+
+    var cadena = ""
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
-      console.log(instructions);
-      instructions.forEach(element => {
-        console.log(element)
-        if (element instanceof BarrasNodo) {
-          console.log("es barranodo");
-          var resultador = element.interpretar(Tree, tabla);
+      if (instructions instanceof Funcion) {
+
+      } else if (instructions instanceof Let) {
+        var respuesta = instructions.interpretar(Tree, tabla, this.tablaGlobal)
+        if (respuesta instanceof SimboloXQuery) {
+          cadena += respuesta.getvalor()
         }
-      });
-
-    }
-=======
-    var cadena=""
-    for (let index = 0; index < ast.getinstrucciones().length; index++) {
-      const instructions = ast.getinstrucciones()[index];
-      if(instructions instanceof Funcion){
-
-      }else if(instructions instanceof Let){
-        var respuesta= instructions.interpretar(Tree,tabla, this.tablaGlobal)
-        if(respuesta instanceof SimboloXQuery){
-          cadena+= respuesta.getvalor()
+      } else if (instructions instanceof ForSimple) {
+        var resultador: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        if (resultador instanceof SimboloXQuery) {
+          console.log("estamos en FORSIMPLE")
+          console.log(resultador)
         }
-      }else if(instructions instanceof ForSimple){
-        instructions.interpretar(Tree,tabla, this.tablaGlobal);
-      }else if(instructions instanceof ForCompuesto){
 
-      }else if(instructions instanceof Llamada){
+      } else if (instructions instanceof CondicionSimple) {
+
+      } else if (instructions instanceof Llamada) {
 
       }
     }
 
-    this.mostrarContenido(cadena,'resultado');
->>>>>>> 94873ab9b9339c8d364ec29055aed6a4d3d8394f
+    this.mostrarContenido(cadena, 'resultado');
+
+    /*L L E N A D O  T A B L A  S I M B O L O S  X Q U E R Y */
+/*     Entorno = "Global"
+    tabsimX = new Map<String, String>();
+    for (var key of this.tablaGlobalX.tablaActual) {
+      if (key.getvalor() instanceof tablaSimbolosXQuery) {
+        var reportee = new reporteTablaX(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+        Tree.listaSimbolos.push(reportee);
+
+        tabsimX.set(Entorno, key.getidentificador())
+        Entorno = key.getidentificador();
+        this.SimbolosXquery(key.getvalor(), Tree)
+      } else {
+        var reportee = new reporteTabla(key.getidentificador(), "Objeto", key.getidentificador(), key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
+        Tree.listaSimbolos.push(reportee);
+      }
+    }
+    ArbolXqueryReporte = Tree.getSimbolos();
+    tabsimX.clear();
+
+
+    var recorridoxquery = Tree.getSimbolos();
+    let tablaX = JSON.stringify(recorridoxquery);
+    localStorage.setItem("symbolXQUERY", tablaX)
 
   }
 
+  SimbolosXquery(tablaGlobalX: tablaSimbolosXQuery, arbolito: ArbolXQUERY) {
+    for (var key of tablaGlobalX.tablaActual) {
 
+      if (key.getvalor() instanceof tablaSimbolosXQuery) {
+        if (Entorno === key.getidentificador().toString()) {
+          for (var [key2, value2] of tabsimX) {
+            if (value2 === key.getidentificador()) {
+              Entorno = key2;
+            }
+          }
+        }
+        var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, "Objeto", key.getLinea(), key.getColumna(), key.setcd3Value());
+        arbolito.listaSimbolos.push(Reporte);
+      
+      for(var [key2, value2] of tabsimX){
+        if (Entorno != key.getidentificador().toString()) {
+          if (key2 === Entorno && value2 === key.getidentificador()) {
+            Entorno = value2
+          } else {
+            tabsimX.set(Entorno, key.getidentificador())
+            Entorno = key.getidentificador();
+          }
+
+        }
+      }
+
+      this.SimbolosXquery(key.getvalor(),arbolito);
+
+      }else{
+        var Reporte = new reporteTabla(key.getidentificador(), "Objeto", Ambito, key.getvalor(), key.getLinea(), key.getColumna(), key.setcd3Value());
+        arbolito.listaSimbolos.push(Reporte);
+      }
+
+    }
+  } */
+  }
 
   /**************************************************************************************************
    * *********************************OPTIMIZACION***************************************************

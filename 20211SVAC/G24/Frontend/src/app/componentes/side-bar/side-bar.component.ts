@@ -23,6 +23,8 @@ export class SideBarComponent implements OnDestroy {
     { name: 'Arbol AST', route: 'xpath-ast', icon: 'device_hub' },
     { name: 'Reporte Errores', route: 'errores', icon: 'coronavirus' },
     { name: 'Reporte Optimizacion', route: 'optimo', icon: 'swap_horizontal_circle'},
+    { name: 'Tabla Simbolos XQuery', route: 'simbolos-xquery', icon: 'bubble_chart'}
+
     //ast
     //errores
     //tablaSimbolos

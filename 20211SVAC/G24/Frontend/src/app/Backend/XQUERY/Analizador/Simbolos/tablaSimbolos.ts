@@ -29,6 +29,8 @@ export default class tablaSimbolos {
     return `creada con exito`;
   }
 
+  
+
   public getVariable(id: String) {
     for (let e: tablaSimbolos = this; e != null; e = e.getAnterior()) {
       let encontrado: Simbolo=null;

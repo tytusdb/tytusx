@@ -1,4 +1,5 @@
 import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import BarrasNodo from "src/app/Backend/XPATH/Analizador/Instrucciones/BarrasNodo";
 import { Instruccion } from "../Abstracto/Instruccion";
 import nodoAST from "../Abstracto/nodoAST";
 import Arbol from "../Simbolos/Arbol";
@@ -18,8 +19,9 @@ export default class CondicionSimple extends Instruccion {
     }
 
     public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
-    console.log("aqui iria la consulta");
-      console.log(tabla);
+        if(this.consulta instanceof BarrasNodo){
+            console.log("ahi vamos")
+        }
 
     }
     public getNodoAST(): nodoAST {
