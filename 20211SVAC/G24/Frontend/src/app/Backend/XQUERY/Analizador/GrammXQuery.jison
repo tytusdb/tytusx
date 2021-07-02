@@ -147,6 +147,7 @@ METODOS
     | METODOS RDECLARE RFUNCTION LOCAL DOSPUNTOS IDENTIFICADOR PARIZQ PARDER TIPO BLOQUE PTCOMA {$$=new funciones.default($6,null,$9,$10,@1.first_line,@1.first_column);}
     | LLAMADAFUNCION            {$$=$1}
     | LET                       {$$=$1}
+    | INSTRUCCION               {$$=$1}
     |                           {$$=""}
     ;
 

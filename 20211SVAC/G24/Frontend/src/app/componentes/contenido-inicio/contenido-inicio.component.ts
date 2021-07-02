@@ -721,13 +721,19 @@ export class ContenidoInicioComponent implements OnInit {
     var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
     var tabla = new tablaSimbolos();                    //ejecucion
     console.log(Tree);
-    
+
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
       console.log(instructions);
+      instructions.forEach(element => {
+        console.log(element)
+        if (element instanceof BarrasNodo) {
+          console.log("es barranodo");
+          var resultador = element.interpretar(Tree, tabla);
+        }
+      });
+
     }
-
-
 
   }
 
