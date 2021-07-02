@@ -24,229 +24,21 @@ let btnCargarxqueryder = document.getElementById("btnCargarxqueryder");
 let parserXQUERYder;
 
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<bookstore>
-   <book category="COOKING">
-      <title>Empire Burlesque</title>
-      <author>Bob Dylan</author>
-      <country>USA</country>
-      <company>Columbia</company>
-      <price>10.90</price>
-      <year>1985</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Hide your heart</title>
-      <author>Bonnie Tyler</author>
-      <country>UK</country>
-      <company>CBS Records</company>
-      <price>9.90</price>
-      <year>1988</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Greatest Hits</title>
-      <author>Dolly Parton</author>
-      <country>USA</country>
-      <company>RCA</company>
-      <price>9.90</price>
-      <year>1982</year>
-   </book>
-   <book category="STORY">
-      <title>Still got the blues</title>
-      <author>Gary Moore</author>
-      <country>UK</country>
-      <company>Virgin records</company>
-      <price>10.20</price>
-      <year>1990</year>
-   </book>
-   <book category="COOKING" category="SITES">
-      <!-- Este titulo tiene un & -->
-      <title>Eros &amp; Eros</title>
-      <author>Eros Ramazzotti</author>
-      <country>EU</country>
-      <company>BMG</company>
-      <price>9.90</price>
-      <year>1997</year>
-   </book>
-   <book category="PINES">
-      <!-- Este titulo estará entre comillas dobles  -->
-      <title> &quot; Esto tiene que salir bien &quot;</title>
-      <author>Bee Gees</author>
-      <country>UK</country>
-      <company>Polydor</company>
-      <price>10.90</price>
-      <year>1998</year>
-   </book>
-   <book category="SPAGET">
-      <!-- Este titulo estará entre comilla simples -->
-      <title>&apos; Esto tiene que salir muy bien tambien &apos;</title>
-      <author>Dr.Hook</author>
-      <country>UK</country>
-      <company>CBS</company>
-      <price>8.10</price>
-      <year>1973</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Maggie May</title>
-      <author>Rod Stewart</author>
-      <country>UK</country>
-      <company>Pickwick</company>
-      <price>8.50</price>
-      <year>1990</year>
-   </book>
-   <book category="COOKING" category="FANTASY">
-      <title>Romanza</title>
-      <author>Andrea Bocelli</author>
-      <country>EU</country>
-      <company>Polydor</company>
-      <price calificacion="hola">10.80</price>
-      <year>1996</year>
-   </book>
-   <book category="DIAGRAM">
-      <title>When a man loves a woman</title>
-      <author>Percy Sledge</author>
-      <country>USA</country>
-      <company>Atlantic</company>
-      <price>8.70</price>
-      <year>1987</year>
-   </book>
-   <book category="CELL">
-      <title>Black angel</title>
-      <author>Savage Rose</author>
-      <country>EU</country>
-      <company>Mega</company>
-      <price>10.90</price>
-      <year>1995</year>
-   </book>
-   <book category="DBZ">
-      <title>1999 Grammy Nominees</title>
-      <author>Many</author>
-      <country>USA</country>
-      <company>Grammy</company>
-      <price>10.20</price>
-      <year>1999</year>
-   </book>
-   <book category="AMONG US">
-      <title>For the good times</title>
-      <author>Kenny Rogers</author>
-      <country>UK</country>
-      <company>Mucik Master</company>
-      <price>8.70</price>
-      <year>1995</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Big Willie style</title>
-      <author>Will Smith</author>
-      <country>USA</country>
-      <company>Columbia</company>
-      <price>9.90</price>
-      <year>1997</year>
-   </book>
-   <book category="GUERRA">
-      <title>Tupelo Honey</title>
-      <author>Van Morrison</author>
-      <country>UK</country>
-      <company>Polydor</company>
-      <price>8.20</price>
-      <year>1971</year>
-   </book>
-   <book category="ALIANZA">
-      <title>Soulsville</title>
-      <author>Jorn Hoel</author>
-      <country>Norway</country>
-      <company>WEA</company>
-      <price>7.90</price>
-      <year>1996</year>
-   </book>
-   <book category="TOPOS">
-      <title>The very best of</title>
-      <author>Cat Stevens</author>
-      <country>UK</country>
-      <company>Island</company>
-      <price>8.90</price>
-      <year>1990</year>
-   </book>
-   <book category="CARRILES">
-      <title>Stop</title>
-      <author>Sam Brown</author>
-      <country>UK</country>
-      <company>A and M</company>
-      <price>8.90</price>
-      <year>1988</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Bridge of Spies</title>
-      <author>T&apos;Pau</author>
-      <country>UK</country>
-      <company>Siren</company>
-      <price>7.90</price>
-      <year>1987</year>
-   </book>
-   <book category="DANZA">
-      <title>Private Dancer</title>
-      <author>Tina Turner</author>
-      <country>UK</country>
-      <company>Capitol</company>
-      <price>8.90</price>
-      <year>1983</year>
-   </book>
-   <book category="ENGLISH">
-      <title>Midt om natten</title>
-      <author>Kim Larsen</author>
-      <country>EU</country>
-      <company>Medley</company>
-      <price>7.80</price>
-      <year>1983</year>
-   </book>
-   <book category="ITALY">
-      <title>Pavarotti Gala Concert</title>
-      <author>Luciano Pavarotti</author>
-      <country>UK</country>
-      <company>DECCA</company>
-      <price>9.90</price>
-      <year>1991</year>
-   </book>
-   <book category="ROCK">
-      <title>The dock of the bay</title>
-      <author>Otis Redding</author>
-      <country>USA</country>
-      <company>Stax Records</company>
-      <price>7.90</price>
-      <year>1968</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Picture book</title>
-      <author>Simply Red</author>
-      <country>EU</country>
-      <company>Elektra</company>
-      <price>7.20</price>
-      <year>1985</year>
-   </book>
-   <book category="LONDON">
-      <title>Red</title>
-      <author>The Communards</author>
-      <country>UK</country>
-      <company>London</company>
-      <price>7.80</price>
-      <year>1987</year>
-   </book>
-   <book category="EL BICHO">
-      <title>Unchain my heart</title>
-      <author>Joe Cocker</author>
-      <country>USA</country>
-      <company>EMI</company>
-      <price>8.20</price>
-      <year>1987</year>
-   </book>
-</bookstore>
+<ackerman>
+  <m>3</m>
+  <n>3</n>
+</ackerman>
+
 `
 
-let XQuery = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
+let XQuery = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:decimal
 {
 if ($m = 0) then $n+1
-else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
-else local:ackerman($m - 1, local:ackerman($m, $n -1))
+else if ($m gt 0 and $n=0) then local:ackerman($m - 1, 1)
+else local:ackerman($m - 1, local:ackerman($m, $n - 1))
 };
 
-local:ackerman(3,3)
+local:ackerman(/ackerman/m,/ackerman/m)
 `
 
 
@@ -637,11 +429,24 @@ function imprimiConsola(txt){
   }
 
 
-
-
 // FUNCION PARA COPIAR
 let copyButton = document.getElementById('copyBtn');
 let clearButton = document.getElementById('clearBtn');
+
+let copyButton2 = document.getElementById('copyBtn2');
+
+copyButton2.addEventListener('click', () => {
+
+  if (consola3DOptimizada.value.trim() !== '') {
+    alert("Copiado");
+    consola3DOptimizada.select();
+    document.execCommand('Codigo Copiado');
+  } else {
+    alert("No hay codigo");
+  }
+
+});
+
 
 copyButton.addEventListener('click', () => {
 

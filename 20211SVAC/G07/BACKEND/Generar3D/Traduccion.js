@@ -88,7 +88,8 @@ class Traduccion {
 
     }
 
-    traducirFuncion(cadena) {
+    traducirFuncion(cadena, index=1) {
+        if (index = 1) {
         for (let i = 0; i < cadena.length; i++) {
             //Se obtiene el ASCII del caracter
             let asciiChar = cadena.charCodeAt(i);
@@ -100,8 +101,36 @@ class Traduccion {
             P = P + ${Math.floor(Math.random() * 100)}; 
             buscarIndex();
             `
-        }      
+        } 
+       }else if(index==2){
+        for (let i = 0; i < cadena.length; i++) {
+            //Se obtiene el ASCII del caracter
+            let asciiChar = cadena.charCodeAt(i);
+
+            this.traduccion3D += `
+            t0 = ${asciiChar};
+            t${Math.floor(1 + Math.random() * (this.t - 1))} = P + 0;
+            t${Math.floor(1 + Math.random() * (this.t - 1))} = P;
+            P = P + ${Math.floor(Math.random() * 100)}; 
+            metodoIf();
+            `
+        } 
+       }else{
+        for (let i = 0; i < cadena.length; i++) {
+            //Se obtiene el ASCII del caracter
+            let asciiChar = cadena.charCodeAt(i);
+
+            this.traduccion3D += `
+            t0 = ${asciiChar};
+            t${Math.floor(1 + Math.random() * (this.t - 1))} = P + 0;
+            t${Math.floor(1 + Math.random() * (this.t - 1))} = P;
+            P = P + ${Math.floor(Math.random() * 100)}; 
+            metodoFor();
+            `
+        }  
+       }
     }
+
 
     //Metodo para obtener del Heap un Numero
     obtenerNumero(indice) {
@@ -272,11 +301,48 @@ class Traduccion {
             ` 
         }
 
+        // Se agrega la funcion para estrucutra del if
+        func3D['metodoIf'] = {
+            "status": true,
+            "codigo": ` void metodoIf() {
+                float t0 = 0;
+                float t1 = 1;
+                if ( t0 > t1 ) goto L0:
+                goto L1;
+                L0: 
+                    printf("%c",(float) t0);   
+                goto L1;
+                L1:
+                    printf("%c",(float) t1);   
+                goto L2;
+                L2:
+                    return;
+        }
+            ` 
+        }
+
+        // Se agrega la funcion para estrucutra del if
+        func3D['metodoFor'] = {
+            "status": true,
+            "codigo": ` void metodoFor() {
+                float t0=0;
+                float x=2;
+                L0:
+                if ( t0 < x ) goto L1;
+                goto L2;
+                L1:
+                    printf("%c",(float) t0);   
+                t0 = t0 + 1;
+                goto L0;
+                L2:
+                t0 = t0 + 1;                                
+                   return;
+            }
+            ` 
+        }                      
 
         return func3D;
     }
-
-    
 
 }
 

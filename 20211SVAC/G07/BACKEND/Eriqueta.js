@@ -26,9 +26,9 @@ class Etiqueta {
       this.cuerpo += ">";
       
 
-
-      if (this.texto.txt != "" && this.texto.txt != undefined) {
-        this.cuerpo += this.texto.txt + "";
+    
+      if (this.texto != "" && this.texto != undefined) {
+        this.cuerpo += this.texto + "";
       }
       
      

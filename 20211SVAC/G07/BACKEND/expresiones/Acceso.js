@@ -235,7 +235,7 @@ class Acceso {
           }
           let retorno = new Etiqueta(
             entorno.etiqueta,
-            {txt:entorno.texto,ref:entorno.referenciaHeap},
+            entorno.texto,
             contenido,
             atributo
           ); //nombre,texto,contenido
