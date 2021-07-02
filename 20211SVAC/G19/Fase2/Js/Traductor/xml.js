@@ -22,7 +22,8 @@
                 var etiqueta_Aux = ob.getID();
                 xml3D += "stack[(int)"+temp1+"]= " +temp0 +";\n"
                 stack.push(t0)
-                ob.SetearPosicion(t1)
+                ob.SetearPosicion(t1);
+                ob.SetearPosicionH(t0);
                 xml3D += temp1 +"= "+ temp1+"+1;\n"
                 t1++;
                 
@@ -48,7 +49,8 @@
                     xml3D += temp1 +"=sp;\n"
                     stack.push(t0)
                     xml3D += "stack[(int)"+temp1+"]="+ temp0+";\n";
-                    atributo.SetearPosicion(t1)
+                    atributo.SetearPosicion(t1);
+                    atributo.SetearPosicionH(t0);
                     xml3D += temp1+"= "+temp1 + "+1;\n"
                     t1++
                     sp = t1
