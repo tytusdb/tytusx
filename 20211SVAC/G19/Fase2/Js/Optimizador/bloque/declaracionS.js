@@ -7,7 +7,14 @@ var declaracionS = /**@class*/ (function(){
         this.ids = ids
         this.codigo=""
     }
-    declaracionS.prototype.get3D = function(){
+    declaracionS.prototype.getTipo = function () {
+        return this.tipo
+    }
+    declaracionS.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    declaracionS.prototype.set3D = function(){
         for(let i=0; i<this.ids.length; i++){
             if(i==0)
                 this.codigo += this.ids[i]
@@ -18,6 +25,8 @@ var declaracionS = /**@class*/ (function(){
         return this.codigo
         
     }
-
+    declaracionS.prototype.getOptimizado=function () {
+        return this.codigo
+    }
     return declaracionS
 }())

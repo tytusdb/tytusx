@@ -1,27 +1,25 @@
 import { Ambito } from "../../model/xml/Ambito/Ambito";
 import { Tipos } from "../../model/xpath/Enum";
+import { Contexto } from "../Contexto";
 import Expresion from "../xpath/Expresion/Expresion";
 import pushIterators from "./BuildElement";
 
-function returnQuery(_expresion: any, _ambito: Ambito, _iterators: Array<any>) {
+function returnQuery(_expresion: any, _ambito: Ambito, _iterators: Array<Contexto>) {
     let expresion: Array<any> = [];
-    // console.log(_iterators.length, 4444)
     for (let i = 0; i < _iterators.length; i++) { // [$x, $y, $z]
-        const iterator = _iterators[i]; // { id: $x, iterators: /book/title (contexto) }
-        let iters = iterator.iterators;
-        if (Array.isArray(iters)) iters = iters[0];
-        // console.log(_expresion, 44444444, iters)
-        let _x = Expresion(_expresion, _ambito, iters, iterator.id); // _expresion = [XPATH]
-        // console.log(_x, 8888888888888888)
+        const iterator = _iterators[i]; // { Contexto }
+        let _x = Expresion(_expresion, _ambito, iterator, iterator.variable?.id); // _expresion = [XPATH]
         if (_x) expresion = expresion.concat(_x);
+        // console.log(_x)
     }
-    // console.log(_expresion,409999,expresion)
-    let _str: Array<any> = [pushIterators(expresion)];
+
+    let _str: Array<any> = pushIterators(expresion);
     if (_expresion.tipo === Tipos.HTML) {
         _str.unshift({ valor: '<' + _expresion.id_open + '>' })
         _str.push({ valor: '</' + _expresion.id_close + '>' })
     }
-    return { cadena: writeReturn(_str), parametros: expresion };
+
+    return { salida: writeReturn(_str), parametros: expresion };
 }
 
 function writeReturn(_expresion: any): string {
@@ -32,19 +30,24 @@ function writeReturn(_expresion: any): string {
     for (let i = 0; i < max; i++) {
         for (let j = 0; j < _expresion.length; j++) {
             var exp = _expresion[j];
+            if (exp.notFound) cadena += exp.notFound;
             if (exp.valor)
                 cadena += exp.valor;
-            else if (exp.length > 0) {
+            else if (exp.items && exp.items.length > 0) {
+                let shift = exp.items.shift();
+                cadena += shift;
+                exp.items.push(shift);
+            }
+            else if (Array.isArray(exp) && exp.length > 0) {
                 let shift = exp.shift();
-                if (shift.valor) continue;
-                else if (shift.item) cadena += shift.item;
-                else cadena += shift
+                if (shift.item) cadena += shift.item;
+                else cadena += shift;
                 exp = exp.push(shift);
             }
         }
         cadena += '\n';
     }
-    console.log(cadena)
+    // console.log(cadena)
     return cadena;
 }
 
@@ -53,10 +56,8 @@ function getMaxLength(context: Array<any>): number {
     context.forEach(element => {
         if (element.length > index)
             index = element.length;
-        if (element.elementos)
-            index = element.elementos.length;
-        if (element.iterators)
-            index = element.iterators.length;
+        if (element.constructor.name == "Contexto")
+            index = element.getLength();
     });
     return index;
 }

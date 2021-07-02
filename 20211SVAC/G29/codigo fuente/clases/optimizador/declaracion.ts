@@ -3,6 +3,7 @@ import {instruccion_3d} from "./instruccion_3d";
 export default class declaracion implements instruccion_3d{
   public tipo: string
   public id: string
+  etiqueta : string;
 
   constructor(tipo, id) {
       this.tipo = tipo;
@@ -27,6 +28,10 @@ export default class declaracion implements instruccion_3d{
     for(let x of lista){
       this.intrucciones_3d.push(x);
     }
+  }
+
+  getLogica(): string {
+    return '';
   }
 
 }

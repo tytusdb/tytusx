@@ -44,14 +44,31 @@
         <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Js/Interprete/Expresiones/Declaracion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
+        <!-- SCRIPTS PARA FUNCIONES XQUERY -->
         <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
         <script src="./Js/Interprete/Instrucciones/XNumber.js"></script>
         <script src="./Js/Interprete/Instrucciones/XSubstring.js"></script>
         <script src="./Js/Interprete/Instrucciones/XString.js"></script>
         <script src="./Js/Interprete/Instrucciones/XLowerCase.js"></script>
         <script src="./Js/Interprete/Instrucciones/XUpperCase.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XFor.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XDeclararFuncion.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XLlamadaFuncion.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XLlamadaFuncionSimple.js"></script>
+        <!-- SCRIPTS PARA TRADUCTORES C3D -->
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXPath.js"></script>
+        <!-- SCRIPTS PARA EXPRESIONES XQUERY -->
+        <script src="./Js/Interprete/Expresiones/XQuery/XOperacion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XPrimitivo.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XValor.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XLlamada.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XIF.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XParametro.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XFuncion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XLet.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XAsignacion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XReturn.js"></script>
         <!--- SCRIPTS PARA OPTIMIZADOR --->
         <script src="./Js/Optimizador/GramaticaOptimizador.js"></script>
         <script src="./Js/Optimizador/Optimizacion.js"></script>
@@ -73,7 +90,7 @@
         <script src="./Js/Optimizador/Bloques/Void.js"></script>
         <script src="./Js/Optimizador/Optimizador.js"></script>
         <script>
-
+            var funciones = [];
             var pasada = 1;
             var heap = [];
             var stack = [];
@@ -139,6 +156,9 @@
             var IDobj = 1;
             var objetosGlobal = null;
             var entornosGlobal = null;
+            var funcionesXQuery = [];
+            var objetosFULL = null;
+            var entornosFUL = null;
             var salidaXPath = null;
             var salidaXQuery = null;
             var salidaRecursiva = "";

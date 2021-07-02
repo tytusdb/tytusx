@@ -129,6 +129,7 @@ class Generador {
     Joinfunc() {
         let cadena = this.cod_funcs.join('\n');
         //Se agrega al código inicial
+        this.Addcomentario('Funciones nativas');
         this.codigo.push(cadena);
     }
     /*Modificaciones de registros*/
@@ -207,7 +208,6 @@ class Generador {
         this.Addxml(`Sxpath = Sxpath + ${this.GetStackposxpath()};`);
         //Llamado de función
         this.Addxml('Printconsulta();\n');
-        this.Addcomentario('Funciones nativas');
         this.Addcodfunc('void Printconsulta() {');
         //En la posición del puntero + 1 está el contenido a imprimir (colocado antes del llamado a la función)
         this.Addcodfuncidentado(`${temp_sp_pos} = Sxpath + 1;`);

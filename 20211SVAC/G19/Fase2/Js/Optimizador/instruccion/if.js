@@ -12,9 +12,73 @@ var _if =/**@class */ (function(){
     _if.prototype.getTipo=function(){
         return this.tipo
     }
-    _if.prototype.get3D = function(){
-        this.codigo="generar 3d"
+    _if.prototype.setOptimizado = function (codigo) {
+        this.codigo=codigo
+        return 
+    }
+    _if.prototype.set3D = function(){
+        if(this.tipo!= tipoInstr.NULL)
+            this.codigo="if("+this.expr1+" "+this.comparador+" "+this.expr2+") goto "+this.id+";\n"
+        else    
+            this.codigo=""
         return this.codigo
+    }
+    _if.prototype.getOptimizado=function () {
+        return this.codigo
+    }
+    _if.prototype.invertirSigno=function(){
+        switch (this.comparador) {
+            case "==":
+                this.comparador="!="
+                break;
+            case "!=":
+                this.comparador="=="
+                break;
+            case ">=":
+                this.comparador="<"
+                break;
+            case "<=":
+                this.comparador=">"
+                break;
+            case "<":
+                this.comparador=">="
+                break;
+            case ">":
+                this.comparador="<="
+                break;
+            
+        }
+            
+    
+    }
+    _if.prototype.isString = function(valor) {
+        if (typeof valor =="string") return true
+        return false
+    }
+    _if.prototype.validarCondicion = function(){
+        if((!isNaN(this.expr1)&& !isNaN(this.expr2) || this.isString(this.expr1) && this.isString(this.expr2))){//si son numeros
+            switch (this.comparador) {
+                case "==":
+                    if(this.expr1==this.expr2) return true
+                        return false
+                case "!=":
+                    if(this.expr1!=this.expr2) return true
+                        return false
+                case "<=":
+                    if(this.expr1<=this.expr2) return true
+                        return false
+                case ">=":
+                    if(this.expr1>=this.expr2) return true
+                        return false
+                case "<":
+                    if(this.expr1<this.expr2) return true
+                        return false
+                case ">":
+                    if(this.expr1>this.expr2) return true
+                        return false
+            
+            }
+        }
     }
     return _if
 }())

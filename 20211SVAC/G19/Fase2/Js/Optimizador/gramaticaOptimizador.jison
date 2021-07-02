@@ -64,16 +64,16 @@
 
 
 ini
-    :BMAIN BLOQUES EOF                                                          {$$= unir1($1,$2);  return $$}
-    |BLOQUES BMAIN BLOQUES EOF                                                  {$$= unir2($1,$2,$3);return $$} 
-    |BLOQUES BMAIN EOF                                                          {$$ =unir3($1,$2); return $$}
-    |BMAIN EOF                                                                  {$$ =$1.get3D(); return $$}
+    :BMAIN BLOQUES EOF                                                          {$$=[$1];  $$=arr($$,$2);console.log("1", $1);/*$$= unir1($1,$2); */ return $$}
+    |BLOQUES BMAIN BLOQUES EOF                                                  {$1.push($2);  $$= arr($1,$3); console.log("2",$1); /*$$= unir2($1,$2,$3);*/return $$} 
+    |BLOQUES BMAIN EOF                                                          { $1.push($2); $$=$1; console.log("3**",$1);/*$$ =unir3($1,$2);*/ return $$}
+    |BMAIN EOF                                                                  { $$=[$1];console.log("4",$1);/*$$ =$1.get3D();*/ return $$}
 ;
 BMAIN
     :TIPO_FUNCTION main parIzq parDer llaIzq llaDer                             {$$ = new main(@1.first_line, @1.first_column, TipoBloque.MAIN, [],[], $1)}
-    |TIPO_FUNCTION main parIzq PARAMETROS parDer llaIzq llaDer                  {$$ = new main(@1.first_line, @1.first_column, TipoBloque.MAIN, [],$4,$1)}
+    |TIPO_FUNCTION main parIzq PARAMETROS parDer llaIzq llaDer                  {$$ = new main(@1.first_line, @1.first_column, TipoBloque.MAIN, [],new parametro(@1.first_line, @1.first_column,TipoBloque.PARAM, $4),$1)}
     |TIPO_FUNCTION main parIzq parDer llaIzq INSTRUCCIONES llaDer               {$$ = new main(@1.first_line, @1.first_column, TipoBloque.MAIN, $6,[],$1)}
-    |TIPO_FUNCTION main parIzq PARAMETROS parDer llaIzq INSTRUCCIONES llaDer    {$$ = new main(@1.first_line, @1.first_column, TipoBloque.MAIN, $7,$4,$1)}
+    |TIPO_FUNCTION main parIzq PARAMETROS parDer llaIzq INSTRUCCIONES llaDer    {$$ = new main(@1.first_line, @1.first_column, TipoBloque.MAIN, $7,new parametro(@1.first_line, @1.first_column,TipoBloque.PARAM, $4),$1)}
 ;
 
 TIPO_FUNCTION
@@ -95,9 +95,9 @@ BLOQUES
 
 BLOQUE
     :TIPO_FUNCTION id parIzq parDer llaIzq llaDer                               {$$ = new funcion(@1.first_line, @1.first_column, TipoBloque.FUNCTION, [],[],$2, $1)}
-    |TIPO_FUNCTION id parIzq PARAMETROS parDer llaIzq llaDer                    {$$ = new funcion(@1.first_line, @1.first_column, TipoBloque.FUNCTION, [],$4,$2, $1)}
+    |TIPO_FUNCTION id parIzq PARAMETROS parDer llaIzq llaDer                    {$$ = new funcion(@1.first_line, @1.first_column, TipoBloque.FUNCTION, [],new parametro(@1.first_line, @1.first_column,TipoBloque.PARAM, $4),$2, $1)}
     |TIPO_FUNCTION id parIzq parDer llaIzq INSTRUCCIONES llaDer                 {$$ = new funcion(@1.first_line, @1.first_column, TipoBloque.FUNCTION, $6,[],$2,$1)}
-    |TIPO_FUNCTION id parIzq PARAMETROS parDer llaIzq INSTRUCCIONES llaDer      {$$ = new funcion(@1.first_line, @1.first_column, TipoBloque.FUNCTION, $7,$4,$2, $1)}
+    |TIPO_FUNCTION id parIzq PARAMETROS parDer llaIzq INSTRUCCIONES llaDer      {$$ = new funcion(@1.first_line, @1.first_column, TipoBloque.FUNCTION, $7,new parametro(@1.first_line, @1.first_column,TipoBloque.PARAM, $4),$2, $1)}
     |include menor id puntoH mayor                                              {$$= new include(@1.first_line, @1.first_column, $1 +"<"+$3+".h>\n", TipoBloque.INCLUDE)}
     |TIPO_FUNCTION IDS equal EXPR ptcoma                                        {$$ = new declaracionAsig(@1.first_line, @1.first_column,$4,$2,TipoBloque.DECLARACION_ASIG, $1)}
     |TIPO_FUNCTION IDS ptcoma                                                   {$$ = new declaracionS(@1.first_line, @1.first_column, TipoBloque.DECLARACION_S, $1, $2)}
@@ -106,7 +106,7 @@ BLOQUE
 ;
 
 PARAMETROS
-    :PARAMETROS comma TIPO_DATO id                                              {$1.push([$3, $4]); $$ =$1}
+    :PARAMETROS comma TIPO_DATO id                                              {$1.push($3); $1.push($4); $$ =$1}
     |TIPO_DATO id                                                               {$$=[$1,$2]}                                                            
 ;
 
@@ -148,6 +148,7 @@ INSTRUCCION
     |if parIzq EXPR COMPARADOR EXPR parDer goto id ptcoma                       {$$= new _if(@1.first_line, @1.first_column, $3, $4,$5,$8, tipoInstr.IF)}
     |TIPO_FUNCTION IDS equal EXPR ptcoma                                        {$$ = new declaracionAsig(@1.first_line, @1.first_column,$4,$2,TipoBloque.DECLARACION_ASIG, $1)}
     |TIPO_FUNCTION IDS ptcoma                                                   {$$ = new declaracionS(@1.first_line, @1.first_column, TipoBloque.DECLARACION_S, $1, $2)}
+    |TIPO_FUNCTION id corcheteIzq digits corcheteDer ptcoma                     {$$ = new declaracionArray(@1.first_line, @1.first_column, TipoBloque.DECLARACION_ARREGLO, $2, $1,$4)}
 ;
 OPERADOR
     :add                                                                        {$$=$1}
