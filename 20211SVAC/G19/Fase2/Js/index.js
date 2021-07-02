@@ -56,6 +56,9 @@ function CargarXML(){
             t0 = 0;
             t1 = 0;      
             xml3D = "";
+            funcionesALlamar="";
+            imp="";
+            xpathC3D="";
 
             xml3D = getTraduction(resultadoXML[0]);
             localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
@@ -100,6 +103,7 @@ function CargarXML(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
+                    
                     traducirXPath(nodoxPATHASC);
 
                    /// ReportesTSXML.GenerarArreglo(tablaSimbolosXML.entornoGlobal,"Global");
@@ -126,7 +130,7 @@ function CargarXML(){
                     salidaGlobal2=salidaGlobal;
                     
                     setTraduccionXPath(CambiarCodificacion(salidaGlobal2.replace("↓ Resultado consulta\n\n","")
-                    .replace("↓ Resultado consulta\n\n","")))
+                    .replace("↓ Resultado consulta\n\n","").replace("↓ Resultado consulta\n\n","").replace("↓ Resultado consulta\n\n","")))
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
@@ -626,7 +630,7 @@ function setTraduction(){
     double hp;
     
     `;
-    imp=imprimirEn3D('cadena');
+    imp='\n';
     for(var i = 0; i< contTemporal+1;i++ ){
         if(i==0){
             globalC3D += `double t`+i.toString();

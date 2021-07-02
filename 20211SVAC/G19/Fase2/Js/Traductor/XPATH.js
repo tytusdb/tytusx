@@ -24,6 +24,15 @@
     }
     function traducirXPath(nodo){
        // console.log(nodo)
+       concatenaXPath="";
+       arbolito=[];
+       arbolito2=[];
+       traducirExpresion="";
+       contadorEtiAnt=0;
+       nuevosElementos="";
+
+       total=0;
+
         analisisXPath(nodo);
         
         console.log(arbolito)
@@ -282,7 +291,7 @@
                         contEtiquetas++;
                         traducir+=`L`+contEtiquetas+`:\n`;
                         contEtiquetas--;
-                        traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                        traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                         traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                         contadorEtiAnt=contEtiquetas;
                         contEtiquetas++;
@@ -334,7 +343,7 @@
                     contEtiquetas++;
                     traducir+=`L`+contEtiquetas+`:\n`;
                     contEtiquetas--;
-                    traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                    traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                     traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                     contadorEtiAnt=contEtiquetas;
                     contEtiquetas++;
@@ -384,7 +393,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -450,7 +459,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -497,7 +506,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -544,7 +553,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -594,7 +603,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -642,7 +651,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -692,7 +701,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -742,7 +751,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -792,7 +801,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -841,7 +850,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -880,7 +889,7 @@
         traducir+=`t`+contTemporal+` = heap[(int)t`+contadorAnterior+`];\n`;
         contEtiquetasAnt=contEtiquetas;
         contEtiquetas++;
-        traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+ `;\n`;
+        traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+ `;\n`;
         traducir+=`printf("%c", (char)t`+contTemporal+`);\n`;
         traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
         traducir+=`goto L`+contEtiquetasAnt+`;\n`;
@@ -919,7 +928,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -965,7 +974,7 @@
                 contEtiquetas++;
                 traducir+=`L`+contEtiquetas+`:\n`;
                 contEtiquetas--;
-                traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+`;\n`;
+                traducir+=`if(t`+contTemporal+` != -1) goto L`+contEtiquetas+`;\n`;
                 traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
                 contadorEtiAnt=contEtiquetas;
                 contEtiquetas++;
@@ -1142,21 +1151,24 @@
        
         textoAImprimir+=`t`+contTemporal +`= stack[(int)t`+contadorAnterior+`];`;
         textoAImprimir+=`L3:`;
-       textoAImprimir+=` t7 = t7+1;goto L2;`
+       textoAImprimir+=` t`+contTemporal+` = t`+ contTemporal+`+1;goto L2;`
         textoAImprimir+=`L2:`;
         contadorAnterior=contTemporal;
         contTemporal++;
         textoAImprimir+=`t`+contTemporal+` = heap[(int)t`+contadorAnterior+`];`;
         textoAImprimir+=`if(t`+contTemporal+` == -10) goto L1;`;
+        
         textoAImprimir+=`if(t`+contTemporal;
          textoAImprimir+=` == -8) goto L3;`;
         textoAImprimir+=`if(t`+contTemporal+` == -1)`;
         textoAImprimir+=` goto L3;`;
         textoAImprimir+=`if(t`+contTemporal+` == -4) goto L3;`;
         textoAImprimir+=`if(t`+contTemporal;
-         textoAImprimir+=` == -7) goto L3;`;
+        textoAImprimir+=` == -7) goto L3;`;
         textoAImprimir+=`if(t`+contTemporal+` == -3)`; 
         textoAImprimir+=` goto L3;`;
+        textoAImprimir+=`if(t`+contTemporal;
+        textoAImprimir+=` == -6) goto L3;`;
         textoAImprimir+=`printf("%c", (char)t`+contTemporal+`);`;
         textoAImprimir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;`;
         textoAImprimir+=`goto L2;`;
