@@ -46,6 +46,14 @@ goto L1;
 //print("Hola mundo");
 L1:
 printf("%f", 5.33);
+
+// Regla 2
+if (4==4) goto L1;
+goto L2;
+L1:
+    printf("Verdadero");
+L2:
+    printf("Falso");
 `;
 
 consolaC3D.value = textoPrueba;
