@@ -28,6 +28,7 @@ BSL                         "\\".
 "integer"                     %{ return 'tk_integer';  %}
 "double"                      %{ return 'tk_double';  %}
 "float"                       %{ return 'tk_float';  %} 
+"decimal"                       %{ return 'tk_decimal';  %} 
 "number"                      %{ return 'tk_number';  %}
 "substring"                   %{ return 'tk_substring';  %}
 "upper-case"                  %{ return 'tk_uppercase';  %}
@@ -229,11 +230,12 @@ PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE {
 
 };
 
-DATA_TYPE: tk_integer   { $$ = [TipoXDataType.INTEGER, $1]; }
-        |  tk_double    { $$ = [TipoXDataType.DOUBLE, $1];  }
-        |  tk_float     { $$ = [TipoXDataType.FLOAT, $1];  }
-        |  tk_boolean   { $$ = [TipoXDataType.BOOLEAN, $1]; }
-        |  tk_string    { $$ = [TipoXDataType.STRING, $1];  };
+DATA_TYPE: tk_integer   { $$ = [TipoXDataType.INTEGER, $1];  }
+        |  tk_double    { $$ = [TipoXDataType.DOUBLE,  $1];  }
+        |  tk_float     { $$ = [TipoXDataType.FLOAT,   $1];  }
+        |  tk_decimal   { $$ = [TipoXDataType.DECIMAL, $1];  }
+        |  tk_boolean   { $$ = [TipoXDataType.BOOLEAN, $1];  }
+        |  tk_string    { $$ = [TipoXDataType.STRING,  $1];  };
 
 RETORNO: tk_as tk_xs DATA_TYPE {  $$ = $3; };
 
@@ -273,11 +275,25 @@ SENFUNCION: tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_
                 nodoaux.agregarHijo(thenaux);
                 nodoaux.agregarHijo(elseifaux);
                 elseifaux.agregarHijo(elseaux);
-                $$ = [XIFAux,nodoaux];
- } ;
+                $$ = [XIFAux,nodoaux];  }
+| tk_let tk_idflower tk_dospuntosigual EXP_CADENA {
+                XLetAux = new XLet(@1.first_line, @1.first_column, $2, $4[0], TipoXSENFUNCION.XLET);
+                nodoaux = new NodoArbol($2,"");
+                nodoaux.agregarHijo($4[1]);
+                $$ = [XLetAux,nodoaux];}                
+| tk_idflower tk_dospuntosigual EXP_CADENA {
+                XAsignacionAux = new XAsignacion(@1.first_line, @1.first_column, $1, $3[0], TipoXSENFUNCION.XASIGNACION);
+                nodoaux = new NodoArbol($1,"");
+                nodoaux.agregarHijo($3[1]);
+                $$ = [XAsignacionAux,nodoaux];}
+| tk_return RETURN_IF {
+                XReturnAux = new XReturn(@1.first_line, @1.first_column, $2[0], TipoXSENFUNCION.XRETURN);
+                nodoaux = new NodoArbol($1,"");
+                nodoaux.agregarHijo($2[1]);
+                $$ = [XReturnAux,nodoaux];};
 
-
-RETURN_IF:      EXP_CADENA { $$ = $1; };
+RETURN_IF:  EXP_CADENA { $$ = $1; }
+        | EXP_LOGICA { $$ = $1; };
 
 
 EXP_LOGICA: EXP_RELACIONAL tk_and EXP_RELACIONAL {  
@@ -788,13 +804,7 @@ SENTENCIAS: SENTENCIAS SENTENCIA {
         | SENTENCIA { $$ = [[$1[0]],$1[1]] };
 
 
-SENTENCIA: tk_let tk_idflower tk_dospuntosigual /*EXPRESION_LOGICAX*/ {  nodoaux = new NodoArbol(":=","");
-                                                                     nodoaux.agregarHijo(new NodoArbol($2,""));
-                                                                     nodoaux.agregarHijo($4[1]);
-                                                                     declaracionAux = new Declaracion(TipoSentencia.LET, $4[0], $2,  @1.first_line, @1.first_column);
-                                                                     $$ = [declaracionAux,nodoaux]; }
-
-        | tk_where  tk_idflower tk_slash EXPRESION_LOGICAX  { 
+SENTENCIA: tk_where  tk_idflower tk_slash EXPRESION_LOGICAX  { 
                                         nodoaux = new NodoArbol("Where","");
                                         nodoaux.agregarHijo($4[1]);
                                         sentenciaAux = new Sentencia(TipoSentencia.WHERE, $4[0], @1.first_line, @1.first_column);
