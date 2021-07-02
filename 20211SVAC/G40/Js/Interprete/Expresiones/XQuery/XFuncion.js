@@ -34,8 +34,13 @@ var XFuncion = /** @class */ (function () {
 
                 for(var i = 0; i < instrucionesAux.length; i++){
 
-                    var resultadoAux = instrucionesAux[i].getValorImplicito(this.entorno);                
+                    var resultadoAux = instrucionesAux[i].getValorImplicito(this.entorno);   
+                        this.entorno = instrucionesAux[i].getEntorno();             
                         resultadoXFuncion = resultadoAux;                  
+
+                    if(instrucionesAux[i].getTipo() == TipoXSENFUNCION.XRETURN){
+                        return resultadoXFuncion;
+                    }              
                 }
 
                 return resultadoXFuncion;
@@ -83,6 +88,11 @@ var XFuncion = /** @class */ (function () {
                     entornoAux.agregar(simboloAux.getID(),simboloAux);
                 
                 } else if((parametros[i].getTipo() == TipoXDataType.FLOAT) && (typeof (valorAux) === 'number') && (this.isInt(Number(valorAux)) == false)){
+                    
+                    var simboloAux = new Simbolo(Tipo.DOUBLE, parametros[i].getID(), this.linea, this.linea, valorAux, 0);
+                    entornoAux.agregar(simboloAux.getID(),simboloAux);
+                
+                } else if((parametros[i].getTipo() == TipoXDataType.DECIMAL) && (typeof (valorAux) === 'number') && (this.isInt(Number(valorAux)) == false)){
                     
                     var simboloAux = new Simbolo(Tipo.DOUBLE, parametros[i].getID(), this.linea, this.linea, valorAux, 0);
                     entornoAux.agregar(simboloAux.getID(),simboloAux);
