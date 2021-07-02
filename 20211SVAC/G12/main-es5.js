@@ -1718,8 +1718,8 @@
           key: "generarNativas",
           value: function generarNativas() {
             this.nativa_print_str(); //this.nativa_print_integer();
-            // this.nativa_compararIgual_str_str();
-            // this.nativa_compararNoIgual_str_str();
+
+            this.nativa_compararIgual_str_str(); // this.nativa_compararNoIgual_str_str();
             //this.nativa_ToUpperCase();
             //this.nativa_ToLowerCase();
 
@@ -4248,33 +4248,34 @@
               $V3 = [1, 7],
               $V4 = [1, 8],
               $V5 = [1, 10],
-              $V6 = [1, 11],
+              $V6 = [1, 15],
               $V7 = [1, 12],
               $V8 = [1, 13],
-              $V9 = [5, 7, 10, 17, 18, 19, 25, 27, 29, 30],
-              $Va = [1, 17],
-              $Vb = [1, 23],
-              $Vc = [1, 20],
-              $Vd = [1, 19],
-              $Ve = [1, 18],
-              $Vf = [1, 21],
-              $Vg = [1, 22],
-              $Vh = [1, 44],
-              $Vi = [1, 40],
-              $Vj = [1, 42],
-              $Vk = [1, 36],
-              $Vl = [1, 37],
-              $Vm = [1, 38],
-              $Vn = [1, 39],
-              $Vo = [1, 41],
-              $Vp = [1, 43],
-              $Vq = [5, 7, 9, 10, 11, 12, 16, 17, 18, 19, 20, 21, 22, 24, 25, 27, 29, 30, 32, 34, 35, 36, 37, 38, 39, 41],
-              $Vr = [1, 56],
-              $Vs = [1, 55],
-              $Vt = [1, 54],
-              $Vu = [16, 21, 24, 25, 32],
-              $Vv = [5, 7, 9, 10, 11, 12, 16, 17, 18, 19, 20, 21, 22, 24, 25, 27, 29, 30, 32, 34, 35, 38, 39, 41],
-              $Vw = [5, 7, 9, 10, 11, 12, 16, 17, 18, 19, 20, 21, 22, 24, 25, 27, 29, 30, 32, 38, 39, 41];
+              $V9 = [1, 14],
+              $Va = [5, 7, 10, 14, 15, 16, 22, 24, 28, 30, 31],
+              $Vb = [1, 22],
+              $Vc = [1, 19],
+              $Vd = [1, 25],
+              $Ve = [1, 21],
+              $Vf = [1, 20],
+              $Vg = [1, 23],
+              $Vh = [1, 24],
+              $Vi = [1, 47],
+              $Vj = [1, 43],
+              $Vk = [1, 45],
+              $Vl = [1, 39],
+              $Vm = [1, 40],
+              $Vn = [1, 41],
+              $Vo = [1, 42],
+              $Vp = [1, 44],
+              $Vq = [1, 46],
+              $Vr = [5, 7, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 30, 31, 33, 35, 36, 37, 38, 39, 40, 42],
+              $Vs = [1, 59],
+              $Vt = [1, 58],
+              $Vu = [1, 57],
+              $Vv = [18, 21, 22, 27, 33],
+              $Vw = [5, 7, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 30, 31, 33, 35, 36, 39, 40, 42],
+              $Vx = [5, 7, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 30, 31, 33, 39, 40, 42];
 
           var parser = {
             trace: function trace() {},
@@ -4291,37 +4292,38 @@
               "LET": 10,
               "DOSPUNTOS": 11,
               "IGUAL": 12,
-              "PARA": 13,
-              "DECIMAL": 14,
-              "TO": 15,
-              "PARC": 16,
-              "WHERE": 17,
-              "ORDER": 18,
-              "RETURN": 19,
-              "MENOR": 20,
-              "ID": 21,
-              "MAYOR": 22,
-              "LLAVEA": 23,
-              "LLAVEC": 24,
-              "BARRA": 25,
-              "SENTECIAS_CONTROL": 26,
-              "IF": 27,
-              "PARAMETROS": 28,
-              "THEN": 29,
-              "ELSE": 30,
-              "LISTA_PARAMETROS": 31,
-              "DOLAR": 32,
-              "ARROBA": 33,
-              "MAS": 34,
-              "MENOS": 35,
-              "POR": 36,
-              "DIV": 37,
-              "MENOR_IGUAL": 38,
-              "MAYOR_IGUAL": 39,
-              "CORA": 40,
-              "CORC": 41,
-              "CADENA": 42,
-              "ENTERO": 43,
+              "OP": 13,
+              "WHERE": 14,
+              "ORDER": 15,
+              "RETURN": 16,
+              "MENOR": 17,
+              "ID": 18,
+              "MAYOR": 19,
+              "LLAVEA": 20,
+              "LLAVEC": 21,
+              "BARRA": 22,
+              "SENTECIAS_CONTROL": 23,
+              "PARA": 24,
+              "DECIMAL": 25,
+              "TO": 26,
+              "PARC": 27,
+              "IF": 28,
+              "PARAMETROS": 29,
+              "THEN": 30,
+              "ELSE": 31,
+              "LISTA_PARAMETROS": 32,
+              "DOLAR": 33,
+              "ARROBA": 34,
+              "MAS": 35,
+              "MENOS": 36,
+              "POR": 37,
+              "DIV": 38,
+              "MENOR_IGUAL": 39,
+              "MAYOR_IGUAL": 40,
+              "CORA": 41,
+              "CORC": 42,
+              "CADENA": 43,
+              "ENTERO": 44,
               "$accept": 0,
               "$end": 1
             },
@@ -4333,36 +4335,36 @@
               10: "LET",
               11: "DOSPUNTOS",
               12: "IGUAL",
-              13: "PARA",
-              14: "DECIMAL",
-              15: "TO",
-              16: "PARC",
-              17: "WHERE",
-              18: "ORDER",
-              19: "RETURN",
-              20: "MENOR",
-              21: "ID",
-              22: "MAYOR",
-              23: "LLAVEA",
-              24: "LLAVEC",
-              25: "BARRA",
-              27: "IF",
-              29: "THEN",
-              30: "ELSE",
-              32: "DOLAR",
-              33: "ARROBA",
-              34: "MAS",
-              35: "MENOS",
-              36: "POR",
-              37: "DIV",
-              38: "MENOR_IGUAL",
-              39: "MAYOR_IGUAL",
-              40: "CORA",
-              41: "CORC",
-              42: "CADENA",
-              43: "ENTERO"
+              14: "WHERE",
+              15: "ORDER",
+              16: "RETURN",
+              17: "MENOR",
+              18: "ID",
+              19: "MAYOR",
+              20: "LLAVEA",
+              21: "LLAVEC",
+              22: "BARRA",
+              24: "PARA",
+              25: "DECIMAL",
+              26: "TO",
+              27: "PARC",
+              28: "IF",
+              30: "THEN",
+              31: "ELSE",
+              33: "DOLAR",
+              34: "ARROBA",
+              35: "MAS",
+              36: "MENOS",
+              37: "POR",
+              38: "DIV",
+              39: "MENOR_IGUAL",
+              40: "MAYOR_IGUAL",
+              41: "CORA",
+              42: "CORC",
+              43: "CADENA",
+              44: "ENTERO"
             },
-            productions_: [0, [3, 2], [4, 2], [4, 1], [6, 4], [6, 9], [6, 2], [6, 2], [6, 2], [6, 11], [6, 2], [6, 1], [6, 2], [6, 3], [26, 4], [26, 11], [26, 11], [28, 2], [28, 1], [31, 2], [31, 2], [31, 3], [31, 3], [31, 1], [31, 4], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 2], [8, 4], [8, 1], [8, 1], [8, 1], [8, 1]],
+            productions_: [0, [3, 2], [4, 2], [4, 1], [6, 4], [6, 5], [6, 2], [6, 2], [6, 2], [6, 11], [6, 2], [6, 1], [6, 2], [6, 3], [6, 1], [13, 5], [23, 4], [23, 11], [23, 11], [29, 2], [29, 1], [32, 2], [32, 2], [32, 3], [32, 3], [32, 1], [32, 4], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 3], [8, 2], [8, 4], [8, 1], [8, 1], [8, 1]],
             performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate
             /* action[1] */
             , $$
@@ -4386,554 +4388,561 @@
               6: 3,
               7: $V0,
               10: $V1,
-              17: $V2,
-              18: $V3,
-              19: $V4,
-              25: $V5,
-              26: 9,
-              27: $V6,
-              29: $V7,
-              30: $V8
+              13: 11,
+              14: $V2,
+              15: $V3,
+              16: $V4,
+              22: $V5,
+              23: 9,
+              24: $V6,
+              28: $V7,
+              30: $V8,
+              31: $V9
             }, {
               1: [3]
             }, {
-              5: [1, 14],
-              6: 15,
+              5: [1, 16],
+              6: 17,
               7: $V0,
               10: $V1,
-              17: $V2,
-              18: $V3,
-              19: $V4,
-              25: $V5,
-              26: 9,
-              27: $V6,
-              29: $V7,
-              30: $V8
-            }, o($V9, [2, 3]), {
-              8: 16,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 24,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 25,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
+              13: 11,
+              14: $V2,
+              15: $V3,
+              16: $V4,
+              22: $V5,
+              23: 9,
+              24: $V6,
+              28: $V7,
+              30: $V8,
+              31: $V9
+            }, o($Va, [2, 3]), {
+              8: 18,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
             }, {
               8: 26,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
             }, {
               8: 27,
-              13: $Va,
-              14: $Vb,
-              20: [1, 28],
-              21: $Vc,
-              26: 29,
-              27: $V6,
-              29: $V7,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 28,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 29,
+              17: [1, 30],
+              18: $Vb,
+              23: 31,
+              24: $Vc,
+              25: $Vd,
+              28: $V7,
               30: $V8,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, o($V9, [2, 11]), {
-              8: 30,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              25: [1, 31],
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
+              31: $V9,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, o($Va, [2, 11]), {
+              8: 32,
+              18: $Vb,
+              22: [1, 33],
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, o($Va, [2, 14]), {
+              24: [1, 34]
             }, {
-              13: [1, 32]
+              17: [1, 35]
             }, {
-              20: [1, 33]
+              17: [1, 36]
             }, {
-              20: [1, 34]
+              25: [1, 37]
             }, {
               1: [2, 1]
-            }, o($V9, [2, 2]), {
-              9: [1, 35],
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }, {
-              8: 45,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 46,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              21: [1, 47]
-            }, o($Vq, [2, 38], {
-              13: [1, 48]
-            }), o($Vq, [2, 39]), o($Vq, [2, 40]), o($Vq, [2, 41]), {
-              11: [1, 49],
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }, o($V9, [2, 6], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }), o($V9, [2, 7], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }), o($V9, [2, 8], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }), {
-              21: [1, 50]
-            }, o($V9, [2, 10]), o($V9, [2, 12], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }), {
-              8: 51,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              21: $Vr,
-              25: $Vs,
-              28: 52,
-              31: 53,
-              32: $Vt
-            }, {
-              21: [1, 57]
-            }, {
-              21: [1, 58]
-            }, {
-              6: 59,
-              7: $V0,
-              10: $V1,
-              17: $V2,
-              18: $V3,
-              19: $V4,
-              25: $V5,
-              26: 9,
-              27: $V6,
-              29: $V7,
-              30: $V8
-            }, {
-              8: 60,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 61,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 62,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 63,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 64,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 65,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 66,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 67,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              8: 68,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, {
-              12: $Vh,
-              16: [1, 69],
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn,
-              38: $Vo,
-              39: $Vp
-            }, {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
+            }, o($Va, [2, 2]), {
+              9: [1, 38],
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
               39: $Vp,
-              41: [1, 70]
-            }, o($Vq, [2, 36]), {
+              40: $Vq
+            }, {
+              8: 48,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 49,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              18: [1, 50]
+            }, {
+              24: [1, 51]
+            }, o($Vr, [2, 40]), o($Vr, [2, 41]), o($Vr, [2, 42]), {
+              11: [1, 52],
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
+            }, o($Va, [2, 6], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
+            }), o($Va, [2, 7], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
+            }), o($Va, [2, 8], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
+            }), {
+              18: [1, 53]
+            }, o($Va, [2, 10]), o($Va, [2, 12], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
+            }), {
+              8: 54,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              18: $Vs,
+              22: $Vt,
+              29: 55,
+              32: 56,
+              33: $Vu
+            }, {
+              18: [1, 60]
+            }, {
+              18: [1, 61]
+            }, {
+              26: [1, 62]
+            }, {
+              6: 63,
+              7: $V0,
+              10: $V1,
+              13: 11,
+              14: $V2,
+              15: $V3,
+              16: $V4,
+              22: $V5,
+              23: 9,
+              24: $V6,
+              28: $V7,
+              30: $V8,
+              31: $V9
+            }, {
+              8: 64,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 65,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 66,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 67,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 68,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 69,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              8: 70,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
               8: 71,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
             }, {
-              12: [1, 72]
+              8: 72,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
             }, {
-              22: [1, 73]
-            }, o($V9, [2, 13], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              27: [1, 73],
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
-              39: $Vp
-            }), {
-              16: [1, 74],
-              21: $Vr,
-              25: $Vs,
-              31: 75,
-              32: $Vt
-            }, o($Vu, [2, 18]), {
-              21: [1, 76]
+              39: $Vp,
+              40: $Vq
             }, {
-              8: 77,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              25: [1, 78],
-              32: $Vd,
-              33: [1, 79],
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, o($Vu, [2, 23], {
-              13: [1, 80]
-            }), {
-              22: [1, 81]
-            }, {
-              22: [1, 82]
-            }, o($V9, [2, 4]), o($Vv, [2, 25], {
-              36: $Vm,
-              37: $Vn
-            }), o($Vv, [2, 26], {
-              36: $Vm,
-              37: $Vn
-            }), o($Vq, [2, 27]), o($Vq, [2, 28]), o($Vw, [2, 29], {
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn
-            }), o($Vw, [2, 30], {
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn
-            }), o($Vw, [2, 31], {
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn
-            }), o($Vw, [2, 32], {
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn
-            }), o($Vw, [2, 33], {
-              34: $Vk,
-              35: $Vl,
-              36: $Vm,
-              37: $Vn
-            }), o($Vq, [2, 34]), o($Vq, [2, 35]), {
-              12: $Vh,
-              16: [1, 83],
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
-              39: $Vp
+              39: $Vp,
+              40: $Vq,
+              42: [1, 74]
+            }, o($Vr, [2, 38]), {
+              8: 75,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
             }, {
-              13: [1, 84]
+              12: [1, 76]
             }, {
-              23: [1, 85]
-            }, o($V9, [2, 14]), o($Vu, [2, 17]), o($Vu, [2, 19]), o($Vu, [2, 20], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
+              19: [1, 77]
+            }, o($Va, [2, 13], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
-              39: $Vp
+              39: $Vp,
+              40: $Vq
             }), {
-              8: 86,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
+              18: $Vs,
+              22: $Vt,
+              27: [1, 78],
+              32: 79,
+              33: $Vu
+            }, o($Vv, [2, 20]), {
+              18: [1, 80]
             }, {
-              8: 87,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
+              8: 81,
+              18: $Vb,
+              22: [1, 82],
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              34: [1, 83],
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, o($Vv, [2, 25], {
+              24: [1, 84]
+            }), {
+              19: [1, 85]
             }, {
-              21: $Vr,
-              25: $Vs,
-              28: 88,
-              31: 53,
-              32: $Vt
+              19: [1, 86]
             }, {
-              23: [1, 89]
+              25: [1, 87]
+            }, o($Va, [2, 4]), o($Vw, [2, 27], {
+              37: $Vn,
+              38: $Vo
+            }), o($Vw, [2, 28], {
+              37: $Vn,
+              38: $Vo
+            }), o($Vr, [2, 29]), o($Vr, [2, 30]), o($Vx, [2, 31], {
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo
+            }), o($Vx, [2, 32], {
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo
+            }), o($Vx, [2, 33], {
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo
+            }), o($Vx, [2, 34], {
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo
+            }), o($Vx, [2, 35], {
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo
+            }), o($Vr, [2, 36]), o($Vr, [2, 37]), {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              27: [1, 88],
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
             }, {
-              23: [1, 90]
-            }, o($Vq, [2, 37]), {
-              14: [1, 91]
+              13: 89,
+              24: $V6
+            }, {
+              20: [1, 90]
+            }, o($Va, [2, 16]), o($Vv, [2, 19]), o($Vv, [2, 21]), o($Vv, [2, 22], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              35: $Vl,
+              36: $Vm,
+              37: $Vn,
+              38: $Vo,
+              39: $Vp,
+              40: $Vq
+            }), {
+              8: 91,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
             }, {
               8: 92,
-              13: $Va,
-              14: $Vb,
-              21: $Vc,
-              32: $Vd,
-              40: $Ve,
-              42: $Vf,
-              43: $Vg
-            }, o($Vu, [2, 21], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, {
+              18: $Vs,
+              22: $Vt,
+              29: 93,
+              32: 56,
+              33: $Vu
+            }, {
+              20: [1, 94]
+            }, {
+              20: [1, 95]
+            }, {
+              27: [1, 96]
+            }, o($Vr, [2, 39]), o($Va, [2, 5]), {
+              8: 97,
+              18: $Vb,
+              24: $Vc,
+              25: $Vd,
+              33: $Ve,
+              41: $Vf,
+              43: $Vg,
+              44: $Vh
+            }, o($Vv, [2, 23], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
-              39: $Vp
-            }), o($Vu, [2, 22], {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              34: $Vk,
+              39: $Vp,
+              40: $Vq
+            }), o($Vv, [2, 24], {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
-              39: $Vp
+              39: $Vp,
+              40: $Vq
             }), {
-              16: [1, 93],
-              21: $Vr,
-              25: $Vs,
-              31: 75,
-              32: $Vt
+              18: $Vs,
+              22: $Vt,
+              27: [1, 98],
+              32: 79,
+              33: $Vu
             }, {
-              21: $Vr,
-              25: $Vs,
-              28: 94,
-              31: 53,
-              32: $Vt
+              18: $Vs,
+              22: $Vt,
+              29: 99,
+              32: 56,
+              33: $Vu
             }, {
-              21: $Vr,
-              25: $Vs,
-              28: 95,
-              31: 53,
-              32: $Vt
-            }, {
-              15: [1, 96]
-            }, {
-              12: $Vh,
-              20: $Vi,
-              22: $Vj,
-              24: [1, 97],
-              34: $Vk,
+              18: $Vs,
+              22: $Vt,
+              29: 100,
+              32: 56,
+              33: $Vu
+            }, o($Va, [2, 15]), {
+              12: $Vi,
+              17: $Vj,
+              19: $Vk,
+              21: [1, 101],
               35: $Vl,
               36: $Vm,
               37: $Vn,
               38: $Vo,
-              39: $Vp
-            }, o($Vu, [2, 24]), {
-              21: $Vr,
-              24: [1, 98],
-              25: $Vs,
-              31: 75,
-              32: $Vt
+              39: $Vp,
+              40: $Vq
+            }, o($Vv, [2, 26]), {
+              18: $Vs,
+              21: [1, 102],
+              22: $Vt,
+              32: 79,
+              33: $Vu
             }, {
-              21: $Vr,
-              24: [1, 99],
-              25: $Vs,
-              31: 75,
-              32: $Vt
+              18: $Vs,
+              21: [1, 103],
+              22: $Vt,
+              32: 79,
+              33: $Vu
             }, {
-              14: [1, 100]
+              17: [1, 104]
             }, {
-              20: [1, 101]
+              17: [1, 105]
             }, {
-              20: [1, 102]
+              17: [1, 106]
             }, {
-              20: [1, 103]
+              22: [1, 107]
             }, {
-              16: [1, 104]
+              22: [1, 108]
             }, {
-              25: [1, 105]
+              22: [1, 109]
             }, {
-              25: [1, 106]
+              18: [1, 110]
             }, {
-              25: [1, 107]
-            }, o($V9, [2, 5]), {
-              21: [1, 108]
+              18: [1, 111]
             }, {
-              21: [1, 109]
+              18: [1, 112]
             }, {
-              21: [1, 110]
+              19: [1, 113]
             }, {
-              22: [1, 111]
+              19: [1, 114]
             }, {
-              22: [1, 112]
-            }, {
-              22: [1, 113]
-            }, o($V9, [2, 9]), o($V9, [2, 15]), o($V9, [2, 16])],
+              19: [1, 115]
+            }, o($Va, [2, 9]), o($Va, [2, 17]), o($Va, [2, 18])],
             defaultActions: {
-              14: [2, 1]
+              16: [2, 1]
             },
             parseError: function parseError(str, hash) {
               if (hash.recoverable) {
@@ -5593,52 +5602,52 @@
                 switch ($avoiding_name_collisions) {
                   case 0:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 13;
+                    return 24;
                     break;
 
                   case 1:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 25;
+                    return 22;
                     break;
 
                   case 2:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 16;
+                    return 27;
                     break;
 
                   case 3:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 32;
+                    return 33;
                     break;
 
                   case 4:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 23;
+                    return 20;
                     break;
 
                   case 5:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 24;
+                    return 21;
                     break;
 
                   case 6:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 40;
+                    return 41;
                     break;
 
                   case 7:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 41;
+                    return 42;
                     break;
 
                   case 8:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 38;
+                    return 39;
                     break;
 
                   case 9:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 39;
+                    return 40;
                     break;
 
                   case 10:
@@ -5648,12 +5657,12 @@
 
                   case 11:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 20;
+                    return 17;
                     break;
 
                   case 12:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 22;
+                    return 19;
                     break;
 
                   case 13:
@@ -5668,22 +5677,22 @@
 
                   case 15:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 34;
+                    return 35;
                     break;
 
                   case 16:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 35;
+                    return 36;
                     break;
 
                   case 17:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 36;
+                    return 37;
                     break;
 
                   case 18:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 37;
+                    return 38;
                     break;
 
                   case 19:
@@ -5713,62 +5722,62 @@
 
                   case 24:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 17;
+                    return 14;
                     break;
 
                   case 25:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 18;
+                    return 15;
                     break;
 
                   case 26:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 19;
+                    return 16;
                     break;
 
                   case 27:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 15;
+                    return 26;
                     break;
 
                   case 28:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 27;
+                    return 28;
                     break;
 
                   case 29:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 29;
+                    return 30;
                     break;
 
                   case 30:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 30;
+                    return 31;
                     break;
 
                   case 31:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 33;
+                    return 34;
                     break;
 
                   case 32:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 14;
+                    return 25;
                     break;
 
                   case 33:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 43;
+                    return 44;
                     break;
 
                   case 34:
                     console.log("Reconocio id : " + yy_.yytext);
-                    return 21;
+                    return 18;
                     break;
 
                   case 35:
                     console.log("Reconocio : " + yy_.yytext);
-                    return 42;
+                    return 43;
                     break;
 
                   case 36:
@@ -6102,6 +6111,18 @@
       var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
       /*! ../AST/Nodo */
       "Zr6O");
+      /* harmony import */
+
+
+      var _retorno__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! ./retorno */
+      "munq");
+      /* harmony import */
+
+
+      var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../TablaSimbolos/Tipo */
+      "lKex");
 
       var Identificador = /*#__PURE__*/function () {
         function Identificador(identifador, linea, columna, t) {
@@ -6116,19 +6137,7 @@
         _createClass(Identificador, [{
           key: "getvalor3d",
           value: function getvalor3d(controlador, ts) {
-            throw new Error("Method not implemented.");
-          }
-        }, {
-          key: "getTipo",
-          value: function getTipo(controlador, ts) {
-            /* let existe_id = ts.getSimbolo(this.identificador);
-             if(existe_id != null ){
-                 return existe_id.tipo.type;
-             }*/
-          }
-        }, {
-          key: "getValor",
-          value: function getValor(controlador, ts) {
+            console.log("getValor3D");
             var existe_id;
             var contador = 1;
 
@@ -6149,6 +6158,66 @@
               _iterator11.e(err);
             } finally {
               _iterator11.f();
+            }
+
+            console.log(existe_id);
+
+            if (existe_id != null) {
+              var generator = controlador.generador;
+
+              if (typeof existe_id.valor == 'number') {
+                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](existe_id.valor + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("DOBLE"));
+              } else if (typeof existe_id.valor == 'string') {
+                console.log("entre****");
+                console.log(existe_id);
+                var temp = generator.newTemporal();
+                generator.genAsignacion(temp, 'h');
+
+                for (var i = 0; i < existe_id.valor.length; i++) {
+                  generator.genSetHeap('h', existe_id.valor.charCodeAt(i));
+                  generator.avanzarHeap();
+                }
+
+                generator.genSetHeap('h', '-1');
+                generator.avanzarHeap();
+                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("STRING"));
+              } else {
+                console.log("no entre");
+              }
+            }
+          }
+        }, {
+          key: "getTipo",
+          value: function getTipo(controlador, ts) {
+            /* let existe_id = ts.getSimbolo(this.identificador);
+             if(existe_id != null ){
+                 return existe_id.tipo.type;
+             }*/
+          }
+        }, {
+          key: "getValor",
+          value: function getValor(controlador, ts) {
+            console.log("getValor");
+            var existe_id;
+            var contador = 1;
+
+            var _iterator12 = _createForOfIteratorHelper(ts.sig),
+                _step12;
+
+            try {
+              for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
+                var tssig = _step12.value;
+
+                if (contador == controlador.posicionid) {
+                  existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+                }
+
+                contador++;
+              }
+            } catch (err) {
+              _iterator12.e(err);
+            } finally {
+              _iterator12.f();
             }
 
             if (existe_id != null) {
@@ -6244,12 +6313,12 @@
               do {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator12 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step12;
+                var _iterator13 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step13;
 
                 try {
-                  for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-                    var ins = _step12.value;
+                  for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
+                    var ins = _step13.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -6267,9 +6336,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator12.e(err);
+                  _iterator13.e(err);
                 } finally {
-                  _iterator12.f();
+                  _iterator13.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (doWhile)");
@@ -6283,18 +6352,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("do", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator13 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step13;
+            var _iterator14 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step14;
 
             try {
-              for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-                var ins = _step13.value;
+              for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
+                var ins = _step14.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator13.e(err);
+              _iterator14.e(err);
             } finally {
-              _iterator13.f();
+              _iterator14.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -6376,12 +6445,12 @@
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
             if (this.valor_sw == this.valor_case.getValor(controlador, ts)) {
-              var _iterator14 = _createForOfIteratorHelper(this.lista_instrucciones),
-                  _step14;
+              var _iterator15 = _createForOfIteratorHelper(this.lista_instrucciones),
+                  _step15;
 
               try {
-                for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
-                  var res = _step14.value;
+                for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
+                  var res = _step15.value;
                   var ins = res.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -6400,9 +6469,9 @@
                   }
                 }
               } catch (err) {
-                _iterator14.e(err);
+                _iterator15.e(err);
               } finally {
-                _iterator14.f();
+                _iterator15.f();
               }
             }
 
@@ -6416,18 +6485,18 @@
             padre.AddHijo(this.valor_case.recorrer());
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](":", ""));
 
-            var _iterator15 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step15;
+            var _iterator16 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step16;
 
             try {
-              for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
-                var ins = _step15.value;
+              for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
+                var ins = _step16.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator15.e(err);
+              _iterator16.e(err);
             } finally {
-              _iterator15.f();
+              _iterator16.f();
             }
 
             return padre;
@@ -7587,12 +7656,12 @@
           key: "obtenerall",
           value: function obtenerall(controlador, ts) {
             if (ts != null) {
-              var _iterator16 = _createForOfIteratorHelper(ts.tabla),
-                  _step16;
+              var _iterator17 = _createForOfIteratorHelper(ts.tabla),
+                  _step17;
 
               try {
-                for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-                  var informacion = _step16.value;
+                for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
+                  var informacion = _step17.value;
 
                   if (this.exprecion.tipo == 1) {
                     if (this.exprecion.id == "*" && informacion.sim.simbolo == 1) {
@@ -7613,23 +7682,23 @@
                   }
                 }
               } catch (err) {
-                _iterator16.e(err);
-              } finally {
-                _iterator16.f();
-              }
-
-              var _iterator17 = _createForOfIteratorHelper(ts.sig),
-                  _step17;
-
-              try {
-                for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
-                  var tssig = _step17.value;
-                  this.obtenerall(controlador, tssig.sig);
-                }
-              } catch (err) {
                 _iterator17.e(err);
               } finally {
                 _iterator17.f();
+              }
+
+              var _iterator18 = _createForOfIteratorHelper(ts.sig),
+                  _step18;
+
+              try {
+                for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
+                  var tssig = _step18.value;
+                  this.obtenerall(controlador, tssig.sig);
+                }
+              } catch (err) {
+                _iterator18.e(err);
+              } finally {
+                _iterator18.f();
               }
             }
           }
@@ -7637,12 +7706,12 @@
           key: "siguiente",
           value: function siguiente(controlador, ts) {
             if (ts != null) {
-              var _iterator18 = _createForOfIteratorHelper(ts.sig),
-                  _step18;
+              var _iterator19 = _createForOfIteratorHelper(ts.sig),
+                  _step19;
 
               try {
-                for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
-                  var tssig = _step18.value;
+                for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
+                  var tssig = _step19.value;
 
                   if (this.exprecion.id == tssig.identificador || this.exprecion.id == "*") {
                     this.sig.ejecutar(controlador, tssig.sig);
@@ -7651,9 +7720,9 @@
                   }
                 }
               } catch (err) {
-                _iterator18.e(err);
+                _iterator19.e(err);
               } finally {
-                _iterator18.f();
+                _iterator19.f();
               }
             }
           }
@@ -7693,12 +7762,12 @@
             var cont = 1;
 
             if (ts != null) {
-              var _iterator19 = _createForOfIteratorHelper(ts.sig),
-                  _step19;
+              var _iterator20 = _createForOfIteratorHelper(ts.sig),
+                  _step20;
 
               try {
-                for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
-                  var tssig = _step19.value;
+                for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
+                  var tssig = _step20.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     valor = this.exprecion.exprecion.getValor(controlador, ts);
@@ -7713,9 +7782,9 @@
                   }
                 }
               } catch (err) {
-                _iterator19.e(err);
+                _iterator20.e(err);
               } finally {
-                _iterator19.f();
+                _iterator20.f();
               }
             }
           }
@@ -7725,12 +7794,12 @@
             var cont = 1;
 
             if (ts != null) {
-              var _iterator20 = _createForOfIteratorHelper(ts.tabla),
-                  _step20;
+              var _iterator21 = _createForOfIteratorHelper(ts.tabla),
+                  _step21;
 
               try {
-                for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
-                  var informacion = _step20.value;
+                for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
+                  var informacion = _step21.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     valor = this.exprecion.exprecion.getValor(controlador, ts);
@@ -7743,23 +7812,23 @@
                   }
                 }
               } catch (err) {
-                _iterator20.e(err);
-              } finally {
-                _iterator20.f();
-              }
-
-              var _iterator21 = _createForOfIteratorHelper(ts.sig),
-                  _step21;
-
-              try {
-                for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
-                  var tssig = _step21.value;
-                  this.obtenerallNumero(controlador, tssig.sig, valor);
-                }
-              } catch (err) {
                 _iterator21.e(err);
               } finally {
                 _iterator21.f();
+              }
+
+              var _iterator22 = _createForOfIteratorHelper(ts.sig),
+                  _step22;
+
+              try {
+                for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
+                  var tssig = _step22.value;
+                  this.obtenerallNumero(controlador, tssig.sig, valor);
+                }
+              } catch (err) {
+                _iterator22.e(err);
+              } finally {
+                _iterator22.f();
               }
             }
           }
@@ -7770,12 +7839,12 @@
             var posicion = 1;
 
             if (ts != null) {
-              var _iterator22 = _createForOfIteratorHelper(ts.sig),
-                  _step22;
+              var _iterator23 = _createForOfIteratorHelper(ts.sig),
+                  _step23;
 
               try {
-                for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
-                  var tssig = _step22.value;
+                for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
+                  var tssig = _step23.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     controlador.position = cont;
@@ -7793,9 +7862,9 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator22.e(err);
+                _iterator23.e(err);
               } finally {
-                _iterator22.f();
+                _iterator23.f();
               }
             }
           }
@@ -7806,12 +7875,12 @@
             var posicion = 1;
 
             if (ts != null) {
-              var _iterator23 = _createForOfIteratorHelper(ts.tabla),
-                  _step23;
+              var _iterator24 = _createForOfIteratorHelper(ts.tabla),
+                  _step24;
 
               try {
-                for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
-                  var informacion = _step23.value;
+                for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
+                  var informacion = _step24.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
@@ -7827,23 +7896,23 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator23.e(err);
-              } finally {
-                _iterator23.f();
-              }
-
-              var _iterator24 = _createForOfIteratorHelper(ts.sig),
-                  _step24;
-
-              try {
-                for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
-                  var tssig = _step24.value;
-                  this.obtenerBool(controlador, tssig.sig);
-                }
-              } catch (err) {
                 _iterator24.e(err);
               } finally {
                 _iterator24.f();
+              }
+
+              var _iterator25 = _createForOfIteratorHelper(ts.sig),
+                  _step25;
+
+              try {
+                for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
+                  var tssig = _step25.value;
+                  this.obtenerBool(controlador, tssig.sig);
+                }
+              } catch (err) {
+                _iterator25.e(err);
+              } finally {
+                _iterator25.f();
               }
             }
           }
@@ -7964,12 +8033,12 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator25 = _createForOfIteratorHelper(ts.sig),
-                    _step25;
+                var _iterator26 = _createForOfIteratorHelper(ts.sig),
+                    _step26;
 
                 try {
-                  for (_iterator25.s(); !(_step25 = _iterator25.n()).done;) {
-                    var tssig = _step25.value;
+                  for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
+                    var tssig = _step26.value;
 
                     if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
@@ -7980,17 +8049,17 @@
                     }
                   }
                 } catch (err) {
-                  _iterator25.e(err);
+                  _iterator26.e(err);
                 } finally {
-                  _iterator25.f();
+                  _iterator26.f();
                 }
               } else {
-                var _iterator26 = _createForOfIteratorHelper(ts.tabla),
-                    _step26;
+                var _iterator27 = _createForOfIteratorHelper(ts.tabla),
+                    _step27;
 
                 try {
-                  for (_iterator26.s(); !(_step26 = _iterator26.n()).done;) {
-                    var informacion = _step26.value;
+                  for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
+                    var informacion = _step27.value;
 
                     if (this.exprecion.tipo == 1) {
                       if (this.exprecion.id == "*") {
@@ -8011,9 +8080,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator26.e(err);
+                  _iterator27.e(err);
                 } finally {
-                  _iterator26.f();
+                  _iterator27.f();
                 }
               }
             }
@@ -8036,12 +8105,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator27 = _createForOfIteratorHelper(ts.sig),
-                  _step27;
+              var _iterator28 = _createForOfIteratorHelper(ts.sig),
+                  _step28;
 
               try {
-                for (_iterator27.s(); !(_step27 = _iterator27.n()).done;) {
-                  var tssig = _step27.value;
+                for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
+                  var tssig = _step28.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -8052,21 +8121,20 @@
                   }
                 }
               } catch (err) {
-                _iterator27.e(err);
+                _iterator28.e(err);
               } finally {
-                _iterator27.f();
+                _iterator28.f();
               }
             } else {
-              var _iterator28 = _createForOfIteratorHelper(ts.tabla),
-                  _step28;
+              var _iterator29 = _createForOfIteratorHelper(ts.tabla),
+                  _step29;
 
               try {
-                for (_iterator28.s(); !(_step28 = _iterator28.n()).done;) {
-                  var informacion = _step28.value;
+                for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
+                  var informacion = _step29.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
-                      console.log("entre a valor 3d");
                       this.exprecion.exprecion.getvalor3d(controlador, ts);
                       controlador.append(informacion.sim.objeto.gethtml("", controlador));
                     }
@@ -8075,9 +8143,9 @@
                   }
                 }
               } catch (err) {
-                _iterator28.e(err);
+                _iterator29.e(err);
               } finally {
-                _iterator28.f();
+                _iterator29.f();
               }
             }
           }
@@ -8089,12 +8157,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator29 = _createForOfIteratorHelper(ts.sig),
-                  _step29;
+              var _iterator30 = _createForOfIteratorHelper(ts.sig),
+                  _step30;
 
               try {
-                for (_iterator29.s(); !(_step29 = _iterator29.n()).done;) {
-                  var tssig = _step29.value;
+                for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
+                  var tssig = _step30.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     controlador.position = cont;
@@ -8110,24 +8178,27 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator29.e(err);
+                _iterator30.e(err);
               } finally {
-                _iterator29.f();
+                _iterator30.f();
               }
             } else {
-              var _iterator30 = _createForOfIteratorHelper(ts.tabla),
-                  _step30;
+              var _iterator31 = _createForOfIteratorHelper(ts.tabla),
+                  _step31;
 
               try {
-                for (_iterator30.s(); !(_step30 = _iterator30.n()).done;) {
-                  var informacion = _step30.value;
+                for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
+                  var informacion = _step31.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
                     controlador.posicionid = posicion;
 
                     if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                      var salida = this.exprecion.exprecion.getvalor3d(controlador, ts);
+                      controlador.generador.genLabel(salida.lblTrue);
                       controlador.append(informacion.sim.objeto.gethtml("", controlador));
+                      controlador.generador.genLabel(salida.lblFalse);
                     }
 
                     cont++;
@@ -8136,9 +8207,9 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator30.e(err);
+                _iterator31.e(err);
               } finally {
-                _iterator30.f();
+                _iterator31.f();
               }
             }
           }
@@ -10860,7 +10931,13 @@
       /* harmony import */
 
 
-      var _Operaciones__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      /*! ../retorno */
+      "munq");
+      /* harmony import */
+
+
+      var _Operaciones__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! ./Operaciones */
       "vu0p");
 
@@ -10903,22 +10980,22 @@
             }
 
             switch (this.operador) {
-              case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].IGUALIGUAL:
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].IGUALIGUAL:
                 return this.igualigual(valor_exp1, valor_exp2);
 
-              case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].DIFERENTE:
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIFERENTE:
                 return this.diferente(valor_exp1, valor_exp2);
 
-              case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MENORQUE:
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORQUE:
                 return this.menorque(valor_exp1, valor_exp2);
 
-              case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MENORIGUAL:
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORIGUAL:
                 return this.menorigual(valor_exp1, valor_exp2);
 
-              case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MAYORQUE:
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORQUE:
                 return this.mayorque(valor_exp1, valor_exp2);
 
-              case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MAYORIGUAL:
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORIGUAL:
                 return this.mayoigual(valor_exp1, valor_exp2);
 
               default:
@@ -11152,6 +11229,160 @@
             }
           }
         }, {
+          key: "getvalor3d",
+          value: function getvalor3d(controlador, ts) {
+            var valor_exp1;
+            var valor_exp2;
+            var valor_expU;
+
+            if (this.expU == false) {
+              valor_exp1 = this.exp1.getvalor3d(controlador, ts);
+              valor_exp2 = this.exp2.getvalor3d(controlador, ts);
+            } else {
+              valor_expU = this.exp1.getvalor3d(controlador, ts);
+            }
+
+            switch (this.operador) {
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].IGUALIGUAL:
+                return this.igualigual3D(valor_exp1, valor_exp2, controlador);
+
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIFERENTE:
+                return this.diferente3D(valor_exp1, valor_exp2, controlador);
+
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORQUE:
+                return this.menorque3D(valor_exp1, valor_exp2, controlador);
+
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORIGUAL:
+                return this.menorigual3D(valor_exp1, valor_exp2, controlador);
+
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORQUE:
+                return this.mayorque3D(valor_exp1, valor_exp2, controlador);
+
+              case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORIGUAL:
+                return this.mayoigual3D(valor_exp1, valor_exp2, controlador);
+
+              default:
+                break;
+            }
+          }
+        }, {
+          key: "igualigual3D",
+          value: function igualigual3D(valor_exp1, valor_exp2, controlador) {
+            var generador = controlador.generador;
+            var temp = generador.newTemporal();
+
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '==');
+              }
+            } else {
+              if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                  var tempAux = generador.newTemporal();
+                  generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                  generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                  generador.genExpresion(tempAux, tempAux, '1', '+');
+                  generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                  generador.genNextEnv(1);
+                  generador.genCall('nativa_compararIgual_str_str');
+                  generador.genGetStack(temp, 'p');
+                  generador.genAntEnv(1);
+                  this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+                  this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+                  generador.genIf(temp, '1', '==', this.lblTrue);
+                  generador.genGoto(this.lblFalse);
+                  var Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+                  Retorno.lblTrue = this.lblTrue;
+                  Retorno.lblFalse = this.lblFalse;
+                  return Retorno;
+                }
+              }
+            }
+          }
+        }, {
+          key: "menorque3D",
+          value: function menorque3D(valor_exp1, valor_exp2, controlador) {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '<');
+              }
+            }
+          }
+        }, {
+          key: "menorigual3D",
+          value: function menorigual3D(valor_exp1, valor_exp2, controlador) {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '<=');
+              }
+            }
+          }
+        }, {
+          key: "mayorque3D",
+          value: function mayorque3D(valor_exp1, valor_exp2, controlador) {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '>');
+              }
+            }
+          }
+        }, {
+          key: "mayoigual3D",
+          value: function mayoigual3D(valor_exp1, valor_exp2, controlador) {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '>=');
+              }
+            }
+          }
+        }, {
+          key: "diferente3D",
+          value: function diferente3D(valor_exp1, valor_exp2, controlador) {
+            var generador = controlador.generador;
+            var temp = generador.newTemporal();
+
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+              if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '!=');
+              }
+            } else {
+              if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                  var tempAux = generador.newTemporal();
+                  generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                  generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                  generador.genExpresion(tempAux, tempAux, '1', '+');
+                  generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                  generador.genNextEnv(1);
+                  generador.genCall('nativa_compararIgual_str_str');
+                  generador.genGetStack(temp, 'p');
+                  generador.genAntEnv(1);
+                  this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+                  this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+                  generador.genIf(temp, '1', '!=', this.lblTrue);
+                  generador.genGoto(this.lblFalse);
+                  var Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+                  Retorno.lblTrue = this.lblTrue;
+                  Retorno.lblFalse = this.lblFalse;
+                  return Retorno;
+                }
+              }
+            }
+          }
+        }, {
+          key: "compararExp",
+          value: function compararExp(valor_exp1, valor_exp2, controlador, signo) {
+            var generador = controlador.generador;
+            this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+            this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+            generador.genIf(valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), signo, this.lblTrue);
+            generador.genGoto(this.lblFalse);
+            var Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"]('', false, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+            Retorno.lblTrue = this.lblTrue;
+            Retorno.lblFalse = this.lblFalse;
+            return Retorno;
+          }
+        }, {
           key: "recorrer",
           value: function recorrer() {
             var padre = new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Exp", "");
@@ -11170,7 +11401,7 @@
         }]);
 
         return Relaciones;
-      }(_Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"]);
+      }(_Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"]);
       /***/
 
     },
@@ -11250,12 +11481,12 @@
 
             if (this.condicion.getTipo(controlador, ts) == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["tipo"].BOOLEANO) {
               if (valor_condicion) {
-                var _iterator31 = _createForOfIteratorHelper(this.lista_ifs),
-                    _step31;
+                var _iterator32 = _createForOfIteratorHelper(this.lista_ifs),
+                    _step32;
 
                 try {
-                  for (_iterator31.s(); !(_step31 = _iterator31.n()).done;) {
-                    var ins = _step31.value;
+                  for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
+                    var ins = _step32.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_3__["default"]) {
@@ -11275,19 +11506,19 @@
 
                   }
                 } catch (err) {
-                  _iterator31.e(err);
+                  _iterator32.e(err);
                 } finally {
-                  _iterator31.f();
+                  _iterator32.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
               } else {
-                var _iterator32 = _createForOfIteratorHelper(this.lista_elses),
-                    _step32;
+                var _iterator33 = _createForOfIteratorHelper(this.lista_elses),
+                    _step33;
 
                 try {
-                  for (_iterator32.s(); !(_step32 = _iterator32.n()).done;) {
-                    var _ins = _step32.value;
+                  for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
+                    var _ins = _step33.value;
 
                     var _res = _ins.ejecutar(controlador, ts_local);
 
@@ -11308,9 +11539,9 @@
 
                   }
                 } catch (err) {
-                  _iterator32.e(err);
+                  _iterator33.e(err);
                 } finally {
-                  _iterator32.f();
+                  _iterator33.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (IF)");
@@ -11329,18 +11560,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator33 = _createForOfIteratorHelper(this.lista_ifs),
-                _step33;
+            var _iterator34 = _createForOfIteratorHelper(this.lista_ifs),
+                _step34;
 
             try {
-              for (_iterator33.s(); !(_step33 = _iterator33.n()).done;) {
-                var _ins2 = _step33.value;
+              for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
+                var _ins2 = _step34.value;
                 padre.AddHijo(_ins2.recorrer());
               }
             } catch (err) {
-              _iterator33.e(err);
+              _iterator34.e(err);
             } finally {
-              _iterator33.f();
+              _iterator34.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -11350,18 +11581,18 @@
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("else", ""));
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-              var _iterator34 = _createForOfIteratorHelper(this.lista_elses),
-                  _step34;
+              var _iterator35 = _createForOfIteratorHelper(this.lista_elses),
+                  _step35;
 
               try {
-                for (_iterator34.s(); !(_step34 = _iterator34.n()).done;) {
-                  var ins = _step34.value;
+                for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
+                  var ins = _step35.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator34.e(err);
+                _iterator35.e(err);
               } finally {
-                _iterator34.f();
+                _iterator35.f();
               }
 
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -11563,21 +11794,21 @@
               if (this.contador == 0) {
                 ts = ts.ant;
 
-                var _iterator35 = _createForOfIteratorHelper(ts.tabla),
-                    _step35;
+                var _iterator36 = _createForOfIteratorHelper(ts.tabla),
+                    _step36;
 
                 try {
-                  for (_iterator35.s(); !(_step35 = _iterator35.n()).done;) {
-                    var informacion = _step35.value;
+                  for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
+                    var informacion = _step36.value;
 
                     if (informacion.sim.simbolo == 1) {
                       controlador.append(informacion.sim.objeto.gethtml("", controlador));
                     }
                   }
                 } catch (err) {
-                  _iterator35.e(err);
+                  _iterator36.e(err);
                 } finally {
-                  _iterator35.f();
+                  _iterator36.f();
                 }
               }
 
@@ -11829,33 +12060,6 @@
           value: function ejecutar(controlador, ts) {
             console.log("vamos a compilar la entrada");
 
-            var _iterator36 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step36;
-
-            try {
-              for (_iterator36.s(); !(_step36 = _iterator36.n()).done;) {
-                var instruccion = _step36.value;
-
-                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
-                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
-                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_0__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
-                  ts.agregar(instruccion.identificador, sim);
-                  ts.agregarSiguiente(instruccion.identificador, instruccion.ejecutar(controlador, ts));
-                }
-              }
-            } catch (err) {
-              _iterator36.e(err);
-            } finally {
-              _iterator36.f();
-            }
-
-            this.graficar(controlador, ts);
-          }
-        }, {
-          key: "ejecutarDescendente",
-          value: function ejecutarDescendente(controlador, ts) {
-            console.log("vamos a compilar la entrada");
-
             var _iterator37 = _createForOfIteratorHelper(this.lista_instrucciones),
                 _step37;
 
@@ -11877,6 +12081,33 @@
             }
 
             this.graficar(controlador, ts);
+          }
+        }, {
+          key: "ejecutarDescendente",
+          value: function ejecutarDescendente(controlador, ts) {
+            console.log("vamos a compilar la entrada");
+
+            var _iterator38 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step38;
+
+            try {
+              for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
+                var instruccion = _step38.value;
+
+                if (instruccion instanceof _xml_objeto__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+                  var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("OBJETO");
+                  var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_0__["default"](1, tipo, instruccion.identificador, instruccion.texto, instruccion);
+                  ts.agregar(instruccion.identificador, sim);
+                  ts.agregarSiguiente(instruccion.identificador, instruccion.ejecutar(controlador, ts));
+                }
+              }
+            } catch (err) {
+              _iterator38.e(err);
+            } finally {
+              _iterator38.f();
+            }
+
+            this.graficar(controlador, ts);
             console.log(ts);
           }
         }, {
@@ -11892,18 +12123,18 @@
             if (ts != null) {
               controlador.graficarEntornos(controlador, ts, ts.ambito);
 
-              var _iterator38 = _createForOfIteratorHelper(ts.sig),
-                  _step38;
+              var _iterator39 = _createForOfIteratorHelper(ts.sig),
+                  _step39;
 
               try {
-                for (_iterator38.s(); !(_step38 = _iterator38.n()).done;) {
-                  var tssig = _step38.value;
+                for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
+                  var tssig = _step39.value;
                   this.graficar(controlador, tssig.sig);
                 }
               } catch (err) {
-                _iterator38.e(err);
+                _iterator39.e(err);
               } finally {
-                _iterator38.f();
+                _iterator39.f();
               }
             }
           }
@@ -11912,18 +12143,18 @@
           value: function recorrer() {
             var raiz = new _Nodo__WEBPACK_IMPORTED_MODULE_3__["default"]("INICIO", "");
 
-            var _iterator39 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step39;
+            var _iterator40 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step40;
 
             try {
-              for (_iterator39.s(); !(_step39 = _iterator39.n()).done;) {
-                var inst = _step39.value;
+              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
+                var inst = _step40.value;
                 raiz.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator39.e(err);
+              _iterator40.e(err);
             } finally {
-              _iterator39.f();
+              _iterator40.f();
             }
 
             return raiz;
@@ -12157,12 +12388,12 @@
             var ts = this;
             console.log("-----------------");
 
-            var _iterator40 = _createForOfIteratorHelper(ts.tabla),
-                _step40;
+            var _iterator41 = _createForOfIteratorHelper(ts.tabla),
+                _step41;
 
             try {
-              for (_iterator40.s(); !(_step40 = _iterator40.n()).done;) {
-                var informacion = _step40.value;
+              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
+                var informacion = _step41.value;
                 console.log(informacion.identificador + "==" + id + " && " + tipoval + "==" + informacion.sim.simbolo);
 
                 if (informacion.identificador == id && tipoval == informacion.sim.simbolo) {
@@ -12170,9 +12401,9 @@
                 }
               }
             } catch (err) {
-              _iterator40.e(err);
+              _iterator41.e(err);
             } finally {
-              _iterator40.f();
+              _iterator41.f();
             }
 
             return null;
@@ -12299,12 +12530,12 @@
               this.posiciontext3d = this.generar3d(this.texto, controlador);
             }
 
-            var _iterator41 = _createForOfIteratorHelper(this.listaAtributos),
-                _step41;
+            var _iterator42 = _createForOfIteratorHelper(this.listaAtributos),
+                _step42;
 
             try {
-              for (_iterator41.s(); !(_step41 = _iterator41.n()).done;) {
-                var at = _step41.value;
+              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
+                var at = _step42.value;
                 var tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("IDENTIFICADOR");
                 var sim = new _TablaSimbolos_Simbolos__WEBPACK_IMPORTED_MODULE_1__["default"](2, tipo, at.identificador, at.valor);
                 at.posicion3d = this.generar3d(at.valor, controlador);
@@ -12312,17 +12543,17 @@
                 ts_local.agregar(at.identificador, sim);
               }
             } catch (err) {
-              _iterator41.e(err);
+              _iterator42.e(err);
             } finally {
-              _iterator41.f();
+              _iterator42.f();
             }
 
-            var _iterator42 = _createForOfIteratorHelper(this.listaObjetos),
-                _step42;
+            var _iterator43 = _createForOfIteratorHelper(this.listaObjetos),
+                _step43;
 
             try {
-              for (_iterator42.s(); !(_step42 = _iterator42.n()).done;) {
-                var _at = _step42.value;
+              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
+                var _at = _step43.value;
 
                 var _tipo = new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_3__["default"]("OBJETO");
 
@@ -12342,9 +12573,9 @@
                 ts_local.agregarSiguiente(_at.identificador, _at.ejecutar(controlador, ts_local));
               }
             } catch (err) {
-              _iterator42.e(err);
+              _iterator43.e(err);
             } finally {
-              _iterator42.f();
+              _iterator43.f();
             }
 
             return ts_local;
@@ -12358,12 +12589,12 @@
             generator.genCall('nativa_print_str');
             var xml = tab + "<" + this.identificador;
 
-            var _iterator43 = _createForOfIteratorHelper(this.listaAtributos),
-                _step43;
+            var _iterator44 = _createForOfIteratorHelper(this.listaAtributos),
+                _step44;
 
             try {
-              for (_iterator43.s(); !(_step43 = _iterator43.n()).done;) {
-                var _at2 = _step43.value;
+              for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
+                var _at2 = _step44.value;
                 generator.genPrint('c', '32');
                 generator.genSetStack('p', _at2.posicionId3d);
                 generator.genCall('nativa_print_str');
@@ -12375,9 +12606,9 @@
                 xml += " " + _at2.identificador + "=\"" + _at2.valor + "\" ";
               }
             } catch (err) {
-              _iterator43.e(err);
+              _iterator44.e(err);
             } finally {
-              _iterator43.f();
+              _iterator44.f();
             }
 
             if (this.tipoetiqueta == 1) {
@@ -12400,20 +12631,20 @@
                 generator.genPrint('c', '62');
                 xml += ">";
 
-                var _iterator44 = _createForOfIteratorHelper(this.listaObjetos),
-                    _step44;
+                var _iterator45 = _createForOfIteratorHelper(this.listaObjetos),
+                    _step45;
 
                 try {
-                  for (_iterator44.s(); !(_step44 = _iterator44.n()).done;) {
-                    var at = _step44.value;
+                  for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
+                    var at = _step45.value;
                     xml += "\n";
                     generator.genPrint('c', '10');
                     xml += at.gethtml(tab, controlador);
                   }
                 } catch (err) {
-                  _iterator44.e(err);
+                  _iterator45.e(err);
                 } finally {
-                  _iterator44.f();
+                  _iterator45.f();
                 }
 
                 generator.genPrint('c', '10');
@@ -12438,32 +12669,32 @@
               hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.texto, ""));
             }
 
-            var _iterator45 = _createForOfIteratorHelper(this.listaAtributos),
-                _step45;
-
-            try {
-              for (_iterator45.s(); !(_step45 = _iterator45.n()).done;) {
-                var at = _step45.value;
-                hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](at.identificador, ""));
-              }
-            } catch (err) {
-              _iterator45.e(err);
-            } finally {
-              _iterator45.f();
-            }
-
-            var _iterator46 = _createForOfIteratorHelper(this.listaObjetos),
+            var _iterator46 = _createForOfIteratorHelper(this.listaAtributos),
                 _step46;
 
             try {
               for (_iterator46.s(); !(_step46 = _iterator46.n()).done;) {
-                var _at3 = _step46.value;
-                hijo.AddHijo(_at3.recorrer());
+                var at = _step46.value;
+                hijo.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](at.identificador, ""));
               }
             } catch (err) {
               _iterator46.e(err);
             } finally {
               _iterator46.f();
+            }
+
+            var _iterator47 = _createForOfIteratorHelper(this.listaObjetos),
+                _step47;
+
+            try {
+              for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
+                var _at3 = _step47.value;
+                hijo.AddHijo(_at3.recorrer());
+              }
+            } catch (err) {
+              _iterator47.e(err);
+            } finally {
+              _iterator47.f();
             }
 
             padre.AddHijo(hijo);
@@ -12982,28 +13213,28 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-            var _iterator47 = _createForOfIteratorHelper(this.Lista_case),
-                _step47;
-
-            try {
-              for (_iterator47.s(); !(_step47 = _iterator47.n()).done;) {
-                var sw = _step47.value;
-                sw.valor_sw = this.valor_sw.getValor(controlador, ts_local);
-              }
-            } catch (err) {
-              _iterator47.e(err);
-            } finally {
-              _iterator47.f();
-            }
-
-            var x = 0;
-
             var _iterator48 = _createForOfIteratorHelper(this.Lista_case),
                 _step48;
 
             try {
               for (_iterator48.s(); !(_step48 = _iterator48.n()).done;) {
-                var _ins3 = _step48.value;
+                var sw = _step48.value;
+                sw.valor_sw = this.valor_sw.getValor(controlador, ts_local);
+              }
+            } catch (err) {
+              _iterator48.e(err);
+            } finally {
+              _iterator48.f();
+            }
+
+            var x = 0;
+
+            var _iterator49 = _createForOfIteratorHelper(this.Lista_case),
+                _step49;
+
+            try {
+              for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
+                var _ins3 = _step49.value;
 
                 var _res2 = _ins3.ejecutar(controlador, ts_local);
 
@@ -13019,18 +13250,18 @@
                 }
               }
             } catch (err) {
-              _iterator48.e(err);
+              _iterator49.e(err);
             } finally {
-              _iterator48.f();
+              _iterator49.f();
             }
 
             if (x == 0) {
-              var _iterator49 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step49;
+              var _iterator50 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step50;
 
               try {
-                for (_iterator49.s(); !(_step49 = _iterator49.n()).done;) {
-                  var ins = _step49.value;
+                for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
+                  var ins = _step50.value;
                   var res = ins.ejecutar(controlador, ts_local);
 
                   if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -13044,9 +13275,9 @@
                   }
                 }
               } catch (err) {
-                _iterator49.e(err);
+                _iterator50.e(err);
               } finally {
-                _iterator49.f();
+                _iterator50.f();
               }
             }
 
@@ -13062,35 +13293,35 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator50 = _createForOfIteratorHelper(this.Lista_case),
-                _step50;
+            var _iterator51 = _createForOfIteratorHelper(this.Lista_case),
+                _step51;
 
             try {
-              for (_iterator50.s(); !(_step50 = _iterator50.n()).done;) {
-                var _ins4 = _step50.value;
+              for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
+                var _ins4 = _step51.value;
                 padre.AddHijo(_ins4.recorrer());
               }
             } catch (err) {
-              _iterator50.e(err);
+              _iterator51.e(err);
             } finally {
-              _iterator50.f();
+              _iterator51.f();
             }
 
             if (this.Lista_defaul.length > 0) {
               padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("default:", ""));
 
-              var _iterator51 = _createForOfIteratorHelper(this.Lista_defaul),
-                  _step51;
+              var _iterator52 = _createForOfIteratorHelper(this.Lista_defaul),
+                  _step52;
 
               try {
-                for (_iterator51.s(); !(_step51 = _iterator51.n()).done;) {
-                  var ins = _step51.value;
+                for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
+                  var ins = _step52.value;
                   padre.AddHijo(ins.recorrer());
                 }
               } catch (err) {
-                _iterator51.e(err);
+                _iterator52.e(err);
               } finally {
-                _iterator51.f();
+                _iterator52.f();
               }
             }
 
@@ -13174,12 +13405,12 @@
               while (this.condicion.getValor(controlador, ts)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts);
 
-                var _iterator52 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step52;
+                var _iterator53 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step53;
 
                 try {
-                  for (_iterator52.s(); !(_step52 = _iterator52.n()).done;) {
-                    var ins = _step52.value;
+                  for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
+                    var ins = _step53.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -13197,9 +13428,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator52.e(err);
+                  _iterator53.e(err);
                 } finally {
-                  _iterator52.f();
+                  _iterator53.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (While)");
@@ -13216,18 +13447,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator53 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step53;
+            var _iterator54 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step54;
 
             try {
-              for (_iterator53.s(); !(_step53 = _iterator53.n()).done;) {
-                var ins = _step53.value;
+              for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
+                var ins = _step54.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator53.e(err);
+              _iterator54.e(err);
             } finally {
-              _iterator53.f();
+              _iterator54.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -13292,12 +13523,12 @@
               this.isxprecion(controlador, ts);
             } else {
               if (this.sig != null) {
-                var _iterator54 = _createForOfIteratorHelper(ts.sig),
-                    _step54;
+                var _iterator55 = _createForOfIteratorHelper(ts.sig),
+                    _step55;
 
                 try {
-                  for (_iterator54.s(); !(_step54 = _iterator54.n()).done;) {
-                    var tssig = _step54.value;
+                  for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
+                    var tssig = _step55.value;
 
                     if (this.exprecion.id == "*") {
                       this.sig.ejecutar(controlador, tssig.sig);
@@ -13308,17 +13539,17 @@
                     }
                   }
                 } catch (err) {
-                  _iterator54.e(err);
+                  _iterator55.e(err);
                 } finally {
-                  _iterator54.f();
+                  _iterator55.f();
                 }
               } else {
-                var _iterator55 = _createForOfIteratorHelper(ts.tabla),
-                    _step55;
+                var _iterator56 = _createForOfIteratorHelper(ts.tabla),
+                    _step56;
 
                 try {
-                  for (_iterator55.s(); !(_step55 = _iterator55.n()).done;) {
-                    var informacion = _step55.value;
+                  for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
+                    var informacion = _step56.value;
 
                     if (this.exprecion.tipo == 1) {
                       if (this.exprecion.id == "*") {
@@ -13339,9 +13570,9 @@
                     }
                   }
                 } catch (err) {
-                  _iterator55.e(err);
+                  _iterator56.e(err);
                 } finally {
-                  _iterator55.f();
+                  _iterator56.f();
                 }
               }
             }
@@ -13364,12 +13595,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator56 = _createForOfIteratorHelper(ts.sig),
-                  _step56;
+              var _iterator57 = _createForOfIteratorHelper(ts.sig),
+                  _step57;
 
               try {
-                for (_iterator56.s(); !(_step56 = _iterator56.n()).done;) {
-                  var tssig = _step56.value;
+                for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
+                  var tssig = _step57.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     if (cont == posicion) {
@@ -13380,17 +13611,17 @@
                   }
                 }
               } catch (err) {
-                _iterator56.e(err);
+                _iterator57.e(err);
               } finally {
-                _iterator56.f();
+                _iterator57.f();
               }
             } else {
-              var _iterator57 = _createForOfIteratorHelper(ts.tabla),
-                  _step57;
+              var _iterator58 = _createForOfIteratorHelper(ts.tabla),
+                  _step58;
 
               try {
-                for (_iterator57.s(); !(_step57 = _iterator57.n()).done;) {
-                  var informacion = _step57.value;
+                for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
+                  var informacion = _step58.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
@@ -13401,9 +13632,9 @@
                   }
                 }
               } catch (err) {
-                _iterator57.e(err);
+                _iterator58.e(err);
               } finally {
-                _iterator57.f();
+                _iterator58.f();
               }
             }
           }
@@ -13415,12 +13646,12 @@
             var cont = 1;
 
             if (this.sig != null) {
-              var _iterator58 = _createForOfIteratorHelper(ts.sig),
-                  _step58;
+              var _iterator59 = _createForOfIteratorHelper(ts.sig),
+                  _step59;
 
               try {
-                for (_iterator58.s(); !(_step58 = _iterator58.n()).done;) {
-                  var tssig = _step58.value;
+                for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
+                  var tssig = _step59.value;
 
                   if (this.exprecion.id == tssig.identificador) {
                     controlador.position = cont;
@@ -13436,17 +13667,17 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator58.e(err);
+                _iterator59.e(err);
               } finally {
-                _iterator58.f();
+                _iterator59.f();
               }
             } else {
-              var _iterator59 = _createForOfIteratorHelper(ts.tabla),
-                  _step59;
+              var _iterator60 = _createForOfIteratorHelper(ts.tabla),
+                  _step60;
 
               try {
-                for (_iterator59.s(); !(_step59 = _iterator59.n()).done;) {
-                  var informacion = _step59.value;
+                for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
+                  var informacion = _step60.value;
 
                   if (informacion.identificador == this.exprecion.id) {
                     controlador.position = cont;
@@ -13462,9 +13693,9 @@
                   posicion++;
                 }
               } catch (err) {
-                _iterator59.e(err);
+                _iterator60.e(err);
               } finally {
-                _iterator59.f();
+                _iterator60.f();
               }
             }
           }
@@ -13563,12 +13794,12 @@
           value: function ejecutar(controlador, ts) {
             var ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts);
 
-            var _iterator60 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step60;
+            var _iterator61 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step61;
 
             try {
-              for (_iterator60.s(); !(_step60 = _iterator60.n()).done;) {
-                var ins = _step60.value;
+              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
+                var ins = _step61.value;
                 var r = ins.ejecutar(controlador, ts_local);
 
                 if (r != null) {
@@ -13578,9 +13809,9 @@
                 }
               }
             } catch (err) {
-              _iterator60.e(err);
+              _iterator61.e(err);
             } finally {
-              _iterator60.f();
+              _iterator61.f();
             }
 
             controlador.ambito = "Funcion: \n" + this.identificador;
@@ -13605,18 +13836,18 @@
             padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
             var hijo_instrucciones = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Instrucciones", "");
 
-            var _iterator61 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step61;
+            var _iterator62 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step62;
 
             try {
-              for (_iterator61.s(); !(_step61 = _iterator61.n()).done;) {
-                var inst = _step61.value;
+              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
+                var inst = _step62.value;
                 hijo_instrucciones.AddHijo(inst.recorrer());
               }
             } catch (err) {
-              _iterator61.e(err);
+              _iterator62.e(err);
             } finally {
-              _iterator61.f();
+              _iterator62.f();
             }
 
             padre.AddHijo(hijo_instrucciones);
@@ -13733,18 +13964,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator62 = _createForOfIteratorHelper(ts.tabla),
-                _step62;
+            var _iterator63 = _createForOfIteratorHelper(ts.tabla),
+                _step63;
 
             try {
-              for (_iterator62.s(); !(_step62 = _iterator62.n()).done;) {
-                var sim = _step62.value;
+              for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
+                var sim = _step63.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator62.e(err);
+              _iterator63.e(err);
             } finally {
-              _iterator62.f();
+              _iterator63.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -13754,19 +13985,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator63 = _createForOfIteratorHelper(controlador.errores),
-                _step63;
+            var _iterator64 = _createForOfIteratorHelper(controlador.errores),
+                _step64;
 
             try {
-              for (_iterator63.s(); !(_step63 = _iterator63.n()).done;) {
-                var sim = _step63.value;
+              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
+                var sim = _step64.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator63.e(err);
+              _iterator64.e(err);
             } finally {
-              _iterator63.f();
+              _iterator64.f();
             }
 
             return cuerpohtml;
@@ -16894,18 +17125,18 @@
           value: function graficarEntornos(controlador, ts, ubicacion) {
             var cuerpohtml = "";
 
-            var _iterator64 = _createForOfIteratorHelper(ts.tabla),
-                _step64;
+            var _iterator65 = _createForOfIteratorHelper(ts.tabla),
+                _step65;
 
             try {
-              for (_iterator64.s(); !(_step64 = _iterator64.n()).done;) {
-                var sim = _step64.value;
+              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
+                var sim = _step65.value;
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador + "</td>" + "</td><td>" + ubicacion + "</td><td>" + this.getValor(sim.sim) + "</tr>";
               }
             } catch (err) {
-              _iterator64.e(err);
+              _iterator65.e(err);
             } finally {
-              _iterator64.f();
+              _iterator65.f();
             }
 
             this.cuerpo = this.cuerpo + cuerpohtml;
@@ -16915,19 +17146,19 @@
           value: function graficar_Semantico(controlador, ts) {
             var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
 
-            var _iterator65 = _createForOfIteratorHelper(controlador.errores),
-                _step65;
+            var _iterator66 = _createForOfIteratorHelper(controlador.errores),
+                _step66;
 
             try {
-              for (_iterator65.s(); !(_step65 = _iterator65.n()).done;) {
-                var sim = _step65.value;
+              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
+                var sim = _step66.value;
                 console.log("Errores");
                 cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion + "</td><td>" + sim.linea + "</td>" + "</td><td>" + sim.columna + "</tr>";
               }
             } catch (err) {
-              _iterator65.e(err);
+              _iterator66.e(err);
             } finally {
-              _iterator65.f();
+              _iterator66.f();
             }
 
             return cuerpohtml;
@@ -17197,33 +17428,6 @@
           value: function getvalor3d(controlador, ts) {
             var cont = 0;
 
-            var _iterator66 = _createForOfIteratorHelper(ts.tabla),
-                _step66;
-
-            try {
-              for (_iterator66.s(); !(_step66 = _iterator66.n()).done;) {
-                var informacion = _step66.value;
-
-                if (informacion.identificador == controlador.idlast) {
-                  cont++;
-                }
-              }
-            } catch (err) {
-              _iterator66.e(err);
-            } finally {
-              _iterator66.f();
-            }
-
-            return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](cont + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
-          }
-        }, {
-          key: "getTipo",
-          value: function getTipo(controlador, ts) {}
-        }, {
-          key: "getValor",
-          value: function getValor(controlador, ts) {
-            var cont = 0;
-
             var _iterator67 = _createForOfIteratorHelper(ts.tabla),
                 _step67;
 
@@ -17239,6 +17443,33 @@
               _iterator67.e(err);
             } finally {
               _iterator67.f();
+            }
+
+            return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](cont + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("DOBLE"));
+          }
+        }, {
+          key: "getTipo",
+          value: function getTipo(controlador, ts) {}
+        }, {
+          key: "getValor",
+          value: function getValor(controlador, ts) {
+            var cont = 0;
+
+            var _iterator68 = _createForOfIteratorHelper(ts.tabla),
+                _step68;
+
+            try {
+              for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
+                var informacion = _step68.value;
+
+                if (informacion.identificador == controlador.idlast) {
+                  cont++;
+                }
+              }
+            } catch (err) {
+              _iterator68.e(err);
+            } finally {
+              _iterator68.f();
             }
 
             return cont;
@@ -17292,8 +17523,8 @@
           key: "generarNativas",
           value: function generarNativas() {
             this.nativa_print_str(); //this.nativa_print_integer();
-            // this.nativa_compararIgual_str_str();
-            // this.nativa_compararNoIgual_str_str();
+
+            this.nativa_compararIgual_str_str(); // this.nativa_compararNoIgual_str_str();
             //this.nativa_ToUpperCase();
             //this.nativa_ToLowerCase();
 
@@ -18256,12 +18487,12 @@
               while (this.condicion.getValor(controlador, ts_for)) {
                 var ts_local = new src_clases_TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_1__["TablaSimbolos"](ts_for);
 
-                var _iterator68 = _createForOfIteratorHelper(this.lista_instrucciones),
-                    _step68;
+                var _iterator69 = _createForOfIteratorHelper(this.lista_instrucciones),
+                    _step69;
 
                 try {
-                  for (_iterator68.s(); !(_step68 = _iterator68.n()).done;) {
-                    var ins = _step68.value;
+                  for (_iterator69.s(); !(_step69 = _iterator69.n()).done;) {
+                    var ins = _step69.value;
                     var res = ins.ejecutar(controlador, ts_local);
 
                     if (ins instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"] || res instanceof _SentenciaTransferencia_Break__WEBPACK_IMPORTED_MODULE_2__["default"]) {
@@ -18280,9 +18511,9 @@
 
                   }
                 } catch (err) {
-                  _iterator68.e(err);
+                  _iterator69.e(err);
                 } finally {
-                  _iterator68.f();
+                  _iterator69.f();
                 }
 
                 controlador.graficarEntornos(controlador, ts_local, " (FOR)");
@@ -18306,18 +18537,18 @@
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](")", ""));
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("{", ""));
 
-            var _iterator69 = _createForOfIteratorHelper(this.lista_instrucciones),
-                _step69;
+            var _iterator70 = _createForOfIteratorHelper(this.lista_instrucciones),
+                _step70;
 
             try {
-              for (_iterator69.s(); !(_step69 = _iterator69.n()).done;) {
-                var ins = _step69.value;
+              for (_iterator70.s(); !(_step70 = _iterator70.n()).done;) {
+                var ins = _step70.value;
                 padre.AddHijo(ins.recorrer());
               }
             } catch (err) {
-              _iterator69.e(err);
+              _iterator70.e(err);
             } finally {
-              _iterator69.f();
+              _iterator70.f();
             }
 
             padre.AddHijo(new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("}", ""));
@@ -18451,6 +18682,7 @@
           this.expU = expU;
           this.op = operador;
           this.operador = this.getOperador(operador);
+          this.lblFalse = this.lblTrue = '';
         }
 
         _createClass(Operaciones, [{
@@ -18769,12 +19001,12 @@
         _createClass(Declaracion, [{
           key: "ejecutar",
           value: function ejecutar(controlador, ts) {
-            var _iterator70 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step70;
+            var _iterator71 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step71;
 
             try {
-              for (_iterator70.s(); !(_step70 = _iterator70.n()).done;) {
-                var simbolo = _step70.value;
+              for (_iterator71.s(); !(_step71 = _iterator71.n()).done;) {
+                var simbolo = _step71.value;
                 var variable = simbolo;
 
                 if (ts.existeEnActual(variable.identificador)) {
@@ -18816,9 +19048,9 @@
                 }
               }
             } catch (err) {
-              _iterator70.e(err);
+              _iterator71.e(err);
             } finally {
-              _iterator70.f();
+              _iterator71.f();
             }
           }
         }, {
@@ -18826,21 +19058,21 @@
           value: function recorrer() {
             var padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaraciones", "");
 
-            var _iterator71 = _createForOfIteratorHelper(this.lista_simbolos),
-                _step71;
+            var _iterator72 = _createForOfIteratorHelper(this.lista_simbolos),
+                _step72;
 
             try {
-              for (_iterator71.s(); !(_step71 = _iterator71.n()).done;) {
-                var simbolo = _step71.value;
+              for (_iterator72.s(); !(_step72 = _iterator72.n()).done;) {
+                var simbolo = _step72.value;
                 var p = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"]("Declaracion", "");
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](simbolo.identificador, ""));
                 p.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_1__["default"](";", ""));
                 padre.AddHijo(p);
               }
             } catch (err) {
-              _iterator71.e(err);
+              _iterator72.e(err);
             } finally {
-              _iterator71.f();
+              _iterator72.f();
             }
 
             return padre;

@@ -1149,7 +1149,7 @@ class Nativas {
     generarNativas() {
         this.nativa_print_str();
         //this.nativa_print_integer();
-        // this.nativa_compararIgual_str_str();
+        this.nativa_compararIgual_str_str();
         // this.nativa_compararNoIgual_str_str();
         //this.nativa_ToUpperCase();
         //this.nativa_ToLowerCase();
@@ -3102,12 +3102,12 @@ class barrabarra {
   }
 */
 var XQuery = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,10],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[5,7,10,17,18,19,25,27,29,30],$Va=[1,17],$Vb=[1,23],$Vc=[1,20],$Vd=[1,19],$Ve=[1,18],$Vf=[1,21],$Vg=[1,22],$Vh=[1,44],$Vi=[1,40],$Vj=[1,42],$Vk=[1,36],$Vl=[1,37],$Vm=[1,38],$Vn=[1,39],$Vo=[1,41],$Vp=[1,43],$Vq=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,34,35,36,37,38,39,41],$Vr=[1,56],$Vs=[1,55],$Vt=[1,54],$Vu=[16,21,24,25,32],$Vv=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,34,35,38,39,41],$Vw=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,38,39,41];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,10],$V6=[1,15],$V7=[1,12],$V8=[1,13],$V9=[1,14],$Va=[5,7,10,14,15,16,22,24,28,30,31],$Vb=[1,22],$Vc=[1,19],$Vd=[1,25],$Ve=[1,21],$Vf=[1,20],$Vg=[1,23],$Vh=[1,24],$Vi=[1,47],$Vj=[1,43],$Vk=[1,45],$Vl=[1,39],$Vm=[1,40],$Vn=[1,41],$Vo=[1,42],$Vp=[1,44],$Vq=[1,46],$Vr=[5,7,9,10,11,12,14,15,16,17,18,19,21,22,24,27,28,30,31,33,35,36,37,38,39,40,42],$Vs=[1,59],$Vt=[1,58],$Vu=[1,57],$Vv=[18,21,22,27,33],$Vw=[5,7,9,10,11,12,14,15,16,17,18,19,21,22,24,27,28,30,31,33,35,36,39,40,42],$Vx=[5,7,9,10,11,12,14,15,16,17,18,19,21,22,24,27,28,30,31,33,39,40,42];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"RAIZ":4,"EOF":5,"INSTRUCCION":6,"FOR":7,"E":8,"IN":9,"LET":10,"DOSPUNTOS":11,"IGUAL":12,"PARA":13,"DECIMAL":14,"TO":15,"PARC":16,"WHERE":17,"ORDER":18,"RETURN":19,"MENOR":20,"ID":21,"MAYOR":22,"LLAVEA":23,"LLAVEC":24,"BARRA":25,"SENTECIAS_CONTROL":26,"IF":27,"PARAMETROS":28,"THEN":29,"ELSE":30,"LISTA_PARAMETROS":31,"DOLAR":32,"ARROBA":33,"MAS":34,"MENOS":35,"POR":36,"DIV":37,"MENOR_IGUAL":38,"MAYOR_IGUAL":39,"CORA":40,"CORC":41,"CADENA":42,"ENTERO":43,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"FOR",9:"IN",10:"LET",11:"DOSPUNTOS",12:"IGUAL",13:"PARA",14:"DECIMAL",15:"TO",16:"PARC",17:"WHERE",18:"ORDER",19:"RETURN",20:"MENOR",21:"ID",22:"MAYOR",23:"LLAVEA",24:"LLAVEC",25:"BARRA",27:"IF",29:"THEN",30:"ELSE",32:"DOLAR",33:"ARROBA",34:"MAS",35:"MENOS",36:"POR",37:"DIV",38:"MENOR_IGUAL",39:"MAYOR_IGUAL",40:"CORA",41:"CORC",42:"CADENA",43:"ENTERO"},
-productions_: [0,[3,2],[4,2],[4,1],[6,4],[6,9],[6,2],[6,2],[6,2],[6,11],[6,2],[6,1],[6,2],[6,3],[26,4],[26,11],[26,11],[28,2],[28,1],[31,2],[31,2],[31,3],[31,3],[31,1],[31,4],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,2],[8,4],[8,1],[8,1],[8,1],[8,1]],
+symbols_: {"error":2,"INICIO":3,"RAIZ":4,"EOF":5,"INSTRUCCION":6,"FOR":7,"E":8,"IN":9,"LET":10,"DOSPUNTOS":11,"IGUAL":12,"OP":13,"WHERE":14,"ORDER":15,"RETURN":16,"MENOR":17,"ID":18,"MAYOR":19,"LLAVEA":20,"LLAVEC":21,"BARRA":22,"SENTECIAS_CONTROL":23,"PARA":24,"DECIMAL":25,"TO":26,"PARC":27,"IF":28,"PARAMETROS":29,"THEN":30,"ELSE":31,"LISTA_PARAMETROS":32,"DOLAR":33,"ARROBA":34,"MAS":35,"MENOS":36,"POR":37,"DIV":38,"MENOR_IGUAL":39,"MAYOR_IGUAL":40,"CORA":41,"CORC":42,"CADENA":43,"ENTERO":44,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"FOR",9:"IN",10:"LET",11:"DOSPUNTOS",12:"IGUAL",14:"WHERE",15:"ORDER",16:"RETURN",17:"MENOR",18:"ID",19:"MAYOR",20:"LLAVEA",21:"LLAVEC",22:"BARRA",24:"PARA",25:"DECIMAL",26:"TO",27:"PARC",28:"IF",30:"THEN",31:"ELSE",33:"DOLAR",34:"ARROBA",35:"MAS",36:"MENOS",37:"POR",38:"DIV",39:"MENOR_IGUAL",40:"MAYOR_IGUAL",41:"CORA",42:"CORC",43:"CADENA",44:"ENTERO"},
+productions_: [0,[3,2],[4,2],[4,1],[6,4],[6,5],[6,2],[6,2],[6,2],[6,11],[6,2],[6,1],[6,2],[6,3],[6,1],[13,5],[23,4],[23,11],[23,11],[29,2],[29,1],[32,2],[32,2],[32,3],[32,3],[32,1],[32,4],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,2],[8,4],[8,1],[8,1],[8,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -3118,8 +3118,8 @@ case 1:
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},{1:[3]},{5:[1,14],6:15,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},o($V9,[2,3]),{8:16,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:24,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:25,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:26,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:27,13:$Va,14:$Vb,20:[1,28],21:$Vc,26:29,27:$V6,29:$V7,30:$V8,32:$Vd,40:$Ve,42:$Vf,43:$Vg},o($V9,[2,11]),{8:30,13:$Va,14:$Vb,21:$Vc,25:[1,31],32:$Vd,40:$Ve,42:$Vf,43:$Vg},{13:[1,32]},{20:[1,33]},{20:[1,34]},{1:[2,1]},o($V9,[2,2]),{9:[1,35],12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{8:45,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:46,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:[1,47]},o($Vq,[2,38],{13:[1,48]}),o($Vq,[2,39]),o($Vq,[2,40]),o($Vq,[2,41]),{11:[1,49],12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},o($V9,[2,6],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($V9,[2,7],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($V9,[2,8],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{21:[1,50]},o($V9,[2,10]),o($V9,[2,12],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{8:51,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:$Vr,25:$Vs,28:52,31:53,32:$Vt},{21:[1,57]},{21:[1,58]},{6:59,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},{8:60,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:61,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:62,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:63,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:64,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:65,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:66,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:67,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:68,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{12:$Vh,16:[1,69],20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,41:[1,70]},o($Vq,[2,36]),{8:71,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{12:[1,72]},{22:[1,73]},o($V9,[2,13],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{16:[1,74],21:$Vr,25:$Vs,31:75,32:$Vt},o($Vu,[2,18]),{21:[1,76]},{8:77,13:$Va,14:$Vb,21:$Vc,25:[1,78],32:$Vd,33:[1,79],40:$Ve,42:$Vf,43:$Vg},o($Vu,[2,23],{13:[1,80]}),{22:[1,81]},{22:[1,82]},o($V9,[2,4]),o($Vv,[2,25],{36:$Vm,37:$Vn}),o($Vv,[2,26],{36:$Vm,37:$Vn}),o($Vq,[2,27]),o($Vq,[2,28]),o($Vw,[2,29],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,30],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,31],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,32],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,33],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vq,[2,34]),o($Vq,[2,35]),{12:$Vh,16:[1,83],20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{13:[1,84]},{23:[1,85]},o($V9,[2,14]),o($Vu,[2,17]),o($Vu,[2,19]),o($Vu,[2,20],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{8:86,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:87,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:$Vr,25:$Vs,28:88,31:53,32:$Vt},{23:[1,89]},{23:[1,90]},o($Vq,[2,37]),{14:[1,91]},{8:92,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},o($Vu,[2,21],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($Vu,[2,22],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{16:[1,93],21:$Vr,25:$Vs,31:75,32:$Vt},{21:$Vr,25:$Vs,28:94,31:53,32:$Vt},{21:$Vr,25:$Vs,28:95,31:53,32:$Vt},{15:[1,96]},{12:$Vh,20:$Vi,22:$Vj,24:[1,97],34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},o($Vu,[2,24]),{21:$Vr,24:[1,98],25:$Vs,31:75,32:$Vt},{21:$Vr,24:[1,99],25:$Vs,31:75,32:$Vt},{14:[1,100]},{20:[1,101]},{20:[1,102]},{20:[1,103]},{16:[1,104]},{25:[1,105]},{25:[1,106]},{25:[1,107]},o($V9,[2,5]),{21:[1,108]},{21:[1,109]},{21:[1,110]},{22:[1,111]},{22:[1,112]},{22:[1,113]},o($V9,[2,9]),o($V9,[2,15]),o($V9,[2,16])],
-defaultActions: {14:[2,1]},
+table: [{3:1,4:2,6:3,7:$V0,10:$V1,13:11,14:$V2,15:$V3,16:$V4,22:$V5,23:9,24:$V6,28:$V7,30:$V8,31:$V9},{1:[3]},{5:[1,16],6:17,7:$V0,10:$V1,13:11,14:$V2,15:$V3,16:$V4,22:$V5,23:9,24:$V6,28:$V7,30:$V8,31:$V9},o($Va,[2,3]),{8:18,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:26,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:27,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:28,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:29,17:[1,30],18:$Vb,23:31,24:$Vc,25:$Vd,28:$V7,30:$V8,31:$V9,33:$Ve,41:$Vf,43:$Vg,44:$Vh},o($Va,[2,11]),{8:32,18:$Vb,22:[1,33],24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},o($Va,[2,14]),{24:[1,34]},{17:[1,35]},{17:[1,36]},{25:[1,37]},{1:[2,1]},o($Va,[2,2]),{9:[1,38],12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},{8:48,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:49,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{18:[1,50]},{24:[1,51]},o($Vr,[2,40]),o($Vr,[2,41]),o($Vr,[2,42]),{11:[1,52],12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},o($Va,[2,6],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),o($Va,[2,7],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),o($Va,[2,8],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),{18:[1,53]},o($Va,[2,10]),o($Va,[2,12],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),{8:54,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{18:$Vs,22:$Vt,29:55,32:56,33:$Vu},{18:[1,60]},{18:[1,61]},{26:[1,62]},{6:63,7:$V0,10:$V1,13:11,14:$V2,15:$V3,16:$V4,22:$V5,23:9,24:$V6,28:$V7,30:$V8,31:$V9},{8:64,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:65,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:66,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:67,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:68,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:69,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:70,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:71,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:72,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{12:$Vi,17:$Vj,19:$Vk,27:[1,73],35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,42:[1,74]},o($Vr,[2,38]),{8:75,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{12:[1,76]},{19:[1,77]},o($Va,[2,13],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),{18:$Vs,22:$Vt,27:[1,78],32:79,33:$Vu},o($Vv,[2,20]),{18:[1,80]},{8:81,18:$Vb,22:[1,82],24:$Vc,25:$Vd,33:$Ve,34:[1,83],41:$Vf,43:$Vg,44:$Vh},o($Vv,[2,25],{24:[1,84]}),{19:[1,85]},{19:[1,86]},{25:[1,87]},o($Va,[2,4]),o($Vw,[2,27],{37:$Vn,38:$Vo}),o($Vw,[2,28],{37:$Vn,38:$Vo}),o($Vr,[2,29]),o($Vr,[2,30]),o($Vx,[2,31],{35:$Vl,36:$Vm,37:$Vn,38:$Vo}),o($Vx,[2,32],{35:$Vl,36:$Vm,37:$Vn,38:$Vo}),o($Vx,[2,33],{35:$Vl,36:$Vm,37:$Vn,38:$Vo}),o($Vx,[2,34],{35:$Vl,36:$Vm,37:$Vn,38:$Vo}),o($Vx,[2,35],{35:$Vl,36:$Vm,37:$Vn,38:$Vo}),o($Vr,[2,36]),o($Vr,[2,37]),{12:$Vi,17:$Vj,19:$Vk,27:[1,88],35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},{13:89,24:$V6},{20:[1,90]},o($Va,[2,16]),o($Vv,[2,19]),o($Vv,[2,21]),o($Vv,[2,22],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),{8:91,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{8:92,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},{18:$Vs,22:$Vt,29:93,32:56,33:$Vu},{20:[1,94]},{20:[1,95]},{27:[1,96]},o($Vr,[2,39]),o($Va,[2,5]),{8:97,18:$Vb,24:$Vc,25:$Vd,33:$Ve,41:$Vf,43:$Vg,44:$Vh},o($Vv,[2,23],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),o($Vv,[2,24],{12:$Vi,17:$Vj,19:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq}),{18:$Vs,22:$Vt,27:[1,98],32:79,33:$Vu},{18:$Vs,22:$Vt,29:99,32:56,33:$Vu},{18:$Vs,22:$Vt,29:100,32:56,33:$Vu},o($Va,[2,15]),{12:$Vi,17:$Vj,19:$Vk,21:[1,101],35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},o($Vv,[2,26]),{18:$Vs,21:[1,102],22:$Vt,32:79,33:$Vu},{18:$Vs,21:[1,103],22:$Vt,32:79,33:$Vu},{17:[1,104]},{17:[1,105]},{17:[1,106]},{22:[1,107]},{22:[1,108]},{22:[1,109]},{18:[1,110]},{18:[1,111]},{18:[1,112]},{19:[1,113]},{19:[1,114]},{19:[1,115]},o($Va,[2,9]),o($Va,[2,17]),o($Va,[2,18])],
+defaultActions: {16:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -3630,43 +3630,43 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0: console.log("Reconocio : "+ yy_.yytext); return 13
+case 0: console.log("Reconocio : "+ yy_.yytext); return 24
 break;
-case 1: console.log("Reconocio : "+ yy_.yytext); return 25
+case 1: console.log("Reconocio : "+ yy_.yytext); return 22
 break;
-case 2: console.log("Reconocio : "+ yy_.yytext); return 16
+case 2: console.log("Reconocio : "+ yy_.yytext); return 27
 break;
-case 3: console.log("Reconocio : "+ yy_.yytext); return 32
+case 3: console.log("Reconocio : "+ yy_.yytext); return 33
 break;
-case 4: console.log("Reconocio : "+ yy_.yytext); return 23
+case 4: console.log("Reconocio : "+ yy_.yytext); return 20
 break;
-case 5: console.log("Reconocio : "+ yy_.yytext); return 24
+case 5: console.log("Reconocio : "+ yy_.yytext); return 21
 break;
-case 6: console.log("Reconocio : "+ yy_.yytext); return 40
+case 6: console.log("Reconocio : "+ yy_.yytext); return 41
 break;
-case 7: console.log("Reconocio : "+ yy_.yytext); return 41
+case 7: console.log("Reconocio : "+ yy_.yytext); return 42
 break;
-case 8: console.log("Reconocio : "+ yy_.yytext); return 38
+case 8: console.log("Reconocio : "+ yy_.yytext); return 39
 break;
-case 9: console.log("Reconocio : "+ yy_.yytext); return 39
+case 9: console.log("Reconocio : "+ yy_.yytext); return 40
 break;
 case 10: console.log("Reconocio : "+ yy_.yytext); return 12
 break;
-case 11: console.log("Reconocio : "+ yy_.yytext); return 20
+case 11: console.log("Reconocio : "+ yy_.yytext); return 17
 break;
-case 12: console.log("Reconocio : "+ yy_.yytext); return 22
+case 12: console.log("Reconocio : "+ yy_.yytext); return 19
 break;
 case 13: console.log("Reconocio : "+ yy_.yytext); return 'DIFERENTE'
 break;
 case 14: console.log("Reconocio : "+ yy_.yytext); return 11
 break;
-case 15: console.log("Reconocio : "+ yy_.yytext); return 34
+case 15: console.log("Reconocio : "+ yy_.yytext); return 35
 break;
-case 16: console.log("Reconocio : "+ yy_.yytext); return 35
+case 16: console.log("Reconocio : "+ yy_.yytext); return 36
 break;
-case 17: console.log("Reconocio : "+ yy_.yytext); return 36
+case 17: console.log("Reconocio : "+ yy_.yytext); return 37
 break;
-case 18: console.log("Reconocio : "+ yy_.yytext); return 37
+case 18: console.log("Reconocio : "+ yy_.yytext); return 38
 break;
 case 19: console.log("Reconocio : "+ yy_.yytext); return 'AND'
 break;
@@ -3678,29 +3678,29 @@ case 22: console.log("Reconocio : "+ yy_.yytext); return 9
 break;
 case 23: console.log("Reconocio : "+ yy_.yytext); return 10
 break;
-case 24: console.log("Reconocio : "+ yy_.yytext); return 17
+case 24: console.log("Reconocio : "+ yy_.yytext); return 14
 break;
-case 25: console.log("Reconocio : "+ yy_.yytext); return 18
+case 25: console.log("Reconocio : "+ yy_.yytext); return 15
 break;
-case 26: console.log("Reconocio : "+ yy_.yytext); return 19
+case 26: console.log("Reconocio : "+ yy_.yytext); return 16
 break;
-case 27: console.log("Reconocio : "+ yy_.yytext); return 15
+case 27: console.log("Reconocio : "+ yy_.yytext); return 26
 break;
-case 28: console.log("Reconocio : "+ yy_.yytext); return 27
+case 28: console.log("Reconocio : "+ yy_.yytext); return 28
 break;
-case 29: console.log("Reconocio : "+ yy_.yytext); return 29
+case 29: console.log("Reconocio : "+ yy_.yytext); return 30
 break;
-case 30: console.log("Reconocio : "+ yy_.yytext); return 30
+case 30: console.log("Reconocio : "+ yy_.yytext); return 31
 break;
-case 31: console.log("Reconocio : "+ yy_.yytext); return 33
+case 31: console.log("Reconocio : "+ yy_.yytext); return 34
 break;
-case 32: console.log("Reconocio : "+ yy_.yytext); return 14
+case 32: console.log("Reconocio : "+ yy_.yytext); return 25
 break;
-case 33: console.log("Reconocio : "+ yy_.yytext); return 43
+case 33: console.log("Reconocio : "+ yy_.yytext); return 44
 break;
-case 34: console.log("Reconocio id : "+ yy_.yytext); return 21
+case 34: console.log("Reconocio id : "+ yy_.yytext); return 18
 break;
-case 35: console.log("Reconocio : "+ yy_.yytext); return 42
+case 35: console.log("Reconocio : "+ yy_.yytext); return 43
 break;
 case 36: /* skip whitespace */ 
 break;
@@ -3909,6 +3909,10 @@ const environment = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Identificador; });
 /* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./retorno */ "munq");
+/* harmony import */ var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TablaSimbolos/Tipo */ "lKex");
+
+
 
 class Identificador {
     constructor(identifador, linea, columna, t) {
@@ -3918,7 +3922,38 @@ class Identificador {
         this.valor = t;
     }
     getvalor3d(controlador, ts) {
-        throw new Error("Method not implemented.");
+        console.log("getValor3D");
+        let existe_id;
+        let contador = 1;
+        for (let tssig of ts.sig) {
+            if (contador == controlador.posicionid) {
+                existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+            }
+            contador++;
+        }
+        console.log(existe_id);
+        if (existe_id != null) {
+            const generator = controlador.generador;
+            if (typeof existe_id.valor == 'number') {
+                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](existe_id.valor + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("DOBLE"));
+            }
+            else if (typeof existe_id.valor == 'string') {
+                console.log("entre****");
+                console.log(existe_id);
+                const temp = generator.newTemporal();
+                generator.genAsignacion(temp, 'h');
+                for (let i = 0; i < existe_id.valor.length; i++) {
+                    generator.genSetHeap('h', existe_id.valor.charCodeAt(i));
+                    generator.avanzarHeap();
+                }
+                generator.genSetHeap('h', '-1');
+                generator.avanzarHeap();
+                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("STRING"));
+            }
+            else {
+                console.log("no entre");
+            }
+        }
     }
     getTipo(controlador, ts) {
         /* let existe_id = ts.getSimbolo(this.identificador);
@@ -3927,6 +3962,7 @@ class Identificador {
          }*/
     }
     getValor(controlador, ts) {
+        console.log("getValor");
         let existe_id;
         let contador = 1;
         for (let tssig of ts.sig) {
@@ -5162,7 +5198,6 @@ class acceso {
             for (let informacion of ts.tabla) {
                 if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
-                        console.log("entre a valor 3d");
                         this.exprecion.exprecion.getvalor3d(controlador, ts);
                         controlador.append(informacion.sim.objeto.gethtml("", controlador));
                     }
@@ -5194,7 +5229,10 @@ class acceso {
                     controlador.position = cont;
                     controlador.posicionid = posicion;
                     if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        let salida = this.exprecion.exprecion.getvalor3d(controlador, ts);
+                        controlador.generador.genLabel(salida.lblTrue);
                         controlador.append(informacion.sim.objeto.gethtml("", controlador));
+                        controlador.generador.genLabel(salida.lblFalse);
                     }
                     cont++;
                 }
@@ -6569,11 +6607,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Relaciones; });
 /* harmony import */ var src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/clases/AST/Nodo */ "XRm8");
 /* harmony import */ var src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/clases/TablaSimbolos/Tipo */ "YE/1");
-/* harmony import */ var _Operaciones__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Operaciones */ "vu0p");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../retorno */ "munq");
+/* harmony import */ var _Operaciones__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Operaciones */ "vu0p");
 
 
 
-class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
     constructor(exp1, op, exp2, linea, columna, expU) {
         super(exp1, op, exp2, linea, columna, expU);
     }
@@ -6601,17 +6641,17 @@ class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
             valor_expU = this.exp1.getValor(controlador, TablaSimbolos);
         }
         switch (this.operador) {
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].IGUALIGUAL:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].IGUALIGUAL:
                 return this.igualigual(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].DIFERENTE:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIFERENTE:
                 return this.diferente(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MENORQUE:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORQUE:
                 return this.menorque(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MENORIGUAL:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORIGUAL:
                 return this.menorigual(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MAYORQUE:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORQUE:
                 return this.mayorque(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MAYORIGUAL:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORIGUAL:
                 return this.mayoigual(valor_exp1, valor_exp2);
             default:
                 break;
@@ -6922,6 +6962,137 @@ class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
                 //error semantico
             }
         }
+    }
+    getvalor3d(controlador, ts) {
+        let valor_exp1;
+        let valor_exp2;
+        let valor_expU;
+        if (this.expU == false) {
+            valor_exp1 = this.exp1.getvalor3d(controlador, ts);
+            valor_exp2 = this.exp2.getvalor3d(controlador, ts);
+        }
+        else {
+            valor_expU = this.exp1.getvalor3d(controlador, ts);
+        }
+        switch (this.operador) {
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].IGUALIGUAL:
+                return this.igualigual3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIFERENTE:
+                return this.diferente3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORQUE:
+                return this.menorque3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORIGUAL:
+                return this.menorigual3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORQUE:
+                return this.mayorque3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORIGUAL:
+                return this.mayoigual3D(valor_exp1, valor_exp2, controlador);
+            default:
+                break;
+        }
+    }
+    igualigual3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '==');
+            }
+        }
+        else {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                    const tempAux = generador.newTemporal();
+                    generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                    generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                    generador.genExpresion(tempAux, tempAux, '1', '+');
+                    generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                    generador.genNextEnv(1);
+                    generador.genCall('nativa_compararIgual_str_str');
+                    generador.genGetStack(temp, 'p');
+                    generador.genAntEnv(1);
+                    this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+                    this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+                    generador.genIf(temp, '1', '==', this.lblTrue);
+                    generador.genGoto(this.lblFalse);
+                    const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+                    Retorno.lblTrue = this.lblTrue;
+                    Retorno.lblFalse = this.lblFalse;
+                    return Retorno;
+                }
+            }
+        }
+    }
+    menorque3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '<');
+            }
+        }
+    }
+    menorigual3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '<=');
+            }
+        }
+    }
+    mayorque3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '>');
+            }
+        }
+    }
+    mayoigual3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '>=');
+            }
+        }
+    }
+    diferente3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '!=');
+            }
+        }
+        else {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                    const tempAux = generador.newTemporal();
+                    generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                    generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                    generador.genExpresion(tempAux, tempAux, '1', '+');
+                    generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                    generador.genNextEnv(1);
+                    generador.genCall('nativa_compararIgual_str_str');
+                    generador.genGetStack(temp, 'p');
+                    generador.genAntEnv(1);
+                    this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+                    this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+                    generador.genIf(temp, '1', '!=', this.lblTrue);
+                    generador.genGoto(this.lblFalse);
+                    const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+                    Retorno.lblTrue = this.lblTrue;
+                    Retorno.lblFalse = this.lblFalse;
+                    return Retorno;
+                }
+            }
+        }
+    }
+    compararExp(valor_exp1, valor_exp2, controlador, signo) {
+        const generador = controlador.generador;
+        this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+        this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+        generador.genIf(valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), signo, this.lblTrue);
+        generador.genGoto(this.lblFalse);
+        const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"]('', false, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+        Retorno.lblTrue = this.lblTrue;
+        Retorno.lblFalse = this.lblFalse;
+        return Retorno;
     }
     recorrer() {
         let padre = new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Exp", "");
@@ -10530,7 +10701,7 @@ class Nativas {
     generarNativas() {
         this.nativa_print_str();
         //this.nativa_print_integer();
-        // this.nativa_compararIgual_str_str();
+        this.nativa_compararIgual_str_str();
         // this.nativa_compararNoIgual_str_str();
         //this.nativa_ToUpperCase();
         //this.nativa_ToLowerCase();
@@ -11500,6 +11671,7 @@ class Operaciones {
         this.expU = expU;
         this.op = operador;
         this.operador = this.getOperador(operador);
+        this.lblFalse = this.lblTrue = '';
     }
     getvalor3d(controlador, ts) {
         throw new Error("Method not implemented.");
