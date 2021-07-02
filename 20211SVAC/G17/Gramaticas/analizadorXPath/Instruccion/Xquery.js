@@ -238,3 +238,13 @@ export class IfThenElse
     return retorno
   }
 }
+
+export function CrearFuncion(nombre,declaraciones,tipo,body )
+{
+  return {
+    nombre:nombre,
+    declaraciones:declaraciones,
+    tipo:tipo,
+    body:body,
+  }
+}

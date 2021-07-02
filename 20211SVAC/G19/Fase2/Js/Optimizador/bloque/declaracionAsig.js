@@ -19,11 +19,11 @@ var declaracionAsig =/**@class */(function(){
         this.codigo = this.tipo_dato
         for (let i=0; i<this.ids.length; i++){
             if(i==0)
-                this.codigo+=this.ids[i]
+                this.codigo+=" "+this.ids[i]
             else
                 this.codigo+= ", "+this.ids[i]
         }
-        this.codigo += " = "+this.expr.get3D()+";\n"
+        this.codigo += " = "+this.expr+";\n"
         return this.codigo
     }
     declaracionAsig.prototype.getOptimizado=function () {
