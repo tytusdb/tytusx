@@ -120,13 +120,14 @@ entero                              [0-9]+("."[0-9]+)?
 
 BEGIN: INSTRUCCIONES EOF                        { 
 
-                                                    return $1;
+                                                    //return $1;
                                                 
                                                 }
 ;
 
 INSTRUCCIONES: INSTRUCCIONES or INSTRUCCION     { $$ = []; $1.push($3); $$ = $1; }
                 | INSTRUCCION                   { $$ = []; $$.push($1); }//{ $$ = $1; console.log($1); }
+                | error { return false }
 ;
 
 INSTRUCCION: axis AXISNAME NODO INSTRUCCION      { $$ = []; $$.push([$1,$3[0],$3[1]]); $$ = $$.concat($4); }         

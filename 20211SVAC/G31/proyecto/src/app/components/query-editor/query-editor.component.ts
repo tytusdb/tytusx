@@ -4,9 +4,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataService } from 'src/app/services/data.service'
 import { parser as ParserAscendente } from 'src/app/utils/gramatica-xpath/ascendente';
 import { parser as ParserDescendente } from 'src/app/utils/gramatica-xpath/descendente';
+import { parser as ParserXQUERY } from 'src/app/utils/gramatica-xquery/ascendente';
 
 import { Arbol } from 'src/app/models/arbol.model';
-import { Tabla } from 'src/app/models/tabla.model';
+
+import { ArbolXML } from 'src/app/models/xmlArbol.model';
+
 
 @Component({
   selector: 'app-query-editor',
@@ -17,6 +20,7 @@ export class QueryEditorComponent implements OnInit {
   public options: Object;
   public content: string;
   public arbol!: Arbol;
+  public arbolXML: ArbolXML | undefined;
 
   private file!: File;
 
@@ -26,9 +30,12 @@ export class QueryEditorComponent implements OnInit {
   ) {
     this.options = this.optionsEditor();
     this.content = '';
+    this.arbolXML = undefined;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this._data.currentXML.subscribe( arbolXML => this.arbolXML = arbolXML);
+  }
 
   private optionsEditor(): Object {
     return {
@@ -64,7 +71,7 @@ export class QueryEditorComponent implements OnInit {
   }
 
   public guardar() {
-    this.guardarArchivo(this.content, 'text/xml', 'entradaXML.xml');
+    this.guardarArchivo(this.content, 'text/txt', 'entradaQUERY.txt');
   }
 
   private guardarArchivo(contenido: string, tipo: string, nombre: string): void {
@@ -76,8 +83,9 @@ export class QueryEditorComponent implements OnInit {
   }
 
   public ejecutarASC(): void {
-    this.arbol = <Arbol>ParserAscendente.parse(this.content);
-    this.ejecucion();
+    console.log(ParserXQUERY.parse(this.content));
+    //this.arbol = <Arbol>ParserAscendente.parse(this.content);
+    //this.ejecucion();
   };
 
   public ejecutarDESC(): void {
@@ -87,6 +95,7 @@ export class QueryEditorComponent implements OnInit {
 
   private ejecucion(): void {
     this.limpiezaReportes();
+    console.log(this.arbolXML);
     console.log(this.arbol.instrucciones);
 
     this._data.changeGramatical(this.arbol.gramatica);
@@ -99,10 +108,11 @@ export class QueryEditorComponent implements OnInit {
     this.cargarArboles();
 
     //TODO ejecucion ARBOL
-    const tabla: Tabla = new Tabla('Global', undefined);
-    this.arbol.instrucciones.forEach(instruccion => {
-      //instruccion.ejecutar(tabla, this.arbol);
-    });
+    //const tabla: Tabla = new Tabla('Global', undefined);
+    //this.arbol.instrucciones.forEach(instruccion => {
+     // if(this.arbolXML?.tabla instanceof Entorno)
+      //  instruccion.ejecutar(this.arbolXML?.tabla, this.arbol);
+    //});
 
     this.cargarConsola();
   }

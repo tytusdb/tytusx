@@ -1,15 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compiladores 2</title>
-    <!-- <base href="https://tytusdb.github.io/tytusx/20211SVAC/G20/"> -->
+    <!-- <base href="https://tytusdb.github.io/tytusx/20211SVAC/G20/">  -->
     <link rel="stylesheet" href="./stylesheets/style.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
-    <script src="bundle.js"></script>
+    <link rel="stylesheet" href="./bootstrap-5.0.1-dist/css/bootstrap.min.css">
+    <script src="./bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./main.js"></script>
+<!--     
+    <script src="./dist/Tabs.js"></script>
+    <script src="./vis/vis.js"></script>
+     -->
+    <script src="./dist/index.js"></script>
+    <script src="./dist/Descargas.js"></script>
+    <script src="./dist/Interprete/Gramatica/XMLascReports.js" ></script>
+    <script src="./dist/Interprete/Gramatica/XMLdescReports.js" ></script>
+    <script src="./dist/Interprete/Gramatica/XpathAsc.js" ></script>
+    <script src="./dist/Interprete/Gramatica/XpathDesc.js" ></script>
+    <script src="./dist/Interprete/Expresiones/Atributo.js"></script>
+    <script src="./dist/Interprete/Expresiones/Objeto.js"></script>
+    <script src="./dist/Interprete/AST/GenerarArbol.js"></script>
+    <script src="./dist/Interprete/AST/NodoArbol.js"></script>
+    <script src="./dist/Interprete/AST/Error.js"></script>
+    <script src="./dist/Interprete/AST/ListaErrores.js"></script>
+    <script src="./dist/globales.js" ></script>
+    <script src="./dist/Interprete/AST/AST.js"></script>
+    <script src="./dist/Interprete/AST/Entorno.js"></script>
+    <script src="./dist/Interprete/AST/EntornoXML.js"></script>
+    <script src="./dist/Interprete/AST/Simbolo.js"></script>
+    <script src="./dist/Interprete/AST/TablaSimbolos.js"></script>
+    <script src="./dist/Interprete/AST/TablaSimbolosXML.js"></script>
+    <script src="./dist/Interprete/AST/Tipo.js"></script>
+    <script src="./dist/Interprete/AST/ReporteGramatical.js"></script>
+    <script src="./dist/Interprete/AST/ReporteTablaSimbolos.js"></script>
+    <script src="./dist/Interprete/AST/ReporteTablaSimbolosXMl.js"></script>
+    <script src="./dist/Interprete/Expresiones/Operacion.js"></script>
+    <script src="./dist/Interprete/Expresiones/Primitivo.js"></script>
+    <script src="./dist/Interprete/Interfaces/Expresion.js"></script>
+    <script src="./dist/Interprete/Interfaces/Instruccion.js"></script>
+    <script src="./dist/Interprete/Expresiones/Axes.js"></script>
+    <script src="./dist/Interprete/Expresiones/ExpresionXPath.js"></script>
+    <script src="./dist/Interprete/Expresiones/NodoXpath.js"></script>
+    <script src="./dist/Interprete/Expresiones/ExpresionDefinida.js"></script>
+    <script src="./dist/Interprete/Instrucciones/XPath.js"></script>
+
+    <script>
+        var codificacionGlobal = "UTF-8";
+        var ListaErr = new ListaErrores();
+        var GenerarDOT = new GenerarArbol();
+        var tablaSimbolosXML = null;
+        var NumeroE = 1;
+        var resultadoXML = null;
+        var resultadoXPath = null;
+        var analisisCorrecto = true;
+        var analisisXpathCorrecto = true;
+        var continuarXpath = true;
+        var DOTxmlCSTasc = "";
+        var DOTxmlCSTdesc = "";
+        var DOTxmlErrores = "";
+        var DOTXPATHASTasc = "";
+        var DOTXPATHASTDesc = "";
+        var RGxml = new ReporteGramatical();
+        var RGxmlDesc = new ReporteGramatical();
+        var nodoxPATHASC = null;
+        var nodoxPATHDESC = null;
+        var IDentorno = 1;
+        var IDobj = 1;
+        var objetosGlobal = null;
+        var entornosGlobal = null;
+        var salidaXPath = null;
+        var salidaRecursiva = "";
+        var salidaGlobal = "";
+    </script>
+    
 </head>
 
 <body>
@@ -30,7 +95,7 @@
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                 aria-expanded="false">Analisis</a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" id="analizeXmlAsc">XML Ascendente</a></li>
+                <li><a class="dropdown-item" id="analizeXmlAsc" onclick="CargarXML()">Analizar XML y XPATH</a></li>
             </ul>
         </li>
         <li class="nav-item dropdown">
@@ -58,9 +123,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="input-group mb-3">
-                    <input type="text" id="codeXPath" class="form-control" placeholder="Código xpath"
+                    <input type="text" id="codeXPATH" class="form-control" placeholder="Código xpath"
                         aria-label="Código xpath" aria-describedby="sendXPath">
-                    <button class="btn btn-outline-secondary" type="button" id="analizeXPathAsc">Filtrar</button>
+                    <!-- <button class="btn btn-outline-secondary" type="button" id="analizeXPathAsc">Filtrar</button> -->
                 </div>
             </div>
             <div class="col-12">
@@ -69,22 +134,18 @@
             <div class="col-6">
                 <div>
                     <!-- onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"  -->
-                    <textarea class="form-control codeBox" name="code" id="codeBlock" name="codeBlock"></textarea>
+                    <textarea class="form-control codeBox" name="code" id="codeXML" name="codeXML"></textarea>
                 </div>
             </div>
             <div class="col-6">
-                <textarea class="form-control codeBox" name="console" id="console" cols="30" rows="6" readonly
+                <textarea class="form-control codeBox" name="codeConsole" id="codeConsole" cols="30" rows="6" readonly
                     wrap="hard">
 				</textarea>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
-
     <script>
-        let initialize = new load.Main();
+        let initialize = new Main();
         initialize.setListener();
         console.log('<----------------');
     </script>

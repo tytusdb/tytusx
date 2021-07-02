@@ -16,16 +16,24 @@ export class Buscar {
   etiquetas = [];
   encoding = ""
   predicado: any;
+  predicados: any[];
   hijos = [];
   vlast = 0;
   vposition = 2;
-  opder = 0;
-
+  traduciendo="";
   constructor(private toastr: ToastrService) {
     this.tablasimbolos = JSON.parse(localStorage.getItem("tablaSimbolo"));
     this.ast = JSON.parse(localStorage.getItem("ASTXPATH"));
-    this.RecorrerAST(this.ast);
-    this.encoding = localStorage.getItem("encoding");
+    //GENERANDO LO PRIMERO DE UN ARCHIVO DE C
+      this.traduciendo+="/------HEADER------/\n"
+      this.traduciendo+="#include <stdio.h>\n"
+      this.traduciendo+="#include <math.h>\n"
+      this.traduciendo+="double heap[19121997];\n"
+      this.traduciendo+="double stack[19121997];\n"
+      this.traduciendo+="/------MAIN------/\n"
+      this.traduciendo+="void main() {\n"
+      this.RecorrerAST(this.ast);
+      this.encoding = localStorage.getItem("encoding");
   }
 
   EncontrarEnTablaDeSimbolos(etiqueta: string, padre: string, cualquiera: boolean): boolean {
@@ -64,14 +72,15 @@ export class Buscar {
     }
   }
 
-  ObtenerEntorno(etiqueta: string, padre: string): any {
+  ObtenerEntorno(padre: string): any {
     let valor = false;
     // Busca en la tabla de simbolos
     for (let i = 0; i < this.tablasimbolos.length; i++) {
       let elemento = this.tablasimbolos[i]
       // si es falso entonces si necesita un padre para acceder a él
-      if (elemento.Nombre == etiqueta && elemento.Padre == padre) {
-        this.contenido2.push(elemento.Valor);
+
+      if (elemento.Padre == padre) {
+        this.contenido2.push(elemento.Valor.valor);
         valor = true;
       }
 
@@ -85,7 +94,6 @@ export class Buscar {
   }
 
   RecorrerAST(raiz: any) {
-
     // Verifica si la variable raiz tiene elementos
     if (raiz != undefined) {
 
@@ -100,8 +108,12 @@ export class Buscar {
             this.RecorrerAST(element);
 
           } else if (element.etiqueta == "Predicado") {//DE ESTA PARTE YO SOLO AGREGUE ESTE ELSE IF Y LUEGO EL RESOLVER EXPRESION
-            this.predicado = this.ResolverExpresion(element)//AQUI SOLO ES ELEMENT
-            console.log(this.predicado)
+            this.predicado = this.ResolverExpresion(element.hijos[0])//AQUI SOLO ES ELEMENT
+            if(this.predicado!=true){
+              this.getPredicado(this.predicado)
+            }else{
+
+            }
           } else if (element.etiqueta == "Funcion") {
             this.getFuncion(element.hijos[0]);
           } else if (element.etiqueta == "Eje") {
@@ -114,7 +126,7 @@ export class Buscar {
             // Si está aqui significa que ya llegó hasta el final
             // y las etiquetas son elementos, this.contenido sirve para ir guardando los resultados
             this.contenido = []
-            console.log(element.etiqueta)
+            //console.log(element.etiqueta)
             for (let i = this.raices.length - 1; i >= 0; i--) {
 
               // entra a un for para saber qué tipo de raiz le pertenece a la etiqueta
@@ -136,26 +148,22 @@ export class Buscar {
                   return
                 }
               } else if (this.raices[i] == "//") {
-                console.log(i)
                 this.raices[i] = ""
                 let valor;
-                if (i == 0 && this.raices.length > 1) {
-                  valor = this.EncontrarEnTablaDeSimbolos(element.etiqueta, this.padre, false);
-                  this.padre = element.etiqueta;
-                } else if (this.raices.length == 1) {
+                if (this.raices.length == 1) {
                   valor = this.EncontrarEnTablaDeSimbolos(element.etiqueta, this.padre, true);
                   this.padre = element.etiqueta;
                 }
                 else {
-                  // console.log(element.etiqueta)
-                  // valor=this.EncontrarEnTablaDeSimbolos(element.etiqueta,this.padre,false);
-                  this.ObtenerEntorno(element.etiqueta, this.padre);
+                  this.ObtenerEntorno(this.padre);
+
                   if (this.contenido2.length != 0) {
+                    this.contenido=[]
+
                     this.recorrerEntorno(this.contenido2, element.etiqueta);
                   } else {
                     console.log("no se encontró")
                   }
-                  // valor=this.EncontrarEnTablaDeSimbolos(element.etiqueta,this.padre,true);
                 }
 
                 this.padre = element.etiqueta;
@@ -178,35 +186,101 @@ export class Buscar {
   }
 
   ResolverExpresion(raiz: any): any {
-    console.log(raiz)
-    //TENEMOS QUE VER SI HAY UNA FUNCION DEL LADO IZQUIERDO 
-    if (raiz.hijos[0].etiqueta == "Funcion") {
-      //COMO SI ES FUNCION HAY QUE REALIZAR PRIMERO LA FUNCION
-      this.getFuncion(raiz.hijos[0].hijos[0])
-      if (raiz.hijos.length==2) {
-        this.opder = this.ResolverExpresion(raiz.hijos[1])
-      }
-      return 1000
-    } else {
+    //console.log(raiz)
       switch (raiz.etiqueta) {
         case "+":
-          return Number(this.ResolverExpresion(raiz.hijos[0])) + Number(this.ResolverExpresion(raiz.hijos[1]))
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            break;
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }
+          else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) + Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
         case "-":
-          return Number(this.ResolverExpresion(raiz.hijos[0])) - Number(this.ResolverExpresion(raiz.hijos[1]))
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            return this.getLast()
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) - Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
         case "*":
-          return Number(this.ResolverExpresion(raiz.hijos[0])) * Number(this.ResolverExpresion(raiz.hijos[1]))
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            errores.Errores.add(new nodoError.Error("Semántico", "No se puede sumar al metodo Last ", 1, 1, "XPath"));
+            break
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) * Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
         case "mod":
-          return Number(this.ResolverExpresion(raiz.hijos[0])) % Number(this.ResolverExpresion(raiz.hijos[1]))
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            errores.Errores.add(new nodoError.Error("Semántico", "No se puede sumar al metodo Last ", 1, 1, "XPath"));
+            break
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) % Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
+
+        case "div":
+        if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+          errores.Errores.add(new nodoError.Error("Semántico", "No se puede sumar al metodo Last ", 1, 1, "XPath"));
+          return this.contenido
+        }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+          return 0
+        }else{
+          return Number(this.ResolverExpresion(raiz.hijos[0])) / Number(this.ResolverExpresion(raiz.hijos[1]))
+        }
+        case "<":
+          if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            this.predicados=[]
+            let last = this.getLast();
+            let indice = this.ResolverExpresion(raiz.hijos[1])
+            for (let i=1; i < last; i++){
+              if(i<indice){
+                this.predicados.push(i)
+              }
+            }
+            return true
+          }
+        break
+        case "Funcion":
+          if(raiz.hijos[0].etiqueta=="last"){
+            return "last"
+          }else if(raiz.hijos[0].etiqueta=="position"){
+            return "position"
+          }
+          return 123
         default:
           return raiz.etiqueta
       }
-    }
+  }
 
+  //Retorna el predicado que debe de ser
+  getPredicado(indice:number){
+    this.contenido = [];
+    let valor = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
+    if (valor) {
+      for (let i: number = 0; i < this.contenido.length; i++) {
+        if (i == (indice - 1)) {
+          this.hijos.push(this.contenido[i]);
+        }
+      }
+      this.contenido = [];
+      this.contenido = this.hijos;
+    } else {
+      errores.Errores.add(new nodoError.Error("Semántico", "No hay hijos para realizar el metodo Last ", 1, 1, "XPath"));
+    }
+  }
+
+  getLast():number{
+    return this.contenido.length -1
   }
 
   //JULISSA AQUI ESTÁ EL MÉTODO DE LAS FUNCIONES
   getFuncion(nodo: any): any {
-    console.log(nodo.etiqueta);
     switch (nodo.etiqueta) {
       case "position":
         /*AQUI HAY QUE VER DE QUÉ FORMA OBETENER EL VALOR DE LA EXPRESIÓN QUE ACOMPAÑA A ESTA FUNCIÓN Y
@@ -214,7 +288,7 @@ export class Buscar {
         EXPRESION SIMPLE COMO position()<2 PUES ENTONCES vposition TENDRÍA EL VALOR DE 2). YO ASUMO QUE
         PARA ESTA FUNCIÓN SERÁN SÓLO LAS OPERACIONES RELACIONALES, PERO NO ESTOY 100% SEGURO.*/
         this.contenido = []
-        this.vposition = this.opder
+        this.vposition = 0
         let valor1 = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
         console.log(valor1);
         if (valor1) {
@@ -233,12 +307,8 @@ export class Buscar {
         }
         break;
       case "last":
-        /*AQUI HAY QUE VER DE QUÉ FORMA OBETENER EL VALOR DE LA EXPRESIÓN QUE ACOMPAÑA A ESTA FUNCIÓN Y
-        ASIGNAR ESE RESULTADO A LA VARIABLE vlast QUE ESTÁ GLOBAL EN TODA LA CLASE (SI ES UNA EXPRESION 
-        SIMPLE COMO last()-2 PUES ENTONCES vlast TENDRÍA EL VALOR DE 2). YO ASUMO QUE PARA ESTA FUNCIÓN 
-        SERÁN SÓLO LAS OPERACIONES ARITMÉTICAS, PERO NO ESTOY 100% SEGURO.*/
         this.contenido = [];
-        this.vlast = this.opder;
+        this.vlast = 0;
         let valor = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
         if (valor) {
           let contlas = this.contenido.length - this.vlast;
@@ -317,25 +387,51 @@ export class Buscar {
 
   recorrerEntorno(Contenido: any, nombre: string) {
     //recorre el contenido del arreglo
-    console.log(Contenido)
-    if (Contenido.length != 0) {
+      if(Contenido.Nombre!=undefined){
+        if (Contenido.Nombre == nombre) {
 
-      Contenido.forEach(element => {
-        if (element.valor.nombreInit == nombre) {
+          if (Contenido.elementos !=null) {
 
-          if (element.Tipo == "Texto" || element.Tipo == "Vacio") {
-            this.contenido.push(element)
-          } else if (element.Tipo == "Elementos") {
-            //console.log(element.valor)
-            let array = [];
-            array.push(element.valor)
-            this.recorrerEntorno(array, nombre);
+            this.contenido.push(Contenido)
+          }else{
+
+            this.contenido.push(Contenido)
           }
-        } else {
-          this.recorrerEntorno(element.lista, nombre);
+        }else{
+          let array=[]
+          if(Contenido.elementos!=null){
+            array.push(Contenido.elementos)
+            this.recorrerEntorno(array,nombre)
+          }
         }
-      });
-    }
+      }else if(Contenido.lista!=undefined){
+
+        if(Contenido!=null){
+          Contenido.lista.forEach(elemento2 => {
+            let array=[]
+            array.push(elemento2)
+            this.recorrerEntorno(array,nombre);
+        });
+        }
+      }else if(Contenido.nombreInit!=undefined){
+        if (Contenido.nombreInit == nombre) {
+
+          if (Contenido.elementos !=null) {
+
+            this.contenido.push(Contenido)
+          }else{
+
+            this.contenido.push(Contenido)
+          }
+        }else{
+          let array=[]
+          if(Contenido.elementos!=null){
+            array.push(Contenido.elementos)
+            this.recorrerEntorno(array,nombre)
+          }
+        }
+      }
+
   }
 
   darFormato(): string {

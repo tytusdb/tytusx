@@ -1,0 +1,26 @@
+"use strict";
+exports.__esModule = true;
+exports.Operador = void 0;
+var Operador;
+(function (Operador) {
+    Operador[Operador["SUMA"] = 0] = "SUMA";
+    Operador[Operador["RESTA"] = 1] = "RESTA";
+    Operador[Operador["MULTIPLICACION"] = 2] = "MULTIPLICACION";
+    Operador[Operador["DIVISION"] = 3] = "DIVISION";
+    Operador[Operador["MODAL"] = 4] = "MODAL";
+    Operador[Operador["MAYOR"] = 5] = "MAYOR";
+    Operador[Operador["MENOR"] = 6] = "MENOR";
+    Operador[Operador["IGUAL"] = 7] = "IGUAL";
+    Operador[Operador["MAYORI"] = 8] = "MAYORI";
+    Operador[Operador["MENORI"] = 9] = "MENORI";
+    Operador[Operador["MAYORU"] = 10] = "MAYORU";
+    Operador[Operador["MENORU"] = 11] = "MENORU";
+    Operador[Operador["IGUALU"] = 12] = "IGUALU";
+    Operador[Operador["MAYORIU"] = 13] = "MAYORIU";
+    Operador[Operador["MENORIU"] = 14] = "MENORIU";
+    Operador[Operador["DIFERENTE"] = 15] = "DIFERENTE";
+    Operador[Operador["DIFERENTEU"] = 16] = "DIFERENTEU";
+    Operador[Operador["AND"] = 17] = "AND";
+    Operador[Operador["OR"] = 18] = "OR";
+    Operador[Operador["TO"] = 19] = "TO";
+})(Operador = exports.Operador || (exports.Operador = {}));

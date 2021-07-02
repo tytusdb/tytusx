@@ -41,8 +41,6 @@ content                         [^<]
 
 \s+                                 /* skip whitespace */
 
-"<"                         return 'lt';
-">"                         return 'gt';
 "="                         return 'igual';
 "/"                         return 'diag';
 "."                         return "dot";
@@ -61,6 +59,8 @@ content                         [^<]
 "div"                       return "div";
 "<="                        return 'lte';
 ">="                        return "gte";
+"<"                         return 'lt';
+">"                         return 'gt';
 "!="                        return "nequal";
 "or"                        return "or";
 "and"                       return "and";
@@ -96,9 +96,6 @@ content                         [^<]
 
 {stringliteral}                     return 'cadena';
 {charliteral}                       return 'cadena2';
-
-
-
 
 
 
@@ -222,17 +219,17 @@ NODETEST: identifier PREDICATE
         | nodeFunc PREDICATE 
                 { 
                         if($2 instanceof Predicate){
-                                $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
-                        }else{
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column, $2);
+                        }else{
+                                $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
                         }
                 }        
         | asterisco PREDICATE
                 { 
                         if($2 instanceof Predicate){
-                                $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column);
-                        }else{
                                 $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column, $2);
+                        }else{
+                                $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column);
                         }
                 }
         ;
@@ -259,7 +256,7 @@ OPERACION: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULT
         | EXPRESION and EXPRESION { $$ = new Operacion(TipoOperacion.AND, $1, $3, @1.first_line, @1.first_column);}  
         | EXPRESION mod EXPRESION { $$ = new Operacion(TipoOperacion.MOD, $1, $3, @1.first_line, @1.first_column);}                                 
         //| menos EXPRESION %prec UMINUS { $$ = "-"+$2;}
-        | parA EXPRESION parC { $$ = new Operacion(TipoOperacion.PAR, $1, null, @1.first_line, @1.first_column);}     
+        | parA EXPRESION parC { $$ = new Operacion(TipoOperacion.PAR, $2, null, @1.first_line, @1.first_column);}     
 ;
 
 PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line, @1.first_column); }
@@ -267,9 +264,14 @@ PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line
         | cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         | cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         | identifier { $$ = new Primitiva($1, TipoPrim.IDENTIFIER, @1.first_line, @1.first_column); }
-        | attr identifier { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
-        | attr asterisco { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
+        | attr identifier { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
+        | attr asterisco { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
         | dot { $$ = new Primitiva($1, TipoPrim.DOT, @1.first_line, @1.first_column);}
+        | identifier LISTANODOS { 
+                $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; 
+                $$ = $$.concat($2); 
+                $$ = new Primitiva($$, TipoPrim.CONSULTA, @1.first_line, @1.first_column);
+                }        
         | FUNCIONES { $$ = new Primitiva($1, TipoPrim.FUNCION, @1.first_line, @1.first_column);}
     ;
 

@@ -5,53 +5,75 @@ class TablaSimbolos {
         this.simbolos = []
     }
 
-    generarTabla() {
-
-        let queue = [this.jsonStruct];
-        let ambitoActual = ["global"];
-
-        console.log("GENERANDO LA TABLA");
-        console.log(this.jsonStruct);
-
-        while (queue.length > 0) {
-
-            let ambito = queue.shift();
-
+    generarTablaRecursivo(ambito, ambitoPadre) {
+        if (ambito) {
             let nombre = ambito['etiqueta'];
             let tipo = ambito['tipo'];
             let fila = ambito['linea'];
             let col = ambito['columna'];
             let texto = ambito['texto'];
-            let amb = ambitoActual.shift();
-            this.simbolos.push(new Simbolo(nombre,"etiqueta " + tipo, amb, fila, col, texto));
 
+            // Insertar al heap y generar C3D 
+            let referenciaHeap = -1;
+
+            //Verificar si el valor es numerico o cadena
+            if (texto.trim() !== "") {
+                if (traductorC3D.esNumero(texto)) {
+                    referenciaHeap = traductorC3D.traducirNumero(parseFloat(texto));
+                } else {
+                    referenciaHeap = traductorC3D.traducirCadena(texto);
+                }
+            }
             
+            
+            this.simbolos.push(new Simbolo(nombre, "etiqueta " + tipo, ambitoPadre, fila, col, texto, referenciaHeap));
+            ambito['referenciaHeap'] = referenciaHeap;
+
             //ATRIBUTOS DE LA ETIQUETA
             if (ambito['atributos']) {
-                let fila = ambito['atributos'].linea;
-                let col = ambito['atributos'].columna;
+                let arrayAtributos = ambito['atributos'];
 
-                for (let key in ambito['atributos']) {
-                    if (key !== 'linea' && key !== 'tipo' && key !== 'columna' && key !== 'nodo') {
-                        this.simbolos.push(new Simbolo(key,"atributo", nombre, fila, col, ambito['atributos'][key]));
+                arrayAtributos.forEach(atributo => {
+                    let filaAtributo = atributo.linea;
+                    let colAtributo = atributo.columna;
+                    let nombreAtributo = atributo.nombreAtributo;
+                    let valorAtributo = atributo.valorAtributo;
+                    let ambitoAtributo = nombre;
+                    let tipoAtributo = "atributo";
+
+                    // Insertar al heap y generar C3D 
+                    let referenciaHeap = -1;
+
+                    //Verificar si el valor es numerico o cadena
+                    if (traductorC3D.esNumero(valorAtributo)) {
+                        referenciaHeap = traductorC3D.traducirNumero(parseFloat(valorAtributo));
+                    } else {
+                        referenciaHeap = traductorC3D.traducirCadena(valorAtributo);
                     }
-                }
-            }   
 
-            // VERIFICANDO LOS HIJOS
-            if (ambito['hijos']) {
-                ambito['hijos'].forEach(hijo => {
-                    queue.push(hijo);
-                    ambitoActual.push(nombre);
+                    this.simbolos.push(new Simbolo(nombreAtributo, tipoAtributo, ambitoAtributo, filaAtributo, colAtributo, valorAtributo, referenciaHeap));
+                    atributo['referenciaHeap'] = referenciaHeap;
                 });
             }
+
+            //VERIFICANDO LOS HIJOS
+            if (ambito['hijos']) {
+                ambito['hijos'].forEach(hijo => {
+                    this.generarTablaRecursivo(hijo, nombre);
+                });
+            }
+
+
         }
+    }
+
+
+    generarTabla() {
+        this.generarTablaRecursivo(this.jsonStruct, "global");
 
 
 
         return this.simbolos;
-
-
     }
 
 

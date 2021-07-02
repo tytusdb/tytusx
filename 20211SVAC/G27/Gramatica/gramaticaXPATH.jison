@@ -1,4 +1,4 @@
-/* Definición Léxica */
+ /* Definición Léxica */
 %lex
 
 %options case-insensitive
@@ -100,21 +100,34 @@
 %%
 
 /* Definición de la gramática */
-START : LISTA_NODOS EOF{
+START : SUPER_LISTA EOF{
        return $1;
 };
 
-LISTA_NODOS : LISTA_NODOS OPERADOR NODO{
-                     $1.push($3);
+SUPER_LISTA :  SUPER_LISTA  OPERADOR LISTA_NODOS {  
+                            if($2=='|'){
+                                   var path = new Ejecutar($3,null);
+                                   $1.push(path);
+                                   $$=$1;
+                            }
+  }
+              | LISTA_NODOS   { 
+                            var path = new Ejecutar($1,null); 
+                            $$ =[path];
+                            }
+              ;
+
+LISTA_NODOS : LISTA_NODOS  NODO{
+                     $1.push($2);
                      $$=$1;
               }
               |NODO{
                      $$=[$1];
               };
 
-OPERADOR : union
-              |or
-              |;
+OPERADOR : union { $$='|';}
+              |or {$$='or';}
+              ;
 
 NODO : ddoble VALOR_NODO{
               $$=new Elemento($2,tipoElemento.DOBLE_DIAGONAL);

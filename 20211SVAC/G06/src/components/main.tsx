@@ -5,13 +5,17 @@ import { Nav, Navbar, Form, Button, Row, Col, NavDropdown } from 'react-bootstra
 import { Graphviz } from 'graphviz-react';
 import { crearTextoReporteErrorXML } from "../xmlAST/ClaseError";
 import { crearTablaSimbolos, crearTextoGraphvizTablaSimbolos, SimboloTabla } from "../Reportes/SimboloTabla";
+import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
+import { traduccion } from '../Traduccion/traduccion';
+import { EntornoXQuery } from '../xqueryAST/AmbientesXquery/EntornoXQuery';
 const parser = require('../Grammar/xmlGrammar');
-const parserXmlDesc = require('../Grammar/xmlGrammarDesc');
 const parserReport = require('../Reportes/xmlReport');
-const parserReportDesc = require('../Reportes/xmlReportDesc');
 const parseXPATH = require('../Grammar/XPATHparser');
-const parseXPATHDesc = require('../Grammar/XPATHparserDesc');
+const parseXQuery = require('../Grammar/xQueryGrammar');
+const parseC3D = require('../Grammar/C3DGrammar');
+
+
 
 const utf8 = require('utf8');
 
@@ -21,13 +25,15 @@ export default class Main extends Component {
         consoleResult: "",
         xpath: "",
         xml: "",
+        xquery: "",
         repcsttxt: '',
         repgramtxt: '',
         repErrorXML: '',
         repErrorXPATH: '',
         repTablaSimbolos: '',
         repAstXpath: '',
-        graphvizContent: ''
+        graphvizContent: '',
+        repOptimizaciones: ''
     }
 
     parse = () => {
@@ -43,17 +49,15 @@ export default class Main extends Component {
         let indice = 1;
         let entornoGlobal;
         let encoding = "";
-        //XML
+        //XML------------------------------------------------------------------------
         try {
             const result = parser.parse(this.state.xml)
             ast = result.ast;
+            traducirXml(ast);
             encoding = result.encoding;
             listaErrores = result.listaErrores;
             entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
-            var buf = new Buffer("Hello World");
-            console.log(buf.toString("ascii"));
-            console.log("---------------------");
-            console.log(buf.toString("utf8"));
+
             if (listaErrores.length === 0) {
                 var xmlResRep = parserReport.parse(this.state.xml);
                 this.setState({
@@ -70,10 +74,11 @@ export default class Main extends Component {
             console.log(error)
             alert("Irrecoverable Xml Syntax Error")
         }
-        //XPATH
+        //XPATH---------------------------------------------------------------------------
         try {
             const querys = parseXPATH.parse(this.state.xpath)
             var querysXpath = querys.xpath;
+            console.log(querysXpath);
             var erroresXpath = querys.listaErrores;
             //REPORTE AST y ERRORES PARA XPATH************************************************************
             if (erroresXpath.length === 0) {
@@ -87,7 +92,7 @@ export default class Main extends Component {
                     }
                 }
                 this.setState({
-                    repAstXpath: "digraph G {" +texto +"}",
+                    repAstXpath: "digraph G {" + texto + "}",
                 });
             } else {
                 console.log(erroresXpath.length)
@@ -96,13 +101,13 @@ export default class Main extends Component {
                 })
             }
 
-
             console.log(texto);
 
             this.setState({
                 repAstXpath: "digraph G {" + texto + "}",
             });
 
+            //EJECUCION DE XPATH----------------------------------------------------------------------------------------------------------------------------------------------
             var erroresSemanticos: string[] = [];
             var salida = "";
             for (const query of querysXpath) {
@@ -112,108 +117,77 @@ export default class Main extends Component {
                     erroresSemanticos.push(error)
                 }
             }
-            if(encoding==="UTF-8"){
-                this.setState({
-                    consoleResult: utf8.encode(salida),
-                });
-            }else{
-                this.setState({
-                    consoleResult: salida,
-                });
-            }
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    parseDesc = () => {
-        let ast;
-        let listaErrores = [];
-        let TablaSimbolos = [];
-        let RepErrorXPATHDESC = '';
-        let repcsttxt2 = '';
-        let repgramtxt2 = '';
-        let repErrorXML2 = '';
-        let repTablaSimbolos2 = '';
-        let encoding = "";
-        let texto = "";
-        let indice = 1;
-        let entornoGlobal;
-        try {
-            const result = parserXmlDesc.parse(this.state.xml)
-            ast = result.ast;
-            encoding = result.encoding;
-            listaErrores = result.listaErrores;
-            entornoGlobal = new Entorno('Global', '', 0, 0, [], ast);
-            
-            if (listaErrores.length === 0) {
-                var xmlResRep = parserReportDesc.parse(this.state.xml);
-                this.setState({
-                    repgramtxt: "digraph G {" + crearTextoGraphvizRepGram(xmlResRep.ReporteGramatical[0], xmlResRep.ReporteGramatical[1], repgramtxt2) + "}",
-                    repcsttxt: "digraph G {" + crearTextoGraphvizCST(xmlResRep.ReporteCST, repcsttxt2) + "}",
-                    repTablaSimbolos: "digraph G {" + crearTextoGraphvizTablaSimbolos(crearTablaSimbolos(entornoGlobal, TablaSimbolos, "Global"), repTablaSimbolos2) + "}"
-                })
-            } else {
-                this.setState({
-                    repErrorXML: "digraph G {" + crearTextoReporteErrorXML(listaErrores, repErrorXML2) + "}"
-                })
-            }
-        } catch (error) {
-            console.log(error)
-            alert("Irrecoverable Xml Syntax Error")
-        }
-        try {
-            const querys2 = parseXPATH.parse(this.state.xpath);
-            var querysXpath2 = querys2.xpath;
-            var erroresXpath2 = querys2.listaErrores;
-            //XPATH AST Y ERROR**********************************************************
-            if (erroresXpath2.length === 0) {
-                const querysDesc = parseXPATHDesc.parse(this.state.xpath)
-                for (const key in querysDesc) {
-                    texto = querysDesc[key].GraficarAST(texto);
-                    if (indice < querysDesc.length) {
-                        texto += "nodo" + key.toString() + "[label=\"|\"];\n"
-                        texto += "nodo" + querysDesc[key].line.toString() + "_" + querysDesc[key].column.toString() + "->nodo" + key.toString() + ";\n";
-                        texto += "nodo" + key.toString() + "->nodo" + querysDesc[indice].line.toString() + "_" + querysDesc[indice].column.toString() + ";\n";
-                        indice++;
-                    }
-                }
-                this.setState({
-                    repAstXpath: "digraph G {" +texto +"}",
-                });
-            } else {
-                this.setState({
-                    repErrorXPATH: "digraph G {" + crearTextoReporteErrorXML(erroresXpath2, RepErrorXPATHDESC) + "}"
-                })
-            }
+
             this.setState({
-                repAstXpath: "digraph G {" + texto + "}",
+                consoleResult: "//CONSULTA-----------------\n\n/*\n" + salida + "*/\n\n//TRADUCCION-----------------\n\n" + traduccion.getTranslate(),
             });
-            var erroresSemanticos: string[] = [];
-            var salida = "";
-            for (const query of querysXpath2) {
-                try {
-                    salida += query.execute(ast[0]).value;
-                } catch (error) {
-                    erroresSemanticos.push(error)
-                }
-            }
-            if(encoding==="UTF-8"){
-                this.setState({
-                    consoleResult: utf8.encode(salida),
-                });
-            }else{
-                this.setState({
-                    consoleResult: salida,
-                });
-            }
+
         } catch (error) {
             console.log(error);
         }
-
-
     }
 
+    //TRADUCCION DE XPATH----------------------------------------------------------------------------------------------------------------------------------------------
+    traducir = () => {
+
+        if (this.state.xml === "") {
+            return;
+        }
+
+        const result = parser.parse(this.state.xml);
+        const querys = parseXPATH.parse(this.state.xpath);
+        var querysXpath = querys.xpath;
+        var ast = result.ast;
+        var respuesta = "";
+        console.log(querysXpath);
+        traducirXml(ast);
+        for (const query of querysXpath) {
+            try {
+                respuesta += query.execute(ast[0]).value;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        this.setState({
+            consoleResult: "//CONSULTA-----------------\n\n/*\n" + respuesta + "*/\n\n//TRADUCCION-----------------\n\n" + traduccion.getTranslate(),
+        });
+    }
+
+    //METODO PARA QUE DEIVID EJECUTE XQUERY################################################################
+    executeXquery = () => {
+
+        const result = parser.parse(this.state.xml)
+        var ast = result.ast;
+
+        const astXquery = parseXQuery.parse(this.state.xquery);
+        var salida = "";
+
+        var nvoEntorno = new EntornoXQuery(null, "global");
+
+        for (const xquery of astXquery) {
+            try {
+                salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        this.setState({
+            consoleResult: salida,
+        });
+
+    }
+    //######################################################################################################
+
+    optimizar = () => {
+        //const optimizado = parseC3D.parse(this.state.xml);
+        const optimizado = parseC3D.parse(this.state.consoleResult);
+        this.setState({
+            consoleResult: "//OPTIMIZACION-----------------\n" + optimizado.Optimizado,
+        });
+        this.setState({
+            repOptimizaciones: "digraph G {" + optimizado.TextGraphviz + "}",
+        });
+    }
 
     handleFileChange = file => {
 
@@ -230,7 +204,6 @@ export default class Main extends Component {
         };
     };
     handleFileChangeXpath = file => {
-
         const reader = new FileReader();
         reader.readAsText(file);
         reader.onload = (e: any) => {
@@ -274,7 +247,12 @@ export default class Main extends Component {
             this.setState({
                 graphvizContent: this.state.repErrorXPATH
             })
+        } else if (e.target.value === "Reporte de Optimizaciones") {
+            this.setState({
+                graphvizContent: this.state.repOptimizaciones
+            })
         }
+
     }
     render() {
         return (
@@ -319,33 +297,57 @@ export default class Main extends Component {
                 </Navbar>
 
                 <div className="mt-2 px-5">
+
+                    <Form.Control
+                        type="text"
+                        placeholder="XPATH AREA"
+                        value={this.state.xpath}
+                        onChange={(e: any) => {
+                            this.setState({
+                                xpath: e.target.value
+                            })
+                        }} />
+
+                    <br />
+
                     <Row>
-                        <Col xs={12} md={8}>
-                            <Form.Control
-                                type="text"
-                                placeholder="Insert your commands here"
-                                value={this.state.xpath}
-                                onChange={(e: any) => {
-                                    this.setState({
-                                        xpath: e.target.value
-                                    })
-                                }} />
+
+                        <Col xs={6} md={3}>
+                            <Button variant="primary" onClick={this.parse}>TRANSALATE XPATH</Button>
                         </Col>
-                        <Col xs={6} md={2}>
-                            <Button variant="primary" onClick={this.parse}>RUN ASC</Button>
+                        <Col xs={6} md={3}>
+                            <Button variant="primary" onClick={this.traducir}>TRANSALATE XQUERY</Button>
                         </Col>
-                        <Col xs={6} md={2}>
-                            <Button variant="primary" onClick={this.parseDesc}>RUN DESC</Button>
+                        <Col xs={6} md={3}>
+                            <Button variant="primary" onClick={this.executeXquery}>EXECUTE XQUERY</Button>
+                        </Col>
+                        <Col xs={12} md={3}>
+                            <Button variant="primary" onClick={this.optimizar}>OPTIMIZE</Button>
+                        </Col>
+
+                    </Row>
+
+                    <br />
+                    <Row>
+                        <Col xs={12} md={0}>
+
+                        </Col>
+                        <Col xs={6} md={6}>
+                            <Form.Control as="textarea" placeholder="XML AREA" rows={15} value={this.state.xml} onChange={(e: any) => {
+                                this.setState({
+                                    xml: e.target.value
+                                })
+                            }} />
+                        </Col>
+                        <Col xs={6} md={6}>
+                            <Form.Control as="textarea" placeholder="XQUERY AREA" rows={15} value={this.state.xquery} onChange={(e: any) => {
+                                this.setState({
+                                    xquery: e.target.value
+                                })
+                            }} />
                         </Col>
                     </Row>
-                    <br />
-                    
-                    <br />
-                    <Form.Control as="textarea" placeholder="XML AREA" rows={15} value={this.state.xml} onChange={(e: any) => {
-                        this.setState({
-                            xml: e.target.value
-                        })
-                    }} />
+
                 </div>
 
                 <div className="mt-3 px-5">
@@ -358,6 +360,7 @@ export default class Main extends Component {
                             <option>Reporte gramatical XML</option>
                             <option>AST XPath</option>
                             <option>Reporte de errores XPath</option>
+                            <option>Reporte de Optimizaciones</option>
                         </Form.Control>
                     </Form.Group>
                 </div>
@@ -371,28 +374,14 @@ export default class Main extends Component {
                     ) : <div></div>
                 }
 
-
                 <div className="mt-3 px-5">
-                    <Form.Control as="textarea" rows={6} value={this.state.consoleResult} readOnly />
+                    <Form.Control as="textarea" rows={30} value={this.state.consoleResult} onChange={(e: any) => {
+                        this.setState({
+                            consoleResult: e.target.value
+                        })
+                    }} />
                 </div>
             </>
         )
     }
 }
-
-
-
-/*
-
-<Button variant="primary" onClick={() => {
-                        var cadena = "Hola como% estasñ434";
-                        var result = utf8.encode(cadena)
-                        console.log(cadena)
-                        console.log(result);
-
-                        
-                        
-                    }}>encoding</Button>
-
-
-*/

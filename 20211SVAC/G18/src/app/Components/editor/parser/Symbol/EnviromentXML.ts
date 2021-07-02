@@ -45,23 +45,39 @@ export class EnvironmentXML {
     return;
   }
 
-  getValor(ambito: string): string{
+  getValor(ambito: string): string {
     let response = "";
-    // console.log("env",this);
-    this.tablaSimbolos.forEach(element => {
-      if(element.ambito == ambito){
-        response = element.getValor();
-      }
-    });
+    if(this.tablaSimbolos.length > 0){
+      this.tablaSimbolos.forEach(element => {
+        if (element.ambito == ambito) {
+          response = element.getValor();
+        }
+      });
+    } else {
+      // Imprimir etiqueta XML Completa
+      this.hijos.forEach(element => {
+        response += '<'+element.nombre+'>'+element.getValor(element.nombre)+'</'+element.nombre+'>\n';
+      });
+    }
     return response;
   }
 
-  public getByAttribute(att:string, value: string){
+  getAttribute(att:string){
+    let valorAtt = "";
+    this.tablaSimbolos.forEach(element => {
+      if (element.nombre == att) {
+        valorAtt = element.valor;
+      }
+    });
+    return valorAtt;
+  }
+
+  public getByAttribute(att: string, value: string) {
     let find = false;
     this.hijos.forEach(element => {
-      if(element.nombre == att) {
+      if (element.nombre == att) {
         let valorAtt = element.getValor(element.nombre);
-        if(valorAtt == value){
+        if (valorAtt == value) {
           find = true;
           return;
         }

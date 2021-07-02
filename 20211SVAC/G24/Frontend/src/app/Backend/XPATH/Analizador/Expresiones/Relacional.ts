@@ -96,6 +96,9 @@ export default class Relacional extends Instruccion {
         return '' + valor;
     }
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export enum Relacionales {

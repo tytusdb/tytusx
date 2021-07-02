@@ -24,12 +24,24 @@ export class Nodo implements Expresion{
         this.NodeTest = nodeTest;
     }
 
+    public ToString(): string{
+        if(this.predicado != undefined){
+            return this.nombre+" "+this.predicado
+        }
+        return this.nombre
+    }
+
     public isFromRoot(): boolean {
         return this.fromRoot;
     }
     public setFromRoot(fromRoot:boolean){
         this.fromRoot = fromRoot;
     }
+
+    public getValorInicial(){
+        return this.nombre;
+    }
+
 
     public getValor(){
         if(this.NodeTest != undefined){
@@ -38,7 +50,7 @@ export class Nodo implements Expresion{
         return this.nombre;
     }
 
-    public getNombre(){
+    public getNombre(){        
         return this.nombre;
     }
     public getPredicado(): Predicate | undefined{

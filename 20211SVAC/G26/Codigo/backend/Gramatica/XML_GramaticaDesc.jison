@@ -10,6 +10,8 @@
     const {Objeto} = require("../XML/Objeto");
     const {Atributo} = require("../XML/Atributo");
     const errores = require('../Global/ListaError');
+    const {Nodo} = require('../Reporte/Nodo');
+    const cst = require('../Reporte/CST');
 %}
 /* Definición Léxica */
 %lex
@@ -75,18 +77,43 @@ content                             [^<]
 %start START
 %%
 /* Definición de la gramática */
-START : ENCABEZADO EOF         { return $1; }
+START : ENCABEZADO EOF         
+        { 
+            let raiz = new Nodo(cst.cstXmlDesc.getId(), 'START', null, [cst.cstXmlDesc.obtenerUltimoNodo()]); 
+            cst.cstXmlDesc.setRaiz(raiz);
+            return $1; 
+        }
     ;
 
 ENCABEZADO: lt interrog xml LISTAATRIBUTOS interrog gt LISTAELEMENTOS       
             { 
                 $7.unshift(new Objeto($3, '', @1.first_line, @1.first_column, $4, [], true)); 
                 $$ = $7; 
+                /* CONSTRUCCION DE CST */
+                let listaElem2 = cst.cstXmlDesc.obtenerUltimoNodo();
+                let listAtrs3 = cst.cstXmlDesc.obtenerUltimoNodo();
+                cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'ENCABEZADO', null, 
+                                                    [new Nodo(cst.cstXmlDesc.getId(), 'lt', null, 
+                                                                [new Nodo(cst.cstXmlDesc.getId(), '<', null, [])]),
+                                                    new Nodo(cst.cstXmlDesc.getId(), 'interrog', null, 
+                                                                [new Nodo(cst.cstXmlDesc.getId(), '?', null, [])]),
+                                                    new Nodo(cst.cstXmlDesc.getId(), 'xml', null, 
+                                                                [new Nodo(cst.cstXmlDesc.getId(), $3.toString(), null, [])]),
+                                                    listAtrs3, 
+                                                    new Nodo(cst.cstXmlDesc.getId(), 'interrog', null, 
+                                                                [new Nodo(cst.cstXmlDesc.getId(), '?', null, [])]),
+                                                    new Nodo(cst.cstXmlDesc.getId(), 'gt', null, 
+                                                                [new Nodo(cst.cstXmlDesc.getId(), '>', null, [])]),
+                                                    listaElem2]));
             }
             | error LISTAELEMENTOS
             {
                 errores.default.agregarError('sintáctico', 'Token inesperado \'' + yytext + '\'', @1.first_line, @1.first_column);
                 $$ = $2;
+                /* CONSTRUCCION DE CST */
+                cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'ENCABEZADO', null, 
+                                                    [new Nodo(cst.cstXmlDesc.getId(), 'error', null, []),
+                                                    cst.cstXmlDesc.obtenerUltimoNodo()]));
             }            
 
 ;
@@ -95,13 +122,29 @@ LISTAELEMENTOS: ELEMENTO LISTAELEMENTOS
                 { 
                     $1 = $1.concat($2);
                     $$ = $1;
+                    /* CONSTRUCCION DE CST */
+                    let listaElem = cst.cstXmlDesc.obtenerUltimoNodo();
+                    let elem2 = cst.cstXmlDesc.obtenerUltimoNodo();
+                    cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'LISTAELEMENTOS', null, 
+                                                        [elem2, listaElem]));
                 }
-                |  { $$ = [];}
+                |  
+                { 
+                    $$ = [];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'LISTAELEMENTOS', null, 
+                                                        [new Nodo(cst.cstXmlDesc.getId(), 'epsilon', null, [])]));
+                }
 ;
 
 ELEMENTO: lt ELEM 
         {
             $$ = [$2];
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'ELEMENTO', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'lt', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '<', null, [])]),
+                                                cst.cstXmlDesc.obtenerUltimoNodo()]));
         }   
 
 ;
@@ -128,6 +171,13 @@ ELEM:   identifier LISTAATRIBUTOS TIPOELEM
                 }
             }
             $$ = newObj;
+            /* CONSTRUCCION DE CST */
+            let tElement = cst.cstXmlDesc.obtenerUltimoNodo();
+            let listAtrs2 = cst.cstXmlDesc.obtenerUltimoNodo();
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'ELEM', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString(), null, [])]),
+                                                listAtrs2, tElement]));
         }    
 ;
 
@@ -140,8 +190,19 @@ LISTAATRIBUTOS:
                 $$ = $1 ;
             }else
                 $$ = $2; 
+            /* CONSTRUCCION DE CST */
+            let listAtrs = cst.cstXmlDesc.obtenerUltimoNodo();
+            let atr = cst.cstXmlDesc.obtenerUltimoNodo();
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'LISTAATRIBUTOS', null, 
+                                                [atr, listAtrs]));
         }
-        |                               { $$ = []; }
+        |                               
+        { 
+            $$ = []; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'LISTAATRIBUTOS', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'epsilon', null, [])]));
+        }
 ;
 
 ATRIBUTO:   
@@ -150,25 +211,57 @@ ATRIBUTO:
         {
             console.log('Entra a error sintactico de atributo');
             errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', @1.first_line, @1.first_column); 
-            $$ = null;
+            $$ = null; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'ATRIBUTO', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString(), null, [])]),
+                                                new Nodo(cst.cstXmlDesc.getId(), 'asignacion', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '=', null, [])]),
+                                                new Nodo(cst.cstXmlDesc.getId(), cst.cstXmlDesc.obtenerUltimoNodo(), null, [])]));
         }
         | error lt
         {
             console.log('Entra a error sintactico de atributo 2');
             errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', @1.first_line, @1.first_column); 
-            $$ = null;
+            $$ = null; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'ATRIBUTO', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'error', null, []),
+                                                new Nodo(cst.cstXmlDesc.getId(), 'lt', null, 
+                                                        [new Nodo(cst.cstXmlDesc.getId(), '<', null, [])])]));
         }        
 ;
 
 TIPOCADENA:     
-        cadena          { $$ = $1.toString(); }
-        | cadena2       { $$ = $1.toString(); }
+        cadena          
+        { 
+            $$ = $1.toString().replaceAll("\"",""); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TIPOCADENA', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'cadena', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])]));
+        }
+        | cadena2       
+        { 
+            $$ = $1.toString().replaceAll("'",""); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TIPOCADENA', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'cadena', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("'",""), null, [])])]));
+        }
 ;
 
 TIPOELEM: 
         diag gt                               
         { 
             $$ = {'texto':'', 'content': null, 'idCierre': ''}; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TIPOELEM', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'diag', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '/', null, [])]), 
+                                                new Nodo(cst.cstXmlDesc.getId(), 'gt', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '>', null, [])])]));
         }
         | gt TEXTCONTENT lt MOREELEMENTS      
         { 
@@ -177,17 +270,45 @@ TIPOELEM:
                     $4.texto = $2;
                 $$ = $4;
             }
+            /* CONSTRUCCION DE CST */
+            let mElem2 = cst.cstXmlDesc.obtenerUltimoNodo();
+            let textContent2 = cst.cstXmlDesc.obtenerUltimoNodo();
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TIPOELEM', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'gt', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '>', null, [])]),
+                                                textContent2,
+                                                new Nodo(cst.cstXmlDesc.getId(), 'lt', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '<', null, [])]),
+                                                mElem2]));
         }
         | diag error gt
         {
             console.log('Entra a error sintactico de TIPOELEM');
             errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', @1.first_line, @1.first_column); 
             $$ = null;
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TIPOELEM', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'diag', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '/', null, [])]), 
+                                                new Nodo(cst.cstXmlDesc.getId(), 'error', null, []), 
+                                                new Nodo(cst.cstXmlDesc.getId(), 'gt', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '>', null, [])])]));
         }   
         ;
 
 MOREELEMENTS:
-        diag identifier gt      { $$ = {'texto':'','content':null,'idCierre':$2};}
+        diag identifier gt      
+        { 
+            $$ = {'texto':'','content':null,'idCierre':$2};
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'MOREELEMENTS', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'diag', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '/', null, [])]), 
+                                                new Nodo(cst.cstXmlDesc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $2.toString().replaceAll("\"",""), null, [])]), 
+                                                new Nodo(cst.cstXmlDesc.getId(), 'gt', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '>', null, [])])]));
+        }
         | ELEM lt MOREELEMENTS  
         { 
             if ($3.idCierre !== ''){ /** Se esta cerrando una etiqueta y se comienza a subir **/
@@ -204,24 +325,127 @@ MOREELEMENTS:
 
                 }
             }
+            /* CONSTRUCCION DE CST */
+            let mElem1 = cst.cstXmlDesc.obtenerUltimoNodo();
+            let elem1 = cst.cstXmlDesc.obtenerUltimoNodo();
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'MOREELEMENTS', null, 
+                                                [elem1, 
+                                                new Nodo(cst.cstXmlDesc.getId(), 'lt', null, [new Nodo(cst.cstXmlDesc.getId(), '<', null, [])]),
+                                                mElem1]));
         }
        
 ;
 
-TEXTCONTENT:    TEXT TEXTCONTENT { $1 = $1 + $2; $$ = $1; }
-                |                { $$ = ''; }
+TEXTCONTENT:    TEXT TEXTCONTENT 
+                { 
+                    $1 = $1 + $2; 
+                    $$ = $1; 
+                    /* CONSTRUCCION DE CST */
+                    let textContent = cst.cstXmlDesc.obtenerUltimoNodo();
+                    let t1 = cst.cstXmlDesc.obtenerUltimoNodo();
+                    cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXTCONTENT', null, [t1, textContent]));
+                }
+                |                
+                { 
+                    $$ = '';
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXTCONTENT', null, 
+                                                        [new Nodo(cst.cstXmlDesc.getId(), 'epsilon', null, [])])); 
+                }
 ;
 
-TEXT:   identifier          { $$ = $1.toString(); }
-        | content           { $$ = $1.toString(); }
-        | DoubleLiteral     { $$ = $1.toString(); }
-        | IntegerLiteral    { $$ = $1.toString(); }
-        | xml               { $$ = $1.toString(); }
-        | apos              {  $$ = $1.toString(); }
-        | less              { $$ = "<";}
-        | greater           { $$ = ">";}
-        | ampersand         {  $$ = "&"; }
-        | apostrophe        { $$ = "'";}
-        | quot              { $$ = "\""; }
-        | error             { $$ = $1.toString();}                
+TEXT:   identifier          
+        { 
+            $$ = $1.toString().replaceAll("\"",""); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'identificador', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])])); 
+        }
+        | content           
+        { 
+            $$ = $1.toString(); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'content', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])]));
+        }
+        | DoubleLiteral     
+        { 
+            $$ = $1.toString().replaceAll("\"",""); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'double', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])]));
+        }
+        | IntegerLiteral    
+        { 
+            $$ = $1.toString().replaceAll("\"",""); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'integer', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])])); 
+        }
+        | xml               
+        { 
+            $$ = $1.toString(); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'identificador', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])]));
+        }
+        | apos              
+        {  
+            $$ = $1.toString().replaceAll("\"",""); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'comilla simple', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), $1.toString().replaceAll("\"",""), null, [])])])); 
+        }
+        | less              
+        { 
+            $$ = "<";
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'menor que', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), "<", null, [])])]));
+        }
+        | greater           
+        { 
+            $$ = ">";
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'mayor que', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), ">", null, [])])]));
+        }
+        | ampersand         
+        {  
+            $$ = "&"; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'ampersand', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), "&", null, [])])]));
+        }
+        | apostrophe        
+        { 
+            $$ = "'";
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'apostrofe', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), "'", null, [])])]));
+        }
+        | quot              
+        { 
+            $$ = "\""; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, 
+                                                [new Nodo(cst.cstXmlDesc.getId(), 'comilla doble', null, 
+                                                            [new Nodo(cst.cstXmlDesc.getId(), '"', null, [])])]));
+        }
+        | error             
+        { 
+            $$ = $1.toString().replaceAll("\"","");
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlDesc.agregarPila(new Nodo(cst.cstXmlDesc.getId(), 'TEXT', null, []));
+        }
 ;

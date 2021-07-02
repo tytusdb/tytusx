@@ -18,52 +18,97 @@ export class Formato{
     if(this.contenido.length!=0){
 
       this.contenido.forEach(element => {
-        if(element.valor.nombreInit!=""){
+        if(element.valor!=undefined){
+          if(element.valor.nombreInit!=""){
 
-          if(element.Tipo=="Texto" || element.Tipo=="Vacio"){
+            if(element.Tipo=="Texto" || element.Tipo=="Vacio"){
 
-            cadena+="<"+element.valor.nombreInit;
-            if (element.valor.atributos!=null){
+              cadena+="<"+element.valor.nombreInit;
+              if (element.valor.atributos!=null){
+                console.log("hay una lista")
+                let array=[];
+                array.push(element.valor.atributos)
+                this.armar(array)
+                cadena+=" "+this.cadenita;
+                this.cadenita=""
+              }
+
+              if(element.valor.nombreFin!=""){
+
+                if(element.valor.texto!=""){
+
+                  const cad=this.convertir(element.valor.texto);
+                  console.log(cad)
+                  if(cad!="error"){
+                    cadena+=">"+cad;
+                  }
+                  cadena+="</"+element.valor.nombreFin+">\n"
+                }else{
+                  cadena+="></"+element.valor.nombreFin+">\n"
+                }
+
+              }else{
+                cadena+="/>";
+              }
+
+
+            }else if(element.Tipo=="Elementos"){
+              //console.log(element.valor)
+                let array=[];
+                array.push(element.valor)
+                this.armar(array);
+                cadena+=this.cadenita;
+                this.cadenita=""
+
+
+            }
+
+
+          }
+        }else{
+          if(element.nombreInit!=""){
+            cadena+="<"+element.nombreInit;
+
+            if (element.atributos!=null){
               console.log("hay una lista")
               let array=[];
-              array.push(element.valor.atributos)
+              array.push(element.atributos)
               this.armar(array)
               cadena+=" "+this.cadenita;
               this.cadenita=""
             }
+            if(element.elementos!=null){
+              //console.log(element.valor)
+              console.log("está en formato")
+                let array=[];
+                array.push(element.elementos)
+                this.armar(array);
+                cadena+=">"+this.cadenita;
+                this.cadenita=""
+            }else{
 
-            if(element.valor.nombreFin!=""){
+              if(element.nombreFin!=""){
+                if(element.texto!=""){
+                  const cad=this.convertir(element.texto);
 
-              if(element.valor.texto!=""){
-
-                const cad=this.convertir(element.valor.texto);
-                console.log(cad)
-                if(cad!="error"){
-                  cadena+=">"+cad;
+                  if(cad!="error"){
+                    cadena+=">"+cad;
+                  }
+                  cadena+="</"+element.nombreFin+">\n"
+                }else{
+                  cadena+="></"+element.nombreFin+">\n"
                 }
-                cadena+="</"+element.valor.nombreFin+">\n"
+
               }else{
-                cadena+="></"+element.valor.nombreFin+">\n"
+                cadena+="/>";
               }
 
-            }else{
-              cadena+="/>";
             }
 
 
-          }else if(element.Tipo=="Elementos"){
-            //console.log(element.valor)
-              let array=[];
-              array.push(element.valor)
-              this.armar(array);
-              cadena+=this.cadenita;
-              this.cadenita=""
-
-
           }
-
-
         }
+
       });
     }else{
       this.toastr.warning("El elemento que busca no se ha encontrado en este archivo XML")

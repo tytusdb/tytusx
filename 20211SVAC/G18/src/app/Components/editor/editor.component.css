@@ -77,3 +77,7 @@ body {
 .exec-btn {
   float: right;
 }
+
+.reporte {
+  cursor: grab;
+}

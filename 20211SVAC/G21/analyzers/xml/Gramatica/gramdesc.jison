@@ -4,9 +4,9 @@
     //const {Primitivo} = require("../Expresiones/Primitivo");
     //const {Operacion, Operador} = require("../Expresiones/Operacion");
 
-    const {Objeto} = require("../Expresiones/Objeto");
-    const {Atributo} = require("../Expresiones/Atributo");
-    const {Raiz} = require("../Entornos/Raiz");
+    // const {Objeto} = require("../Expresiones/Objeto");
+    // const {Atributo} = require("../Expresiones/Atributo");
+    // const {Raiz} = require("../Entornos/Raiz");
     errores = []
     encoding = []
 %}
@@ -80,9 +80,12 @@ START : RAIZ EOF   { $$ = new Raiz($1,encoding, errores );
 
 RAIZ : ENC OBJETO { $$ = $2 }
     | OBJETO      { $$ = $1 }
-    | error              { console.error('Error sintáctico: ' + yytext + ', linea: ' + this._$.first_line + ', columna: ' + this._$.first_column); 
+    | error              { 
                             errores.push({'Error Type': 'Sintactico', 'Row': @1.first_line, 'Column': @1.first_column, 'Description': 'No se esperaba el caracter: '+yytext });
-
+                            $$ = new Raiz({},encoding, errores ); 
+                            errores = [];
+                            encoding = [];
+                            return $$;
                           } 
 ;
 
@@ -92,7 +95,7 @@ ENC : minquest  xml LATRIBUTOS maxquest { encoding = $3; }
 OBJETO : menor identificador LATRIBUTOS NEXT_OBJ { $$ = new Objeto($2,$4[0],@1.first_line, @1.first_column,$3,$4[1]);
                                                     if ($4[2] != ''){
                                                         if($2 != $4[2]) {
-                                                            errores.push({'Error Type': 'Sintactico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$2+' y '+$4[2]+' no coinciden' });
+                                                            errores.push({'Error Type': 'Semantico', 'Row': this._$.first_line, 'Column': this._$.first_column, 'Description': 'Las etiquetas '+$2+' y '+$4[2]+' no coinciden' });
                                                             //errores.push({error: 'Las etiquetas '+$2+' y '+$4[2]+' no coinciden', tipo: 'Semantico', linea: this._$.first_line, columna: this._$.first_column})
                                                         };
                                                     };

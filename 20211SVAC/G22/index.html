@@ -7,10 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./codemirror-5.61.1/lib/codemirror.css">
+    <link rel="stylesheet" href="./codemirror-5.61.1/theme/blackboard.css">
+
+    <link rel=stylesheet href="./codemirror-5.61.1/doc/docs.css">
+    <script src="./codemirror-5.61.1/lib/codemirror.js"></script>
+    <script src="./codemirror-5.61.1/mode/xml/xml.js"></script>
+    <script src="./codemirror-5.61.1/mode/xquery/xquery.js"></script>
+    <script src="./codemirror-5.61.1/mode/javascript/javascript.js"></script>
+    <script src="./codemirror-5.61.1/mode/css/css.js"></script>
+    <script src="./codemirror-5.61.1/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="./codemirror-5.61.1/edit/matchbrackets.js"></script>
+    <script src="./codemirror-5.61.1/doc/activebookmark.js"></script>
+
     <meta name="viewport" content="width= device-width">
     <link rel="stylesheet" href="./css/estiloBarra.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="./css/estiloheader.css" MEDIA=screen>
-    <script src="./codemirror-5.61.1/lib/codemirror.js"> </script>
     <script src="./Scripts/require.js"></script>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Analizador</title>
@@ -70,16 +81,22 @@
                                     <i class="fa fa-caret-down"></i>
                                 </button>
                                 <div class="dropdown-content1">
-                                    <form action="./Frontend/errores.html" method="get">
-                                        <input hidden id="tabErrores" name="erroresV" />
-                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="CST">
+                                    <form action="./Frontend/arbol.html" method="get">
+                                        <input hidden id="arbolcst" name="arbol" />
+                                        <input hidden id="tit" name="titulo" value="AST"/>
+                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="CST"></button>                                    </form>
                                     </form>
-                                    <form action="./Frontend/errores.html" method="get">
-                                        <input hidden id="tabErrores" name="erroresV" />
-                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="AST">
+                                    <form action="./Frontend/arbol.html" method="get">
+                                        <input hidden id="arbolast" name="arbol" />
+                                        <input hidden id="tit" name="titulo" value="CST"/>
+                                        <input style="background-color: Transparent; color:white; border: none;"  onclick="" type="submit" value="AST"></button>
                                     </form>
                                 </div>
                             </div>
+                            <form action="./Frontend/tabGramatical.html" method="get">
+                                <input hidden id="grafo" name="grafoND"/>
+                                    <a><input style="background-color: Transparent; color:white; border: none;" type="submit" value="Grafo"></a>
+                            </form>
                             <form action="./Frontend/tablaSimbolos.html" method="get">
                                 <input hidden id="tabErrores" name="simbolostb"/>
                                 <input hidden id="tabSimbolosXML" name="tabSimbolosXML"/>
@@ -87,8 +104,9 @@
                             </form>
                             <form action="./Frontend/tabGramatical.html" method="get">
                                 <input hidden id="gramaticaltb" name="tablaGr"/>
-                                    <input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla Gramatical">
+                                    <a><input style="background-color: Transparent; color:white; border: none;" type="submit" value="Tabla Gramatical"></a>
                             </form>
+                           
                     </nav>
                 </div>
             </div>
@@ -113,20 +131,21 @@
                     <h2 style="background-color: rgb(8, 49, 68); color:white; margin-top: 20px;">Entrada</h2>
 
                     <textarea style="width: 100%; height: 400px; font-size: 20px;" id="editor"></textarea>
-                    <button type="button" class="btn btn-light btn_blue"  onclick="analisisAsc()" id="ascendente"><img
+                        
+                    <!--<button type="button" class="btn btn-light btn_blue"  onclick="analisisAsc()" id="ascendente"><img
                             src="./css/imagenes/asc.png" />
                         Analizar XML Ascendente </button>
                     <button type="button" class="btn btn-light btn_blue"  onclick="analisisDesc()" id="descendente"><img
                             src="./css/imagenes/desc.png" />
-                        Analizar XML Descendente </button>
+                        Analizar XML Descendente </button>-->
                 </div>
                 <div style="width:48%; padding-right: 5%; float:right;">
 
-                    <button type="button" class="btn btn-light btn_blue" onclick=""><img src="./css/imagenes/asc.png" />
+                    <button type="button" class="btn btn-light btn_blue" onclick="analisisAscXPATH()"><img src="./css/imagenes/asc.png" />
                         Analizar Ascendente </button>
-                    <button type="button" class="btn btn-light btn_blue" onclick="reglasgg()"><img
+                    <!--<button type="button" class="btn btn-light btn_blue" onclick="analisisDescXPATH()"><img
                             src="./css/imagenes/desc.png" />
-                        Analizar Descendente </button>
+                        Analizar Descendente </button>-->
 
                     <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 20px;">Consulta
                     </h2>
@@ -136,40 +155,31 @@
         </div>
     </section>
     <section>
-        <div style="padding-left: 20%; padding-right: 20%; align-content: center;">
-
-            <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236); margin-top: 580px;">RESULTADO
-                CONSULTA</h2>
-            <textarea class="consola_resultado" id="resultado" readonly></textarea>
-            <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img
-                    src="./css/imagenes/guardar.png" />
-                Guardar Resultado</button>
+                
+        <div style="padding-top: 300px;" >
+            <div style="width: 100%; ">
+                <div style="width:48%; padding-left: 5%; float:left; padding-top: 130px;">
+                    <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236);">RESULTADO </h2>
+                    <textarea class="consola_resultado" id="resultado" readonly></textarea>
+                    <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img
+                            src="./css/imagenes/guardar.png" />
+                        Guardar Resultado</button>
+                </div>
+                <div style="width:48%; padding-right: 5%; float:right; padding-top: 30PX;">
+                    <h2 style="background-color: rgb(8, 49, 68); color:rgb(184, 230, 236);">CODIGO 3D</h2>
+                    <textarea class="consola_resultado" id="cod3d" class="CodeMirror cm-s-blackboard" readonly></textarea>
+                    <button class="btn btn-light btn_blue" type="button" onclick="guardarResultado()"><img
+                        src="./css/imagenes/guardar.png" /> Guardar C3D</button>
+                </div>
+            </div>
         </div>
     </section>
-
+    
+   
     <!-- necesario para que sean validos todos los js traspilados-->
     <script>var exports = {};</script>
-
-
-
-    <script src="./codemirror-5.61.1/mode/javascript/javascript.js"> </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
-
-    <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
-    <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
-    <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
-    <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
-    <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
-    <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
-    <script src="./Gramaticas/xml/funcionesParseo.js"></script>
-    <script src="./Scripts/Arboles/Tipo.js"></script>
+    
     <script type="text/javascript">
-
-
-
-            var btnXML = document.getElementById("ascendente");
-            inputElement.addEventListener("onclick", leerArchivo, false);
 
             function analisisAsc(){
                 // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
@@ -205,8 +215,82 @@
                     });
             }
 
+            function analisisAscXPATH(){
+                analisisAsc();
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['grammarXPATH'],
+                    function (grammarXPATH) {
+                        var entrada2 =  editorXQ.getValue();
+                        if (entrada2.length >= 0) {
+                            console.log(entrada2+"-------------")
+                            //console.log(grammarXPATH);
+                            var grammarAST = grammarXPATH.getParser().parse(entrada2);
+                            console.log(grammarAST);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                            llenarArboles();
+                            alert("el archivo ha sido analizado\n");
+                            //document.getElementById('tabSimbolosXML').setAttribute('value',JSON.stringify(xmlAST));
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
+            }
+
+            function analisisDescXPATH(){
+                // Recupera el contenido del js especificado para tener acceso a funciones definidas en: define()
+                requirejs(['gramaticaXPATHDesc'],
+                    function (gramaticaXPATHDesc) {
+                        var editorxpath = document.getElementById('consola');
+                        var entrada =  editorxpath.value;
+                        //console.log(entrada);
+                        if (entrada.length >= 0) {
+                            var gramdesAST = gramaticaXPATHDesc.getParser().parse(entrada);
+                            llenarTablaErrores();
+                            llenarTablaGramatical();
+                            llenarArboles();
+                        } else {
+                            alert("EL ARCHIVO DE ENTRADA ESTA VACIO\n");
+                        }
+                    });
+            }
+
     </script>
 </body>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="Scripts/InsertarArchivo.js"></script>
+    <script type="text/javascript" src="Scripts/agregador-codemirror.js"></script>
+
+
+    <script type="text/javascript" src="Scripts/clasesXML/ObjetoNodo.js"></script>
+    <script type="text/javascript" src="Scripts/clasesXML/Atributo.js"></script>
+    <script type="text/javascript" src="Scripts/Errores/Error.js"></script>
+
+    <script src="./Scripts/Gramaticas/xml/gramarxmldes.js"></script>
+    <script type="text/javascript" src="./Scripts/Gramaticas/xml/gramarxml.js"></script>
+    <script type="text/javascript" src="./Gramaticas/xpath/gramaticaXpathAsc/gramaticaxpath.js"></script>
+    <script type="text/javascript" src="./Gramaticas/xpath/gramaticaXpathDesc/gramaticaXpathDesc.js"></script>
+    
+    <script type="text/javascript" src="./Scripts/clasesXML/ObjetoNodo.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Arroba.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Dato.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/diagonalSimpleS.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/diagonalDobleC.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Funcion.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/IdCompuesto.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/IdSimple.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Metodo.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionAritmetica.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionLogica.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/OperacionRelacional.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Operador.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/Predicado.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/SimbolosXpath.js"></script>
+    <script type="text/javascript" src="./Scripts/ClasesXpath/TiposXpath.js"></script>
+    <script type="text/javascript" src="./Scripts/Arboles/Regla.js"></script>
+    <script type="text/javascript" src="./Scripts/clasesXML/ObjetoA.js"></script>
+    <script src="./Gramaticas/xml/funcionesParseo.js"></script>
+    <script src="./Scripts/Arboles/Tipo.js"></script>
 
 </html>
 

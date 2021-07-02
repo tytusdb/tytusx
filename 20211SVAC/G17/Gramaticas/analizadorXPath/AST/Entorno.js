@@ -1,4 +1,5 @@
-const { ErroresGlobal, LimpiarErrores } = require('./Global')
+const { ErroresGlobal, LimpiarErrores, CrearGlobal, AgregarGlobal } = require('./Global')
+var C3D = require('../../C3D')
 //Enum de tipos
 export const Tipo = {
     "INTEGER" : 0,
@@ -76,9 +77,10 @@ export const TipoPath = {
 
 export class Comando
 {
-  constructor(Instrucciones,Nodos,Edges,graphviz,errores,tablaGramatica)
+  constructor(Prologo,Instrucciones,Nodos,Edges,graphviz,errores,tablaGramatica)
   {
     this.Instrucciones = Instrucciones
+    this.Prologo = Prologo
     this.Nodos=Nodos
     this.Edges=Edges
     this.graphviz=graphviz
@@ -88,12 +90,23 @@ export class Comando
 
   Ejecutar(XML)
   {
+    
     LimpiarErrores()
     var Salida = ""
     var retornos=[]
+    CrearGlobal();
+    for (const prologo of this.Prologo) {
+      AgregarGlobal(prologo)
+    }
     for (const iterator of this.Instrucciones) {
       var {Nodo} = require('../Expresion/Expresiones')
-      retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
+      retornos = retornos.concat(
+        iterator.getValor(
+          [
+            new Nodo(Tipo.NODO,XML,[],"",1)
+          ]
+        )
+      )
     }
     for (const retorno of retornos) {
       if(retorno.tipo == Tipo.NODO)
@@ -111,6 +124,62 @@ export class Comando
     }
     this.errores = this.errores.concat(ErroresGlobal)
     return Salida;
+  }
+
+  // función para generar c3d
+  EjecutarC3D(xml){
+    C3D.clearC3D()
+    var salida = ""
+    var retornos=[]
+    for (const instruccion of this.Instrucciones) {
+      var {Nodo} = require('../Expresion/Expresiones')
+      retornos = retornos.concat(instruccion.getC3D([new Nodo(Tipo.NODO,xml,[],"",1)]))
+    }
+
+    for (const retorno of retornos) {
+      C3D.addCodigo3D(`\n/* Añadiendo la raiz para la consulta */\n`);
+      C3D.addCodigo3D(`stackConsulta[0] = stack[0];\n`)
+      C3D.addCodigo3D(`stackConsulta[1] = -2;\n`) 
+
+      if(retorno instanceof C3D.Retorno){
+        C3D.addCodigo3D(C3D.getstr3d())
+        switch (retorno.tipo) {
+          case Tipo.STRING:
+            var T0 = C3D.newTemp();
+            C3D.funcBoleanas[C3D.funcIndices.STRING] = true
+            C3D.addCodigo3D(`sp = sp + 1; \n`)
+            C3D.addCodigo3D(`${T0} = sp + 0; \n`)
+            C3D.addCodigo3D(`stack[(int)${T0}] = ${retorno.valor}; \n`)
+            C3D.addCodigo3D(`imprimirString(); \n`)
+            C3D.addCodigo3D(`sp = sp - 1; \n`)
+            break;
+          case Tipo.DECIMAL:
+            C3D.addCodigo3D(`printf("%f", ${retorno.valor}); \n`);
+            break;
+          case Tipo.INTEGER:
+            C3D.addCodigo3D(`printf("%d", (int)${retorno.valor}); \n`);
+            break;
+        }
+      }
+
+      if(retorno.tipo == 5 /*Tipo.ATRIB*/){
+        //entonces fue un atributo
+        C3D.funcBoleanas[C3D.funcIndices.IMPRIMIRATRIBUTO] = true
+        C3D.addCodigo3D(`ImprimirAtributoR(); \n`);
+      }else if(retorno.tipo == 3 /*Tipo.NODO*/){
+        //entonces fue un camino
+        C3D.funcBoleanas[C3D.funcIndices.IMPRIMIRCONSULTA] = true
+        C3D.addCodigo3D(`ImprimirConsultaR(); \n`);
+      }
+    
+    }
+
+    
+
+    // imprimir 
+    console.log(retornos)
+    salida = C3D.getFullC3D()
+    return salida
   }
 
   Graficar()

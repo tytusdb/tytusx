@@ -45,22 +45,7 @@
         <div class="row">
             <!-- PESTAÑA ARCHIVO -->
 
-            <div class="btn-group" role="group">
-                <div class="btn-group" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-outline-danger dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ARCHIVO
-                </button>
-                <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                    <button type="button" class="btn btn-outline-danger" id="abrirr"
-                        onclick="MostrarErroresLexicosXML();location.href='#tberror';">Abrir</button>
-                    <button type="button" class="btn btn-outline-danger" id="guardarr"
-                        onclick="erroreslexicos_ejecucion();location.href='#tberror';">Guardar</button>
-                    <button type="button" class="btn btn-outline-danger" id="cambios"
-                        onclick="erroreslexicos_ejecucion();location.href='#tberror';">Guardar cambios</button>
-                </div>
-            </div>
-        </div>
+            
 
         <!-- PESTAÑA tabla de simbolos -->
         <div class="btn-group" role="group">
@@ -117,14 +102,18 @@
                 <div class="btn-group" role="group">
                     <button id="btnGroupDrop4" type="button" class="btn btn-outline-warning dropdown-toggle"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        AST
+                        AST | CST
                     </button>
                     <div style="background-color: transparent;" class="dropdown-menu" aria-labelledby="btnGroupDrop4">
                         <!--<button type="button" class="btn btn-outline-danger" id="rplexicoT" onclick="erroreslexicos_traduccion(); window.open('./errorlextraduccion.html','_blank','resizable=yes');">Traduccion</button>-->
                         <button type="button" class="btn btn-outline-warning" id="reporteast1"
-                            onclick="location.href='#areagraph';GraficarXMLDESC();">DESC XML</button>
+                            onclick="location.href='#areagraph';GraficarXMLDESC();">CST DESC XML</button>
                         <button type="button" class="btn btn-outline-warning" id="reporteast2"
-                            onclick="location.href='#areagraph';GraficarXMLASC();">ASC XML</button>
+                            onclick="location.href='#areagraph';GraficarXMLASC();">CST ASC XML</button>
+                        <button type="button" class="btn btn-outline-warning" id="reporteast3"
+                            onclick="location.href='#areagraph';GraficarXPATHASC();">AST ASC XPATH</button>
+                        <button type="button" class="btn btn-outline-warning" id="reporteast4"
+                            onclick="location.href='#areagraph';GraficarXPATHCST();">CST DESC XPATH</button>
                     </div>
                 </div>
             </div>

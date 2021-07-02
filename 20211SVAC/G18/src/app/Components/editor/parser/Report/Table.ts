@@ -1,4 +1,5 @@
 import { Error_ } from '../Error';
+import { Regla_ } from '../Regla';
 import { Rule } from '../Optimizer/Rule';
 import { XMLSymbol } from '../Symbol/xmlSymbol';
 
@@ -93,6 +94,28 @@ export class Table {
 
     let count = 1;
     errores.forEach((element) => {
+      result += '<tr>\n';
+      result += '<th scope="row">' + count + '</th>\n';
+      result += element.htmlRow();
+      result += '</tr>\n';
+      count++;
+    });
+    result += '</tbody>\n';
+    return (result += '</table>\n</div>');
+  }
+
+  public reglas(reglas: Array<Regla_>) {
+    //console.log(errores);
+    let result = '<table class="table">\n';
+    result += '<thead>\n<tr>\n<th scope="col">#</th>\n';
+    result += '<th scope="col">Regla Sintactica</th>\n';
+    result += '<th scope="col">Regla Semantica</th>\n';
+    result += '</tr>\n';
+    result += '</thead>\n';
+    result += '<tbody>\n';
+
+    let count = 1;
+    reglas.forEach((element) => {
       result += '<tr>\n';
       result += '<th scope="row">' + count + '</th>\n';
       result += element.htmlRow();
