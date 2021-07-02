@@ -1,23 +1,24 @@
 import { Element } from "../../model/xml/Element";
 import { Atributo } from "../../model/xml/Atributo";
 import { Tipos } from "../../model/xpath/Enum";
+import { Contexto } from "../Contexto";
 
 function pushIterators(input: Array<any>): Array<any> {
     let iterators: Array<string> = [];
     // console.log(input, 36363638)
     for (let i = 0; i < input.length; i++) {
         const path = input[i];
-        if (path.item) {
+        if (path.items && path.items.length > 0) {
             return input;
         }
         if (path.notFound) {
-            return ['No se encontraron elementos.'];
+            return [{ notFound: 'No se encontraron elementos.' }];
         }
-        // if (path.valor) {
-        //     iterators.unshift(path);
-        // }
+        if (path.valor || path.valor === 0) {
+            iterators.unshift(path.valor);
+        }
         if (path.cadena === Tipos.TEXTOS) {
-            let root: Array<string> = (path.texto) ? (path.texto) : (path.elementos);
+            let root: Array<string> = path.texto;
             root.forEach(txt => {
                 iterators.push(concatText(txt).substring(1));
             });
@@ -55,8 +56,8 @@ function pushIterators(input: Array<any>): Array<any> {
         }
     }
     if (iterators.length > 0)
-        return iterators;
-    return ['No se encontraron elementos.'];
+        return [iterators];
+    return [{ notFound: 'No se encontraron elementos.' }];
 }
 
 function concatChilds(_element: Element, cadena: string): string {

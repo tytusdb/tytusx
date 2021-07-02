@@ -155,10 +155,18 @@ var TipoXDataType;
     TipoXDataType[TipoXDataType["FLOAT"] = 92] = "FLOAT";
     TipoXDataType[TipoXDataType["BOOLEAN"] = 93] = "BOOLEAN";
     TipoXDataType[TipoXDataType["STRING"] = 94] = "STRING";
+    TipoXDataType[TipoXDataType["DECIMAL"] = 95] = "DECIMAL";
 })(TipoXDataType || (TipoXDataType = {}));
 
 var TipoXValor;
 (function (TipoXValor) {
-    TipoXValor[TipoXValor["PRIMITIVO"] = 95] = "PRIMITIVO";
-    TipoXValor[TipoXValor["XPATH"] = 96] = "XPATH";
+    TipoXValor[TipoXValor["PRIMITIVO"] = 96] = "PRIMITIVO";
+    TipoXValor[TipoXValor["XPATH"] = 97] = "XPATH";
 })(TipoXValor || (TipoXValor = {}));
+
+var TipoXSENFUNCION;
+(function (TipoXSENFUNCION) {
+    TipoXSENFUNCION[TipoXSENFUNCION["XLET"] = 98] = "XLET";
+    TipoXSENFUNCION[TipoXSENFUNCION["XASIGNACION"] = 99] = "XASIGNACION";
+    TipoXSENFUNCION[TipoXSENFUNCION["XRETURN"] = 100] = "XRETURN";
+})(TipoXSENFUNCION || (TipoXSENFUNCION = {}));

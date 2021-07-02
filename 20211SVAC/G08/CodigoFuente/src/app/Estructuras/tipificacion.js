@@ -55,6 +55,8 @@ var SingleExpresionType;
     SingleExpresionType[SingleExpresionType["FuncionDefinida"] = 4] = "FuncionDefinida";
     SingleExpresionType[SingleExpresionType["XPARAM"] = 5] = "XPARAM";
     SingleExpresionType[SingleExpresionType["Path"] = 6] = "Path";
+    SingleExpresionType[SingleExpresionType["LlamadaFuncion"] = 7] = "LlamadaFuncion";
+    SingleExpresionType[SingleExpresionType["Sentencia"] = 8] = "Sentencia";
 })(SingleExpresionType = exports.SingleExpresionType || (exports.SingleExpresionType = {}));
 var FLWORTipo;
 (function (FLWORTipo) {
@@ -93,4 +95,5 @@ var ParamType;
     ParamType[ParamType["xsDate"] = 1] = "xsDate";
     ParamType[ParamType["xsDecimal"] = 2] = "xsDecimal";
     ParamType[ParamType["xsBoolean"] = 3] = "xsBoolean";
+    ParamType[ParamType["xsInteger"] = 4] = "xsInteger";
 })(ParamType = exports.ParamType || (exports.ParamType = {}));

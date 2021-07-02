@@ -6,19 +6,24 @@ var asignacionOp = /**@class*/(function(){
         this.expr = expr
         this. tipo = tipo
         this.codigo=""
+        this.optimizado=false
     }
 
     asignacionOp.prototype.getTipo=function(){
         return this.tipo
     }
     asignacionOp.prototype.set3D = function(){
-        if(this.tipo!= tipoInstr.NULL)
+        if(this.tipo!= tipoInstr.NULL && this.optimizado==false)
             this.codigo = this.id + " = "+this.expr+" ;\n"
+        else if(this.tipo!= tipoInstr.NULL&&this.optimizado==true)
+            this.codigo= this.codigo
         else    
             this.codigo=""
         return this.codigo
     }
-    asignacionOp.prototype.setOptimizado = function (codigo) {
+    asignacionOp.prototype.setOptimizado = function (codigo, optim) {
+        if(optim==true)
+            this.optimizado=true
         this.codigo=codigo
         return 
     }

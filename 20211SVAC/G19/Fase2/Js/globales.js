@@ -30,6 +30,12 @@ const init = function(e){
         //window.document.location = './reportes/cstXML.html';
         window.open('./fase2/reportes/tablaSimbolosXML.html','_blank');
     });
+    let btn_tsXML3D = document.querySelector("#tsXML3D");
+
+    btn_tsXML3D.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./fase2/reportes/tablaSimbolosXML3D.html','_blank');
+    });
 
     let btn_rgXML = document.querySelector("#rgXML");
 

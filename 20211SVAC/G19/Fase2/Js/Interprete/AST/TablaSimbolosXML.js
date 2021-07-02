@@ -16,7 +16,7 @@ var TablaSimbolosXML = /** @class */ (function () {
             IDobj++;
             if (element.listaAtributos.length > 0) {
                 element.listaAtributos.forEach(function (atributo) {
-                    var simbolo = new Simbolo(Tipo.ATRIBUTO, atributo.identificador, atributo.linea, atributo.columna, atributo.valor,atributo.posicion);
+                    var simbolo = new Simbolo(Tipo.ATRIBUTO, atributo.identificador, atributo.linea, atributo.columna, atributo.valor,atributo.posicion,atributo.posicionH);
                     entornoObjeto.agregar(simbolo);
                 });
             }
@@ -25,7 +25,7 @@ var TablaSimbolosXML = /** @class */ (function () {
             }
             
             element.entorno = entornoObjeto;
-            var simbolo = new Simbolo(Tipo.STRUCT, element.identificador1, element.linea, element.columna, element,element.posicion);
+            var simbolo = new Simbolo(Tipo.STRUCT, element.identificador1, element.linea, element.columna, element,element.posicion,element.posicionH);
             entornoPadre.agregar(simbolo);
             entornoObjeto.setAnterior(entornoPadre);
         });

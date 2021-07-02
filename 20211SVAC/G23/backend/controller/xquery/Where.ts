@@ -1,27 +1,16 @@
 import { Ambito } from "../../model/xml/Ambito/Ambito";
 import Expresion from "../xpath/Expresion/Expresion";
-import { Tipos } from "../../model/xpath/Enum";
+import { Contexto } from "../Contexto";
 
-function WhereClause(_instruccion: any, _ambito: Ambito, _iterators: Array<any>) {
-    const Bloque = require("../xpath/Instruccion/Bloque");
-    let iterators: Array<any> = [];
+function WhereClause(_instruccion: any, _ambito: Ambito, _iterators: Array<Contexto>): Array<Contexto> {
+    let iterators: Array<Contexto> = [];
     for (let i = 0; i < _iterators.length; i++) { // [$x, $y, $z]
-        const iterator = _iterators[i]; // { id: $x, iterators: /book/title (contexto) }
-        let iters = iterator.iterators;
-        if (Array.isArray(iters)) iters = iters[0];
-        // let _x = Bloque.getIterators(_instruccion, _ambito, iters, iterator.id); // _instruccion = [comparissons]
-        let _x = Expresion(_instruccion, _ambito, iters, iterator.id);
-        // console.log(_x, 8888888888888888)
-        if (_x) {
-            _x.forEach((element: any) => {
-                iterators.push({ id: iterator.id, iterators: { elementos: [element], cadena: Tipos.ELEMENTOS } });
-            });
-        }
+        const iterator = _iterators[i]; // { Contexto }
+        let _x = Expresion(_instruccion, _ambito, iterator, iterator.variable?.id); // _instruccion = [comparissons]
+        if (_x) iterators = iterators.concat(_x);
     }
-    // console.log(iterators, 22222222222)
-    if (iterators.length > 0)
-        return iterators;
-    return null;
+    // console.log(iterators)
+    return iterators;
 }
 
 export = WhereClause;
