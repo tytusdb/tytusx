@@ -158,7 +158,38 @@ class Operacion implements Expresion {
             }
         }
 
-        return null;
+        let op1 = this.op_izquierda.getValorImplicito(ent, arbol);
+        let op2 = this.op_derecha.getValorImplicito(ent, arbol);
+
+        //aqui se deben agregar las operaciones relacionales
+        //deben retornar true or false
+        /*--------------------IGUAL-------------------------- */
+        if (this.operador == Operador.IGUAL_IGUAL){
+            if (op1 == op2){return true;}else{return false;}
+        }
+        /*--------------------MAYOR QUE-------------------------- */
+        else if(this.operador == Operador.MAYOR_QUE){
+            if (op1 > op2){return true;}else{return false;}
+        }
+        /*--------------------MAYOR IGUAL-------------------------- */
+        else if(this.operador == Operador.MAYOR_IGUAL_QUE){
+            if (op1 >= op2){return true;}else{return false;}
+        }
+        /*--------------------MENOR QUE-------------------------- */
+        else if(this.operador == Operador.MENOR_QUE){
+            if (op1 < op2){return true;}else{return false;}
+        }
+        /*--------------------MENOR IGUAL-------------------------- */
+        else if(this.operador == Operador.MENOR_IGUAL_QUE){
+            if (op1 <= op2){return true;}else{return false;}
+        }
+        /*--------------------DIFERENTE-------------------------- */
+        else if(this.operador == Operador.DIFERENTE_QUE){
+            if (op1 != op2){return true;}else{return false;}
+        }
+        else{
+            return null;
+        }
     }
 
     isInt(n:number){

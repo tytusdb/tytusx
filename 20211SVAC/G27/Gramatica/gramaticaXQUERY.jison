@@ -2,24 +2,50 @@
 %lex
 
 %options case-insensitive
+%options yylineno
 
 %%
 \s+                                 /* skip whitespace */
-/* PALABRAS RESERVADAS */
+"(:"[\s\S\n]*?":)"                  /* comentario en XQUERY */
+"<!--"[\s\S\n]*?"-->"               /* Cometario de múltiples líneas XQUERY */
+/* ELEMENTOS RESERVADOS DE XQUERY*/
+"or"                        return 'or';
+"and"                       return 'and';
+"let"                       return 'let';
+'for'                       return 'for';
+'mod'                       return 'mod';
+'doc'                       return 'doc';
+'to'                        return 'to';
+'in'                        return 'in';
+'at'                        return 'at';
+'where'                     return 'where';
+'order'                     return 'order';
+'by'                        return 'by';
+'return'                    return 'return';
+'data'                      return 'data';
+
+/* PALABRAS RESERVADAS XQUERY */
+"div"                      return 'div';
+"ancestor-or-self"          return 'ancestor-or-self';
+"descendant-or-self"        return 'descendant-or-self';
+"following-sibling"         return 'following-sibling';
+"preceding-sibling"         return 'preceding-sibling';
+
+/* PALABRAS RESERVADAS XPATH */
 "last"                     return  'last';
 "position"                 return  'position';
 "text"                     return  'text';
 "ancestor"                 return  'ancestor'; 
 "attribute"                return  'attribute'
-"child"                    return  'child'
-"descendant"               return  'descendant'
-"following"                return  'following'
-"namespace"                return  'namespace'
-"parent"                   return  'parent'
-"preceding"                return  'preceding'
-"sibling"                  return  'sibling'
-"self"                     return  'self'
-"node"                     return  'node'
+"child"                    return  'child';
+"descendant"               return  'descendant';
+"following"                return  'following';
+"namespace"                return  'namespace';
+"parent"                   return  'parent';
+"preceding"                return  'preceding';
+"sibling"                  return  'sibling';
+"self"                     return  'self';
+"node"                     return  'node';
 \"[^"]+\"                   yytext = yytext.slice(1,-1); return 'STRING';
 
 /* SIMBOLOS PARA OPERACIONES ARITMÉTICAS */
@@ -37,6 +63,7 @@
 "="                         return 'igual';
 "=="                        return 'digual';
 "!="                        return 'noigual';
+":="                        return 'dosPuntosIgual';
 
 "&&"                        return 'and';
 "or"                        return 'or';
@@ -44,7 +71,10 @@
 
 ";"                         return 'semicolon';
 "("                         return 'parentesisa';
-")"                         return 'parentesisc';
+")"                         return 'parentesisc'
+
+"/\/"                       return 'barraDoble';
+"/"                         return 'barraSimple';
 
 "&&"                        return 'and';
 "||"                        return 'or';
@@ -56,7 +86,12 @@
 "]"                         return 'corc';
 "."                         return 'punto';
 "::"                        return 'ddpuntos';
+".."                        return 'puntosDobles';
 "@"                         return 'arroba';
+"$"                         return 'dolar';
+"{"                         return 'llaveAbre';
+"}"                         return "llaveCierra";
+","                         return 'coma';
 
 /* Number literals */
 (([0-9]+"."[0-9]*)|("."[0-9]+))     return 'decimal';
@@ -82,10 +117,10 @@
 %}*/
 
 // DEFINIMOS PRESEDENCIA DE OPERADORES
-%left 'or'
+%left 'or' 'union'
 %left 'and'
 %left 'not'
-%left 'union'
+//%left 'union'
 %left 'igual' 'noigual'
 %left 'menor' 'mayor' 'menorigual' 'mayorigual' 
 %left 'ddoble' 'dsimple'
@@ -93,6 +128,7 @@
 %left 'parentesisa' 'parentesisc'
 %left 'por' 'div' 'mod'
 %left 'mas' 'menos'
+%left 'barraSimple' 'barraDoble'
 
 // DEFINIMOS PRODUCCIÓN INICIAL
 %start START
@@ -100,9 +136,61 @@
 %%
 
 /* Definición de la gramática */
-START : LISTA_NODOS EOF{
+/*START : LISTA_NODOS EOF{
        return $1;
-};
+};*/
+START: XQUERY EOF{
+    return $1;
+}
+;
+
+XQUERY: XQUERY INSTRUCCION
+       | INSTRUCCION
+;
+
+INSTRUCCION:  FUNCIONES
+       |      CICLO_FOR
+       |      SENTENCIA
+       |      ASIGNACION
+;
+SENTENCIA: EOF
+;
+
+ASIGNACION: let dolar nodoid dosPuntosIgual DECLARACION2
+       |    DECLARACION2
+;
+
+CICLO_FOR: for DECLARACION1 COMPLEMENTO
+;
+
+COMPLEMENTO: COMPLEMENTO INS_FOR
+       |     INS_FOR
+;
+
+INS_FOR: ORDER_BY_FOR
+       | where EXPRESION
+       | return XPATH
+;
+
+ORDER_BY_FOR: ORDER_BY_FOR coma EXPRESION
+       |      order by EXPRESION
+;
+
+DECLARACION1: dolar nodoid in DECLARACION2
+       |      dolar nodoid at dolar nodoid in DECLARACION2
+;
+
+DECLARACION2: parentesisa EXPRESION to EXPRESION parentesisc
+       |      parentesisa LISTA_VALORES parentesisc
+       |      XPATH
+;
+
+LISTA_VALORES: LISTA_VALORES coma EXPRESION
+       |       EXPRESION
+;
+
+XPATH: LISTA_NODOS
+;
 
 LISTA_NODOS : LISTA_NODOS OPERADOR NODO{
                      $1.push($3);
@@ -175,12 +263,15 @@ FUNCION : position parentesisa parentesisc
 EXPRESION : ARITMETICA
             |LOGICA
             |PRIMITIVO
-            |FUNCION;
+            |FUNCION
+            |XPATH
+;
 
 ARITMETICA : EXPRESION mas EXPRESION
             |EXPRESION menos EXPRESION
             |EXPRESION por EXPRESION
             |EXPRESION div EXPRESION
+            |EXPRESION mod EXPRESION
             |parentesisa EXPRESION parentesisc;
             
 PRIMITIVO :  entero
@@ -195,4 +286,8 @@ LOGICA : EXPRESION menor  EXPRESION
         |EXPRESION mayor  EXPRESION
         |EXPRESION igual EXPRESION
         |EXPRESION menorigual EXPRESION
-        |EXPRESION mayorigual EXPRESION;
+        |EXPRESION mayorigual EXPRESION
+        |EXPRESION or EXPRESION
+        |EXPRESION and 
+        |EXPRESION igual EXPRESION
+        |EXPRESION noigual EXPRESION
