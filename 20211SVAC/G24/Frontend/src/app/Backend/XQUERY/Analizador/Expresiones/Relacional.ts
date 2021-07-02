@@ -1,11 +1,11 @@
-//aritmeticas
-
-import { Instruccion } from '../Abstracto/Instruccion';
-import nodoAST from '../Abstracto/nodoAST';
-import NodoErrores from '../Excepciones/NodoErrores';
-import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
-import Tipo, { tipoDato } from '../Simbolos/Tipo';
+import NodoErrores from "src/app/Backend/XML/Analizador/Excepciones/NodoErrores";
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import { Instruccion } from "../Abstracto/Instruccion";
+import nodoAST from "../Abstracto/nodoAST";
+import Arbol from "../Simbolos/Arbol";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
+import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class Relacional extends Instruccion {
   private cond1: Instruccion;
@@ -31,11 +31,11 @@ export default class Relacional extends Instruccion {
     nodo.agregarHijoAST(this.cond2.getNodoAST());
     return nodo;
   }
-  public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+  public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     let izq, der;
-    izq = this.obtieneValor(this.cond1, arbol, tabla);
+    izq = this.obtieneValor(this.cond1, arbol, tabla,tablaxml);
     if (izq instanceof NodoErrores) return izq;
-    der = this.obtieneValor(this.cond2, arbol, tabla);
+    der = this.obtieneValor(this.cond2, arbol, tabla,tablaxml);
     if (der instanceof NodoErrores) return der;
     if (
       this.cond1.tipoDato.getTipo() == tipoDato.CADENA &&
@@ -77,8 +77,8 @@ export default class Relacional extends Instruccion {
       }
     }
   }
-  obtieneValor(operando: Instruccion, arbol: Arbol, tabla: tablaSimbolos): any {
-    let valor = operando.interpretar(arbol, tabla);
+  obtieneValor(operando: Instruccion, arbol: Arbol, tabla: tablaSimbolos, tablaxml:tablaSimbolosxml): any {
+    let valor = operando.interpretar(arbol, tabla, tablaxml)
     switch (operando.tipoDato.getTipo()) {
       case tipoDato.ENTERO:
         return parseInt(valor);

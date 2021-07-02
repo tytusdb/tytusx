@@ -1,7 +1,9 @@
-import tablaSimbolos from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
+import tablaSimbolosxml from "src/app/Backend/XML/Analizador/Simbolos/tablaSimbolos";
 import { Instruccion } from "../Abstracto/Instruccion";
 import nodoAST from "../Abstracto/nodoAST";
 import Arbol from "../Simbolos/Arbol";
+import Simbolo from "../Simbolos/Simbolo";
+import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class CondicionSimple extends Instruccion {
@@ -15,7 +17,7 @@ export default class CondicionSimple extends Instruccion {
         this.variables=variables;
     }
 
-    public interpretar(arbol: Arbol, tabla: tablaSimbolos) {
+    public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     console.log("aqui iria la consulta");
       console.log(tabla);
 
