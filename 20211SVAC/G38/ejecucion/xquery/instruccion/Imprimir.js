@@ -8,5 +8,6 @@ class Imprimir {
     ejecutar(ent, xmlData) {
         let valor = this.expresion.getValor(ent, xmlData);
         InterfazGrafica.print(valor);
+        return valor;
     }
 }

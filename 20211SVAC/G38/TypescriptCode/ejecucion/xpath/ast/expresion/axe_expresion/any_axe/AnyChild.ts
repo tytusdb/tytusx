@@ -1,4 +1,4 @@
-class AnyChild implements Expresion{
+class AnyChild extends ExpresionAncestor{
     private axeType: AxeType;
     private axeOperation: AxeOperation;
     private identifier: string;
@@ -8,6 +8,7 @@ class AnyChild implements Expresion{
 
     constructor(axeType: AxeType, axeOperation: AxeOperation, identifier: string,
                 listaPredicados:Expresion[], linea: number, columna: number) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;

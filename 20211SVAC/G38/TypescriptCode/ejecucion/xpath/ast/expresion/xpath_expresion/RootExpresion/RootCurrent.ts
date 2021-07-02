@@ -1,9 +1,10 @@
-class RootCurrent implements Expresion{
+class RootCurrent extends ExpresionAncestor{
     private predicatesList: Expresion[];
     linea: number;
     columna: number;
 
     constructor(predicatesList: Expresion[], linea: number, columna: number) {
+        super();
         this.predicatesList = predicatesList;
         this.linea = linea;
         this.columna = columna;

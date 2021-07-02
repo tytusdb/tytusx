@@ -5,8 +5,9 @@ var NativeFunction;
     NativeFunction[NativeFunction["position"] = 1] = "position";
     NativeFunction[NativeFunction["text"] = 2] = "text";
 })(NativeFunction || (NativeFunction = {}));
-class NativeFunctionExpresion {
+class NativeFunctionExpresion extends ExpresionAncestor {
     constructor(nativeFunction, linea, columna) {
+        super();
         this.nativeFunction = nativeFunction;
         this.linea = linea;
         this.columna = columna;

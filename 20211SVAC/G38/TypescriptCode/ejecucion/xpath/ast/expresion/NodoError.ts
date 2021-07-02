@@ -1,8 +1,9 @@
-class NodoError implements Expresion{
+class NodoError extends ExpresionAncestor{
     linea: number;
     columna: number;
 
     constructor(linea: number, columna: number) {
+        super();
         this.linea = linea;
         this.columna = columna;
     }

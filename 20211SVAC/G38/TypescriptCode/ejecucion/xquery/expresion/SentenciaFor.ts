@@ -1,4 +1,4 @@
-class SentenciaFor implements Expresion, NodoXquery{
+class SentenciaFor extends ExpresionAncestor implements NodoXquery{
 
     linea: number;
     columna: number;

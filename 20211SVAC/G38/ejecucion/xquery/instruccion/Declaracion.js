@@ -11,10 +11,7 @@ class Declaracion {
         let valor;
         if (!tipo.esError()) {
             valor = this.expresion.getValor(ent, xmlData);
-            if (!XpathUtil.createSimbolo(this.variable, valor, tipo, ent, xmlData)) {
-                ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("No se pudo guardar la variable con nombre " + this.variable
-                    + " porque ya ha sido declarada", this.linea, this.columna));
-            }
+            this.createSimbolo(valor, tipo, ent, xmlData);
         }
         else {
             ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("No se pudo guardar la variable con nombre " + this.variable

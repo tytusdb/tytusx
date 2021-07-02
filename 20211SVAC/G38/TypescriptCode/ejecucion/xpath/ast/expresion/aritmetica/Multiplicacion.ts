@@ -1,10 +1,11 @@
-class Multiplicacion implements Expresion{
+class Multiplicacion extends ExpresionAncestor{
     private izquierda: Expresion;
     private derecha: Expresion;
     columna: number;
     linea: number;
 
     constructor(izquierda: Expresion, derecha: Expresion,linea:number, columna:number) {
+        super();
         this.izquierda = izquierda;
         this.derecha = derecha;
         this.linea = linea;

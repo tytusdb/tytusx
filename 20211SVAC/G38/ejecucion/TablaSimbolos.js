@@ -504,6 +504,13 @@ class TablaSimbolos {
         ambitoGlobal = this.listaSimbolos[0].sub_entorno[0].generarCodigo_3d("-1");
         CodeUtil.printComment("Dejamos el entorno global en la primera pos del stack");
         CodeUtil.printWithComment("Stack[0] = " + ambitoGlobal + " ; ", "Stack[0] = Ambito Global ;");
+        CodeUtil.print("SP = SP + 1 ;");
+        CodeUtil.print("crearLista();");
+        let tmpPosParametroObjeto = CodeUtil.generarTemporal();
+        CodeUtil.print(tmpPosParametroObjeto + " = SP + 1 ;");
+        CodeUtil.printWithComment("Stack[(int)" + tmpPosParametroObjeto + "] = " + ambitoGlobal + " ;", "Pasamos la referencia del objeto global para ser agregada a la lista. ");
+        CodeUtil.printWithComment("concatenarObjeto();", "El resultado se queda en Stack[SP]");
+        CodeUtil.print("SP = SP - 1 ;");
         CodeUtil.printWithComment("}", "Fin de cargarXml()");
         CodeUtil.print("");
     }

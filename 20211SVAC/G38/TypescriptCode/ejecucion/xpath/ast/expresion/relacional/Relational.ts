@@ -1,4 +1,4 @@
-class Relational implements Expresion{
+class Relational extends ExpresionAncestor{
     private izquierdo: Expresion;
     private derecha: Expresion;
     private relationalOperator: RelationalOperators;
@@ -6,6 +6,7 @@ class Relational implements Expresion{
     columna: number;
 
     constructor(izquierdo: Expresion, derecha: Expresion, relationalOperator: RelationalOperators, linea: number, columna: number) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.relationalOperator = relationalOperator;

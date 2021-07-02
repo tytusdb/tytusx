@@ -1,6 +1,7 @@
 "use strict";
-class XpathExpresion {
+class XpathExpresion extends ExpresionAncestor {
     constructor(expresionesXpath, linea, columna) {
+        super();
         this.expresionesXpath = expresionesXpath;
         this.linea = linea;
         this.columna = columna;
@@ -17,6 +18,16 @@ class XpathExpresion {
                 throw Error("Se devolvio tabla nula");
             }
             entornoActual = expresion.getValor(ts, entornoActual);
+        }
+        return entornoActual;
+    }
+    traducir3D(ambito, sizeScope) {
+        let entornoActual = ambito;
+        for (let expression of this.expresionesXpath) {
+            if (ambito == undefined || ambito == null) {
+                throw Error("Ambito es nulo");
+            }
+            entornoActual = expression.traducir3D(ambito, sizeScope);
         }
         return entornoActual;
     }

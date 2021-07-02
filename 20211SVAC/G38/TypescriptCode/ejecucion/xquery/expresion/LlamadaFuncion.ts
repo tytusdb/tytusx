@@ -1,4 +1,4 @@
-class LlamadaFuncion implements  Expresion, NodoXquery{
+class LlamadaFuncion extends ExpresionAncestor implements  NodoXquery{
     identifier: string;
     valoresParametros: Expresion[];
     linea: number;

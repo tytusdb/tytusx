@@ -1,10 +1,11 @@
-class OrLogica implements Expresion{
+class OrLogica extends ExpresionAncestor{
     private izquierdo: Expresion;
     private derecha: Expresion;
     linea: number;
     columna: number;
 
     constructor(izquierdo: Expresion, derecha: Expresion, linea: number, columna: number) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.linea = linea;

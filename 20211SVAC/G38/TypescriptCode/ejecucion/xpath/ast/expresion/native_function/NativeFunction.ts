@@ -4,13 +4,14 @@ enum NativeFunction{
     text
 }
 
-class NativeFunctionExpresion implements Expresion{
+class NativeFunctionExpresion extends ExpresionAncestor{
     private nativeFunction: NativeFunction;
     linea: number;
     columna: number;
 
 
     constructor(nativeFunction: NativeFunction, linea: number, columna: number) {
+        super();
         this.nativeFunction = nativeFunction;
         this.linea = linea;
         this.columna = columna;

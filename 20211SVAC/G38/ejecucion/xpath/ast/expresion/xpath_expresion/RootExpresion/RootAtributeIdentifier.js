@@ -1,6 +1,7 @@
 "use strict";
-class RootAtributeIdentifier {
+class RootAtributeIdentifier extends ExpresionAncestor {
     constructor(identifier, predicatesList, linea, columna) {
+        super();
         this.identifier = identifier;
         this.predicatesList = predicatesList;
         this.linea = linea;

@@ -1,9 +1,10 @@
-class AnyText implements Expresion{
+class AnyText extends ExpresionAncestor{
     private predicatesList: Expresion[];
     linea: number;
     columna: number;
 
     constructor(predicatesList: Expresion[], linea: number, columna: number) {
+        super();
         this.predicatesList = predicatesList;
         this.linea = linea;
         this.columna = columna;

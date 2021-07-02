@@ -1,9 +1,10 @@
-class AnyNode implements Expresion{// LO mismo de times //node()
+class AnyNode extends ExpresionAncestor{// LO mismo de times //node()
     private predicatesList: Expresion[];
     linea: number;
     columna: number;
 
     constructor(predicatesList: Expresion[], linea: number, columna: number) {
+        super();
         this.predicatesList = predicatesList;
         this.linea = linea;
         this.columna = columna;

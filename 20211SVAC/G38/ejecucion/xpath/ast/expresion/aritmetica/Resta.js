@@ -1,6 +1,7 @@
 "use strict";
-class Resta {
+class Resta extends ExpresionAncestor {
     constructor(izquierda, derecha, linea, columna) {
+        super();
         this.izquierda = izquierda;
         this.derecha = derecha;
         this.linea = linea;

@@ -1,6 +1,7 @@
 "use strict";
-class AnyFollowing {
+class AnyFollowing extends ExpresionAncestor {
     constructor(axeType, axeOperation, identifier, listaPredicados, linea, columna) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;

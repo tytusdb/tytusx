@@ -7,10 +7,13 @@ class CodeUtil {
         this._sp = 0;
         this._hp = 0;
         this._rp = 0;
-        this._temporal = 0;
-        this._etiqueta = 0;
+        this._temporal = 1;
+        this._etiqueta = 1;
         this.initCad();
         this.generarFuncionesNativas();
+    }
+    static registrarTamañoHeapCargaXML(size) {
+        this.printWithComment(this.TMP_SIZE_TS_XML + " = " + size + " ;", "Guardamos posicion de H para determinar tamaño de la carga");
     }
     static generarDefinicionFunciones() {
         CodeUtil.print("/*************************************/");
@@ -23,18 +26,23 @@ class CodeUtil {
         this.print("void imprimirAtributos();");
         this.print("void imprimirAtributo();");
         this.print("void imprimirHijos();");
+        this.print("void crearLista();");
+        this.print("void imprimirListaObjetos();");
+        this.print("void findObjectsByNombre();");
         CodeUtil.print("/*************************************/");
         this.print("");
     }
     static generarFuncionesNativas() {
         this.generarDefinicionFunciones();
+        RootIdentifier.findObjectsByNombre();
+        this.imprimirListaObjetos();
         this.imprimrObjeto();
         this.imprimirHijos();
         this.imprimirAtributo();
         this.imprimirAtributos();
         this.concatenarObjeto();
         this.crearLista();
-        this.genEqualsFunction();
+        this.equalString();
         this.genPrintstring();
         this.genPrintLnString();
         CodeUtil.print("/*************************************/");
@@ -86,19 +94,29 @@ class CodeUtil {
         this._etiqueta += 1;
         return etiqueta;
     }
+    static guardarTexto(cadena) {
+        CodeUtil.printComment("Guardamos " + cadena);
+        var tmp = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment(tmp + " = RP + 0 ;", "Obtenemos inicio de cadena");
+        for (let caracter of cadena) {
+            CodeUtil.printWithComment("Repository[RP] = " + caracter.charCodeAt(0) + " ;", caracter);
+            CodeUtil.print("RP = RP + 1 ;");
+        }
+        CodeUtil.printWithComment("Repository[RP] = -1 ;", "EOF");
+        CodeUtil.print("RP = RP + 1 ;");
+        return tmp;
+    }
     static crearMain() {
         this.print("/**************************************");
         this.print("main():void");
         this.print("AmbitaoGlboal->stack[P]");
+        this.print("List AmbitaoGlboal->stack[P+1]");
         this.print("**************************************/");
         CodeUtil.print("int main()");
         CodeUtil.print("{");
-        CodeUtil.print(CodeUtil.METHOD_CARGARXML + ";");
-        this.print("SP = SP + 1;\n" +
-            "Stack[SP] = 0 ;\n" +
-            "Stack[SP + 1 ] = 0 ;\n" +
-            "imprimirObjeto();\n" +
-            "SP = SP - 1; ");
+        CodeUtil.printWithComment(CodeUtil.METHOD_CARGARXML + ";", "Stack[SP] y Stack[SP+1] queda la carga. ");
+    }
+    static cerrarMain() {
         CodeUtil.print("}");
     }
     static createTemps() {
@@ -107,8 +125,11 @@ class CodeUtil {
     static createLibs() {
         this._cadSalida = "#include <stdio.h>\n\n" + this._cadSalida;
     }
-    static finalizeCad() {
+    static comenzarPrograma() {
         CodeUtil.crearMain();
+    }
+    static finalizarProgrma() {
+        CodeUtil.cerrarMain();
         CodeUtil.createTemps();
         CodeUtil.createLibs();
     }
@@ -163,7 +184,7 @@ class CodeUtil {
         this.print("}");
         this.print("");
     }
-    static genEqualsFunction() {
+    static equalString() {
         this.print("/**************************************");
         this.print("equalString(string cadena1, string cadena2):boolean");
         this.print("cadena1->stack[P]");
@@ -210,7 +231,7 @@ class CodeUtil {
         this.print("crearLista():int");
         this.print("return->stack[P]");
         this.print("**************************************/");
-        this.print("void crarLista()");
+        this.print("void crearLista()");
         this.print("{");
         var tmpReferencia = this.generarTemporal();
         this.print(tmpReferencia + " = HP ;");
@@ -251,47 +272,57 @@ class CodeUtil {
         var tmpApuntador = this.generarTemporal();
         this.print(tmpApuntador + " = Heap[(int)" + tmpPosReferencia + "];");
         this.print("if ( " + tmpObjeto + " != -1) goto " + lValidarApuntador + " ;");
+        this.printComment("La lista esta vacia, se inserta el primer objeto");
         //Guardamos el objeto en la primera posicion
         this.printWithComment("Heap[(int)" + tmpParametro1 + "] = " + tmpParametro2 + " ;", "La primera casilla es nula y asignamos el objeto enviado por parametro");
         this.printWithComment("goto " + lFin + " ; ", "Salgo a etiqueta fin");
         this.print(lValidarApuntador + " : ");
         this.print("if ( " + tmpApuntador + " != -1 ) goto " + lValidarSiguietntelLista + " ;" /*,"Buscar en la sigueinte sub lista"*/);
         //Creamos nueva lista y la concatenamos a la existente
+        this.printComment("El apuntador es nulo y se crea nueva lista para concatenar");
         this.printComment("Se va a crear una nueva lista.");
         this.print("SP = SP + 2 ;");
-        // this.printWithComment("crearLista(); ","Llamamos funcion que crea lista");
+        this.printWithComment("crearLista(); ", "Llamamos funcion que crea lista");
         var tmpApuntadorNuevaLista = this.generarTemporal();
         this.printWithComment(tmpApuntadorNuevaLista + " = Stack[SP] ;", "Se recupera el return del metodo. ");
         this.print("SP = SP - 2 ;");
-        this.printComment("Se inserta el objeto a la nueva lista. Se hace llamado recursivo. ");
-        this.print("SP = SP + 2 ;");
-        var tmpPosAntiguoPosPar1 = tmpPosParametro1;
-        //var tmpPosAntiguoPosPar2 = tmpPosParametro2;
-        tmpPosParametro1 = this.generarTemporal();
-        this.printWithComment(tmpPosParametro1 + " = SP + 0 ;", "Posicion del parametro de la lista");
-        tmpPosParametro2 = this.generarTemporal();
-        this.printWithComment(tmpPosParametro2 + " = SP + 1 ;", "Posicion del parametro del objeto");
-        this.printWithComment("Stack[(int)" + tmpPosParametro1 + "] = " + tmpApuntadorNuevaLista + " ;", "Se pasa la referencia de la nueva lista");
-        this.printWithComment("Stack[(int)" + tmpPosParametro2 + "] = " + tmpParametro2 + " ;", "Se pasa la referencia del objeto, el mismo que se recibio por parametro");
-        this.print("SP = SP - 2 ;");
+        //Enlazamos la lista
         this.printComment("Asociamos la nueva lista a la lista actual");
         this.print("Heap[(int)" + tmpPosReferencia + "] = " + tmpApuntadorNuevaLista + " ;");
-        this.printWithComment("goto " + lFin + " ; ", "Salgo a etiqueta fin");
+        //Se guarda nuevamente el objeto en la nueva lista
+        this.printWithComment("Stack[(int)" + tmpPosParametro1 + "] = " + tmpApuntadorNuevaLista + " ;", "Se asigna al parametro la nueva lista");
+        this.printWithComment("Stack[(int)" + tmpPosParametro2 + "] = " + tmpParametro2 + " ;", "El objeto recibido sigue como parametro 2");
+        this.printWithComment("goto " + lInicio + " ;", "Se hace goto en vez de llamada recursiva");
+        /*
+        this.print("SP = SP + 2 ;");
+        //var tmpPosAntiguoPosPar2 = tmpPosParametro2;
+        tmpPosParametro1 = this.generarTemporal();
+        this.printWithComment(tmpPosParametro1 + " = SP + 0 ;","Posicion del parametro de la lista");
+        tmpPosParametro2 = this.generarTemporal();
+        this.printWithComment(tmpPosParametro2 + " = SP + 1 ;","Posicion del parametro del objeto");
+        this.printWithComment("Stack[(int)"+tmpPosParametro1+"] = "+tmpApuntadorNuevaLista+" ;",
+            "Se pasa la referencia de la nueva lista");
+        this.printWithComment("Stack[(int)"+tmpPosParametro2+"] = "+tmpParametro2+" ;",
+            "Se pasa la referencia del objeto, el mismo que se recibio por parametro");
+        this.print("SP = SP - 2 ;");
+        this.printWithComment("goto "+lFin+" ; ","Salgo a etiqueta fin");
+        */
         this.print(lValidarSiguietntelLista + " :");
         //Insertamos en la referencia de la siguiente lista.
         this.printComment("Se busca en el siguiente objeto enlazado");
-        this.printWithComment("Stack[(int)" + tmpPosAntiguoPosPar1 + "] = " + tmpApuntador + " ;", "Se pasa la referencia del siguietne objeto de la lista");
+        this.printWithComment("Stack[(int)" + tmpPosParametro1 + "] = " + tmpApuntador + " ;", "Se asigna al parametro la referencia de la lista");
+        this.printWithComment("Stack[(int)" + tmpPosParametro2 + "] = " + tmpParametro2 + " ;", "El objeto recibido sigue como parametro 2");
         this.printWithComment("goto " + lInicio + " ; ", "Salgo a etiqueta incio");
         this.printWithComment(lFin + " :", "Etiqueta fin");
-        this.printWithComment("return ;", "Dejo esto porque el compilador marca error si finaliza el metodo despues de la etiqueta");
+        this.print("return ;");
         this.print("}");
         this.print("");
     }
     static imprimrObjeto() {
         this.print("/**************************************");
-        this.print("imprimirObjeto(Object objetoImprimir, boolean imprimirSiEsObjeto ):void");
+        this.print("imprimirObjeto(Object objetoImprimir, boolean imprimirAtributo ):void");
         this.print("objetoImprimir->stack[P]");
-        this.print("imprimirSiEsObjeto->stack[P+1]");
+        this.print("imprimirAtributo->stack[P+1]");
         this.print("**************************************/");
         this.print("void imprimirObjeto()");
         this.print("{");
@@ -533,9 +564,47 @@ class CodeUtil {
         }
         this.printComment("Fin de recuperacion de temporales en la pila");
     }
+    static imprimirListaObjetos() {
+        this.print("/**************************************");
+        this.print("imprimirListaObjetos(ListObject listaObjetos ):void");
+        this.print("ListaObjetos->stack[P]");
+        this.print("**************************************/");
+        this.print("void imprimirListaObjetos()");
+        this.print("{");
+        let tamanioAmbito = 1;
+        let lInicio = this.generarEtiqueta();
+        let lFin = this.generarEtiqueta();
+        this.printWithComment(lInicio + ": ", "Etiqueta Inicio");
+        let tmpPostParametro1 = this.generarTemporal();
+        this.printWithComment(tmpPostParametro1 + " = SP + 0 ;", "Posicion del parametro");
+        let tmpParametro1 = this.generarTemporal();
+        this.printWithComment(tmpParametro1 + " = Stack[(int)" + tmpPostParametro1 + "]; ", "Objeto enviado por parametro");
+        let tmpReferenciaObjeto = this.generarTemporal();
+        this.printWithComment(tmpReferenciaObjeto + "= Heap[(int)" + tmpParametro1 + "];", "Obtenemos la referencia del primer objeto.");
+        this.printWithComment("if ( " + tmpReferenciaObjeto + " == -1 ) goto " + lFin + " ; ", "Si esta vacia la lista no terminamos metodo");
+        this.printWithComment("SP = SP + " + tamanioAmbito + " ;", "Cambiamos ambito");
+        this.printWithComment("Stack[SP] = " + tmpReferenciaObjeto + " ;", "Pasamos el objeto a imprimir");
+        let tmpPosParametroImpAtributo = this.generarTemporal();
+        this.printWithComment(tmpPosParametroImpAtributo + " = SP + 1 ;", "Posicion para parametro de imprimir atributo");
+        this.print("Stack[(int)" + tmpPosParametroImpAtributo + "] = 1 ;");
+        this.printWithComment("imprimirObjeto();", "Call: Imprimir Objeto");
+        this.printWithComment("SP = SP - " + tamanioAmbito + " ;", "Recuperamos ambito");
+        let tmpPosRefeSiguienteObjeto = this.generarTemporal();
+        this.printWithComment(tmpPosRefeSiguienteObjeto + " = " + tmpParametro1 + " + 1 ;", "Obtenemos la referencia del siguiente objeto de la lsita");
+        let tmpRefSiguienteObjeto = this.generarTemporal();
+        this.printWithComment(tmpRefSiguienteObjeto + " = Heap[(int)" + tmpPosRefeSiguienteObjeto + "] ;", "Obtenemos la referncia del siguiente objeto");
+        this.printWithComment("if ( " + tmpRefSiguienteObjeto + " == -1 ) goto " + lFin + " ;", "Si no hay ningun otro objeto finalizamos");
+        this.printWithComment("Stack[(int)" + tmpPostParametro1 + "] = " + tmpRefSiguienteObjeto + ";", "Colocamos el siguiente objeto en la posicion del parametro y comenzamos la funcion");
+        this.printWithComment("goto " + lInicio + ";", "Saltamos al Etiqueta Inicio");
+        this.printWithComment(lFin + ":", "Etiqueta fin");
+        this.print("return ;");
+        this.print("}");
+        this.print("");
+    }
 }
 CodeUtil.METHOD_CARGARXML = "cargarXml()";
 CodeUtil.METHOD_EQUAL_ = "equalString()";
 CodeUtil.METHOD_PRINT_STRING = "printString()";
-CodeUtil._cadSalida = "";
 CodeUtil.T = "t";
+CodeUtil.TMP_SIZE_TS_XML = CodeUtil.T + "0";
+CodeUtil._cadSalida = "";

@@ -1,7 +1,7 @@
 "use strict";
-class ListaXqueryExpresion {
+class ListaXqueryExpresion extends ExpresionAncestor {
     constructor(listaExpresiones, linea, columna) {
-        this.listaExpresiones = listaExpresiones;
+        super();
         this.linea = linea;
         this.columna = columna;
     }

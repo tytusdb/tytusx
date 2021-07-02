@@ -1,4 +1,4 @@
-class Primitive implements Expresion{
+class Primitive extends ExpresionAncestor{
     private valor: any;
     private tipo: Tipo;
     linea: number;
@@ -6,6 +6,7 @@ class Primitive implements Expresion{
 
 
     constructor(valor: any, tipo: Tipo, linea: number, columna: number) {
+        super();
         this.valor = valor;
         this.tipo = tipo;
         this.linea = linea;

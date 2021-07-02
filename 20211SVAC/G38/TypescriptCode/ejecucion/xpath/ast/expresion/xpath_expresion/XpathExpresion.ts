@@ -1,9 +1,10 @@
-class XpathExpresion implements Expresion{
+class XpathExpresion extends ExpresionAncestor{
     private expresionesXpath: Expresion[];
     linea: number;
     columna: number;
 
     constructor(expresionesXpath: Expresion[], linea: number, columna: number) {
+        super();
         this.expresionesXpath = expresionesXpath;
         this.linea = linea;
         this.columna = columna;
@@ -26,4 +27,18 @@ class XpathExpresion implements Expresion{
         }
         return entornoActual;
     }
+
+
+    traducir3D(ambito:string, sizeScope:string):string{
+        let entornoActual = ambito;
+        for(let expression of this.expresionesXpath){
+            if(ambito == undefined || ambito == null) {
+                throw Error("Ambito es nulo");
+            }
+            entornoActual = expression.traducir3D(ambito,sizeScope);
+        }
+        return entornoActual;
+    }
+
+
 }

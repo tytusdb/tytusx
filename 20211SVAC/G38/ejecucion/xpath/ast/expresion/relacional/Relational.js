@@ -1,6 +1,7 @@
 "use strict";
-class Relational {
+class Relational extends ExpresionAncestor {
     constructor(izquierdo, derecha, relationalOperator, linea, columna) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.relationalOperator = relationalOperator;

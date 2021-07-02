@@ -1,6 +1,7 @@
 "use strict";
-class RootAtributeTimes {
+class RootAtributeTimes extends ExpresionAncestor {
     constructor(predicatesList, linea, columna) {
+        super();
         this.predicatesList = predicatesList;
         this.linea = linea;
         this.columna = columna;

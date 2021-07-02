@@ -1,6 +1,7 @@
 "use strict";
-class AnyIdentifier {
+class AnyIdentifier extends ExpresionAncestor {
     constructor(identifier, predicatesList, linea, columna) {
+        super();
         this.identifier = identifier;
         this.predicatesList = predicatesList;
         this.linea = linea;

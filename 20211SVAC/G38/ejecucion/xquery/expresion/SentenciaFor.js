@@ -1,5 +1,5 @@
 "use strict";
-class SentenciaFor {
+class SentenciaFor extends ExpresionAncestor {
     getTipo(ent, xmlData) {
         return undefined;
     }

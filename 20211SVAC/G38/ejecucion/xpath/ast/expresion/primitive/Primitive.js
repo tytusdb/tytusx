@@ -1,6 +1,7 @@
 "use strict";
-class Primitive {
+class Primitive extends ExpresionAncestor {
     constructor(valor, tipo, linea, columna) {
+        super();
         this.valor = valor;
         this.tipo = tipo;
         this.linea = linea;

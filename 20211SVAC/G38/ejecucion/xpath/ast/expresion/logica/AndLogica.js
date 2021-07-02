@@ -1,6 +1,7 @@
 "use strict";
-class AndLogica {
+class AndLogica extends ExpresionAncestor {
     constructor(izquierdo, derecha, linea, columna) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.linea = linea;

@@ -1,11 +1,11 @@
-class ListaXqueryExpresion implements Expresion{
+class ListaXqueryExpresion extends ExpresionAncestor{
     listaExpresiones: any[];
     linea: number;
     columna: number;
 
 
     constructor(listaExpresiones: any[], linea: number, columna: number) {
-        this.listaExpresiones = listaExpresiones;
+        super();
         this.linea = linea;
         this.columna = columna;
     }

@@ -1,9 +1,10 @@
-class Variable implements Expresion{
+class Variable extends ExpresionAncestor{
     variable: string;
     linea: number;
     columna: number;
 
     constructor(variable: string, linea: number, columna: number) {
+        super();
         this.variable = variable;
         this.linea = linea;
         this.columna = columna;

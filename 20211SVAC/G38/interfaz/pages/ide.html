@@ -11,6 +11,7 @@
     <script src="../../reportes/ReporteGramatical.js"></script>
 
     <script src="../../ejecucion/xpath/ast/expresion/Expresion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/ExpresionAncestor.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Division.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Modulo.js"></script>
     <script src="../../ejecucion/xpath/ast/expresion/aritmetica/Multiplicacion.js"></script>
@@ -400,13 +401,13 @@
             $("#btnDescarga3D").click(function (){
                 entradaXml   = $("#txtEntradaXML").val();
                 entradaXpath = $("#txtEntradaXPath").val();
-                descargarArchivo(entradaXml);
+                descargarArchivo(entradaXml, entradaXpath);
             });
 
             $("btnGenerar3D").click(function (){
                 entradaXml   = $("#txtEntradaXML").val();
                 entradaXpath = $("#txtEntradaXPath").val();
-                generar3D(entradaXml);
+                generar3D(entradaXml, entradaXpath);
             });
 
         });

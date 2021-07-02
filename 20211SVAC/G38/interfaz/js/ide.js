@@ -178,7 +178,6 @@ const analizarXQUERY= function (cadEntrada){
         InterfazGrafica.print("Iniciando ejecucion: "+new Date());
         try {
             ListaErrores.InicializarXquery();
-            ListaFunciones.limipiarFunciones();
             let rootXquery = XqueryAnalyzer.parse(cadEntrada);
             if(rootXquery){
                 console.info('Se genero correctamente el árbol xquery. ');
@@ -290,10 +289,9 @@ const ejecutarXquery= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXQUERY(cadEntradaXpath);
-        _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
-        if(ListaErrores.hayErroresXquery()){
-            InterfazGrafica.print("Hubieron errores durante la ejecucion en XQUERY");
-        }
+        let listaDeImpresion = _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        let result = XpathUtil.convertirNodosXqueryATexto(listaDeImpresion);
+        InterfazGrafica.print(result);
         InterfazGrafica.print('FIN EJECUCION');
     }catch (e){
         InterfazGrafica.print('error en ejecucion: '+e);
@@ -311,14 +309,17 @@ const getStringAst = function (){
     return _graphicUtil.generarGrafo(_backEnd.root);
 };
 
-function  generar3D(cadEntradaXml){
+function  generar3D(cadEntradaXml, cadEntradaXpath){
     var tablaSimbolosXml;
     try {
         analizarXML(cadEntradaXml);
+        analizarXPATH(cadEntradaXpath);
         CodeUtil.init();
         tablaSimbolosXml = _tsXml;
         tablaSimbolosXml.cargarXml_3d();
-        CodeUtil.finalizeCad();
+        CodeUtil.comenzarPrograma();
+        let rootXpath = _rootXpath.traducir3D("","2");
+        CodeUtil.finalizarProgrma();
         InterfazGrafica.print('Fin de generación');
     }catch (e){
         InterfazGrafica.print('error en ejecucion: '+e);
@@ -327,8 +328,8 @@ function  generar3D(cadEntradaXml){
 };
 
 
-function descargarArchivo(cadEntradaXml){
-    generar3D(cadEntradaXml);
+function descargarArchivo(cadEntradaXml, cadEntradaXpath){
+    generar3D(cadEntradaXml, cadEntradaXpath);
     var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "XPath.c");
 

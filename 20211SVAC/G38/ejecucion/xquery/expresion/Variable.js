@@ -1,6 +1,7 @@
 "use strict";
-class Variable {
+class Variable extends ExpresionAncestor {
     constructor(variable, linea, columna) {
+        super();
         this.variable = variable;
         this.linea = linea;
         this.columna = columna;

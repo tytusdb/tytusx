@@ -56,14 +56,6 @@ class TablaSimbolosXquery {
         }
         return null;
     }
-    obtenerTablaGlobal() {
-        for (let actual = this; actual != null; actual = actual.tsPadre) {
-            if (actual.esGlobal) {
-                return actual;
-            }
-        }
-        return null;
-    }
     get tsPadre() {
         return this._tsPadre;
     }

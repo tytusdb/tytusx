@@ -1,6 +1,7 @@
 "use strict";
-class NodoError {
+class NodoError extends ExpresionAncestor {
     constructor(linea, columna) {
+        super();
         this.linea = linea;
         this.columna = columna;
     }

@@ -1,6 +1,7 @@
 "use strict";
-class AnyTimes {
+class AnyTimes extends ExpresionAncestor {
     constructor(predicatesList, linea, columna) {
+        super();
         this.predicatesList = predicatesList;
         this.linea = linea;
         this.columna = columna;

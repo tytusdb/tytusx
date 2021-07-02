@@ -1,10 +1,11 @@
-class Division implements Expresion{
+class Division extends ExpresionAncestor{
     private izquierda: Expresion;
     private derecha: Expresion;
     linea: number;
     columna: number;
 
     constructor(izquierda: Expresion, derecha: Expresion,linea:number, columna:number) {
+        super();
         this.izquierda = izquierda;
         this.derecha = derecha;
         this.linea = linea;
