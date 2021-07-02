@@ -9,7 +9,7 @@ class Traduccion {
         this.t = 0;
         this.traduccion3D = ``;
         this.funciones3D = this.obtenerFuncionesC3D();
-        
+        this.Ls=0;
 
     }
 
@@ -274,6 +274,9 @@ class Traduccion {
 
 
         return func3D;
+    }
+    traducirAritmeticas(cod){
+        this.traduccion3D += cod;
     }
 
     

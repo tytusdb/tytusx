@@ -24,21 +24,48 @@ let btnCargarxqueryder = document.getElementById("btnCargarxqueryder");
 let parserXQUERYder;
 
 let textoEntrada = `<?xml version="1.0" encoding="UTF-8"?>
-<ackerman>
-  <m>3</m>
-  <n>3</n>
-</ackerman>
 
+<bookstore>
+
+<book category="COOKING">
+  <title lang="en">Everyday Italian</title>
+  <author>Giada De Laurentiis</author>
+  <year>2005</year>
+  <price>30.00</price>
+</book>
+
+<book category="CHILDREN">
+  <title lang="en">Harry Potter</title>
+  <author>J K. Rowling</author>
+  <year>2005</year>
+  <price>29.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">XQuery Kick Start</title>
+  <author>James McGovern</author>
+  <author>Per Bothner</author>
+  <author>Kurt Cagle</author>
+  <author>James Linn</author>
+  <author>Vaidyanathan Nagarajan</author>
+  <year>2003</year>
+  <price>49.99</price>
+</book>
+
+<book category="WEB">
+  <title lang="en">Learning XML</title>
+  <author>Erik T. Ray</author>
+  <year>2003</year>
+  <price>39.95</price>
+</book>
+
+</bookstore>
 `
 
-let XQuery = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:decimal
-{
-if ($m = 0) then $n+1
-else if ($m gt 0 and $n=0) then local:ackerman($m - 1, 1)
-else local:ackerman($m - 1, local:ackerman($m, $n - 1))
-};
+let XQuery = `for $x in doc("books.xml")/bookstore/book
+where $x/price>30
+return $x/title
 
-local:ackerman(/ackerman/m,/ackerman/m)
 `
 
 
@@ -349,7 +376,7 @@ boton3D.addEventListener("click", () => {
   parserXQUERY = analizador_xqueryizq.parse(editorXQUERY.value);
 
   console.log("EL ANALIZADOR REGRESA");
-  parserXML = xmlDerecha.parse(editorXML.value);
+  console.log(listaErrores);
   globalencod =parserXML.tipoencoding;
   ejecutarXQuery(parserXQUERY,parserXML.json);
 

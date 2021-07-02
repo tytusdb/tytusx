@@ -144,7 +144,7 @@
 // FIN DEL ARCHIVO
 <<EOF>>                                     %{ return "EOF"; %}
 // ERRORES LEXICOS
-.                                           %{ listaErrores.push(new TokenError("xPATH","ERROR LEXICO","Caracter no reconocido "+ yytext, yylloc.first_line, yylloc.first_column )); %}
+.                                           %{ listaErrores.push(new TokenError("xQuery","ERROR LEXICO","Caracter no reconocido: "+ yytext, yylloc.first_line, yylloc.first_column )); %}
 
 
 /lex
@@ -245,6 +245,12 @@ CONDICIONAL
         |tk_numero                                                                      {$$={tipo:"NUMERO",valor:$tk_numero}}
         |tk_hilera                                                                      {$$={tipo:"CADENA",valor:$1.slice(1,-1)}}
         //
+        |CONDICIONAL tk_mas CONDICIONAL                                                               {$$= {tipo:"OP_MAS",valor1:$1,valor2:$3}}                                                  
+        |CONDICIONAL tk_menos CONDICIONAL                                                             {$$= {tipo:"OP_MENOS",valor1:$1,valor2:$3}}    
+        |CONDICIONAL tk_asterisco CONDICIONAL                                                         {$$= {tipo:"OP_MUL",valor1:$1,valor2:$3}}                                                 
+        |CONDICIONAL tk_div CONDICIONAL                                                               {$$= {tipo:"OP_DIV",valor1:$1,valor2:$3}}  
+        |CONDICIONAL tk_mod CONDICIONAL                                                               {$$= {tipo:"OP_MOD",valor1:$1,valor2:$3}}                                                                                                          
+        |tk_menos DATO %prec UMENOS	                                                {$$= {tipo:"OP_NEG",valor1:$2}}
         |CONDICIONAL tk_mayor CONDICIONAL                                               {$$={tipo:"MAYOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_menor CONDICIONAL                                               {$$={tipo:"MENOR",valor1:$1,valor2:$3};}
         |CONDICIONAL tk_mayor_igual CONDICIONAL                                         {$$={tipo:"MAYOR_IGUAL",valor1:$1,valor2:$3};}
@@ -350,6 +356,7 @@ DATO
         |DATO tk_ne DATO                                                                {$$={tipo:"DIFERENTE",valor1:$1,valor2:$3};}  
         |DATO tk_and DATO                                                               {$$={tipo:"AND",valor1:$1,valor2:$3};}  
         |DATO tk_or DATO                                                                {$$={tipo:"OR",valor1:$1,valor2:$3};}  
+        |tk_parentesis_izq DATO tk_parentesis_der                                       {$$=$DATO;}
 ;
 F_NATIVAS
         :tk_punto tk_to tk_identificador tk_parentesis_izq tk_parentesis_der

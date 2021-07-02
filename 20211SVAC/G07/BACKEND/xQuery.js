@@ -1,7 +1,7 @@
 function ejecutarXQuery(instruccion,entorno){
     let tablaSimbolos=new Entorno(null);
     let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
-    
+    //tablaSimbolos
     if(consulta){
         imprimiConsola(consulta);
     }else{
@@ -34,14 +34,26 @@ function getConsultaXQuery(instruccion, entorno,tablaSimbolos){
 function ejecutarIfElse(instruccion,entorno,tablaSimbolos){
    
     let condicion=procesarDato(instruccion.condicion,entorno,tablaSimbolos);
-    
+    tem=traductorC3D.t;
+    traducirOperacion(instruccion.condicion,entorno,tablaSimbolos);
+    traductorC3D.t+=tem;
+
     if(condicion){
+        tem=traductorC3D.t;
+        traducirOperacion(instruccion.accion.data,entorno,tablaSimbolos);
+        traductorC3D.t+=tem;
+
         return procesarDato(instruccion.accion.data,entorno,tablaSimbolos);
+        
     }else{
         if(instruccion.siguiente){
             if(instruccion.siguiente.regreso=="ELSEIF"){
                 return ejecutarIfElse(instruccion.siguiente.data,entorno,tablaSimbolos);
             }else{
+                tem=traductorC3D.t;
+                traducirOperacion(instruccion.siguiente.data,entorno,tablaSimbolos);
+                traductorC3D.t+=tem;
+            
                 return procesarDato(instruccion.siguiente.data,entorno,tablaSimbolos);
             }
         }
@@ -50,6 +62,7 @@ function ejecutarIfElse(instruccion,entorno,tablaSimbolos){
     return null
 }
 function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
+    
     for (const instruccion of instrucciones) {
         
         switch (instruccion.instr) {
@@ -67,7 +80,6 @@ function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
             case "LLAMADA_F":
                 return llamada_funcion(instruccion.valor,entorno,tablaSimbolos);
             case "NUEVO_ETR":
-                
                 tablaSimbolos=new Entorno(tablaSimbolos);
                 break;
             default:
@@ -110,9 +122,13 @@ function llamada_funcion(instrucciones,entorno,tablaSimbolos){
    return null 
 }
 function crear_Variable(instrucciones,entorno,tablaSimbolos){
-    
+    console.log("crear");
     if(!tablaSimbolos.existeEnActual(instrucciones.id)){
         let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
+        tem=traductorC3D.t;
+        traducirOperacion(instrucciones.valor,entorno,tablaSimbolos);
+        traductorC3D.t+=tem;
+
         tablaSimbolos.agregar(instrucciones.id,valor);
     }else{
         console.error("La variable "+instrucciones.id+" ya existe en el entorno actual");
@@ -124,7 +140,10 @@ function crear_Variable(instrucciones,entorno,tablaSimbolos){
 function asignar_variable(instrucciones,entorno,tablaSimbolos){
     if(tablaSimbolos.existeEnActual(instrucciones.id)){
         let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
-        
+        tem=traductorC3D.t;
+        traducirOperacion(instrucciones.valor,entorno,tablaSimbolos);
+        traductorC3D.t+=tem;
+
         tablaSimbolos.reemplazar(instrucciones.id,valor);
     }else{
         console.error("La variable "+instrucciones.id+" no existe en el entorno actual");
@@ -284,6 +303,9 @@ function ejecutarForIn(instruccion,entorno,padre){
         var_.agregar(instruccion.iterador.contador,contador);
         contador++;
         let retorno=null;
+        tem=traductorC3D.t;
+        traducirOperacionW(where.condicion,var_);
+        traductorC3D.t+=tem;
         if(where==null||validarWhere(where.condicion,var_)){
             retorno=procesarReturn(instruccion.retorno,var_);
         }
@@ -324,6 +346,27 @@ function validarWhere(instruccion,tabla){
     let valor1;
     let valor2;
     switch (instruccion.tipo) {
+        case "OP_MAS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1+valor2;
+         case "OP_RES":
+         case "OP_MENOS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1-valor2;
+         case "OP_MUL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1*valor2;
+         case "OP_DIV":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1/valor2;
+         case "OP_NEG":
+             valor1=validarWhere(instruccion.valor1,tabla);
+             return -1*valor1;
+
         case "MAYOR":
             valor1=validarWhere(instruccion.valor1,tabla);
             valor2=validarWhere(instruccion.valor2,tabla);
@@ -401,7 +444,9 @@ function procesarReturn(instruccion,variables){
 }
 function procesarIF(instruccion,variables){
     let res=validarWhere(instruccion.condicion,variables);
-
+    tem=traductorC3D.t;
+    traducirOperacionW(instruccion.condicion,variables);
+    traductorC3D.t+=tem;
     if(res){
         switch (instruccion.then.tipo) {
             case "HTML":
@@ -530,14 +575,31 @@ function imprimirEntorno(entorno){
               atributo = {
                   etiqueta: atr.nombreAtributo,
                   valor: atr.valorAtributo,
+                  ref:atr.referenciaHeap
                 };
               arregloAtributo.unshift(atributo);
             }
           } else {
               arregloAtributo = [];
           }
+          
+          if(entorno.hijos){
+            traductorC3D.traducirFuncion("<" + entorno.etiqueta );
+
+            traductorC3D.traducirFuncion( ">");
+            console.log(traductorC3D.t);
+            if(traductorC3D.esNumero(entorno.texto)){
+
+              traductorC3D.imprimirNumero(entorno.referenciaHeap);
+            }else{
+              traductorC3D.imprimirCadena(entorno.referenciaHeap);
+            }
+          }
       for (const iterator of entorno.hijos) {
           contenido += imprimirEntorno(iterator);
+      }
+      if(entorno.hijos){
+        traductorC3D.traducirFuncion("</" + entorno.etiqueta + ">");
       }
       
       let retorno = new Etiqueta(
@@ -664,3 +726,77 @@ function ejecutarSubstring(instruccion,entorno,padre){
     return  null;
 }
 
+
+
+function validarWhere(instruccion,tabla){
+
+    let valor1;
+    let valor2;
+    switch (instruccion.tipo) {
+        case "OP_MAS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1+valor2;
+         case "OP_RES":
+         case "OP_MENOS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1-valor2;
+         case "OP_MUL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1*valor2;
+         case "OP_DIV":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1/valor2;
+         case "OP_NEG":
+             valor1=validarWhere(instruccion.valor1,tabla);
+             return -1*valor1;
+
+        case "MAYOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 > valor2;
+        case "MAYOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 >= valor2;
+        case "MENOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 < valor2;
+        case "MENOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 <= valor2;
+        case "IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 == valor2;
+        case "DIFERENTE":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 != valor2;
+        case "NUMERO":
+            return parseInt(instruccion.valor)
+        case "CADENA":
+            
+            return instruccion.valor
+        case "VARIABLE":
+            let variable=tabla.getSimbolo(instruccion.variable);
+            
+            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            for (const iterator of arregloEntornos) {
+                if(iterator.valorAtributo){
+                    return iterator.valorAtributo;
+                }
+                return iterator.texto
+            }
+
+        default:
+            return false;
+           
+    }
+}
