@@ -1,0 +1,218 @@
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////INICIO   DE/////////////////////////////////////
+//////////////////////////////////////////XML//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+<?xml version="1.0" encoding="ASCII"?>
+<mundo>
+  <continente name="Europa">
+    <pais moneda="Euro">
+      <nombre>Monaco</nombre>
+      <capital>Ciudad de Monaco</capital>
+      <idioma>Frances</idioma>
+      <poblacion year="2019" unit="thousands">38.964</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Austria</nombre>
+      <capital>Viena</capital>
+      <idioma>Aleman</idioma>
+      <poblacion year="2019" unit="millions">8.859</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Portugal</nombre>
+      <capital>Lisboa</capital>
+      <idioma>Portugues</idioma>
+      <poblacion year="2019" unit="millions">10.28</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Francia</nombre>
+      <capital>Paris</capital>
+      <idioma>Frances</idioma>
+      <poblacion year="2019" unit="millions">67.06</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>Alemania</nombre>
+      <capital>Berlin</capital>
+      <idioma>Aleman</idioma>
+      <poblacion year="2019" unit="millions">83.02</poblacion>
+    </pais>
+    <pais moneda="Euro">
+      <nombre>España</nombre>
+      <capital>Madrid</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">46.94</poblacion>
+    </pais>
+  </continente>
+  <continente name="America">
+    <pais moneda="Dolar">
+      <nombre>Estados unidos</nombre>
+      <capital>Washington DC</capital>
+      <poblacion year="2019" unit="millions">328.2</poblacion>
+    </pais>
+    <pais moneda="Quetzal">
+      <nombre>Guatemala</nombre>
+      <capital>Ciudad de Guatemala</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">16.6</poblacion>
+    </pais>
+    <pais moneda="Dolar">
+      <nombre>El Salvador</nombre>
+      <capital>San Salvador</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">6.454</poblacion>
+    </pais>
+    <pais moneda="Peso argentino">
+      <nombre>Argentina</nombre>
+      <capital>Buenos Aires</capital>
+      <idioma>Español</idioma>
+      <poblacion year="2019" unit="millions">44.94</poblacion>
+    </pais>
+    <pais moneda="Real brasileño">
+      <nombre>Brasil</nombre>
+      <capital>Brasilia</capital>
+      <idioma>Portugues</idioma>
+      <poblacion year="2019" unit="millions">221</poblacion>
+    </pais>
+  </continente>
+</mundo>
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+doc("Mundo.xml")
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+1) Consulta 1	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+	
+    //mundo/continente/pais[@moneda="Quetzal"]/nombre
+
+    /mundo/continente/pais/nombre[8]
+	/mundo//pais/nombre[8]
+	/mundo//pais/nombre[9+6 * 2 div 2 - 7]
+
+	for $x in /mundo/continente/pais
+	order by $x/nombre
+	return $x/nombre
+
+	for $x in /mundo/continente/pais	
+	return if ($x/nombre="Guatemala")
+	then <guate>{data($x/nombre)}</guate>
+	else <NO>{data($x/nombre)}</NO>
+	
+	Salida
+		<NO>Monaco</NO>
+		<NO>Austria</NO>
+		<NO>Portugal</NO>
+		<NO>Francia</NO>
+		<NO>Alemania</NO>
+		<NO>España</NO>
+		<NO>Estados unidos</NO>
+		<guate>Guatemala</guate>
+		<NO>El Salvador</NO>
+		<NO>Argentina</NO>
+		<NO>Brasil</NO>
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+2) Consulta 2	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+	
+	    //mundo/continente/pais/poblacion[@unit="units"]/../nombre
+
+	for $x in /mundo/continente/pais	
+	return if ($x/nombre="Estados unidos")
+	then <USA>{data($x/nombre)}</USA>
+	else <NO>{data($x/nombre)}</NO>
+	
+	Salida
+		<NO>Monaco</NO>
+		<NO>Austria</NO>
+		<NO>Portugal</NO>
+		<NO>Francia</NO>
+		<NO>Alemania</NO>
+		<NO>España</NO>
+		<USA>Estados unidos</USA>
+		<NO>Guatemala</NO>
+		<NO>El Salvador</NO>
+		<NO>Argentina</NO>
+		<NO>Brasil</NO>
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+3) Consulta 3	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+        /mundo/continente/pais/poblacion[@unit="units"]/../../@name | /mundo/continente/pais/poblacion[@unit="thousands"]/../idioma/text()
+
+		/mundo//pais/idioma[8-6 * 2 div 2 - 1] | //@name 
+		
+		/mundo//pais/idioma[8-6 * 2 div 2 - 1] | /mundo/continente[2]/@name
+
+	for $x in /mundo/continente/pais	
+	return if ($x/idioma="Frances")
+	then <Francia>{data($x/nombre)}</Francia>
+	else <NO>{data($x/nombre)}</NO>
+
+	Salida:
+	<Francia>Monaco</Francia>
+	<NO>Austria</NO>
+	<NO>Portugal</NO>
+	<Francia>Francia</Francia>
+	<NO>Alemania</NO>
+	<NO>España</NO>
+	<NO>Estados unidos</NO>
+	<NO>Guatemala</NO>
+	<NO>El Salvador</NO>
+	<NO>Argentina</NO>
+	<NO>Brasil</NO>
+	
+	for $x in /mundo/continente
+	return if ($x/@name="America")
+	then <America>{data($x/pais)}</America>
+	else <Europa>{data($x/pais)}</Europa>
+	
+	Salida:
+	<Europa>MonacoCiudad de MonacoFrances38.964   
+			AustriaVienaAleman8.859   
+			PortugalLisboaPortugues10.28   
+			FranciaParisFrances67.06   
+			AlemaniaBerlinAleman83.02   
+			EspañaMadridEspañol46.94
+	</Europa>
+	<America>Estados unidosWashington DC328.2   
+			GuatemalaCiudad de GuatemalaEspañol16.6   
+			El SalvadorSan SalvadorEspañol6.454   
+			ArgentinaBuenos AiresEspañol44.94   
+			BrasilBrasiliaPortugues221
+	</America>	
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+4) Consulta 4	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+	
+        /mundo/continente/pais[idioma="Español"]/poblacion/./..//idioma/text()
+	
+	for $x in /mundo/continente/pais
+	where $x/idioma="Español"
+	return {data($x/idioma)}
+
+	Salida:
+       
+		Español
+        Español
+        Español
+        Español
+		
