@@ -14,10 +14,12 @@ escape                              \\{escapechar}
 "//"                        return 'BARRAS';
 "//".*                              // comentario simple línea
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] // comentario multiple líneas
-
+"then"                      return 'Then';
 {entero}	      return 'entero'
 {stringliteral}       return 'STRING_LITERAL'
 {caracterliteral}     return 'CARACTER_LITERAL'
+
+
 "ancestor-or-self"          return 'ancestor-or-self';
 "ancestor"                  return 'ancestor';
 "attribute"                 return 'attribute';
@@ -68,6 +70,7 @@ escape                              \\{escapechar}
 "le"                        return 'le'
 "gt"                        return 'gt'
 "ge"                        return 'ge'
+"if"                        return 'if'
 "let"                       return 'let'
 "to"                        return 'to'
 "ascending"                 return 'ascending'
@@ -87,12 +90,12 @@ escape                              \\{escapechar}
 'xs:date'                   return 'xsDate'
 'xs:decimal'                return 'xsDecimal'
 'xs:boolean'                return 'xsBoolean'
+'xs:integer'                return 'xsInteger'
 'as'                        return 'as'
 ":"                         return ':';
 ","                         return ',';
 "?"                         return '?';
 ";"                         return 'semicolon';
-"then"                      return 'then';
 "else"                      return 'else';
 "["                         return '[';
 "]"                         return ']';
@@ -206,6 +209,7 @@ OccurrenceIndicator: '?' {$$ = '?';}| '*' {$$ = '*';}| '+' {$$ = '+';}|{$$ = '';
 ItemType: xsString {$$ = ParamType.xsString;}
 |xsDate {$$ = ParamType.xsDate;}
 |xsDecimal {$$ = ParamType.xsDecimal;}
+|xsInteger {$$ = ParamType.xsInteger;}
 |xsBoolean {$$ = ParamType.xsBoolean;};
 
 FunctionBody: EnclosedExpr semicolon {$$ = $1;};
@@ -249,13 +253,15 @@ LForBinding: LForBinding ',' ForBinding {$1.Variables.push($3); $$ = $1;}
 ForBinding: '$'nodename in SENTENCIA {$$ = new FLWORVariables('$' + $2, $4, null);}
            |'$'nodename in ExprSingle {$$ = new FLWORVariables('$' + $2, null, $4);};
 
-ExprSingle: FLWORExpr {$$ = new SingleExpresion (SingleExpresionType.FLWORExpr, $1,0,0);}
-	| IfExpr {$$ = new SingleExpresion (SingleExpresionType.IfExpr, $1,0,0);}
+ExprSingle: IfExpr {$$ = new SingleExpresion (SingleExpresionType.IfExpr, $1,0,0);}
+	| FLWORExpr {$$ = new SingleExpresion (SingleExpresionType.FLWORExpr, $1,0,0);}
         | lparen entero to entero rparen {$$ = new SingleExpresion (SingleExpresionType.Contador, null,Number($2),Number($4));}
         | DirectConstructor {$$ = new SingleExpresion (SingleExpresionType.HtmlSequence, $1,0,0);}
         | NativeFuntion {$$ = new SingleExpresion (SingleExpresionType.FuncionDefinida, $1,0,0);}
         | XPARAM {$$ = new SingleExpresion (SingleExpresionType.XPARAM, $1,0,0);}
         | LPathExpresion {$$ = new SingleExpresion (SingleExpresionType.Path, $1,0,0);}
+        | LlamadoFuncion {$$ = new SingleExpresion (SingleExpresionType.LlamadaFuncion, $1,0,0);}
+        | SENTENCIA {$$ = new SingleExpresion (SingleExpresionType.Sentencia, $1,0,0);}
         ;
 
 LPathExpresion : LPathExpresion ',' PathExpresion {$1.push($3); $$ = $1;}
@@ -316,7 +322,7 @@ OrderModifier: ascending {$$ = OrderModifierType.Ascendente}
 			
 ReturnClause: return ExprSingle {$$ = $2;};
 
-IfExpr: if lparen Expr rparen then ExprSingle else ExprSingle {$$ = new IfExpresion($3,$6,$8);};
+IfExpr: if lparen Expr rparen Then ExprSingle else ExprSingle {$$ = new IfExpresion($3,$6,$8);};
 
 Expr: 	Expr ExprSingle {$1.push($2); $$ = $1;}
         |Expr ',' ExprSingle {$1.push($3); $$ = $1;}
@@ -339,13 +345,17 @@ XOPERACION: XPARAM '+' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mas);}
         |XPARAM '*' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Por);}
         |XPARAM mod XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mod);}
         |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);}
+        |XPARAM ComparisonValue XPARAM {$$ = new OperacionXpath($1,$3,$2);}
         |lparen XPARAM rparen {$$ = $2.Operacion;};
 
 
 
 
 
-ComparisonValue : GeneralComp {$$ = $1;}| ValueComp{$$ = $1;};
+ComparisonValue : GeneralComp {$$ = $1;}| ValueComp{$$ = $1;} | LogicExpresion{$$ = $1;};
+
+LogicExpresion: 'and' {$$ = TipoOperador.And;}
+        | 'or' {$$ = TipoOperador.Or;};
 
 ValueComp : 'eq' {$$ = TipoOperador.Igual;}
         | 'ne' {$$ = TipoOperador.Diferente;}

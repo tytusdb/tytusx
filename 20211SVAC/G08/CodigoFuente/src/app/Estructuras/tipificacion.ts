@@ -49,6 +49,8 @@ export enum SingleExpresionType{
   ,FuncionDefinida
   ,XPARAM
   ,Path
+  ,LlamadaFuncion
+  ,Sentencia
 }
 
 export enum FLWORTipo{
@@ -86,4 +88,5 @@ export enum ParamType{
   xsDate
   ,xsDecimal
   ,xsBoolean
+  ,xsInteger
 }
