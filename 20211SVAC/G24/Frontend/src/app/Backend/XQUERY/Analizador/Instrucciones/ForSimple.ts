@@ -59,7 +59,7 @@ export default class ForSimple extends Instruccion {
                     
                   
                   /* if(key.getidentificador==){
-                        console.log("Adrian crack")
+                        console.log("f en el shat")
                     }*/
                 }
             }else{
