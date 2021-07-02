@@ -101,6 +101,8 @@ function CargarXML(){
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
                     traducirXPath(nodoxPATHASC);
+
+                   /// ReportesTSXML.GenerarArreglo(tablaSimbolosXML.entornoGlobal,"Global");
                     //console.log(concatenaXPath)
                     salidaGlobal = "";
                     var salidaGlobal2="";
@@ -612,7 +614,7 @@ function CambiarCodificacion(cadena){
 }
 
 function setTraduction(){
-SetReporteOptimizar('hola')
+
     globalC3D = "";
     globalC3D += `
     #include <stdio.h>
@@ -624,7 +626,7 @@ SetReporteOptimizar('hola')
     double hp;
     
     `;
-
+    imp=imprimirEn3D('cadena');
     for(var i = 0; i< contTemporal+1;i++ ){
         if(i==0){
             globalC3D += `double t`+i.toString();
@@ -634,7 +636,7 @@ SetReporteOptimizar('hola')
     }
     
     funcionesALlamar=`CargarXML();\n`+funcionesALlamar;
-    globalC3D+=`; \n`+concatenaXPath+` \n void CargarXML(){\n`
+    globalC3D+=`; \n\n `+imp+` \n`+concatenaXPath+` \n void CargarXML(){\n`
 
     if(codificacionGlobal == "UTF-8"){
         globalC3D += "stack[(int)0] = -1;\n";

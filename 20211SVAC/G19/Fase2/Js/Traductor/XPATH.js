@@ -7,6 +7,8 @@
     var arbolito2=[];
     var traducirExpresion="";
     contadorEtiAnt=0;
+    var nuevosElementos="";
+    var imp="";
     var total=0;
     function getPosicionStack(elemento){
         var posicion=0;
@@ -23,12 +25,27 @@
     function traducirXPath(nodo){
        // console.log(nodo)
         analisisXPath(nodo);
+        
         console.log(arbolito)
         concatenaXPath=`void ciclo_XPath(){\n`+concatenaXPath+`};\n`
         funcionesALlamar+=`ciclo_XPath();\n`
     }
+    function agregarSimbolos(Nombre,tipo,stack,heap){
+        var Ambito='consulta';
+        var fila='1';
+        var Columna='1'; 
+        nuevosElementos += `<tr>
+                <td>`+Nombre+`</td>
+                <td>`+tipo+`</td>
+                <td>`+Ambito+`</td>
+                <td>`+fila+`</td>
+                <td>`+Columna+`</td>
+                <td>`+stack+`</td>
+                <td>`+heap+`</td>
+            </tr>`
+    }
     function analisisXPath(nodo){
-        var simbolo = new Simbolo('Tipo.STRUCT', '','','','','','');
+      agregarSimbolos('nombre','tipo','1','2')
         
        // console.log(nodo)
         var concatena = "";
@@ -51,22 +68,27 @@
                     
                     if(nodo.hijos[index].valor=='NODO'){
                        // nodo.hijos[index].valor='SELECTOR'
-                        concatenaXPath+=`heap[(int)hp] = -1 ;// inicio SELECTOR \n hp = hp + 1;\n` ;
+                       concatenaXPath+=`\n/* Analiza en postorden la entrada en el array tipo /<SELECTOR> */\n`;
+                        concatenaXPath+=`heap[(int)hp] = -1 ;// inicio SELECTOR "/" \n hp = hp + 1;\n` ;
                             hp = hp + 1;
                     }else if(nodo.hijos[index].valor=='/'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio Nodo simple \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* En alto nivel busca el objeto y retorna la posicon en stack */\n`;
                             hp = hp + 1;
                             concatenaXPath+= nodoSimple('/')
                     }else if(nodo.hijos[index].valor=='*'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio Expresion *\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la operacion * en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarOperaciones3DXPath('*');
                     }else if(nodo.hijos[index].valor=='-'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio Expresion -\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la operacion - en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarOperaciones3DXPath('-');
                     }else if(nodo.hijos[index].valor=='+'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio Expresion +\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la operacion + en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarOperaciones3DXPath('+');
                     }else if(nodo.hijos[index].valor=='='){
@@ -75,77 +97,95 @@
                             concatenaXPath+=realizarLogicas3DXPath('=');
                     }else if(nodo.hijos[index].valor=='<'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio Expresion < \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la comparacion < en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarLogicas3DXPath('<');
                     }
                     else if(nodo.hijos[index].valor=='>'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio Expresion >\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la comparacion > en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarLogicas3DXPath('>');
                     }
                     else if(nodo.hijos[index].valor=='or'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio or\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la operacion or en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarLogicas3DXPath('or');
                     }
                     else if(nodo.hijos[index].valor=='and'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio and\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Realiza la operacion and en posorden retonando el valor de sus hijos */\n`;
                             hp = hp + 1;
                             concatenaXPath+=realizarLogicas3DXPath('and');
                     }else if(nodo.hijos[index].valor=='.'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio nodoActual\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Busca en alto nivel y retorna en nodo actual en el stack */\n`;
                             hp = hp + 1;
                             concatenaXPath+=retrocesoPunto('.');
                     }
                     else if(nodo.hijos[index].valor=='..'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// retorno a padre \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Busca en alto nivel y retorna en nodo anterior en el stack */\n`;
                             hp = hp + 1;
                             concatenaXPath+=retrocesoDosPunto('..');
                     }else if(nodo.hijos[index].valor=='@'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio atributo \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Busca en alto nivel y retorna la posicion del atributo en el stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+= buscaAtributo('@');
                     }else if(nodo.hijos[index].valor=='|'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio or | \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Concatena los resultados y devulve al inicio */\n`;
                             hp = hp + 1;
                     }else if(nodo.hijos[index].valor=='text()'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio node\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Busca la poscion -4 donde devuelve el texto */\n`;
                             hp = hp + 1;
                         concatenaXPath+= nodesSwitch('text()');
                     }else if(nodo.hijos[index].valor=='last()'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio node\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Lla en alto nivel el conteo de los nodos y encuentra el nodo ultimo */\n`;
                             hp = hp + 1;
                         concatenaXPath+= nodesSwitch('last()');
                     }else if(nodo.hijos[index].valor=='node()'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio node\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Busca los nodos con la etiqueta */\n`;
                             hp = hp + 1;
                     concatenaXPath+= nodesSwitch('node()');
                     }else if(nodo.hijos[index].valor=='ancestor::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio ancestor\n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devulve el ancestro del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=ancestor('ancestor::');
                     }else if(nodo.hijos[index].valor=='ancestor-or-self::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio ancestor-or-self \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve el ancestro del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=ancestor('ancestor-or-self::');
                     }else if(nodo.hijos[index].valor=='atribute::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio atribute \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve el ancestro y el nodo actual del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=buscaAtributo('atribute::');
                     }else if(nodo.hijos[index].valor=='child'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio child \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve los hijos del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=child('child::');
                     }else if(nodo.hijos[index].valor=='descendant::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio descendant \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve los descendientes del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=descendant('descendant::');
                     }else if(nodo.hijos[index].valor=='descendant-or-self::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio descendant or self \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve los descendientes o nodo actual del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=descendant('descendant-or-self::');
                     }else if(nodo.hijos[index].valor=='following::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio following \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve el siguiente del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=following('following::')
                     }else if(nodo.hijos[index].valor=='following-sibling::'){
@@ -158,6 +198,7 @@
                     concatenaXPath+=parent('parent::')
                     }else if(nodo.hijos[index].valor=='preceding::'){
                         concatenaXPath+=`heap[(int)hp] = -1 ;// inicio preceding \n hp = hp + 1;\n` ;
+                        concatenaXPath+=`\n/* Devuelve  del nodo retorna su poscion en stack */\n`;
                             hp = hp + 1;
                     concatenaXPath+=precedent('preceding::')
                     }else if(nodo.hijos[index].valor=='preceding-self::'){
@@ -764,7 +805,7 @@
         
     }
     return traducir
-
+    }
     function following(elemento){
         var traducir="";
         var temporalExp1, temporalExp2=0;
@@ -815,6 +856,37 @@
     return traducir
 
     }
+    
+    function imprimirEn3D(cadena){
+        contEtiquetas=0;
+        contEtiquetasAnt=0;
+        var traducir="";
+        var conteo=0;
+        traducir+=`void printString() {\n`;
+        contadorAnterior=contTemporal;
+        contTemporal++;
+       
+        conteo++;
+        traducir+=`t`+contTemporal+` = sp+`+conteo+`;\n`;
+        contadorAnterior=contTemporal;
+        contTemporal++;
+        traducir+=`t`+contTemporal+` = stack[(int)t`+contadorAnterior+`];\n`
+        contEtiquetasAnt=contEtiquetas;
+        contEtiquetas++;
+        traducir+=`L`+contEtiquetas+`:\n`;
+        contadorAnterior=contTemporal;
+        contTemporal++;
+        
+        traducir+=`t`+contTemporal+` = heap[(int)t`+contadorAnterior+`];\n`;
+        contEtiquetasAnt=contEtiquetas;
+        contEtiquetas++;
+        traducir+=`if(t`+contTemporal+` == -1) goto L`+contEtiquetas+ `;\n`;
+        traducir+=`printf("%c", (char)t`+contTemporal+`);\n`;
+        traducir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;\n`;
+        traducir+=`goto L`+contEtiquetasAnt+`;\n`;
+        traducir+=`L`+contEtiquetas+`:\n`;
+        traducir+=`return;\n}\n`;
+        return traducir
     }
     function retrocesoPunto(elemento){
         var traducir="";
@@ -997,18 +1069,18 @@
                 hp = hp + 1;
                 textoAImprimir+=`heap[(int)hp] = -8 ;// inicio etiqueta \n hp = hp + 1;\n` ;
                 hp = hp + 1;
-                textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`; // `+texto[index]+` \n hp = hp + 1;\n` ;
+                textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`;  \n hp = hp + 1;\n` ;
                 
             }else if(texto[index]=='>') {
                 aceptaAtributos=false;
                 hp = hp + 1;
                  textoAImprimir+=`heap[(int)hp] = -7 ;//termina etiquta \n hp = hp + 1;\n` ;
                  hp = hp + 1;
-                 textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+` ;// `+texto[index]+` \n hp = hp + 1;\n` ;
+                 textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`;  \n hp = hp + 1;\n` ;
 
             }else if ((texto[index]=='<'&& texto[index+1]=='/') ){
                 hp = hp + 1;
-                textoAImprimir+=`heap[(int)hp] = -5; //termina texto \n hp = hp + 1;\n` ;
+               // textoAImprimir+=`heap[(int)hp] = -5; //termina texto \n hp = hp + 1;\n` ;
                 hp = hp + 1;
                 textoAImprimir+=`heap[(int)hp] = -6; //termina objeto \n hp = hp + 1;\n` ;
                 hp = hp + 1;
@@ -1016,7 +1088,7 @@
                 textoAImprimir+=`heap[(int)hp] = -8; //inicia etiqueta \n hp = hp + 1;\n` ;
                 hp = hp + 1;
             
-            textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`; // `+texto[index]+` \n hp = hp + 1;\n` ;
+            textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`;  \n hp = hp + 1;\n` ;
             
             }else if(texto[index]=='='&& texto[index+1]=='"'){
                 
@@ -1024,26 +1096,29 @@
                 hp = hp + 1;
                 textoAImprimir+=`heap[(int)hp] = -3;//inicia valor atributo \n hp = hp + 1;\n` ;
                 hp = hp + 1;
-                textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`; // `+texto[index]+` \n hp = hp + 1;\n` ;
+                textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`; //  \n hp = hp + 1;\n` ;
 
             }else{
                     if(texto[index]==' ' && aceptaAtributos==true){
                         hp = hp + 1;
-                        textoAImprimir+=`heap[(int)hp] = -2;//inicia atributo \n hp = hp + 1;\n` ;
+                       // textoAImprimir+=`heap[(int)hp] = -2;//inicia atributo \n hp = hp + 1;\n` ;
                         aceptaValor=false;
                     }else{
                         if(texto[index-1]=='>'){
                             hp = hp + 1;
                             textoAImprimir+=`heap[(int)hp] = -4;//inicia texto \n hp = hp + 1;\n` ;
                         }
-                        hp = hp + 1;
+
+                            hp = hp + 1;
                         textoAImprimir+=`heap[(int)hp] = `+texto[index].charCodeAt()+`; // `+texto[index]+` \n hp = hp + 1;\n` ;
+                         
+                            
                     }
             }
         }
         //console.log(""+textoAImprimir+"")
         contTemporal++;
-        auxiliar+=`//llena un segmento del heap con la salida para facilitar xquery\n`
+        //auxiliar+=`//llena un segmento del heap con la salida para facilitar xquery\n`
       //  auxiliar+= `void llenarHeapAuxiliar(){ \n t`+contTemporal+` = hp; \n`;
         auxiliar+= `\n t`+contTemporal+` = hp; \n`;
         contadorAnterior=contTemporal;
@@ -1058,17 +1133,30 @@
         contTemporal++;
         textoAImprimir+=`t`+contTemporal+` = sp+1; \n`;
         textoAImprimir+=`heap[(int)hp] = -10;//termina Consulta \n `;//stack[(int)t`+contadorTemporales+`] = t`+contadorAnterior+ `; \n
-        textoAImprimir+=`hp = hp + 1;\n`;// sp=sp+1; \n`;
+        textoAImprimir+=`hp = hp + 1;\n}\n`;// sp=sp+1; \n`;
         
        // textoAImprimir+=`t1 = sp+1;`;
-       
+       funcionesALlamar+=`imprimirConsulta();\n`
+       textoAImprimir+=` void imprimirConsulta(){\n`
        contTemporal++;
+       
         textoAImprimir+=`t`+contTemporal +`= stack[(int)t`+contadorAnterior+`];`;
+        textoAImprimir+=`L3:`;
+       textoAImprimir+=` t7 = t7+1;goto L2;`
         textoAImprimir+=`L2:`;
         contadorAnterior=contTemporal;
         contTemporal++;
         textoAImprimir+=`t`+contTemporal+` = heap[(int)t`+contadorAnterior+`];`;
         textoAImprimir+=`if(t`+contTemporal+` == -10) goto L1;`;
+        textoAImprimir+=`if(t`+contTemporal;
+         textoAImprimir+=` == -8) goto L3;`;
+        textoAImprimir+=`if(t`+contTemporal+` == -1)`;
+        textoAImprimir+=` goto L3;`;
+        textoAImprimir+=`if(t`+contTemporal+` == -4) goto L3;`;
+        textoAImprimir+=`if(t`+contTemporal;
+         textoAImprimir+=` == -7) goto L3;`;
+        textoAImprimir+=`if(t`+contTemporal+` == -3)`; 
+        textoAImprimir+=` goto L3;`;
         textoAImprimir+=`printf("%c", (char)t`+contTemporal+`);`;
         textoAImprimir+=`t`+contadorAnterior+` = t`+contadorAnterior+`+1;`;
         textoAImprimir+=`goto L2;`;
