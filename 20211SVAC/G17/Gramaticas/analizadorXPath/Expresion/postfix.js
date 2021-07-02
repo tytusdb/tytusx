@@ -2,6 +2,7 @@ import { concat, lowerCase, pad, truncate, upperCase } from "lodash"
 import { Tipo, TipoPath, Predicado } from "../AST/Entorno"
 import { Camino } from "./axes"
 import { Literal, Nodo } from "./Expresiones"
+import { retonarGlobal } from "../AST/Global"
 const { ErroresGlobal } = require('../AST/Global')
 
 
@@ -118,7 +119,7 @@ export class CallFunction extends PostFix
   {
     let expArgumentos = []
     for (const argumento of this.argumentos) {
-      expArgumentos = expArgumentos.concat(argumento.getValor(nodos))
+        expArgumentos = expArgumentos.concat(argumento.getValor(nodos))
     }
     var retorno = []
     switch(this.nombre)
@@ -231,11 +232,63 @@ export class CallFunctionPrefix extends PostFix
     this.argumentos = argumentos
   }
 
-  getValor()
+  getValor(nodos)
   {
     if(this.prefix == "fn")
     {
       return new CallFunction(this.predicado,this.tipo,this.nombre,this.argumentos) 
+    }
+    else if(this.prefix == "local")
+    {
+      var retornos= []
+      var funciones = retonarGlobal()
+      for (const funcion of funciones) {
+        var nuevoEntorno = [...nodos]
+        if(funcion.nombre == this.nombre)
+        {
+          var ArgumentosRealizados = []
+          for (const argumento of this.argumentos) {
+            ArgumentosRealizados.push(argumento.getValor(nuevoEntorno))
+          }
+          if(ArgumentosRealizados.length != funcion.declaraciones.length)
+          {
+            ErroresGlobal.push({Error:`Error en los argumentos de la funcion`,tipo:"Semantico",Linea:0,columna:0})
+            return []
+          }
+          for (let i = 0; i < ArgumentosRealizados.length; i++) {
+            if(
+                (ArgumentosRealizados[i][0] && funcion.declaraciones[i]) && 
+                (funcion.declaraciones[i].tipo == ArgumentosRealizados[i][0].tipo || funcion.declaraciones[i].tipo==null)
+              )
+            {
+              var Entorno =
+              {
+                tipo : funcion.declaraciones[i].nombre,
+                atributos : [],
+                hijos:ArgumentosRealizados[i],
+                texto:'',
+                posTipo : 0,
+                posTexto : 0,
+              }
+              nuevoEntorno.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
+            }else
+            {
+              ErroresGlobal.push({Error:`Error en los argumentos de la funcion`,tipo:"Semantico",Linea:0,columna:0})
+              return []
+            }
+          }
+          for (const ejectuar of funcion.body) {
+            retornos = retornos.concat(ejectuar.getValor(nuevoEntorno))
+          }
+          if(retornos[0].tipo != funcion.tipo && funcion.tipo != null)
+          {
+            ErroresGlobal.push({Error:`Error en el retorno de la funcion`,tipo:"Semantico",Linea:0,columna:0})
+            return []
+          }
+          break
+        }
+      }
+      return retornos
     }
   }
 }
