@@ -7,8 +7,9 @@ var Contenido = /** @class */ (function () {
         this.expresion = expresion;
         this.Contenido = Contenido;
     }
-    Contenido.prototype.insertSimbolsTable = function (node) {
+    Contenido.prototype.insertSimbolsTable = function (node, anterior, eAnterior) {
         throw new Error('Method not implemented.');
+        return eAnterior;
     };
     Contenido.prototype.ejecutar = function (entorno) {
         throw new Error('Method not implemented.');
