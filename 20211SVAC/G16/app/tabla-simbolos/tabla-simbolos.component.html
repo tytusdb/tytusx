@@ -5,7 +5,8 @@
         <a class="nav-link" (click)="regresar()">Regresar</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
           Reportes
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -24,28 +25,30 @@
   <br>
   <br>
 </nav>
-  <div style="text-align: center;">
-    <h2>Tabla de símbolos XML</h2>
-  </div>
-  <hr>
+<div style="text-align: center;">
+  <h2>Tabla de símbolos XML</h2>
+</div>
+<hr>
 <div class="component">
-  <table class="table table-hover">
+  <table class="table table-hover text-align:center">
     <thead>
       <tr>
         <th scope="col">Nombre</th>
         <th scope="col">Padre</th>
-        <th scope="col">Valor</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Posición</th>
         <th scope="col">Linea</th>
         <th scope="col">Columna</th>
       </tr>
     </thead>
     <tbody *ngFor="let item of lista">
       <tr>
-        <th>{{item.Nombre}}</th>
-        <td>{{item.Padre}}</td>
-        <td>{{item.Valor.Tipo}}</td>
-        <td>{{item.Linea}}</td>
-        <td>{{item.Columna}}</td>
+        <td>{{item.valor}}</td>
+        <td>{{item.padre}}</td>
+        <td>{{item.tipo}}</td>
+        <td>{{item.posicion}}</td>
+        <td>{{item.fila}}</td>
+        <td>{{item.columna}}</td>
       </tr>
     </tbody>
   </table>

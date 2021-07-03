@@ -3693,15 +3693,13 @@ case 41:return 50;
 break;
 case 42:return 51;
 break;
-case 43:return 'string';
+case 43:return 12;
 break;
-case 44:return 12;
+case 44:return 52
 break;
-case 45:return 52
+case 45:return 5
 break;
-case 46:return 5
-break;
-case 47:
+case 46:
                                                             var lexerAscError = new Error(
                                                                 yy_.yytext, 
                                                                 yy_.yylloc.first_line, 
@@ -3713,8 +3711,8 @@ case 47:
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:last\b)/i,/^(?:attr\b)/i,/^(?:node\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:parent\b)/i,/^(?:child\b)/i,/^(?:self\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:attribute\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:folowing\b)/i,/^(?:folowing-sibling\b)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:\/)/i,/^(?:\|)/i,/^(?:\.)/i,/^(?:\.\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:"[^\"]*")/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"inclusive":true}}
+rules: [/^(?:\s+)/i,/^(?:last\b)/i,/^(?:attr\b)/i,/^(?:node\b)/i,/^(?:text\b)/i,/^(?:position\b)/i,/^(?:parent\b)/i,/^(?:child\b)/i,/^(?:self\b)/i,/^(?:preceding\b)/i,/^(?:preceding-sibling\b)/i,/^(?:attribute\b)/i,/^(?:descendant\b)/i,/^(?:descendant-or-self\b)/i,/^(?:ancestor\b)/i,/^(?:ancestor-or-self\b)/i,/^(?:folowing\b)/i,/^(?:folowing-sibling\b)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:\/)/i,/^(?:\|)/i,/^(?:\.)/i,/^(?:\.\.)/i,/^(?:::)/i,/^(?:@)/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\()/i,/^(?:\))/i,/^(?:(([0-9]+\.[0-9]*)|(\.[0-9]+)))/i,/^(?:[0-9]+)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:("((\\([\'\"\\bfnrtv]))|([^\"\\]+))*"))/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46],"inclusive":true}}
 });
 return lexer;
 })();
@@ -3854,8 +3852,13 @@ class Main {
         this.nodoxpath = [];
         this.edgesxpath = [];
         this.tablaSimbolos = '';
+        this.codificacion = 'utf-8';
         this.i = 1;
         this.j = 1;
+        this.escapable = /[\\\"\x00-\x1f\x7f-\uffff]/g;
+    }
+    equalsIgnoringCase(text, other) {
+        return (text.localeCompare(other, undefined, { sensitivity: 'base' }) === 0);
     }
     ejecutarCodigoXmlAsc(entrada) {
         console.log('ejecutando xmlAsc ...');
@@ -3863,15 +3866,40 @@ class Main {
         const objetos = xmlAsc.parse(entrada);
         // console.log('**********');
         console.log(objetos);
+        if (objetos !== undefined && objetos !== null) {
+            if (objetos.erroresSemanticos.length > 0 ||
+                objetos.erroresSintacticos.length > 0) {
+                alert('Existen errores');
+            }
+        }
         // console.log('**********');
         this.lista_objetos = objetos.objeto;
         this.listacst = objetos.nodos;
         console.log(this.listacst);
         if (this.lista_objetos.length > 1) {
-            console.log(this.getXmlFormat(this.lista_objetos[1]));
+            let flag = false;
+            for (const item of this.lista_objetos[0].listaAtributos) {
+                if (this.equalsIgnoringCase(item.identificador, 'encoding')) {
+                    if (this.equalsIgnoringCase(item.valor, 'ASCII')) {
+                        this.codificacion = 'ASCII';
+                    }
+                    else if (this.equalsIgnoringCase(item.valor, 'ISO-8859-1')) {
+                        this.codificacion = 'ISO-8859-1';
+                    }
+                    else {
+                        this.codificacion = 'utf-8';
+                    }
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                this.codificacion = 'utf-8';
+            }
+            console.log(this.applyCodification(this.getXmlFormat(this.lista_objetos[1])));
         }
         else {
-            console.log(this.getXmlFormat(this.lista_objetos[0]));
+            console.log(this.applyCodification(this.getXmlFormat(this.lista_objetos[0])));
         }
         window.localStorage.setItem('lexicos', JSON.stringify(objetos.erroresLexicos));
         if (objetos !== undefined) {
@@ -3887,7 +3915,7 @@ class Main {
         const objetos = xpathAsc.parse(entrada);
         console.log(objetos);
         this.lista_objetos_xpath = objetos.Nodo;
-        // this.execPath_list(objetos.XPath);
+        this.execPath_list(objetos.XPath);
     }
     getXmlFormat(objeto) {
         let contenido = '';
@@ -3940,6 +3968,45 @@ class Main {
             etiqueta += '/>';
         }
         return etiqueta;
+    }
+    quote(string) {
+        // If the string contains no control characters, no quote characters, and no
+        // backslash characters, then we can safely slap some quotes around it.
+        // Otherwise we must also replace the offending characters with safe escape
+        // sequences.
+        this.escapable.lastIndex = 0;
+        return this.escapable.test(string)
+            ? '"' +
+                string.replace(this.escapable, function (a) {
+                    let meta = {
+                        // table of character substitutions
+                        '\b': '\\b',
+                        '\t': '\\t',
+                        '\n': '\\n',
+                        '\f': '\\f',
+                        '\r': '\\r',
+                        '"': '\\"',
+                        '\\': '\\\\',
+                    };
+                    var c = meta[a];
+                    return typeof c === 'string'
+                        ? c
+                        : '\\u' +
+                            ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                }) +
+                '"'
+            : '"' + string + '"';
+    }
+    applyCodification(text) {
+        if (this.equalsIgnoringCase(this.codificacion, 'ASCII')) {
+            return this.quote(text);
+        }
+        else if (this.equalsIgnoringCase(this.codificacion, 'ISO-8859-1')) {
+            return unescape(encodeURIComponent(text));
+        }
+        else {
+            return text;
+        }
     }
     readFile(e) {
         console.log('read file ...');
@@ -4319,13 +4386,17 @@ class Main {
                 }
             }
             else if (nodeList[index].type === Element_1.TypeElement.CURRENT) {
-                if (nodeList.length > index + 1)
+                if (nodeList.length > index + 1 &&
+                    nodeList[index + 1].type === Element_1.TypeElement.CURRENT) {
+                    // PARENT
+                }
+                // CURRENT
+                if (nodeList.length > index + 1) {
                     this.searchElement(rootXML, nodeList, index + 1);
+                }
                 else {
                     this.printElement(element);
                 }
-            }
-            else if (nodeList[index].type === Element_1.TypeElement.PARENT) {
             }
         });
     }
@@ -4338,11 +4409,13 @@ class Main {
         return result;
     }
     printElement(element) {
-        console.info(element);
+        let text = this.applyCodification(this.getXmlFormat(element));
+        console.log(text);
+        document.getElementById('console').value += text;
     }
     printElements(elements) {
         elements.forEach((element) => {
-            console.info(element);
+            this.printElement(element);
         });
     }
     setListener() {

@@ -1,0 +1,44 @@
+<h1>REPORTE DE OPTIMIZACION</h1>
+<div class="tabla">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="TIPO OPTIMIZACION">
+          <th mat-header-cell *matHeaderCellDef> TIPO OPTIMIZACION </th>
+          <td mat-cell *matCellDef="let element"> {{element.Tipo_Optimizacion}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="REGLA">
+          <th mat-header-cell *matHeaderCellDef> REGLA </th>
+          <td mat-cell *matCellDef="let element"> {{element.Regla}} </td>
+        </ng-container>
+      
+        <!-- Weight Column -->
+        <ng-container matColumnDef="CODIGO ELIMINADO">
+          <th mat-header-cell *matHeaderCellDef> CODIGO ELIMINADO </th>
+          <td mat-cell *matCellDef="let element"> {{element.eliminado}} </td>
+        </ng-container>
+      
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="CODIGO AGREGADO">
+          <th mat-header-cell *matHeaderCellDef> CODIGO AGREGADO </th>
+          <td mat-cell *matCellDef="let element"> {{element.agregado}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="LINEA">
+          <th mat-header-cell *matHeaderCellDef> LINEA </th>
+          <td mat-cell *matCellDef="let element"> {{element.linea}} </td>
+        </ng-container>
+        <ng-container matColumnDef="COLUMNA">
+          <th mat-header-cell *matHeaderCellDef> COLUMNA </th>
+          <td mat-cell *matCellDef="let element"> {{element.columna}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+</div>

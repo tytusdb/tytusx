@@ -21,6 +21,7 @@ const Tipo= require("./Simbolos/Tipo");
 const aritmetica= require("./Expresiones/Aritmetica");
 const logica= require("./Expresiones/Logica");
 const relacional= require("./Expresiones/Relacional");
+const instrucciones= require("./Abstracto/Instrucciones")
 
 %}
 %lex
@@ -122,14 +123,18 @@ escape                              \\{escapechar}
 
 
 START 
-        : INSTRUCCIONES  EOF                   {return $1;}
+        : NODO  EOF                   {return $1;}
+        ;
+
+NODO    
+        :NODO  OPTION INSTRUCCIONES             {if($3!=false)$1.push($3);$$=$1;}
+        | INSTRUCCIONES                         {$$=($1!=false) ?[$1]:[];}
         ;
 
 INSTRUCCIONES
         : INSTRUCCIONES INSTRUCCION             {if($2!=false)$1.push($2);$$=$1;}
         | INSTRUCCION                           {$$=($1!=false) ?[$1]:[];}
-        | INSTRUCCIONES OPTION INSTRUCCION      {if($3!=false)$1.push($3);$$=$1;}
-
+        
         ;
 
 INSTRUCCION 

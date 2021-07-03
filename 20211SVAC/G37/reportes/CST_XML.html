@@ -1,0 +1,43 @@
+<html lang="en">
+
+<head>
+    <title>CST</title>
+    <script type="text/javascript" src="./js/vis-network.min.js"></script>
+</head>
+
+<body>
+    <p id="log"></p>
+    <div id="mynetwork"></div>
+
+    <script type="text/javascript">
+        alert(localStorage.getItem("cst-xml"));
+        //var hol = ejecutarCodigo(localStorage.getItem("xpath"))
+        // create a network
+        var container = document.getElementById("mynetwork");
+        var DOTstring = localStorage.getItem("cst-xml")
+        //console.table(DOTstring)
+        var parsedData = vis.parseDOTNetwork(DOTstring);
+        var data = {
+            nodes: parsedData.nodes,
+            edges: parsedData.edges
+        }
+        //console.table(data)
+        var options = {
+            nodes: {
+            },
+            layout: {
+                hierarchical: {
+                    levelSeparation: 100,
+                    nodeSpacing: 200,
+                    parentCentralization: true,
+                    direction: 'UD',        // UD, DU, LR, RL
+                    sortMethod: 'directed',  // hubsize, directed
+                    shakeTowards: 'roots'  // roots, leaves
+                },
+            },
+        };
+        var network = new vis.Network(container, data, options);
+    </script>
+</body>
+
+</html>

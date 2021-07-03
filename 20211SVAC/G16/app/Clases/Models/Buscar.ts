@@ -16,15 +16,24 @@ export class Buscar {
   etiquetas = [];
   encoding = ""
   predicado: any;
+  predicados: any[];
   hijos = [];
   vlast = 0;
-  vposition = 0;
-
+  vposition = 2;
+  traduciendo="";
   constructor(private toastr: ToastrService) {
     this.tablasimbolos = JSON.parse(localStorage.getItem("tablaSimbolo"));
     this.ast = JSON.parse(localStorage.getItem("ASTXPATH"));
-    this.RecorrerAST(this.ast);
-    this.encoding = localStorage.getItem("encoding");
+    //GENERANDO LO PRIMERO DE UN ARCHIVO DE C
+      this.traduciendo+="/------HEADER------/\n"
+      this.traduciendo+="#include <stdio.h>\n"
+      this.traduciendo+="#include <math.h>\n"
+      this.traduciendo+="double heap[19121997];\n"
+      this.traduciendo+="double stack[19121997];\n"
+      this.traduciendo+="/------MAIN------/\n"
+      this.traduciendo+="void main() {\n"
+      this.RecorrerAST(this.ast);
+      this.encoding = localStorage.getItem("encoding");
   }
 
   EncontrarEnTablaDeSimbolos(etiqueta: string, padre: string, cualquiera: boolean): boolean {
@@ -37,6 +46,9 @@ export class Buscar {
         if (elemento.Nombre == etiqueta) {
           this.contenido.push(elemento.Valor);
           valor = true;
+        } else if (elemento.Tipo == "Texto") {
+          this.contenido.push(elemento.Valor);
+          valor = true;
         }
       } else {
         // si es falso entonces si necesita un padre para acceder a él
@@ -45,8 +57,9 @@ export class Buscar {
           valor = true;
         } else if (elemento.Tipo == etiqueta && elemento.Padre == padre) {
           this.contenido.push(elemento.Valor.valor);
-        } else if ((etiqueta == "last" || etiqueta == "position" || etiqueta == "node") && elemento.Padre == padre) {
-          this.hijos.push(elemento.Valor);
+        } else if (etiqueta == "Texto" && elemento.Padre == padre) {
+          console.log(padre);
+          this.contenido.push(elemento.Valor);
           valor = true;
         }
       }
@@ -59,14 +72,15 @@ export class Buscar {
     }
   }
 
-  ObtenerEntorno(etiqueta: string, padre: string): any {
+  ObtenerEntorno(padre: string): any {
     let valor = false;
     // Busca en la tabla de simbolos
     for (let i = 0; i < this.tablasimbolos.length; i++) {
       let elemento = this.tablasimbolos[i]
       // si es falso entonces si necesita un padre para acceder a él
-      if (elemento.Nombre == etiqueta && elemento.Padre == padre) {
-        this.contenido2.push(elemento.Valor);
+
+      if (elemento.Padre == padre) {
+        this.contenido2.push(elemento.Valor.valor);
         valor = true;
       }
 
@@ -80,7 +94,6 @@ export class Buscar {
   }
 
   RecorrerAST(raiz: any) {
-
     // Verifica si la variable raiz tiene elementos
     if (raiz != undefined) {
 
@@ -88,56 +101,32 @@ export class Buscar {
         //si raiz tiene hijos entonces recorre el AST
         let array = raiz.hijos
         array.forEach(element => {
+          //  console.log(element.etiqueta)
           // Compara la etiqueta para saber que tipo de recorrido es
           if (element.etiqueta == "/" || element.etiqueta == "//") {
             this.raices.push(element.etiqueta)
             this.RecorrerAST(element);
 
           } else if (element.etiqueta == "Predicado") {//DE ESTA PARTE YO SOLO AGREGUE ESTE ELSE IF Y LUEGO EL RESOLVER EXPRESION
-            this.predicado = this.ResolverExpresion(element.hijos[0])
-            console.log(this.predicado)
+            this.predicado = this.ResolverExpresion(element.hijos[0])//AQUI SOLO ES ELEMENT
+            if(this.predicado!=true){
+              this.getPredicado(this.predicado)
+            }else{
+
+            }
           } else if (element.etiqueta == "Funcion") {
-            this.RecorrerAST(element.etiqueta);
-          } else if (element.etiqueta == "text") {
-            this.EncontrarEnTablaDeSimbolos("Texto", this.padre, false);
-          } else if (element.etiqueta == "last") {
-            let valor = this.EncontrarEnTablaDeSimbolos("last", this.padre, false);
-            if (valor) {
-              let contlas = this.hijos.length - this.vlast;
-              for (let i: number = 0; i < this.hijos.length; i++) {
-                if (i == contlas) {
-                  this.contenido.push(this.hijos[i]);
-                }
-              }
-            } else {
-              //error semántico: No hay hijos, no se puede hacer función last()
-            }
-          } else if (element.etiqueta == "position") {
-            let valor = this.EncontrarEnTablaDeSimbolos("position", this.padre, false);
-            if (valor) {
-              for (let i: number = 0; i < this.hijos.length; i++) {
-                if (i < this.vposition) {
-                  this.contenido.push(this.hijos[i]);
-                }
-              }
-            } else {
-              //error semántico: No hay hijos, no se puede hacer función position()
-            }
-          } else if (element.etiqueta == "node") {
-            let valor = this.EncontrarEnTablaDeSimbolos("node", this.padre, false);
-            if (valor) {
-              this.hijos.forEach(element => {
-                this.contenido.push(element);
-              });
-            } else {
-              //error semántico: No hay hijos, no se puede hacer función node()
-            }
+            this.getFuncion(element.hijos[0]);
+          } else if (element.etiqueta == "Eje") {
+            let nodo = this.getEje(element.hijos[0]);
+            this.RecorrerAST(nodo);
+          } else if (element.etiqueta == "Contenido") {
+            this.RecorrerAST(element);
           }
           else {
             // Si está aqui significa que ya llegó hasta el final
             // y las etiquetas son elementos, this.contenido sirve para ir guardando los resultados
             this.contenido = []
-
+            //console.log(element.etiqueta)
             for (let i = this.raices.length - 1; i >= 0; i--) {
 
               // entra a un for para saber qué tipo de raiz le pertenece a la etiqueta
@@ -159,26 +148,22 @@ export class Buscar {
                   return
                 }
               } else if (this.raices[i] == "//") {
-                console.log(i)
                 this.raices[i] = ""
                 let valor;
-                if (i == 0 && this.raices.length > 1) {
-                  valor = this.EncontrarEnTablaDeSimbolos(element.etiqueta, this.padre, false);
-                  this.padre = element.etiqueta;
-                } else if (this.raices.length == 1) {
+                if (this.raices.length == 1) {
                   valor = this.EncontrarEnTablaDeSimbolos(element.etiqueta, this.padre, true);
                   this.padre = element.etiqueta;
                 }
                 else {
-                  // console.log(element.etiqueta)
-                  // valor=this.EncontrarEnTablaDeSimbolos(element.etiqueta,this.padre,false);
-                  this.ObtenerEntorno(element.etiqueta, this.padre);
+                  this.ObtenerEntorno(this.padre);
+
                   if (this.contenido2.length != 0) {
+                    this.contenido=[]
+
                     this.recorrerEntorno(this.contenido2, element.etiqueta);
                   } else {
                     console.log("no se encontró")
                   }
-                  // valor=this.EncontrarEnTablaDeSimbolos(element.etiqueta,this.padre,true);
                 }
 
                 this.padre = element.etiqueta;
@@ -192,6 +177,7 @@ export class Buscar {
             }
           }
         });
+
       }
 
     } else {
@@ -200,42 +186,252 @@ export class Buscar {
   }
 
   ResolverExpresion(raiz: any): any {
-    console.log(raiz)
-    switch (raiz.etiqueta) {
-      case "+":
-        return Number(this.ResolverExpresion(raiz.hijos[0])) + Number(this.ResolverExpresion(raiz.hijos[1]))
-      case "-":
-        return Number(this.ResolverExpresion(raiz.hijos[0])) - Number(this.ResolverExpresion(raiz.hijos[1]))
-      case "*":
-        return Number(this.ResolverExpresion(raiz.hijos[0])) * Number(this.ResolverExpresion(raiz.hijos[1]))
-      case "mod":
-        return Number(this.ResolverExpresion(raiz.hijos[0])) % Number(this.ResolverExpresion(raiz.hijos[1]))
-      default:
-        return raiz.etiqueta
+    //console.log(raiz)
+      switch (raiz.etiqueta) {
+        case "+":
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            break;
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }
+          else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) + Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
+        case "-":
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            return this.getLast()
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) - Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
+        case "*":
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            errores.Errores.add(new nodoError.Error("Semántico", "No se puede sumar al metodo Last ", 1, 1, "XPath"));
+            break
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) * Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
+        case "mod":
+          if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+            errores.Errores.add(new nodoError.Error("Semántico", "No se puede sumar al metodo Last ", 1, 1, "XPath"));
+            break
+          }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            return 0
+          }else{
+            return Number(this.ResolverExpresion(raiz.hijos[0])) % Number(this.ResolverExpresion(raiz.hijos[1]))
+          }
+
+        case "div":
+        if(this.ResolverExpresion(raiz.hijos[0]) == "last"){
+          errores.Errores.add(new nodoError.Error("Semántico", "No se puede sumar al metodo Last ", 1, 1, "XPath"));
+          return this.contenido
+        }else if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+          return 0
+        }else{
+          return Number(this.ResolverExpresion(raiz.hijos[0])) / Number(this.ResolverExpresion(raiz.hijos[1]))
+        }
+        case "<":
+          if(this.ResolverExpresion(raiz.hijos[0]) == "position"){
+            this.predicados=[]
+            let last = this.getLast();
+            let indice = this.ResolverExpresion(raiz.hijos[1])
+            for (let i=1; i < last; i++){
+              if(i<indice){
+                this.predicados.push(i)
+              }
+            }
+            return true
+          }
+        break
+        case "Funcion":
+          if(raiz.hijos[0].etiqueta=="last"){
+            return "last"
+          }else if(raiz.hijos[0].etiqueta=="position"){
+            return "position"
+          }
+          return 123
+        default:
+          return raiz.etiqueta
+      }
+  }
+
+  //Retorna el predicado que debe de ser
+  getPredicado(indice:number){
+    this.contenido = [];
+    let valor = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
+    if (valor) {
+      for (let i: number = 0; i < this.contenido.length; i++) {
+        if (i == (indice - 1)) {
+          this.hijos.push(this.contenido[i]);
+        }
+      }
+      this.contenido = [];
+      this.contenido = this.hijos;
+    } else {
+      errores.Errores.add(new nodoError.Error("Semántico", "No hay hijos para realizar el metodo Last ", 1, 1, "XPath"));
+    }
+  }
+
+  getLast():number{
+    return this.contenido.length -1
+  }
+
+  //JULISSA AQUI ESTÁ EL MÉTODO DE LAS FUNCIONES
+  getFuncion(nodo: any): any {
+    switch (nodo.etiqueta) {
+      case "position":
+        /*AQUI HAY QUE VER DE QUÉ FORMA OBETENER EL VALOR DE LA EXPRESIÓN QUE ACOMPAÑA A ESTA FUNCIÓN Y
+        ASIGNAR ESE RESULTADO A LA VARIABLE vposition QUE ESTÁ GLOBAL EN TODA LA CLASE (SI ES UNA
+        EXPRESION SIMPLE COMO position()<2 PUES ENTONCES vposition TENDRÍA EL VALOR DE 2). YO ASUMO QUE
+        PARA ESTA FUNCIÓN SERÁN SÓLO LAS OPERACIONES RELACIONALES, PERO NO ESTOY 100% SEGURO.*/
+        this.contenido = []
+        this.vposition = 0
+        let valor1 = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
+        console.log(valor1);
+        if (valor1) {
+          console.log(this.contenido);
+          for (let i: number = 0; i < this.contenido.length; i++) {
+            if (i < (this.vposition - 1)) {
+              this.hijos.push(this.contenido[i]);
+            } else {
+              break;
+            }
+          }
+          this.contenido = [];
+          this.contenido = this.hijos;
+        } else {
+          //error semántico: No hay hijos, no se puede hacer función position()
+        }
+        break;
+      case "last":
+        this.contenido = [];
+        this.vlast = 0;
+        let valor = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
+        if (valor) {
+          let contlas = this.contenido.length - this.vlast;
+          console.log(this.contenido);
+          console.log(contlas);
+          for (let i: number = 0; i < this.contenido.length; i++) {
+            if (i == (contlas - 1)) {
+              this.hijos.push(this.contenido[i]);
+            }
+          }
+          this.contenido = [];
+          this.contenido = this.hijos;
+        } else {
+          //error semántico: No hay hijos, no se puede hacer función last()
+        }
+        break;
+      case "node":
+        /*ESTA FUNCION LO QUE HACE ES QUE DEVUELVE ABSOLUTAMENTE TODOS LOS NODOS QUE ESTÁN DENTRO DEL
+        PADRE INDICADO, ESTA CREO QUE NO VIENE DENTRO DE LOS PREDICADOS, Y SI VIENE NO TENDRÍA EXPRESIONES,
+        VENDRÍA SOLITA xD*/
+        this.contenido = [];
+        let valor2 = this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
+        if (valor2) {
+          this.contenido.forEach(element => {
+            this.hijos.push(element);
+          });
+          this.contenido = [];
+          this.contenido = this.hijos;
+        } else {
+          //error semántico: No hay hijos, no se puede hacer función node()
+        }
+        break;
+      case "text":
+        /*ESTA FUNCION DEVUELVE TODOS LOS TEXTOS QUE VIENEN EN LOS NODOS HIJOS (POR EJEMPLO SI VIENE
+        <libro>Hola</libro> ENTONCES DEVUELVE Hola). ESTA FUNCIÓN TAMPOCO TRAE EXPRESIONES, SIEMPRE VA
+        SOLITA, ASÍ COMO YO :c*/
+        this.contenido = [];
+        console.log("padre: " + this.padre);
+        this.EncontrarEnTablaDeSimbolos("Texto", this.padre, false);
+        break;
+    }
+  }
+
+  getEje(nodo: any): any {
+    switch (nodo.etiqueta) {
+      case "ancestor":
+        return (nodo);
+      case "ancestor-or-self":
+        return (nodo);
+      case "attribute":
+        return (nodo);
+      case "child":
+        this.contenido = [];
+        this.EncontrarEnTablaDeSimbolos(this.padre, "", true);
+        return (nodo);
+      case "descendant":
+        return (nodo);
+      case "descendant-or-self":
+        return (nodo);
+      case "following":
+        return (nodo);
+      case "following-sibling":
+        return (nodo);
+      case "namespace":
+        return (nodo);
+      case "parent":
+        return (nodo);
+      case "preceding":
+        return (nodo);
+      case "preceding-sibling":
+        return (nodo);
+      case "self":
+        return (nodo);
     }
   }
 
   recorrerEntorno(Contenido: any, nombre: string) {
     //recorre el contenido del arreglo
-    console.log(Contenido)
-    if (Contenido.length != 0) {
+      if(Contenido.Nombre!=undefined){
+        if (Contenido.Nombre == nombre) {
 
-      Contenido.forEach(element => {
-        if (element.valor.nombreInit == nombre) {
+          if (Contenido.elementos !=null) {
 
-          if (element.Tipo == "Texto" || element.Tipo == "Vacio") {
-            this.contenido.push(element)
-          } else if (element.Tipo == "Elementos") {
-            //console.log(element.valor)
-            let array = [];
-            array.push(element.valor)
-            this.recorrerEntorno(array, nombre);
+            this.contenido.push(Contenido)
+          }else{
+
+            this.contenido.push(Contenido)
           }
-        } else {
-          this.recorrerEntorno(element.lista, nombre);
+        }else{
+          let array=[]
+          if(Contenido.elementos!=null){
+            array.push(Contenido.elementos)
+            this.recorrerEntorno(array,nombre)
+          }
         }
-      });
-    }
+      }else if(Contenido.lista!=undefined){
+
+        if(Contenido!=null){
+          Contenido.lista.forEach(elemento2 => {
+            let array=[]
+            array.push(elemento2)
+            this.recorrerEntorno(array,nombre);
+        });
+        }
+      }else if(Contenido.nombreInit!=undefined){
+        if (Contenido.nombreInit == nombre) {
+
+          if (Contenido.elementos !=null) {
+
+            this.contenido.push(Contenido)
+          }else{
+
+            this.contenido.push(Contenido)
+          }
+        }else{
+          let array=[]
+          if(Contenido.elementos!=null){
+            array.push(Contenido.elementos)
+            this.recorrerEntorno(array,nombre)
+          }
+        }
+      }
+
   }
 
   darFormato(): string {

@@ -8,6 +8,7 @@
   var Objeto=require("../app/Clases/Models/Objeto.js")
   var nodoError=require("../app/Clases/Models/Errores.js")
   var ErrorL=require("../app/Clases/Models/ListaError.js")
+  encoding="";
   texto=""
 %}
 
@@ -74,13 +75,14 @@ S
                         //ESTADO 1 ES PARA TS
                         if(Estado.Estado.cambio==1){
                           Gram.ReporteGramatical.add( new NodoGram.NodoGramatica("S -> INIT EOF", "S.val := INIT.val"));
-                          $$=$1; return $$;
+                          $$=$1; return {list:$$,encoding:encoding};
                         }else if(Estado.Estado.cambio==2){//ESTADO DOS PARA CST
                           let NodoS = new Nodo.default("S", "");
                           NodoS.AgregarHijo($1);
                           $$=NodoS;
-                          return $$;
+                          return {list:$$,encoding:encoding};
                         }
+                    
                     }
 ;
 INIT
@@ -123,6 +125,7 @@ FORMATO
                           $$ = new Nodo.default("FORMATO", "FORMATO -> utf");
                           $$.AgregarHijo(new Nodo.default($1, ""));
                         }
+                        encoding="utf";
                       }
   | ascii             {
                           //ESTADO 1 ES PARA TS
@@ -133,6 +136,7 @@ FORMATO
                           $$ = new Nodo.default("FORMATO", "FORMATO -> ascii");
                           $$.AgregarHijo(new Nodo.default($1, ""));
                         }
+                        encoding="ascii"
                       }
   | iso               {
                         //ESTADO 1 ES PARA TS
@@ -143,7 +147,9 @@ FORMATO
                           $$ = new Nodo.default("FORMATO", "FORMATO -> iso");
                           $$.AgregarHijo(new Nodo.default($1, ""));
                         }
+                        encoding="iso"
                       }
+
     | error EOF       {
                         ErrorL.Errores.add(new nodoError.Error("Sintáctico","Error sintáctico en la etiqueta: "+yytext,@1.first_line, @1.first_column,"XML"));
                       }

@@ -1,13 +1,30 @@
-function analizarXpath(entornoGlobal: Entorno){
+let erroresXpath = new Errores();
+function analizarXpath(entornoGlobal: Entorno) {
+    erroresXpath = new Errores();
     const textoAnalizar = document.getElementById('inputXPath');
     const result = document.getElementById('result') as HTMLTextAreaElement;
-    // @ts-ignore
-    let matrizConsultas: Array<Array<Consulta>> = jisonXpaht.parse(textoAnalizar.value);
+    let matrizConsultas: Array<Array<Consulta>>;
+    try {
+        // @ts-ignore
+        matrizConsultas = jisonXpaht.parse(textoAnalizar.value);
+    } catch (err) {
+        erroresXpath.agregarError("Error fatal", "error sin recuperacion", 0, 0);
+        matrizConsultas = [];
+    }
 
-    if (errores.getSize > 0) {        
-        errores.agregarEncabezadoFinal("XPATH");
+    if (erroresXpath.getSize > 0) {
+        if (erroresXpath.getErrores().length > 0) {
+            erroresXpath.agregarEncabezado("<br>XML");
+            erroresXpath.getErrores().forEach(e => {
+                errores.agregarError1(e);
+            });
+            matrizConsultas = [];
+        }
+        
+    }
+    if(errores.getErrores().length>0){
         agregarContenidoErrores();
-    } else {
+    }
         let i: number = 1;
         let resultConsulta: Array<string> = new Array();
         matrizConsultas.forEach(listC => {
@@ -27,9 +44,6 @@ function analizarXpath(entornoGlobal: Entorno){
             });
         });
         result.value = resultConsulta.join("\n");
-
-
-    }
 }
 
 function recorrer(consultas: Array<Consulta>, entornos: Array<Entorno>, index: number): Array<Entorno> {

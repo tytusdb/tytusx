@@ -7,6 +7,7 @@ function graficarArbolCST(Arbol){
         console.log("\n>>>Reconoció la Raíz del Arbol: "+Arbol.id);
         if (Raiz){
             script = "digraph G {\n";
+            script += "graph[label=\"Gráfica Arbol CST\", labelloc=t, fontsize=30];\n";
             script += "node [shape = record, height = 0.1];\n";
             //script += "node"+contNodos+"[label = \"<f0> | <f1>"+Raiz.valor+" | <f2>\"];"
             script += recorrerHijos(Raiz);
@@ -30,7 +31,7 @@ function recorrerHijos(Nodo){
     //se genera el nodo padre
     let Padre = "node"+contNodos;
     script += Padre + ";\n";
-    script += Padre + "[label = \""+Nodo.id + "=" + Nodo.valor +"\"];\n";
+    script += Padre + "[label = \"" + Nodo.valor +"\"];\n";
 
     //si el nodo padre tiene hijos entonces se crearán los nodos hijos en graphviz
     if (numHijos > 0){
@@ -48,7 +49,7 @@ function recorrerHijos(Nodo){
                 script += recorrerHijos(Hijo);
             }else{
                 script += Padre + "->" + hoja + ";\n";
-                script += hoja+"[label = \""+Hijo.id + "=" + Hijo.valor +"\"];\n";
+                script += hoja+"[label = \"" + Hijo.valor +"\"];\n";
             }
         }
         console.log("\n>>>Terminó de construir los nodos hijos...");
@@ -111,13 +112,13 @@ function probandoArbol(){
     */
 }
 
-function pruebaGraficarViz(grafica){
+function pruebaGraficarVizCST(grafica){
     var viz = new Viz();
     viz.renderSVGElement(grafica)
     .then(function(element) {
         //document.body.appendChild(element);
         //alert('entro a la funcion elemento');
-        let elemento = document.getElementById('grafica');
+        let elemento = document.getElementById('reporteCSTGrafica');
         elemento.appendChild(element);
     })
     .catch(error => {

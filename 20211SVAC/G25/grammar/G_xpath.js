@@ -86,6 +86,8 @@ switch (yystate) {
 case 1:
  
         var root = new AST_XPATH($$[$0-1]);
+        root.setErrores(list_error);
+        list_error = [];
         return root; 
     
 break;
@@ -105,7 +107,7 @@ case 8:
 this.$ = new Nodo($$[$0-1], null, null, $$[$0], null, TipoX.PATH, this._$.first_line, this._$.first_column);
 break;
 case 9:
-this.$ = new Nodo($$[$0-1],null,null,null,$$[$0],TipoX.WILDCARD, this._$.first_line, this._$.first_column);
+this.$ = new Nodo($$[$0-1],null,null,$$[$0],null,TipoX.WILDCARD, this._$.first_line, this._$.first_column);
 break;
 case 10:
 this.$ = new Nodo(null,$$[$0],null,null,null,TipoX.PATH, this._$.first_line, this._$.first_column);
@@ -816,7 +818,7 @@ case 87:return 16;
 break;
 case 88:return 5;
 break;
-case 89:  addError(`Error léxico`,`No se esperaba ${yy_.yytext}`,yy_.yylloc.first_line, yy_.yylloc.first_column); 
+case 89:  list_error.push(`Error léxico`,`No se esperaba ${yy_.yytext}`,yy_.yylloc.first_line, yy_.yylloc.first_column); 
 break;
 }
 },

@@ -53,7 +53,7 @@
 "self"                   return 'TK_SELF'
 "last"                   return 'TK_LAST'
 "position"               return 'TK_POSITION'
-"node"                   return 'TK_NODE'
+"Node_tree"                   return 'TK_Node_tree'
 "text"                   return 'TK_TEXT'
 
 
@@ -96,171 +96,169 @@
 %% /* GRAMATICA  ε */
 
 /*INICIO DE LA GRAMATICA */
-S: LISTA EOF { $$ = new Node('S'); $$.addChild($1); return $$; };
+S: LISTA EOF { $$ = new Node_tree('S',''); $$.addChild($1); return $$; };
 
-LISTA: PUNTO              { $$ = new Node('LISTA'); $$.addChild($1); }
-    |  LISTAS             { $$ = new Node('LISTA'); $$.addChild($1); }
+LISTA: PUNTO              { $$ = new Node_tree('LISTA',''); $$.addChild($1); }
+    |  LISTA2             { $$ = new Node_tree('LISTA',''); $$.addChild($1); }
     ;
 
-LISTAS: LISTA1 LISTAS    { $$ = new Node('LISTAS'); $$.addChild($1); $$.addChild($2); }
-    |LISTA1              { $$ = new Node('LISTAS'); $$.addChild($1); }
+LISTA2 : LISTA2 BARRAS LISTA2 { $$ = new Node_tree('LISTA2',''); $$.addChild($1); $$.addChild($2); $$.addChild($3); }
+       | LISTAS               { $$ = new Node_tree('LISTA2',''); $$.addChild($1); }
+       ;
+
+LISTAS: LISTA1 LISTAS    { $$ = new Node_tree('LISTAS',''); $$.addChild($1); $$.addChild($2); }
+    |LISTA1              { $$ = new Node_tree('LISTAS',''); $$.addChild($1); }
     ;
 
-LISTA1:ATRIBUTO BARRAS LISTA1       { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild($2); $$.addChild($3); }
-    |ASTERISCO BARRAS LISTA1        { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild($2); $$.addChild($3); }
-    |PALABRAS_R BARRAS LISTA1       { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild($2); $$.addChild($3); }
-    |ATRIBUTO1 BARRAS LISTA1        { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild($2); $$.addChild($3); }
-    |PR TK_PARENTESIS BARRAS LISTA1 { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild(new Node($2,'TK_PARENTESIS')); $$.addChild($3); $$.addChild($4); }
-    |IDS BARRAS LISTA1              { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild($2); $$.addChild($3); }
-    |ATRIBUTO                       { $$ = new Node('LISTA1'); $$.addChild($1); }
-    |ATRIBUTO1                      { $$ = new Node('LISTA1'); $$.addChild($1); }
-    |PR  TK_PARENTESIS              { $$ = new Node('LISTA1'); $$.addChild($1); $$.addChild(new Node($2,'TK_PARENTESIS')); }
-    |PALABRAS_R                     { $$ = new Node('LISTA1'); $$.addChild($1); }
-    |IDS                            { $$ = new Node('LISTA1'); $$.addChild($1); }
-    |ASTERISCO                      { $$ = new Node('LISTA1'); $$.addChild($1); }
-    |                               { $$ = new Node('LISTA1'); $$.addChild(new Node('ε','ε')); }
-    |error                          {Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+LISTA1: PALABRAS_R                  { $$ = new Node_tree('LISTA1',''); $$.addChild($1); }
+    |IDS                            { $$ = new Node_tree('LISTA1',''); $$.addChild($1); }
+    |ATRIBUTO                       { $$ = new Node_tree('LISTA1',''); $$.addChild($1); }
+    |ATRIBUTO1                      { $$ = new Node_tree('LISTA1',''); $$.addChild($1); }
+    |ASTERISCO                      { $$ = new Node_tree('LISTA1',''); $$.addChild($1); }
+    |                               { $$ = new Node_tree('LISTA1',''); $$.addChild(new Node_tree('ε','ε')); }
+    |error                          { $$ = new Node_tree('error','error'); }
     ;
 
-BARRAS: TK_BARRA_VERTICAL { $$ = new Node('BARRAS'); $$.addChild(new Node($1,'TK_BARRA_VERTICAL')); }
-    |TK_AND { $$ = new Node('BARRAS'); $$.addChild(new Node($1,'TK_AND')); }
-    |TK_OR { $$ = new Node('BARRAS'); $$.addChild(new Node($1,'TK_OR')); };
+BARRAS: TK_BARRA_VERTICAL { $$ = new Node_tree('BARRAS',''); $$.addChild(new Node_tree($1,'TK_BARRA_VERTICAL')); }
+    |TK_AND { $$ = new Node_tree('BARRAS',''); $$.addChild(new Node_tree($1,'TK_AND')); }
+    |TK_OR { $$ = new Node_tree('BARRAS',''); $$.addChild(new Node_tree($1,'TK_OR')); };
 
-PUNTO: TK_PUNTO PUNTO1          { $$ = new Node('PUNTO'); $$.addChild(new Node($1,'TK_PUNTO')); $$.addChild($2); }
-    |error                      {Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+PUNTO: TK_PUNTO PUNTO1          { $$ = new Node_tree('PUNTO',''); $$.addChild(new Node_tree($1,'TK_PUNTO')); $$.addChild($2); }
+    |error                      { $$ = new Node_tree('error','error');}
     ;
-PUNTO1: LISTAS                  { $$ = new Node('PUNTO1'); $$.addChild($1); }
-    |error                      {Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno))}
+PUNTO1: LISTAS                  { $$ = new Node_tree('PUNTO1',''); $$.addChild($1); }
+    |error                      { $$ = new Node_tree('error','error');}
     ;
 
-IDS: TK_DBARRA TK_IDENTIFICADOR ASTERISCO1      { $$ = new Node('IDS'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_IDENTIFICADOR')); $$.addChild($3); }
-    |TK_BARRA TK_IDENTIFICADOR  ASTERISCO1      { $$ = new Node('IDS'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_IDENTIFICADOR')); $$.addChild($3); }
-    |TK_DBARRA TK_IDENTIFICADOR                 { $$ = new Node('IDS'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_IDENTIFICADOR')); }
-    |TK_BARRA TK_IDENTIFICADOR                  { $$ = new Node('IDS'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_IDENTIFICADOR')); }
-    |TK_IDENTIFICADOR                           { $$ = new Node('IDS'); $$.addChild(new Node($1,'TK_IDENTIFICADOR')); }
+IDS: TK_DBARRA TK_IDENTIFICADOR ASTERISCO1      { $$ = new Node_tree('IDS',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_IDENTIFICADOR')); $$.addChild($3); }
+    |TK_BARRA TK_IDENTIFICADOR  ASTERISCO1      { $$ = new Node_tree('IDS',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_IDENTIFICADOR')); $$.addChild($3); }
+    |TK_DBARRA TK_IDENTIFICADOR                 { $$ = new Node_tree('IDS',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_IDENTIFICADOR')); }
+    |TK_BARRA TK_IDENTIFICADOR                  { $$ = new Node_tree('IDS',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_IDENTIFICADOR')); }
+    |TK_IDENTIFICADOR                           { $$ = new Node_tree('IDS',''); $$.addChild(new Node_tree($1,'TK_IDENTIFICADOR')); }
     ;
 
 
-ATRIBUTO: TK_DBARRA TK_ARROBA TK_POR L_ATRIBUTO         { $$ = new Node('ATRIBUTO'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_ARROBA')); $$.addChild(new Node($3,'TK_POR')); $$.addChild($4); }
-    |TK_BARRA TK_ARROBA TK_POR L_ATRIBUTO               { $$ = new Node('ATRIBUTO'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_ARROBA')); $$.addChild(new Node($3,'TK_POR')); $$.addChild($4); } 
-    |TK_ARROBA TK_POR  L_ATRIBUTO                       { $$ = new Node('ATRIBUTO'); $$.addChild(new Node($1,'TK_ARROBA')); $$.addChild(new Node($2,'TK_POR')); $$.addChild($3); }
-    |TK_DBARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO    { $$ = new Node('ATRIBUTO'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_ARROBA')); $$.addChild(new Node($3,'TK_IDENTIFICADOR')); $$.addChild($4); }
-    |TK_BARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO     { $$ = new Node('ATRIBUTO'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_ARROBA')); $$.addChild(new Node($3,'TK_IDENTIFICADOR')); $$.addChild($4); } 
-    |TK_ARROBA TK_IDENTIFICADOR  L_ATRIBUTO             { $$ = new Node('ATRIBUTO'); $$.addChild(new Node($1,'TK_ARROBA')); $$.addChild(new Node($2,'TK_IDENTIFICADOR')); $$.addChild($3); }     
+ATRIBUTO: TK_DBARRA TK_ARROBA TK_POR L_ATRIBUTO         { $$ = new Node_tree('ATRIBUTO',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_ARROBA')); $$.addChild(new Node_tree($3,'TK_POR')); $$.addChild($4); }
+    |TK_BARRA TK_ARROBA TK_POR L_ATRIBUTO               { $$ = new Node_tree('ATRIBUTO',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_ARROBA')); $$.addChild(new Node_tree($3,'TK_POR')); $$.addChild($4); } 
+    |TK_ARROBA TK_POR  L_ATRIBUTO                       { $$ = new Node_tree('ATRIBUTO',''); $$.addChild(new Node_tree($1,'TK_ARROBA')); $$.addChild(new Node_tree($2,'TK_POR')); $$.addChild($3); }
+    |TK_DBARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO    { $$ = new Node_tree('ATRIBUTO',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_ARROBA')); $$.addChild(new Node_tree($3,'TK_IDENTIFICADOR')); $$.addChild($4); }
+    |TK_BARRA TK_ARROBA TK_IDENTIFICADOR L_ATRIBUTO     { $$ = new Node_tree('ATRIBUTO',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_ARROBA')); $$.addChild(new Node_tree($3,'TK_IDENTIFICADOR')); $$.addChild($4); } 
+    |TK_ARROBA TK_IDENTIFICADOR  L_ATRIBUTO             { $$ = new Node_tree('ATRIBUTO',''); $$.addChild(new Node_tree($1,'TK_ARROBA')); $$.addChild(new Node_tree($2,'TK_IDENTIFICADOR')); $$.addChild($3); }     
     ;
 
 
-L_ATRIBUTO: ATRIBUTO1 L_ATRIBUTO    { $$ = new Node('L_ATRIBUTO'); $$.addChild($1); $$.addChild($2); }
-    |ATRIBUTO1                      { $$ = new Node('L_ATRIBUTO'); $$.addChild($1); }
+L_ATRIBUTO: ATRIBUTO1 L_ATRIBUTO    { $$ = new Node_tree('L_ATRIBUTO',''); $$.addChild($1); $$.addChild($2); }
+    |ATRIBUTO1                      { $$ = new Node_tree('L_ATRIBUTO',''); $$.addChild($1); }
     ;
 
-ATRIBUTO1: TK_DBARRA  TK_DPUNTO     { $$ = new Node('ATRIBUTO1'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_DPUTNO')); }
-    |TK_DBARRA TK_PUNTO             { $$ = new Node('ATRIBUTO1'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_PUNTO')); }
-    |TK_BARRA TK_DPUNTO             { $$ = new Node('ATRIBUTO1'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_DPUNTO')); }
-    |TK_BARRA TK_PUNTO              { $$ = new Node('ATRIBUTO1'); $$.addChild(new Node($1,'TK_BARRA')); $$.addChild(new Node($2,'TK_PUNTO')); }
-    |                               { $$ = new Node('ATRIBUTO1'); $$.addChild(new Node('ε','ε')); }
+ATRIBUTO1: TK_DBARRA  TK_DPUNTO     { $$ = new Node_tree('ATRIBUTO1',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_DPUTNO')); }
+    |TK_DBARRA TK_PUNTO             { $$ = new Node_tree('ATRIBUTO1',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_PUNTO')); }
+    |TK_BARRA TK_DPUNTO             { $$ = new Node_tree('ATRIBUTO1',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_DPUNTO')); }
+    |TK_BARRA TK_PUNTO              { $$ = new Node_tree('ATRIBUTO1',''); $$.addChild(new Node_tree($1,'TK_BARRA')); $$.addChild(new Node_tree($2,'TK_PUNTO')); }
+    |                               { $$ = new Node_tree('ATRIBUTO1',''); $$.addChild(new Node_tree('ε','ε')); }
     ;
 
-PALABRAS_R: TK_DBARRA PR TK_DDP OPCION ASTERISCO1   { $$ = new Node('PALABRAS_R'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild($2); $$.addChild(new Node($3,'TK_DDP')); $$.addChild($4); $$.addChild($5); }
-    |TK_BARRA PR TK_DDP OPCION  ASTERISCO1          { $$ = new Node('PALABRAS_R'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild($2); $$.addChild(new Node($3,'TK_DDP')); $$.addChild($4); $$.addChild($5); }
-    |TK_DBARRA PR TK_DDP OPCION                     { $$ = new Node('PALABRAS_R'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild($2); $$.addChild(new Node($3,'TK_DDP')); $$.addChild($4); }
-    |TK_BARRA PR TK_DDP OPCION                      { $$ = new Node('PALABRAS_R'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild($2); $$.addChild(new Node($3,'TK_DDP')); $$.addChild($4); }    
+PALABRAS_R: TK_DBARRA PR TK_DDP OPCION ASTERISCO1   { $$ = new Node_tree('PALABRAS_R',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild($2); $$.addChild(new Node_tree($3,'TK_DDP')); $$.addChild($4); $$.addChild($5); }
+    |TK_BARRA PR TK_DDP OPCION  ASTERISCO1          { $$ = new Node_tree('PALABRAS_R',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild($2); $$.addChild(new Node_tree($3,'TK_DDP')); $$.addChild($4); $$.addChild($5); }
+    |TK_DBARRA PR TK_DDP OPCION                     { $$ = new Node_tree('PALABRAS_R',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild($2); $$.addChild(new Node_tree($3,'TK_DDP')); $$.addChild($4); }
+    |TK_BARRA PR TK_DDP OPCION                      { $$ = new Node_tree('PALABRAS_R',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild($2); $$.addChild(new Node_tree($3,'TK_DDP')); $$.addChild($4); }
+    |TK_BARRA PR  TK_PARENTESIS                     { $$ = new Node_tree_tree('PALABRAS_R',''); $$.addChild(new Node_tree_tree($1,'TK_BARRA')); $$.addChild($2); $$.addChild(new Node_tree_tree($3,'TK_PARENTESIS')); }
+    |TK_DBARRA PR  TK_PARENTESIS                    { $$ = new Node_tree_tree('PALABRAS_R',''); $$.addChild(new Node_tree_tree($1,'TK_DBARRA')); $$.addChild($2); $$.addChild(new Node_tree_tree($3,'TK_PARENTESIS')); }
     ;
 
-PR: TK_ANCESTOR             { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_ANCESTOR')); }
-    |TK_ANCESTOR_OR_SELF    { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_ANCESTOR_OR_SELF')); }
-    |TK_ATTRIBUTE           { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_ATTRIBUTE')); }
-    |TK_CHILD               { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_CHILD')); }
-    |TK_DESCENDANT          { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_DESCENDANT')); }
-    |TK_DESCENDANT_OR_SELF  { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_DESCENDANT_OR_SELF')); }
-    |TK_FOLLOWING           { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_FOLLOWING')); }
-    |TK_FOLLOWING_SIBLING   { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_FOLLOWING_SIBLING')); }
-    |TK_NAMESPACE           { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_NAMESPACE')); }
-    |TK_PARENT              { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_PARENT')); }
-    |TK_PRECEDING           { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_PRECEDING')); }
-    |TK_PRECEDING_SIBLING   { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_PRECEDING_SIBLING')); }
-    |TK_SELF                { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_SELF')); }
-    |TK_LAST                { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_LAST')); }
-    |TK_POSITION            { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_POSITION')); }
-    |TK_NODE                { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_NODE')); }
-    |TK_TEXT                { $$ = new Node('PR'); $$.addChild(new Node($1,'TK_TEXT')); }
-    |error                  {Errores.Error.add(new CNodoError.NodoError("Sintactico","No se esperaba el caracter: "+yytext,yylineno));}
-    ;
-
-
-OPCION: TK_LAST TK_PARENTESIS   { $$ = new Node('OPCION'); $$.addChild(new Node($1,'TK_LAST')); $$.addChild(new Node($2,'TK_PARENTESIS')); }
-    |TK_POSITION TK_PARENTESIS  { $$ = new Node('OPCION'); $$.addChild(new Node($1,'TK_POSITION')); $$.addChild(new Node($2,'TK_PARENTESIS')); }
-    |TK_NODE TK_PARENTESIS      { $$ = new Node('OPCION'); $$.addChild(new Node($1,'TK_NODE')); $$.addChild(new Node($2,'TK_PARENTESIS')); }
-    |TK_TEXT TK_PARENTESIS      { $$ = new Node('OPCION'); $$.addChild(new Node($1,'TK_TEXT')); $$.addChild(new Node($2,'TK_PARENTESIS')); }
-    |TK_IDENTIFICADOR           { $$ = new Node('OPCION'); $$.addChild(new Node($1,'TK_IDENTIFICADOR')); }
-    ;
-
-ASTERISCO:TK_DBARRA TK_POR L_ASTERISCO    { $$ = new Node('ASTERISCO'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_POR')); $$.addChild($3); }
-    |TK_BARRA TK_POR L_ASTERISCO          { $$ = new Node('ASTERISCO'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_POR')); $$.addChild($3); }
-    |TK_DBARRA TK_POR                     { $$ = new Node('ASTERISCO'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_POR')); }
-    |TK_BARRA TK_POR                      { $$ = new Node('ASTERISCO'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_POR')); }
-    ;
-
-L_ASTERISCO: ASTERISCO1 L_ASTERISCO          { $$ = new Node('L_ASTERISCO'); $$.addChild($1); $$.addChild($2); }
-    |ASTERISCO1                              { $$ = new Node('L_ASTERISCO'); $$.addChild($1); }
-    ;
-
-ASTERISCO1:TK_CORCHETE_IZQUIERDO EXP TK_CORCHETE_DERECHO    { $$ = new Node('ASTERISCO1'); $$.addChild(new Node($1,'TK_CORCHETE_IZQUIERDO')); $$.addChild($2); $$.addChild(new Node($3,'TK_CORCHETE_DERECHO'));  }
-    |TK_IDENTIFICADOR          { $$ = new Node('ASTERISCO1'); $$.addChild(new Node($1,'TK_IDENTIFICADOR')); }
-    ;
-
-EXP:  EXP1 EXP_P                { $$ = new Node('EXP'); $$.addChild($1); $$.addChild($2); };
-EXP_P: TK_MAS EXP1 EXP_P        { $$ = new Node('EXP_P'); $$.addChild(new Node($1,'TK_MAS')); $$.addChild($2); $$.addChild($3); }
-    | TK_MENOS EXP1 EXP_P       { $$ = new Node('EXP_P'); $$.addChild(new Node($1,'TK_MENOS')); $$.addChild($2); $$.addChild($3); }
-    |                           { $$ = new Node('EXP_P'); $$.addChild(new Node('ε','ε')); } 
-    ;
-EXP1: EXP2 EXP1_P               { $$ = new Node('EXP1'); $$.addChild($1); $$.addChild($2); };
-EXP1_P:TK_POR EXP2 EXP1_P       { $$ = new Node('EXP1_P'); $$.addChild(new Node($1,'TK_POR')); $$.addChild($2); $$.addChild($3); }
-    | TK_DIVISION EXP2 EXP1_P   { $$ = new Node('EXP1_P'); $$.addChild(new Node($1,'TK_DIVISION')); $$.addChild($2); $$.addChild($3); }
-    | TK_MODULO EXP2 EXP1_P     { $$ = new Node('EXP1_P'); $$.addChild(new Node($1,'TK_MODULO')); $$.addChild($2); $$.addChild($3); }
-    |                           { $$ = new Node('EXP1_P'); $$.addChild(new Node('ε','ε')); }
-    ;
-EXP2: EXP3 EXP2_P                   { $$ = new Node('EXP2'); $$.addChild($1); $$.addChild($2); };
-EXP2_P:TK_MENOR EXP3 EXP2_P         { $$ = new Node('EXP2_P'); $$.addChild(new Node($1,'TK_MENOR')); $$.addChild($2); $$.addChild($3); }
-    | TK_MAYOR EXP3 EXP2_P          { $$ = new Node('EXP2_P'); $$.addChild(new Node($1,'TK_MAYOR')); $$.addChild($2); $$.addChild($3); }
-    | TK_MENOR_IGUAL EXP3 EXP2_P    { $$ = new Node('EXP2_P'); $$.addChild(new Node($1,'TK_MENOR_IGUAL')); $$.addChild($2); $$.addChild($3); }
-    | TK_MAYOR_IGUAL EXP3 EXP2_P    { $$ = new Node('EXP2_P'); $$.addChild(new Node($1,'TK_MAYOR_IGUAL')); $$.addChild($2); $$.addChild($3); }
-    | TK_IGUALDAD EXP3 EXP2_P       { $$ = new Node('EXP2_P'); $$.addChild(new Node($1,'TK_IGUALDAD')); $$.addChild($2); $$.addChild($3); }
-    | TK_DESIGUALDAD EXP3 EXP2_P    { $$ = new Node('EXP2_P'); $$.addChild(new Node($1,'TK_DESIGUALDAD')); $$.addChild($2); $$.addChild($3); }
-    |                               { $$ = new Node('EXP2_P'); $$.addChild(new Node('ε','ε')); }
-    ;
-EXP3: EXP4 EXP3_P                       { $$ = new Node('EXP3'); $$.addChild($1); $$.addChild($2); };
-EXP3_P: TK_OR EXP4 EXP3_P               { $$ = new Node('EXP3_P'); $$.addChild(new Node($1,'TK_OR')); $$.addChild($2); $$.addChild($3); }
-    | TK_AND EXP4 EXP3_P                { $$ = new Node('EXP3_P'); $$.addChild(new Node($1,'TK_AND')); $$.addChild($2); $$.addChild($3); }
-    | TK_BARRA_VERTICAL EXP4 EXP3_P     { $$ = new Node('EXP3_P'); $$.addChild(new Node($1,'TK_BARRA_VERTICAL')); $$.addChild($2); $$.addChild($3); }
-    |                                   { $$ = new Node('EXP3_P'); $$.addChild(new Node('ε','ε')); }
-    ;
-EXP4: TK_PARENTESIS_IZQUIERDO EXP TK_PARENTESIS_DERECHO  { $$ = new Node('EXP4'); $$.addChild($1); }
-    | ATRI                                               { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_ARROBA EXP                                      { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_DECIMAL                                         { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_ENTERO                                          { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_CADENA                                          { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_IDENTIFICADOR                                   { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_POSITION TK_PARENTESIS                          { $$ = new Node('EXP4'); $$.addChild($1); }
-    | TK_LAST TK_PARENTESIS                              { $$ = new Node('EXP4'); $$.addChild($1); }
-    | PAL_RE                                             { $$ = new Node('EXP4'); $$.addChild($1); }
+PR: TK_ANCESTOR             { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_ANCESTOR')); }
+    |TK_ANCESTOR_OR_SELF    { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_ANCESTOR_OR_SELF')); }
+    |TK_ATTRIBUTE           { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_ATTRIBUTE')); }
+    |TK_CHILD               { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_CHILD')); }
+    |TK_DESCENDANT          { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_DESCENDANT')); }
+    |TK_DESCENDANT_OR_SELF  { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_DESCENDANT_OR_SELF')); }
+    |TK_FOLLOWING           { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_FOLLOWING')); }
+    |TK_FOLLOWING_SIBLING   { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_FOLLOWING_SIBLING')); }
+    |TK_NAMESPACE           { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_NAMESPACE')); }
+    |TK_PARENT              { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_PARENT')); }
+    |TK_PRECEDING           { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_PRECEDING')); }
+    |TK_PRECEDING_SIBLING   { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_PRECEDING_SIBLING')); }
+    |TK_SELF                { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_SELF')); }
+    |TK_LAST                { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_LAST')); }
+    |TK_POSITION            { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_POSITION')); }
+    |TK_Node                { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_Node_tree')); }
+    |TK_TEXT                { $$ = new Node_tree('PR',''); $$.addChild(new Node_tree($1,'TK_TEXT')); }
     ;
 
 
-PAL_RE: PR TK_DDP OPCION { $$ = new Node('PAL_RE'); $$.addChild($1); $$.addChild(new Node($2,'TK_DDP')); $$.addChild($3); };
-
-ATRI: TK_ARROBA TK_POR L_ATRI { $$ = new Node('ATRI'); $$.addChild(new Node($1,'TK_ARROBA')); $$.addChild(new Node($2,'TK_POR')); $$.addChild($3); };
-
-L_ATRI: ATRI1 L_ATRI { $$ = new Node('L_ATRI'); $$.addChild($1); $$.addChild($2); }
-    |ATRI1          { $$ = new Node('L_ATRI'); $$.addChild($1); }
+OPCION: TK_LAST TK_PARENTESIS   { $$ = new Node_tree('OPCION',''); $$.addChild(new Node_tree($1,'TK_LAST')); $$.addChild(new Node_tree($2,'TK_PARENTESIS')); }
+    |TK_POSITION TK_PARENTESIS  { $$ = new Node_tree('OPCION',''); $$.addChild(new Node_tree($1,'TK_POSITION')); $$.addChild(new Node_tree($2,'TK_PARENTESIS')); }
+    |TK_Node TK_PARENTESIS      { $$ = new Node_tree('OPCION',''); $$.addChild(new Node_tree($1,'TK_Node_tree')); $$.addChild(new Node_tree($2,'TK_PARENTESIS')); }
+    |TK_TEXT TK_PARENTESIS      { $$ = new Node_tree('OPCION',''); $$.addChild(new Node_tree($1,'TK_TEXT')); $$.addChild(new Node_tree($2,'TK_PARENTESIS')); }
+    |TK_IDENTIFICADOR           { $$ = new Node_tree('OPCION',''); $$.addChild(new Node_tree($1,'TK_IDENTIFICADOR')); }
     ;
 
-ATRI1: TK_DBARRA TK_DPUNTO      { $$ = new Node('ATRI1'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_DPUTNO')); }
-    |TK_DBARRA TK_PUNTO         { $$ = new Node('ATRI1'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_PUTNO')); }
-    |TK_BARRA TK_DPUNTO         { $$ = new Node('ATRI1'); $$.addChild(new Node($1,'TK_DBARRA')); $$.addChild(new Node($2,'TK_DPUTNO')); }
-    |TK_BARRA TK_PUNTO          { $$ = new Node('ATRI1'); $$.addChild(new Node($1,'TK_BARRA'));  $$.addChild(new Node($2,'TK_PUTNO')); }
-    |                           { $$ = new Node('ATRI1'); $$.addChild(new Node('ε','ε')); }         
+ASTERISCO:TK_DBARRA TK_POR L_ASTERISCO    { $$ = new Node_tree('ASTERISCO',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_POR')); $$.addChild($3); }
+    |TK_BARRA TK_POR L_ASTERISCO          { $$ = new Node_tree('ASTERISCO',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_POR')); $$.addChild($3); }
+    |TK_DBARRA TK_POR                     { $$ = new Node_tree('ASTERISCO',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_POR')); }
+    |TK_BARRA TK_POR                      { $$ = new Node_tree('ASTERISCO',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_POR')); }
+    ;
+
+L_ASTERISCO: ASTERISCO1 L_ASTERISCO          { $$ = new Node_tree('L_ASTERISCO',''); $$.addChild($1); $$.addChild($2); }
+    |ASTERISCO1                              { $$ = new Node_tree('L_ASTERISCO',''); $$.addChild($1); }
+    ;
+
+ASTERISCO1:TK_CORCHETE_IZQUIERDO EXP TK_CORCHETE_DERECHO    { $$ = new Node_tree('ASTERISCO1',''); $$.addChild(new Node_tree($1,'TK_CORCHETE_IZQUIERDO')); $$.addChild($2); $$.addChild(new Node_tree($3,'TK_CORCHETE_DERECHO'));  }
+    |TK_IDENTIFICADOR          { $$ = new Node_tree('ASTERISCO1',''); $$.addChild(new Node_tree($1,'TK_IDENTIFICADOR')); }
+    ;
+
+EXP:  EXP1 EXP_P                { $$ = new Node_tree('EXP',''); $$.addChild($1); $$.addChild($2); };
+EXP_P: TK_MAS EXP1 EXP_P        { $$ = new Node_tree('EXP_P',''); $$.addChild(new Node_tree($1,'TK_MAS')); $$.addChild($2); $$.addChild($3); }
+    | TK_MENOS EXP1 EXP_P       { $$ = new Node_tree('EXP_P',''); $$.addChild(new Node_tree($1,'TK_MENOS')); $$.addChild($2); $$.addChild($3); }
+    |                           { $$ = new Node_tree('EXP_P',''); $$.addChild(new Node_tree('ε','ε')); } 
+    ;
+EXP1: EXP2 EXP1_P               { $$ = new Node_tree('EXP1',''); $$.addChild($1); $$.addChild($2); };
+EXP1_P:TK_POR EXP2 EXP1_P       { $$ = new Node_tree('EXP1_P',''); $$.addChild(new Node_tree($1,'TK_POR')); $$.addChild($2); $$.addChild($3); }
+    | TK_DIVISION EXP2 EXP1_P   { $$ = new Node_tree('EXP1_P',''); $$.addChild(new Node_tree($1,'TK_DIVISION')); $$.addChild($2); $$.addChild($3); }
+    | TK_MODULO EXP2 EXP1_P     { $$ = new Node_tree('EXP1_P',''); $$.addChild(new Node_tree($1,'TK_MODULO')); $$.addChild($2); $$.addChild($3); }
+    |                           { $$ = new Node_tree('EXP1_P',''); $$.addChild(new Node_tree('ε','ε')); }
+    ;
+EXP2: EXP3 EXP2_P                   { $$ = new Node_tree('EXP2',''); $$.addChild($1); $$.addChild($2); };
+EXP2_P:TK_MENOR EXP3 EXP2_P         { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree($1,'TK_MENOR')); $$.addChild($2); $$.addChild($3); }
+    | TK_MAYOR EXP3 EXP2_P          { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree($1,'TK_MAYOR')); $$.addChild($2); $$.addChild($3); }
+    | TK_MENOR_IGUAL EXP3 EXP2_P    { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree($1,'TK_MENOR_IGUAL')); $$.addChild($2); $$.addChild($3); }
+    | TK_MAYOR_IGUAL EXP3 EXP2_P    { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree($1,'TK_MAYOR_IGUAL')); $$.addChild($2); $$.addChild($3); }
+    | TK_IGUALDAD EXP3 EXP2_P       { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree($1,'TK_IGUALDAD')); $$.addChild($2); $$.addChild($3); }
+    | TK_DESIGUALDAD EXP3 EXP2_P    { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree($1,'TK_DESIGUALDAD')); $$.addChild($2); $$.addChild($3); }
+    |                               { $$ = new Node_tree('EXP2_P',''); $$.addChild(new Node_tree('ε','ε')); }
+    ;
+EXP3: EXP4 EXP3_P                       { $$ = new Node_tree('EXP3',''); $$.addChild($1); $$.addChild($2); };
+EXP3_P: TK_OR EXP4 EXP3_P               { $$ = new Node_tree('EXP3_P',''); $$.addChild(new Node_tree($1,'TK_OR')); $$.addChild($2); $$.addChild($3); }
+    | TK_AND EXP4 EXP3_P                { $$ = new Node_tree('EXP3_P',''); $$.addChild(new Node_tree($1,'TK_AND')); $$.addChild($2); $$.addChild($3); }
+    | TK_BARRA_VERTICAL EXP4 EXP3_P     { $$ = new Node_tree('EXP3_P',''); $$.addChild(new Node_tree($1,'TK_BARRA_VERTICAL')); $$.addChild($2); $$.addChild($3); }
+    |                                   { $$ = new Node_tree('EXP3_P',''); $$.addChild(new Node_tree('ε','ε')); }
+    ;
+EXP4: TK_PARENTESIS_IZQUIERDO EXP TK_PARENTESIS_DERECHO  { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_PARENTESIS_IZQUIERDO')); $$.addChild($2); $$.addChild(new Node_tree($3,'TK_PARENTESIS_DERECHO')); }
+    | ATRI                                               { $$ = new Node_tree('EXP4',''); $$.addChild($1); }
+    | TK_ARROBA EXP                                      { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_ARROBA')); $$.addChild($2); }
+    | TK_DECIMAL                                         { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_DECIMAL')); }
+    | TK_ENTERO                                          { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_ENTERO')); }
+    | TK_CADENA                                          { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_CADENA')); }
+    | TK_IDENTIFICADOR                                   { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_IDENTIFICADOR')); }
+    | TK_POSITION TK_PARENTESIS                          { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_POSITION')); $$.addChild(new Node_tree($2,'TK_PARENTESIS')); }
+    | TK_LAST TK_PARENTESIS                              { $$ = new Node_tree('EXP4',''); $$.addChild(new Node_tree($1,'TK_LAST')); $$.addChild(new Node_tree($2,'TK_PARENTESIS'));}
+    | PAL_RE                                             { $$ = new Node_tree('EXP4',''); $$.addChild($1); }
+    ;
+
+
+PAL_RE: PR TK_DDP OPCION { $$ = new Node_tree('PAL_RE',''); $$.addChild($1); $$.addChild(new Node_tree($2,'TK_DDP')); $$.addChild($3); };
+
+ATRI: TK_ARROBA TK_POR L_ATRI { $$ = new Node_tree('ATRI',''); $$.addChild(new Node_tree($1,'TK_ARROBA')); $$.addChild(new Node_tree($2,'TK_POR')); $$.addChild($3); };
+
+L_ATRI: ATRI1 L_ATRI { $$ = new Node_tree('L_ATRI',''); $$.addChild($1); $$.addChild($2); }
+    |ATRI1          { $$ = new Node_tree('L_ATRI',''); $$.addChild($1); }
+    ;
+
+ATRI1: TK_DBARRA TK_DPUNTO      { $$ = new Node_tree('ATRI1',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_DPUTNO')); }
+    |TK_DBARRA TK_PUNTO         { $$ = new Node_tree('ATRI1',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_PUTNO')); }
+    |TK_BARRA TK_DPUNTO         { $$ = new Node_tree('ATRI1',''); $$.addChild(new Node_tree($1,'TK_DBARRA')); $$.addChild(new Node_tree($2,'TK_DPUTNO')); }
+    |TK_BARRA TK_PUNTO          { $$ = new Node_tree('ATRI1',''); $$.addChild(new Node_tree($1,'TK_BARRA'));  $$.addChild(new Node_tree($2,'TK_PUTNO')); }
+    |                           { $$ = new Node_tree('ATRI1',''); $$.addChild(new Node_tree('ε','ε')); }         
     ;
 
 /*FIN DE LA GRAMATICA */

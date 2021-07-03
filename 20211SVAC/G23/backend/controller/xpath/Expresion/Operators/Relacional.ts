@@ -1,9 +1,12 @@
 import { Ambito } from "../../../../model/xml/Ambito/Ambito";
 import { Tipos } from "../../../../model/xpath/Enum";
+import { Contexto } from "../../../Contexto";
+import filterElements from "./Match";
 
-function Relacional(_expresion: any, _ambito: Ambito, _contexto: Array<any>) {
-    let operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo, _contexto);
-    if (operators.error) return operators;
+function Relacional(_expresion: any, _ambito: Ambito, _contexto: Contexto, id?: any) {
+    let operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _expresion.tipo, _contexto, id);
+    if (operators === null || operators.error) return operators;
+    if (Array.isArray(operators)) return operators;
     switch (operators.tipo) {
         case Tipos.RELACIONAL_MAYOR:
             return mayor(operators.op1, operators.op2);
@@ -22,23 +25,30 @@ function Relacional(_expresion: any, _ambito: Ambito, _contexto: Array<any>) {
     }
 }
 
-function init(_opIzq: any, _opDer: any, _ambito: Ambito, _tipo: Tipos, _contexto: Array<any>) {
+function init(_opIzq: any, _opDer: any, _ambito: Ambito, _tipo: Tipos, _contexto: Contexto, id?: any) {
     const Expresion = require("../Expresion");
-    let op1 = Expresion(_opIzq, _ambito, _contexto);
-    if (op1.error) return op1;
-    let op2 = Expresion(_opDer, _ambito, _contexto);
-    if (op2.error) return op2;
+    let op1 = Expresion(_opIzq, _ambito, _contexto, id);
+    if (op1 === null || op1.error) return op1;
+    let op2 = Expresion(_opDer, _ambito, _contexto, id);
+    if (op2 === null || op2.error) return op2;
     let tipo: Tipos = _tipo;
+
+    if (op1.elementos || op2.elementos) {
+        if (op1.elementos && (op2.tipo === Tipos.NUMBER || op2.tipo === Tipos.STRING))
+            return filterElements(op2.valor, tipo, op1, _contexto);
+        else
+            return null;
+    }
     // Numéricas
     if (tipo === Tipos.RELACIONAL_MAYOR || tipo === Tipos.RELACIONAL_MAYORIGUAL ||
         tipo === Tipos.RELACIONAL_MENOR || tipo === Tipos.RELACIONAL_MENORIGUAL) {
         if ((op1.tipo === Tipos.FUNCION_POSITION || op1.tipo === Tipos.FUNCION_LAST) && op2.tipo === Tipos.NUMBER) {
-            op1 = _contexto.length;
+            op1 = _contexto.getLength();
             op2 = Number(op2.valor);
         }
         else if (op1.tipo === Tipos.NUMBER && (op2.tipo === Tipos.FUNCION_POSITION || op2.tipo === Tipos.FUNCION_LAST)) {
             op2 = Number(op1.valor);
-            op1 = _contexto.length;
+            op1 = _contexto.getLength();
             if (_tipo === Tipos.RELACIONAL_MAYOR) tipo = Tipos.RELACIONAL_MENOR;
             if (_tipo === Tipos.RELACIONAL_MAYORIGUAL) tipo = Tipos.RELACIONAL_MENORIGUAL;
             if (_tipo === Tipos.RELACIONAL_MENOR) tipo = Tipos.RELACIONAL_MAYOR;
@@ -88,12 +98,12 @@ function init(_opIzq: any, _opDer: any, _ambito: Ambito, _tipo: Tipos, _contexto
         let opIzq = { valor: 0, tipo: op1.tipo };
         let opDer = { valor: 0, tipo: op2.tipo };
         if ((op1.tipo === Tipos.FUNCION_POSITION || op1.tipo === Tipos.FUNCION_LAST) && op2.tipo === Tipos.NUMBER) {
-            opIzq.valor = _contexto.length;
+            opIzq.valor = _contexto.getLength();
             opDer.valor = Number(op2.valor);
         }
         else if (op1.tipo === Tipos.NUMBER && (op2.tipo === Tipos.FUNCION_POSITION || op2.tipo === Tipos.FUNCION_LAST)) {
             opIzq.valor = Number(op1.valor);
-            opDer.valor = _contexto.length;
+            opDer.valor = _contexto.getLength();
         }
         else if (op1.tipo === Tipos.ATRIBUTOS || op2.tipo === Tipos.ATRIBUTOS) {
             opIzq.tipo = Tipos.ATRIBUTOS;
@@ -226,4 +236,4 @@ function diferente(_opIzq: any, _opDer: any) {
     return { e1: _opIzq, e2: _opDer, tipo: Tipos.ELEMENTOS, desigualdad: Tipos.RELACIONAL_DIFERENTE }
 }
 
-export =  Relacional;
+export = Relacional;

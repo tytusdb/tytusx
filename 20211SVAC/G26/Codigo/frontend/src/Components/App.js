@@ -27,45 +27,17 @@ class App extends React.Component {
   state = {
     open: false,
     modalOpen: false,
+    modalOpenCst: false,
     alertOpen: false,
     opcion: '',
     consoleText: '',
     fileName: '',
     xml: '',
     xpath: '',
+    listaErrores: '',
     fileDownloadUrl: null,
     selectedOption: '',
-    dot:`digraph {
-
-      tbl [
-    
-        shape=plaintext
-        label=<
-    
-          <table border='0' cellborder='1' color='blue' cellspacing='0'>
-            <tr><td>foo</td><td>bar</td><td>baz</td></tr>
-            <tr><td cellpadding='4'>
-              <table color='orange' cellspacing='0'>
-                <tr><td>one  </td><td>two  </td><td>three</td></tr>
-                <tr><td>four </td><td>five </td><td>six  </td></tr>
-                <tr><td>seven</td><td>eight</td><td>nine </td></tr>
-              </table>
-            </td>
-            <td colspan='2' rowspan='2'>
-              <table color='pink' border='0' cellborder='1' cellpadding='10' cellspacing='0'>
-                <tr><td>eins</td><td>zwei</td><td rowspan='2'>drei<br/>sechs</td></tr>
-                <tr><td>vier</td><td>fünf</td>                             </tr>
-              </table>
-            </td> 
-            </tr>
-    
-            <tr><td>abc</td></tr>
-    
-          </table>
-    
-        >];
-    
-    }`,
+    dot:`digraph {}`,
   }
 
   abrirModal = () => {
@@ -86,6 +58,14 @@ class App extends React.Component {
 
   handleXPath = (value) => {
     this.setState({xpath: value});
+  }
+
+  handleDot = (value) => {
+    this.setState({dot: value});
+  }
+
+  handleDot = (value) => {
+    this.setState({listaErrores: value});
   }
 
   nuevo = () => {
@@ -178,20 +158,49 @@ class App extends React.Component {
 
   analizar = (event) => {
     this.abrirModal();
+    let resultado = '';
     switch(this.state.selectedOption){
       case 'Ascendente':
         analizador.xmlAscendente(this.state.xml);
-        analizador.XPathAscendente(this.state.xpath);
+        resultado = this.state.xpath !== ''?analizador.XPathAscendente(this.state.xpath):'';
         break;
       case 'Descendente':
         analizador.xmlDescendente(this.state.xml);
+        resultado = this.state.xpath !== ''?analizador.XPathDescendente(this.state.xpath):'';
         break;
       default:
         break;
     }
-    this.setState({consoleText:analizador.getErrores()});
+    this.setState({consoleText:resultado});
     if (this.state.selectedOption !== '') 
       this.setState({alertOpen: true});
+  }
+
+  reporteTablaSimbolos = (event) => {
+    this.setState({dot:analizador.getRepTablaSimbolos()});
+  }
+
+  reporteListaErrores = (event) => {
+    this.setState({listaErrores:analizador.getRepErrores()});
+  }
+
+  mostrarCst = () => {
+    this.setState({modalOpenCst: !this.state.modalOpenCst});
+    //this.setState({dot:analizador.getCSTXmlAsc()});
+  }
+
+  reporteCst = (event) => {
+    this.mostrarCst();
+    switch(this.state.selectedOption){
+      case 'Xml Ascendente':
+        this.setState({dot:analizador.getCSTXmlAsc()});
+        break;
+      case 'Xml Descendente':
+        this.setState({dot:analizador.getCSTXmlDesc()});
+        break;
+      default:
+        break;
+    }
   }
 
   render(){
@@ -313,10 +322,25 @@ class App extends React.Component {
               <Paper className="paper">
                 <div className="row">
                   <div className="col-md-12">
+                    <br></br>
                     <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>Reportes</InputLabel>
-                    <div style={{borderStyle: 'solid', borderRadius: '2em'}}>
+                    <Button className="btn bg-primary" onClick={this.reporteTablaSimbolos}>Tabla de Simbolos</Button> |
+                    <Button className="btn bg-secondary">AST</Button> |
+                    <Button className="btn bg-success" onClick={this.mostrarCst}>CST</Button> |
+                    <Button className="btn bg-danger" onClick={this.reporteListaErrores}>Lista de Errores</Button> |
+                    <Button className="btn bg-warning">GRAMATICA</Button>
+                    <br></br>
+                    <div id="pnlGraphviz" style={{borderStyle: 'solid', borderRadius: '2em'}}>
                       <Graphviz dot={this.state.dot} options={{fit:true, width:950,zoom: true}}/>
                     </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <Paper>
+                      <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>LISTA ERRORES</InputLabel> 
+                      <div id="pnlErorres" dangerouslySetInnerHTML={{ __html: this.state.listaErrores }} />
+                    </Paper>
                   </div>
                 </div>
               </Paper> 
@@ -378,6 +402,43 @@ class App extends React.Component {
       <ModalFooter>
           <Button color="primary" onClick={this.analizar}>Analizar</Button>
           <Button color="secondary" onClick={() => {this.setState({selectedOption: ''}); this.abrirModal();}}>Cerrar</Button>
+      </ModalFooter>
+      </Modal>
+
+
+      <Modal isOpen={this.state.modalOpenCst} style={modalStyles}>
+      <ModalHeader>
+        Reporte CST
+      </ModalHeader>
+      <ModalBody>
+        <form onSubmit={this.formSubmit}>
+          <div className="radio">
+            <label>
+              <input
+                type="radio"
+                value="Xml Ascendente"
+                checked={this.state.selectedOption === "Xml Ascendente"}
+                onChange={this.onValueChange}
+              />
+              Xml Ascendente
+            </label>
+          </div>
+          <div className="radio">
+            <label>
+              <input
+                type="radio"
+                value="Xml Descendente"
+                checked={this.state.selectedOption === "Xml Descendente"}
+                onChange={this.onValueChange}
+              />
+              Xml Descendente
+            </label>
+          </div>
+        </form>
+      </ModalBody>
+      <ModalFooter>
+          <Button color="primary" onClick={this.reporteCst}>Generar Reporte</Button>
+          <Button color="secondary" onClick={() => {this.setState({selectedOption: ''}); this.mostrarCst();}}>Cerrar</Button>
       </ModalFooter>
       </Modal>
 

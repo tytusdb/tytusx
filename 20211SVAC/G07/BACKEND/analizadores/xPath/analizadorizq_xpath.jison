@@ -121,7 +121,7 @@ ELEMENTO_P:
         |EXPRESION {
 			$$= new Nodo("ELE", "ELE" );
             $$.agregarHijo($1);
-		},
+		}
 		|error tk_barra_or{
             listaErrores.push(new TokenError("XPATH",'Este es un error sintáctico ' , "Me recupero con: " + yytext , @1.first_line, @2.first_column ));
         }

@@ -1,6 +1,7 @@
 
 <html> 
     <head>
+        <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">    
         <link rel="stylesheet" type="text/css" href="./Css/styles.css">\
@@ -13,6 +14,7 @@
         <script src="./Js/Interprete/Gramatica/XMLdescReports.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathAsc.js" ></script>
         <script src="./Js/Interprete/Gramatica/XpathDesc.js" ></script>
+        <script src="./Js/Interprete/Gramatica/XQueryAsc.js" ></script>
         <script src="./Js/Interprete/Expresiones/Atributo.js"></script>
         <script src="./Js/Interprete/Expresiones/Objeto.js"></script>
         <script src="./Js/Interprete/AST/GenerarArbol.js"></script>
@@ -32,17 +34,100 @@
         <script src="./Js/Interprete/AST/ReporteTablaSimbolosXMl.js"></script>
         <script src="./Js/Interprete/Expresiones/Operacion.js"></script>
         <script src="./Js/Interprete/Expresiones/Primitivo.js"></script>
+        <script src="./Js/Interprete/Expresiones/Sentencia.js"></script>.
+        <script src="./Js/Interprete/Expresiones/ExpresionXQuery.js"></script>
         <script src="./Js/Interprete/Interfaces/Expresion.js"></script>
         <script src="./Js/Interprete/Interfaces/Instruccion.js"></script>
         <script src="./Js/Interprete/Expresiones/Axes.js"></script>
         <script src="./Js/Interprete/Expresiones/ExpresionXPath.js"></script>
         <script src="./Js/Interprete/Expresiones/NodoXpath.js"></script>
         <script src="./Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
+        <script src="./Js/Interprete/Expresiones/Declaracion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XPath.js"></script>
-
+        <!-- SCRIPTS PARA FUNCIONES XQUERY -->
+        <script src="./Js/Interprete/Instrucciones/Flower.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XNumber.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XSubstring.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XString.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XLowerCase.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XUpperCase.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XFor.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XDeclararFuncion.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XLlamadaFuncion.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XLlamadaFuncionSimple.js"></script>
+        <script src="./Js/Interprete/Instrucciones/FlowerIf.js"></script>
+        <!-- SCRIPTS PARA TRADUCTORES C3D -->
+        <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
+        <script src="./Js/Interprete/Traductor/TraductorXPath.js"></script>
+        <!-- SCRIPTS PARA EXPRESIONES XQUERY -->
+        <script src="./Js/Interprete/Expresiones/XQuery/XOperacion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XPrimitivo.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XValor.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XLlamada.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XIF.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XParametro.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XFuncion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XLet.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XAsignacion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XQuery/XReturn.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerIF.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerIfThen.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerCondicion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerData.js"></script>
+        <!--- SCRIPTS PARA OPTIMIZADOR --->
+        <script src="./Js/Optimizador/GramaticaOptimizador.js"></script>
+        <script src="./Js/Optimizador/Optimizacion.js"></script>
+        <script src="./Js/Optimizador/Tipo3D.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/ArregloAsignacion.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionArreglo.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionOperacion.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionSimple.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Etiqueta.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Goto.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/If.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Llamada.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Print.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/Return.js"></script>
+        <script src="./Js/Optimizador/Bloques/Declaracion.js"></script>
+        <script src="./Js/Optimizador/Bloques/DeclaracionArreglo.js"></script>
+        <script src="./Js/Optimizador/Bloques/Include.js"></script>
+        <script src="./Js/Optimizador/Bloques/Main.js"></script>
+        <script src="./Js/Optimizador/Bloques/Void.js"></script>
+        <script src="./Js/Optimizador/Optimizador.js"></script>
         <script>
-
-
+            var funciones = [];
+            var pasada = 1;
+            var heap = [];
+            var stack = [];
+            var finalXML = 0;
+            var encodingXML = 0;
+            var contadorStack = 0;
+            var contadorHeap = 0;
+            var contadorTemporales = 0;
+            var contadorEtiquetas = 0;
+            var SP = 2;
+            var HP = 0;
+            var T0 = 0;
+            var T1 = 0;
+            var temporal0 = "";
+            var temporal1 = "";
+            var temporalXML = "";
+            var temporalXHP = "";
+            var temporalXHEAP = "";
+            var temporalFINXML = "";
+            var temporalNiveles = "";
+            var temporalValorHEAP = "";
+            var temporalValorXHEAP = "";
+            var temporalPos = "";
+            var temporalXSTACK = "";
+            var temporalContador = "";
+            var globalC3D = "";
+            var funcionesC3D = "";
+            var xpathC3D = "";
+            var xmlC3D = "";
+            var C3DXML = new TraductorXML();
+            var C3DXPATH = new TraductorXPath();
+            var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();
             var GenerarDOT = new GenerarArbol();
@@ -50,27 +135,41 @@
             var NumeroE = 1;
             var resultadoXML = null;
             var resultadoXPath = null;
+            var resultadoXQuery = null;
+            var resultadoOptimizador = null;
             var analisisCorrecto = true;
             var analisisXpathCorrecto = true;
+            var analisisXqueryCorrecto = true;
+            var analisisOptimizadorCorrecto = true;
             var continuarXpath = true;
+            var contenidoOptimizar = "";
             var DOTxmlCSTasc = "";
             var DOTxmlCSTdesc = "";
             var DOTxmlErrores = "";
             var DOTXPATHASTasc = "";
             var DOTXPATHASTDesc = "";
+            var DOTXQUERYASTAsc = "";
+            var DOTXQUERYASTDesc = "";
             var RGxml = new ReporteGramatical();
             var RGxmlDesc = new ReporteGramatical();
+            var ListaDAG = [];
+            var ListaOptimizaciones = [];
             var nodoxPATHASC = null;
             var nodoxPATHDESC = null;
+            var nodoxQUERYASC = null;
             var IDentorno = 1;
             var IDobj = 1;
             var objetosGlobal = null;
             var entornosGlobal = null;
+            var funcionesXQuery = [];
+            var objetosFULL = null;
+            var entornosFUL = null;
             var salidaXPath = null;
+            var salidaXQuery = null;
             var salidaRecursiva = "";
             var salidaGlobal = "";
         </script>
-        <title> Compi 2 - Proyecto 1 | By Oscar Llamas</title>
+        <title> Compi 2 - TytusX | By Oscar Llamas</title>
         <link href="./codemirror/lib/codemirror.css" rel="stylesheet">
         <script src="./codemirror/lib/codemirror.js"></script>
         <script src="./codemirror/mode/clike/clike.js"></script>
@@ -78,7 +177,10 @@
         <link href="./codemirror/theme/cobalt.css" rel="stylesheet">
         <link href="./codemirror/theme/duotone-light.css" rel="stylesheet">
         <link href="./codemirror/theme/duotone-dark.css" rel="stylesheet">
+        <link href="./codemirror/theme/ayu-dark.css" rel="stylesheet">
         <script src="./codemirror/mode/xml/xml.js"></script>
+        <script src="./codemirror/mode/xquery/xquery.js"></script>
+        
     </head> 
     <body oncontextmenu="return false;"> 
        <div class="editor1"> 
@@ -111,7 +213,11 @@
                         <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
                         <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
                         <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
-                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>                                
+                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>
+                        <a class="dropitem" id="heap">HEAP</a>  
+                        <a class="dropitem" id="stack">STACK</a>        
+                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>
+                        <a class="dropitem" id="opC3D">OPTIMIZACIONES C3D</a>                        
                         </div>
                     </div> 
                 </div>
@@ -145,8 +251,8 @@
                     <!-- EDITOR 2 -->
                     <textarea id="editor2"></textarea>
                     <span>
-                        <button class="button2" >Ejecutar (Asc)</button>
-                        <button class="button4" >Ejecutar (Desc)</button>
+                        <button class="button2" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button4" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>
                     <!-- FIN EDITOR 2 -->
                 </div>
@@ -154,8 +260,8 @@
                     <!-- EDITOR 3 -->
                     <textarea id="editor3"></textarea>
                     <span>
-                        <button class="button3" >Ejecutar (Asc)</button>
-                        <button class="button1" >Ejecutar (Desc)</button>
+                        <button class="button3" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button1" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>
                     <!-- FIN EDITOR 3 -->
                 </div> 
@@ -163,8 +269,8 @@
                     <!-- EDITOR 4 -->
                     <textarea id="editor4"></textarea>
                     <span>
-                        <button class="button4" >Ejecutar (Asc)</button>
-                        <button class="button2" >Ejecutar (Desc)</button>
+                        <button class="button4" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button2" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
                     </span>
                     <!-- FIN EDITOR 4 -->
                 </div> 
@@ -179,15 +285,27 @@
             <textarea id="entrada_xpath"></textarea>
             <!-- FIN ENTRADA XPATH -->
         </div>
+        <div class="labelConsola"><label class="label info">ENTRADA XQUERY</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="entrada_xquery"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>
         <div class="labelConsola"><label class="label info">SALIDA</label></div>
         <div class="consola">
             <!-- CONSOLA Python -->
             <textarea id="salida_xpath"></textarea>
             <!-- FIN CONSOLA JS -->
         </div>
-    </div>           
+        <div class="labelConsola"><label class="label info">SALIDA TRADUCCION</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="salida_traduccion"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+            <button class="button3" onclick="Optimizar()">Optimizar</button>
+        </div>       
         <script src="Js/Consolas.js"></script>
-        
+
     <script src="./Js/jquery.min.js"></script>
     <script src="./Js/jquery.backtotop.js"></script>
     <script src="./Js/jquery.mobilemenu.js"></script>     

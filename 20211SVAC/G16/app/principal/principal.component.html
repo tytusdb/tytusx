@@ -5,12 +5,17 @@
         <div class="input-file">
           <input type="file" id="file" class="input-file-input" (change)=leerArchivo($event)/>
           <label for="file" class="input-file-btn">
-          Seleccionar archivo
+          Subir XML
           </label>
       </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Guardar archivo</a>
+      <li class="nav-item active">
+        <div class="input-file">
+          <input type="file" id="file2" class="input-file-input" (change)=leerArchivox($event)/>
+          <label for="file2" class="input-file-btn">
+          Subir XQuery
+          </label>
+      </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,36 +41,45 @@
   <br>
   <h5>Organización de Lenguajes y Compiladores 2: XML</h5>
   <hr>
-  <button type="button" class="btn btn-light"(click)="compilar()">Analizar XML de forma ascendente</button>
-  <button type="button" class="btn btn-light"(click)="Xmldesc()">Analizar XML de forma descendente</button>
-  <button type="button" class="btn btn-light">Limpiar área de texto</button>
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item" *ngFor="let item of array">
-          <a class={{item.active}} id={{item.tab}} data-toggle="tab" href="#{{item.id}}" role="tab" attr.aria-controls={{item.id2}} [attr.aria-selected]="item.estado">
-            {{item.name}}
-          </a>
-      </li>
-      <button type="button" class="btn btn-outline-success btn-circle" title="nuevo" data-toggle="tooltip" (click)="nuevo()"><i class="fas fa-plus"></i></button>
-  </ul>
-  <div class="tab-content" id="myTabContent">
-      <div class={{item.active2}} id="{{item.id}}" role="tabpanel" attr.aria-labelledby={{item.tab}}  *ngFor="let item of array">
-          <div style=" border: 1px solid #ccc;">
-            <ngx-codemirror class="form-control" id="{{item.texto}}" rows="15"
-          [options]="options"
-          [(ngModel)]="archivo"
-          [disabled]="readOnly"
-          [autoFocus]="true"
 
-            >
-          </ngx-codemirror>
-          </div>
+  <div style="display: block;">
+      <!--ESTE ES EL TEXT ÁREA DE XML-->
+    <div style="float: left; width: 50%;">
+      <div style="text-align: center;">
+        <button type="button" class="btn btn-light"(click)="compilar()">Analizar XML de forma ASC</button>
+        <button type="button" class="btn btn-light"(click)="Xmldesc()">Analizar XML de forma DESC</button>
+        <button type="button" class="btn btn-light" (click)="traducirXML()">Traducir XML</button>
       </div>
+      <h5 style="text-align: center;">XML</h5>
+      <ngx-codemirror class="form-control"  rows="15"
+      [options]="options"
+      [(ngModel)]="archivo"
+      [disabled]="readOnly"
+      [autoFocus]="true"
+      ></ngx-codemirror>
+    </div>
+      <!--ESTE ES EL TEXT ÁREA DE XPATH-->
+    <div style="float: left; width: 50%;">
+      <div style="text-align: center;">
+        <button type="button" class="btn btn-light" (click)="AnalizarXQuery()">Ejecutar XQuery</button>
+        <button type="button" class="btn btn-light" (click)="xpathDESC()">Traducir XQuery</button>
+        <button type="button" class="btn btn-light" (click)="optimizarC3D()">Optimizar XQuery</button>
+      </div>
+
+      <h5 style="text-align: center;">XQuery</h5>
+      <ngx-codemirror class="form-control"  rows="15"
+      [options]="options2"
+      [(ngModel)]="xquery"
+      [disabled]="readOnly"
+      [autoFocus]="true"
+      ></ngx-codemirror>
+    </div>
   </div>
 </div>
 <br>
+<br>
 <div class="col-sm-12">
-  <br>
-  <h5>XPath: consultas</h5>
+  <h5 style="padding-top: 1%;">XPath: consultas</h5>
   <hr>
 <div class="input-group mb-3" style="padding-left: 3%; padding-right: 4%;">
   <div class="input-group-prepend">
@@ -76,7 +90,7 @@
 <div class="m-0 row justify-content-center">
   <button type="button" class="btn btn-light" (click)="xpathASC()">Realizar consulta de forma ascendente</button>
   <button type="button" class="btn btn-light" (click)="xpathDESC()">Realizar consulta de forma descendente</button>
-<button type="button" class="btn btn-light">Limpiar área de texto</button>
+  <button type="button" class="btn btn-light" (click)="xpathDESC()">Traducir XPath</button>
 </div>
 </div>
 <br>
@@ -89,17 +103,25 @@
     </li>
     <li class="nav-item">
       <a class="nav-link text-uppercase" id="error-tab" data-toggle="tab" href="#div-error" role="tab" [attr.aria-selected]="false">
-        Salida
+        Traduccion
       </a>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="div-salida" role="tabpanel" attr.aria-labelledby="salida-tab">
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" [(ngModel)]="salida" readonly></textarea>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" [(ngModel)]="salida" readonly></textarea>
     </div>
 
     <div class="tab-pane fade" id="div-error" role="tabpanel" attr.aria-labelledby="error-tab">
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" [(ngModel)]="errores" readonly></textarea>
+    <!--
+ <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" [(ngModel)]="errores" readonly></textarea>
+    -->
+    <ngx-codemirror class="form-control"  rows="15"
+      [options]="options3"
+      [(ngModel)]="traduccion"
+      [disabled]="readOnly"
+      [autoFocus]="true"
+      ></ngx-codemirror>
     </div>
 </div>
 </div>

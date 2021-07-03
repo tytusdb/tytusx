@@ -3,6 +3,7 @@ let errores = new Errores();
 function analizar() {
     const texto = document.getElementById('inputXML');
     const consola = document.getElementById('result');
+    errores = new Errores();
     let auxResultado;
     try {
         // @ts-ignore

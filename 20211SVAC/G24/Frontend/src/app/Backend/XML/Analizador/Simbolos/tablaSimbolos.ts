@@ -2,7 +2,7 @@ import Simbolo from './Simbolo';
 import Tipo, { tipoDato } from './Tipo';
 
 export default class tablaSimbolos {
-  private tablaAnterior: tablaSimbolos | any;
+  public tablaAnterior: tablaSimbolos | any;
   private tipoDato: Tipo;
   public tablaActual: Array<Simbolo>;
   private nombreDato: String;
