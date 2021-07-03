@@ -3,8 +3,7 @@ exports.__esModule = true;
 exports.Formato = void 0;
 var buffer_1 = require("buffer");
 var Formato = /** @class */ (function () {
-    function Formato(contenido, toastr, encoding) {
-        this.toastr = toastr;
+    function Formato(contenido, encoding) {
         this.contenido = [];
         this.cadenita = "";
         this.encoding = "";
@@ -22,7 +21,6 @@ var Formato = /** @class */ (function () {
                         if (element.Tipo == "Texto" || element.Tipo == "Vacio") {
                             cadena += "<" + element.valor.nombreInit;
                             if (element.valor.atributos != null) {
-                                console.log("hay una lista");
                                 var array = [];
                                 array.push(element.valor.atributos);
                                 _this.armar(array);
@@ -32,7 +30,6 @@ var Formato = /** @class */ (function () {
                             if (element.valor.nombreFin != "") {
                                 if (element.valor.texto != "") {
                                     var cad = _this.convertir(element.valor.texto);
-                                    console.log(cad);
                                     if (cad != "error") {
                                         cadena += ">" + cad;
                                     }
@@ -47,7 +44,6 @@ var Formato = /** @class */ (function () {
                             }
                         }
                         else if (element.Tipo == "Elementos") {
-                            //console.log(element.valor)
                             var array = [];
                             array.push(element.valor);
                             _this.armar(array);
@@ -60,7 +56,6 @@ var Formato = /** @class */ (function () {
                     if (element.nombreInit != "") {
                         cadena += "<" + element.nombreInit;
                         if (element.atributos != null) {
-                            console.log("hay una lista");
                             var array = [];
                             array.push(element.atributos);
                             _this.armar(array);
@@ -68,8 +63,6 @@ var Formato = /** @class */ (function () {
                             _this.cadenita = "";
                         }
                         if (element.elementos != null) {
-                            //console.log(element.valor)
-                            console.log("está en formato");
                             var array = [];
                             array.push(element.elementos);
                             _this.armar(array);
@@ -98,7 +91,7 @@ var Formato = /** @class */ (function () {
             });
         }
         else {
-            this.toastr.warning("El elemento que busca no se ha encontrado en este archivo XML");
+            console.log("F en el formato");
         }
         return cadena;
     };
@@ -115,7 +108,6 @@ var Formato = /** @class */ (function () {
                         _this.cadenita += "<" + elementos.nombreInit;
                         if (elementos.atributos != undefined && elementos.atributos != null) {
                             if (elementos.atributos.lista != undefined) {
-                                // console.log(this.cadenita)
                                 _this.armar(elementos.atributos.lista);
                             }
                             else {

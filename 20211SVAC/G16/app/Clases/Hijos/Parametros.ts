@@ -28,7 +28,8 @@ export class Parametros implements Instruccion{
    let valor=new Valor("Parámetro",null,"");
    let simbolo=new Simbolo(this.getVariable(),valor,entorno.nombre,node.linea,node.columna,-1);
    entorno.AddVariables(simbolo);
-   TableSimbols.TableSimbols.add(simbolo);
+
+   //TableSimbols.TableSimbols.add(simbolo);
    if(this.params!=null){
      this.params.ejecutar(entorno,this.params)
    }
