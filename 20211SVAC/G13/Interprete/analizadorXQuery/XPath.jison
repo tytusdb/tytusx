@@ -12,11 +12,16 @@
   const { AST } = require('./XQuery/ts/Arbol/AST')
   const { TipoXQ, EnumTipo } = require('./XQuery/ts/Entorno/TipoXQ')
   const { LiteralXQ } = require('./XQuery/ts/Expresiones/LiteralXQ')
+  const { IdXQ } = require('./XQuery/ts/Expresiones/IdXQ')
   const { DeclaracionXQ } = require('./XQuery/ts/Instrucciones/DeclaracionXQ')
   const { AsignacionXQ } = require('./XQuery/ts/Instrucciones/AsignacionXQ')
   const { BloqueXQ } = require('./XQuery/ts/Instrucciones/Bloque')
   const { If } = require('./XQuery/ts/Instrucciones/If')
   const { Condicion_If } = require('./XQuery/ts/Instrucciones/Condicion_If')
+  const { ParametroXQ } = require('./XQuery/ts/Funciones/ParametroXQ')
+  const { FuncionXQ } = require('./XQuery/ts/Funciones/Funcion')
+  const { ReturnXQ } = require('./XQuery/ts/Funciones/ReturnXQ')
+  const { LlamadaF } = require('./XQuery/ts/Funciones/LlamadaF')
     
   var grafo = new grafoCST(); 
 
@@ -41,6 +46,9 @@
 "as"        return "RAS"
 "xs"        return "Rxs"
 ":="        return "ASIGNAR"
+"{"         return "LLAVEA"
+"}"         return "LLAVEC"
+";"         return "SEMICOLON"
 "at"        return "RAT"
 "true"      return "RTRUE"
 "false"     return "RFALSE"
@@ -53,6 +61,10 @@
 "if"        return "R_IF"
 "then"      return "R_THEN"
 "else"      return "R_ELSE"
+"declare"   return "R_DECLARE"
+"function"  return "R_FUNC"
+"local"     return "R_LOCAL"
+"return"    return "R_RETURN"
 
 
 "or"    return "ROR"
@@ -130,11 +142,69 @@
 
 %%
 
-XQuery: LInstrucciones
+XQuery: LInstruccionesXQ
   {
     $$ = new AST($1);
     return $$;
   }
+;
+
+LInstruccionesXQ: 
+  LInstruccionesXQ InstruccionXQ { $1.push($2); $$ = $1; }
+  | InstruccionXQ { $$ = [$1] }
+;
+
+InstruccionXQ:
+  Instruccion { $$ = $1; }
+  | DFuncion { $$ = $1; }
+;
+
+DFuncion: 
+  R_DECLARE R_FUNC R_LOCAL DOSPUNTOS NOMBRE PARENTESISA L_PARAMF PARENTESISC RAS T INTERROGACIONC BloqueF
+    {
+      let auxDF0 = new FuncionXQ($5, $7, $12, @5.first_line, @5.first_column);
+      auxDF0.setTipo($10);
+      $$ = auxDF0;
+    }
+  | R_DECLARE R_FUNC R_LOCAL DOSPUNTOS NOMBRE PARENTESISA L_PARAMF PARENTESISC RAS T BloqueF
+    {
+      let auxDF1 = new FuncionXQ($5, $7, $11, @5.first_line, @5.first_column);
+      auxDF1.setTipo($10);
+      $$ = auxDF1;
+    }
+  | R_DECLARE R_FUNC R_LOCAL DOSPUNTOS NOMBRE PARENTESISA L_PARAMF PARENTESISC BloqueF
+    {
+      $$ = new FuncionXQ($5, $7, $9, @5.first_line, @5.first_column);
+    }
+;
+
+L_PARAMF:
+  L_PARAMF COMA PARAMF { $1.push($3); $$ = $1; }
+  | PARAMF  { $$ = [$1]; }
+  | { $$ = []; }
+;
+
+PARAMF:
+  DOLAR NOMBRE RAS T INTERROGACIONC
+    {
+      let auxPF0 = new ParametroXQ($2);
+      auxPF0.setTipo($4);
+      $$ = auxPF0;
+    }
+  | DOLAR NOMBRE RAS T
+    {
+      let auxPF1 = new ParametroXQ($2);
+      auxPF1.setTipo($4);
+      $$ = auxPF1;
+    }
+  | DOLAR NOMBRE
+    {
+      $$ = new ParametroXQ($2);
+    }
+;
+
+BloqueF:
+  LLAVEA BloqueI LLAVEC SEMICOLON { $$ = $2; }
 ;
 
 LInstrucciones: LInstrucciones Instruccion { $1.push($2); $$ = $1; }
@@ -145,18 +215,53 @@ Instruccion:
   Declaracion { $$ = $1; }
   | Asignacion { $$ = $1; }
   | SIf { $$ = $1; }
+  | LlamadaFuncion { $$ = $1; }
+  | Return { $$ = $1; }
 ;
 
-Declaracion: RLET DOLAR NOMBRE ASIGNAR E { $$ = new DeclaracionXQ($3, $5, @3.first_line, @3.first_column); }
-  | RLET DOLAR NOMBRE RAS T ASIGNAR E 
-    { 
-      let auxD = new DeclaracionXQ($3, $7, @3.first_line, @3.first_column);
-      auxD.setTipo($5);
-      $$ = auxD;
+Return: R_RETURN E { $$ = new ReturnXQ($2, @1.first_line, @1.first_column); }
+  | R_RETURN { $$ = new ReturnXQ(null, @1.first_line, @1.first_column); }
+;
+
+LlamadaFuncion: 
+  R_LOCAL DOSPUNTOS NOMBRE ParametrosLL
+    {
+      $$ = new LlamadaF($3, $4, @3.first_line, @3.first_column);
     }
 ;
 
-Asignacion: DOLAR NOMBRE ASIGNAR E { $$ = new AsignacionXQ($2, @2.first_line, @2.first_column, $4); }
+ParametrosLL: PARENTESISA LPLL PARENTESISC  { $$ = $2; }
+  | PARENTESISA PARENTESISC { $$ = []; }
+;
+
+LPLL: LPLL COMA E { $1.push($3); $$ = $1; }
+  | E { $$ = [$1]; }
+;
+
+Declaracion:
+  RLET DOLAR NOMBRE RAS T INTERROGACIONC ASIGNAR E 
+    { 
+      let auxD0 = new DeclaracionXQ($3, $8, @3.first_line, @3.first_column);
+      auxD0.setTipo($5);
+      $$ = auxD0;
+    }
+  | RLET DOLAR NOMBRE RAS T ASIGNAR E 
+    { 
+      let auxD1 = new DeclaracionXQ($3, $7, @3.first_line, @3.first_column);
+      auxD1.setTipo($5);
+      $$ = auxD1;
+    }
+  | RLET DOLAR NOMBRE ASIGNAR E
+    {
+      $$ = new DeclaracionXQ($3, $5, @3.first_line, @3.first_column);
+    }
+;
+
+Asignacion: 
+  DOLAR NOMBRE ASIGNAR E 
+  { 
+    $$ = new AsignacionXQ($2, @2.first_line, @2.first_column, $4);
+  }
 ;
 
 SIf: L_Condiciones R_ELSE BloqueI { $$ = new If($1, $3, @2.first_line, @2.first_column); }
@@ -190,7 +295,7 @@ BloqueI: LInstrucciones
 T: Rxs DOSPUNTOS R_INT     { $$ = new TipoXQ(EnumTipo.entero); }
   | Rxs DOSPUNTOS R_DOBLE  { $$ = new TipoXQ(EnumTipo.doble); }
   | Rxs DOSPUNTOS R_STRING  { $$ = new TipoXQ(EnumTipo.cadena); }
-  | Rxs DOSPUNTOS R_BOOLEAN  { $$ = new TipoXQ(EnumTipo.boolean); }
+  | Rxs DOSPUNTOS R_BOOLEAN  { $$ = new TipoXQ(EnumTipo.booleano); }
 ;
 
 E: 
@@ -219,6 +324,7 @@ E:
   | XPath   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.XPath), $1, @1.first_column, @1.first_column); }
   | RTRUE   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | RFALSE  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
+  | DOLAR NOMBRE { $$ = new IdXQ($2, @2.first_line, @2.first_column); }
 //LLAMADA
 ;
 

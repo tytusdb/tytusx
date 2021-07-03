@@ -1,8 +1,10 @@
 import { EntornoXQ } from "../Entorno/Entorno";
 import { InstruccionXQ } from "./InstruccionXQ";
+import { NodoXQ } from "./NodoXQ";
 
 export class AST {
-    listaInstrucciones:[InstruccionXQ];
+    static contador:number = 0;
+    listaInstrucciones:[NodoXQ];
     tablaGlobal:EntornoXQ;
 
     constructor(lista:any) {
@@ -13,7 +15,13 @@ export class AST {
 
     ejecutar() {
         this.listaInstrucciones.forEach(ins => {
-            ins.ejecutar(this.tablaGlobal);
+            if(ins instanceof InstruccionXQ) {
+                ins.ejecutar(this.tablaGlobal);
+            } else {
+                ins.getValor(this.tablaGlobal);
+            }
         });
     }
 }
+
+export let contador = 0;
