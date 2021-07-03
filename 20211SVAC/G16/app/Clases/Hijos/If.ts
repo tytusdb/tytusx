@@ -21,17 +21,14 @@ export class If implements Instruccion{
 
   ejecutar(entorno: Entorno, node:any) {
     let retorno=this.condicion.ejecutar(entorno,node);
-
     if(retorno!=null && retorno!=false){
 
       if(this.sentencias instanceof Operacion){
         let resultado=this.sentencias.ejecutar(entorno,this.sentencias);
         if(resultado!=null){
-          if(this.sino.operador1.tipo==Tipo.VARIABLE){
-            entorno.setVariable(this.sino.operador1.valor,resultado);
+          if(this.sentencias.operador1.tipo==Tipo.VARIABLE){
+            entorno.setVariable(this.sentencias.operador1.valor,resultado);
           }
-          console.log("*****está en el if*****")
-          console.log(this.sentencias.operador1)
           return resultado;
         }
       }
@@ -44,8 +41,6 @@ export class If implements Instruccion{
           if(this.sino.operador1.tipo==Tipo.VARIABLE){
             entorno.setVariable(this.sino.operador1.valor,resultado);
           }
-          console.log("****está en el sino*****")
-          console.log(this.sino)
           return resultado;
         }
       }

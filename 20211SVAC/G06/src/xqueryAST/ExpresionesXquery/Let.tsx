@@ -25,7 +25,7 @@ export class Let implements ExpressionXquery{
         }else {
             throw new Error("Error Semantico: Se encuentra en uso el id: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
         }
-        return {value : this.ret.executeXquery(entAct, RaizXML).value, type: tipoPrimitivo.STRING}
+        return {value : this.ret.executeXquery(entAct, RaizXML).value, type: tipoPrimitivo.STRING, SP: -1}
     }
 
     GraficarAST(texto: string): string {

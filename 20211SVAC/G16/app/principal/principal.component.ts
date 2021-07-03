@@ -1,4 +1,3 @@
-import { Buscar } from './../Clases/Models/Buscar';
 import { ToastrService } from 'ngx-toastr';
 import { Component, OnInit } from '@angular/core';
 import { Instruccion } from './../Clases/Interfaces/Instruccion';
@@ -21,6 +20,7 @@ import Crear from '../Clases/AST/CrearTS'
 import { Router } from '@angular/router';
 import Entorno from '../Clases/AST/Entorno';
 const TableSimbols=require("../Clases/AST/TSXQuery.js");
+import { Formato } from '../Clases/Models/Formato'
 
 const defaults = {
   xml:
@@ -43,7 +43,7 @@ const defaults3 = {
 })
 
 export class PrincipalComponent implements OnInit {
-
+  encoding
   nodoraiz: any;
   tablaSimbolo: Crear = null;
   salida: string = ""
@@ -58,7 +58,7 @@ export class PrincipalComponent implements OnInit {
   //USO PARA ABSTRACTAS
   lista=[];
   entornoact=[]
-  padre=""
+  padre=[]
   //-----------------
   mode: keyof typeof defaults = 'xml';
   options = {
@@ -164,36 +164,36 @@ export class PrincipalComponent implements OnInit {
 
 
   xpathASC() {
-    // try{
-    //const AST = parserXpathAsc.parse(this.xpath);
+    TablaSim.TablaSimbolosXP.clear()
     let x = parserXpathAsc.parse(this.xpath);
     this.RecorrerAbstractas();
-    //localStorage.setItem("ASTXPATH",JSON.stringify(AST));
-    let tabla = []
-    tabla = JSON.parse(localStorage.getItem("tablaSimbolo"));
-    if (tabla.length != 0) {
-      let buscar = new Buscar(this.toastr);
-      this.toastr.success("Análisis completado")
-      this.salida = buscar.darFormato()
-    } else {
-      this.toastr.warning("Se debe ingresar un archivo XML primero");
-    }
-    /*}catch(Error){
-     this.toastr.error("Error", "Hay un error en la sintáxis, compruebe su cadena de entrada")
-     }*/
   }
 
   RecorrerAbstractas(){
+    this.encoding = localStorage.getItem("encoding");
+    this.padre = []
+    this.lista = []
     if(TablaSim.TablaSimbolosXP.getSimbolos().length>0){
       for (let i=0; i < TablaSim.TablaSimbolosXP.getSimbolos().length; i++){
         this.lista.push(TablaSim.TablaSimbolosXP.getSimbolos()[i])
       }
     }
-    localStorage.setItem("dad", "Global")
+    this.padre = JSON.parse(localStorage.getItem("tablaSimbolo"))
+    this.padre = this.padre[0]
+    localStorage.setItem("dad", JSON.stringify(this.padre))
     this.lista.forEach(element => {
-      this.padre =localStorage.getItem("dad")
+      this.padre = JSON.parse(localStorage.getItem("dad"))
       element.execute(this.padre);
     });
+    try{
+      this.padre = JSON.parse(localStorage.getItem("dad"))
+      const formato = new Formato(this.padre, this.encoding);
+      var y = formato.darFormato()
+      console.log(y)
+    }catch{
+      let textopadre = localStorage.getItem("dad")
+      console.log(textopadre)
+    }
   }
 
   xpathDESC() {
@@ -311,6 +311,7 @@ export class PrincipalComponent implements OnInit {
   }
 
   TablaSimbolos() {
+    localStorage.setItem("tablaSimbolo","")
     localStorage.setItem("tablaSimbolo", JSON.stringify(this.tablaSimbolo.getTabla()))
     localStorage.setItem("tablaSimboloAux", JSON.stringify(this.tablaSimbolo.getTablaAux()))
   }

@@ -4,17 +4,30 @@ exports.Operador = void 0;
 var Tipo_js_1 = require("./Tipo.js");
 var Operador = /** @class */ (function () {
     function Operador(tipo, valor, etiqueta) {
+        this.contenido = new Array();
+        this.temp = [];
+        this.contador = 0;
         this.tipo = tipo;
         this.valor = valor;
         this.etiqueta = etiqueta;
     }
     Operador.prototype.ejecutar = function (Entorno, node) {
+        console.log("ESTÁ EN OPERADOR");
         if (this.etiqueta == null) {
             var respuesta = this.VerificarTipo(Entorno);
             if (respuesta == null) {
                 return null;
             }
             return respuesta;
+        }
+        else {
+            var respuesta = this.VerificarTipo(Entorno);
+            if (respuesta != null) {
+                return { etiqueta: this.etiqueta };
+            }
+            else {
+                return respuesta;
+            }
         }
     };
     Operador.prototype.VerificarTipo = function (entorno) {
@@ -69,6 +82,9 @@ var Operador = /** @class */ (function () {
                 //No existe la variable, error semántico
                 return null;
             }
+        }
+        else if (this.tipo == Tipo_js_1.Tipo.LLAMADA) {
+            return this.valor.ejecutar(entorno, this.valor);
         }
         else {
             //error semántico

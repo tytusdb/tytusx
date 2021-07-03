@@ -8,20 +8,25 @@ export class Funciones implements NodoAbs {
     }
 
     execute(padre) {
+        let datos ={}
         switch (this.funcion){
             case "last":
-                let etiqueta = localStorage.getItem("idtmp")
-                const consulta = new ConsultasTS()
-                let x = consulta.getEntornoActual(etiqueta, padre)
-                return x.length
+                let tmp = JSON.parse(padre)
+                return tmp.length
             case "position":
                 return 1
             case "node":
-
-            break
+                datos={
+                    id:"",
+                    pred:"node"
+                }
+                return datos
             case "text":
-
-            break
+                datos={
+                    id:"",
+                    pred:"text"
+                }
+                return datos
         }
         return "F"
     }

@@ -13,6 +13,7 @@ const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
 const parseXQuery = require('../Grammar/xQueryGrammar');
+const parseXQueryTraduccion = require('../Grammar/xQueryGrammarTraduccion');
 const parseC3D = require('../Grammar/C3DGrammar');
 
 
@@ -162,6 +163,8 @@ export default class Main extends Component {
         const astXquery = parseXQuery.parse(this.state.xquery);
         var salida = "";
 
+        console.log(astXquery);
+
         var nvoEntorno = new EntornoXQuery(null, "global");
 
         for (const xquery of astXquery) {
@@ -173,6 +176,36 @@ export default class Main extends Component {
         }
         this.setState({
             consoleResult: salida,
+        });
+
+    }
+    //######################################################################################################
+
+
+    //TRADUCCION XQUERY################################################################
+    traduccionXquery = () => {
+
+        const result = parser.parse(this.state.xml)
+        var ast = result.ast;
+        traducirXml(ast);
+
+        const astXquery = parseXQueryTraduccion.parse(this.state.xquery);
+        var salida = "";
+
+        //console.log(astXquery);
+
+        var nvoEntorno = new EntornoXQuery(null, "global");
+
+        for (const xquery of astXquery) {
+            try {
+                salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        this.setState({
+            consoleResult: "//CONSULTA XQUERY-----------------\n\n/*\n" + salida + "*/\n\n//TRADUCCION C3D XQUERY-----------------\n\n" + traduccion.getTranslate(),
         });
 
     }
@@ -316,7 +349,7 @@ export default class Main extends Component {
                             <Button variant="primary" onClick={this.parse}>TRANSALATE XPATH</Button>
                         </Col>
                         <Col xs={6} md={3}>
-                            <Button variant="primary" onClick={this.traducir}>TRANSALATE XQUERY</Button>
+                            <Button variant="primary" onClick={this.traduccionXquery}>TRANSALATE XQUERY</Button>
                         </Col>
                         <Col xs={6} md={3}>
                             <Button variant="primary" onClick={this.executeXquery}>EXECUTE XQUERY</Button>

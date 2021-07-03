@@ -3,6 +3,7 @@ import { ConsultasTS } from "./ConsultasTS.js";
 import { ToastrService } from 'ngx-toastr';
 import { Formato } from '../Models/Formato'
 import { If } from "../Hijos/If";
+import { Console } from "console";
 
 export class Indice implements NodoAbs {
     ejecuciones:any
@@ -16,35 +17,81 @@ export class Indice implements NodoAbs {
     }
 
     execute(padre) {
-        this.tablasimbolos = JSON.parse(localStorage.getItem("tablaSimbolo"))
         this.encoding = localStorage.getItem("encoding");
         var contenido = this.ejecuciones.execute(padre)
         if(contenido.pred=="false"){
             const consulta = new ConsultasTS()
-            var x = consulta.getEntornoActual(contenido.id, padre)
-            const formato = new Formato(x, this.toastr, this.encoding);
-            var y = formato.darFormato()
-            console.log(y)
-            localStorage.setItem("dad", contenido.id)
+            let x:any = consulta.newEntorno(padre, contenido.id)
+            if(x.length>1){
+                localStorage.setItem("dad", JSON.stringify(x))
+            }else if(x[0].Valor == undefined){
+                    let lista = []
+                    lista.push(x[0])
+                    localStorage.setItem("dad", JSON.stringify(x[0]))
+            }else{
+                let lista = []
+                lista.push(x[0].Valor.valor)
+                var newdad = JSON.stringify(x[0].Valor.valor)
+                localStorage.setItem("dad", newdad)
+            }
+        }else if(contenido.pred=="text"){
+            const consulta = new ConsultasTS()
+            var x= consulta.getText(padre)
+            localStorage.setItem("dad", x)
+        }else if(contenido.pred=="node"){
+            const consulta = new ConsultasTS()
+            var x= consulta.getNode(padre)
+            localStorage.setItem("dad", x)
         }else{
-            localStorage.setItem("idtmp", contenido.id)
-            let pred = contenido.pred.execute(padre)
-            //VALIDACIÓN SI VIENE ALGO EN .pred
+            let entornotmp:any
+            const consulta = new ConsultasTS()
+            let x:any = consulta.newEntorno(padre, contenido.id)
+            if(x.length>1){
+                entornotmp = JSON.stringify(x)
+            }else if(x[0].Valor == undefined){
+                    let lista = []
+                    lista.push(x[0])
+                    entornotmp = JSON.stringify(x[0])
+            }else{
+                let lista = []
+                lista.push(x[0].Valor.valor)
+                entornotmp = JSON.stringify(x[0].Valor.valor)
+                localStorage.setItem("dad", newdad)
+            }
+            //PARA EL PREDICADO
+            let pred = contenido.pred.execute(entornotmp)
+            //VERIFICAR QUE TIPO DE PREDICADO ES:
             if (pred.pred!=undefined){
                 if (pred.pred=="menor"){
                     const consulta = new ConsultasTS()
-                    let w = consulta.Concatenar(pred.id.indice, pred.id.tope, contenido.id, padre)
-                    const formato2= new Formato(w, this.toastr, this.encoding)
-                    console.log(formato2.darFormato())
+                    let w = consulta.Menor(pred.id.indice, pred.id.tope, entornotmp)
+                    localStorage.setItem("dad", JSON.stringify(w))
+                }else if (pred.pred=="mayor"){
+                    const consulta = new ConsultasTS()
+                    let w = consulta.Mayor(pred.id.indice, pred.id.tope, entornotmp)
+                    localStorage.setItem("dad", JSON.stringify(w))
+                }else if (pred.pred=="menori"){
+                    const consulta = new ConsultasTS()
+                    let w = consulta.Menori(pred.id.indice, pred.id.tope, entornotmp)
+                    localStorage.setItem("dad", JSON.stringify(w))
+                }else if (pred.pred=="mayori"){
+                    const consulta = new ConsultasTS()
+                    let w = consulta.Mayori(pred.id.indice, pred.id.tope, entornotmp)
+                    localStorage.setItem("dad", JSON.stringify(w))
+                }else if (pred.pred=="igual"){
+                    const consulta = new ConsultasTS()
+                    let w = consulta.Igual(pred.id.indice, pred.id.tope, entornotmp)
+                    localStorage.setItem("dad", JSON.stringify(w))
+                }else if (pred.pred=="noigual"){
+                    const consulta = new ConsultasTS()
+                    let w = consulta.Diferente(pred.id.indice, pred.id.tope, entornotmp)
+                    localStorage.setItem("dad", JSON.stringify(w))
                 }
             }else{//SI ENTRA ACÁ ES POR QUE VIENE DIRECTO UN NUMERO NO UN ARREGLO DE NUMEROS.
                 const consulta = new ConsultasTS()
-                let x = consulta.getPredicado(pred, contenido.id, padre)
-                const formato = new Formato(x, this.toastr, this.encoding);
-                var y = formato.darFormato()
-                console.log(y)//VA PARA SALIDA
+                let w = consulta.getPredicado(entornotmp, pred)
+                localStorage.setItem("dad", JSON.stringify(w))
             }
-            localStorage.setItem("dad", contenido.id)
         }
     }
 

@@ -20,7 +20,7 @@ export class MultiXpaths implements ExpressionXquery{
         for (const path of this.paths) {
             ManejadorXquery.concatenar(content, path.executeXquery(entAct, RaizXML).value);
         }
-        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
+        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
     }
 
     GraficarAST(texto: string): string {
