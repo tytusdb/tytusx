@@ -29,7 +29,7 @@ export class If implements ExpressionXquery{
         
             const elseif = this.elseif?.executeXquery(entAct, RaizXML); 
             if (elseif === undefined){
-                return {value : [], type: tipoPrimitivo.RESP}
+                return {value : [], type: tipoPrimitivo.RESP, SP: -1}
             }
             return elseif;
 

@@ -69,7 +69,7 @@ export class Path implements ExpressionXquery{
                 this.construirNodos(ent, "")
             }
         } 
-        return {value: this.salida, type: tipoPrimitivo.RESP};
+        return {value: this.salida, type: tipoPrimitivo.RESP, SP: -1};
     }
 
     private getQuery(entXquery: EntornoXQuery, entPadre: Entorno, posActAcceso: number, simboloPadre?:Simbolo) {
