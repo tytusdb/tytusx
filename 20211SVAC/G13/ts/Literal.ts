@@ -14,7 +14,15 @@ export class Literal extends Expresion {
         this.columna = c;
     }
     
-    getValor(): Expresion {
+    getValor(entorno: any): Expresion {
+        if(this.valor == 'last()' && this.tipo == 6) {
+            return new Literal(0, entorno.lista_objetos.length, this.linea, this.columna);
+        } else {
+            return new Literal(this.tipo, this.valor, this.linea, this.columna);
+        }
+    }
+
+    copiarValor(): Expresion {
         return new Literal(this.tipo, this.valor, this.linea, this.columna);
     }
 }

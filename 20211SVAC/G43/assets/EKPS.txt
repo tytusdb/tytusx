@@ -1,0 +1,1840 @@
+//CONSULTA-----------------
+
+/*
+<title lang = "en"  >Everyday Italian</title>
+<title lang = "en"  >Harry Potter</title>
+<title lang = "en"  >XQuery Kick Start</title>
+<title lang = "en"  >Learning XML</title>
+*/
+
+//TRADUCCION-----------------
+
+//Header	--------------
+#include <stdio.h>
+
+double heap[30101999];
+double stack[30101999];
+
+double S;
+double H;
+
+double t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22, t23, t24, t25, t26, t27, t28, t29, t30, t31, t32, t33, t34, t35, t36, t37, t38, t39, t40, t41, t42, t43, t44, t45, t46, t47, t48, t49, t50, t51, t52, t53, t54, t55, t56, t57, t58, t59, t60, t61, t62, t63, t64, t65, t66, t67, t68, t69, t70, t71, t72, t73, t74, t75, t76, t77, t78, t79, t80, t81, t82, t83, t84, t85, t86, t87, t88, t89, t90, t91, t92, t93, t94, t95, t96, t97, t98, t99, t100, t101, t102, t103, t104, t105, t106;
+
+//Metodo Comparar cadenas	--------------
+
+void compararCadenas() {
+t0 = S + 1;
+t1 = stack[(int)t0];
+t2 = t0 + 1;
+t3 = stack[(int)t2];
+L1:
+t4 = heap[(int)t1];
+t5 = heap[(int)t3];
+if(t4==-1) goto L2;
+if(t5==-1) goto L2;
+if(t4!=t5) goto L2;
+t1 = t1 + 1;
+t3 = t3 + 1;
+goto L1;
+L2:
+if(t5==t4) goto L3;
+stack[(int)t0] = 0;
+goto L4;
+L3:
+stack[(int)t0] = 1;
+L4:
+return;
+}
+
+//Metodo etiqueta texto	--------------
+
+void crearEtiquetaTexto() {
+t39 = S + 1;
+t40 = stack[(int)t39];
+t41 = t39 + 1;
+t42 = stack[(int)t41];
+L11:
+t43 = heap[(int)t42];
+if(t43==-1) goto L12;
+printf("%c", (char)t43);
+t42 = t42 + 1;
+goto L11;
+L12:
+printf("%c", (char)60);
+printf("%c", (char)47);
+t38 = S + 1;
+t39 = stack[(int)t38];
+L13:
+t42 = heap[(int)t39];
+if(t42==-1) goto L14;
+printf("%c", (char)t42);
+t39 = t39 + 1;
+goto L13;
+L14:
+printf("%c", (char)62);
+printf("%c", (char)10);
+return;
+}
+
+//Metodo Etiqueta apertura	--------------
+
+void crearEtiquetaApertura() {
+t25 = S + 1;
+t26 = stack[(int)t25];
+printf("%c", (char)60);		// <
+L6:
+t27 = heap[(int)t26];
+if(t27==-1) goto L7;
+printf("%c", (char)t27);
+t26 = t26 + 1;
+goto L6;
+L7:
+return;
+}
+
+//Metodo Obtener Atributo	--------------
+void crearAtributoEtiqueta() {
+t30 = S + 1;
+t31 = stack[(int)t30];
+t32 = t30 + 1;
+t33 = stack[(int)t32];
+printf("%c", (char)32);		// ' '
+L8:
+t34 = heap[(int)t31];
+if(t34==-1) goto L9;
+printf("%c", (char)t34);
+t31 = t31 + 1;
+goto L8;
+L9:
+printf("%c", (char)61);		// =
+printf("%c", (char)34);		// "
+goto L10;
+L10:
+t35 = heap[(int)t33];
+if(t35==-1) goto L11;
+printf("%c", (char)t35);
+t33 = t33 + 1;
+goto L10;
+L11:
+printf("%c", (char)34);		// "
+return;
+}
+
+//Metodo Main	--------------
+void main(){
+S = 0; H = 0;
+
+//Posicion en stack	--------------
+stack[0] = H;
+
+//Identificador de etiqueta: bookstore	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = 115;		//Caracter s
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[1] = H;
+
+//Identificador de etiqueta: book	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[2] = H;
+
+//Simbolo category de etiqueta: book	--------------
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[3] = H;
+
+//Valor de category	--------------
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[4] = H;
+
+//Identificador de etiqueta: title	--------------
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[5] = H;
+
+//Texto de nodo: title	--------------
+heap[(int)H] = 69;		//Caracter E
+H = H + 1;
+heap[(int)H] = 118;		//Caracter v
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 73;		//Caracter I
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[6] = H;
+
+//Simbolo lang de etiqueta: title	--------------
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[7] = H;
+
+//Valor de lang	--------------
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[8] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[9] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 71;		//Caracter G
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 68;		//Caracter D
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 76;		//Caracter L
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 115;		//Caracter s
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[10] = H;
+
+//Identificador de etiqueta: year	--------------
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[11] = H;
+
+//Texto de nodo: year	--------------
+heap[(int)H] = 50;		//Caracter 2
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 53;		//Caracter 5
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[12] = H;
+
+//Identificador de etiqueta: price	--------------
+heap[(int)H] = 112;		//Caracter p
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[13] = H;
+
+//Texto de nodo: price	--------------
+heap[(int)H] = 51;		//Caracter 3
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 46;		//Caracter .
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[14] = H;
+
+//Identificador de etiqueta: book	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[15] = H;
+
+//Simbolo category de etiqueta: book	--------------
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[16] = H;
+
+//Valor de category	--------------
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[17] = H;
+
+//Identificador de etiqueta: title	--------------
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[18] = H;
+
+//Texto de nodo: title	--------------
+heap[(int)H] = 72;		//Caracter H
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 80;		//Caracter P
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[19] = H;
+
+//Simbolo lang de etiqueta: title	--------------
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[20] = H;
+
+//Valor de lang	--------------
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[21] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[22] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 74;		//Caracter J
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 75;		//Caracter K
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 46;		//Caracter .
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 82;		//Caracter R
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 119;		//Caracter w
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[23] = H;
+
+//Identificador de etiqueta: year	--------------
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[24] = H;
+
+//Texto de nodo: year	--------------
+heap[(int)H] = 50;		//Caracter 2
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 53;		//Caracter 5
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[25] = H;
+
+//Identificador de etiqueta: price	--------------
+heap[(int)H] = 112;		//Caracter p
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[26] = H;
+
+//Texto de nodo: price	--------------
+heap[(int)H] = 50;		//Caracter 2
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = 46;		//Caracter .
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[27] = H;
+
+//Identificador de etiqueta: book	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[28] = H;
+
+//Simbolo category de etiqueta: book	--------------
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[29] = H;
+
+//Valor de category	--------------
+heap[(int)H] = 119;		//Caracter w
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[30] = H;
+
+//Identificador de etiqueta: title	--------------
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[31] = H;
+
+//Texto de nodo: title	--------------
+heap[(int)H] = 88;		//Caracter X
+H = H + 1;
+heap[(int)H] = 81;		//Caracter Q
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 75;		//Caracter K
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 83;		//Caracter S
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[32] = H;
+
+//Simbolo lang de etiqueta: title	--------------
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[33] = H;
+
+//Valor de lang	--------------
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[34] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[35] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 74;		//Caracter J
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 109;		//Caracter m
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 115;		//Caracter s
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 77;		//Caracter M
+H = H + 1;
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 71;		//Caracter G
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 118;		//Caracter v
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[36] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[37] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 80;		//Caracter P
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 66;		//Caracter B
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[38] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[39] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 75;		//Caracter K
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 67;		//Caracter C
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[40] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[41] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 74;		//Caracter J
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 109;		//Caracter m
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 115;		//Caracter s
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 76;		//Caracter L
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[42] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[43] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 86;		//Caracter V
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 78;		//Caracter N
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 106;		//Caracter j
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[44] = H;
+
+//Identificador de etiqueta: year	--------------
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[45] = H;
+
+//Texto de nodo: year	--------------
+heap[(int)H] = 50;		//Caracter 2
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 51;		//Caracter 3
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[46] = H;
+
+//Identificador de etiqueta: price	--------------
+heap[(int)H] = 112;		//Caracter p
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[47] = H;
+
+//Texto de nodo: price	--------------
+heap[(int)H] = 52;		//Caracter 4
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = 46;		//Caracter .
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[48] = H;
+
+//Identificador de etiqueta: book	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[49] = H;
+
+//Simbolo category de etiqueta: book	--------------
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[50] = H;
+
+//Valor de category	--------------
+heap[(int)H] = 119;		//Caracter w
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[51] = H;
+
+//Identificador de etiqueta: title	--------------
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[52] = H;
+
+//Texto de nodo: title	--------------
+heap[(int)H] = 76;		//Caracter L
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 88;		//Caracter X
+H = H + 1;
+heap[(int)H] = 77;		//Caracter M
+H = H + 1;
+heap[(int)H] = 76;		//Caracter L
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Posicion en stack	--------------
+stack[53] = H;
+
+//Simbolo lang de etiqueta: title	--------------
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 103;		//Caracter g
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+//Posicion en stack	--------------
+stack[54] = H;
+
+//Valor de lang	--------------
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[55] = H;
+
+//Identificador de etiqueta: author	--------------
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 117;		//Caracter u
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 104;		//Caracter h
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[56] = H;
+
+//Texto de nodo: author	--------------
+heap[(int)H] = 69;		//Caracter E
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 84;		//Caracter T
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 46;		//Caracter .
+H = H + 1;
+heap[(int)H] = 32;		//Caracter  
+H = H + 1;
+heap[(int)H] = 82;		//Caracter R
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[57] = H;
+
+//Identificador de etiqueta: year	--------------
+heap[(int)H] = 121;		//Caracter y
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = 97;		//Caracter a
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[58] = H;
+
+//Texto de nodo: year	--------------
+heap[(int)H] = 50;		//Caracter 2
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 48;		//Caracter 0
+H = H + 1;
+heap[(int)H] = 51;		//Caracter 3
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[59] = H;
+
+//Identificador de etiqueta: price	--------------
+heap[(int)H] = 112;		//Caracter p
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 99;		//Caracter c
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Posicion en stack	--------------
+stack[60] = H;
+
+//Texto de nodo: price	--------------
+heap[(int)H] = 51;		//Caracter 3
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = 46;		//Caracter .
+H = H + 1;
+heap[(int)H] = 57;		//Caracter 9
+H = H + 1;
+heap[(int)H] = 53;		//Caracter 5
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Ingresando consulta Xpath	--------------
+stack[61] = H;
+
+//Ingresando acceso	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = 115;		//Caracter s
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 114;		//Caracter r
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Ingresando tipo de acceso	--------------
+stack[62] = H;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+stack[63] = H;
+
+//Ingresando acceso	--------------
+heap[(int)H] = 98;		//Caracter b
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 107;		//Caracter k
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Ingresando tipo de acceso	--------------
+stack[64] = H;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+stack[65] = H;
+
+//Ingresando acceso	--------------
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 105;		//Caracter i
+H = H + 1;
+heap[(int)H] = 116;		//Caracter t
+H = H + 1;
+heap[(int)H] = 108;		//Caracter l
+H = H + 1;
+heap[(int)H] = 101;		//Caracter e
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+//Ingresando tipo de acceso	--------------
+stack[66] = H;
+heap[(int)H] = 110;		//Caracter n
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = 100;		//Caracter d
+H = H + 1;
+heap[(int)H] = 111;		//Caracter o
+H = H + 1;
+heap[(int)H] = -1;		//FIN DE CADENA
+H = H + 1;
+
+
+//Comparando accesos	--------------
+
+t7 = stack[(int)0];
+t8 = stack[(int)61];
+t9 = S + 66;
+t9 = t9 + 1;
+stack[(int)t9] = t7;
+t9 = t9 + 1;
+stack[(int)t9] = t8;
+S = S + 66;
+compararCadenas();
+t10 = S + 1;
+t11 = stack[(int)t10];
+
+if(t11!=1) goto L0;
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t13 = stack[(int)1];
+t14 = stack[(int)63];
+t15 = S + 66;
+t15 = t15 + 1;
+stack[(int)t15] = t13;
+t15 = t15 + 1;
+stack[(int)t15] = t14;
+S = S + 66;
+compararCadenas();
+t16 = S + 1;
+t17 = stack[(int)t16];
+
+if(t17!=1) goto L0;
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t19 = stack[(int)4];
+t20 = stack[(int)65];
+t21 = S + 66;
+t21 = t21 + 1;
+stack[(int)t21] = t19;
+t21 = t21 + 1;
+stack[(int)t21] = t20;
+S = S + 66;
+compararCadenas();
+t22 = S + 1;
+t23 = stack[(int)t22];
+
+if(t23!=1) goto L0;
+S = S - 66;
+
+//Inicia Etiqueta apertura	--------------
+
+
+t28 = stack[(int)4];
+t29 = S + 66;
+t29 = t29 + 1;
+stack[(int)t29] = t28;
+S = S + 66;
+crearEtiquetaApertura();
+S = S - 66;
+
+
+//Atributo Etiqueta		--------------
+
+
+t36 = stack[(int)6];
+t37 = stack[(int)7];
+t38 = S + 66;
+t38 = t38 + 1;
+stack[(int)t38] = t36;
+t38 = t38 + 1;
+stack[(int)t38] = t37;
+S = S + 66;
+crearAtributoEtiqueta();
+S = S - 66;
+printf("%c", (char)62);		// >
+
+
+
+//Imprimiendo nodo Texto	--------------
+
+
+t44 = stack[(int)4];
+t45 = stack[(int)5];
+t46 = S + 66;
+t46 = t46 + 1;
+stack[(int)t46] = t44;
+t46 = t46 + 1;
+stack[(int)t46] = t45;
+S = S + 66;
+crearEtiquetaTexto();
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t47 = stack[(int)14];
+t48 = stack[(int)63];
+t49 = S + 66;
+t49 = t49 + 1;
+stack[(int)t49] = t47;
+t49 = t49 + 1;
+stack[(int)t49] = t48;
+S = S + 66;
+compararCadenas();
+t50 = S + 1;
+t51 = stack[(int)t50];
+
+if(t51!=1) goto L0;
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t53 = stack[(int)17];
+t54 = stack[(int)65];
+t55 = S + 66;
+t55 = t55 + 1;
+stack[(int)t55] = t53;
+t55 = t55 + 1;
+stack[(int)t55] = t54;
+S = S + 66;
+compararCadenas();
+t56 = S + 1;
+t57 = stack[(int)t56];
+
+if(t57!=1) goto L0;
+S = S - 66;
+
+//Inicia Etiqueta apertura	--------------
+
+
+t59 = stack[(int)17];
+t60 = S + 66;
+t60 = t60 + 1;
+stack[(int)t60] = t59;
+S = S + 66;
+crearEtiquetaApertura();
+S = S - 66;
+
+
+//Atributo Etiqueta		--------------
+
+
+t61 = stack[(int)19];
+t62 = stack[(int)20];
+t63 = S + 66;
+t63 = t63 + 1;
+stack[(int)t63] = t61;
+t63 = t63 + 1;
+stack[(int)t63] = t62;
+S = S + 66;
+crearAtributoEtiqueta();
+S = S - 66;
+printf("%c", (char)62);		// >
+
+
+
+//Imprimiendo nodo Texto	--------------
+
+
+t64 = stack[(int)17];
+t65 = stack[(int)18];
+t66 = S + 66;
+t66 = t66 + 1;
+stack[(int)t66] = t64;
+t66 = t66 + 1;
+stack[(int)t66] = t65;
+S = S + 66;
+crearEtiquetaTexto();
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t67 = stack[(int)27];
+t68 = stack[(int)63];
+t69 = S + 66;
+t69 = t69 + 1;
+stack[(int)t69] = t67;
+t69 = t69 + 1;
+stack[(int)t69] = t68;
+S = S + 66;
+compararCadenas();
+t70 = S + 1;
+t71 = stack[(int)t70];
+
+if(t71!=1) goto L0;
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t73 = stack[(int)30];
+t74 = stack[(int)65];
+t75 = S + 66;
+t75 = t75 + 1;
+stack[(int)t75] = t73;
+t75 = t75 + 1;
+stack[(int)t75] = t74;
+S = S + 66;
+compararCadenas();
+t76 = S + 1;
+t77 = stack[(int)t76];
+
+if(t77!=1) goto L0;
+S = S - 66;
+
+//Inicia Etiqueta apertura	--------------
+
+
+t79 = stack[(int)30];
+t80 = S + 66;
+t80 = t80 + 1;
+stack[(int)t80] = t79;
+S = S + 66;
+crearEtiquetaApertura();
+S = S - 66;
+
+
+//Atributo Etiqueta		--------------
+
+
+t81 = stack[(int)32];
+t82 = stack[(int)33];
+t83 = S + 66;
+t83 = t83 + 1;
+stack[(int)t83] = t81;
+t83 = t83 + 1;
+stack[(int)t83] = t82;
+S = S + 66;
+crearAtributoEtiqueta();
+S = S - 66;
+printf("%c", (char)62);		// >
+
+
+
+//Imprimiendo nodo Texto	--------------
+
+
+t84 = stack[(int)30];
+t85 = stack[(int)31];
+t86 = S + 66;
+t86 = t86 + 1;
+stack[(int)t86] = t84;
+t86 = t86 + 1;
+stack[(int)t86] = t85;
+S = S + 66;
+crearEtiquetaTexto();
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t87 = stack[(int)48];
+t88 = stack[(int)63];
+t89 = S + 66;
+t89 = t89 + 1;
+stack[(int)t89] = t87;
+t89 = t89 + 1;
+stack[(int)t89] = t88;
+S = S + 66;
+compararCadenas();
+t90 = S + 1;
+t91 = stack[(int)t90];
+
+if(t91!=1) goto L0;
+S = S - 66;
+
+
+//Comparando accesos	--------------
+
+t93 = stack[(int)51];
+t94 = stack[(int)65];
+t95 = S + 66;
+t95 = t95 + 1;
+stack[(int)t95] = t93;
+t95 = t95 + 1;
+stack[(int)t95] = t94;
+S = S + 66;
+compararCadenas();
+t96 = S + 1;
+t97 = stack[(int)t96];
+
+if(t97!=1) goto L0;
+S = S - 66;
+
+//Inicia Etiqueta apertura	--------------
+
+
+t99 = stack[(int)51];
+t100 = S + 66;
+t100 = t100 + 1;
+stack[(int)t100] = t99;
+S = S + 66;
+crearEtiquetaApertura();
+S = S - 66;
+
+
+//Atributo Etiqueta		--------------
+
+
+t101 = stack[(int)53];
+t102 = stack[(int)54];
+t103 = S + 66;
+t103 = t103 + 1;
+stack[(int)t103] = t101;
+t103 = t103 + 1;
+stack[(int)t103] = t102;
+S = S + 66;
+crearAtributoEtiqueta();
+S = S - 66;
+printf("%c", (char)62);		// >
+
+
+
+//Imprimiendo nodo Texto	--------------
+
+
+t104 = stack[(int)51];
+t105 = stack[(int)52];
+t106 = S + 66;
+t106 = t106 + 1;
+stack[(int)t106] = t104;
+t106 = t106 + 1;
+stack[(int)t106] = t105;
+S = S + 66;
+crearEtiquetaTexto();
+S = S - 66;
+
+L0:
+
+return;
+}

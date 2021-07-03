@@ -1,4 +1,4 @@
-import { Instruccion } from "../INTERFACES/Instruccion";
+
 
 export class AST{
     

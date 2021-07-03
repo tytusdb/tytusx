@@ -1,5 +1,6 @@
 %{
 	var helpers = require('./helpers')
+  var C3D = require('../C3D')
   const {grafoCST} = require('../CST')
   var grafo = new grafoCST; 
 	var atributosRaiz = []
@@ -64,7 +65,9 @@
 <EtiquetaComentario>[ \r\t]+  {}
 <EtiquetaComentario>\n        {}
 <EtiquetaComentario>"-->"     {this.popState(); }
-<EtiquetaComentario>[^"-->"]+ {} 
+<EtiquetaComentario>"-"       {}
+<EtiquetaComentario>">"       {}
+<EtiquetaComentario>[^-->]+   {} 
 
 <Etiquetai>[ \r\t]+  {}
 <Etiquetai>\n        {}
@@ -115,7 +118,15 @@ ini
       ListaErrores = [];
       var retornoGrafo = Object.assign({}, grafo);
       grafo = new grafoCST();
-      return {datos:$$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,tabla:retornoGrafo.TablaGramatica,errores:retornoErrores}
+      var c3d = C3D.getFullC3D()
+      return{
+        datos:$$,
+        nodes:retornoGrafo.pilaNodos,
+        edges:retornoGrafo.PilaEdges,
+        tabla:retornoGrafo.TablaGramatica,
+        errores:retornoErrores,
+        c3d:c3d
+      }
     }
   | error 
     {
@@ -131,14 +142,14 @@ ini
 CUERPO
 	: LISTA_OBJETO EOF 									
 		{ 
-      $$ = new helpers.Objeto("/",[],$1,this._$.first_line, this._$.first_column);  
+      $$ = new helpers.ObjetoPrincipal("/",[],$1,this._$.first_line, this._$.first_column);  
 			grafo.generarPadre(1,"LISTA_OBJETO");
       grafo.generarHijos("LISTA_OBJETO")
       grafo.generarTexto("Cuerpo.entorno = ListaObjeto.entorno")
 		}
 	| ETIQUETACONFIGURACION LISTA_OBJETO EOF			
 		{ 
-      $$ = new helpers.Objeto("/",$1,$2,this._$.first_line, this._$.first_column); 
+      $$ = new helpers.ObjetoPrincipal("/",$1,$2,this._$.first_line, this._$.first_column); 
 			grafo.generarPadre(2,"LISTA_OBJETO");
       grafo.generarPadre(1,"ETIQUETACONFIGURACION");
       grafo.generarHijos("ETIQUETACONFIGURACION","LISTA_OBJETO");

@@ -14,30 +14,34 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="./Utilidad/codemirror/lib/codemirror.css">
-    <script  src="./Gramatica/gramaticaXML.js"></script>
-    <script  src="./Gramatica/gramaticaXPath.js"></script>
-    <script  src="./AST/AST.js"></script>
-    <script  src="./AST/Entorno.js"></script>
-    <script  src="./AST/Simbolo.js"></script>
-    <script  src="./AST/Tipo.js"></script>
-    <script  src="./Expresiones/Primitivo.js"></script>
-    <script  src="./Instrucciones/Busqueda.js"></script>
-    <script  src="./Instrucciones/Nodo.js"></script>
-    <script  src="./Instrucciones/Primitivas/Print.js"></script>
-    <script  src="./Interfaces/Expresion.js"></script>
-    <script  src="./Interfaces/Instruccion.js"></script>
-    <script  src="./Expresiones/Atributo.js"></script>
-    <script  src="./Expresiones/Operacion.js"></script>
-    <script  src="./Expresiones/Objeto.js"></script>
-    <script src="./Utilidad/TipoError.js"></script>
-    <script src="./Utilidad/ErrorCapturado.js"></script>    
-    <script src="./Utilidad/ReglaGramatical.js"></script>        
-    <script src="./Graficadora/GraficadoraTS.js"></script>    
-    <script src="./Graficadora/GraficadoraErrores.js"></script>    
-    <script src="./Graficadora/GraficadoraGramatical.js"></script>    
-    <script src="./Graficadora/UtilidadGrafica.js"></script>    
-    <script src="./index.js"></script>
+    <link rel="stylesheet" type="text/css" href="./dist/Utilidad/codemirror/lib/codemirror.css">
+    <script  src="./dist/Utilidad/viz/viz.js"></script>
+    <script  src="./dist/Utilidad/viz/lite.render.js"></script>
+    <script  src="./dist/Gramatica/gramaticaXML.js"></script>
+    <script  src="./dist/Gramatica/gramaticaXPath.js"></script>
+    <script  src="./dist/AST/AST.js"></script>
+    <script  src="./dist/AST/Entorno.js"></script>
+    <script  src="./dist/AST/Simbolo.js"></script>
+    <script  src="./dist/AST/Tipo.js"></script>
+    <script  src="./dist/Expresiones/Primitivo.js"></script>
+    <script  src="./dist/Instrucciones/Busqueda.js"></script>
+    <script  src="./dist/Instrucciones/Nodo.js"></script>
+    <script  src="./dist/Instrucciones/Primitivas/Print.js"></script>
+    <script  src="./dist/Interfaces/Expresion.js"></script>
+    <script  src="./dist/Interfaces/Instruccion.js"></script>
+    <script  src="./dist/Expresiones/Atributo.js"></script>
+    <script  src="./dist/Expresiones/Operacion.js"></script>
+    <script  src="./dist/Expresiones/Objeto.js"></script>
+    <script src="./dist/Utilidad/TipoError.js"></script>
+    <script src="./dist/Utilidad/ErrorCapturado.js"></script>    
+    <script src="./dist/Utilidad/ReglaGramatical.js"></script>        
+    <script src="./dist/Graficadora/GraficadoraTS.js"></script>    
+    <script src="./dist/Graficadora/GraficadoraErrores.js"></script>    
+    <script src="./dist/Graficadora/GraficadoraGramatical.js"></script>    
+    <script src="./dist/Graficadora/UtilidadGrafica.js"></script>
+    <script src="./dist/Graficadora/GraficadoraAST.js"></script>
+    <script src="./dist/Expresiones/Predicados.js"></script>
+    <script src="./dist/index.js"></script>
     <h1>Compi 2 - GRUPO 2 GHP</h1>
 </head>
 
@@ -95,6 +99,9 @@
                             <td>
                                 <button onclick="generarReporteGramatical()">Reporte Gramatical</button>
                             </td>
+                            <td>
+                                <button onclick="graficarASTXML()">Graficar AST XML</button>
+                            </td>
                         </tr>
                     </table>
                 </td>
@@ -106,12 +113,15 @@
             </tr>
         </table>
     </div>
-
+    <div>
+        <h2>AST XML</h2>
+        <div id="image"></div>
+    </div>
 
     <!-- JAVASCRIPT -->
-    <script type="text/javascript" src="./Utilidad/jquery.min.js"></script>
-    <script type="text/javascript" src="./Utilidad/codemirror/lib/codemirror.js"></script>
-    <script type="text/javascript" src="./Utilidad/utilidades.js"></script>
+    <script type="text/javascript" src="./dist/Utilidad/jquery.min.js"></script>
+    <script type="text/javascript" src="./dist/Utilidad/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="./dist/Utilidad/utilidades.js"></script>
 
 </body>
 

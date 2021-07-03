@@ -1,3 +1,5 @@
+import { Retorno, newTemp } from '../../C3D';
+const C3D = require('../../C3D')
 const { Colision, ColisionTipo, Tipo, getTipoById } = require('../AST/Entorno')
 const { ErroresGlobal } = require('../AST/Global')
 const { Literal } = require("./Expresiones");
@@ -19,7 +21,7 @@ export class Arithmetic {
         for (var izq of valIzq){
             for (var der of valDer){
                 var newValor = operar(izq, this.op, der)
-                if (newValor && !this.contiene(retorno,newValor)){
+                if ((newValor!=undefined || newValor!=null) && !this.contiene(retorno,newValor)){
                     retorno.push(
                         new Literal(
                             ColisionTipo[izq.tipo][der.tipo],
@@ -30,7 +32,30 @@ export class Arithmetic {
             }
         }
         return retorno
-    } 
+    }
+
+    getC3D(){
+        var retorno =[]
+        var retIzq = this.izquierdo.getC3D()
+        var retDer = this.derecho.getC3D()
+
+        // recorrer todos los retornos
+        for (var izq of retIzq) {
+            for (var der of retDer){
+                var tmp = newTemp()
+                var tresDirecciones = `${tmp}=${izq.valor}${this.op}${der.valor};`
+                C3D.addC3D(tresDirecciones) 
+                retorno.push(
+                    new Retorno(
+                        tmp,
+                        ColisionTipo[izq.tipo][der.tipo]
+                    )
+                )
+            }
+        }
+
+        return retorno
+    }
 
     contiene(objeto,numero)
     {
@@ -123,6 +148,26 @@ export class Unary {
         return retorno
     }
 
+    getC3D(){
+        var retorno =[]
+        var retIzq = this.izquierdo.getC3D()
+
+        // recorrer todos los retornos
+        for (var izq of retIzq) {
+            var tmp = newTemp()
+            var tresDirecciones = `${tmp}=${this.op}${izq.valor};`
+            C3D.addC3D(tresDirecciones) 
+            retorno.push(
+                new Retorno(
+                    tmp,
+                    izq.tipo
+                )
+            )
+        }
+
+        return retorno
+    }
+
     contiene(objeto,numero)
     {
         for (const iterator of objeto) {
@@ -137,6 +182,91 @@ export class Unary {
         var nodoActual = {id:contador.num,label:this.op}
         NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
         var nodos = this.izquierdo.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        return NodosActuales
+    }
+}
+
+export class RangeExp
+{
+    constructor(inicio,fin)
+    {
+        this.inicio = inicio
+        this.fin = fin
+    }
+
+    getValor(Objetos)
+    {
+        var retorno = []
+        var valinicio = this.inicio.getValor(Objetos)
+        var valfin = this.fin.getValor(Objetos)
+            // plano cartesiano entre valores izq y valores 
+        if(valinicio.length != 1 || valfin.length != 1 || valfin[0].tipo!=Tipo.INTEGER || valinicio[0].tipo!=Tipo.INTEGER)
+        {
+            ErroresGlobal.push({Error:`Se esperaba entero to entero`,tipo:"Semantico",Linea:0,columna:0})
+            return []
+        }
+        for (let index = Number(valinicio[0].valor); index <= Number(valfin[0].valor); index++) {
+            retorno.push(new Literal(Tipo.INTEGER,index))
+        }
+        return retorno
+    }
+    
+    Graficar(ListaNodes,ListaEdges,contador)
+    {
+        var NodosActuales = []
+        var nodoActual = {id:contador.num,label:"to"}
+        NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+        var nodos = this.izquierdo.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        nodos=this.derecho.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        return NodosActuales
+    }
+}
+
+export class Concat 
+{
+    constructor (izquierdo,derecho){
+        this.izquierdo = izquierdo;
+        this.derecho = derecho;
+    }
+
+    getValor(Objetos){
+        var retorno = []
+
+        var valIzq = this.izquierdo.getValor(Objetos)
+        var valDer = this.derecho.getValor(Objetos)
+            // plano cartesiano entre valores izq y valores 
+        for (var izq of valIzq){
+            for (var der of valDer){
+                retorno.push(
+                    new Literal(
+                        Tipo.STRING,
+                        `${izq.valor}${der.valor}`
+                    )
+                )
+            }
+        }
+        return retorno
+    } 
+
+    Graficar(ListaNodes,ListaEdges,contador)
+    {
+        var NodosActuales = []
+        var nodoActual = {id:contador.num,label:"||"}
+        NodosActuales.push(nodoActual);ListaNodes.push(nodoActual);contador.num++
+        var nodos = this.izquierdo.Graficar(ListaNodes,ListaEdges,contador)
+        for (const nodo of nodos) {
+            ListaEdges.push({from:nodoActual.id,to:nodo.id})
+        }
+        nodos=this.derecho.Graficar(ListaNodes,ListaEdges,contador)
         for (const nodo of nodos) {
             ListaEdges.push({from:nodoActual.id,to:nodo.id})
         }

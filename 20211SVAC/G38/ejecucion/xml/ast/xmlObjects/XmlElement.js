@@ -73,4 +73,20 @@ class XmlElement extends XmlObjectAncestor {
         }
         return cad;
     }
+    getStrAst(nodoPadre) {
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot = nombreRoot + "[" + 'label="Element:' + this.name + '",' + 'color="black",' + "];\n ";
+        var cad = cadenaRoot + nodoPadre + "->" + nombreRoot + ";\n";
+        if (this._childs != null) {
+            for (let child of this._childs) {
+                cad += child.getStrAst(nombreRoot);
+            }
+        }
+        if (this._attributes != null) {
+            for (let attribute of this._attributes) {
+                cad += attribute.getStrAst(nombreRoot);
+            }
+        }
+        return cad;
+    }
 }

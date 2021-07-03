@@ -65,58 +65,68 @@ INIT
     ;
 
 INTRO    
-    :  INTRO NODO EOF           {$2.setPos($1.length);$1.push($2); $$ = $1;}
-    |  NODO CHECK               {$1.setPos(0);$$ = [$1];}
+    :  INTRO NODO EOF           {$$ = $1;}
+    |  NODO CHECK               {$$ = [$1];}
     ;
 
 CHECK
-    : EOF               {}
-    |                   {}
+    : EOF                       {}
+    |                           {}
     ;
 
 NODO
-    :    'menor' id LISTAATRIBUTOS 'mayor' LISTANODOS 'menor' '/' id 'mayor'    
-    {
-        if($2!==$8){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column));}
-        $$ = new Entorno($2,'',@1.first_line, @1.first_column,$3,$5);
-    }
-    |    'menor' id LISTAATRIBUTOS 'mayor' NODOTEXTO 'menor' '/' id 'mayor'     
-    {
-        if($2!==$8){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column));}
-        $$ = new Entorno($2,$5,@1.first_line, @1.first_column,$3,[]);
-    }
-    |    'menor' id LISTAATRIBUTOS '/' 'mayor'                          {$$ = new Entorno($2,'',@1.first_line, @1.first_column,$3,[]);}
-    |    'menor' id  'mayor' LISTANODOS 'menor' '/' id 'mayor'                  
-    {
-        if($2!==$7){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column))}
-        $$ = new Entorno($2,'',@1.first_line, @1.first_column,[],$4);
-    }
-    |    'menor' id  'mayor' NODOTEXTO 'menor' '/' id 'mayor'                   
-    {
-        if($2!==$7){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column))}
-        $$ = new Entorno($2,$4,@1.first_line, @1.first_column,[],[]);
-    }
-    |    'menor' id  '/' 'mayor'                                        {$$ = new Entorno($2,'',@1.first_line, @1.first_column,[],[]);}
-    |    error FINDERROR                                                {listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',@1.first_line, @1.first_column))}
+    :   'menor' id LISTAATRIBUTOS 'mayor' LISTANODOS 'menor' '/' id 'mayor'    
+        {
+            if($2!==$8){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column));}
+            $$ = new Entorno($2,'',@1.first_line, @1.first_column,$3,$5,true);
+        }
+    |   'menor' id LISTAATRIBUTOS 'mayor' NODOTEXTO 'menor' '/' id 'mayor'     
+        {
+            if($2!==$8){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column));}
+            $$ = new Entorno($2,$5,@1.first_line, @1.first_column,$3,[],true);
+        }
+    |   'menor' id LISTAATRIBUTOS '/' 'mayor'                          
+        {
+            $$ = new Entorno($2,'',@1.first_line, @1.first_column,$3,[],true);
+        }
+    |   'menor' id  'mayor' LISTANODOS 'menor' '/' id 'mayor'                  
+        {
+            if($2!==$7){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column))}
+            $$ = new Entorno($2,'',@1.first_line, @1.first_column,[],$4,true);
+        }
+    |   'menor' id  'mayor' NODOTEXTO 'menor' '/' id 'mayor'                   
+        {
+            if($2!==$7){listaErrores.push(new ClaseError('Semantico','La etiqueta '+$2+' no esta cerrada',@1.first_line, @1.first_column))}
+            $$ = new Entorno($2,$4,@1.first_line, @1.first_column,[],[],true);
+        }
+    |   'menor' id  '/' 'mayor'                                        
+        {
+            $$ = new Entorno($2,'',@1.first_line, @1.first_column,[],[],true);
+        }
+    |   error FINDERROR                                                
+        {
+            listaErrores.push(new ClaseError('Sintactico','Se esperaba la definicion de una etiqueta',@1.first_line, @1.first_column))
+        }
     ;
 
 FINDERROR
-    : 'mayor' {}
+    : 'mayor'                       {}
     ;
 
+
 LISTANODOS
-    : LISTANODOS NODO   {$1.push($2); $$ = $1;}
-    | NODO              {$$ = [$1];}
+    : LISTANODOS NODO               {$1.push($2); $$ = $1;}
+    | NODO                          {$$ = [$1];}
     ;
 
 LISTAATRIBUTOS
-    : LISTAATRIBUTOS ATRIBUTO   {$2.setPos($1.length); $1.push($2); $$ = $1;}
-    | ATRIBUTO                  {$1.setPos(0);$$ = [$1];}
+    : LISTAATRIBUTOS ATRIBUTO       {$1.push($2); $$ = $1;}
+    | ATRIBUTO                      {$$ = [$1];}
     ;
 
 ATRIBUTO
-    : id '=' sstring    {$$ = new Simbolo($1, $3, @1.first_line, @1.first_column);}
-    | id '=' dstring    {$$ = new Simbolo($1, $3, @1.first_line, @1.first_column);}
+    : id '=' sstring                {$$ = new Simbolo($1, $3, @1.first_line, @1.first_column,true);}
+    | id '=' dstring                {$$ = new Simbolo($1, $3, @1.first_line, @1.first_column,true);}
     ;
 
 NODOTEXTO 

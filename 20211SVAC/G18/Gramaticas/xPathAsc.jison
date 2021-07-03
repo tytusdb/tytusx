@@ -95,6 +95,7 @@ Init : Exp EOF
 			init.addHijo($1);
 			return init;
 		} ;
+		
 
 Exp : DIVSIGN Lexp
 		{
@@ -109,7 +110,14 @@ Exp : DIVSIGN Lexp
 			var exp = new NodoXML("Exp","Exp",@1.first_line+1,@1.first_column+1);			
 			exp.addHijo($1);
 			$$ = exp;
+		}
+	| error {        
+			errores.push(new Error_(@1.first_line, @1.first_column, 'Sintactico','Valor inesperado ' + yytext));
+			
+			var init = new NodoXML("Init","Init",@1.first_line+1,@1.first_column+1);			
+			return init;
 		};
+
 
 Lexp : Lexp ORSIGN DIVSIGN Syntfin
 		{
@@ -136,7 +144,8 @@ Lexp : Lexp ORSIGN DIVSIGN Syntfin
 			var lexp = new NodoXML("Lexp","Lexp",@1.first_line+1,@1.first_column+1);			
 			lexp.addHijo($1);
 			$$ = lexp;
-		}; 
+		};
+
 
 Syntfin    : Fin
 				{
@@ -243,6 +252,7 @@ Fin :  Valor Opc
 		};
 
 
+
 Valor : ID
 			{
 				var val = new NodoXML($1,"Valor",@1.first_line+1,@1.first_column+1);				
@@ -268,6 +278,7 @@ Valor : ID
 				var val = new NodoXML($1,"Valor",@1.first_line+1,@1.first_column+1);				
 				$$ = val;
 			};
+
 
 Preservada:  CHILD
 					{
@@ -313,7 +324,9 @@ Preservada:  CHILD
 					{
 						var val = new NodoXML($1,"Axes",@1.first_line+1,@1.first_column+1);				
 						$$ = val;
-					};
+					}
+					;
+
 
 Opc : LPredicado
 			{
@@ -325,6 +338,7 @@ Opc : LPredicado
 				var opc = new NodoXML("Opc","Opc",@1.first_line+1,@1.first_column+1);									
 				$$ = opc;
 			};
+
 
 LPredicado : LPredicado Predicado
 						{
@@ -340,6 +354,7 @@ LPredicado : LPredicado Predicado
 							$$ = lpredicado;
 						};
 
+
 Predicado: '[' ExprLogica']'
 			{
 				var predicado = new NodoXML("Predicado","Predicado",@1.first_line+1,@1.first_column+1);
@@ -350,6 +365,7 @@ Predicado: '[' ExprLogica']'
 				predicado.addHijo(val2);					
 				$$ = predicado;
 			};
+
 
 ExprLogica
          : Expr '<=' Expr
@@ -412,6 +428,7 @@ ExprLogica
 				exprLogica.addHijo($1);					
 				$$ = exprLogica;
 			};
+
 
 Expr : Expr '+' Expr   
 			{
@@ -492,3 +509,4 @@ Expr : Expr '+' Expr
 			expr.addHijo($1);
 			$$ = expr;
 		 };
+

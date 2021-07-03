@@ -12,7 +12,7 @@ export class TablaSimbolosComponent implements OnInit {
   }
   lista:Array<any>;
   ngOnInit(): void {
-    this.lista=JSON.parse(localStorage.getItem("tablaSimbolo"));
+    this.lista=JSON.parse(localStorage.getItem("tablaSimboloAux"));
     
   }
 

@@ -11,10 +11,6 @@ class AnyIdentifier {
     }
     getValor(ent) {
         let ts = ent.findAllObjectsByNombreElemento(this.identifier);
-        if (!ts.esVacia())
-            this.predicatesList.forEach(function (expresion) {
-                expresion.getValor(ts);
-            });
-        return ts;
+        return PredicateExpresion.filterXpathExpresion(ts, this.predicatesList);
     }
 }

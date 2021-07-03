@@ -4,7 +4,7 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class Relacional extends Instruccion {
@@ -96,6 +96,9 @@ export default class Relacional extends Instruccion {
         return '' + valor;
     }
   }
+  codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+    throw new Error('Method not implemented.');
+  }
 }
 
 export enum Relacionales {
@@ -105,4 +108,5 @@ export enum Relacionales {
   MENOR,
   MAYORIGUAL,
   MENORIGUAL,
+  NOIGUAL
 }

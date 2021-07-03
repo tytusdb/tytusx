@@ -1,0 +1,275 @@
+
+<html> 
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">    
+        <link rel="stylesheet" type="text/css" href="./Fase2/Css/styles.css">\
+        <link rel="stylesheet" type="text/css" href="./Fase2/Css/vis.css">
+        <script src="./Fase2/Js/Tabs.js"></script>
+        <script src="./Fase2/Js/index.js"></script>
+        <script src="./Fase2/Js/Descargas.js"></script>
+        <script src="./Fase2/Js/vis.js"></script>
+        <script src="./Fase2/Js/Interprete/Gramatica/XMLascReports.js" ></script>
+        <script src="./Fase2/Js/Interprete/Gramatica/XMLdescReports.js" ></script>
+        <script src="./Fase2/Js/Interprete/Gramatica/XpathAsc.js" ></script>
+        <script src="./Fase2/Js/Interprete/Gramatica/XpathDesc.js" ></script>
+        <script src="./Fase2/Js/Interprete/Gramatica/XQueryAsc.js" ></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/Atributo.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/Objeto.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/GenerarArbol.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/NodoArbol.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/Error.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/ListaErrores.js"></script>
+        <script src="./Fase2/Js/globales.js" ></script>
+        <script src="./Fase2/Js/Interprete/AST/AST.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/Entorno.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/EntornoXML.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/Simbolo.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/TablaSimbolos.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/TablaSimbolosXML.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/Tipo.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/ReporteGramatical.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/ReporteTablaSimbolos.js"></script>
+        <script src="./Fase2/Js/Interprete/AST/ReporteTablaSimbolosXMl.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/Operacion.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/Primitivo.js"></script>
+        <script src="./Fase2/Js/Interprete/Interfaces/Expresion.js"></script>
+        <script src="./Fase2/Js/Interprete/Interfaces/Instruccion.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/Axes.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/ExpresionXPath.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/NodoXpath.js"></script>
+        <script src="./Fase2/Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
+        <script src="./Fase2/Js/Interprete/Instrucciones/XPath.js"></script>
+        <!-- JS TRANSLATOR XML-->
+        <script src="./Fase2/Js/Traductor/XPATH.js"></script>
+        <script src="./Fase2/Js/Traductor/xml.js"></script>
+        <!-- JS OPTIMIZADOR-->
+        <script src="./gramaticaOptimizador.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionAsig.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/declaracionS.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/function.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/include.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/main.js"></script>
+        <script src="./Fase2/Js/Optimizador/bloque/parametro.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionOp.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignarIdArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionDosExpr.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/call.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/etiqueta.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/goto.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/if.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/print.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/return.js"></script>
+        <script src="./Fase2/Js/Optimizador/Tipo3D.js"></script>
+        <script src="./Fase2/Js/Optimizador/optimizador.js"></script>
+
+
+        <script>
+
+            var heap = [];
+            var stack = [];
+            var contadorStack = 0;
+            var globalC3D = "";
+
+            //xml translator
+            var xpathC3D = "";
+            var hp = 0;
+            var xml3D = "";
+            var temp0 = "";
+            var t0 = 0;
+            var temp1 = "";
+            var t1 = 0;
+            var sp = 2;
+            var contTemporal = 0;
+            var endXml=0;
+            var funcionesALlamar="";
+            var contEtiquetas=0;
+
+
+            
+            var numeroTemporales = 0;
+            var codificacionGlobal = "UTF-8";
+            var ListaErr = new ListaErrores();
+            var GenerarDOT = new GenerarArbol();
+            var tablaSimbolosXML = null;
+            var NumeroE = 1;
+            var resultadoXML = null;
+            var resultadoXPath = null;
+            var resultadoXQuery = null;
+            var analisisCorrecto = true;
+            var analisisXpathCorrecto = true;
+            var analisisXqueryCorrecto = true;
+            var continuarXpath = true;
+            var DOTxmlCSTasc = "";
+            var DOTxmlCSTdesc = "";
+            var DOTxmlErrores = "";
+            var DOTXPATHASTasc = "";
+            var DOTXPATHASTDesc = "";
+            var DOTXQUERYASTAsc = "";
+            var DOTXQUERYASTDesc = "";
+            var RGxml = new ReporteGramatical();
+            var RGxmlDesc = new ReporteGramatical();
+            var ListaDAG = [];
+            var nodoxPATHASC = null;
+            var nodoxPATHDESC = null;
+            var nodoxQUERYASC = null;
+            var IDentorno = 1;
+            var IDobj = 1;
+            var objetosGlobal = null;
+            var entornosGlobal = null;
+            var salidaXPath = null;
+            var salidaRecursiva = "";
+            var salidaGlobal = "";
+        </script>
+        <title> Compi 2 - Proyecto 1 Fase 2</title>
+        <link href="./Fase2/codemirror/lib/codemirror.css" rel="stylesheet">
+        <script src="./Fase2/codemirror/lib/codemirror.js"></script>
+        <script src="./Fase2/codemirror/mode/clike/clike.js"></script>
+        <link href="./Fase2/codemirror/theme/midnight.css" rel="stylesheet">
+        <link href="./Fase2/codemirror/theme/cobalt.css" rel="stylesheet">
+        <link href="./Fase2/codemirror/theme/duotone-light.css" rel="stylesheet">
+        <link href="./Fase2/codemirror/theme/duotone-dark.css" rel="stylesheet">
+        <link href="./Fase2/codemirror/theme/ayu-dark.css" rel="stylesheet">
+        <script src="./Fase2/codemirror/mode/xml/xml.js"></script>
+        <script src="./Fase2/codemirror/mode/xquery/xquery.js"></script>
+        
+    </head> 
+    <body> 
+       <div class="editor1"> 
+            <div>
+                <div class="componente">
+                    <div class="dropdown">
+                        <button onclick="Menu()" class="dropbtn">Funciones Basicas</button>
+                        <div id="myDropdown1" class="dropdown-content">
+                            <input type="file" id="real-file" hidden="hidden" />
+                            <a class="dropitem" id="botonAbrir">Abrir archivo XML</a>
+                            <input type="file" id="real-file2" hidden="hidden" />
+                            <a class="dropitem" id="XPath">Abrir archivo XPath</a>
+                            <a class="dropitem" id="guardar-xml" onclick="GenerarDescarga()">Guardar XML como...</a>
+                            <a class="dropitem" id="guardar-xpath" onclick="GenerarDescargaXPath()">Guardar XPath como...</a>
+                            <a class="dropitem" onclick="LimpiarXML()">Limpiar editor XML</a>
+                            <a class="dropitem" onclick="LimpiarXPath()">Limpiar editor XPath</a>
+                            <a class="dropitem" onclick="LimpiarSalida()">Limpiar salida</a>
+                            <a class="dropitem" onclick="LimpiarTodo()">Limpiar todo</a>
+                        </div>
+                    </div> 
+                </div>
+                <div class="componente">
+                    <div class="dropdown">
+                        <button onclick="Descargar()" class="dropbtn">Reportes Fase1</button>
+                        <div id="myDropdown2" class="dropdown-content">
+                        <a class="dropitem" id="cstXML">CST XML (Asc)</a>
+                        <a class="dropitem" id="cstXMLDesc">CST XML (Desc)</a>
+                        <a class="dropitem" id="erroresXML">Errores</a>
+                        <a class="dropitem" id="tsXML">Tabla de Simbolos XML</a>
+                        <a class="dropitem" id="rgXML">Reporte gramatical XML (Asc)</a>
+                        <a class="dropitem" id="rgXMLdesc">Reporte gramatical XML (Desc)</a>
+                        <a class="dropitem" id="astXP">AST XPATH (Asc)</a>
+                        <a class="dropitem" id="astXPDesc">AST XPATH (Desc)</a>
+                       
+                        </div>
+                    </div> 
+                </div>
+                <div class="componente">
+                    <div class="dropdown">
+                        <button onclick="ReportesFase2()" class="dropbtn">Reportes Fase2</button>
+                        <div id="myDropdown3" class="dropdown-content">
+                        <a class="dropitem" id="tsXML3D">Tabla de Simbolos XML</a>
+                        <a class="dropitem" id="errores">Errores Traduccion</a>        
+                        <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
+                        </div>
+                    </div> 
+                </div>
+                
+                
+            </div>
+            
+        
+            <div class="editores">
+            <span>
+                        <button class="button1" onclick="CargarXML()">Ejecutar (Asc)</button>
+                        <button class="button3" onclick="CargarXMLDesc()">Ejecutar (Desc)</button>
+                    </span>
+            <div class="consola">
+
+        <div class="labelConsola"><label class="label info">XPath</label></div>
+            <!-- ENTRADA XPATH -->
+            <textarea id="entrada_xpath"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>
+                <!-- INICIO TAGS -->
+                 <!-- Tab links -->
+                <div class="tab">
+                    <button id='pagina1' class="tablinks" onclick="openTag(event, 'p1'); SetearUno()">Pestaña 1</button>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function(event) { 
+                          document.getElementById("pagina1").click();
+                       });
+                      </script>
+                    <button class="tablinks" onclick="openTag(event, 'p2'); SetearDos()">New Tab</button>
+                    
+                    
+                </div>
+                <!-- Tab content -->
+                <div id="p1" class="tabcontent">
+                    <!-- EDITOR 1 -->
+                    <textarea id="editor" ></textarea>
+                       
+                    <!-- FIN EDITOR 1 -->                 
+                </div>                   
+                <div id="p2" class="tabcontent">
+                    <!-- EDITOR 2 -->
+                    <textarea id="editor2"></textarea>
+
+                    <!-- FIN EDITOR 2 -->
+                </div>
+                <script src="Fase2/Js/Codemirrors.js"></script>
+                <script>DefaultTag('p1');</script>
+               <!-- FIN TAGS -->
+            </div>  
+       </div>        
+        <div class="labelConsola"><label class="label info">CONSOLA</label></div>
+        <div class="consola">
+            <!-- CONSOLA Python -->
+            <textarea id="salida_xpath"></textarea>
+            <!-- FIN CONSOLA JS -->
+        </div>
+
+        
+        <div class="labelConsola"><label class="label info">XQuery</label></div>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="entrada_xquery"></textarea>
+            <!-- FIN ENTRADA XPATH -->
+        </div>
+        
+        <div class="labelConsola"><label class="label info">Traduccion</label></div>
+        
+        <button class="button3" onclick="Optimizar()">Optimizar</button>
+        <div class="consola">
+            <!-- ENTRADA XPATH -->
+            <textarea id="salida_traduccion"></textarea>
+            
+            <!-- FIN ENTRADA XPATH -->
+        </div>  
+
+                <div class="labelConsola"><label class="label info">Reporte optimizar</label></div>
+        <div class="consola">
+            <!-- CONSOLA Python -->
+            <textarea id="reporte"></textarea>
+            <!-- FIN CONSOLA JS -->
+        </div>     
+
+        <script src="Fase2/Js/Consolas.js"></script>
+        
+        
+
+    <script src="./Fase2/Js/jquery.min.js"></script>
+    <script src="./Fase2/Js/jquery.backtotop.js"></script>
+    <script src="./Fase2/Js/jquery.mobilemenu.js"></script>     
+              
+    </body> 
+ </html> 
+ 

@@ -7,6 +7,7 @@
     const { Division } = require('./Division');
     const { Modulo } = require('./Modulo');
     const { Literal } = require('./Literal');
+    const { Id } = require('./Id');
 
     const { Error } = require('./Error');
     //var erroresXPath = require('./indexXPath').erroresXPath;
@@ -104,7 +105,6 @@ charliteral                         \'{stringsingle}\'
 %left 'mas' 'menos'
 %left 'por' 'div' 'mod'
 %left UMINUS
-//%left 'lparen' 'rparen'
 
 // PRODUCCIÓN INICIAL
 %start START
@@ -113,7 +113,7 @@ charliteral                         \'{stringsingle}\'
 /* GRAMATICA */
 START:
     LCONSULTAS EOF      {
-                            console.log('Analisis XPath Finalizado!'); 
+                            console.log('Analisis XPath Ascendente Finalizado!'); 
                             $$ = $1; return $$;
                         }
 ;
@@ -144,10 +144,8 @@ ENODO:
 ;
 
 NODO:
-    TKid lcorchete PRED rcorchete  { 
-                                    //console.log($3); 
+    TKid lcorchete E rcorchete  { 
                                     var aux = new ObjetoXPath($1.toString());
-                                    //aux.exp = $3.getValor();
                                     aux.setExpresion($3);
                                     $$ = aux;
                                 }
@@ -156,16 +154,6 @@ NODO:
     | por                       { $$ = new ObjetoXPath($1); }
     | dot                       { $$ = new ObjetoXPath($1); }
     | dobledot                  { $$ = new ObjetoXPath($1); }
-;
-
-PRED:
-    L_LOGICAS
-;
-
-L_LOGICAS:
-    L_LOGICAS and E
-    | L_LOGICAS or E
-    | E
 ;
 
 E: 
@@ -180,6 +168,8 @@ E:
 	| E mayorigual E            {}
 	| E igual E                 {}
 	| E noigual E               {}
+    | E and E                   {}
+    | E or E                    {}
 	| menos E %prec UMINUS      { 
                                     var men = new Literal(0,'0');
                                     $$ = new Resta(men,$2,@1.first_line,@1.first_column);
@@ -193,6 +183,6 @@ PRIMITIVO:
 	| TKdouble                  { $$ = new Literal(1,$1.toString()); }
     | TKchar                    { $$ = new Literal(2,$1.toString()); }
 	| TKstring                  { $$ = new Literal(3,$1.toString()); }
-    | Rlast lparen rparen       { $$ = new Literal(6,$1.toString()+'()'); } //Pendiente de ver el last :v
+    | Rlast lparen rparen       { $$ = new Literal(6,$1.toString()+'()'); }
     | Rposition lparen rparen   { $$ = new Literal(6,$1.toString()+'()'); } //Pendiente de ver el position :v
 ;

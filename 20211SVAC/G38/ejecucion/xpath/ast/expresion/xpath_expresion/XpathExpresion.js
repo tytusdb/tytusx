@@ -15,13 +15,7 @@ class XpathExpresion {
             if (entornoActual == undefined || entornoActual == null) {
                 throw Error("Se devolvio tabal nula");
             }
-            let entornoNuevo = expresion.getValor(entornoActual);
-            if (entornoActual.esGlobal) {
-                entornoActual = entornoNuevo;
-            }
-            else {
-                entornoActual.merge(entornoNuevo);
-            }
+            entornoActual = expresion.getValor(entornoActual);
             if (!(expresion instanceof RootCurrent || expresion instanceof RootParent))
                 entornoActual.esGlobal = false;
         }

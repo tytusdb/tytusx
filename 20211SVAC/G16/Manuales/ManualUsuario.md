@@ -28,7 +28,7 @@ TytusX es una aplicación que soportará archivos XML y manejará el lenguaje de
 
   * **Ventana Principal**
 
-![Principal](Usuario/img1.png) 
+![Imgur](https://i.imgur.com/5a1Vq8z.png) 
 <div style="text-align: center">
 
 _Imagen No. 1_
@@ -38,7 +38,7 @@ Se muestra la ventana de inicio de la aplicación, se puede observar que cuenta 
 
 * **XML**
 
-![XML](Usuario/img2.png) 
+![Imgur](https://i.imgur.com/46L5Geu.png)
 <div style="text-align: center">
 
 _Imagen No. 2_
@@ -48,7 +48,7 @@ Aquí se puede ver la sección asignada para los archivos XML, en el área de te
 
 * **XPath**
 
-![XPath](Usuario/img3.png) 
+![Imgur](https://i.imgur.com/4h06dm2.png)
 <div style="text-align: center">
 
 _Imagen No. 3_
@@ -58,7 +58,7 @@ Al igual que con los archivos XML, las consultas de XPath también cuentan con s
 
   * **Consolas**
 
-![Consolas](Usuario/img4.png)
+![Imgur](https://i.imgur.com/wN2msEt.png)
 <div style="text-align: center">
 
 _Imagen No. 4_
@@ -68,7 +68,7 @@ En esta sección se encuentran las consolas de salida. En Consola se mostrarán 
 
   * **Reportes**
 
-  ![Reportes](Usuario/img5.png)
+  ![Imgur](https://i.imgur.com/J2uAXQw.png)
   <div style="text-align: center">
 
   _Imagen No. 5_
@@ -92,7 +92,7 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * XML
 
-![EjemploXML](Usuario/img8.png)
+![Imgur](https://i.imgur.com/GkHMx8C.png)
   <div style="text-align: center">
 
   _Imagen No. 6_
@@ -102,7 +102,7 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * CST
 
-![EjmeploCST](Usuario/img9.png)
+![Imgur](https://i.imgur.com/D9rM7jO.png)
   <div style="text-align: center">
 
   _Imagen No. 7_
@@ -112,7 +112,7 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * Tabla de Símbolos
 
-![EjemploSimbolos](Usuario/img10.png)
+![Imgur](https://i.imgur.com/DJQjAg9.png)
   <div style="text-align: center">
 
   _Imagen No. 8_
@@ -122,7 +122,7 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * Reporte Gramatical
 
-![EjemploGramatical](Usuario/img11.png)
+![Imgur](https://i.imgur.com/EeJo50e.png)
   <div style="text-align: center">
 
   _Imagen No. 9_
@@ -132,7 +132,7 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * XPath
 
-![EjemploXpath](Usuario/img6.png)
+![Imgur](https://i.imgur.com/NjpuIYm.png)
   <div style="text-align: center">
 
   _Imagen No. 10_
@@ -142,7 +142,7 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * Reporte AST
 
-![EjemploAST](Usuario/img7.png)
+![Imgur](https://i.imgur.com/n7uiNXx.png)
   <div style="text-align: center">
 
   _Imagen No. 11_
@@ -152,20 +152,10 @@ Esta pestaña muestra los reportes que se pueden realizar luego de analizar los 
 
 * Consola
 
-![EjemploConsola](Usuario/img12.png)
+![Imgur](https://i.imgur.com/Ofi6Ycq.png)
   <div style="text-align: center">
 
   _Imagen No. 12_
-  </div>
-Se observa que no hay errores en el análisis.
-  <br><br>
-
-* Salida
-
-![EjemploSalida](Usuario/img13.png)
-  <div style="text-align: center">
-
-  _Imagen No. 13_
   </div>
 Se observa el resultado de la consulta.
 
