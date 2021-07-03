@@ -132,13 +132,13 @@ case 38:
 this.$=new theforsimple.default($$[$0-6],$$[$0],_$[$0-7].first_line,_$[$0-7].first_column,$$[$0-4],$$[$0-2]);
 break;
 case 39:
-this.$=new theforsimple.default($$[$0-4],$$[$0],_$[$0-5].first_line,_$[$0-5].first_column,$$[$0-2],[]);
+this.$=new theforsimple.default($$[$0-4],$$[$0],_$[$0-5].first_line,_$[$0-5].first_column,$$[$0-2],null);
 break;
 case 40:
-this.$=new theforsimple.default($$[$0-4],$$[$0],_$[$0-5].first_line,_$[$0-5].first_column,[],$$[$0-2]);
+this.$=new theforsimple.default($$[$0-4],$$[$0],_$[$0-5].first_line,_$[$0-5].first_column,null,$$[$0-2]);
 break;
 case 41:
-this.$=new theforsimple.default($$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column,[],[]);
+this.$=new theforsimple.default($$[$0-2],$$[$0],_$[$0-3].first_line,_$[$0-3].first_column,null,null);
 break;
 case 42:
 this.$=$$[$0-2]+$$[$0-1]+$$[$0]
@@ -400,7 +400,6 @@ parse: function parse(input) {
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
     const relacional = require("./Expresiones/Relacional");
-
     const barrasnodo= require("./Instrucciones/BarrasNodo")
     const identificador= require("./Expresiones/Identificador");
     const nativo= require("./Expresiones/Nativo");

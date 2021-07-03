@@ -20,6 +20,7 @@ export default class CondicionSimple extends Instruccion {
 
     public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
         return {variables: this.variables, consulta: this.consulta}
+
     }
     public getNodoAST(): nodoAST {
         throw new Error("Method not implemented.");

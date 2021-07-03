@@ -208,9 +208,9 @@ FORCOMPUESTO
 
  FORSIMPLE
     :RFOR CONDICIONSIMPLE RWHERE CONDICION RORDERBY CONDICION RRETURN RETORNO       {$$=new theforsimple.default($2,$8,@1.first_line,@1.first_column,$4,$6);}
-    |RFOR CONDICIONSIMPLE RWHERE CONDICION RRETURN RETORNO                          {$$=new theforsimple.default($2,$6,@1.first_line,@1.first_column,$4,[]);}     
-    |RFOR CONDICIONSIMPLE RORDERBY CONDICION RRETURN RETORNO                        {$$=new theforsimple.default($2,$6,@1.first_line,@1.first_column,[],$4);}    
-    |RFOR CONDICIONSIMPLE RRETURN RETORNO                                           {$$=new theforsimple.default($2,$4,@1.first_line,@1.first_column,[],[]);}      
+    |RFOR CONDICIONSIMPLE RWHERE CONDICION RRETURN RETORNO                          {$$=new theforsimple.default($2,$6,@1.first_line,@1.first_column,$4,null);}     
+    |RFOR CONDICIONSIMPLE RORDERBY CONDICION RRETURN RETORNO                        {$$=new theforsimple.default($2,$6,@1.first_line,@1.first_column,null,$4);}    
+    |RFOR CONDICIONSIMPLE RRETURN RETORNO                                           {$$=new theforsimple.default($2,$4,@1.first_line,@1.first_column,null,null);}      
     ;      
 
 CONDICIONCOMPUESTA

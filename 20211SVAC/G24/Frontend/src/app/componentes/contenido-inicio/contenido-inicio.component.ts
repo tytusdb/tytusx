@@ -40,6 +40,7 @@ import { collectExternalReferences } from '@angular/compiler';
 import Let from 'src/app/Backend/XQUERY/Analizador/Instrucciones/Let';
 import ForCompuesto from 'src/app/Backend/XQUERY/Analizador/Instrucciones/ForCompuesto';
 import Llamada from 'src/app/Backend/Optimizacion/Instrucciones/Llamada';
+import { element } from 'protractor';
 
 export let listaErrores: Array<NodoErrores>;
 export let listainstrucciones: Array<Instruccion[]>
@@ -726,37 +727,56 @@ export class ContenidoInicioComponent implements OnInit {
     var Tree: ArbolXQUERY = new ArbolXQUERY([objetos]);
     var tabla = new tablaSimbolosXQuery();                    //ejecucion
     console.log(Tree);
-    var cadena=""
+    var cadena = ""
+    var consola = ""
+
+    for (var key of this.tablaGlobal.getTabla()) {//SIMBOLOS
+      if (key.getidentificador() == 'xml') {
+        this.tablaGlobal = key.getvalor()
+      }
+    }
+
     for (let index = 0; index < ast.getinstrucciones().length; index++) {
       const instructions = ast.getinstrucciones()[index];
-      if(instructions instanceof Funcion){
+      if (instructions instanceof Funcion) {
 
-      }else if(instructions instanceof Let){
-        var respuesta= instructions.interpretar(Tree,tabla, this.tablaGlobal)
+      } else if (instructions instanceof Let) {
+        var respuesta = instructions.interpretar(Tree, tabla, this.tablaGlobal)
         console.log(typeof respuesta)
-        if(respuesta instanceof SimboloXQuery){
-          cadena+= respuesta.getvalor()
-        }else if(respuesta instanceof Array){
+        if (respuesta instanceof SimboloXQuery) {
+          cadena += respuesta.getvalor()
+        } else if (respuesta instanceof Array) {
           respuesta.forEach(element => {
-            cadena+= element.getvalor();
+            cadena += element.getvalor();
           });
-        }else if (respuesta instanceof tablaSimbolos) {
-            if (TreeAsc != null) {
-              cadena += this.recorrerTablaXquery(respuesta, TreeAsc);
-              cadena += "\n"
-            }
-          
-        }
-      }else if(instructions instanceof ForSimple){
-        instructions.interpretar(Tree,tabla, this.tablaGlobal);
-      }else if(instructions instanceof ForCompuesto){
+        } else if (respuesta instanceof tablaSimbolos) {
+          if (TreeAsc != null) {
+            cadena += this.recorrerTablaXquery(respuesta, TreeAsc);
+            cadena += "\n"
+          }
 
-      }else if(instructions instanceof Llamada){
+        }
+      } else if (instructions instanceof ForSimple) {
+        var hola: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        if (hola instanceof SimboloXQuery) {
+          consola += hola.getvalor();
+        } else if (hola instanceof Array) {
+          hola.forEach(element => {
+            consola += element.getvalor();
+          });
+          console.log(consola)
+
+        } else {
+          consola = <string><unknown>instructions.respuesta
+          this.mostrarContenido(consola, 'resultado');
+        }
+      } else if (instructions instanceof ForCompuesto) {
+
+      } else if (instructions instanceof Llamada) {
 
       }
     }
 
-    this.mostrarContenido(cadena,'resultado');
 
   }
 
@@ -773,6 +793,7 @@ export class ContenidoInicioComponent implements OnInit {
         }
         //  let recorrido=
         let atributos = ""
+
 
         /**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
          * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IMPRIMIR DATOS CD3 XPATH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -829,6 +850,7 @@ export class ContenidoInicioComponent implements OnInit {
 
     }
     this.mostrarContenido(cadenaconcat, 'resultado');
+
     var reco = Tree.getSimbolos();
     let reporte = JSON.stringify(reco);
     localStorage.setItem("optimo", reporte);
