@@ -27,13 +27,13 @@ var Expresion = /** @class */ (function () {
             case "dospuntos":
                 datos = {
                     id: "..",
-                    pred: "false"
+                    pred: "dospuntos"
                 };
                 return datos;
             case "punto":
                 datos = {
                     id: ".",
-                    pred: "false"
+                    pred: "punto"
                 };
                 return datos;
             case "aterisco":
@@ -42,10 +42,18 @@ var Expresion = /** @class */ (function () {
                     pred: "false"
                 };
                 return datos;
-            case "agributoT":
+            case "atributoT":
                 datos = {
                     id: "@*",
-                    pred: "false"
+                    pred: "atributoT"
+                };
+                return datos;
+            case "atributoid":
+                indice = this.operadord;
+                tope = "*";
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "atributoid"
                 };
                 return datos;
             case "+":
@@ -108,6 +116,60 @@ var Expresion = /** @class */ (function () {
                     pred: "noigual"
                 };
                 return datos;
+            //PARA EL XQUERY
+            case "eq": //IGUAL
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "eq"
+                };
+                return datos;
+            case "ne": //DIFERENTE
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "ne"
+                };
+                return datos;
+            case "lt": //MENOR
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "lt"
+                };
+                return datos;
+            case "le": //MENOR IGUAL
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "le"
+                };
+                return datos;
+            case "gt": //MAYOR
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "gt"
+                };
+                return datos;
+            case "ge": //MAYOR IGUAL
+                indice = this.operadori.execute(padre);
+                tope = this.operadord.execute(padre);
+                datos = {
+                    id: { indice: indice, tope: tope },
+                    pred: "ge"
+                };
+                return datos;
+            //------------------------------------------------------------------------------
+            case "cadenas":
+                var x = this.operadori;
+                var cadena = x.replace("\"", "");
+                return cadena;
             case "entero":
                 return Number(this.operadori);
         }
