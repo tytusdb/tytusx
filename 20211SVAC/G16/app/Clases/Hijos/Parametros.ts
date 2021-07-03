@@ -18,30 +18,22 @@ export class Parametros implements Instruccion{
     this.columna=columna;
     this.params=params;
   }
-  ejecutar(entorno: any) {
-    throw new Error('Method not implemented.');
-  }
-  insertSimbolsTable(node: any, anterior: string, eEntorno:Entorno):Entorno {
-    let repetido=false;
-    let lista=TableSimbols.TableSimbols.getLista();
-      lista.forEach(element => {
-        if(element.Valor.Tipo=="Parámetro" && element.Nombre==node.variable && element.Padre==anterior){
-          console.log("error semántico")
-          repetido=true;
-        }
-      });
-    if(!repetido){
-      let valor=new Valor("Parámetro",node,"");
-      let simbolo=new Simbolo(node.variable,valor,anterior,node.linea,node.columna,-1);
-      eEntorno.Add(simbolo);
-     // TableSimbols.TableSimbols.add(simbolo);
-      if(node.params!=null){
-        node.params.insertSimbolsTable(node.params,anterior,eEntorno);
-      }
+  ejecutar(entorno: Entorno,node:any) {
+   entorno.variables.forEach(variable=>{
+    if(variable.Nombre==this.variable){
+      console.log("LA VARIABLE YA EXISTE")
+      return null
     }
-
-    return eEntorno;
+   });
+   let valor=new Valor("Parámetro",null,"");
+   let simbolo=new Simbolo(this.getVariable(),valor,entorno.nombre,node.linea,node.columna,-1);
+   entorno.AddVariables(simbolo);
+   TableSimbols.TableSimbols.add(simbolo);
+   if(this.params!=null){
+     this.params.ejecutar(entorno,this.params)
+   }
   }
+
 
   getTipo():Tipo{
     return this.tipo;

@@ -56,51 +56,54 @@ export class OptimizadorMirilla{
     
     Regla3()    {
         try {
-            val1 = parseInt(asigact.operando1);
-            val2 = parseInt(asigact.operando2);
-            if(asigact.comparacion === "==") {
-                if (asigact.operando1 === asigact.operando2) {
-                    this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
-                    this.NuevoVal = "";
-                    return true;
+            val1 = Number(asigact.operando1);
+            val2 = Number(asigact.operando2);
+            if(!Number.isNaN(val1) && !Number.isNaN(val2)) {
+                if(asigact.comparacion === "==") {
+                    if (val1 === val2) {
+                        this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
+                        this.NuevoVal = "";
+                        return true;
+                    }
+                    return false;
+                } else if (asigact.comparacion === "!=") {
+                    if (val1 !== val2) {
+                        this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
+                        this.NuevoVal = "";
+                        return true;
+                    }
+                    return false;
+                } else if (asigact.comparacion === ">=") {
+                    if (val1 >= val2) {
+                        this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
+                        this.NuevoVal = "";
+                        return true;
+                    }
+                    return false;
+                } else if (asigact.comparacion === "<=") {
+                    if (val1 <= val2) {
+                        this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
+                        this.NuevoVal = "";
+                        return true;
+                    }
+                    return false;
+                } else if (asigact.comparacion === "<") {
+                    if (val1 < val2) {
+                        this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
+                        this.NuevoVal = "";
+                        return true;
+                    }
+                    return false;
+                } else if (asigact.comparacion === ">") {
+                    if (val1 > val2) {
+                        this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
+                        this.NuevoVal = "";
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            } else if (asigact.comparacion === "!=") {
-                if (asigact.operando1 !== asigact.operando2) {
-                    this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
-                    this.NuevoVal = "";
-                    return true;
-                }
-                return false;
-            } else if (asigact.comparacion === ">=") {
-                if (asigact.operando1 >= asigact.operando2) {
-                    this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
-                    this.NuevoVal = "";
-                    return true;
-                }
-                return false;
-            } else if (asigact.comparacion === "<=") {
-                if (asigact.operando1 <= asigact.operando2) {
-                    this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
-                    this.NuevoVal = "";
-                    return true;
-                }
-                return false;
-            } else if (asigact.comparacion === "<") {
-                if (asigact.operando1 < asigact.operando2) {
-                    this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
-                    this.NuevoVal = "";
-                    return true;
-                }
-                return false;
-            } else if (asigact.comparacion === ">") {
-                if (asigact.operando1 > asigact.operando2) {
-                    this.ReporteCodigo.push(new Optimizado("3","if("+asigact.operando1+asigact.comparacion+asigact.operando2+")","Se elimina la instruccion"));
-                    this.NuevoVal = "";
-                    return true;
-                }
-                return false;
             }
+            
             return false;
         } catch (error) {
             return false;

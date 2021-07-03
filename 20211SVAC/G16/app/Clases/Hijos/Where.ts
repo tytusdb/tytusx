@@ -11,14 +11,9 @@ export class Where implements Instruccion{
     this.linea=linea;
     this.columna=columna;
   }
-  insertSimbolsTable(node: any, anterior:string, eAnterior:any):Entorno {
-    throw new Error('Method not implemented.');
-    return eAnterior
-  }
 
-
-  ejecutar(entorno: any) {
-    throw new Error('Method not implemented.');
+  ejecutar(entorno: Entorno, node:any) {
+   console.log("pasó por el where")
   }
 
 }

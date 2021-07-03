@@ -6,16 +6,19 @@ var call =/**@class */ (function(){
         this.codigo = ""
         this.ids = ids
         this.id = id
+        this.optimizado=false
     }
     call.prototype.getTipo = function(){
         return this.tipo
     }
-    call.prototype.setOptimizado = function (codigo) {
+    call.prototype.setOptimizado = function (codigo, optim) {
+        if(optim==true)
+            this.optimizado=true
         this.codigo=codigo
         return 
     }
     call.prototype.set3D = function(){
-        if(this.tipo!= tipoInstr.NULL){
+        if(this.tipo!= tipoInstr.NULL&&this.optimizado==false){
             this.codigo = this.id+"("
             for(let i=0; i<this.ids.length; i++){
                 if(i==0)
@@ -24,7 +27,9 @@ var call =/**@class */ (function(){
                     this.codigo+=", "+this.ids[i]
             }
             this.codigo +=");\n"
-        }else    
+        }else if(this.tipo!= tipoInstr.NULL&&this.optimizado==true)
+            this.codigo= this.codigo
+        else    
             this.codigo=""
         
         return this.codigo

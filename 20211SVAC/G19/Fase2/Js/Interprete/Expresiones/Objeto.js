@@ -13,6 +13,7 @@ var Objeto = /** @class */ (function () {
         this.entorno = null;
         this.id = 0;
         this.posicion = -1;
+        this.posicionH = -1;
     }
 
     Objeto.prototype.getAgregar = function () {
@@ -24,11 +25,17 @@ var Objeto = /** @class */ (function () {
             this.posicion = pos;
         }    
     };
-
+    Objeto.prototype.SetearPosicionH = function (pos) {
+        if(this.posicionH==-1){
+            this.posicionH = pos;
+        }    
+    };
     Objeto.prototype.getPosicion = function () {
         return this.posicion;
     };   
-
+    Objeto.prototype.getPosicionH = function () {
+        return this.posicionH;
+    };
     Objeto.prototype.getTexto = function () {
         return this.texto;
     };    

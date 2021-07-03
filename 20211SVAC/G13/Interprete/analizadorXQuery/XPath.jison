@@ -14,7 +14,10 @@
   const { LiteralXQ } = require('./XQuery/ts/Expresiones/LiteralXQ')
   const { DeclaracionXQ } = require('./XQuery/ts/Instrucciones/DeclaracionXQ')
   const { AsignacionXQ } = require('./XQuery/ts/Instrucciones/AsignacionXQ')
-  
+  const { BloqueXQ } = require('./XQuery/ts/Instrucciones/Bloque')
+  const { If } = require('./XQuery/ts/Instrucciones/If')
+  const { Condicion_If } = require('./XQuery/ts/Instrucciones/Condicion_If')
+    
   var grafo = new grafoCST(); 
 
   var ListaErrores = []
@@ -22,14 +25,35 @@
 
 /* Definición Léxica */
 %lex
-
-      %options case-insensitive
-
+  %options case-insensitive
+  %x Comentario
 %%
 
-"let"    return "RLET"
-"at"  return "RAT"
+/* Espacios en blanco */
+[ \r\t]+ {}
+\n {}
+
+"(:"          { this.begin("Comentario"); }
+<Comentario>":)"  { this.popState(); }
+<Comentario>.     {}
+
+"let"       return "RLET"
+"as"        return "RAS"
+"xs"        return "Rxs"
 ":="        return "ASIGNAR"
+"at"        return "RAT"
+"true"      return "RTRUE"
+"false"     return "RFALSE"
+"integer"   return "R_INT"
+"double"    return "R_DOBLE"
+"decimal"   return "R_DOBLE"
+"float"     return "R_DOBLE"
+"string"    return "R_STRING"
+"boolean"   return "R_BOOLEAN"
+"if"        return "R_IF"
+"then"      return "R_THEN"
+"else"      return "R_ELSE"
+
 
 "or"    return "ROR"
 "and"   return "RAND"
@@ -94,12 +118,6 @@
 "::"        return "DOBLEDOSPUNTOS"
 ":"         return "DOSPUNTOS"
 
-/* Espacios en blanco */
-[ \r\t]+{}
-\n{}
-['('][':'][^':']*[':']+([^'('':'][^':']*[':']+)*[')'] {}
-
-
 .	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 
 /lex
@@ -126,18 +144,82 @@ LInstrucciones: LInstrucciones Instruccion { $1.push($2); $$ = $1; }
 Instruccion:
   Declaracion { $$ = $1; }
   | Asignacion { $$ = $1; }
+  | SIf { $$ = $1; }
 ;
 
 Declaracion: RLET DOLAR NOMBRE ASIGNAR E { $$ = new DeclaracionXQ($3, $5, @3.first_line, @3.first_column); }
+  | RLET DOLAR NOMBRE RAS T ASIGNAR E 
+    { 
+      let auxD = new DeclaracionXQ($3, $7, @3.first_line, @3.first_column);
+      auxD.setTipo($5);
+      $$ = auxD;
+    }
 ;
 
 Asignacion: DOLAR NOMBRE ASIGNAR E { $$ = new AsignacionXQ($2, @2.first_line, @2.first_column, $4); }
 ;
 
-E: INTEGER  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.entero), $1, @1.first_line, @1.first_column); }
+SIf: L_Condiciones R_ELSE BloqueI { $$ = new If($1, $3, @2.first_line, @2.first_column); }
+  | L_Condiciones { $$ = new If($1, null, @1.first_line, @1.first_column); }
+;
+
+L_Condiciones: L_Condiciones R_ELSE R_IF PARENTESISA E PARENTESISC R_THEN BloqueI
+    {
+      let auxLC1 = new Condicion_If($5, $8, @3.first_line, @3.first_column); 
+      $1.push(auxLC1);
+      $$ = $1;
+    }
+  | R_IF PARENTESISA E PARENTESISC R_THEN BloqueI
+    { 
+      let auxLC0 = new Condicion_If($3, $6, @1.first_line, @1.first_column); 
+      $$ = [auxLC0]
+    }
+;
+
+BloqueI: LInstrucciones 
+    {
+      let auxBlI = new BloqueXQ();
+      auxBlI.setDatos($1, @1.first_line, @1.first_column);
+      $$ = auxBlI;
+    }
+  | { 
+      $$ = new BloqueXQ();
+    }
+;
+
+T: Rxs DOSPUNTOS R_INT     { $$ = new TipoXQ(EnumTipo.entero); }
+  | Rxs DOSPUNTOS R_DOBLE  { $$ = new TipoXQ(EnumTipo.doble); }
+  | Rxs DOSPUNTOS R_STRING  { $$ = new TipoXQ(EnumTipo.cadena); }
+  | Rxs DOSPUNTOS R_BOOLEAN  { $$ = new TipoXQ(EnumTipo.boolean); }
+;
+
+E: 
+//Aritmeticas
+  E MAS E
+  | E MENOS E
+  | E POR E
+  | E DIV E
+  | E MOD E
+//LOGICAS
+  | E EQ E
+  | E NE E
+  | E GT E
+  | E GE E
+  | E LT E
+  | E LE E
+//RELACIONALES
+  | E ROR E
+  | E RAND E
+//UNARIA
+  | MENOS E %UMENOS
+//Literales
+  | INTEGER  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.entero), $1, @1.first_line, @1.first_column); }
   | DECIMAL { $$ = new LiteralXQ(new TipoXQ(EnumTipo.doble), $1, @1.first_line, @1.first_column); }
   | CADENA  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.cadena), $1, @1.first_line, @1.first_column); }
   | XPath   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.XPath), $1, @1.first_column, @1.first_column); }
+  | RTRUE   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
+  | RFALSE  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
+//LLAMADA
 ;
 
 //======================================================

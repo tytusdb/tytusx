@@ -27,7 +27,7 @@ var SimboloXQ = /** @class */ (function (_super) {
         return _this;
     }
     SimboloXQ.prototype.getValor = function (ent) {
-        return new LiteralXQ_1.LiteralXQ(this.tipo, this.valor);
+        return new LiteralXQ_1.LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
     };
     SimboloXQ.prototype.copiar = function () {
         return new SimboloXQ(this.tipo, this.valor);

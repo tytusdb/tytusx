@@ -15,6 +15,7 @@ var declaracionS = /**@class*/ (function(){
         return 
     }
     declaracionS.prototype.set3D = function(){
+        this.codigo =""
         for(let i=0; i<this.ids.length; i++){
             if(i==0)
                 this.codigo += this.ids[i]

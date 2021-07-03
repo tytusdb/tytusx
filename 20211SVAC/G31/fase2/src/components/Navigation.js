@@ -5,6 +5,7 @@ import {  parse as parseXPath } from '../code/analizadorXPath/Xpath'
 import { parse as parseXQuery } from '../code/analizadorXQuery/ascendente';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { CD3 } from '../code/codigo3D/cd3';
+import { XPATHC3D } from '../code/codigo3D/xpathC3D';
 import { Entorno } from '../code/analizadorXQuery/Tabla/TablaSimbolos';
 import { Error } from '../code/analizadorXQuery/Tabla/Error';
 
@@ -20,6 +21,15 @@ const grammarDesc = require('../code/analizadorXMLDesc/grammarDesc')
 
 
 class Navigation extends React.Component{
+
+    contadorTemporal = null;
+    contadorEtiqueta = null;
+    heap = null;
+    stack = null;
+    codigoXml = null;
+    codigoXpath = null;
+    codigoXquery = null;
+    codigoC3D = null;
 
     constructor(props){
         super(props);
@@ -107,7 +117,10 @@ class Navigation extends React.Component{
         }
         console.log(funcion)
         var respuesta=funcion.Ejecutar(this.state.XML);   // donde esta esta funcion.Ejecutar   // ENTORNO  // 
+        var c3dXpath = this.getXpathC3D(respuesta);
+        //console.log(c3dXpath);
         this.setState({OutputTextarea: respuesta});  
+        //console.log('EN TEORIA DEBO DE GUARDAR', respuesta);
         var AST = funcion.Graficar();
         this.setState({AST:AST})
         funcion.InvertirNodes()
@@ -162,7 +175,8 @@ class Navigation extends React.Component{
         var resultado = grammar.parse(x)
         if(resultado.errores.length>0)
         {
-            alert("Errores en el analisis del XML")
+            //alert("Errores en el analisis del XML")
+            console.log(`Errores en el analisis del XML`)
             return
         }
         resultado.datos = this.getC3D(resultado.datos); 
@@ -175,8 +189,57 @@ class Navigation extends React.Component{
     getC3D(xml){
         var traducir = new CD3(); 
         var codigo = traducir.getTraduccion(xml); 
-        this.setState({TraductorTextArea: codigo.traduccion})
+        
+        this.codigoXml = codigo.traduccion;
+        this.codigoC3D = this.getEncabezado() + this.codigoXml;
+
+        //this.setState({TraductorTextArea: codigo.traduccion})
+        this.setState({TraductorTextArea: this.codigoC3D})
+
+        this.contadorTemporal = traducir.getTemporal();
+        console.log(this.contadorTemporal, `<--------Temp Xml`);
+
+        this.heap = traducir.getHeap();
+        console.log(this.heap.hp, `<--------Heap Xml`);
+
+        this.stack = traducir.getStack();
+        console.log(this.stack.lista.length, `<--------Stack Xml`);
+
         return codigo.objeto
+    }
+
+    getEncabezado(){
+        let traduccion = `/* --- --- --- ENCABEZADO --- --- --- */\n#include <stdio.h> \n#include <math.h>\n`
+        traduccion += ` double heap[31110999];\n double stack[31110999];\n double P;\n double H; \n double t0`   
+        for (let index = 1; index < this.contadorTemporal; index++) {
+            traduccion += `, t${index}`
+        }
+
+        traduccion += `; \n\n`
+
+        return traduccion; 
+    }
+
+    getXpathC3D(xpath){
+        var traducirX = new XPATHC3D();
+        var respuesta = traducirX.getXpath(xpath, this.contadorTemporal, this.heap, this.stack);
+
+        //TEMPORAL NUEVO CON XPATH
+        this.contadorTemporal = traducirX.getTemporal();
+        console.log(this.contadorTemporal, `<--------Temp Xpath`);
+        //HEAP NUEVO CON XPATH
+        this.heap = traducirX.getHeap();
+        console.log(this.heap.hp, `<--------Heap Xpath`);
+        //STACK NUEVO CON XPATH
+        this.stack = traducirX.getStack();
+        console.log(this.stack.lista.length, `<--------Stack Xpath`);
+
+        this.codigoXpath = respuesta;
+        this.codigoC3D = this.getEncabezado() + this.codigoXpath + this.codigoXml;
+
+        this.setState({TraductorTextArea: this.codigoC3D})
+
+        return respuesta
     }
 
     handleOnChange = e => {
@@ -223,7 +286,8 @@ class Navigation extends React.Component{
         console.log(resultado)
         if(resultado.errores.length>0)
         {
-            alert("Errores en el analisis del XML")
+            //alert("Errores en el analisis del XML")
+            console.log(`Errores en el analisis del XML`)
         }
         resultado.datos = this.getC3D(resultado.datos);
         this.setState({XML:resultado.datos}) // Esto es lo que se envia para ejecutar el XPATH 
@@ -271,10 +335,11 @@ class Navigation extends React.Component{
         let entornoGlobal = new Entorno(null, 'global')
         if(resultado.instrucciones instanceof Array){
             for(let instruccion of resultado.instrucciones){
-                consola += instruccion.getValor(entornoGlobal)
+                consola += instruccion.getValor(entornoGlobal, this.state.XML)
+                consola += '\n'
             }
         }else{
-            consola =  resultado.instrucciones.getValor(entornoGlobal)
+            consola =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)
         }
         if(consola instanceof Error){
             consola = 'Se encontraron errores en la ejecución de XQuery'

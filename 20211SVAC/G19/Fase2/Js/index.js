@@ -545,7 +545,10 @@ function SetSalida(texto){
     SalidaXPath.setValue(texto);
     SalidaXPath.refresh();
 }
-
+function SetReporteOptimizar(texto){
+    ReporteOptimizar.setValue(texto);
+    ReporteOptimizar.refresh();
+}
 function ReemplazarEspeciales(cadena){
 
     var pattern = /(?<=[a-zA-ZñÑ]+)'/gi;
@@ -609,7 +612,7 @@ function CambiarCodificacion(cadena){
 }
 
 function setTraduction(){
-
+SetReporteOptimizar('hola')
     globalC3D = "";
     globalC3D += `
     #include <stdio.h>
@@ -667,14 +670,14 @@ function setTraduction(){
     SalidaTraduccion.refresh();
 
 }
+
 function Optimizar(){
     var texto =SalidaTraduccion.getValue()
     var ast =gramaticaOptimizador.parse(texto);
     var op = new optimizador(ast)
+    op.optimizar()
+    console.log(op.reporte)
+    op.optimizar()
+    SalidaTraduccion.setValue(op.print())
     
-    op.optimizar()
-    op.optimizar()
-    for(let i=0; i<ast.length; i++){
-       console.log( ast[i].getOptimizado())
-     }
 }

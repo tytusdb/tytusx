@@ -28,7 +28,8 @@
         funcionesALlamar+=`ciclo_XPath();\n`
     }
     function analisisXPath(nodo){
-
+        var simbolo = new Simbolo('Tipo.STRUCT', '','','','','','');
+        
        // console.log(nodo)
         var concatena = "";
         if(nodo.valor='NODO'){

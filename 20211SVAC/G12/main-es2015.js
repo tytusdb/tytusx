@@ -23,6 +23,9 @@ class Llamada {
         this.columna = col;
         this.linea = linea;
     }
+    limpiar() {
+        throw new Error("Method not implemented.");
+    }
     getvalor3d(controlador, ts) {
         throw new Error("Method not implemented.");
     }
@@ -827,11 +830,12 @@ if ( true && __webpack_require__.c[__webpack_require__.s] === module) {
 /*!********************************!*\
   !*** ./src/clases/Analizar.ts ***!
   \********************************/
-/*! exports provided: Analizador */
+/*! exports provided: errorLex, Analizador */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorLex", function() { return errorLex; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Analizador", function() { return Analizador; });
 /* harmony import */ var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Analizadores/gramatica */ "lbnd");
 /* harmony import */ var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__);
@@ -849,6 +853,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+let errorLex = [];
 /* let error_html = controlador.graficar_Semantico (controlador,ts_globla);  Metodos para lo errores*/
 class Analizador {
     ejecutar(entradaxml, entradaxpath) {
@@ -857,12 +862,13 @@ class Analizador {
         let astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
         let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
         let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+        console.log(errorLex);
         astxml.ejecutar(controlador, ts_globla);
         //Ejecutar xpath
-        let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
-        console.log(astxpaht);
-        astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
-        // console.log("aa");
+        if (entradaxpath.length > 0) {
+            let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+        }
         let ts_html = controlador.graficar_ts(controlador, ts_globla);
         let retorno = { "ts": ts_html, "consola": controlador.consola };
         return retorno;
@@ -875,8 +881,10 @@ class Analizador {
         let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
         astxml.ejecutarDescendente(controlador, ts_globla);
         //Ejecutar xpath
-        let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
-        astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+        if (entradaxpath.length > 0) {
+            let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+        }
         // console.log("aa");
         let ts_html = controlador.graficar_ts(controlador, ts_globla);
         let retorno = { "ts": ts_html, "consola": controlador.consola };
@@ -888,7 +896,125 @@ class Analizador {
         let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
         controlador.generador.clearCode();
         astxml.ejecutar(controlador, ts_globla);
-        if (entradaxpath != null) {
+        if (entradaxpath.length > 0) {
+            let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+        }
+        let ts_html = controlador.graficar_ts(controlador, ts_globla);
+        let retorno = { "ts": ts_html, "consola": controlador.generador.getCode() };
+        return retorno;
+    }
+    recorrer(input) {
+        try {
+            let ast = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](input);
+            let nodo_ast = ast.recorrer();
+            return nodo_ast;
+        }
+        catch (error) {
+        }
+    }
+    recorrerDes(input) {
+        try {
+            let ast = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](input);
+            console.log(ast);
+            let nodo_ast = ast.recorrer();
+            return nodo_ast;
+        }
+        catch (error) {
+        }
+    }
+    recorrerDesxpath(input) {
+        try {
+            let ast = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](input);
+            console.log(ast);
+            console.log(ast);
+            let nodo_ast = ast.recorrer();
+            return nodo_ast;
+        }
+        catch (error) {
+        }
+    }
+    recorrerXquery(entradaxquery) {
+        console.log("vamos a analizar la entrada");
+        //Ejecutar Xquery
+        _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__["parse"](entradaxquery);
+    }
+}
+
+
+/***/ }),
+
+/***/ "/l+n":
+/*!********************************!*\
+  !*** ./src/Clases/Analizar.ts ***!
+  \********************************/
+/*! exports provided: errorLex, Analizador */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorLex", function() { return errorLex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Analizador", function() { return Analizador; });
+/* harmony import */ var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Analizadores/gramatica */ "lbnd");
+/* harmony import */ var _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Analizadores/XML */ "7krQ");
+/* harmony import */ var _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Analizadores/XMLDescendente */ "EViG");
+/* harmony import */ var _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Analizadores/XQuery */ "9IBB");
+/* harmony import */ var _Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_Analizadores_XQuery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Controlador__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Controlador */ "iMxP");
+/* harmony import */ var _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TablaSimbolos/TablaSimbolos */ "AviG");
+
+
+
+
+
+
+let errorLex = [];
+/* let error_html = controlador.graficar_Semantico (controlador,ts_globla);  Metodos para lo errores*/
+class Analizador {
+    ejecutar(entradaxml, entradaxpath) {
+        console.log("vamos a analizar la entrada");
+        //Ejecutar xml 
+        let astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
+        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+        console.log(errorLex);
+        astxml.ejecutar(controlador, ts_globla);
+        //Ejecutar xpath
+        if (entradaxpath.length > 0) {
+            let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+        }
+        let ts_html = controlador.graficar_ts(controlador, ts_globla);
+        let retorno = { "ts": ts_html, "consola": controlador.consola };
+        return retorno;
+    }
+    ejecutarDes(entradaxml, entradaxpath) {
+        console.log("vamos a analizar la entrada");
+        //Ejecutar xml 
+        let astxml = _Analizadores_XMLDescendente__WEBPACK_IMPORTED_MODULE_2__["parse"](entradaxml);
+        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+        astxml.ejecutarDescendente(controlador, ts_globla);
+        //Ejecutar xpath
+        if (entradaxpath.length > 0) {
+            let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
+            astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
+        }
+        // console.log("aa");
+        let ts_html = controlador.graficar_ts(controlador, ts_globla);
+        let retorno = { "ts": ts_html, "consola": controlador.consola };
+        return retorno;
+    }
+    traducirxml(entradaxml, entradaxpath) {
+        let astxml = _Analizadores_XML__WEBPACK_IMPORTED_MODULE_1__["parse"](entradaxml);
+        let controlador = new _Controlador__WEBPACK_IMPORTED_MODULE_4__["default"]();
+        let ts_globla = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_5__["TablaSimbolos"](null, "Global");
+        controlador.generador.clearCode();
+        astxml.ejecutar(controlador, ts_globla);
+        if (entradaxpath.length > 0) {
             let astxpaht = _Analizadores_gramatica__WEBPACK_IMPORTED_MODULE_0__["parse"](entradaxpath);
             astxml.ejecutarXPath(controlador, ts_globla, astxpaht);
         }
@@ -1010,6 +1136,772 @@ class Ejecutar {
 
 /***/ }),
 
+/***/ "3Bn/":
+/*!********************************************!*\
+  !*** ./src/Clases/GeneradorC3D/Nativas.ts ***!
+  \********************************************/
+/*! exports provided: Nativas */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Nativas", function() { return Nativas; });
+/* harmony import */ var _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GeneradorC3D */ "cg4T");
+
+class Nativas {
+    generarNativas() {
+        this.nativa_print_str();
+        //this.nativa_print_integer();
+        this.nativa_compararIgual_str_str();
+        // this.nativa_compararNoIgual_str_str();
+        //this.nativa_ToUpperCase();
+        //this.nativa_ToLowerCase();
+        this.nativa_concat_str_str();
+        //this.nativa_concat_dbl_str();
+        //  this.nativa_concat_str_dbl();
+        this.nativa_concat_int_str();
+        this.nativa_concat_str_int();
+        //this.nativa_concat_str_bol();
+        // this.nativa_concat_bol_str();
+        //this.nativa_lenght_str();
+        return _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia().getNativas();
+    }
+    nativa_lenght_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let t3 = gen.newTemporal();
+        let next = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_lenght_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t0, 'p', '1', '+');
+        gen.genGetStack(t1, t0);
+        gen.genAsignacion(t3, '0');
+        gen.genLabel(next);
+        gen.genGetHeap(t2, t1);
+        gen.genIf(t2, '-1', '==', fin);
+        gen.genExpresion(t3, t3, '1', '+');
+        gen.genExpresion(t1, t1, '1', '+');
+        gen.genGoto(next);
+        gen.genLabel(fin);
+        gen.genSetStack('p', t3);
+        gen.genCode('return;');
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t0);
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(t3);
+    }
+    nativa_print_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let next = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_print_str');
+        gen.isFunc = '\t';
+        gen.genGetStack(t1, 'p');
+        gen.genLabel(next);
+        gen.genGetHeap(t2, t1);
+        gen.genIf(t2, '-1', '==', fin);
+        gen.genPrint('c', t2);
+        gen.genExpresion(t1, t1, '1', '+');
+        gen.genGoto(next);
+        gen.genLabel(fin);
+        gen.genCode('return;');
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+    }
+    /*
+        nativa_print_integer() {
+            const gen = GeneradorC3D.getInstancia();
+            let t1 = gen.newTemporal();
+            let t2 = gen.newTemporal();
+            let t3 = gen.newTemporal();
+            let inicio = gen.newLabel();
+            let nextPos = gen.newLabel();
+            let nextPrt = gen.newLabel();
+            let fin = gen.newLabel();
+    
+            gen.genFuncion('nativa_print_integer');
+            gen.isFunc = '\t';
+            gen.genGetStack(t1, 'p');
+            gen.genIf(t1, '0', '>=', inicio);
+            gen.genPrint('c', '45');
+            gen.genExpresion(t1, t1, '-1', '*');
+            gen.genLabel(inicio);
+            gen.genAsignacion(t3, 'p');
+            gen.genSetStack(t3, '-1');
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genLabel(nextPos);
+            gen.genIf(t1, '0', '==', nextPrt);
+            gen.genCode(`${t2} = fmod(${t1}, 10);`);
+            gen.genSetStack(t3, t2);
+            gen.genExpresion(t3, t3, '1', '+');
+            gen.genExpresion(t1, t1, '10', '/');
+            gen.genGoto(nextPos);
+            gen.genLabel(nextPrt);
+            gen.genExpresion(t3, t3, '1', '-');
+            gen.genGetStack(t1, t3);
+            gen.genIf(t1, '-1', '==', fin);
+            gen.genPrint('i', t1);
+            gen.genGoto(nextPrt);
+            gen.genLabel(fin);
+            gen.genCode('return;');
+            gen.genEndFuncion();
+            gen.isFunc = '';
+            gen.freeTemp(t1);
+            gen.freeTemp(t2);
+            gen.freeTemp(t3);
+        }*/
+    nativa_compararIgual_str_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let c1 = gen.newTemporal();
+        let c2 = gen.newTemporal();
+        let lblfalse = gen.newLabel();
+        let lbltrue = gen.newLabel();
+        let l2 = gen.newLabel();
+        let inicio = gen.newLabel();
+        let nextPos = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_compararIgual_str_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t0, 'p', '1', '+');
+        gen.genGetStack(p1, t0);
+        gen.genExpresion(t0, 'p', '2', '+');
+        gen.genGetStack(p2, t0);
+        gen.genIf(p1, '-1', '==', l2);
+        gen.genIf(p2, '-1', '==', lblfalse);
+        gen.genGoto(inicio);
+        gen.genLabel(l2);
+        gen.genIf(p2, '-1', '==', lbltrue);
+        gen.genGoto(lblfalse);
+        gen.genLabel(inicio);
+        gen.genGetHeap(c1, p1);
+        gen.genGetHeap(c2, p2);
+        gen.genLabel(nextPos);
+        gen.genIf(c1, c2, '!=', lblfalse);
+        gen.genIf(c1, '-1', '==', lbltrue);
+        gen.genExpresion(p1, p1, '1', '+');
+        gen.genExpresion(p2, p2, '1', '+');
+        gen.genGetHeap(c1, p1);
+        gen.genGetHeap(c2, p2);
+        gen.genGoto(nextPos);
+        gen.genLabel(lbltrue);
+        gen.genSetStack('p', '1');
+        gen.genGoto(fin);
+        gen.genLabel(lblfalse);
+        gen.genSetStack('p', '0');
+        gen.genLabel(fin);
+        gen.genCode('return;');
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+        gen.freeTemp(c1);
+        gen.freeTemp(c2);
+    }
+    nativa_compararNoIgual_str_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t1 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let c1 = gen.newTemporal();
+        let c2 = gen.newTemporal();
+        let lblfalse = gen.newLabel();
+        let lbltrue = gen.newLabel();
+        let l2 = gen.newLabel();
+        let inicio = gen.newLabel();
+        let nextPos = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_compararNoIgual_str_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genIf(p1, '-1', '==', l2);
+        gen.genIf(p2, '-1', '==', lbltrue);
+        gen.genGoto(inicio);
+        gen.genLabel(l2);
+        gen.genIf(p2, '-1', '==', lblfalse);
+        gen.genGoto(lbltrue);
+        gen.genLabel(inicio);
+        gen.genGetHeap(c1, p1);
+        gen.genGetHeap(c2, p2);
+        gen.genLabel(nextPos);
+        gen.genIf(c1, c2, '!=', lbltrue);
+        gen.genIf(c1, '-1', '==', lblfalse);
+        gen.genExpresion(p1, p1, '1', '+');
+        gen.genExpresion(p2, p2, '1', '+');
+        gen.genGetHeap(c1, p1);
+        gen.genGetHeap(c2, p2);
+        gen.genGoto(nextPos);
+        gen.genLabel(lbltrue);
+        gen.genSetStack('p', '1');
+        gen.genGoto(fin);
+        gen.genLabel(lblfalse);
+        gen.genSetStack('p', '0');
+        gen.genLabel(fin);
+        gen.genCode('return;');
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+        gen.freeTemp(c1);
+        gen.freeTemp(c2);
+    }
+    nativa_ToUpperCase() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let t3 = gen.newTemporal();
+        let t4 = gen.newTemporal();
+        let nextPos = gen.newLabel();
+        let setChar = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_ToUpperCase');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(t2, t1); // carga la referencia del string
+        gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
+        gen.genLabel(nextPos);
+        gen.genGetHeap(t4, t2);
+        gen.genIf(t4, '-1', '==', fin);
+        gen.genIf(t4, '97', '<', setChar);
+        gen.genIf(t4, '122', '>', setChar);
+        gen.genExpresion(t4, t4, '32', '-');
+        gen.genLabel(setChar);
+        gen.genSetHeap('h', t4);
+        gen.avanzarHeap();
+        gen.genExpresion(t2, t2, '1', '+');
+        gen.genGoto(nextPos);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t3);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(t3);
+        gen.freeTemp(t4);
+    }
+    nativa_ToLowerCase() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let t3 = gen.newTemporal();
+        let t4 = gen.newTemporal();
+        let nextPos = gen.newLabel();
+        let setChar = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_ToLowerCase');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(t2, t1); // carga la referencia del string
+        gen.genAsignacion(t3, 'h'); // inicio de posicion vacia del heap
+        gen.genLabel(nextPos);
+        gen.genGetHeap(t4, t2);
+        gen.genIf(t4, '-1', '==', fin);
+        gen.genIf(t4, '65', '<', setChar);
+        gen.genIf(t4, '90', '>', setChar);
+        gen.genExpresion(t4, t4, '32', '+');
+        gen.genLabel(setChar);
+        gen.genSetHeap('h', t4);
+        gen.avanzarHeap();
+        gen.genExpresion(t2, t2, '1', '+');
+        gen.genGoto(nextPos);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t3);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(t3);
+        gen.freeTemp(t4);
+    }
+    nativa_concat_str_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let str1 = gen.newLabel();
+        let str2 = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_str_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t1, 'h');
+        gen.genLabel(str1);
+        gen.genGetHeap(t2, p1);
+        gen.genIf(t2, '-1', '==', str2);
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(p1, p1, '1', '+');
+        gen.genGoto(str1);
+        gen.genLabel(str2);
+        gen.genGetHeap(t2, p2);
+        gen.genIf(t2, '-1', '==', fin);
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(p2, p2, '1', '+');
+        gen.genGoto(str2);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t1);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+    nativa_concat_int_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let inicio = gen.newLabel();
+        let nextPos = gen.newLabel();
+        let validar = gen.newLabel();
+        let str1 = gen.newLabel();
+        let str2 = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_int_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t0, 'h');
+        gen.genIf(p1, '0', '>=', inicio);
+        gen.genSetHeap('h', '45');
+        gen.avanzarHeap();
+        gen.genExpresion(p1, p1, '-1', '*');
+        gen.genLabel(inicio);
+        gen.genAsignacion(t1, '0');
+        gen.genLabel(nextPos);
+        gen.genIf(p1, '0', '==', validar);
+        gen.genExpresion(t1, t1, '10', '*');
+        gen.genCode(`${t2} = fmod(${p1}, 10);`);
+        //gen.genExpresion(t2, '(int)' + p1, '10', '%');
+        gen.genExpresion(t1, t1, t2, '+');
+        gen.genExpresion(p1, p1, '10', '/');
+        gen.genCode(p1 + ' = (int)' + p1 + ';');
+        gen.genGoto(nextPos);
+        gen.genLabel(validar);
+        gen.genIf(t1, '0', '!=', str1);
+        gen.genSetHeap('h', '48');
+        gen.avanzarHeap();
+        gen.genLabel(str1);
+        gen.genIf(t1, '0', '==', str2);
+        gen.genCode(`${t2} = fmod(${t1}, 10);`);
+        //gen.genExpresion(t2, '(int)' + t1, '10', '%');
+        gen.genExpresion(t2, t2, '48', '+');
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(t1, t1, '10', '/');
+        gen.genCode(t1 + ' = (int)' + t1 + ';');
+        gen.genGoto(str1);
+        gen.genLabel(str2);
+        gen.genGetHeap(t2, p2);
+        gen.genIf(t2, '-1', '==', fin);
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(p2, p2, '1', '+');
+        gen.genGoto(str2);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t0);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+    nativa_concat_str_int() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let pre = gen.newLabel();
+        let inicio = gen.newLabel();
+        let nextPos = gen.newLabel();
+        let validar = gen.newLabel();
+        let str1 = gen.newLabel();
+        let str2 = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_str_int');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t0, 'h');
+        gen.genLabel(str2);
+        gen.genGetHeap(t2, p1);
+        gen.genIf(t2, '-1', '==', pre);
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(p1, p1, '1', '+');
+        gen.genGoto(str2);
+        gen.genLabel(pre);
+        gen.genIf(p2, '0', '>=', inicio);
+        gen.genSetHeap('h', '45');
+        gen.avanzarHeap();
+        gen.genExpresion(p2, p2, '-1', '*');
+        gen.genLabel(inicio);
+        gen.genAsignacion(t1, '0');
+        gen.genLabel(nextPos);
+        gen.genIf(p2, '0', '==', validar);
+        gen.genExpresion(t1, t1, '10', '*');
+        gen.genCode(`${t2} = fmod(${p2}, 10);`);
+        //gen.genExpresion(t2, '(int)' + p2, '10', '%');
+        gen.genExpresion(t1, t1, t2, '+');
+        gen.genExpresion(p2, p2, '10', '/');
+        gen.genCode(p2 + ' = (int)' + p2 + ';');
+        gen.genGoto(nextPos);
+        gen.genLabel(validar);
+        gen.genIf(t1, '0', '!=', str1);
+        gen.genSetHeap('h', '48');
+        gen.avanzarHeap();
+        gen.genLabel(str1);
+        gen.genIf(t1, '0', '==', fin);
+        gen.genCode(`${t2} = fmod(${t1}, 10);`);
+        //gen.genExpresion(t2, '(int)' + t1, '10', '%');
+        gen.genExpresion(t2, t2, '48', '+');
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(t1, t1, '10', '/');
+        gen.genCode(t1 + ' = (int)' + t1 + ';');
+        gen.genGoto(str1);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t0);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+    nativa_concat_dbl_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let t3 = gen.newTemporal();
+        let t4 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let pre = gen.newLabel();
+        let inicio = gen.newLabel();
+        let nextPos = gen.newLabel();
+        let validar = gen.newLabel();
+        let str1 = gen.newLabel();
+        let strd = gen.newLabel();
+        let str2 = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_dbl_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t0, 'h');
+        gen.genIf(p1, '0', '>=', pre);
+        gen.genSetHeap('h', '45');
+        gen.avanzarHeap();
+        gen.genExpresion(p1, p1, '-1', '*');
+        gen.genLabel(pre);
+        gen.genCode(`${t1} = (int)${p1};`);
+        //gen.genCode(`${t2} = fmod(${p1}, 1);`);
+        gen.genAsignacion(t3, '0');
+        gen.genLabel(inicio);
+        gen.genIf(t1, '0', '==', validar);
+        gen.genExpresion(t3, t3, '10', '*');
+        gen.genCode(`${t2} = fmod(${t1}, 10);`);
+        gen.genExpresion(t3, t3, t2, '+');
+        gen.genExpresion(t1, t1, '10', '/');
+        gen.genCode(`${t1} = (int)${t1};`);
+        gen.genGoto(inicio);
+        gen.genLabel(validar);
+        gen.genIf(t3, '0', '!=', nextPos);
+        gen.genSetHeap('h', '48');
+        gen.avanzarHeap();
+        gen.genLabel(nextPos);
+        gen.genIf(t3, '0', '==', str1);
+        gen.genCode(`${t1} = fmod(${t3}, 10);`);
+        gen.genExpresion(t3, t3, '10', '/');
+        gen.genCode(`${t3} = (int)${t3};`);
+        gen.genExpresion(t2, t1, '48', '+');
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genGoto(nextPos);
+        gen.genLabel(str1);
+        gen.genSetHeap('h', '46');
+        gen.avanzarHeap();
+        gen.genAsignacion(t3, '0');
+        gen.genCode(`${t1} = fmod(${p1}, 1);`);
+        gen.genLabel(strd);
+        gen.genIf(t3, '3', '==', str2);
+        gen.genExpresion(t1, t1, '10', '*');
+        gen.genCode(`${t2} = fmod(${t1}, 10);`);
+        gen.genCode(`${t2} = (int)${t2};`);
+        gen.genExpresion(t4, t2, '48', '+');
+        gen.genSetHeap('h', t4);
+        gen.avanzarHeap();
+        gen.genExpresion(t3, t3, '1', '+');
+        gen.genGoto(strd);
+        gen.genLabel(str2);
+        gen.genGetHeap(t2, p2);
+        gen.genIf(t2, '-1', '==', fin);
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(p2, p2, '1', '+');
+        gen.genGoto(str2);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t0);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(t3);
+        gen.freeTemp(t4);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+    nativa_concat_str_dbl() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let t2 = gen.newTemporal();
+        let t3 = gen.newTemporal();
+        let t4 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let pre = gen.newLabel();
+        let sig = gen.newLabel();
+        let inicio = gen.newLabel();
+        let nextPos = gen.newLabel();
+        let validar = gen.newLabel();
+        let str1 = gen.newLabel();
+        let strd = gen.newLabel();
+        let str2 = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_str_dbl');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t0, 'h');
+        gen.genLabel(str2);
+        gen.genGetHeap(t2, p1);
+        gen.genIf(t2, '-1', '==', sig);
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genExpresion(p1, p1, '1', '+');
+        gen.genGoto(str2);
+        gen.genLabel(sig);
+        gen.genIf(p2, '0', '>=', pre);
+        gen.genSetHeap('h', '45');
+        gen.avanzarHeap();
+        gen.genExpresion(p2, p2, '-1', '*');
+        gen.genLabel(pre);
+        gen.genCode(`${t1} = (int)${p2};`);
+        //gen.genCode(`${t2} = fmod(${p2}, 1);`);
+        gen.genAsignacion(t3, '0');
+        gen.genLabel(inicio);
+        gen.genIf(t1, '0', '==', validar);
+        gen.genExpresion(t3, t3, '10', '*');
+        gen.genCode(`${t2} = fmod(${t1}, 10);`);
+        gen.genExpresion(t3, t3, t2, '+');
+        gen.genExpresion(t1, t1, '10', '/');
+        gen.genCode(`${t1} = (int)${t1};`);
+        gen.genGoto(inicio);
+        gen.genLabel(validar);
+        gen.genIf(t3, '0', '!=', nextPos);
+        gen.genSetHeap('h', '48');
+        gen.avanzarHeap();
+        gen.genLabel(nextPos);
+        gen.genIf(t3, '0', '==', str1);
+        gen.genCode(`${t1} = fmod(${t3}, 10);`);
+        gen.genExpresion(t3, t3, '10', '/');
+        gen.genCode(`${t3} = (int)${t3};`);
+        gen.genExpresion(t2, t1, '48', '+');
+        gen.genSetHeap('h', t2);
+        gen.avanzarHeap();
+        gen.genGoto(nextPos);
+        gen.genLabel(str1);
+        gen.genSetHeap('h', '46');
+        gen.avanzarHeap();
+        gen.genAsignacion(t3, '0');
+        gen.genCode(`${t1} = fmod(${p2}, 1);`);
+        gen.genLabel(strd);
+        gen.genIf(t3, '3', '==', fin);
+        gen.genExpresion(t1, t1, '10', '*');
+        gen.genCode(`${t2} = fmod(${t1}, 10);`);
+        gen.genCode(`${t2} = (int)${t2};`);
+        gen.genExpresion(t4, t2, '48', '+');
+        gen.genSetHeap('h', t4);
+        gen.avanzarHeap();
+        gen.genExpresion(t3, t3, '1', '+');
+        gen.genGoto(strd);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t0);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(t2);
+        gen.freeTemp(t3);
+        gen.freeTemp(t4);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+    nativa_concat_str_bol() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let str1 = gen.newLabel();
+        let bol = gen.newLabel();
+        let lblf = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_str_bol');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t0, 'h');
+        gen.genLabel(str1);
+        gen.genGetHeap(t1, p1);
+        gen.genIf(t1, '-1', '==', bol);
+        gen.genSetHeap('h', t1);
+        gen.avanzarHeap();
+        gen.genExpresion(p1, p1, '1', '+');
+        gen.genGoto(str1);
+        gen.genLabel(bol);
+        gen.genIf(p2, '1', '!=', lblf);
+        gen.genSetHeap('h', '116');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '114');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '117');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '101');
+        gen.avanzarHeap();
+        gen.genGoto(fin);
+        gen.genLabel(lblf);
+        gen.genSetHeap('h', '102');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '97');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '108');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '115');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '101');
+        gen.avanzarHeap();
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t0);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+    nativa_concat_bol_str() {
+        const gen = _GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+        let t0 = gen.newTemporal();
+        let t1 = gen.newTemporal();
+        let p1 = gen.newTemporal();
+        let p2 = gen.newTemporal();
+        let str2 = gen.newLabel();
+        let lblf = gen.newLabel();
+        let fin = gen.newLabel();
+        gen.genFuncion('nativa_concat_bol_str');
+        gen.isFunc = '\t';
+        gen.genExpresion(t1, 'p', '1', '+');
+        gen.genGetStack(p1, t1);
+        gen.genExpresion(t1, 'p', '2', '+');
+        gen.genGetStack(p2, t1);
+        gen.genAsignacion(t0, 'h');
+        gen.genIf(p1, '1', '!=', lblf);
+        gen.genSetHeap('h', '116');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '114');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '117');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '101');
+        gen.avanzarHeap();
+        gen.genGoto(str2);
+        gen.genLabel(lblf);
+        gen.genSetHeap('h', '102');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '97');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '108');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '115');
+        gen.avanzarHeap();
+        gen.genSetHeap('h', '101');
+        gen.avanzarHeap();
+        gen.genLabel(str2);
+        gen.genGetHeap(t1, p2);
+        gen.genIf(t1, '-1', '==', fin);
+        gen.genSetHeap('h', t1);
+        gen.avanzarHeap();
+        gen.genExpresion(p2, p2, '1', '+');
+        gen.genGoto(str2);
+        gen.genLabel(fin);
+        gen.genSetHeap('h', '-1');
+        gen.avanzarHeap();
+        gen.genSetStack('p', t0);
+        gen.genEndFuncion();
+        gen.isFunc = '';
+        gen.freeTemp(t1);
+        gen.freeTemp(p1);
+        gen.freeTemp(p2);
+    }
+}
+
+
+/***/ }),
+
 /***/ "7KGZ":
 /*!*******************************************************!*\
   !*** ./src/Clases/Expreciones/Operaciones/Logicas.ts ***!
@@ -1022,16 +1914,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Logicas; });
 /* harmony import */ var src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/clases/AST/Nodo */ "XRm8");
 /* harmony import */ var src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/clases/TablaSimbolos/Tipo */ "YE/1");
-/* harmony import */ var _Operaciones__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Operaciones */ "vu0p");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../retorno */ "munq");
+/* harmony import */ var _Operaciones__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Operaciones */ "vu0p");
 
 
 
-class Logicas extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+class Logicas extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
     constructor(exp1, op, exp2, linea, columna, expU) {
         super(exp1, op, exp2, linea, columna, expU);
     }
-    getvalor3d(controlador, ts) {
-        throw new Error("Method not implemented.");
+    limpiar() {
+        this.lblFalse = '';
+        this.lblTrue = '';
+        if (this.expU == false) {
+            this.exp1.limpiar();
+            this.exp2.limpiar();
+        }
+        else {
+            this.exp1.limpiar();
+        }
     }
     getTipo(controlador, ts) {
         let valor = this.getValor(controlador, ts);
@@ -1057,11 +1959,11 @@ class Logicas extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
             valor_expU = this.exp1.getValor(controlador, TablaSimbolos);
         }
         switch (this.operador) {
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].AND:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].AND:
                 return this.and(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].NOT:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].NOT:
                 return this.not(valor_expU);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].OR:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].OR:
                 return this.or(valor_exp1, valor_exp2);
             default:
                 break;
@@ -1093,6 +1995,52 @@ class Logicas extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
         }
         else {
             //Erro semantico
+        }
+    }
+    getvalor3d(controlador, ts) {
+        switch (this.operador) {
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].AND:
+                return this.and3D(controlador, ts);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].NOT:
+                break;
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].OR:
+                return this.or3D(controlador, ts);
+            default:
+                break;
+        }
+    }
+    and3D(controlador, ts) {
+        const generador = controlador.generador;
+        this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+        this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+        this.exp1.lblTrue = generador.newLabel();
+        this.exp2.lblTrue = this.lblTrue;
+        this.exp1.lblFalse = this.exp2.lblFalse = this.lblFalse;
+        const expIzq = this.exp1.getvalor3d(controlador, ts);
+        generador.genLabel(this.exp1.lblTrue);
+        const expDer = this.exp2.getvalor3d(controlador, ts);
+        if (expIzq.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO && expDer.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO) {
+            const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"]('', false, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+            Retorno.lblTrue = this.lblTrue;
+            Retorno.lblFalse = this.exp2.lblFalse;
+            return Retorno;
+        }
+    }
+    or3D(controlador, ts) {
+        const generador = controlador.generador;
+        this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+        this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+        this.exp1.lblTrue = this.exp2.lblTrue = this.lblTrue;
+        this.exp1.lblFalse = generador.newLabel();
+        this.exp2.lblFalse = this.lblFalse;
+        const expIzq = this.exp1.getvalor3d(controlador, ts);
+        generador.genLabel(this.exp1.lblFalse);
+        const expDer = this.exp2.getvalor3d(controlador, ts);
+        if (expIzq.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO && expDer.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO) {
+            const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"]('', false, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+            Retorno.lblTrue = this.lblTrue;
+            Retorno.lblFalse = this.exp2.lblFalse;
+            return Retorno;
         }
     }
     recorrer() {
@@ -1231,24 +2179,24 @@ class instrucciondoble {
   }
 */
 var XML = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[5,8],$V2=[1,8],$V3=[11,12],$V4=[1,12],$V5=[9,11,12],$V6=[8,19];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[2,12],$V1=[1,8],$V2=[5,6,8,13],$V3=[1,18],$V4=[1,17],$V5=[2,4,10],$V6=[2,4],$V7=[1,21],$V8=[4,20];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"inicio":3,"raices":4,"EOF":5,"raiz":6,"objeto":7,"<":8,"ID":9,"latributos":10,"/":11,">":12,"texto_libre":13,"objetos":14,"atributos":15,"atributo":16,"=":17,"CADENA":18,"TEXTO":19,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"<",9:"ID",11:"/",12:">",17:"=",18:"CADENA",19:"TEXTO"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[7,5],[7,9],[7,9],[14,2],[14,1],[10,1],[10,0],[15,2],[15,1],[16,3],[13,2],[13,1]],
+symbols_: {"error":2,"inicio":3,"<":4,"?":5,"ID":6,"latributos":7,">":8,"raices":9,"EOF":10,"raiz":11,"objeto":12,"/":13,"texto_libre":14,"objetos":15,"atributos":16,"atributo":17,"=":18,"CADENA":19,"TEXTO":20,"$accept":0,"$end":1},
+terminals_: {2:"error",4:"<",5:"?",6:"ID",8:">",10:"EOF",13:"/",18:"=",19:"CADENA",20:"TEXTO"},
+productions_: [0,[3,8],[9,2],[9,1],[11,1],[12,5],[12,9],[12,9],[12,1],[15,2],[15,1],[7,1],[7,0],[16,2],[16,1],[17,3],[14,2],[14,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
- console.log($$[$0-1]); this.$= new ast.default($$[$0-1]);  return this.$; 
+ this.$= new ast.default($$[$0-1]);  return this.$; 
 break;
-case 2: case 8: case 12:
+case 2: case 9: case 13:
  $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
 break;
-case 3: case 9: case 13:
+case 3: case 10: case 14:
  this.$ = [$$[$0]]; 
 break;
 case 4:
@@ -1258,27 +2206,30 @@ case 5:
  this.$ = new Objeto.default($$[$0-3],'',_$[$0-4].first_line, _$[$0-4].first_column,$$[$0-2],[],1); 
 break;
 case 6:
- this.$ = new Objeto.default($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],2); 
+ this.$ = new Objeto.default($$[$0-7],$$[$0-4],_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],[],2,$$[$0-1]); 
 break;
 case 7:
- this.$ = new Objeto.default($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],2); 
+ this.$ = new Objeto.default($$[$0-7],'',_$[$0-8].first_line, _$[$0-8].first_column,$$[$0-6],$$[$0-4],2,$$[$0-1]); 
 break;
-case 10: case 16:
+case 8:
+  new LErrores("Sintactico", "No se esperaba: "+yytext,"XML", this._$.first_line , this._$.first_column);
+break;
+case 11: case 17:
  this.$ = $$[$0]; 
 break;
-case 11:
+case 12:
  this.$ = []; 
 break;
-case 14:
+case 15:
 $$[$0] = $$[$0].slice(1, $$[$0].length-1); this.$ = new Atributo.default($$[$0-2], $$[$0], _$[$0-2].first_line, _$[$0-2].first_column);
 break;
-case 15:
+case 16:
  this.$ = $$[$0-1] + $$[$0]; 
 break;
 }
 },
-table: [{3:1,4:2,6:3,7:4,8:$V0},{1:[3]},{5:[1,6],6:7,7:4,8:$V0},o($V1,[2,3]),o($V1,[2,4]),{9:$V2},{1:[2,1]},o($V1,[2,2]),o($V3,[2,11],{10:9,15:10,16:11,9:$V4}),{11:[1,13],12:[1,14]},o($V3,[2,10],{16:15,9:$V4}),o($V5,[2,13]),{17:[1,16]},{12:[1,17]},{7:21,8:$V0,13:18,14:19,19:[1,20]},o($V5,[2,12]),{18:[1,22]},o($V1,[2,5]),{8:[1,23],19:[1,24]},{7:26,8:[1,25]},o($V6,[2,16]),{8:[2,9]},o($V5,[2,14]),{11:[1,27]},o($V6,[2,15]),{9:$V2,11:[1,28]},{8:[2,8]},{9:[1,29]},{9:[1,30]},{12:[1,31]},{12:[1,32]},o($V1,[2,6]),o($V1,[2,7])],
-defaultActions: {6:[2,1],21:[2,9],26:[2,8]},
+table: [{3:1,4:[1,2]},{1:[3]},{5:[1,3]},{6:[1,4]},{5:$V0,6:$V1,7:5,16:6,17:7},{5:[1,9]},o([5,8,13],[2,11],{17:10,6:$V1}),o($V2,[2,14]),{18:[1,11]},{8:[1,12]},o($V2,[2,13]),{19:[1,13]},{2:$V3,4:$V4,9:14,11:15,12:16},o($V2,[2,15]),{2:$V3,4:$V4,10:[1,19],11:20,12:16},o($V5,[2,3]),o($V5,$V6),{6:$V7},o($V5,[2,8]),{1:[2,1]},o($V5,[2,2]),o([8,13],$V0,{16:6,17:7,7:22,6:$V1}),{8:[1,24],13:[1,23]},{8:[1,25]},{2:$V3,4:$V4,12:29,14:26,15:27,20:[1,28]},o($V5,[2,5]),{4:[1,30],20:[1,31]},{2:$V3,4:[1,32],12:33},o($V8,[2,17]),o($V6,[2,10]),{13:[1,34]},o($V8,[2,16]),{6:$V7,13:[1,35]},o($V6,[2,9]),{6:[1,36]},{6:[1,37]},{8:[1,38]},{8:[1,39]},o($V5,[2,6]),o($V5,[2,7])],
+defaultActions: {19:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1288,16 +2239,33 @@ parseError: function parseError (str, hash) {
         throw error;
     }
 },
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+parse: function parse (input) {
+    var self = this,
+        stack = [0],
+        tstack = [], // token stack
+        vstack = [null], // semantic value stack
+        lstack = [], // location stack
+        table = this.table,
+        yytext = '',
+        yylineno = 0,
+        yyleng = 0,
+        recovering = 0,
+        TERROR = 2,
+        EOF = 1;
+
     var args = lstack.slice.call(arguments, 1);
+
+    //this.reductionCount = this.shiftCount = 0;
+
     var lexer = Object.create(this.lexer);
     var sharedState = { yy: {} };
+    // copy state
     for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
+      if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+        sharedState.yy[k] = this.yy[k];
+      }
     }
+
     lexer.setInput(input, sharedState.yy);
     sharedState.yy.lexer = lexer;
     sharedState.yy.parser = this;
@@ -1306,123 +2274,207 @@ parse: function parse(input) {
     }
     var yyloc = lexer.yylloc;
     lstack.push(yyloc);
+
     var ranges = lexer.options && lexer.options.ranges;
+
     if (typeof sharedState.yy.parseError === 'function') {
         this.parseError = sharedState.yy.parseError;
     } else {
         this.parseError = Object.getPrototypeOf(this).parseError;
     }
-    function popStack(n) {
+
+    function popStack (n) {
         stack.length = stack.length - 2 * n;
         vstack.length = vstack.length - n;
         lstack.length = lstack.length - n;
     }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
+
+_token_stack:
+    var lex = function () {
+        var token;
+        token = lexer.lex() || EOF;
+        // if token isn't its numeric value, convert
+        if (typeof token !== 'number') {
+            token = self.symbols_[token] || token;
+        }
+        return token;
+    }
+
     var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
     while (true) {
+        // retreive state number from top of stack
         state = stack[stack.length - 1];
+
+        // use default actions if available
         if (this.defaultActions[state]) {
             action = this.defaultActions[state];
         } else {
             if (symbol === null || typeof symbol == 'undefined') {
                 symbol = lex();
             }
+            // read action for current state and first input
             action = table[state] && table[state][symbol];
         }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
+
+_handle_error:
+        // handle parse error
+        if (typeof action === 'undefined' || !action.length || !action[0]) {
+            var error_rule_depth;
+            var errStr = '';
+
+            // Return the rule stack depth where the nearest error rule can be found.
+            // Return FALSE when no error recovery rule was found.
+            function locateNearestErrorRecoveryRule(state) {
+                var stack_probe = stack.length - 1;
+                var depth = 0;
+
+                // try to recover from error
+                for(;;) {
+                    // check for error recovery rule in this state
+                    if ((TERROR.toString()) in table[state]) {
+                        return depth;
+                    }
+                    if (state === 0 || stack_probe < 2) {
+                        return false; // No suitable error recovery rule available.
+                    }
+                    stack_probe -= 2; // popStack(1): [symbol, action]
+                    state = stack[stack_probe];
+                    ++depth;
+                }
+            }
+
+            if (!recovering) {
+                // first see if there's any chance at hitting an error recovery rule:
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
+
+                // Report error
                 expected = [];
                 for (p in table[state]) {
                     if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
+                        expected.push("'"+this.terminals_[p]+"'");
                     }
                 }
                 if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                    errStr = 'Parse error on line '+(yylineno+1)+":\n"+lexer.showPosition()+"\nExpecting "+expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol)+ "'";
                 } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                    errStr = 'Parse error on line '+(yylineno+1)+": Unexpected " +
+                                  (symbol == EOF ? "end of input" :
+                                              ("'"+(this.terminals_[symbol] || symbol)+"'"));
                 }
                 this.parseError(errStr, {
                     text: lexer.match,
                     token: this.terminals_[symbol] || symbol,
                     line: lexer.yylineno,
                     loc: yyloc,
-                    expected: expected
+                    expected: expected,
+                    recoverable: (error_rule_depth !== false)
                 });
+            } else if (preErrorSymbol !== EOF) {
+                error_rule_depth = locateNearestErrorRecoveryRule(state);
             }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
+
+            // just recovered from another error
+            if (recovering == 3) {
+                if (symbol === EOF || preErrorSymbol === EOF) {
+                    throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
+                }
+
+                // discard current lookahead and grab another
                 yyleng = lexer.yyleng;
                 yytext = lexer.yytext;
                 yylineno = lexer.yylineno;
                 yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
+                symbol = lex();
             }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
+
+            // try to recover from error
+            if (error_rule_depth === false) {
+                throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
             }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
+            popStack(error_rule_depth);
+
+            preErrorSymbol = (symbol == TERROR ? null : symbol); // save the lookahead token
+            symbol = TERROR;         // insert generic error symbol as new lookahead
+            state = stack[stack.length-1];
+            action = table[state] && table[state][TERROR];
+            recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
         }
+
+        // this shouldn't happen, unless resolve defaults are off
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('Parse Error: multiple actions possible at state: '+state+', token: '+symbol);
+        }
+
+        switch (action[0]) {
+            case 1: // shift
+                //this.shiftCount++;
+
+                stack.push(symbol);
+                vstack.push(lexer.yytext);
+                lstack.push(lexer.yylloc);
+                stack.push(action[1]); // push state
+                symbol = null;
+                if (!preErrorSymbol) { // normal execution/no error
+                    yyleng = lexer.yyleng;
+                    yytext = lexer.yytext;
+                    yylineno = lexer.yylineno;
+                    yyloc = lexer.yylloc;
+                    if (recovering > 0) {
+                        recovering--;
+                    }
+                } else {
+                    // error just occurred, resume old lookahead f/ before error
+                    symbol = preErrorSymbol;
+                    preErrorSymbol = null;
+                }
+                break;
+
+            case 2:
+                // reduce
+                //this.reductionCount++;
+
+                len = this.productions_[action[1]][1];
+
+                // perform semantic action
+                yyval.$ = vstack[vstack.length-len]; // default to $$ = $1
+                // default location, uses first token for firsts, last for lasts
+                yyval._$ = {
+                    first_line: lstack[lstack.length-(len||1)].first_line,
+                    last_line: lstack[lstack.length-1].last_line,
+                    first_column: lstack[lstack.length-(len||1)].first_column,
+                    last_column: lstack[lstack.length-1].last_column
+                };
+                if (ranges) {
+                  yyval._$.range = [lstack[lstack.length-(len||1)].range[0], lstack[lstack.length-1].range[1]];
+                }
+                r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+
+                if (typeof r !== 'undefined') {
+                    return r;
+                }
+
+                // pop off stack
+                if (len) {
+                    stack = stack.slice(0,-1*len*2);
+                    vstack = vstack.slice(0, -1*len);
+                    lstack = lstack.slice(0, -1*len);
+                }
+
+                stack.push(this.productions_[action[1]][0]);    // push nonterminal (reduce)
+                vstack.push(yyval.$);
+                lstack.push(yyval._$);
+                // goto new state = table[STATE][NONTERMINAL]
+                newState = table[stack[stack.length-2]][stack[stack.length-1]];
+                stack.push(newState);
+                break;
+
+            case 3:
+                // accept
+                return true;
+        }
+
     }
+
     return true;
 }};
 
@@ -1431,6 +2483,7 @@ parse: function parse(input) {
       const  Atributo = __webpack_require__ (/*! ../Clases/xml/atributo */ "Ab3f");
       const  Objeto  = __webpack_require__ (/*! ../Clases/xml/objeto */ "bzrv");
       const ast =__webpack_require__(/*! ../Clases/AST/Ast */ "ZSbs");
+      const  {LErrores} =__webpack_require__ (/*! ../Clases/AST/ListaError */ "wLeh");
 /* generated by jison-lex 0.3.4 */
 var lexer = (function(){
 var lexer = ({
@@ -1763,47 +2816,49 @@ case 0:/* Ignoro los comentarios simples */
 break;
 case 1:/* skip whitespace */
 break;
-case 2: console.log("Reconocio : "+ yy_.yytext); return 18
+case 2: console.log("Reconocio : "+ yy_.yytext); return 19
 break;
-case 3: console.log("Reconocio : "+ yy_.yytext); return 9
+case 3: console.log("Reconocio : "+ yy_.yytext); return 6
 break;
-case 4: console.log("Reconocio : "+ yy_.yytext); return 8
+case 4: console.log("Reconocio : "+ yy_.yytext); return 4
 break;
-case 5: console.log("Reconocio : "+ yy_.yytext); return 17
+case 5: console.log("Reconocio : "+ yy_.yytext); return 18
 break;
-case 6: console.log("Reconocio : "+ yy_.yytext); return 11
+case 6: console.log("Reconocio : "+ yy_.yytext); return 13
 break;
-case 7: this.begin("S1"); $ESPACIOS=""; console.log("Reconocio : "+ yy_.yytext); return ">";
+case 7: console.log("Reconocio : "+ yy_.yytext); return 5
 break;
-case 8: yy_.yytext = $ESPACIOS + "<"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 19; 
+case 8: this.begin("S1"); $ESPACIOS=""; console.log("Reconocio : "+ yy_.yytext); return ">";
 break;
-case 9: yy_.yytext = $ESPACIOS + ">"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 19; 
+case 9: yy_.yytext = $ESPACIOS + "<"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 20; 
 break;
-case 10: yy_.yytext = $ESPACIOS + "\&"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 19; 
+case 10: yy_.yytext = $ESPACIOS + ">"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 20; 
 break;
-case 11: yy_.yytext = $ESPACIOS + "\'"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 19; 
+case 11: yy_.yytext = $ESPACIOS + "\&"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 20; 
 break;
-case 12: yy_.yytext = $ESPACIOS + "\""; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 19; 
+case 12: yy_.yytext = $ESPACIOS + "\'"; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 20; 
 break;
-case 13:  /* Ignoro los comentarios simples */
+case 13: yy_.yytext = $ESPACIOS + "\""; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 20; 
 break;
-case 14: $ESPACIOS += yy.lexer.match;
+case 14:  /* Ignoro los comentarios simples */
 break;
-case 15: this.begin("INITIAL"); console.log("Reconocio : "+ yy_.yytext); return "<";
+case 15: $ESPACIOS += yy.lexer.match;
 break;
-case 16: yy_.yytext = $ESPACIOS + yy_.yytext; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 19; 
+case 16: this.begin("INITIAL"); console.log("Reconocio : "+ yy_.yytext); return "<";
 break;
-case 17:return 5
+case 17: yy_.yytext = $ESPACIOS + yy_.yytext; $ESPACIOS="";  console.log("Reconocio : "+ yy_.yytext); return 20; 
 break;
-case 18: console.log("Error Lexico "+yy_.yytext
+case 18:return 10
+break;
+case 19: console.log("Error Lexico "+yy_.yytext
                         +" linea "+yy_.yylineno
                         +" columna "+(yy_.yylloc.last_column+1));        
                         
 break;
 }
 },
-rules: [/^(?:<!--(.|\n)*-->)/i,/^(?:\s+)/i,/^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i,/^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i,/^(?:<)/i,/^(?:=)/i,/^(?:\/)/i,/^(?:>)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:<!--(.|\n)*-->)/i,/^(?:\s)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"S1":{"rules":[0,8,9,10,11,12,13,14,15,16,17,18],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,13,17,18],"inclusive":true}}
+rules: [/^(?:<!--(.|\n)*-->)/i,/^(?:\s+)/i,/^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i,/^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i,/^(?:<)/i,/^(?:=)/i,/^(?:\/)/i,/^(?:\?)/i,/^(?:>)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:<!--(.|\n)*-->)/i,/^(?:\s)/i,/^(?:<)/i,/^(?:.)/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"S1":{"rules":[0,9,10,11,12,13,14,15,16,17,18,19],"inclusive":true},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,14,18,19],"inclusive":true}}
 });
 return lexer;
 })();
@@ -2106,12 +3161,12 @@ class barrabarra {
   }
 */
 var XQuery = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,4],$V1=[1,5],$V2=[1,6],$V3=[1,7],$V4=[1,8],$V5=[1,10],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[5,7,10,17,18,19,25,27,29,30],$Va=[1,17],$Vb=[1,23],$Vc=[1,20],$Vd=[1,19],$Ve=[1,18],$Vf=[1,21],$Vg=[1,22],$Vh=[1,44],$Vi=[1,40],$Vj=[1,42],$Vk=[1,36],$Vl=[1,37],$Vm=[1,38],$Vn=[1,39],$Vo=[1,41],$Vp=[1,43],$Vq=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,34,35,36,37,38,39,41],$Vr=[1,56],$Vs=[1,55],$Vt=[1,54],$Vu=[16,21,24,25,32],$Vv=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,34,35,38,39,41],$Vw=[5,7,9,10,11,12,16,17,18,19,20,21,22,24,25,27,29,30,32,38,39,41];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,7],$V3=[1,8],$V4=[1,9],$V5=[1,10],$V6=[1,11],$V7=[1,12],$V8=[1,13],$V9=[1,14],$Va=[5,7,31],$Vb=[5,7,9,14,15,16,17,20,24,26,27,29,31],$Vc=[1,40],$Vd=[1,43],$Ve=[1,39],$Vf=[1,38],$Vg=[1,37],$Vh=[1,42],$Vi=[1,41],$Vj=[1,46],$Vk=[1,44],$Vl=[1,45],$Vm=[1,47],$Vn=[1,66],$Vo=[1,64],$Vp=[1,60],$Vq=[1,61],$Vr=[1,57],$Vs=[1,58],$Vt=[1,62],$Vu=[1,63],$Vv=[1,65],$Vw=[1,67],$Vx=[1,68],$Vy=[1,69],$Vz=[1,70],$VA=[1,71],$VB=[1,72],$VC=[1,73],$VD=[1,74],$VE=[1,81],$VF=[1,75],$VG=[1,76],$VH=[1,77],$VI=[1,78],$VJ=[1,79],$VK=[1,80],$VL=[1,97],$VM=[1,94],$VN=[1,92],$VO=[1,95],$VP=[1,93],$VQ=[1,85],$VR=[1,86],$VS=[1,87],$VT=[1,88],$VU=[1,89],$VV=[1,90],$VW=[1,91],$VX=[1,96],$VY=[19,22,38,39,40,41,42,43,44,45,46,47,48,49,50,73],$VZ=[5,7,9,14,15,16,17,19,20,24,26,27,29,31],$V_=[1,122],$V$=[1,110],$V01=[1,111],$V11=[1,112],$V21=[1,113],$V31=[1,114],$V41=[1,115],$V51=[1,116],$V61=[1,117],$V71=[1,118],$V81=[1,119],$V91=[1,121],$Va1=[1,126],$Vb1=[1,128],$Vc1=[1,129],$Vd1=[1,130],$Ve1=[1,131],$Vf1=[1,127],$Vg1=[5,7,9,10,11,14,15,16,17,18,19,20,22,24,25,26,27,29,31,33,35,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,55,56,57,59,60,61,62,63,64,65,66,67,68,69,70],$Vh1=[1,139],$Vi1=[19,22,38,39,40,41,42,43,44,48,49,50,73],$Vj1=[19,22,38,39,40,41,42,48,49,50,73],$Vk1=[5,7,9,10,11,14,15,16,17,18,19,20,22,24,25,26,27,29,31,33,35,39,40,41,42,48,49,50,51,52,53,55,56,57,59,60,61,62,63,64,65,66,67,68,69,70],$Vl1=[5,7,9,10,11,14,15,16,17,18,19,20,22,24,25,26,27,29,31,33,35,39,40,41,42,43,44,48,49,50,51,52,53,55,56,57,59,60,61,62,63,64,65,66,67,68,69,70];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"INICIO":3,"RAIZ":4,"EOF":5,"INSTRUCCION":6,"FOR":7,"E":8,"IN":9,"LET":10,"DOSPUNTOS":11,"IGUAL":12,"PARA":13,"DECIMAL":14,"TO":15,"PARC":16,"WHERE":17,"ORDER":18,"RETURN":19,"MENOR":20,"ID":21,"MAYOR":22,"LLAVEA":23,"LLAVEC":24,"BARRA":25,"SENTECIAS_CONTROL":26,"IF":27,"PARAMETROS":28,"THEN":29,"ELSE":30,"LISTA_PARAMETROS":31,"DOLAR":32,"ARROBA":33,"MAS":34,"MENOS":35,"POR":36,"DIV":37,"MENOR_IGUAL":38,"MAYOR_IGUAL":39,"CORA":40,"CORC":41,"CADENA":42,"ENTERO":43,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"FOR",9:"IN",10:"LET",11:"DOSPUNTOS",12:"IGUAL",13:"PARA",14:"DECIMAL",15:"TO",16:"PARC",17:"WHERE",18:"ORDER",19:"RETURN",20:"MENOR",21:"ID",22:"MAYOR",23:"LLAVEA",24:"LLAVEC",25:"BARRA",27:"IF",29:"THEN",30:"ELSE",32:"DOLAR",33:"ARROBA",34:"MAS",35:"MENOS",36:"POR",37:"DIV",38:"MENOR_IGUAL",39:"MAYOR_IGUAL",40:"CORA",41:"CORC",42:"CADENA",43:"ENTERO"},
-productions_: [0,[3,2],[4,2],[4,1],[6,4],[6,9],[6,2],[6,2],[6,2],[6,11],[6,2],[6,1],[6,2],[6,3],[26,4],[26,11],[26,11],[28,2],[28,1],[31,2],[31,2],[31,3],[31,3],[31,1],[31,4],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,3],[8,2],[8,4],[8,1],[8,1],[8,1],[8,1]],
+symbols_: {"error":2,"INICIO":3,"VARIAS":4,"EOF":5,"INSTRUCCIONES":6,"SIGNOO":7,"SENTENCIAS":8,"FOR":9,"DOLAR":10,"ID":11,"IN":12,"PARAMETROS":13,"WHERE":14,"ORDER":15,"RETURN":16,"IF":17,"PARA":18,"PARC":19,"LET":20,"DOSPUNTOS":21,"IGUAL":22,"OPERADORES":23,"THEN":24,"DATA":25,"ELSE":26,"DECLARE":27,"FUNCTION":28,"AS":29,"LLAVEA":30,"LLAVEC":31,"LISTA_PARAMETROS":32,"BARRA":33,"e":34,"BARRABARRA":35,"RESERV":36,"PUNTOPUNTO":37,"TO":38,"MENORQUE":39,"MAYORQUE":40,"MENORIGUAL":41,"MAYORIGUAL":42,"MAS":43,"MENOS":44,"POR":45,"DIV":46,"MODULO":47,"AND":48,"OR":49,"DIFERENTE":50,"ENTERO":51,"DECIMAL":52,"CADENA":53,"COMA":54,"LAST":55,"POSITION":56,"ANCESTOR":57,"RESERVLARGE":58,"ATTRIBUTE":59,"ANCESORSELF":60,"CHILD":61,"DESCENDANT":62,"FOLLOWING":63,"SIBLING":64,"NAMESPACE":65,"PARENT":66,"PRECENDING":67,"SELF":68,"TEXT":69,"NODE":70,"ARROBA":71,"CORA":72,"CORC":73,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"SIGNOO",9:"FOR",10:"DOLAR",11:"ID",12:"IN",14:"WHERE",15:"ORDER",16:"RETURN",17:"IF",18:"PARA",19:"PARC",20:"LET",21:"DOSPUNTOS",22:"IGUAL",24:"THEN",25:"DATA",26:"ELSE",27:"DECLARE",28:"FUNCTION",29:"AS",30:"LLAVEA",31:"LLAVEC",33:"BARRA",35:"BARRABARRA",37:"PUNTOPUNTO",38:"TO",39:"MENORQUE",40:"MAYORQUE",41:"MENORIGUAL",42:"MAYORIGUAL",43:"MAS",44:"MENOS",45:"POR",46:"DIV",47:"MODULO",48:"AND",49:"OR",50:"DIFERENTE",51:"ENTERO",52:"DECIMAL",53:"CADENA",54:"COMA",55:"LAST",56:"POSITION",57:"ANCESTOR",59:"ATTRIBUTE",60:"ANCESORSELF",61:"CHILD",62:"DESCENDANT",63:"FOLLOWING",64:"SIBLING",65:"NAMESPACE",66:"PARENT",67:"PRECENDING",68:"SELF",69:"TEXT",70:"NODE",71:"ARROBA",72:"CORA",73:"CORC"},
+productions_: [0,[3,2],[4,3],[4,1],[6,2],[6,1],[8,5],[8,4],[8,4],[8,4],[8,6],[8,3],[8,6],[8,2],[8,4],[8,7],[8,2],[8,3],[8,8],[8,7],[13,2],[13,1],[32,2],[32,2],[32,3],[32,4],[32,2],[32,4],[32,5],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,3],[32,4],[32,3],[32,1],[32,1],[32,1],[32,1],[32,7],[32,6],[36,1],[36,1],[36,2],[36,1],[36,1],[36,1],[36,2],[36,1],[36,3],[36,1],[36,1],[36,1],[36,1],[36,3],[36,1],[36,1],[36,1],[36,1],[58,4],[58,2],[34,1],[34,2],[34,2],[34,1],[34,4],[34,1],[34,1],[34,1],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,3],[23,2],[23,4],[23,3],[23,2],[23,1],[23,1],[23,1],[23,1],[23,1],[23,1],[23,2]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -2120,10 +3175,16 @@ switch (yystate) {
 case 1:
   this.$=$$[$0-1]; return this.$ 
 break;
+case 2:
+this.$=new instrucciondoble.default($$[$0-2],$$[$0]);
+break;
+case 3:
+this.$=$$[$0]
+break;
 }
 },
-table: [{3:1,4:2,6:3,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},{1:[3]},{5:[1,14],6:15,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},o($V9,[2,3]),{8:16,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:24,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:25,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:26,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:27,13:$Va,14:$Vb,20:[1,28],21:$Vc,26:29,27:$V6,29:$V7,30:$V8,32:$Vd,40:$Ve,42:$Vf,43:$Vg},o($V9,[2,11]),{8:30,13:$Va,14:$Vb,21:$Vc,25:[1,31],32:$Vd,40:$Ve,42:$Vf,43:$Vg},{13:[1,32]},{20:[1,33]},{20:[1,34]},{1:[2,1]},o($V9,[2,2]),{9:[1,35],12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{8:45,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:46,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:[1,47]},o($Vq,[2,38],{13:[1,48]}),o($Vq,[2,39]),o($Vq,[2,40]),o($Vq,[2,41]),{11:[1,49],12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},o($V9,[2,6],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($V9,[2,7],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($V9,[2,8],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{21:[1,50]},o($V9,[2,10]),o($V9,[2,12],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{8:51,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:$Vr,25:$Vs,28:52,31:53,32:$Vt},{21:[1,57]},{21:[1,58]},{6:59,7:$V0,10:$V1,17:$V2,18:$V3,19:$V4,25:$V5,26:9,27:$V6,29:$V7,30:$V8},{8:60,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:61,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:62,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:63,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:64,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:65,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:66,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:67,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:68,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{12:$Vh,16:[1,69],20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,41:[1,70]},o($Vq,[2,36]),{8:71,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{12:[1,72]},{22:[1,73]},o($V9,[2,13],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{16:[1,74],21:$Vr,25:$Vs,31:75,32:$Vt},o($Vu,[2,18]),{21:[1,76]},{8:77,13:$Va,14:$Vb,21:$Vc,25:[1,78],32:$Vd,33:[1,79],40:$Ve,42:$Vf,43:$Vg},o($Vu,[2,23],{13:[1,80]}),{22:[1,81]},{22:[1,82]},o($V9,[2,4]),o($Vv,[2,25],{36:$Vm,37:$Vn}),o($Vv,[2,26],{36:$Vm,37:$Vn}),o($Vq,[2,27]),o($Vq,[2,28]),o($Vw,[2,29],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,30],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,31],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,32],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vw,[2,33],{34:$Vk,35:$Vl,36:$Vm,37:$Vn}),o($Vq,[2,34]),o($Vq,[2,35]),{12:$Vh,16:[1,83],20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},{13:[1,84]},{23:[1,85]},o($V9,[2,14]),o($Vu,[2,17]),o($Vu,[2,19]),o($Vu,[2,20],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{8:86,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{8:87,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},{21:$Vr,25:$Vs,28:88,31:53,32:$Vt},{23:[1,89]},{23:[1,90]},o($Vq,[2,37]),{14:[1,91]},{8:92,13:$Va,14:$Vb,21:$Vc,32:$Vd,40:$Ve,42:$Vf,43:$Vg},o($Vu,[2,21],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),o($Vu,[2,22],{12:$Vh,20:$Vi,22:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp}),{16:[1,93],21:$Vr,25:$Vs,31:75,32:$Vt},{21:$Vr,25:$Vs,28:94,31:53,32:$Vt},{21:$Vr,25:$Vs,28:95,31:53,32:$Vt},{15:[1,96]},{12:$Vh,20:$Vi,22:$Vj,24:[1,97],34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp},o($Vu,[2,24]),{21:$Vr,24:[1,98],25:$Vs,31:75,32:$Vt},{21:$Vr,24:[1,99],25:$Vs,31:75,32:$Vt},{14:[1,100]},{20:[1,101]},{20:[1,102]},{20:[1,103]},{16:[1,104]},{25:[1,105]},{25:[1,106]},{25:[1,107]},o($V9,[2,5]),{21:[1,108]},{21:[1,109]},{21:[1,110]},{22:[1,111]},{22:[1,112]},{22:[1,113]},o($V9,[2,9]),o($V9,[2,15]),o($V9,[2,16])],
-defaultActions: {14:[2,1]},
+table: [{3:1,4:2,6:3,8:4,9:$V0,14:$V1,15:$V2,16:$V3,17:$V4,20:$V5,24:$V6,26:$V7,27:$V8,29:$V9},{1:[3]},{5:[1,15]},{5:[2,3],7:[1,16]},o($Va,[2,5],{8:4,6:17,9:$V0,14:$V1,15:$V2,16:$V3,17:$V4,20:$V5,24:$V6,26:$V7,27:$V8,29:$V9}),{10:[1,18]},{10:[1,19]},{10:[1,20]},{8:22,9:$V0,10:[1,21],14:$V1,15:$V2,16:$V3,17:$V4,18:[1,23],20:$V5,24:$V6,26:$V7,27:$V8,29:$V9},{18:[1,24]},{10:[1,25]},{25:[1,26]},{8:27,9:$V0,14:$V1,15:$V2,16:$V3,17:$V4,18:[1,28],20:$V5,24:$V6,26:$V7,27:$V8,29:$V9},{28:[1,29]},{11:[1,30]},{1:[2,1]},{6:31,8:4,9:$V0,14:$V1,15:$V2,16:$V3,17:$V4,20:$V5,24:$V6,26:$V7,27:$V8,29:$V9},o($Va,[2,4]),{11:[1,32]},{11:[1,33]},{11:[1,34]},{11:[1,35]},o($Vb,[2,13]),{10:$Vc,11:$Vd,18:$Ve,23:36,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:[1,48]},{11:[1,49]},{18:[1,50]},o($Vb,[2,16]),{19:[1,51]},{11:[1,52]},{21:[1,53]},{5:[2,2]},{12:[1,54]},{10:$Vn,11:$Vo,13:55,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,13:82,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},o($Vb,[2,11],{32:56,36:59,13:83,10:$Vn,11:$Vo,18:$Vp,25:$Vq,33:$Vr,35:$Vs,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK}),{19:[1,84],22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX},{10:$Vc,11:$Vd,18:$Ve,23:98,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{18:[1,99]},{10:$Vc,11:$Vd,18:$Ve,23:100,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{11:[1,101]},o($VY,[2,95]),o($VY,[2,96]),o($VY,[2,97]),o($VY,[2,98]),o($VY,[2,99]),o($VY,[2,100]),{11:[1,102]},{11:[1,103]},{21:[1,104]},{10:[1,105]},o($Vb,[2,17]),{21:[1,106]},{11:[1,107]},{10:$Vn,11:$Vo,13:108,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},o($Vb,[2,7]),o($VZ,[2,21],{32:56,36:59,13:109,10:$Vn,11:$Vo,18:$Vp,22:$V_,25:$Vq,33:$Vr,35:$Vs,39:$V$,40:$V01,41:$V11,42:$V21,43:$V31,44:$V41,45:$V51,46:$V61,47:$V71,48:$V81,49:[1,120],50:$V91,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK}),{11:$Va1,34:123,36:124,37:[1,125],45:$Vb1,51:$Vc1,52:$Vd1,53:$Ve1,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK,71:$Vf1},{11:$Va1,34:132,36:133,45:$Vb1,51:$Vc1,52:$Vd1,53:$Ve1,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK,71:$Vf1},{21:[1,134]},{10:$Vc,11:$Vd,18:$Ve,23:135,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{18:[1,136]},o($Vg1,[2,44]),o($Vg1,[2,45]),o($Vg1,[2,46]),o($Vg1,[2,47]),{11:[1,137]},{21:[2,50]},{21:[2,51]},{44:$Vh1,58:138},{21:[2,53]},{21:[2,54]},{21:[2,55]},{21:[2,57],44:$Vh1,58:140},{21:[2,59],44:[1,141]},{21:[2,60]},{21:[2,61]},{21:[2,62],44:[1,142]},{21:[2,64]},{21:[2,65]},{21:[2,66]},{21:[2,67]},o($Vb,[2,8]),o($Vb,[2,9]),o($Vb,[2,14]),{10:$Vc,11:$Vd,18:$Ve,23:143,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:144,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:145,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:146,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:147,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:148,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:149,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:150,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:151,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:152,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:153,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:154,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{10:$Vc,11:$Vd,18:$Ve,23:155,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},o($VY,[2,91]),{10:$Vc,11:$Vd,18:$Ve,23:156,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{19:[1,157],22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX},o($VY,[2,94]),o($VY,[2,101]),{10:$Vn,11:$Vo,13:158,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{22:[1,159]},{11:[1,160]},{11:[1,161]},{30:[1,162]},o($Vb,[2,6]),o($VZ,[2,20]),{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:163,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:164,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:165,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:166,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:167,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:168,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:169,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:170,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:171,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:172,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:173,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:174,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,18:$Vp,25:$Vq,32:175,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},o($Vg1,[2,22]),{21:[1,176]},o($Vg1,[2,26]),o($Vg1,[2,70],{72:[1,177]}),{11:[1,178],45:[1,179]},o($Vg1,[2,73]),o($Vg1,[2,75]),o($Vg1,[2,76]),o($Vg1,[2,77]),o($Vg1,[2,23]),{21:[1,180]},{11:$Va1,34:181,45:$Vb1,51:$Vc1,52:$Vd1,53:$Ve1,71:$Vf1},{19:[1,183],22:$VL,38:[1,182],39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX},{10:$Vc,11:$Vd,18:$Ve,23:184,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},{29:[1,185]},{21:[2,52]},{49:[1,186],64:[1,187]},{21:[2,56]},{64:[1,188]},{64:[1,189]},o($Vi1,[2,78],{45:$VS,46:$VT,47:$VU}),o($Vi1,[2,79],{45:$VS,46:$VT,47:$VU}),o($VY,[2,80]),o($VY,[2,81]),o($VY,[2,82]),o([19,38,48,49,73],[2,83],{22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,50:$VX}),o([19,38,49,73],[2,84],{22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,50:$VX}),o($Vj1,[2,85],{43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU}),o($Vj1,[2,86],{43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU}),o($Vj1,[2,87],{43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU}),o($Vj1,[2,88],{43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU}),o($Vj1,[2,89],{43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU}),o($Vj1,[2,90],{43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU}),{19:[1,190],22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX},o($VY,[2,93]),{19:[1,191]},{10:$Vn,11:$Vo,13:192,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{10:$Vn,11:$Vo,13:193,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{18:[1,194]},{6:195,8:4,9:$V0,14:$V1,15:$V2,16:$V3,17:$V4,20:$V5,24:$V6,26:$V7,27:$V8,29:$V9},o($Vk1,[2,29],{43:$V31,44:$V41,45:$V51,46:$V61,47:$V71}),o($Vk1,[2,30],{43:$V31,44:$V41,45:$V51,46:$V61,47:$V71}),o($Vk1,[2,31],{43:$V31,44:$V41,45:$V51,46:$V61,47:$V71}),o($Vk1,[2,32],{43:$V31,44:$V41,45:$V51,46:$V61,47:$V71}),o($Vl1,[2,33],{45:$V51,46:$V61,47:$V71}),o($Vl1,[2,34],{45:$V51,46:$V61,47:$V71}),o($Vg1,[2,35]),o($Vg1,[2,36]),o($Vg1,[2,37]),o([5,7,9,10,11,14,15,16,17,18,19,20,24,25,26,27,29,31,33,35,48,49,51,52,53,55,56,57,59,60,61,62,63,64,65,66,67,68,69,70],[2,38],{22:$V_,39:$V$,40:$V01,41:$V11,42:$V21,43:$V31,44:$V41,45:$V51,46:$V61,47:$V71,50:$V91}),o([5,7,9,10,11,14,15,16,17,18,19,20,24,25,26,27,29,31,33,35,49,51,52,53,55,56,57,59,60,61,62,63,64,65,66,67,68,69,70],[2,39],{22:$V_,39:$V$,40:$V01,41:$V11,42:$V21,43:$V31,44:$V41,45:$V51,46:$V61,47:$V71,48:$V81,50:$V91}),o($Vk1,[2,40],{43:$V31,44:$V41,45:$V51,46:$V61,47:$V71}),o($Vk1,[2,41],{43:$V31,44:$V41,45:$V51,46:$V61,47:$V71}),{11:$Va1,34:196,45:$Vb1,51:$Vc1,52:$Vd1,53:$Ve1,71:$Vf1},{10:$Vc,11:$Vd,18:$Ve,23:197,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},o($Vg1,[2,71]),o($Vg1,[2,72]),{11:$Va1,34:198,45:$Vb1,51:$Vc1,52:$Vd1,53:$Ve1,71:$Vf1},o($Vg1,[2,24]),{10:$Vc,11:$Vd,18:$Ve,23:199,25:$Vf,44:$Vg,51:$Vh,52:$Vi,53:$Vj,55:$Vk,56:$Vl,71:$Vm},o($Vg1,[2,43]),{19:[1,200],22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX},{11:[1,201]},{44:[1,202]},{21:[2,69]},{21:[2,58]},{21:[2,63]},o($VY,[2,92]),o($Vb,[2,10]),o($Vb,[2,12]),{19:[1,203]},{10:$Vn,11:$Vo,13:204,18:$Vp,25:$Vq,32:56,33:$Vr,35:$Vs,36:59,51:$Vt,52:$Vu,53:$Vv,55:$Vw,56:$Vx,57:$Vy,59:$Vz,60:$VA,61:$VB,62:$VC,63:$VD,64:$VE,65:$VF,66:$VG,67:$VH,68:$VI,69:$VJ,70:$VK},{31:[1,205]},o($Vg1,[2,25]),{22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX,73:[1,206]},o($Vg1,[2,27]),{19:[1,207],22:$VL,39:$VM,40:$VN,41:$VO,42:$VP,43:$VQ,44:$VR,45:$VS,46:$VT,47:$VU,48:$VV,49:$VW,50:$VX},o($Vg1,[2,42]),{21:[1,208]},{68:[1,209]},o($Vb,[2,15]),{19:[1,210]},o($Vb,[2,19]),o($Vg1,[2,74]),o($Vg1,[2,28]),{11:[1,211]},{21:[2,68]},o($Vb,[2,18]),o($Vg1,[2,49],{54:[1,212]}),o($Vg1,[2,48])],
+defaultActions: {15:[2,1],31:[2,2],67:[2,50],68:[2,51],70:[2,53],71:[2,54],72:[2,55],75:[2,60],76:[2,61],78:[2,64],79:[2,65],80:[2,66],81:[2,67],138:[2,52],140:[2,56],187:[2,69],188:[2,58],189:[2,63],209:[2,68]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -2634,91 +3695,147 @@ options: {"case-insensitive":true},
 performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
-case 0: console.log("Reconocio : "+ yy_.yytext); return 13
+case 0: console.log("Reconocio : "+ yy_.yytext); return 18
 break;
-case 1: console.log("Reconocio : "+ yy_.yytext); return 25
+case 1: console.log("Reconocio : "+ yy_.yytext); return 35
 break;
-case 2: console.log("Reconocio : "+ yy_.yytext); return 16
+case 2: console.log("Reconocio : "+ yy_.yytext); return 33
 break;
-case 3: console.log("Reconocio : "+ yy_.yytext); return 32
+case 3: console.log("Reconocio : "+ yy_.yytext); return 19
 break;
-case 4: console.log("Reconocio : "+ yy_.yytext); return 23
+case 4: console.log("Reconocio : "+ yy_.yytext); return 10
 break;
-case 5: console.log("Reconocio : "+ yy_.yytext); return 24
+case 5: console.log("Reconocio : "+ yy_.yytext); return 30
 break;
-case 6: console.log("Reconocio : "+ yy_.yytext); return 40
+case 6: console.log("Reconocio : "+ yy_.yytext); return 31
 break;
-case 7: console.log("Reconocio : "+ yy_.yytext); return 41
+case 7: console.log("Reconocio : "+ yy_.yytext); return 72
 break;
-case 8: console.log("Reconocio : "+ yy_.yytext); return 38
+case 8: console.log("Reconocio : "+ yy_.yytext); return 73
 break;
-case 9: console.log("Reconocio : "+ yy_.yytext); return 39
+case 9: console.log("Reconocio : "+ yy_.yytext); return 37
 break;
-case 10: console.log("Reconocio : "+ yy_.yytext); return 12
+case 10: console.log("Reconocio : "+ yy_.yytext); return 'PUNTO'
 break;
-case 11: console.log("Reconocio : "+ yy_.yytext); return 20
+case 11: console.log("Reconocio : "+ yy_.yytext); return 7
 break;
-case 12: console.log("Reconocio : "+ yy_.yytext); return 22
+case 12: console.log("Reconocio : "+ yy_.yytext); return 21
 break;
-case 13: console.log("Reconocio : "+ yy_.yytext); return 'DIFERENTE'
+case 13: console.log("Reconocio : "+ yy_.yytext); return 41
 break;
-case 14: console.log("Reconocio : "+ yy_.yytext); return 11
+case 14: console.log("Reconocio : "+ yy_.yytext); return 42
 break;
-case 15: console.log("Reconocio : "+ yy_.yytext); return 34
+case 15: console.log("Reconocio : "+ yy_.yytext); return 22
 break;
-case 16: console.log("Reconocio : "+ yy_.yytext); return 35
+case 16: console.log("Reconocio : "+ yy_.yytext); return 39
 break;
-case 17: console.log("Reconocio : "+ yy_.yytext); return 36
+case 17: console.log("Reconocio : "+ yy_.yytext); return 40
 break;
-case 18: console.log("Reconocio : "+ yy_.yytext); return 37
+case 18: console.log("Reconocio : "+ yy_.yytext); return 50
 break;
-case 19: console.log("Reconocio : "+ yy_.yytext); return 'AND'
+case 19: console.log("Reconocio : "+ yy_.yytext); return 21
 break;
-case 20: console.log("Reconocio : "+ yy_.yytext); return 'OR'
+case 20: console.log("Reconocio : "+ yy_.yytext); return 54
 break;
-case 21: console.log("Reconocio : "+ yy_.yytext); return 7
+case 21: console.log("Reconocio : "+ yy_.yytext); return 71
 break;
-case 22: console.log("Reconocio : "+ yy_.yytext); return 9
+case 22: console.log("Reconocio : "+ yy_.yytext); return 43
 break;
-case 23: console.log("Reconocio : "+ yy_.yytext); return 10
+case 23: console.log("Reconocio : "+ yy_.yytext); return 44
 break;
-case 24: console.log("Reconocio : "+ yy_.yytext); return 17
+case 24: console.log("Reconocio : "+ yy_.yytext); return 45
 break;
-case 25: console.log("Reconocio : "+ yy_.yytext); return 18
+case 25: console.log("Reconocio : "+ yy_.yytext); return 46
 break;
-case 26: console.log("Reconocio : "+ yy_.yytext); return 19
+case 26: console.log("Reconocio : "+ yy_.yytext); return 47
 break;
-case 27: console.log("Reconocio : "+ yy_.yytext); return 15
+case 27: console.log("Reconocio : "+ yy_.yytext); return 48
 break;
-case 28: console.log("Reconocio : "+ yy_.yytext); return 27
+case 28: console.log("Reconocio : "+ yy_.yytext); return 49
 break;
-case 29: console.log("Reconocio : "+ yy_.yytext); return 29
+case 29: console.log("Reconocio : "+ yy_.yytext); return 9
 break;
-case 30: console.log("Reconocio : "+ yy_.yytext); return 30
+case 30: console.log("Reconocio : "+ yy_.yytext); return 12
 break;
-case 31: console.log("Reconocio : "+ yy_.yytext); return 33
+case 31: console.log("Reconocio : "+ yy_.yytext); return 20
 break;
 case 32: console.log("Reconocio : "+ yy_.yytext); return 14
 break;
-case 33: console.log("Reconocio : "+ yy_.yytext); return 43
+case 33: console.log("Reconocio : "+ yy_.yytext); return 15
 break;
-case 34: console.log("Reconocio id : "+ yy_.yytext); return 21
+case 34: console.log("Reconocio : "+ yy_.yytext); return 16
 break;
-case 35: console.log("Reconocio : "+ yy_.yytext); return 42
+case 35: console.log("Reconocio : "+ yy_.yytext); return 38
 break;
-case 36: /* skip whitespace */ 
+case 36: console.log("Reconocio : "+ yy_.yytext); return 17
 break;
-case 37:return 5
+case 37: console.log("Reconocio : "+ yy_.yytext); return 24
 break;
-case 38: console.log("Error Lexico "+yy_.yytext
+case 38: console.log("Reconocio : "+ yy_.yytext); return 26
+break;
+case 39: console.log("Reconocio : "+ yy_.yytext); return 27
+break;
+case 40: console.log("Reconocio : "+ yy_.yytext); return 28
+break;
+case 41: console.log("Reconocio : "+ yy_.yytext); return 29
+break;
+case 42: console.log("Reconocio : "+ yy_.yytext); return 20
+break;
+case 43: console.log("Reconocio : "+ yy_.yytext); return 25
+break;
+case 44: console.log("Reconocio : "+ yy_.yytext); return 55
+break;
+case 45: console.log("Reconocio : "+ yy_.yytext); return 56
+break;
+case 46: console.log("Reconocio : "+ yy_.yytext); return 57
+break;
+case 47: console.log("Reconocio : "+ yy_.yytext); return 59
+break;
+case 48: console.log("Reconocio : "+ yy_.yytext); return 68
+break;
+case 49: console.log("Reconocio : "+ yy_.yytext); return 61
+break;
+case 50: console.log("Reconocio : "+ yy_.yytext); return 62
+break;
+case 51: console.log("Reconocio : "+ yy_.yytext); return 63
+break;
+case 52: console.log("Reconocio : "+ yy_.yytext); return 64
+break;
+case 53: console.log("Reconocio : "+ yy_.yytext); return 65
+break;
+case 54: console.log("Reconocio : "+ yy_.yytext); return 66
+break;
+case 55: console.log("Reconocio : "+ yy_.yytext); return 67
+break;
+case 56: console.log("Reconocio : "+ yy_.yytext); return 69
+break;
+case 57: console.log("Reconocio : "+ yy_.yytext); return 70
+break;
+case 58: console.log("Reconocio : "+ yy_.yytext); return 55
+break;
+case 59: console.log("Reconocio : "+ yy_.yytext); return 56
+break;
+case 60: console.log("Reconocio : "+ yy_.yytext); return 52
+break;
+case 61: console.log("Reconocio : "+ yy_.yytext); return 51
+break;
+case 62: console.log("Reconocio id : "+ yy_.yytext); return 11
+break;
+case 63: console.log("Reconocio : "+ yy_.yytext); return 53
+break;
+case 64: /* skip whitespace */ 
+break;
+case 65:return 5
+break;
+case 66: console.log("Error Lexico "+yy_.yytext
                         +" linea "+yy_.yylineno
                         +" columna "+(yy_.yylloc.last_column+1));        
                         
 break;
 }
 },
-rules: [/^(?:\()/i,/^(?:\/)/i,/^(?:\))/i,/^(?:\$)/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:!=)/i,/^(?::)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:and\b)/i,/^(?:or\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:let\b)/i,/^(?:where\b)/i,/^(?:order by\b)/i,/^(?:return\b)/i,/^(?:to\b)/i,/^(?:if\b)/i,/^(?:then\b)/i,/^(?:else\b)/i,/^(?:@)/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:([0-9]+))/i,/^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i,/^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i,/^(?:[\s\r\n\t])/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38],"inclusive":true}}
+rules: [/^(?:\()/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:\))/i,/^(?:\$)/i,/^(?:\{)/i,/^(?:\})/i,/^(?:\[)/i,/^(?:\])/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:\|)/i,/^(?:::)/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:!=)/i,/^(?::)/i,/^(?:,)/i,/^(?:@)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:div\b)/i,/^(?:mod\b)/i,/^(?:and\b)/i,/^(?:or\b)/i,/^(?:for\b)/i,/^(?:in\b)/i,/^(?:let\b)/i,/^(?:where\b)/i,/^(?:order by\b)/i,/^(?:return\b)/i,/^(?:to\b)/i,/^(?:if\b)/i,/^(?:then\b)/i,/^(?:else\b)/i,/^(?:declare\b)/i,/^(?:function\b)/i,/^(?:as\b)/i,/^(?:let\b)/i,/^(?:data\b)/i,/^(?:last\(\))/i,/^(?:position\(\))/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:self\b)/i,/^(?:child\b)/i,/^(?:descendant\b)/i,/^(?:following\b)/i,/^(?:sibling\b)/i,/^(?:namespace\b)/i,/^(?:parent\b)/i,/^(?:preceding\b)/i,/^(?:text\(\))/i,/^(?:node\(\))/i,/^(?:last\(\))/i,/^(?:position\(\))/i,/^(?:[0-9]+(\.[0-9]+)?\b)/i,/^(?:([0-9]+))/i,/^(?:([a-zñA-ZÑ_][a-zñA-ZÑ0-9_]*))/i,/^(?:(("((\\([\'\"\\ntr]))|([^\"\\]+))*")))/i,/^(?:[\s\r\n\t])/i,/^(?:$)/i,/^(?:.)/i],
+conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66],"inclusive":true}}
 });
 return lexer;
 })();
@@ -2796,6 +3913,8 @@ class Atributo {
         return "atributo";
     }
     getValor(controlador, ts) {
+    }
+    limpiar() {
     }
     recorrer() {
         throw new Error("Method not implemented.");
@@ -2913,6 +4032,10 @@ const environment = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Identificador; });
 /* harmony import */ var _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../AST/Nodo */ "Zr6O");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./retorno */ "munq");
+/* harmony import */ var _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../TablaSimbolos/Tipo */ "lKex");
+
+
 
 class Identificador {
     constructor(identifador, linea, columna, t) {
@@ -2922,7 +4045,40 @@ class Identificador {
         this.valor = t;
     }
     getvalor3d(controlador, ts) {
-        throw new Error("Method not implemented.");
+        console.log("getValor3D");
+        let existe_id;
+        let contador = 1;
+        for (let tssig of ts.sig) {
+            if (contador == controlador.posicionid) {
+                existe_id = tssig.sig.getSimbolo(this.identificador, this.valor);
+            }
+            contador++;
+        }
+        console.log(existe_id);
+        if (existe_id != null) {
+            const generator = controlador.generador;
+            if (typeof existe_id.valor == 'number') {
+                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](existe_id.valor + "", false, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("DOBLE"));
+            }
+            else if (typeof existe_id.valor == 'string') {
+                console.log("entre****");
+                console.log(existe_id);
+                const temp = generator.newTemporal();
+                generator.genAsignacion(temp, 'h');
+                for (let i = 0; i < existe_id.valor.length; i++) {
+                    generator.genSetHeap('h', existe_id.valor.charCodeAt(i));
+                    generator.avanzarHeap();
+                }
+                generator.genSetHeap('h', '-1');
+                generator.avanzarHeap();
+                return new _retorno__WEBPACK_IMPORTED_MODULE_1__["retorno"](temp, true, new _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_2__["default"]("STRING"));
+            }
+            else {
+                console.log("no entre");
+            }
+        }
+    }
+    limpiar() {
     }
     getTipo(controlador, ts) {
         /* let existe_id = ts.getSimbolo(this.identificador);
@@ -2931,6 +4087,7 @@ class Identificador {
          }*/
     }
     getValor(controlador, ts) {
+        console.log("getValor");
         let existe_id;
         let contador = 1;
         for (let tssig of ts.sig) {
@@ -4166,7 +5323,6 @@ class acceso {
             for (let informacion of ts.tabla) {
                 if (informacion.identificador == this.exprecion.id) {
                     if (cont == posicion) {
-                        console.log("entre a valor 3d");
                         this.exprecion.exprecion.getvalor3d(controlador, ts);
                         controlador.append(informacion.sim.objeto.gethtml("", controlador));
                     }
@@ -4198,7 +5354,11 @@ class acceso {
                     controlador.position = cont;
                     controlador.posicionid = posicion;
                     if (this.exprecion.exprecion.getValor(controlador, ts)) {
+                        let salida = this.exprecion.exprecion.getvalor3d(controlador, ts);
+                        controlador.generador.genLabel(salida.lblTrue);
                         controlador.append(informacion.sim.objeto.gethtml("", controlador));
+                        controlador.generador.genLabel(salida.lblFalse);
+                        this.exprecion.exprecion.limpiar();
                     }
                     cont++;
                 }
@@ -4288,13 +5448,14 @@ function AppComponent_div_8_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](6, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](7, "a", 20);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_7_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4); const ctx_r6 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r6.traducir3D(); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](8, "Traducir 3D XPAHT");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](9, "a", 20);
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_9_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4); const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r7.ejecutarXquery(); });
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](10, "Ejecutar XQuery");
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](9, "div", 21);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 20);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵlistener"]("click", function AppComponent_div_8_Template_a_click_10_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵrestoreView"](_r4); const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵnextContext"](); return ctx_r7.ejecutarXquery(); });
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](11, "Ejecutar XQuery");
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](11, "div", 21);
+    _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](12, "div", 21);
     _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
 } }
 function AppComponent_div_13_Template(rf, ctx) { if (rf & 1) {
@@ -4501,7 +5662,7 @@ AppComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineCompo
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtext"](6, " Ejecutar ");
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelement"](7, "span", 5);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 12, 0, "div", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵtemplate"](8, AppComponent_div_8_Template, 13, 0, "div", 6);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](9, "li", 3);
         _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵelementStart"](10, "a", 4);
@@ -4674,6 +5835,8 @@ class position {
     recorrer() {
         let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("position();", "");
         return padre;
+    }
+    limpiar() {
     }
 }
 
@@ -5572,11 +6735,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Relaciones; });
 /* harmony import */ var src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/clases/AST/Nodo */ "XRm8");
 /* harmony import */ var src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/clases/TablaSimbolos/Tipo */ "YE/1");
-/* harmony import */ var _Operaciones__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Operaciones */ "vu0p");
+/* harmony import */ var _retorno__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../retorno */ "munq");
+/* harmony import */ var _Operaciones__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Operaciones */ "vu0p");
 
 
 
-class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
     constructor(exp1, op, exp2, linea, columna, expU) {
         super(exp1, op, exp2, linea, columna, expU);
     }
@@ -5592,6 +6757,17 @@ class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
             return src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO;
         }
     }
+    limpiar() {
+        this.lblFalse = '';
+        this.lblTrue = '';
+        if (this.expU == false) {
+            this.exp1.limpiar();
+            this.exp2.limpiar();
+        }
+        else {
+            this.exp1.limpiar();
+        }
+    }
     getValor(controlador, TablaSimbolos) {
         let valor_exp1;
         let valor_exp2;
@@ -5604,17 +6780,17 @@ class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
             valor_expU = this.exp1.getValor(controlador, TablaSimbolos);
         }
         switch (this.operador) {
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].IGUALIGUAL:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].IGUALIGUAL:
                 return this.igualigual(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].DIFERENTE:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIFERENTE:
                 return this.diferente(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MENORQUE:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORQUE:
                 return this.menorque(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MENORIGUAL:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORIGUAL:
                 return this.menorigual(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MAYORQUE:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORQUE:
                 return this.mayorque(valor_exp1, valor_exp2);
-            case _Operaciones__WEBPACK_IMPORTED_MODULE_2__["Operador"].MAYORIGUAL:
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORIGUAL:
                 return this.mayoigual(valor_exp1, valor_exp2);
             default:
                 break;
@@ -5925,6 +7101,137 @@ class Relaciones extends _Operaciones__WEBPACK_IMPORTED_MODULE_2__["default"] {
                 //error semantico
             }
         }
+    }
+    getvalor3d(controlador, ts) {
+        let valor_exp1;
+        let valor_exp2;
+        let valor_expU;
+        if (this.expU == false) {
+            valor_exp1 = this.exp1.getvalor3d(controlador, ts);
+            valor_exp2 = this.exp2.getvalor3d(controlador, ts);
+        }
+        else {
+            valor_expU = this.exp1.getvalor3d(controlador, ts);
+        }
+        switch (this.operador) {
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].IGUALIGUAL:
+                return this.igualigual3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].DIFERENTE:
+                return this.diferente3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORQUE:
+                return this.menorque3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MENORIGUAL:
+                return this.menorigual3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORQUE:
+                return this.mayorque3D(valor_exp1, valor_exp2, controlador);
+            case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MAYORIGUAL:
+                return this.mayoigual3D(valor_exp1, valor_exp2, controlador);
+            default:
+                break;
+        }
+    }
+    igualigual3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '==');
+            }
+        }
+        else {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                    const tempAux = generador.newTemporal();
+                    generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                    generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                    generador.genExpresion(tempAux, tempAux, '1', '+');
+                    generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                    generador.genNextEnv(1);
+                    generador.genCall('nativa_compararIgual_str_str');
+                    generador.genGetStack(temp, 'p');
+                    generador.genAntEnv(1);
+                    this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+                    this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+                    generador.genIf(temp, '1', '==', this.lblTrue);
+                    generador.genGoto(this.lblFalse);
+                    const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+                    Retorno.lblTrue = this.lblTrue;
+                    Retorno.lblFalse = this.lblFalse;
+                    return Retorno;
+                }
+            }
+        }
+    }
+    menorque3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '<');
+            }
+        }
+    }
+    menorigual3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '<=');
+            }
+        }
+    }
+    mayorque3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '>');
+            }
+        }
+    }
+    mayoigual3D(valor_exp1, valor_exp2, controlador) {
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '>=');
+            }
+        }
+    }
+    diferente3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                return this.compararExp(valor_exp1, valor_exp2, controlador, '!=');
+            }
+        }
+        else {
+            if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].CADENA) {
+                    const tempAux = generador.newTemporal();
+                    generador.genExpresion(tempAux, 'p', 1 + 1, '+');
+                    generador.genSetStack(tempAux, valor_exp1.getvalor3d());
+                    generador.genExpresion(tempAux, tempAux, '1', '+');
+                    generador.genSetStack(tempAux, valor_exp2.getvalor3d());
+                    generador.genNextEnv(1);
+                    generador.genCall('nativa_compararIgual_str_str');
+                    generador.genGetStack(temp, 'p');
+                    generador.genAntEnv(1);
+                    this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+                    this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+                    generador.genIf(temp, '1', '!=', this.lblTrue);
+                    generador.genGoto(this.lblFalse);
+                    const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+                    Retorno.lblTrue = this.lblTrue;
+                    Retorno.lblFalse = this.lblFalse;
+                    return Retorno;
+                }
+            }
+        }
+    }
+    compararExp(valor_exp1, valor_exp2, controlador, signo) {
+        const generador = controlador.generador;
+        this.lblTrue = this.lblTrue == '' ? generador.newLabel() : this.lblTrue;
+        this.lblFalse = this.lblFalse == '' ? generador.newLabel() : this.lblFalse;
+        generador.genIf(valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), signo, this.lblTrue);
+        generador.genGoto(this.lblFalse);
+        const Retorno = new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"]('', false, new src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["default"]("BOOLEAN"));
+        Retorno.lblTrue = this.lblTrue;
+        Retorno.lblFalse = this.lblFalse;
+        return Retorno;
     }
     recorrer() {
         let padre = new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Exp", "");
@@ -6580,7 +7887,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Objeto {
-    constructor(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta) {
+    constructor(id, texto, linea, columna, listaAtributos, listaO, tipoetiqueta, etiquetaF) {
         this.identificador = id;
         this.texto = texto;
         this.linea = linea;
@@ -6588,8 +7895,14 @@ class Objeto {
         this.listaAtributos = listaAtributos;
         this.listaObjetos = listaO;
         this.tipoetiqueta = tipoetiqueta;
+        this.etiquetaF = etiquetaF;
     }
     ejecutar(controlador, ts) {
+        if (this.tipoetiqueta == 2) {
+            if (this.identificador != this.etiquetaF) {
+                controlador.append("Error: La etiqueta de inicio y fin no coinciden:: inicio: " + this.identificador + " final: " + this.etiquetaF);
+            }
+        }
         this.posicionid3d = this.generar3d(this.identificador, controlador);
         let ts_local = new _TablaSimbolos_TablaSimbolos__WEBPACK_IMPORTED_MODULE_2__["TablaSimbolos"](ts, this.identificador);
         if (this.texto.length > 0) {
@@ -6699,6 +8012,307 @@ class Objeto {
         generator.genSetHeap('h', '-1');
         generator.avanzarHeap();
         return temp;
+    }
+}
+
+
+/***/ }),
+
+/***/ "cg4T":
+/*!*************************************************!*\
+  !*** ./src/Clases/GeneradorC3D/GeneradorC3D.ts ***!
+  \*************************************************/
+/*! exports provided: GeneradorC3D */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GeneradorC3D", function() { return GeneradorC3D; });
+/* harmony import */ var _Nativas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nativas */ "3Bn/");
+
+class GeneradorC3D {
+    /**
+     * constructor de la clase singleton
+     */
+    constructor() {
+        this.isFunc = '';
+        this.temporal = this.label = 0;
+        this.code = [];
+        this.codeFuncion = [];
+        this.tempStorage = new Set();
+    }
+    agregarFuncion(funcion) {
+        funcion.forEach((fun) => {
+            this.codeFuncion.push(fun);
+        });
+    }
+    /**
+     * Obtiene la instancia de la clase singleton
+     */
+    static getInstancia() {
+        return this.generador || (this.generador = new this());
+    }
+    /**
+     * Retorna el set de los temporales que estan en uso
+     */
+    getTempStorage() {
+        return this.tempStorage;
+    }
+    /**
+     * Vacia el set de los temporales
+     */
+    clearTempStorage() {
+        this.tempStorage.clear();
+    }
+    /**
+     * asigna el set al set local de temporales
+     * @param tempStorage lista tipo Set que se asignara al set local
+     */
+    setTempStorage(tempStorage) {
+        this.tempStorage = tempStorage;
+    }
+    /**
+     * borra el C3D que tenga guardado la clase y reinicia los temporales y labels
+     */
+    clearCode() {
+        this.temporal = this.label = 0;
+        this.code = [];
+        this.codeFuncion = [];
+        this.tempStorage = new Set();
+    }
+    clearSoloCode() {
+        this.code = [];
+    }
+    /**
+     * Ingresa en el C3D el valor que se asigna como parametro
+     * @param code valor que se asignara al C3D de la clase
+     */
+    genCode(code) {
+        this.code.push(this.isFunc + code);
+    }
+    /**
+     * Retorna el C3D que se haya generado en la clase singleton
+     */
+    getCode() {
+        let nativas = new _Nativas__WEBPACK_IMPORTED_MODULE_0__["Nativas"]();
+        let encabezado = '#include <stdio.h>\n#include <math.h>\ndouble Stack[60000]; double Heap[60000];\nint p; int h;\n';
+        let main = `\nint main() {\n${this.code.join('\n')}\n\nreturn 0;\n}\n`;
+        const funciones = this.codeFuncion.join('\n');
+        this.code = [];
+        let strNativas = nativas.generarNativas();
+        //strNativas = ''; // comentar despues de terminar
+        let c3d = `${encabezado}${this.getTemporales()};\n${strNativas}\n${funciones}\n${main}`;
+        return c3d;
+    }
+    getSoloCode() {
+        return this.code;
+    }
+    setSoloCode(codeA) {
+        this.code = codeA;
+    }
+    getNativas() {
+        return this.code.join('\n');
+    }
+    getTemporales() {
+        let lista = 'double ';
+        for (let i = 0; i < this.temporal; i++) {
+            lista += 'T' + i;
+            lista += i < this.temporal - 1 ? ',' : '';
+        }
+        return lista;
+    }
+    /**
+     * Crea un nuevo temporal y lo retorna
+     */
+    newTemporal() {
+        const temp = 'T' + this.temporal++;
+        this.tempStorage.add(temp);
+        return temp;
+    }
+    /**
+     * Crea una nueva etiqueta y la retorna
+     */
+    newLabel() {
+        return 'L' + this.label++;
+    }
+    /**
+     * funcion que agrega una nueva etiqueta el C3D
+     * @param label valor que se agregara al C3D como tipo etiqueta
+     */
+    genLabel(label) {
+        this.code.push(`${this.isFunc}${label}:`);
+    }
+    /**
+     * Genera una nueva expresion y la agrega al C3D
+     * @param tem Temporal al que se le asignara la expresion
+     * @param izq Expresion izquierda que se asignara al temporal
+     * @param der Expresion derecha que se asignara al temporal
+     * @param operator Operador de la expresion
+     */
+    genExpresion(tem, iqz, der = '', operator = '') {
+        this.code.push(`${this.isFunc}${tem} = ${iqz} ${operator} ${der};`);
+    }
+    /**
+     * asigna un valor a un temporal o puntero
+     * @param tem variable que recibira el valor
+     * @param val valor que sera asignado
+     */
+    genAsignacion(tem, val) {
+        this.code.push(`${this.isFunc}${tem} = ${val};`);
+    }
+    /**
+     * genera un goto con el valor de label y lo agrega el C3D
+     * @param label valor de etiqueta al cual se hara el goto
+     */
+    genGoto(label) {
+        this.code.push(`${this.isFunc}goto ${label};`);
+    }
+    /**
+     * genera un if y lo agrega al C3D
+     * @param iqz Expresion izquierda de la condicion if
+     * @param der Expresion derecha de la condicion if
+     * @param operator Operador boleano de la condicion
+     * @param label Etiqueta de salto si la condicion es verdadera
+     */
+    genIf(iqz, der, operator, label) {
+        this.code.push(`${this.isFunc}if (${iqz} ${operator} ${der}) goto ${label};`);
+    }
+    /**
+     * Intruccion que hace avanzar el puntero heap a su siguite posicion
+     */
+    avanzarHeap() {
+        this.code.push(this.isFunc + 'h = h + 1;');
+    }
+    /**
+     * genera un acceso al heap en la posicion index y lo asiga al tem
+     * @param tem temporal que recibira el valor del heap
+     * @param index posicion del heap al cual se accedera
+     */
+    genGetHeap(tem, index) {
+        index = index[0] === 'T' ? '(int)' + index : index;
+        this.code.push(`${this.isFunc}${tem} = Heap[${index}];`);
+    }
+    /**
+     * genera una asignacion de valor al heap en la posicion index
+     * @param index posicion del heap al cual se desea acceder
+     * @param valor valor que se asignara a la posicion del heap
+     */
+    genSetHeap(index, valor) {
+        index = index[0] === 'T' ? '(int)' + index : index;
+        this.code.push(`${this.isFunc}Heap[${index}] = ${valor};`);
+    }
+    /**
+     * genera una asignacion a tem del valor del stack en la posicion index
+     * @param tem temporal al cual se asignara el valor del stack
+     * @param index posicion del stack al cual se desea acceder
+     */
+    genGetStack(tem, index) {
+        index = index[0] === 'T' ? '(int)' + index : index;
+        this.code.push(`${this.isFunc}${tem} = Stack[${index}];`);
+    }
+    /**
+     * genera una asignacion al stack en la posicion index
+     * @param index posicion del stack al cual se desea acceder
+     * @param value valor que sera asignado al stack
+     */
+    genSetStack(index, value) {
+        index = index[0] === 'T' ? '(int)' + index : index;
+        this.code.push(`${this.isFunc}Stack[${index}] = ${value};`);
+    }
+    /**
+     * genera un desplazamiento del stack para generar un nuevo ambito
+     * @param size posiciones que se desplazara el stack
+     */
+    genNextEnv(size) {
+        this.code.push(`${this.isFunc}p = p + ${size};`);
+    }
+    /**
+     * genera un desplazamiento del stack para volver a un ambito anterios
+     * @param size posiciones que se desplazara el stack
+     */
+    genAntEnv(size) {
+        this.code.push(`${this.isFunc}p = p - ${size};`);
+    }
+    /**
+     * genera una llamada a una funcion
+     * @param id nombre de la funcion
+     */
+    genCall(id) {
+        this.code.push(`${this.isFunc}${id}();`);
+    }
+    /**
+     * Genera el encabezado de una funcion
+     * @param id nombre de la funcion
+     */
+    genFuncion(id) {
+        this.code.push(`\nvoid ${id}() {`);
+    }
+    /**
+     * Genera el cierre de la definicion de una funcion
+     */
+    genEndFuncion() {
+        this.code.push('}');
+    }
+    /**
+     * genera un printf con el tipo de dato y el valor
+     * @param formato tipo de dato que se va a imprimir
+     * @param valor valor que se va a imprimir
+     */
+    genPrint(formato, valor) {
+        valor = valor[0] === 'T' && formato !== 'f' ? '(int)' + valor : valor;
+        this.code.push(`${this.isFunc}printf("%${formato}",${valor});`);
+    }
+    /**
+     * genera un print del valor true
+     */
+    genPrintTrue() {
+        this.genPrint('c', 't'.charCodeAt(0));
+        this.genPrint('c', 'r'.charCodeAt(0));
+        this.genPrint('c', 'u'.charCodeAt(0));
+        this.genPrint('c', 'e'.charCodeAt(0));
+    }
+    /**
+     * genera un print del valor false
+     */
+    genPrintFalse() {
+        this.genPrint('c', 'f'.charCodeAt(0));
+        this.genPrint('c', 'a'.charCodeAt(0));
+        this.genPrint('c', 'l'.charCodeAt(0));
+        this.genPrint('c', 's'.charCodeAt(0));
+        this.genPrint('c', 'e'.charCodeAt(0));
+    }
+    /**
+     * genera un print del valor null
+     */
+    genPrintNull() {
+        this.genPrint('c', 'n'.charCodeAt(0));
+        this.genPrint('c', 'u'.charCodeAt(0));
+        this.genPrint('c', 'l'.charCodeAt(0));
+        this.genPrint('c', 'l'.charCodeAt(0));
+    }
+    /**
+     * genera un nuevo comentario
+     * @param comment valor del comentario
+     */
+    genComentario(comment) {
+        this.code.push(`${this.isFunc}// ----- ${comment} -----`);
+    }
+    /**
+     * borra un temporal del storage
+     * @param temp temporal que ya no se utilizara
+     */
+    freeTemp(temp) {
+        if (this.tempStorage.has(temp)) {
+            this.tempStorage.delete(temp);
+        }
+    }
+    /**
+     * agrega un temporal al storage
+     * @param temp temporal que se agregara al storage
+     */
+    genTemp(temp) {
+        if (!this.tempStorage.has(temp))
+            this.tempStorage.add(temp);
     }
 }
 
@@ -7111,6 +8725,107 @@ class Simbolos {
 
 /***/ }),
 
+/***/ "iMxP":
+/*!***********************************!*\
+  !*** ./src/Clases/Controlador.ts ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Controlador; });
+/* harmony import */ var _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GeneradorC3D/GeneradorC3D */ "cg4T");
+
+class Controlador {
+    constructor() {
+        this.errores = new Array();
+        this.consola = "";
+        this.cuerpo;
+        this.idlast = "";
+        this.position = 0;
+        this.acceso = 1;
+        this.generador = _GeneradorC3D_GeneradorC3D__WEBPACK_IMPORTED_MODULE_0__["GeneradorC3D"].getInstancia();
+    }
+    append(consola) {
+        this.consola += consola + "\n";
+    }
+    graficar_ts(controlador, ts) {
+        var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"6\">Tabla de Simbolos </td></tr><tr><th>Tipo</th><th>Nombre</th><th>Ambito</th><th>Valor</th></tr></thead>";
+        cuerpohtml += this.cuerpo;
+        return cuerpohtml;
+    }
+    graficarEntornos(controlador, ts, ubicacion) {
+        var cuerpohtml = "";
+        for (let sim of ts.tabla) {
+            cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + this.getRol(sim.sim) + "</th><td>" + sim.identificador +
+                "</td>" +
+                "</td><td>" + ubicacion +
+                "</td><td>" + this.getValor(sim.sim) + "</tr>";
+        }
+        this.cuerpo = this.cuerpo + cuerpohtml;
+    }
+    graficar_Semantico(controlador, ts) {
+        var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"4\">Errores Semanticos </td></tr><tr><th>Tipo</th><th>Descripcion</th><th>Fila</th><th>Columna</th></tr></thead>";
+        for (let sim of controlador.errores) {
+            console.log(`Errores`);
+            cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" + sim.tipo + "</th><td>" + sim.descripcion +
+                "</td><td>" + sim.linea + "</td>" +
+                "</td><td>" + sim.columna + "</tr>";
+        }
+        return cuerpohtml;
+    }
+    getValor(sim) {
+        if (sim.valor != null) {
+            return sim.valor.toString();
+        }
+        else {
+            return '...';
+        }
+    }
+    getTipo(sim) {
+        return sim.tipo.stype.toLowerCase();
+    }
+    getRol(sim) {
+        let rol = '';
+        switch (sim.simbolo) {
+            case 1:
+                rol = "objeto";
+                break;
+            case 2:
+                rol = "identificador";
+                break;
+            case 3:
+                rol = "metodo";
+                break;
+            case 4:
+                rol = "vector";
+                break;
+            case 5:
+                rol = "lista";
+                break;
+            case 6:
+                rol = "parametro";
+                break;
+        }
+        return rol;
+    }
+    getAmbito() {
+        return 'global';
+    }
+    parametros(sim) {
+        if (sim.lista_params != undefined) {
+            return sim.lista_params.length;
+        }
+        else {
+            return "...";
+        }
+    }
+}
+
+
+/***/ }),
+
 /***/ "jImf":
 /*!**********************************************************!*\
   !*** ./src/Clases/Expreciones/Operaciones/Aritmetica.ts ***!
@@ -7132,6 +8847,17 @@ __webpack_require__.r(__webpack_exports__);
 class Aritmetica extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
     constructor(exp1, operador, exp2, linea, columna, expU) {
         super(exp1, operador, exp2, linea, columna, expU);
+    }
+    limpiar() {
+        this.lblFalse = '';
+        this.lblTrue = '';
+        if (this.expU == false) {
+            this.exp1.limpiar();
+            this.exp2.limpiar();
+        }
+        else {
+            this.exp1.limpiar();
+        }
     }
     getTipo(controlador, ts) {
         let valor = this.getValor(controlador, ts);
@@ -7484,9 +9210,9 @@ class Aritmetica extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].POT:
                 return this.potencia(valor_exp1, valor_exp2);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].MODULO:
-                return this.modulo(valor_exp1, valor_exp2);
+                return this.modulo3D(valor_exp1, valor_exp2, controlador);
             case _Operaciones__WEBPACK_IMPORTED_MODULE_3__["Operador"].UNARIO:
-                return this.unario(valor_expU);
+                return this.unario3D(valor_expU, controlador);
             default:
                 //Se produjo un error inesperado
                 break;
@@ -7581,6 +9307,24 @@ class Aritmetica extends _Operaciones__WEBPACK_IMPORTED_MODULE_3__["default"] {
                 generador.genExpresion(temp, valor_exp1.getvalor3d(), valor_exp2.getvalor3d(), '/');
                 return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
             }
+        }
+    }
+    modulo3D(valor_exp1, valor_exp2, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            if (valor_exp2.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+                generador.genCode(temp + ' = fmod(' + valor_exp1.getvalor3d() + ',' + valor_exp2.getvalor3d() + ');');
+                return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp2.tipo);
+            }
+        }
+    }
+    unario3D(valor_exp1, controlador) {
+        const generador = controlador.generador;
+        const temp = generador.newTemporal();
+        if (valor_exp1.tipo.type == src_clases_TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].DOBLE) {
+            generador.genExpresion(temp, valor_exp1.getvalor3d(), '-1', '*');
+            return new _retorno__WEBPACK_IMPORTED_MODULE_2__["retorno"](temp, true, valor_exp1.tipo);
         }
     }
 }
@@ -8069,12 +9813,12 @@ class GeneradorC3D {
   }
 */
 var gramatica = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,8],$V3=[1,9],$V4=[1,10],$V5=[1,11],$V6=[1,12],$V7=[1,13],$V8=[1,14],$V9=[1,15],$Va=[1,16],$Vb=[1,23],$Vc=[1,17],$Vd=[1,18],$Ve=[1,19],$Vf=[1,20],$Vg=[1,21],$Vh=[1,22],$Vi=[5,7],$Vj=[1,30],$Vk=[1,31],$Vl=[1,32],$Vm=[5,7,9,11,15,16,17,18,20,21,22,23,24,26,27,28,29,30,31,32],$Vn=[1,37],$Vo=[1,57],$Vp=[1,58],$Vq=[1,59],$Vr=[1,54],$Vs=[1,61],$Vt=[1,55],$Vu=[1,56],$Vv=[1,60],$Vw=[1,66],$Vx=[1,67],$Vy=[1,65],$Vz=[1,68],$VA=[1,69],$VB=[1,70],$VC=[1,72],$VD=[1,73],$VE=[1,74],$VF=[1,75],$VG=[1,76],$VH=[1,77],$VI=[25,33,35,38,39,40,41,42,43,44,45,46,47,48],$VJ=[25,33,38,39,42,43,44,45,46,47,48],$VK=[33,38,42,43,44,45,46,47,48];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[1,8],$V3=[1,9],$V4=[1,10],$V5=[1,11],$V6=[1,12],$V7=[1,13],$V8=[1,14],$V9=[1,15],$Va=[1,16],$Vb=[1,23],$Vc=[1,17],$Vd=[1,18],$Ve=[1,19],$Vf=[1,20],$Vg=[1,21],$Vh=[1,22],$Vi=[5,7],$Vj=[1,30],$Vk=[1,31],$Vl=[1,32],$Vm=[5,7,9,11,15,16,17,18,20,21,22,23,24,26,27,28,29,30,31,32],$Vn=[1,37],$Vo=[1,58],$Vp=[1,59],$Vq=[1,60],$Vr=[1,54],$Vs=[1,62],$Vt=[1,55],$Vu=[1,56],$Vv=[1,57],$Vw=[1,61],$Vx=[1,67],$Vy=[1,72],$Vz=[1,68],$VA=[1,66],$VB=[1,69],$VC=[1,70],$VD=[1,71],$VE=[1,73],$VF=[1,74],$VG=[1,75],$VH=[1,76],$VI=[1,77],$VJ=[1,78],$VK=[25,33,35,38,39,40,41,42,43,44,45,46,47,48,50],$VL=[25,33,38,39,42,43,44,45,46,47,48,50],$VM=[33,38,42,43,44,45,46,47,48,50];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"inicio":3,"varias":4,"EOF":5,"instrucciones":6,"SIGNOO":7,"instruccion":8,"BARRA":9,"e":10,"BARRABARRA":11,"RESERV":12,"DOSPUNTOS":13,"PUNTOPUNTO":14,"ID":15,"LAST":16,"POSITION":17,"ANCESTOR":18,"RESERVLARGE":19,"ATTRIBUTE":20,"ANCESORSELF":21,"CHILD":22,"DESCENDANT":23,"FOLLOWING":24,"MENOS":25,"SIBLING":26,"NAMESPACE":27,"PARENT":28,"PRECENDING":29,"SELF":30,"TEXT":31,"NODE":32,"OR":33,"ARROBA":34,"ASTERISCO":35,"CORA":36,"OPERADORES":37,"CORC":38,"MAS":39,"DIV":40,"MODULO":41,"AND":42,"MAYORQUE":43,"MAYORIGUAL":44,"MENORQUE":45,"MENORIGUAL":46,"DIFERENTE":47,"IGUAL":48,"DECIMAL":49,"ENTERO":50,"CADENA":51,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",7:"SIGNOO",9:"BARRA",11:"BARRABARRA",13:"DOSPUNTOS",14:"PUNTOPUNTO",15:"ID",16:"LAST",17:"POSITION",18:"ANCESTOR",20:"ATTRIBUTE",21:"ANCESORSELF",22:"CHILD",23:"DESCENDANT",24:"FOLLOWING",25:"MENOS",26:"SIBLING",27:"NAMESPACE",28:"PARENT",29:"PRECENDING",30:"SELF",31:"TEXT",32:"NODE",33:"OR",34:"ARROBA",35:"ASTERISCO",36:"CORA",38:"CORC",39:"MAS",40:"DIV",41:"MODULO",42:"AND",43:"MAYORQUE",44:"MAYORIGUAL",45:"MENORQUE",46:"MENORIGUAL",47:"DIFERENTE",48:"IGUAL",49:"DECIMAL",50:"ENTERO",51:"CADENA"},
-productions_: [0,[3,2],[4,3],[4,1],[6,2],[6,1],[8,2],[8,2],[8,3],[8,4],[8,2],[8,4],[8,1],[12,1],[12,1],[12,2],[12,1],[12,1],[12,1],[12,2],[12,1],[12,3],[12,1],[12,1],[12,1],[12,1],[12,3],[12,1],[12,1],[12,1],[12,1],[19,4],[19,2],[10,1],[10,2],[10,2],[10,1],[10,4],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,2],[37,1],[37,1],[37,1],[37,1],[37,1],[37,1],[37,2]],
+symbols_: {"error":2,"inicio":3,"varias":4,"EOF":5,"instrucciones":6,"SIGNOO":7,"instruccion":8,"BARRA":9,"e":10,"BARRABARRA":11,"RESERV":12,"DOSPUNTOS":13,"PUNTOPUNTO":14,"ID":15,"LAST":16,"POSITION":17,"ANCESTOR":18,"RESERVLARGE":19,"ATTRIBUTE":20,"ANCESORSELF":21,"CHILD":22,"DESCENDANT":23,"FOLLOWING":24,"MENOS":25,"SIBLING":26,"NAMESPACE":27,"PARENT":28,"PRECENDING":29,"SELF":30,"TEXT":31,"NODE":32,"OR":33,"ARROBA":34,"ASTERISCO":35,"CORA":36,"OPERADORES":37,"CORC":38,"MAS":39,"DIV":40,"MODULO":41,"AND":42,"MAYORQUE":43,"MAYORIGUAL":44,"MENORQUE":45,"MENORIGUAL":46,"DIFERENTE":47,"IGUAL":48,"PARA":49,"PARC":50,"DECIMAL":51,"ENTERO":52,"CADENA":53,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",7:"SIGNOO",9:"BARRA",11:"BARRABARRA",13:"DOSPUNTOS",14:"PUNTOPUNTO",15:"ID",16:"LAST",17:"POSITION",18:"ANCESTOR",20:"ATTRIBUTE",21:"ANCESORSELF",22:"CHILD",23:"DESCENDANT",24:"FOLLOWING",25:"MENOS",26:"SIBLING",27:"NAMESPACE",28:"PARENT",29:"PRECENDING",30:"SELF",31:"TEXT",32:"NODE",33:"OR",34:"ARROBA",35:"ASTERISCO",36:"CORA",38:"CORC",39:"MAS",40:"DIV",41:"MODULO",42:"AND",43:"MAYORQUE",44:"MAYORIGUAL",45:"MENORQUE",46:"MENORIGUAL",47:"DIFERENTE",48:"IGUAL",49:"PARA",50:"PARC",51:"DECIMAL",52:"ENTERO",53:"CADENA"},
+productions_: [0,[3,2],[4,3],[4,1],[6,2],[6,1],[8,2],[8,2],[8,3],[8,4],[8,2],[8,4],[8,1],[12,1],[12,1],[12,2],[12,1],[12,1],[12,1],[12,2],[12,1],[12,3],[12,1],[12,1],[12,1],[12,1],[12,3],[12,1],[12,1],[12,1],[12,1],[19,4],[19,2],[10,1],[10,2],[10,2],[10,1],[10,4],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,3],[37,2],[37,3],[37,1],[37,1],[37,1],[37,1],[37,1],[37,1],[37,2]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -8179,28 +9923,31 @@ break;
 case 51:
 this.$ = new aritmetica.default($$[$0], 'UNARIO', null, $$[$0-1].first_line, $$[$0-1].last_column, true);
 break;
-case 52: case 53:
+case 52:
+this.$ = $$[$0-1];
+break;
+case 53: case 54:
 this.$ = new primitivo.default(Number(yytext), $$[$0].first_line, $$[$0].last_column,-1);
 break;
-case 54:
+case 55:
 this.$ = new identificador.default($$[$0] , _$[$0].first_line, _$[$0].last_column,1); 
 break;
-case 55:
+case 56:
 this.$ = new last.default();
 break;
-case 56:
+case 57:
 this.$ = new position.default();
 break;
-case 57:
+case 58:
 $$[$0] = $$[$0].slice(1, $$[$0].length-1); this.$ = new primitivo.default($$[$0], $$[$0].first_line, $$[$0].last_column);
 break;
-case 58:
+case 59:
 this.$ = new identificador.default($$[$0] , _$[$0-1].first_line, _$[$0-1].last_column,2); 
 break;
 }
 },
-table: [{3:1,4:2,6:3,8:4,9:$V0,11:$V1,12:7,15:$V2,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh},{1:[3]},{5:[1,24]},{5:[2,3],7:[1,25]},o($Vi,[2,5],{8:4,12:7,6:26,9:$V0,11:$V1,15:$V2,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh}),{10:27,12:28,14:[1,29],15:$Vj,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,34:$Vk,35:$Vl},{10:33,12:34,15:$Vj,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,34:$Vk,35:$Vl},{13:[1,35]},o($Vm,[2,12]),{13:[2,13]},{13:[2,14]},{19:36,25:$Vn},{13:[2,16]},{13:[2,17]},{13:[2,18]},{13:[2,20],19:38,25:$Vn},{13:[2,22],25:[1,39]},{13:[2,23]},{13:[2,24]},{13:[2,25],25:[1,40]},{13:[2,27]},{13:[2,28]},{13:[2,29]},{13:[2,30]},{1:[2,1]},{6:41,8:4,9:$V0,11:$V1,12:7,15:$V2,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh},o($Vi,[2,4]),o($Vm,[2,6]),{13:[1,42]},o($Vm,[2,10]),o($Vm,[2,33],{36:[1,43]}),{15:[1,44],35:[1,45]},o($Vm,[2,36]),o($Vm,[2,7]),{13:[1,46]},{10:47,15:$Vj,34:$Vk,35:$Vl},{13:[2,15]},{26:[1,49],33:[1,48]},{13:[2,19]},{26:[1,50]},{26:[1,51]},{5:[2,2]},{10:52,15:$Vj,34:$Vk,35:$Vl},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:53,49:$Vt,50:$Vu,51:$Vv},o($Vm,[2,34]),o($Vm,[2,35]),{10:62,15:$Vj,34:$Vk,35:$Vl},o($Vm,[2,8]),{25:[1,63]},{13:[2,32]},{13:[2,21]},{13:[2,26]},o($Vm,[2,9]),{25:$Vw,33:[1,71],35:$Vx,38:[1,64],39:$Vy,40:$Vz,41:$VA,42:$VB,43:$VC,44:$VD,45:$VE,46:$VF,47:$VG,48:$VH},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:78,49:$Vt,50:$Vu,51:$Vv},o($VI,[2,52]),o($VI,[2,53]),o($VI,[2,54]),o($VI,[2,55]),o($VI,[2,56]),o($VI,[2,57]),{15:[1,79]},o($Vm,[2,11]),{30:[1,80]},o($Vm,[2,37]),{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:81,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:82,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:83,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:84,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:85,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:86,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:87,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:88,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:89,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:90,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:91,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:92,49:$Vt,50:$Vu,51:$Vv},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:93,49:$Vt,50:$Vu,51:$Vv},o($VI,[2,51]),o($VI,[2,58]),{13:[2,31]},o($VJ,[2,38],{35:$Vx,40:$Vz,41:$VA}),o($VJ,[2,39],{35:$Vx,40:$Vz,41:$VA}),o($VI,[2,40]),o($VI,[2,41]),o($VI,[2,42]),o([33,38,42],[2,43],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA,43:$VC,44:$VD,45:$VE,46:$VF,47:$VG,48:$VH}),o([33,38],[2,44],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA,42:$VB,43:$VC,44:$VD,45:$VE,46:$VF,47:$VG,48:$VH}),o($VK,[2,45],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA}),o($VK,[2,46],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA}),o($VK,[2,47],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA}),o($VK,[2,48],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA}),o($VK,[2,49],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA}),o($VK,[2,50],{25:$Vw,35:$Vx,39:$Vy,40:$Vz,41:$VA})],
-defaultActions: {9:[2,13],10:[2,14],12:[2,16],13:[2,17],14:[2,18],17:[2,23],18:[2,24],20:[2,27],21:[2,28],22:[2,29],23:[2,30],24:[2,1],36:[2,15],38:[2,19],41:[2,2],49:[2,32],50:[2,21],51:[2,26],80:[2,31]},
+table: [{3:1,4:2,6:3,8:4,9:$V0,11:$V1,12:7,15:$V2,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh},{1:[3]},{5:[1,24]},{5:[2,3],7:[1,25]},o($Vi,[2,5],{8:4,12:7,6:26,9:$V0,11:$V1,15:$V2,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh}),{10:27,12:28,14:[1,29],15:$Vj,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,34:$Vk,35:$Vl},{10:33,12:34,15:$Vj,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh,34:$Vk,35:$Vl},{13:[1,35]},o($Vm,[2,12]),{13:[2,13]},{13:[2,14]},{19:36,25:$Vn},{13:[2,16]},{13:[2,17]},{13:[2,18]},{13:[2,20],19:38,25:$Vn},{13:[2,22],25:[1,39]},{13:[2,23]},{13:[2,24]},{13:[2,25],25:[1,40]},{13:[2,27]},{13:[2,28]},{13:[2,29]},{13:[2,30]},{1:[2,1]},{6:41,8:4,9:$V0,11:$V1,12:7,15:$V2,16:$V3,17:$V4,18:$V5,20:$V6,21:$V7,22:$V8,23:$V9,24:$Va,26:$Vb,27:$Vc,28:$Vd,29:$Ve,30:$Vf,31:$Vg,32:$Vh},o($Vi,[2,4]),o($Vm,[2,6]),{13:[1,42]},o($Vm,[2,10]),o($Vm,[2,33],{36:[1,43]}),{15:[1,44],35:[1,45]},o($Vm,[2,36]),o($Vm,[2,7]),{13:[1,46]},{10:47,15:$Vj,34:$Vk,35:$Vl},{13:[2,15]},{26:[1,49],33:[1,48]},{13:[2,19]},{26:[1,50]},{26:[1,51]},{5:[2,2]},{10:52,15:$Vj,34:$Vk,35:$Vl},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:53,49:$Vt,51:$Vu,52:$Vv,53:$Vw},o($Vm,[2,34]),o($Vm,[2,35]),{10:63,15:$Vj,34:$Vk,35:$Vl},o($Vm,[2,8]),{25:[1,64]},{13:[2,32]},{13:[2,21]},{13:[2,26]},o($Vm,[2,9]),{25:$Vx,33:$Vy,35:$Vz,38:[1,65],39:$VA,40:$VB,41:$VC,42:$VD,43:$VE,44:$VF,45:$VG,46:$VH,47:$VI,48:$VJ},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:79,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:80,49:$Vt,51:$Vu,52:$Vv,53:$Vw},o($VK,[2,53]),o($VK,[2,54]),o($VK,[2,55]),o($VK,[2,56]),o($VK,[2,57]),o($VK,[2,58]),{15:[1,81]},o($Vm,[2,11]),{30:[1,82]},o($Vm,[2,37]),{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:83,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:84,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:85,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:86,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:87,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:88,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:89,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:90,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:91,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:92,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:93,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:94,49:$Vt,51:$Vu,52:$Vv,53:$Vw},{15:$Vo,16:$Vp,17:$Vq,25:$Vr,34:$Vs,37:95,49:$Vt,51:$Vu,52:$Vv,53:$Vw},o($VK,[2,51]),{25:$Vx,33:$Vy,35:$Vz,39:$VA,40:$VB,41:$VC,42:$VD,43:$VE,44:$VF,45:$VG,46:$VH,47:$VI,48:$VJ,50:[1,96]},o($VK,[2,59]),{13:[2,31]},o($VL,[2,38],{35:$Vz,40:$VB,41:$VC}),o($VL,[2,39],{35:$Vz,40:$VB,41:$VC}),o($VK,[2,40]),o($VK,[2,41]),o($VK,[2,42]),o([33,38,42,50],[2,43],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC,43:$VE,44:$VF,45:$VG,46:$VH,47:$VI,48:$VJ}),o([33,38,50],[2,44],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC,42:$VD,43:$VE,44:$VF,45:$VG,46:$VH,47:$VI,48:$VJ}),o($VM,[2,45],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC}),o($VM,[2,46],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC}),o($VM,[2,47],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC}),o($VM,[2,48],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC}),o($VM,[2,49],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC}),o($VM,[2,50],{25:$Vx,35:$Vz,39:$VA,40:$VB,41:$VC}),o($VK,[2,52])],
+defaultActions: {9:[2,13],10:[2,14],12:[2,16],13:[2,17],14:[2,18],17:[2,23],18:[2,24],20:[2,27],21:[2,28],22:[2,29],23:[2,30],24:[2,1],36:[2,15],38:[2,19],41:[2,2],49:[2,32],50:[2,21],51:[2,26],82:[2,31]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -8723,13 +10470,13 @@ case 4: console.log("Reconocio : "+ yy_.yytext); return 43
 break;
 case 5: console.log("Reconocio : "+ yy_.yytext); return 47
 break;
-case 6: console.log("Reconocio : "+ yy_.yytext); return 'PARA'
+case 6: console.log("Reconocio : "+ yy_.yytext); return 49
 break;
 case 7: console.log("Reconocio : "+ yy_.yytext); return 11
 break;
 case 8: console.log("Reconocio : "+ yy_.yytext); return 9
 break;
-case 9: console.log("Reconocio : "+ yy_.yytext); return 'PARC'
+case 9: console.log("Reconocio : "+ yy_.yytext); return 50
 break;
 case 10: console.log("Reconocio : "+ yy_.yytext); return 36
 break;
@@ -8791,13 +10538,13 @@ case 38: console.log("Reconocio : "+ yy_.yytext); return 16
 break;
 case 39: console.log("Reconocio : "+ yy_.yytext); return 17
 break;
-case 40: console.log("Reconocio : "+ yy_.yytext); return 49
+case 40: console.log("Reconocio : "+ yy_.yytext); return 51
 break;
-case 41: console.log("Reconocio : "+ yy_.yytext); return 50
+case 41: console.log("Reconocio : "+ yy_.yytext); return 52
 break;
 case 42: console.log("Reconocio id : "+ yy_.yytext); return 15
 break;
-case 43: console.log("Reconocio : "+ yy_.yytext); return 51
+case 43: console.log("Reconocio : "+ yy_.yytext); return 53
 break;
 case 44: /* skip whitespace */ 
 break;
@@ -9005,6 +10752,8 @@ class Primitivo {
             return _TablaSimbolos_Tipo__WEBPACK_IMPORTED_MODULE_1__["tipo"].BOOLEANO;
         }
     }
+    limpiar() {
+    }
     recorrer() {
         let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("Primitivo", "");
         padre.AddHijo(new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"](this.primitivo.toString(), ""));
@@ -9083,6 +10832,8 @@ class last {
         let padre = new _AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("LAST();", "");
         return padre;
     }
+    limpiar() {
+    }
 }
 
 
@@ -9104,7 +10855,7 @@ class Nativas {
     generarNativas() {
         this.nativa_print_str();
         //this.nativa_print_integer();
-        // this.nativa_compararIgual_str_str();
+        this.nativa_compararIgual_str_str();
         // this.nativa_compararNoIgual_str_str();
         //this.nativa_ToUpperCase();
         //this.nativa_ToLowerCase();
@@ -9890,6 +11641,8 @@ class Ternario {
             controlador.append(`Error Semantico : La condicion del ternario no es booleana. En la linea ${this.linea} y columan ${this.columna}`);
         }
     }
+    limpiar() {
+    }
     getValor(controlador, ts) {
         let valor_condicion = this.condicion.getValor(controlador, ts);
         if (typeof valor_condicion == 'boolean') {
@@ -10074,9 +11827,12 @@ class Operaciones {
         this.expU = expU;
         this.op = operador;
         this.operador = this.getOperador(operador);
+        this.lblFalse = this.lblTrue = '';
     }
     getvalor3d(controlador, ts) {
         throw new Error("Method not implemented.");
+    }
+    limpiar() {
     }
     getOperador(op) {
         if (op == '+') {
@@ -10163,6 +11919,31 @@ class Continuar {
     recorrer() {
         let padre = new src_clases_AST_Nodo__WEBPACK_IMPORTED_MODULE_0__["default"]("CONTUNUE", "");
         return padre;
+    }
+}
+
+
+/***/ }),
+
+/***/ "wLeh":
+/*!**************************************!*\
+  !*** ./src/Clases/AST/ListaError.ts ***!
+  \**************************************/
+/*! exports provided: LErrores */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LErrores", function() { return LErrores; });
+/* harmony import */ var _Analizar__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Analizar */ "/l+n");
+/* harmony import */ var _Errores__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Errores */ "zZ//");
+
+
+class LErrores {
+    constructor(tipo, descripcion, analizador, linea, columna) {
+        console.log("hay un error");
+        _Analizar__WEBPACK_IMPORTED_MODULE_0__["errorLex"].push(new _Errores__WEBPACK_IMPORTED_MODULE_1__["default"](tipo, descripcion, linea, columna, analizador));
+        console.log(_Analizar__WEBPACK_IMPORTED_MODULE_0__["errorLex"]);
     }
 }
 
@@ -10312,11 +12093,12 @@ class Declaracion {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Errores; });
 class Errores {
-    constructor(tipo, descripcion, linea, columna) {
+    constructor(tipo, descripcion, linea, columna, analizador) {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.linea = linea;
         this.columna = columna;
+        this.analizador = analizador;
     }
 }
 
