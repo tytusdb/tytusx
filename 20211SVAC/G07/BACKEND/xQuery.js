@@ -2,6 +2,8 @@ function ejecutarXQuery(instruccion,entorno){
     let tablaSimbolos=new Entorno(null);
     let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
     //tablaSimbolos
+    console.log("pp");
+    console.log(tablaSimbolos);
     if(consulta){
         imprimiConsola(consulta);
     }else{
@@ -100,7 +102,7 @@ function llamada_funcion(instrucciones,entorno,tablaSimbolos){
     
     
     if(tablaSimbolos.getFuncion(instrucciones.id)){
-        
+
         let funcion=JSON.parse(JSON.stringify(tablaSimbolos.getFuncion(instrucciones.id)));
 
         let index=0;   

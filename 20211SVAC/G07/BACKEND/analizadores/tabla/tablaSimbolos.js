@@ -7,10 +7,6 @@ class TablaSimbolos {
 
 
     agregarSimbolo(simbolo) {
-        /**
-         * let tablaSimbolos2 = new TablaSimbolos();
-         * tablaSimbolos2.agregarSimbolo(new Simbolo(nombre, tipo, ambito, fila, columna, valor, indice));
-         */
         this.simbolos.push(simbolo);    
     }
 
@@ -82,8 +78,8 @@ class TablaSimbolos {
         return this.simbolos;
     }
 
-    // generarTabla2() {
-    //     return  this.simbolos;   
-    // }
+     generarTabla2() {
+         return  this.simbolos;   
+     }
 
 }

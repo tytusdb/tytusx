@@ -7,6 +7,7 @@ let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
 let tablaSimbolos = [];
+let tablaSimbolosVariables = [];
 let listaTokens=[];
 let parserXML;
 let parserXPATHDER;
@@ -191,7 +192,6 @@ botonCargar.addEventListener("click", () => {
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
 
-
 })
 
 // ======================================
@@ -259,6 +259,7 @@ let btnReporteXML = document.getElementById('btnReporteXML');
 let btnReporteXMLCST= document.getElementById('btnReporteXMLcst');
 let btnReporteGram = document.getElementById('btnReporteXGRAM');
 let btnReporteXMLErrores = document.getElementById('btnReporteXMLErrores');
+let btnReporteXQUERYTB = document.getElementById('btnReporteXQUERYTB');
 
 let tablaTitulo = document.getElementById('EpicModalLabel');
 let tablaTituloCST = document.getElementById('EpicModalLabelAST');
@@ -266,6 +267,8 @@ let tabla = document.getElementById('tablaSimbolos');
 let contenidoModal2 = document.getElementById('modal2Content');
 
 let tablaCabeceras = document.getElementById('tablaCabeceras');
+
+
 
 // REPORTE TABLA DE SIMBOLOS
 btnReporteXML.addEventListener("click", () => {
@@ -276,10 +279,10 @@ btnReporteXML.addEventListener("click", () => {
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
   <th scope="col">Nombre</th>
-  <th scope="col">Tipo</th>
+  <th scope="col"> </th>
   <th scope="col">Ambito</th>
-  <th scope="col">Fila</th>
-  <th scope="col">Columna</th>
+  <th scope="col"> </th>
+  <th scope="col"> </th>
   <th scope="col">Valor</th>
   <th scope="col">Indice</th>
   `;
@@ -456,6 +459,8 @@ boton3D.addEventListener("click", () => {
  * ******************************************************
  */
  btnCargarxquery.addEventListener("click", () => {
+  tablaSimbolosVariables = new TablaSimbolos();
+
   console.log("Analizando XQUERY ")
   tipoAnalizadorXML = "ASCENDENTE";
 
@@ -467,6 +472,7 @@ boton3D.addEventListener("click", () => {
   globalencod =parserXML.tipoencoding;
   ejecutarXQuery(parserXQUERY,parserXML.json);
 
+  tablaSimbolosVariables = tablaSimbolosVariables.generarTabla2();
 
 })
 /*
@@ -504,6 +510,8 @@ document.getElementById("btnReporteXQUERYgda").addEventListener("click", () => {
 
 })
 
+
+
 let botonCargar3 = document.getElementById("btnCargar3");
 botonCargar3.addEventListener("click", () => {
   alert("Vaciaste el consola");
@@ -511,6 +519,40 @@ botonCargar3.addEventListener("click", () => {
 })
 
 
+
+
+btnReporteXQUERYTB.addEventListener("click", () => {
+  tablaTitulo.innerHTML = 'Reporte Tabla Simbolos XQUERY ' + tipoAnalizadorXML;
+  tabla.innerHTML = "";
+
+  
+  // Agregar las cabeceras
+  tablaCabeceras.innerHTML = `
+  <th scope="col">Nombre</th>
+  <th scope="col">Tipo</th>
+  <th scope="col">Ambito</th>
+  <th scope="col">Fila</th>
+  <th scope="col">Columna</th>
+  <th scope="col">Valor</th>
+  <th scope="col">Indice</th>
+  `;
+
+
+  // Agregar contenido a la tabla
+  tablaSimbolosVariables.forEach(simbolo => {
+    tabla.innerHTML += `
+      <tr>
+        <td>${simbolo.nombre}</td>
+        <td>${simbolo.tipo}</td>
+        <td>${simbolo.ambito}</td>
+        <td>${simbolo.fila}</td>
+        <td>${simbolo.columna}</td>
+        <td>${simbolo.valor}</td>
+        <td>${simbolo.indice === -1 ? '' : simbolo.indice}</td>
+      </tr>
+    `;
+  });
+});
 
 
     // Original
