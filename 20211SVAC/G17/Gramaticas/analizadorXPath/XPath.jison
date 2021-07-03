@@ -8,7 +8,7 @@
   const { Atributo, Camino, Child, Descendant, Attribute, Self, DescSelf, FollowSibling, Follow } = require('./Expresion/axes')
   const { CaminoInverso, Parent, Ancestor, PrecedingSibling, AncestorSelf, Preceding } = require('./Expresion/axes')
   const { ContextItemExpr, CallFunction, CallFunctionPrefix } = require('./Expresion/postfix')
-  const { Flower,IfThenElse } = require('./Instruccion/Xquery')
+  const { Flower,IfThenElse,CrearFuncion } = require('./Instruccion/Xquery')
   const { grafoCST } = require('../CST')
 
   var grafo = new grafoCST(); 
@@ -129,6 +129,7 @@
 "."         return "PUNTO"
 "::"        return "DOBLEDOSPUNTOS"
 ":"         return "DOSPUNTOS"
+";"         return "PUNTOCOMA"
 "$"         return "DOLAR"
 
 /* Espacios en blanco */
@@ -148,23 +149,68 @@
 
 %%
 
-XPath 
-  : Expr { 
-    grafo.generarPadre(1, "INICIO");grafo.generarHijos("Expr");
+XPath
+  : Modulo { 
+    grafo.generarPadre(1,"Modulo")
+    grafo.generarHijos("Modulo")
+    grafo.generarTexto("Xpath.valor = Modulo.valor") 
+    grafo.generarPadre(1,"Xpath") 
+    grafo.generarHijos("Xpath") 
     var retornoErrores = Object.assign([], ListaErrores);
     ListaErrores = [];
     var retornoGrafo = Object.assign({}, grafo);
     grafo = new grafoCST();
-    $$=new Comando($1,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
+    $$=new Comando($1.prologo,$1.expr,retornoGrafo.pilaNodos,retornoGrafo.PilaEdges,retornoGrafo.GrahpvizNodo+retornoGrafo.GrahpvizEdges,retornoErrores,retornoGrafo.TablaGramatica);
     return $$ }
-  | AnnotatedDecl { return new Comando([],[],[],"",retornoErrores,[]) }
   | error {  
-      setLineaColumna(this._$.first_line,this._$.first_column)
-      //ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
-      var retornoErrores = Object.assign([], ListaErrores);
-      ListaErrores = [];
-      grafo = new grafoCST(); 
-      return new Comando([],[],[],"",retornoErrores,[]) }
+    setLineaColumna(this._$.first_line,this._$.first_column)
+    //ListaErrores.push({Error:"Error sintactico :"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column});
+    var retornoErrores = Object.assign([], ListaErrores);
+    ListaErrores = [];
+    grafo = new grafoCST(); 
+    $$=new Comando([],[],[],[],"",retornoErrores,[]) 
+    return $$ }
+;
+
+Modulo 
+  : Expr { 
+    $$ = {prologo:[],expr:$1}
+    grafo.generarPadre(1, "Expr");
+    grafo.generarHijos("Expr");
+    grafo.generarTexto("Modulo.valor = Expr.valor") }
+  | Prolog Expr {
+    $$ = {prologo:$1,expr:$2}
+    grafo.generarPadre(2, "Expr");
+    grafo.generarPadre(1, "Prolog")
+    grafo.generarHijos("Prolog","Expr");
+    grafo.generarTexto("Modulo.valor = Expr.valor,Modulo.funciones = Prolog.valor") }
+;
+
+Prolog
+  : AnnotatedDecl { 
+    $$=[$1] 
+    grafo.generarPadre(1,"AnnotatedDecl")
+    grafo.generarHijos("AnnotatedDecl")
+    grafo.generarTexto(`Prolog.valor = AnnotatedDecl.valor`) }
+  | Prolog AnnotatedDecl { 
+    $$=$1;
+    $$.push($2) 
+    grafo.generarPadre(2,"AnnotatedDecl")
+    grafo.generarPadre(1,"Prolog")
+    grafo.generarHijos("Prolog","AnnotatedDecl")
+    grafo.generarTexto(`Prolog.valor = Prolog1.valor; Prolog.valor.push(AnnotatedDecl.valor)`) }
+  | Prolog error { 
+    $$=$1 
+    grafo.generarPadre(1,"Prolog");
+    grafo.generarHijos("Prolog","error")
+    setLineaColumna(this._$.first_line,this._$.first_column)
+    grafo.generarTexto(`Prolog.valor = Prolog1.valor;new Error();`) }
+  | error AnnotatedDecl { 
+    $$=[$2] 
+    grafo.generarPadre(2,"AnnotatedDecl")
+    grafo.generarHijos("error","AnnotatedDecl")
+    setLineaColumna(this._$.first_line,this._$.first_column)
+    grafo.generarTexto(`Prolog.valor = [AnnotatedDecl.valor];new Error();`) }
 ;
 
 Expr 
@@ -180,13 +226,15 @@ Expr
     grafo.generarHijos("Expr",$2,"ExprSingle");
     grafo.generarTexto(`expr.push(ExprSingle.valor);`); }
   | Expr Separador error { 
-    $$=$1;grafo.generarPadre(1, "Expr");
-    setLineaColumna(this._$.first_line,this._$.first_column)
+    $$=$1;
+    grafo.generarPadre(1, "Expr");
     //ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
     grafo.generarHijos("Expt",$2,"error");
+    setLineaColumna(this._$.first_line,this._$.first_column)
     grafo.generarTexto(`return expr; new Error();`); }
   | error Separador ExprSingle { 
-    $$=[];$$.push($3); grafo.generarPadre(3, "ExprSingle");
+    $$=[];$$.push($3); 
+    grafo.generarPadre(3, "ExprSingle");
     grafo.generarHijos("error",$2,"ExprSingle");
     setLineaColumna(this._$.first_line,this._$.first_column)
     //ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
@@ -202,7 +250,11 @@ Separador
 ;
 
 AnnotatedDecl	   
-  : RDECLARE FunctionDecl
+  : RDECLARE FunctionDecl PUNTOCOMA{ 
+    $$=$2 
+    grafo.generarPadre(2,"FunctionDecl")
+    grafo.generarHijos($1,"FunctionDecl",$3)
+    grafo.generarTexto(`AnnotatedDecl.valor = FunctionDecl.valor`) }
 ;
 
 TypeDeclaration
@@ -228,35 +280,77 @@ TypeDeclaration
     grafo.generarTexto(`TypeDeclaration.tipo = Decimal`) }
 ;
 
-VarValue 
-  : ExprSingle	
+FunctionDecl
+  : RFUNCTION NOMBRE DOSPUNTOS NOMBRE PARENTESISA ParamList PARENTESISC TypeDeclaration FunctionBody { 
+    $$=CrearFuncion($4,$6,$8,$9)
+    grafo.generarPadre(9,"FunctionBody")
+    grafo.generarPadre(8,"TypeDeclaration") 
+    grafo.generarPadre(6,"ParamList")
+    grafo.generarHijos($1,$2,$3,$4,$5,"ParamList",$7,"TypeDeclaration","FunctionBody") 
+    grafo.generarTexto(`FunctionDecl.valor = new Function(${$4},ParamList.valor,TypeDeclaration.tipo,FunctionBody.valor)`) }
+  | RFUNCTION NOMBRE DOSPUNTOS NOMBRE PARENTESISA PARENTESISC TypeDeclaration FunctionBody { 
+    $$=CrearFuncion($4,[],$7,$8)
+    grafo.generarPadre(8,"FunctionBody")
+    grafo.generarPadre(7,"TypeDeclaration")
+    grafo.generarHijos($1,$2,$3,$4,$5,$6,"TypeDeclaration","FunctionBody")
+    grafo.generarTexto(`FunctionDecl.valor = new Function(${$4},[],TypeDeclaration.tipo,FunctionBody.valor)`) }
+  | RFUNCTION NOMBRE DOSPUNTOS NOMBRE PARENTESISA ParamList PARENTESISC FunctionBody { 
+    $$=CrearFuncion($4,$6,null,$8)
+    grafo.generarPadre(8,"FunctionBody")
+    grafo.generarPadre(6,"ParamList")
+    grafo.generarHijos($1,$2,$3,$4,$5,"ParamList",$7,"FunctionBody")
+    grafo.generarTexto(`FunctionDecl.valor = new Function(${$4},ParamList.valor,null,FunctionBody.valor)`) }
+  | RFUNCTION NOMBRE DOSPUNTOS NOMBRE PARENTESISA PARENTESISC FunctionBody { 
+    $$=CrearFuncion($4,[],null,$7)
+    grafo.generarPadre(7,"FunctionBody")
+    grafo.generarHijos($1,$2,$3,$4,$5,$6,"FunctionBody")
+    grafo.generarTexto(`FunctionDecl.valor = new Function(${$4},[],null,FunctionBody.valor)`) } 
 ;
 
-FunctionDecl
-  : RFUNCTION NOMBRE PARENTESISA ParamList PARENTESISC TypeDeclaration FunctionBody
-  | RFUNCTION NOMBRE PARENTESISA PARENTESISC TypeDeclaration FunctionBody
-  | RFUNCTION NOMBRE PARENTESISA ParamList PARENTESISC FunctionBody
-  | RFUNCTION NOMBRE PARENTESISA PARENTESISC FunctionBody 
-;
 
 ParamList
-  : ParamList COMA Param
-  | Param  	
+  : ParamList COMA Param  { 
+    $$=$1;
+    $$.push($3)
+    grafo.generarPadre(3,"Param")
+    grafo.generarPadre(1,"ParamList")
+    grafo.generarHijos("ParamList",$1,"Param")
+    grafo.generarTexto(`ParamList.valor = ParamList1.valor; ParamList.valor.push(Param.valor)`) }
+  | Param  	              { 
+    $$=[$1]
+    grafo.generarPadre(1,"Param")
+    grafo.generarHijos("Param")
+    grafo.generarTexto(`ParamList.valor = [Param.valor];`)  }
 ;
 
 Param
-  : DOLAR NOMBRE TypeDeclaration
-  | DOLAR NOMBRE 	                
+  : DOLAR NOMBRE TypeDeclaration  { 
+    $$={nombre:$1+$2, type:$3}
+    grafo.generarPadre(3,"TypeDeclaration")
+    grafo.generarHijos($1,$2,"TypeDeclaration")
+    grafo.generarTexto(`Param.Valor = new Declaracion(${$1},TypeDeclaration.tipo`) }
+  | DOLAR NOMBRE { 
+    $$={nombre:$1+$2, type:null} 
+    grafo.generarHijos($1,$2)
+    grafo.generarTexto(`Param.Valor = new Declaracion(${$1},null`) }
 ;
 
 FunctionBody
-  : LLAVEA Expr LLAVEC
-  | LLAVEA LLAVEC	
+  : LLAVEA Expr LLAVEC  { 
+    $$=$2 
+    grafo.generarPadre(2,"Expr")
+    grafo.generarHijos($1,"Expr",$3) 
+    grafo.generarTexto(`FunctionBody.valor = Expr.valor`) }
+  | LLAVEA LLAVEC	{ 
+    $$=[]
+    grafo.generarHijos($1,$2) 
+    grafo.generarTexto(`FunctionBody.valor = []`) }
 ;
 
 ExprSingle  
   : OrExpr  { 
-    $$=$1; grafo.generarPadre(1, "OrExpr");
+    $$=$1; 
+    grafo.generarPadre(1, "OrExpr");
     grafo.generarHijos("OrExpr");
     grafo.generarTexto(`ExprSingle.valor = OrExpr.valor`); }
   | FLWORExpr { 
@@ -304,7 +398,8 @@ IntermediateClauseR
     $$.push($2);
     grafo.generarPadre(2,"IntermediateClause")
     grafo.generarPadre(1,"IntermediateClauseR")
-    grafo.generarHijos("IntermediateClauseR.valor=IntermediateClauseR1.valor;IntermediateClauseR.valor.push(IntermediateClause.valor)") }
+    grafo.generarHijos("IntermediateClauseR.valor=IntermediateClauseR1.valor;IntermediateClauseR.valor.push(IntermediateClause.valor)")
+    grafo.generarTexto("IntermediateClauseR.valor = IntermediateClauseR1.valor; IntermediateClauseR.valor.push(IntermediateClause.valor)") }
 ;
 
 InitialClause
@@ -965,7 +1060,7 @@ FunctionCall
     grafo.generarHijos($1,$2,$3,$4,$5);
     grafo.generarTexto(`FunctionCall = new CallFunction(); functionCall.tipo = Absoluto;`); }  //NODE() TEXT() POSITION() LAST() FIST()
   | NOMBRE DOSPUNTOS NOMBRE PARENTESISA ArgumentList PARENTESISC  {  
-    $$ = new CallFunction([],TipoPath.ABS,$1,$3,$5) 
+    $$ = new CallFunctionPrefix([],TipoPath.ABS,$1,$3,$5) 
     grafo.generarPadre(5,"ArgumentList")
     grafo.generarHijos($1,$2,$3,$4,"ArgumentList",$6)
     grafo.generarTexto(`FunctionCall = new CallFunction(ArgumentList.Valor)`)}
@@ -999,6 +1094,7 @@ ParenthesizedExpr
     grafo.generarTexto(`ParenthesizedExpr.valor = [];`); }
 	| PARENTESISA Expr PARENTESISC { 
     $$=new Parentesis($2); 
-    grafo.generarHijos($1,$2,$3); 
+    grafo.generarPadre(2,"Expr")
+    grafo.generarHijos($1,"Expr",$3); 
     grafo.generarTexto(`ParenthesizedExpr.valor = ExprSingle.valor;`); }
 ;	

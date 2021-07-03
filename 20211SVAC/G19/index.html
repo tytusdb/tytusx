@@ -41,6 +41,7 @@
         <script src="./Fase2/Js/Interprete/Expresiones/ExpresionDefinida.js"></script>
         <script src="./Fase2/Js/Interprete/Instrucciones/XPath.js"></script>
         <!-- JS TRANSLATOR XML-->
+        <script src="./Fase2/Js/Traductor/XPATH.js"></script>
         <script src="./Fase2/Js/Traductor/xml.js"></script>
         <!-- JS OPTIMIZADOR-->
         <script src="./gramaticaOptimizador.js"></script>
@@ -54,6 +55,7 @@
         <script src="./Fase2/Js/Optimizador/instruccion/asignacionArray.js"></script>
         <script src="./Fase2/Js/Optimizador/instruccion/asignacionOp.js"></script>
         <script src="./Fase2/Js/Optimizador/instruccion/asignarIdArray.js"></script>
+        <script src="./Fase2/Js/Optimizador/instruccion/asignacionDosExpr.js"></script>
         <script src="./Fase2/Js/Optimizador/instruccion/call.js"></script>
         <script src="./Fase2/Js/Optimizador/instruccion/etiqueta.js"></script>
         <script src="./Fase2/Js/Optimizador/instruccion/goto.js"></script>
@@ -82,6 +84,8 @@
             var sp = 2;
             var contTemporal = 0;
             var endXml=0;
+            var funcionesALlamar="";
+            var contEtiquetas=0;
 
 
             
@@ -172,7 +176,8 @@
                     <div class="dropdown">
                         <button onclick="ReportesFase2()" class="dropbtn">Reportes Fase2</button>
                         <div id="myDropdown3" class="dropdown-content">
-                        <a class="dropitem" id="heap">HEAP</a>        
+                        <a class="dropitem" id="tsXML3D">Tabla de Simbolos XML</a>
+                        <a class="dropitem" id="errores">Errores Traduccion</a>        
                         <a class="dropitem" id="astXQ">AST XQUERY (Asc)</a>                           
                         </div>
                     </div> 
@@ -231,6 +236,8 @@
             <textarea id="salida_xpath"></textarea>
             <!-- FIN CONSOLA JS -->
         </div>
+
+        
         <div class="labelConsola"><label class="label info">XQuery</label></div>
         <div class="consola">
             <!-- ENTRADA XPATH -->
@@ -239,13 +246,25 @@
         </div>
         
         <div class="labelConsola"><label class="label info">Traduccion</label></div>
+        
         <button class="button3" onclick="Optimizar()">Optimizar</button>
         <div class="consola">
             <!-- ENTRADA XPATH -->
             <textarea id="salida_traduccion"></textarea>
+            
             <!-- FIN ENTRADA XPATH -->
-        </div>       
+        </div>  
+
+                <div class="labelConsola"><label class="label info">Reporte optimizar</label></div>
+        <div class="consola">
+            <!-- CONSOLA Python -->
+            <textarea id="reporte"></textarea>
+            <!-- FIN CONSOLA JS -->
+        </div>     
+
         <script src="Fase2/Js/Consolas.js"></script>
+        
+        
 
     <script src="./Fase2/Js/jquery.min.js"></script>
     <script src="./Fase2/Js/jquery.backtotop.js"></script>

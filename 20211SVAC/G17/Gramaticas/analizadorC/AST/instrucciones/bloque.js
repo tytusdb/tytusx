@@ -94,6 +94,37 @@ export class Bloque extends Instruccion {
                 iraActual = ''
             }
 
+            // regla 6; regla 7
+            //goto L1;  -> goto L2
+            // 
+            //L1:
+            //goto L2
+            if (
+                instruccionActual instanceof Ira &&
+                instruccionAnterior instanceof Etiqueta &&
+                instruccionActual.etiqueta != instruccionAnterior.etiqueta
+            ){
+                //var tmpIns = []
+                for (let i = newInstrucciones.length; i >= 0; i--) {
+                    const ins = newInstrucciones[i];
+                    if (
+                        ins instanceof Ira &&
+                        ins.etiqueta == instruccionAnterior.etiqueta
+                    ){
+                        newInstrucciones[i] = new Ira(instruccionActual.etiqueta)
+                    }
+
+                    if (
+                        ins instanceof Si &&
+                        ins.ira.etiqueta == instruccionAnterior.etiqueta
+                    ){
+                        newInstrucciones[i] = new Si(ins.condicion, new Ira(instruccionActual.etiqueta))
+                    }
+                }
+            }
+
+            
+
             if(insertar){
                 newInstrucciones.push(instruccionActual)
                 instruccionAnterior = instruccionActual

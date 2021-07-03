@@ -1,10 +1,10 @@
 import { Ambito } from "../../../../model/xml/Ambito/Ambito";
 import { Tipos } from "../../../../model/xpath/Enum";
-import { Element } from "../../../../model/xml/Element";
+import { Contexto } from "../../../Contexto";
 
-function Logica(_expresion: any, _ambito: Ambito, _contexto: Array<any>) {
+function Logica(_expresion: any, _ambito: Ambito, _contexto: Contexto) {
     let operators = init(_expresion.opIzq, _expresion.opDer, _ambito, _contexto, _expresion.tipo);
-    if (operators.error) return operators;
+    if (operators === null || operators.error) return operators;
     switch (operators.tipo) {
         case Tipos.LOGICA_AND:
             return and(operators.op1, operators.op2, _contexto);
@@ -15,14 +15,14 @@ function Logica(_expresion: any, _ambito: Ambito, _contexto: Array<any>) {
     }
 }
 
-function init(_opIzq: any, _opDer: any, _ambito: Ambito, _contexto: Array<any>, _tipo: Tipos) {
+function init(_opIzq: any, _opDer: any, _ambito: Ambito, _contexto: Contexto, _tipo: Tipos) {
     const Expresion = require("../Expresion");
-    let op1 = Expresion(_opIzq, _ambito, _contexto);
-    if (op1.error) return op1;
-    let op2 = Expresion(_opDer, _ambito, _contexto);
-    if (op2.error) return op2;
+    let op1 = Expresion((Array.isArray(_opIzq)) ? (_opIzq[0]) : (_opIzq), _ambito, _contexto);
+    if (op1 === null || op1.error) return op1;
+    let op2 = Expresion((Array.isArray(_opDer)) ? (_opDer[0]) : (_opDer), _ambito, _contexto);
+    if (op2 === null || op2.error) return op2;
     let tipo: Tipos = _tipo;
-    console.log(op1, 888, op2)
+    // console.log(op1, 888, op2)
     if (op1.tipo === Tipos.ELEMENTOS && op2.tipo === Tipos.ELEMENTOS) {
         return { op1: op1, op2: op2, tipo: tipo };
     }
@@ -32,7 +32,7 @@ function init(_opIzq: any, _opDer: any, _ambito: Ambito, _contexto: Array<any>, 
     else return { error: "Relación lógica no aceptable.", tipo: "Semántico", origen: "Query", linea: _opIzq.linea, columna: _opIzq.columna }
 }
 
-function and(_opIzq: any, _opDer: any, _contexto: Array<Element>) {
+function and(_opIzq: any, _opDer: any, _contexto: Contexto) {
     const op1 = _opIzq; // Tiene sus dos operadores y desigualdad
     const op2 = _opDer;
     let context1 = filterElements(op1.e1, op1.e2, op1.desigualdad, _contexto);
@@ -51,7 +51,7 @@ function and(_opIzq: any, _opDer: any, _contexto: Array<Element>) {
     return { tipo: Tipos.LOGICA_AND, elementos: tmp };
 }
 
-function or(_opIzq: any, _opDer: any, _contexto: Array<Element>) {
+function or(_opIzq: any, _opDer: any, _contexto: Contexto) {
     const op1 = _opIzq; // Tiene sus dos operadores y desigualdad
     const op2 = _opDer;
     let context1 = filterElements(op1.e1, op1.e2, op1.desigualdad, _contexto);
@@ -60,11 +60,12 @@ function or(_opIzq: any, _opDer: any, _contexto: Array<Element>) {
     return { tipo: Tipos.LOGICA_OR, elementos: tmp };
 }
 
-function filterElements(e1: any, e2: any, desigualdad: Tipos, _contexto: Array<Element>): Array<Element> {
+function filterElements(e1: any, e2: any, desigualdad: Tipos, _contexto: Contexto): Array<any> {
     let condition: boolean = false;
+    let array = _contexto.getArray();
     let tmp = [];
-    for (let i = 0; i < _contexto.length; i++) {
-        const element = _contexto[i];
+    for (let i = 0; i < array.length; i++) {
+        const element = array[i];
         if (element.attributes) { // Hace match con un atributo
             for (let j = 0; j < element.attributes.length; j++) {
                 const attribute = element.attributes[j];
@@ -79,16 +80,23 @@ function filterElements(e1: any, e2: any, desigualdad: Tipos, _contexto: Array<E
             for (let j = 0; j < element.childs.length; j++) {
                 const child = element.childs[j];
                 condition = verificarDesigualdad(desigualdad, child.id_open, e1, child.value, e2);
-                console.log(desigualdad, child.id_open, e1, child.value, e2);
+                // console.log(desigualdad, child.id_open, e1, child.value, e2);
                 if (condition) {
                     tmp.push(element);
                     break;
                 }
             }
         }
-        condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2); // Hace match con el elemento
-        if (condition)
-            tmp.push(element);
+        if (element.id_open) {
+            condition = verificarDesigualdad(desigualdad, element.id_open, e1, element.value, e2); // Hace match con el elemento
+            if (condition)
+                tmp.push(element);
+        }
+        else if (element.value) {
+            condition = verificarDesigualdad(desigualdad, element.id, e1, element.value, e2); // Hace match con el elemento
+            if (condition)
+                tmp.push(element);
+        }
     }
     return tmp;
 }

@@ -21,7 +21,7 @@ export class Arithmetic {
         for (var izq of valIzq){
             for (var der of valDer){
                 var newValor = operar(izq, this.op, der)
-                if (newValor && !this.contiene(retorno,newValor)){
+                if ((newValor!=undefined || newValor!=null) && !this.contiene(retorno,newValor)){
                     retorno.push(
                         new Literal(
                             ColisionTipo[izq.tipo][der.tipo],

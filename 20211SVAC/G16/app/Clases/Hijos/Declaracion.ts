@@ -22,8 +22,7 @@ export class Declaracion implements Instruccion{
   }
 
   ejecutar(entorno: Entorno,node:any) {
-    console.log("pasó por declaración")
-    if(entorno.buscarVariable(this.nombre,entorno)!=null){
+    if(entorno.buscarVariableEntorno(this.nombre,entorno)!=null){
       console.log("Ya existe una variable con este nombre")
     }else{
       let val=this.funcion(entorno,node,this.valor);

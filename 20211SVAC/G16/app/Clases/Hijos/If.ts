@@ -1,26 +1,56 @@
+import { Tipo } from './Tipo.js';
+import { Operacion } from './Operaciones.js';
 import Entorno from '../AST/Entorno';
 import { Instruccion } from './../Interfaces/Instruccion';
 export class If implements Instruccion{
 
-  condicicion:any;
+  condicion:any;
   sentencias:any;
   sino:any;
   fila:number;
   columna:number;
   t:string;
-  constructor(condicion:any,sentencias:any,sino:any,fila:number,columna:number){
-    this.condicicion=condicion;
+  constructor(condicion:any,sentencias:any,sino:any,fila:number,columna:number, t:string){
+    this.condicion=condicion;
     this.sentencias=sentencias;
     this.sino=sino;
     this.fila=fila;
     this.columna=columna;
+    this.t=t;
   }
-  insertSimbolsTable(node: any, anterior:string, eAnterior:any):Entorno {
-    console.log("pasó por el if")
-    return eAnterior;
-  }
-  ejecutar(entorno: any) {
-    throw new Error('Method not implemented.');
+
+  ejecutar(entorno: Entorno, node:any) {
+    let retorno=this.condicion.ejecutar(entorno,node);
+
+    if(retorno!=null && retorno!=false){
+
+      if(this.sentencias instanceof Operacion){
+        let resultado=this.sentencias.ejecutar(entorno,this.sentencias);
+        if(resultado!=null){
+          if(this.sino.operador1.tipo==Tipo.VARIABLE){
+            entorno.setVariable(this.sino.operador1.valor,resultado);
+          }
+          console.log("*****está en el if*****")
+          console.log(this.sentencias.operador1)
+          return resultado;
+        }
+      }
+      return this.sentencias.ejecutar(entorno,this.sentencias);
+    }else if(this.sino!=null){
+
+      if(this.sino instanceof Operacion){
+        let resultado=this.sino.ejecutar(entorno,this.sino);
+        if(resultado!=null){
+          if(this.sino.operador1.tipo==Tipo.VARIABLE){
+            entorno.setVariable(this.sino.operador1.valor,resultado);
+          }
+          console.log("****está en el sino*****")
+          console.log(this.sino)
+          return resultado;
+        }
+      }
+      return this.sino.ejecutar(entorno,this.sino);
+    }
   }
 
 }

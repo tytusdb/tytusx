@@ -23,12 +23,25 @@ const init = function(e){
         //window.document.location = './reportes/cstXML.html';
         window.open('./fase2/reportes/erroresXML.html','_blank');
     });
+    
+    let btn_errXMLtra = document.querySelector("#errores");
+
+    btn_errXMLtra.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./fase2/reportes/erroresXMLtraduccion.html','_blank');
+    });
 
     let btn_tsXML = document.querySelector("#tsXML");
 
     btn_tsXML.addEventListener('click', function(){     
         //window.document.location = './reportes/cstXML.html';
         window.open('./fase2/reportes/tablaSimbolosXML.html','_blank');
+    });
+    let btn_tsXML3D = document.querySelector("#tsXML3D");
+
+    btn_tsXML3D.addEventListener('click', function(){     
+        //window.document.location = './reportes/cstXML.html';
+        window.open('./fase2/reportes/tablaSimbolosXML3D.html','_blank');
     });
 
     let btn_rgXML = document.querySelector("#rgXML");
@@ -66,12 +79,7 @@ const init = function(e){
         window.open('./fase2/reportes/astXQUERY.html','_blank');
     });
 
-    let btn_heap = document.querySelector("#heap");
 
-    btn_heap.addEventListener('click', function(){     
-        //window.document.location = './reportes/cstXML.html';
-        window.open('./fase2/reportes/heap.html','_blank');
-    });
 
 };
 

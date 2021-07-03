@@ -64,6 +64,7 @@ export class AppComponent {
   showTablaSimbolo = true;
   listaDescendientes:sentenciaXpath[] = [];
   xmlOriginal:Objeto[];
+  sentenciaOriginal:sentenciaXpath;
   parserXml;
   astXML;
   arbol;
@@ -71,7 +72,8 @@ export class AppComponent {
 rgxmldesc;
 cstxml;
   tablaXML="";
-  xmlText = `<pruebas>
+  xmlText = `<?xml version="1.0" encoding="UTF-8"?>
+  <pruebas>
 	<m>3</m>
 	<n>2</n>
 </pruebas>`;
@@ -140,7 +142,7 @@ c3dTextFinal = `    return;
         this.listaDescendientes = [];
         console.log(elementoActual);
       
-        
+        this.sentenciaOriginal = elementoActual;
         this.consoleValue += this.ProcesarNodoRaiz(elementoActual,lista,null);
       });
       //elementoActual en este momento es la raiz de la entrada Xpath
@@ -2698,14 +2700,17 @@ console.log();
 console.log();
     }
 
-    traducirXml(){
-      var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
+  traducirXml(){
+    var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
     console.log(objetos.listaObjetos);
     const traduction= new this.xmlTraductor.TraductorXML_C3D();
     var codigo= traduction.traducir(objetos.listaObjetos);
     this.xmlTraducido=codigo;
-console.log("**************");
-console.log(objetos);
-    }
+    console.log("**************");
+    console.log(objetos);
+    var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
+    console.log("**************Valor");
+    console.log(valor);
+  }
 
 }

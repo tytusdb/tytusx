@@ -146,62 +146,16 @@ export class PathExp
 
     getC3D(objetos)
     {
-        var esCamino = false;
-        var esAtributo = false;
-        var retornos = []
+        var retorno = {tipo:Tipo.ERROR,cod:""};
 
-        /* verificamos si entre los caminos viene un atributo */
-        for (const objeto of this.caminos) {
-            if(objeto instanceof Atributo){
-                esAtributo = true
-                esCamino = false
-            }else if(objeto instanceof Camino){
-                esCamino = true
-                esAtributo = false
-            }else{
-                /* Para aritmeticas nada */
-            }
+
+        for (const objeto of this.caminos){
+            var tempretorno = objeto.getC3D(objetos)    //se queda con el ultimo retorno
+            retorno.cod += tempretorno.cod 
+            retorno.tipo = tempretorno.tipo            
         }
 
-        //Ahora verificamos como lo ejecutamos
-        if(esAtributo){
-            for (const objeto of this.caminos){
-                retornos = retornos.concat(objeto.getC3D(objetos)) 
-                var cod = '';
-                for (const iterator of retornos) {
-                    cod += iterator
-                }
-                C3D.addCodigo3D(`\n`);
-                C3D.agregarComentario(` Añadiendo la raiz para la consulta `);
-                C3D.addCodigo3D(`stackConsulta[0] = stack[0]; \n`);
-                C3D.addCodigo3D(`stackConsulta[1] = -2; \n`);
-                C3D.addCodigo3D(cod);
-                C3D.addfuncion3d(C3D.funcAtributo())             
-            }
-            esAtributo = false
-
-        }else if(esCamino){
-            for (const objeto of this.caminos){
-                retornos = retornos.concat(objeto.getC3D(objetos)) 
-                var cod = '';
-                for (const iterator of retornos) {
-                    cod += iterator
-                }
-                C3D.addCodigo3D(`\n`);
-                C3D.agregarComentario(` Añadiendo la raiz para las consulta `);
-                C3D.addCodigo3D(`stackConsulta[0] = stack[0]; \n`);
-                C3D.addCodigo3D(`stackConsulta[1] = -2; \n`);
-                C3D.addCodigo3D(cod);
-                C3D.addfuncion3d(C3D.funcCaminoABS())               
-            }
-            esCamino = false
-        }else{
-            for (const objeto of this.caminos){
-                retornos = retornos.concat(objeto.getC3D(objetos))               
-            }
-            return retornos
-        }
-        
+        return retorno       
     }
 
     Graficar(ListaNodes,ListaEdges,contador)

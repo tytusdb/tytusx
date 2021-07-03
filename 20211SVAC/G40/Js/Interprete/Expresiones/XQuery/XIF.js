@@ -36,8 +36,15 @@ var XIF = /** @class */ (function () {
             }
 
         }
+
+        this.entorno = entorno;
     
     };
+
+    XIF.prototype.getEntorno = function () {
+        return this.entorno;
+    };
+
     XIF.prototype.isInt = function (n) {
         return Number(n) === n && n % 1 === 0;
     };

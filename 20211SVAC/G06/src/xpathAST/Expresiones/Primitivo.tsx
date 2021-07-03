@@ -32,7 +32,24 @@ export class Primitivo implements Expression {
             //###############################################################################################################
             return { value: Number(this.valor), type: tipoPrimitivo.NUMBER, SP: traduccion.stackCounter };
         } else if (this.tipoPrimitivo === tipoPrimitivo.STRING) {
-            return { value: String(this.valor), type: tipoPrimitivo.STRING, SP: -1 };
+
+            //TRADUCCION 3D#################################################################################################
+            traduccion.setTranslate("\n//Ingresando primitivo Cadena\t--------------\n");
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
+
+            for (let i = 0; i < String(this.valor).length; i++) {
+                traduccion.setTranslate("heap[(int)H] = " + String(this.valor).charCodeAt(i) + ";" + "\t\t//Caracter " + String(this.valor)[i].toString());
+                traduccion.setTranslate("H = H + 1;");
+                if (i + 1 === String(this.valor).length) {
+                    traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
+                    traduccion.setTranslate("H = H + 1;");
+                }
+            }
+            //###############################################################################################################
+
+
+            return { value: String(this.valor), type: tipoPrimitivo.STRING, SP: traduccion.stackCounter };
         } else if (this.valor === "position") {
 
             if (simboloPadre !== undefined) {

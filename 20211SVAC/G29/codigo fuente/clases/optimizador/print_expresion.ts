@@ -1,6 +1,6 @@
 import {instruccion_3d} from "./instruccion_3d";
 
-export default class asignacion implements instruccion_3d{
+export default class print_expresion implements instruccion_3d{
   public imprimir: string;
 
   constructor(imprimir : string ) {

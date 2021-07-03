@@ -16,7 +16,7 @@ export class Sentencia implements Instruccion{
     }
 
     if(this.sentencia!=null){
-      this.sentencia.ejecutar(entorno,this.sentencia);
+      return this.sentencia.ejecutar(entorno,this.sentencia);
     }
   }
 

@@ -1,9 +1,9 @@
 import { ExpressionXquery, Retorno } from "../../Interfaces/ExpressionXquery";
 import { Entorno } from "../../xmlAST/Entorno";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
-import { Path } from "../ExpresionesXpath/Path";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
-import { ManejadorXquery } from "../manejadores/ManejadorXquery";
+import { Return } from "./Return";
+import { traduccion } from '../../Traduccion/traduccion';
 
 export class For implements ExpressionXquery{
 
@@ -16,34 +16,55 @@ export class For implements ExpressionXquery{
         public where: ExpressionXquery | null,
         public orderBy: ExpressionXquery | null,   
         public orden: string,
-        public ret: ExpressionXquery){}
+        public ret: Return){}
     
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
         
-        var nvoEnt: EntornoXQuery = new EntornoXQuery(entAct);
+        var result : string= "";
 
-        var result : Retorno[]= [];
         var content: Retorno = this.select.executeXquery(entAct, RaizXML);
-
-        for (const element of content.value) {
-            
-            if (this.validarWhere(nvoEnt, RaizXML)){
+        if (content.type === tipoPrimitivo.RESP){
+  
+            var nvoEnt: EntornoXQuery = new EntornoXQuery(entAct, "sentencia for");
+            for (const element of content.value) {
+                
                 nvoEnt.guaradarVar(this.idIn , element);
-                ManejadorXquery.concatenar(result, this.ret.executeXquery(nvoEnt, RaizXML).value);
+                if (this.validarWhere(nvoEnt, RaizXML)){
+                    result += this.ret.executeXquery(nvoEnt, RaizXML).value;
+                }
             }
+            //TRADUCCION3D##########################################################################################
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
+            traduccion.setTranslate("\n//Ingresando String\t--------------");
+
+            for (let i = 0; i < result.length; i++) {
+                traduccion.setTranslate("heap[(int)H] = " + result.charCodeAt(i) + ";" + "\t\t//Caracter " + result[i].toString());
+                traduccion.setTranslate("H = H + 1;");
+                if (i + 1 === result.length) {
+                    traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
+                    traduccion.setTranslate("H = H + 1;");
+                }
+            }
+            //#######################################################################################################
+
+
+            return {value: result, type : tipoPrimitivo.STRING, SP: traduccion.stackCounter}
+            
+        }else {
+            throw new Error("Error semantico: la variable "+ this.idIn + " no es una variable iterable prveniente de una consulta, linea: " +this.line + "columna: "+ this.column);
         }
-        return {value: ManejadorXquery.buildXquery(result), type : tipoPrimitivo.STRING}
     }
 
     private validarWhere(entAct: EntornoXQuery, RaizXML: Entorno) : boolean{
 
         var result  = this.where?.executeXquery(entAct, RaizXML)
-        if (result != null){
+        if (result !== undefined){
             
             if (result.type === tipoPrimitivo.BOOL){
                 return result.value; 
             }else {
-                throw new Error("Error Semntico: la expresion de la sentencia where es de tipo : "+result.type.toString()+" y debe ser de tipo bool");
+                throw new Error("Error Semntico: la expresion del where es de tipo : "+result.type.toString()+" y debe ser de tipo boolean, linea: " +this.line + "columna: "+ this.column);
             }
         }
         return true;

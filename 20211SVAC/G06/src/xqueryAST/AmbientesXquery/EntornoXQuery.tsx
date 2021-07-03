@@ -5,7 +5,9 @@ export class EntornoXQuery {
     private variables: Map<string, Retorno>;
     //public funciones: Map<string, InsFuncion>;
 
-    constructor (public anterior: EntornoXQuery | null){
+    constructor (
+        public anterior: EntornoXQuery | null,
+        public nombreEntXquery: string){
         this.variables = new Map();
     }
 
@@ -36,6 +38,19 @@ export class EntornoXQuery {
             }
         }
         return null;
+    }
+
+    public getAllVars() : String{
+
+        let salida : string = ""
+    
+        salida += "Anbiente: " + this.nombreEntXquery+ "\n";
+
+        for (let entry of Array.from(this.variables.entries())) {
+            salida += "identificador: "+ entry[1] + "valor: "+ entry[0]+ "\n";
+        }
+        return salida;
+
     }
 
 }

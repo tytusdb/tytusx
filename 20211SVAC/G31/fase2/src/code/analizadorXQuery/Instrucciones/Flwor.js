@@ -2,8 +2,9 @@ import { NodoXQuery, Tipo } from "../Expresiones/Expresion";
 import { parse } from "../../analizadorXPath/Xpath";
 import { parse as grammar } from "../../analizadorXML/grammar";
 import { SimboloXQuery } from "../Tabla/SimboloXQuery";
-import { TablaSimbolos } from "../Tabla/TablaSimbolos";
+import { Entorno, TablaSimbolos } from "../Tabla/TablaSimbolos";
 import { Error } from "../Tabla/Error";
+import { isArguments } from "lodash";
 
 
 export class Flwor extends NodoXQuery{
@@ -27,30 +28,35 @@ export class Flwor extends NodoXQuery{
         this.tabla = new TablaSimbolos(); 
     }
 
-    getValor(xml){
+    getValor(entorno, xml){
         this.xml = this.asignarPadre(xml)
-        let retorno = null; 
-        for(let variable of this.blindingList){
-            let entorno = this.ejecutarConsulta(variable.query)
-            entorno = this.asignarPadre(entorno)
-            this.tabla.addSimbolo(new SimboloXQuery(variable.linea, variable.columna, variable.nombre, variable.query, entorno, Tipo.CONSULTA));             
-        }
-        
-        if(this.intermedias instanceof Array){
-            for(let intermedia of this.intermedias){
-                if(intermedia instanceof Where){
-                    retorno = intermedia.getValor(this.tabla, this.xml)
-                    console.log('VALOR DE WHERE', retorno)
+
+        let entornoFlor = new Entorno(entorno, 'for'); // nuevo entorno para el flowr
+
+        if(Array.isArray(this.blindingList)){ // agregue los parametros 
+            for(let variable of this.blindingList){
+                if(entornoFlor instanceof Entorno){
+                    let valor = this.ejecutarConsulta(variable.query)
+                    console.log('Esto se trajo de la variable del for', valor)
+                    let declaracion =  entornoFlor.declarar(variable.nombre, valor, variable.linea, variable.columna); 
+                    if(declaracion instanceof Error)
+                        return declaracion
                 }
             }
+            console.log('Se declararon las variables del for', entornoFlor)
+        }else{
+            let declaracion = entornoFlor.declarar(this.blindingList.nombre, null, this.blindingList.linea, this.blindingList.columna)
+            if(declaracion instanceof Error)
+                return declaracion
         }
-        
 
-        retorno = this.returnClause.getValor(this.tabla, retorno); 
-        
-
-        let consola = this.ConvertiraXML(retorno, 0); 
-        return consola
+        let retorno; 
+        if(Array.isArray(this.intermedias)){
+            for(let instruccion of this.intermedias){
+                retorno = instruccion.getValor(entornoFlor, xml)
+                console.log('resultado de una intermedia', retorno)
+            }
+        }
     }
 
     asignarPadre(entorno){
@@ -74,7 +80,7 @@ export class Flwor extends NodoXQuery{
         return xmlNuevo.datos
     }
 
-   ConvertiraXML(nodos,iteracion){
+    ConvertiraXML(nodos,iteracion){
         var XML=""
         for (var i=0;i<iteracion;i++) {
             XML += "  "
@@ -149,8 +155,8 @@ export class Where {
     }
 
 
-    getValor(tabla, xml){     
-        let valor  =  this.instrucciones.getValor(tabla, xml); 
+    getValor(entorno, xml){     
+        let valor  =  this.instrucciones.getValor(entorno, xml); 
         return valor
     }
 
@@ -167,7 +173,7 @@ export class OrderBy {
         this.expresiones = expresiones; 
     }
 
-    getValor(tabla, entorno){
+    getValor(entorno, xml){
 
     }
 }
@@ -180,13 +186,9 @@ export class Return {
         this.expresion = expresion; 
     }
 
-    getValor(tabla, entorno){
-        let resultado = this.expresion.getValor(tabla, entorno) 
-
-
-
+    getValor(entorno, xml){
+        let resultado = this.expresion.getValor(entorno, xml) 
         return resultado
     }
-
-
 }
+

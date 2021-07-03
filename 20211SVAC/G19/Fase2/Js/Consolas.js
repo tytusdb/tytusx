@@ -40,6 +40,21 @@ var SalidaXPath = CodeMirror.fromTextArea
 SalidaXPath.setSize(null, 425);
 SalidaXPath.refresh();
 
+var ReporteOptimizar = CodeMirror.fromTextArea
+(document.getElementById('reporte'),{
+    mode : "text/html",
+    htmlMode: true,
+    theme: "ayu-dark",
+    lineNumbers: false,
+    fixedGutter: false,
+    autoRefresh: true,
+    readOnly: true,
+    readOnly: "nocursor"
+});
+
+ReporteOptimizar.setSize(1000, 425);
+ReporteOptimizar.refresh();
+
 
 var SalidaTraduccion = CodeMirror.fromTextArea
 (document.getElementById('salida_traduccion'),{
@@ -51,5 +66,7 @@ var SalidaTraduccion = CodeMirror.fromTextArea
     autoRefresh:true
 });
 
-SalidaTraduccion.setSize(null, 800);
+SalidaTraduccion.setSize(1000, 550);
 SalidaTraduccion.refresh();
+
+

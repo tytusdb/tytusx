@@ -112,7 +112,7 @@ export class Buscar {
             if(this.predicado!=true){
               this.getPredicado(this.predicado)
             }else{
-                
+
             }
           } else if (element.etiqueta == "Funcion") {
             this.getFuncion(element.hijos[0]);
@@ -387,37 +387,51 @@ export class Buscar {
 
   recorrerEntorno(Contenido: any, nombre: string) {
     //recorre el contenido del arreglo
-    if (Contenido.length != undefined && Contenido!=null) {
-      Contenido.forEach(element => {
-          if(element.nombreInit!=undefined){
-            if (element.nombreInit == nombre) {
+      if(Contenido.Nombre!=undefined){
+        if (Contenido.Nombre == nombre) {
 
-              if (element.elementos !=null) {
+          if (Contenido.elementos !=null) {
 
-                this.contenido.push(element)
-              }else{
+            this.contenido.push(Contenido)
+          }else{
 
-                this.contenido.push(element)
-              }
-            }else{
-              let array=[]
-              if(element.elementos!=null){
-                array.push(element.elementos)
-                this.recorrerEntorno(array,nombre)
-              }
-            }
-          }else if(element.lista!=undefined){
-
-            if(element!=null){
-              element.lista.forEach(elemento2 => {
-                let array=[]
-                array.push(elemento2)
-                this.recorrerEntorno(array,nombre);
-            });
-            }
+            this.contenido.push(Contenido)
           }
-      });
-    }
+        }else{
+          let array=[]
+          if(Contenido.elementos!=null){
+            array.push(Contenido.elementos)
+            this.recorrerEntorno(array,nombre)
+          }
+        }
+      }else if(Contenido.lista!=undefined){
+
+        if(Contenido!=null){
+          Contenido.lista.forEach(elemento2 => {
+            let array=[]
+            array.push(elemento2)
+            this.recorrerEntorno(array,nombre);
+        });
+        }
+      }else if(Contenido.nombreInit!=undefined){
+        if (Contenido.nombreInit == nombre) {
+
+          if (Contenido.elementos !=null) {
+
+            this.contenido.push(Contenido)
+          }else{
+
+            this.contenido.push(Contenido)
+          }
+        }else{
+          let array=[]
+          if(Contenido.elementos!=null){
+            array.push(Contenido.elementos)
+            this.recorrerEntorno(array,nombre)
+          }
+        }
+      }
+
   }
 
   darFormato(): string {
