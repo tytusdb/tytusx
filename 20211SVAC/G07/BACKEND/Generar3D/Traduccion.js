@@ -307,13 +307,13 @@ class Traduccion {
             "codigo": ` void metodoIf() {
                 float t0 = 0;
                 float t1 = 1;
-                if ( t0 > t1 ) goto L0:
+                if ( t0 > t1 ) goto L0;
                 goto L1;
                 L0: 
-                    printf("%c",(float) t0);   
+                    printf("%f",(float) t0);   
                 goto L1;
                 L1:
-                    printf("%c",(float) t1);   
+                    printf("%f",(float) t1);   
                 goto L2;
                 L2:
                     return;
@@ -331,7 +331,7 @@ class Traduccion {
                 if ( t0 < x ) goto L1;
                 goto L2;
                 L1:
-                    printf("%c",(float) t0);   
+                    printf("%f",(float) t0);   
                 t0 = t0 + 1;
                 goto L0;
                 L2:
