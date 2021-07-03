@@ -1,6 +1,7 @@
 function ejecutarXQuery(instruccion,entorno){
     let tablaSimbolos=new Entorno(null);
     let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
+    //console.log(tablaSimbolos);
     //tablaSimbolos
     console.log("pp");
     console.log(tablaSimbolos);
@@ -39,7 +40,7 @@ function ejecutarIfElse(instruccion,entorno,tablaSimbolos){
     tem=traductorC3D.t;
     traducirOperacion(instruccion.condicion,entorno,tablaSimbolos);
     traductorC3D.t+=tem;
-
+    traductorC3D.traducirFuncion("",2);
     if(condicion){
         tem=traductorC3D.t;
         traducirOperacion(instruccion.accion.data,entorno,tablaSimbolos);
@@ -82,7 +83,9 @@ function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
             case "LLAMADA_F":
                 return llamada_funcion(instruccion.valor,entorno,tablaSimbolos);
             case "NUEVO_ETR":
+
                 tablaSimbolos=new Entorno(tablaSimbolos);
+                console.log(tablaSimbolos);
                 break;
             default:
                 return null
@@ -126,10 +129,17 @@ function llamada_funcion(instrucciones,entorno,tablaSimbolos){
 function crear_Variable(instrucciones,entorno,tablaSimbolos){
     console.log("crear");
     if(!tablaSimbolos.existeEnActual(instrucciones.id)){
-        let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
-        tem=traductorC3D.t;
-        traducirOperacion(instrucciones.valor,entorno,tablaSimbolos);
-        traductorC3D.t+=tem;
+        let valor;
+        if(instrucciones.valor){
+            valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
+            tem=traductorC3D.t;
+            traducirOperacion(instrucciones.valor,entorno,tablaSimbolos);
+            traductorC3D.t+=tem;
+        }else{
+            valor=null;
+        }
+       
+        
 
         tablaSimbolos.agregar(instrucciones.id,valor);
     }else{
@@ -275,6 +285,7 @@ function alfabeto(palabra1,palabra2,i){
 function ejecutarForIn(instruccion,entorno,padre){
     console.log(instruccion.iterador.consulta);
     let respuesta="";
+    traductorC3D.traducirFuncion("",3);
     if(instruccion.iterador.consulta.tipo=="TO"){
         for (let index = instruccion.iterador.consulta.inicio; index <= instruccion.iterador.consulta.fin; index++) {
             let var_= new Entorno(padre);
@@ -304,6 +315,7 @@ function ejecutarForIn(instruccion,entorno,padre){
         let var_= new Entorno(padre);
         var_.agregar(instruccion.iterador.variable,x);
         var_.agregar(instruccion.iterador.contador,contador);
+        
         contador++;
         let retorno=null;
         if(where){
@@ -317,6 +329,7 @@ function ejecutarForIn(instruccion,entorno,padre){
         if(retorno){
             respuesta+=retorno+'\n';
         }
+        console.log(var_);
     }
     
     if(respuesta!=""){

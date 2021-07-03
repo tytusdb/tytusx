@@ -181,26 +181,11 @@ function traducirOperacionW(instruccion,tabla){
             traductorC3D.traducirAritmeticas("\n            t"+tem+"="+instruccion.valor+";");        
             return "t"+tem;
         case "CADENA":
-            
-            return instruccion.valor
+            ++tem;
+            return "t"+tem;
         case "VARIABLE":
-            let variable=tabla.getSimbolo(instruccion.variable);
-            
-            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable)
-            arregloEntornos=procesarEtorno(arregloEntornos);
-            for (const iterator of arregloEntornos) {
-                if(iterator.valorAtributo){
-                    return iterator.valorAtributo;
-                }
-                if(!isNaN(iterator.texto)){
-                    ++tem;
-                    traductorC3D.traducirAritmeticas("\n            t"+tem+"="+iterator.texto+";");        
-                    return "t"+tem;
-                }
-                ++tem;
-                traductorC3D.traducirAritmeticas("\n            t"+tem+"= heap[(int) "+(1 + Math.random()) +"];");        
-                return "t"+tem;
-            }
+            ++tem;
+            return "t"+tem;
 
         default:
             return false;
