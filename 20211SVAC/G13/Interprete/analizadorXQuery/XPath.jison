@@ -215,7 +215,7 @@ Instruccion:
   Declaracion { $$ = $1; }
   | Asignacion { $$ = $1; }
   | SIf { $$ = $1; }
-  | LlamadaFuncion { $$ = $1; }
+  | E { $$ = $1; }
   | Return { $$ = $1; }
 ;
 
@@ -325,6 +325,7 @@ E:
   | RTRUE   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | RFALSE  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | DOLAR NOMBRE { $$ = new IdXQ($2, @2.first_line, @2.first_column); }
+  | LlamadaFuncion
 //LLAMADA
 ;
 

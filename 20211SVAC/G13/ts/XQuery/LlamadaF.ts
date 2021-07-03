@@ -59,25 +59,24 @@ export class LlamadaF extends ExpresionXQ {
                     let devolver:ExpresionXQ = reti.retorno;
                     if(devolver != null && devolver != undefined) {
                         if(func.tipo.tipo == EnumTipo.tvoid) {
-                            console.log('La funcion de tipo void no debe de tener una expresion de retorno');
+                            //console.log('La funcion de tipo void no debe de tener una expresion de retorno');
                             return new LiteralXQ(new TipoXQ(EnumTipo.tvoid), 'void', this.linea, this.columna);
                         } else {
                             //Aqui se mira lo de los objetos... pero no hay en este lenguaje
                             if(func.tipo.tipo == devolver.tipo.tipo) {
-                                console.log('Los retornos estan bien');
+                                //console.log('Los retornos estan bien');
                                 return devolver;
                             } else {
-                                console.log('El tipo de retorno no coincide con el esperado por la funcion' + this.nombre);
+                                //console.log('El tipo de retorno no coincide con el esperado por la funcion ' + this.nombre);
                                 return retorno;
                             }
                         }
                     } else {
                         if(func.tipo.tipo == EnumTipo.tvoid) {
-                            //Esta bien que tenga return pero que no devuelva nada
-                            console.log('Esta bien que tenga return pero que no devuelva nada ya que la funcion es de tipo void');
+                            //console.log('Esta bien que tenga return pero que no devuelva nada ya que la funcion es de tipo void');
                             return new LiteralXQ(new TipoXQ(EnumTipo.tvoid), 'void', this.linea, this.columna);
                         } else {
-                            console.log('La funcion esperaba un retorno vacio ya que es de tipo void');
+                            //console.log('La funcion no esperaba un retorno vacio ya que NO ES de tipo void');
                             return retorno;
                         }
                     }
@@ -89,10 +88,10 @@ export class LlamadaF extends ExpresionXQ {
                 //No habia instruccion return
                 if(func.tipo.tipo == EnumTipo.tvoid) {
                     //Esta bien que no tenga return
-                    console.log('Esta bien que no tenga return ya que la funcion es de tipo void');
+                    //console.log('Esta bien que no tenga return ya que la funcion es de tipo void');
                     return new LiteralXQ(new TipoXQ(EnumTipo.tvoid), 'void', this.linea, this.columna);
                 } else {
-                    console.log('La funcion esperaba una expresion de retorno ya que dicha funcion no es void');
+                    //console.log('La funcion esperaba una expresion de retorno ya que dicha funcion no es void');
                     return retorno;
                 }
             }
