@@ -49,9 +49,13 @@ export default class Logica extends Instruccion {
       if (unico instanceof NodoErrores) return unico;
     } else {
       izq = this.cond1?.interpretar(arbol, tabla, tablaxml)
-      if (izq instanceof NodoErrores) return izq;
+      if (izq instanceof NodoErrores){
+        return izq;
+      } 
       der = this.cond2?.interpretar(arbol, tabla, tablaxml)
-      if (der instanceof NodoErrores) return der;
+      if (der instanceof NodoErrores) {
+        return der;
+      }
     }
     //inicio comparacion
     switch (this.loogica) {

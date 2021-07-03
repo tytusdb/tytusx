@@ -15,14 +15,14 @@ import Condicion from "./Condicion";
 export default class ForSimple extends Instruccion {
 
     public consulta: Instruccion;
-    public respuesta: Instruccion;
+    public respuesta: Instruccion| String;
     public thewhere: Instruccion;
     public theorderby: Instruccion;
     public cadena: string;
     public consolita:any;
+    public variableanterior:string;
 
-
-    constructor(consulta: Instruccion, respuesta: Instruccion, linea: number, columna: number, thewhere?: Instruccion, theorderby?: Instruccion) {
+    constructor(consulta: Instruccion, respuesta: Instruccion| String, linea: number, columna: number, thewhere?: Instruccion, theorderby?: Instruccion) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
         this.consulta = consulta;
         this.respuesta = respuesta;
@@ -73,34 +73,51 @@ export default class ForSimple extends Instruccion {
                 }
             });
         }
-
+        console.log(this.variableanterior)
+        c=0;
         if (this.thewhere != null) {
             let cuando;
             if (this.thewhere instanceof CondicionSimple) {
                 cuando = this.thewhere.interpretar(arbol, tabla, tablaxml);
+                cuando.consulta.forEach(element => {
+                    c++;
+                    if (element instanceof BarrasNodo) {
+                        var resultador = element.interpretar(arbol, tabla, tablaxml)
+                        if (resultador instanceof tablaSimbolosxml) {
+                            tablaxml = resultador
+                            if (c == cuando.consulta.length) {
+                                if (arbol != null) {
+                                    sim = new Simbolo(new Tipo(tipoDato.WHERE), cuando.variables, this.fila.toString(), this.columna.toString(), "", resultador);
+                                    tabla.setVariable(sim)
+                                    var buscar = tabla.getVariable(cuando.variables);
+                                    if (buscar != null) {
+                                        searchconsulta = buscar.getvalor()
+                                        return buscar
+                                    }
+                                }
+                            }
+
+                        } else if (resultador instanceof Array) {
+                            sim = new Simbolo(new Tipo(tipoDato.WHERE), cuando.variables, this.fila.toString(), this.columna.toString(), "", resultador);
+                            tabla.setVariable(sim)
+                            var buscar = tabla.getVariable(cuando.variables.toString());
+                            if (buscar != null) {
+                                searchconsulta = buscar.getvalor()
+                                return buscar
+                            }
+                        }
+                    }
+                });
             } else if (this.thewhere instanceof Condicion) {
 
             } else {
 
             }
-            if (searchconsulta != null) {
-                if (searchconsulta instanceof SimboloXQuery) {
-                    //cadena += respuesta.getvalor()
-                } else if (searchconsulta instanceof Array) {
-                    /*respuesta.forEach(element => {
-                        cadena += element.getvalor();
-                    });*/
-                } else if (searchconsulta instanceof tablaSimbolosxml) {
-                    /*if (TreeAsc != null) {
-                        cadena += this.recorrerTablaXquery(respuesta, TreeAsc);
-                        cadena += "\n"
-                    }*/
-
-                }
-            }
+            
         }
 
-        if(this.theorderby!=null){
+
+       /* if(this.theorderby!=null){
 
         }
 
@@ -152,7 +169,18 @@ export default class ForSimple extends Instruccion {
 
         }
         return this.consolita;
+*/
+        if(this.respuesta!=null){
+            if (this.respuesta instanceof String) {
+                var buscar = tabla.getVariable(this.respuesta.toString());
+                if (buscar != null) {
+                    return buscar
+                }
+            }
+        }
     }
+
+
     public getNodoAST(): nodoAST {
         throw new Error("Method not implemented.");
     }

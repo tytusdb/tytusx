@@ -622,7 +622,7 @@ export class ContenidoInicioComponent implements OnInit {
         this.generarEtiquetascd3(">", arbol);
         this.printcd3Simple(contain, arbol, key.getidentificador());
         salida += "<" + key.getidentificador() + atributos + ">"
-        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         let etiqueta2 = "</" + key.getidentificador() + ">"
         salida += etiqueta2 + "\n"
         this.generarEtiquetascd3(etiqueta2, arbol);
@@ -794,10 +794,9 @@ export class ContenidoInicioComponent implements OnInit {
         //  let recorrido=
         let atributos = ""
 
-
-        /**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-         * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IMPRIMIR DATOS CD3 XPATH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-         * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        /**################################################################################################
+         * #################################### IMPRIMIR DATOS CD3 XQUERY #################################
+         * ################################################################################################
          */
 
         let etiqueta1 = "<" + key.getidentificador()
@@ -818,7 +817,7 @@ export class ContenidoInicioComponent implements OnInit {
           }
         }
         salida += "<" + key.getidentificador() + atributos + ">"
-        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         let etiqueta2 = "</" + key.getidentificador() + ">"
         salida += etiqueta2 + "\n"
       }

@@ -8,9 +8,9 @@ import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
 
 export default class Relacional extends Instruccion {
-  private cond1: Instruccion;
-  private cond2: Instruccion;
-  private relacion: Relacionales;
+  public cond1: Instruccion;
+  public cond2: Instruccion;
+  public relacion: Relacionales;
   constructor(
     relacion: Relacionales,
     fila: number,
@@ -41,22 +41,14 @@ export default class Relacional extends Instruccion {
       this.cond1.tipoDato.getTipo() == tipoDato.CADENA &&
       this.cond2.tipoDato.getTipo() != tipoDato.CADENA
     ) {
-      return new NodoErrores(
-        'ERROR SEMANTICO',
-        'NO SE PUEDE COMPARAR UNA CADENA CON OTRO TIPO DE DATO QUE NO SEA CADENA',
-        this.fila,
-        this.columna
-      );
+      let opera= this.TipoOperando()
+      return {condicion1:izq, operador:opera, condicion2: der}
     } else if (
       this.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
       this.cond1.tipoDato.getTipo() != tipoDato.CADENA
     ) {
-      return new NodoErrores(
-        'ERROR SEMANTICO',
-        'NO SE PUEDE COMPARAR UNA CADENA CON OTRO TIPO DE DATO QUE NO SEA CADENA',
-        this.fila,
-        this.columna
-      );
+      let opera= this.TipoOperando()
+      return {condicion1:izq, operador:opera, condicion2: der}
     } else {
       this.tipoDato.setTipo(tipoDato.BOOLEANO);
       switch (this.relacion) {
@@ -64,11 +56,11 @@ export default class Relacional extends Instruccion {
           return izq == der;
         case Relacionales.DIFERENTE:
           return izq != der;
-        case Relacionales.MENOR:
+        case Relacionales.MENORQUE:
           return izq < der;
         case Relacionales.MENORIGUAL:
           return izq <= der;
-        case Relacionales.MAYOR:
+        case Relacionales.MAYORQUE:
           return izq > der;
         case Relacionales.MAYORIGUAL:
           return izq >= der;
@@ -99,13 +91,31 @@ export default class Relacional extends Instruccion {
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
     throw new Error('Method not implemented.');
   }
+  TipoOperando(){
+    switch (this.relacion) {
+      case Relacionales.IGUAL:
+        return "==";
+      case Relacionales.DIFERENTE:
+        return "!=";
+      case Relacionales.MENORQUE:
+        return "<";
+      case Relacionales.MENORIGUAL:
+        return "<=";
+      case Relacionales.MAYORQUE:
+        return ">";
+      case Relacionales.MAYORIGUAL:
+        return ">=";
+      default:
+        return 'what';
+    }
+  }
 }
 
 export enum Relacionales {
   IGUAL,
   DIFERENTE,
-  MAYOR,
-  MENOR,
+  MAYORQUE,
+  MENORQUE,
   MAYORIGUAL,
   MENORIGUAL,
   NOIGUAL
