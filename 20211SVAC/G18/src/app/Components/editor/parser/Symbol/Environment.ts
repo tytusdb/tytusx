@@ -1,9 +1,10 @@
 import { Symbol } from "./Symbol";
+import { Function } from '../Instruction/Function';
 import { Type } from "../Abstract/Retorno";
-import { Function } from "../Instruction/Function";
-import { errores } from '../Errores';
-import { Error_ } from '../Error';
 import { _Console } from '../Util/Salida';
+import { EnvironmentXML } from '../../parser/Symbol/EnviromentXML';
+import { Error_ } from '../Error';
+import { errores } from '../Errores';
 
 export class Environment {
 
@@ -11,7 +12,8 @@ export class Environment {
     public funciones: Map<string, Function>;
     public apuntadores: Map<string, number>;
 
-    constructor(public anterior: Environment | null) {
+    constructor(public anterior: Environment | null, public xmlEnvironment: EnvironmentXML) {
+        this.xmlEnvironment = xmlEnvironment;
         this.anterior = anterior;
         this.variables = new Map<string, Symbol>();
         this.funciones = new Map<string, Function>();
@@ -35,27 +37,33 @@ export class Environment {
         }
         this.variables.set(id, new Symbol(valor, id, type));
     }
+    
+    save_error(line:number, column: number, msg: string){
+        errores.push(new Error_(line, column, "Semantico", msg));
+    }
 
     public guardarFuncion(id: string, funcion: Function) {
-        if (this.funciones.has(id)) errores.push(new Error_(funcion.line, funcion.column, "Semantico", "Funcion ya definida"));
+        if (this.funciones.has(id)){
+            this.save_error(funcion.line,funcion.column,"Funcion ya definida");
+        } 
         else {
             _Console.symbols.set(id, new Symbol('Instrucciones', id, 8, 'Global'));
             this.funciones.set(id, funcion);
         }
     }
 
-    public getVar(id: string): Symbol | undefined | null {
-        let env: Environment | null = this;
+    public getVar(id: string): Symbol {
+        let env: Environment = this;
         while (env != null) {
             if (env.variables.has(id)) {
                 return env.variables.get(id);
             }
-            env = env.anterior;
+            else env = env.anterior;
         }
         return null;
     }
 
-    public getFuncion(id: string): Function | undefined {
+    public getFuncion(id: string): Function{
         let env: Environment | null = this;
         while (env != null) {
             if (env.funciones.has(id)) {
@@ -63,7 +71,7 @@ export class Environment {
             }
             env = env.anterior;
         }
-        return undefined;
+        return null;
     }
 
     public getGlobal(): Environment {

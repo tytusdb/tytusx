@@ -1,37 +1,36 @@
 import { Instruction } from "../Abstract/Instruction";
 import { Environment } from "../Symbol/Environment";
-import { _Type } from '../Types/Type';
-import { Param } from '../Expression/Param';
+// import { _Type } from '../Types/Type';
 import { _Console } from '../Util/Salida';
-import { Symbol } from '../Symbol/Symbol';
+import { Statement } from "./Statement";
+
 
 export class Function extends Instruction {
     public translate(environment: Environment): String {
-        // Nuevo entorno
-        let newEnv = new Environment(environment);
-        let initialPointer = _Console.stackPointer;
-        newEnv.setP(initialPointer);
-        newEnv.setLastL(_Console.labels);
-        _Console.labels++;
-        // Guardar parametros
-        this.parametros.forEach(element => {
-            _Console.symbols.set(element.id, new Symbol(_Console.stackPointer, element.id, element.type.execute().type, 'Local'));
-            newEnv.variables.set(element.id, new Symbol(_Console.stackPointer, element.id, element.type.execute().type, 'Local'));
-            _Console.stackPointer++;
-        });
-        newEnv.setP(_Console.stackPointer);
-        _Console.stackPointer = 1;
-        environment.guardarFuncion(this.id, this);
-        let result = "void " + this.id + "() {\n";
-        result += this.statment.translate(newEnv);
-        result += "\nl" + newEnv.getLastL() + ":\n";
-        result += "return; \n"
-        result += "}\n\n";
-        // lo mando a salida para no meterlo en mi void
-        _Console.salida += result;
-        _Console.stackPointer = initialPointer;
+        // // Nuevo entorno
+        // let newEnv = new Environment(environment);
+        // let initialPointer = _Console.stackPointer;
+        // newEnv.setP(initialPointer);
+        // newEnv.setLastL(_Console.labels);
+        // _Console.labels++;
+        // // Guardar parametros
+        // this.parametros.forEach(element => {
+        //     _Console.symbols.set(element.id, new Symbol(_Console.stackPointer, element.id, element.type.execute().type, 'Local'));
+        //     newEnv.variables.set(element.id, new Symbol(_Console.stackPointer, element.id, element.type.execute().type, 'Local'));
+        //     _Console.stackPointer++;
+        // });
+        // newEnv.setP(_Console.stackPointer);
+        // _Console.stackPointer = 1;
+        // environment.guardarFuncion(this.id, this);
+        // let result = "void " + this.id + "() {\n";
+        // result += this.statment.translate(newEnv);
+        // result += "\nl" + newEnv.getLastL() + ":\n";
+        // result += "return; \n"
+        // result += "}\n\n";
+        // // lo mando a salida para no meterlo en mi void
+        // _Console.salida += result;
+        // _Console.stackPointer = initialPointer;
         return "";
-
     }
 
     public plot(count: number): string {
@@ -50,7 +49,7 @@ export class Function extends Instruction {
         return result;
     }
 
-    constructor(private id: string, public statment: Instruction, public parametros: Array<Param>, public type: _Type, line: number, column: number) {
+    constructor(public id: string, public parameters, public return_type, public statment: Statement,  line: number, column: number) {
         super(line, column);
     }
 
@@ -58,4 +57,3 @@ export class Function extends Instruction {
         environment.guardarFuncion(this.id, this);
     }
 }
-

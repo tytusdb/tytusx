@@ -27,7 +27,7 @@ export class EjecutorXML {
             .replace(/[']/g, '')
             .toLowerCase()
             .split('=');
-          console.log(vals);
+          // console.log(vals);
           if (vals.includes('utf-8')) {
             this.encoding = 0;
           } else if (vals.includes('ascii')) {
@@ -251,20 +251,46 @@ export class EjecutorXML {
   }
 
   encodeContent(str: any) {
-    console.log(this.encoding);
+    // console.log(this.encoding);
     switch (this.encoding) {
       case 0:
         //utf-8
-        return encodeURIComponent(str);
+        return encodeURIComponent(
+          str
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&apos;', "'")
+            .replaceAll('&quot;', '"')
+        );
       case 1:
         //ascii
-        return this.encodeToAscii(str);
+        return this.encodeToAscii(
+          str
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&apos;', "'")
+            .replaceAll('&quot;', '"')
+        );
       case 2:
         //iso
-        return this.encodeISO(str);
+        return this.encodeISO(
+          str
+            .replaceAll('&lt;', '<')
+            .replaceAll('&gt;', '>')
+            .replaceAll('&amp;', '&')
+            .replaceAll('&apos;', "'")
+            .replaceAll('&quot;', '"')
+        );
       case 4:
         //none
-        return str;
+        return str
+          .replaceAll('&lt;', '<')
+          .replaceAll('&gt;', '>')
+          .replaceAll('&amp;', '&')
+          .replaceAll('&apos;', "'")
+          .replaceAll('&quot;', '"');
     }
   }
 
