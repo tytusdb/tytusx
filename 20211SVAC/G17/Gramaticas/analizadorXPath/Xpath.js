@@ -133,7 +133,7 @@ case 6:
  
     this.$=$$[$0-1];
     this.$.push($$[$0]) 
-    grafo.generarPadre(3,"AnnotatedDecl")
+    grafo.generarPadre(2,"AnnotatedDecl")
     grafo.generarPadre(1,"Prolog")
     grafo.generarHijos("Prolog","AnnotatedDecl")
     grafo.generarTexto(`Prolog.valor = Prolog1.valor; Prolog.valor.push(AnnotatedDecl.valor)`) 
@@ -149,7 +149,7 @@ break;
 case 8:
  
     this.$=[$$[$0]] 
-    grafo.generarPadre(3,"AnnotatedDecl")
+    grafo.generarPadre(2,"AnnotatedDecl")
     grafo.generarHijos("error","AnnotatedDecl")
     setLineaColumna(this._$.first_line,this._$.first_column)
     grafo.generarTexto(`Prolog.valor = [AnnotatedDecl.valor];new Error();`) 
@@ -180,7 +180,8 @@ case 11:
 break;
 case 12:
  
-    this.$=[];this.$.push($$[$0]); grafo.generarPadre(3, "ExprSingle");
+    this.$=[];this.$.push($$[$0]); 
+    grafo.generarPadre(3, "ExprSingle");
     grafo.generarHijos("error",$$[$0-1],"ExprSingle");
     setLineaColumna(this._$.first_line,this._$.first_column)
     //ListaErrores.push({Error:"Error sintactico se recupero en:"+yytext,tipo:"Sintactico",Linea:this._$.first_line,columna:this._$.first_column}); 
@@ -232,7 +233,7 @@ case 21:
  
     this.$=CrearFuncion($$[$0-5],$$[$0-3],$$[$0-1],$$[$0])
     grafo.generarPadre(9,"FunctionBody")
-    grafo.generarPadre(8,"TypeDeclaration")
+    grafo.generarPadre(8,"TypeDeclaration") 
     grafo.generarPadre(6,"ParamList")
     grafo.generarHijos($$[$0-8],$$[$0-7],$$[$0-6],$$[$0-5],$$[$0-4],"ParamList",$$[$0-2],"TypeDeclaration","FunctionBody") 
     grafo.generarTexto(`FunctionDecl.valor = new Function(${$$[$0-5]},ParamList.valor,TypeDeclaration.tipo,FunctionBody.valor)`) 
@@ -304,7 +305,8 @@ case 30:
 break;
 case 31:
  
-    this.$=$$[$0]; grafo.generarPadre(1, "OrExpr");
+    this.$=$$[$0]; 
+    grafo.generarPadre(1, "OrExpr");
     grafo.generarHijos("OrExpr");
     grafo.generarTexto(`ExprSingle.valor = OrExpr.valor`); 
 break;
@@ -358,7 +360,8 @@ case 37:
     this.$.push($$[$0]);
     grafo.generarPadre(2,"IntermediateClause")
     grafo.generarPadre(1,"IntermediateClauseR")
-    grafo.generarHijos("IntermediateClauseR.valor=IntermediateClauseR1.valor;IntermediateClauseR.valor.push(IntermediateClause.valor)") 
+    grafo.generarHijos("IntermediateClauseR.valor=IntermediateClauseR1.valor;IntermediateClauseR.valor.push(IntermediateClause.valor)")
+    grafo.generarTexto("IntermediateClauseR.valor = IntermediateClauseR1.valor; IntermediateClauseR.valor.push(IntermediateClause.valor)") 
 break;
 case 38:
   
@@ -1075,7 +1078,8 @@ break;
 case 152:
  
     this.$=new Parentesis($$[$0-1]); 
-    grafo.generarHijos($$[$0-2],$$[$0-1],$$[$0]); 
+    grafo.generarPadre(2,"Expr")
+    grafo.generarHijos($$[$0-2],"Expr",$$[$0]); 
     grafo.generarTexto(`ParenthesizedExpr.valor = ExprSingle.valor;`); 
 break;
 }

@@ -128,7 +128,6 @@ export class Comando
 
   // función para generar c3d
   EjecutarC3D(xml){
-    C3D.clearC3D()
     var salida = ""
     var retornos=[]
     for (const instruccion of this.Instrucciones) {
@@ -141,6 +140,7 @@ export class Comando
       C3D.addCodigo3D(`stackConsulta[0] = stack[0];\n`)
       C3D.addCodigo3D(`stackConsulta[1] = -2;\n`) 
 
+      C3D.addCodigo3D(retorno.cod)
       if(retorno instanceof C3D.Retorno){
         C3D.addCodigo3D(C3D.getstr3d())
         switch (retorno.tipo) {

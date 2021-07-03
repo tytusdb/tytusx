@@ -146,14 +146,13 @@ export class PathExp
 
     getC3D(objetos)
     {
-        var retorno;
+        var retorno = {tipo:Tipo.ERROR,cod:""};
 
 
         for (const objeto of this.caminos){
-            retorno = objeto.getC3D(objetos)    //se queda con el ultimo retorno 
-            if(!(retorno[0] instanceof C3D.Retorno)){
-                C3D.addCodigo3D(retorno.cod)
-            }                                                    
+            var tempretorno = objeto.getC3D(objetos)    //se queda con el ultimo retorno
+            retorno.cod += tempretorno.cod 
+            retorno.tipo = tempretorno.tipo            
         }
 
         return retorno       
