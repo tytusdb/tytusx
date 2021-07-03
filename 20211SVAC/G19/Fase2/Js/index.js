@@ -56,6 +56,9 @@ function CargarXML(){
             t0 = 0;
             t1 = 0;      
             xml3D = "";
+            funcionesALlamar="";
+            imp="";
+            xpathC3D="";
 
             xml3D = getTraduction(resultadoXML[0]);
             localStorage.setItem('heapJSON',JSON.stringify(heap, null, 2));
@@ -100,7 +103,10 @@ function CargarXML(){
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                     console.log("↓ Funcion XPath ↓");
                     console.log(resultadoXPath);
+                    
                     traducirXPath(nodoxPATHASC);
+
+                   /// ReportesTSXML.GenerarArreglo(tablaSimbolosXML.entornoGlobal,"Global");
                     //console.log(concatenaXPath)
                     salidaGlobal = "";
                     var salidaGlobal2="";
@@ -124,7 +130,7 @@ function CargarXML(){
                     salidaGlobal2=salidaGlobal;
                     
                     setTraduccionXPath(CambiarCodificacion(salidaGlobal2.replace("↓ Resultado consulta\n\n","")
-                    .replace("↓ Resultado consulta\n\n","")))
+                    .replace("↓ Resultado consulta\n\n","").replace("↓ Resultado consulta\n\n","").replace("↓ Resultado consulta\n\n","")))
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
                 } else {
@@ -612,7 +618,7 @@ function CambiarCodificacion(cadena){
 }
 
 function setTraduction(){
-SetReporteOptimizar('hola')
+
     globalC3D = "";
     globalC3D += `
     #include <stdio.h>
@@ -624,7 +630,7 @@ SetReporteOptimizar('hola')
     double hp;
     
     `;
-
+    imp='\n';
     for(var i = 0; i< contTemporal+1;i++ ){
         if(i==0){
             globalC3D += `double t`+i.toString();
@@ -634,7 +640,7 @@ SetReporteOptimizar('hola')
     }
     
     funcionesALlamar=`CargarXML();\n`+funcionesALlamar;
-    globalC3D+=`; \n`+concatenaXPath+` \n void CargarXML(){\n`
+    globalC3D+=`; \n\n `+imp+` \n`+concatenaXPath+` \n void CargarXML(){\n`
 
     if(codificacionGlobal == "UTF-8"){
         globalC3D += "stack[(int)0] = -1;\n";

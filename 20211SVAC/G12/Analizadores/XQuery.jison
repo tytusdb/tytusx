@@ -16,6 +16,7 @@ cadena      (\"({escape} | {aceptacion})*\")
 
 /* Simbolos del programa */
 "("                     { console.log("Reconocio : "+ yytext); return 'PARA'}
+"//"                     { console.log("Reconocio : "+ yytext); return 'BARRABARRA'}
 "/"                     { console.log("Reconocio : "+ yytext); return 'BARRA'}
 ")"                     { console.log("Reconocio : "+ yytext); return 'PARC'}
 "$"                     { console.log("Reconocio : "+ yytext); return 'DOLAR'}
@@ -23,21 +24,28 @@ cadena      (\"({escape} | {aceptacion})*\")
 "}"                     { console.log("Reconocio : "+ yytext); return 'LLAVEC'}
 "["                     { console.log("Reconocio : "+ yytext); return 'CORA'}
 "]"                     { console.log("Reconocio : "+ yytext); return 'CORC'}
+".."                    { console.log("Reconocio : "+ yytext); return 'PUNTOPUNTO'}
+"."                     { console.log("Reconocio : "+ yytext); return 'PUNTO'}
+"|"                     { console.log("Reconocio : "+ yytext); return 'SIGNOO'}
+"::"                    { console.log("Reconocio : "+ yytext); return 'DOSPUNTOS'}
 
 /* Operadores Relacionales */
-"<="                    { console.log("Reconocio : "+ yytext); return 'MENOR_IGUAL'}
-">="                    { console.log("Reconocio : "+ yytext); return 'MAYOR_IGUAL'}
+"<="                    { console.log("Reconocio : "+ yytext); return 'MENORIGUAL'}
+">="                    { console.log("Reconocio : "+ yytext); return 'MAYORIGUAL'}
 "="                     { console.log("Reconocio : "+ yytext); return 'IGUAL'}
-"<"                     { console.log("Reconocio : "+ yytext); return 'MENOR'}
-">"                     { console.log("Reconocio : "+ yytext); return 'MAYOR'}
+"<"                     { console.log("Reconocio : "+ yytext); return 'MENORQUE'}
+">"                     { console.log("Reconocio : "+ yytext); return 'MAYORQUE'}
 "!="                    { console.log("Reconocio : "+ yytext); return 'DIFERENTE'}
 ":"                    { console.log("Reconocio : "+ yytext); return 'DOSPUNTOS'}
+","                    { console.log("Reconocio : "+ yytext); return 'COMA'}
+"@"                     { console.log("Reconocio : "+ yytext); return 'ARROBA'}
 
 /* Operadores Aritmeticos */
 "+"                     { console.log("Reconocio : "+ yytext); return 'MAS'}
 "-"                     { console.log("Reconocio : "+ yytext); return 'MENOS'}
 "*"                     { console.log("Reconocio : "+ yytext); return 'POR'}
 "div"                   { console.log("Reconocio : "+ yytext); return 'DIV'}
+"mod"                   { console.log("Reconocio : "+ yytext); return 'MODULO'}
 
 /* Operadores Logicos */
 "and"                   { console.log("Reconocio : "+ yytext); return 'AND'}
@@ -54,8 +62,29 @@ cadena      (\"({escape} | {aceptacion})*\")
 "if"                    { console.log("Reconocio : "+ yytext); return 'IF'}
 "then"                  { console.log("Reconocio : "+ yytext); return 'THEN'}
 "else"                  { console.log("Reconocio : "+ yytext); return 'ELSE'}
-"@"                     { console.log("Reconocio : "+ yytext); return 'ARROBA'}
+"declare"               { console.log("Reconocio : "+ yytext); return 'DECLARE'}
+"function"              { console.log("Reconocio : "+ yytext); return 'FUNCTION'}
+"as"                    { console.log("Reconocio : "+ yytext); return 'AS'}
+"let"                   { console.log("Reconocio : "+ yytext); return 'LET'}
+"data"                   { console.log("Reconocio : "+ yytext); return 'DATA'}
 
+//XPATH
+"last()"                { console.log("Reconocio : "+ yytext); return 'LAST'}
+"position()"            { console.log("Reconocio : "+ yytext); return 'POSITION'}
+"ancestor"              { console.log("Reconocio : "+ yytext); return 'ANCESTOR'}
+"attribute"             { console.log("Reconocio : "+ yytext); return 'ATTRIBUTE'}
+"self"                  { console.log("Reconocio : "+ yytext); return 'SELF'} 
+"child"                 { console.log("Reconocio : "+ yytext); return 'CHILD'}
+"descendant"            { console.log("Reconocio : "+ yytext); return 'DESCENDANT'}
+"following"             { console.log("Reconocio : "+ yytext); return 'FOLLOWING'}
+"sibling"               { console.log("Reconocio : "+ yytext); return 'SIBLING'}
+"namespace"             { console.log("Reconocio : "+ yytext); return 'NAMESPACE'}
+"parent"                { console.log("Reconocio : "+ yytext); return 'PARENT'}
+"preceding"             { console.log("Reconocio : "+ yytext); return 'PRECENDING'}
+"text()"                { console.log("Reconocio : "+ yytext); return 'TEXT'}
+"node()"                { console.log("Reconocio : "+ yytext); return 'NODE'}
+"last()"                { console.log("Reconocio : "+ yytext); return 'LAST'}
+"position()"            { console.log("Reconocio : "+ yytext); return 'POSITION'}
 
 /* SIMBOLOS ER */
 [0-9]+("."[0-9]+)?\b        { console.log("Reconocio : "+ yytext); return 'DECIMAL'}
@@ -119,7 +148,7 @@ cadena      (\"({escape} | {aceptacion})*\")
 %left 'OR'
 %left 'AND'
 %right 'NOT'
-%left 'IGUAL' 'DIFERENTE' 'MENOR' 'MENOR_IGUAL' 'MAYOR'  'MAYOR_IGUAL' 
+%left 'IGUAL' 'DIFERENTE' 'MENORQUE' 'MENORIGUAL' 'MAYORQUE'  'MAYORIGUAL' 
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIV' 'MODULO'
 %nonassoc 'POT'
@@ -131,60 +160,120 @@ cadena      (\"({escape} | {aceptacion})*\")
 %% /* Gramatica */
 
 
-INICIO : RAIZ EOF {  $$=$1; return $$ };
+INICIO
+    : VARIAS EOF {  $$=$1; return $$ };
 
-RAIZ:  RAIZ  INSTRUCCION
-        | INSTRUCCION
+
+VARIAS: INSTRUCCIONES SIGNOO INSTRUCCIONES {$$=new instrucciondoble.default($1,$3);}
+        |INSTRUCCIONES {$$=$1}
         ;
 
-INSTRUCCION: FOR E IN INSTRUCCION
-    | LET E DOSPUNTOS IGUAL OP
-    | WHERE E
-    | ORDER E
-    | RETURN E
-    | RETURN MENOR ID MAYOR LLAVEA E LLAVEC MENOR BARRA ID MAYOR
-    | RETURN SENTECIAS_CONTROL
-    | SENTECIAS_CONTROL
-    | BARRA E
-    | BARRA BARRA E
-    | OP
+INSTRUCCIONES : SENTENCIAS INSTRUCCIONES
+            |   SENTENCIAS
+            ;
+
+SENTENCIAS: FOR DOLAR ID IN PARAMETROS
+    | WHERE DOLAR ID PARAMETROS
+    | ORDER DOLAR ID PARAMETROS
+    | RETURN DOLAR ID PARAMETROS
+    | IF PARA DOLAR ID PARAMETROS  PARC
+    | RETURN DOLAR ID
+    | LET DOLAR ID DOSPUNTOS IGUAL PARAMETROS
+    | RETURN SENTENCIAS
+    | THEN DATA PARA DOLAR ID PARAMETROS  PARC
+    | ELSE SENTENCIAS
+    | ELSE PARA PARC
     ;
 
-OP : PARA DECIMAL TO DECIMAL PARC   
-;
-
-SENTECIAS_CONTROL: IF PARA PARAMETROS PARC
-    | THEN MENOR ID MAYOR LLAVEA PARAMETROS LLAVEC MENOR BARRA ID MAYOR
-    | ELSE MENOR ID MAYOR LLAVEA PARAMETROS LLAVEC MENOR BARRA ID MAYOR
-    ;
-
-PARAMETROS: PARAMETROS LISTA_PARAMETROS
+PARAMETROS: LISTA_PARAMETROS PARAMETROS
     | LISTA_PARAMETROS
     ;
 
-LISTA_PARAMETROS: DOLAR ID
-    | BARRA E
-    | BARRA BARRA E
-    | BARRA ARROBA E
-    | ID
-    | ID PARA PARAMETROS PARC
-    ;
-
-E: E MAS E
-    | E MENOS E
-    | E POR E
-    | E DIV E
-    | E MENOR E
-    | E MENOR_IGUAL E
-    | E MAYOR E
-    | E MAYOR_IGUAL E
-    | E IGUAL E
-    | PARA E PARC
-    | CORA E CORC
-    | DOLAR ID //RETURN
-    | ID PARA E PARC //RETURN
-    //| ID
-    | CADENA
+LISTA_PARAMETROS : BARRA e
+    | BARRABARRA e
+    | RESERV DOSPUNTOS e
+    | BARRA RESERV DOSPUNTOS e
+    | BARRA PUNTOPUNTO
+    | BARRABARRA RESERV DOSPUNTOS e
+    | PARA OPERADORES TO OPERADORES PARC
+    | LISTA_PARAMETROS MENORQUE LISTA_PARAMETROS
+    | LISTA_PARAMETROS MAYORQUE LISTA_PARAMETROS
+    | LISTA_PARAMETROS MENORIGUAL LISTA_PARAMETROS
+    | LISTA_PARAMETROS MAYORIGUAL LISTA_PARAMETROS
+    | LISTA_PARAMETROS MAS LISTA_PARAMETROS
+    | LISTA_PARAMETROS MENOS LISTA_PARAMETROS
+    | LISTA_PARAMETROS POR LISTA_PARAMETROS
+    | LISTA_PARAMETROS DIV LISTA_PARAMETROS
+    | LISTA_PARAMETROS MODULO LISTA_PARAMETROS
+    | LISTA_PARAMETROS AND LISTA_PARAMETROS
+    | LISTA_PARAMETROS OR LISTA_PARAMETROS
+    | LISTA_PARAMETROS DIFERENTE LISTA_PARAMETROS
+    | LISTA_PARAMETROS IGUAL LISTA_PARAMETROS
+    | DATA PARA OPERADORES PARC
+    | PARA OPERADORES PARC
     | ENTERO
     | DECIMAL
+    | ID
+    | CADENA
+    ;
+
+RESERV :  LAST
+    | POSITION
+    | ANCESTOR RESERVLARGE
+    | ATTRIBUTE
+    | ANCESORSELF
+    | CHILD
+    | DESCENDANT RESERVLARGE
+    | DESCENDANT
+    | FOLLOWING  MENOS SIBLING
+    | FOLLOWING
+    | NAMESPACE
+    | PARENT
+    | PRECENDING
+    | PRECENDING MENOS SIBLING
+    | SELF
+    | TEXT
+    | NODE
+    | SIBLING
+    ;
+
+RESERVLARGE :   MENOS OR MENOS SELF
+    |   MENOS SIBLING
+    ;
+
+e :   ID
+    | ARROBA ID
+    | ARROBA POR
+    | POR
+    //| ARROBA OPERADORES
+    | ID CORA OPERADORES CORC
+    | ENTERO
+    | DECIMAL
+    | CADENA
+    ;
+ 
+    
+OPERADORES :  OPERADORES MAS OPERADORES
+    | OPERADORES MENOS OPERADORES
+    | OPERADORES POR OPERADORES
+    | OPERADORES DIV OPERADORES
+    | OPERADORES MODULO OPERADORES
+    | OPERADORES AND OPERADORES
+    | OPERADORES OR OPERADORES
+    | OPERADORES MAYORQUE OPERADORES
+    | OPERADORES MAYORIGUAL OPERADORES
+    | OPERADORES MENORQUE OPERADORES
+    | OPERADORES MENORIGUAL OPERADORES
+    | OPERADORES DIFERENTE OPERADORES
+    | OPERADORES IGUAL OPERADORES
+    | MENOS OPERADORES %prec UNARIO
+    | DATA PARA OPERADORES PARC
+    | PARA OPERADORES PARC
+    | DECIMAL
+    | ENTERO
+    | ID 
+    | LAST
+    | POSITION
+    | CADENA
+    | ARROBA ID
     ;
