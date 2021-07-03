@@ -2,8 +2,8 @@ class ConsultaPreceding extends Consulta {
 
     private ignorarNodos: boolean;
 
-    constructor(type: TipoConsulta, id: string) {
-        super(type, id);
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
         this.ignorarNodos = true;
     }
 

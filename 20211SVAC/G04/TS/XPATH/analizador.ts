@@ -11,6 +11,7 @@ function analizarXpath(entornoGlobal: Entorno, resultC3D: C3DResult) {
     } catch (err) {
         erroresXpath.agregarError("Error fatal", "error sin recuperacion", 0, 0);
         matrizConsultas = [];
+        console.log(err);
     }
 
     if (erroresXpath.getSize > 0) {
@@ -44,7 +45,6 @@ function analizarXpath(entornoGlobal: Entorno, resultC3D: C3DResult) {
                 });
             });
             matrizEntornos.push(entornos);
-            console.log(entornos);
         });
         result.value = resultConsulta.join("\n");
         let controller: C3DController = new C3DController();

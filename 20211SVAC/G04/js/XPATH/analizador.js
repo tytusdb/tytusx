@@ -12,6 +12,7 @@ function analizarXpath(entornoGlobal, resultC3D) {
     catch (err) {
         erroresXpath.agregarError("Error fatal", "error sin recuperacion", 0, 0);
         matrizConsultas = [];
+        console.log(err);
     }
     if (erroresXpath.getSize > 0) {
         if (erroresXpath.getErrores().length > 0) {
@@ -44,7 +45,6 @@ function analizarXpath(entornoGlobal, resultC3D) {
             });
         });
         matrizEntornos.push(entornos);
-        console.log(entornos);
     });
     result.value = resultConsulta.join("\n");
     let controller = new C3DController();

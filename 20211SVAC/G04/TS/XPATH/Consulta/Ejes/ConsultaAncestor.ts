@@ -1,7 +1,7 @@
 class ConsultaAncestor extends Consulta {
 
-    constructor(type: TipoConsulta, id: string) {
-        super(type, id);
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
     }
 
     public run(entornos: Array<Entorno>): Array<Entorno> {

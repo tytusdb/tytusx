@@ -1,7 +1,9 @@
 class Consulta {
-    constructor(type, id) {
+    constructor(type, id, filtros) {
         this.type = type;
         this.id = id;
+        this.filtros = filtros;
+        this.hasPredicado = (this.filtros.length > 0) ? true : false;
     }
     getType() {
         return this.type;
@@ -20,6 +22,18 @@ class Consulta {
     }
     setStackPointer(stackPointer) {
         this.stackPointer = stackPointer;
+    }
+    getFiltros() {
+        return this.filtros;
+    }
+    setFiltros(filtros) {
+        this.filtros = filtros;
+    }
+    getHasPredicado() {
+        return this.hasPredicado;
+    }
+    setHasPredicado(hasPredicado) {
+        this.hasPredicado = hasPredicado;
     }
     generateC3D(resultC3D) {
         let codigo = resultC3D.getCodigo();

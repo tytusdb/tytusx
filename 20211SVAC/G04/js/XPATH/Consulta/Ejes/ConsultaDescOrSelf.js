@@ -1,6 +1,6 @@
 class ConsultaDescOrSelf extends Consulta {
-    constructor(type, id) {
-        super(type, id);
+    constructor(type, id, filtros) {
+        super(type, id, filtros);
     }
     run(entornos) {
         let newEntornos = new Array();

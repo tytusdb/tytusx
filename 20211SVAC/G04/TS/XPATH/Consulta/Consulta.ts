@@ -3,10 +3,14 @@ abstract class Consulta {
     private type: TipoConsulta;
     private id: string;
     private stackPointer: number;
+    private filtros: Array<Filtro>
+    private hasPredicado: boolean;
 
-    constructor(type: TipoConsulta, id: string) {
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
         this.type = type;
         this.id = id;
+        this.filtros = filtros;
+        this.hasPredicado = (this.filtros.length >0) ? true : false;
     }
 
     public getType(): TipoConsulta {
@@ -31,6 +35,22 @@ abstract class Consulta {
 
     public setStackPointer(stackPointer: number): void {
         this.stackPointer = stackPointer;
+    }
+
+    public getFiltros(): Array<Filtro> {
+        return this.filtros;
+    }
+
+    public setFiltros(filtros: Array<Filtro>): void {
+        this.filtros = filtros;
+    }
+
+    public getHasPredicado(): boolean {
+        return this.hasPredicado;
+    }
+
+    public setHasPredicado(hasPredicado: boolean): void {
+        this.hasPredicado = hasPredicado;
     }
 
     public generateC3D(resultC3D: C3DResult): C3DResult {

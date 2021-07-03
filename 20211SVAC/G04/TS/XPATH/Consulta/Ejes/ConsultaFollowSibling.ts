@@ -2,8 +2,8 @@ class ConsultaFollowSibling extends Consulta {
 
     private ignorarNodos: boolean;
 
-    constructor(type: TipoConsulta, id: string) {
-        super(type, id);
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
         this.ignorarNodos = true;
     }
 
@@ -20,7 +20,7 @@ class ConsultaFollowSibling extends Consulta {
             }
         });
 
-        let parent: ConsultaPuntos = new ConsultaPuntos(TipoConsulta.PUNTOS, "");
+        let parent: ConsultaPuntos = new ConsultaPuntos(TipoConsulta.PUNTOS, "", []);
         entornos = parent.run(entornos);
         entornos = this.getHijos(entornos);
 

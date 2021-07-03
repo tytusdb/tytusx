@@ -15,7 +15,7 @@ class C3DController {
 
         matrizConsultas.forEach(cs => {
             cs.forEach(c => {
-                if (c.getType() != TipoConsulta.SIMPLE) {
+                if (c.getType() != TipoConsulta.SIMPLE || c.getHasPredicado()) {
                     areSimple = false;
                 }
             });
