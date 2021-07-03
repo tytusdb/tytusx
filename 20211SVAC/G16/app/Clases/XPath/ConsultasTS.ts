@@ -17,6 +17,7 @@ export class ConsultasTS{
     hijos = []
     texto=""
     etiqueta
+    hayatributo=""
   constructor(){
     this.tablasimbolos = JSON.parse(localStorage.getItem("tablaSimbolo"))
     this.encoding = localStorage.getItem("encoding")
@@ -52,14 +53,70 @@ export class ConsultasTS{
 
     getPredicado(padre:any, indice):any{
         this.contenido = JSON.parse(padre)
-          for (let i= 0; i < this.contenido.length; i++) {
-            if (i == (indice - 1)) {
-              this.hijos.push(this.contenido[i]);
-            }
+        for (let i= 0; i < this.contenido.length; i++) {
+          if (i == (indice - 1)) {
+            this.hijos.push(this.contenido[i]);
           }
-          this.contenido = [];
-          this.contenido = this.hijos;
-        return this.contenido
+        }
+        this.contenido = [];
+        this.contenido = this.hijos;
+      return this.contenido
+    }
+
+    getAtributo(padre:any, atributo:any){
+      this.hijos=[]
+      try{
+        this.contenido = JSON.parse(padre)
+      }catch{
+        this.contenido = padre
+      }
+      for (let i=0; i < this.contenido.length; i++){
+        this.RecorrerAtributo(this.contenido[i].atributos, atributo)
+        if(this.hayatributo!="F"){
+          this.hijos.push(this.contenido[i])
+        }
+      }
+      return this.hijos
+    }
+
+    RecorrerAtributo(contenido:any, atributo:any){
+      if(contenido.lista!=undefined){
+        contenido.lista.forEach(element => {
+          if(element.lista!=undefined){
+            this.RecorrerAtributo(element.lista, atributo)
+          }
+        });
+      }else{
+        if(atributo!="all"){
+          if(contenido[0].identificador == atributo){
+            var c:string = contenido[0].valor
+            this.hayatributo = c.replace("\"","")
+          }else{
+            this.hayatributo="F"
+          }
+        }else{
+            var c:string = contenido[0].valor
+            this.hayatributo = c.replace("\"","")
+        }
+        
+      }
+    }
+
+    getOnlyAtributo(padre:any, atributo:any){
+      let texto=""
+      try{
+        this.contenido = JSON.parse(padre)
+      }catch{
+        this.contenido = padre
+      }
+      
+      for (let i=0; i < this.contenido.length; i++){
+        this.RecorrerAtributo(this.contenido[i].atributos, atributo)
+        if(this.hayatributo!="F"){
+          texto+="\n"+this.hayatributo.replace("\"","")
+        }
+      }
+      return texto
     }
 
     Menor(indice:any, tope:any, padre:any){
@@ -158,10 +215,27 @@ export class ConsultasTS{
     this.contenido = JSON.parse(padre)
     this.hijos=[]
     if(indice.id!=undefined){
-      for(let i=0; i<this.contenido.length; i++){
-        this.getEtiqueta(this.contenido[i], indice.id)
-        if(this.etiqueta==tope){
-          this.hijos.push(this.contenido[i])
+      if(indice.pred=="atributoid"){
+        for(let i=0; i<this.contenido.length; i++){
+          this.RecorrerAtributo(this.contenido[i].atributos, indice.id.indice)
+          if(this.hayatributo!="F"){
+              var atr:string = this.hayatributo.replace("\"", "")
+              var atr2: string = tope
+              var x = atr2.replace("\"","")
+              console.log( atr + "-"+x)
+            if(atr==x){
+              this.hijos.push(this.contenido[i])
+            }
+          }else{
+            console.log(this.hayatributo)
+          }
+        }
+      }else{
+        for(let i=0; i<this.contenido.length; i++){
+          this.getEtiqueta(this.contenido[i], indice.id)
+          if(this.etiqueta==tope){
+            this.hijos.push(this.contenido[i])
+          }
         }
       }
     }
@@ -172,10 +246,27 @@ export class ConsultasTS{
     this.contenido = JSON.parse(padre)
     this.hijos=[]
     if(indice.id!=undefined){
-      for(let i=0; i<this.contenido.length; i++){
-        this.getEtiqueta(this.contenido[i], indice.id)
-        if(this.etiqueta!=tope){
-          this.hijos.push(this.contenido[i])
+      if(indice.pred=="atributoid"){
+        for(let i=0; i<this.contenido.length; i++){
+          this.RecorrerAtributo(this.contenido[i].atributos, indice.id.indice)
+          if(this.hayatributo!="F"){
+              var atr:string = this.hayatributo.replace("\"", "")
+              var atr2: string = tope
+              var x = atr2.replace("\"","")
+              console.log( atr + "-"+x)
+            if(atr!=x){
+              this.hijos.push(this.contenido[i])
+            }
+          }else{
+            console.log(this.hayatributo)
+          }
+        }
+      }else{
+        for(let i=0; i<this.contenido.length; i++){
+          this.getEtiqueta(this.contenido[i], indice.id)
+          if(this.etiqueta!=tope){
+            this.hijos.push(this.contenido[i])
+          }
         }
       }
     }
@@ -188,12 +279,9 @@ export class ConsultasTS{
         Contenido.forEach(element => {
             if(element.nombreInit!=undefined){
               if (element.nombreInit == nombre) {
-  
                 if (element.elementos !=null) {
-  
                   this.contenido.push(element)
                 }else{
-  
                   this.contenido.push(element)
                 }
               }else{
@@ -217,12 +305,9 @@ export class ConsultasTS{
       }else{
         if(Contenido.Nombre!=undefined){
           if (Contenido.Nombre == nombre) {
-  
             if (Contenido.elementos !=null) {
-  
               this.contenido.push(Contenido)
             }else{
-  
               this.contenido.push(Contenido)
             }
           }else{
@@ -233,7 +318,6 @@ export class ConsultasTS{
             }
           }
         }else if(Contenido.lista!=undefined){
-  
             if(Contenido!=null){
                 Contenido.lista.forEach(elemento2 => {
                 let array=[]

@@ -9,6 +9,7 @@ var ConsultasTS = /** @class */ (function () {
         this.contenido = [];
         this.hijos = [];
         this.texto = "";
+        this.hayatributo = "";
         this.tablasimbolos = JSON.parse(localStorage.getItem("tablaSimbolo"));
         this.encoding = localStorage.getItem("encoding");
     }
@@ -50,6 +51,63 @@ var ConsultasTS = /** @class */ (function () {
         this.contenido = [];
         this.contenido = this.hijos;
         return this.contenido;
+    };
+    ConsultasTS.prototype.getAtributo = function (padre, atributo) {
+        this.hijos = [];
+        try {
+            this.contenido = JSON.parse(padre);
+        }
+        catch (_a) {
+            this.contenido = padre;
+        }
+        for (var i = 0; i < this.contenido.length; i++) {
+            this.RecorrerAtributo(this.contenido[i].atributos, atributo);
+            if (this.hayatributo != "F") {
+                this.hijos.push(this.contenido[i]);
+            }
+        }
+        return this.hijos;
+    };
+    ConsultasTS.prototype.RecorrerAtributo = function (contenido, atributo) {
+        var _this = this;
+        if (contenido.lista != undefined) {
+            contenido.lista.forEach(function (element) {
+                if (element.lista != undefined) {
+                    _this.RecorrerAtributo(element.lista, atributo);
+                }
+            });
+        }
+        else {
+            if (atributo != "all") {
+                if (contenido[0].identificador == atributo) {
+                    var c = contenido[0].valor;
+                    this.hayatributo = c.replace("\"", "");
+                }
+                else {
+                    this.hayatributo = "F";
+                }
+            }
+            else {
+                var c = contenido[0].valor;
+                this.hayatributo = c.replace("\"", "");
+            }
+        }
+    };
+    ConsultasTS.prototype.getOnlyAtributo = function (padre, atributo) {
+        var texto = "";
+        try {
+            this.contenido = JSON.parse(padre);
+        }
+        catch (_a) {
+            this.contenido = padre;
+        }
+        for (var i = 0; i < this.contenido.length; i++) {
+            this.RecorrerAtributo(this.contenido[i].atributos, atributo);
+            if (this.hayatributo != "F") {
+                texto += "\n" + this.hayatributo.replace("\"", "");
+            }
+        }
+        return texto;
     };
     ConsultasTS.prototype.Menor = function (indice, tope, padre) {
         this.contenido = JSON.parse(padre);
@@ -143,10 +201,29 @@ var ConsultasTS = /** @class */ (function () {
         this.contenido = JSON.parse(padre);
         this.hijos = [];
         if (indice.id != undefined) {
-            for (var i = 0; i < this.contenido.length; i++) {
-                this.getEtiqueta(this.contenido[i], indice.id);
-                if (this.etiqueta == tope) {
-                    this.hijos.push(this.contenido[i]);
+            if (indice.pred == "atributoid") {
+                for (var i = 0; i < this.contenido.length; i++) {
+                    this.RecorrerAtributo(this.contenido[i].atributos, indice.id.indice);
+                    if (this.hayatributo != "F") {
+                        var atr = this.hayatributo.replace("\"", "");
+                        var atr2 = tope;
+                        var x = atr2.replace("\"", "");
+                        console.log(atr + "-" + x);
+                        if (atr == x) {
+                            this.hijos.push(this.contenido[i]);
+                        }
+                    }
+                    else {
+                        console.log(this.hayatributo);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < this.contenido.length; i++) {
+                    this.getEtiqueta(this.contenido[i], indice.id);
+                    if (this.etiqueta == tope) {
+                        this.hijos.push(this.contenido[i]);
+                    }
                 }
             }
         }
@@ -156,10 +233,29 @@ var ConsultasTS = /** @class */ (function () {
         this.contenido = JSON.parse(padre);
         this.hijos = [];
         if (indice.id != undefined) {
-            for (var i = 0; i < this.contenido.length; i++) {
-                this.getEtiqueta(this.contenido[i], indice.id);
-                if (this.etiqueta != tope) {
-                    this.hijos.push(this.contenido[i]);
+            if (indice.pred == "atributoid") {
+                for (var i = 0; i < this.contenido.length; i++) {
+                    this.RecorrerAtributo(this.contenido[i].atributos, indice.id.indice);
+                    if (this.hayatributo != "F") {
+                        var atr = this.hayatributo.replace("\"", "");
+                        var atr2 = tope;
+                        var x = atr2.replace("\"", "");
+                        console.log(atr + "-" + x);
+                        if (atr != x) {
+                            this.hijos.push(this.contenido[i]);
+                        }
+                    }
+                    else {
+                        console.log(this.hayatributo);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < this.contenido.length; i++) {
+                    this.getEtiqueta(this.contenido[i], indice.id);
+                    if (this.etiqueta != tope) {
+                        this.hijos.push(this.contenido[i]);
+                    }
                 }
             }
         }

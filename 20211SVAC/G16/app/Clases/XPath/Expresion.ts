@@ -30,13 +30,13 @@ export class Expresion implements NodoAbs {
             case "dospuntos":
                 datos={
                     id:"..",
-                    pred:"false"
+                    pred:"dospuntos"
                 }
                 return datos
             case "punto":
                 datos={
                     id:".",
-                    pred:"false"
+                    pred:"punto"
                 }
                 return datos
             case "aterisco":
@@ -45,10 +45,18 @@ export class Expresion implements NodoAbs {
                     pred:"false"
                 }
                 return datos
-            case "agributoT":
+            case "atributoT":
                 datos={
                     id:"@*",
-                    pred:"false"
+                    pred:"atributoT"
+                }
+                return datos
+            case "atributoid":
+                indice=this.operadord
+                tope="*"
+                datos={
+                    id: {indice, tope},
+                    pred:"atributoid"
                 }
                 return datos
             case "+":
@@ -104,13 +112,67 @@ export class Expresion implements NodoAbs {
                 }
                 return datos
             case "noigual":
-            indice=this.operadori.execute(padre)//este creo que no va a importar
-            tope=this.operadord.execute(padre)//en este caso en este es donde comienza
-            datos={
-                id:{indice, tope},  
-                pred:"noigual"
-            }
+                indice=this.operadori.execute(padre)//este creo que no va a importar
+                tope=this.operadord.execute(padre)//en este caso en este es donde comienza
+                datos={
+                    id:{indice, tope},  
+                    pred:"noigual"
+                }
                 return datos
+            //PARA EL XQUERY
+            case "eq"://IGUAL
+                indice=this.operadori.execute(padre)
+                tope=this.operadord.execute(padre)
+                datos={
+                    id:{indice, tope},
+                    pred:"eq"
+                }
+                return datos
+            case "ne"://DIFERENTE
+                indice=this.operadori.execute(padre)
+                tope=this.operadord.execute(padre)
+                datos={
+                    id:{indice, tope},
+                    pred:"ne"
+                }
+                return datos
+            case "lt"://MENOR
+                indice=this.operadori.execute(padre)
+                tope=this.operadord.execute(padre)
+                datos={
+                    id:{indice, tope},
+                    pred:"lt"
+                }
+                return datos
+            case "le"://MENOR IGUAL
+                indice=this.operadori.execute(padre)
+                tope=this.operadord.execute(padre)
+                datos={
+                    id:{indice, tope},  
+                    pred:"le"
+                }
+                return datos
+            case "gt"://MAYOR
+                indice=this.operadori.execute(padre)
+                tope=this.operadord.execute(padre)
+                datos={
+                    id:{indice, tope},  
+                    pred:"gt"
+                }
+                return datos
+            case "ge"://MAYOR IGUAL
+                indice=this.operadori.execute(padre)
+                tope=this.operadord.execute(padre)
+                datos={
+                    id:{indice, tope},  
+                    pred:"ge"
+                }
+                return datos
+            //------------------------------------------------------------------------------
+            case "cadenas":
+                var x:string = this.operadori
+                let cadena=x.replace("\"", "")
+                return cadena
             case "entero":
                 return Number(this.operadori)
         }
