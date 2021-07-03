@@ -44,7 +44,6 @@ export class Texto extends PostFix {
   }
 }
 
-
 // CONTEXT
 export class ContextItemExpr extends PostFix
 {
@@ -104,7 +103,6 @@ function GenerarNodosHijos(padre)
   }
   return hijos;
 }
-
 //CALLFUNCTION
 export class CallFunction extends PostFix 
 {
@@ -243,9 +241,9 @@ export class CallFunctionPrefix extends PostFix
       var retornos= []
       var funciones = retonarGlobal()
       for (const funcion of funciones) {
-        var nuevoEntorno = [...nodos]
         if(funcion.nombre == this.nombre)
         {
+          var nuevoEntorno = [...nodos]
           var ArgumentosRealizados = []
           for (const argumento of this.argumentos) {
             ArgumentosRealizados.push(argumento.getValor(nuevoEntorno))
@@ -270,7 +268,10 @@ export class CallFunctionPrefix extends PostFix
                 posTipo : 0,
                 posTexto : 0,
               }
-              nuevoEntorno.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
+              if(!this.contains(nuevoEntorno,Entorno,funcion.declaraciones[i].nombre))
+              {
+                nuevoEntorno.push(new Nodo(Tipo.NODO,Entorno,[],'',1))
+              }
             }else
             {
               ErroresGlobal.push({Error:`Error en los argumentos de la funcion`,tipo:"Semantico",Linea:0,columna:0})
@@ -291,6 +292,17 @@ export class CallFunctionPrefix extends PostFix
       return retornos
     }
   }
+  contains(nodos,Entorno,nombre)
+    {
+      for (let i = 0; i < nodos.length; i++) {
+        if(nodos[i].entorno.tipo == nombre)
+        {
+          nodos[i] = new Nodo(Tipo.NODO,Entorno,[],'',1)
+          return true
+        }
+      }
+      return false
+    }
 }
 // GET LAST
 export class Last extends PostFix 

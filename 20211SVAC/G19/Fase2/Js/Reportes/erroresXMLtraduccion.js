@@ -2,7 +2,7 @@
 
 const init = function(e){
 
-    var myArray = JSON.parse(localStorage.getItem('tsJSON'));
+    var myArray = JSON.parse(localStorage.getItem('errJSON'));
 	buildTable(myArray)
 
 
@@ -12,20 +12,15 @@ const init = function(e){
 
 		for (var i = 0; i < data.length; i++){
 			var row = `<tr>
-							<td>${data[i].Nombre}</td>
+							<td>${data[i].No}</td>
                             <td>${data[i].Tipo}</td>
-                            <td>${data[i].Ambito}</td>
-							<td>${data[i].Fila}</td>
-							<td>${data[i].Columna}</td>
-							<td>${data[i].Posicion}</td>
-							<td>${data[i].PosicionH}</td>
+                            <td>Error al traducir ${data[i].Descripcion} no se pudo generar C3D del token </td>
+                            <td>${data[i].Gramatica}</td>
 					  </tr>`
 			table.innerHTML += row
 
 
 		}
-		table.innerHTML+=nuevosElementos;
-
 	}
 };
 
