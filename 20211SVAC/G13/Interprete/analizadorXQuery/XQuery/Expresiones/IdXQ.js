@@ -31,10 +31,10 @@ var IdXQ = /** @class */ (function (_super) {
     IdXQ.prototype.getValor = function (ent) {
         var sim = ent.buscar(this.id, this.linea, this.columna, 'La Variable');
         if (sim != null || sim != undefined) {
-            var ret = new LiteralXQ_1.LiteralXQ(sim.tipo, sim.valor);
+            var ret = new LiteralXQ_1.LiteralXQ(sim.tipo, sim.valor, this.linea, this.columna);
             return ret;
         }
-        return new LiteralXQ_1.LiteralXQ(new TipoXQ_1.TipoXQ(TipoXQ_1.EnumTipo.error), "@Error@");
+        return new LiteralXQ_1.LiteralXQ(new TipoXQ_1.TipoXQ(TipoXQ_1.EnumTipo.error), "@Error@", this.linea, this.columna);
     };
     IdXQ.prototype.copiar = function () {
         return new IdXQ(this.id, this.linea, this.columna);

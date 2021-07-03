@@ -30,11 +30,12 @@ var BloqueXQ = /** @class */ (function (_super) {
         this.columna = c;
     };
     BloqueXQ.prototype.ejecutar = function (ent) {
+        var ret = null;
         this.listabloque.forEach(function (nodo) {
             if (nodo instanceof InstruccionXQ_1.InstruccionXQ) {
                 var ins = nodo.ejecutar(ent);
                 if (ins != null) {
-                    return ins;
+                    ret = ins;
                 }
             }
             else {
@@ -42,7 +43,7 @@ var BloqueXQ = /** @class */ (function (_super) {
                 //nodo.getValor(ent);
             }
         });
-        return null;
+        return ret;
     };
     return BloqueXQ;
 }(InstruccionXQ_1.InstruccionXQ));

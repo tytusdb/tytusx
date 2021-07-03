@@ -18,17 +18,18 @@ export class BloqueXQ extends InstruccionXQ {
     }
 
     ejecutar(ent: EntornoXQ): Object {
+        var ret = null;
         this.listabloque.forEach(nodo => {
             if(nodo instanceof InstruccionXQ) {
                 let ins = nodo.ejecutar(ent);
                 if(ins != null) {
-                    return ins;
+                    ret = ins;
                 }
             } else {
                 console.log('Hacer cosas de expresion si es que hay');
                 //nodo.getValor(ent);
             }
         });
-        return null;
+        return ret;
     }
 }
