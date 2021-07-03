@@ -4,11 +4,15 @@
 %options case-insensitive
 
 BSL                         "\\".
-
+%s                          comment
 %%
 
 
+"(:"                      this.begin('comment');
+<comment>":)"              this.popState();
+<comment>.                  /* skip commentario content*/
 ("$")([a-zA-ZáéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ])[a-zA-Z0-9áéíúóàèìòÁÉÍÓÚÀÈÌÒÙñÑ_]*     %{ return 'tk_idflower'; %}
+"data"                          %{ return 'tk_data';  %}
 "if"                          %{ return 'tk_if';  %}
 "then"                        %{ return 'tk_then';  %}
 "else"                        %{ return 'tk_else';  %}
@@ -786,22 +790,89 @@ CADENA :         tk_cadena1 { primitivoAux = new Primitivo($1, @1.first_line, @1
 
 
 FLOWER: tk_for tk_idflower tk_in SETS SENTENCIAS RETURN_FLOWER { 
-                                                $5[0].push($6[0]);
-                                                $5[1].agregarHijo($6[1]);
-                                                instruccionAux = new XPath(@1.first_line, @1.first_column, $4[0]);
-                                                flowerAux = new Flower(@1.first_line, @1.first_column, $2, instruccionAux, $5[0]);
-                                                nodoaux = new NodoArbol("for","");
-                                                nodoaux.agregarHijo(new NodoArbol($2,""));
-                                                nodoaux.agregarHijo($4[1]);
-                                                nodoaux.agregarHijo($5[1]);
-                                                $$ = [flowerAux,nodoaux]; };
+                $5[0].push($6[0]);
+                $5[1].agregarHijo($6[1]);
+                instruccionAux = new XPath(@1.first_line, @1.first_column, $4[0]);
+                flowerAux = new Flower(@1.first_line, @1.first_column, $2, instruccionAux, $5[0]);
+                nodoaux = new NodoArbol("for","");
+                nodoaux.agregarHijo(new NodoArbol($2,""));
+                nodoaux.agregarHijo($4[1]);
+                nodoaux.agregarHijo($5[1]);
+                $$ = [flowerAux,nodoaux]; }
+                                                
+        | tk_for tk_idflower tk_in SETS IF_FLOWER {
+                instruccionAux = new XPath(@1.first_line, @1.first_column, $4[0]);
+                flowerIfAux = new FlowerIf(@1.first_line, @1.first_column, $2, instruccionAux, $5[0]);
+                nodoaux = new NodoArbol("for","");
+                nodoaux.agregarHijo(new NodoArbol($2,""));
+                nodoaux.agregarHijo($4[1]);
+                nodoaux.agregarHijo($5[1]);
+                $$ = [flowerIfAux,nodoaux];};
+
+IF_FLOWER: tk_return tk_if CONDICION_IFFLOWER tk_then DATA_RETURN LISTA_ELSEIF tk_else ELSE_DATA {
+                XElseIfAux = new XFlowerIfThen($3[0], $5[0], @1.first_line, @1.first_column);
+                nodoaux = new NodoArbol("return if","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo($5[1]);
+                listadoAux = [XElseIfAux];
+                listadoXFlower = listadoAux.concat($6[0]);
+                nodoaux.agregarHijo($6[1]);
+                nodoelse = new NodoArbol("else","");
+                nodoelse.agregarHijo($8[1]);
+                nodoaux.agregarHijo(nodoelse);
+                IfFlowerAux = new XFlowerIF(listadoXFlower, $8[0], @1.first_line, @1.first_column);
+                $$ = [IfFlowerAux,nodoaux];}
+        | tk_return tk_if CONDICION_IFFLOWER tk_then DATA_RETURN tk_else ELSE_DATA {
+                XElseIfAux = new XFlowerIfThen($3[0], $5[0], @1.first_line, @1.first_column);
+                nodoaux = new NodoArbol(" return if","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo($5[1]);
+                listadoXFlower = [XElseIfAux];
+                nodoelse = new NodoArbol("else","");
+                nodoelse.agregarHijo($7[1]);
+                nodoaux.agregarHijo(nodoelse);
+                IfFlowerAux = new XFlowerIF(listadoXFlower, $7[0], @1.first_line, @1.first_column);
+                $$ = [IfFlowerAux,nodoaux];};
+
+ELSE_DATA: DATA_RETURN { $$ = $1; }
+        | { nodoaux = new NodoArbol("else()","");
+            $$ = [null,nodoaux];};
+
+
+LISTA_ELSEIF : LISTA_ELSEIF ELSEIF_FLOWER { $1[1].agregarHijo($2[1]);
+                                   $1[0].push($2[0]); 
+                                   $$ = [$1[0],$1[1]]; }
+
+        |       ELSEIF_FLOWER { $$ = [[$1[0]],$1[1]]; };
+
+ELSEIF_FLOWER: tk_else tk_if CONDICION_IFFLOWER tk_then DATA_RETURN {
+                XElseIfAux = new XFlowerIfThen($3[0], $5[0], @1.first_line, @1.first_column);
+                nodoaux = new NodoArbol("else if","");
+                nodoaux.agregarHijo($3[1]);
+                nodoaux.agregarHijo($5[1]);
+                $$ = [XElseIfAux,nodoaux];
+ };
+
+CONDICION_IFFLOWER : tk_parentesisa tk_idflower tk_slash EXPRESION_LOGICA tk_parentesisc {
+                condicionAux = new XFlowerCondicion($2, $4[0], @1.first_line, @1.first_column);
+                nodoaux = new NodoArbol($2+"/","");
+                nodoaux.agregarHijo($4[1]);
+                $$ = [condicionAux,nodoaux];
+ };
+
+
+DATA_RETURN : tk_data tk_parentesisa tk_idflower tk_slash tk_identificador tk_parentesisc { 
+                dataReturnAux = new XFlowerData($3, $5, @1.first_line, @1.first_column);
+                nodoaux = new NodoArbol($3+"/"+$5,"");
+                $$ = [dataReturnAux,nodoaux];
+};
 
 SENTENCIAS: SENTENCIAS SENTENCIA {                                   
                                    $1[1].agregarHijo($2[1]);
                                    $1[0].push($2[0]); 
                                    $$ = [$1[0],$1[1]];  }
 
-        | SENTENCIA { $$ = [[$1[0]],$1[1]] };
+        | SENTENCIA { $$ = [[$1[0]],$1[1]]; };
 
 
 SENTENCIA: tk_where  tk_idflower tk_slash EXPRESION_LOGICAX  { 
