@@ -32,7 +32,7 @@ export class For implements ExpressionXquery{
                     result += this.ret.executeXquery(nvoEnt, RaizXML).value;
                 }
             }
-            return {value: result, type : tipoPrimitivo.STRING}
+            return {value: result, type : tipoPrimitivo.STRING, SP: -1}
             
         }else {
             throw new Error("Error semantico: la variable "+ this.idIn + " no es una variable iterable prveniente de una consulta, linea: " +this.line + "columna: "+ this.column);

@@ -20,7 +20,7 @@ export class DobleIndice implements NodoAbs {
         if(contenido.pred=="false"){
             const consulta = new ConsultasTS()
             var x = consulta.getEntornoLibre(contenido.id)
-            const formato = new Formato(x, this.toastr, this.encoding);
+            const formato = new Formato(x, this.encoding);
             var y = formato.darFormato()
             console.log(y)//VA PARA SALIDA
             localStorage.setItem("dad", contenido.id)
@@ -29,7 +29,7 @@ export class DobleIndice implements NodoAbs {
           let pred = contenido.pred.execute(padre)
           const consulta = new ConsultasTS()
           let x = consulta.getPredicado(pred, contenido.id, padre)
-            const formato = new Formato(x, this.toastr, this.encoding);
+            const formato = new Formato(x, this.encoding);
             var y = formato.darFormato()
             console.log(y)//VA PARA SALIDA
           

@@ -107,6 +107,24 @@ class InConsole extends React.Component{
                 <p></p>
                 <p></p>
 
+                <label>Árbol XQUERY CST</label>
+                <div className = "container-fluid">
+                    <Graph
+                        graph={this.datosAST}
+                        options={this.options}
+                        events={this.events}
+                        //style={style}
+                        getNetwork={this.getNetwork}
+                        getEdges={this.getEdges}
+                        getNodes={this.getNodes}
+                        vis={vis => (this.vis = vis)}
+                    />
+                </div>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+
             <footer className="bg-dark text-center text-lg-start">
             <div className="text-center p-3 text-light ">
                 <font size="3">

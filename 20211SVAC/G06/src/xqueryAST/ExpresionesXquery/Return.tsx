@@ -26,7 +26,7 @@ export class Return implements ExpressionXquery{
                 content.push(resultExp);
             }
         }
-        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
+        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
     }
 
     GraficarAST(texto: string): string {

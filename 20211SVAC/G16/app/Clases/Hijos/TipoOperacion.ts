@@ -20,3 +20,4 @@ export enum Operador {
   OR,
   TO
 }
+
