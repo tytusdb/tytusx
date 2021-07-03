@@ -17,7 +17,7 @@ export class ManejadorXquery {
     static buildXquery(listNodes: Retorno[]): string {
 
         var content: string[] = []
-        console.log(listNodes);
+        //onsole.log(listNodes);
         for (const element of listNodes) {
 
             if (element.type === tipoPrimitivo.NODO) {
