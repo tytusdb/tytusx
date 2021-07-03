@@ -106,7 +106,7 @@
     const aritmetica= require("./Expresiones/Aritmetica");
     const logica = require ("./Expresiones/Logica");
     const relacional = require("./Expresiones/Relacional");
-    const barrasnodo= require("../../XPATH/Analizador/Instrucciones/BarrasNodo")
+    const barrasnodo= require("./Instrucciones/BarrasNodo")
     const identificador= require("./Expresiones/Identificador");
     const nativo= require("./Expresiones/Nativo");
     const asignacion= require("./Instrucciones/Asignacion")
@@ -247,6 +247,7 @@ L_IN
     | RIN PARIZQ ENTERO CONECTOR ENTERO PARDER                  {$$=$1+$2+$3+$4+$5+$6}
     | PARIZQ ENTERO CONECTOR ENTERO PARDER                      {$$=$1+$2+$3+$4+$5}
     | LLAMADAFUNCION                                            {$$=$1}
+    | L_CONSULTAS                                               {$$=$1}
     ;
 
 LLAMADAFUNCION
