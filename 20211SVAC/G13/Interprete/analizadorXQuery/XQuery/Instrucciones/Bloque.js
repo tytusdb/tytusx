@@ -39,8 +39,8 @@ var BloqueXQ = /** @class */ (function (_super) {
                 }
             }
             else {
-                console.log('Hacer cosas de expresion si es que hay');
-                //nodo.getValor(ent);
+                //console.log('Hacer cosas de expresion si es que hay');
+                nodo.getValor(ent);
             }
         });
         return ret;

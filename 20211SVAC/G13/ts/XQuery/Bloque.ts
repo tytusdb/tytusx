@@ -26,8 +26,8 @@ export class BloqueXQ extends InstruccionXQ {
                     ret = ins;
                 }
             } else {
-                console.log('Hacer cosas de expresion si es que hay');
-                //nodo.getValor(ent);
+                //console.log('Hacer cosas de expresion si es que hay');
+                nodo.getValor(ent);
             }
         });
         return ret;
