@@ -9,35 +9,40 @@ class Entorno {
 
   agregar(id, simbolo) {
     this.tabla.set(id, simbolo);
+    let valor = simbolo;
+    if(!traductorC3D.esNumero(valor)){
+          valor = " ";
+    }
                         // Insertar al heap y generar C3D 
                         let referenciaHeap = -1;
-                          if (this.padre) {
+                        if (this.padre) {
+                        
                           //Verificar si el valor es numerico o cadena
-                          if (traductorC3D.esNumero(simbolo)) {
-                            referenciaHeap = traductorC3D.traducirNumero(parseFloat(simbolo));
+                          if (traductorC3D.esNumero(valor)) {
+                            referenciaHeap = traductorC3D.traducirNumero(parseFloat(valor));
                         } else {
-                            referenciaHeap = traductorC3D.traducirCadena(simbolo);
+                            referenciaHeap = traductorC3D.traducirCadena(valor);
                         }
                         if(id != null){ //JSON.stringify(simbolo)
-                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "entorno "+cont_var, " ", " ", simbolo, referenciaHeap));  
+                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "entorno "+cont_var, " ", " ",valor, referenciaHeap));  
                         }else{
                           id = " ";
-                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "entorno "+cont_var, " ", " ",  simbolo, referenciaHeap));  
+                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "entorno "+cont_var, " ", " ", valor, referenciaHeap));  
                         }
                         
                       }else{
 
                           //Verificar si el valor es numerico o cadena
-                          if (traductorC3D.esNumero(simbolo)) {
-                            referenciaHeap = traductorC3D.traducirNumero(parseFloat(simbolo));
+                          if (traductorC3D.esNumero(valor)) {
+                            referenciaHeap = traductorC3D.traducirNumero(parseFloat(valor));
                         } else {
-                            referenciaHeap = traductorC3D.traducirCadena(simbolo);
+                            referenciaHeap = traductorC3D.traducirCadena(valor);
                         }
                         if(id != null){ //JSON.stringify(simbolo)
-                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "global", " ", " ", simbolo, referenciaHeap));  
+                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "global", " ", " ", valor, referenciaHeap));  
                         }else{
                           id = " ";
-                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "global", " ", " ",  simbolo, referenciaHeap));  
+                          tablaSimbolosVariables.agregarSimbolo(new Simbolo(id, " ", "global", " ", " ", valor, referenciaHeap));  
                         }    
   }
 }

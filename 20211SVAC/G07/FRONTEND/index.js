@@ -191,7 +191,7 @@ botonCargar.addEventListener("click", () => {
     // Se genera la Tabla de Simbolos
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
-
+   
 })
 
 // ======================================
@@ -217,6 +217,7 @@ botonCargar2.addEventListener("click", () => {
   // Se genera la Tabla de Simbolos
   tablaSimbolos = new TablaSimbolos(parserXML.json);
   tablaSimbolos = tablaSimbolos.generarTabla();
+  
 })
 
 
@@ -471,7 +472,6 @@ boton3D.addEventListener("click", () => {
   console.log(listaErrores);
   globalencod =parserXML.tipoencoding;
   ejecutarXQuery(parserXQUERY,parserXML.json);
-
   tablaSimbolosVariables = tablaSimbolosVariables.generarTabla2();
 
 })
