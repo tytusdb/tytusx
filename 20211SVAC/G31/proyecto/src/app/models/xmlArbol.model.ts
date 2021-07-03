@@ -15,7 +15,8 @@ export class ArbolXML {
   public gramatica: string;
   public simbolos: Array<Simbolo>;
   public tabla: Entorno;
-  public encoding: string
+  public encoding: string;
+  private contadorT: number;
 
   constructor(objetos: Array<Objeto>, grafica: NodoGrafico, gramatica: string, excepciones: Array<Excepcion>, encoding: string) {
     this.objetos = objetos;
@@ -25,6 +26,7 @@ export class ArbolXML {
     this.simbolos = new Array<Simbolo>();
     this.tabla = new Entorno(null);
     this.encoding = encoding;
+    this.contadorT = 0;
 
   }
 
@@ -53,6 +55,47 @@ export class ArbolXML {
 
   public getCST(): Object{
     return JSON.parse(JSON.stringify(this.grafica))
+  }
+
+  public getTraduccion():string{   // El heap informacion detallada - el stack los identificadores
+    let sp = 0;
+    let hp = 0;
+    let traduccion = `/* --- MAIN --- */
+    void main() {
+      P = 0; H = 0; `
+
+
+    this.simbolos.forEach((simbolo: Simbolo) => {
+      if(simbolo.tipo ==Tipo.ATRIBUTO){
+
+      }else{
+        if(simbolo.valor == ''){  // Tiene mas objetos dentro - NO  tiene texto
+
+        }
+      }
+    });
+
+    traduccion += `return ; \n }\n`
+    return traduccion
+  }
+
+  public getEncabezado(): string {
+    let encabezado = `/* --- --- --- ENCABEZADO --- --- --- */
+    #include <stdio.h>
+    #include <math.h>
+
+    double heap[301620999];
+    double stack[301620999];
+    double P;
+    double H;
+    double t0`;
+
+    for (let index = 1; index < this.contadorT; index++) {
+      encabezado += ', t'+index
+    }
+
+    encabezado += '; \n'
+    return encabezado;
   }
 }
 

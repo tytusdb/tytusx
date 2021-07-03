@@ -54,14 +54,18 @@
      
     <div class="form-group">
       <label for="txtXpath">Editor xPath:</label>
-      <textarea style="resize: none;" id="txtXpath"  [(ngModel)]="txtXpath" class="form-control"  rows="2" [ngModelOptions]="{standalone: true}"></textarea>
+      <textarea style="resize: none;" id="txtXpath"  [(ngModel)]="txtXpath" class="form-control"  rows="4" [ngModelOptions]="{standalone: true}"></textarea>
     </div>
     <form>
-      <div class="form-group">
-        <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
           <label for="txtXml">Editor XML:</label>
-          <textarea style="resize: none;"   [(ngModel)]="xmlText" class="form-control" id="txtXml" rows="15" [ngModelOptions]="{standalone: true}"></textarea>
-        </div>
+          <textarea style="resize: none;"   [(ngModel)]="xmlText" class="form-control" id="txtXml" rows="13" [ngModelOptions]="{standalone: true}"></textarea>
+         </div>
+         <div class="col-md-6">
+          <label for="txtXml">Salida C3D:</label>
+          <textarea style="resize: none;" [(ngModel)]="c3dText" class="form-control" id="txtC3D" rows="13" [ngModelOptions]="{standalone: true}"></textarea>
+         </div>
       </div>
     </form>
      <div class="form-group">
@@ -76,7 +80,7 @@
     </mat-card-actions>
   </mat-card>
   <div>
-    <button (click)="dibujar()">Generar AST XML Ascendente</button>  
+    <button (click)="dibujar()">Generar CST XML Ascendente</button>  
     <button (click)="generarReporteGramaticalXML()">Generar Reporte Gramatical XML Ascendente</button> 
     <div id="graph"></div>
     <table  border="1">
@@ -84,6 +88,20 @@
       <tr> <TD>PRODUCCION</TD> <TD>ACCIONES</TD>  </tr>  
 
       <tr *ngFor="let fila of this.rgxmlasc">
+        <td>{{fila.Produccion}}</td>
+        <td>{{fila.Regla_}}</td>
+      </tr>
+      </table>
+  </div>
+  <div>
+    <button (click)="dibujarCSTDes()">Generar CST XML Descendente</button>  
+    <button (click)="generarReporteGramaticalXML()">Generar Reporte Gramatical XML Descendente</button> 
+    <div id="graph2"></div>
+    <table  border="1">
+      <tr>REPORTE GRAMATICAL XML Descendente</tr>
+      <tr> <TD>PRODUCCION</TD> <TD>ACCIONES</TD>  </tr>  
+
+      <tr *ngFor="let fila of this.rgxmldesc">
         <td>{{fila.Produccion}}</td>
         <td>{{fila.Regla_}}</td>
       </tr>

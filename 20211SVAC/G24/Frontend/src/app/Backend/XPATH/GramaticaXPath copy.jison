@@ -103,7 +103,7 @@ START
 INSTRUCCIONES
         : INSTRUCCIONES INSTRUCCION             {if($2!=false)$1.push($2);$$=$1;}
         | INSTRUCCION                           {$$=($1!=false) ?[$1]:[];}
-        | INSTRUCCIONES OPTION INSTRUCCION      {if($3!=false)$1.push($3);$$=$1;}
+        | INSTRUCCIONES OPTION INSTRUCCIONES      {if($3!=false)$1.push($3);$$=$1;}
 
         ;
 
@@ -143,6 +143,7 @@ EXPRESION
         : CADENA                                                {$$=$1}
         | NUMBER                                                {$$=$1}
         | entero                                                {$$=$1}
+        | L_CORCHETES                                           {$$=$1}
         | CARACTER_LITERAL                                      {$$=$1}
         | STRING_LITERAL                                        {$$=$1}
         | ALL                                                   {$$=$1}

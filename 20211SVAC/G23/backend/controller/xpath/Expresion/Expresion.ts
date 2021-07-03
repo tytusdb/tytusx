@@ -1,12 +1,13 @@
 import { Ambito } from "../../../model/xml/Ambito/Ambito";
 import { Tipos } from "../../../model/xpath/Enum";
-import { Element } from "../../../model/xml/Element"
+import { Contexto } from "../../Contexto";
 
-function Expresion(_expresion: any, _ambito: Ambito, _contexto: Array<Element>): any {
-    let tipo: Tipos = _expresion.tipo;
-    // console.log(_expresion, 1111111) // Agregar el caso de que sea una instrucción y abrir un bloque
+function Expresion(_expresion: any, _ambito: Ambito, _contexto: Contexto, id?: any): any {
+    // if (!_expresion) return null;
+    let tipo: Tipos = (Array.isArray(_expresion)) ? Tipos.NONE : _expresion.tipo;
+
     if (tipo === Tipos.EXPRESION) {
-        return Expresion(_expresion.expresion, _ambito, _contexto);
+        return Expresion(_expresion.expresion, _ambito, _contexto, id);
     }
     else if (tipo === Tipos.NODENAME) {
         return { valor: _expresion.nodename, tipo: Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
@@ -15,6 +16,10 @@ function Expresion(_expresion: any, _ambito: Ambito, _contexto: Array<Element>):
         return _expresion;
     }
     else if (tipo === Tipos.SELECT_CURRENT) {
+        if (id) {
+            if (id === _expresion.expresion) return { valor: ".", tipo: Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
+            else return null;
+        }
         return { valor: ".", tipo: Tipos.ELEMENTOS, linea: _expresion.linea, columna: _expresion.columna };
     }
     else if (tipo === Tipos.SELECT_PARENT) {
@@ -52,15 +57,15 @@ function Expresion(_expresion: any, _ambito: Ambito, _contexto: Array<Element>):
         || tipo === Tipos.RELACIONAL_MENOR || tipo === Tipos.RELACIONAL_MENORIGUAL
         || tipo === Tipos.RELACIONAL_IGUAL || tipo === Tipos.RELACIONAL_DIFERENTE) {
         const Relacional = require("./Operators/Relacional");
-        return Relacional(_expresion, _ambito, _contexto);
+        return Relacional(_expresion, _ambito, _contexto, id);
     }
     else if (tipo === Tipos.LOGICA_AND || tipo === Tipos.LOGICA_OR) {
         const Logica = require("./Operators/Logica");
         return Logica(_expresion, _ambito, _contexto);
     }
     else {
-        console.log(_expresion, "SSSSSSSS")
-        return { error: "Error: Expresión no procesada.", tipo: "Semántico", origen: "Query", linea: _expresion.linea, columna: _expresion.columna };
+        const ExpresionQuery = require('../../xquery/Expresion/Expresion');
+        return ExpresionQuery(_expresion, _ambito, _contexto, id);
     }
 }
 

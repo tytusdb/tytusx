@@ -2,7 +2,7 @@ import { Entorno } from '../../xmlAST/Entorno';
 import { Expression, Retorno } from "../../Interfaces/Expresion";
 import { tipoPrimitivo } from './Primitivo';
 import { Simbolo } from '../../xmlAST/Simbolo';
-
+import { traduccion } from '../../Traduccion/traduccion';
 
 export enum operacionRelacional {
     IGUAL,
@@ -14,96 +14,193 @@ export enum operacionRelacional {
 }
 ////fechaPublicacion[@año>/biblioteca[1]/libro[3]/fechaPublicacion[1]/@año]     
 
-export class Relacional implements Expression{
+export class Relacional implements Expression {
 
-    constructor (
-    public line : Number,
-    public column: Number,
-    public hijoIzq: Expression,
-    public hijoDer: Expression,
-    public tipoOperacion: operacionRelacional,
-    public sym: string){}
+    constructor(
+        public line: Number,
+        public column: Number,
+        public hijoIzq: Expression,
+        public hijoDer: Expression,
+        public tipoOperacion: operacionRelacional,
+        public sym: string) { }
 
-    public execute(ent : Entorno, simboloPadre?:Simbolo): Retorno {
+    public execute(ent: Entorno, simboloPadre?: Simbolo): Retorno {
 
         let valorIzq = this.hijoIzq.execute(ent, simboloPadre);
         let valorDer = this.hijoDer.execute(ent, simboloPadre);
 
         if (valorIzq.type === tipoPrimitivo.RESP && valorDer.type === tipoPrimitivo.RESP) {
 
-            for (const valIzq of valorIzq.value ) {
+            for (const valIzq of valorIzq.value) {
                 for (const valDer of valorDer.value) {
-                    
-                    if (valIzq.type != tipoPrimitivo.NODO && valDer.type != tipoPrimitivo.NODO){
 
-                        if (this.validar(valIzq, valDer)){
-                            return {value: true, type: tipoPrimitivo.BOOL}
+                    if (valIzq.type === tipoPrimitivo.NODO && valDer.type === tipoPrimitivo.NODO) {
+
+                        if (this.validar(valIzq.value.identificador, valDer.value.identificador)) {
+                            //TRADUCCION 3D#################################################################################################
+                            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                            traduccion.stackCounter++;
+                            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                            //###############################################################################################################
+                            return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
                         }
-                    }else {
+                    } else if (valIzq.type === tipoPrimitivo.NODO) {
 
-                        if (this.validar(valIzq, valDer)){
-                            return {value: true, type: tipoPrimitivo.BOOL}
+                        if (valIzq.value.listaEntornos.length === 0 && valIzq.value.texto !== '') {
+
+                            if (this.validar(valIzq.value.texto, valDer.value)) {
+                                //TRADUCCION 3D#################################################################################################
+                                traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                                traduccion.stackCounter++;
+                                traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                                //###############################################################################################################
+                                return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
+                            }
+                        }
+                    }
+                    else if (valDer.type === tipoPrimitivo.NODO) {
+
+                        if (valDer.value.listaEntornos.length === 0 && valDer.value.texto !== '') {
+
+                            if (this.validar(valDer.value.texto, valIzq.value)) {
+                                //TRADUCCION 3D#################################################################################################
+                                traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                                traduccion.stackCounter++;
+                                traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                                //###############################################################################################################
+                                return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
+                            }
+                        }
+
+                    } else {
+
+                        if (this.validar(valIzq.value, valDer.value)) {
+                            //TRADUCCION 3D#################################################################################################
+                            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                            traduccion.stackCounter++;
+                            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                            //###############################################################################################################
+                            return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
                         }
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL}; 
+            //TRADUCCION 3D#################################################################################################
+            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+            //###############################################################################################################
             
-        }else if (valorIzq.type === tipoPrimitivo.RESP){
+            return { value: false, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter };
+
+        } else if (valorIzq.type === tipoPrimitivo.RESP) {
 
             for (const valIzq of valorIzq.value) {
-                if (valIzq.type != tipoPrimitivo.NODO){
-                    if (this.validar(valIzq, valorDer)){
-                        return {value: true, type: tipoPrimitivo.BOOL}
+                if (valIzq.type === tipoPrimitivo.NODO) {
+
+                    if (valIzq.value.listaEntornos.length === 0 && valIzq.value.texto !== '') {
+
+                        if (this.validar(valIzq.value.texto, valorDer.value)) {
+                            //TRADUCCION 3D#################################################################################################
+                            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                            traduccion.stackCounter++;
+                            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                            //###############################################################################################################
+                            return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
+                        }
+                    }
+                } else {
+
+                    if (this.validar(valIzq.value, valorDer.value)) {
+                        //TRADUCCION 3D#################################################################################################
+                        traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                        traduccion.stackCounter++;
+                        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                        //###############################################################################################################
+                        return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL};
+            //TRADUCCION 3D#################################################################################################
+            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 0;");
+            //###############################################################################################################
+            return { value: false, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter };
 
-        }else if (valorDer.type === tipoPrimitivo.RESP){
+        } else if (valorDer.type === tipoPrimitivo.RESP) {
 
             for (const valDer of valorDer.value) {
-                if (valDer.type != tipoPrimitivo.NODO){
-                    if (this.validar(valorIzq, valDer)){
-                        return {value: true, type: tipoPrimitivo.BOOL}
+                if (valDer.type === tipoPrimitivo.NODO) {
+
+                    if (valDer.value.listaEntornos.length === 0 && valDer.value.texto !== '') {
+
+                        if (this.validar(valDer.value.texto, valorIzq.value)) {
+                            //TRADUCCION 3D#################################################################################################
+                            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                            traduccion.stackCounter++;
+                            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                            //###############################################################################################################
+                            return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
+                        }
+                    }
+                } else {
+
+                    if (this.validar(valorIzq.value, valDer.value)) {
+                        //TRADUCCION 3D#################################################################################################
+                        traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+                        traduccion.stackCounter++;
+                        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 1;");
+                        //###############################################################################################################
+                        return { value: true, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
                     }
                 }
             }
-            return {value: false , type : tipoPrimitivo.BOOL};
-            
-        }else {
-            return { value: this.validar(valorIzq, valorDer), type: tipoPrimitivo.BOOL }
+            //TRADUCCION 3D#################################################################################################
+            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = 0;");
+            //###############################################################################################################
+            return { value: false, type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter };
+
+        } else {
+            //TRADUCCION 3D#################################################################################################
+            traduccion.setTranslate("\n//Ingresando primitivo bool\t--------------");
+            traduccion.stackCounter++;
+            traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = "+(this.validar(valorIzq.value, valorDer.value) ? "1" : "0")+";");
+            //###############################################################################################################
+            return { value: this.validar(valorIzq.value, valorDer.value), type: tipoPrimitivo.BOOL, SP: traduccion.stackCounter }
         }
 
     }
 
-    private validar(valorIzq : Retorno, valorDer: Retorno): boolean{
-        
+    private validar(valorIzq: String, valorDer: String): boolean {
+
         if (this.tipoOperacion === operacionRelacional.IGUAL) {
-            const result = valorIzq.value === valorDer.value;
+            const result = valorIzq == valorDer;
             return result
         } else if (this.tipoOperacion === operacionRelacional.DIFERENCIACION) {
-            const result = valorIzq.value !== valorDer.value;
+            const result = valorIzq != valorDer;
             return result
-        }else if (this.tipoOperacion === operacionRelacional.MENOR) { 
-            const result = valorIzq.value < valorDer.value;
+        } else if (this.tipoOperacion === operacionRelacional.MENOR) {
+            const result = valorIzq < valorDer;
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MENORIGUAL) {
-            const result = valorIzq.value <= valorDer.value;
+            const result = valorIzq <= valorDer;
             return result;
         } else if (this.tipoOperacion === operacionRelacional.MAYOR) {
-            const result = valorIzq.value > valorDer.value;
+            const result = valorIzq > valorDer;
             return result
         } else if (this.tipoOperacion === operacionRelacional.MAYORIGUAL) {
-            const result = valorIzq.value >= valorDer.value;
+            const result = valorIzq >= valorDer;
             return result;
         }
         else {
-            throw new Error("Error Semantico: no se reconoce el operador  " + this.sym + ", Linea: "+this.line+"Column: "+this.column);
+            throw new Error("Error Semantico: no se reconoce el operador  " + this.sym + ", Linea: " + this.line + "Column: " + this.column);
         }
     }
 
-    public GraficarAST(texto:string):string {
+    public GraficarAST(texto: string): string {
         texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.sym.toString() + "\"];\n";
         texto = this.hijoIzq.GraficarAST(texto);
         texto = this.hijoDer.GraficarAST(texto);

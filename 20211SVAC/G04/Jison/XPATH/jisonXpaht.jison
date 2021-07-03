@@ -253,7 +253,8 @@ INIT
         return $1;
     }
     | error eof {
-        errores.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico","Errores seguidos"+yytext,this._$.first_line,this._$.first_column);
+        return [];
     }
 ;
 
@@ -262,10 +263,12 @@ CONSULTAS_XPATH
     : CONSULTAS_XPATH operador_o CONSULTA_XPATH         {$1.push($3); $$ = $1;}
     | CONSULTA_XPATH                                    {$$ = [$1]}
     | corchete_abierto error corchete_cerrado {
-        errores.agregarError("Sintactico","No puede venir un predicado como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
+        $$ = [];
+        erroresXpath.agregarError("Sintactico","No puede venir un predicado como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     }
     | parentesis_abierto error parentesis_cerrado {
-        errores.agregarError("Sintactico","No puede venir una expresion como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
+        $$ = [];
+        erroresXpath.agregarError("Sintactico","No puede venir una expresion como un nodo\n"+yytext,this._$.first_line,this._$.first_column);
     }
 ;
 
@@ -285,7 +288,8 @@ EXPRESIONES_RUTA
     : EXPRESIONES_RUTA EXPRESION_RUTA       {$2.forEach(e => $1.push(e)); $$ = $1;}
     | EXPRESION_RUTA                        {$$ = $1;}
     | error operador_o {
-        errores.agregarError("Sintactico","Consulta no aceptada:\n"+yytext,this._$.first_line,this._$.first_column);
+        $$ = [];
+        erroresXpath.agregarError("Sintactico","Consulta no aceptada:\n"+yytext,this._$.first_line,this._$.first_column);
     }
 ;
 
@@ -298,7 +302,8 @@ EXPRESION_RUTA
             $$.push(FabricaConsulta.fabricar($2, $3.id, $3.eje));
     }
     | error identificador {
-        errores.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico",yytext,this._$.first_line,this._$.first_column);
+        $$ = [];
     }
 ;
 
@@ -370,7 +375,7 @@ OPCIONAL_PREDICADO : | PREDICADOS
 
 PREDICADOS : PREDICADOS PREDICADO | PREDICADO
     | corchete_abierto error corchete_cerrado {
-        errores.agregarError("Sintactico","Error en predicado\n"+yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico","Error en predicado\n"+yytext,this._$.first_line,this._$.first_column);
     }
 ;
 
@@ -399,7 +404,7 @@ EXPR
     | parentesis_abierto EXPR parentesis_cerrado
     | TIPOS
     | parentesis_abierto error parentesis_cerrado {
-        errores.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
+        erroresXpath.agregarError("Sintactico","Error dentro expresion\n"+yytext,this._$.first_line,this._$.first_column);
     }
 ;
 

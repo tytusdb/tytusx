@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,12 +20,14 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ContenidoInicioComponent } from './componentes/contenido-inicio/contenido-inicio.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { CodemirrorModule } from 'ng2-codemirror';
+import { AceEditorComponent } from 'ng2-ace-editor';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { MatDialogModule } from '@angular/material/dialog';
 import { GramaticalReportComponent } from './paginas/gramatical-report/gramatical-report.component';
 import { AstDescComponent } from './paginas/ast-desc/ast-desc.component';
 import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.component';
-
+import { ReporteOptimizacionComponent } from './paginas/reporte-optimizacion/reporte-optimizacion.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +41,7 @@ import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.comp
     GramaticalReportComponent,
     AstDescComponent,
     XpathAscAstComponent,
+    ReporteOptimizacionComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +58,8 @@ import { XpathAscAstComponent } from './paginas/xpath-asc-ast/xpath-asc-ast.comp
     MatInputModule,
     MatTableModule,
     MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

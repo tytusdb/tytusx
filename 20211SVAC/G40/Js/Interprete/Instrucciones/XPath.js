@@ -1,6 +1,5 @@
 "use strict";
-//Object.defineProperty(exports, "__esModule", { value: true });
-//exports.XPath = void 0;
+
 var XPath = /** @class */ (function () {
     function XPath(linea, columna, lista) {
         this.linea = linea;
@@ -10,6 +9,7 @@ var XPath = /** @class */ (function () {
         this.temporal = null;
         this.resultadoAux = null;
         this.objetos = [];
+        this.tipo = TipoXInstruccion.XPATH;
     }
     XPath.prototype.ejecutar = function (ent, arbol) {
 
@@ -47,8 +47,10 @@ var XPath = /** @class */ (function () {
 
     };
 
-    
+    XPath.prototype.getTipo = function (){
+        return this.tipo;
+    };
 
     return XPath;
 }());
-//exports.XPath = XPath;
+

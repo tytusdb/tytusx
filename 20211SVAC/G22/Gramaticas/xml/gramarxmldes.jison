@@ -1,6 +1,13 @@
 
 
 %{
+	define(function () {
+    return {
+        getParser: function () {
+            return gramarxmldes;
+        }
+    };
+	});
 	//const {Error} = require('../../Scripts/Errores/Error.js');
 	var erroresLexicos = [];
 	var variables=[];
@@ -66,19 +73,17 @@
 
 <<EOF>>                 return 'EOF';
 
-.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                       { 
+						console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); 
+						var error =  new Error( this._$.first_line ,  this._$.first_column, 'lexico','xmldesc', yytext);
+						erroresLexicos.push(error);
+						}
 /lex
 
 //SECCION DE IMPORTS
 %{
 	
-	define(function () {
-    return {
-        getParser: function () {
-            return gramarxmldes;
-        }
-    };
-});
+
     //const {Primitivo} = require("../../Scripts/Arboles/Primitivo");
     //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
     //const {Atributo} = require("../../Scripts/clasesXML/Atributo");

@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/tytusx/20211SVAC/G01/static/css/main.e2635582.chunk.css",
+    "main.js": "/tytusx/20211SVAC/G01/static/js/main.6be07449.chunk.js",
+    "main.js.map": "/tytusx/20211SVAC/G01/static/js/main.6be07449.chunk.js.map",
+    "runtime-main.js": "/tytusx/20211SVAC/G01/static/js/runtime-main.d34e0932.js",
+    "runtime-main.js.map": "/tytusx/20211SVAC/G01/static/js/runtime-main.d34e0932.js.map",
+    "static/css/2.c7a26ce1.chunk.css": "/tytusx/20211SVAC/G01/static/css/2.c7a26ce1.chunk.css",
+    "static/js/2.acff0128.chunk.js": "/tytusx/20211SVAC/G01/static/js/2.acff0128.chunk.js",
+    "static/js/2.acff0128.chunk.js.map": "/tytusx/20211SVAC/G01/static/js/2.acff0128.chunk.js.map",
+    "static/js/3.b416fca1.chunk.js": "/tytusx/20211SVAC/G01/static/js/3.b416fca1.chunk.js",
+    "static/js/3.b416fca1.chunk.js.map": "/tytusx/20211SVAC/G01/static/js/3.b416fca1.chunk.js.map",
+    "index.html": "/tytusx/20211SVAC/G01/index.html",
+    "static/css/2.c7a26ce1.chunk.css.map": "/tytusx/20211SVAC/G01/static/css/2.c7a26ce1.chunk.css.map",
+    "static/css/main.e2635582.chunk.css.map": "/tytusx/20211SVAC/G01/static/css/main.e2635582.chunk.css.map",
+    "static/js/2.acff0128.chunk.js.LICENSE.txt": "/tytusx/20211SVAC/G01/static/js/2.acff0128.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/tytusx/20211SVAC/G01/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d34e0932.js",
+    "static/css/2.c7a26ce1.chunk.css",
+    "static/js/2.acff0128.chunk.js",
+    "static/css/main.e2635582.chunk.css",
+    "static/js/main.6be07449.chunk.js"
+  ]
+}

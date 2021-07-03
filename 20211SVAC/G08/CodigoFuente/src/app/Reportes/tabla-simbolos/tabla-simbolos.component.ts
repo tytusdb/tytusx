@@ -9,6 +9,7 @@ export interface Data {
   Columna: number;
   Padre: string;
   TipoEtiqueta: number;
+  Posicion: number;
 }
 
 @Component({
@@ -32,7 +33,9 @@ export class TablaSimbolosComponent implements OnInit {
         Columna:element.columna,
         Padre :element.padre?.identificador,
         Tipo:'Nodo',
-        TipoEtiqueta:element.tipo});
+        TipoEtiqueta:element.tipo,
+        Posicion:element.posicion
+      });
 
         element.listaAtributos.forEach(atr => {
           this.source.push({
@@ -41,7 +44,9 @@ export class TablaSimbolosComponent implements OnInit {
             Columna:atr.columna,
             Padre :element.padre?.identificador,
             Tipo:'Atributo',
-            TipoEtiqueta:null});
+            TipoEtiqueta:null,
+            Posicion:atr.posicion  
+          });
         });
         this.FillData(element.listaObjetos);
       });

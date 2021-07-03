@@ -23,7 +23,8 @@ editorsalida.session.setUseSoftTabs(true);
 
 */
 function ejecutarCodigo( /*entrada: string*/) {
-    exepath(listaDirecciones);
+    //exepath(listaDirecciones);
+    document.getElementById("consola").value += exepath(listaDirecciones);
 }
 var erroresXML;
 var erroresXPATH;
@@ -55,12 +56,7 @@ function InterpretarCodigoXPATH(entrada) {
 function InterpretarCodigoXPATH_DESC(entrada) {
     rg_path = new ReporteGramatical_XPATH();
     try {
-        gramatica_xpath_desc.parse(entrada);
-        /* PRUEBAS */
-        var l = BusquedaXML(tds_xml_persistente[2], 'bookstore');
-        //console.log(l);
-        BusquedaXML(l[0], 'book');
-        BusquedaXMLD(tds_xml_persistente[2], 'bookstore');
+        listaDirecciones = gramatica_xpath.parse(entrada);
         document.getElementById("consola").value += "Mensaje Grupo34 >> Se analizo el documento XPATH\n";
     }
     catch (error) {
@@ -193,6 +189,16 @@ function GraficarXMLDESC() {
     var grafica = new Graficar();
     d3.select("#graph").graphviz()
         .renderDot("" + grafica.graficarXML());
+}
+function GraficarXPATHASC() {
+    var grafica = new Graficar();
+    d3.select("#graph").graphviz()
+        .renderDot("" + grafica.graficarXPATHAST());
+}
+function GraficarXPATHCST() {
+    var grafica = new Graficar();
+    d3.select("#graph").graphviz()
+        .renderDot("" + grafica.graficarXPATHCST());
 }
 //Reporte Gramatical
 function RG_XML_ASC() {

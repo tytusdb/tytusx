@@ -4,23 +4,22 @@ export class Simbolo{
     linea: number;
     columna: number;
     pos: number;
-    last: boolean
+    last: number;
+    SP_ID:number;
+    SP_VAL:number;
 
-    constructor(id:string, valor:string, linea:number, columna:number, last : boolean){
+    constructor(id:string, valor:string, linea:number, columna:number){
         this.identificador = id;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
         this.pos = -1;
-        this.last = last                  // $[$.lenght-1].setLast(false);  
+        this.last = -1;
+        this.SP_ID = -1;
+        this.SP_VAL = -1;
     }
 
-    public setPos(pos :number){
-        this.pos = pos;
-    }
 
-    public setLast(last: boolean){
-        this.last= last;
-    }
+
 
 }
