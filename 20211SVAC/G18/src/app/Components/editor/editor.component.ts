@@ -29,20 +29,24 @@ import {
 
 import { errores } from './parser/Errores';
 import { reglas } from './parser/Reglas';
-
-import { _Optimizer } from './parser/Optimizer/Optimizer';
-import { Rule } from './parser/Optimizer/Rule';
+import { Function } from './parser/Instruction/Function';
 
 declare var require: any;
 const parserXMLASC = require('./parser/Grammar/XmlGrammarASC.js');
 const parserXMLDESC = require('./parser/Grammar/XmlGrammarDESC.js');
 const xPathASC = require('./parser/Grammar/xPathAsc.js');
 const xPathDESC = require('./parser/Grammar/xPathDesc.js');
+const xQuery = require('./parser/Grammar/xQuery.js');
+const optimizer = require('./parser/Grammar/OptGrammar');
+const xQueryTrad = require('./parser/Grammar/xQueryTrad.js');
 
 import { EnvironmentXML } from './parser/Symbol/EnviromentXML';
 import { EjecutorXML } from './ejecutor/ejecutorXML';
 import { EjecutorXPath } from './ejecutor/ejecutorXPath';
-import { Error_ } from './parser/Error';
+import { _Optimizer } from './parser/Optimizer/Optimizer';
+import { Rule } from './parser/Optimizer/Rule';
+import { environment } from 'src/environments/environment';
+import { TraductorXQuery } from './ejecutor/traductorXQuery';
 
 @Component({
   selector: 'editor-root',
@@ -57,10 +61,10 @@ export class EditorComponent {
   entradaXpath = '/helloworld';
   salida = 'TytusX Output: \n\n';
   ast: any;
-  reglas_: Array<Rule>;
   env: Environment;
   flag: boolean;
   envXML = new EnvironmentXML('global');
+  reglas: Array<Rule>;
 
   // Iconos
   faSpinner = faSpinner;
@@ -98,10 +102,26 @@ export class EditorComponent {
   cOutput(body: string) {
     // Muestra el encabezado
     this.salida = '#include <stdio.h> \n\n';
-    this.salida += 'float Heap[16384];\n';
-    this.salida += 'float Stack[16384]; \n';
-    this.salida += 'float p; \n';
-    this.salida += 'float h; \n';
+    this.salida += 'float HeapXML[100000];\n';
+    this.salida += 'float StackXML[100000]; \n';
+
+    this.salida += 'float HeapXPath[100000];\n';
+    this.salida += 'float StackXPath[100000]; \n';
+
+    this.salida += 'float HeapXQuery[100000];\n';
+    this.salida += 'float StackXQuery[100000]; \n';
+
+    this.salida += 'float pxml; \n';
+    this.salida += 'float hxml; \n';
+
+    this.salida += 'float pxpath; \n';
+    this.salida += 'float hxpath; \n';
+
+    this.salida += 'float pxquery; \n';
+    this.salida += 'float hxquery; \n';
+
+    this.translateXML();
+
     this.salida += 'float ';
     for (let index = 0; index < _Console.count; index++) {
       if (index > 0 && index % 8 == 0) {
@@ -122,17 +142,137 @@ export class EditorComponent {
     this.salida += '}\n\n';
   }
 
+  translateXML() {
+    let table = this.envXML.getTablaSimbolos();
+    let result = 'void cargaXML(){\n';
+    result += 'pxml = 0;\nhxml = 0;\n\n';
+    var c = (_Console.count = 0);
+    var h = (_Console.heapPointer = 0);
+    var s = (_Console.stackPointer = 0);
+
+    table.forEach((element) => {
+      if (element.tipo === 0) {
+        //atributo
+        result += `// atributo (etiqueta: ${element.ambito}): ${element.nombre} = "${element.valor}"\n`;
+      } else {
+        //valor
+        result += `// contenido (etiqueta: ${element.ambito}): ${element.valor}\n`;
+      }
+      result += `t${c} = hxml;\n`;
+      c++;
+      for (var x = 0; x < element.valor.length; x++) {
+        var char = element.valor.charCodeAt(x);
+        result += `HeapXML[(int)hxml] = ${char};\n`;
+        result += `hxml = hxml + 1;\n`;
+        h++;
+      }
+      result += `HeapXML[(int)hxml] = -1;\n`;
+      result += `hxml = hxml + 1;\n`;
+      result += `StackXML[(int)${s}] = t${c - 1};\n\n`;
+      element.posicion = s;
+      s++;
+    });
+    result += '}\n\n';
+    _Console.salida = result;
+    _Console.count = c;
+    _Console.heapPointer = h;
+    _Console.stackPointer = s;
+  }
+
+  translate() {
+    this.ejecutarXmlAsc(); // traducir xml primero
+    try {
+      let salida = '';
+      if (errores.length == 0) {
+        // Muestra el resultado en la pagina
+        salida += '//main\n';
+        salida += 'cargaXML();\n';
+        this.ast = xQueryTrad.parse(this.entradaXpath.toString());
+        let traductor = new TraductorXQuery();
+        salida += traductor.traducir(this.ast, this.envXML);
+        this.cOutput(salida);
+      } else {
+        errores.forEach((error) => {
+          this.salida +=
+            'Error ' +
+            error.getTipo() +
+            ' (linea: ' +
+            error.getLinea() +
+            ', columna: ' +
+            error.getColumna() +
+            '): ' +
+            error.getDescripcion() +
+            '.  \n';
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    this.flag = false;
+  }
+
+  ejecutarXQuery() {
+    this.ejecutarXmlAsc();
+    this.clean();
+    try {
+      let queryTree = xQuery.parse(this.entradaXpath.toString());
+      let queryEnv = new Environment(null, this.envXML);
+      console.log('------------TREE------------');
+      console.log(queryTree);
+      // Saving functions in table
+      for (const instr of queryTree) {
+        try {
+          if (instr instanceof Function) {
+            // console.log('instace of function');
+            instr.execute(queryEnv);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      // Executing Instructions Not Functions
+      for (const instr of queryTree) {
+        if (instr instanceof Function) continue;
+        try {
+          // console.log('instace of instruction');
+          instr.execute(queryEnv);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (errores.length == 0) {
+        // Muestra el resultado en la pagina
+        this.salida += _Console.salida;
+        console.log(_Console.symbols);
+        console.log(_Console.salida);
+      } else {
+        errores.forEach((error) => {
+          this.salida +=
+            'Error ' +
+            error.getTipo() +
+            ' (linea: ' +
+            error.getLinea() +
+            ', columna: ' +
+            error.getColumna() +
+            '): ' +
+            error.getDescripcion() +
+            '.  \n';
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    this.flag = false;
+  }
+
   ejecutarXmlAsc() {
     this.clean();
     try {
       this.ast = parserXMLASC.parse(this.entradaXml.toString());
-      // console.log(this.ast);
-      // console.log('ejecutando');
       this.envXML = new EnvironmentXML('global');
       let ejecutor = new EjecutorXML();
       ejecutor.ejecutar(this.ast, this.envXML);
       this.envXML.printEntornos();
-      // console.log(this.envXML.getTablaSimbolos());
     } catch (e) {
       console.error(e.message);
     }
@@ -143,13 +283,10 @@ export class EditorComponent {
     this.clean();
     try {
       this.ast = parserXMLDESC.parse(this.entradaXml.toString());
-      // console.log(this.ast);
-      // console.log('ejecutando');
       this.envXML = new EnvironmentXML('global');
       let ejecutor = new EjecutorXML();
       ejecutor.ejecutar(this.ast, this.envXML);
       this.envXML.printEntornos();
-      // console.log(this.envXML.getTablaSimbolos());
     } catch (e) {
       console.error(e.message);
     }
@@ -171,14 +308,12 @@ export class EditorComponent {
     this.clean();
     try {
       let queryTree = xPathASC.parse(this.entradaXpath.toString());
+      let newEnv = new Environment(null, this.envXML);
       // se pasa el env xml
-      let ejecutor = new EjecutorXPath(this.envXML);
+      let ejecutor = new EjecutorXPath(newEnv);
       ejecutor.ejecutar(queryTree);
       let envXPath = ejecutor.getEntorno();
       this.salida = 'TytusX Output: \n\n' + _Console.salida;
-      // console.log("--- Imprimiendo Entorno de Consultas ---");
-      // console.log(envXPath);
-      // console.log("------");
       this.ast = queryTree;
     } catch (e) {
       console.error(e);
@@ -201,14 +336,12 @@ export class EditorComponent {
     this.clean();
     try {
       let queryTree = xPathDESC.parse(this.entradaXpath.toString());
+      let newEnv = new Environment(null, this.envXML);
       // se pasa el env xml
-      let ejecutor = new EjecutorXPath(this.envXML);
+      let ejecutor = new EjecutorXPath(newEnv);
       ejecutor.ejecutar(queryTree);
       let envXPath = ejecutor.getEntorno();
       this.salida = 'TytusX Output: \n\n' + _Console.salida;
-      // console.log("--- Imprimiendo Entorno de Consultas ---");
-      // console.log(envXPath);
-      // console.log("------");
       this.ast = queryTree;
     } catch (e) {
       console.error(e);
@@ -408,7 +541,7 @@ export class EditorComponent {
   }
 
   optTable() {
-    if (this.reglas_ == undefined) {
+    if (this.reglas == undefined) {
       Swal.fire({
         title: 'Oops...',
         text: 'No se ha analizado el codigo aun',
@@ -417,7 +550,7 @@ export class EditorComponent {
         confirmButtonColor: 'rgb(8, 101, 104)',
         background: 'black',
       });
-    } else if (this.reglas_.length == 0) {
+    } else if (this.reglas.length == 0) {
       Swal.fire({
         title: 'Cool!',
         text: 'No se encontraron optimizaciones en su codigo',
@@ -429,7 +562,7 @@ export class EditorComponent {
     } else {
       Swal.fire({
         title: 'Tabla de Reglas',
-        html: new Table().rules(this.reglas_),
+        html: new Table().rules(this.reglas),
         confirmButtonText: 'Entendido',
         confirmButtonColor: 'rgb(8, 101, 104)',
         background: 'black',
@@ -582,200 +715,106 @@ export class EditorComponent {
     this.salida = '[Grupo18_TitusX]Output: \n\n';
   }
 
-  executeOpt(entrada: string) {
-    // try {
-    //   this.ast = optimizer.parse(entrada);
-    //   let env = new _Optimizer();
-    //   try {
-    //     for (const instr of this.ast[0]) {
-    //       instr.regla1(env);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   this.cOutput(env.salida);
-    //   this.ast = optimizer.parse(this.salida);
-    //   this.reglas = env.reglas;
-    //   env = new _Optimizer();
-    //   env.reglas = this.reglas;
-    //   try {
-    //     for (const instr of this.ast[0]) {
-    //       instr.regla2(env);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   this.cOutput(env.salida);
-    //   this.ast = optimizer.parse(this.salida);
-    //   this.reglas = env.reglas;
-    //   env = new _Optimizer();
-    //   env.reglas = this.reglas;
-    //   try {
-    //     for (const instr of this.ast[0]) {
-    //       instr.regla3(env);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   this.cOutput(env.salida);
-    //   this.ast = optimizer.parse(this.salida);
-    //   this.reglas = env.reglas;
-    //   env = new _Optimizer();
-    //   env.reglas = this.reglas;
-    //   try {
-    //     for (const instr of this.ast[0]) {
-    //       instr.regla4(env);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   this.cOutput(env.salida);
-    //   this.ast = optimizer.parse(this.salida);
-    //   this.reglas = env.reglas;
-    //   env = new _Optimizer();
-    //   env.reglas = this.reglas;
-    //   try {
-    //     for (const instr of this.ast[0]) {
-    //       instr.regla5(env);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   this.reglas = env.reglas;
-    //   Swal.fire({
-    //     title: 'Cool!',
-    //     text: 'Su codigo intermedio se ha optimizado correctamente...',
-    //     icon: 'success',
-    //     confirmButtonText: 'Entendido',
-    //     confirmButtonColor: 'rgb(8, 101, 104)',
-    //     background: 'black',
-    //   }).then(() => {
-    //     this.cOutput(env.salida);
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    //   Swal.fire({
-    //     title: 'Error',
-    //     text: 'Ocurrieron errores en la optimizacion...',
-    //     icon: 'error',
-    //     confirmButtonText: 'Entendido',
-    //     confirmButtonColor: 'rgb(8, 101, 104)',
-    //     background: 'black',
-    //   });
-    // }
-  }
-
   optimizar() {
-    // Swal.fire({
-    //   title: 'En donde se encuentra el codigo a optimizar?',
-    //   showDenyButton: true,
-    //   showCancelButton: true,
-    //   confirmButtonText: `Entrada`,
-    //   denyButtonText: `Salida`,
-    //   confirmButtonColor: 'rgb(8, 101, 104)',
-    //   background: 'black',
-    //   icon: 'info',
-    // }).then((result) => {
-    //   if (result.isConfirmed) this.executeOpt(this.entrada.toString());
-    //   else if (result.isDenied) this.executeOpt(this.salida.toString());
-    // });
-  }
+    // Regla 1
 
-  ejecutar() {
-    // this.clean();
-    // try {
-    //   this.ast = parserXML.parse(this.entradaXml.toString());
-    //   console.log(this.ast);
-    // } catch (e) {
-    //   console.error(e.message);
-    // }
-    // this.flag = false;
-    // try {
-    //   this.ast = parserXML.parse(this.entradaXml.toString());
-    //   console.log(this.ast);
-    // } catch (e) {
-    //   console.error(e.message);
-    // }
-    // this.flag = false;
-    // try {
-    //   this.ast = parser.parse(this.entradaXml.toString());
-    //   this.env = new Environment(null);
-    //   for (const instr of this.ast) {
-    //     try {
-    //       if (instr instanceof Function) instr.execute(this.env);
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
-    //   for (const instr of this.ast) {
-    //     if (instr instanceof Function || isString(instr)) continue;
-    //     try {
-    //       instr.execute(this.env);
-    //       // TODO validar return break continue fuera de ciclos
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
-    //   if (errores.length == 0) {
-    //     // Muestra el resultado en la pagina
-    //     this.salida += _Console.salida;
-    //   } else {
-    //     if (errores.length != 0) {
-    //       errores.forEach((error) => {
-    //         this.salida +=
-    //           'Error ' +
-    //           error.getTipo() +
-    //           ' (linea: ' +
-    //           error.getLinea() +
-    //           ', columna: ' +
-    //           error.getColumna() +
-    //           '): ' +
-    //           error.getDescripcion() +
-    //           '.  \n';
-    //       });
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // this.flag = false;
-  }
+    let c_code_tree = optimizer.parse(this.entradaXml);
+    console.log(c_code_tree);
+    let env = new _Optimizer();
+    try {
+      for (const instr of c_code_tree[1]) {
+        instr.regla1(env);
+      }
+    } catch (e) {
+      console.log(e);
+    }
 
-  translate() {
-    // this.clean();
-    // try {
-    //   this.ast = parser.parse(this.entrada.toString());
-    //   this.env = new Environment(null);
-    //   this.salida = '';
-    //   try {
-    //     for (const instr of this.ast) {
-    //       this.salida += instr.translate(this.env);
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   if (errores.length == 0) {
-    //     this.cOutput(this.salida);
-    //   } else {
-    //     if (errores.length != 0) {
-    //       errores.forEach((error) => {
-    //         this.salida +=
-    //           'Error ' +
-    //           error.getTipo() +
-    //           ' (linea: ' +
-    //           error.getLinea() +
-    //           ', columna: ' +
-    //           error.getColumna() +
-    //           '): ' +
-    //           error.getDescripcion() +
-    //           '.  \n';
-    //       });
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // this.flag = false;
-    // _Console.showSystem();
+    // Regla 3
+
+    this.cOutput(env.salida);
+    this.ast = optimizer.parse(this.salida);
+    let c_rules = env.reglas;
+    env = new _Optimizer();
+    env.reglas = c_rules;
+    try {
+      for (const instr of this.ast[1]) {
+        instr.regla3(env);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    // Regla 4
+    this.cOutput(env.salida);
+    this.ast = optimizer.parse(this.salida);
+    c_rules = env.reglas;
+    env = new _Optimizer();
+    env.reglas = c_rules;
+    try {
+      for (const instr of this.ast[1]) {
+        instr.regla4(env);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    // Regla 2
+
+    this.cOutput(env.salida);
+    this.ast = optimizer.parse(this.salida);
+    c_rules = env.reglas;
+    env = new _Optimizer();
+    env.reglas = c_rules;
+    try {
+      for (const instr of this.ast[1]) {
+        instr.regla2(env);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    // Regla 5
+
+    this.cOutput(env.salida);
+    this.ast = optimizer.parse(this.salida);
+    c_rules = env.reglas;
+    env = new _Optimizer();
+    env.reglas = c_rules;
+    try {
+      for (const instr of this.ast[1]) {
+        instr.regla5(env);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    c_rules = env.reglas;
+
+    // Restantes
+
+    this.cOutput(env.salida);
+    this.ast = optimizer.parse(this.salida);
+    c_rules = env.reglas;
+    env = new _Optimizer();
+    env.reglas = c_rules;
+    try {
+      for (const instr of this.ast[1]) {
+        instr.optimize(env);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    c_rules = env.reglas;
+
+    Swal.fire({
+      title: 'Cool!',
+      text: 'Su codigo intermedio se ha optimizado correctamente...',
+      icon: 'success',
+      confirmButtonText: 'Entendido',
+      confirmButtonColor: 'rgb(8, 101, 104)',
+      background: 'black',
+    }).then(() => {
+      this.reglas = env.reglas;
+      this.cOutput(env.salida);
+    });
   }
 }
