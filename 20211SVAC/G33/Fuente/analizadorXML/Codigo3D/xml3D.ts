@@ -414,6 +414,24 @@ ${this.getXpath3D(xpath)}
         return hasFounded;
     }
 
+    traducir3DXpath(pos: any, tam: any): any {
+        var tmp = `
+    t4 = ${pos};
+    t5 = ${tam};
+    etiqueta_part${this.contadorEtiqueta}:
+        imprimir2();
+        t4 = t4 + 1;
+        t5 = t5 - 1; 
+        if(t5 == 0) goto inicio${this.contadorSalidas};
+        goto etiqueta_part${this.contadorEtiqueta};
+        
+    inicio${this.contadorSalidas}:
+    printf("%c", 10);            
+    \n`;
+        this.contadorEtiqueta++;
+        this.contadorSalidas++;
+        return tmp;
+    }
 
 }
 /*
