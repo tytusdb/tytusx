@@ -6,6 +6,7 @@ import { parse as parseXQuery } from '../code/analizadorXQuery/ascendente';
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import { CD3 } from '../code/codigo3D/cd3';
 import { XPATHC3D } from '../code/codigo3D/xpathC3D';
+//import { parse as Optimizacion } from '../code/optimizacion/gramatica-optimizador';
 import { Entorno } from '../code/analizadorXQuery/Tabla/TablaSimbolos';
 import { Error } from '../code/analizadorXQuery/Tabla/Error';
 const { ErroresGlobal, LimpiarErrores } = require('../code/analizadorXPath/AST/Global')
@@ -19,6 +20,7 @@ require('../../node_modules/codemirror/mode/clike/clike')
 const XPathDesc = require('../code/analizadorXPath/XPathDesc')
 const grammar = require('../code/analizadorXML/grammar')
 const grammarDesc = require('../code/analizadorXMLDesc/grammarDesc')
+const optimizacion = require('../code/optimizacion/gramatica-optimizador')
 
 
 class Navigation extends React.Component{
@@ -113,7 +115,8 @@ class Navigation extends React.Component{
             MistakesXPath: [],
             TablaGramatical: [],
             TablaGramticalXPath: [], 
-            ErroresXQuery: []
+            ErroresXQuery: [],
+            TablaOptimizacion: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -122,7 +125,7 @@ class Navigation extends React.Component{
     }
 
     setText(){  // ANALISIS ASCENDENTE XPATH 
-        console.log("setText Button clicked");
+        console.log("Analisis Xpath :)");
         let text = this.state.InputTextarea;
         if(text=="") return
         var funcion = parseXPath(text); //XPATH 
@@ -188,6 +191,7 @@ class Navigation extends React.Component{
     actualizar(){ // ANALIZADOR ASCENDENTE XML - Ver como guardan los datos en la tabla de simbolos para la traducción 
         console.log('Hola')
         var x = this.state.XMLTextarea;
+        if (x=="") return
         var resultado = grammar.parse(x)
         if(resultado.errores.length>0)
         {
@@ -205,12 +209,8 @@ class Navigation extends React.Component{
     getC3D(xml){
         var traducir = new CD3(); 
         var codigo = traducir.getTraduccion(xml); 
-        
-        this.codigoXml = codigo.traduccion;
-        this.codigoC3D = this.getEncabezado() + this.codigoXml;
 
         //this.setState({TraductorTextArea: codigo.traduccion})
-        this.setState({TraductorTextArea: this.codigoC3D})
 
         this.contadorTemporal = traducir.getTemporal();
         console.log(this.contadorTemporal, `<--------Temp Xml`);
@@ -220,6 +220,11 @@ class Navigation extends React.Component{
 
         this.stack = traducir.getStack();
         console.log(this.stack.lista.length, `<--------Stack Xml`);
+
+        this.codigoXml = codigo.traduccion;
+        this.codigoC3D = this.getEncabezado() + this.codigoXml;
+
+        this.setState({TraductorTextArea: this.codigoC3D})
 
         return codigo.objeto
     }
@@ -240,7 +245,7 @@ class Navigation extends React.Component{
         var traducirX = new XPATHC3D();
         var respuesta = traducirX.getXpath(xpath, this.contadorTemporal, this.heap, this.stack);
 
-        //TEMPORAL NUEVO CON XPATH
+        //CONTADOR TEMPORAL NUEVO CON XPATH
         this.contadorTemporal = traducirX.getTemporal();
         console.log(this.contadorTemporal, `<--------Temp Xpath`);
         //HEAP NUEVO CON XPATH
@@ -249,6 +254,9 @@ class Navigation extends React.Component{
         //STACK NUEVO CON XPATH
         this.stack = traducirX.getStack();
         console.log(this.stack.lista.length, `<--------Stack Xpath`);
+        //CONTADOR ETIQUETA NUEVO CON XPATH
+        this.contadorEtiqueta = traducirX.getEtiqueta();
+        console.log(this.contadorEtiqueta, `<--------Etiqueta Xpath`);
 
         this.codigoXpath = respuesta;
         this.codigoC3D = this.getEncabezado() + this.codigoXpath + this.codigoXml;
@@ -256,6 +264,30 @@ class Navigation extends React.Component{
         this.setState({TraductorTextArea: this.codigoC3D})
 
         return respuesta
+    }
+
+    optimizar(){
+        console.log('Optimizo :9')
+        this.setState({TablaOptimizacion: []})
+        //var text = this.state.XMLTextarea;
+        //var text = this.state.TraductorTextArea;  //Si lo hago de esta forma y quiero hacer cambios en ese text area. No actualiza los cambios, usa el estado anterior
+        var text = this.state.InputTextarea;
+        if (text=="") return
+        var resultado = optimizacion.parse(text);
+        /*if(resultado.errores.length>0)
+        {
+            //alert("Errores en el analisis del XML")
+            console.log(`Se detectaron errores en la optimizacion :'(`)
+            console.log(resultado.errores)
+            return
+        }*/
+        console.log(resultado.instruccion)
+        console.log(resultado.reporte)
+        //resultado.datos = this.getC3D(resultado.datos); 
+        this.setState({TraductorTextArea:resultado.instruccion}) 
+       /* this.setState({datosCSTXML:{nodes:resultado.nodes,edges:resultado.edges}})
+        this.setState({Mistakes: resultado.errores})   */
+        this.setState({TablaOptimizacion: resultado.reporte})
     }
 
     handleOnChange = e => {
@@ -412,6 +444,11 @@ class Navigation extends React.Component{
                             Errores
                         </Link>                        
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteOptimizacion", TablaOptimizacion:this.state.TablaOptimizacion, TablaOptimizacion:this.state.TablaOptimizacion, TablaOptimizacion: this.state.TablaOptimizacion }}>
+                            Optimizacion
+                        </Link>                        
+                    </li>                    
                 </ul>
             </nav>
 
@@ -475,11 +512,16 @@ class Navigation extends React.Component{
                              placeholder="Bienvenido"
                              />
                         </div>
+                        <div className="container">
                         <div className="row">
                         <p></p>
-                            <div className="col-12 block">
+                            <div className="col-6 block">
                                 <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.actualizar() }> Ejecutar XML </button> 
                             </div>
+                            <div className="col-6 block">
+                                <button type="button" className="btn btn-primary btn-lg" onClick={ () => this.optimizar() }> Optimizar </button> 
+                            </div>
+                        </div>
                         </div>
                     </div>
                     <div className="col-6 block">
@@ -505,7 +547,7 @@ class Navigation extends React.Component{
                         <div className="row">
                             <p></p>
                             <div className="col-6 block"> 
-                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Ascendente </button>
+                                <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.setText() }>Ejecutar Xpath </button>
                             </div>                            
                             <div className="col-6 block">
                                 <button type="submit" className="btn btn-primary btn-lg" onClick={ () => this.ejecutarXQuery() }> Ejecutar XQuery </button>
