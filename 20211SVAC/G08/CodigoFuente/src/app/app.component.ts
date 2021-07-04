@@ -8,11 +8,12 @@ import {Objeto} from '../Expresiones/Objeto'
 import { OperacionXpath } from './Estructuras/OperacionXpath';
 import { ParametroOperacionXpath } from './Estructuras/ParametroOperacionXpath';
 import { Entrada } from './Estructuras/Entrada';
-import {TipoParametro, TipoOperador, TipoNodo, OrderModifierType, TipoDeclaracionXquery, SingleExpresionType, ParamType, FLWORTipo, TipoClausulaIntermedia} from './Estructuras/tipificacion';
+import {TipoParametro, TipoOperador, TipoNodo, OrderModifierType, TipoDeclaracionXquery, SingleExpresionType, ParamType, FLWORTipo, TipoClausulaIntermedia, TipoFuncion} from './Estructuras/tipificacion';
 import { graphviz }  from 'd3-graphviz';
 import {crearArbolDot} from './AST/crearArbolDot';
 import {MatDialog} from '@angular/material/dialog';
 import {TablaSimbolosComponent} from '../app/Reportes/tabla-simbolos/tabla-simbolos.component';
+import {OptimizacionesComponent} from '../app/Reportes/optimizaciones/optimizaciones.component';
 import { Error } from 'src/app/AST/Error';
 import {ErroresXMLComponent} from '../app/Reportes/errores-xml/errores-xml.component';
 import { ListaErrores } from 'src/app/AST/ListaErrores';
@@ -20,8 +21,11 @@ import { DeclaracionXquery, FuncionXquery, ParametroXquery, TypeDeclaration } fr
 import { PathExpresion } from './Estructuras/Xquery/PathExpresion';
 import { SingleExpresion } from './Estructuras/Xquery/SingleExpresion';
 import { FLWORExpr,OrderSpec } from './Estructuras/Xquery/FLWORExpr';
+import { IfExpresion } from './Estructuras/Xquery/IfExpresion';
+import { NativeFunctionExpresion } from './Estructuras/Xquery/NativeFunctionExpresion';
 import { parametroXpath } from './Estructuras/parametroXpath';
-
+import { Optimizacion, OptimizarCodigo } from './OptimizarCodigo';
+import { Declaracion3D } from './Estructuras/C3D/Declaracion3D';
 interface TablaSimbolosXquery{
   Tipo:string;
   ID:string;
@@ -49,15 +53,11 @@ export class AppComponent {
   Funciones:DeclaracionXquery[] = [];
   Simbolos:TablaSimbolosXquery;
   title = 'proyecto1';
-  txtXpath = `declare function local:ackerman($m as xs:integer ,$n as xs:integer)
-  as xs:integer
-  {
-    if($m = 0) then $n+1
-    else if($m gt 0 and $n=0) then local:ackerman($m - 1, 1)
-    else local:ackerman($m - 1, local:ackerman($m, $n - 1))
-  };
-  
-  local:ackerman(/pruebas/m,/pruebas/n)`;
+  txtXpath = `for $x in /bookstore/book
+  return if ($x/@category = "children") then
+  upper-case($x/title)
+  else
+  upper-case($x/year)`;
   consoleValue = "";
   parser;
   retroceder = true;
@@ -67,16 +67,49 @@ export class AppComponent {
   sentenciaOriginal:sentenciaXpath;
   parserXml;
   astXML;
+  parserC3D;
   arbol;
   rgxmlasc;
 rgxmldesc;
 cstxml;
   tablaXML="";
   xmlText = `<?xml version="1.0" encoding="UTF-8"?>
-  <pruebas>
-	<m>3</m>
-	<n>2</n>
-</pruebas>`;
+
+  <bookstore>
+  
+  <book category="COOKING">
+    <title lang="en">Everyday Italian</title>
+    <author>Giada De Laurentiis</author>
+    <year>2005</year>
+    <price>30.00</price>
+  </book>
+  
+  <book category="CHILDREN">
+    <title lang="en">Harry Potter</title>
+    <author>J K. Rowling</author>
+    <year>2005</year>
+    <price>29.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">XQuery Kick Start</title>
+    <author>James McGovern</author>
+    <author>Per Bothner</author>
+    <author>Kurt Cagle</author>
+    <author>James Linn</author>
+    <author>Vaidyanathan Nagarajan</author>
+    <year>2003</year>
+    <price>49.99</price>
+  </book>
+  
+  <book category="WEB">
+    <title lang="en">Learning XML</title>
+    <author>Erik T. Ray</author>
+    <year>2003</year>
+    <price>39.95</price>
+  </book>
+  
+  </bookstore>`;
   c3dTextInicial = `/*------HEADER------*/
   #include <stdio.h>
   #include <math.h>
@@ -97,12 +130,13 @@ c3dTextFinal = `    return;
     objetosTraducir;
     xmlTraductor;
     xmlTraducido="";
-  
+    reporteOptimizaciones:Optimizacion[]= [];
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
     this.httpClient = http;
     //this.parser = require("./Gramatica/gramatica");
     this.parser = require("./Gramatica/xpathGramatica");
+    this.parserC3D = require("./Gramatica/Opt3DGramatica");
     this.parserXml = require("./Gramatica/gramatica");
     this.astXML= require("./Gramatica/gramaticaXMLAsc_Arbol");
     this.arbol=require("./AST/crearArbolDot");
@@ -111,6 +145,35 @@ c3dTextFinal = `    return;
   this.objetosTraducir=require("./Gramatica/gramatica");
   }
 
+  Optimizar(){
+    var objeto3d = this.parserC3D.parse(this.c3dText) as Declaracion3D[];
+    var opt = new OptimizarCodigo();
+    objeto3d = opt.Optimizar(objeto3d);
+    console.log('Salida Optimizacion ****');
+    console.log(objeto3d);
+    this.c3dText = "";
+    objeto3d.forEach(element => {
+      this.c3dText += element.C3D + '\n';
+      if(Array.isArray(element.Instruccion3D)){
+        element.Instruccion3D.forEach(inst => {
+          this.c3dText += ' '+(inst.Dato as any).C3D + '\n';
+        });
+      }
+      if(element.ID !=null){
+        this.c3dText += '}';
+      }
+    });
+    console.log('Salida Reporte ****');
+    console.log(opt.Reporte);
+    this.reporteOptimizaciones = opt.Reporte;
+  }
+  ReporteOptimizaciones(){
+    
+    this.dialog.open(OptimizacionesComponent, {
+      data: this.reporteOptimizaciones,
+      maxHeight: '80%'
+    });
+  }
   Compilar() {
     this.consoleValue ="";
     var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
@@ -129,7 +192,7 @@ c3dTextFinal = `    return;
         
       var lista:Objeto[] = [];
       lista.push(xmlObject);
-      this.xmlOriginal = lista;
+      
       console.log(xmlObject);
       this.consoleValue = '';
       xPathObject.forEach(element => {
@@ -143,6 +206,7 @@ c3dTextFinal = `    return;
         console.log(elementoActual);
       
         this.sentenciaOriginal = elementoActual;
+        this.xmlOriginal = lista;
         this.consoleValue += this.ProcesarNodoRaiz(elementoActual,lista,null);
       });
       //elementoActual en este momento es la raiz de la entrada Xpath
@@ -172,32 +236,68 @@ c3dTextFinal = `    return;
 
         }
       }else{//Llamado a funciones
-        this.EjecutarFuncion(element.Llamado);
+        this.EjecutarFuncion(element.Llamado,[]);
       }
     });
   }
 
-  EjecutarFuncion(sentencia:LlamadoFuncion){
+  EjecutarFuncion(sentencia:LlamadoFuncion,parametrosAnteriores:ParametroFuncion[]){
+    var ret:any;
     this.Funciones.forEach(element => {
       var funcion = element.Valor as FuncionXquery;
       if(funcion.FunctionName.Name == sentencia.Name.Name && funcion.FunctionName.Ambiente == sentencia.Name.Ambiente){
         //validacion de parametros
-        var params = this.ValidarParametros(funcion.ListaParametros,sentencia.Parametros);
-        //Sentecias del cuerpo
+        var params = this.ValidarParametros(funcion.ListaParametros,sentencia.Parametros,parametrosAnteriores);
+        //Sentecias del cuerpo 
+        this.consoleValue = '';
         funcion.Body.forEach(expresion => {
-          this.consoleValue += this.ResolverSingleExpresion(expresion,params) + '\n';
+          ret = this.ResolverSingleExpresion(expresion,params);
+          
+           this.consoleValue += this.ResolverSingleExpresion(expresion,params) + '\n';
         });
         
       }
     });
+    return ret;
   }
 
 
   ResolverSingleExpresion(expresion:SingleExpresion, parametros:ParametroFuncion[]){
+   
     switch(expresion.Tipo){
       case  SingleExpresionType.FLWORExpr:{
        return this.ResolverFLWORExpr(expresion.Objeto as FLWORExpr,parametros);
       }
+      case  SingleExpresionType.FuncionDefinida:{
+          var funcion = expresion.Objeto as NativeFunctionExpresion;
+          if(funcion.NameFunction.TipoFuncion == TipoFuncion.Nativa){
+            
+            if(funcion.NameFunction.Valor == "upper-case"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return val.toString().toUpperCase();
+            }else if(funcion.NameFunction.Valor == "lower-case"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return val.toString().toLowerCase();
+            }
+            else if(funcion.NameFunction.Valor == "string"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return val.toString();
+            }
+            else if(funcion.NameFunction.Valor == "number"){
+              var val = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+              return Number(val);
+            }
+            else if(funcion.NameFunction.Valor == "substring"){
+              if(funcion.Value.length == 3){
+                var val1 = this.ResolverSingleExpresion(funcion.Value[0],parametros);
+                var val2 = this.ResolverSingleExpresion(funcion.Value[1],parametros);
+                var val3 = this.ResolverSingleExpresion(funcion.Value[2],parametros);
+                return val1.toString().substring(val2,val3);
+              }
+             
+            }
+          }
+       }
       case SingleExpresionType.XPARAM :{
         var res = this.GetValorXparam(expresion.Objeto as ParametroOperacionXpath,parametros);
         if(Array.isArray(res))
@@ -228,9 +328,32 @@ c3dTextFinal = `    return;
         });
         return result;
       }
+      case  SingleExpresionType.IfExpr:{
+        return this.ResolverIfExpresion(expresion.Objeto as IfExpresion,parametros);
+      }
+      case  SingleExpresionType.LlamadaFuncion:{
+        return this.EjecutarFuncion(expresion.Objeto as LlamadoFuncion,parametros);
+      }
     }
   }
 
+  ResolverIfExpresion(ifSentence:IfExpresion, parametros:ParametroFuncion[]):any{
+
+    var condition = ifSentence.Parametros[0];
+   
+      var condicion = this.ResolverSingleExpresion(condition as SingleExpresion, parametros)
+     console.log('condicion');
+     console.log(condicion);
+      if(condicion){
+        var res = this.ResolverSingleExpresion(ifSentence.AccionVerdadera,parametros);
+        return res ;
+      }else{
+        return this.ResolverSingleExpresion(ifSentence.AccionFalsa,parametros);
+      }
+   
+  }
+
+ 
   ResolverFLWORExpr(expresion:FLWORExpr, parametros:ParametroFuncion[]){
     
     switch(expresion.Binding.Tipo){
@@ -282,11 +405,10 @@ c3dTextFinal = `    return;
                 elementoActual = elementoActual.Padre;
               }
               
-            console.log('Procesando Sentencia');
             var valor = this.ProcesarNodoRaizXquery(elementoActual,lista,[]);
-            console.log('Sentencia Result');
-            console.log(valor);
-            parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
+            //valoresIterador = valor;
+            valoresIterador.push({Nombre:element.VarName,Valor:valor});
+            //parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
           }
         });
 
@@ -300,8 +422,6 @@ c3dTextFinal = `    return;
                this.FiltrarOperacionXquery(element.Clausula as parametroXpath,parametros)
                
               }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
-                console.log('element por ordenar');
-                console.log(element);
                 (element.Clausula as OrderSpec[]).forEach(cl => {
                   this.OrdenarOperacionXquery(cl,parametros)
                 });
@@ -325,8 +445,6 @@ c3dTextFinal = `    return;
             valoresIterador.forEach(element => {
               copyParams.push({Nombre:element.Nombre,Valor:element.Valor[i],Tipo:null});
             });
-            console.log('copyParams');
-            console.log(copyParams);
             //intermediate clauses
             if(expresion.IntermediteClauses!=null)
             {
@@ -343,6 +461,7 @@ c3dTextFinal = `    return;
       }break;
     }
   }
+
 
   OrdenarOperacionXquery( param:OrderSpec, parametros:ParametroFuncion[]):Objeto[]{
     var result:Objeto[] = [];
@@ -456,14 +575,18 @@ c3dTextFinal = `    return;
       }
     });
   }
-  ValidarParametros(parametrosFuncion:ParametroXquery[],parametrosLlamado:SingleExpresion[]){
-    var infoVariables:ParametroFuncion[] = []; 
+  ValidarParametros(parametrosFuncion:ParametroXquery[],parametrosLlamado:SingleExpresion[],parametrosAnteriores:ParametroFuncion[]){
+    
+    var infoVariables =  [];
+    parametrosAnteriores.forEach(val => infoVariables.push(Object.assign({}, val)));
+
     var totalVariablesObligatorias:number = 0;
     parametrosFuncion.forEach(element => {
       if(element.TipoParam.OccurrenceIndicator != "?")
         totalVariablesObligatorias++;
     });
     if( parametrosLlamado.length < totalVariablesObligatorias){
+      console.log('error por manejar');
       //error por manejar
       return infoVariables;
     }
@@ -472,8 +595,50 @@ c3dTextFinal = `    return;
      
       switch(element.Tipo){
         case SingleExpresionType.XPARAM : {
-          var valor = this.GetValorXparam(element.Objeto as ParametroOperacionXpath,infoVariables);
-          infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valor});
+          var ope = element.Objeto as ParametroOperacionXpath;
+          if(ope.Tipo == TipoParametro.FuncionDefinida){
+            var valFun =  this.EjecutarFuncion(ope.Funcion,parametrosAnteriores.length>0? parametrosAnteriores:infoVariables);
+            //console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
+            if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+              this.ActualizarValorVariable(parametrosFuncion[cont].Name,valFun,infoVariables);
+            }else{
+              infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valFun});
+            }
+          }else{
+            var valor = this.GetValorXparam(element.Objeto as ParametroOperacionXpath,infoVariables);
+            //console.log('XPARAM: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valor);
+            if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+              this.ActualizarValorVariable(parametrosFuncion[cont].Name,valor,infoVariables);
+            }else{
+              infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valor});
+            }
+          }
+         
+          
+        }break;
+        case SingleExpresionType.Sentencia : {
+          var xmlObject = this.parserXml.parse(this.xmlText) as Objeto;
+
+          var elementoAcual = this.EnlazarSentencia(element.Objeto as sentenciaXpath);
+              
+          var val = this.ProcesarNodoRaizXquery(elementoAcual,[xmlObject],[]);
+          //console.log('Sentencia: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + val[0].texto);
+          if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+            this.ActualizarValorVariable(parametrosFuncion[cont].Name, val[0].texto as any,infoVariables);
+          }else{
+            infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : val[0].texto});
+          }
+          
+        }break;
+        case SingleExpresionType.LlamadaFuncion : {
+          var valFun =  this.EjecutarFuncion(element.Objeto as LlamadoFuncion,parametrosAnteriores.length>0? parametrosAnteriores:infoVariables);
+          
+          //console.log('LlamadaFuncion: Gurdando variable ' + parametrosFuncion[cont].Name + ', valor: ' + valFun);
+          if(infoVariables.find(x=>x.Nombre == parametrosFuncion[cont].Name) !=undefined){
+            this.ActualizarValorVariable(parametrosFuncion[cont].Name,valFun,infoVariables);
+          }else{
+            infoVariables.push({Nombre: parametrosFuncion[cont].Name,Tipo : parametrosFuncion[cont].TipoParam.Tipo,Valor : valFun});
+          }
         }break;
       }
       cont++;
@@ -485,6 +650,15 @@ c3dTextFinal = `    return;
     return infoVariables;
   }
 
+  EnlazarSentencia( element:sentenciaXpath):sentenciaXpath{
+    var elementoActual = element;
+    element.Hijo = null;
+    while(elementoActual.Padre !=null){
+      elementoActual.Padre.Hijo = elementoActual;
+      elementoActual = elementoActual.Padre;
+    }
+    return elementoActual
+  }
   GetDefaultValue(tipo:ParamType){
     switch (tipo){
       case ParamType.xsBoolean : return false;
@@ -499,10 +673,58 @@ c3dTextFinal = `    return;
       case TipoParametro.Entero:{
         return Number(param.Valor);
       }break;
+      case TipoParametro.Ruta:{
+        var temp:any = param.Valor;
+        var path = temp  as PathExpresion;
+        var retorno;
+        parametros.forEach(element => {
+          if(element.Nombre == path.Varname){
+            
+            var obj = element.Valor as Objeto;
+         
+              var elementoActual = path.Sentencia;
+              path.Sentencia.Hijo = null;
+              while(elementoActual.Padre !=null){
+                elementoActual.Padre.Hijo = elementoActual;
+                elementoActual = elementoActual.Padre;
+              }
+              
+            while(elementoActual!=null){
+              if(elementoActual.Tipo.Tipo ==TipoNodo.Atributo){
+                obj.listaAtributos.forEach(atr => {
+                 if(atr.identificador == elementoActual.Tipo.Valor){
+                    retorno = atr.valor;
+                 } 
+                });
+              }else  if(elementoActual.Tipo.Tipo ==TipoNodo.ID){
+                obj.listaObjetos.forEach(atr => {
+                 if(atr.identificador == elementoActual.Tipo.Valor){
+                    retorno = atr.texto;
+                 } 
+                });
+              }
+              elementoActual = elementoActual.Hijo;
+            }
+           
+          }
+        });
+        console.log('retorno');
+        console.log(retorno);
+        return retorno;
+      }break;
+      case TipoParametro.Cadena:{
+        return (param.Valor);
+      }break;
+      case TipoParametro.FuncionDefinida:{
+        value = this.EjecutarFuncion(param.Funcion,parametros);
+        console.log('value');
+        console.log(value);
+        return value;
+      }break;
       case TipoParametro.Variable:{
         var value;
         parametros.forEach(element => {
-          if(element.Nombre == param.Valor){
+          if(element.Nombre == param.Valor.toString()){
             if(element.Valor != null){
               value = element.Valor;
             }else{
@@ -513,14 +735,9 @@ c3dTextFinal = `    return;
         return value;
       }break;
       case TipoParametro.Operacion:{
-        console.log('Operacion');
-        console.log(param);
-        console.log(parametros);
         var valorIzquierdo = this.GetValorXparam(param.Operacion.ParametroIzquierdo,parametros);
         var valorDerecho = this.GetValorXparam(param.Operacion.ParametroDerecho,parametros);
-        console.log('Operacion Values');
-        console.log(valorIzquierdo);
-        console.log(valorDerecho);
+       
         switch(param.Operacion.TipoOperador){
           case TipoOperador.Mas:{
             return valorIzquierdo + valorDerecho;
@@ -537,6 +754,30 @@ c3dTextFinal = `    return;
           }
           case TipoOperador.Mod:{
             return valorIzquierdo % valorDerecho;
+          }
+          case TipoOperador.Igual:{
+            return valorIzquierdo.toString() == valorDerecho.toString();
+          }
+          case TipoOperador.Diferente:{
+            return valorIzquierdo.toString() != valorDerecho.toString();
+          }
+          case TipoOperador.Mayor:{
+            return Number(valorIzquierdo) > Number(valorDerecho);
+          }
+          case TipoOperador.Menor:{
+            return Number(valorIzquierdo) < Number(valorDerecho);
+          }
+          case TipoOperador.MayorIgual:{
+            return Number(valorIzquierdo) >= Number(valorDerecho);
+          }
+          case TipoOperador.MenorIgual:{
+            return Number(valorIzquierdo) <= Number(valorDerecho);
+          }
+          case TipoOperador.And:{
+            return valorIzquierdo && valorDerecho;
+          }
+          case TipoOperador.And:{
+            return valorIzquierdo || valorDerecho;
           }
         }
       }break;
@@ -558,7 +799,7 @@ c3dTextFinal = `    return;
       case TipoNodo.ID:
       { 
         this.retroceder = true;
-        console.log('Procesando ID: ' + raiz.Tipo.Valor);
+        
         if(raiz.Padre.Tipo.Tipo == TipoNodo.Descendiente){
           this.listaDescendientes.push(raiz);
         }
@@ -582,9 +823,6 @@ c3dTextFinal = `    return;
       } break;
       case TipoNodo.Atributo:
       {
-        console.log("atributo");
-        console.log(xml);
-        console.log(raiz);
         if(raiz.Tipo.Valor == '*'){
           xml = this.GetAllAtributos(xml);
         }
@@ -1158,8 +1396,6 @@ c3dTextFinal = `    return;
     if(etiqueta.Parametro!=null){
       result = this.FiltrarOperacion(result,etiqueta);
     }
-    console.log('result GetXmlEtiqueta');
-    console.log(result);
     return result;
   }
 
@@ -2702,15 +2938,15 @@ console.log();
 
   traducirXml(){
     var objetos = this.objetosTraducir.parse(this.xmlText) as Objeto;
-    console.log(objetos.listaObjetos);
+    //console.log(objetos.listaObjetos);
     const traduction= new this.xmlTraductor.TraductorXML_C3D();
     var codigo= traduction.traducir(objetos.listaObjetos);
     this.xmlTraducido=codigo;
-    console.log("**************");
-    console.log(objetos);
-    var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
-    console.log("**************Valor");
-    console.log(valor);
+    //console.log("**************");
+    //console.log(objetos);
+    //var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
+    //console.log("**************Valor");
+    //console.log(valor);
   }
 
 }

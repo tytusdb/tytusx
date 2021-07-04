@@ -148,7 +148,7 @@ escape                              \\{escapechar}
 
 %left 'or'
 %left 'and'
-%left '<' '>' '>=' '<=' '=' '!='
+%left '<' '>' '>=' '<=' '=' '!=' 'eq' 'ne' 'lt' 'le' 'gt' 'ge'
 %left '+' '-'
 %left 'div' '*' 'mod'
 
@@ -253,14 +253,15 @@ LForBinding: LForBinding ',' ForBinding {$1.Variables.push($3); $$ = $1;}
 ForBinding: '$'nodename in SENTENCIA {$$ = new FLWORVariables('$' + $2, $4, null);}
            |'$'nodename in ExprSingle {$$ = new FLWORVariables('$' + $2, null, $4);};
 
-ExprSingle: IfExpr {$$ = new SingleExpresion (SingleExpresionType.IfExpr, $1,0,0);}
+ExprSingle: 
+         NativeFuntion {$$ = new SingleExpresion (SingleExpresionType.FuncionDefinida, $1,0,0);}
+         |XPARAM {$$ = new SingleExpresion (SingleExpresionType.XPARAM, $1,0,0);}
+        | IfExpr {$$ = new SingleExpresion (SingleExpresionType.IfExpr, $1,0,0);}
 	| FLWORExpr {$$ = new SingleExpresion (SingleExpresionType.FLWORExpr, $1,0,0);}
         | lparen entero to entero rparen {$$ = new SingleExpresion (SingleExpresionType.Contador, null,Number($2),Number($4));}
-        | DirectConstructor {$$ = new SingleExpresion (SingleExpresionType.HtmlSequence, $1,0,0);}
-        | NativeFuntion {$$ = new SingleExpresion (SingleExpresionType.FuncionDefinida, $1,0,0);}
-        | XPARAM {$$ = new SingleExpresion (SingleExpresionType.XPARAM, $1,0,0);}
+        //| DirectConstructor {$$ = new SingleExpresion (SingleExpresionType.HtmlSequence, $1,0,0);}
         | LPathExpresion {$$ = new SingleExpresion (SingleExpresionType.Path, $1,0,0);}
-        | LlamadoFuncion {$$ = new SingleExpresion (SingleExpresionType.LlamadaFuncion, $1,0,0);}
+        //| LlamadoFuncion {$$ = new SingleExpresion (SingleExpresionType.LlamadaFuncion, $1,0,0);}
         | SENTENCIA {$$ = new SingleExpresion (SingleExpresionType.Sentencia, $1,0,0);}
         ;
 
@@ -271,7 +272,7 @@ PathExpresion : '$' nodename SENTENCIA {$$ = new PathExpresion('$' + $2,$3);};
 
 
 
-NativeFuntion: NativeFunctionName lparen ExprSingle rparen {$$ = new NativeFunctionExpresion($1,$3);}; //funcion definida
+NativeFuntion: NativeFunctionName lparen Expr rparen {$$ = new NativeFunctionExpresion($1,$3);}; //funcion definida
 
 NativeFunctionName: uppercase {$$ = new Funcion(TipoFuncion.Nativa,$1);}
         | lowercase {$$ = new Funcion(TipoFuncion.Nativa,$1);}
@@ -336,26 +337,40 @@ ComparisonExpr : QuantifiedExpr ComparisonValue ExprSingle
 {$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$3.Objeto,$2,null);}
 | QuantifiedExpr SENTENCIA ComparisonValue ExprSingle {$$ = new OperacionXpath(new ParametroOperacionXpath(null,$1,TipoParametro.Variable),$4.Objeto,$3,$2);};
 
-XPARAM : numberLiteral {$$ = $1;}
+XPARAM : 
+LlamadoFuncion {$$ = new ParametroOperacionXpath(null,null,TipoParametro.FuncionDefinida,$1);}
+|  XOPERACION  {$$ = new ParametroOperacionXpath($1,'',TipoParametro.Operacion);}
 | QuantifiedExpr {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Variable);}
-|  XOPERACION  {$$ = new ParametroOperacionXpath($1,'',TipoParametro.Operacion);};
+| PathExpresion {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Ruta);}
+| STRING_LITERAL {$$ = new ParametroOperacionXpath(null,$1,TipoParametro.Cadena);}
+| numberLiteral {$$ = $1;};
 
 XOPERACION: XPARAM '+' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mas);}
         |XPARAM '-' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menos);}
         |XPARAM '*' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Por);}
         |XPARAM mod XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mod);}
         |XPARAM 'div' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Div);}
-        |XPARAM ComparisonValue XPARAM {$$ = new OperacionXpath($1,$3,$2);}
+        |XPARAM 'eq' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Igual);}
+        |XPARAM 'ne' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Diferente);}
+        |XPARAM 'lt' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menor);}
+        |XPARAM 'le' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.MenorIgual);}
+        |XPARAM 'gt' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mayor);}
+        |XPARAM 'ge' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.MayorIgual);}
+        |XPARAM '=' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Igual);}
+        |XPARAM '!=' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Diferente);}
+        |XPARAM '<' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Menor);}
+        |XPARAM '<=' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.MenorIgual);}
+        |XPARAM '>' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Mayor);}
+        |XPARAM '>=' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.MayorIgual);}
+	|XPARAM 'and' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.And);}
+        |XPARAM 'or' XPARAM {$$ = new OperacionXpath($1,$3,TipoOperador.Or);}
         |lparen XPARAM rparen {$$ = $2.Operacion;};
 
 
 
 
 
-ComparisonValue : GeneralComp {$$ = $1;}| ValueComp{$$ = $1;} | LogicExpresion{$$ = $1;};
-
-LogicExpresion: 'and' {$$ = TipoOperador.And;}
-        | 'or' {$$ = TipoOperador.Or;};
+ComparisonValue : GeneralComp {$$ = $1;}| ValueComp{$$ = $1;} ;
 
 ValueComp : 'eq' {$$ = TipoOperador.Igual;}
         | 'ne' {$$ = TipoOperador.Diferente;}
