@@ -37,6 +37,8 @@
   const { AndXQ } = require('./XQuery/ts/Operaciones/Logicas/And')
   const { OrXQ } = require('./XQuery/ts/Operaciones/Logicas/Or')
   const { NotXQ } = require('./XQuery/ts/Operaciones/Logicas/Not')
+  const { ToStringXQ } = require('./XQuery/ts/Funciones/Nativas/ToString')
+  const { ToNumberXQ } = require('./XQuery/ts/Funciones/Nativas/ToNumber')
     
   var grafo = new grafoCST(); 
 
@@ -82,6 +84,11 @@
 "function"  return "R_FUNC"
 "local"     return "R_LOCAL"
 "return"    return "R_RETURN"
+"toString"  return "R_TOSTRING"
+"tostring"  return "R_TOSTRING"
+"number"    return "R_NUMBER"
+"toNumber"    return "R_TONUMBER"
+"tonumber"    return "R_TONUMBER"
 
 
 "or"    return "ROR"
@@ -356,9 +363,13 @@ E:
   | RTRUE   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | RFALSE  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | DOLAR NOMBRE { $$ = new IdXQ($2, @2.first_line, @2.first_column); }
+//Nativas
+  | R_STRING PARENTESISA E PARENTESISC { $$ = new ToStringXQ($3, @1.first_line, @1.first_column); }
+  | R_TOSTRING PARENTESISA E PARENTESISC {$$ = new ToStringXQ($3, @1.first_line, @1.first_column); }
+  | R_NUMBER PARENTESISA E PARENTESISC { $$ = new ToNumberXQ($3, @1.first_line, @1.first_column); }
+  | R_TONUMBER PARENTESISA E PARENTESISC {$$ = new ToNumberXQ($3, @1.first_line, @1.first_column); }
 //LLAMADA
   | LlamadaFuncion  { $$ = $1; }
-
 ;
 
 //======================================================
