@@ -622,7 +622,7 @@ export class ContenidoInicioComponent implements OnInit {
         this.generarEtiquetascd3(">", arbol);
         this.printcd3Simple(contain, arbol, key.getidentificador());
         salida += "<" + key.getidentificador() + atributos + ">"
-        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         let etiqueta2 = "</" + key.getidentificador() + ">"
         salida += etiqueta2 + "\n"
         this.generarEtiquetascd3(etiqueta2, arbol);
@@ -757,18 +757,22 @@ export class ContenidoInicioComponent implements OnInit {
 
         }
       } else if (instructions instanceof ForSimple) {
-        var hola: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
-        if (hola instanceof SimboloXQuery) {
-          consola += hola.getvalor();
-        } else if (hola instanceof Array) {
-          hola.forEach(element => {
-            consola += element.getvalor();
+        var respuesta: any = instructions.interpretar(Tree, tabla, this.tablaGlobal);
+        if (respuesta instanceof SimboloXQuery) {
+          cadena += respuesta.getvalor()
+        } else if (respuesta instanceof Array) {
+          respuesta.forEach(element => {
+            cadena += element.getvalor();
           });
-          console.log(consola)
+        } else if (respuesta instanceof tablaSimbolos) {
+          if (TreeAsc != null) {
+            cadena += this.recorrerTablaXquery(respuesta, TreeAsc);
+            cadena += "\n"
+          }
 
         } else {
           consola = <string><unknown>instructions.respuesta
-          this.mostrarContenido(consola, 'resultado');
+          
         }
       } else if (instructions instanceof ForCompuesto) {
 
@@ -777,7 +781,8 @@ export class ContenidoInicioComponent implements OnInit {
       }
     }
 
-
+    this.mostrarContenido(cadena, 'resultado');
+    cadena=""
   }
 
   recorrerTablaXquery(t: tablaSimbolos, arbol: Arbol) {
@@ -794,10 +799,9 @@ export class ContenidoInicioComponent implements OnInit {
         //  let recorrido=
         let atributos = ""
 
-
-        /**@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-         * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IMPRIMIR DATOS CD3 XPATH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-         * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        /**################################################################################################
+         * #################################### IMPRIMIR DATOS CD3 XQUERY #################################
+         * ################################################################################################
          */
 
         let etiqueta1 = "<" + key.getidentificador()
@@ -818,7 +822,7 @@ export class ContenidoInicioComponent implements OnInit {
           }
         }
         salida += "<" + key.getidentificador() + atributos + ">"
-        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("\t", "\n");
+        salida += objetos.replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"");
         let etiqueta2 = "</" + key.getidentificador() + ">"
         salida += etiqueta2 + "\n"
       }

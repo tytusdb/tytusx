@@ -23,6 +23,8 @@ export enum tipoDato {
   CARACTER,
   SELECT,
   ATRIBUTO,
-  FUNCION
-
+  FUNCION,
+  CICLOFOR,
+  WHERE,
+  ORDERBY
 }

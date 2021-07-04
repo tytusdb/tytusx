@@ -225,7 +225,8 @@ CONDICIONSIMPLE
     ;
 
 UNION
-        : VARIABLE RIN L_CONSULTAS          {$$=new condicionsimple.default($1,$3,@1.first_line,@1.first_column);}      
+        : VARIABLE RIN L_CONSULTAS          {$$=new condicionsimple.default($1,$3,@1.first_line,@1.first_column);}
+        | VARIABLE L_IN                              {$$=$1}
         ;
 
 CONJUNCION
@@ -276,10 +277,12 @@ RETORNO
     | EXPRESION          {$$=$1}
     ;
 
+
 IF
     :RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE RETORNO            {$$=new theif.default($3,@1.first_line,@1.first_column,$6,$8)}
     |RIF PARIZQ CONDICION PARDER RTHEN RETORNO RELSE PARIZQ PARDER      {$$=new theif.default($3,@1.first_line,@1.first_column,$6,[])}
     ;
+
 
 FUNCIONES
     :RDATA PARIZQ CONDICION PARDER              {$$=$1+$2+$3+$4}

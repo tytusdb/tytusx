@@ -11,6 +11,8 @@ import Identificador from '../Expresiones/Identificador';
 import AtributoSimple from '../../../XPATH/Analizador/Instrucciones/AtributosSimples'
 import SelectRoot from '../../../XPATH/Analizador/Instrucciones/SelectRoot';
 import Todo from '../../../XPATH/Analizador/Instrucciones/Todo';
+import Relacional from "../Expresiones/Relacional";
+import ForSimple from "./ForSimple";
 const inicio = require("../../../../componentes/contenido-inicio/contenido-inicio.component")
 
 export default class BarrasNodo extends Instruccion {
@@ -70,6 +72,97 @@ export default class BarrasNodo extends Instruccion {
         }
       } else if (this.Operacion instanceof Aritmetica) {
 
+      } else if (this.Operacion instanceof Relacional) {
+        if (
+          this.Operacion.cond1.tipoDato.getTipo() == tipoDato.CADENA &&
+          this.Operacion.cond2.tipoDato.getTipo() != tipoDato.CADENA
+        ) {
+
+          ///SE HACE LA COMPARACION PARA RETORNAR SI ES DE BARRANODO Y HAY CADENA
+          for (var simb of tablaxml.getAnterior().getTabla()) {
+            var bloqueaceptado: Simbolo = simb
+            if (simb.getidentificador() == ForSimple.prototype.variableanterior) {
+
+              for (let key of simb.getvalor().getTabla()) {
+                try {
+                  for (let sim of key.getvalor().getTabla()) {
+
+                  }
+                } catch (error) {
+
+                  if (this.busquedaCondicion(variable.condicion1, key, variable.condicion2, variable.operador, this.Operacion.cond2.tipoDato)) {
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                  }
+                }
+
+              }
+            }
+          }
+
+        } else if (
+          this.Operacion.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
+          this.Operacion.cond1.tipoDato.getTipo() != tipoDato.CADENA
+        ) {
+          for (var simb of tablaxml.getAnterior().getTabla()) {
+            var bloqueaceptado: Simbolo = simb
+            if (simb.getidentificador() == ForSimple.prototype.variableanterior) {
+
+              for (let key of simb.getvalor().getTabla()) {
+                try {
+                  for (let sim of key.getvalor().getTabla()) {
+
+                  }
+                } catch (error) {
+
+                  if (this.busquedaCondicion(variable.condicion2, key, variable.condicion1, variable.operador, this.Operacion.cond2.tipoDato)) {
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                  }
+                }
+
+              }
+            }
+          }
+        }else if (
+          this.Operacion.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
+          this.Operacion.cond1.tipoDato.getTipo() == tipoDato.CADENA
+        ) {
+          var cond1= this.Operacion.cond1.interpretar(arbol,tabla,tablaxml)
+          var cond2= this.Operacion.cond2.interpretar(arbol,tabla,tablaxml)
+          var operador= this.Operacion.TipoOperando()
+          for (var simb of tablaxml.getAnterior().getTabla()) {
+            if (simb.getidentificador() == ForSimple.prototype.variableanterior) {
+
+              for (let key of simb.getvalor().getTabla()) {
+                try {
+                  for (let sim of key.getvalor().getTabla()) {
+
+                  }
+                } catch (error) {
+
+                  if (this.busquedaCondicion(cond1, key, cond2, operador, this.Operacion.cond2.tipoDato)) {
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                  }else if(this.busquedaCondicion(cond2, key, cond1, operador, this.Operacion.cond2.tipoDato)){
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                    
+                  }
+                }
+
+              }
+            }
+          }
+        }
+
+        if (salidas != null) {
+          return salidas
+        }
       } else if (this.Operacion instanceof SelectRoot) {
         if (variable === ".") {
           for (var key of tablaxml.getTabla()) {
@@ -110,11 +203,10 @@ export default class BarrasNodo extends Instruccion {
         }
         return salidas
       } else {
-        var devolver: Array<Simboloxml>=new Array<Simboloxml>();
+        var devolver: Array<Simboloxml> = new Array<Simboloxml>();
         for (var key of tablaxml.getTabla()) {
-
           if (key.getidentificador() == variable) {
-
+            ForSimple.prototype.variableanterior = variable
             console.log(key.getidentificador())
             try {
               for (let sim of key.getvalor().getTabla()) {
@@ -128,7 +220,6 @@ export default class BarrasNodo extends Instruccion {
             error = "Nodo no encontrado ";
             console.log(error);
           }
-
         }
         if (cadena != '') {
           return devolver
@@ -189,30 +280,94 @@ export default class BarrasNodo extends Instruccion {
         }
       } else {
 
+        var devolver: Array<Simboloxml> = new Array<Simboloxml>();
         for (var key of tablaxml.getTabla()) {
           if (key.getidentificador() == variable) {
             console.log(key.getidentificador())
-            if (key.getvalor() instanceof tablaSimbolos) {
+            try {
               for (let sim of key.getvalor().getTabla()) {
                 salidas.setVariable(sim)
               }
-
-            }
-            else {
+            } catch (error) {
+              devolver.push(key)
               cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
             }
+          } else {
+            console.log("NO SE ENCONTRO NODO")
           }
-          if (cadena != '') {
-            return cadena
-          }
-          console.log("OBJETOSSALIDA")
-          console.log(salidas)
-          salidas.setAnterior(tablaxml)
-          return salidas
         }
+        if (cadena != '') {
+          return devolver
+        }
+        console.log("OBJETOSSALIDA")
+        console.log(salidas)
+        salidas.setAnterior(tablaxml)
+        return salidas
       }
     }
 
+  }
+  /**
+   * BUSQUEDA DE LA CONDICION CON ALGUNA ETIQUETA REALMENTE PARA LA FUNCION DE FOR Y LOS DERIVADOS DE WHERE
+   * @param id 
+   * @param tabla 
+   * @returns 
+   */
+  busquedaCondicion(id: String, sim: Simboloxml, condicion2: any, operador: String, tipodato: Tipo): Boolean {
+    if (id == sim.getidentificador()) {
+      var condicion1 = this.cambiartipo(tipodato, sim.getvalor().trim())
+      return this.hacerOperacion(condicion1, operador, condicion2)
+    }
+    return null
+  }
+  /**
+   * ESTE HACE LA OPERACION Y DEVUELVE UN TRUE PARA 
+   * @param cond1 
+   * @param Operador 
+   * @param cond2 
+   * @returns 
+   */
+  hacerOperacion(cond1: any, Operador: String, cond2: any): Boolean {
+    switch (Operador) {
+      case "==":
+        return cond1 == cond2;
+      case "!=":
+        return cond1 != cond2;
+      case "<":
+        return cond1 < cond2;
+      case "<=":
+        return cond1 <= cond2;
+      case ">":
+        return cond1 > cond2;
+      case ">=":
+        return cond1 >= cond2;
+      default:
+        return false;
+    }
+  }
+  /**
+   * CAMBIAR TIPO PARA HACER COMPARACION
+   * @param tipodato 
+   * @param valor 
+   * @returns 
+   */
+  cambiartipo(tipodato: Tipo, valor: any) {
+    switch (tipodato.getTipo()) {
+      case tipoDato.ENTERO:
+        return parseInt(valor);
+      case tipoDato.DECIMAL:
+        return parseFloat(valor);
+      case tipoDato.CARACTER:
+        var da = valor + '';
+        var res = da.charCodeAt(0);
+        return res;
+      case tipoDato.BOOLEANO:
+        let dats = valor + '';
+        let otr = dats.toLowerCase();
+        return parseInt(otr);
+      case tipoDato.CADENA:
+        return '' + valor;
+    }
   }
   /////////////////////////////////FALTA COMPONER ESTA PARTE PARA QUE TAMBIEN HAGA LA COMPARACION CON CODIGO 3D
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
