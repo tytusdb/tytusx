@@ -1,16 +1,17 @@
 "use strict";
-class Relational {
+class Relational extends ExpresionAncestor {
     constructor(izquierdo, derecha, relationalOperator, linea, columna) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.relationalOperator = relationalOperator;
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierdo.getTipo(tsXquery, ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery, ent);
         if ((tipoIzquierda.esXpath() || tipoIzquierda.esNumero()) && (tipoDerecha.esXpath() || tipoDerecha.esNumero())) {
             tipo = new Tipo(TipoDato.booleano);
         }
@@ -19,16 +20,16 @@ class Relational {
         }
         return tipo;
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         let valor;
-        let tipo = this.getTipo(ent);
-        let valorIzquierda = this.izquierdo.getValor(ent);
-        let valorDerecha = this.derecha.getValor(ent);
+        let tipo = this.getTipo(tsXquery, ent);
+        let valorIzquierda = this.izquierdo.getValor(tsXquery, ent);
+        let valorDerecha = this.derecha.getValor(tsXquery, ent);
         if (valorIzquierda instanceof TablaSimbolos) {
             valorIzquierda = valorIzquierda.getContentRow();
             if (valorIzquierda != null) {
-                if (valorIzquierda.getTipo(ent).esNumero())
-                    valorIzquierda = valorIzquierda.getValor(ent);
+                if (valorIzquierda.getTipo(tsXquery, ent).esNumero())
+                    valorIzquierda = valorIzquierda.getValor(tsXquery, ent);
                 else {
                     //error de tipo
                     ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
@@ -44,8 +45,8 @@ class Relational {
         if (valorDerecha instanceof TablaSimbolos) {
             valorDerecha = valorDerecha.getContentRow();
             if (valorDerecha != null) {
-                if (valorDerecha.getTipo(ent).esNumero())
-                    valorDerecha = valorDerecha.getValor(ent);
+                if (valorDerecha.getTipo(tsXquery, ent).esNumero())
+                    valorDerecha = valorDerecha.getValor(tsXquery, ent);
                 else {
                     //error de tipo
                     ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
@@ -61,15 +62,19 @@ class Relational {
         if (!tipo.esError() && valorIzquierda != null && valorDerecha != null) {
             switch (this.relationalOperator) {
                 case RelationalOperators.greaterThan:
+                case RelationalOperators.one_greaterThan:
                     valor = valorIzquierda > valorDerecha;
                     break;
                 case RelationalOperators.greaterOrEqualThan:
+                case RelationalOperators.one_greaterOrEqualThan:
                     valor = valorIzquierda >= valorDerecha;
                     break;
                 case RelationalOperators.lessThan:
+                case RelationalOperators.one_lessThan:
                     valor = valorIzquierda < valorDerecha;
                     break;
                 case RelationalOperators.lessOrEqualThan:
+                case RelationalOperators.one_lessOrEqualThan:
                     valor = valorIzquierda <= valorDerecha;
                     break;
             }

@@ -1,4 +1,4 @@
-class Relational implements Expresion{
+class Relational extends ExpresionAncestor{
     private izquierdo: Expresion;
     private derecha: Expresion;
     private relationalOperator: RelationalOperators;
@@ -6,6 +6,7 @@ class Relational implements Expresion{
     columna: number;
 
     constructor(izquierdo: Expresion, derecha: Expresion, relationalOperator: RelationalOperators, linea: number, columna: number) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.relationalOperator = relationalOperator;
@@ -13,10 +14,10 @@ class Relational implements Expresion{
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierdo.getTipo(tsXquery,ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery,ent);
         if( (tipoIzquierda.esXpath() || tipoIzquierda.esNumero()) && (tipoDerecha.esXpath() || tipoDerecha.esNumero() ) ){
             tipo = new Tipo(TipoDato.booleano);
         }
@@ -26,17 +27,17 @@ class Relational implements Expresion{
         return tipo;
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         let valor;
-        let tipo = this.getTipo(ent);
-        let valorIzquierda = this.izquierdo.getValor(ent);
-        let valorDerecha = this.derecha.getValor(ent);
+        let tipo = this.getTipo(tsXquery,ent);
+        let valorIzquierda = this.izquierdo.getValor(tsXquery,ent);
+        let valorDerecha = this.derecha.getValor(tsXquery,ent);
 
         if(valorIzquierda instanceof TablaSimbolos){
             valorIzquierda = valorIzquierda.getContentRow();
             if(valorIzquierda != null ){
-                if(valorIzquierda.getTipo(ent).esNumero())
-                    valorIzquierda = valorIzquierda.getValor(ent);
+                if(valorIzquierda.getTipo(tsXquery,ent).esNumero())
+                    valorIzquierda = valorIzquierda.getValor(tsXquery,ent);
                 else{
                     //error de tipo
                     ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  "+this.relationalOperator,this.linea,this.columna));
@@ -51,8 +52,8 @@ class Relational implements Expresion{
         if(valorDerecha instanceof TablaSimbolos){
             valorDerecha = valorDerecha.getContentRow();
             if(valorDerecha != null ){
-                if(valorDerecha.getTipo(ent).esNumero())
-                    valorDerecha = valorDerecha.getValor(ent);
+                if(valorDerecha.getTipo(tsXquery,ent).esNumero())
+                    valorDerecha = valorDerecha.getValor(tsXquery,ent);
                 else{
                     //error de tipo
                     ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  "+this.relationalOperator,this.linea,this.columna));

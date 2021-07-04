@@ -4,23 +4,24 @@ enum NativeFunction{
     text
 }
 
-class NativeFunctionExpresion implements Expresion{
+class NativeFunctionExpresion extends ExpresionAncestor{
     private nativeFunction: NativeFunction;
     linea: number;
     columna: number;
 
 
     constructor(nativeFunction: NativeFunction, linea: number, columna: number) {
+        super();
         this.nativeFunction = nativeFunction;
         this.linea = linea;
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return new Tipo(TipoDato.numero);
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         let position;
         switch (this.nativeFunction){
             case NativeFunction.position:

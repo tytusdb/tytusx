@@ -1,19 +1,20 @@
-class RootNode implements Expresion{
+class RootNode extends ExpresionAncestor{
     private predicatesList: Expresion[];
     linea: number;
     columna: number;
 
     constructor(predicatesList: Expresion[], linea: number, columna: number) {
+        super();
         this.predicatesList = predicatesList;
         this.linea = linea;
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         return new Tipo(TipoDato.err);
     }
 
-    getValor(ent: TablaSimbolos): any {
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
         let ts = ent.findAllObjects();
         return PredicateExpresion.filterXpathExpresion(ts,this.predicatesList);
     }
