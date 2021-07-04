@@ -4,8 +4,6 @@ import { Retorno } from "../Abstract/Retorno";
 import { Error_ } from "../Error";
 import { errores } from '../Errores';
 import { isArray, isNumber } from 'util';
-import { _Array } from '../Object/Array';
-import { _Struct } from '../Object/Struct';
 import { _Console } from '../Util/Salida';
 import { Literal } from './Literal';
 import { _Optimizer } from '../Optimizer/Optimizer';

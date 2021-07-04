@@ -33,7 +33,6 @@ Los analizadores se dividen en dos carpetas
 # Gramáticas
 
 ## XML
-## Xpath
 
 Init -> instrucciones EOF
 
@@ -124,8 +123,6 @@ predicado -> '*'
 &nbsp;&nbsp;&nbsp;&nbsp;->'node''('')'
 &nbsp;&nbsp;&nbsp;&nbsp;->'position''('')'
 &nbsp;&nbsp;&nbsp;&nbsp;->'last''('')' 
-
-
 
 
 

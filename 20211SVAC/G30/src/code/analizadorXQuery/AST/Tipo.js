@@ -1,0 +1,20 @@
+"use strict";
+exports.__esModule = true;
+exports.Tipo = void 0;
+var Tipo;
+(function (Tipo) {
+    Tipo["OBJETO"] = "OBJETO";
+    Tipo["STRING"] = "STRING";
+    Tipo["DATE"] = "DATE";
+    Tipo["DECIMAL"] = "DECIMAL";
+    Tipo["INTEGER"] = "INTEGER";
+    Tipo["INT"] = "INT";
+    Tipo["LONG"] = "LONG";
+    Tipo["SHORT"] = "SHORT";
+    Tipo["BOOLEAN"] = "BOOLEAN";
+    Tipo["DOUBLE"] = "DOUBLE";
+    Tipo["FLOAT"] = "FLOAT";
+    Tipo["NULL"] = "NULL";
+    Tipo["PATH"] = "PATH";
+    Tipo["VOID"] = "VOID";
+})(Tipo = exports.Tipo || (exports.Tipo = {}));

@@ -28,6 +28,6 @@ export class Print {
         env.salida += this.build();
     }
     optimize(env: _Optimizer) {
-
+        env.salida += this.build();
     }
 }

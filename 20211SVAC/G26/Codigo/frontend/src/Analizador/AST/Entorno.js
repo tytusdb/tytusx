@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Entorno = void 0;
-var ListaError_1 = __importDefault(require("../Global/ListaError"));
-var Tipo_1 = require("./Tipo");
-var Entorno = /** @class */ (function () {
-    function Entorno(nombre, padre, global) {
+const ListaError_1 = __importDefault(require("../Global/ListaError"));
+const Tipo_1 = require("./Tipo");
+class Entorno {
+    constructor(nombre, padre, global) {
         this.tsimbolos = new Array();
         this.nombre = nombre;
         this.padre = padre;
@@ -16,10 +16,23 @@ var Entorno = /** @class */ (function () {
         else
             this.global = global;
     }
-    Entorno.prototype.agregarSimbolo = function (nombre, simbolo) {
+    agregarSimbolo(nombre, simbolo) {
         this.tsimbolos.push({ 'nombre': nombre, 'valor': simbolo });
-    };
-    Entorno.prototype.getStringTipo = function (t) {
+    }
+    sobreEscribirSimbolo(nombre, simbolo) {
+        for (let a = this; a != null; a = a.padre) {
+            for (let i = 0; i < a.tsimbolos.length; i++) {
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
+                    let nuevo = { 'nombre': nombre, 'valor': simbolo };
+                    a.tsimbolos[i] = nuevo;
+                    return true;
+                }
+            }
+        }
+        ListaError_1.default.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
+        return false;
+    }
+    getStringTipo(t) {
         switch (t) {
             case Tipo_1.Tipo.STRING:
                 return 'Cadena';
@@ -29,25 +42,26 @@ var Entorno = /** @class */ (function () {
                 return 'Atributo';
         }
         return '';
-    };
-    Entorno.prototype.obtenerSimbolo = function (nombre) {
-        for (var a = this; a != null; a = a.padre) {
-            for (var i = 0; i < a.tsimbolos.length; i++) {
-                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase())
+    }
+    obtenerSimbolo(nombre) {
+        for (let a = this; a != null; a = a.padre) {
+            for (let i = 0; i < a.tsimbolos.length; i++) {
+                if (a.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
                     return a.tsimbolos[i].valor;
+                }
             }
         }
         ListaError_1.default.agregarError('semantico', 'No existe el simbolo ' + nombre, -1, -1);
         return null;
-    };
+    }
     /* Metodo para cambiar el valor del simbolo */
-    Entorno.prototype.setSimbolo = function (nombre, simbolo) {
+    setSimbolo(nombre, simbolo) {
         //console.log("Entra a set simbolo");
-        for (var a = this; a != null; a = a.padre) {
-            for (var i = 0; i < a.tsimbolos.length; i++) {
+        for (let a = this; a != null; a = a.padre) {
+            for (let i = 0; i < a.tsimbolos.length; i++) {
                 //console.log(a.tsimbolos[i].nombre.toString().toLowerCase());
                 //console.log(nombre.toString().toLowerCase());
-                var aux = a.tsimbolos[i];
+                let aux = a.tsimbolos[i];
                 if (aux.nombre.toString().toLowerCase() === nombre.toString().toLowerCase()) {
                     aux.valor = simbolo;
                     //console.log(a.tsimbolos[i].valor);
@@ -56,15 +70,14 @@ var Entorno = /** @class */ (function () {
                 }
             }
         }
-    };
+    }
     /* Verifica si el simbolo existe en el entorno actual */
-    Entorno.prototype.existeSimbolo = function (nombre) {
-        for (var i = 0; i < this.tsimbolos.length; i++) {
+    existeSimbolo(nombre) {
+        for (let i = 0; i < this.tsimbolos.length; i++) {
             if (this.tsimbolos[i].nombre.toString().toLowerCase() === nombre.toString().toLowerCase())
                 return true;
         }
         return false;
-    };
-    return Entorno;
-}());
+    }
+}
 exports.Entorno = Entorno;

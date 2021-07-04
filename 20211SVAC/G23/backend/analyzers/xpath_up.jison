@@ -1,6 +1,6 @@
 /* lexical grammar */
 %{
-	var attribute = '';
+  var attribute = '';
 	var errors = [];
 	let re = /[^\n\t\r ]+/g
 	//let ast = null;
@@ -129,6 +129,7 @@
                      <tr><th>ini</th><td>XPATH_U EOF</td><td>SS= S1</td></tr>
                      <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
                      <tr><th>XPATH_U</th><td>XPATH_U tk_line XPATH</td><td>S1.push(S3); SS = S1;</td></tr>
+                     <tr><th></th><td>XPATH_U tk_2line XPATH</td><td>S1.push(S3); SS = S1;</td></tr>
                      <tr><th></th><td>XPATH</td><td>SS = [S1]</td></tr>
                      <tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td></tr>
                      <tr><th>XPATH</th><td>XPATH QUERY</td><td>S1.push(S2); SS = S1;</td></tr>
@@ -252,7 +253,6 @@
                      </html>`;
                      return str;
     }
-    // .replace("₤","$")
     function buildGrammarReport(obj){
         if(obj == null){return "";}
         let str = "";
@@ -271,7 +271,6 @@
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
 
@@ -288,44 +287,6 @@
         }
         return str;
     }
-
-//just for testing purposes
-	function printstrack(obj, lines){
-	return;
-
-        if(Array.isArray(obj)){ //IS ARRAY
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            obj.forEach((value)=>{
-                if(typeof value === 'string' ){
-                     str = ""
-                     for(let i = 0; i < lines; i++){str = str + "- ";}
-                     console.log(str + value);
-                }else if(Array.isArray(value)){console.log("ERROR 5");}else{
-                    str = ""
-                    for(let i = 0; i < lines; i++){ str = str + "- ";}
-                    for(let key in value){
-                       console.log(`${str}${key}`);
-                       printstrack(value[key], lines + 1);
-                    }
-                }
-
-                //printstrack(value, lines +1);
-            });
-        }else if(typeof obj === 'string' ){ // IS STRING
-            str = ""
-            for(let i = 0; i < lines; i++){str = str + "- ";}
-            console.log(str + obj);
-        }else{// IS OBJECT
-            str = ""
-            for(let i = 0; i < lines; i++){ str = str + "- ";}
-            for(let key in obj){
-                console.log(`${str}Key: ${key}`);
-                //console.log(obj[key]);
-                printstrack(obj[key], lines + 1);
-            }
-        }
-	}
 
     function getCST(obj){
         let str = `
@@ -510,7 +471,6 @@
             });
         }else if(typeof obj === 'string' ){ // IS STRING
             return "";
-            console.log("ERROR**************************");
         }else{// IS OBJECT
             for(let key in obj){
                 const words = key.split('->');
@@ -541,13 +501,13 @@
 
 "div"                   return 'tk_div'
 [0-9]+("."[0-9]+)?\b    return 'num'
-"<="					return 'tk_menorigual'
-">="					return 'tk_mayorigual'
-"<"		        		return 'tk_menor'
-">"						return 'tk_mayor'
+"<="					          return 'tk_menorigual'
+">="					          return 'tk_mayorigual'
+"<"		                  return 'tk_menor'
+">"						          return 'tk_mayor'
 "//"                    return 'tk_2bar'
-"/"						return 'tk_bar'
-"="						return 'tk_equal'
+"/"						          return 'tk_bar'
+"="						          return 'tk_equal'
 ".."                    return 'tk_2puntos'
 "."                     return 'tk_punto'
 "::"                    return 'tk_4puntos'
@@ -578,37 +538,36 @@
 "+"                     return 'tk_mas'
 "-"                     return 'tk_menos'
 "!="                    return 'tk_diferent'
-"or"					return 'tk_or'
-"and"					return 'tk_and'
-"mod"					return 'tk_mod'
+"or"					          return 'tk_or'
+"and"					          return 'tk_and'
+"mod"					          return 'tk_mod'
 
 [\w\u00e1\u00e9\u00ed\u00f3\u00fa\u00c1\u00c9\u00cd\u00d3\u00da\u00f1\u00d1]+ return 'tk_id'
 
-["]								{ attribute = ''; this.begin("string_doubleq"); }
+["]								          { attribute = ''; this.begin("string_doubleq"); }
 <string_doubleq>[^"\\]+			{ attribute += yytext; }
 <string_doubleq>"\\\""			{ attribute += "\""; }
-<string_doubleq>"\\n"			{ attribute += "\n"; }
-<string_doubleq>\s				{ attribute += " ";  }
-<string_doubleq>"\\t"			{ attribute += "\t"; }
+<string_doubleq>"\\n"			  { attribute += "\n"; }
+<string_doubleq>\s				  { attribute += " ";  }
+<string_doubleq>"\\t"			  { attribute += "\t"; }
 <string_doubleq>"\\\\"			{ attribute += "\\"; }
 <string_doubleq>"\\\'"			{ attribute += "\'"; }
-<string_doubleq>"\\r"			{ attribute += "\r"; }
-<string_doubleq>["]				{ yytext = attribute; this.popState(); return 'tk_attribute_d'; }
+<string_doubleq>"\\r"			  { attribute += "\r"; }
+<string_doubleq>["]				  { yytext = attribute; this.popState(); return 'tk_attribute_d'; }
 
-[']								{ attribute = ''; this.begin("string_singleq"); }
+[']								          { attribute = ''; this.begin("string_singleq"); }
 <string_singleq>[^'\\]+			{ attribute += yytext; }
 <string_singleq>"\\\""			{ attribute += "\""; }
-<string_singleq>"\\n"			{ attribute += "\n"; }
-<string_singleq>\s				{ attribute += " ";  }
-<string_singleq>"\\t"			{ attribute += "\t"; }
+<string_singleq>"\\n"			  { attribute += "\n"; }
+<string_singleq>\s				  { attribute += " ";  }
+<string_singleq>"\\t"			  { attribute += "\t"; }
 <string_singleq>"\\\\"			{ attribute += "\\"; }
 <string_singleq>"\\\'"			{ attribute += "\'"; }
-<string_singleq>"\\r"			{ attribute += "\r"; }
-<string_singleq>[']				{ yytext = attribute; this.popState(); return 'tk_attribute_s'; }
+<string_singleq>"\\r"			  { attribute += "\r"; }
+<string_singleq>[']				  { yytext = attribute; this.popState(); return 'tk_attribute_s'; }
 
 
 <<EOF>>               	return 'EOF'
-[^></]+					return 'anything'
 .                     	{ errors.push({ tipo: "Léxico", error: yytext, origen: "XPath", linea: yylloc.first_line, columna: yylloc.first_column+1 }); return 'INVALID'; }
 
 /lex
@@ -616,11 +575,11 @@
 %{
 	const { Objeto } = require('../model/xpath/Objeto');
 	const { Tipos } = require('../model/xpath/Enum');
+  const getASTTree = require('./ast_xpath');
 	var builder = new Objeto();
 %}
 
 /* operator associations and precedence */
-// %left 'tk_por'
 %left 'tk_or' 'tk_line'
 %left 'tk_and'
 %left 'tk_equal' 'tk_diferent' 'tk_menor' 'tk_menorigual' 'tk_mayor' 'tk_mayorigual'
@@ -639,8 +598,8 @@ ini: XPATH_U EOF { 	prod_1 = grammar_stack.pop();
 					grammar_report =  getGrammarReport(grammar_stack);
                     cst = getCST(grammar_stack);
                     console.log(grammar_report);
-					//printstrack(grammar_stack, 0);
-					console.log($1,999); ast = { ast: $1, errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : "<h1>Test</h1>" }; return ast;
+                    let arbol_ast = getASTTree($1);
+					ast = { ast: $1, errors: errors, cst :cst, grammar_report:grammar_report,  arbolAST : arbol_ast }; return ast;
 					}
 ;
 
@@ -648,6 +607,10 @@ XPATH_U: XPATH_U tk_line XPATH { $1.push($3); $$=$1;
 								 prod_1 = grammar_stack.pop();
 								 prod_2 = grammar_stack.pop();
 			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_line\t Lexema: ' + $1, prod_1]}); }
+        | XPATH_U tk_2line XPATH { $1.push($3); $$=$1;
+								 prod_1 = grammar_stack.pop();
+								 prod_2 = grammar_stack.pop();
+			 					 grammar_stack.push({'XPATH_U -> XPATH_U tk_2line XPATH {S1.push(S3); SS = S1;}': [prod_2, 'token: tk_2line\t Lexema: ' + $1, prod_1]}); }
 		| XPATH { $$=[$1];
 				  prod_1 = grammar_stack.pop();
 			 	  grammar_stack.push({'XPATH_U -> XPATH {SS = [S1]}': [prod_1]}); }

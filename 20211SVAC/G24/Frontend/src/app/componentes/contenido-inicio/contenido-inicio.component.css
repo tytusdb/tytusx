@@ -2,14 +2,18 @@ mat-button-toggle-group {
   margin-top: 10px;
   margin-right: auto;
   margin-left: auto;
+  left: 20px;
+  flex: auto;
   background-color: #fafafa;
 }
 
 mat-button-toggle {
   height: 50px;
-  width: 150px;
+  width: 140px;
+  flex: content;
   background-color: #262c7c;
   color: #f9faf7;
+  font-size: 12px;
   font-family: "Century Gothic";
 }
 .contenedor {
@@ -30,17 +34,23 @@ mat-button-toggle {
   width: 50%;
 }
 .forma {
+  background: url(http://i.imgur.com/2cOaJ.png);
+  background-attachment: local;
+background-repeat: no-repeat;
   padding-top: 13px;
+  padding-left: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
-  height: 1000px;
+  height: 300px;
   border-style: solid;
   width: 80%;
   margin-left: 10%;
   font-family: "Courier New", "Lucida Console", "Century Gothic";
-  font-size: 96%;
-  resize: none;
-  white-space: nowrap;
+  font-size: 98%;
+  color: white;
+position: relative;
+  border-color:rgb(126, 123, 123);
+  background-color: rgb(24, 73, 43);
 }
 .consola {
   padding-top: 13px;
@@ -68,4 +78,68 @@ mat-button-toggle {
 .consolaContainer label {
   font-size: 20px;
   margin-right: 20px;
+}
+
+
+@import '~codemirror/lib/codemirror';
+@import '~codemirror/theme/material';
+.textareanumber{
+  background: url(http://i.imgur.com/2cOaJ.png);
+background-attachment: local;
+background-repeat: no-repeat;
+padding-top: 13px;
+padding-left: 40px;
+top: 70px;
+height: 300px;
+width: 600px;
+font-size: 12.5px;
+color: white;
+position: relative;
+  border-color:rgb(126, 123, 123);
+  background-color: rgb(58, 56, 56);
+}
+
+.textareanumber3{
+  background: url(http://i.imgur.com/2cOaJ.png);
+background-attachment: local;
+background-repeat: no-repeat;
+padding-left: 40px;
+padding-top: 13px;
+top: 10px;
+left: 210px;
+margin-block-end: 80px;
+height: 300px;
+width: 800px;
+font-size: 12.5px;
+color: white;
+position: relative;
+  border-color:rgb(126, 123, 123);
+  background-color: rgb(3, 102, 89);
+}
+.textareanumber4{
+  background: url(http://i.imgur.com/2cOaJ.png);
+background-attachment: local;
+background-repeat: no-repeat;
+padding-left: 40px;
+padding-top: 13px;
+top: 10px;
+left: 210px;
+margin-block-end: 80px;
+height: 300px;
+width: 800px;
+font-size: 12.5px;
+color: white;
+position: relative;
+  border-color:rgb(126, 123, 123);
+  background-color: rgb(17, 19, 53);
+}
+.cd3result{
+  left: 100px;
+  top: -500px;
+  
+}
+
+.mostrar{
+  left: 100px;
+  background-color: aquamarine;
 }

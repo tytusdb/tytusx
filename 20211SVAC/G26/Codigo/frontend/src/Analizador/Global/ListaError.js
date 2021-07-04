@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Error_1 = __importDefault(require("./Error"));
-var ListaError = /** @class */ (function () {
-    function ListaError() {
+const Error_1 = __importDefault(require("./Error"));
+class ListaError {
+    constructor() {
         this.listaError = new Array();
         if (typeof ListaError._instance === "object") {
             return ListaError._instance;
@@ -13,22 +13,21 @@ var ListaError = /** @class */ (function () {
         ListaError._instance = this;
         return this;
     }
-    ListaError.getInstance = function () {
+    static getInstance() {
         return this._instance;
-    };
-    ListaError.prototype.agregarError = function (tipo, descripcion, linea, columna) {
+    }
+    agregarError(tipo, descripcion, linea, columna) {
         this.listaError.push(new Error_1.default(tipo, descripcion, linea, columna));
-    };
-    ListaError.prototype.getSize = function () {
+    }
+    getSize() {
         return this.listaError.length;
-    };
-    ListaError.prototype.getError = function (indice) {
+    }
+    getError(indice) {
         return this.listaError[indice];
-    };
-    ListaError.prototype.limpiar = function () {
+    }
+    limpiar() {
         this.listaError = [];
-    };
-    return ListaError;
-}());
-var errores = new ListaError();
+    }
+}
+const errores = new ListaError();
 exports.default = errores;

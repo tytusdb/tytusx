@@ -8,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class TablaSimbolosComponent implements OnInit {
   displayedColumns: string[] = [
     'ID',
+    'TIPO',
+    'AMBITO',
     'CONTENIDO',
-    'LISTA ATRIBUTO',
-    'LISTA OBJETO',
-    'LINEA',
-    'COLUMNA'
+    'LINEA',  
+    'COLUMNA',
+    'POSICION'
   ];
   dataSource = '';
   constructor() {}

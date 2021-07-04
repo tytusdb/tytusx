@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetTE = exports.ELexico = exports.ESintactico = exports.TError = exports.errorLex = exports.errorSin = exports.errorSem = void 0;
+exports.resetTE = exports.ESemantico = exports.ELexico = exports.ESintactico = exports.TError = exports.errorLex = exports.errorSin = exports.errorSem = void 0;
 exports.errorSem = [];
 exports.errorSin = [];
 exports.errorLex = [];
@@ -50,6 +50,13 @@ class ELexico {
     }
 }
 exports.ELexico = ELexico;
+class ESemantico {
+    constructor(tipo, descripcion, analizador, linea, columna) {
+        const result = Error(tipo, descripcion, analizador, linea, columna);
+        exports.errorSem.push(result);
+    }
+}
+exports.ESemantico = ESemantico;
 function resetTE() {
     exports.errorSem = [];
     exports.errorSin = [];

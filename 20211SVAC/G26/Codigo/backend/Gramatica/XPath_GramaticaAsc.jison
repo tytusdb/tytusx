@@ -15,6 +15,8 @@
     const {TipoAxis} = require("../XPath/Nodo")
 
     const errores = require('../Global/ListaError');
+    const {Nodo} = require('../Reporte/Nodo');
+    const cst = require('../Reporte/CST');
 %}
 
 
@@ -41,8 +43,6 @@ content                         [^<]
 
 \s+                                 /* skip whitespace */
 
-"<"                         return 'lt';
-">"                         return 'gt';
 "="                         return 'igual';
 "/"                         return 'diag';
 "."                         return "dot";
@@ -61,6 +61,8 @@ content                         [^<]
 "div"                       return "div";
 "<="                        return 'lte';
 ">="                        return "gte";
+"<"                         return 'lt';
+">"                         return 'gt';
 "!="                        return "nequal";
 "or"                        return "or";
 "and"                       return "and";
@@ -99,9 +101,6 @@ content                         [^<]
 
 
 
-
-
-
 //error lexico
 .                                   {
                                         console.log(errores.default);
@@ -130,24 +129,100 @@ content                         [^<]
 %start START
 %%
 /* Definición de la gramática */
-START : LISTACONSULTAS EOF         { $$ = $1; return $$; }
+START : LISTACONSULTAS EOF         
+        { 
+            /* CONSTRUCCION DE CST */
+            let raiz = new Nodo(cst.cstXpathAsc.getId(), 'START', null, [cst.cstXpathAsc.obtenerUltimoNodo()]); 
+            cst.cstXmlAsc.setRaiz(raiz);
+            return $1; 
+        }
     ;
 
 
-LISTACONSULTAS: LISTACONSULTAS andSelect CONSULTA { $1.push(new Consulta($3,@3.first_line, @3.first_column)); $$ = $1; }
-        |  CONSULTA     { $$ = [new Consulta($1, @1.first_line, @1.first_column)];}
+LISTACONSULTAS: LISTACONSULTAS andSelect CONSULTA 
+                { 
+                    $1.push(new Consulta($3,@3.first_line, @3.first_column)); 
+                    $$ = $1; 
+                    /* CONSTRUCCION DE CST */
+                    let cons = cst.cstXmlAsc.obtenerUltimoNodo();
+                    let listCons = cst.cstXmlAsc.obtenerUltimoNodo();
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTACONSULTAS', null, 
+                                                        [listCons, 
+                                                        new Nodo(cst.cstXmlAsc.getId(), 'OR', null, 
+                                                                [new Nodo(cst.cstXmlAsc.getId(), '|', null, [])]), 
+                                                        cons]));
+                }
+                |  CONSULTA     
+                { 
+                    $$ = [new Consulta($1, @1.first_line, @1.first_column)];
+                    /* CONSTRUCCION DE CST */
+                    cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTACONSULTAS', null, 
+                                                        [cst.cstXmlAsc.obtenerUltimoNodo()]));
+                }
 ;
 
 
-CONSULTA: identifier { $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]}
-        | identifier LISTANODOS {$$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; $$ = $$.concat($2); }
-        | MASTIPOS LISTANODOS{ $$ = [$1]; $$ = $$.concat($2)}
-        | LISTANODOS { $$ = $1;}
-        | MASTIPOS { $$ = [$1];}
+CONSULTA: identifier 
+        { 
+            $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)];
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'CONSULTA', null, 
+                                                [new Nodo(cst.cstXmlAsc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), $1.toString().replaceAll("\"",""), null, [])])]));
+        }
+        | identifier LISTANODOS 
+        {
+            $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; 
+            $$ = $$.concat($2); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'CONSULTA', null, 
+                                                [new Nodo(cst.cstXmlAsc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), $1.toString().replaceAll("\"",""), null, [])]), 
+                                                cst.cstXmlAsc.obtenerUltimoNodo()]));
+        }
+        | MASTIPOS LISTANODOS
+        { 
+            $$ = [$1]; 
+            $$ = $$.concat($2);
+            /* CONSTRUCCION DE CST */
+            let listaNodo = cst.cstXmlAsc.obtenerUltimoNodo();
+            let masTipos = cst.cstXmlAsc.obtenerUltimoNodo();
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'CONSULTA', null, 
+                                                [masTipos, listaNodo]));
+        }
+        | LISTANODOS 
+        { 
+            $$ = $1;
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'CONSULTA', null, 
+                                                [cst.cstXmlAsc.obtenerUltimoNodo()]));
+        }
+        | MASTIPOS 
+        { 
+            $$ = [$1];
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'CONSULTA', null, 
+                                                [cst.cstXmlAsc.obtenerUltimoNodo()]));
+        }
 ;
 
-LISTANODOS:  LISTANODOS NODO{ $1.push($2); $$ = $1;}
-        | NODO { $$ = [$1]; }
+LISTANODOS:  LISTANODOS NODO
+            { 
+                $1.push($2); 
+                $$ = $1;
+                /* CONSTRUCCION DE CST */
+                let node = cst.cstXmlAsc.obtenerUltimoNodo();
+                let listNode = cst.cstXmlAsc.obtenerUltimoNodo();
+                cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTANODOS', null, 
+                                                    [listNode, node]));
+            }
+            | NODO 
+            { 
+                $$ = [$1]; 
+                /* CONSTRUCCION DE CST */
+                cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'LISTANODOS', null, 
+                                                    [cst.cstXmlAsc.obtenerUltimoNodo()]));
+            }
 ;
 
 NODO: diag TIPONODO 
@@ -155,26 +230,86 @@ NODO: diag TIPONODO
                 if($$ != null){
                         $2.fromRoot = true; $$ = $2;
                 }
+                /* CONSTRUCCION DE CST */
+                cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'NODO', null, 
+                                                    [new Nodo(cst.cstXmlAsc.getId(), 'diag', null, 
+                                                                [new Nodo(cst.cstXmlAsc.getId(), '/', null, [])]), 
+                                                    cst.cstXmlAsc.obtenerUltimoNodo()]));
         }
     | diag diag TIPONODO 
         { 
                 if($$ != null){
                         $3.fromRoot = false; $$ = $3;
                 }
+                /* CONSTRUCCION DE CST */
+                cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'NODO', null, 
+                                                    [new Nodo(cst.cstXmlAsc.getId(), 'diag', null, 
+                                                                [new Nodo(cst.cstXmlAsc.getId(), '/', null, [])]),
+                                                    new Nodo(cst.cstXmlAsc.getId(), 'diag', null, 
+                                                                [new Nodo(cst.cstXmlAsc.getId(), '/', null, [])]), 
+                                                    cst.cstXmlAsc.obtenerUltimoNodo()]));
         }
-    | diag error = { console.log('Entra a error sintactico de one diag');
+    | diag error = 
+        { 
+            console.log('Entra a error sintactico de one diag');
             errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', @1.first_line, @1.first_column); 
-            $$ = new Nodo($2, TipoNodo.NODOERROR, @1.first_line, @1.first_column);}
-    | diag diag error = { console.log('Entra a error sintactico de two diags');
+            $$ = new Nodo($2, TipoNodo.NODOERROR, @1.first_line, @1.first_column);
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'NODO', null, 
+                                                [new Nodo(cst.cstXmlAsc.getId(), 'diag', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), '/', null, [])]), 
+                                                new Nodo(cst.cstXmlAsc.getId(), 'error', null, [])]));
+        }
+    | diag diag error = 
+        { 
+            console.log('Entra a error sintactico de two diags');
             errores.default.agregarError('sintactico', 'Token inesperado \'' + yytext + '\'', @1.first_line, @1.first_column); 
-            $$ = new Nodo($3, TipoNodo.NODOERROR, @1.first_line, @1.first_column);}                     
+            $$ = new Nodo($3, TipoNodo.NODOERROR, @1.first_line, @1.first_column);
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'NODO', null, 
+                                                [new Nodo(cst.cstXmlAsc.getId(), 'diag', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), '/', null, [])]),
+                                                new Nodo(cst.cstXmlAsc.getId(), 'diag', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), '/', null, [])]), 
+                                                new Nodo(cst.cstXmlAsc.getId(), 'error', null, [])]));
+        }   
 ;
 
-TIPONODO: identifier { $$ = new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column); }
-        | identifier corA EXPRESION corC { $$ = new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column, new Predicate($3, @1.first_line, @1.first_column));}
-        | MASTIPOS { $$ = $1; }
-        |  AXES { $$ = $1; }    
-
+TIPONODO: identifier 
+        { 
+            $$ = new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column); 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TIPONODO', null, 
+                                                [new Nodo(cst.cstXmlAsc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), $1.toString().replaceAll("\"",""), null, [])])]));
+        }
+        | identifier corA EXPRESION corC 
+        { 
+            $$ = new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column, new Predicate($3, @1.first_line, @1.first_column));
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TIPONODO', null, 
+                                                [new Nodo(cst.cstXmlAsc.getId(), 'identifier', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), $1.toString().replaceAll("\"",""), null, [])]),
+                                                new Nodo(cst.cstXmlAsc.getId(), 'corchete', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), '[', null, [])]),
+                                                cst.cstXmlAsc.obtenerUltimoNodo(), 
+                                                new Nodo(cst.cstXmlAsc.getId(), 'corchete', null, 
+                                                            [new Nodo(cst.cstXmlAsc.getId(), ']', null, [])])]));
+        }
+        | MASTIPOS 
+        { 
+            $$ = $1; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TIPONODO', null, 
+                                                [cst.cstXmlAsc.obtenerUltimoNodo()]));
+        }
+        |  AXES 
+        { 
+            $$ = $1; 
+            /* CONSTRUCCION DE CST */
+            cst.cstXmlAsc.agregarPila(new Nodo(cst.cstXmlAsc.getId(), 'TIPONODO', null, 
+                                                [cst.cstXmlAsc.obtenerUltimoNodo()]));
+        }
 ;
 MASTIPOS: attr identifier PREDICATE { $$ = new Nodo($2, TipoNodo.ATRIBUTO, @1.first_line, @1.first_column);}
     | attr asterisco PREDICATE { $$ = new Nodo($2, TipoNodo.ATRIBUTO, @1.first_line, @1.first_column);} 
@@ -222,17 +357,17 @@ NODETEST: identifier PREDICATE
         | nodeFunc PREDICATE 
                 { 
                         if($2 instanceof Predicate){
-                                $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
-                        }else{
                                 $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column, $2);
+                        }else{
+                                $$ = new Nodo($1, TipoNodo.FUNCION, @1.first_line, @1.first_column);
                         }
                 }        
         | asterisco PREDICATE
                 { 
                         if($2 instanceof Predicate){
-                                $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column);
-                        }else{
                                 $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column, $2);
+                        }else{
+                                $$ = new Nodo($1, TipoNodo.ASTERISCO, @1.first_line, @1.first_column);
                         }
                 }
         ;
@@ -259,7 +394,7 @@ OPERACION: EXPRESION asterisco EXPRESION { $$ = new Operacion(TipoOperacion.MULT
         | EXPRESION and EXPRESION { $$ = new Operacion(TipoOperacion.AND, $1, $3, @1.first_line, @1.first_column);}  
         | EXPRESION mod EXPRESION { $$ = new Operacion(TipoOperacion.MOD, $1, $3, @1.first_line, @1.first_column);}                                 
         //| menos EXPRESION %prec UMINUS { $$ = "-"+$2;}
-        | parA EXPRESION parC { $$ = new Operacion(TipoOperacion.PAR, $1, null, @1.first_line, @1.first_column);}     
+        | parA EXPRESION parC { $$ = new Operacion(TipoOperacion.PAR, $2, null, @1.first_line, @1.first_column);}     
 ;
 
 PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line, @1.first_column); }
@@ -267,9 +402,14 @@ PRIMITIVA: DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line
         | cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         | cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column); }
         | identifier { $$ = new Primitiva($1, TipoPrim.IDENTIFIER, @1.first_line, @1.first_column); }
-        | attr identifier { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
-        | attr asterisco { $$ = new Primitiva($1, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
+        | attr identifier { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);}
+        | attr asterisco { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first_line, @1.first_column);} 
         | dot { $$ = new Primitiva($1, TipoPrim.DOT, @1.first_line, @1.first_column);}
+        | identifier LISTANODOS { 
+                $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; 
+                $$ = $$.concat($2); 
+                $$ = new Primitiva($$, TipoPrim.CONSULTA, @1.first_line, @1.first_column);
+                }        
         | FUNCIONES { $$ = new Primitiva($1, TipoPrim.FUNCION, @1.first_line, @1.first_column);}
     ;
 

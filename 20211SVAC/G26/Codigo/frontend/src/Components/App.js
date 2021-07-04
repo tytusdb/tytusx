@@ -15,6 +15,7 @@ import '../Styles/App.css';
 import Editor from './Editor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileAlt, faFileUpload, faPlay, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faCode, faCogs } from '@fortawesome/free-solid-svg-icons';
 
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -27,45 +28,20 @@ class App extends React.Component {
   state = {
     open: false,
     modalOpen: false,
+    modalOpenCst: false,
     alertOpen: false,
     opcion: '',
     consoleText: '',
     fileName: '',
     xml: '',
     xpath: '',
+    reptHtml: '',
     fileDownloadUrl: null,
     selectedOption: '',
-    dot:`digraph {
-
-      tbl [
-    
-        shape=plaintext
-        label=<
-    
-          <table border='0' cellborder='1' color='blue' cellspacing='0'>
-            <tr><td>foo</td><td>bar</td><td>baz</td></tr>
-            <tr><td cellpadding='4'>
-              <table color='orange' cellspacing='0'>
-                <tr><td>one  </td><td>two  </td><td>three</td></tr>
-                <tr><td>four </td><td>five </td><td>six  </td></tr>
-                <tr><td>seven</td><td>eight</td><td>nine </td></tr>
-              </table>
-            </td>
-            <td colspan='2' rowspan='2'>
-              <table color='pink' border='0' cellborder='1' cellpadding='10' cellspacing='0'>
-                <tr><td>eins</td><td>zwei</td><td rowspan='2'>drei<br/>sechs</td></tr>
-                <tr><td>vier</td><td>fünf</td>                             </tr>
-              </table>
-            </td> 
-            </tr>
-    
-            <tr><td>abc</td></tr>
-    
-          </table>
-    
-        >];
-    
-    }`,
+    dot: `digraph {}`,
+    c3d: '',
+    open3D: false,
+    tituloRepHTML: ''
   }
 
   abrirModal = () => {
@@ -88,8 +64,16 @@ class App extends React.Component {
     this.setState({xpath: value});
   }
 
+  handleDot = (value) => {
+    this.setState({dot: value});
+  }
+
+  handleC3d = (value) => {
+    this.setState({c3d: value});
+  }
+
   nuevo = () => {
-    this.setState({fileName: '', xml: '', xpath: ''});
+    this.setState({fileName: '', xml: '', xpath: '', c3d: '', open3D: false});
   }
 
   upload = (event) => {
@@ -178,20 +162,67 @@ class App extends React.Component {
 
   analizar = (event) => {
     this.abrirModal();
+    let resultado = '';
     switch(this.state.selectedOption){
-      case 'Ascendente':
+      case 'XPath':
         analizador.xmlAscendente(this.state.xml);
-        analizador.XPathAscendente(this.state.xpath);
+        resultado = this.state.xpath !== ''?analizador.XPathAscendente(this.state.xpath):'';
         break;
-      case 'Descendente':
+      case 'XQuery':
         analizador.xmlDescendente(this.state.xml);
+        resultado = this.state.xpath !== ''?analizador.XQueryAscendente(this.state.xpath):'';
         break;
       default:
         break;
     }
-    this.setState({consoleText:analizador.getErrores()});
+    this.setState({consoleText:resultado});
     if (this.state.selectedOption !== '') 
       this.setState({alertOpen: true});
+  }
+
+  generar3D = (event) => {
+    this.setState({open3D:true, c3d: analizador.traduceXML()});
+    
+  }
+
+  optimizar = (event) => {
+    if (this.state.c3d !== '' || this.state.xpath !== '')
+      this.setState({c3d:analizador.optimizacion(this.state.c3d!=''?this.state.c3d:this.state.xpath)})
+    console.log('OPTIMIZACION FINALIZADA CON EXITO!')
+    this.setState({open3D:true});
+  }
+
+  reporteTablaSimbolos = (event) => {
+    this.setState({dot:analizador.getRepTablaSimbolos()});
+  }
+
+  reporteListaErrores = (event) => {
+    this.setState({tituloRepHTML:"LISTA DE ERRORES"});
+    this.setState({reptHtml:analizador.getRepErrores()});
+  }
+
+  reporteOptimizacion = (event) => {
+    this.setState({tituloRepHTML:"REPORTE DE OPTIMIZACION"});
+    this.setState({reptHtml:analizador.getRepOptimizacion()});
+  }
+
+  mostrarCst = () => {
+    this.setState({modalOpenCst: !this.state.modalOpenCst});
+    //this.setState({dot:analizador.getCSTXmlAsc()});
+  }
+
+  reporteCst = (event) => {
+    this.mostrarCst();
+    switch(this.state.selectedOption){
+      case 'XPath':
+        //this.setState({dot:analizador.getCSTXmlAsc()});
+        break;
+      case 'XQuery':
+        //this.setState({dot:analizador.getCSTXmlDesc()});
+        break;
+      default:
+        break;
+    }
   }
 
   render(){
@@ -205,7 +236,7 @@ class App extends React.Component {
       <>
       <div className="App" style={{width:"100%"}}>
         <header className="App-header">
-          <AppBar position="static">
+          <AppBar position="static" style={{ background: '#4b6584' }}>
             <Toolbar>
               <IconButton edge="start" className="menuButton" color="inherit" aria-label="menu">
                 <MenuIcon />
@@ -217,7 +248,7 @@ class App extends React.Component {
           </AppBar>
         </header>
         <div className="App-body">
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
           <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               <div className="row">
@@ -235,7 +266,7 @@ class App extends React.Component {
                     ref={e=>this.dofileUpload = e}
                   />
                   <div style={{display:"inline-block", padding:'0px 10px 0px 10px'}}>
-                    <Typography style={{color:"black"}}>Guardar XML</Typography>
+                    <Typography style={{color:"white"}}>Guardar XML</Typography>
                     <button className="Boton" style={{backgroundColor:"white", color:"gray"}} onClick={this.downloadXML}>
                       <FontAwesomeIcon icon={faSave} />
                     </button> 
@@ -246,7 +277,7 @@ class App extends React.Component {
                   </div> 
 
                   <div style={{display:"inline-block", padding:'0px 5px 0px 5px'}}>  
-                    <Typography style={{color:"black"}}>Guardar XPath</Typography>
+                    <Typography style={{color:"white"}}>Guardar XPath</Typography>
                     <button className="Boton" style={{backgroundColor:"white", color:"gray"}} onClick={this.downloadXPath}>
                       <FontAwesomeIcon icon={faSave} /> 
                     </button>
@@ -257,7 +288,14 @@ class App extends React.Component {
                   </div>        
                   <button className="Boton" style={{backgroundColor:"white", color:"green"}} onClick={this.abrirModal}>
                     <FontAwesomeIcon icon={faPlay} /> 
-                  </button>     
+                  </button>  
+                       
+                  <button className="Boton" style={{backgroundColor:"white", color:"gray"}} onClick={this.generar3D}>
+                    <FontAwesomeIcon icon={faCode} /> 
+                  </button>          
+                  <button className="Boton" style={{backgroundColor:"white", color:"gray"}} onClick={this.optimizar}>
+                    <FontAwesomeIcon icon={faCogs} /> 
+                  </button>  
                 </div>
                 <div>
 
@@ -280,7 +318,7 @@ class App extends React.Component {
               <Paper className="paper"  /*style={{background: 'rgba(96,113,121,0.3)'}}*/>
                 <Editor 
                   language="xquery"
-                  displayName="XPATH"
+                  displayName="XPath / XQuery"
                   value={this.state.xpath}
                   onChange={this.handleXPath}
                 />
@@ -289,7 +327,7 @@ class App extends React.Component {
             <Grid item xs={1}></Grid>
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
-              <Paper className="paper"  /*style={{background: 'rgba(96,113,121,0.3)'}}*/>          
+              <Paper className="paper"  /*style={{background: 'rgba(96,113,121,0.3)'}}*/ >          
                 <div className="row">
                   <div className="col-md-12">
                       <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>CONSOLA</InputLabel> 
@@ -311,16 +349,47 @@ class App extends React.Component {
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               <Paper className="paper">
+                <div className="row" style={{visibility: this.state.open3D?'visible':'hidden'}}>
+                  <div className="col-md-12">
+                    <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>Código 3D</InputLabel> 
+                    <Editor
+                      language="clike"
+                      displayName="3DC"
+                      value={this.state.c3d}
+                      onChange={this.handleC3d}
+                    />
+                  </div>
+                </div>
+              </Paper>
+            </Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={10}>
+              <Paper className="paper">
                 <div className="row">
                   <div className="col-md-12">
+                    <br></br>
                     <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>Reportes</InputLabel>
+                    <Button className="btn bg-primary" onClick={this.reporteTablaSimbolos}>Tabla de Simbolos</Button> |
+                    <Button className="btn bg-secondary">AST</Button> |
+                    <Button className="btn bg-success" onClick={this.mostrarCst}>CST</Button> |
+                    <Button className="btn bg-danger" onClick={this.reporteListaErrores}>Lista de Errores</Button> |
+                    <Button className="btn bg-warning" onClick={this.reporteOptimizacion}>Optimizacion</Button>
+                    <br></br>
                     <div style={{borderStyle: 'solid', borderRadius: '2em'}}>
                       <Graphviz dot={this.state.dot} options={{fit:true, width:950,zoom: true}}/>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-12">
+                        <InputLabel style={{fontWeight: 'bold', fontFamily: 'sans-serif'}}>{this.state.tituloRepHTML}</InputLabel> 
+                        <div id="pnlErorres" dangerouslySetInnerHTML={{ __html: this.state.reptHtml }} />
+                      </div>
                     </div>
                   </div>
                 </div>
               </Paper> 
-            </Grid>
+            </Grid>            
+            <Grid item xs={1}></Grid>
             <Grid item xs={1}></Grid>
           </Grid>
         </div>
@@ -355,22 +424,22 @@ class App extends React.Component {
             <label>
               <input
                 type="radio"
-                value="Ascendente"
-                checked={this.state.selectedOption === "Ascendente"}
+                value="XPath"
+                checked={this.state.selectedOption === "XPath"}
                 onChange={this.onValueChange}
               />
-              Ascendente
+              XPath
             </label>
           </div>
           <div className="radio">
             <label>
               <input
                 type="radio"
-                value="Descendente"
-                checked={this.state.selectedOption === "Descendente"}
+                value="XQuery"
+                checked={this.state.selectedOption === "XQuery"}
                 onChange={this.onValueChange}
               />
-              Descendente
+              XQuery
             </label>
           </div>
         </form>
@@ -378,6 +447,43 @@ class App extends React.Component {
       <ModalFooter>
           <Button color="primary" onClick={this.analizar}>Analizar</Button>
           <Button color="secondary" onClick={() => {this.setState({selectedOption: ''}); this.abrirModal();}}>Cerrar</Button>
+      </ModalFooter>
+      </Modal>
+
+
+      <Modal isOpen={this.state.modalOpenCst} style={modalStyles}>
+      <ModalHeader>
+        Reporte CST
+      </ModalHeader>
+      <ModalBody>
+        <form onSubmit={this.formSubmit}>
+          <div className="radio">
+            <label>
+              <input
+                type="radio"
+                value="XPath"
+                checked={this.state.selectedOption === "XPath"}
+                onChange={this.onValueChange}
+              />
+              XPath
+            </label>
+          </div>
+          <div className="radio">
+            <label>
+              <input
+                type="radio"
+                value="XQuery"
+                checked={this.state.selectedOption === "XQuery"}
+                onChange={this.onValueChange}
+              />
+              XQuery
+            </label>
+          </div>
+        </form>
+      </ModalBody>
+      <ModalFooter>
+          <Button color="primary" onClick={this.reporteCst}>Generar Reporte</Button>
+          <Button color="secondary" onClick={() => {this.setState({selectedOption: ''}); this.mostrarCst();}}>Cerrar</Button>
       </ModalFooter>
       </Modal>
 

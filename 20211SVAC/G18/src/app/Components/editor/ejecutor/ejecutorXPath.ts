@@ -1,20 +1,22 @@
 import { NodoXML } from '../parser/Nodes/NodoXml';
-import { EnvironmentXPath } from '../parser/Symbol/EnviromentXPath';
 import { EnvironmentXML } from '../parser/Symbol/EnviromentXML';
 import { Error_ } from '../parser/Error';
 import { errores } from '../parser/Errores';
 import { _Console } from '../parser/Util/Salida';
+import { Environment } from '../parser/Symbol/Environment';
+import { xPathASC } from '../parser/Grammar/xPathAsc.js';
 
 export class EjecutorXPath {
-  entorno: EnvironmentXPath;
+  entorno: Environment;
   environmentXML: EnvironmentXML;
   nivel: number;
   indexCount: number;
-  constructor(xmlEnvironment: EnvironmentXML) {
-    this.entorno = new EnvironmentXPath('global', null);
+
+  constructor(entorno: Environment) {
+    this.entorno = entorno;
+    this.environmentXML = entorno.xmlEnvironment;
     this.nivel = 0;
     this.indexCount = 1;
-    this.environmentXML = xmlEnvironment; // El entorno de xml donde busca la consulta
   }
 
   ejecutar(ast: NodoXML) {
@@ -28,16 +30,21 @@ export class EjecutorXPath {
           let find = this.ejecutarFin(ast);
           if (find) {
             // console.log("entorno",this.environmentXML);
-            let valor = this.environmentXML.getValor(this.environmentXML.nombre);
-            _Console.salida = valor;
+            let valor = this.environmentXML.getValor(
+              this.environmentXML.nombre
+            );
+            _Console.salida += valor;
           }
+          break;
+        case 'Syntfin':
+          _Console.salida += this.ejecutarSyntfin(ast);
           break;
         case 'LPredicado':
           let index = this.ejecutarPredicado(ast);
           return index;
         default:
           let nodos = ast.getHijos();
-          nodos.forEach(element => {
+          nodos.forEach((element) => {
             response = this.ejecutar(element);
           });
           break;
@@ -46,6 +53,15 @@ export class EjecutorXPath {
     return response;
   }
 
+  ejecutarSyntfin(ast: NodoXML) {
+    let hijos = ast.getHijos();
+    if (hijos.length == 3) {
+      // se busca un atributo
+      let ruta = hijos[1].name;
+      return this.environmentXML.getAttribute(ruta);
+    } else if (hijos.length == 1) return this.ejecutarFin(hijos[0]);
+    return true;
+  }
 
   ejecutarPredicado(ast: NodoXML) {
     let result = null;
@@ -61,13 +77,13 @@ export class EjecutorXPath {
           let hijos1 = ast.getHijos();
           let att = this.ejecutarPredicado(hijos1[0]);
           let search = this.ejecutarPredicado(hijos1[2]);
-          return {"att":att,"search":search}
+          return { att: att, search: search };
         default:
           let nodos = ast.getHijos();
-          nodos.forEach(element => {
+          nodos.forEach((element) => {
             let retorno = this.ejecutarPredicado(element);
-            result = (retorno == null) ? result : retorno;
-            if(result != null) return;
+            result = retorno == null ? result : retorno;
+            if (result != null) return;
           });
           break;
       }
@@ -77,38 +93,49 @@ export class EjecutorXPath {
 
   ejecutarFin(ast: NodoXML) {
     let hijos = ast.getHijos();
-    if (hijos.length == 0) return true;
-    let ruta = hijos[0].name;
+    if (hijos.length == 0)
+      return this.environmentXML.getValor(this.environmentXML.nombre);
+    let ruta = '';
+    if (hijos[0].type == 'Access') {
+      ruta = this.entorno.getVar(hijos[0].name).valor;
+      let queryTree = xPathASC.parse(ruta);
+      // se pasa el env xml
+      let ejecutor = new EjecutorXPath(this.entorno);
+      ejecutor.ejecutar(queryTree);
+      this.environmentXML = ejecutor.environmentXML;
+      return;
+    } else {
+      console.log('searching', this);
+      ruta = hijos[0].name;
+    }
     // console.log("validando",this.environmentXML,hijos[0]);
     let nodes = this.environmentXML.hijos;
     let find = false;
-    nodes.forEach(element => {
+    nodes.forEach((element) => {
       if (find) return; // si ya lo encuentra no valida a los demas elementos
       // console.log("validando",element.nombre,ruta);
       if (element.nombre == ruta) {
         // valida si tiene index
         if (hijos[1].listaNodos.length != 0) {
-
           let index = this.ejecutar(hijos[1]);
-          if(index.att != undefined){
+          if (index.search != undefined) {
             // busca por atributo
-            let nodeSearch = element.getByAttribute(index.att,index.search.replaceAll('"',''));
-            if(nodeSearch != null){
+            let nodeSearch = element.getByAttribute(
+              index.att,
+              index.search.replaceAll('"', '')
+            );
+            if (nodeSearch != null) {
               this.environmentXML = nodeSearch;
               find = true;
               this.indexCount = 0;
             }
-            console.log("find",find);
-          }
-          else if (index == this.indexCount) {
+          } else if (index.att == this.indexCount) {
             // avanza un nivel
             this.environmentXML = element;
             find = true;
             this.indexCount = 0;
-          }
-          else this.indexCount++;
-        }
-        else {
+          } else this.indexCount++;
+        } else {
           // avanza un nivel
           this.environmentXML = element;
           find = true;
@@ -116,19 +143,18 @@ export class EjecutorXPath {
       }
     });
     if (!find) {
-      // errores.push(
-      //   new Error_(
-      //     hijos[0].getLine(),
-      //     hijos[0].getColumn(),
-      //     'Semantico',
-      //     `No se encuentra $ruta`
-      //   )
-      // );
+      errores.push(
+        new Error_(
+          hijos[0].getLine(),
+          hijos[0].getColumn(),
+          'Semantico',
+          `No se encuentra $ruta`
+        )
+      );
       return false;
     }
     find = false;
     this.nivel++;
-    // console.log("se ejecuta fin con ",hijos[0]);
     return this.ejecutarFin(hijos[0]);
   }
 

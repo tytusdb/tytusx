@@ -1,29 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Simbolo = void 0;
-var Simbolo = /** @class */ (function () {
-    function Simbolo(tipo, nombre, valor, linea, columna) {
+class Simbolo {
+    constructor(tipo, nombre, valor, linea, columna) {
         this.tipo = tipo;
         this.nombre = nombre;
         this.valor = valor;
         this.linea = linea;
         this.columna = columna;
+        this.posicion = 0;
     }
-    Simbolo.prototype.getTipo = function () {
+    getTipo() {
         return this.tipo;
-    };
-    Simbolo.prototype.getNombre = function () {
+    }
+    getNombre() {
         return this.nombre;
-    };
-    Simbolo.prototype.getValor = function () {
+    }
+    getValor() {
         return this.valor;
-    };
-    Simbolo.prototype.getLinea = function () {
+    }
+    getLinea() {
         return this.linea;
-    };
-    Simbolo.prototype.getColumna = function () {
+    }
+    getColumna() {
         return this.columna;
-    };
-    return Simbolo;
-}());
+    }
+    getPosicion() {
+        return this.posicion;
+    }
+    setPosicion(posicion) {
+        this.posicion = posicion;
+    }
+}
 exports.Simbolo = Simbolo;

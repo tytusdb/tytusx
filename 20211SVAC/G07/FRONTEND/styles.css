@@ -15,6 +15,8 @@ nav {
     color: white;
     padding: 0 100px;
     justify-content: space-between;
+    height: 6vh;
+    z-index: 400;
 }
 
 nav span {
@@ -29,9 +31,16 @@ nav span {
     color: white;
     font-size: 30px;
 }
+.btnCargarx{
+    
+    width: 49%;
+    color: white;
+    font-size: 30px;
+}
 .menu {
     display: flex;
     list-style: none;
+    margin: 0;
 }
 
 .menu-item {
@@ -70,7 +79,7 @@ nav span {
     left: 0;
     top: 100%;
     border: none;
-    z-index: 100;
+    z-index: 300;
 }
 
 .subitem {
@@ -85,88 +94,65 @@ nav span {
 
 /* MAIN */
 main {
-    padding: 40px 30px;
+    padding: 0 30px;
     display: flex;
     justify-content: space-between;
+    height: 94vh;
 }
 
-/* EDITOR DE CODIGO*/
-.tabs-container {
-    position: relative;
-    width: 50%;
+.editorContainer {
+    width: 49%;
+    overflow-y: auto;
 }
 
-.tabs {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
+.editorContainer::-webkit-scrollbar-track
+{
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
-.tab {
-    border: 1px solid #0E1F26;
-    line-height: 2.5;
-    padding: 0 1em;
-    background: #0E1F26;
-    color: #fff;
-    position: relative;
-    top: 1px;
-    border-bottom: none;
-    cursor: pointer;
+.editorContainer::-webkit-scrollbar {
+    width: 5px;
 }
 
-.tab.active {
-    background: #03738C;
-    z-index: 20;
-    border: 1px solid #03738C;
+.editorContainer::-webkit-scrollbar-thumb
+{
+	background: rgba(0, 0, 0, 0.377);
+    border-radius: 25px;
 }
 
-.panels {
-    position: relative;
-    z-index: 10;
-}
-
-.panel {
-    position: absolute;
-    left: -1000%;
-    display: none;
-}
-
-.panel.active {
-    position: relative;
-    left: 0;
-    display: block;
-}
 
 /* CONSOLAS */
-.consolas {
-    width: 49%;
-}
 
-.consola {
-    margin-bottom: 15px;
-}
-
-.consola h2 {
-    font-family: 'Hind', sans-serif;
-}
-
-.consola textarea{
-    resize: none;
-    width: 100%;
-    height: 305px;
-    background: #000;
-    color: #fff;
-    padding: 10px;
-}
 .editor{
     color:  white;
     background-color: black;
     width: 100%;
-    height: 750px;
+    height: 300px;
     padding: 5px;
+    resize: none;
 }
+
+
+.editor::-webkit-scrollbar-track
+{
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.editor::-webkit-scrollbar {
+    width: 20px;
+}
+
+.editor::-webkit-scrollbar-thumb
+{
+	background: rgba(255, 127, 105, 0.89);
+    border-radius: 10px;
+	
+}
+
+.editor.editorOutput {
+    height: 400px;
+}
+
 .div_table{
     width: 90%;
     padding-left: 5% ;

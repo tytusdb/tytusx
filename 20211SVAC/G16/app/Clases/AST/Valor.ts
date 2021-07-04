@@ -1,10 +1,12 @@
-export default class Valor{
+export default class Valor {
 
-  Tipo:string;
-  valor:any;
+  Tipo: string;
+  valor: any;
+  Texto: string;
 
-  constructor(Tipo:string,valor:any){
-    this.Tipo=Tipo;
-    this.valor=valor;
+  constructor(Tipo: string, valor: any, Texto: string) {
+    this.Tipo = Tipo;
+    this.valor = valor;
+    this.Texto = Texto;
   }
 }

@@ -3,6 +3,7 @@ import { DataServiceProvider } from 'src/data-service';
 import * as saveAs from 'file-saver';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { xml2json } from 'xml-js';
+import { graphviz }  from 'd3-graphviz';
 
 
 @Component({
@@ -13,7 +14,12 @@ import { xml2json } from 'xml-js';
 export class AppComponent {
   title = 'Proyecto1201314408';
   xml = `<note><to>User</to><from>Library</from><heading>Message</heading><body>Some XML to convert to JSON!</body></note>`;
- 
+  GrafoAST = 'digraph {';
+
+  D3() {
+    this.GrafoAST = this.GrafoAST + "}"
+    graphviz("#graph").renderDot(this.GrafoAST);
+  }
 
   constructor(public dat: DataServiceProvider, public ngxXml2jsonService: NgxXml2jsonService){
 
@@ -87,9 +93,11 @@ fileChanged2(e) {
   printValues(obj) {
     for(var k in obj) {
         if(obj[k] instanceof Object) {
+          this.GrafoAST = this.GrafoAST + " A [shape=diamond] ";
             this.printValues(obj[k]);
         } else {
             console.log(obj[k]);
+            this.GrafoAST = this.GrafoAST + " A -> B ";
             this.dat.Cod_tab3 = this.dat.Cod_tab3 + "\n" + (obj[k])
         }
     }
