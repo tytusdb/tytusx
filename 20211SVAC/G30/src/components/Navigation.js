@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
 import React from 'react';
 import { parse as parseXPath } from '../code/analizadorXPath/Xpath'
-//import { parse as parseXQuery } from '../code/analizadorXQuery/gram_xquery'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
+//import { parse as XQuery } from '../code/analizadorXQuery/XQuery';
+//import { parse } from '../code/analizadorXQuery/gram_xquery';
+import { parse as grammar } from '../code/analizadorXML/grammar';
+// import { gram_xquery  } from '../code/analizadorXQuery/gram_xquery';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { GeneradorC3D } from "../code/analizadorXML/generadorC3D";
 
 import { Instruccion } from '../code/optimizador/codigo/instruccion'
@@ -17,8 +20,10 @@ require('../../node_modules/codemirror/mode/javascript/javascript')
 require('../../node_modules/codemirror/mode/clike/clike')
 
 //const XPath = require('../code/analizadorXPath/Xpath')
-const grammar = require('../code/analizadorXML/grammar')
-const xquery = require('../code/analizadorXQuery/gram_xquery')
+//const grammar = require('../code/analizadorXML/grammar')
+
+const {XQuery} = require('../code/analizadorXQuery/XQuery')
+
 
 //const GeneradorC3D = require('../code/analizadorXML/generadorC3D')
 
@@ -130,11 +135,12 @@ class Navigation extends React.Component {
         this.setState({ MistakesXPath: funcion.errores })
         this.setState({ TablaGramticalXPath: funcion.tablaGramatica });
         */
-
-
+        var query = XQuery.parse(text)
+        console.log(query)
         //LLAMANDO AL ANALIZADOR DE XQUERY
         try {
-            var query = xquery.parse(text)
+
+
             console.log("QUERY\n" + query)
             console.log("QUERY\n" + query.toString())
             this.setState({ OutputTextarea: query.toString() });
@@ -152,7 +158,8 @@ class Navigation extends React.Component {
     //funcion donde se carga el XML
     actualizar() {
         var codigoXML = this.state.XMLTextarea;
-        var resultado = grammar.parse(codigoXML);
+        var resultado = grammar(codigoXML)
+        //var resultado = grammar.parse(codigoXML);
         if (resultado.errores.length > 0) {
             alert("Errores en el analisis del XML");
         }
@@ -246,7 +253,8 @@ class Navigation extends React.Component {
 
     handleFocus = (e) => {                                     //onBlur XmlInput
         if (e.getValue() == "") return
-        var resultado = grammar.parse(e.getValue())
+        //var resultado = grammar.parse(e.getValue())
+        var resultado = grammar(e.getValue())
         //console.log(resultado)
         if (resultado.errores.length > 0) {
             alert("Errores en el analisis del XML")
@@ -469,19 +477,9 @@ class Navigation extends React.Component {
 
                         <p></p>
                         <label className="labelClass">Reporte de Optimizacion</label>
-                        <div className="text-center">
-                            <Table striped bordered size="sm" variant="dark">
-                                <thead>
-                                    <tr>
-                                        <th># Instruccion&emsp;&emsp;&emsp;</th>
-                                        <th># Regla usada&emsp;&emsp;&emsp;</th>
-                                        <th>Código&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.TablaReportesC3D.map(this.renderOptim)}
-                                </tbody>
-                            </Table>
+                        <div>
+
+
                         </div>
                     </div>
                 </div>

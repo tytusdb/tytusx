@@ -40,17 +40,12 @@ export class Optimizador {
       this.reglas6_16Header(this.listaInstrucciones);
       this.reglas3_4(this.listaInstrucciones);
       this.reglas1_2(this.listaInstrucciones);
-    
 
 
       //paso el array a la cadena
       this.arrayCadena();
       console.log(this.reporteOptimizacion);
       return this.cadenaOptimizada;
-   }
-
-   public getReporte(): Array<Optimizacion>{
-      return this.reporteOptimizacion;
    }
 
    private reglas6_16Header(array: Array<Instruccion>) {
@@ -67,18 +62,20 @@ export class Optimizador {
                // si cumple con todas las condiciones de 16 
                let regla = '16';
                this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = 0;'
-               this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+               this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
+
             }
 
             if (instruccion.arg2 == '1') {
                if (instruccion.arg1 == instruccion.resultado) {
                   let regla = '9';
                   this.nuevasInstrucciones[contador].cadena = '';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                } else {
                   let regla = '13';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
+
                }
             }
 
@@ -90,29 +87,29 @@ export class Optimizador {
                // si cumple con todas las condiciones de 15
                let regla = '15';
                this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = 0;'
-               this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+               this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
             }
 
             if (instruccion.arg1 == '1') {
                if (instruccion.arg2 == instruccion.resultado) {
                   let regla = '8';
                   this.nuevasInstrucciones[contador].cadena = '';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                } else {
                   let regla = '12';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
 
             } else if (instruccion.arg2 == '1') {
                if (instruccion.arg1 == instruccion.resultado) {
                   let regla = '8';
                   this.nuevasInstrucciones[contador].cadena = '';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                } else {
                   let regla = '12';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
             }
 
@@ -122,7 +119,7 @@ export class Optimizador {
                   // si cumple con todas las condiciones de 14
                   let regla = '14';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ' + ' + instruccion.arg2 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
             } else if (instruccion.arg2 == '2') {
 
@@ -130,7 +127,7 @@ export class Optimizador {
                   // si cumple con todas las condiciones de 14
                   let regla = '14';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ' + ' + instruccion.arg1 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
             }
 
@@ -142,13 +139,14 @@ export class Optimizador {
                if (instruccion.resultado == instruccion.arg1) {
                   let regla = '7';
                   this.nuevasInstrucciones[contador].cadena = '';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                } else {
                   let regla = '11';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
             }
+
 
          }
          // MAS
@@ -158,22 +156,22 @@ export class Optimizador {
                if (instruccion.resultado == instruccion.arg1) {
                   let regla = '6';
                   this.nuevasInstrucciones[contador].cadena = '';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                } else {
                   //console.log('regla 10!')
                   let regla = '10';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
             } else if (instruccion.arg1 == '0') {
                if (instruccion.resultado == instruccion.arg2) {
                   let regla = '6';
                   this.nuevasInstrucciones[contador].cadena = '';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                } else {
                   let regla = '10';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ';';
-                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
                }
             }
 
@@ -181,7 +179,6 @@ export class Optimizador {
          //console.log('# ', contador);
          contador++;
       }
-
    }
 
    private reglas1_2(array: Array<Instruccion>) {
@@ -199,7 +196,7 @@ export class Optimizador {
             } else {
                let regla = '1';
                this.nuevasInstrucciones[contador].cadena = '';
-               this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+               this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
             }
          }
 
@@ -211,7 +208,7 @@ export class Optimizador {
             } else {
                let regla = '2';
                this.nuevasInstrucciones[contador].cadena = '';
-               this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+               this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
             }
 
          }
@@ -240,7 +237,7 @@ export class Optimizador {
                      }
 
                      this.nuevasInstrucciones[contador].cadena = 'if ( ' + instruccion.arg1 + this.nuevasInstrucciones[contador].operador + instruccion.arg2 + ' ) ' + this.listaInstrucciones[coso + 1].cadena;
-                     this.reporteOptimizacion.push(new Optimizacion(contador, '2', this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, '2', this.nuevasInstrucciones[contador].cadena));
                      eliminarabierto = true;
                   }
                }
@@ -249,6 +246,7 @@ export class Optimizador {
 
 
          contador++;
+
       }
 
       console.log('final');
@@ -268,67 +266,67 @@ export class Optimizador {
                   if (arg1 == arg2) {
                      let regla = '3';
                      this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
 
                   } else {
                      let regla = '4';
                      this.nuevasInstrucciones[contador].cadena = '';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                   }
                } else if (instruccion.operador == '!=') {
                   if (arg1 != arg2) {
                      let regla = '3';
                      this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
 
                   } else {
                      let regla = '4';
                      this.nuevasInstrucciones[contador].cadena = '';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                   }
                } else if (instruccion.operador == '<=') {
                   if (arg1 <= arg2) {
                      let regla = '3';
                      this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
 
                   } else {
                      let regla = '4';
                      this.nuevasInstrucciones[contador].cadena = '';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                   }
                } else if (instruccion.operador == '>=') {
                   if (arg1 >= arg2) {
                      let regla = '3';
                      this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
 
                   } else {
                      let regla = '4';
                      this.nuevasInstrucciones[contador].cadena = '';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                   }
                } else if (instruccion.operador == '<') {
                   if (arg1 < arg2) {
                      let regla = '3';
                      this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
 
                   } else {
                      let regla = '4';
                      this.nuevasInstrucciones[contador].cadena = '';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                   }
                } else if (instruccion.operador == '>') {
                   if (arg1 > arg2) {
                      let regla = '3';
                      this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
 
                   } else {
                      let regla = '4';
                      this.nuevasInstrucciones[contador].cadena = '';
-                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                   }
                }
             }
@@ -372,7 +370,7 @@ export class Optimizador {
                      if (match) {
                         let regla = '5';
                         this.nuevasInstrucciones[contador].cadena = '';
-                        this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
+                        this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
                      }
                   }
                   cont2++;
@@ -400,6 +398,7 @@ export class Optimizador {
       }
    }
 
+
 }
 
 export class Optimizacion {
@@ -409,7 +408,8 @@ export class Optimizacion {
    codigo: string;
    codigo_original:string;
 
-   constructor(linea: number, regla: string, codigo: string, codigo_original:string) {
+   constructor(linea: number, regla: string, codigo: string) {
+
       this.linea = linea;
       this.regla = regla;
       this.codigo = codigo;
