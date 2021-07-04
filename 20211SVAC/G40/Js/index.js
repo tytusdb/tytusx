@@ -351,8 +351,77 @@ function CargarXMLDesc(){
                     salidaGlobal = salidaGlobal.replaceAll(" =\"\"", "");
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                     /* TRADUCIENDO XPATH A C3D */
+                     xpathC3D = "";
+                     funcionesC3D = "";
+                     var funcionesXPath = contenidoXpath.split(/[ ]*\|[ ]*/g);
+ 
+                     for(var i = 0; i < resultadoXPath.length; i++) {
+                     
+                         var salida = C3DXPATH.traducir(funcionesXPath[i] ,resultadoXPath[i]);
+                         xpathC3D += salida + "\n\n";
+                     }
+
+
                 } else {
                     SetSalida("El parser Xpath descendente no pudo recuperarse de un error sintactico.");
+                }
+
+            }
+
+        }
+
+        if (analisisCorrecto) {
+
+            if (contenidoXQuery == ""){
+                EntradaXQuery.setValue("No hay entrada XQuery para analizar pero se han generado reportes XML");
+                EntradaXQuery.refresh();
+            } else {
+
+                analisisXqueryCorrecto = EjecutarXQueryAsc(contenidoXQuery);
+
+                if (analisisXqueryCorrecto){
+
+                    DOTXQUERYASTAsc = GenerarDOT.recorrerDOT(resultadoXQuery[1]);
+                    DOTXQUERYASTAsc = "digraph {" + DOTXQUERYASTAsc + "}";
+                    localStorage.setItem('astXQUERY', DOTXQUERYASTAsc);
+                    
+                    console.log("↓ Funcion XQuery ↓");
+                    console.log(resultadoXQuery[0]);
+                    funcionesXQuery = [];
+
+                    var contador = 1;
+                    resultadoXQuery[0].forEach(function (funcion){
+
+                        salidaGlobal+="↓ Resultado consulta XQuery "+contador+" ↓\n\n";
+                        salidaRecursiva = "";
+                        salidaXQuery = funcion.ejecutar(tablaSimbolosXML.getEntornoGlobal(),null);
+
+                        if(funcion.getTipo() == TipoXInstruccion.XPATH || funcion.getTipo() == TipoXInstruccion.XFLOWER){
+
+                            GenerarSalidaXPath(salidaXQuery);
+
+                            if(salidaRecursiva!=""){
+                                salidaGlobal+= salidaRecursiva + "\n\n";
+                            } else {
+                                salidaGlobal+= "No se encontraron coincidencias. :(\n\n";
+                            }
+
+                        } else {
+                            salidaGlobal+= salidaXQuery.toString() + "\n\n";
+                        } 
+                        contador++;
+                    } );
+                    
+                    SetSalida(salidaGlobal);
+                    localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                    xquery3D = C3DXQUERY.traducir(resultadoXQuery[0]);
+
+
+                } else {                   
+                    SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
                 }
 
             }
@@ -524,7 +593,6 @@ function EntornoYaExiste(arreglo, id){
     return existe;
 
 }
-
 
 
 function ObjetoYaExiste(arreglo, id){
