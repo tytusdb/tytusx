@@ -117,6 +117,9 @@ EXPRESION:      tk_identificador { $$ = $1; }
         |       tk_menos tk_decimal { $$ = "-" + $2; }
         |       tk_menos tk_entero { $$ = "-" + $2; };
 
+EXP_PARAMETRO: tk_cadena2 { $$ = $1; }
+        |       tk_identificador { $$ = $1 };
+
 OPERADOR:       tk_mas { $$ = [Operador.SUMA,"+"]; }
         |       tk_menos { $$ = [Operador.RESTA,"-"];  }
         |       tk_division { $$ = [Operador.DIVISION,"/"]; }
@@ -145,6 +148,10 @@ INSTRUCCION:    tk_identificador tk_igual EXPRESION OPERADOR EXPRESION tk_puntoy
         |       tk_identificador tk_igual tk_identificador tk_corchetea tk_parentesisa TIPO_DATO tk_parentesisc EXPRESION tk_corchetec tk_puntoycoma  {
                 codigoAux = $1 + " = " + $3 + "[(" + $6 + ")" + $8 + "];\n";
                 $$ = new AsignacionArreglo($1, codigoAux, @1.first_line, @1.first_column, TipoInstruccion3D.ASIGNACION_ARREGLO);
+                }
+        |       tk_identificador tk_igual tk_identificador tk_parentesisa EXP_PARAMETRO tk_parentesisc tk_puntoycoma  {
+                codigoAux = $1 + " = " + $3 + "(" + $5 + ");\n";
+                $$ = new AsignacionMetodo($1, codigoAux, @1.first_line, @1.first_column, TipoInstruccion3D.ASIGNACION_METODO);
                 }
         |       tk_identificador tk_corchetea tk_parentesisa TIPO_DATO tk_parentesisc EXPRESION tk_corchetec tk_igual EXPRESION tk_puntoycoma {
                 codigoAux = $1 + "[(" + $4 + ")" + $6 + "] = " + $9 + ";\n";
