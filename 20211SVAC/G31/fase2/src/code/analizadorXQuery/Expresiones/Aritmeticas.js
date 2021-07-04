@@ -29,12 +29,10 @@ export class Suma {
             return resultDer
         }
         console.log('SUMA', resultIzq, resultDer)
-        console.log(typeof resultIzq)
-        console.log(typeof resultDer)
-        let retorno = parseFloat(resultIzq) + parseFloat(resultDer)
-        console.log(retorno)
+        let retorno = (Number(resultIzq) + Number(resultDer)).toString()
         
-        return  (Number(resultIzq) + Number(resultDer)).toString()
+        if(retorno == undefined)return ""
+        return retorno
     }
 
 }

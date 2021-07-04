@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer'
 
-export class TraducirConsulta {
+export default class TraducirConsulta {
 
     encoding = ""
     stack = []
@@ -9,6 +9,12 @@ export class TraducirConsulta {
     simbolos = []
     padre = ""
     cadenita = ""
+    imprimir = ""
+    cadenac = ""
+    igual = "=".charCodeAt(0)
+    menor = "<".charCodeAt(0)
+    mayor = ">".charCodeAt(0)
+    barra = "/".charCodeAt(0)
     t = 0
     l = 0
 
@@ -19,6 +25,12 @@ export class TraducirConsulta {
         this.simbolos = simbolos
         this.encoding = encoding
         this.t = t
+        console.log(this.stack)
+        console.log(this.heap)
+        console.log(this.consulta)
+        console.log(this.simbolos)
+        console.log(this.encoding)
+        console.log(this.t)
     }
 
     darFormato() {
@@ -26,8 +38,14 @@ export class TraducirConsulta {
         let t2 = 0
         let l2 = 0
         let posi = ""
-        
-        return { string: cadena, number: this.t }
+        cadena += "/*------NATIVES------*/\n"
+        cadena += "void imprimirConsulta() {\n"
+        cadena += this.imprimir
+        cadena += "}\n\n"
+        cadena += "void consulta() {\n"
+        cadena += this.cadenac
+        cadena += "}"
+        return { cad: cadena, num: this.t }
     }
 
     armar() {

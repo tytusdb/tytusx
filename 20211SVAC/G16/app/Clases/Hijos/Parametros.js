@@ -23,7 +23,7 @@ var Parametros = /** @class */ (function () {
         var valor = new Valor_1["default"]("Parámetro", null, "");
         var simbolo = new Simbolo_1["default"](this.getVariable(), valor, entorno.nombre, node.linea, node.columna, -1);
         entorno.AddVariables(simbolo);
-        TableSimbols.TableSimbols.add(simbolo);
+        //TableSimbols.TableSimbols.add(simbolo);
         if (this.params != null) {
             this.params.ejecutar(entorno, this.params);
         }

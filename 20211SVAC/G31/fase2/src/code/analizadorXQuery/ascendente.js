@@ -84,10 +84,13 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
+       grafoNuevo.generarPadre(1,"INICIO");
+                                                grafoNuevo.generarHijos("INICIO");
 
                                                 this.$ = {
                                                         instrucciones: $$[$0-1].instrucciones, 
-                                                        errores: ListaErrores
+                                                        errores: ListaErrores, 
+                                                        grafo: grafoNuevo
                                                 }
                                                 ListaErrores = []
                                                 return this.$
@@ -96,8 +99,9 @@ break;
 case 2:
  return 'Entrada vacia' 
 break;
-case 3: case 26: case 34: case 35: case 36:
-
+case 3:
+        
+                                                grafoNuevo.generarHijos("EXPR")
                                                 this.$ = {
                                                         instrucciones: $$[$0].instrucciones
                                                 }
@@ -233,6 +237,13 @@ case 24:
                                         }
                                 
 break;
+case 26: case 34: case 35: case 36:
+
+                                                this.$ = {
+                                                        instrucciones: $$[$0].instrucciones
+                                                }
+                                        
+break;
 case 27:
 
                                                 this.$ = {
@@ -241,16 +252,30 @@ case 27:
             
 break;
 case 28:
-
-                                                                                this.$ = {
+       
+                                                                                if($$[$0-2].tipo == 'LET_CLAUSE'){
+                                                                                        this.$ = {
+                                                                                                instrucciones: new Flwor($$[$0-2].tipo, '', $$[$0-2].instrucciones, $$[$0-1].instrucciones, $$[$0].instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }else{
+                                                                                        this.$ = {
                                                                                         instrucciones: new Flwor($$[$0-2].tipo, '', $$[$0-2].listaVaribles, $$[$0-1].instrucciones, $$[$0].instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
                                                                                 }
+
+                                                                                
                                                                         
 break;
 case 29:
-
-                                                                                this.$ = {
-                                                                                        instrucciones: new Flwor($$[$0-1].tipo, '', $$[$0-1].listaVaribles, null, $$[$0].instrucciones, this._$.first_line, this._$.first_column)
+       // Aqui tengo que cambiar estooo para el Let pero ya me voy a mimir
+                                                                                if($$[$0-1].tipo == 'LET_CLAUSE'){
+                                                                                        this.$ = {
+                                                                                                instrucciones: new Flwor($$[$0-1].tipo, '', $$[$0-1].instrucciones, [], $$[$0].instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }else{
+                                                                                        this.$ = {
+                                                                                                instrucciones: new Flwor($$[$0-1].tipo, '', $$[$0-1].listaVaribles,[], $$[$0].instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
                                                                                 }
                                                                         
 break;
@@ -333,6 +358,9 @@ case 42:
 break;
 case 43:
      $$[$0-2].instrucciones.push($$[$0].instrucciones)
+                                                                this.$ = {
+                                                                        instrucciones: $$[$0-2].instrucciones
+                                                                }
 
                                                         
 break;
@@ -346,7 +374,7 @@ break;
 case 45:
 
                                                         this.$ = {
-                                                                instrucciones: new Asignacion($$[$0-2].consulta, $$[$0-1].instrucciones, this._$.first_line, this.first_column)
+                                                                instrucciones: new Asignacion($$[$0-2].consulta, $$[$0].instrucciones, this._$.first_line, this.first_column)
                                                         }
                                                 
 break;
@@ -1013,7 +1041,7 @@ parse: function parse(input) {
         const { Consulta } = require('./Expresiones/Consulta')
         const { grafoCST } = require('../CST'); 
         const { Error } = require('./Tabla/Error')
-        var grafo = new grafoCST(); 
+        var grafoNuevo = new grafoCST(); 
         var ListaErrores = []
 
 
@@ -1514,7 +1542,7 @@ case 81:
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:((\(:[\s\S]*?:\))))/,/^(?:\/\/)/,/^(?:\/)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:::)/,/^(?:,)/,/^(?::=)/,/^(?::)/,/^(?:@)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:\{)/,/^(?:\})/,/^(?:;)/,/^(?:integer\b)/,/^(?:decimal\b)/,/^(?:function\b)/,/^(?:local\b)/,/^(?:ancestor-or-self\b)/,/^(?:ancestor\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant-or-self\b)/,/^(?:descendant\b)/,/^(?:following-sibling\b)/,/^(?:following\b)/,/^(?:last\b)/,/^(?:namespace\b)/,/^(?:node\b)/,/^(?:parent\b)/,/^(?:position\b)/,/^(?:preceding-sibling\b)/,/^(?:preceding\b)/,/^(?:self\b)/,/^(?:text\b)/,/^(?:at\b)/,/^(?:as\b)/,/^(?:by\b)/,/^(?:declare\b)/,/^(?:else\b)/,/^(?:for\b)/,/^(?:if\b)/,/^(?:in\b)/,/^(?:let\b)/,/^(?:order\b)/,/^(?:return\b)/,/^(?:then\b)/,/^(?:to\b)/,/^(?:variable\b)/,/^(?:where\b)/,/^(?:xs\b)/,/^(?:eq\b)/,/^(?:ne\b)/,/^(?:lt\b)/,/^(?:le\b)/,/^(?:gt\b)/,/^(?:ge\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:<=)/,/^(?:<)/,/^(?:>=)/,/^(?:>)/,/^(?:=)/,/^(?:!=)/,/^(?:\*)/,/^(?:div\b)/,/^(?:mod\b)/,/^(?:\+)/,/^(?:-)/,/^(?:(\$([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*))/,/^(?:(([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*))/,/^(?:(([0-9]+)?\.([0-9]+)+))/,/^(?:([0-9]+))/,/^(?:(((")|('))((?:\\((")|('))|(?:(?!((")|('))).))*)((")|('))))/,/^(?:$)/,/^(?:.)/],
+rules: [/^(?:\s+)/,/^(?:((\(:[\s\S]*?:\))))/,/^(?:\/\/)/,/^(?:\/)/,/^(?:\.\.)/,/^(?:\.)/,/^(?:::)/,/^(?:,)/,/^(?::=)/,/^(?::)/,/^(?:@)/,/^(?:\()/,/^(?:\))/,/^(?:\[)/,/^(?:\])/,/^(?:\|)/,/^(?:\{)/,/^(?:\})/,/^(?:;)/,/^(?:integer\b)/,/^(?:decimal\b)/,/^(?:function\b)/,/^(?:local\b)/,/^(?:ancestor-or-self\b)/,/^(?:ancestor\b)/,/^(?:attribute\b)/,/^(?:child\b)/,/^(?:descendant-or-self\b)/,/^(?:descendant\b)/,/^(?:following-sibling\b)/,/^(?:following\b)/,/^(?:last\b)/,/^(?:namespace\b)/,/^(?:node\b)/,/^(?:parent\b)/,/^(?:position\b)/,/^(?:preceding-sibling\b)/,/^(?:preceding\b)/,/^(?:self\b)/,/^(?:text\b)/,/^(?:at\b)/,/^(?:as\b)/,/^(?:by\b)/,/^(?:declare\b)/,/^(?:else\b)/,/^(?:for\b)/,/^(?:if\b)/,/^(?:in\b)/,/^(?:let\b)/,/^(?:order\b)/,/^(?:return\b)/,/^(?:then\b)/,/^(?:to\b)/,/^(?:variable\b)/,/^(?:where\b)/,/^(?:xs\b)/,/^(?:eq\b)/,/^(?:ne\b)/,/^(?:lt\b)/,/^(?:le\b)/,/^(?:gt\b)/,/^(?:ge\b)/,/^(?:and\b)/,/^(?:or\b)/,/^(?:<=)/,/^(?:<)/,/^(?:>=)/,/^(?:>)/,/^(?:=)/,/^(?:!=)/,/^(?:\*)/,/^(?:div\b)/,/^(?:mod\b)/,/^(?:\+)/,/^(?:-)/,/^(?:(\$([a-zñÑA-Z])[a-zA-ZñÑ0-9_]*))/,/^(?:(([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*))/,/^(?:(([0-9]+)?\.([0-9]+)+))/,/^(?:([0-9]+))/,/^(?:(((")|('))((?:\\((")|('))|(?:(?!((")|('))).))*)((")|('))))/,/^(?:$)/,/^(?:.)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81],"inclusive":true}}
 });
 return lexer;

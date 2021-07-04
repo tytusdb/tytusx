@@ -1,4 +1,7 @@
+import { ComponentFactoryResolver } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import Simbolo from '../AST/Simbolo';
+import { Contenido } from '../Hijos/Contenido';
 
 
 
@@ -12,6 +15,9 @@ export class ConsultasTS{
     encoding:any
     toastr: ToastrService
     hijos = []
+    texto=""
+    etiqueta
+    hayatributo=""
   constructor(){
     this.tablasimbolos = JSON.parse(localStorage.getItem("tablaSimbolo"))
     this.encoding = localStorage.getItem("encoding")
@@ -45,31 +51,343 @@ export class ConsultasTS{
           }
     }
 
-    getPredicado(indice:number, etiqueta:any, padre:any):any{
-        this.contenido = [];
-        this.getEntornoActual(etiqueta, padre)
-          for (let i= 0; i < this.contenido.length; i++) {
-            if (i == (indice - 1)) {
-              this.hijos.push(this.contenido[i]);
-            }
+    getPredicado(padre:any, indice):any{
+        this.contenido = JSON.parse(padre)
+        for (let i= 0; i < this.contenido.length; i++) {
+          if (i == (indice - 1)) {
+            this.hijos.push(this.contenido[i]);
           }
-          this.contenido = [];
-          this.contenido = this.hijos;
-        return this.contenido
+        }
+        this.contenido = [];
+        this.contenido = this.hijos;
+      return this.contenido
     }
 
-    Concatenar(indice:any, tope:any, etiqueta:any, padre:any){
-        this.contenido = []
+    getAtributo(padre:any, atributo:any){
+      this.hijos=[]
+      try{
+        this.contenido = JSON.parse(padre)
+      }catch{
+        this.contenido = padre
+      }
+      for (let i=0; i < this.contenido.length; i++){
+        this.RecorrerAtributo(this.contenido[i].atributos, atributo)
+        if(this.hayatributo!="F"){
+          this.hijos.push(this.contenido[i])
+        }
+      }
+      return this.hijos
+    }
+
+    RecorrerAtributo(contenido:any, atributo:any){
+      if(contenido.lista!=undefined){
+        contenido.lista.forEach(element => {
+          if(element.lista!=undefined){
+            this.RecorrerAtributo(element.lista, atributo)
+          }
+        });
+      }else{
+        if(atributo!="all"){
+          if(contenido[0].identificador == atributo){
+            var c:string = contenido[0].valor
+            this.hayatributo = c.replace("\"","")
+          }else{
+            this.hayatributo="F"
+          }
+        }else{
+            var c:string = contenido[0].valor
+            this.hayatributo = c.replace("\"","")
+        }
+        
+      }
+    }
+
+    getOnlyAtributo(padre:any, atributo:any){
+      let texto=""
+      try{
+        this.contenido = JSON.parse(padre)
+      }catch{
+        this.contenido = padre
+      }
+      
+      for (let i=0; i < this.contenido.length; i++){
+        this.RecorrerAtributo(this.contenido[i].atributos, atributo)
+        if(this.hayatributo!="F"){
+          texto+="\n"+this.hayatributo.replace("\"","")
+        }
+      }
+      return texto
+    }
+
+    Menor(indice:any, tope:any, padre:any){
+        this.contenido = JSON.parse(padre)
         this.hijos=[];
-        this.getEntornoActual(etiqueta, padre)
-        for (let i = indice; i<tope; i++){
+        if(indice.id==undefined){
+          for (let i = indice; i<tope; i++){
             for(let j = 0; j < this.contenido.length; j++){
                 if (j==(i-1)){
                     this.hijos.push(this.contenido[j])
                 }
             }
+          }
+        }else{
+          for(let i=0; i<this.contenido.length; i++){
+            this.getEtiqueta(this.contenido[i], indice.id)
+            if(this.etiqueta<tope){
+              this.hijos.push(this.contenido[i])
+            }
+          }
         }
+        
         return this.hijos
     }
 
+    Menori(indice:any, tope:any, padre:any){
+      this.contenido = JSON.parse(padre)
+      this.hijos=[]
+      if(indice.id==undefined){
+        for (let i = indice; i<=tope; i++){
+          for(let j = 0; j < this.contenido.length; j++){
+              if (j==(i-1)){
+                  this.hijos.push(this.contenido[j])
+              }
+          }
+        }
+      }else{
+        for(let i=0; i<this.contenido.length; i++){
+          this.getEtiqueta(this.contenido[i], indice.id)
+          if(this.etiqueta<=tope){
+            this.hijos.push(this.contenido[i])
+          }
+        }
+      }
+      return this.hijos
+  }
+
+  Mayor(indice:any, tope:any, padre:any){
+      this.contenido = JSON.parse(padre)
+      this.hijos=[]
+      if(indice.id==undefined){
+        for (let i = tope+1; i<this.contenido.length+1; i++){
+          for(let j = 0; j < this.contenido.length; j++){
+              if (j==(i-1)){
+                  this.hijos.push(this.contenido[j])
+              }
+          }
+        }
+      }else{//QUIERE DECIR QUE PUEDE VENIR UNA ETIQUETA
+        for(let i=0; i<this.contenido.length; i++){
+          this.getEtiqueta(this.contenido[i], indice.id)
+          if(this.etiqueta>tope){
+            this.hijos.push(this.contenido[i])
+          }
+        }
+      }
+
+      return this.hijos
+  }
+
+  Mayori(indice:any, tope:any, padre:any){
+    this.contenido = JSON.parse(padre)
+    this.hijos=[]
+    if(indice.id==undefined){
+      for (let i = tope
+        ; i<this.contenido.length+1; i++){
+        for(let j = 0; j < this.contenido.length; j++){
+            if (j==(i-1)){
+                this.hijos.push(this.contenido[j])
+            }
+        }
+      }
+    }else{
+      for(let i=0; i<this.contenido.length; i++){
+        this.getEtiqueta(this.contenido[i], indice.id)
+        if(this.etiqueta>=tope){
+          this.hijos.push(this.contenido[i])
+        }
+      }
+    }
+    
+    return this.hijos
+}
+
+  Igual(indice:any, tope:any, padre:any){
+    this.contenido = JSON.parse(padre)
+    this.hijos=[]
+    if(indice.id!=undefined){
+      if(indice.pred=="atributoid"){
+        for(let i=0; i<this.contenido.length; i++){
+          this.RecorrerAtributo(this.contenido[i].atributos, indice.id.indice)
+          if(this.hayatributo!="F"){
+              var atr:string = this.hayatributo.replace("\"", "")
+              var atr2: string = tope
+              var x = atr2.replace("\"","")
+              console.log( atr + "-"+x)
+            if(atr==x){
+              this.hijos.push(this.contenido[i])
+            }
+          }else{
+            console.log(this.hayatributo)
+          }
+        }
+      }else{
+        for(let i=0; i<this.contenido.length; i++){
+          this.getEtiqueta(this.contenido[i], indice.id)
+          if(this.etiqueta==tope){
+            this.hijos.push(this.contenido[i])
+          }
+        }
+      }
+    }
+    return this.hijos
+  }
+
+  Diferente(indice:any, tope:any, padre:any){
+    this.contenido = JSON.parse(padre)
+    this.hijos=[]
+    if(indice.id!=undefined){
+      if(indice.pred=="atributoid"){
+        for(let i=0; i<this.contenido.length; i++){
+          this.RecorrerAtributo(this.contenido[i].atributos, indice.id.indice)
+          if(this.hayatributo!="F"){
+              var atr:string = this.hayatributo.replace("\"", "")
+              var atr2: string = tope
+              var x = atr2.replace("\"","")
+              console.log( atr + "-"+x)
+            if(atr!=x){
+              this.hijos.push(this.contenido[i])
+            }
+          }else{
+            console.log(this.hayatributo)
+          }
+        }
+      }else{
+        for(let i=0; i<this.contenido.length; i++){
+          this.getEtiqueta(this.contenido[i], indice.id)
+          if(this.etiqueta!=tope){
+            this.hijos.push(this.contenido[i])
+          }
+        }
+      }
+    }
+    return this.hijos
+  }
+
+
+    newEntorno(Contenido: any, nombre: string) {
+    if (Contenido.length != undefined && Contenido!=null) {
+        Contenido.forEach(element => {
+            if(element.nombreInit!=undefined){
+              if (element.nombreInit == nombre) {
+                if (element.elementos !=null) {
+                  this.contenido.push(element)
+                }else{
+                  this.contenido.push(element)
+                }
+              }else{
+                let array=[]
+                if(element.elementos!=null){
+                  array.push(element.elementos)
+                  this.newEntorno(array,nombre)
+                }
+              }
+            }else if(element.lista!=undefined){
+  
+              if(element!=null){
+                element.lista.forEach(elemento2 => {
+                  let array=[]
+                  array.push(elemento2)
+                  this.newEntorno(array,nombre);
+              });
+              }
+            }
+        });
+      }else{
+        if(Contenido.Nombre!=undefined){
+          if (Contenido.Nombre == nombre) {
+            if (Contenido.elementos !=null) {
+              this.contenido.push(Contenido)
+            }else{
+              this.contenido.push(Contenido)
+            }
+          }else{
+            let array=[]
+            if(Contenido.elementos!=null){
+              array.push(Contenido.elementos)
+              this.newEntorno(array,nombre)
+            }
+          }
+        }else if(Contenido.lista!=undefined){
+            if(Contenido!=null){
+                Contenido.lista.forEach(elemento2 => {
+                let array=[]
+                array.push(elemento2)
+                this.newEntorno(array,nombre);
+            });
+            }
+        }else if(Contenido.nombreInit!=undefined){
+            if (Contenido.nombreInit == nombre) {
+              if (Contenido.elementos !=null) {
+    
+                this.contenido.push(Contenido)
+              }else{
+    
+                this.contenido.push(Contenido)
+              }
+            }else{
+              let array=[]
+              if(Contenido.elementos!=null){
+                array.push(Contenido.elementos)
+                this.newEntorno(array,nombre)
+              }
+            }
+          }
+
+        }
+        return this.contenido
+    }
+    
+    getText(padre:any){
+      let texto=""
+      padre.forEach(element => {
+        texto+="\n"+ element.texto
+      });
+      return texto
+    }
+
+    recorrerElementos(Contenido:any){
+      if(Contenido.lista!=undefined){
+        for(let i=0; i<Contenido.lista.length; i++){
+          this.recorrerElementos(Contenido.lista[i])
+        }
+      }else{
+        this.texto+="\n"+ Contenido.texto
+      }
+    }
+
+    getNode(padre:any){
+      this.texto=""
+      padre.forEach(element => {
+        this.recorrerElementos(element.elementos)
+      });
+      return this.texto
+    }
+
+    getEtiqueta(padre:any, etiqueta:any){
+      if(padre.lista!=undefined){
+        for(let i=0; i<padre.lista.length; i++){
+          this.getEtiqueta(padre.lista[i], etiqueta)
+        }
+      }else{
+        if(padre.elementos!=undefined){
+          this.getEtiqueta(padre.elementos, etiqueta)
+        }else{
+          if(padre.nombreInit==etiqueta){
+            var n = String(padre.texto)
+            var numero = n.replace(" ", "")
+            this.etiqueta=Number(numero)
+          }
+        }
+      }
+    }
 }

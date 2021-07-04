@@ -211,7 +211,7 @@ case 10:
                   if(Estado.Estado.cambio==1){
                     this.$=[]
                   }else if(Estado.Estado.cambio==2){//ESTADO DOS PARA CST
-                    
+
                   }
                 
 break;
@@ -1590,9 +1590,9 @@ case 19:return 11
 break;
 case 20:return 22;
 break;
-case 21:return 28;
+case 21:return 29;
 break;
-case 22:return 29;
+case 22:return 28;
 break;
 case 23:return 12;
 break;
@@ -1607,7 +1607,7 @@ case 27: ErrorL.Errores.add(new nodoError.Error("Léxico","Caracter "+yy_.yytext
 break;
 }
 },
-rules: [/^(?:\s+)/i,/^(?:<!--)/i,/^(?:[^"-->"]+)/i,/^(?:-->)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:xml\b)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:"UTF-8")/i,/^(?:"ASCII")/i,/^(?:"ISO-8859-1")/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:\?)/i,/^(?:=)/i,/^(?:([a-zA-Z]|_)+(_|\.|-|:|á|é|í|ó||ñ|Á|É|Í|Ó|Ú|[0-9A-Za-z])*)/i,/^(?:[0-9]+)/i,/^(?:[0-9]+\.[0-9]+)/i,/^(?:[\"]([^\"\n]|(\\")|(\\'))*[\"])/i,/^(?:[\'][^\'\n]*[\'])/i,/^(?:[^<>&]+)/i,/^(?:$)/i,/^(?:.)/i],
+rules: [/^(?:\s+)/i,/^(?:<!--)/i,/^(?:[^"-->"]+)/i,/^(?:-->)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:xml\b)/i,/^(?:&lt;)/i,/^(?:&gt;)/i,/^(?:&amp;)/i,/^(?:&apos;)/i,/^(?:&quot;)/i,/^(?:"UTF-8")/i,/^(?:"ASCII")/i,/^(?:"ISO-8859-1")/i,/^(?:<)/i,/^(?:>)/i,/^(?:\/)/i,/^(?:\?)/i,/^(?:=)/i,/^(?:([a-zA-Z]|_)+(_|\.|-|:|á|é|í|ó||ñ|Á|É|Í|Ó|Ú|[0-9A-Za-z])*)/i,/^(?:[0-9]+\.[0-9]+)/i,/^(?:[0-9]+)/i,/^(?:[\"]([^\"\n]|(\\")|(\\'))*[\"])/i,/^(?:[\'][^\'\n]*[\'])/i,/^(?:[^<>&]+)/i,/^(?:$)/i,/^(?:.)/i],
 conditions: {"Comentario":{"rules":[2,3],"inclusive":false},"INITIAL":{"rules":[0,1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27],"inclusive":true}}
 });
 return lexer;

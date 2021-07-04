@@ -224,7 +224,6 @@ function CargarXML(){
                             salidaGlobal+= salidaXQuery.toString() + "\n\n";
                         } 
 
-                        contador++;
                     } );
                     
                     SetSalida(salidaGlobal);

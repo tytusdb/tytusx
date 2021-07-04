@@ -18,13 +18,14 @@ export class grafoCST {
   {
     posicion--
     var concatenado=""
-    var Edges = this.pilaHijos.pop()  
-    for(const temp of Edges)
-    {
-      this.PilaEdges.push({from:this.contador+posicion, to:temp.id})
-      this.GrahpvizEdges += `${this.contador+posicion} -> ${temp.id}\n`
-      concatenado+=temp.label+" "
-    }
+    var Edges = this.pilaHijos.pop() 
+      for(const temp of Edges)
+      {
+        this.PilaEdges.push({from:this.contador+posicion, to:temp.id})
+        this.GrahpvizEdges += `${this.contador+posicion} -> ${temp.id}\n`
+        concatenado+=temp.label+" "
+      }
+    
     if(this.texto.length>0)
     {
       var textoActual=this.texto.pop()
