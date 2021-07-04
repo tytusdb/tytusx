@@ -37,8 +37,9 @@ function traducirOperacion(instruccion,entorno,tablaSimbolos){
            traductorC3D.traducirAritmeticas("            t"+tem+"="+valor1+"/"+valor2+";\n");
             return "t"+tem;
         case "OP_NEG":
-            ++tem;
+           
             valor1=traducirOperacion(instruccion.valor1,entorno,tablaSimbolos);
+            ++tem;
            traductorC3D.traducirAritmeticas("            t"+tem+"= -"+valor1+";\n");
             return "t"+tem;
     }
@@ -75,9 +76,10 @@ function traducirOperacionW(instruccion,tabla){
            traductorC3D.traducirAritmeticas("\n            t"+tem+"="+valor1+"/"+valor2+";");
             return "t"+tem;
         case "OP_NEG":
-            ++tem;
+            
             valor1=traducirOperacionW(instruccion.valor1,tabla);
             traductorC3D.traducirAritmeticas("\n            t"+tem+"= -"+valor1+";");
+            ++tem;
             return "t"+tem;
 
         case "MAYOR":

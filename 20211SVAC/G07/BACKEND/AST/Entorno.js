@@ -10,8 +10,9 @@ class Entorno {
   agregar(id, simbolo) {
     this.tabla.set(id, simbolo);
     let valor = simbolo;
+    
     if(!traductorC3D.esNumero(valor)){
-          valor = " ";
+          valor = 0;
     }
                         // Insertar al heap y generar C3D 
                         let referenciaHeap = -1;
