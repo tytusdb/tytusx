@@ -14,6 +14,7 @@ class TablaSimbolosXquery {
 
     public agregarSimbolo(simbolo: Simbolo): boolean{
         if(!this.existeSimbolo(simbolo)){
+            simbolo.offset = this._listaSimbolos.length;
             this._listaSimbolos.push(simbolo);
             return true;
         }
@@ -77,6 +78,12 @@ class TablaSimbolosXquery {
             }
         }
         return null;
+    }
+
+    public cargarElementosXml():TablaSimbolosXquery{
+        this.listaSimbolos.push(new Simbolo("$$Ts",new Tipo(TipoDato.objeto),null,null));
+        this.listaSimbolos.push(new Simbolo("$$Ts",new Tipo(TipoDato.xpathValue),null,null));
+        return this;
     }
 
     get tsPadre(): TablaSimbolosXquery {

@@ -85,6 +85,7 @@
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
     <script src="../../utils/CodeUtil.js"></script>
+    <script src="../../utils/XQueryUtil.js"></script>
 
     <script src="../../ejecucion/xquery/NodoXquery.js"></script>
     <script src="../../ejecucion/xquery/TablaSimbolos/Simbolo.js"></script>
@@ -495,13 +496,20 @@
             });
 
 
-
-
             $("#btnGenerar3DXQuery").click(function (){
                 entradaXml   = $("#txtEntradaXML").val();
                 entradaXpath = $("#txtEntradaXPath").val();
                 generar3DXquery(entradaXml, entradaXpath);
             });
+
+
+            $("#btnDescarga3DXQuery").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                descargarArchivoXQuery(entradaXml, entradaXpath);
+            });
+
+
 
         });
     </script>

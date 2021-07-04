@@ -1,9 +1,10 @@
-class NumberFunction implements Expresion{
+class NumberFunction extends ExpresionAncestor{
     private entrada : Expresion;
     linea: number;
     columna: number;
 
     constructor(entrada: Expresion, linea: number, columna: number) {
+        super();
         this.entrada = entrada;
         this.linea = linea;
         this.columna = columna;

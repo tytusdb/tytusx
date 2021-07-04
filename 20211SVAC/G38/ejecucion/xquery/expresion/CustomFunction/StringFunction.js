@@ -1,6 +1,7 @@
 "use strict";
-class StringFunction {
+class StringFunction extends ExpresionAncestor {
     constructor(entrada, linea, columna) {
+        super();
         this.entrada = entrada;
         this.linea = linea;
         this.columna = columna;

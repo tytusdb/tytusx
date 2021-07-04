@@ -24,4 +24,8 @@ class FilterResult implements InstruccionXquery{
         return PredicateExpresion.filterXpathXqueryExpresion(ent,simbolo.valorXpath,[this.filterExpresion]);
     }
 
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
+
 }

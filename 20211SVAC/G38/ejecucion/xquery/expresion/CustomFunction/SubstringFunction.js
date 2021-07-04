@@ -1,6 +1,7 @@
 "use strict";
-class SubstringFunction {
+class SubstringFunction extends ExpresionAncestor {
     constructor(cadena, inicio, fin, linea, columna) {
+        super();
         this.cadena = cadena;
         this.inicio = inicio;
         this.fin = fin;

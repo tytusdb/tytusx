@@ -94,4 +94,48 @@ class ListaXpathExpresion extends ExpresionAncestor{
 
 
 
+    traducir3DXQuery(sizeScope:string):any{
+
+
+        CodeUtil.printComment("Creamos una nueva lista para concatenar las respuesetas de XpathExpressions")
+        let tmpListaXpathXpressions = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment("SP = SP + "+sizeScope+" ;","Se cambia ambito")
+        CodeUtil.print("crearLista();");
+        CodeUtil.print(tmpListaXpathXpressions+" = Stack[SP];")
+        CodeUtil.printWithComment("SP = SP - "+sizeScope+" ;","Se recupera ambito")
+
+        let nuevaLista = "";
+        this.expresionesXpath.forEach( function (expression) {
+            nuevaLista = expression.traducir3D(null,sizeScope);
+
+            CodeUtil.printWithComment("SP = SP + "+sizeScope+" ;","Se cambia ambito")
+            let tmpPosParametro1 = CodeUtil.generarTemporal();
+            let tmpPosParametro2 = CodeUtil.generarTemporal();
+            CodeUtil.print(tmpPosParametro1 + " = SP + 0 ; ");
+            CodeUtil.print(tmpPosParametro2 + " = SP + 1 ; ");
+            CodeUtil.print("Stack[(int)"+tmpPosParametro1+"] = "+tmpListaXpathXpressions+" ;")
+            CodeUtil.print("Stack[(int)"+tmpPosParametro2+"] = "+nuevaLista+" ;")
+            CodeUtil.printWithComment("concatenarListas();","Concatenamos las listas Xpath")
+            CodeUtil.print(tmpListaXpathXpressions+" = Stack[SP]; ")
+            CodeUtil.printWithComment("SP = SP - "+sizeScope+" ;","Se recupera ambito")
+
+        });
+
+        return tmpListaXpathXpressions;
+    }
+
+    traducirRetorno3DXQuery(sizeScope:string, ambito:string):any{
+        let tmpListaXpathXpressions = this.crearLista3D(sizeScope);
+
+        let nuevaLista = "";
+        for(let expression of this.expresionesXpath){
+
+            nuevaLista = expression.traducirRetorno3DXQuery(ambito,sizeScope);
+            this.concatenarLista3D(sizeScope, tmpListaXpathXpressions, nuevaLista);
+        }
+
+        this.imprimirLista3D(sizeScope, tmpListaXpathXpressions);
+
+    }
+
 }

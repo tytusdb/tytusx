@@ -12,4 +12,8 @@ class XqueryXpath implements InstruccionXquery{
         return [this.predicate.getValor(ent,xmlData)];
     }
 
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
+
 }

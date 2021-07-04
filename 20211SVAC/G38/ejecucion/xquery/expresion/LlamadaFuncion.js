@@ -1,6 +1,7 @@
 "use strict";
-class LlamadaFuncion {
+class LlamadaFuncion extends ExpresionAncestor {
     constructor(identifier, valoresParametros, linea, columna) {
+        super();
         this.identifier = identifier;
         this.valoresParametros = valoresParametros;
         this.linea = linea;

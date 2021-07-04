@@ -1,4 +1,4 @@
-class SubstringFunction implements Expresion{
+class SubstringFunction extends ExpresionAncestor{
     private cadena : Expresion;
     private inicio : Expresion;
     private fin : Expresion;
@@ -6,6 +6,7 @@ class SubstringFunction implements Expresion{
     columna: number;
 
     constructor(cadena: Expresion, inicio: Expresion, fin: Expresion, linea: number, columna: number) {
+        super();
         this.cadena = cadena;
         this.inicio = inicio;
         this.fin = fin;

@@ -5,6 +5,7 @@ class LlamadaFuncion extends ExpresionAncestor implements  NodoXquery{
     columna: number;
 
     constructor(identifier: string, valoresParametros: Expresion[], linea: number, columna: number) {
+        super();
         this.identifier = identifier;
         this.valoresParametros = valoresParametros;
         this.linea = linea;

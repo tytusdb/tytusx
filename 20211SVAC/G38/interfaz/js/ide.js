@@ -384,6 +384,7 @@ function descargarArchivo(cadEntradaXml, cadEntradaXpath){
 function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
     var tablaSimbolosXml;
     try {
+        ListaErrores.InicializarC3D();
         analizarXML(cadEntradaXml);
         analizarXQUERY(cadEntradaXpath);
         if(ListaErrores.hayErroresXml()){
@@ -393,7 +394,11 @@ function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
         tablaSimbolosXml = _tsXml;
         tablaSimbolosXml.cargarXml_3d();
         CodeUtil.comenzarPrograma();
-        let rootXquery = _rootXquery;//Ejecutar Xquery
+        let ts = _rootXquery.obtenerTS(_tsXml);
+        XQueryUtil.tablaSimbolosGlobal = ts;
+        XQueryUtil.tablaSimbolosLocal = ts;
+        ts.cargarElementosXml();
+        let rootXquery =    _rootXquery.traducirXQ(10);//Ejecutar Xquery
         CodeUtil.finalizarProgrma();
         InterfazGrafica.print(CodeUtil._cadSalida);
 
@@ -403,4 +408,13 @@ function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
         InterfazGrafica.print('error en ejecucion: '+e);
         console.log(e);
     }
+};
+
+
+
+function descargarArchivoXQuery(cadEntradaXml, cadEntradaXpath){
+    generar3DXquery(cadEntradaXml, cadEntradaXpath);
+    var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "XQuery.c");
+
 };

@@ -11,4 +11,7 @@ class SentenciaElse {
             sentencia.ejecutar(entornoElse, xmlData);
         }
     }
+    traducirXQ(sizeScope, otro) {
+        throw new Error("Method not implemented.");
+    }
 }

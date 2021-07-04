@@ -21,4 +21,8 @@ class Retorno implements InstruccionXquery{
         }
     }
 
+    traducirXQ(sizeScope: string, otro:any) {
+        this.expresion.traducirRetorno3DXQuery(sizeScope,otro);
+    }
+
 }

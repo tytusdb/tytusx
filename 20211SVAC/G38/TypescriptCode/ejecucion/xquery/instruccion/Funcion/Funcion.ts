@@ -26,4 +26,8 @@ class Funcion implements InstruccionXquery, NodoXquery{
         }
         ListaFunciones.agregarFuncion(this.nombreFuncion,this);
     }
+
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
 }

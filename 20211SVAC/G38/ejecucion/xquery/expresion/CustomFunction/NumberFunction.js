@@ -1,6 +1,7 @@
 "use strict";
-class NumberFunction {
+class NumberFunction extends ExpresionAncestor {
     constructor(entrada, linea, columna) {
+        super();
         this.entrada = entrada;
         this.linea = linea;
         this.columna = columna;

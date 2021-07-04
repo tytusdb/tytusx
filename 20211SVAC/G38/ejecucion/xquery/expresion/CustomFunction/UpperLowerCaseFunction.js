@@ -1,6 +1,7 @@
 "use strict";
-class UpperLowerCaseFunction {
+class UpperLowerCaseFunction extends ExpresionAncestor {
     constructor(entrada, upperCase, linea, columna) {
+        super();
         this.entrada = entrada;
         this.upperCase = upperCase;
         this.linea = linea;

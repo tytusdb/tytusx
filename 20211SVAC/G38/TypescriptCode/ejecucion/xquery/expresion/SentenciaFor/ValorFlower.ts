@@ -17,6 +17,7 @@ class ValorFlower{
         this.columna = columna;
     }
 
+
     declaracionInicial(ent:TablaSimbolosXquery, tabla:TablaSimbolos){
         if(this.listaNumeros != null && this.listaNumeros != undefined  ){
             let valor = this.listaNumeros[0];

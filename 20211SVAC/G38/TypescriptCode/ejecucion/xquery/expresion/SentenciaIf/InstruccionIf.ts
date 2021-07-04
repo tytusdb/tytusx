@@ -32,5 +32,9 @@ class InstruccionIf implements InstruccionXquery, NodoXquery{
         this.sentenciasIfs.unshift(sentenciaIf);
     }
 
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
+
 
 }

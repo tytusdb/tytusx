@@ -1,9 +1,10 @@
-class StringFunction implements Expresion{
+class StringFunction extends ExpresionAncestor{
     private entrada : Expresion;
     linea: number;
     columna: number;
 
     constructor(entrada: Expresion, linea: number, columna: number) {
+        super();
         this.entrada = entrada;
         this.linea = linea;
         this.columna = columna;

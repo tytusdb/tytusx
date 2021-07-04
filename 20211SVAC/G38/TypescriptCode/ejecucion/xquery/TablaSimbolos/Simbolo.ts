@@ -3,6 +3,8 @@ class Simbolo{
     private _tipo:Tipo;
     private _valorPrimitvo:any;
     private _valorXpath:TablaSimbolos;
+    //Generacion C3D
+    private _offset:number;
 
 
     constructor(identificador: string, tipo: Tipo, valorPrimitvo: any, valorXpath: TablaSimbolos) {
@@ -53,5 +55,14 @@ class Simbolo{
             return true;
         }
         return false;
+    }
+
+
+    get offset(): number {
+        return this._offset;
+    }
+
+    set offset(value: number) {
+        this._offset = value;
     }
 }

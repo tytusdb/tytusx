@@ -1,10 +1,11 @@
-class UpperLowerCaseFunction implements Expresion{
+class UpperLowerCaseFunction extends ExpresionAncestor{
     private entrada : Expresion;
     private upperCase: boolean;
     linea: number;
     columna: number;
 
     constructor(entrada: Expresion, upperCase:boolean, linea: number, columna: number) {
+        super();
         this.entrada = entrada;
         this.upperCase = upperCase;
         this.linea = linea;

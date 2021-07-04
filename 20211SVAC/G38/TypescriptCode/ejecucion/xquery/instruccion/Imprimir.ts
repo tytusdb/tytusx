@@ -15,4 +15,8 @@ class Imprimir implements NodoXquery, InstruccionXquery{
         InterfazGrafica.print(valor);
     }
 
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
+
 }

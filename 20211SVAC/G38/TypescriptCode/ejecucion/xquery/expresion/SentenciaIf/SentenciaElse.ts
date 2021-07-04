@@ -17,4 +17,8 @@ class SentenciaElse implements InstruccionXquery, NodoXquery{
         }
     }
 
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
+
 }

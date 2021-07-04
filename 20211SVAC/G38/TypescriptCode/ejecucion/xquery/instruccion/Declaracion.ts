@@ -36,4 +36,8 @@ class Declaracion implements InstruccionXquery{
             );
         }
     }
+
+    traducirXQ(sizeScope: string, otro:any) {
+        throw new Error("Method not implemented.");
+    }
 }

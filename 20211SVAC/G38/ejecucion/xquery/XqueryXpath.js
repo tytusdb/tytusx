@@ -6,4 +6,7 @@ class XqueryXpath {
     ejecutar(ent, xmlData) {
         return [this.predicate.getValor(ent, xmlData)];
     }
+    traducirXQ(sizeScope, otro) {
+        throw new Error("Method not implemented.");
+    }
 }

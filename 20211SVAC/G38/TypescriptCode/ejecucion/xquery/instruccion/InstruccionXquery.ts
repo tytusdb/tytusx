@@ -3,4 +3,6 @@ interface InstruccionXquery{
     columna: number;
 
     ejecutar(ent: TablaSimbolosXquery, xmlData: TablaSimbolos): any;
+
+    traducirXQ(sizeScope:string, otro:any):any;
 }
