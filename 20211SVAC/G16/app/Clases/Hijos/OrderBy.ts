@@ -13,5 +13,6 @@ export class OrderBy implements Instruccion{
   }
   ejecutar(entorno: Entorno, node:any) {
     console.log("pasó por el order by")
+    console.log(entorno)
   }
 }

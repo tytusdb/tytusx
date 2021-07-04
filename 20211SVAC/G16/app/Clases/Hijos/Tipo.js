@@ -11,4 +11,5 @@ var Tipo;
     Tipo[Tipo["FLOAT"] = 5] = "FLOAT";
     Tipo[Tipo["VARIABLE"] = 6] = "VARIABLE";
     Tipo[Tipo["ID"] = 7] = "ID";
+    Tipo[Tipo["LLAMADA"] = 8] = "LLAMADA";
 })(Tipo = exports.Tipo || (exports.Tipo = {}));

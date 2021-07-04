@@ -24,6 +24,8 @@ const init = function(e){
 
 
 		}
+		table.innerHTML+=nuevosElementos;
+
 	}
 };
 

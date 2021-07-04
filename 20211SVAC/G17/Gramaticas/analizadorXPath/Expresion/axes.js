@@ -329,6 +329,37 @@ export class Descendant extends Axes
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"descendant::")
   }
+
+  getC3D(nodos)
+  {
+    C3D.funcBoleanas[C3D.funcIndices.DESCENDANT] = true
+    C3D.funcBoleanas[C3D.funcIndices.DESCENDANTRECURSIVA] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
+    cod += (`\n/* Guardando la ruta ${this.nombre} */ \n`);
+    //guardamos en el heapConsulta el camino que nos dieron /* esto es recursivo */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`Descendant(); \n`); //manda a llamar a la funcion camino
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
+  }
 }
 
 export class Attribute extends Axes
@@ -411,6 +442,38 @@ export class Self extends Axes
     return retornos
   }
 
+  getC3D(nodos){   
+
+    C3D.funcBoleanas[C3D.funcIndices.SELF] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
+    cod += (`\n/* Guardando la ruta del atributo ${this.nombre} */ \n`);
+
+    //guardamos en el heapConsulta el camino que nos dieron /* esto solo viene una vez */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`Self(); \n`); //manda a llamar a la funcion atributo
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
+
+  }
+
   Graficar(ListaNodes,ListaEdges,contador)
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"self::")
@@ -454,6 +517,37 @@ export class DescSelf extends Axes
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"descendant-or-self::")
   }
+
+  getC3D(nodos)
+  {
+    C3D.funcBoleanas[C3D.funcIndices.DESCENDANTSELF] = true
+    C3D.funcBoleanas[C3D.funcIndices.DESCENDANTRECURSIVA] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
+    cod += (`\n/* Guardando la ruta ${this.nombre} */ \n`);
+    //guardamos en el heapConsulta el camino que nos dieron /* esto es recursivo */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`DescendantSelf(); \n`); //manda a llamar a la funcion camino
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
+  }
 }
 
 export class FollowSibling extends Axes
@@ -465,13 +559,13 @@ export class FollowSibling extends Axes
 
   getValor(nodos,nivel)
   {
-    if(!nivel) nivel = 0
-    var retornos = new  Map()
-    for (const nodo of nodos) {
-      var retorno = []
-      var nuevaPila = Object.assign([],nodo.pila)
-      var entorno = nuevaPila.pop()
-      var Padre = [new Nodo(Tipo.NODO,entorno,nuevaPila,"")]
+    if(!nivel) nivel = 0                    //si no hay nivel, el nivel es 0
+    var retornos = new  Map()               //crea una tabla hash para almacenar
+    for (const nodo of nodos) {             //para cada nodo desde la raiz
+      var retorno = []                      //crea un array par los retornos
+      var nuevaPila = Object.assign([],nodo.pila)   //crea una nueva pila de la pila de los hijos
+      var entorno = nuevaPila.pop()                 //saca el primero de la pila
+      var Padre = [new Nodo(Tipo.NODO,entorno,nuevaPila,"")]  
       var hermanos = new Camino("*",[],TipoPath.ABS).getValor(Padre)
       var indice=-1;
       var posicion=1
@@ -480,7 +574,7 @@ export class FollowSibling extends Axes
         { 
           indice=i
         }
-        if(indice!=-1 && i>indice-nivel && v.entorno.tipo==this.nombre)
+        if(indice!=-1 && i>indice-nivel && (v.entorno.tipo==this.nombre || v.entorno.tipo=="*"))
         {
           v.posicion=posicion
           retorno.push(v)
@@ -509,6 +603,37 @@ export class FollowSibling extends Axes
       posicion++
     }
     return realretorno
+  }
+
+  getC3D(nodos){
+    /* Todos los hermanos del nodo en cuestion -> Todos los hijos del padre del nodo actual (menos el actual) */
+
+    C3D.funcBoleanas[C3D.funcIndices.FOLLOWINGSIBLING] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion FOLLOWING-SIBLING*/
+    cod += (`\n/* Guardando la ruta ${this.nombre} */ \n`);
+    //guardamos en el heapConsulta el camino que nos dieron /* esto es recursivo */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`FollowingSibling(); \n`); //manda a llamar a la funcion camino
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
   }
 
   Graficar(ListaNodes,ListaEdges,contador)
@@ -754,6 +879,40 @@ export class Ancestor extends Axes
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"ancestor::")
   }
+
+  getC3D(nodos){
+    /* Esta funcion solo captura el primer padre del nodo en cuestion */
+    //hacemos el camino con normalidad ::check
+    //en este Axes guardamos en el heapConsulta el nombre del padre :: check    
+
+    C3D.funcBoleanas[C3D.funcIndices.ANCESTOR] = true
+    C3D.funcBoleanas[C3D.funcIndices.ANCESTORRECURSIVA] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
+    cod += (`\n/* Guardando la ruta ${this.nombre} */ \n`);
+    //guardamos en el heapConsulta el camino que nos dieron /* esto es recursivo */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`Ancestor(); \n`); //manda a llamar a la funcion camino inverso
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
+  }
 }
 
 export class AncestorSelf extends Axes
@@ -804,6 +963,40 @@ export class AncestorSelf extends Axes
   {
     return this.GraficarAxis(ListaNodes,ListaEdges,contador,"ancestor-or-sibling::")
   }
+
+  getC3D(nodos){
+    /* Esta funcion solo captura el primer padre del nodo en cuestion */
+    //hacemos el camino con normalidad ::check
+    //en este Axes guardamos en el heapConsulta el nombre del padre :: check    
+
+    C3D.funcBoleanas[C3D.funcIndices.ANCESTORSELF] = true
+    C3D.funcBoleanas[C3D.funcIndices.ANCESTORRECURSIVA] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
+    cod += (`\n/* Guardando la ruta ${this.nombre} */ \n`);
+    //guardamos en el heapConsulta el camino que nos dieron /* esto es recursivo */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`AncestorSelf(); \n`); //manda a llamar a la funcion camino inverso
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
+  }
 }
 
 export class PrecedingSibling extends Axes
@@ -830,7 +1023,7 @@ export class PrecedingSibling extends Axes
         { 
           indice=i
         }
-        if(indice==-1 && v.entorno.tipo==this.nombre)
+        if(indice==-1 && (v.entorno.tipo==this.nombre || v.entorno.tipo=="*"))
         {
           v.posicion=posicion
           retorno.push(v)
@@ -859,6 +1052,37 @@ export class PrecedingSibling extends Axes
       posicion++
     }
     return realretorno
+  }
+
+  getC3D(nodos){
+    /* Captura todos los hermanos del nodo actual hasta que aparesca el nodo actual */
+
+    C3D.funcBoleanas[C3D.funcIndices.PRECEDINGSIBLING] = true
+    var cod = ''
+
+    /* Añadiendo en el Main la llamada y los parametros a la funcion CaminoABS */
+    cod += (`\n/* Guardando la ruta ${this.nombre} */ \n`);
+    //guardamos en el heapConsulta el camino que nos dieron /* esto es recursivo */
+    var TC0 = C3D.newTemp();
+    cod += (`${TC0} = hpc; \n`);  //guardamos donde inicia la consulta
+
+    for (const letra of this.nombre) {
+      var ascci = letra.charCodeAt(0);
+      cod += (`heapConsulta[(int)hpc] = ${ascci}; \n`);
+      cod += (`hpc = hpc + 1; \n`);
+    } 
+    cod += (`heapConsulta[(int)hpc] = -1; \n`);
+    cod += (`hpc = hpc + 1; \n`);
+
+    cod += (`\n/* Cambiando de entorno */\n`);
+    cod += (`sp = sp + 1; \n`);
+    var TC3 = C3D.newTemp();
+    cod += (`${TC3} = sp + 1; \n`); //le sumamos uno para dejar espacio para el return
+    cod += (`stack[(int)${TC3}] = ${TC0}; \n`);  //guardamos el inicio de heapConsulta
+    cod += (`PrecedingSibling(); \n`); //manda a llamar a la funcion camino inverso
+    cod += (`sp = sp - 1; \n`);
+
+    return {cod: cod, tipo: Tipo.NODO}
   }
 
   Graficar(ListaNodes,ListaEdges,contador)

@@ -46,8 +46,8 @@
 
 //expresiones regulares
 ([a-zA-Z]|"_")+("_"|"."|"-"|":"|"á"|"é"|"í"|"ó"|ú|"ñ"|"Á"|"É"|"Í"|"Ó"|"Ú"|[0-9A-Za-z])*    %{return 'ID';%}
-[0-9]+                                                                                    %{return 'integer';%}
 [0-9]+"."[0-9]+                                                                   %{return 'double';%}
+[0-9]+                                                                                    %{return 'integer';%}
 [\"]([^\"\n]|(\\\")|(\\\'))*[\"]                                                          %{return 'CADENA';%}
 [\'][^\'\n]*[\']                                                                          %{return 'CHAR';%}
 [^<>&]+                                                                                   %{return 'CARACTER'%}
@@ -190,7 +190,7 @@ OP
                   if(Estado.Estado.cambio==1){
                     $$=[]
                   }else if(Estado.Estado.cambio==2){//ESTADO DOS PARA CST
-                    
+
                   }
                 }
 ;
