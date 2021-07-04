@@ -9,6 +9,9 @@ import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
 import { traduccion } from '../Traduccion/traduccion';
 import { EntornoXQuery } from '../xqueryAST/AmbientesXquery/EntornoXQuery';
+import { ManejadorXquery } from '../xqueryAST/manejadores/ManejadorXquery';
+import { Retorno } from '../Interfaces/ExpressionXquery';
+import { tipoPrimitivo } from '../xqueryAST/ExpresionesXpath/Primitivo';
 const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
@@ -169,7 +172,16 @@ export default class Main extends Component {
 
         for (const xquery of astXquery) {
             try {
-                salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
+
+                const result: Retorno = xquery.executeXquery(nvoEntorno, ast[0]);
+                if (result.type === tipoPrimitivo.RESP){
+                    salida += ManejadorXquery.graficarXquery(result.value) + "\n";
+                }else if (result.type === tipoPrimitivo.NODO){
+                    salida += ManejadorXquery.unirSalida(ManejadorXquery.graficarNodos(result.value, "")) + "\n";
+                }else if (result.type !== tipoPrimitivo.VOID) {
+                    salida += result.value + "\n";
+                }
+                
             } catch (error) {
                 console.log(error)
             }
@@ -187,6 +199,25 @@ export default class Main extends Component {
 
         const result = parser.parse(this.state.xml)
         var ast = result.ast;
+
+        result.encoding =  result.encoding.replaceAll("\"","");
+
+        //TRADUCCION3D##########################################################################################
+        traduccion.stackCounter++;
+        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
+        traduccion.setTranslate("\n//INTRODUCIENDO ENCODING\t--------------");
+
+        for (let i = 0; i < result.encoding.length; i++) {
+            traduccion.setTranslate("heap[(int)H] = " + result.encoding.charCodeAt(i) + ";" + "\t\t//Caracter " + result.encoding[i].toString());
+            traduccion.setTranslate("H = H + 1;");
+            if (i + 1 === result.encoding.length) {
+                traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
+                traduccion.setTranslate("H = H + 1;");
+            }
+        }
+        //#######################################################################################################
+
+
         traducirXml(ast);
 
         const astXquery = parseXQueryTraduccion.parse(this.state.xquery);
