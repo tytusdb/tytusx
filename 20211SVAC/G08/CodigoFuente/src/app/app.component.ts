@@ -131,6 +131,7 @@ c3dTextFinal = `    return;
     xmlTraductor;
     xmlTraducido="";
     reporteOptimizaciones:Optimizacion[]= [];
+    ProcessedData:Entrada;
   private httpClient: HttpClient;
   constructor(http: HttpClient,public dialog: MatDialog) {
     this.httpClient = http;
@@ -182,7 +183,7 @@ c3dTextFinal = `    return;
 
     console.log('processedObject');
     console.log((processedObject));
-
+    this.ProcessedData = processedObject;
     if(processedObject.Tipo == 1){//Xquery Info
       this.ProcesarXquery(processedObject.xQueryData);
     }else{
@@ -220,6 +221,7 @@ c3dTextFinal = `    return;
     sentencias.forEach(element => {
       if(element.FlworExpresion!=null){//FLWORExpression
         var result = this.ResolverFLWORExpr(element.FlworExpresion,[]);
+        this.consoleValue = '';
         if(Array.isArray(result)){
           result.forEach(element => {
             this.consoleValue += element + '\n';
@@ -268,6 +270,13 @@ c3dTextFinal = `    return;
       case  SingleExpresionType.FLWORExpr:{
        return this.ResolverFLWORExpr(expresion.Objeto as FLWORExpr,parametros);
       }
+      case  SingleExpresionType.Contador:{
+        var values = [];
+        for(var i = expresion.Inicio ; i<= expresion.Fin; i++){
+          values.push(i);
+        }
+        return values;
+      }
       case  SingleExpresionType.FuncionDefinida:{
           var funcion = expresion.Objeto as NativeFunctionExpresion;
           if(funcion.NameFunction.TipoFuncion == TipoFuncion.Nativa){
@@ -302,14 +311,24 @@ c3dTextFinal = `    return;
         var res = this.GetValorXparam(expresion.Objeto as ParametroOperacionXpath,parametros);
         if(Array.isArray(res))
         {
+         
           var result = "";
+          var esObjeto = false;
           res.forEach(element => {
-            var obj = element as Objeto;
-            if(obj!=null && obj!=undefined){
+            if(element.constructor.Name == 'Objeto'){
+              esObjeto = true;
+              var obj = element as Objeto;
               result += this.GetXmlText(obj);
+            }else{
+
             }
           });
-          return result;
+          if(esObjeto){
+            return result;
+          }else{
+            return res;
+          }
+         
         }else{
           return res;
         }
@@ -363,6 +382,7 @@ c3dTextFinal = `    return;
           {
             var valor = this.ResolverSingleExpresion(element.SEValue,parametros);
             parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
+           
             
           }else if(element.Sentencia!=null){
 
@@ -378,7 +398,7 @@ c3dTextFinal = `    return;
       }break;
       case FLWORTipo.For :{
         //binding
-        var valoresIterador = [];
+        var valoresIterador:ParametroFuncion[] = [];
         expresion.Binding.Variables.forEach(element => {
           if(element.SEValue!=null)
           {
@@ -388,7 +408,7 @@ c3dTextFinal = `    return;
               for(let i = element.SEValue.Inicio; i <= element.SEValue.Fin; i++){
                 values.push(i);
               }
-              valoresIterador.push({Nombre:element.VarName,Valor:values});
+              valoresIterador.push({Nombre:element.VarName,Valor:values,Tipo:null});
               //parametros.push({Nombre:element.VarName,Valor:values,Tipo:null})
             }else{
               
@@ -407,10 +427,31 @@ c3dTextFinal = `    return;
               
             var valor = this.ProcesarNodoRaizXquery(elementoActual,lista,[]);
             //valoresIterador = valor;
-            valoresIterador.push({Nombre:element.VarName,Valor:valor});
+            valoresIterador.push({Nombre:element.VarName,Valor:valor,Tipo:null});
             //parametros.push({Nombre:element.VarName,Valor:valor,Tipo:null})
           }
         });
+
+
+        if( expresion.IntermediteClauses!=null)
+          {
+            expresion.IntermediteClauses.forEach(element => {
+              if(element.Tipo == TipoClausulaIntermedia.WhereClause){
+              
+                this.FiltrarOperacionXquery(element.Clausula as parametroXpath,valoresIterador)
+                
+              }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
+                (element.Clausula as OrderSpec[]).forEach(cl => {
+                  console.log('OrdenarOperacionXquery');
+                  console.log(cl);
+                  console.log(valoresIterador);
+                  this.OrdenarOperacionXquery(cl,valoresIterador)
+                });
+                
+                
+              } 
+            });
+          }
 
         if(valoresIterador.length<=0){
           //intermediate clauses
@@ -423,6 +464,7 @@ c3dTextFinal = `    return;
                
               }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
                 (element.Clausula as OrderSpec[]).forEach(cl => {
+                  console.log(parametros);
                   this.OrdenarOperacionXquery(cl,parametros)
                 });
                
@@ -436,8 +478,8 @@ c3dTextFinal = `    return;
           var retornos = [];
           var max = 0;
           valoresIterador.forEach(element => {
-            if(max < element.Valor.length){
-              max = element.Valor.length;
+            if(max < (element.Valor as any).length){
+              max = (element.Valor as any).length;
             }
           });
           for(let i=0;i<max;i++){
@@ -448,9 +490,19 @@ c3dTextFinal = `    return;
             //intermediate clauses
             if(expresion.IntermediteClauses!=null)
             {
-              expresion.IntermediteClauses.forEach(element => {
-              
-              });
+              // expresion.IntermediteClauses.forEach(element => {
+              //   if(element.Tipo == TipoClausulaIntermedia.WhereClause){
+                
+              //    this.FiltrarOperacionXquery(element.Clausula as parametroXpath,valoresIterador)
+                 
+              //   }else if(element.Tipo == TipoClausulaIntermedia.OrderByClause){
+              //     (element.Clausula as OrderSpec[]).forEach(cl => {
+              //       this.OrdenarOperacionXquery(cl,valoresIterador)
+              //     });
+                 
+                 
+              //   } 
+              // });
             }
             //return clauses
             retornos.push(this.ResolverSingleExpresion(expresion.ReturnClause,copyParams));
@@ -488,27 +540,51 @@ c3dTextFinal = `    return;
             result.push(data[i].Nodo);
           }
         }
+        console.log('ActualizarValorVariable');
+        console.log(result);
         this.ActualizarValorVariable(p.Varname,result,parametros);
       });
      
     }else  if(param.SingleExpresion.Tipo == SingleExpresionType.XPARAM){
-      var p = param.SingleExpresion.Objeto as ParametroOperacionXpath;
+      var p = (param.SingleExpresion.Objeto as any).Valor as PathExpresion;
       parametros.forEach(element => {
-        if(element.Nombre == p.Valor){
-          var data = element.Valor as Objeto[];
+        if(element.Nombre == p.Varname){
+          var dataAux = element.Valor as Objeto[];
+          var data = [];
+
+          var elementoActual = p.Sentencia;
+          p.Sentencia.Hijo = null;
+          while(elementoActual.Padre !=null){
+            elementoActual.Padre.Hijo = elementoActual;
+            elementoActual = elementoActual.Padre;
+          }
+
+          dataAux.forEach(element => {
+            if(p.Sentencia.Tipo.Tipo == TipoNodo.Atributo){
+              var result = "";
+              result = ( this.ProcesarNodoRaiz(elementoActual,[element],[]));
+              data.push({Valor:result,Nodo:element});
+            }else{
+              var res:Objeto[] ;
+              res = ( this.ProcesarNodoRaizXquery(elementoActual,[element],[]));
+              console.log(res);
+              data.push({Valor:res[0].texto,Nodo:element});
+            }
+          });
+
           console.log(data);
-          data = data.sort((a, b) => (a.texto > b.texto) ? 1 : -1);
+          data = data.sort((a, b) => (a.Valor > b.Valor) ? 1 : -1);
           console.log(data);
           if(param.OrderModifierType == OrderModifierType.Ninguno || param.OrderModifierType == OrderModifierType.Ascendente){
             data.forEach(element => {
-              result.push(element);
+              result.push(element.Nodo);
             });
           }else{
             for(let i = data.length -1; i >=0;i--){
-              result.push(data[i]);
+              result.push(data[i].Nodo);
             }
           }
-          this.ActualizarValorVariable(p.Valor,result,parametros);
+          this.ActualizarValorVariable(p.Varname,result,parametros);
         }
       });
     }
@@ -697,6 +773,7 @@ c3dTextFinal = `    return;
                  } 
                 });
               }else  if(elementoActual.Tipo.Tipo ==TipoNodo.ID){
+                if(obj.listaObjetos != undefined)
                 obj.listaObjetos.forEach(atr => {
                  if(atr.identificador == elementoActual.Tipo.Valor){
                     retorno = atr.texto;
@@ -708,8 +785,7 @@ c3dTextFinal = `    return;
            
           }
         });
-        console.log('retorno');
-        console.log(retorno);
+        
         return retorno;
       }break;
       case TipoParametro.Cadena:{
@@ -1384,6 +1460,7 @@ c3dTextFinal = `    return;
         });
       }else{
         xml.forEach(element => {
+          if(element.listaObjetos != undefined)
           element.listaObjetos.forEach(obj => {
             if(obj.identificador == etiqueta.Tipo.Valor){
               result.push(obj);
@@ -2944,7 +3021,10 @@ console.log();
     this.xmlTraducido=codigo;
     //console.log("**************");
     //console.log(objetos);
-    //var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
+    if(this.ProcessedData.Tipo != 1){
+      var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
+    }
+    
     //console.log("**************Valor");
     //console.log(valor);
   }
