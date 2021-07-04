@@ -290,7 +290,9 @@ function ejecutarForIn(instruccion,entorno,padre){
         for (let index = instruccion.iterador.consulta.inicio; index <= instruccion.iterador.consulta.fin; index++) {
             let var_= new Entorno(padre);
             var_.agregar(instruccion.iterador.variable,index);
+            tem=traductorC3D.t;
             retorno=procesarReturn(instruccion.retorno,var_);
+            traductorC3D.t+=tem;
             if(retorno){
                 respuesta+=retorno+'\n';
             }
@@ -462,9 +464,9 @@ function procesarReturn(instruccion,variables){
 }
 function procesarIF(instruccion,variables){
     let res=validarWhere(instruccion.condicion,variables);
-    tem=traductorC3D.t;
+    
     traducirOperacionW(instruccion.condicion,variables);
-    traductorC3D.t+=tem;
+    
     if(res){
         switch (instruccion.then.tipo) {
             case "HTML":
