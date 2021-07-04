@@ -511,7 +511,7 @@ class Optimizacion {
                         this.cadenaOptimizada[i] = '';
                         this.cadenaSplit[i] = '';
                         this.bitacoraOptimizaciones.push({
-                            regla: 6,
+                            regla: 8,
                             linea: i,
                             instruccion: `${instruccion}`,
                             cambio: `Se elimina la instruccion`
