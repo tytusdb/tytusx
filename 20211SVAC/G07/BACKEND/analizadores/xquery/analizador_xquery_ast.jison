@@ -449,7 +449,43 @@ CONDICIONAL
         |tk_hilera                                                                     
         {$$= new Nodo("CONDI", "CONDI" );
         $$.agregarHijo(new Nodo($1,$1));
-	}        
+	} 
+        |CONDICIONAL tk_mas CONDICIONAL 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                
+        |CONDICIONAL tk_menos CONDICIONAL 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                
+        |CONDICIONAL tk_asterisco CONDICIONAL 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                
+        |CONDICIONAL tk_div CONDICIONAL 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                
+        |CONDICIONAL tk_mod CONDICIONAL 
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo($1);
+        $$.agregarHijo(new Nodo($2,$2));
+        $$.agregarHijo($3);
+	}                
+        |tk_menos DATO  %prec UMENOS
+        {$$= new Nodo("CONDI", "CONDI" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+	}                
+
         |CONDICIONAL tk_mayor CONDICIONAL 
         {$$= new Nodo("CONDI", "CONDI" );
         $$.agregarHijo($1);
@@ -882,6 +918,12 @@ DATO
         $$.agregarHijo(new Nodo($2,$2));
         $$.agregarHijo($3);
 	}
+        |tk_parentesis_izq DATO tk_parentesis_der
+        {$$= new Nodo("DATO", "DATO" );
+        $$.agregarHijo(new Nodo($1,$1));
+        $$.agregarHijo($2);
+        $$.agregarHijo(new Nodo($3,$3));
+	}        
 ;
 
 F_NATIVAS
