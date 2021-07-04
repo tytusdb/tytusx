@@ -40,8 +40,11 @@ class TraductorXML_C3D{
         this.xml_C3D += "\n\t//almacenar la posicion donde termina el xml en el heap"
         this.xml_C3D += "\n\t" + this.temporal_0 + " =  HP;" ;
         this.T_0 = this.HP;
-        this.xml_C3D += "\n\t//almacenar en la posicion 1 del stack, donde termina el xml en el heap"; 
-        this.xml_C3D += "\n\tstack[(int)1]= t0;";
+        //this.xml_C3D += "\n\t//almacenar en la posicion 1 del stack, donde termina el xml en el heap"; 
+        //this.xml_C3D += "\n\tstack[(int)1]= t0;";
+        this.xml_C3D += "\n\t//se llama al metodo que imprime la consulta"; 
+        this.xml_C3D += "\n\timprimirConsulta();";
+
         this.stack[0]=this.T_0;
         this.finalXML = this.T_0;
         return this.xml_C3D;
@@ -236,7 +239,7 @@ class TraductorXML_C3D{
         var _this = this;
         _this.contadorTemporales++;
         objetosFil.forEach(function(obj){
-            var tipo=obj.getIdC();
+            //var tipo=obj.getIdC();
             var tempTexto=0;
             var gotoEtiqueta=0;
             //if(tipo !=null){
@@ -438,7 +441,7 @@ class TraductorXML_C3D{
             //verificar si la etiqueta es 
             // <id>...</id>
             // o <id/>
-            if(obj.getIdC()!=null){//<id></id>
+            if(obj.getTipo()==0){//<id></id>
                 _this.contadorTemporales++;
                 _this.consulta_C3D += "\n\tL"+_this.contadorEtiqueta +":";
                 _this.consulta_C3D += "\n\t//imprimir </";
@@ -507,7 +510,7 @@ class TraductorXML_C3D{
     }
 
     generarTemporales(){
-        var cadenaTemporales="Double ";
+        var cadenaTemporales="double ";
         for(var i=0;i<this.contadorTemporales;i++){
             cadenaTemporales += "t"+i+", ";
         }
