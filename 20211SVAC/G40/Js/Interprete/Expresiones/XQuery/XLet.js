@@ -12,6 +12,10 @@ var XLet = /** @class */ (function () {
     XLet.prototype.getTipo = function () {
         return this.tipo;
     };
+    XLet.prototype.getID = function () {
+        return this.identificador;
+    };
+    
     XLet.prototype.getValorImplicito = function (entorno) {
 
         var entornoPadre = entorno;

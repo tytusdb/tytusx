@@ -19,7 +19,7 @@ export class OptimizarCodigo{
             if(element.Instruccion3D.length>0){
                 element.Instruccion3D =  this.Regla2(element.Instruccion3D);
                 while(this.optimizacion3){
-                    element.Instruccion3D =  this.Regla3(element.Instruccion3D);
+                     element.Instruccion3D =  this.Regla3(element.Instruccion3D);
                 }
                 element.Instruccion3D =  this.Regla6(element.Instruccion3D);
                 element.Instruccion3D =  this.Regla7(element.Instruccion3D);
@@ -41,11 +41,6 @@ export class OptimizarCodigo{
                     if(codigo[i+1].TipoInstruccion == TipoInstruccion.Asignacion){
                         var asignacionSiguiente = codigo[i+1].Dato as Asignacion;
                         var simboloSiguiente = (asignacionSiguiente.Operacion as any) as Simbolo;
-                        console.log('simboloSiguiente');
-                        console.log(simboloSiguiente.constructor.name);
-                        console.log('simbolo');
-                        console.log(simbolo.constructor.name);
-
                         if(simboloSiguiente.constructor.name == 'Simbolo'){
                             if(asignacion.ID == simboloSiguiente.Valor.toString() && simbolo.Valor.toString() == asignacionSiguiente.ID){
                                 ret.push(codigo[i]);
@@ -122,67 +117,72 @@ export class OptimizarCodigo{
         for(var i = 0; i<codigo.length;i++){
             if(codigo[i].TipoInstruccion == TipoInstruccion.If && codigo[i+1].TipoInstruccion == TipoInstruccion.GoTo){
                 var instruccion = codigo[i].Dato as Asignacion;
-                if(instruccion.Operacion.ExpresionIzquierda.Valor == instruccion.Operacion.ExpresionDerecha.Valor){
-                    switch(instruccion.Operacion.TipoOperador){
-                        case TipoOperador.Igual : {
-                            var textIni = instruccion.C3D;
-                            var etiqueta = new Etiqueta(instruccion.Fila,instruccion.Columna,instruccion.ID,'goto ' + instruccion.ID + ';');
-                            codigo[i].Dato = etiqueta;
-                            codigo[i].TipoInstruccion = TipoInstruccion.GoTo;
-                            ret.push(codigo[i]);
-                            for(var x = i+2; x<codigo.length;x++){
-                                ret.push(codigo[x]);
-                            }
-                            this.Reporte.push({Regla:4, AccionRealizada:'Código Cambiado: ' + textIni + ' Por: ' + etiqueta.C3D, Columna: instruccion.Columna, Fila:instruccion.Fila });
-                            return ret;
-                        }
-                    }      
-                }else if(instruccion.Operacion.ExpresionIzquierda.TipoParametro == TipoParametro.Entero &&
-                     instruccion.Operacion.ExpresionDerecha.TipoParametro == TipoParametro.Entero){
+                if(instruccion.Operacion.TipoOperador == TipoOperador.Igual){
+                    if(instruccion.Operacion.ExpresionIzquierda.Valor == instruccion.Operacion.ExpresionDerecha.Valor){
                         switch(instruccion.Operacion.TipoOperador){
                             case TipoOperador.Igual : {
                                 var textIni = instruccion.C3D;
-                                for(var x = i+1; x<codigo.length;x++){
+                                var etiqueta = new Etiqueta(instruccion.Fila,instruccion.Columna,instruccion.ID,'goto ' + instruccion.ID + ';');
+                                codigo[i].Dato = etiqueta;
+                                codigo[i].TipoInstruccion = TipoInstruccion.GoTo;
+                                ret.push(codigo[i]);
+                                for(var x = i+2; x<codigo.length;x++){
                                     ret.push(codigo[x]);
                                 }
-                                this.Reporte.push({Regla:5, AccionRealizada:'Eliminación de : ' + textIni, Columna: instruccion.Columna, Fila:instruccion.Fila });
+                                this.Reporte.push({Regla:4, AccionRealizada:'Código Cambiado: ' + textIni + ' Por: ' + etiqueta.C3D, Columna: instruccion.Columna, Fila:instruccion.Fila });
                                 return ret;
                             }
-                        }   
-                }
-                for(var j = i + 2; j<codigo.length;j++){
-                    if(codigo[j].TipoInstruccion == TipoInstruccion.Etiqueta){
-                        var etiqueta = codigo[j].Dato as Etiqueta;
-                        if(etiqueta.ID == instruccion.ID){ //etiqueta verdadera
-                            var temp  = j + 1;
-                            while(temp < codigo.length && codigo[temp].TipoInstruccion != TipoInstruccion.Etiqueta){
-                                sentenciasVerdaderas.push(codigo[temp]);
-                                temp++;
-                            }
-                            var etiquetaFalsa =  codigo[i+1].Dato as Etiqueta;
-                            var textIni = instruccion.C3D;
+                        }      
+                    }else if(instruccion.Operacion.ExpresionIzquierda.TipoParametro == TipoParametro.Entero &&
+                         instruccion.Operacion.ExpresionDerecha.TipoParametro == TipoParametro.Entero){
                             switch(instruccion.Operacion.TipoOperador){
                                 case TipoOperador.Igual : {
-                                    instruccion.Operacion.TipoOperador = TipoOperador.Diferente;
-                                    instruccion.Operacion.C3D = instruccion.Operacion.ExpresionIzquierda.C3D + '!=' + instruccion.Operacion.ExpresionDerecha.C3D;
-                                    instruccion.C3D = 'if(' + instruccion.Operacion.C3D + ') ' + etiquetaFalsa.C3D;
-                                    instruccion.ID = etiquetaFalsa.ID;
+                                    var textIni = instruccion.C3D;
+                                    for(var x = i+1; x<codigo.length;x++){
+                                        ret.push(codigo[x]);
+                                    }
+                                    this.Reporte.push({Regla:5, AccionRealizada:'Eliminación de : ' + textIni, Columna: instruccion.Columna, Fila:instruccion.Fila });
+                                    return ret;
                                 }
+                            }   
+                    }
+                    for(var j = i + 2; j<codigo.length;j++){
+                        if(codigo[j].TipoInstruccion == TipoInstruccion.Etiqueta){
+                            var etiqueta = codigo[j].Dato as Etiqueta;
+                            if(etiqueta.ID == instruccion.ID){ //etiqueta verdadera
+                                var temp  = j + 1;
+                                while(temp < codigo.length && codigo[temp].TipoInstruccion != TipoInstruccion.Etiqueta){
+                                    sentenciasVerdaderas.push(codigo[temp]);
+                                    temp++;
+                                }
+                                var etiquetaFalsa =  codigo[i+1].Dato as Etiqueta;
+                                var textIni = instruccion.C3D;
+                                switch(instruccion.Operacion.TipoOperador){
+                                    case TipoOperador.Igual : {
+                                        instruccion.Operacion.TipoOperador = TipoOperador.Diferente;
+                                        instruccion.Operacion.C3D = instruccion.Operacion.ExpresionIzquierda.C3D + '!=' + instruccion.Operacion.ExpresionDerecha.C3D;
+                                        instruccion.C3D = 'if(' + instruccion.Operacion.C3D + ') ' + etiquetaFalsa.C3D;
+                                        instruccion.ID = etiquetaFalsa.ID;
+                                        codigo[i].Dato = instruccion;
+                                        var textFin = instruccion.C3D;
+                                        ret.push(codigo[i]);
+                                        sentenciasVerdaderas.forEach(element => {
+                                            ret.push(element);
+                                        });
+                                        //ret.push(codigo[i+1]);
+                                        for(var x = temp; x<codigo.length;x++){
+                                            ret.push(codigo[x]);
+                                        }
+                                        this.Reporte.push({Regla:3, AccionRealizada:'Código Cambiado: ' + textIni + ' Por: ' + textFin, Columna: instruccion.Columna, Fila:instruccion.Fila });
+                                        return ret;
+                                    }
+                                }
+                                
                             }
-                            codigo[i].Dato = instruccion;
-                            var textFin = instruccion.C3D;
-                            ret.push(codigo[i]);
-                            sentenciasVerdaderas.forEach(element => {
-                                ret.push(element);
-                            });
-                            //ret.push(codigo[i+1]);
-                            for(var x = temp; x<codigo.length;x++){
-                                ret.push(codigo[x]);
-                            }
-                            this.Reporte.push({Regla:3, AccionRealizada:'Código Cambiado: ' + textIni + ' Por: ' + textFin, Columna: instruccion.Columna, Fila:instruccion.Fila });
-                            return ret;
                         }
                     }
+                }else{
+                    ret.push(codigo[i]);
                 }
             }else{
                 ret.push(codigo[i]);
@@ -199,16 +199,17 @@ export class OptimizarCodigo{
                 var goto = codigo[i].Dato as Etiqueta;
                 var instrucciones:Instruccion3D[] = [];
                 for(var j = i + 1; j < codigo.length;j++){
-                    if(codigo[j].TipoInstruccion == TipoInstruccion.Etiqueta){
+                    if(codigo[j].TipoInstruccion == TipoInstruccion.Etiqueta ){
+                        if(instrucciones.length <= 0) break;
                         var etiqueta = codigo[j].Dato as Etiqueta;
                         if(etiqueta.ID == goto.ID){
-                            if(codigo[j+1].TipoInstruccion == TipoInstruccion.GoTo){
+                            if(codigo[j+1].TipoInstruccion == TipoInstruccion.GoTo ){
                                 this.Reporte.push({Regla:6, AccionRealizada:'Código Cambiado: ' + goto.C3D + ' Por: ' + (codigo[j+1].Dato as any).C3D, Columna: goto.Columna, Fila:goto.Fila });
                                 codigo[i] = codigo[j+1];
-                                ret.push(codigo[i]);
+                                //ret.push(codigo[i]);
                                 break;
                             }else{
-                                ret.push(codigo[i]);
+                                //ret.push(codigo[i]);
                                 break;
                             }
                         }else{
@@ -217,7 +218,9 @@ export class OptimizarCodigo{
                     }else{
                         instrucciones.push(codigo[j]);
                     }
+                    instrucciones.push(codigo[j]);
                 }
+                ret.push(codigo[i]);
             }else{
                 ret.push(codigo[i]);
             }
@@ -265,7 +268,8 @@ export class OptimizarCodigo{
         codigo.forEach(element => {
             if(element.TipoInstruccion == TipoInstruccion.Asignacion){
                 var asignacion = element.Dato as Asignacion;
-                if(asignacion.Operacion.TipoOperador == TipoOperador.Mas || asignacion.Operacion.TipoOperador == TipoOperador.Menos){
+                if(asignacion.Operacion.TipoOperador == TipoOperador.Mas || asignacion.Operacion.TipoOperador == TipoOperador.Menos
+                    && asignacion.Operacion.ExpresionIzquierda.Valor != undefined && asignacion.Operacion.ExpresionDerecha.Valor != undefined){
                     if(asignacion.Operacion.ExpresionIzquierda.Valor.toString() == asignacion.ID && asignacion.Operacion.ExpresionDerecha.Valor.toString() == "0"){
                         switch(asignacion.Operacion.TipoOperador){
                             case TipoOperador.Mas:{
@@ -295,6 +299,8 @@ export class OptimizarCodigo{
                         ret.push(element);
                     }
                 }else if(asignacion.Operacion.TipoOperador == TipoOperador.Por || asignacion.Operacion.TipoOperador == TipoOperador.Div){
+                    console.log('asignacion');
+                    console.log(asignacion);
                     if(asignacion.Operacion.ExpresionIzquierda.Valor.toString() == asignacion.ID && asignacion.Operacion.ExpresionDerecha.Valor.toString() == "1"){
                         switch(asignacion.Operacion.TipoOperador){
                             case TipoOperador.Por:{
@@ -336,7 +342,8 @@ export class OptimizarCodigo{
         codigo.forEach(element => {
             if(element.TipoInstruccion == TipoInstruccion.Asignacion){
                 var asignacion = element.Dato as Asignacion;
-                 if(asignacion.Operacion.TipoOperador == TipoOperador.Por){
+                 if(asignacion.Operacion.TipoOperador == TipoOperador.Por
+                    && asignacion.Operacion.ExpresionIzquierda.Valor != undefined && asignacion.Operacion.ExpresionDerecha.Valor != undefined){
                     if(asignacion.Operacion.ExpresionIzquierda.Valor.toString() != asignacion.ID && asignacion.Operacion.ExpresionDerecha.Valor.toString() == "2"){
                         this.Reporte.push({Regla:16, AccionRealizada:'Modificación expresión : ' + asignacion.C3D + ', Por: ' + asignacion.ID +' = ' + asignacion.Operacion.ExpresionIzquierda.C3D + '+' + asignacion.Operacion.ExpresionIzquierda.C3D, Columna: asignacion.Columna, Fila:asignacion.Fila });
                         asignacion.C3D = asignacion.ID +' = ' + asignacion.Operacion.ExpresionIzquierda.C3D + '+' + asignacion.Operacion.ExpresionIzquierda.C3D +';';
@@ -357,7 +364,8 @@ export class OptimizarCodigo{
                     }else {
                         ret.push(element);
                     }
-                }else if(asignacion.Operacion.TipoOperador == TipoOperador.Div){
+                }else if(asignacion.Operacion.TipoOperador == TipoOperador.Div
+                    && asignacion.Operacion.ExpresionIzquierda.Valor != undefined && asignacion.Operacion.ExpresionDerecha.Valor != undefined){
                     if(asignacion.Operacion.ExpresionDerecha.Valor.toString() != asignacion.ID && asignacion.Operacion.ExpresionIzquierda.Valor.toString() == "0"){
                         this.Reporte.push({Regla:18, AccionRealizada:'Modificación expresión : ' + asignacion.C3D + ', Por: ' + asignacion.ID +' = 0' , Columna: asignacion.Columna, Fila:asignacion.Fila });
                         asignacion.C3D = asignacion.ID +' = 0;';

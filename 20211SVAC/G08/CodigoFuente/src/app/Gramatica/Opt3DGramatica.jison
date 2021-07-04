@@ -39,10 +39,10 @@ charliteral                         \'{stringsingle}*\'
 ";"                                 return 'semicolon';
 ","                                 return ',';
 ":"                                 return ':';
-">"                                 return '>';
-"<"                                 return '<';
 "<="                                return '<=';
 ">="                                return '>=';
+">"                                 return '>';
+"<"                                 return '<';
 "=="                                return 'igualigual';
 "="                                 return 'igual';
 "!="                                return "!=";
@@ -82,7 +82,7 @@ charliteral                         \'{stringsingle}*\'
 
 // DEFINIMOS PRECEDENCIA DE OPERADORES
 
-%left '<' '<=' '>' '>=' 'igualigual' '!='
+%left  '>=' '<=' '>' '<'  'igualigual' '!='
 %left 'mas' 'menos'
 %left 'por' 'div' 'mod'
 %left UMINUS
@@ -192,13 +192,14 @@ OPERACION: EXPRESION mas EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.fir
         | EXPRESION igualigual EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.Igual, $1, $3,  $1.C3D + ' == ' + $3.C3D);}  
         | EXPRESION '!=' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.Diferente, $1, $3,  $1.C3D + ' != ' + $3.C3D);}   
         | EXPRESION '<=' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.MenorIgual, $1, $3,  $1.C3D + ' <= ' + $3.C3D);} 
+        | EXPRESION '>=' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.MayorIgual, $1, $3,  $1.C3D + ' >= ' + $3.C3D);} 
         | EXPRESION '<' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.Menor, $1, $3,  $1.C3D + ' < ' + $3.C3D);}    
-        | EXPRESION '>' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.Mayor, $1, $3,  $1.C3D + ' > ' + $3.C3D);}       
-        | EXPRESION '>=' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.MayorIgual, $1, $3,  $1.C3D + ' >= ' + $3.C3D);}   
+        | EXPRESION '>' EXPRESION { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.Mayor, $1, $3,  $1.C3D + ' > ' + $3.C3D);}         
         | menos EXPRESION %prec UMINUS { $$ = new OperacionC3D(@1.first_line, @1.first_column,TipoOperador.Diferente, $2, null, '- ' + $2.C3D);} 
 ;
 
-PRIMITIVA: identifier { $$ = new Simbolo(@1.first_line, @1.first_column, $1, $1, TipoDato.Primitivo, TipoParametro.Variable );}
+PRIMITIVA: '(' TIPO_DATO ')' identifier { $$ = new Simbolo(@1.first_line, @1.first_column, $4, $1+$2+$3+$4, TipoDato.Primitivo, TipoParametro.Variable );}
+        |  identifier { $$ = new Simbolo(@1.first_line, @1.first_column, $1, $1, TipoDato.Primitivo, TipoParametro.Variable );}
         | IntegerLiteral { $$ = new Simbolo(@1.first_line, @1.first_column, $1, $1, TipoDato.Primitivo, TipoParametro.Entero );}
         | DoubleLiteral { $$ = new Simbolo(@1.first_line, @1.first_column, $1, $1, TipoDato.Primitivo, TipoParametro.Decimal );}
 ;
