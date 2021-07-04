@@ -86,17 +86,15 @@ export default class BarrasNodo extends Instruccion {
               for (let key of simb.getvalor().getTabla()) {
                 try {
                   for (let sim of key.getvalor().getTabla()) {
-                    
+
                   }
                 } catch (error) {
-                  
-                 if(this.busquedaCondicion(variable.condicion1,key,variable.condicion2,variable.operador,this.Operacion.cond2.tipoDato)){
-                  for (let where of simb.getvalor().getTabla()) {
-                    salidas.setVariable(where)
+
+                  if (this.busquedaCondicion(variable.condicion1, key, variable.condicion2, variable.operador, this.Operacion.cond2.tipoDato)) {
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
                   }
-                 }
-                  //salidas.setVariable(key.getvalor())
-                  //cadena += key.getvalor().replaceAll("%20", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&").replaceAll("&apos;", "'").replaceAll("&quot;", "\"").replaceAll("   ", "\n");
                 }
 
               }
@@ -107,11 +105,62 @@ export default class BarrasNodo extends Instruccion {
           this.Operacion.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
           this.Operacion.cond1.tipoDato.getTipo() != tipoDato.CADENA
         ) {
-          let opera = this.Operacion.TipoOperando()
-          ///SE HACE LA COMPARACION PARA RETORNAR SI ES DE BARRANODO Y HAY CADENA
+          for (var simb of tablaxml.getAnterior().getTabla()) {
+            var bloqueaceptado: Simbolo = simb
+            if (simb.getidentificador() == ForSimple.prototype.variableanterior) {
+
+              for (let key of simb.getvalor().getTabla()) {
+                try {
+                  for (let sim of key.getvalor().getTabla()) {
+
+                  }
+                } catch (error) {
+
+                  if (this.busquedaCondicion(variable.condicion2, key, variable.condicion1, variable.operador, this.Operacion.cond2.tipoDato)) {
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                  }
+                }
+
+              }
+            }
+          }
+        }else if (
+          this.Operacion.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
+          this.Operacion.cond1.tipoDato.getTipo() == tipoDato.CADENA
+        ) {
+          var cond1= this.Operacion.cond1.interpretar(arbol,tabla,tablaxml)
+          var cond2= this.Operacion.cond2.interpretar(arbol,tabla,tablaxml)
+          var operador= this.Operacion.TipoOperando()
+          for (var simb of tablaxml.getAnterior().getTabla()) {
+            if (simb.getidentificador() == ForSimple.prototype.variableanterior) {
+
+              for (let key of simb.getvalor().getTabla()) {
+                try {
+                  for (let sim of key.getvalor().getTabla()) {
+
+                  }
+                } catch (error) {
+
+                  if (this.busquedaCondicion(cond1, key, cond2, operador, this.Operacion.cond2.tipoDato)) {
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                  }else if(this.busquedaCondicion(cond2, key, cond1, operador, this.Operacion.cond2.tipoDato)){
+                    for (let where of simb.getvalor().getTabla()) {
+                      salidas.setVariable(where)
+                    }
+                    
+                  }
+                }
+
+              }
+            }
+          }
         }
-      
-        if(salidas!=null){
+
+        if (salidas != null) {
           return salidas
         }
       } else if (this.Operacion instanceof SelectRoot) {
@@ -264,10 +313,10 @@ export default class BarrasNodo extends Instruccion {
    * @param tabla 
    * @returns 
    */
-  busquedaCondicion(id: String, sim: Simboloxml, condicion2:any, operador:String, tipodato:Tipo):Boolean {
-    if(id==sim.getidentificador()){
-      var condicion1= this.cambiartipo(tipodato,sim.getvalor().trim())
-      return this.hacerOperacion(condicion1,operador,condicion2)
+  busquedaCondicion(id: String, sim: Simboloxml, condicion2: any, operador: String, tipodato: Tipo): Boolean {
+    if (id == sim.getidentificador()) {
+      var condicion1 = this.cambiartipo(tipodato, sim.getvalor().trim())
+      return this.hacerOperacion(condicion1, operador, condicion2)
     }
     return null
   }
@@ -278,7 +327,7 @@ export default class BarrasNodo extends Instruccion {
    * @param cond2 
    * @returns 
    */
-  hacerOperacion(cond1:any,Operador:String, cond2:any):Boolean{
+  hacerOperacion(cond1: any, Operador: String, cond2: any): Boolean {
     switch (Operador) {
       case "==":
         return cond1 == cond2;
@@ -302,7 +351,7 @@ export default class BarrasNodo extends Instruccion {
    * @param valor 
    * @returns 
    */
-  cambiartipo(tipodato:Tipo, valor:any){
+  cambiartipo(tipodato: Tipo, valor: any) {
     switch (tipodato.getTipo()) {
       case tipoDato.ENTERO:
         return parseInt(valor);

@@ -15,14 +15,14 @@ import Condicion from "./Condicion";
 export default class ForSimple extends Instruccion {
 
     public consulta: Instruccion;
-    public respuesta: Instruccion| String;
+    public respuesta: Instruccion | String;
     public thewhere: Instruccion;
     public theorderby: Instruccion;
     public cadena: string;
-    public consolita:any;
-    public variableanterior:string;
+    public consolita: any;
+    public variableanterior: string;
 
-    constructor(consulta: Instruccion, respuesta: Instruccion| String, linea: number, columna: number, thewhere?: Instruccion, theorderby?: Instruccion) {
+    constructor(consulta: Instruccion, respuesta: Instruccion | String, linea: number, columna: number, thewhere?: Instruccion, theorderby?: Instruccion) {
         super(new Tipo(tipoDato.CADENA), linea, columna);
         this.consulta = consulta;
         this.respuesta = respuesta;
@@ -74,7 +74,7 @@ export default class ForSimple extends Instruccion {
             });
         }
         console.log(this.variableanterior)
-        c=0;
+        c = 0;
         if (this.thewhere != null) {
             let cuando;
             if (this.thewhere instanceof CondicionSimple) {
@@ -87,11 +87,9 @@ export default class ForSimple extends Instruccion {
                             tablaxml = resultador
                             if (c == cuando.consulta.length) {
                                 if (arbol != null) {
-                                    sim = new Simbolo(new Tipo(tipoDato.WHERE), cuando.variables, this.fila.toString(), this.columna.toString(), "", resultador);
-                                    tabla.setVariable(sim)
                                     var buscar = tabla.getVariable(cuando.variables);
                                     if (buscar != null) {
-                                        searchconsulta = buscar.getvalor()
+                                        buscar.setvalor(resultador)
                                         return buscar
                                     }
                                 }
@@ -113,71 +111,71 @@ export default class ForSimple extends Instruccion {
             } else {
 
             }
-            
-        }
-
-
-       /* if(this.theorderby!=null){
 
         }
 
-        if(this.respuesta!=null){
-            this.consolita='';
-            if(this.respuesta instanceof Array){
-                console.log("Aqui vendra si viene una consulta")
-            }else{
-                console.log("Entra aca si solo es una variable")
-                 if (searchconsulta instanceof Array) {
-                    console.log("aca viene la magic")
-                    searchconsulta.forEach(element => {
-                        this.respuesta=this.consolita;
-                        this.consolita += <string>element.getvalor() + "\n";
-                        return this.consolita;
-                        
-                    });
-                } else if (searchconsulta instanceof tablaSimbolosxml) {
-                    if (arbol != null) {
-                        this.consolita += this.recorrerTabla(searchconsulta, arbol);
-                        this.consolita += "\n"
-                        this.respuesta=this.consolita
-                        return this.consolita;
-                    }
-
-                }else{
-                    console.log("Entra aca si solo es una variable")
-                    searchconsulta.forEach(element => {
-                        this.respuesta=this.consolita;
-                        this.consolita += <string>element.getvalor() + "\n";
-                        return this.consolita;
-                        
-                    });
-
-                }
-            }
-        }
-    }
-
-
-
-    recorrerTabla(t: tablaSimbolosxml, arbol: Arbol) {
-        var salida = ''
-        for (var key of t.tablaActual) {
-
-
-            let objetos = key.getvalor();
-           this.consolita+=<string>objetos + "\n";;
-
-        }
-        return this.consolita;
-*/
-        if(this.respuesta!=null){
-            if (this.respuesta instanceof String) {
+        if (this.respuesta != null) {
+            if (this.respuesta as string) {
                 var buscar = tabla.getVariable(this.respuesta.toString());
                 if (buscar != null) {
-                    return buscar
+                    return buscar.getvalor()
                 }
             }
         }
+        /* if(this.theorderby!=null){
+ 
+         }
+ 
+         if(this.respuesta!=null){
+             this.consolita='';
+             if(this.respuesta instanceof Array){
+                 console.log("Aqui vendra si viene una consulta")
+             }else{
+                 console.log("Entra aca si solo es una variable")
+                  if (searchconsulta instanceof Array) {
+                     console.log("aca viene la magic")
+                     searchconsulta.forEach(element => {
+                         this.respuesta=this.consolita;
+                         this.consolita += <string>element.getvalor() + "\n";
+                         return this.consolita;
+                         
+                     });
+                 } else if (searchconsulta instanceof tablaSimbolosxml) {
+                     if (arbol != null) {
+                         this.consolita += this.recorrerTabla(searchconsulta, arbol);
+                         this.consolita += "\n"
+                         this.respuesta=this.consolita
+                         return this.consolita;
+                     }
+ 
+                 }else{
+                     console.log("Entra aca si solo es una variable")
+                     searchconsulta.forEach(element => {
+                         this.respuesta=this.consolita;
+                         this.consolita += <string>element.getvalor() + "\n";
+                         return this.consolita;
+                         
+                     });
+ 
+                 }
+             }
+         }
+     }
+ 
+ 
+ 
+     recorrerTabla(t: tablaSimbolosxml, arbol: Arbol) {
+         var salida = ''
+         for (var key of t.tablaActual) {
+ 
+ 
+             let objetos = key.getvalor();
+            this.consolita+=<string>objetos + "\n";;
+ 
+         }
+         return this.consolita;
+ */
+        
     }
 
 
