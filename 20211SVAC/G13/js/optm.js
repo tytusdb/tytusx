@@ -1,3 +1,5 @@
+let reporteOptimizador = [];
+
 function PP(entrada) {
     let entradaSeparada = entrada.split(/\n/);
     let tokenVar1 = "";
@@ -202,3 +204,17 @@ function TP(entrada) {
     }
     return salida;
 }
+
+function optmGo(strEntrada) {
+    let limpiar = "";
+
+    limpiar = primeraPasada(strEntrada);
+    
+    limpiar = segundaPasada(limpiar);
+
+    limpiar = terceraPasada(limpiar);
+
+    return [limpiar, ]
+}
+
+module.exports.optmGo = optmGo;
