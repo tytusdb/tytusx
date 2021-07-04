@@ -59,8 +59,6 @@ export class Operacion implements Expresion {
 
     getValorImplicito(ent: Entorno) {
         
-        //pendiente validar que sea un valor de la tabla de simbolos e ir a traerlo
-
         if (this.operador !== Operador.NOT) {
 
             let op1 = this.op_izquierda.getValorImplicito(ent);

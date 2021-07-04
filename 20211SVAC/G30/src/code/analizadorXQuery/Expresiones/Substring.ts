@@ -52,11 +52,7 @@ export class Substring implements Expresion {
             for (let i = this.num1; i <= this.num2; i++) {
                 resultado += text[i];
             }
-
-            console.log(resultado);
-           
             return resultado;
-
         } else {
             console.log('Valores incorrectos al llamar la funcion..')
             return 'null';

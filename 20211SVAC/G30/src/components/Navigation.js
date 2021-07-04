@@ -8,6 +8,7 @@ import { GeneradorC3D } from "../code/analizadorXML/generadorC3D";
 import { Instruccion } from '../code/optimizador/codigo/instruccion'
 import { tipoInstruccion } from '../code/optimizador/codigo/instruccion'
 import { Optimizador } from '../code/optimizador/codigo/optimizador'
+import Table from 'react-bootstrap/Button';
 //import { parse as parseOptimizador } from '../code/optimizador/test'
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
@@ -18,6 +19,7 @@ require('../../node_modules/codemirror/mode/clike/clike')
 //const XPath = require('../code/analizadorXPath/Xpath')
 const grammar = require('../code/analizadorXML/grammar')
 const xquery = require('../code/analizadorXQuery/gram_xquery')
+
 //const GeneradorC3D = require('../code/analizadorXML/generadorC3D')
 
 
@@ -32,6 +34,7 @@ class Navigation extends React.Component {
             XMLTextarea: "",
             InputTextarea: "",
             Codigo3D: "",
+            traduccionXML: "",
             XML: {
                 tipo: '',
                 texto: '',
@@ -87,7 +90,8 @@ class Navigation extends React.Component {
             Mistakes: [],
             MistakesXPath: [],
             TablaGramatical: [],
-            TablaGramticalXPath: []
+            TablaGramticalXPath: [],
+            TablaReportesC3D: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -100,8 +104,12 @@ class Navigation extends React.Component {
         //se guarda la entrada en una variable
         let text = this.state.InputTextarea;
         if (text == "") return
-        /* //se analiza
-        var funcion = parseXPath(text);
+
+
+
+        //se analiza
+        /*var funcion = parseXPath(text);
+        4de64456b6f152945370948616460c5f31a0c9b9
         //manejo de errores
         if (funcion.errores.length > 0) {
             alert("Se detectaron errores en la entrada :( Xpath")
@@ -110,9 +118,10 @@ class Navigation extends React.Component {
         //se interpreta
         var respuesta = funcion.Ejecutar(this.state.XML);
         //salida
-        this.setState({ OutputTextarea: respuesta });
+        console.log(respuesta); 
+        this.setState({ OutputTextarea: respuesta });*/
         //arbol
-        var AST = funcion.Graficar();
+        /*var AST = funcion.Graficar();
         this.setState({ AST: AST })
         funcion.InvertirNodes()
         //se guardan datos de graphviz
@@ -120,19 +129,23 @@ class Navigation extends React.Component {
         this.setState({ datosCST: datos }) 
         this.setState({ MistakesXPath: funcion.errores })
         this.setState({ TablaGramticalXPath: funcion.tablaGramatica });
+        */
+
+
         //LLAMANDO AL ANALIZADOR DE XQUERY
-        /* try {
-            var xquery = parseXQuery(text)
-            this.setState({ OutputTextarea: xquery.toString() });
+        try {
+            var query = xquery.parse(text)
+            console.log("QUERY\n" + query)
+            console.log("QUERY\n" + query.toString())
+            this.setState({ OutputTextarea: query.toString() });
         } catch (error) {
             this.setState({ OutputTextarea: 'No matches found..' });
-        } */
+        }
 
-        var query = xquery.parse(text)
-        console.log(query)
-        this.setState({ OutputTextarea: query.toString() });
-
-        
+        var generadorC3D = new GeneradorC3D();
+        let resultadoXML = this.state.XML
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultadoXML, query.toString()) })
+        this.setState({ XML: resultadoXML })
 
 
     }
@@ -145,10 +158,15 @@ class Navigation extends React.Component {
         }
         //guardando el objeto XML en localstorage
         this.SetXMLStorage(resultado.datos)
+        // var generadorC3D = new GeneradorC3D();
+        // this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos)})
         this.setState({ XML: resultado.datos })
         this.setState({ datosCSTXML: { nodes: resultado.nodes, edges: resultado.edges } })
         this.setState({ Mistakes: resultado.errores })
         this.setState({ TablaGramatical: resultado.tabla })
+
+        var generadorC3D = new GeneradorC3D();
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
     }
 
 
@@ -204,7 +222,9 @@ class Navigation extends React.Component {
 
         this.SetXMLStorage(resultado.datos)
         var generadorC3D = new GeneradorC3D();
-        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos) })
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
+        /*var generadorC3D = new GeneradorC3D();
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos)})*/
         this.setState({ XML: resultado.datos })
         this.setState({ datosCSTXML: { nodes: resultado.nodes, edges: resultado.edges } })
         this.setState({ Mistakes: resultado.errores })
@@ -246,24 +266,37 @@ class Navigation extends React.Component {
 
     // OPTIMIZADOR
 
-    optimizar(){
+    optimizar() {
         console.log('optimizador');
         //console.log('->', this.state.Codigo3D);
         let optimizador = new Optimizador();
 
         let nuevo = optimizador.optimizar(this.state.Codigo3D);
         this.setState({ Codigo3D: nuevo });
+
+        let report = optimizador.getReporte();
+        this.setState({ TablaReportesC3D: report });
     }
 
     handleOpti = (event) => {
 
         this.setState({
-            Codigo3D: event.getValue()            
+            Codigo3D: event.getValue()
         })
 
         //console.log('nuevo valor! -> ', this.state.Codigo3D);
 
     }
+
+    renderOptim(person, index) {
+        return (
+          <tr key={index}>
+            <td>{person.linea}</td>
+            <td>{person.regla}</td>
+            <td>{person.codigo}</td>
+          </tr>
+        )
+      }
 
 
     render() {
@@ -386,6 +419,7 @@ class Navigation extends React.Component {
                 </div>
 
                 <div className="container">
+                    <p></p>
                     <div className="row">
                         <h2>SALIDA</h2>
                         <label className="labelClass">Consola</label>
@@ -413,7 +447,7 @@ class Navigation extends React.Component {
                             <CodeMirror
                                 className="codeMirror"
                                 value={this.state.Codigo3D}
-                                onChange={(event)=> this.handleOpti(event)}
+                                onChange={(event) => this.handleOpti(event)}
                                 options={{
                                     mode: 'clike',
                                     theme: 'dracula',
@@ -431,6 +465,23 @@ class Navigation extends React.Component {
                                 <p></p>
                                 <button type="submit" className="btn btn-primary btn-lg" onClick={() => this.optimizar()}>Optimizar</button>
                             </div>
+                        </div>
+
+                        <p></p>
+                        <label className="labelClass">Reporte de Optimizacion</label>
+                        <div className="text-center">
+                            <Table striped bordered size="sm" variant="dark">
+                                <thead>
+                                    <tr>
+                                        <th># Instruccion&emsp;&emsp;&emsp;</th>
+                                        <th># Regla usada&emsp;&emsp;&emsp;</th>
+                                        <th>Código&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.TablaReportesC3D.map(this.renderOptim)}
+                                </tbody>
+                            </Table>
                         </div>
                     </div>
                 </div>
