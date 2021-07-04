@@ -30,22 +30,25 @@ var If = /** @class */ (function (_super) {
     }
     If.prototype.ejecutar = function (ent) {
         var retn = 'nulo';
-        this.lista_condiciones.forEach(function (condicion) {
+        for (var _i = 0, _a = this.lista_condiciones; _i < _a.length; _i++) {
+            var condicion = _a[_i];
             var res = condicion.ejecutar(ent);
             if (res != null) {
                 retn = res;
+                break;
             }
             if (retn == 'nulo') {
                 if (condicion.ejecutado) {
                     retn = null;
+                    break;
                 }
             }
-        });
+        }
         if (retn == 'nulo') {
             if (this.bloque_else != null && this.bloque_else != undefined) {
-                var res = this.bloque_else.ejecutar(new Entorno_1.EntornoXQ(ent));
-                if (res != null) {
-                    retn = res;
+                var res_1 = this.bloque_else.ejecutar(new Entorno_1.EntornoXQ(ent));
+                if (res_1 != null) {
+                    retn = res_1;
                 }
                 else {
                     retn = null;

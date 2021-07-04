@@ -34,6 +34,9 @@
   const { MayorIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/MayorIgual')
   const { MenorXQ } = require('./XQuery/ts/Operaciones/Relacionales/Menor')
   const { MenorIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/MenorIgual')
+  const { AndXQ } = require('./XQuery/ts/Operaciones/Logicas/And')
+  const { OrXQ } = require('./XQuery/ts/Operaciones/Logicas/Or')
+  const { NotXQ } = require('./XQuery/ts/Operaciones/Logicas/Not')
     
   var grafo = new grafoCST(); 
 
@@ -83,6 +86,7 @@
 
 "or"    return "ROR"
 "and"   return "RAND"
+"not" return "RNOT"
 "idiv"  return "IDIV"
 "div"   return "DIV"
 "mod"   return "MOD"
@@ -147,10 +151,13 @@
 
 /lex
 
+%left 'ROR'
+%left 'RAND'
 %nonassoc 'IGUAL' 'DIFERENTE' 'MAYOR' 'MAYORIG' 'MENOR' 'MENORIG' 'EQ' 'NE' 'LT' 'LE' 'GT' 'GE'
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIV' 'IDIV' 'MOD'
 %left UMENOS UMAS
+%right 'RNOT'
 
 %start XQuery
 
@@ -335,6 +342,11 @@ E:
   | E GE E { $$ = new MayorIgualXQ($1, $3, @2.first_line, @2.first_column); }
   | E LT E { $$ = new MenorXQ($1, $3, @2.first_line, @2.first_column); }
   | E LE E { $$ = new MenorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+//Logicas
+  | E RAND E { $$ = new AndXQ($1, $3, @2.first_line, @2.first_column); }
+  | E ROR E { $$ = new OrXQ($1, $3, @2.first_line, @2.first_column); }
+  | RNOT E { $$ = new NotXQ($2, @2.first_line, @2.first_column); }
+  | ADMIRACION E { $$ = new NotXQ($2, @2.first_line, @2.first_column); }
 //Literales - Primitivos
   | PARENTESISA E PARENTESISC { $$ = $2; }
   | INTEGER  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.entero), $1, @1.first_line, @1.first_column); }
