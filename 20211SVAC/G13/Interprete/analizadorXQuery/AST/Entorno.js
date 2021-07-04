@@ -120,6 +120,16 @@ class Comando
     return Salida;
   }
 
+  EjecutarFor3D(XML){
+    LimpiarErrores()
+    var retornos=[]
+    for (const iterator of this.Instrucciones) {
+      var {Nodo} = require('../Expresion/Expresiones')
+      retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
+    }
+    return retornos;
+  }
+
   Graficar()
   {
     var ListaNodes = []
@@ -167,10 +177,20 @@ function ConvertiraXML(nodos,iteracion)
     for (var i=0;i<iteracion;i++) {
         XML += "  "
     }
-    XML+="<"+nodos.tipo+" "
-    for (const atributo of nodos.atributos) {
-        XML+=`${atributo.nombre}="${atributo.valor}" `
+    
+    if(nodos.atributos.length == 0) {
+      XML+="<"+nodos.tipo
+    } else {
+      XML+="<"+nodos.tipo+" "
+      for(i = 0; i < nodos.atributos.length; i++) {
+        if(i != nodos.atributos.length - 1) {
+          XML+=`${nodos.atributos[i].nombre}="${nodos.atributos[i].valor}" `
+        } else {
+          XML+=`${nodos.atributos[i].nombre}="${nodos.atributos[i].valor}"`
+        }
+      }
     }
+
     if(nodos.hijos.length>0 || nodos.texto!="")
     {
         XML+=">"
