@@ -346,6 +346,10 @@ export class PrincipalComponent implements OnInit {
     this.router.navigate(['./gramatical']);
   }
 
+  ReporteOpt() {
+    this.router.navigate(['./optimizado']);
+  }
+
   getJSON() {
     //return (data as any); // aqui obtenemos el JSON completo
   }
@@ -360,35 +364,9 @@ export class PrincipalComponent implements OnInit {
   }
 
   optimizarC3D() {
-    //let prueba = parserOp.parse(this.traduccion)
-    let prueba = parserOp.parse(`#include <stdio.h>
-    #include <math.h>
-    
-    float P;
-    float H;
-    
-    void main(){
-      if (1 == 1) goto L1;
-      goto L2;
-    
-      if (1 == 0) goto L1;
-      goto L2;
-    
-      x = x + 0;
-      x = x - 0;
-      x = x * 1;
-      x = x / 1;
-      x = y + 0;
-      x = y - 0;
-      x = y * 1;
-      x = y / 1;
-      x = y * 2;
-      x = y * 0;
-      x = 0 / y;
-    }`)
-    console.log(prueba.cadena)
+    let prueba = parserOp.parse(this.traduccion)
     let repo = prueba.reporte.getReporte()
-    console.log(repo)
+    this.traduccion = prueba.cadena
   }
 
 }

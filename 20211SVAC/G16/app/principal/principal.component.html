@@ -30,7 +30,12 @@
           <a class="dropdown-item" (click)="ASTXPATH()">AST XPATH</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="ReporteGram()">Reporte gramatical XML</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="ReporteOpt()">Reporte de Optimización</a>
         </div>
+      </li>
+      <li style="padding-left: 20px;">
+        <a class="nav-link active" role="button" (click)="optimizarC3D()">Optimizar</a>
       </li>
     </ul>
 
@@ -39,15 +44,15 @@
 
 <div class="col-sm-12">
   <br>
-  <h5>Organización de Lenguajes y Compiladores 2: XML</h5>
+  <h5>Organización de Lenguajes y Compiladores 2: XML - XPath - XQuery</h5>
   <hr>
 
   <div style="display: block;">
       <!--ESTE ES EL TEXT ÁREA DE XML-->
     <div style="float: left; width: 50%;">
-      <div style="text-align: center;">
-        <button type="button" class="btn btn-light"(click)="compilar()">Analizar XML de forma ASC</button>
-        <button type="button" class="btn btn-light"(click)="Xmldesc()">Analizar XML de forma DESC</button>
+      <div style="text-align: center; padding-bottom: 20px; padding-top: 10px;">
+        <button type="button" class="btn btn-light"(click)="compilar()">Analizar XML ASC</button>
+        <button type="button" class="btn btn-light"(click)="Xmldesc()">Analizar XML DESC</button>
         <button type="button" class="btn btn-light" (click)="traducirXML()">Traducir XML</button>
       </div>
       <h5 style="text-align: center;">XML</h5>
@@ -59,8 +64,8 @@
       ></ngx-codemirror>
     </div>
       <!--ESTE ES EL TEXT ÁREA DE XPATH-->
-    <div style="float: left; width: 50%;">
-      <div style="text-align: center;">
+    <div style="float: left; width: 50%; padding-bottom: 40px;">
+      <div style="text-align: center; padding-bottom: 20px; padding-top: 10px;">
         <button type="button" class="btn btn-light" (click)="AnalizarXQuery()">Ejecutar XQuery</button>
         <button type="button" class="btn btn-light" (click)="xpathDESC()">Traducir XQuery</button>
         <button type="button" class="btn btn-light" (click)="optimizarC3D()">Optimizar XQuery</button>
@@ -79,7 +84,7 @@
 <br>
 <br>
 <div class="col-sm-12">
-  <h5 style="padding-top: 1%;">XPath: consultas</h5>
+  <h5 style="padding-top: 1%;">XPath: Consultas</h5>
   <hr>
 <div class="input-group mb-3" style="padding-left: 3%; padding-right: 4%;">
   <div class="input-group-prepend">
@@ -88,8 +93,8 @@
   <input type="text" class="form-control" [(ngModel)]="xpath" aria-label="Default" aria-describedby="inputGroup-sizing-default">
 </div>
 <div class="m-0 row justify-content-center">
-  <button type="button" class="btn btn-light" (click)="xpathASC()">Realizar consulta de forma ascendente</button>
-  <button type="button" class="btn btn-light" (click)="xpathDESC()">Realizar consulta de forma descendente</button>
+  <button type="button" class="btn btn-light" (click)="xpathASC()">Realizar Consulta ASC</button>
+  <button type="button" class="btn btn-light" (click)="xpathDESC()">Realizar Consulta DESC</button>
   <button type="button" class="btn btn-light" (click)="xpathDESC()">Traducir XPath</button>
 </div>
 </div>
@@ -116,7 +121,7 @@
     <!--
  <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" [(ngModel)]="errores" readonly></textarea>
     -->
-    <ngx-codemirror class="form-control"  rows="15"
+    <ngx-codemirror class="form-control"  rows="15" theme="dracula"
       [options]="options3"
       [(ngModel)]="traduccion"
       [disabled]="readOnly"
