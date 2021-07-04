@@ -9,6 +9,7 @@ function IfConditional(_condicion: any, _instruccionesThen: Array<any>, _instruc
     if (condicion === null || condicion.error) return condicion;
     let cumple = cumpleCondicion(condicion[0], _contexto);
     if (cumple) {
+        cumple.tablaVariables = _contexto.tablaVariables;
         let instrucciones = Expresion(_instruccionesThen, _ambito, cumple, id);
         // console.log(instrucciones, 3383838338)
         return instrucciones;

@@ -95,6 +95,11 @@ function ExpresionQuery(_expresion: any, _ambito: Ambito, _contexto: Contexto, _
         return Exec(_expresion, _ambito, _contexto, _id);
     }
 
+    else if (tipo === Tipos.LLAMADA_NATIVA) {
+        const Nativa = require("../Funciones/Nativas");
+        return Nativa(_expresion, _ambito, _contexto, _id);
+    }
+
     else {
         // console.log(_expresion, 4444);
         const Bloque = require('../Bloque_XQuery');

@@ -9,7 +9,7 @@ function returnQuery(_expresion: any, _ambito: Ambito, _iterators: Array<Context
     for (let i = 0; i < _iterators.length; i++) { // [$x, $y, $z]
         const iterator = _iterators[i]; // { Contexto }
         let _x = Expresion(_expresion, _ambito, iterator, iterator.variable?.id); // _expresion = [XPATH]
-        if (_x) expresion = expresion.concat(_x);
+        if (_x && !_x.error) expresion = expresion.concat(_x);
         // console.log(_x)
     }
 
