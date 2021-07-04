@@ -1,0 +1,19 @@
+enum TipoConsulta {
+    SIMPLE = 1,
+    ATTRIBUTE = 2,
+    PUNTO = 3,
+    PUNTOS = 4,
+    TEXT = 5,
+    NODE = 6,
+    DESCENDENTE = 7,
+    DESC_ATTR = 8,
+    DESC_NODE = 9,
+    DESC_TEXT = 10,
+    PARENT = 11,
+    SELF = 12,
+    DESC_OR_SELF = 13,
+    FOLLOWING = 14,
+    PRECEDING = 15,
+    PREC_SIBLING = 16,
+    FOLL_SIBLING = 17
+}

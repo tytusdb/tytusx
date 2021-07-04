@@ -12,10 +12,10 @@ class ConsultaDescAttribute extends ConsultaSimple {
         entorno.getTable().forEach((s) => {
             //Recorro los simbolos buscando el atributo
             if (s instanceof Atributo) {
-                if (super.getIdentificador() === "*") {
+                if (super.getId() === "*") {
                     flag = this.addSimbolo(entorno, nuevoEntorno);
                 }
-                else if (s.getNombre() === super.getIdentificador()) {
+                else if (s.getNombre() === super.getId()) {
                     flag = this.addSimbolo(entorno, nuevoEntorno);
                 }
             }

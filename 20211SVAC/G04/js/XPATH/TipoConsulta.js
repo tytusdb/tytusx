@@ -1,0 +1,20 @@
+var TipoConsulta;
+(function (TipoConsulta) {
+    TipoConsulta[TipoConsulta["SIMPLE"] = 1] = "SIMPLE";
+    TipoConsulta[TipoConsulta["ATTRIBUTE"] = 2] = "ATTRIBUTE";
+    TipoConsulta[TipoConsulta["PUNTO"] = 3] = "PUNTO";
+    TipoConsulta[TipoConsulta["PUNTOS"] = 4] = "PUNTOS";
+    TipoConsulta[TipoConsulta["TEXT"] = 5] = "TEXT";
+    TipoConsulta[TipoConsulta["NODE"] = 6] = "NODE";
+    TipoConsulta[TipoConsulta["DESCENDENTE"] = 7] = "DESCENDENTE";
+    TipoConsulta[TipoConsulta["DESC_ATTR"] = 8] = "DESC_ATTR";
+    TipoConsulta[TipoConsulta["DESC_NODE"] = 9] = "DESC_NODE";
+    TipoConsulta[TipoConsulta["DESC_TEXT"] = 10] = "DESC_TEXT";
+    TipoConsulta[TipoConsulta["PARENT"] = 11] = "PARENT";
+    TipoConsulta[TipoConsulta["SELF"] = 12] = "SELF";
+    TipoConsulta[TipoConsulta["DESC_OR_SELF"] = 13] = "DESC_OR_SELF";
+    TipoConsulta[TipoConsulta["FOLLOWING"] = 14] = "FOLLOWING";
+    TipoConsulta[TipoConsulta["PRECEDING"] = 15] = "PRECEDING";
+    TipoConsulta[TipoConsulta["PREC_SIBLING"] = 16] = "PREC_SIBLING";
+    TipoConsulta[TipoConsulta["FOLL_SIBLING"] = 17] = "FOLL_SIBLING";
+})(TipoConsulta || (TipoConsulta = {}));

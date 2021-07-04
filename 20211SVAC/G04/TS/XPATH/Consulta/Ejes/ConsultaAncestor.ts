@@ -1,9 +1,7 @@
-class ConsultaAncestor implements Consulta {
+class ConsultaAncestor extends Consulta {
 
-    private id: string;
-
-    constructor(id: string) {
-        this.id = id;
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
     }
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
@@ -13,7 +11,7 @@ class ConsultaAncestor implements Consulta {
 
             e.getAnterior().getTable().forEach(s => {
                 if (s instanceof Nodo) {
-                    if (s.getNombre() === this.id) {
+                    if (s.getNombre() === super.getId()) {
                         this.addEntorno(newEntornos, e.getAnterior());
                     }
                 }

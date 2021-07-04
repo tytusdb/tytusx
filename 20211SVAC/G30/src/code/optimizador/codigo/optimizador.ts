@@ -40,7 +40,9 @@ export class Optimizador {
       this.reglas6_16Header(this.listaInstrucciones);
       this.reglas3_4(this.listaInstrucciones);
       this.reglas1_2(this.listaInstrucciones);
+
     
+
 
 
       //paso el array a la cadena
@@ -52,6 +54,7 @@ export class Optimizador {
    public getReporte(): Array<Optimizacion>{
       return this.reporteOptimizacion;
    }
+
 
    private reglas6_16Header(array: Array<Instruccion>) {
 
@@ -67,24 +70,29 @@ export class Optimizador {
                // si cumple con todas las condiciones de 16 
                let regla = '16';
                this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = 0;'
+
                this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+
             }
 
             if (instruccion.arg2 == '1') {
                if (instruccion.arg1 == instruccion.resultado) {
                   let regla = '9';
                   this.nuevasInstrucciones[contador].cadena = '';
+
                   this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
                } else {
                   let regla = '13';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
                   this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena, instruccion.cadena));
+
                }
             }
 
          }
          // MULTIPLICADOS
          if (instruccion.operador == '*') {
+
 
             if (instruccion.arg1 == '0' || instruccion.arg2 == '0') {
                // si cumple con todas las condiciones de 15
@@ -384,10 +392,57 @@ export class Optimizador {
 
                this.asignacionesPrevias.push(instruccion);
             }
-         }
 
+          
+         }
+         // MENOS
+         if (instruccion.operador == '-') {
+
+            if (instruccion.arg2 == '0') {
+               if (instruccion.resultado == instruccion.arg1) {
+                  let regla = '7';
+                  this.nuevasInstrucciones[contador].cadena = '';
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
+               } else {
+                  let regla = '11';
+                  this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
+               }
+            }
+
+
+         }
+         // MAS
+         if (instruccion.operador == '+') {
+
+            if (instruccion.arg2 == '0') {
+               if (instruccion.resultado == instruccion.arg1) {
+                  let regla = '6';
+                  this.nuevasInstrucciones[contador].cadena = '';
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
+               } else {
+                  //console.log('regla 10!')
+                  let regla = '10';
+                  this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
+               }
+            } else if (instruccion.arg1 == '0') {
+               if (instruccion.resultado == instruccion.arg2) {
+                  let regla = '6';
+                  this.nuevasInstrucciones[contador].cadena = '';
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
+               } else {
+                  let regla = '10';
+                  this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ';';
+                  this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
+               }
+            }
+
+         }
+         //console.log('# ', contador);
          contador++;
       }
+
    }
 
    private arrayCadena() {
@@ -399,7 +454,6 @@ export class Optimizador {
          }
       }
    }
-
 }
 
 export class Optimizacion {
@@ -409,7 +463,9 @@ export class Optimizacion {
    codigo: string;
    codigo_original:string;
 
+
    constructor(linea: number, regla: string, codigo: string, codigo_original:string) {
+
       this.linea = linea;
       this.regla = regla;
       this.codigo = codigo;
