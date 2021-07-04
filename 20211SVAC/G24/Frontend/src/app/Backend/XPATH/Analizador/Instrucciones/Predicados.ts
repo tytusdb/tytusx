@@ -2,7 +2,7 @@ import { Instruccion } from '../Abstracto/Instruccion';
 import nodoAST from '../Abstracto/nodoAST';
 import NodoErrores from '../Excepciones/NodoErrores';
 import Arbol from '../Simbolos/Arbol';
-import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import tablaSimbolos from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 
 export default class Predicados extends Instruccion {
@@ -25,17 +25,20 @@ export default class Predicados extends Instruccion {
          * ATRIBUTOS IDENTIFICADOR L_CORCHETES
          */
         if(this.Identificador!=null){
-            var nodito= new nodoAST('IDENTIFICADOR')
-            nodito.agregarHijo(this.Identificador);
-            nodo.agregarHijoAST(nodito);
+           
+            nodo.agregarHijo(this.Identificador);
+            
         }
         
         if(this.Corchetes!=null){
-            var l_corchetes = new nodoAST("L_CORCHETES");
-            l_corchetes.agregarHijoAST(this.Corchetes.getNodosAST())
-            nodo.agregarHijoAST(l_corchetes);
+            
+            nodo.agregarHijoAST(this.Corchetes.getNodosAST())
+            
         }
         
         return nodo;
+    }
+    codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
+        throw new Error('Method not implemented.');
     }
 }

@@ -1,0 +1,232 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<title>
+    TytusX Grupo 10
+</title>
+
+<h1 class="Titulo"> TytusX Grupo 10 </h1>
+<h3 class="subtitulo"> XPATH </h3>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <!-- AREA DE TEXTO PARA CONSULTA -->
+                <div id="ide2">
+                    <textarea id="txtXpath" class="txtarea" name="txtXpath" rows="5" cols="100"></textarea>
+                </div> 
+            </td>
+        </tr>
+    </table>
+    <h3 class="subtitulo">XML</h3>
+    <table>
+        <tr>
+            <td>
+                <!-- AREA DE TEXTO PARA XML -->
+                <div id="ide">
+                    <textarea id="txtXML" class="txtarea" name="txtXML" rows="30" cols="100"></textarea>
+                    <br /><br />
+                    <input type="file" name="inputfile" id="inputfile">
+                    <input type="button" class="button" value="Analizar" onclick="analizar_xml();" /> <br /><br>
+
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <h3 class="subtitulo"> RESULTADO </h3>
+    <table>
+        <tr>
+            <td>
+                <!-- AREA DE TEXTO PARA RESULTADO -->
+                <div id="ide3">
+                    <textarea id="console"  class="txtarea" name="console" rows="20" cols="100">>></textarea>
+                    <br /><br />
+                    <input type="button" class="button" value="Limpiar" onclick="javascript:clearConsole();" />
+                </div>  
+            </td>
+        </tr>
+    </table>
+    <h3 class="subtitulo"> REPORTES </h3>
+    <table>
+        <tr>
+            <td>
+                <!-- AREA DE TEXTO PARA REPORTES -->
+                <div id="ide3">
+                    <br>
+                    <a id="astLink">AST ASC</a>
+                    <br>
+                    <a id="tablaLink">Tabla Simbolos ASC</a>
+                    <br>
+                    <a id="tablaerror">Tabla Errores ASC</a>
+                    <br>
+                    <textarea id="textogramatical" class="txtarea" name="txtXML" rows="50" cols="100"></textarea>
+                </div>  
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+<!-- AREA DE IMPORTS -->
+
+<!-- AST -->
+<script src="dist/AST/Error.js"></script>
+<script src="dist/AST/Simbolo.js"></script>
+<script src="dist/AST/Tabla_errores.js"></script>
+<script src="dist/AST/Tabla_simbolos.js"></script>
+<script src="dist/AST/Tipo.js"></script>
+
+<!-- EXPRESIONES -->
+<script src="dist/Expresiones/Atributo.js"></script>
+<script src="dist/Expresiones/entregable.js"></script>
+<script src="dist/Expresiones/Objeto.js"></script>
+
+<!-- GRAMATICA -->
+
+<script src="Gramatica\gramatica.js"></script>
+<script src="GramaticaXPATH\gramaticaXpath.js"></script>
+
+<script type="text/javascript">
+    document.getElementById('inputfile')
+        .addEventListener('change', function () {
+            var fr = new FileReader();
+            fr.onload = function () {
+                document.getElementById('txtXML')
+                    .textContent = fr.result;
+            }
+            fr.readAsText(this.files[0]);
+        })
+</script>
+
+<script type="text/javascript">
+
+    function analizar_xml() {
+        //graficar ast
+        
+        var astAddress = 'https://dreampuf.github.io/GraphvizOnline/#strict digraph{';
+        var tablaAdress = 'https://dreampuf.github.io/GraphvizOnline/#strict digraph{';
+        var dotData = '';
+        var dotTabla = '';
+        var dotTablaE = '';
+        var reportegramaticalxml ='REPORTE GRAMATICAL ASC:\n ';
+        var TablaErrores = 'https://dreampuf.github.io/GraphvizOnline/#strict digraph{';
+
+
+        //tabla de simbolos
+        dotTabla += "graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];"
+        dotTabla += "node [shape=plain]";
+        dotTabla += "rankdir=LR;";
+        dotTabla += "TablaSimbolos[label=<";
+        dotTabla += "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">";
+        dotTabla += "<tr style=\"background-color:#069DCD\"><td>ID</td><td>NOMBRE</td><td>VALOR</td><td>TIPO</td><td>PADRE</td><td>LINEA</td><td>COLUMNA</td></tr>";
+
+        dotTablaE += "graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"2\"];"
+        dotTablaE += "node [shape=plain]";
+        dotTablaE += "rankdir=LR;";
+        dotTablaE += "TablaErrores[label=<";
+        dotTablaE += "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">";
+        dotTablaE += "<tr style=\"background-color:#069DCD\"><td>TIPO</td><td>DESCRIPCION</td><td>LINEA</td><td>COLUMNA</td></tr>";
+
+
+
+        lexicalErrors = [];
+        syntaxErrors = [];
+        semanticErrors = [];
+
+        var toParse = document.getElementById("txtXML").value;
+        var result = gramatica.parse(toParse);
+        result.CrearTabla();
+
+        //tabla de simbolos
+        var contenido = result.graficarTablaSimbolos(contenido);
+        dotTabla = dotTabla + contenido;
+
+        //tabla de errores
+        var contenidoerrores = result.graficarTablaErrores(contenidoerrores);
+        dotTablaE = dotTablaE + contenidoerrores;
+
+        dotData += result.GraficarAST(dotData);
+            
+        //reporte gramatical
+        reportegramaticalxml += result.reportegramatical(reportegramaticalxml);
+
+        if (result != null) {
+            document.getElementById("console").innerHTML = "retorne valor";
+
+            //graficar
+            astAddress += dotData;
+            astAddress += '}';
+            //graficar tabla
+            tablaAdress += dotTabla;
+            tablaAdress += '}';
+
+
+            TablaErrores += dotTablaE;
+            TablaErrores += '}';
+
+            getURLGramatical(reportegramaticalxml);
+            getURLAST(astAddress);
+            getURLTABLAS(tablaAdress);
+            getURLERRORES(TablaErrores);
+
+            analizar_xpath()
+        } else {
+            document.getElementById("console").innerHTML = "no retorne valor";
+        }
+    }
+
+    function getURLAST(astAddress)
+        {
+            document.getElementById("astLink").setAttribute("href",astAddress);
+        }
+
+    function getURLTABLAS(tablaAdress)
+        {
+            document.getElementById("tablaLink").setAttribute("href",tablaAdress);
+        }
+
+    function getURLGramatical(reportegramaticalxml)
+        {
+            //document.getElementById("textogramatical").setAttribute("href",reportegramaticalxml);
+            document.getElementById("textogramatical").innerHTML = reportegramaticalxml;
+            //console.log(reportegramaticalxml);
+        }
+
+    function getURLERRORES(tablaError)
+        {
+            document.getElementById("tablaerror").setAttribute("href",tablaError);
+        }
+
+
+        
+    function analizar_xpath() {
+
+        lexicalErrors = [];
+        syntaxErrors = [];
+        semanticErrors = [];
+        var toParse = document.getElementById("txtXpath").value;
+        var result = gramaticaXpath.parse(toParse);
+
+        document.getElementById('console').innerHTML = "";
+        
+        if (result != null) {
+            document.getElementById("console").innerHTML = "retorne valor de xpath";
+        } else {
+            document.getElementById("console").innerHTML = "no retorne valor de xpath";
+        }
+    }
+
+    function clearConsole() {
+        document.getElementById('console').innerHTML = "";
+    }
+
+</script>
+
+</html>

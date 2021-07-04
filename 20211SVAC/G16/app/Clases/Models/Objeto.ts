@@ -7,12 +7,12 @@ export default class Objeto{
   nombreFin:string;
   unica:boolean;
   texto:string;
-  atributos:Array<any>;
-  elementos:Array<any>;
+  atributos:any;
+  elementos:any;
   linea:number;
   columna:number;
 
-  public constructor(nombreInit:string,nombreFin:string,texto:string, atributos:Array<any>,elementos:Array<any>,unica:boolean,linea:number,columna:number){
+  public constructor(nombreInit:string,nombreFin:string,texto:string, atributos:any,elementos:any,unica:boolean,linea:number,columna:number){
     this.nombreInit=nombreInit;
     this.nombreFin=nombreFin;
     this.texto=texto;

@@ -1,34 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Reporte de errores</title>
-		<link href="style.css" type="text/css" rel="stylesheet" />
-		<script src="bundle.js"></script>
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de errores</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <script src="bundle.js"></script>
+</head>
 
-	<body>
-		<div id="wrapper">
-			<h1>Tabla de errores</h1>
 
-			<table id="keywords" cellspacing="0" cellpadding="0">
-				<thead>
-					<tr>
-						<th><span>Descripcion</span></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr></tr>
-				</tbody>
-			</table>
-		</div>
+<body>
+    <div id="wrapper">
+     
+      <h1>Tabla de errores xml</h1>
+     
+     <table id="keywords" cellspacing="0" cellpadding="0">
+       <thead>
+         <tr>
+           <th><span>Descripcion</span></th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+         </tr>
+       </tbody>
+     </table>
 
-		<script>
-			let initialize = new load.Main();
-			initialize.getErroresLexicos();
-			console.log('<----------------');
-		</script>
-	</body>
+     <h1>Tabla de errores xpath</h1>
+     
+     <table id="xpath" cellspacing="0" cellpadding="0">
+       <thead>
+         <tr>
+           <th><span>Descripcion</span></th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+         </tr>
+       </tbody>
+     </table>
+
+    </div> 
+
+
+
+    <script>
+        let initialize = new load.Main();
+        initialize.getErroresLexicos();
+        console.log('<----------------');
+    </script>
+    
+
+   </body>
+
+
+
 </html>

@@ -20,15 +20,19 @@ export class Modulo extends Expresion {
         this.columna = c;
     }
     
-    getValor(): Expresion {
+    copiarValor(): Expresion {
+        return new Modulo(this.hI.copiarValor(), this.hD.copiarValor(), this.linea, this.columna);
+    }
+
+    getValor(entorno: any): Expresion {
         var res:Literal = new Literal(69,'@ERROR@', this.linea, this.columna);
-        var e1 = this.hI.getValor();
-        var e2 = this.hD.getValor();
+        var e1 = this.hI.getValor(entorno);
+        var e2 = this.hD.getValor(entorno);
 
         if(e1.tipo == 0) {
             if(e2.tipo == 0) {
                 if(parseInt(e2.valor.toString()) != 0) {
-                    res.tipo = 1;
+                    res.tipo = 0;
                     res.valor = parseInt(e1.valor.toString()) % parseInt(e2.valor.toString());
                     return res;
                 } else {
@@ -36,7 +40,7 @@ export class Modulo extends Expresion {
                 }
             } else if(e2.tipo == 1) {
                 if(parseInt(e2.valor.toString()) != 0) {
-                    res.tipo = 1;
+                    res.tipo = 0;
                     res.valor = parseInt(e1.valor.toString()) % parseFloat(e2.valor.toString());
                     return res;
                 } else {

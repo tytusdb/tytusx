@@ -1,0 +1,25 @@
+{
+  "name": "Grupo2",
+  "version": "1.0.0",
+  "description": "Proyecto Compiladores 2, Grupo 2",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo ========Traduciendo TypeScripts======== && tsc && echo ========Traduccion exitosa========",
+    "gramaticaXML": "echo ========Generando gramaticaXML======== && jison ./dist/Gramatica/gramaticaXML.jison && echo ========generacion exitosa========",
+    "gramaticaXPath": "echo ========Generando gramaticaXPath======== && jison ./dist/Gramatica/gramaticaXPath.jison && echo ========generacion exitosa========",
+    "gramaticas": "jison ./dist/Gramatica/gramaticaXML.jison && jison ./dist/Gramatica/gramaticaXPath.jison",
+    "copiarGramaticaXML": "echo ========administrando Archivos XML======== && npx rimraf dist/Gramatica/gramaticaXML.js && copyfiles gramaticaXML.js dist/Gramatica && npx rimraf gramaticaXML.js && echo ========finaliza administrador XML========",
+    "copiarGramaticaXPath": "echo ========administrando Archivos XPath======== && npx rimraf dist/Gramatica/gramaticaXPath.js && copyfiles gramaticaXPath.js dist/Gramatica && npx rimraf gramaticaXPath.js && ========echo finaliza administrador XPath========",
+    "copiarGramaticas": "npm run copiarGramaticaXML && npm run copiarGramaticaXPath",
+    "correrGramaticas": "npm run gramaticas && npm run copiarGramaticas",
+    "full-build": "echo ========Corriendo full build======== && npm run build && npm run correrGramaticas && echo ========full build finalizado========"
+  },
+  "author": "Grupo 2",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^15.9.0"
+  },
+  "dependencies": {
+    "viz.js": "^2.1.2"
+  }
+}

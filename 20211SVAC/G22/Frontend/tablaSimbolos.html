@@ -54,16 +54,35 @@
             </div>
         </div>
     </div>
+    <div style="width: 100%; padding-top: 80px; padding-left: 15%;padding-right: 15%;">
+        <table border="1">
+            <thead>
+                <tr style="width: 100%;">
+                    <th>Identificador</th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Columna</th>
+                    <th>Linea</th>
+                    <th>Entorno</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTablaSimbolos">
 
+            </tbody>
+        </table>
+    </div>
     <div  style="width: 100%; padding-top: 80px; padding-left: 15%;padding-right: 15%;" id="tablaSimbolos" >
 
     </div>
 </body>
+<script type="text/javascript" src="../Scripts/tablasimbolosxml.js"></script>
 <script>
     window.onload=llenarTabla;
     var url_string = window.location.href; //
     var url = new URL(url_string);
+    let params = new URLSearchParams(document.location.search.substring(1));
     var errores = url.searchParams.get("tablaSim");
+    var xmlAST = params.get("tabSimbolosXML");
     var divTabla1 = document.getElementById('tablaSimbolos');
     
     function llenarTabla(){
@@ -71,5 +90,7 @@
             divTabla1.innerHTML = errores;
             console.log(errores);
     }
+    let tablaHTML = getTablaSimbolosXML(llenarTablaSimbolos(JSON.parse(xmlAST)));
+    document.getElementById('bodyTablaSimbolos').innerHTML = tablaHTML;
     
 </script>

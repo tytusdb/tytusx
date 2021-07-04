@@ -3,14 +3,18 @@ import { Expression } from "../../Interfaces/Expresion";
 
 export class Acceso {
 
-    public tipoQuery : string;
+    SP_id:number;
+    SP_tipoAcceso:number;
+
     constructor (
     public line : Number,
     public column: Number,
     public id: string,
     public tipoAcceso: string,
-    public predicados: Expression[]){
-        this.tipoQuery= "";
+    public predicados: Expression[],
+    public tipoQuery ?: string ){
+        this.SP_id = -1;
+        this.SP_tipoAcceso = -1
     } 
 
     public setipoQuery(tipo: string){

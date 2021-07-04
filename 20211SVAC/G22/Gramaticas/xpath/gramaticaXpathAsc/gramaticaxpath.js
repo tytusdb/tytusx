@@ -72,636 +72,2301 @@
   }
 */
 var gramaticaxpath = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,6],$V1=[1,7],$V2=[1,8],$V3=[1,10],$V4=[1,11],$V5=[1,12],$V6=[1,13],$V7=[1,14],$V8=[1,15],$V9=[1,16],$Va=[5,9,10,11,13,15,18,21,22,23,24,25,44,48,49,52,53,54,55,56,57,58,60,61,64,67],$Vb=[1,23],$Vc=[1,20],$Vd=[1,21],$Ve=[1,22],$Vf=[1,28],$Vg=[1,29],$Vh=[1,30],$Vi=[1,31],$Vj=[1,32],$Vk=[1,33],$Vl=[1,34],$Vm=[1,35],$Vn=[1,36],$Vo=[1,37],$Vp=[1,38],$Vq=[1,39],$Vr=[1,43],$Vs=[1,46],$Vt=[1,45],$Vu=[5,9,10,11,13,15,18,21,22,23,24,25,42,44,48,49,52,53,54,55,56,57,58,60,61,64,67],$Vv=[1,60],$Vw=[1,57],$Vx=[1,58],$Vy=[1,59],$Vz=[1,61],$VA=[44,48,49],$VB=[1,70],$VC=[1,71],$VD=[44,48,49,52,53,54,55,56,57,58,60,67],$VE=[1,78],$VF=[44,48,49,52,53,54,55,56,57,58,60,61,67],$VG=[1,79],$VH=[1,80],$VI=[18,44,48,49,52,53,54,55,56,57,58,60,61,64,67],$VJ=[9,10,11,13,15,16,21,22,23,24,25,28,29,30,31,32,33,34,35,36,37,38,39,66,68,69,70];
-var parser = {trace: function trace () { },
-yy: {},
-symbols_: {"error":2,"S":3,"CONSULTAS":4,"EOF":5,"CONSULTA":6,"DIAGONALES":7,"TIPO_ID":8,"concatenacion":9,"punto":10,"dosPuntos":11,"FUNCION":12,"diagonalDoble":13,"SIMBOLOS":14,"diagonal":15,"arroba":16,"SIGUIENTE_ARROBA":17,"asterisco":18,"dosPuntosConsecutivos":19,"METODOS":20,"identificador":21,"funcionNode":22,"funcionText":23,"funcionLast":24,"funcionPosition":25,"PALABRA_RESERVADA":26,"SIGUIENTE_METODO":27,"ancestor1":28,"ancestor_or_self1":29,"attribute1":30,"child1":31,"descendant1":32,"descendant_or_self1":33,"following1":34,"following_sibling1":35,"parent1":36,"preceding1":37,"preceding_sibling1":38,"self1":39,"ARREGLOS_ID":40,"ARREGLO_ID":41,"corcheteAbierto":42,"OPERACIONES_ARREGLO":43,"corcheteCerrado":44,"OPERACION_LOGICA":45,"OPERACION_RELACIONAL":46,"SIMBOLOS_LOGICOS":47,"and1":48,"or1":49,"OPERACION_ARITMETICA":50,"SIMBOLOS_RELACIONALES":51,"mayorque":52,"menorque":53,"mayorIgual":54,"menorIgual":55,"igual":56,"diferenteQue":57,"mas":58,"T1":59,"menos":60,"modulo":61,"T":62,"F":63,"dividir":64,"TIPOIGUALAR":65,"parizq":66,"parder":67,"entero":68,"decimal":69,"cadena":70,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",9:"concatenacion",10:"punto",11:"dosPuntos",13:"diagonalDoble",15:"diagonal",16:"arroba",18:"asterisco",19:"dosPuntosConsecutivos",21:"identificador",22:"funcionNode",23:"funcionText",24:"funcionLast",25:"funcionPosition",28:"ancestor1",29:"ancestor_or_self1",30:"attribute1",31:"child1",32:"descendant1",33:"descendant_or_self1",34:"following1",35:"following_sibling1",36:"parent1",37:"preceding1",38:"preceding_sibling1",39:"self1",42:"corcheteAbierto",44:"corcheteCerrado",48:"and1",49:"or1",52:"mayorque",53:"menorque",54:"mayorIgual",55:"menorIgual",56:"igual",57:"diferenteQue",58:"mas",60:"menos",61:"modulo",64:"dividir",66:"parizq",67:"parder",68:"entero",69:"decimal",70:"cadena"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[6,1],[6,1],[6,1],[6,1],[7,2],[7,2],[14,2],[14,1],[14,1],[14,1],[14,1],[14,1],[14,1],[17,1],[17,1],[12,1],[12,1],[12,1],[12,1],[20,4],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[26,1],[27,1],[27,1],[27,1],[27,1],[27,1],[8,1],[8,2],[40,2],[40,1],[41,3],[43,1],[43,1],[45,3],[47,1],[47,1],[46,3],[46,1],[51,1],[51,1],[51,1],[51,1],[51,1],[51,1],[50,3],[50,3],[50,1],[59,3],[59,1],[62,3],[62,3],[62,1],[63,1],[63,3],[65,1],[65,1],[65,2],[65,1],[65,1],[65,1]],
-performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
-/* this == yyval */
-
-var $0 = $$.length - 1;
-switch (yystate) {
-}
-},
-table: [{3:1,4:2,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},{1:[3]},{5:[1,17],6:18,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9},o($Va,[2,3]),o($Va,[2,4]),o($Va,[2,5]),o($Va,[2,6]),o($Va,[2,7]),o($Va,[2,8]),o($Va,[2,9]),{8:26,10:$Vb,12:24,14:19,16:$Vc,18:$Vd,19:$Ve,20:25,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq},{8:26,10:$Vb,12:24,14:40,16:$Vc,18:$Vd,19:$Ve,20:25,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq},o($Va,[2,43],{40:41,41:42,42:$Vr}),o($Va,[2,21]),o($Va,[2,22]),o($Va,[2,23]),o($Va,[2,24]),{1:[2,1]},o($Va,[2,2]),o($Va,[2,10]),{17:44,18:$Vs,21:$Vt},o($Va,[2,13]),o($Va,[2,14]),o($Va,[2,15]),o($Va,[2,16]),o($Va,[2,17]),o($Va,[2,18]),{11:[1,47]},{11:[2,26]},{11:[2,27]},{11:[2,28]},{11:[2,29]},{11:[2,30]},{11:[2,31]},{11:[2,32]},{11:[2,33]},{11:[2,34]},{11:[2,35]},{11:[2,36]},{11:[2,37]},o($Va,[2,11]),o($Va,[2,44],{41:48,42:$Vr}),o($Vu,[2,46]),{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,43:49,45:50,46:51,50:52,59:53,62:54,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},o($Va,[2,12]),o($Va,[2,19]),o($Va,[2,20]),{11:[1,64]},o($Vu,[2,45]),{44:[1,65]},{44:[2,48]},{44:[2,49],47:66,48:[1,67],49:[1,68]},o($VA,[2,54],{51:69,52:[1,72],53:[1,73],54:[1,74],55:[1,75],56:[1,76],57:[1,77],58:$VB,60:$VC}),o($VD,[2,63],{61:$VE}),o($VF,[2,65],{18:$VG,64:$VH}),o($VI,[2,68]),o($VI,[2,69]),{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,50:81,59:53,62:54,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},o($VI,[2,71]),o($VI,[2,72]),{17:82,18:$Vs,21:$Vt},o($VI,[2,74]),o($VI,[2,75],{7:4,8:5,12:9,6:18,9:$V0,10:$V1,11:$V2,13:$V3,15:$V4,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9}),o($VI,[2,76]),{8:85,10:[1,87],11:[1,88],12:84,18:[1,86],21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,27:83},o($Vu,[2,47]),{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,46:89,50:52,59:53,62:54,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},o($VJ,[2,51]),o($VJ,[2,52]),{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,50:90,59:53,62:54,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,59:91,62:54,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,59:92,62:54,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},o($VJ,[2,55]),o($VJ,[2,56]),o($VJ,[2,57]),o($VJ,[2,58]),o($VJ,[2,59]),o($VJ,[2,60]),{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,62:93,63:55,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,63:94,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},{4:62,6:3,7:4,8:5,9:$V0,10:$V1,11:$V2,12:9,13:$V3,15:$V4,16:$Vv,20:63,21:$V5,22:$V6,23:$V7,24:$V8,25:$V9,26:27,28:$Vf,29:$Vg,30:$Vh,31:$Vi,32:$Vj,33:$Vk,34:$Vl,35:$Vm,36:$Vn,37:$Vo,38:$Vp,39:$Vq,63:95,65:56,66:$Vw,68:$Vx,69:$Vy,70:$Vz},{58:$VB,60:$VC,67:[1,96]},o($VI,[2,73]),o($Va,[2,25]),o($Va,[2,38]),o($Va,[2,39]),o($Va,[2,40]),o($Va,[2,41]),o($Va,[2,42]),{44:[2,50]},o($VA,[2,53],{58:$VB,60:$VC}),o($VD,[2,61],{61:$VE}),o($VD,[2,62],{61:$VE}),o($VF,[2,64],{18:$VG,64:$VH}),o($VI,[2,66]),o($VI,[2,67]),o($VI,[2,70])],
-defaultActions: {17:[2,1],28:[2,26],29:[2,27],30:[2,28],31:[2,29],32:[2,30],33:[2,31],34:[2,32],35:[2,33],36:[2,34],37:[2,35],38:[2,36],39:[2,37],50:[2,48],89:[2,50]},
-parseError: function parseError (str, hash) {
-    if (hash.recoverable) {
-        this.trace(str);
-    } else {
-        var error = new Error(str);
-        error.hash = hash;
-        throw error;
+    var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,8],$V1=[1,9],$V2=[1,11],$V3=[1,12],$V4=[1,13],$V5=[1,14],$V6=[1,15],$V7=[1,16],$V8=[1,17],$V9=[5,6],$Va=[5,6,11,12,14,16,19,22,23,24,25,26,45,49,50,52,53,54,55,56,57,59,61,62,65,68],$Vb=[1,26],$Vc=[1,23],$Vd=[1,24],$Ve=[1,25],$Vf=[1,31],$Vg=[1,32],$Vh=[1,33],$Vi=[1,34],$Vj=[1,35],$Vk=[1,36],$Vl=[1,37],$Vm=[1,38],$Vn=[1,39],$Vo=[1,40],$Vp=[1,41],$Vq=[1,42],$Vr=[1,46],$Vs=[1,48],$Vt=[1,51],$Vu=[1,50],$Vv=[5,6,11,12,14,16,19,22,23,24,25,26,43,45,49,50,52,53,54,55,56,57,59,61,62,65,68],$Vw=[1,65],$Vx=[1,62],$Vy=[1,63],$Vz=[1,64],$VA=[1,66],$VB=[45,49,50],$VC=[1,75],$VD=[1,76],$VE=[45,49,50,52,53,54,55,56,57,59,61,68],$VF=[1,83],$VG=[45,49,50,52,53,54,55,56,57,59,61,62,68],$VH=[1,84],$VI=[1,85],$VJ=[19,45,49,50,52,53,54,55,56,57,59,61,62,65,68],$VK=[2,11,12,14,16,17,22,23,24,25,26,29,30,31,32,33,34,35,36,37,38,39,40,67,69,70,71];
+    var parser = {trace: function trace() { },
+    yy: {},
+    symbols_: {"error":2,"S":3,"RUTAS":4,"EOF":5,"concatenacion":6,"CONSULTAS":7,"CONSULTA":8,"DIAGONALES":9,"TIPO_ID":10,"punto":11,"dosPuntos":12,"FUNCION":13,"diagonalDoble":14,"SIMBOLOS":15,"diagonal":16,"arroba":17,"SIGUIENTE_ARROBA":18,"asterisco":19,"dosPuntosConsecutivos":20,"METODOS":21,"identificador":22,"funcionNode":23,"funcionText":24,"funcionLast":25,"funcionPosition":26,"PALABRA_RESERVADA":27,"SIGUIENTE_METODO":28,"ancestor1":29,"ancestor_or_self1":30,"attribute1":31,"child1":32,"descendant1":33,"descendant_or_self1":34,"following1":35,"following_sibling1":36,"parent1":37,"preceding1":38,"preceding_sibling1":39,"self1":40,"ARREGLOS_ID":41,"ARREGLO_ID":42,"corcheteAbierto":43,"OPERACIONES_ARREGLO":44,"corcheteCerrado":45,"OPERACION_LOGICA":46,"OPERACION_RELACIONAL":47,"SIMBOLOS_LOGICOS":48,"and1":49,"or1":50,"SIMBOLOS_RELACIONALES":51,"mayorque":52,"menorque":53,"mayorIgual":54,"menorIgual":55,"igual":56,"diferenteQue":57,"OPERACION_ARITMETICA":58,"mas":59,"T1":60,"menos":61,"modulo":62,"T":63,"F":64,"dividir":65,"TIPOIGUALAR":66,"parizq":67,"parder":68,"entero":69,"decimal":70,"cadena":71,"$accept":0,"$end":1},
+    terminals_: {2:"error",5:"EOF",6:"concatenacion",11:"punto",12:"dosPuntos",14:"diagonalDoble",16:"diagonal",17:"arroba",19:"asterisco",20:"dosPuntosConsecutivos",22:"identificador",23:"funcionNode",24:"funcionText",25:"funcionLast",26:"funcionPosition",29:"ancestor1",30:"ancestor_or_self1",31:"attribute1",32:"child1",33:"descendant1",34:"descendant_or_self1",35:"following1",36:"following_sibling1",37:"parent1",38:"preceding1",39:"preceding_sibling1",40:"self1",43:"corcheteAbierto",45:"corcheteCerrado",49:"and1",50:"or1",52:"mayorque",53:"menorque",54:"mayorIgual",55:"menorIgual",56:"igual",57:"diferenteQue",59:"mas",61:"menos",62:"modulo",65:"dividir",67:"parizq",68:"parder",69:"entero",70:"decimal",71:"cadena"},
+    productions_: [0,[3,2],[3,1],[4,3],[4,1],[7,2],[7,1],[7,2],[8,1],[8,1],[8,1],[8,1],[8,1],[9,2],[9,2],[15,2],[15,1],[15,1],[15,1],[15,1],[15,1],[15,1],[18,1],[18,1],[13,1],[13,1],[13,1],[13,1],[21,4],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[27,1],[28,1],[28,1],[28,1],[28,1],[28,1],[10,1],[10,2],[41,2],[41,1],[42,3],[44,1],[44,1],[46,3],[48,1],[48,1],[51,1],[51,1],[51,1],[51,1],[51,1],[51,1],[58,3],[58,3],[58,1],[60,3],[60,1],[63,3],[63,3],[63,1],[64,1],[64,3],[66,1],[66,1],[66,2],[66,1],[66,1],[66,1],[47,3],[47,1]],
+    performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
+    /* this == yyval */
+    
+    var $0 = $$.length - 1;
+    switch (yystate) {
+    case 1:
+     
+                //AST
+            var id =$$[$0-1].idAST;
+    
+            //CST
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'S'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-1].idCST+';'+'\n}';
+            //reglas semanticas
+            yy.dotAST += '\n}';
+            //this.$[0] = $$[$0-1][0]; 
+            this.$  = new ObjetoA($$[$0-1].objeto, id, padre);
+            var regla = new Regla("GRAMATICAL","S-> RUTAS EOF",""); ingresarRegla(regla);
+            
+            llenarArboles1(yy.dotAST,yy.dotCST);
+            unirErrores();
+            this.$ = $$[$0-1].objeto; 
+            return this.$; 
+        
+    break;
+    case 2:
+     
+                console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
+                erroresSintacticos.push(error); unirErrores(); 
+        
+    break;
+    case 3:
+         
+            //AST
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'|'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idCST+';'+'\n';
+            //CST
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'RUTAS'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'concatenacion'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+"|"+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+    
+            var ob=  [$$[$0-2].objeto];
+            ob = ob.push($$[$0].objeto); 
+            this.$  = new ObjetoA(ob, padre1, padre);
+    
+            var regla = new ObjetoA("GRAMATICAL","RUTAS-> RUTAS concatenacion CONSULTAS",""); ingresarRegla(regla);
+            
+    break;
+    case 4:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'ARREGLOS_ID'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new ObjetoA($$[$0].objeto, id, id2);
+            this.$= objeto;
+    
+            var regla = new Regla("GRAMATICAL","RUTAS-> CONSULTAS",""); ingresarRegla(regla);
+            
+    break;
+    case 5:
+         
+            //AST
+            yy.dotAST += $$[$0].idAST+'--'+$$[$0-1].idAST+';'+'\n';
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'CONSULTAS'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0-1].idCST+';'+'\n';
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            //reglas gram
+            var objet = [$$[$0-1].objeto];
+            objet.push($$[$0].objeto); 
+            this.$ = new ObjetoA(objet,$$[$0].idAST, id2);
+            
+            var regla = new Regla("GRAMATICAL","CONSULTAS-> CONSULTAS CONSULTA",""); ingresarRegla(regla);
+            
+    break;
+    case 6:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'CONSULTAS'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$ = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","CONSULTAS-> CONSULTA",""); ingresarRegla(regla);
+            
+    break;
+    case 7:
+    
+                console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                var error =  new Error( this._$.first_line ,  this._$.first_column, 'sintactico','xmldesc', yytext);
+                erroresSintacticos.push(error); unirErrores(); 
+                this.$=new ObjetoA('ERROR','', ' ');
+            
+    break;
+    case 8:
+    
+            ///AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n'; 
+            yy.dotCST += yy.idCST+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new ObjetoA($$[$0].objeto,id, id2);
+            this.$= objeto;
+    
+            var regla = new Regla("GRAMATICAL","CONSULTA-> DIAGONALES",""); ingresarRegla(regla);
+        
+    break;
+    case 9:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'CONSULTA'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new ObjetoA($$[$0].objeto,id, id2);
+            this.$= objeto;
+    
+            var regla = new Regla("GRAMATICAL","CONSULTA-> TIPO_ID",""); ingresarRegla(regla);
+        
+    break;
+    case 10:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'CONSULTA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'punto'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+    
+            var ob = new SimbolosXpath(TiposXpath.PUNTO,_$[$0].first_line, _$[$0].first_column);
+            this.$=  new ObjetoA(ob,id, padre);
+            
+            var regla = new Regla("GRAMATICAL","CONSULTA-> punto",""); ingresarRegla(regla);
+        
+    break;
+    case 11:
+    
+            //AST
+            var id =++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'CONSULTA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'dosPuntos'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,_$[$0].first_line, _$[$0].first_column);
+            this.$=  new ObjetoA(ob,id, padre);
+            var regla = new Regla("GRAMATICAL","CONSULTA-> dosPuntos",""); ingresarRegla(regla);
+        
+    break;
+    case 12:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+=id2+' [label="'+'CONSULTA'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$=  new ObjetoA($$[$0].objeto,id, id2);
+            
+            var regla = new Regla("GRAMATICAL","CONSULTA-> FUNCION",""); ingresarRegla(regla);
+        
+    break;
+    case 13:
+        //AST
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'//'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+            //CST
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'DIAGONALES'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'diagonalDoble'+'"];'+'\n'; 
+            var hijo1 =++yy.idCST;
+            yy.dotCST+= hijo1+' [label="'+'//'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo1+';'+'\n';
+            var ob = new diagonalDobleC($$[$0].objeto, _$[$0-1].first_line, _$[$0-1].first_column);
+            this.$  = new ObjetoA(ob, padre1, padre);
+            var regla = new Regla("GRAMATICAL","DIAGONALES-> diagonalDoble SIMBOLOS","crear nodos AST;\n Crear nodos CST;\n Return newDiagonalDoble;"); ingresarRegla(regla);
+        
+    break;
+    case 14:
+    
+            //AST
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'/'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            //CST
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'DIAGONALES'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'diagonal'+'"];'+'\n'; 
+            var hijo1 =++yy.idCST;
+            yy.dotCST+= hijo1+' [label="'+'/'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo1+';'+'\n';
+    
+            var ob = new diagonalSimpleS($$[$0].objeto, _$[$0-1].first_line, _$[$0-1].first_column);
+            this.$  = new ObjetoA(ob, padre1, padre);
+    
+            
+            var regla = new Regla("GRAMATICAL","DIAGONALES-> diagonal SIMBOLOS","crear nodos AST, crear nodos AST, retornar diagramas"); ingresarRegla(regla);
+        
+    break;
+    case 15:
+    
+            //AST
+            var id =++yy.idAST;
+            yy.dotAST+= id+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+            var hijo =++yy.idAST;
+            yy.dotAST+= hijo+' [label="'+'arroba'+'"];'+'\n'; 
+            yy.dotAST += id+'--'+hijo+';'+'\n';
+            yy.dotAST += id+'--'+$$[$0].idAST+';'+'\n';
+    
+            //CST
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'arroba'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+    
+            var ob = new Arroba($$[$0].objeto, _$[$0-1].first_line, _$[$0-1].first_column); 
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> arroba SIGUIENTE_ARROBA",""); ingresarRegla(regla);
+        
+    break;
+    case 16:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIMBOLOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new SimbolosXpath(TiposXpath.ASTERISCO,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> asterisco",""); ingresarRegla(regla);
+        
+    break;
+    case 17:
+    //antes debe de haber un /id/ o //id/ etc, sino error semantico{
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIMBOLOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'dosPuntosConsecutivos'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+    
+            var ob = new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> dosPuntosConsecutivos",""); ingresarRegla(regla);
+        
+    break;
+    case 18:
+    //antes debe de haber un /id/  //id/ etc, sino error semantico{
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIMBOLOS'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'punto'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob = new SimbolosXpath(TiposXpath.PUNTO,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> punto",""); ingresarRegla(regla);
+        
+    break;
+    case 19:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$=  new ObjetoA($$[$0].objeto,id, id2);
+            
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> FUNCION",""); ingresarRegla(regla);
+        
+    break;
+    case 20:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$=  new ObjetoA($$[$0].objeto,id, id2);
+            
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> TIPO_ID",""); ingresarRegla(regla);
+        
+    break;
+    case 21:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'SIMBOLOS'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$ =  new ObjetoA($$[$0].objeto,id, id2);
+            
+            var regla = new Regla("GRAMATICAL","SIMBOLOS-> TIPO_ID",""); ingresarRegla(regla);
+        
+    break;
+    case 22:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+            
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIGUIENTE_ARROBA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'identificador'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+                    
+            var ob = new Dato($$[$0], _$[$0].first_line, _$[$0].first_column); 
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_ARROBA-> identificador",""); ingresarRegla(regla);
+        
+    break;
+    case 23:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIGUIENTE_ARROBA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new SimbolosXpath(TiposXpath.ASTERISCO,_$[$0].first_line, _$[$0].first_column);
+    
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_ARROBA-> asterisco",""); ingresarRegla(regla);
+        
+    break;
+    case 24:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'funcionNode'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new Funcion(TiposXpath.FUNCION_NODE,_$[$0].first_line, _$[$0].first_column);
+    
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","FUNCION-> funcionNode",""); ingresarRegla(regla);
+        
+    break;
+    case 25:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'funcionText'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new Funcion(TiposXpath.FUNCION_TEXT,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","FUNCION-> funcionText",""); ingresarRegla(regla);
+        
+    break;
+    case 26:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'funcionLast'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+yy.text+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new Funcion(TiposXpath.FUNCION_LAST,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","FUNCION-> funcionLast",""); ingresarRegla(regla);
+        
+    break;
+    case 27:
+    
+            var regla = new Regla("GRAMATICAL","FUNCION-> funcionPosition",""); ingresarRegla(regla);
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'FUNCION'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'funcionPosition'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+yytext+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new Funcion(TiposXpath.FUNCION_POSITION,_$[$0].first_line, _$[$0].first_column);
+    
+            this.$  = new ObjetoA(ob, id, padre);
+    
+        
+    break;
+    case 28:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+'::'+'"];'+'\n'; 
+            yy.dotAST += id+'--'+$$[$0-3].idAST+';'+'\n';
+            yy.dotAST += id+'--'+$$[$0-1].idAST+';'+'\n';
+    
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'METODOS'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'dos puntos'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+'::'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-3].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+    
+            var ob = new Metodo($$[$0-3].objeto,$$[$0].objeto,_$[$0-3].first_line, _$[$0-3].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","METODOS-> PALABRA_RESERVADA  dosPuntos dosPuntos SIGUIENTE_METODO","return objetA(objeto, idAST, idCST);"); ingresarRegla(regla);
+        
+    break;
+    case 29:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'ancestor1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob=TiposXpath.METODO_ANCESTOR;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> ancestor1",""); ingresarRegla(regla);
+        
+    break;
+    case 30:
+    
+            var id =++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'ancestor_or_self1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob =TiposXpath.METODO_ANCESTOR_OR_SELF;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> ancestor_or_self1",""); ingresarRegla(regla);
+        
+    break;
+    case 31:
+    
+            
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'attribute1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob=TiposXpath.METODO_ATRIBUTE;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> attribute1",""); ingresarRegla(regla);
+        
+    break;
+    case 32:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'child1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+        
+            var ob=TiposXpath.METODO_CHILD;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> child1",""); ingresarRegla(regla);
+        
+    break;
+    case 33:
+    
+            var id =++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'descendant1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob =TiposXpath.METODO_DESCENDANT;
+    
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> descendant1",""); ingresarRegla(regla);
+        
+    break;
+    case 34:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'descendant_or_self1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob =TiposXpath.METODO_METODO_DESCENDANT_OR_SELF;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> following1",""); ingresarRegla(regla);
+        
+    break;
+    case 35:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+yytext+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'following1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob=TiposXpath.METODO_FOLLOWING;
+            this.$  = new ObjetoA(ob, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> following1",""); ingresarRegla(regla);
+        
+    break;
+    case 36:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'following_sibling1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+             
+            var ob=TiposXpath.METODO_FOLLOWING_SIGLING;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> following_sibling1",""); ingresarRegla(regla);
+        
+    break;
+    case 37:
+    
+            var id =++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'parent1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            var ob=TiposXpath.METODO_PARENT;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> preceding1",""); ingresarRegla(regla);
+        
+    break;
+    case 38:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'preceding1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob=TiposXpath.METODO_PRECEDING;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> preceding1",""); ingresarRegla(regla);
+        
+    break;
+    case 39:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'preceding_sibling1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob=TiposXpath.METODO_PRECEDING_SIBLING;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> preceding_sibling1",""); ingresarRegla(regla);
+        
+    break;
+    case 40:
+    
+            var id =++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'PALABRA_RESERVADA'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'self1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob= TiposXpath.METODO_SELF;
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","PALABRA_RESERVADA-> self1",""); ingresarRegla(regla);
+        
+    break;
+    case 41:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new ObjetoA($$[$0].objeto,id, id2);
+    
+            this.$  = new ObjetoA($$[$0].Objeto, id, id2);
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> FUNCION",""); ingresarRegla(regla);
+        
+    break;
+    case 42:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var padre=++yy.idCST;
+            yy.dotCST+= yy.idCST+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n'; 
+            yy.dotCST += yy.idCST+'--'+$$[$0].idCST+';'+'\n';
+    
+            this.$  = new ObjetoA($$[$0].Objeto, id, padre);
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto",""); ingresarRegla(regla);
+        
+    break;
+    case 43:
+    //a partir de aqui verificar que sea logico para ver si se toma o no estas 3 producciones{
+            var id =++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob = new SimbolosXpath(TiposXpath.ASTERISCO,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto",""); ingresarRegla(regla);
+        
+    break;
+    case 44:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'punto'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var ob = new SimbolosXpath(TiposXpath.PUNTO,_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> punto","return nuevo tipoSImboloXPATH"); ingresarRegla(regla);
+        
+    break;
+    case 45:
+    
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIGUIENTE_METODO'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'dosPuntos'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var ob= new SimbolosXpath(TiposXpath.DOSPUNTOSCONSECUTIVOS,_$[$0].first_line, _$[$0].first_column);
+    
+            this.$  = new ObjetoA(ob, id, padre);
+            var regla = new Regla("GRAMATICAL","SIGUIENTE_METODO-> dosPuntos",""); ingresarRegla(regla);
+        
+    break;
+    case 46:
+    //bookstore{
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+    
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'TIPO_ID'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'identificador'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            
+            var idS= new IdSimple($$[$0],_$[$0].first_line, _$[$0].first_column);
+            this.$  = new ObjetoA(idS, id, padre);
+            var regla = new Regla("GRAMATICAL","ARREGLO_ID-> identificador","return idSimple"); ingresarRegla(regla);
+        
+    break;
+    case 47:
+     // booksotre[ operaciones ]{
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'TIPO_ID'+'"];'+'\n'; 
+            var hijo =++yy.idAST;
+            yy.dotCST+= hijo+' [label="'+$$[$0-1]+'"];'+'\n'; 
+    
+            yy.dotAST += padre1+'--'+hijo+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'TIPO_ID'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'identificador'+'"];'+'\n'; 
+            var hijo1 =++yy.idCST;
+            yy.dotCST+= hijo1+' [label="'+$$[$0-1]+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo1+';'+'\n';
+    
+            var obj = new IdCompuesto($$[$0-1],$$[$0].objeto,_$[$0-1].first_line, _$[$0-1].first_column);
+    
+            this.$  = new ObjetoA(obj, padre1, padre);
+            var regla = new Regla("GRAMATICAL","ARREGLO_ID-> identificador ARREGLOS_ID",""); ingresarRegla(regla);
+        
+    break;
+    case 48:
+    
+            //AST
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'ARREGLOS_ID'+'"];'+'\n'; 
+    
+            yy.dotAST += padre1+'--'+$$[$0-1].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            //CST		6
+            var padre=++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'ARREGLOS_ID'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-1].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            var obj = [$$[$0-1].objeto];
+            obj.push($$[$0].objeto); 		
+            this.$  = new ObjetoA(obj, padre1, padre);
+            var regla = new Regla("GRAMATICAL","ARREGLO_ID-> ARREGLOS_ID ARREGLO_ID","agregar Arreglo_ID a arreglos,\n return arrreglos;"); ingresarRegla(regla);
+        
+    break;
+    case 49:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+=  id2 +' [label="'+'ARREGLOS_ID'+'"];'+'\n'; 
+            yy.dotCST += id2 +'--'+$$[$0].idCST+';'+'\n';
+            this.$ = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","ARREGLO_ID->  corcheteAbierto OPERACIONES_ARREGLO corcheteCerrado",""); ingresarRegla(regla);
+        
+    break;
+    case 50:
+    
+            //AST
+            var id = $$[$0-1].idAST;
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'F'+'"];'+'\n'; 
+    
+            var hijo1 =++yy.idCST;										
+            yy.dotCST+= hijo1+' [label="'+'corcheteAbierto'+'"];'+'\n';	
+            var hijo12 =++yy.idCST;										
+            yy.dotCST+= hijo12+' [label="'+'['+'"];'+'\n';	
+    
+            var hijo2 =++yy.idCST;										
+            yy.dotCST+= hijo2+' [label="'+'corcheteCerrado'+'"];'+'\n';			
+            var hijo22 =++yy.idCST;										
+            yy.dotCST+= hijo22+' [label="'+']'+'"];'+'\n';				
+    
+            yy.dotCST +=padre+'--'+hijo1+';'+'\n';						
+            yy.dotCST += padre+'--'+$$[$0-1].idCST+';'+'\n';	
+            yy.dotCST += padre+'--'+hijo2+';'+'\n';						
+            yy.dotCST += hijo1+'--'+hijo12+';'+'\n';			
+            yy.dotCST += hijo2+'--'+hijo22+';'+'\n\n-------\n\n';			
+    
+            var ob = new Predicado($$[$0-1].objeto,_$[$0-2].first_line, _$[$0-2].first_column);	
+            var objeto = new objetoA(ob, id, padre);
+            this.$= objeto;
+            var regla = new Regla("GRAMATICAL","ARREGLO_ID->  corcheteAbierto OPERACIONES_ARREGLO corcheteCerrado","return new Predicado"); ingresarRegla(regla);
+        
+    break;
+    case 51:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'OPERACIONES_ARREGLO'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new objetoA($$[$0].objeto,id, id2);
+            this.$= objeto;
+    
+            var regla = new Regla("GRAMATICAL","OPERACIONES_ARREGLO->  OPERACION_LOGICA ","return OPERACION_LOGICA"); ingresarRegla(regla);
+        
+    break;
+    case 52:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'OPERACIONES_ARREGLO'+'"];'+'\n'; 
+            yy.dotCST +=id2+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new objetoA($$[$0].objeto,id, id2);
+            this.$= objeto;
+    
+            var regla = new Regla("GRAMATICAL","OPERACIONES_ARREGLO->  OPERACION_RELACIONAL ","return OPERACION_RELACIONAL"); ingresarRegla(regla);
+        
+    break;
+    case 53:
+    
+            //AST=
+            yy.dotAST += $$[$0-1].idAST+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += $$[$0-1].idAST+'--'+$$[$0].idAST+';'+'\n\n-----\n\n';
+            //CST
+            var id =++yy.idCST;
+            yy.dotCST+= id+' [label="'+'OPERACION_LOGICA'+'"];'+'\n'; 
+            yy.dotCST += id+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST +=id+'--'+$$[$0-1].idCST+';'+'\n';
+            yy.dotCST += id+'--'+$$[$0].idCST+';'+'\n\n-----\n\n';
+    
+            var opL = new OperacionLogica($$[$0-2].objeto,$$[$0].objeto,$$[$0-1].objeto,_$[$0-2].first_line, _$[$0-2].first_column);
+            
+            this.$ = ObjetoA(opL, $$[$0-1].idAST, id);;
+    
+            var regla = new Regla("GRAMATICAL","OPERACION_LOGICA->  OPERACION_RELACIONAL SIMBOLOS_LOGICOS OPERACION_RELACIONAL",""); ingresarRegla(regla);
+        
+    break;
+    case 54:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n\n-----\n\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'and1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n\n-----\n\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA( Operador.AND, id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS_LOGICOS->  and1",""); ingresarRegla(regla);
+        
+    break;
+    case 55:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n\n-----\n\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'or1'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n\n-----\n\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA(Operador.OR , id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS_LOGICOS->  or1",""); ingresarRegla(regla);
+        
+    break;
+    case 56:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'mayorque'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA($$[$0] , id, padre);
+    
+            var regla = new Regla("GRAMATICAL","SIMBOLOS_RELACIONALES->  mayorque",""); ingresarRegla(regla);
+        
+    break;
+    case 57:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'menorque'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA($$[$0] , id, padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal",""); ingresarRegla(regla);
+        
+    break;
+    case 58:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'mayorIgual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA($$[$0],id, padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal",""); ingresarRegla(regla);
+        
+    break;
+    case 59:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'menorIgual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA($$[$0],id, padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal",""); ingresarRegla(regla);
+        
+    break;
+    case 60:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'igual'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            this.$ = new ObjetoA($$[$0] ,id , padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal",""); ingresarRegla(regla);
+    
+        
+    break;
+    case 61:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'SIMBOLOS_RELACIONALES'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'diferenteQue'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+        
+            this.$ = new ObjetoA($$[$0],id, padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal",""); ingresarRegla(regla);
+        
+    break;
+    case 62:
+    
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'+'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'mas'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+'*'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+    
+            var opA = new OperacionAritmetica($$[$0-2].objeto ,$$[$0].objeto ,Operador.SUMA,_$[$0-2].first_line, _$[$0-2].first_column);
+            this.$ = new ObjetoA(opA,padre1, padre);
+            var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> OPERACION_ARITMETICA mas T1","crear nodos AST; crear nodos CST; Return nuevaOperacion Aritmetica SUMA;"); ingresarRegla(regla);
+        
+    break;
+    case 63:
+    
+            //AST
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'-'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            //CST
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'menos'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+'-'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+            
+            var opA = new OperacionAritmetica($$[$0-2].objeto,$$[$0].objeto,Operador.RESTA,_$[$0-2].first_line, _$[$0-2].first_column);
+            this.$ = new ObjetoA(opA,padre1, padre);
+            var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> OPERACION_ARITMETICA menos T1","crear nodos AST; crear nodos CST; Return nuevaOperacion Aritmetica RESTA;"); ingresarRegla(regla);
+        
+    break;
+    case 64:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'OPERACION_ARITMETICA'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$ = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","OPERACION_ARITMETICA-> T1 ","crear nodos AST; crear nodos CST; Return T1"); ingresarRegla(regla);
+        
+    break;
+    case 65:
+    
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'%'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'T'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'modulo'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+'%'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+    
+            var opA= new OperacionAritmetica($$[$0-2].objeto ,$$[$0].objeto ,Operador.MODULO,_$[$0-2].first_line, _$[$0-2].first_column);
+            
+            this.$ = new ObjetoA(opA,padre1, padre);
+    
+            var regla = new Regla("GRAMATICAL","T1-> T1 modulo T",""); ingresarRegla(regla);
+        
+    break;
+    case 66:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'T1'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$ = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","T1-> T",""); ingresarRegla(regla);
+        
+    break;
+    case 67:
+    
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'*'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'T'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'asterisco'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+'*'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+            
+            var opA = new OperacionAritmetica($$[$0-2].objeto,$$[$0].objeto ,Operador.MULTIPLICACION,_$[$0-2].first_line, _$[$0-2].first_column);
+            this.$ = new ObjetoA(opA,padre1, padre);
+            var regla = new Regla("GRAMATICAL","T-> T asterisco F ",""); ingresarRegla(regla);
+        
+    break;
+    case 68:
+    
+            var padre1 =++yy.idAST;
+            yy.dotAST+= padre1+' [label="'+'div'+'"];'+'\n'; 
+            yy.dotAST += padre1+'--'+$$[$0-2].idAST+';'+'\n';
+            yy.dotAST += padre1+'--'+$$[$0].idAST+';'+'\n';
+    
+            var padre =++yy.idCST;
+            yy.dotCST+= padre+' [label="'+'T'+'"];'+'\n'; 
+            var hijo =++yy.idCST;
+            yy.dotCST+= hijo+' [label="'+'dividir'+'"];'+'\n'; 
+            var hijo2 =++yy.idCST;
+            yy.dotCST+= hijo2+' [label="'+'div'+'"];'+'\n'; 
+            yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+            yy.dotCST += padre+'--'+hijo+';'+'\n';
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';
+            
+            var opA = new OperacionAritmetica($$[$0-2].objeto,$$[$0].objeto,Operador.DIVISION,_$[$0-2].first_line, _$[$0-2].first_column);
+            this.$ = new ObjetoA(opA,padre1, padre);
+            var regla = new Regla("GRAMATICAL","T-> T dividir F",""); ingresarRegla(regla);
+        
+    break;
+    case 69:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2 +' [label="'+'T'+'"];'+'\n'; 
+            yy.dotCST+= id2 +'--'+$$[$0].idCST+';'+'\n';
+            this.$ = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","T-> F","devolver nodoAAST, crear NodoCST, devolver F;"); ingresarRegla(regla);
+        
+    break;
+    case 70:
+    
+            //AST
+            var id = $$[$0].idAST;
+            //CST
+            var id2=++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'F'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            this.$ = new ObjetoNodo($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","F-> TIPOIGUALAR",""); ingresarRegla(regla);
+        
+    break;
+    case 71:
+    
+            //AST
+            var id =$$[$0-1].idAST;
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'F'+'"];'+'\n';  
+            var hijo1 =++yy.idCST;										
+            yy.dotCST+= hijo1+' [label="'+'parizq'+'"];'+'\n';			 
+            var hijo12 =++yy.idCST;										
+            yy.dotCST+= hijo12+' [label="'+'('+'"];'+'\n';				
+            var hijo2 =++yy.idCST;										
+            yy.dotCST+= hijo2+' [label="'+'parder'+'"];'+'\n';			
+            var hijo22 =++yy.idCST;										
+            yy.dotCST+= hijo22+' [label="'+')'+'"];'+'\n';				
+    
+            yy.dotCST +=padre+'--'+hijo1+';'+'\n';						
+            yy.dotCST += padre+'--'+$$[$0-1].idCST+';'+'\n';	
+            yy.dotCST += padre+'--'+hijo2+';'+'\n';						
+            yy.dotCST += hijo1+'--'+hijo12+';'+'\n';			
+            yy.dotCST += hijo2+'--'+hijo22+';'+'\n';		
+    
+            this.$ = new ObjetoNodo($$[$0-1].objeto,id, padre);
+    
+            var regla = new Regla("GRAMATICAL","F-> parizq OPERACION_ARITMETICA parder",""); ingresarRegla(regla);
+        
+    break;
+    case 72:
+    
+            var id =++yy.idAST;
+            yy.dotAST+= id+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'TIPO_IGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'entero'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+    
+            var dato = new Dato($$[$0], _$[$0].first_line, _$[$0].first_column); 
+    
+            this.$ = new objetoA(dato,id, padre);
+    
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> entero",""); ingresarRegla(regla);
+        
+    break;
+    case 73:
+    
+            //AST
+            var id=++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'TIPO_IGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'decimal'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            
+            var dato = new Dato($$[$0], _$[$0].first_line, _$[$0].first_column); 
+            this.$ = new ObjetoA(dato,id, padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> decimal",""); ingresarRegla(regla);
+    
+        
+    break;
+    case 74:
+    
+            
+            var padre2 =++yy.idAST;
+            yy.dotAST+= padre2+' [label="'+'TIPOIGUALAR'+'"];'+'\n'; 
+            var hijo =++yy.idAST;
+            yy.dotAST+= hijo+' [label="'+'arroba'+'"];'+'\n'; 
+    
+            yy.dotAST += padre2+'--'+hijo+';'+'\n';
+            yy.dotAST += padre2+'--'+$$[$0].idAST+';'+'\n';
+            
+            
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= padre+' [label="'+'TIPOIGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'arroba'+'"];'+'\n';			// yydotCST += 6 [label='arroba'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+'@'+'"];'+'\n';				// yydotCST += 7 [label='@'];
+    
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n';						//	yydotCST+= 5 -- 4
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotcst+= 6 -- 7 
+    
+            var arroba = new Arroba($$[$0], _$[$0-1].first_line, _$[$0-1].first_column);
+    
+            this.$ = new ObjetoA(arroba, padre2, padre);
+    
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> SIGUIENTE_ARROBA","retorna nuevo objeto(objetoA, idAST,idCST);;"); ingresarRegla(regla);//return 5;
+        
+    break;
+    case 75:
+    
+            //AST
+            var id =++yy.idAST;
+            yy.dotAST+= yy.idAST+' [label="'+$$[$0]+'"];'+'\n'; 
+            //CST
+            var padre=++yy.idCST;//padre = 5;
+            yy.dotCST+= yy.idCST+' [label="'+'TIPO_IGUALAR'+'"];'+'\n';  // yydotCST += 5 [label='TIPOIGUALAR'];
+            var hijo =++yy.idCST;										// hijo = 6; 
+            yy.dotCST+= hijo+' [label="'+'cadena'+'"];'+'\n';			// yydotCST += 6 [label='cadena'];
+            var hijo2 =++yy.idCST;										// hijo2 = 7; 
+            yy.dotCST+= hijo2+' [label="'+$$[$0]+'"];'+'\n';				// yydotCST += 7 [label='@'];
+            yy.dotCST +=padre+'--'+hijo+';'+'\n';						//	yydotCST+= 5 -- 6
+            yy.dotCST += hijo+'--'+hijo2+';'+'\n';						//	yydotCST+= 6 -- 7
+            var dato = new Dato($$[$0], _$[$0].first_line, _$[$0].first_column); 
+            this.$ = new ObjetoA(dato,id, padre);
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> cadena","retorna objetoA(nuevoDato, idAst, idCst);"); ingresarRegla(regla);
+        
+    break;
+    case 76:
+    
+            var id =$$[$0].idAST;
+    
+            var id2 =++yy.idCST;
+            yy.dotCST+= id2+' [label="'+'TIPO_IGUALAR'+'"];'+'\n'; 
+            yy.dotCST += id2+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> CONSULTAS",""); ingresarRegla(regla);
+            this.$ = objeto;
+        
+    break;
+    case 77:
+    
+            var id =$$[$0].idAST;
+    
+            var id2 =++yy.idCST;
+            yy.dotCST+= yy.idCST+' [label="'+'TIPO_IGUALAR'+'"];'+'\n'; 
+            yy.dotCST += yy.idCST+'--'+$$[$0].idCST+';'+'\n';
+            var objeto = new ObjetoA($$[$0].objeto,id, id2);
+    
+            var regla = new Regla("GRAMATICAL","TIPOIGUALAR-> METODOS",""); ingresarRegla(regla);
+            this.$ = objeto;
+        
+    break;
+    case 78:
+    
+                yy.dotAST += $$[$0-1].idAST+'--'+$$[$0-2].idAST+';'+'\n';
+                yy.dotAST += $$[$0-1].idAST+'--'+$$[$0].idAST+';'+'\n\n-----\n\n';
+                var id =$$[$0-1].idAST;
+    
+                var padre =++yy.idCST;
+                yy.dotCST+= padre+' [label="'+'OPERACION_RELACIONAL'+'"];'+'\n'; 
+                yy.dotCST += padre+'--'+$$[$0-2].idCST+';'+'\n';
+                yy.dotCST += padre+'--'+$$[$0-1].idCST+';'+'\n';
+                yy.dotCST += padre+'--'+$$[$0].idCST+';'+'\n\n-----\n\n';
+    
+                var opR = new OperacionRelacional($$[$0-2].objeto,$$[$0].objeto,$$[$0-1].objeto,_$[$0-2].first_line, _$[$0-2].first_column);
+                this.$ = new ObjetoA(opR,id, padre);
+                var regla = new Regla("GRAMATICAL","OPERACION_RELACIONAL->  PERACION_ARITMETICA SIMBOLOS_RELACIONALES OPERACION_ARITMETICA","return objetoN");
+                ingresarRegla(regla);
+                 
+            
+    break;
+    case 79:
+    
+                //AST
+                var id = $$[$0].idAST;
+                //CST
+                var id2=++yy.idCST;
+                yy.dotCST+= yy.idCST+' [label="'+'OPERACION_RELACIONAL'+'"];'+'\n'; 
+                yy.dotCST += yy.idCST+'--'+$$[$0].idCST+';'+'\n';
+                this.$ = new ObjetoA($$[$0].objeto,id, id2);
+                var regla = new Regla("GRAMATICAL","OPERACION_RELACIONAL->  OPERACION_ARITMETICA",""); ingresarRegla(regla);
+            
+    break;
     }
-},
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
-    var args = lstack.slice.call(arguments, 1);
-    var lexer = Object.create(this.lexer);
-    var sharedState = { yy: {} };
-    for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
+    },
+    table: [{2:[1,3],3:1,4:2,7:4,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8},{1:[3]},{5:[1,18],6:[1,19]},{1:[2,2],8:20,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8},o($V9,[2,4],{9:6,10:7,13:10,8:21,11:$V0,12:$V1,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8}),o($Va,[2,6]),o($Va,[2,8]),o($Va,[2,9]),o($Va,[2,10]),o($Va,[2,11]),o($Va,[2,12]),{10:29,11:$Vb,13:27,15:22,17:$Vc,19:$Vd,20:$Ve,21:28,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},{10:29,11:$Vb,13:27,15:43,17:$Vc,19:$Vd,20:$Ve,21:28,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq},o($Va,[2,46],{41:44,42:45,43:$Vr}),o($Va,[2,24]),o($Va,[2,25]),o($Va,[2,26]),o($Va,[2,27]),{1:[2,1]},{2:$Vs,7:47,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8},o($Va,[2,7]),o($Va,[2,5]),o($Va,[2,13]),{18:49,19:$Vt,22:$Vu},o($Va,[2,16]),o($Va,[2,17]),o($Va,[2,18]),o($Va,[2,19]),o($Va,[2,20]),o($Va,[2,21]),{12:[1,52]},{12:[2,29]},{12:[2,30]},{12:[2,31]},{12:[2,32]},{12:[2,33]},{12:[2,34]},{12:[2,35]},{12:[2,36]},{12:[2,37]},{12:[2,38]},{12:[2,39]},{12:[2,40]},o($Va,[2,14]),o($Va,[2,47],{42:53,43:$Vr}),o($Vv,[2,49]),{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,44:54,46:55,47:56,58:57,60:58,63:59,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},o($V9,[2,3],{9:6,10:7,13:10,8:21,11:$V0,12:$V1,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8}),{8:20,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8},o($Va,[2,15]),o($Va,[2,22]),o($Va,[2,23]),{12:[1,69]},o($Vv,[2,48]),{45:[1,70]},{45:[2,51]},{45:[2,52],48:71,49:[1,72],50:[1,73]},o($VB,[2,79],{51:74,52:[1,77],53:[1,78],54:[1,79],55:[1,80],56:[1,81],57:[1,82],59:$VC,61:$VD}),o($VE,[2,64],{62:$VF}),o($VG,[2,66],{19:$VH,65:$VI}),o($VJ,[2,69]),o($VJ,[2,70]),{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,58:86,60:58,63:59,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},o($VJ,[2,72]),o($VJ,[2,73]),{18:87,19:$Vt,22:$Vu},o($VJ,[2,75]),o($VJ,[2,76],{9:6,10:7,13:10,8:21,11:$V0,12:$V1,14:$V2,16:$V3,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8}),o($VJ,[2,77]),{10:90,11:[1,92],12:[1,93],13:89,19:[1,91],22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,28:88},o($Vv,[2,50]),{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,47:94,58:57,60:58,63:59,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},o($VK,[2,54]),o($VK,[2,55]),{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,58:95,60:58,63:59,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,60:96,63:59,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,60:97,63:59,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},o($VK,[2,56]),o($VK,[2,57]),o($VK,[2,58]),o($VK,[2,59]),o($VK,[2,60]),o($VK,[2,61]),{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,63:98,64:60,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,64:99,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},{2:$Vs,7:67,8:5,9:6,10:7,11:$V0,12:$V1,13:10,14:$V2,16:$V3,17:$Vw,21:68,22:$V4,23:$V5,24:$V6,25:$V7,26:$V8,27:30,29:$Vf,30:$Vg,31:$Vh,32:$Vi,33:$Vj,34:$Vk,35:$Vl,36:$Vm,37:$Vn,38:$Vo,39:$Vp,40:$Vq,64:100,66:61,67:$Vx,69:$Vy,70:$Vz,71:$VA},{59:$VC,61:$VD,68:[1,101]},o($VJ,[2,74]),o($Va,[2,28]),o($Va,[2,41]),o($Va,[2,42]),o($Va,[2,43]),o($Va,[2,44]),o($Va,[2,45]),{45:[2,53]},o($VB,[2,78],{59:$VC,61:$VD}),o($VE,[2,62],{62:$VF}),o($VE,[2,63],{62:$VF}),o($VG,[2,65],{19:$VH,65:$VI}),o($VJ,[2,67]),o($VJ,[2,68]),o($VJ,[2,71])],
+    defaultActions: {18:[2,1],31:[2,29],32:[2,30],33:[2,31],34:[2,32],35:[2,33],36:[2,34],37:[2,35],38:[2,36],39:[2,37],40:[2,38],41:[2,39],42:[2,40],55:[2,51],94:[2,53]},
+    parseError: function parseError(str, hash) {
+        if (hash.recoverable) {
+            this.trace(str);
+        } else {
+            var error = new Error(str);
+            error.hash = hash;
+            throw error;
         }
-    }
-    lexer.setInput(input, sharedState.yy);
-    sharedState.yy.lexer = lexer;
-    sharedState.yy.parser = this;
-    if (typeof lexer.yylloc == 'undefined') {
-        lexer.yylloc = {};
-    }
-    var yyloc = lexer.yylloc;
-    lstack.push(yyloc);
-    var ranges = lexer.options && lexer.options.ranges;
-    if (typeof sharedState.yy.parseError === 'function') {
-        this.parseError = sharedState.yy.parseError;
-    } else {
-        this.parseError = Object.getPrototypeOf(this).parseError;
-    }
-    function popStack(n) {
-        stack.length = stack.length - 2 * n;
-        vstack.length = vstack.length - n;
-        lstack.length = lstack.length - n;
-    }
+    },
+    parse: function parse(input) {
+        var self = this,
+            stack = [0],
+            tstack = [], // token stack
+            vstack = [null], // semantic value stack
+            lstack = [], // location stack
+            table = this.table,
+            yytext = '',
+            yylineno = 0,
+            yyleng = 0,
+            recovering = 0,
+            TERROR = 2,
+            EOF = 1;
+    
+        var args = lstack.slice.call(arguments, 1);
+    
+        //this.reductionCount = this.shiftCount = 0;
+    
+        var lexer = Object.create(this.lexer);
+        var sharedState = { yy: {} };
+        // copy state
+        for (var k in this.yy) {
+          if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+            sharedState.yy[k] = this.yy[k];
+          }
+        }
+    
+        lexer.setInput(input, sharedState.yy);
+        sharedState.yy.lexer = lexer;
+        sharedState.yy.parser = this;
+        if (typeof lexer.yylloc == 'undefined') {
+            lexer.yylloc = {};
+        }
+        var yyloc = lexer.yylloc;
+        lstack.push(yyloc);
+    
+        var ranges = lexer.options && lexer.options.ranges;
+    
+        if (typeof sharedState.yy.parseError === 'function') {
+            this.parseError = sharedState.yy.parseError;
+        } else {
+            this.parseError = Object.getPrototypeOf(this).parseError;
+        }
+    
+        function popStack (n) {
+            stack.length = stack.length - 2 * n;
+            vstack.length = vstack.length - n;
+            lstack.length = lstack.length - n;
+        }
+    
     _token_stack:
         var lex = function () {
             var token;
             token = lexer.lex() || EOF;
+            // if token isn't its numeric value, convert
             if (typeof token !== 'number') {
                 token = self.symbols_[token] || token;
             }
             return token;
-        };
-    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
-    while (true) {
-        state = stack[stack.length - 1];
-        if (this.defaultActions[state]) {
-            action = this.defaultActions[state];
-        } else {
-            if (symbol === null || typeof symbol == 'undefined') {
-                symbol = lex();
-            }
-            action = table[state] && table[state][symbol];
         }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
+    
+        var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+        while (true) {
+            // retreive state number from top of stack
+            state = stack[stack.length - 1];
+    
+            // use default actions if available
+            if (this.defaultActions[state]) {
+                action = this.defaultActions[state];
+            } else {
+                if (symbol === null || typeof symbol == 'undefined') {
+                    symbol = lex();
+                }
+                // read action for current state and first input
+                action = table[state] && table[state][symbol];
+            }
+    
+    _handle_error:
+            // handle parse error
+            if (typeof action === 'undefined' || !action.length || !action[0]) {
+                var error_rule_depth;
                 var errStr = '';
-                expected = [];
-                for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
+    
+                // Return the rule stack depth where the nearest error rule can be found.
+                // Return FALSE when no error recovery rule was found.
+                function locateNearestErrorRecoveryRule(state) {
+                    var stack_probe = stack.length - 1;
+                    var depth = 0;
+    
+                    // try to recover from error
+                    for(;;) {
+                        // check for error recovery rule in this state
+                        if ((TERROR.toString()) in table[state]) {
+                            return depth;
+                        }
+                        if (state === 0 || stack_probe < 2) {
+                            return false; // No suitable error recovery rule available.
+                        }
+                        stack_probe -= 2; // popStack(1): [symbol, action]
+                        state = stack[stack_probe];
+                        ++depth;
                     }
                 }
-                if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+    
+                if (!recovering) {
+                    // first see if there's any chance at hitting an error recovery rule:
+                    error_rule_depth = locateNearestErrorRecoveryRule(state);
+    
+                    // Report error
+                    expected = [];
+                    for (p in table[state]) {
+                        if (this.terminals_[p] && p > TERROR) {
+                            expected.push("'"+this.terminals_[p]+"'");
+                        }
+                    }
+                    if (lexer.showPosition) {
+                        errStr = 'Parse error on line '+(yylineno+1)+":\n"+lexer.showPosition()+"\nExpecting "+expected.join(', ') + ", got '" + (this.terminals_[symbol] || symbol)+ "'";
+                    } else {
+                        errStr = 'Parse error on line '+(yylineno+1)+": Unexpected " +
+                                      (symbol == EOF ? "end of input" :
+                                                  ("'"+(this.terminals_[symbol] || symbol)+"'"));
+                    }
+                    this.parseError(errStr, {
+                        text: lexer.match,
+                        token: this.terminals_[symbol] || symbol,
+                        line: lexer.yylineno,
+                        loc: yyloc,
+                        expected: expected,
+                        recoverable: (error_rule_depth !== false)
+                    });
+                } else if (preErrorSymbol !== EOF) {
+                    error_rule_depth = locateNearestErrorRecoveryRule(state);
                 }
-                this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected
-                });
-            }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
-                yyleng = lexer.yyleng;
-                yytext = lexer.yytext;
-                yylineno = lexer.yylineno;
-                yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
+    
+                // just recovered from another error
+                if (recovering == 3) {
+                    if (symbol === EOF || preErrorSymbol === EOF) {
+                        throw new Error(errStr || 'Parsing halted while starting to recover from another error.');
+                    }
+    
+                    // discard current lookahead and grab another
+                    yyleng = lexer.yyleng;
+                    yytext = lexer.yytext;
+                    yylineno = lexer.yylineno;
+                    yyloc = lexer.yylloc;
+                    symbol = lex();
                 }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
+    
+                // try to recover from error
+                if (error_rule_depth === false) {
+                    throw new Error(errStr || 'Parsing halted. No suitable error recovery rule available.');
+                }
+                popStack(error_rule_depth);
+    
+                preErrorSymbol = (symbol == TERROR ? null : symbol); // save the lookahead token
+                symbol = TERROR;         // insert generic error symbol as new lookahead
+                state = stack[stack.length-1];
+                action = table[state] && table[state][TERROR];
+                recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
             }
-            break;
-        case 2:
-            len = this.productions_[action[1]][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
+    
+            // this shouldn't happen, unless resolve defaults are off
+            if (action[0] instanceof Array && action.length > 1) {
+                throw new Error('Parse Error: multiple actions possible at state: '+state+', token: '+symbol);
             }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
+    
+            switch (action[0]) {
+                case 1: // shift
+                    //this.shiftCount++;
+    
+                    stack.push(symbol);
+                    vstack.push(lexer.yytext);
+                    lstack.push(lexer.yylloc);
+                    stack.push(action[1]); // push state
+                    symbol = null;
+                    if (!preErrorSymbol) { // normal execution/no error
+                        yyleng = lexer.yyleng;
+                        yytext = lexer.yytext;
+                        yylineno = lexer.yylineno;
+                        yyloc = lexer.yylloc;
+                        if (recovering > 0) {
+                            recovering--;
+                        }
+                    } else {
+                        // error just occurred, resume old lookahead f/ before error
+                        symbol = preErrorSymbol;
+                        preErrorSymbol = null;
+                    }
+                    break;
+    
+                case 2:
+                    // reduce
+                    //this.reductionCount++;
+    
+                    len = this.productions_[action[1]][1];
+    
+                    // perform semantic action
+                    yyval.$ = vstack[vstack.length-len]; // default to $$ = $1
+                    // default location, uses first token for firsts, last for lasts
+                    yyval._$ = {
+                        first_line: lstack[lstack.length-(len||1)].first_line,
+                        last_line: lstack[lstack.length-1].last_line,
+                        first_column: lstack[lstack.length-(len||1)].first_column,
+                        last_column: lstack[lstack.length-1].last_column
+                    };
+                    if (ranges) {
+                      yyval._$.range = [lstack[lstack.length-(len||1)].range[0], lstack[lstack.length-1].range[1]];
+                    }
+                    r = this.performAction.apply(yyval, [yytext, yyleng, yylineno, sharedState.yy, action[1], vstack, lstack].concat(args));
+    
+                    if (typeof r !== 'undefined') {
+                        return r;
+                    }
+    
+                    // pop off stack
+                    if (len) {
+                        stack = stack.slice(0,-1*len*2);
+                        vstack = vstack.slice(0, -1*len);
+                        lstack = lstack.slice(0, -1*len);
+                    }
+    
+                    stack.push(this.productions_[action[1]][0]);    // push nonterminal (reduce)
+                    vstack.push(yyval.$);
+                    lstack.push(yyval._$);
+                    // goto new state = table[STATE][NONTERMINAL]
+                    newState = table[stack[stack.length-2]][stack[stack.length-1]];
+                    stack.push(newState);
+                    break;
+    
+                case 3:
+                    // accept
+                    return true;
             }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            stack.push(this.productions_[action[1]][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            newState = table[stack[stack.length - 2]][stack[stack.length - 1]];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
+    
         }
-    }
-    return true;
-}};
-/* generated by jison-lex 0.3.4 */
-var lexer = (function(){
-var lexer = ({
-
-EOF:1,
-
-parseError:function parseError(str, hash) {
-        if (this.yy.parser) {
-            this.yy.parser.parseError(str, hash);
-        } else {
-            throw new Error(str);
-        }
-    },
-
-// resets the lexer, sets new input
-setInput:function (input, yy) {
-        this.yy = yy || this.yy || {};
-        this._input = input;
-        this._more = this._backtrack = this.done = false;
-        this.yylineno = this.yyleng = 0;
-        this.yytext = this.matched = this.match = '';
-        this.conditionStack = ['INITIAL'];
-        this.yylloc = {
-            first_line: 1,
-            first_column: 0,
-            last_line: 1,
-            last_column: 0
-        };
-        if (this.options.ranges) {
-            this.yylloc.range = [0,0];
-        }
-        this.offset = 0;
-        return this;
-    },
-
-// consumes and returns one char from the input
-input:function () {
-        var ch = this._input[0];
-        this.yytext += ch;
-        this.yyleng++;
-        this.offset++;
-        this.match += ch;
-        this.matched += ch;
-        var lines = ch.match(/(?:\r\n?|\n).*/g);
-        if (lines) {
-            this.yylineno++;
-            this.yylloc.last_line++;
-        } else {
-            this.yylloc.last_column++;
-        }
-        if (this.options.ranges) {
-            this.yylloc.range[1]++;
-        }
-
-        this._input = this._input.slice(1);
-        return ch;
-    },
-
-// unshifts one char (or a string) into the input
-unput:function (ch) {
-        var len = ch.length;
-        var lines = ch.split(/(?:\r\n?|\n)/g);
-
-        this._input = ch + this._input;
-        this.yytext = this.yytext.substr(0, this.yytext.length - len);
-        //this.yyleng -= len;
-        this.offset -= len;
-        var oldLines = this.match.split(/(?:\r\n?|\n)/g);
-        this.match = this.match.substr(0, this.match.length - 1);
-        this.matched = this.matched.substr(0, this.matched.length - 1);
-
-        if (lines.length - 1) {
-            this.yylineno -= lines.length - 1;
-        }
-        var r = this.yylloc.range;
-
-        this.yylloc = {
-            first_line: this.yylloc.first_line,
-            last_line: this.yylineno + 1,
-            first_column: this.yylloc.first_column,
-            last_column: lines ?
-                (lines.length === oldLines.length ? this.yylloc.first_column : 0)
-                 + oldLines[oldLines.length - lines.length].length - lines[0].length :
-              this.yylloc.first_column - len
-        };
-
-        if (this.options.ranges) {
-            this.yylloc.range = [r[0], r[0] + this.yyleng - len];
-        }
-        this.yyleng = this.yytext.length;
-        return this;
-    },
-
-// When called from action, caches matched text and appends it on next action
-more:function () {
-        this._more = true;
-        return this;
-    },
-
-// When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
-reject:function () {
-        if (this.options.backtrack_lexer) {
-            this._backtrack = true;
-        } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
-                text: "",
-                token: null,
-                line: this.yylineno
+    
+        return true;
+    }};
+    
+        define('grammarXPATH',function () {
+                return {
+                    getParser: function () {
+                        return gramaticaxpath;
+                    }
+                };
             });
-
+    
+        var erroresLexicos = [];
+        var variables=[];
+        var erroresSintacticos = [];
+        var errorSemantico=[];
+        
+        var etiquetas=[];
+    
+    
+        //const {Dato} = require("../../../Scripts/ClasesXpath/Dato");
+    //const {OperacionAritmetica} = require("../../../Scripts/ClasesXpath/OperacionAritmetica");
+        //const {Operador} = require("../../../Scripts/ClasesXpath/Operador");
+        //const {OperacionRelacional} = require("../../../Scripts/ClasesXpath/OperacionRelacional");
+        //const {OperacionLogica} = require("../../../Scripts/ClasesXpath/OperacionLogica");
+        //const {Predicado} = require("../../../Scripts/ClasesXpath/Predicado");
+        //const {IdSimple} = require("../../../Scripts/ClasesXpath/IdSimple");
+        //const {IdCompuesto} = require("../../../Scripts/ClasesXpath/IdCompuesto");
+        //const {SimbolosXpath} = require("../../../Scripts/ClasesXpath/SimbolosXpath");
+        //const {TiposXpath} = require("../../../Scripts/ClasesXpath/TiposXpath");
+        //const {Metodo} = require("../../../Scripts/ClasesXpath/Metodo");
+        //const {Metodo} = require("../../../Scripts/ClasesXpath/Metodo");
+        //const {Funcion} = require("../../../Scripts/ClasesXpath/Funcion");
+        //const {Arroba} = require("../../../Scripts/ClasesXpath/Arroba");
+        //const {diagonalDobleC} = require("../../../Scripts/ClasesXpath/diagonalDobleC");
+        //const {diagonalSimpleS} = require("../../../Scripts/ClasesXpath/diagonalSimpleS"); 
+        var AUXid=0;
+        
+        
+        
+        //const {Error} = require('../../../Scripts/Errores/Error.js');
+        //const {Regla} = require("../../../Scripts/Arboles/Regla");
+        //const {ObjetoNodo} = require("../../Scripts/Arboles/ObjetoNodo");
+        //const {Atributo} = require("../../Scripts/clasesXML/Atributo");
+        //const {Nodo} = require("../../Scripts/clasesXML/Nodo");\
+        var AUXid=0;
+            
+        function unirErrores(){
+            erroresGramar[0]= erroresLexicos ;
+            erroresGramar[1]= erroresSintacticos;
+            erroresGramar[2]=errorSemantico;
+            
+            console.log(erroresGramar.length);
+            console.log(erroresGramar[0].length+'errores lexicos');
+            console.log(erroresGramar[1].length+'errores sintacticos');
+            console.log(erroresGramar[2].length +'errores semanticos');
         }
-        return this;
-    },
-
-// retain first n characters of the match
-less:function (n) {
-        this.unput(this.match.slice(n));
-    },
-
-// displays already matched input, i.e. for error messages
-pastInput:function () {
-        var past = this.matched.substr(0, this.matched.length - this.match.length);
-        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
-    },
-
-// displays upcoming input, i.e. for error messages
-upcomingInput:function () {
-        var next = this.match;
-        if (next.length < 20) {
-            next += this._input.substr(0, 20-next.length);
+    
+        function ingresarRegla(regla){
+            if(reglasxpath.length>0){
+                var reglas2=[];
+                reglas2.push(regla);
+                reglasxpath= reglas2.concat(reglasxpath);
+                console.log('agregando regla'+reglasxpath.length+' --- '+regla.getProduccion());
+            }else{
+                reglasxpath.push(regla);
+                console.log('agregando regla'+reglasxpath.length);
+            }
         }
-        return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
-    },
-
-// displays the character position where the lexing error occurred, i.e. for error messages
-showPosition:function () {
-        var pre = this.pastInput();
-        var c = new Array(pre.length + 1).join("-");
-        return pre + this.upcomingInput() + "\n" + c + "^";
-    },
-
-// test the lexed token: return FALSE when not a match, otherwise return token
-test_match:function(match, indexed_rule) {
-        var token,
-            lines,
-            backup;
-
-        if (this.options.backtrack_lexer) {
-            // save context
-            backup = {
-                yylineno: this.yylineno,
-                yylloc: {
-                    first_line: this.yylloc.first_line,
-                    last_line: this.last_line,
-                    first_column: this.yylloc.first_column,
-                    last_column: this.yylloc.last_column
-                },
-                yytext: this.yytext,
-                match: this.match,
-                matches: this.matches,
-                matched: this.matched,
-                yyleng: this.yyleng,
-                offset: this.offset,
-                _more: this._more,
-                _input: this._input,
-                yy: this.yy,
-                conditionStack: this.conditionStack.slice(0),
-                done: this.done
+    
+        function llenarArboles1(ast,cst){
+            ASTtree=ast;
+             CSTtree=cst;
+            console.log("-------CST--------");
+            console.log("DOT:",ast+'}');
+            console.log('-------AST--------');
+            console.log("DOT:",cst+'}');
+        }
+    /* generated by jison-lex 0.3.4 */
+    var lexer = (function(){
+    var lexer = ({
+    
+    EOF:1,
+    
+    parseError:function parseError(str, hash) {
+            if (this.yy.parser) {
+                this.yy.parser.parseError(str, hash);
+            } else {
+                throw new Error(str);
+            }
+        },
+    
+    // resets the lexer, sets new input
+    setInput:function (input, yy) {
+            this.yy = yy || this.yy || {};
+            this._input = input;
+            this._more = this._backtrack = this.done = false;
+            this.yylineno = this.yyleng = 0;
+            this.yytext = this.matched = this.match = '';
+            this.conditionStack = ['INITIAL'];
+            this.yylloc = {
+                first_line: 1,
+                first_column: 0,
+                last_line: 1,
+                last_column: 0
             };
             if (this.options.ranges) {
-                backup.yylloc.range = this.yylloc.range.slice(0);
+                this.yylloc.range = [0,0];
             }
-        }
-
-        lines = match[0].match(/(?:\r\n?|\n).*/g);
-        if (lines) {
-            this.yylineno += lines.length;
-        }
-        this.yylloc = {
-            first_line: this.yylloc.last_line,
-            last_line: this.yylineno + 1,
-            first_column: this.yylloc.last_column,
-            last_column: lines ?
-                         lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
-                         this.yylloc.last_column + match[0].length
-        };
-        this.yytext += match[0];
-        this.match += match[0];
-        this.matches = match;
-        this.yyleng = this.yytext.length;
-        if (this.options.ranges) {
-            this.yylloc.range = [this.offset, this.offset += this.yyleng];
-        }
-        this._more = false;
-        this._backtrack = false;
-        this._input = this._input.slice(match[0].length);
-        this.matched += match[0];
-        token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
-        if (this.done && this._input) {
-            this.done = false;
-        }
-        if (token) {
-            return token;
-        } else if (this._backtrack) {
-            // recover context
-            for (var k in backup) {
-                this[k] = backup[k];
+            this.offset = 0;
+            return this;
+        },
+    
+    // consumes and returns one char from the input
+    input:function () {
+            var ch = this._input[0];
+            this.yytext += ch;
+            this.yyleng++;
+            this.offset++;
+            this.match += ch;
+            this.matched += ch;
+            var lines = ch.match(/(?:\r\n?|\n).*/g);
+            if (lines) {
+                this.yylineno++;
+                this.yylloc.last_line++;
+            } else {
+                this.yylloc.last_column++;
             }
-            return false; // rule action called reject() implying the next rule should be tested instead.
-        }
-        return false;
-    },
-
-// return next match in input
-next:function () {
-        if (this.done) {
-            return this.EOF;
-        }
-        if (!this._input) {
-            this.done = true;
-        }
-
-        var token,
-            match,
-            tempMatch,
-            index;
-        if (!this._more) {
-            this.yytext = '';
-            this.match = '';
-        }
-        var rules = this._currentRules();
-        for (var i = 0; i < rules.length; i++) {
-            tempMatch = this._input.match(this.rules[rules[i]]);
-            if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
-                match = tempMatch;
-                index = i;
-                if (this.options.backtrack_lexer) {
-                    token = this.test_match(tempMatch, rules[i]);
-                    if (token !== false) {
-                        return token;
-                    } else if (this._backtrack) {
-                        match = false;
-                        continue; // rule action called reject() implying a rule MISmatch.
-                    } else {
-                        // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
-                        return false;
-                    }
-                } else if (!this.options.flex) {
-                    break;
+            if (this.options.ranges) {
+                this.yylloc.range[1]++;
+            }
+    
+            this._input = this._input.slice(1);
+            return ch;
+        },
+    
+    // unshifts one char (or a string) into the input
+    unput:function (ch) {
+            var len = ch.length;
+            var lines = ch.split(/(?:\r\n?|\n)/g);
+    
+            this._input = ch + this._input;
+            this.yytext = this.yytext.substr(0, this.yytext.length - len);
+            //this.yyleng -= len;
+            this.offset -= len;
+            var oldLines = this.match.split(/(?:\r\n?|\n)/g);
+            this.match = this.match.substr(0, this.match.length - 1);
+            this.matched = this.matched.substr(0, this.matched.length - 1);
+    
+            if (lines.length - 1) {
+                this.yylineno -= lines.length - 1;
+            }
+            var r = this.yylloc.range;
+    
+            this.yylloc = {
+                first_line: this.yylloc.first_line,
+                last_line: this.yylineno + 1,
+                first_column: this.yylloc.first_column,
+                last_column: lines ?
+                    (lines.length === oldLines.length ? this.yylloc.first_column : 0)
+                     + oldLines[oldLines.length - lines.length].length - lines[0].length :
+                  this.yylloc.first_column - len
+            };
+    
+            if (this.options.ranges) {
+                this.yylloc.range = [r[0], r[0] + this.yyleng - len];
+            }
+            this.yyleng = this.yytext.length;
+            return this;
+        },
+    
+    // When called from action, caches matched text and appends it on next action
+    more:function () {
+            this._more = true;
+            return this;
+        },
+    
+    // When called from action, signals the lexer that this rule fails to match the input, so the next matching rule (regex) should be tested instead.
+    reject:function () {
+            if (this.options.backtrack_lexer) {
+                this._backtrack = true;
+            } else {
+                return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. You can only invoke reject() in the lexer when the lexer is of the backtracking persuasion (options.backtrack_lexer = true).\n' + this.showPosition(), {
+                    text: "",
+                    token: null,
+                    line: this.yylineno
+                });
+    
+            }
+            return this;
+        },
+    
+    // retain first n characters of the match
+    less:function (n) {
+            this.unput(this.match.slice(n));
+        },
+    
+    // displays already matched input, i.e. for error messages
+    pastInput:function () {
+            var past = this.matched.substr(0, this.matched.length - this.match.length);
+            return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
+        },
+    
+    // displays upcoming input, i.e. for error messages
+    upcomingInput:function () {
+            var next = this.match;
+            if (next.length < 20) {
+                next += this._input.substr(0, 20-next.length);
+            }
+            return (next.substr(0,20) + (next.length > 20 ? '...' : '')).replace(/\n/g, "");
+        },
+    
+    // displays the character position where the lexing error occurred, i.e. for error messages
+    showPosition:function () {
+            var pre = this.pastInput();
+            var c = new Array(pre.length + 1).join("-");
+            return pre + this.upcomingInput() + "\n" + c + "^";
+        },
+    
+    // test the lexed token: return FALSE when not a match, otherwise return token
+    test_match:function (match, indexed_rule) {
+            var token,
+                lines,
+                backup;
+    
+            if (this.options.backtrack_lexer) {
+                // save context
+                backup = {
+                    yylineno: this.yylineno,
+                    yylloc: {
+                        first_line: this.yylloc.first_line,
+                        last_line: this.last_line,
+                        first_column: this.yylloc.first_column,
+                        last_column: this.yylloc.last_column
+                    },
+                    yytext: this.yytext,
+                    match: this.match,
+                    matches: this.matches,
+                    matched: this.matched,
+                    yyleng: this.yyleng,
+                    offset: this.offset,
+                    _more: this._more,
+                    _input: this._input,
+                    yy: this.yy,
+                    conditionStack: this.conditionStack.slice(0),
+                    done: this.done
+                };
+                if (this.options.ranges) {
+                    backup.yylloc.range = this.yylloc.range.slice(0);
                 }
             }
-        }
-        if (match) {
-            token = this.test_match(match, rules[index]);
-            if (token !== false) {
-                return token;
+    
+            lines = match[0].match(/(?:\r\n?|\n).*/g);
+            if (lines) {
+                this.yylineno += lines.length;
             }
-            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+            this.yylloc = {
+                first_line: this.yylloc.last_line,
+                last_line: this.yylineno + 1,
+                first_column: this.yylloc.last_column,
+                last_column: lines ?
+                             lines[lines.length - 1].length - lines[lines.length - 1].match(/\r?\n?/)[0].length :
+                             this.yylloc.last_column + match[0].length
+            };
+            this.yytext += match[0];
+            this.match += match[0];
+            this.matches = match;
+            this.yyleng = this.yytext.length;
+            if (this.options.ranges) {
+                this.yylloc.range = [this.offset, this.offset += this.yyleng];
+            }
+            this._more = false;
+            this._backtrack = false;
+            this._input = this._input.slice(match[0].length);
+            this.matched += match[0];
+            token = this.performAction.call(this, this.yy, this, indexed_rule, this.conditionStack[this.conditionStack.length - 1]);
+            if (this.done && this._input) {
+                this.done = false;
+            }
+            if (token) {
+                return token;
+            } else if (this._backtrack) {
+                // recover context
+                for (var k in backup) {
+                    this[k] = backup[k];
+                }
+                return false; // rule action called reject() implying the next rule should be tested instead.
+            }
             return false;
+        },
+    
+    // return next match in input
+    next:function () {
+            if (this.done) {
+                return this.EOF;
+            }
+            if (!this._input) {
+                this.done = true;
+            }
+    
+            var token,
+                match,
+                tempMatch,
+                index;
+            if (!this._more) {
+                this.yytext = '';
+                this.match = '';
+            }
+            var rules = this._currentRules();
+            for (var i = 0; i < rules.length; i++) {
+                tempMatch = this._input.match(this.rules[rules[i]]);
+                if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
+                    match = tempMatch;
+                    index = i;
+                    if (this.options.backtrack_lexer) {
+                        token = this.test_match(tempMatch, rules[i]);
+                        if (token !== false) {
+                            return token;
+                        } else if (this._backtrack) {
+                            match = false;
+                            continue; // rule action called reject() implying a rule MISmatch.
+                        } else {
+                            // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                            return false;
+                        }
+                    } else if (!this.options.flex) {
+                        break;
+                    }
+                }
+            }
+            if (match) {
+                token = this.test_match(match, rules[index]);
+                if (token !== false) {
+                    return token;
+                }
+                // else: this is a lexer rule which consumes input without producing a token (e.g. whitespace)
+                return false;
+            }
+            if (this._input === "") {
+                return this.EOF;
+            } else {
+                return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
+                    text: "",
+                    token: null,
+                    line: this.yylineno
+                });
+            }
+        },
+    
+    // return next match that has a token
+    lex:function lex() {
+            var r = this.next();
+            if (r) {
+                return r;
+            } else {
+                return this.lex();
+            }
+        },
+    
+    // activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
+    begin:function begin(condition) {
+            this.conditionStack.push(condition);
+        },
+    
+    // pop the previously active lexer condition state off the condition stack
+    popState:function popState() {
+            var n = this.conditionStack.length - 1;
+            if (n > 0) {
+                return this.conditionStack.pop();
+            } else {
+                return this.conditionStack[0];
+            }
+        },
+    
+    // produce the lexer rule set which is active for the currently active lexer condition state
+    _currentRules:function _currentRules() {
+            if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
+                return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
+            } else {
+                return this.conditions["INITIAL"].rules;
+            }
+        },
+    
+    // return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
+    topState:function topState(n) {
+            n = this.conditionStack.length - 1 - Math.abs(n || 0);
+            if (n >= 0) {
+                return this.conditionStack[n];
+            } else {
+                return "INITIAL";
+            }
+        },
+    
+    // alias for begin(condition)
+    pushState:function pushState(condition) {
+            this.begin(condition);
+        },
+    
+    // return the number of states currently on the stack
+    stateStackSize:function stateStackSize() {
+            return this.conditionStack.length;
+        },
+    options: {"case-insensitive":true},
+    performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
+    
+        if (!('idCST' in yy)) {
+            yy.idCST = 0;
+            yy.dotCST = 'graph{'+'\n';
         }
-        if (this._input === "") {
-            return this.EOF;
-        } else {
-            return this.parseError('Lexical error on line ' + (this.yylineno + 1) + '. Unrecognized text.\n' + this.showPosition(), {
-                text: "",
-                token: null,
-                line: this.yylineno
-            });
+        if (!('idAST' in yy)) {
+            yy.idAST = 0;
+            yy.dotAST = 'graph{'+'\n';
         }
-    },
-
-// return next match that has a token
-lex:function lex () {
-        var r = this.next();
-        if (r) {
-            return r;
-        } else {
-            return this.lex();
-        }
-    },
-
-// activates a new lexer condition state (pushes the new lexer condition state onto the condition stack)
-begin:function begin (condition) {
-        this.conditionStack.push(condition);
-    },
-
-// pop the previously active lexer condition state off the condition stack
-popState:function popState () {
-        var n = this.conditionStack.length - 1;
-        if (n > 0) {
-            return this.conditionStack.pop();
-        } else {
-            return this.conditionStack[0];
-        }
-    },
-
-// produce the lexer rule set which is active for the currently active lexer condition state
-_currentRules:function _currentRules () {
-        if (this.conditionStack.length && this.conditionStack[this.conditionStack.length - 1]) {
-            return this.conditions[this.conditionStack[this.conditionStack.length - 1]].rules;
-        } else {
-            return this.conditions["INITIAL"].rules;
-        }
-    },
-
-// return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available
-topState:function topState (n) {
-        n = this.conditionStack.length - 1 - Math.abs(n || 0);
-        if (n >= 0) {
-            return this.conditionStack[n];
-        } else {
-            return "INITIAL";
-        }
-    },
-
-// alias for begin(condition)
-pushState:function pushState (condition) {
-        this.begin(condition);
-    },
-
-// return the number of states currently on the stack
-stateStackSize:function stateStackSize() {
-        return this.conditionStack.length;
-    },
-options: {"case-insensitive":true},
-performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
-var YYSTATE=YY_START;
-switch($avoiding_name_collisions) {
-case 0:return 'xml1'; 
-break;
-case 1:return 'utf';
-break;
-case 2:return 'ascii1';
-break;
-case 3:return 'version';
-break;
-case 4:return 'encoding';
-break;
-case 5:return 61;
-break;
-case 6:return 49;
-break;
-case 7:return 48;
-break;
-case 8:return 22;
-break;
-case 9:return 23;
-break;
-case 10:return 24;
-break;
-case 11:return 25;
-break;
-case 12:return 29;
-break;
-case 13:return 28;
-break;
-case 14:return 30;
-break;
-case 15:return 31;
-break;
-case 16:return 33;	
-break;
-case 17:return 32;
-break;
-case 18:return 35;
-break;
-case 19:return 34;
-break;
-case 20:return 36;
-break;
-case 21:return 38;
-break;
-case 22:return 37;
-break;
-case 23:return 39;
-break;
-case 24:return 'ptcoma';
-break;
-case 25:return 11;
-break;
-case 26:return 66;
-break;
-case 27:return 67;
-break;
-case 28:return 42;
-break;
-case 29:return 44;
-break;
-case 30:return 55;
-break;
-case 31:return 54;
-break;
-case 32:return 53;
-break;
-case 33:return 52;
-break;
-case 34:return 56;
-break;
-case 35:return 57;
-break;
-case 36:return 19;
-break;
-case 37:return 10;
-break;
-case 38:return 58;
-break;
-case 39:return 60;
-break;
-case 40:return 18;
-break;
-case 41:return 13;
-break;
-case 42:return 15;
-break;
-case 43:return 64;
-break;
-case 44:return 'interrogacionC';
-break;
-case 45:return 16;
-break;
-case 46:return 9;
-break;
-case 47:
-break;
-case 48:
-break;
-case 49:return 69;
-break;
-case 50:return 68;
-break;
-case 51:return 21;
-break;
-case 52:return 70;
-break;
-case 53:return 'comilla';
-break;
-case 54:return 5;
-break;
-case 55: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
-break;
-}
-},
-rules: [/^(?:XML\b)/i,/^(?:UTF8\b)/i,/^(?:ASCII\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:mod\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:node\(\))/i,/^(?:text\(\))/i,/^(?:last\(\))/i,/^(?:position\(\))/i,/^(?:ancestor_or_self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant_or_self\b)/i,/^(?:descendant\b)/i,/^(?:following_sibling\b)/i,/^(?:following\b)/i,/^(?:parent\b)/i,/^(?:preceding_sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:;)/i,/^(?::)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:div\b)/i,/^(?:\?)/i,/^(?:@)/i,/^(?:\|)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)\b)/i,/^(?:[0-9]+\b)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:"[^\"]*")/i,/^(?:")/i,/^(?:$)/i,/^(?:.)/i],
-conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55],"inclusive":true}}
-});
-return lexer;
-})();
-parser.lexer = lexer;
-function Parser () {
-  this.yy = {};
-}
-Parser.prototype = parser;parser.Parser = Parser;
-return new Parser;
-})();
-
-
-if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = gramaticaxpath;
-exports.Parser = gramaticaxpath.Parser;
-exports.parse = function () { return gramaticaxpath.parse.apply(gramaticaxpath, arguments); };
-exports.main = function commonjsMain (args) {
-    if (!args[1]) {
-        console.log('Usage: '+args[0]+' FILE');
-        process.exit(1);
+        
+    
+    var YYSTATE=YY_START;
+    switch($avoiding_name_collisions) {
+    case 0:return 'xml1'; 
+    break;
+    case 1:return 'utf';
+    break;
+    case 2:return 'ascii1';
+    break;
+    case 3:return 'version';
+    break;
+    case 4:return 'encoding';
+    break;
+    case 5:return 62;
+    break;
+    case 6:return 50;
+    break;
+    case 7:return 49;
+    break;
+    case 8:return 23;
+    break;
+    case 9:return 24;
+    break;
+    case 10:return 25;
+    break;
+    case 11:return 26;
+    break;
+    case 12:return 30;
+    break;
+    case 13:return 29;
+    break;
+    case 14:return 31;
+    break;
+    case 15:return 32;
+    break;
+    case 16:return 34;	
+    break;
+    case 17:return 33;
+    break;
+    case 18:return 36;
+    break;
+    case 19:return 35;
+    break;
+    case 20:return 37;
+    break;
+    case 21:return 39;
+    break;
+    case 22:return 38;
+    break;
+    case 23:return 40;
+    break;
+    case 24:return 'ptcoma';
+    break;
+    case 25:return 12;
+    break;
+    case 26:return 67;
+    break;
+    case 27:return 68;
+    break;
+    case 28:return 43;
+    break;
+    case 29:return 45;
+    break;
+    case 30:return 55;
+    break;
+    case 31:return 54;
+    break;
+    case 32:return 53;
+    break;
+    case 33:return 52;
+    break;
+    case 34:return 56;
+    break;
+    case 35:return 57;
+    break;
+    case 36:return 20;
+    break;
+    case 37:return 11;
+    break;
+    case 38:return 59;
+    break;
+    case 39:return 61;
+    break;
+    case 40:return 19;
+    break;
+    case 41:return 14;
+    break;
+    case 42:return 16;
+    break;
+    case 43:return 65;
+    break;
+    case 44:return 'interrogacionC';
+    break;
+    case 45:return 17;
+    break;
+    case 46:return 6;
+    break;
+    case 47:
+    break;
+    case 48:
+    break;
+    case 49:return 70;
+    break;
+    case 50:return 69;
+    break;
+    case 51:return 22;
+    break;
+    case 52:return 71;
+    break;
+    case 53:return 'comilla';
+    break;
+    case 54:return 5;
+    break;
+    case 55: console.error('Este es un error léxico: ' + yy_.yytext + ', en la linea: ' + yy_.yylloc.first_line + ', en la columna: ' + yy_.yylloc.first_column); 
+                            erroresLexicos.push(new Error( yy_.yylloc._$.first_line ,  yy_.yylloc._$.first_column, 'sintactico','xmldesc', yy_.yytext));
+                            
+    break;
     }
-    var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
-    return exports.parser.parse(source);
-};
-if (typeof module !== 'undefined' && require.main === module) {
-  exports.main(process.argv.slice(1));
-}
-}
+    },
+    rules: [/^(?:XML\b)/i,/^(?:UTF8\b)/i,/^(?:ASCII\b)/i,/^(?:version\b)/i,/^(?:encoding\b)/i,/^(?:mod\b)/i,/^(?:or\b)/i,/^(?:and\b)/i,/^(?:node\(\))/i,/^(?:text\(\))/i,/^(?:last\(\))/i,/^(?:position\(\))/i,/^(?:ancestor_or_self\b)/i,/^(?:ancestor\b)/i,/^(?:attribute\b)/i,/^(?:child\b)/i,/^(?:descendant_or_self\b)/i,/^(?:descendant\b)/i,/^(?:following_sibling\b)/i,/^(?:following\b)/i,/^(?:parent\b)/i,/^(?:preceding_sibling\b)/i,/^(?:preceding\b)/i,/^(?:self\b)/i,/^(?:;)/i,/^(?::)/i,/^(?:\()/i,/^(?:\))/i,/^(?:\[)/i,/^(?:\])/i,/^(?:<=)/i,/^(?:>=)/i,/^(?:<)/i,/^(?:>)/i,/^(?:=)/i,/^(?:!=)/i,/^(?:\.\.)/i,/^(?:\.)/i,/^(?:\+)/i,/^(?:-)/i,/^(?:\*)/i,/^(?:\/\/)/i,/^(?:\/)/i,/^(?:div\b)/i,/^(?:\?)/i,/^(?:@)/i,/^(?:\|)/i,/^(?:[ \r\t]+)/i,/^(?:\n)/i,/^(?:[0-9]+(\.[0-9]+)\b)/i,/^(?:[0-9]+\b)/i,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/i,/^(?:"[^\"]*")/i,/^(?:")/i,/^(?:$)/i,/^(?:.)/i],
+    conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55],"inclusive":true}}
+    });
+    return lexer;
+    })();
+    parser.lexer = lexer;
+    function Parser () {
+      this.yy = {};
+    }
+    Parser.prototype = parser;parser.Parser = Parser;
+    return new Parser;
+    })();
+    
+    
+    if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+    exports.parser = gramaticaxpath;
+    exports.Parser = gramaticaxpath.Parser;
+    exports.parse = function () { return gramaticaxpath.parse.apply(gramaticaxpath, arguments); };
+    exports.main = function commonjsMain(args) {
+        if (!args[1]) {
+            console.log('Usage: '+args[0]+' FILE');
+            process.exit(1);
+        }
+        var source = require('fs').readFileSync(require('path').normalize(args[1]), "utf8");
+        return exports.parser.parse(source);
+    };
+    if (typeof module !== 'undefined' && require.main === module) {
+      exports.main(process.argv.slice(1));
+    }
+    }

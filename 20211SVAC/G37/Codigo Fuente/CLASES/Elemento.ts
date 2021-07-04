@@ -24,18 +24,18 @@ export class Elemento{
         //console.log("Hijos insertados: ",lista_elementos);
     }
 
-    construirTablaSimbolos(ambitoAnterior:any):Ambito{ // Construira la tabla de simbolos de 'lista_atributos' y 'lista_elementos' -> Esta es una funcion RECURSIVA
-        console.log("INICIARE A EJECUTAR \n\n");
+    getTablaSimbolos(ambitoAnterior:any):Ambito{ // Construira la tabla de simbolos de 'lista_atributos' y 'lista_elementos' -> Esta es una funcion RECURSIVA
         this.ambito = new Ambito(ambitoAnterior);
         // SI la this.lista_atributos esta vacia, el foreach no se ejecuta, ni da error
         this.lista_atributos.forEach(atributo =>{ 
-            //console.log('encontre->',e);
+            console.log('atributo ->'+atributo);
             const newSimbolo:Simbolo = new Simbolo(atributo.identificador, Tipo.ATRIBUTO, atributo.linea, atributo.columna, atributo.valor); // SIMBOLO TIPO ATRIBUTO
             this.ambito?.agregar(atributo.identificador, newSimbolo); 
         });
         // SI la this.lista_elementos esta vacia, el foreach no se ejecuta, ni da error
         this.lista_elementos.forEach(elemento=>{ 
-            elemento.construirTablaSimbolos(this.ambito); // contruye la tabla de simbolos del elemento
+            console.log('elemento ->'+elemento);
+            elemento.getTablaSimbolos(this.ambito); // contruye la tabla de simbolos del elemento
             let newSimbolo:Simbolo = new Simbolo(elemento.identificador, Tipo.ELEMENTO, elemento.linea, elemento.columna, elemento); // Almaceno el elemento en el Ambito actual
             this.ambito?.agregar(elemento.identificador, newSimbolo);
         });

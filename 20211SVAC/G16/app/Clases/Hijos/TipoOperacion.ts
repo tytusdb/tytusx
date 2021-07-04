@@ -1,0 +1,22 @@
+export enum Operador {
+  SUMA,
+  RESTA,
+  MULTIPLICACION,
+  DIVISION,
+  MODAL,
+  MAYOR,
+  MENOR,
+  IGUAL,
+  MAYORI,
+  MENORI,
+  MAYORU,
+  MENORU,
+  IGUALU,
+  MAYORIU,
+  MENORIU,
+  DIFERENTE,
+  DIFERENTEU,
+  AND,
+  OR,
+  TO
+}

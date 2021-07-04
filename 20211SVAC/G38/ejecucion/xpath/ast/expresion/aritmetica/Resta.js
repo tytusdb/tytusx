@@ -19,6 +19,11 @@ class Resta {
         return tipo;
     }
     getValor(ent) {
-        return null;
+        let tipo = this.getTipo(ent);
+        let valor;
+        if (!tipo.esError()) {
+            valor = this.izquierda.getValor(ent) - this.derecha.getValor(ent);
+        }
+        return valor;
     }
 }

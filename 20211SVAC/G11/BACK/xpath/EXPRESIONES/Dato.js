@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.Dato = void 0;
-var Tipo_1 = require("../AST/Tipo");
+
 var Dato = /** @class */ (function () {
     function Dato(valor, linea, columna) {
         this.linea = linea;
@@ -11,18 +11,18 @@ var Dato = /** @class */ (function () {
     Dato.prototype.getTipo = function (ent, arbol) {
         var valor = this.getValorImplicito(ent, arbol);
         if (typeof (valor) === 'boolean') {
-            return Tipo_1.Tipo.BOOL;
+            return TipoXpath.BOOL;
         }
         else if (typeof (valor) === 'string') {
-            return Tipo_1.Tipo.CADENA;
+            return TipoXpath.CADENA;
         }
         else if (typeof (valor) === 'number') {
             if (this.isInt(Number(valor))) {
-                return Tipo_1.Tipo.ENTERO;
+                return TipoXpath.ENTERO;
             }
-            return Tipo_1.Tipo.DECIMAL;
+            return TipoXpath.DECIMAL;
         }
-        return Tipo_1.Tipo.IDENTIFICADOR;
+        return TipoXpath.IDENTIFICADOR;
     };
     Dato.prototype.getValorImplicito = function (ent, arbol) {
         return this.valor;

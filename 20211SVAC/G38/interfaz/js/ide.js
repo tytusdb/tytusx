@@ -33,6 +33,9 @@ const analizarXML= function (cadEntrada){
             }else{
                 throw "No se pudo generar correctamente el árbol. ";
             }
+            if(ListaErrores.hayErroresXml()){
+                //print("Hubieron errores durante el analisis")
+            }
             _rootXml = rootXml;
         }catch (e){
             throw ('Error al generar el AST. '+e);
@@ -52,6 +55,118 @@ const analizarXML= function (cadEntrada){
     }
 };
 
+
+/**
+ * Metodo genera el aST ascendente
+ * @param entrada
+ */
+const generarAstAscennteXml= function (cadEntrada){
+    try {
+        print("Iniciando generacion de AST: "+new Date());
+        XpathUtil.contador_nodo = 1;
+        try {
+            if(cadEntrada!=null){
+                cadEntrada = cadEntrada.replace(/\<\?xml.+\?\>|\<\!DOCTYPE.+]\>/g, ' ');
+            }
+            let rootXml = xmlAnalyzer.parse(cadEntrada);
+            if(rootXml){
+                console.info('Se genero correctamente el árbol. ');
+            }else{
+                throw "No se pudo generar correctamente el árbol. ";
+            }
+            _rootXml = rootXml;
+
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+
+        let catDot = "";
+        try {
+            _tsXml = new TablaSimbolos(_rootXml) ;
+            catDot = _tsXml.getStrAst();
+        }catch (e) {
+            throw ('No se pudo generar AST. ');
+        }
+
+
+        console.info('Se genero correctamente el árbol. ');
+        let pagina = "https://dreampuf.github.io/GraphvizOnline/#"+catDot;
+        let url=encodeURI(pagina);
+        window.open(url);
+
+        console.info('Se genero exitosamente el AST. ');
+        print(CONSOLE_MESSAGE_SUCCESSFULL);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
+
+
+/**
+ * Genera CstXmlAscendente
+ * @param entrada
+ */
+const generarCstXMLAscendnete= function (cadEntrada){
+    try {
+        XpathUtil.contador_nodo = 1;
+        print("Generando CST: "+new Date());
+        try {
+            if(cadEntrada!=null){
+                cadEntrada = cadEntrada.replace(/\<\?xml.+\?\>|\<\!DOCTYPE.+]\>/g, ' ');
+            }
+            let catDot = xmlAnalyzerAst.parse(cadEntrada);
+            if(catDot){
+                console.info('Se genero correctamente el árbol. ');
+                let pagina = "https://dreampuf.github.io/GraphvizOnline/#"+catDot;
+                let url=encodeURI(pagina);
+                window.open(url);
+            }else{
+                throw "No se pudo generar correctamente el árbol. ";
+            }
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        print(CONSOLE_MESSAGE_SUCCESSFULL);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
+
+
+/**
+ * Genera CstXmlAscendente
+ * @param entrada
+ */
+const generarCstXMLDescendente= function (cadEntrada){
+    try {
+        XpathUtil.contador_nodo = 1;
+        print("Generando CST: "+new Date());
+        try {
+            if(cadEntrada!=null){
+                cadEntrada = cadEntrada.replace(/\<\?xml.+\?\>|\<\!DOCTYPE.+]\>/g, ' ');
+            }
+            let catDot = xmlAnalyzerTopdown.parse(cadEntrada);
+            if(catDot){
+                console.info('Se genero correctamente el árbol. ');
+                let pagina = "https://dreampuf.github.io/GraphvizOnline/#"+catDot;
+                let url=encodeURI(pagina);
+                window.open(url);
+            }else{
+                throw "No se pudo generar correctamente el árbol. ";
+            }
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        print(CONSOLE_MESSAGE_SUCCESSFULL);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
+
+
 /**
  * Metodo que analiza el xpath
  * @param entrada
@@ -67,6 +182,41 @@ const analizarXPATH= function (cadEntrada){
                 console.info('Se genero correctamente el árbol xpath. ');
             }else{
                 throw "No se pudo generar correctamente el árbol de xpath. ";
+            }
+            if(ListaErrores.hayErroresXpath()){
+                print("Hubieron errores durante el analisis en XPATH");
+            }
+            _rootXpath = rootXpath;
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        console.info('Se cargo exitosamente las tabla de simbolos. ');
+        print(CONSOLE_MESSAGE_SUCCESSFULL_XPATH);
+    }catch (e){
+        print(e);
+        console.log(e);
+    }
+};
+
+
+/**
+ * Metodo que analiza el xpath
+ * @param entrada
+ */
+const analizarXPATHDescendente= function (cadEntrada){
+    try {
+        print("Iniciando ejecucion: "+new Date());
+        ReporteGramatical.InicializarReporteGramaticalXpath();
+        try {
+            ListaErrores.InicializarXpath();
+            let rootXpath = XpathAnalyzerDescendant.parse(cadEntrada);
+            if(rootXpath){
+                console.info('Se genero correctamente el árbol xpath. ');
+            }else{
+                throw "No se pudo generar correctamente el árbol de xpath. ";
+            }
+            if(ListaErrores.hayErroresXpath()){
+                print("Hubieron errores durante el analisis en XPATH");
             }
             _rootXpath = rootXpath;
         }catch (e){
@@ -88,7 +238,8 @@ const ejecutar= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXPATH(cadEntradaXpath);
-        let result = _rootXpath.getValor(_tsXml);
+        let nodoAImprimir = _rootXpath.getValor(_tsXml);
+        let result = XpathUtil.convertirNodosXpathATexto(nodoAImprimir);
         print(result);
         print('FIN EJECUCION');
     }catch (e){
@@ -106,9 +257,10 @@ const print = function (strTexto){
 
 
 const getStringAst = function (){
-    if(_backEnd==undefined || _backEnd.root==undefined){
+    if(_tsXml==undefined || _tsXml==undefined){
         print("No existe árbol que graficar.");
     }
+
     _graphicUtil = new GraphicUtil();
     return _graphicUtil.generarGrafo(_backEnd.root);
 };

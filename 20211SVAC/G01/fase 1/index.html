@@ -1,0 +1,51 @@
+<html>
+<head>
+<title> Inicio </title>
+</head>
+<body>
+<h2 style="text-align:center"> Analizador XML y Xpath </h2>
+<label for=consulta>Ingrese consulta: </label>
+<textarea id=consulta name=consulta rows=1 cols= 50></textarea>
+<button type="button" onclick="prueba()">ASC</button>
+<button type="button">DESC</button>
+<button type="button" onclick="Limpiar()">Limpiar Salidas</button>
+<br>
+<br>
+<label for=txml>&nbsp;&nbsp;&nbsp;&nbsp;Ingrese XML:</label>
+<textarea id =txml name=txml rows=25 cols=50></textarea>
+<label for=salida>Salida:</label>
+<textarea id =salida name=salida rows=25 cols=25></textarea>
+<br>
+<br>
+<label for=grama>Reporte Gramatical:</label>
+<textarea id =grama name=salida rows=25 cols=100></textarea>
+<br>
+<br>
+<label for=errores>Errores Reportados:</label>
+<textarea id =errores name=salida rows=25 cols=120></textarea>
+<br>
+<br>
+<div id="tree-simple" style="width:100%; height: 100%"> </div>
+<br>
+<br>
+<table class="table table-hover">
+<thead>
+<tr id="headers"> 
+</tr>
+</thead>
+<tbody id='simbolos'>
+</tbody>
+</table>
+<script src= ".\dist\Utiles\Instruccion.js"></script>
+<script src= ".\dist\Gramatica\XMLasc.js"></script>
+<script src= ".\dist\ArbolST\Token.js"></script>
+<script src= ".\dist\ArbolST\Nodo.js"></script>
+<script src=".\treant-js-master\vendor\raphael.js"></script>
+<script src=".\treant-js-master\Treant.js"></script>
+<script src= ".\dist\ArbolST\TablaSimbolos.js"></script>
+<script src= ".\dist\ArbolST\Simbolo.js"></script>
+<script>new Treant(simple_chart_config);</script>
+</body>
+</html>
+
+
