@@ -15,6 +15,9 @@ let globalencod;
 let codificador = document.getElementById("codencod");
 let optimizador;
 
+//botones de creacion de ejemplos
+let btnEjemplo1 = document.getElementById("btnEjemplo1");
+
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
 let parserXQUERY;
@@ -147,13 +150,87 @@ let textoEntrada = `<?xml version="1.0" encoding="ISO-8859-1"?>
       environment.</description>
    </book>
 </catalog>
-
-
 `
 
-let XQuery = `	for $x in /catalog/book
+let textoPrueba = `<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog>
+   <book id="bk101">
+      <author>GÃ¡mbardellÃ¤, MÃ¡tthew</author>
+      <title>XML Developer&apos;s Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publish_date>2000-10-01</publish_date>
+      <description>An in-depth look at creating applications 
+      with XML.</description>
+   </book>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-12-16</publish_date>
+      <description>A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world.</description>
+   </book>
+   <book id="bk103">
+      <author>Corets, Eva</author>
+      <title>Maeve Ascendant</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-11-17</publish_date>
+      <description>After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society.</description>
+   </book>
+</catalog>
+`
+
+let XQuery = `for $x in /catalog/book
 return if ($x/@id="bk101")
 then {data($x)}
+`
+
+let XQueryflwr = `for $x in /catalog/book
+where $x/price<60
+order by $x/price
+return $x/price
+`
+let XQueryfrt = `for $x in /catalog/book
+return if ($x/@id="bk101")
+then <libro1>{data($x)}</libro1>
+`
+
+
+
+let EJEMGDA = `//ENTRADA PARA ARBOL GDA
+
+// Regla 5
+t1 = b;
+t8 = 4;
+t2 = t3 + 1;
+b = t1;
+t5 = t9;
+t9 = t5;
+
+//Regla 6, 7, 8, 9
+t5 = t5 + 0;
+t5 = t5 % 0;
+t7 = t7 - 0;
+t9 = t9 * 1 ;
+t2 = t3 + 3;
+t8 = t8 / 1;
+
+//Regla 10 - 13
+T1 = T2 + 0;
+T3 = T4 - 0;
+T5 = T6 * 1;
+T7 = T8 / 1;
+
+//Regla 14 - 16
+T9 = T10 * 2;
+T11 = T12 * 0;
+T13 = 0 / T14;
 `
 
 
@@ -166,6 +243,59 @@ let consolaC3D = document.getElementById('consola3D');
 let consolaC3DOptimizada = document.getElementById('consola3DOptimizada');
 
 
+
+// =========================================
+//EJECUCION DE CODIGO PARA MOSTRAR EJEMPLOS
+// =========================================
+
+
+// =========================================
+// CONSOLAS DENTRO DE LA PANTALLA PRINCIPAL
+//          XML =>  consolaJS editorXML
+//          XPATH => editor  editorXPATH
+//          XQUERY => consolaXQUERY  editorXQUERY
+//
+//          SALIDA => consolaPython 
+//          SALIDA3D => consolaC3D
+//          SALIDA OP-3D => consola3DOptimizada    consolaC3DOptimizada
+// =========================================
+
+// Boton de ejemplo para realizar el GDA
+btnEjemplo1.addEventListener("click", () => {
+//  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    consolaC3D.value = EJEMGDA;
+})
+
+// Boton de ejemplo para verificar un FLOWR
+btnEjemplo2.addEventListener("click", () => {
+  //  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    editorXML.value = textoPrueba;
+    editorXQUERY.value = XQueryflwr;
+  })
+  
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo3.addEventListener("click", () => {
+  //  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    editorXML.value = textoPrueba;
+    editorXQUERY.value = XQueryfrt;
+  })
+  
+  
 // ======================================
 //BOTON DE XML DESCENDENTE
 // ======================================

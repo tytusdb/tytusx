@@ -14,7 +14,7 @@ class Entorno {
           valor = " ";
     }
                         // Insertar al heap y generar C3D 
-                        let referenciaHeap = -1;
+                        let referenciaHeap = 0;
                         if (this.padre) {
                         
                           //Verificar si el valor es numerico o cadena
