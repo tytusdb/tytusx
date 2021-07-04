@@ -11,7 +11,6 @@ import { GeneradorC3D } from "../code/analizadorXML/generadorC3D";
 import { Instruccion } from '../code/optimizador/codigo/instruccion'
 import { tipoInstruccion } from '../code/optimizador/codigo/instruccion'
 import { Optimizador } from '../code/optimizador/codigo/optimizador'
-import Table from 'react-bootstrap/Button';
 //import { parse as parseOptimizador } from '../code/optimizador/test'
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
@@ -22,8 +21,7 @@ require('../../node_modules/codemirror/mode/clike/clike')
 //const XPath = require('../code/analizadorXPath/Xpath')
 //const grammar = require('../code/analizadorXML/grammar')
 
-const {XQuery} = require('../code/analizadorXQuery/XQuery')
-
+const XQuery = require('../code/analizadorXQuery/XQuery')
 
 //const GeneradorC3D = require('../code/analizadorXML/generadorC3D')
 
@@ -95,8 +93,7 @@ class Navigation extends React.Component {
             Mistakes: [],
             MistakesXPath: [],
             TablaGramatical: [],
-            TablaGramticalXPath: [],
-            TablaReportesC3D: []
+            TablaGramticalXPath: []
         }
         this.fileInput = React.createRef();
         this.fileInput2 = React.createRef();
@@ -139,7 +136,6 @@ class Navigation extends React.Component {
         console.log(query)
         //LLAMANDO AL ANALIZADOR DE XQUERY
         try {
-
 
             console.log("QUERY\n" + query)
             console.log("QUERY\n" + query.toString())
@@ -281,9 +277,6 @@ class Navigation extends React.Component {
 
         let nuevo = optimizador.optimizar(this.state.Codigo3D);
         this.setState({ Codigo3D: nuevo });
-
-        let report = optimizador.getReporte();
-        this.setState({ TablaReportesC3D: report });
     }
 
     handleOpti = (event) => {
@@ -295,16 +288,6 @@ class Navigation extends React.Component {
         //console.log('nuevo valor! -> ', this.state.Codigo3D);
 
     }
-
-    renderOptim(person, index) {
-        return (
-          <tr key={index}>
-            <td>{person.linea}</td>
-            <td>{person.regla}</td>
-            <td>{person.codigo}</td>
-          </tr>
-        )
-      }
 
 
     render() {
@@ -478,7 +461,6 @@ class Navigation extends React.Component {
                         <p></p>
                         <label className="labelClass">Reporte de Optimizacion</label>
                         <div>
-
 
                         </div>
                     </div>

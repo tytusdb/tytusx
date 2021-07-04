@@ -33,9 +33,6 @@ var Optimizador = /** @class */ (function () {
         console.log(this.reporteOptimizacion);
         return this.cadenaOptimizada;
     };
-    Optimizador.prototype.getReporte = function () {
-        return this.reporteOptimizacion;
-    };
     Optimizador.prototype.reglas6_16Header = function (array) {
         var contador = 0;
         for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
@@ -46,9 +43,7 @@ var Optimizador = /** @class */ (function () {
                     // si cumple con todas las condiciones de 16 
                     var regla = '16';
                     this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = 0;';
-
                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                 }
                 if (instruccion.arg2 == '1') {
                     if (instruccion.arg1 == instruccion.resultado) {
@@ -60,7 +55,6 @@ var Optimizador = /** @class */ (function () {
                         var regla = '13';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
             }
@@ -71,20 +65,17 @@ var Optimizador = /** @class */ (function () {
                     var regla = '15';
                     this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = 0;';
                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                 }
                 if (instruccion.arg1 == '1') {
                     if (instruccion.arg2 == instruccion.resultado) {
                         var regla = '8';
                         this.nuevasInstrucciones[contador].cadena = '';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                     }
                     else {
                         var regla = '12';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
                 else if (instruccion.arg2 == '1') {
@@ -92,7 +83,6 @@ var Optimizador = /** @class */ (function () {
                         var regla = '8';
                         this.nuevasInstrucciones[contador].cadena = '';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                     }
                     else {
                         var regla = '12';
@@ -107,7 +97,6 @@ var Optimizador = /** @class */ (function () {
                         var regla = '14';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ' + ' + instruccion.arg2 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
                 else if (instruccion.arg2 == '2') {
@@ -116,7 +105,6 @@ var Optimizador = /** @class */ (function () {
                         var regla = '14';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ' + ' + instruccion.arg1 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
             }
@@ -127,13 +115,11 @@ var Optimizador = /** @class */ (function () {
                         var regla = '7';
                         this.nuevasInstrucciones[contador].cadena = '';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                     }
                     else {
                         var regla = '11';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
             }
@@ -144,14 +130,12 @@ var Optimizador = /** @class */ (function () {
                         var regla = '6';
                         this.nuevasInstrucciones[contador].cadena = '';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                     }
                     else {
                         //console.log('regla 10!')
                         var regla = '10';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
                 else if (instruccion.arg1 == '0') {
@@ -159,13 +143,11 @@ var Optimizador = /** @class */ (function () {
                         var regla = '6';
                         this.nuevasInstrucciones[contador].cadena = '';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                     }
                     else {
                         var regla = '10';
                         this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg2 + ';';
                         this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                     }
                 }
             }
@@ -189,7 +171,6 @@ var Optimizador = /** @class */ (function () {
                     var regla = '1';
                     this.nuevasInstrucciones[contador].cadena = '';
                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                 }
             }
             if (instruccion.getTipo() == 'salto' && !regla1abierta) {
@@ -202,7 +183,6 @@ var Optimizador = /** @class */ (function () {
                     var regla = '2';
                     this.nuevasInstrucciones[contador].cadena = '';
                     this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                 }
             }
             if (instruccion.getTipo() == 'salto_condicional' && this.listaInstrucciones.length > (contador + 2)) {
@@ -232,7 +212,6 @@ var Optimizador = /** @class */ (function () {
                             }
                             this.nuevasInstrucciones[contador].cadena = 'if ( ' + instruccion.arg1 + this.nuevasInstrucciones[contador].operador + instruccion.arg2 + ' ) ' + this.listaInstrucciones[coso + 1].cadena;
                             this.reporteOptimizacion.push(new Optimizacion(contador, '2', this.nuevasInstrucciones[contador].cadena));
-
                             eliminarabierto = true;
                         }
                     }
@@ -257,13 +236,11 @@ var Optimizador = /** @class */ (function () {
                             var regla = '3';
                             this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
                             this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                         }
                         else {
                             var regla = '4';
                             this.nuevasInstrucciones[contador].cadena = '';
                             this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                         }
                     }
                     else if (instruccion.operador == '!=') {
@@ -271,13 +248,11 @@ var Optimizador = /** @class */ (function () {
                             var regla = '3';
                             this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
                             this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                         }
                         else {
                             var regla = '4';
                             this.nuevasInstrucciones[contador].cadena = '';
                             this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                         }
                     }
                     else if (instruccion.operador == '<=') {
@@ -285,13 +260,11 @@ var Optimizador = /** @class */ (function () {
                             var regla = '3';
                             this.nuevasInstrucciones[contador].cadena = 'goto ' + instruccion.resultado + ';';
                             this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                         }
                         else {
                             var regla = '4';
                             this.nuevasInstrucciones[contador].cadena = '';
                             this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada'));
-
                         }
                     }
                     else if (instruccion.operador == '>=') {
@@ -377,51 +350,6 @@ var Optimizador = /** @class */ (function () {
                     this.asignacionesPrevias.push(instruccion);
                 }
             }
-            if (instruccion.getTipo() == 'etiqueta') {
-                this.asignacionesPrevias.push(instruccion);
-            }
-            if (instruccion.getTipo() == 'asignacion') {
-                // si es iwal transverso al previo, elimino este
-                if (instruccion.operador == '') {
-                    var match = false;
-                    var cont2 = 0;
-                    // si es una asignación, miro si hay un H1 = H2, H2 = H1 antes.
-                    // si ya encontré un match, miro que ninguno de los dos se reasigne
-                    for (var _a = 0, _b = this.asignacionesPrevias; _a < _b.length; _a++) {
-                        var iterator = _b[_a];
-                        if ((iterator.resultado == instruccion.arg1) && (iterator.arg1 == instruccion.resultado)) {
-                            match = true;
-                            console.log('match!');
-                            var conti = 0;
-                            for (var _c = 0, _d = this.asignacionesPrevias; _c < _d.length; _c++) {
-                                var cosita = _d[_c];
-                                if (conti > cont2) { // si pasa después del contador en el que ando arriba
-                                    console.log(cosita.resultado, ' == ', instruccion.arg1);
-                                    if (cosita.resultado == instruccion.arg1 || cosita.getTipo() == 'etiqueta') {
-                                        match = false;
-                                        console.log('2', cosita.resultado == instruccion.arg1);
-                                        console.log(cosita.getTipo() == 'etiqueta');
-                                        console.log('match inverso :c');
-                                        return;
-                                        // si hay otra asignación o es una etiqueta, no hago nada
-                                    }
-                                }
-                                conti++;
-                            }
-                            if (match) {
-                                var regla = '5';
-                                this.nuevasInstrucciones[contador].cadena = '';
-                                this.reporteOptimizacion.push(new Optimizacion(contador, regla, 'cadena eliminada', instruccion.cadena));
-                            }
-                        }
-                        cont2++;
-                    }
-                    if (match) {
-                        // 
-                    }
-                    this.asignacionesPrevias.push(instruccion);
-                }
-            }
             contador++;
         }
     };
@@ -439,11 +367,10 @@ var Optimizador = /** @class */ (function () {
 }());
 exports.Optimizador = Optimizador;
 var Optimizacion = /** @class */ (function () {
-    function Optimizacion(linea, regla, codigo, codigo_original) {
+    function Optimizacion(linea, regla, codigo) {
         this.linea = linea;
         this.regla = regla;
         this.codigo = codigo;
-        this.codigo_original = codigo_original;
     }
     return Optimizacion;
 }());

@@ -23,10 +23,6 @@ export class Let implements Instruccion {
         var new_simbol = new Simbolo(this.identificador, this.valor.getTipo(ent), this.linea, this.columna, this.valor.getValorImplicito(ent))
         //se agrega el simbolo al entorno
         ent.agregar(new_simbol);
-
-        
-
-
     }
     //obtener contador
     GetCountStorage(): number {
@@ -38,5 +34,25 @@ export class Let implements Instruccion {
         localStorage.setItem('contador', JSON.stringify(contador));
     }
 
+    VariableC3D(ent: Entorno):any{
+        var variable = [];
+        var id = this.identificador;
+        var valor = this.valor.getValorImplicito(ent);
+        
+        variable.push(id);
+
+        if( typeof(valor) == 'number' ){
+            variable.push([valor]);
+        }
+        else if(typeof(valor) == 'string'){
+            let val_temp = [];
+            for(let val of valor){
+                val_temp.push(val.charCodeAt(0));
+            }
+            variable.push(val_temp)
+        }
+        return variable;
+
+    }
 
 }

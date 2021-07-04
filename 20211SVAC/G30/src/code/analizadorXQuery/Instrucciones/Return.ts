@@ -22,7 +22,8 @@ export class Return implements Instruccion {
         var resultado = '';
         //se hace la consulta a la tabla de simbolos
         if (this.path == '') {
-            return this.valor.getValorImplicito(ent);
+            var valor = this.valor.getValorImplicito(ent);
+            return valor;
         } else {
             var id_temp = this.path.split('/')[1];
             if (ent.existeEnActual(id_temp)) {
@@ -55,7 +56,25 @@ export class Return implements Instruccion {
                 console.log('La variable en cuestion no existe, error semantico..')
             }
         }
-        return resultado;
+        return resultado;   
+    }
+
+    VariableC3D(ent: Entorno):any{
+        var variable;
+        var valor = this.valor.getValorImplicito(ent);
+        
+        if( typeof(valor) == 'number' ){
+            variable = [valor];
+        }
+        else if(typeof(valor) == 'string'){
+            let val_temp = [];
+            for(let val of valor){
+                val_temp.push(val.charCodeAt(0));
+            }
+            variable = val_temp;
+        }
+        return variable;
+
     }
 
 }

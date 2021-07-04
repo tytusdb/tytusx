@@ -39,6 +39,14 @@
     //manejo de errores
     var errores = [];
 
+    //codigo 3 direcciones
+    var c3d = '';
+    var cont_temp = 100;
+    var SP = 0;
+    var HP = 0;
+    var variables = [];
+    var returns = [];
+
 %}
  
 /******************************LEXICO***************************************/ 
@@ -206,7 +214,26 @@ entero                              [0-9]+("."[0-9]+)?
 /******************************SINTACTICO***************************************/ 
 
 BEGIN: INSTRUCCIONES EOF {  
-                            console.log(Arbol_AST);
+                            //guardando variable de inicio
+                            let cont_ini = cont_temp;
+                            //generando codigo 3d
+                            var mainc3d = new MainC3D(@1.first_line, @1.first_column, variables, returns, cont_temp, SP, HP );
+                            //[codigo, contador]
+                            var code = mainc3d.ejecutar(Arbol_AST.getEntorno('global'));
+                            //header
+                            var headc3d = new HeaderC3D(@1.first_line, @1.first_column, cont_ini, code[1], code[0]);
+                            //agregando encabezado
+                            var code_header = headc3d.ejecutar(Arbol_AST.getEntorno('global')); 
+
+                            console.log(code_header);
+                            
+                            //seteando variables
+                            c3d = '';
+                            cont_temp = 100;
+                            SP = 0;
+                            HP = 0;
+                            variables = [];
+                            returns = [];
                             return $$;
                         }                    
 ;
@@ -228,10 +255,11 @@ FLWOR: FOR LET WHERE ORDER RETURN           {
                                                     }
                                                 }
                                                 //ejecutando let
-                                                console.log($2);
                                                 if($2 != undefined){
                                                     for(let inst_let of $2){
                                                     inst_let.ejecutar(Arbol_AST.getEntorno('global'));
+                                                    variables.push(inst_let.VariableC3D(Arbol_AST.getEntorno('global')));
+                                                    
                                                     }
                                                 }
                                                 if($3 != undefined){
@@ -242,6 +270,7 @@ FLWOR: FOR LET WHERE ORDER RETURN           {
                                                 }
                                                 //ejecutando return
                                                 $$ = $5.ejecutar(Arbol_AST.getEntorno('global'));
+                                                returns = $5.VariableC3D(Arbol_AST.getEntorno('global'));
                                             }                                         
 ;
  

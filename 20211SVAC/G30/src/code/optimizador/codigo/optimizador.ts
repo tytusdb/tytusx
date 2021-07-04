@@ -40,6 +40,7 @@ export class Optimizador {
       this.reglas6_16Header(this.listaInstrucciones);
       this.reglas3_4(this.listaInstrucciones);
       this.reglas1_2(this.listaInstrucciones);
+      
 
 
       //paso el array a la cadena
@@ -63,7 +64,6 @@ export class Optimizador {
                let regla = '16';
                this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = 0;'
                this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
             }
 
             if (instruccion.arg2 == '1') {
@@ -75,7 +75,6 @@ export class Optimizador {
                   let regla = '13';
                   this.nuevasInstrucciones[contador].cadena = instruccion.resultado + ' = ' + instruccion.arg1 + ';';
                   this.reporteOptimizacion.push(new Optimizacion(contador, regla, this.nuevasInstrucciones[contador].cadena));
-
                }
             }
 
@@ -147,7 +146,6 @@ export class Optimizador {
                }
             }
 
-
          }
          // MAS
          if (instruccion.operador == '+') {
@@ -179,6 +177,7 @@ export class Optimizador {
          //console.log('# ', contador);
          contador++;
       }
+
    }
 
    private reglas1_2(array: Array<Instruccion>) {
@@ -246,7 +245,6 @@ export class Optimizador {
 
 
          contador++;
-
       }
 
       console.log('final');
@@ -398,7 +396,6 @@ export class Optimizador {
       }
    }
 
-
 }
 
 export class Optimizacion {
@@ -406,14 +403,11 @@ export class Optimizacion {
    linea: number;
    regla: string;
    codigo: string;
-   codigo_original:string;
 
    constructor(linea: number, regla: string, codigo: string) {
-
       this.linea = linea;
       this.regla = regla;
       this.codigo = codigo;
-      this.codigo_original = codigo_original;
    }
 
 
