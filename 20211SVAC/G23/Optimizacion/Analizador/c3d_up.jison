@@ -194,7 +194,7 @@ G_TMP: tk_float L_TMP tk_ptcoma{ $$ = new Nodo(id++, 'G_TMP', '');
     }
 ;
 
-L_TMP: L_TMP tk_coma temporal {let com = new Nodo(id++, 'tk_coma', ','); $1.push(com);
+L_TMP: L_TMP tk_coma temporal {
             tem = new Nodo(id++, 'temporal', $3); $1.push(tem); $$ = $1;
         }
     | temporal { tem = new Nodo(id++, 'temporal', $1); $$ = [tem];}
@@ -350,15 +350,11 @@ COND: VALI RELA VALI {$$ = new Nodo(id++, 'COND', '');
     }
 ;
 
-VALI: temporal {$$ = new Nodo(id++, 'VALI', '');
-        tem = new Nodo(id++, 'temporal', $1); $$.NuevoHijo(tem);
+VALI: TEMP {$$ = new Nodo(id++, 'VALI', '');
+        $$.NuevoHijo($1);
     }
-    | num {$$ = new Nodo(id++, 'VALI', '');
-        num1 = new Nodo(id++, 'num', $1); $$.NuevoHijo(num1);
-    }
-    | tk_menos num %prec umenos {$$ = new Nodo(id++, 'VALI', '');
-        $1 = new Nodo(id++, 'tk_menos', '-'); $$.NuevoHijo($1);
-        num1 = new Nodo(id++, 'num', $2); $$.NuevoHijo(num1);
+    | PRIMI {$$ = new Nodo(id++, 'VALI', '');
+        $$.NuevoHijo($1);
     }
 ;
 
@@ -468,34 +464,41 @@ ARI: tk_mas {$$ = new Nodo(id++, 'ARI', '');
     }
 ;
 
-VALO: tk_sp {$$ = new Nodo(id++, 'VALO', '');
-        $1 = new Nodo(id++, 'tk_sp', 'SP'); $$.NuevoHijo($1);
+VALO: PUN {$$ = new Nodo(id++, 'VALO', '');
+        $$.NuevoHijo($1);
     }
-    | tk_hp {$$ = new Nodo(id++, 'VALO', '');
-        $1 = new Nodo(id++, 'tk_hp', 'HP'); $$.NuevoHijo($1);
+    | PRIMI {$$ = new Nodo(id++, 'VALO', '');
+        $$.NuevoHijo($1);
     }
-    | num {$$ = new Nodo(id++, 'VALO', '');
-        num1 = new Nodo(id++, 'num', $1); $$.NuevoHijo(num1);
-    }
-    | tk_menos num %prec umenos {$$ = new Nodo(id++, 'VALO', '');
-        $1 = new Nodo(id++, 'tk_menos', '-');
-        num1 = new Nodo(id++, 'num', $2); $$.NuevoHijo(num1);
-    }
-    | temporal {$$ = new Nodo(id++, 'VALO', '');
-        tem = new Nodo(id++, 'num', $1); $$.NuevoHijo(tem);
+    | TEMP {$$ = new Nodo(id++, 'VALO', '');
+        $$.NuevoHijo($1);
     }
     | STR {$$ = new Nodo(id++, 'VALO', '');
-        $$.NuevoHijo(num1);
+        $$.NuevoHijo($1);
     }
 ;
 
-// PUN: tk_sp
-//     | tk_hp
-// ;
+PUN: tk_sp {$$ = new Nodo(id++, 'PUN', '');
+            $1 = new Nodo(id++, 'tk_sp', 'SP'); $$.NuevoHijo($1);
+        }
+    | tk_hp {$$ = new Nodo(id++, 'PUN', '');
+        $1 = new Nodo(id++, 'tk_hp', 'HP'); $$.NuevoHijo($1);
+    }
+;
 
-// PRIMI: num 
-//     | tk_menos num %prec umenos 
-// ;
+PRIMI: num {$$ = new Nodo(id++, 'PRIMI', '');
+        num1 = new Nodo(id++, 'num', $1); $$.NuevoHijo(num1);
+    }
+    | tk_menos num %prec umenos { $$ = new Nodo(id++, 'PRIMI', '');
+        $1 = new Nodo(id++, 'tk_menos', '-');
+        num1 = new Nodo(id++, 'num', $2); $$.NuevoHijo(num1);
+    }
+;
+
+TEMP: temporal { $$ = new Nodo(id++, 'TEMP', '');
+        tem = new Nodo(id++, 'temporal', $1); $$.NuevoHijo(tem);
+    }
+;
 
 STR: tk_stack tk_corA INDEX tk_corC {$$ = new Nodo(id++, 'STR', '');
         $1 = new Nodo(id++, 'tk_stack', 'Stack'); $$.NuevoHijo($1);
