@@ -67,12 +67,12 @@ tiposComillas "\"" | "'"
     return 'as';
 }
 
-"double" {
-    //console.log('Detecto double');
-    return 'double';
+"double"|"decimal"|"float" {
+    //console.log('Detecto double_tipo');
+    return 'double_tipo';
 }
 
-"int" {
+"integer" {
     //console.log('Detecto int');
     return 'int';
 }
@@ -150,6 +150,11 @@ tiposComillas "\"" | "'"
     ////console.log('Detecto diagonal');
      return 'diagonal';
 }
+
+(0|[1-9][0-9]*)(\.(0|[0-9]*[1-9](0)?)) {
+    ////console.log('Detecto decimal');
+     return 'decimal';
+    }
 
 "." {
     ////console.log('Detecto punto');
@@ -284,14 +289,20 @@ tiposComillas "\"" | "'"
     return 'diferente';
 }
 
+"<=" {
+    ////console.log('Detecto menor_igual');
+    return 'menor_igual';
+}
+
 "<" {
     ////console.log('Detecto menor');
     return 'menor';
 }
 
-"<=" {
-    ////console.log('Detecto menor_igual');
-    return 'menor_igual';
+
+">=" {
+    ////console.log('Detecto mayor_igual');
+    return 'mayor_igual';
 }
 
 ">" {
@@ -299,10 +310,6 @@ tiposComillas "\"" | "'"
     return 'mayor';
 }
 
-">" {
-    ////console.log('Detecto mayor_igual');
-    return 'mayor_igual';
-}
 
 "or" {
     ////console.log('Detecto or');
@@ -312,6 +319,11 @@ tiposComillas "\"" | "'"
 "and" {
     ////console.log('Detecto and');
     return 'and';
+}
+
+"!" {
+    ////console.log('Detecto negado');
+    return 'negado';
 }
 
 "mod" {
@@ -371,10 +383,10 @@ tiposComillas "\"" | "'"
 //------------------------------------------------------EXPRESIONES------------------------------------------------------
 
 
-(0|[1-9][0-9]*)(\.(0|[0-9]*[1-9](0)?))? {
-    ////console.log('Detecto digito');
-     return 'digito';
-    }
+(0|[1-9][0-9]*) {
+    ////console.log('Detecto decimal');
+    return 'digito';
+}
 
 "$"\w+  {
     //console.log('Detecto identificador xquery');
@@ -406,13 +418,18 @@ tiposComillas "\"" | "'"
 /lex
 %{
 //metodos o atributos
+let variables = [];
+let funciones = [];
+let ambito;
+let tipoDatoGlobal;
 %}
+%left 'and' 'or'
+%left 'igual' 'eq' 'diferente' 'ne' 'menor' 'lt' 'menor_igual' 'le' 'mayor' 'gt' 'mayor_igual' 'ge' 
 
 %left 'suma' 'resta'
 %left 'multiplicacion' 'division' 'mod'
-
-%left 'igual' 'diferente' 'menor' 'menor_igual' 'mayor' 'mayor_igual'
-%left 'or' 'and'
+%left 'negado'
+%left UMENOS
 
 %start INIT
 
@@ -420,8 +437,8 @@ tiposComillas "\"" | "'"
 
 INIT
     : CONSULTAS_XQUERY eof {
-        console.log('\nexito al analizar\n');
-        //return //$1;
+        console.log('\nexito al analizar\n',$1.instrucciones);
+        return $1.instrucciones;
     }
     | error eof {
         console.log("Error sintatciti error eof "+$1);
@@ -431,78 +448,152 @@ INIT
 ;
 
 CONSULTAS_XQUERY 
-    : CONSULTAS_XPATH
-    | ESTRUCTURA_LLAMADA_FUNCION
-    | RECURSIVA_QUERY
+    : RECURSIVA_QUERY {$$ = $1;}
+    //|CONSULTAS_XPATH
 ;
 
 RECURSIVA_QUERY
-    : RECURSIVA_QUERY OPCIONES_QUERY
-    | OPCIONES_QUERY
+    : RECURSIVA_QUERY OPCIONES_QUERY    {$1.instrucciones.push($2.instrucciones);$$ = {instrucciones:$1};}
+    | OPCIONES_QUERY                    {$$ = {instrucciones:[$1.instrucciones]};}
 ;
 
 OPCIONES_QUERY
-    : ESTRUCTURA_FOR
-    | ETIQUETAS_QUERY
-    | ESTRUCTURA_FUNCION
+    : ETIQUETAS_QUERY
+    //| ESTRUCTURA_FOR
+    | ESTRUCTURA_FUNCION            {$$ = {instrucciones:$1.instrucciones}}
+    | ESTRUCTURA_LLAMADA_FUNCION    {$$ = {instrucciones:$1.expresion}}
 ;
 
 ESTRUCTURA_LLAMADA_FUNCION
-    : identificador dos_puntos identificador parentesis_abierto ESTRUCTURAS_PARAMETROS_LLAMADA parentesis_cerrado
+    : identificador dos_puntos identificador parentesis_abierto OPCIONES_PARAMETRO parentesis_cerrado
+        {
+            $$ = {expresion:ValidacionExpresion.validaarFuncion(funciones,$3,$5)};
+        }
+;
+
+OPCIONES_PARAMETRO
+    : ESTRUCTURAS_PARAMETROS_LLAMADA    {$$ = $1;}
+    |                                   {$$=[]}
 ;
 
 ESTRUCTURAS_PARAMETROS_LLAMADA
-    : ESTRUCTURAS_PARAMETROS_LLAMADA coma ESTRUCTURA_PARAMETROS_LLAMADA
-    | ESTRUCTURA_PARAMETROS_LLAMADA
+    : ESTRUCTURAS_PARAMETROS_LLAMADA coma ESTRUCTURA_PARAMETROS_LLAMADA     {$1.push($3);$$ = $1;}
+    | ESTRUCTURA_PARAMETROS_LLAMADA                                         {$$ = [$1];}
 ;
 
 ESTRUCTURA_PARAMETROS_LLAMADA
-    : identificadorXquery
-    | identificadorXquery RUTAS_QUERY
+    : EXPRESION_RELACIONAL_QUERY        {$$ = $1.expresion;}
 ;
 
 ESTRUCTURA_FUNCION
-    : declare function identificador dos_puntos identificador ESTRUCTURA_PARAMETROS as identificador dos_puntos TIPOS_QUERY interrogacion CUERPO_FUNCION punto_coma
+    : AUX_ESTRUCTURA_FUNCION CUERPO_FUNCION punto_coma {
+        $1.setBloquecodigo($2.instrucciones);
+        $$ = {instrucciones:$1};
+    }
+;
+
+AUX_ESTRUCTURA_FUNCION
+    : declare function identificador dos_puntos IDENTIFICADOR_FUNCION ESTRUCTURA_PARAMETROS OPCION_TIPO_RETORNO {
+        let funcionNew = new CrearFuncion($5,$6,$7);
+        funciones.push(funcionNew);
+        $$ = funcionNew;
+    }
+;
+
+IDENTIFICADOR_FUNCION
+    : identificador {
+        ambito = $1;
+        $$ = $1;
+    }
+;
+
+OPCION_TIPO_RETORNO
+    : as identificador dos_puntos TIPOS_QUERY OPCION_INTERROGACION     {$$ = $4;tipoDatoGlobal = $$;}
+    |                                                           {$$ = null;tipoDatoGlobal = $$;}
+;
+
+OPCION_INTERROGACION
+    : |interrogacion
 ;
 
 ESTRUCTURA_PARAMETROS
-    : parentesis_abierto PARAMETROS_FUNCION parentesis_cerrado
+    : parentesis_abierto PARAMETROS_FUNCION parentesis_cerrado {
+        $$ = $2;
+    }
 ;
 
 CUERPO_FUNCION
-    : llave_abierta BLOQUES_CODIGO llave_cerrada 
+    : llave_abierta OPCIONES_BLOQUE llave_cerrada {
+        $$ = $2;
+    }
 ;
 
-BLOQUES_CODIGO
-    : BLOQUES_CODIGO BLOQUE_CODIGO
-    | BLOQUE_CODIGO
+OPCIONES_BLOQUE
+    :
+    | EXPRESION_RELACIONAL_QUERY                                         {
+            $$ = {instrucciones:[$1.expresion]};
+        }
+    |  DECLARACION_VARIABLE return OPCIONES_RETURN {
+            $1.push($3.instrucciones);
+            $$ = {instrucciones:$1};
+        }
+    | ESTRUCTURA_IF {
+            $$ = {instrucciones:[$1.instrucciones]};
+    }
 ;
 
-BLOQUE_CODIGO
-    : EXPRESION_SIMPLE
-    | let identificadorXquery dos_puntos igual OPCIONES_LET
-    | return EXPRESION_SIMPLE
+
+DECLARACION_VARIABLE
+    : DECLARACION_VARIABLE VARIABLE     {$1.push($2.instrucciones);$$ = $1;}
+    | VARIABLE                          {$$ = [$1.instrucciones];}
+;
+
+VARIABLE
+    : let identificadorXquery dos_puntos igual OPCIONES_LET {
+        let variable = new Variable(0,$2,$5.expresion,ambito);
+        $$ = {instrucciones:variable};
+        if(variables.find(e => e.id == $2)==undefined)variables.push(variable);
+    }
 ;
 
 OPCIONES_LET
-    : EXPRESION_SIMPLE
-    | TO
+    : EXPRESION_RELACIONAL_QUERY              {$$ = $1;}
+    | TO                            {$$ = $1;}
 ;
 
 PARAMETROS_FUNCION
-    : PARAMETROS_FUNCION coma PARAMETRO_FUNCION
-    | PARAMETRO_FUNCION
+    : PARAMETROS_FUNCION coma PARAMETRO_FUNCION {
+        $1.push($3);
+        $$ = $1;
+    }
+    | PARAMETRO_FUNCION {
+        $$ = [$1];
+    }
+    | {
+        $$ = [];
+    }
 ;
 
 PARAMETRO_FUNCION
-    : identificadorXquery as identificador dos_puntos TIPOS_QUERY interrogacion
+    : identificadorXquery as identificador dos_puntos TIPOS_QUERY OPCION_INTERROGACION {
+        $$ = new Parametro($1,$5,ambito);
+        variables.push(new Variable(0,$1,new Expresion($5,"0"),ambito));
+    }$5
 ;
 
 TIPOS_QUERY
-    : string_tipo
-    | int
-    | double
-    | boolean
+    : string_tipo {
+        $$ = TiposDatos.STRING;
+    }
+    | int {
+        $$ = TiposDatos.ENTERO;
+    }
+    | double_tipo {
+        $$ = TiposDatos.DECIMAL;
+    }
+    | boolean {
+        $$ = TipoDato.BOOLEAN;
+    }
 ;
 
 ETIQUETAS_QUERY
@@ -543,20 +634,27 @@ OPCIONES_FOR
 ;
 
 TO 
-    : parentesis_abierto digito to digito parentesis_cerrado
+    : parentesis_abierto digito to digito parentesis_cerrado {
+        for(let i = $2;i<$4;i++){
+            $$ = i+"";
+        }
+        $$ = {valor:$$};
+    }
 ;
 
 ESTRUCTURA_IF
-    : if ESTRUCTURA_CONDICION then OPCIONES_RETURN OPCIONES_ELSE
+    : if ESTRUCTURA_CONDICION then EXPRESION_RELACIONAL_QUERY OPCIONES_ELSE {
+        $$ = {instrucciones:If.validarIf($2,$4.expresion,$5,tipoDatoGlobal)};
+    }
 ;
 
 OPCIONES_ELSE
-    : else OPCIONES_RETURN
-    | else parentesis_abierto parentesis_cerrado
+    : else OPCIONES_RETURN                          {$$ = $2.instrucciones;}
+    | else parentesis_abierto parentesis_cerrado    {$$ = null;}
 ;
 
 ESTRUCTURA_CONDICION
-    : parentesis_abierto FILTROS_QUERY parentesis_cerrado
+    : parentesis_abierto EXPRESION_RELACIONAL_QUERY parentesis_cerrado {$$ = $2.expresion;}
 ;
 
 ESTRUCTURA_WHERE 
@@ -567,12 +665,8 @@ ESTRUCTURA_WHERE
 FILTROS_QUERY
     : FILTROS_QUERY and FILTROS_QUERY
     | FILTROS_QUERY or  FILTROS_QUERY
-    | FILTRO_QUERY
 ;
 
-FILTRO_QUERY
-    : identificadorXquery RUTAS_QUERY EXPRESION_RELACIONAL_QUERY
-;
 
 RUTAS_QUERY
     : RUTAS_QUERY DIAGONALES RUTA_WHERE
@@ -581,31 +675,39 @@ RUTAS_QUERY
 
 
 EXPRESION_RELACIONAL_QUERY
-    : menor EXPRESION_SIMPLE
-    | menor_igual EXPRESION_SIMPLE
-    | mayor EXPRESION_SIMPLE
-    | mayor_igual EXPRESION_SIMPLE
-    | igual EXPRESION_SIMPLE
-    | diferente EXPRESION_SIMPLE
-    | eq EXPRESION_SIMPLE
-    | ne EXPRESION_SIMPLE
-    | lt EXPRESION_SIMPLE
-    | le EXPRESION_SIMPLE
-    | gt EXPRESION_SIMPLE
-    | ge EXPRESION_SIMPLE
+    : EXPRESION_RELACIONAL_QUERY menor EXPRESION_RELACIONAL_QUERY                   {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MENOR,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY menor_igual EXPRESION_RELACIONAL_QUERY             {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MENOR_IGUAL,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY mayor EXPRESION_RELACIONAL_QUERY                   {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MAYOR,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY mayor_igual EXPRESION_RELACIONAL_QUERY             {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MAYOR_IGUAL,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY igual EXPRESION_RELACIONAL_QUERY                   {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.IGUAL,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY diferente EXPRESION_RELACIONAL_QUERY               {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.DIFERENTE,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY eq EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.IGUAL,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY ne EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.DIFERENTE,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY lt EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MENOR,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY le EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MENOR_IGUAL,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY gt EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MAYOR,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY ge EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MAYOR_IGUAL,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY multiplicacion EXPRESION_RELACIONAL_QUERY          {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MULTIPLICACION,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY division EXPRESION_RELACIONAL_QUERY                {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.DIVISION,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY suma EXPRESION_RELACIONAL_QUERY                    {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.SUMA,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY resta EXPRESION_RELACIONAL_QUERY                   {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.RESTA,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY mod EXPRESION_RELACIONAL_QUERY                     {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.MOD,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY and EXPRESION_RELACIONAL_QUERY                     {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.AND,$3.expresion)};}
+    | EXPRESION_RELACIONAL_QUERY or EXPRESION_RELACIONAL_QUERY                      {$$ = {expresion:ValidacionExpresion.validacion($1.expresion,tiposOperando.OR,$3.expresion)};}
+    | negado EXPRESION_RELACIONAL_QUERY                                             {$$ = {expresion:ValidacionExpresion.negado($2.expresion)};}
+    | resta EXPRESION_RELACIONAL_QUERY %prec UMENOS                                 {$$ = {expresion:ValidacionExpresion.umenos($2.expresion)};}
+    | parentesis_abierto EXPRESION_RELACIONAL_QUERY parentesis_cerrado               {$2.expresion.setValor("("+$2.expresion.valor+")");$$ = {expresion:$2.expresion};}
+    | TIPOS_EXPRESION                                                               {$$ = {expresion:$1};}
 ;
 
-EXPRESION_SIMPLE
-    : EXPRESION_SIMPLE multiplicacion EXPRESION_SIMPLE
-    | EXPRESION_SIMPLE division EXPRESION_SIMPLE
-    | EXPRESION_SIMPLE suma EXPRESION_SIMPLE
-    | EXPRESION_SIMPLE resta EXPRESION_SIMPLE
-    | EXPRESION_SIMPLE mod EXPRESION_SIMPLE
-    | parentesis_abierto EXPRESION_SIMPLE parentesis_cerrado
-    | digito
-    | identificador
-    | string
-    | identificadorXquery
+
+
+TIPOS_EXPRESION
+    : digito                      {$$ = new Expresion(TiposDatos.ENTERO ,$1);}
+    | decimal                     {$$ = new Expresion(TiposDatos.DECIMAL ,$1);}
+    | identificadorXquery         {$$ = ValidacionExpresion.validarVariable(variables,$1,ambito);}
+    | string                      {$$ = new Expresion(TiposDatos.STRING ,$1);}
+    | ESTRUCTURA_LLAMADA_FUNCION  {$$ = $1.expresion;}
 ;
 
 RUTA_WHERE
@@ -633,16 +735,16 @@ OPCION_ORDER_BY
 ;
 
 ESTRUCTURA_RETURN 
-    : return OPCIONES_RETURN
+    : return 
     |
 ;
 
 OPCIONES_RETURN
     : OPCIONES_ETIQUETA
-    | identificadorXquery
-    | identificadorXquery RUTAS_QUERY
     | data parentesis_abierto identificadorXquery OPCION_RUTA_QUERY parentesis_cerrado
-    | ESTRUCTURA_IF
+    | ESTRUCTURA_IF                     {$$ = {instrucciones:$1.instrucciones};}
+    | EXPRESION_RELACIONAL_QUERY        {$$ = {instrucciones:$1.expresion};}
+    | identificadorXquery RUTAS_QUERY
 ;
 
 OPCIONES_ETIQUETA
