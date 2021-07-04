@@ -5,7 +5,6 @@ import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { Path } from "../ExpresionesXpath/Path";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
 import { ManejadorXquery } from "../manejadores/ManejadorXquery";
-import { traduccion } from '../../Traduccion/traduccion';
 
 export class MultiXpaths implements ExpressionXquery{
     
@@ -21,25 +20,7 @@ export class MultiXpaths implements ExpressionXquery{
         for (const path of this.paths) {
             ManejadorXquery.concatenar(content, path.executeXquery(entAct, RaizXML).value);
         }
-
-        var temp = ManejadorXquery.buildXquery(content);
-
-        //TRADUCCION3D##########################################################################################
-        traduccion.stackCounter++;
-        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
-        traduccion.setTranslate("\n//Ingresando String\t--------------");
-
-        for (let i = 0; i < temp.length; i++) {
-            traduccion.setTranslate("heap[(int)H] = " + temp.charCodeAt(i) + ";" + "\t\t//Caracter " + temp[i].toString());
-            traduccion.setTranslate("H = H + 1;");
-            if (i + 1 === temp.length) {
-                traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
-                traduccion.setTranslate("H = H + 1;");
-            }
-        }
-        //#######################################################################################################
-
-        return {value: temp , type : tipoPrimitivo.STRING, SP : traduccion.stackCounter}
+        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
     }
 
     GraficarAST(texto: string): string {

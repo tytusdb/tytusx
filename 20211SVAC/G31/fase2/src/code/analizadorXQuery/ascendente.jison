@@ -13,7 +13,7 @@
         const { Consulta } = require('./Expresiones/Consulta')
         const { grafoCST } = require('../CST'); 
         const { Error } = require('./Tabla/Error')
-        var grafo = new grafoCST(); 
+        var grafoNuevo = new grafoCST(); 
         var ListaErrores = []
 
 
@@ -24,7 +24,7 @@
 %options case-sensitive
 
 comentarios       (\(\:[\s\S]*?\:\))
-variable          "$"([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*
+variable          "$"([a-zñÑA-Z])[a-zA-ZñÑ0-9_]*
 nodename          ([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*
 digito            [0-9]+
 decimal           {digito}?"."{digito}+
@@ -143,10 +143,13 @@ comentarios       "(:"[^]*":)"
 %start RAIZ
 %% /* Gramática */
 
-RAIZ : DECLARACIONES EOF                {
+RAIZ : DECLARACIONES EOF                {       grafoNuevo.generarPadre(1,"INICIO");
+                                                grafoNuevo.generarHijos("INICIO");
+
                                                 $$ = {
                                                         instrucciones: $1.instrucciones, 
-                                                        errores: ListaErrores
+                                                        errores: ListaErrores, 
+                                                        grafo: grafoNuevo
                                                 }
                                                 ListaErrores = []
                                                 return $$
@@ -160,7 +163,8 @@ RAIZ : DECLARACIONES EOF                {
 
 
 
-DECLARACIONES: EXPR                    {
+DECLARACIONES: EXPR                    {        
+                                                grafoNuevo.generarHijos("EXPR")
                                                 $$ = {
                                                         instrucciones: $1.instrucciones
                                                 }
@@ -319,14 +323,28 @@ EXPR_SINGLE : FLWOR_EXPR        {
             }
             ;
 			
-FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE       {
-                                                                                $$ = {
+FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE       {       
+                                                                                if($1.tipo == 'LET_CLAUSE'){
+                                                                                        $$ = {
+                                                                                                instrucciones: new Flwor($1.tipo, '', $1.instrucciones, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }else{
+                                                                                        $$ = {
                                                                                         instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
                                                                                 }
+
+                                                                                
                                                                         }
 	|INITIAL_CLAUSE RETURN_CLAUSE                                   {       // Aqui tengo que cambiar estooo para el Let pero ya me voy a mimir
-                                                                                $$ = {
-                                                                                        instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, null, $2.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                if($1.tipo == 'LET_CLAUSE'){
+                                                                                        $$ = {
+                                                                                                instrucciones: new Flwor($1.tipo, '', $1.instrucciones, [], $2.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }else{
+                                                                                        $$ = {
+                                                                                                instrucciones: new Flwor($1.tipo, '', $1.listaVaribles,[], $2.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
                                                                                 }
                                                                         }
 	;
@@ -421,6 +439,9 @@ LET_CLAUSE: 'let'  LET_BINDING_LIST             {
 ;
 
 LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING      {     $1.instrucciones.push($3.instrucciones)
+                                                                $$ = {
+                                                                        instrucciones: $1.instrucciones
+                                                                }
 
                                                         }
 		|LET_BINDING                            {
@@ -432,7 +453,7 @@ LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING      {     $1.instrucciones.p
 
 LET_BINDING	 :  VAR_NAME ':=' EXPR_SINGLE   {
                                                         $$ = {
-                                                                instrucciones: new Asignacion($1.consulta, $2.instrucciones, this._$.first_line, this.first_column)
+                                                                instrucciones: new Asignacion($1.consulta, $3.instrucciones, this._$.first_line, this.first_column)
                                                         }
                                                 }
 ;

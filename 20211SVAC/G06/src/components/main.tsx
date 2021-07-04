@@ -13,6 +13,7 @@ const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
 const parseXQuery = require('../Grammar/xQueryGrammar');
+const parseXQueryTraduccion = require('../Grammar/xQueryGrammarTraduccion');
 const parseC3D = require('../Grammar/C3DGrammar');
 
 
@@ -188,16 +189,10 @@ export default class Main extends Component {
         var ast = result.ast;
         traducirXml(ast);
 
-        const astXquery = parseXQuery.parse(this.state.xquery);
+        const astXquery = parseXQueryTraduccion.parse(this.state.xquery);
         var salida = "";
 
-        console.log(astXquery);
-
-        for (const iterator of astXquery) {
-            for (const key in iterator) {
-                console.log(key);
-            }
-        }
+        //console.log(astXquery);
 
         var nvoEntorno = new EntornoXQuery(null, "global");
 

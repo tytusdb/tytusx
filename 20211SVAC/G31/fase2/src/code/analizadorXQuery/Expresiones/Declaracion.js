@@ -58,5 +58,6 @@ export class Asignacion{
                 entorno.asignar(this.id, valor, this.linea, this.columna)
             }
         }
+        return entorno
     }
 }

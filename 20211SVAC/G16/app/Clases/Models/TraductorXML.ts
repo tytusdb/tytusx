@@ -1,4 +1,4 @@
-const TraduccionConsulta = require('./TraducirConsulta')
+const TraduccionConsulta = require('./TraducirConsulta.js')
 
 export default class TraductorXML {
 
@@ -10,26 +10,29 @@ export default class TraductorXML {
     cadenamain = ""
     xpath = ""
     encoding = ""
+    tipo = ""
     contador = 0;
     t = 0;
     taux = 0;
 
-    constructor(entorno) {
+    constructor(entorno, consulta, tipo) {
+        this.tipo = tipo
         this.encoding = localStorage.getItem("encoding")
         this.traducir(entorno)
-        this.antesMain(TraductorXML.stack, TraductorXML.heap, entorno, null)
+        this.antesMain(TraductorXML.stack, TraductorXML.heap, entorno, consulta)
         this.hacerHeader()
     }
 
     antesMain(stack, heap, tablaS, resultado) {
-        if (resultado != null) {
-            this.xpath += "/*------CONSULTA------*/"
-            this.xpath += "    void imprimirConsulta() {\n"
-            let formato = new TraduccionConsulta(stack, heap, resultado, tablaS, this.encoding, this.t)
-            let consulta = formato.darFormato()
-            this.xpath += consulta.string
-            this.t = consulta.number
-            this.xpath += "    }\n"
+        if (resultado.length != 0) {
+            if (this.tipo == "xpath") {
+                let formato = new TraduccionConsulta.default(stack, heap, resultado, tablaS, this.encoding, this.t)
+                let consulta = formato.darFormato()
+                this.xpath += consulta.cad
+                this.t = consulta.num
+            } else if (this.tipo == "xquery") {
+
+            }
         }
     }
 
@@ -39,30 +42,30 @@ export default class TraductorXML {
         for (let i: number = 0; i < ent.length; i++) {
             ent[i].posicion = this.ps
             let letras = ent[i].valor.split("")
-            this.cadenamain += "    t" + t2 + " = H;\n"
+            this.cadenamain += "\tt" + t2 + " = H;\n"
             TraductorXML.stack.push(this.ph)
             letras.forEach(el => {
-                this.cadenamain += "    heap[(int)H] = " + el.charCodeAt(0) + ";\n"
+                this.cadenamain += "\theap[(int)H] = " + el.charCodeAt(0) + ";\n"
                 TraductorXML.heap.push(el.charCodeAt(0))
-                this.cadenamain += "    H = H + 1;\n"
+                this.cadenamain += "\tH = H + 1;\n"
                 this.ph++
             });
-            this.cadenamain += "    heap[(int)H] = -1;\n"
+            this.cadenamain += "\theap[(int)H] = -1;\n"
             TraductorXML.heap.push(-1)
-            this.cadenamain += "    H = H + 1;\n"
+            this.cadenamain += "\tH = H + 1;\n"
             this.ph++
-            this.cadenamain += "    t" + this.t + " = S + 0;\n"
-            this.cadenamain += "    stack[(int)t" + this.t + "] = t" + t2 + ";\n"
+            this.cadenamain += "\tt" + this.t + " = S + 0;\n"
+            this.cadenamain += "\tstack[(int)t" + this.t + "] = t" + t2 + ";\n"
             if (ent[i + 1] != undefined) {
-                this.cadenamain += "    S = S + 1;\n"
+                this.cadenamain += "\tS = S + 1;\n"
                 this.ps++
             } else {
-                this.cadenamain += "    S = S + 0;\n"
+                this.cadenamain += "\tS = S + 0;\n"
             }
         }
         this.t++
-        this.cadenamain += "    S = S - " + this.ps + ";\n"
-        this.cadenamain += "    t" + this.t + " = stack[(int)S];\n"
+        this.cadenamain += "\tS = S - " + this.ps + ";\n"
+        this.cadenamain += "\tt" + this.t + " = stack[(int)S];\n"
         this.t++
         localStorage.setItem("tablaSimboloAux", JSON.stringify(ent))
     }
@@ -92,13 +95,13 @@ export default class TraductorXML {
         }
         this.cadena += "/*------MAIN------*/\n"
         this.cadena += "void main() {\n"
-        this.cadena += "    S = 0; H = 0;\n"
-        this.cadena += this.cadenamain + "\n"
+        this.cadena += "\tS = 0; H = 0;\n"
+        this.cadena += this.cadenamain
         if (this.xpath != "") {
-            this.cadena += "    imprimirConsulta();\n"
+            this.cadena += "\tconsulta();\n\n"
         }
-        this.cadena += "    printf(\"%c\", (char)10);\n"
-        this.cadena += "    return;\n"
+        this.cadena += "\tprintf(\"%c\", (char)10);\n"
+        this.cadena += "\treturn;\n"
         this.cadena += "}\n"
     }
 

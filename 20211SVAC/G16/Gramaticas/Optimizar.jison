@@ -42,6 +42,7 @@
 "float"         return 'rfloat';
 "char"          return 'rchar';
 "if"            return 'rif';
+"double"        return 'rdouble'
 "printf"        return 'rprintf';
 "include"       return 'rinclude';
 "return"        return 'rreturn';
@@ -75,7 +76,7 @@ DECLARACIONES
 ;
 
 DECLARACIONVAR
-    :rfloat LISTAIDENTIFICADOR puntocoma   { $$ = $1 + " " + $2 + $3 + "\n"; }
+    :TIPODATO LISTAIDENTIFICADOR puntocoma   { $$ = $1 + " " + $2 + $3 + "\n"; }
 ;
 
 LISTAIDENTIFICADOR
@@ -88,8 +89,8 @@ LISTAIDENTIFICADOR
 ;
 
 SENTENCIAS
-    :SENTENCIAS rvoid id parizq parder llaveizq SENTENCIA llaveder   { $$ = $1 + $2 + " " + $3 + $4 + $5 + " " + $6 + $7 + $8; }
-    |rvoid id parizq parder llaveizq SENTENCIA llaveder              { $$ = $1 + " " + $2 + $3 + $4 + " " + $5 + $6 + $7 + "\n\n"; }
+    :SENTENCIAS TIPODATO id parizq parder llaveizq SENTENCIA llaveder   { $$ = $1 + $2 + " " + $3 + $4 + $5 + " " + $6 + "\n" + $7 + $8 + "\n"; }
+    |TIPODATO id parizq parder llaveizq SENTENCIA llaveder              { $$ = $1 + " " + $2 + $3 + $4 + " " + $5 + "\n" + $6 + $7 + "\n\n"; }
 ;
 
 SENTENCIA
@@ -98,13 +99,13 @@ SENTENCIA
 ;
 
 INSTRUCCION
-    :ASIGNACION         { $$ = "    " + $1; }
-    |DEFETIQUETA        { $$ = "    " + $1; }
-    |SENTENCIAIF        { $$ = "    " + $1; }
-    |SENTENCIAGOTO      { $$ = "    " + $1; }
-    |SENTENCIAPRINT     { $$ = "    " + $1; }
-    |LLAMADA            { $$ = "    " + $1; }
-    |rreturn puntocoma  { $$ = "    " + $1; }
+    :ASIGNACION         { $$ = "\t" + $1; }
+    |DEFETIQUETA        { $$ = "\t" + $1; }
+    |SENTENCIAIF        { $$ = "\t" + $1; }
+    |SENTENCIAGOTO      { $$ = "\t" + $1; }
+    |SENTENCIAPRINT     { $$ = "\t" + $1; }
+    |LLAMADA            { $$ = "\t" + $1; }
+    |rreturn puntocoma  { $$ = "\t" + $1; }
 ;
 
 ASIGNACION
@@ -159,4 +160,11 @@ CONSTANTE
     :entero     { $$ = $1; }
     |decimal    { $$ = $1; }
     |id         { $$ = $1; }
+;
+
+TIPODATO
+    :rint       { $$ = $1; }
+    |rchar      { $$ = $1; }
+    |rfloat     { $$ = $1; }
+    |rdouble    { $$ = $1; }
 ;

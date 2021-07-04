@@ -18,11 +18,9 @@ var If = /** @class */ (function () {
             if (this.sentencias instanceof Operaciones_js_1.Operacion) {
                 var resultado = this.sentencias.ejecutar(entorno, this.sentencias);
                 if (resultado != null) {
-                    if (this.sino.operador1.tipo == Tipo_js_1.Tipo.VARIABLE) {
-                        entorno.setVariable(this.sino.operador1.valor, resultado);
+                    if (this.sentencias.operador1.tipo == Tipo_js_1.Tipo.VARIABLE) {
+                        entorno.setVariable(this.sentencias.operador1.valor, resultado);
                     }
-                    console.log("*****está en el if*****");
-                    console.log(this.sentencias.operador1);
                     return resultado;
                 }
             }
@@ -35,8 +33,6 @@ var If = /** @class */ (function () {
                     if (this.sino.operador1.tipo == Tipo_js_1.Tipo.VARIABLE) {
                         entorno.setVariable(this.sino.operador1.valor, resultado);
                     }
-                    console.log("****está en el sino*****");
-                    console.log(this.sino);
                     return resultado;
                 }
             }
