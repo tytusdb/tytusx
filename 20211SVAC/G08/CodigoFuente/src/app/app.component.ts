@@ -117,19 +117,22 @@ cstxml;
   double heap[30101999];
   double stack[30101999];
   double SP;
+  double HP;`
 
-  double HP;
-  
+  c3dTextInicial2 = `
   /*------MAIN------*/
   void main() {
     SP = 0; HP = 0;`;
+
 c3dText = '';
 c3dTextGenerado = '';
+c3dTemporales="";
 c3dTextFinal = `    return;
     }`;
     objetosTraducir;
     xmlTraductor;
     xmlTraducido="";
+    consultac3d="";
     reporteOptimizaciones:Optimizacion[]= [];
     ProcessedData:Entrada;
   private httpClient: HttpClient;
@@ -214,7 +217,9 @@ c3dTextFinal = `    return;
     }
     
    this.traducirXml();
-  this.c3dText = this.c3dTextInicial + '\n' +this.xmlTraducido+ this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
+  this.c3dText = this.c3dTextInicial+ '\n'+  this.c3dTemporales +'\n'
+    + this.consultac3d +'\n' +this.c3dTextInicial2 
+     + '\n' +this.xmlTraducido+ this.c3dTextGenerado + '\n' + this.c3dTextFinal; 
   }
 
   ProcesarXquery(sentencias:SentenciaXquery[]){
@@ -3019,14 +3024,18 @@ console.log();
     const traduction= new this.xmlTraductor.TraductorXML_C3D();
     var codigo= traduction.traducir(objetos.listaObjetos);
     this.xmlTraducido=codigo;
-    //console.log("**************");
-    //console.log(objetos);
-    if(this.ProcessedData.Tipo != 1){
-      var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
-    }
-    
-    //console.log("**************Valor");
-    //console.log(valor);
+
+    console.log("**************");
+    console.log(objetos);
+    var valor = this.ProcesarNodoRaizXquery(this.sentenciaOriginal,[objetos],[])
+    console.log("**************Valor");
+    console.log(valor);
+    var codigoConsulta=traduction.traducirconsulta(valor);
+    console.log(codigoConsulta);
+    this.consultac3d=codigoConsulta;
+    this.c3dTemporales=traduction.generarTemporales();
+
+
   }
 
 }
