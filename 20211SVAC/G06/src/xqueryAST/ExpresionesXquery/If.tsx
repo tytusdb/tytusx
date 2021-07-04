@@ -3,7 +3,6 @@ import { Entorno } from "../../xmlAST/Entorno";
 import { Simbolo } from "../../xmlAST/Simbolo";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
-import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
 export class If implements ExpressionXquery{
 
@@ -21,15 +20,12 @@ export class If implements ExpressionXquery{
         }
 
         if (condicion.value === true){
-            
-            const resultExp = this.exp.executeXquery(entAct, RaizXML);
-            return resultExp
-
+            return this.exp.executeXquery(entAct, RaizXML);
         }else {
         
             const elseif = this.elseif?.executeXquery(entAct, RaizXML); 
             if (elseif === undefined){
-                return {value : [], type: tipoPrimitivo.RESP}
+                return {value : [], type: tipoPrimitivo.VOID, SP: -1}
             }
             return elseif;
 

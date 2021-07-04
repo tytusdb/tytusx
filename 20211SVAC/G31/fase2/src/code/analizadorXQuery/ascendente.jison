@@ -6,6 +6,7 @@
         const { And, Or } = require('./Expresiones/Logicas') ; 
         const { Suma, Resta, Multiplicacion, Division, Positivo, Negativo } = require('./Expresiones/Aritmeticas')
         const { Menor, Mayor, MenorIgual, MayorIgual, Igualdad, Desigualdad } = require('./Expresiones/Relacional')
+        const { LowerFuncion, UpperFuncion, SubstringFuncion, Anumber, Astring } = require('./Instrucciones/FuncionN')
         const { If } = require('./Instrucciones/If')
         const { Parametro } = require('./Expresiones/Parametro')
         const { Funcion, CallFuncion } = require('./Instrucciones/Funcion')
@@ -13,7 +14,7 @@
         const { Consulta } = require('./Expresiones/Consulta')
         const { grafoCST } = require('../CST'); 
         const { Error } = require('./Tabla/Error')
-        var grafo = new grafoCST(); 
+        var grafoNuevo = new grafoCST(); 
         var ListaErrores = []
 
 
@@ -24,7 +25,7 @@
 %options case-sensitive
 
 comentarios       (\(\:[\s\S]*?\:\))
-variable          "$"([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*
+variable          "$"([a-zñÑA-Z])[a-zA-ZñÑ0-9_]*
 nodename          ([a-zñÑA-Z])[a-zA-ZñÑ0-9_-]*
 digito            [0-9]+
 decimal           {digito}?"."{digito}+
@@ -57,6 +58,7 @@ comentarios       "(:"[^]*":)"
 ";"                     return ';'
 //"$"                     return '$'
 
+"string"                  return 'string'
 "integer"                 return 'integer'
 "decimal"                 return 'prdecimal'
 "function"                return 'function'
@@ -78,6 +80,10 @@ comentarios       "(:"[^]*":)"
 "preceding"               return 'preceding'
 "self"                    return 'self'
 "text"                    return 'text'
+"upper-case"              return 'uppercase'
+"substring"               return 'substring'
+"lower-case"              return 'lowercase'
+"number"                  return 'number'
 
 "at"                      return 'at'
 "as"                      return 'as'
@@ -92,7 +98,7 @@ comentarios       "(:"[^]*":)"
 "return"                  return 'return'
 "then"                    return 'then'
 "to"                      return 'to'
-"variable"                return 'variable'
+"variable"                return 'prvariable'
 "where"                   return 'where'
 "xs"                      return 'xs'
 
@@ -125,7 +131,7 @@ comentarios       "(:"[^]*":)"
 <<EOF>>                   return 'EOF';
 
 .                         {
-                            ListaErrores.push(new Error('Léxico', `Patrón desconocido ${yytext}`, yylloc.first_line, yylloc.first_column));
+                            ListaErrores.push({Error: `Se encontro caracter desconocido ${yytext}`, tipo:`Léxico`, linea: yylloc.first_line, columna: yylloc.first_column});
                             console.log(`Error Léxico: ${yytext} en la linea ${yylloc.first_line} y columna ${yylloc.first_column}`);
                           }
 /lex
@@ -143,24 +149,49 @@ comentarios       "(:"[^]*":)"
 %start RAIZ
 %% /* Gramática */
 
-RAIZ : DECLARACIONES EOF                {
+RAIZ : DECLARACIONES EOF                {       grafoNuevo.generarPadre(1,"DECLARACIONES");
+                                                grafoNuevo.generarHijos("DECLARACIONES");
+                                                
+                                                var retornoGrafo = Object.assign({}, grafoNuevo)
+                                                var retornoErrores = Object.assign({}, ListaErrores)
+
                                                 $$ = {
                                                         instrucciones: $1.instrucciones, 
-                                                        errores: ListaErrores
+                                                        errores: ListaErrores, 
+                                                        grafo: retornoGrafo, 
+                                                        grafoNodes: retornoGrafo.pilaNodos, 
+                                                        grafoEdges: retornoGrafo.PilaEdges, 
+                                                        
                                                 }
-                                                ListaErrores = []
+                                                ListaErrores = []; 
+                                                grafoNuevo = new grafoCST()
+                                                
                                                 return $$
                                         }
     | EOF                               { return 'Entrada vacia' }
- /*   | error                             {
-                                                ListaErrores.push(new Error('Sintáctico', `Se obtuvo ${yytext}`, this._$.first_line, this._$.first_column));
+    | error                             {
+                                                ListaErrores.push({Error: `Se esperaba ${yy.parser.hash.expected} en lugar de ${yytext}`, tipo: 'Sintáctico', linea: this._$.first_line, columna: this._$.first_column});
                                                 console.log(`Error Sintáctico: ${yytext} en la linea ${this._$.first_line} y columna ${this._$.first_column}`);
-                                        }*/
+                                               
+                                                var retornoErrores = Object.assign({}, ListaErrores)
+                                                $$ = {
+                                                        instrucciones: null, 
+                                                        errores: ListaErrores, 
+                                                        grafo: null, 
+                                                        grafoNodes: null, 
+                                                        grafoEdges: null
+                                                }
+
+                                                ListaErrores = []
+                                                grafoNuevo = new grafoCST()
+                                                return $$
+                                        }
     ;
 
 
 
-DECLARACIONES: EXPR                    {
+DECLARACIONES: EXPR                    {        grafoNuevo.generarPadre(1, "EXPR")
+                                                grafoNuevo.generarHijos("EXPR")
                                                 $$ = {
                                                         instrucciones: $1.instrucciones
                                                 }
@@ -168,12 +199,21 @@ DECLARACIONES: EXPR                    {
              ;
 	
 
-VAR_DECL : 'variable' VAR_NAME ':=' EXPR_SINGLE         {
+VAR_DECL : 'prvariable' VAR_NAME ':=' EXPR_SINGLE         {       grafoNuevo.generarPadre(4, "EXPR_SINGLE")
+                                                                grafoNuevo.generarPadre(2, "VAR_NAME")
+                                                               
+                                                                grafoNuevo.generarHijos($1, "VAR_NAME", $3, "EXPR_SINGLE")
+
                                                                 $$ = {
                                                                         instrucciones: new Declaracion($2.consulta, Tipo.STRING, $4.instrucciones, this._$.first_line, this._$.first_column)
                                                                 }
                                                         }
-	|  'variable' VAR_NAME TYPE_DECL ':=' EXPR_SINGLE       {
+	|  'prvariable' VAR_NAME TYPE_DECL ':=' EXPR_SINGLE       {       grafoNuevo.generarPadre(5, "EXPR_SINGLE")
+                                                                        grafoNuevo.generarPadre(3, "TYPE_DECL")
+                                                                        grafoNuevo.generarPadre(2, "VAR_NAME")
+                                                                        
+                                                                        
+                                                                        grafoNuevo.generarHijos($1, "VAR_NAME", "TYPE_DECL", $4, "EXPR_SINGLE")
                                                                         $$ = {
                                                                                 instrucciones: new Declaracion($2.consulta, $3.tipo, $4.instrucciones, this._$.first_line, this._$.first_column)
                                                                         }
@@ -181,7 +221,12 @@ VAR_DECL : 'variable' VAR_NAME ':=' EXPR_SINGLE         {
 	;
 
 FUNC_DECL: 'function' 'local' ':' 'VAR_NAME' '(' PARAMS_LIST ')'  TYPE_DECL '{' EXPR '}'  
-                                                                                                {
+                                                                                                {       grafoNuevo.generarPadre(10, "EXPR")
+                                                                                                        grafoNuevo.generarPadre(8, "TYPE_DECL")
+                                                                                                        grafoNuevo.generarPadre(6, "PARAMS_LIST")
+                                                                                                        grafoNuevo.generarPadre(4, "VAR_NAME")
+
+                                                                                                        grafoNuevo.generarHijos($1, $2, $3, "VAR_NAME", $5, "PARAMS_LIST", $7, "TYPE_DECL", $9, "EXPR", $11)
                                                                                                 
                                                                                                         $$ = {
                                                                                                                 instrucciones: new Funcion($4.consulta, $6.instrucciones, $10.instrucciones,  $8.tipo)
@@ -189,26 +234,44 @@ FUNC_DECL: 'function' 'local' ':' 'VAR_NAME' '(' PARAMS_LIST ')'  TYPE_DECL '{' 
                                                                                                 }
         | 'function' 'local' ':' 'VAR_NAME' '(' ')'  TYPE_DECL '{' EXPR '}'  
                                                                                                 {
-                                                                                                
+                                                                                                        grafoNuevo.generarPadre(9, "EXPR")
+                                                                                                        grafoNuevo.generarPadre(7, "TYPE_DECL")
+                                                                                                        grafoNuevo.generarPadre(4, "VAR_NAME")                                                                                                        
+                                                                                                        
+                                                                                                        grafoNuevo.generarHijos($1, $2, $3, "VAR_NAME", $5, $6, "TYPE_DECL", $8, "EXPR", $10)
+
                                                                                                         $$ = {
                                                                                                                 instrucciones: new Funcion($4.consulta, [] , $10.instrucciones,  $8.tipo)
                                                                                                         }
                                                                                                 }
 ; 
 
-PARAMS_LIST: PARAMS_LIST ',' PARAMS     {       $1.instrucciones.push($3.instrucciones)
+PARAMS_LIST: PARAMS_LIST ',' PARAMS     {       
+                                                grafoNuevo.generarPadre(3, "PARAMS")
+                                                grafoNuevo.generarPadre(1, "PARAMS_LIST")
+                                                
+                                                grafoNuevo.generarHijos("PARAMS_LIST", $2, "PARAMS")
+
+                                                $1.instrucciones.push($3.instrucciones)
                                                 $$ = {
                                                         instrucciones: $1.instrucciones
                                                 }
                                         }
         | PARAMS                        {
+                                                grafoNuevo.generarPadre(1, "PARAMS"); 
+                                                grafoNuevo.generarHijos("PARAMS")
                                                 $$ = {
                                                         instrucciones: [$1.instrucciones]
                                                 }
                                         }
         ; 
 
-PARAMS: VAR_NAME TYPE_DECL              {
+PARAMS: VAR_NAME TYPE_DECL              {       
+                                                grafoNuevo.generarPadre(2, "TYPE_DECL")
+                                                grafoNuevo.generarPadre(1, "VAR_NAME")
+                                                
+                                                grafoNuevo.generarHijos("VAR_NAME", "TYPE_DECL")
+
                                                 $$ = {
                                                         instrucciones: new Parametro($1.consulta, $2.tipo, this._$.first_line, this._$.first_column)
                                                 }
@@ -217,11 +280,17 @@ PARAMS: VAR_NAME TYPE_DECL              {
 
 
 CALL_FUNCT: 'local' ':' VAR_NAME '(' EXPR  ')'          {
+                                                                grafoNuevo.generarPadre(5, "EXPR")
+                                                                grafoNuevo.generarPadre(3, "VAR_NAME")
+                                                                
+                                                                grafoNuevo.generarHijos($1, $2, "VAR_NAME", $4, "EXPR", $6)
                                                                 $$ = {
                                                                         instrucciones: new CallFuncion($3.consulta, $5.instrucciones, this._$.first_line, this._$.first_column)
                                                                 }
                                                         }
-        | 'local' ':' VAR_NAME '('  ')'                 {
+        | 'local' ':' VAR_NAME '('  ')'                 {       
+                                                                grafoNuevo.generarPadre(3, "VAR_NAME")
+                                                                grafoNuevo.generarHijos($1, $2, "VAR_NAME", $4, $5)
                                                                 $$ = {
                                                                         instrucciones: new CallFuncion($3.consulta, [], this._$.first_line, this._$.first_column)
                                                                 }
@@ -230,31 +299,46 @@ CALL_FUNCT: 'local' ':' VAR_NAME '(' EXPR  ')'          {
 
 
 		
-TYPE_DECL : 'as' ITEM_TYPE  {
+TYPE_DECL : 'as' ITEM_TYPE  {           grafoNuevo.generarPadre(2, "ITEM_TYPE")
+                                        grafoNuevo.generarHijos($1, "ITEM_TYPE")
                                         $$ = {
                                                 tipo: $2.tipo
                                         }
                                 }
         ;
 
-ITEM_TYPE : KIND_TEST
-          | PARENTHESIZED_EXPR          {
-                                                        console.log('PASO POR AQUI')
+ITEM_TYPE : KIND_TEST                   {
+                                                grafoNuevo.generarPadre(1, "KIND_TEST")
+                                                grafoNuevo.generarHijos("KIND_TEST")
                                         }
-          | 'xs' '':' 'integer'                   {
+          | PARENTHESIZED_EXPR          {
+                                                grafoNuevo.generarPadre(1, "PARENTHESIZED_EXPR")      
+                                                grafoNuevo.generarPadre("PARENTHESIZED")
+                                        }
+          | 'xs' '':' 'integer'         {
+                                                grafoNuevo.generarHijos($1, $2, $3)
                                                 $$ = {
                                                         tipo: Tipo.INTEGER
                                                 }
                                         }
-          | 'xs' '':' 'prdecimal'                   {
+          | 'xs' '':' 'prdecimal'       {       
+                                                grafoNuevo.generarHijos($1, $2, $3)
                                                 $$ = {
                                                         tipo: Tipo.DECIMAL
+                                                }
+                                        }
+          
+          | 'xs' ':' 'string'           {
+                                                grafoNuevo.generarHijos($1, $2, $3)
+                                                $$ = {
+                                                        tipo: Tipo.STRING
                                                 }
                                         }
           ;
 
 
-VAR_NAME : EQNAME       {
+VAR_NAME : EQNAME       {       grafoNuevo.generarPadre(1,"EQNAME")
+                                grafoNuevo.generarHijos("EQNAME")
                                 $$ = {
                                         consulta: `${$1}`
                                 }
@@ -262,21 +346,32 @@ VAR_NAME : EQNAME       {
 ;
 
 
-EXPR : EXPR ',' EXPR_SINGLE     {
+EXPR : EXPR ',' EXPR_SINGLE     {       grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                        grafoNuevo.generarPadre(1, "EXPR")
+                                        
+                                        grafoNuevo.generarHijos("EXPR", ",","EXPR_SINGLE")
+                                        
                                         $1.instrucciones.push($3.instrucciones)
                                         $$ = {
                                                 consulta: `${$1.consulta},${$3.consulta}`, 
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
-     | EXPR ';' EXPR_SINGLE     {
+     | EXPR ';' EXPR_SINGLE     {       grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                        grafoNuevo.generarPadre(1, "EXPR")
+                                                                               
+                                        grafoNuevo.generarHijos("EXPR", ";","EXPR_SINGLE")
+
                                         $1.instrucciones.push($3.instrucciones)
                                         $$ = {
                                                 consulta: `${$1.consulta},${$3.consulta}`, 
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
-     | EXPR_SINGLE      {
+     | EXPR_SINGLE      {       
+                                grafoNuevo.generarPadre(1, "EXPR_SINGLE")
+                                grafoNuevo.generarHijos("EXPR_SINGLE")
+
                                 $$ = {
                                         consulta: $1.consulta,
                                         instrucciones: [$1.instrucciones]
@@ -284,61 +379,151 @@ EXPR : EXPR ',' EXPR_SINGLE     {
                         }
      ;
 
-EXPR_SINGLE : FLWOR_EXPR        {
+EXPR_SINGLE : FLWOR_EXPR        {       grafoNuevo.generarPadre(1, "FLWOR_EXPR")
+                                        grafoNuevo.generarHijos("FLWOR_EXPR")
+
                                         $$ = {
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
-            | IF_EXPR           {
+            | IF_EXPR           {       grafoNuevo.generarPadre(1, "IF_EXPR")
+                                        grafoNuevo.generarHijos("IF_EXPR")
+
                                         $$ = {
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
-            | OR_EXPR           {
+            | OR_EXPR           {       grafoNuevo.generarPadre(1, "OR_EXPR")
+                                        grafoNuevo.generarHijos("OR_EXPR")
+
                                         $$ = {
                                                 consulta: $1.consulta,
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
 
-            | RETURN_CLAUSE     {
+            | RETURN_CLAUSE     {       grafoNuevo.generarPadre(1, "RETURN_CLAUSE")
+                                        grafoNuevo.generarHijos("RETURN_CLAUSE")
+
                                         $$ = {
                                                 instrucciones: $1.instrucciones
                                         }
                                 }
         
-            |  'declare' FUNC_DECL     {
+            |  'declare' FUNC_DECL     {        grafoNuevo.generarPadre(2, "FUNC_DECL")
+                                                grafoNuevo.generarHijos("declare", "FUNC_DECL")
+
                                                 $$ = {
                                                         instrucciones: $2.instrucciones
                                                 }
                                         }
-            | 'declare' VAR_DECL        {
+            | 'declare' VAR_DECL        {       grafoNuevo.generarPadre(2, "VAR_DECL")
+                                                grafoNuevo.generarHijos("declare", "VAR_DECL")
+
                                                 $$ = {
                                                         instrucciones: $2.instrucciones
                                                 }
-            }
-            ;
-			
-FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE       {
+                                        }
+            | 'lowercase' '(' EXPR_SINGLE ')'           {
+                                                                grafoNuevo.generarPadre(3, "EXPR_SINGLE"); 
+                                                                grafoNuevo.generarHijos($1, $2, "EXPR_SINGLE", $4); 
+                                                                
+                                                                $$ = {
+                                                                        instrucciones: new LowerFuncion($3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                }
+                                                        } 
+            | 'uppercase' '(' EXPR_SINGLE ')'           {
+                                                                grafoNuevo.generarPadre(3, "EXPR_SINGLE"); 
+                                                                grafoNuevo.generarHijos($1, $2, "EXPR_SINGLE", $4); 
+
+                                                                $$ = {
+                                                                        instrucciones: new UpperFuncion($3.instrucciones, this._$.first_line, this._$.first_column)
+
+                                                                }
+                                                        }                  
+
+        | 'string' '(' EXPR_SINGLE ')'                  {
+                                                                grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                                                grafoNuevo.generarHijos($1, $2, "EXPR_SINGLE", $4)
+
+                                                                $$ = {
+                                                                        instrucciones: new Astring($3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                }
+
+                                                        }             
+        | 'number' '(' EXPR_SINGLE ')'                  {
+                                                                grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                                                grafoNuevo.generarHijos($1, $2, "EXPR_SINGLE", $4)
+
+                                                                $$ = {
+                                                                        instrucciones: new Anumber($3.instrucciones, this._$.first_line, this.$.first_column)
+                                                                }
+                                                               
+                                                        }
+        | 'substring' '(' EXPR_SINGLE ',' EXPR_SINGLE ',' EXPR_SINGLE ')'       {       grafoNuevo.generarPadre(7, "EXPR_SINGLE")
+                                                                                        grafoNuevo.generarPadre(5, "EXPR_SINGLE")
+                                                                                        grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                                                                        grafoNuevo.generarHijos($1, $2, "EXPR_SINGLE", $4, "EXPR_SINGLE", $6, "EXPR_SINGLE", $8)
+                                                                                        $$ = {
+                                                                                                instrucciones: new SubstringFuncion($3.instrucciones, $5.instrucciones, $7.instrucciones,this._$.first_line, this._$.first_column )
+                                                                                        }
+                                                                                }
+        | 'substring'  '(' EXPR_SINGLE ',' EXPR_SINGLE ')'              {
+                                                                                
+                                                                                grafoNuevo.generarPadre(5, "EXPR_SINGLE")
+                                                                                grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                                                                grafoNuevo.generarHijos($1, $2, "EXPR_SINGLE", $4, "EXPR_SINGLE", $6,)
                                                                                 $$ = {
-                                                                                        instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        instrucciones: new SubstringFuncion($3.instrucciones, $5.instrucciones, null ,this._$.first_line, this._$.first_column )
                                                                                 }
                                                                         }
-	|INITIAL_CLAUSE RETURN_CLAUSE                                   {       // Aqui tengo que cambiar estooo para el Let pero ya me voy a mimir
-                                                                                $$ = {
-                                                                                        instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, null, $2.instrucciones, this._$.first_line, this._$.first_column)
+        ; 
+			
+FLWOR_EXPR: INITIAL_CLAUSE INTERMEDIATE_CLAUSE_LIST RETURN_CLAUSE       {       grafoNuevo.generarPadre(3, "RETURN_CLAUSE")
+                                                                                grafoNuevo.generarPadre(2, "INTERMEDIA_CLAUSE")
+                                                                                grafoNuevo.generarPadre(1, "INITIAL_CLAUSE")
+                                                                                grafoNuevo.generarHijos("INTIAL_CLAUSE", "INTERMEDIA_CLAUSE", "RETURN_CLAUSE")
+
+                                                                                if($1.tipo == 'LET_CLAUSE'){
+                                                                                        $$ = {
+                                                                                                instrucciones: new Flwor($1.tipo, '', $1.instrucciones, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }else{
+                                                                                        $$ = {
+                                                                                        instrucciones: new Flwor($1.tipo, '', $1.listaVaribles, $2.instrucciones, $3.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }
+
+                                                                                
+                                                                        }
+	|INITIAL_CLAUSE RETURN_CLAUSE                                   {       
+                                                                                grafoNuevo.generarPadre(2, "RETURN_CLAUSE")
+                                                                                grafoNuevo.generarPadre(1, "INITIAL_CLAUSE")
+                                                                                
+                                                                                grafoNuevo.generarHijos("INTIAL_CLAUSE",  "RETURN_CLAUSE")
+
+                                                                                if($1.tipo == 'LET_CLAUSE'){
+                                                                                        $$ = {
+                                                                                                instrucciones: new Flwor($1.tipo, '', $1.instrucciones, [], $2.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
+                                                                                }else{
+                                                                                        $$ = {
+                                                                                                instrucciones: new Flwor($1.tipo, '', $1.listaVaribles,[], $2.instrucciones, this._$.first_line, this._$.first_column)
+                                                                                        }
                                                                                 }
                                                                         }
 	;
 			
-INITIAL_CLAUSE : FOR_CLAUSE     {
+INITIAL_CLAUSE : FOR_CLAUSE     {       grafoNuevo.generarPadre(1, "FOR_CLAUSE")
+                                        grafoNuevo.generarHijos("FOR_CLAUSE")
                                         $$ = {
                                                 instrucciones: $1.instrucciones, 
                                                 tipo: 'FOR_CLAUSE', 
                                                 listaVaribles: $1.variables
                                         }
                                 }
-		|LET_CLAUSE     {
+		|LET_CLAUSE     {       grafoNuevo.generarPadre(1, "LET_CLAUSE")
+                                        grafoNuevo.generarHijos("LET_CLAUSE")
                                         $$ = {
                                                 instrucciones: $1.instrucciones, 
                                                 tipo: 'LET_CLAUSE'
@@ -346,13 +531,19 @@ INITIAL_CLAUSE : FOR_CLAUSE     {
                                 }
 		;
 		
-INTERMEDIATE_CLAUSE_LIST: INTERMEDIATE_CLAUSE_LIST INTERMEDIATE_CLAUSE           {
+INTERMEDIATE_CLAUSE_LIST: INTERMEDIATE_CLAUSE_LIST INTERMEDIATE_CLAUSE           {      grafoNuevo.generarPadre(2, "INTERMEDIATE_CLAUSE")
+                                                                                        grafoNuevo.generarPadre(1, "INTERMEDIATE_CLAUSE_LIST")
+                                                                                        
+                                                                                        grafoNuevo.generarHijos("INTERMEDIATE_CLAUSE_LIST", "INTERMEDIATE_CLAUSE")
+
                                                                                         $1.instrucciones.push($2.instrucciones)
                                                                                         $$ = {
                                                                                                 instrucciones: $1.instrucciones
                                                                                         }
                                                                                 }
-                        |INTERMEDIATE_CLAUSE                                    {
+                        |INTERMEDIATE_CLAUSE                                    {       grafoNuevo.generarPadre(1, "INTERMEDIATE_CLAUSE")
+                                                                                        grafoNuevo.generarHijos("INTERMEDIATE_CLAUSE")
+                                                                                        
                                                                                         $$ = {
                                                                                                 instrucciones: [$1.instrucciones]
                                                                                         }
@@ -360,17 +551,22 @@ INTERMEDIATE_CLAUSE_LIST: INTERMEDIATE_CLAUSE_LIST INTERMEDIATE_CLAUSE          
                         ;
 
 
-INTERMEDIATE_CLAUSE : INITIAL_CLAUSE    {
+INTERMEDIATE_CLAUSE : INITIAL_CLAUSE    {       grafoNuevo.generarPadre(1, "INITIAL_CLAUSE")
+                                                grafoNuevo.generarHijos("INITIAL_CLAUSE")
+
                                                 $$ = {
                                                         instrucciones: $1.instrucciones
                                                 }
                                         }   
-		|WHERE_CLAUSE           {
+		|WHERE_CLAUSE           {       grafoNuevo.generarPadre(1, "WHERE_cLAUSE")
+                                                grafoNuevo.generarHijos("WHERE_CLAUSE")
+
                                                 $$ = {
                                                         instrucciones: $1.instrucciones
                                                 }
                                         }
-		|ORDERBY_CLAUSE         {
+		|ORDERBY_CLAUSE         {       grafoNuevo.generarPadre(1, "ORDERBY_CLAUSE")
+                                                grafoNuevo.generarHijos("ORDERBY_CLAUSE")
                                                 $$ = {
                                                         instrucciones: $1.instrucciones
                                                 }
@@ -378,7 +574,8 @@ INTERMEDIATE_CLAUSE : INITIAL_CLAUSE    {
 		;
 
 					
-FOR_CLAUSE : 'for' FOR_BINDING_LIST      {     
+FOR_CLAUSE : 'for' FOR_BINDING_LIST      {      grafoNuevo.generarPadre(2, "FOR_BINDING_LIST")
+                                                grafoNuevo.generarHijos($1, "FOR_BINDING_LIST")
                                                 $$ = {
                                                         variables: $2.variables
                                                 }
@@ -386,26 +583,40 @@ FOR_CLAUSE : 'for' FOR_BINDING_LIST      {
 ;
 
 FOR_BINDING_LIST: FOR_BINDING_LIST ',' FOR_BINDING      {       
+                                                                grafoNuevo.generarPadre(2, "FOR_BINDING")
+                                                                grafoNuevo.generarPadre(1, "FOR_BINDING_LIST")
+                                                                
+                                                                grafoNuevo.generarHijos("FOR_BINDING_LIST", $2, "FOR_BINDING")
 
                                                                 $1.variables.push($3.variables); 
                                                                 $$ = {
                                                                         variables: $1.variables
                                                                 }
                                                         }       
-		| FOR_BINDING                           {
+		| FOR_BINDING                           {       grafoNuevo.generarPadre(1, "FOR_BINDING")
+                                                                grafoNuevo.generarHijos("FOR_BINDING")
+
                                                                 $$ = {
                                                                         variables: [$1.variables]
                                                                 }
                                                         }
 		;
 			
-FOR_BINDING :  VAR_NAME  'at' VAR_NAME 'in' QUERY     {      
+FOR_BINDING :  VAR_NAME  'at' VAR_NAME 'in' QUERY     {         grafoNuevo.generarPadre(5, "QUERY")
+                                                                grafoNuevo.generarPadre(3, "VAR_NAME")
+                                                                grafoNuevo.generarPadre(1, "VAR_NAME")
+                                                                grafoNuevo.generarHijos("VAR_NAME", $2, "VAR_NAME", $4, "QUERY")
+
                                                                     $$ = {
                                                                         variables: new VariableFor(this._$.first_line, this._$.first_column, $1.consulta, $5.consulta, $3.consulta)
                                                                     }
 
                                                              }
-		| VAR_NAME 'in' QUERY                      {      
+		| VAR_NAME 'in' QUERY                      {    grafoNuevo.generarPadre(3, "QUERY")
+                                                                grafoNuevo.generarPadre(1, "VAR_NAME")
+                                                                
+                                                                grafoNuevo.generarHijos("VAR_NAME", $2, "QUERY")
+
                                                                    $$ = {
                                                                         variables: new VariableFor(this._$.first_line, this._$.first_column, $1.consulta, $3.consulta, null)
                                                                    }
@@ -413,38 +624,55 @@ FOR_BINDING :  VAR_NAME  'at' VAR_NAME 'in' QUERY     {
 		;
 			
 
-LET_CLAUSE: 'let'  LET_BINDING_LIST             {
+LET_CLAUSE: 'let'  LET_BINDING_LIST             {       grafoNuevo.generarPadre(2, "LET_BINDING_LIST")
+                                                        grafoNuevo.generarHijos($1, "LET_BINDING_LIST")
                                                         $$ = {
                                                                 instrucciones: $2.instrucciones
                                                         }
                                                 }
 ;
 
-LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING      {     $1.instrucciones.push($3.instrucciones)
+LET_BINDING_LIST: LET_BINDING_LIST ',' LET_BINDING      {     
+                                                                grafoNuevo.generarPadre(3, "LET_BINDING")
+                                                                grafoNuevo.generarPadre(1, "LET_BINDING_LIST");
+                                                                
+                                                                grafoNuevo.generarHijos("LET_BINDING_LIST", $2, "LET_BINDING")
+
+                                                                $1.instrucciones.push($3.instrucciones)
+                                                                $$ = {
+                                                                        instrucciones: $1.instrucciones
+                                                                }
 
                                                         }
-		|LET_BINDING                            {
+		|LET_BINDING                            {       grafoNuevo.generarPadre(1, "LET_BINDING")
+                                                                grafoNuevo.generarHijos("LET_BINDING")
                                                                 $$ = {
                                                                         instrucciones: [$1.instrucciones]
                                                                 }
                                                         }
 ;
 
-LET_BINDING	 :  VAR_NAME ':=' EXPR_SINGLE   {
+LET_BINDING	 :  VAR_NAME ':=' EXPR_SINGLE   {       
+                                                        grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                                        grafoNuevo.generarPadre(1, "VAR_NAME")
+                                                       
+                                                        grafoNuevo.generarHijos("VAR_NAME", $2, "EXPR_SINGLE")
                                                         $$ = {
-                                                                instrucciones: new Asignacion($1.consulta, $2.instrucciones, this._$.first_line, this.first_column)
+                                                                instrucciones: new Asignacion($1.consulta, $3.instrucciones, this._$.first_line, this.first_column)
                                                         }
                                                 }
 ;
 
-WHERE_CLAUSE : 'where' EXPR_SINGLE  {  
+WHERE_CLAUSE : 'where' EXPR_SINGLE  {           grafoNuevo.generarPadre(2, "EXPR_SINGLE")
+                                                grafoNuevo.generarHijos($1, "EXPR_SINGLE")
                                                 $$ = {
                                                         instrucciones: new Where(this._$.first_line, this._$.first_column, $2.consulta, $2.instrucciones)
                                                 }
                                         }
 ;
 
-ORDERBY_CLAUSE : 'order' 'by'  ORDER_SPEC_LIST          {
+ORDERBY_CLAUSE : 'order' 'by'  ORDER_SPEC_LIST          {       grafoNuevo.generarPadre(3, "ORDER_SPEC_LIST")
+                                                                grafoNuevo.generarHijos($1, $2, "ORDER_SPEC_LIST")
                                                                 $$ = {
                                                                         instrucciones: new OrderBy($3.instrucciones, this._$.first_line, this._$.first_column)
                                                                 }
@@ -452,12 +680,18 @@ ORDERBY_CLAUSE : 'order' 'by'  ORDER_SPEC_LIST          {
 ;
 
 ORDER_SPEC_LIST : ORDER_SPEC_LIST ',' EXPR_SINGLE       {       
+                                                                grafoNuevo.generarPadre(3, "EXPR_SINGLE")
+                                                                grafoNuevo.generarPadre(1, "ORDER_SPEC_LIST")
+                                                                
+                                                                grafoNuevo.generarHijos("ORDER_SPEC_LIST", $2, "EXPR_SINGLE")
+
                                                                 $1.instrucciones.push($3.instrucciones)
                                                                 $$  = {
                                                                         instrucciones: $1.instrucciones
                                                                 }
                                                         }
-		|EXPR_SINGLE                            {
+		|EXPR_SINGLE                            {       grafoNuevo.generarPadre(1, "EXPR_SINGLE")
+                                                                grafoNuevo.generarHijos("EXPR_SINGLE")
                                                                 $$ = {
                                                                         instrucciones: [$1.instrucciones]
                                                                 }
@@ -465,14 +699,19 @@ ORDER_SPEC_LIST : ORDER_SPEC_LIST ',' EXPR_SINGLE       {
 ;
 
 
-RETURN_CLAUSE :  'return' EXPR_SINGLE   {
+RETURN_CLAUSE :  'return' EXPR_SINGLE   {       grafoNuevo.generarPadre(2, "EXPR_SINGLE")       
+                                                grafoNuevo.generarHijos($1 ,"EXPR_SINGLE")
                                                 $$ = {
                                                         instrucciones: new Return($2.instrucciones)
                                                 }
                                         }
 ;
 
-IF_EXPR : 'if' '(' EXPR ')' 'then' EXPR_SINGLE 'else' EXPR_SINGLE       {
+IF_EXPR : 'if' '(' EXPR ')' 'then' EXPR_SINGLE 'else' EXPR_SINGLE       {       
+                                                                                grafoNuevo.generarPadre(8, "EXPR_SINGLE")
+                                                                                grafoNuevo.generarPadre(6, "EXPR_SINGLE")
+                                                                                grafoNuevo.generarPadre(3, "EXPR")
+                                                                                grafoNuevo.generarHijos($1, $2, "EXPR", $4, $5, "EXPR_SINGLE", $7, "EXPR_SINGLE")
                                                                                 $$ = {
                                                                                         instrucciones: new If(this._$.first_line, this._$.first_column, $3.instrucciones, $6.instrucciones, $8.instrucciones )
                                                                                 }
@@ -480,13 +719,20 @@ IF_EXPR : 'if' '(' EXPR ')' 'then' EXPR_SINGLE 'else' EXPR_SINGLE       {
 ; 
 
 
-OR_EXPR : AND_EXPR                      {
+OR_EXPR : AND_EXPR                      {       
+                                                grafoNuevo.generarPadre(1, "AND_EXPR")
+                                                grafoNuevo.generarHijos("AND_EXPR")
+
                                                 $$ = {
                                                         consulta: $1.consulta, 
                                                         instrucciones: $1.instrucciones
                                                 }
                                         }
         | OR_EXPR 'or'  AND_EXPR         {     // console.log('OR', $1.instrucciones, $3.instrucciones)
+                                                grafoNuevo.generarPadre(3, "AND_EXPR")
+                                                grafoNuevo.generarPadre(1, "OR_EXPR")
+                                                
+                                                grafoNuevo.generarHijos("OR_EXPR", $2, "AND_EXPR")
                                                 $$ = {
                                                         consulta: `${$1.consulta} or ${$3.consulta}` , 
                                                         instrucciones: new Or(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones) 
@@ -494,7 +740,8 @@ OR_EXPR : AND_EXPR                      {
                                         }  
 ;        
 
-AND_EXPR :  COMPARISON_EXPR                     {
+AND_EXPR :  COMPARISON_EXPR                     {       grafoNuevo.generarPadre(1, "COMPARISON_EXPR")
+                                                        grafoNuevo.generarHijos("COMPARISON_EXPR")
                                                         $$ = {
                                                                 consulta: $1.consulta, 
                                                                 instrucciones: $1.instrucciones
@@ -502,6 +749,11 @@ AND_EXPR :  COMPARISON_EXPR                     {
                                                 }
          | AND_EXPR 'and' COMPARISON_EXPR       {       
                                                     //   console.log('AND', $1.instrucciones, $3.instrucciones)
+                                                        grafoNuevo.generarPadre(3, "COMPARISON_EXPR")
+                                                        grafoNuevo.generarPadre(1, "AND_EXPR")
+                                                        
+                                                        grafoNuevo.generarHijos("AND_EXPR", $2, "COMPARISON_EXPR")
+
                                                         $$ = {
                                                                 consulta: `${$1.consulta} and ${$3.consulta}`, 
                                                                 instrucciones: new And(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones)
@@ -510,80 +762,107 @@ AND_EXPR :  COMPARISON_EXPR                     {
         ;
 
 
-COMPARISON_EXPR : ADDITIVE_EXPR                         {
+COMPARISON_EXPR : ADDITIVE_EXPR                         {       
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}`, 
                                                                         instrucciones: $1.instrucciones
                                                                 }
                                                         }
-                | ADDITIVE_EXPR '<' ADDITIVE_EXPR       {
+                | ADDITIVE_EXPR '<' ADDITIVE_EXPR       {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`,
                                                                         instrucciones: new Menor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR '>' ADDITIVE_EXPR       {
+                | ADDITIVE_EXPR '>' ADDITIVE_EXPR       {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Mayor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR '<=' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR '<=' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new MenorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR '>=' ADDITIVE_EXPR      {       
+                | ADDITIVE_EXPR '>=' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new MayorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
                                                                 } 
 
                                                         }
-                | ADDITIVE_EXPR '=' ADDITIVE_EXPR       {
+                | ADDITIVE_EXPR '=' ADDITIVE_EXPR       {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Igualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR '!=' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR '!=' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Desigualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, false)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR 'eq' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR 'eq' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Igualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR 'ne' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR 'ne' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Desigualdad(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR 'lt' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR 'lt' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                          instrucciones: new Menor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR 'le' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR 'le' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new MenorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR 'gt' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR 'gt' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Mayor(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
                                                                 }
                                                         }
-                | ADDITIVE_EXPR 'ge' ADDITIVE_EXPR      {
+                | ADDITIVE_EXPR 'ge' ADDITIVE_EXPR      {       grafoNuevo.generarPadre(3, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "ADDITIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new MayorIgual(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.BOOLEAN, $1.instrucciones, $3.instrucciones, true)
@@ -591,19 +870,25 @@ COMPARISON_EXPR : ADDITIVE_EXPR                         {
                                                         }
                 ;
 
-ADDITIVE_EXPR : MULTIPLICATIVE_EXPR                     {
+ADDITIVE_EXPR : MULTIPLICATIVE_EXPR                     {       grafoNuevo.generarPadre(1, "MULTIPLICATIVE_EXPR")
+                                                                grafoNuevo.generarHijos("MULTIPLICATIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: $1.consulta, 
                                                                         instrucciones: $1.instrucciones
                                                                 }
                                                         }   
-              | ADDITIVE_EXPR '+' MULTIPLICATIVE_EXPR   {
+              | ADDITIVE_EXPR '+' MULTIPLICATIVE_EXPR   {       grafoNuevo.generarPadre(3, "MULTIPLICATIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "MULTIPLICATIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Suma(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones)
                                                                 }
                                                         }  
-              | ADDITIVE_EXPR '-' MULTIPLICATIVE_EXPR   {
+              | ADDITIVE_EXPR '-' MULTIPLICATIVE_EXPR   {       grafoNuevo.generarPadre(3, "MULTIPLICATIVE_EXPR")
+                                                                grafoNuevo.generarPadre(1, "ADDITIVE_EXPR")
+                                                                grafoNuevo.generarHijos("ADDITIVE_EXPR", $2, "MULTIPLICATIVE_EXPR")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                         instrucciones: new Resta(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones )
@@ -611,19 +896,25 @@ ADDITIVE_EXPR : MULTIPLICATIVE_EXPR                     {
                                                         } 
               ;
 
-MULTIPLICATIVE_EXPR : UNARY_EXPR                                {
+MULTIPLICATIVE_EXPR : UNARY_EXPR                                {       grafoNuevo.generarPadre(1, "UNARY_EXPR")
+                                                                        grafoNuevo.generarHijos("UNARY_EXPR")
                                                                         $$ = {
                                                                                 consulta: $1.consulta, 
                                                                                 instrucciones: $1.instrucciones
                                                                         }
                                                                 }
-                    | MULTIPLICATIVE_EXPR '*' UNARY_EXPR        {
+                    | MULTIPLICATIVE_EXPR '*' UNARY_EXPR        {       grafoNuevo.generarPadre(3, "UNARY_EXPR")
+                                                                        grafoNuevo.generarPadre(1, "MULTIPLICATIVE_EXPR")
+                                                                        
+                                                                        grafoNuevo.generarHijos("MULTIPLICATIVE_EXPR", $2, "UNARY_EXPR")
                                                                         $$ = {
                                                                                 consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                                 instrucciones: new Multiplicacion(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones)
                                                                         }
                                                                 }
-                    | MULTIPLICATIVE_EXPR 'div' UNARY_EXPR      {
+                    | MULTIPLICATIVE_EXPR 'div' UNARY_EXPR      {       grafoNuevo.generarPadre(3, "UNARY_EXPR")
+                                                                        grafoNuevo.generarPadre(1, "MULTIPLICATIVE_EXPR")
+                                                                        grafoNuevo.generarHijos("MULTIPLICATIVE_EXPR", $2, "UNARY_EXPR")
                                                                         $$ = {
                                                                                 consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                                 instrucciones: new Division(this._$.first_line, this._$.first_column, Tipo.STRING, $1.instrucciones, $3.instrucciones)
@@ -632,25 +923,32 @@ MULTIPLICATIVE_EXPR : UNARY_EXPR                                {
                     ;
 
 UNARY_EXPR  : QUERY                          {
-
+                                                grafoNuevo.generarPadre(1, "QUERY"); 
+                                                grafoNuevo.generarHijos("QUERY")
                                                 $$ = {
                                                         consulta: $1.consulta, 
                                                         instrucciones: new Consulta(Tipo.STRING,  $1.consulta, '', $1.instrucciones, this._$.first_line, this._$.first_column)
                                                 }
                                              }
-            | '-' UNARY_EXPR %prec UMINUS       {
+            | '-' UNARY_EXPR %prec UMINUS       {       
+                                                        grafoNuevo.generarPadre(2, "UNARY_EXPR"); 
+                                                        grafoNuevo.generarHijos($1, "UNARY_EXPR")
                                                         $$ = {
                                                                 consulta: `-${$2.consulta}`, 
                                                                 instrucciones: new Negativo(this._$.first_line,this._$.first_column, Tipo.STRING, $2.instrucciones) 
                                                         }
                                                 }
             | '+' UNARY_EXPR %prec UPLUS        {
+                                                        grafoNuevo.generarPadre(2, "UNARY_EXPR"); 
+                                                        grafoNuevo.generarHijos($1, "UNARY_EXPR")
                                                         $$ = {
                                                                 consulta: `+${$2.consulta}`, 
                                                                 instrucciones: new Positivo(this._$.first_line, this._$.first_column, Tipo.STRING, $2.instrucciones)
                                                         }
                                                 }
-            | CALL_FUNCT        {
+            | CALL_FUNCT        {       
+                                        grafoNuevo.generarPadre(1, "CALL_FUNCT")
+                                        grafoNuevo.generarHijos("CALL_FUNCT")
                                         $$ = {
                                                 consulta: $1.consulta, 
                                                 instrucciones: $1.instrucciones
@@ -660,19 +958,22 @@ UNARY_EXPR  : QUERY                          {
 
 
 // Gramatica para la Consulta en XQuery 
-QUERY :  '/' PATH_EXPR                  {
+QUERY :  '/' PATH_EXPR                  {       grafoNuevo.generarPadre(2, "PATH_EXPR")
+                                                grafoNuevo.generarHijos($1, "PATH_EXPR")
                                                 $$ = {
                                                         consulta: `${$1}${$2.consulta}`, 
                                                         instrucciones: $2.instrucciones
                                                 }
                                         }
-      | '//' PATH_EXPR                  {       
+      | '//' PATH_EXPR                  {       grafoNuevo.generarPadre(2, "PATH_EXPR")
+                                                grafoNuevo.generarHijos($1, "PATH_EXPR")
                                                 $$ = {
                                                         consulta: `${$1}${$2.consulta}`, 
                                                         instrucciones: $2.instrucciones
                                                 }
                                         }
-      | PATH_EXPR                       {
+      | PATH_EXPR                       {       grafoNuevo.generarPadre(1, "PATH_EXPR")
+                                                grafoNuevo.generarHijos("PATH_EXPR")
                                                 $$ = {
                                                         consulta: `${$1.consulta}`, 
                                                         instrucciones: $1.instrucciones
@@ -680,19 +981,28 @@ QUERY :  '/' PATH_EXPR                  {
                                         }
 ;   
 
-PATH_EXPR : PATH_EXPR '/' STEP_EXPR             {       $1.instrucciones.push($3.instrucciones); 
+PATH_EXPR : PATH_EXPR '/' STEP_EXPR             {       grafoNuevo.generarPadre(3, "STEP_EXPR")
+                                                        grafoNuevo.generarPadre(1, "PATH_EXPR")
+                                                        grafoNuevo.generarHijos("PATH_EXPR", $2, "STEP_EXPR")        
+                                                        $1.instrucciones.push($3.instrucciones); 
                                                         $$ = {
                                                                 consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-          | PATH_EXPR '//' STEP_EXPR            {       $1.instrucciones.push($3.instrucciones); 
+          | PATH_EXPR '//' STEP_EXPR            {       grafoNuevo.generarPadre(3, "STEP_EXPR")
+                                                        grafoNuevo.generarPadre(1, "PATH_EXPR")
+                                                        
+                                                        grafoNuevo.generarHijos("PATH_EXPR", $2, "STEP_EXPR")
+
+                                                        $1.instrucciones.push($3.instrucciones); 
                                                         $$ = {
                                                                 consulta: `${$1.consulta}${$2}${$3.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-          | STEP_EXPR                           {
+          | STEP_EXPR                           {       grafoNuevo.generarPadre(1, "STEP_EXPR")
+                                                        grafoNuevo.generarHijos("STEP_EXPR")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: [$1.instrucciones] 
@@ -700,13 +1010,15 @@ PATH_EXPR : PATH_EXPR '/' STEP_EXPR             {       $1.instrucciones.push($3
                                                 }
     ;      
 
-STEP_EXPR : POST_FIX_EXPR                       {
+STEP_EXPR : POST_FIX_EXPR                       {       grafoNuevo.generarPadre(1, "POST_FIX_EXPR")
+                                                        grafoNuevo.generarHijos("POST_FIX_EXPR")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-          | AXIS_STEP                           {
+          | AXIS_STEP                           {       grafoNuevo.generarPadre(1, "AXIS_STEP")
+                                                        grafoNuevo.generarHijos("AXIS_STEP")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: $1.instrucciones
@@ -714,25 +1026,33 @@ STEP_EXPR : POST_FIX_EXPR                       {
                                                 }
      ;     
 
-AXIS_STEP : REVERSE_STEP                        {
+AXIS_STEP : REVERSE_STEP                        {       grafoNuevo.generarPadre(1, "REVERSE_STEP")
+                                                        grafoNuevo.generarHijos("REVERSE_STEP")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-          | REVERSE_STEP PREDICATE_LIST         {
+          | REVERSE_STEP PREDICATE_LIST         {       grafoNuevo.generarPadre(2, "PREDICATE_LIST")
+                                                        grafoNuevo.generarPadre(1, "REVERSE_STEP")
+                                                        
+                                                        grafoNuevo.generarHijos("REVERSE_STEP", "PREDICATE_LIST")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}${$2.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-          | FORWARD_STEP                        {
+          | FORWARD_STEP                        {       grafoNuevo.generarPadre(1, "FORWARD_STEP")
+                                                        grafoNuevo.generarHijos("FORWARD_STEP")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-          | FORWARD_STEP PREDICATE_LIST         {
+          | FORWARD_STEP PREDICATE_LIST         {       grafoNuevo.generarPadre(2, "PREDICATE_LIST")
+                                                        grafoNuevo.generarPadre(1, "FORWARD_STEP")
+                                                        
+                                                        grafoNuevo.generarHijos("FORWARD_STEP", "PREDICATE_LIST")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}${$2.consulta}`, 
                                                                 instrucciones: $1.instrucciones   // aqui arreglar 
@@ -740,53 +1060,63 @@ AXIS_STEP : REVERSE_STEP                        {
                                                 }
           ;
 
-FORWARD_STEP : 'attribute' '::' NODE_TEST               {
-                                                                $$ = {
+FORWARD_STEP : 'attribute' '::' NODE_TEST               {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
+                                                                $$ = {  
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }
-             | 'child' '::' NODE_TEST                   {       
+             | 'child' '::' NODE_TEST                   {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")         
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }  
-             | 'descendant' '::' NODE_TEST              {
+             | 'descendant' '::' NODE_TEST              {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }  
-             | 'descendant-or-self' '::' NODE_TEST      {
+             | 'descendant-or-self' '::' NODE_TEST      {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         } 
-             | 'following' '::' NODE_TEST               {
+             | 'following' '::' NODE_TEST               {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }
-             | 'following-sibling' '::' NODE_TEST       {
+             | 'following-sibling' '::' NODE_TEST       {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }
-             | 'namespace' '::' NODE_TEST               {
+             | 'namespace' '::' NODE_TEST               {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }      
-             | 'self' '::' NODE_TEST                    {
+             | 'self' '::' NODE_TEST                    {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3.consulta}`
                                                                 }
                                                         }         
-             | '@' NODE_TEST                            {
+             | '@' NODE_TEST                            {       grafoNuevo.generarPadre(2, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2.consulta} `, 
                                                                         instrucciones: $2.instrucciones
                                                                 }
                                                         }   
-             | NODE_TEST                                {
+             | NODE_TEST                                {       grafoNuevo.generarPadre(1, "NODE_TEST")
+                                                                grafoNuevo.generarHijos("NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1.consulta}`, 
                                                                         instrucciones: $1.instrucciones
@@ -794,62 +1124,72 @@ FORWARD_STEP : 'attribute' '::' NODE_TEST               {
                                                         }      
         ;
 
-REVERSE_STEP : 'ancestor' '::' NODE_TEST                {
+REVERSE_STEP : 'ancestor' '::' NODE_TEST                {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3}`
                                                                 }
                                                         }   
-             | 'ancestor-or-self' '::' NODE_TEST        {
+             | 'ancestor-or-self' '::' NODE_TEST        {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3}`
                                                                 }
                                                         }      
-             | 'parent' '::' NODE_TEST                  {
+             | 'parent' '::' NODE_TEST                  {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3}`
                                                                 }
                                                         }       
-             | 'preceding' '::' NODE_TEST               {
+             | 'preceding' '::' NODE_TEST               {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3}`
                                                                 }
                                                         }   
-             | 'preceding-sibling' '::' NODE_TEST       {
+             | 'preceding-sibling' '::' NODE_TEST       {       grafoNuevo.generarPadre(3, "NODE_TEST")
+                                                                grafoNuevo.generarHijos($1, $2, "NODE_TEST")
                                                                 $$ = {
                                                                         consulta: `${$1} ${$2} ${$3}`
                                                                 }
                                                         }     
-             | '..'                                     {
+             | '..'                                     {       grafoNuevo.generarHijos($1)
                                                                 $$ = {
                                                                         consulta: `${$1}`
                                                                 }
                                                         }            
              ;
 
-NODE_TEST : KIND_TEST   {
+NODE_TEST : KIND_TEST   {       grafoNuevo.generarPadre(1, "KIND_TEST")
+                                grafoNuevo.generarHijos("KIND_TEST")
                                 $$ = {
                                         consulta: `${$1}`
                                 }
                         }
-          | EQNAME      {
+          | EQNAME      {       grafoNuevo.generarPadre(1, "EQNAME")
+                                grafoNuevo.generarHijos($1)
                                 $$ = {
                                         consulta: `${$1}`
                                 }
                         }
-          | '*'         {
+          | '*'         {       grafoNuevo.generarHijos($1)
                                 $$ = {
                                         consulta: `${$1}`
                                 }
                         }
           ;
 
-POST_FIX_EXPR : PRIMARY_EXPR                    {
+POST_FIX_EXPR : PRIMARY_EXPR                    {       
+                                                        grafoNuevo.generarPadre(1, "PRIMARY_EXPR")
+                                                        grafoNuevo.generarHijos("PRIMARY_EXPR")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: $1.instrucciones
                                                         }
                                                 }
-              | PRIMARY_EXPR PREDICATE_LIST     {
+              | PRIMARY_EXPR PREDICATE_LIST     {       grafoNuevo.generarPadre(1, "PRIMARY_EXPR")
+                                                        grafoNuevo.generarPadre(2, "PREDICATE_LIST")
                                                         $$ = {
                                                                 consulta: `${$1.consulta} ${$2.consulta}`, 
                                                                 instrucciones: $1.instrucciones
@@ -857,62 +1197,67 @@ POST_FIX_EXPR : PRIMARY_EXPR                    {
                                                 }
               ;
 
-PREDICATE_LIST : PREDICATE_LIST PREDICATE       {
+PREDICATE_LIST : PREDICATE_LIST PREDICATE       {       grafoNuevo.generarPadre(1, "PREDICATE_LIST")
+                                                        grafoNuevo.generarPadre(2, "PREDICATE")
                                                         $$ = {
                                                                 consulta: `${$1.consulta} ${$2.consulta}`
                                                         }
                                                 }
-               | PREDICATE                      {
+               | PREDICATE                      {       grafoNuevo.generarPadre(1, "PREDICATE")
+                                                        grafoNuevo.generarHijos("PREDICATE")
                                                         $$ = { 
                                                                 consulta: `${$1.consulta}`
                                                         }
                                                 }
                ;
 
-PREDICATE : '[' EXPR ']'        {
+PREDICATE : '[' EXPR ']'        {       grafoNuevo.generarPadre(2, "EXPR")
+                                        grafoNuevo.generarHijos($1, "EXPR", $3)
                                         $$ = { 
                                                 consulta: `${$1}${$2.consulta}${$3}`
                                         }
                                 }
           ;
 
-PRIMARY_EXPR : PARENTHESIZED_EXPR       {
+PRIMARY_EXPR : PARENTHESIZED_EXPR       {       grafoNuevo.generarPadre(1, "PARENTHESIZED_EXPR")
+                                                grafoNuevo.generarHijos("PARENTHESIZED_EXPR")
                                                 $$ = {
                                                         consulta: `${$1.consulta}`,
                                                         instrucciones: $1.instrucciones
                                                 }        
                                         }
-             | '.'                      {
+             | '.'                      {       grafoNuevo.generarHijos($1)
                                                 $$ = {
                                                         consulta: `${$1}`, 
                                                         instrucciones: null
 
                                                 }
                                         }
-             | 'cadena'                 {
+             | 'cadena'                 {       grafoNuevo.generarHijos($1)
                                                 $$ = {
                                                         consulta: `${$1}`, 
                                                         instrucciones: new Primitivo(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.STRING, $1)
                                                 }
                                         }
-             | 'digito'                 {
+             | 'digito'                 {       grafoNuevo.generarHijos($1)
                                                 $$ = {
                                                         consulta: `${$1}`, 
                                                         instrucciones: new Primitivo(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.INTEGER, $1)
                                                 }
                                         }
-             | 'decimal'                {
+             | 'decimal'                {       grafoNuevo.generarHijos($1)
                                                 $$ = {
                                                         consulta: `${$1}`, 
                                                         instrucciones: new Primitivo(this._$.first_line, this._$.first_column, Tipo.PRIMITIVO, Tipo.DECIMAL, $1)
                                                 }
                                         } 
-             | '[' ']'                  {
+             | '[' ']'                  {       grafoNuevo.generarHijos($1, $2)
                                                 $$ = {
                                                         consulta: `${$1}`
                                                 }
                                         }
-             | '[' QUERY_LIST ']'       {
+             | '[' QUERY_LIST ']'       {       grafoNuevo.generarPadre(2, "QUERY_LIST")
+                                                grafoNuevo.generarHijos($1, "QUERY_LIST", $3)
                                                 $$ = { 
                                                         consulta: `[${$2.consulta}]`, 
                                                         instrucciones: $2.instrucciones
@@ -920,31 +1265,36 @@ PRIMARY_EXPR : PARENTHESIZED_EXPR       {
                                         }
              ;
 
-PARENTHESIZED_EXPR : '(' ')'                            {
+PARENTHESIZED_EXPR : '(' ')'                            {       grafoNuevo.generarHijos($1, $2)
                                                                 $$ = {
                                                                         consulta: `()`
                                                                 }
                                                         }
-                   | '(' EXPR ')'                       {      
+                   | '(' EXPR ')'                       {       grafoNuevo.generarPadre(2, "EXPR")  
+                                                                grafoNuevo.generarHijos($1, "EXPR", $3)
                                                                 $$ = {
                                                                         consulta: `(${$2.consulta})`, 
                                                                         instrucciones: $2.instrucciones
                                                                 }
                                                         }
-                   | '('  '$' 'VAR_NAME' 'EXPR' ')'        {
+        /*           | '('  '$' 'VAR_NAME' 'EXPR' ')'        {    grafoNuevo.generarPadre()
                                                                 $$ = {
                                                                         consulta: `($${$3.consulta}${$4.consulta})`, 
                                                                         instrucciones: $4.instrucciones
                                                                 }
-                   }
+                   }*/
                    ;
 
-QUERY_LIST : QUERY_LIST ',' QUERY               {
+QUERY_LIST : QUERY_LIST ',' QUERY               {       grafoNuevo.generarPadre(3, "QUERY")
+                                                        grafoNuevo.generarPadre(1, "QUERY_LIST")
+                                                        
+                                                        grafoNuevo.generarHijos("QUERY_LIST", $2, "QUERY")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}${$2}${$3.consulta}`
                                                         }
                                                 }
-           | QUERY                              {
+           | QUERY                              {       grafoNuevo.generarPadre(1, "QUERY")
+                                                        grafoNuevo.generarHijos("QUERY")
                                                         $$ = {
                                                                 consulta: `${$1.consulta}`, 
                                                                 instrucciones: $1.instrucciones
@@ -952,52 +1302,58 @@ QUERY_LIST : QUERY_LIST ',' QUERY               {
                                                 }         
            ;
 
-KIND_TEST : 'text' '(' ')'                      {
+KIND_TEST : 'text' '(' ')'                      {       
                                                         $$ = {
                                                                 consulta: `text()`
                                                         }
+                                                        grafoNuevo.generarHijos($1, $2, $3);
                                                 }
           | 'node' '(' ')'                      {
                                                         $$ = {
                                                                 consulta: `node()`
                                                         }
+                                                        grafoNuevo.generarHijos($1, $2, $3);
                                                 }
           | 'last' '(' ')'                      {
                                                         $$ = {
                                                                 consulta: `last()`
                                                         }
+                                                       
+                                                        grafoNuevo.generarHijos($1, $2, $3);
                                                 }
           | 'position' '(' ')'                  {
                                                         $$ = {
                                                                 consulta: `position()`
                                                         }
+
+                                                        grafoNuevo.generarHijos($1, $2, $3);
                                                 }
           ;
 
-EQNAME : 'nodename'               
-       | 'ancestor-or-self'       
-       | 'ancestor'               
-       | 'attribute'              
-       | 'child'                  
-       | 'descendant-or-self'     
-       | 'descendant'             
-       | 'following-sibling'      
-       | 'following'              
-       | 'last'                   
-       | 'namespace'              
-       | 'node'                   
-       | 'parent'                 
-       | 'position'               
-       | 'preceding-sibling'      
-       | 'preceding'              
-       | 'self'                   
-       | 'text'                  
-       | 'and'                    
-       | 'or'                     
-       | 'div'                   
-       | 'mod'   
-       | 'function'   
-       | 'variable'         
+EQNAME : 'nodename'                     { grafoNuevo.generarHijos($1)}
+       | 'ancestor-or-self'             { grafoNuevo.generarHijos($1)}
+       | 'ancestor'                     { grafoNuevo.generarHijos($1)}        
+       | 'attribute'                    { grafoNuevo.generarHijos($1)}       
+       | 'child'                        { grafoNuevo.generarHijos($1)}
+       | 'descendant-or-self'           { grafoNuevo.generarHijos($1)}
+       | 'descendant'                   { grafoNuevo.generarHijos($1)}
+       | 'following-sibling'            { grafoNuevo.generarHijos($1)}
+       | 'following'                    { grafoNuevo.generarHijos($1)}
+       | 'last'                         { grafoNuevo.generarHijos($1)}
+       | 'namespace'                    { grafoNuevo.generarHijos($1)}
+       | 'node'                         { grafoNuevo.generarHijos($1)}
+       | 'parent'                       { grafoNuevo.generarHijos($1)}
+       | 'position'                     { grafoNuevo.generarHijos($1)}
+       | 'preceding-sibling'            { grafoNuevo.generarHijos($1)}
+       | 'preceding'                    { grafoNuevo.generarHijos($1)}     
+       | 'self'                         { grafoNuevo.generarHijos($1)}
+       | 'text'                         { grafoNuevo.generarHijos($1)}
+       | 'and'                          { grafoNuevo.generarHijos($1)}
+       | 'or'                           { grafoNuevo.generarHijos($1)}
+       | 'div'                          { grafoNuevo.generarHijos($1)}
+       | 'mod'                          { grafoNuevo.generarHijos($1)}
+       | 'function'                     { grafoNuevo.generarHijos($1)}
+       | 'variable'                     { grafoNuevo.generarHijos($1)}
        ;
 
 ERROR : '/'

@@ -29,22 +29,36 @@ var If = /** @class */ (function (_super) {
         return _this;
     }
     If.prototype.ejecutar = function (ent) {
-        this.lista_condiciones.forEach(function (condicion) {
+        var retn = 'nulo';
+        for (var _i = 0, _a = this.lista_condiciones; _i < _a.length; _i++) {
+            var condicion = _a[_i];
             var res = condicion.ejecutar(ent);
             if (res != null) {
-                return res;
+                retn = res;
+                break;
             }
-            if (condicion.ejecutado) {
-                return null;
-            }
-        });
-        if (this.bloque_else != null && this.bloque_else != undefined) {
-            var res = this.bloque_else.ejecutar(new Entorno_1.EntornoXQ(ent));
-            if (res != null) {
-                return res;
+            if (retn == 'nulo') {
+                if (condicion.ejecutado) {
+                    retn = null;
+                    break;
+                }
             }
         }
-        return null;
+        if (retn == 'nulo') {
+            if (this.bloque_else != null && this.bloque_else != undefined) {
+                var res_1 = this.bloque_else.ejecutar(new Entorno_1.EntornoXQ(ent));
+                if (res_1 != null) {
+                    retn = res_1;
+                }
+                else {
+                    retn = null;
+                }
+            }
+            else {
+                retn = null;
+            }
+        }
+        return retn;
     };
     return If;
 }(InstruccionXQ_1.InstruccionXQ));

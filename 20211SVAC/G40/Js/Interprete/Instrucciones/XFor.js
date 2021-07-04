@@ -50,5 +50,30 @@ var XFor = /** @class */ (function () {
     XFor.prototype.getTipo = function (){
         return this.tipo;
     };
+
+    XFor.prototype.getEtiqueta1 = function (){
+        return this.etiqueta1;
+    };
+
+    XFor.prototype.getEtiqueta2 = function (){
+        return this.etiqueta2;
+    };
+
+    XFor.prototype.Min = function (){
+        return this.min;
+    };
+    
+    XFor.prototype.Max = function (){
+        return this.max;
+    };
+
+    XFor.prototype.ID1 = function (){
+        return this.id1;
+    };
+
+    XFor.prototype.ID2 = function (){
+        return this.id2;
+    };
+
     return XFor;
 }());

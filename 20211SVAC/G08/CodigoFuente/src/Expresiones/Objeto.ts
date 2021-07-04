@@ -41,4 +41,13 @@ export class Objeto{
         return this.listaObjetos;
     }; 
 
+    
+    getTipo(){
+        return this.tipo;
+    }
+    
+    getPosicion(){
+        return this.posicion;
+    }
+
 }

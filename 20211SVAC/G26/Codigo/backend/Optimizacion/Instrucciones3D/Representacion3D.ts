@@ -11,12 +11,33 @@ export class Representacion3D implements Instruccion3D{
     columna: number;
     tipo: TipoInstruccion3D;
     codigo3D: string;
+    optimizada: boolean;
+    eliminada: boolean;
     constructor(tipo: TipoInstruccion3D, codigo3D: string, fila: number, columna: number){
         this.codigo3D = codigo3D;
         this.tipo = tipo;
         this.fila = fila;
         this.columna = columna;
+        this.eliminada = false;
+        this.optimizada = false;
     }
+
+    isOptimizada(): boolean{
+        return this.optimizada;
+    }
+
+    setOptimizada(optimizada: boolean){
+        this.optimizada = optimizada;
+    }
+    isEliminada(): boolean {
+        return this.eliminada;
+    }
+
+    setEliminada(eliminada: boolean){
+        this.eliminada = eliminada;
+    }
+    
+    
     getCodigo3D(): string{
         return this.codigo3D;
     }

@@ -17,5 +17,10 @@ var XLowerCase = /** @class */ (function () {
     XLowerCase.prototype.getTipo = function (){
         return this.tipo;
     };
+
+    XLowerCase.prototype.getCadena = function (){
+        return this.cadena.getValorImplicito("","").toString();
+    };
+
     return XLowerCase;
 }());

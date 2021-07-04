@@ -7,18 +7,29 @@ export class Operador implements Expresion{
     tipo:Tipo;
     valor:any;
     etiqueta:any;
+    contenido:Array<any>=new Array<any>();
+    temp=[];
+    contador=0;
     constructor(tipo:Tipo,valor:any,etiqueta:any){
       this.tipo=tipo;
       this.valor=valor;
       this.etiqueta=etiqueta;
     }
   ejecutar(Entorno: Entorno, node: any) {
+    console.log("ESTÁ EN OPERADOR")
     if(this.etiqueta==null){
       let respuesta=this.VerificarTipo(Entorno);
       if(respuesta==null){
         return null
       }
       return respuesta
+    }else{
+    let respuesta=this.VerificarTipo(Entorno);
+      if(respuesta!=null){
+        return {etiqueta:this.etiqueta}
+      } else{
+        return respuesta
+      }
     }
 
   }
@@ -66,9 +77,15 @@ export class Operador implements Expresion{
         //No existe la variable, error semántico
         return null;
       }
-    }else{
+    }else if(this.tipo==Tipo.LLAMADA){
+      return this.valor.ejecutar(entorno,this.valor)
+    }
+    else{
       //error semántico
       return null
     }
 }
+
+
+
 }

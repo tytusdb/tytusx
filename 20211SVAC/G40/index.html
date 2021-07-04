@@ -52,12 +52,15 @@
         <script src="./Js/Interprete/Instrucciones/XLowerCase.js"></script>
         <script src="./Js/Interprete/Instrucciones/XUpperCase.js"></script>
         <script src="./Js/Interprete/Instrucciones/XFor.js"></script>
+        <script src="./Js/Interprete/Instrucciones/XForSimple.js"></script>
         <script src="./Js/Interprete/Instrucciones/XDeclararFuncion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XLlamadaFuncion.js"></script>
         <script src="./Js/Interprete/Instrucciones/XLlamadaFuncionSimple.js"></script>
+        <script src="./Js/Interprete/Instrucciones/FlowerIf.js"></script>
         <!-- SCRIPTS PARA TRADUCTORES C3D -->
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXPath.js"></script>
+        <script src="./Js/Interprete/Traductor/TraductorXQuery.js"></script>
         <!-- SCRIPTS PARA EXPRESIONES XQUERY -->
         <script src="./Js/Interprete/Expresiones/XQuery/XOperacion.js"></script>
         <script src="./Js/Interprete/Expresiones/XQuery/XPrimitivo.js"></script>
@@ -69,6 +72,10 @@
         <script src="./Js/Interprete/Expresiones/XQuery/XLet.js"></script>
         <script src="./Js/Interprete/Expresiones/XQuery/XAsignacion.js"></script>
         <script src="./Js/Interprete/Expresiones/XQuery/XReturn.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerIF.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerIfThen.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerCondicion.js"></script>
+        <script src="./Js/Interprete/Expresiones/XFlowerData.js"></script>
         <!--- SCRIPTS PARA OPTIMIZADOR --->
         <script src="./Js/Optimizador/GramaticaOptimizador.js"></script>
         <script src="./Js/Optimizador/Optimizacion.js"></script>
@@ -77,6 +84,7 @@
         <script src="./Js/Optimizador/Instrucciones3D/AsignacionArreglo.js"></script>
         <script src="./Js/Optimizador/Instrucciones3D/AsignacionOperacion.js"></script>
         <script src="./Js/Optimizador/Instrucciones3D/AsignacionSimple.js"></script>
+        <script src="./Js/Optimizador/Instrucciones3D/AsignacionMetodo.js"></script>
         <script src="./Js/Optimizador/Instrucciones3D/Etiqueta.js"></script>
         <script src="./Js/Optimizador/Instrucciones3D/Goto.js"></script>
         <script src="./Js/Optimizador/Instrucciones3D/If.js"></script>
@@ -120,8 +128,10 @@
             var funcionesC3D = "";
             var xpathC3D = "";
             var xmlC3D = "";
+            var xquery3D = "";
             var C3DXML = new TraductorXML();
             var C3DXPATH = new TraductorXPath();
+            var C3DXQUERY = new TraductorXQuery();
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();

@@ -1,4 +1,4 @@
-class ConsultaText {
+class ConsultaText extends Consulta {
     run(entornos) {
         let newEntornos = new Array();
         entornos.forEach((e) => {

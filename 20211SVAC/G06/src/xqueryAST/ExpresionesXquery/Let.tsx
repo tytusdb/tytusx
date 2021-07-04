@@ -12,7 +12,7 @@ export class Let implements ExpressionXquery{
         public column: Number,
         public idVar: string,
         public exp : ExpressionXquery, 
-        public ret : Return){
+        public ret : Return | null){
     }
     
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
@@ -25,7 +25,13 @@ export class Let implements ExpressionXquery{
         }else {
             throw new Error("Error Semantico: Se encuentra en uso el id: "+this.idVar+", Linea: "+this.line +" Columna: "+this.column );
         }
-        return {value : this.ret.executeXquery(entAct, RaizXML).value, type: tipoPrimitivo.STRING}
+
+        if (this.ret !== null){
+            return this.ret.executeXquery(entAct, RaizXML);
+        }else {
+            return {value: [], type: tipoPrimitivo.VOID, SP:-1}
+        }
+        
     }
 
     GraficarAST(texto: string): string {

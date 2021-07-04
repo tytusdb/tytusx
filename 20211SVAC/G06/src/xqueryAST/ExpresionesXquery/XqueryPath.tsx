@@ -16,26 +16,32 @@ export class XqueryPath implements ExpressionXquery{
    
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
         
-        var content : Retorno[] = [];
-        
         var varFind = entAct.getVar(this.idVar);  
         if (varFind != null){
 
             if (varFind.type === tipoPrimitivo.RESP){
 
+                var result : Retorno[] = [];
+
                 for (const element of varFind.value) {
 
                     if (element.type === tipoPrimitivo.NODO){
-                        ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, element.value).value) ;
+                        ManejadorXquery.concatenar(result, this.accesos.executeXquery(entAct, element.value).value) ;
                     }else {
-                        content.push(element);
+                        result.push(element);
                     }
                 }
-                return {value : content, type: tipoPrimitivo.RESP}
+
+                if (result.length > 1){
+                    return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+                }else if (result.length === 1) {
+                    return result[0];
+                }else {
+                    return {value: [] , type: tipoPrimitivo.VOID, SP: -1};
+                }
 
             }else if (varFind.type === tipoPrimitivo.NODO){
-                ManejadorXquery.concatenar(content, this.accesos.executeXquery(entAct, varFind.value).value);
-                return {value : content, type: tipoPrimitivo.RESP};
+                return this.accesos.executeXquery(entAct, varFind.value)
             }else {
                 return varFind;
             }

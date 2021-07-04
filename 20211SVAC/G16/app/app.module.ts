@@ -13,6 +13,7 @@ import { ErroresComponent } from './errores/errores.component';
 import { ASTXPathComponent } from './astxpath/astxpath.component';
 import { CommonModule } from '@angular/common';
 import { ReporteGramaticalComponent } from './reporte-gramatical/reporte-gramatical.component';
+import { ReporteOptimizarComponent } from './reporte-optimizar/reporte-optimizar.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +22,8 @@ import { ReporteGramaticalComponent } from './reporte-gramatical/reporte-gramati
     CstascendenteComponent,
     ASTXPathComponent,
     ErroresComponent,
-    ReporteGramaticalComponent
+    ReporteGramaticalComponent,
+    ReporteOptimizarComponent
   ],
   imports: [
     BrowserModule,

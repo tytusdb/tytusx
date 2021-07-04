@@ -21,12 +21,14 @@ import {TipoNodo,TipoOperador,TipoParametro} from '../app/Estructuras/tipificaci
 import { TablaSimbolosComponent } from './Reportes/tabla-simbolos/tabla-simbolos.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ErroresXMLComponent } from './Reportes/errores-xml/errores-xml.component';
+import { OptimizacionesComponent } from './Reportes/optimizaciones/optimizaciones.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TablaSimbolosComponent,
-    ErroresXMLComponent
+    ErroresXMLComponent,
+    OptimizacionesComponent
   ],
   imports: [
     BrowserModule,

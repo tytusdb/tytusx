@@ -1,7 +1,8 @@
 let erroresXpath = new Errores();
-function analizarXpath(entornoGlobal) {
+function analizarXpath(entornoGlobal, resultC3D) {
     erroresXpath = new Errores();
     const textoAnalizar = document.getElementById('inputXPath');
+    const consola = document.getElementById('resultC3D');
     const result = document.getElementById('result');
     let matrizConsultas;
     try {
@@ -11,6 +12,7 @@ function analizarXpath(entornoGlobal) {
     catch (err) {
         erroresXpath.agregarError("Error fatal", "error sin recuperacion", 0, 0);
         matrizConsultas = [];
+        console.log(err);
     }
     if (erroresXpath.getSize > 0) {
         if (erroresXpath.getErrores().length > 0) {
@@ -26,9 +28,10 @@ function analizarXpath(entornoGlobal) {
     }
     let i = 1;
     let resultConsulta = new Array();
+    let matrizEntornos = new Array();
     matrizConsultas.forEach(listC => {
         let entornos = [entornoGlobal];
-        entornos = recorrer(listC, entornos, 0);
+        entornos = recorrerConsultas(listC, entornos, 0);
         entornos.forEach(e => {
             e.getTable().forEach(s => {
                 if (s instanceof Nodo) {
@@ -41,10 +44,13 @@ function analizarXpath(entornoGlobal) {
                 }
             });
         });
+        matrizEntornos.push(entornos);
     });
     result.value = resultConsulta.join("\n");
+    let controller = new C3DController();
+    consola.value = controller.generateC3D(resultC3D, matrizConsultas, entornoGlobal, matrizEntornos);
 }
-function recorrer(consultas, entornos, index) {
+function recorrerConsultas(consultas, entornos, index) {
     let newEntornos = new Array();
     entornos = consultas[index].run(entornos);
     entornos.forEach((e) => {
@@ -61,7 +67,7 @@ function recorrer(consultas, entornos, index) {
     index++;
     if (index < consultas.length) {
         entornos = (consultas[index] instanceof ConsultaSimple) ? newEntornos : entornos;
-        return recorrer(consultas, entornos, index);
+        return recorrerConsultas(consultas, entornos, index);
     }
     else {
         return entornos;

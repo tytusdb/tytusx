@@ -319,7 +319,8 @@ class Optimizador{
                                     
                                         if((bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_OPERACION) ||
                                         (bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_SIMPLE) ||
-                                        (bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_ARREGLO)){
+                                        (bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_ARREGLO) ||
+                                        (bloque.getInstrucciones()[x].getTipo() == TipoInstruccion3D.ASIGNACION_METODO)){
 
                                             if((bloque.getInstrucciones()[x].getTemporal() == Temporal1) ||
                                             (bloque.getInstrucciones()[x].getTemporal() == Temporal2)){

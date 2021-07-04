@@ -11,6 +11,8 @@ export class If3D implements Instruccion3D{
     codigo3D: string;
     condicion: Expresion3D
     gotoEtiqueta: Goto3D;
+    eliminada: boolean;
+    optimizada: boolean;
     constructor(tipo: TipoInstruccion3D, condicion: Expresion3D, gotoEtiqueta: Goto3D, codigo3d: string, fila: number, columna: number){
         this.fila = fila;
         this.columna = columna;
@@ -18,8 +20,25 @@ export class If3D implements Instruccion3D{
         this.codigo3D = codigo3d;
         this.condicion = condicion;
         this.gotoEtiqueta = gotoEtiqueta;
+        this.eliminada = false;
+        this.optimizada = false;
     }
 
+    isOptimizada(): boolean{
+        return this.optimizada;
+    }
+
+    setOptimizada(optimizada: boolean){
+        this.optimizada = optimizada;
+    }
+    isEliminada(): boolean {
+        return this.eliminada;
+    }
+
+    setEliminada(eliminada: boolean){
+        this.eliminada = eliminada;
+    }
+    
     getTipoInstruccion(): TipoInstruccion3D{
         return this.tipo;
     }

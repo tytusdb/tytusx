@@ -21,6 +21,7 @@ export class Declaracion {
         let valor = this.instruccion.getValor(entorno, xml); 
         if(valor instanceof Error) return valor 
 
+        console.log('Esto se esta tratando de adignar a una declaracion', valor)
         if(entorno instanceof Entorno){
             return entorno.declarar(this.id, valor, this.linea, this.columna);             
         }else{
@@ -58,5 +59,6 @@ export class Asignacion{
                 entorno.asignar(this.id, valor, this.linea, this.columna)
             }
         }
+        return entorno
     }
 }

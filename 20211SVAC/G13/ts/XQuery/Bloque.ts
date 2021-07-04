@@ -1,3 +1,4 @@
+import { Nodo } from "../../../../../tsfiles/Nodo";
 import { ExpresionXQ } from "../Arbol/ExpresionXQ";
 import { InstruccionXQ } from "../Arbol/InstruccionXQ";
 import { NodoXQ } from "../Arbol/NodoXQ";
@@ -18,17 +19,19 @@ export class BloqueXQ extends InstruccionXQ {
     }
 
     ejecutar(ent: EntornoXQ): Object {
-        this.listabloque.forEach(nodo => {
+        var ret = null;
+        for (const nodo of this.listabloque) {
             if(nodo instanceof InstruccionXQ) {
                 let ins = nodo.ejecutar(ent);
                 if(ins != null) {
-                    return ins;
+                    ret = ins;
+                    break;
                 }
             } else {
-                console.log('Hacer cosas de expresion si es que hay');
-                //nodo.getValor(ent);
+                //console.log('Hacer cosas de expresion si es que hay');
+                nodo.getValor(ent);
             }
-        });
-        return null;
+        }
+        return ret;
     }
 }

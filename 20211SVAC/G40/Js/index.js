@@ -223,12 +223,14 @@ function CargarXML(){
                         } else {
                             salidaGlobal+= salidaXQuery.toString() + "\n\n";
                         } 
-
                         contador++;
                     } );
                     
                     SetSalida(salidaGlobal);
                     localStorage.setItem('errJSON',JSON.stringify(ListaErr.errores, null, 2));
+
+                    xquery3D = C3DXQUERY.traducir(resultadoXQuery[0]);
+
 
                 } else {                   
                     SetSalida("El parser XQuery no pudo recuperarse de un error sintactico.");
@@ -751,6 +753,12 @@ function SetearTraduccion(){
     globalC3D += "\n";
 
     globalC3D += xpathC3D;
+
+    globalC3D += "\n";
+
+    globalC3D += xquery3D;
+
+    globalC3D += "\n";
 
     globalC3D +=`
 

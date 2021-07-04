@@ -12,11 +12,31 @@
   const { AST } = require('./XQuery/ts/Arbol/AST')
   const { TipoXQ, EnumTipo } = require('./XQuery/ts/Entorno/TipoXQ')
   const { LiteralXQ } = require('./XQuery/ts/Expresiones/LiteralXQ')
+  const { IdXQ } = require('./XQuery/ts/Expresiones/IdXQ')
   const { DeclaracionXQ } = require('./XQuery/ts/Instrucciones/DeclaracionXQ')
   const { AsignacionXQ } = require('./XQuery/ts/Instrucciones/AsignacionXQ')
   const { BloqueXQ } = require('./XQuery/ts/Instrucciones/Bloque')
   const { If } = require('./XQuery/ts/Instrucciones/If')
   const { Condicion_If } = require('./XQuery/ts/Instrucciones/Condicion_If')
+  const { ParametroXQ } = require('./XQuery/ts/Funciones/ParametroXQ')
+  const { FuncionXQ } = require('./XQuery/ts/Funciones/Funcion')
+  const { ReturnXQ } = require('./XQuery/ts/Funciones/ReturnXQ')
+  const { LlamadaF } = require('./XQuery/ts/Funciones/LlamadaF')
+  const { SumaXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Suma')
+  const { RestaXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Resta')
+  const { MultiplicacionXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Multiplicacion')
+  const { DivisionXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Division')
+  const { ModuloXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Modulo')
+  const { NegativoXQ } = require('./XQuery/ts/Operaciones/Aritmeticas/Negativo')
+  const { IgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/Igual')
+  const { NoIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/NoIgual')
+  const { MayorXQ } = require('./XQuery/ts/Operaciones/Relacionales/Mayor')
+  const { MayorIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/MayorIgual')
+  const { MenorXQ } = require('./XQuery/ts/Operaciones/Relacionales/Menor')
+  const { MenorIgualXQ } = require('./XQuery/ts/Operaciones/Relacionales/MenorIgual')
+  const { AndXQ } = require('./XQuery/ts/Operaciones/Logicas/And')
+  const { OrXQ } = require('./XQuery/ts/Operaciones/Logicas/Or')
+  const { NotXQ } = require('./XQuery/ts/Operaciones/Logicas/Not')
     
   var grafo = new grafoCST(); 
 
@@ -35,32 +55,41 @@
 
 "(:"          { this.begin("Comentario"); }
 <Comentario>":)"  { this.popState(); }
+<Comentario>[ \r\t]+     {}
+<Comentario>\n     {}
 <Comentario>.     {}
 
 "let"       return "RLET"
 "as"        return "RAS"
 "xs"        return "Rxs"
 ":="        return "ASIGNAR"
+"{"         return "LLAVEA"
+"}"         return "LLAVEC"
+";"         return "SEMICOLON"
 "at"        return "RAT"
 "true"      return "RTRUE"
 "false"     return "RFALSE"
 "integer"   return "R_INT"
 "double"    return "R_DOBLE"
-"decimal"   return "R_DOBLE"
-"float"     return "R_DOBLE"
+"decimal"   return "R_DECIMAL"
+"float"     return "R_FLOAT"
 "string"    return "R_STRING"
 "boolean"   return "R_BOOLEAN"
 "if"        return "R_IF"
 "then"      return "R_THEN"
 "else"      return "R_ELSE"
+"declare"   return "R_DECLARE"
+"function"  return "R_FUNC"
+"local"     return "R_LOCAL"
+"return"    return "R_RETURN"
 
 
 "or"    return "ROR"
 "and"   return "RAND"
+"not" return "RNOT"
 "idiv"  return "IDIV"
 "div"   return "DIV"
 "mod"   return "MOD"
-"return" return "RRETURN"
 "for" return "RFOR"
 "in"  return "RIN"
 "to"  return "RTO"
@@ -118,23 +147,85 @@
 "::"        return "DOBLEDOSPUNTOS"
 ":"         return "DOSPUNTOS"
 
-.	{ ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
+.	{ console.log(`LEXERR: ${yytext}. L:${yylloc.first_line} C:${yylloc.first_column}`); ListaErrores.push({Error:'Este es un error léxico: ' + yytext,tipo:"Lexico", Linea: yylloc.first_line , columna:yylloc.first_column}) }
 
 /lex
 
+%left 'ROR'
+%left 'RAND'
+%nonassoc 'IGUAL' 'DIFERENTE' 'MAYOR' 'MAYORIG' 'MENOR' 'MENORIG' 'EQ' 'NE' 'LT' 'LE' 'GT' 'GE'
 %left 'MAS' 'MENOS'
 %left 'POR' 'DIV' 'IDIV' 'MOD'
 %left UMENOS UMAS
+%right 'RNOT'
 
 %start XQuery
 
 %%
 
-XQuery: LInstrucciones
+XQuery: LInstruccionesXQ
   {
     $$ = new AST($1);
     return $$;
   }
+;
+
+LInstruccionesXQ: 
+  LInstruccionesXQ InstruccionXQ { $1.push($2); $$ = $1; }
+  | InstruccionXQ { $$ = [$1] }
+;
+
+InstruccionXQ:
+  Instruccion { $$ = $1; }
+  | DFuncion { $$ = $1; }
+;
+
+DFuncion: 
+  R_DECLARE R_FUNC R_LOCAL DOSPUNTOS NOMBRE PARENTESISA L_PARAMF PARENTESISC RAS T INTERROGACIONC BloqueF
+    {
+      let auxDF0 = new FuncionXQ($5, $7, $12, @5.first_line, @5.first_column);
+      auxDF0.setTipo($10);
+      $$ = auxDF0;
+    }
+  | R_DECLARE R_FUNC R_LOCAL DOSPUNTOS NOMBRE PARENTESISA L_PARAMF PARENTESISC RAS T BloqueF
+    {
+      let auxDF1 = new FuncionXQ($5, $7, $11, @5.first_line, @5.first_column);
+      auxDF1.setTipo($10);
+      $$ = auxDF1;
+    }
+  | R_DECLARE R_FUNC R_LOCAL DOSPUNTOS NOMBRE PARENTESISA L_PARAMF PARENTESISC BloqueF
+    {
+      $$ = new FuncionXQ($5, $7, $9, @5.first_line, @5.first_column);
+    }
+;
+
+L_PARAMF:
+  L_PARAMF COMA PARAMF { $1.push($3); $$ = $1; }
+  | PARAMF  { $$ = [$1]; }
+  | { $$ = []; }
+;
+
+PARAMF:
+  DOLAR NOMBRE RAS T INTERROGACIONC
+    {
+      let auxPF0 = new ParametroXQ($2);
+      auxPF0.setTipo($4);
+      $$ = auxPF0;
+    }
+  | DOLAR NOMBRE RAS T
+    {
+      let auxPF1 = new ParametroXQ($2);
+      auxPF1.setTipo($4);
+      $$ = auxPF1;
+    }
+  | DOLAR NOMBRE
+    {
+      $$ = new ParametroXQ($2);
+    }
+;
+
+BloqueF:
+  LLAVEA BloqueI LLAVEC SEMICOLON { $$ = $2; }
 ;
 
 LInstrucciones: LInstrucciones Instruccion { $1.push($2); $$ = $1; }
@@ -145,18 +236,53 @@ Instruccion:
   Declaracion { $$ = $1; }
   | Asignacion { $$ = $1; }
   | SIf { $$ = $1; }
+  | E { $$ = $1; }
+  | Return { $$ = $1; }
 ;
 
-Declaracion: RLET DOLAR NOMBRE ASIGNAR E { $$ = new DeclaracionXQ($3, $5, @3.first_line, @3.first_column); }
-  | RLET DOLAR NOMBRE RAS T ASIGNAR E 
-    { 
-      let auxD = new DeclaracionXQ($3, $7, @3.first_line, @3.first_column);
-      auxD.setTipo($5);
-      $$ = auxD;
+Return: R_RETURN E { $$ = new ReturnXQ($2, @1.first_line, @1.first_column); }
+  | R_RETURN { $$ = new ReturnXQ(null, @1.first_line, @1.first_column); }
+;
+
+LlamadaFuncion: 
+  R_LOCAL DOSPUNTOS NOMBRE ParametrosLL
+    {
+      $$ = new LlamadaF($3, $4, @3.first_line, @3.first_column);
     }
 ;
 
-Asignacion: DOLAR NOMBRE ASIGNAR E { $$ = new AsignacionXQ($2, @2.first_line, @2.first_column, $4); }
+ParametrosLL: PARENTESISA LPLL PARENTESISC  { $$ = $2; }
+  | PARENTESISA PARENTESISC { $$ = []; }
+;
+
+LPLL: LPLL COMA E { $1.push($3); $$ = $1; }
+  | E { $$ = [$1]; }
+;
+
+Declaracion:
+  RLET DOLAR NOMBRE RAS T INTERROGACIONC ASIGNAR E 
+    { 
+      let auxD0 = new DeclaracionXQ($3, $8, @3.first_line, @3.first_column);
+      auxD0.setTipo($5);
+      $$ = auxD0;
+    }
+  | RLET DOLAR NOMBRE RAS T ASIGNAR E 
+    { 
+      let auxD1 = new DeclaracionXQ($3, $7, @3.first_line, @3.first_column);
+      auxD1.setTipo($5);
+      $$ = auxD1;
+    }
+  | RLET DOLAR NOMBRE ASIGNAR E
+    {
+      $$ = new DeclaracionXQ($3, $5, @3.first_line, @3.first_column);
+    }
+;
+
+Asignacion: 
+  DOLAR NOMBRE ASIGNAR E 
+  { 
+    $$ = new AsignacionXQ($2, @2.first_line, @2.first_column, $4);
+  }
 ;
 
 SIf: L_Condiciones R_ELSE BloqueI { $$ = new If($1, $3, @2.first_line, @2.first_column); }
@@ -189,37 +315,50 @@ BloqueI: LInstrucciones
 
 T: Rxs DOSPUNTOS R_INT     { $$ = new TipoXQ(EnumTipo.entero); }
   | Rxs DOSPUNTOS R_DOBLE  { $$ = new TipoXQ(EnumTipo.doble); }
+  | Rxs DOSPUNTOS R_DECIMAL  { $$ = new TipoXQ(EnumTipo.doble); }
+  | Rxs DOSPUNTOS R_FLOAT  { $$ = new TipoXQ(EnumTipo.doble); }
   | Rxs DOSPUNTOS R_STRING  { $$ = new TipoXQ(EnumTipo.cadena); }
-  | Rxs DOSPUNTOS R_BOOLEAN  { $$ = new TipoXQ(EnumTipo.boolean); }
+  | Rxs DOSPUNTOS R_BOOLEAN  { $$ = new TipoXQ(EnumTipo.booleano); }
 ;
 
 E: 
 //Aritmeticas
-  E MAS E
-  | E MENOS E
-  | E POR E
-  | E DIV E
-  | E MOD E
-//LOGICAS
-  | E EQ E
-  | E NE E
-  | E GT E
-  | E GE E
-  | E LT E
-  | E LE E
-//RELACIONALES
-  | E ROR E
-  | E RAND E
-//UNARIA
-  | MENOS E %UMENOS
-//Literales
+  E MAS E { $$ = new SumaXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MENOS E { $$ = new RestaXQ($1, $3, @2.first_line, @2.first_column); }
+  | E POR E { $$ = new MultiplicacionXQ($1, $3, @2.first_line, @2.first_column); }
+  | E DIV E { $$ = new DivisionXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MOD E { $$ = new ModuloXQ($1, $3, @2.first_line, @2.first_column); }
+  | MENOS E %prec UMENOS { $$ = new NegativoXQ($2, @1.first_line, @1.first_column); }
+//Relacionales
+  | E IGUAL E { $$ = new IgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E DIFERENTE E { $$ = new NoIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MAYOR E { $$ = new MayorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MAYORIG E { $$ = new MayorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MENOR E { $$ = new MenorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E MENORIG E { $$ = new MenorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E EQ E { $$ = new IgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E NE E { $$ = new NoIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E GT E { $$ = new MayorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E GE E { $$ = new MayorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+  | E LT E { $$ = new MenorXQ($1, $3, @2.first_line, @2.first_column); }
+  | E LE E { $$ = new MenorIgualXQ($1, $3, @2.first_line, @2.first_column); }
+//Logicas
+  | E RAND E { $$ = new AndXQ($1, $3, @2.first_line, @2.first_column); }
+  | E ROR E { $$ = new OrXQ($1, $3, @2.first_line, @2.first_column); }
+  | RNOT E { $$ = new NotXQ($2, @2.first_line, @2.first_column); }
+  | ADMIRACION E { $$ = new NotXQ($2, @2.first_line, @2.first_column); }
+//Literales - Primitivos
+  | PARENTESISA E PARENTESISC { $$ = $2; }
   | INTEGER  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.entero), $1, @1.first_line, @1.first_column); }
   | DECIMAL { $$ = new LiteralXQ(new TipoXQ(EnumTipo.doble), $1, @1.first_line, @1.first_column); }
   | CADENA  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.cadena), $1, @1.first_line, @1.first_column); }
   | XPath   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.XPath), $1, @1.first_column, @1.first_column); }
   | RTRUE   { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
   | RFALSE  { $$ = new LiteralXQ(new TipoXQ(EnumTipo.booleano), $1, @1.first_line, @1.first_column); }
+  | DOLAR NOMBRE { $$ = new IdXQ($2, @2.first_line, @2.first_column); }
 //LLAMADA
+  | LlamadaFuncion  { $$ = $1; }
+
 ;
 
 //======================================================
@@ -335,23 +474,10 @@ ComparisonExpr
     grafo.generarPadre(1, "AdditiveExpr");
     grafo.generarHijos("StringConcatExpr","GeneralComp","StringConcatExpr");
     grafo.generarTexto(`ComparisonExpr.valor = new ComparisonExp(AdditiveExpr.valor, GeneralComp.valor, AdditiveExpr.valor)`);
-  } 
-//| StringConcatExpr ValueComp StringConcatExpr   {} 
-// falta el que es deeeee el que tiene el (is) y las funciones de doble mayor y menor
+  }
 ;
 
-/*
-ValueComp    // palabras reservadas     
-    : EQ  {}  // 5 EQ 5
-	| NE  {}  
-	| LT  {}
-	| LE  {}
-	| GT  {}
-	| GE  {}  
-;
-*/
-
-GeneralComp       // signo
+GeneralComp
   : IGUAL     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); } // 5 = 5 | nodo = nodo
 	| DIFERENTE { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 	| MENOR     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
@@ -359,13 +485,6 @@ GeneralComp       // signo
 	| MAYOR     { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 	| MAYORIG   { $$ = $1; grafo.generarHijos($1); grafo.generarTexto(`GeneralComp.valor = ${$1}`); }
 ;
-
-
-
-// StringConcatExpr  
-//   : AdditiveExpr                         { $$=$1; grafo.generarPadre(1);grafo.generarHijos("AdditiveExpr") }
-// 	| StringConcatExpr OR_EXP AdditiveExpr { }
-// ;
 
 AdditiveExpr      
   : MultiplicativeExpr                    
@@ -389,7 +508,6 @@ AdditiveExpr
   }
 ;
 
-//Aca se intercambio UnoinExpr por Unary Expresion cambiar en el futuro
 MultiplicativeExpr      
   : UnaryExpr                         
   { 
@@ -450,16 +568,6 @@ UnaryExpr
   }
 ;
 
-// ValueExpr   
-//   : SimpleMapExpr                     { $$=$1 }
-// ;
-
-// SimpleMapExpr     
-//   : PathExpr                            { $$=$1 }
-// 	| SimpleLetClause ADMIRACION PathExpr {}
-// ;
-
- //  /emplyee/name//id
 PathExpr    
   : BARRA RelativePathExpr              
   { 
@@ -558,7 +666,6 @@ PredicateList
   }
 ;
 
-//Faltan las formas no abreviadas
 ForwardStep 
   : AbbrevForwardStep    
   { 
@@ -603,10 +710,8 @@ ForwardAxis
   | RNAMESPACE DOBLEDOSPUNTOS     {}
 ;
 
-//KindText no implementado todavia
 NodeTest    
   : NameTest    { $$=$1; grafo.generarPadre(1, "NameTest"); grafo.generarHijos("NameTest"); grafo.generarTexto(`NodeTest.valor = NameTest.valor;`); }
-  //| KindTest
 ;
 
 NameTest    
@@ -614,7 +719,6 @@ NameTest
 	| POR       { $$=$1; grafo.generarHijos($1); grafo.generarTexto(`NameTest.valor = ${$1};`); }
 ;
 
-//Faltan las formas no abrevidas
 ReverseStep 
   :  AbbrevReverseStep    
   { 
@@ -658,16 +762,6 @@ PostfixExpr
   }
 ;
 
-//Falta crear los demas metodos de argumentos para las primaryEXpr
-// PostfixExprL      
-//     : Predicate                 { $$=$1; grafo.generarPadre(1); grafo.generarHijos("Predicate") }
-//   //| ArgumentList
-//   //| Lookup
-// 	  | PostfixExprL        { $$=$1+$2; grafo.generarPadre(2); grafo.generarPadre(1); grafo.generarHijos("PostfixExprL","Predicate") }
-//   //| PostfixExprL ArgumentList
-//   //| PostfixExprL Lookup
-// ;
-
 Predicate   
   : CORA ExprSingle CORB            
   { 
@@ -690,16 +784,13 @@ Literal
 	| CADENA                    { $$=new Literal(Tipo.STRING,$1);  grafo.generarHijos($1); grafo.generarTexto(`return literal = new Literal(${$1}); literal.tipo = STRING;`); }
 ;
 
-
 FunctionCall      
   : NOMBRE PARENTESISA PARENTESISC              
   {
     $$ = new CallFunction([],TipoPath.ABS,$1);
     grafo.generarHijos($1,$2,$3);
     grafo.generarTexto(`functionCall = new CallFunction(); functionCall.tipo = Absoluto;`);
-  }  //NODE() TEXT() POSITION() LAST() FIST()
-
-	//| NOMBRE PARENTESISA ArgumentList PARENTESISC { $$=$1+$2+$3+$4 }
+  }
 ;
 
 ContextItemExpr   
