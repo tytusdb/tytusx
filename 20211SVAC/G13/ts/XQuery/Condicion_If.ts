@@ -23,7 +23,7 @@ export class Condicion_If extends InstruccionXQ {
         let ex:ExpresionXQ = this.condicion.getValor(ent);
 
         if(ex.tipo.tipo == EnumTipo.booleano) {
-            let res:boolean = (ex.valor === 'true');
+            let res:boolean = (ex.valor.toString() == 'true');
             if(res == true) {
                 //console.log('Es TRUE');
                 let ret:any = this.bloque_ins.ejecutar(new EntornoXQ(ent));
