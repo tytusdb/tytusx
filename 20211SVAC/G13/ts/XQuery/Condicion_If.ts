@@ -25,11 +25,14 @@ export class Condicion_If extends InstruccionXQ {
         if(ex.tipo.tipo == EnumTipo.booleano) {
             let res:boolean = (ex.valor === 'true');
             if(res == true) {
+                //console.log('Es TRUE');
                 let ret:any = this.bloque_ins.ejecutar(new EntornoXQ(ent));
                 this.ejecutado = true;
                 if(ret != null) {
                     return ret;
                 }
+            } else {
+                //console.log('Es FALSEs');
             }
         } else {
             // Error condicion del if no es booleano

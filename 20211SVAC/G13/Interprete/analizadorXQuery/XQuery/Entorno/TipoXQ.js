@@ -20,4 +20,6 @@ var EnumTipo;
     EnumTipo[EnumTipo["nulo"] = 7] = "nulo";
     EnumTipo[EnumTipo["XPath"] = 8] = "XPath";
     EnumTipo[EnumTipo["sequence"] = 9] = "sequence";
+    EnumTipo[EnumTipo["defecto"] = 10] = "defecto";
+    EnumTipo[EnumTipo["funcion"] = 11] = "funcion";
 })(EnumTipo = exports.EnumTipo || (exports.EnumTipo = {}));

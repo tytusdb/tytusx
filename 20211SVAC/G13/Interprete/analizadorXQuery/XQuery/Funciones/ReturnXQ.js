@@ -15,36 +15,31 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.BloqueXQ = void 0;
+exports.ReturnXQ = void 0;
 var InstruccionXQ_1 = require("../Arbol/InstruccionXQ");
-var BloqueXQ = /** @class */ (function (_super) {
-    __extends(BloqueXQ, _super);
-    function BloqueXQ() {
+var localStorage = require('localStorage');
+var ReturnXQ = /** @class */ (function (_super) {
+    __extends(ReturnXQ, _super);
+    function ReturnXQ(e, l, c) {
         var _this = _super.call(this) || this;
-        _this.listabloque = [];
+        _this.exret = e;
+        _this.linea = l;
+        _this.columna = c;
+        _this.retorno = null;
         return _this;
     }
-    BloqueXQ.prototype.setDatos = function (lb, l, c) {
-        this.listabloque = lb;
-        this.linea = l;
-        this.columna = c;
-    };
-    BloqueXQ.prototype.ejecutar = function (ent) {
-        var ret = null;
-        this.listabloque.forEach(function (nodo) {
-            if (nodo instanceof InstruccionXQ_1.InstruccionXQ) {
-                var ins = nodo.ejecutar(ent);
-                if (ins != null) {
-                    ret = ins;
-                }
+    ReturnXQ.prototype.ejecutar = function (ent) {
+        //Verificar que este dentro de una funcion
+        var contador = parseInt(localStorage.getItem('contador'));
+        //console.log('La pila tiene un length de: ' + contador);
+        if (contador != 0) {
+            if (this.exret != null) {
+                this.retorno = this.exret.getValor(ent);
             }
-            else {
-                //console.log('Hacer cosas de expresion si es que hay');
-                nodo.getValor(ent);
-            }
-        });
-        return ret;
+            return this;
+        }
+        return null;
     };
-    return BloqueXQ;
+    return ReturnXQ;
 }(InstruccionXQ_1.InstruccionXQ));
-exports.BloqueXQ = BloqueXQ;
+exports.ReturnXQ = ReturnXQ;

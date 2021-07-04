@@ -23,6 +23,16 @@ export class AsignacionXQ extends InstruccionXQ {
             let res:ExpresionXQ = this.valor.getValor(ent);
 
             switch (sim.tipo.tipo) {
+                case EnumTipo.defecto:
+                    if(res.tipo.tipo != EnumTipo.error && res.tipo.tipo != EnumTipo.tvoid &&
+                        res.tipo.tipo != EnumTipo.nulo && res.tipo.tipo != EnumTipo.defecto &&
+                        res.tipo.tipo != EnumTipo.funcion
+                    ) {
+                        sim.tipo = res.tipo;
+                        sim.valor = res.valor;
+                        return null;
+                    }
+                    break;
                 case EnumTipo.entero:
                     if (res.tipo.tipo == EnumTipo.entero) {
                         sim.valor = res.valor;
@@ -60,7 +70,7 @@ export class AsignacionXQ extends InstruccionXQ {
                     }
                     break;
             }
-
+            console.log('Error al asignar tipos a la variable \'' + this.id + '\'');
             //ERRORES
         }
 

@@ -15,36 +15,34 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.BloqueXQ = void 0;
+exports.FuncionXQ = void 0;
 var InstruccionXQ_1 = require("../Arbol/InstruccionXQ");
-var BloqueXQ = /** @class */ (function (_super) {
-    __extends(BloqueXQ, _super);
-    function BloqueXQ() {
+var SimboloXQ_1 = require("../Entorno/SimboloXQ");
+var TipoXQ_1 = require("../Entorno/TipoXQ");
+var FuncionXQ = /** @class */ (function (_super) {
+    __extends(FuncionXQ, _super);
+    function FuncionXQ(n, lp, b, l, c) {
         var _this = _super.call(this) || this;
-        _this.listabloque = [];
+        _this.nombre = n;
+        _this.listaP = lp;
+        _this.listaI = b;
+        _this.linea = l;
+        _this.columna = c;
+        _this.tipo = new TipoXQ_1.TipoXQ(TipoXQ_1.EnumTipo.tvoid);
         return _this;
     }
-    BloqueXQ.prototype.setDatos = function (lb, l, c) {
-        this.listabloque = lb;
-        this.linea = l;
-        this.columna = c;
+    FuncionXQ.prototype.setTipo = function (t) {
+        this.tipo = t;
     };
-    BloqueXQ.prototype.ejecutar = function (ent) {
-        var ret = null;
-        this.listabloque.forEach(function (nodo) {
-            if (nodo instanceof InstruccionXQ_1.InstruccionXQ) {
-                var ins = nodo.ejecutar(ent);
-                if (ins != null) {
-                    ret = ins;
-                }
-            }
-            else {
-                //console.log('Hacer cosas de expresion si es que hay');
-                nodo.getValor(ent);
-            }
+    FuncionXQ.prototype.ejecutar = function (ent) {
+        var auxNombre = '$' + this.nombre;
+        this.listaP.forEach(function (param) {
+            auxNombre += '_' + param.tipo.tipo;
         });
-        return ret;
+        var sim = new SimboloXQ_1.SimboloXQ(this.tipo, this);
+        ent.insertar(auxNombre, sim, this.linea, this.columna, 'La funcion');
+        return null;
     };
-    return BloqueXQ;
+    return FuncionXQ;
 }(InstruccionXQ_1.InstruccionXQ));
-exports.BloqueXQ = BloqueXQ;
+exports.FuncionXQ = FuncionXQ;

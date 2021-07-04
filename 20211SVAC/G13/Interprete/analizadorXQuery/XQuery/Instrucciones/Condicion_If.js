@@ -36,14 +36,15 @@ var Condicion_If = /** @class */ (function (_super) {
         if (ex.tipo.tipo == TipoXQ_1.EnumTipo.booleano) {
             var res = (ex.valor === 'true');
             if (res == true) {
-                console.log('Es TRUE');
+                //console.log('Es TRUE');
                 var ret = this.bloque_ins.ejecutar(new Entorno_1.EntornoXQ(ent));
                 this.ejecutado = true;
                 if (ret != null) {
                     return ret;
                 }
-            } else {
-                console.log('Es FALSEs');
+            }
+            else {
+                //console.log('Es FALSEs');
             }
         }
         else {
