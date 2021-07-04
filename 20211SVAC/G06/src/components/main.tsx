@@ -9,10 +9,14 @@ import { traducirXml, TraducirXPATH } from "../Traduccion/xml3d";
 import { Entorno } from '../xmlAST/Entorno';
 import { traduccion } from '../Traduccion/traduccion';
 import { EntornoXQuery } from '../xqueryAST/AmbientesXquery/EntornoXQuery';
+import { ManejadorXquery } from '../xqueryAST/manejadores/ManejadorXquery';
+import { Retorno } from '../Interfaces/ExpressionXquery';
+import { tipoPrimitivo } from '../xqueryAST/ExpresionesXpath/Primitivo';
 const parser = require('../Grammar/xmlGrammar');
 const parserReport = require('../Reportes/xmlReport');
 const parseXPATH = require('../Grammar/XPATHparser');
 const parseXQuery = require('../Grammar/xQueryGrammar');
+const parseXQueryTraduccion = require('../Grammar/xQueryGrammarTraduccion');
 const parseC3D = require('../Grammar/C3DGrammar');
 
 
@@ -168,7 +172,16 @@ export default class Main extends Component {
 
         for (const xquery of astXquery) {
             try {
-                salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
+
+                const result: Retorno = xquery.executeXquery(nvoEntorno, ast[0]);
+                if (result.type === tipoPrimitivo.RESP){
+                    salida += ManejadorXquery.graficarXquery(result.value) + "\n";
+                }else if (result.type === tipoPrimitivo.NODO){
+                    salida += ManejadorXquery.unirSalida(ManejadorXquery.graficarNodos(result.value, "")) + "\n";
+                }else if (result.type !== tipoPrimitivo.VOID) {
+                    salida += result.value + "\n";
+                }
+                
             } catch (error) {
                 console.log(error)
             }
@@ -188,16 +201,10 @@ export default class Main extends Component {
         var ast = result.ast;
         traducirXml(ast);
 
-        const astXquery = parseXQuery.parse(this.state.xquery);
+        const astXquery = parseXQueryTraduccion.parse(this.state.xquery);
         var salida = "";
 
-        console.log(astXquery);
-
-        for (const iterator of astXquery) {
-            for (const key in iterator) {
-                console.log(key);
-            }
-        }
+        //console.log(astXquery);
 
         var nvoEntorno = new EntornoXQuery(null, "global");
 

@@ -175,7 +175,7 @@ export class Relacional implements ExpressionXquery {
 
     }
 
-    private validar(valorIzq: String, valorDer: String): boolean {
+    private validar(valorIzq: any, valorDer: any): boolean {
 
         if (this.tipoOperacion === operacionRelacional.IGUAL) {
             const result = valorIzq == valorDer;
