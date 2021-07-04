@@ -357,7 +357,6 @@ class Optimizer {
         }
         console.log("Se eliminaron :", contador + " instrucciones");
         console.log("-------------------------------------------");
-        console.log("MY INST ARE: ", nuevasInstrucciones);
         return this.marcarAsOptimizadas(nuevasInstrucciones, false);
     }
     reglasAlgebraicas(listaInstrucciones) {

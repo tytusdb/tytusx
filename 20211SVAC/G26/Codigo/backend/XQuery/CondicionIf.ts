@@ -27,20 +27,20 @@ export class CondicionIf{
     isVacio(){
         return this.vacio
     }
-    obtenerResponse(simbolo: any){
+    obtenerResponse(simbolo: any): Array<any>{
         if(this.identificador != undefined && this.listaNodos != undefined){
             //Es del tipo: $x/algo/otro
             //1. Sobre el simbolo recibido, obtener la consulta
             let tempC: Consulta = new Consulta(this.listaNodos, this.linea, this.columna)
             let resp: Array<any> = []
-            
             return resp.concat(tempC.ejecutar(simbolo.valor));
         }else if(this.funcionXQ != undefined){
             //Es del tipo: data($id/algo)
             let resp: Array<any> = []
             resp = resp.concat(this.funcionXQ.getSobreEntornoXML(simbolo.valor));
             //resp.concat(simbolo);
-            return resp
+            return resp;
         }
+        return [];
     }
 }
