@@ -37,7 +37,8 @@ export default class Main extends Component {
         repTablaSimbolos: '',
         repAstXpath: '',
         graphvizContent: '',
-        repOptimizaciones: ''
+        repOptimizaciones: '',
+        repastxquery: ''
     }
 
     parse = () => {
@@ -137,7 +138,7 @@ export default class Main extends Component {
         if (this.state.xml === "") {
             return;
         }
-
+        
         const result = parser.parse(this.state.xml);
         const querys = parseXPATH.parse(this.state.xpath);
         var querysXpath = querys.xpath;
@@ -196,12 +197,10 @@ export default class Main extends Component {
 
     //TRADUCCION XQUERY################################################################
     traduccionXquery = () => {
-
+        let texto = "";
         const result = parser.parse(this.state.xml)
         var ast = result.ast;
-
         result.encoding =  result.encoding.replaceAll("\"","");
-
         //TRADUCCION3D##########################################################################################
         traduccion.stackCounter++;
         traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
@@ -216,17 +215,23 @@ export default class Main extends Component {
             }
         }
         //#######################################################################################################
-
-
         traducirXml(ast);
 
         const astXquery = parseXQueryTraduccion.parse(this.state.xquery);
         var salida = "";
 
-        //console.log(astXquery);
+        console.log(astXquery);
+        texto += "nodoPadre[label=\"/\"];\n";
+        for (const key in astXquery) {
+            texto = astXquery[key].GraficarAST(texto);
+            texto += "nodoPadre -> nodo" + astXquery[key].line.toString()  + "_" + astXquery[key].column.toString() + ";\n";
+        }
+
+        this.setState({
+            repastxquery: "digraph G {" + texto + "}"
+        })
 
         var nvoEntorno = new EntornoXQuery(null, "global");
-
         for (const xquery of astXquery) {
             try {
                 salida += xquery.executeXquery(nvoEntorno, ast[0]).value + "\n";
@@ -314,6 +319,10 @@ export default class Main extends Component {
         } else if (e.target.value === "Reporte de Optimizaciones") {
             this.setState({
                 graphvizContent: this.state.repOptimizaciones
+            })
+        } else if (e.target.value === "AST XQuery") {
+            this.setState({
+                graphvizContent: this.state.repastxquery
             })
         }
 
@@ -425,6 +434,7 @@ export default class Main extends Component {
                             <option>AST XPath</option>
                             <option>Reporte de errores XPath</option>
                             <option>Reporte de Optimizaciones</option>
+                            <option>AST XQuery</option>
                         </Form.Control>
                     </Form.Group>
                 </div>
