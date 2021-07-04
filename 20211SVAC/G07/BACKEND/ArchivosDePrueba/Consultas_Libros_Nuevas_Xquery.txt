@@ -1,0 +1,363 @@
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////INICIO   DE/////////////////////////////////////
+//////////////////////////////////////////XML//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog>
+   <book id="bk101">
+      <author>GÃ¡mbardellÃ¤, MÃ¡tthew</author>
+      <title>XML Developer&apos;s Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publish_date>2000-10-01</publish_date>
+      <description>An in-depth look at creating applications 
+      with XML.</description>
+   </book>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-12-16</publish_date>
+      <description>A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world.</description>
+   </book>
+   <book id="bk103">
+      <author>Corets, Eva</author>
+      <title>Maeve Ascendant</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-11-17</publish_date>
+      <description>After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society.</description>
+   </book>
+   <book id="bk104">
+      <author>Corets, Eva</author>
+      <title>Oberon's Legacy</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2001-03-10</publish_date>
+      <description>In post-apocalypse England, the mysterious 
+      agent known only as Oberon helps to create a new life 
+      for the inhabitants of London. Sequel to Maeve 
+      Ascendant.</description>
+   </book>
+   <book id="bk105">
+      <author>Corets, Eva</author>
+      <title>The Sundered Grail</title>
+      <genre top="cali">Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2001-09-10</publish_date>
+      <description>The two daughters of Maeve, half-sisters, 
+      battle one another for control of England. Sequel to 
+      Oberon's Legacy.</description>
+   </book>
+   <book id="bk106">
+      <author>Randall, Cynthia</author>
+      <title>Lover Birds</title>
+      <genre top="cali">Romance</genre>
+      <price>4.95</price>
+      <publish_date>2000-09-02</publish_date>
+      <description>When Carla meets Paul at an ornithology 
+      conference, tempers fly as feathers get ruffled.</description>
+   </book>
+   <book id="bk107">
+      <author>Thurman, Paula</author>
+      <title>Splish Splash</title>
+      <genre>Romance</genre>
+      <price>4.95</price>
+      <publish_date>2000-11-02</publish_date>
+      <description>A deep sea diver finds true love twenty 
+      thousand leagues beneath the sea.</description>
+   </book>
+   <book id="bk108">
+      <author>Knorr, Stefan</author>
+      <title>Creepy Crawlies</title>
+      <genre>Horror</genre>
+      <price>4.95</price>
+      <publish_date>2000-12-06</publish_date>
+      <description>An anthology of horror stories about roaches,
+      centipedes, scorpions  and other insects.</description>
+   </book>
+   <book id="bk109">
+      <author>Kress, Peter</author>
+      <title>Paradox Lost</title>
+      <genre>Science Fiction</genre>
+      <price>6.95</price>
+      <publish_date>2000-11-02</publish_date>
+      <description>After an inadvertant trip through a Heisenberg
+      Uncertainty Device, James Salway discovers the problems 
+      of being quantum.</description>
+   </book>
+   <book id="bk110">
+      <author>O'Brien, Tim</author>
+      <title>Microsoft .NET: The Programming Bible</title>
+      <genre top="cali">Computer</genre>
+      <price>36.95</price>
+      <publish_date>2000-12-09</publish_date>
+      <description>Microsoft's .NET initiative is explored in 
+      detail in this deep programmer's reference.</description>
+   </book>
+   <book id="bk111">
+      <author>O'Brien, Tim</author>
+      <title>MSXML3: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>36.95</price>
+      <publish_date>2000-12-01</publish_date>
+      <description>The Microsoft MSXML3 parser is covered in 
+      detail, with attention to XML DOM interfaces, XSLT processing, 
+      SAX and more.</description>
+   </book>
+   <book id="bk112">
+      <author>Galos, Mike</author>
+      <title>Visual Studio 7: A Comprehensive Guide</title>
+      <genre>Computer</genre>
+      <price>49.95</price>
+      <publish_date cali="hola">2001-04-16</publish_date>
+      <description>Microsoft Visual Studio 7 is explored in depth,
+      looking at how Visual Basic, Visual C++, C#, and ASP+ are 
+      integrated into a comprehensive development 
+      environment.</description>
+   </book>
+</catalog>
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+
+5) Consulta 5	ESPERADA ************************* Archivo Libros.xml
+
+        //@*
+        
+        Salida Esperada 
+            bk101
+            bk102
+            bk103
+            bk104
+            bk105
+            cali
+            bk106
+            cali
+            bk107
+            bk108
+            bk109
+            bk110
+            cali
+            bk111
+            bk112
+            hola
+
+5) Consulta 5	MOSTRADA ************************* Archivo Libros.xml
+
+        //@*
+        
+        Salida Esperada 
+			id="bk101"
+			id="bk102"
+			id="bk103"
+			id="bk104"
+			top="cali"
+			id="bk105"
+			top="cali"
+			id="bk106"
+			id="bk107"
+			id="bk108"
+			id="bk109"
+			top="cali"
+			id="bk110"
+			id="bk111"
+			cali="hola"
+			id="bk112"
+
+
+
+6) Consulta 6	ESPERADA ************************* Archivo Libros.xml
+
+////////////////////////////////////////////////////////////////////////
+CONSULTA XQUERY: 
+DUDA CON RESPECTO A LA LECTURA DE ATRIBUTOS
+for $x in //@top/..
+return $x /@*
+  
+  //@top/../@*
+
+    Salida Esperada 
+
+        cali
+        cali
+        cali
+		
+6) Consulta 6	MOSTRADA ************************* Archivo Libros.xml
+
+    //@top
+
+    Salida Esperada 
+
+		top="cali"
+		top="cali"
+		top="cali"	
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+1) Consulta 1	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+	for $x in /catalog/book
+	return if ($x/@id="bk101")
+	then <libro1>{data($x)}</libro1>
+
+	 o
+
+	for $x in /catalog/book
+	return if ($x/@id="bk101")
+	then {data($x)}	 
+	
+	SALIDA:
+        GÃ¡mbardellÃ¤, MÃ¡tthew
+        XML Developer's Guide
+        Computer
+        44.95
+        2000-10-01
+        An in-depth look at creating applications 
+            with XML.
+	
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+2) Consulta 2	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+	/catalog/book/price
+	//price
+
+	for $x in /catalog/book
+	where $x/price<60
+	order by $x/price
+	return $x/price
+
+	SALIDA:
+			<price >49.95</price>
+			<price >44.95</price>
+			<price >36.95</price>
+			<price >36.95</price>
+			<price >6.95</price>
+			<price >5.95</price>
+			<price >5.95</price>
+			<price >5.95</price>
+			<price >5.95</price>
+			<price >4.95</price>
+			<price >4.95</price>
+			<price >4.95</price>	
+	
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+3) Consulta 3	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+	/catalog/book[last()]/title
+
+	for $x in /catalog/book
+	return if ($x/@id="bk112")
+	then <LIBRO112>{data($x/title)}</LIBRO112>
+	else <NO>{data($x/title)}</NO>
+
+	SALIDA:
+            <NO>XML Developer ' s Guide</NO>
+			<NO>Midnight Rain</NO>
+			<NO>Maeve Ascendant</NO>
+			<NO>Oberon s Legacy</NO>
+			<NO>The Sundered Grail</NO>
+			<NO>Lover Birds</NO>
+			<NO>Splish Splash</NO>
+			<NO>Creepy Crawlies</NO>
+			<NO>Paradox Lost</NO>
+			<NO>Microsoft NET The Programming Bible</NO>
+			<NO>MSXML3 A Comprehensive Guide</NO>
+			<LIBRO112>Visual Studio 7 A Comprehensive Guide</LIBRO112>
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+4) Consulta 4	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+	/catalog/book[1]/price|/catalog/book[last()-2]/price|/catalog/book[11]/price|/catalog/book[last()]/price
+
+	for $x in /catalog/book
+	return if ($x/@id="bk101")
+	then <menor>{data($x/price)}</menor>
+	else <sig>{data($x/price)}</sig>
+	
+	SALIDA:
+		<menor>44.95</menor>
+		<sig>5.95</sig>
+		<sig>5.95</sig>
+		<sig>5.95</sig>
+		<sig>5.95</sig>
+		<sig>4.95</sig>
+		<sig>4.95</sig>
+		<sig>4.95</sig>
+		<sig>6.95</sig>
+		<sig>36.95</sig>
+		<sig>36.95</sig>
+		<sig>49.95</sig>
+
+			
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+5) Consulta 5	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+ //@*
+
+	for $x in //@*
+	return @id
+	then <libro1>{data($x)}</libro1>
+	else <Otros>{data($x)}</Otros>
+	
+	SALIDA:
+			id="bk101"
+			id="bk102"
+			id="bk103"
+			id="bk104"
+			top="cali"
+			id="bk105"
+			top="cali"
+			id="bk106"
+			id="bk107"
+			id="bk108"
+			id="bk109"
+			top="cali"
+			id="bk110"
+			id="bk111"
+			cali="hola"
+			id="bk112"
+			
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+6) Consulta 6	MOSTRADA ************************* Archivo Libros.xml /////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+//@top/../@*
+
+	for $x in /catalog/book
+	return if ($x/@id="bk101")
+	then <libro1>{data($x)}</libro1>
+	else <Otros>{data($x)}</Otros>
+
+	SALIDA:
+		top="cali"
+		top="cali"
+		top="cali"		

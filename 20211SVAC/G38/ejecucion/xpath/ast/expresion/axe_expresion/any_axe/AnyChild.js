@@ -1,6 +1,7 @@
 "use strict";
-class AnyChild {
+class AnyChild extends ExpresionAncestor {
     constructor(axeType, axeOperation, identifier, listaPredicados, linea, columna) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;
@@ -8,10 +9,10 @@ class AnyChild {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         var ts = new TablaSimbolos(null);
         switch (this.axeOperation) {
             case AxeOperation.identifier:
