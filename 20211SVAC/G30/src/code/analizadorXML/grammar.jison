@@ -111,10 +111,7 @@ INICIO
                 ListaErrores = [];
                 var retornoGrafo = Object.assign({}, grafo);
                 grafo = new grafoCST();
-                var encabezado = "/*------HEADER------*\/\n#include <stdio.h>\n#include <math.h>\n"
-                +"double heap[30101999];\ndouble stack[30101999];\n"
-                +"double P;\ndouble H;\n";
-                return {datos:$$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,tabla:retornoGrafo.TablaGramatica,errores:retornoErrores, c3d: encabezado}
+                return {datos:$$,nodes:retornoGrafo.pilaNodos,edges:retornoGrafo.PilaEdges,tabla:retornoGrafo.TablaGramatica,errores:retornoErrores}
               }
   | error 
     {

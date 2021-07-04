@@ -1,6 +1,6 @@
 /******************************EXPORTACIONES*******************************/
 %{
-    /***************     AST      *********************/
+    /********************AST**************************/
     const { parse } = require ('../analizadorXPath/Xpath')
     const grammar = require('../analizadorXML/grammar')
     const { Simbolo } = require ('./AST/Simbolo')
@@ -8,29 +8,37 @@
     const { AST } = require ('./AST/AST')
     const { Tipo } = require('./AST/Tipo')
 
-     /***************     INSTRUCCIONES      *********************/
+     /***************INSTRUCCIONES*********************/
     const { For } = require ('./Instrucciones/For')
     const { Let } = require ('./Instrucciones/Let')
     const { Where } = require ('./Instrucciones/Where')
     const { Return } = require ('./Instrucciones/Return')
     const { Function } = require ('./Instrucciones/Function')
+    const { HeaderC3D } = require ('./Instrucciones/HeaderC3D')
+    const { MainC3D } = require ('./Instrucciones/MainC3D')
+    const { FunctionsC3D } = require ('./Instrucciones/FunctionsC3D')
 
-    /***************     EXPRESIONES      *********************/
+    /*****************EXPRESIONES**********************/
     const { Primitivo } = require ('./Expresiones/Primitivo')
     const { Operacion, Operador } = require ('./Expresiones/Operacion')
     const { Path } = require ('./Expresiones/Path')
     const { SourcePath } = require ('./Expresiones/SourcePath')
     const { Variable } = require ('./Expresiones/Variable')
     const { If } = require ('./Expresiones/If')
+    const { Call } = require ('./Expresiones/Call')
     const { Substring } = require ('./Expresiones/Substring')
     const { UpperCase } = require ('./Expresiones/UpperCase')
-    const { Call } = require ('./Expresiones/Call')
+    const { LowerCase } = require ('./Expresiones/LowerCase')
+    const { ToString } = require ('./Expresiones/ToString')
+    const { ToNumber } = require ('./Expresiones/ToNumber')
 
     //se crea el entorno global
     var Entorno_Global = new Entorno('global',null)
+
     //se crea el ast y se le pasa el entorno global
     var Arbol_AST = new AST([],Entorno_Global)
 
+    //manejo de errores
     var errores = [];
 
 %}
@@ -38,16 +46,13 @@
 /******************************LEXICO***************************************/ 
 
 %lex 
-
 %options case-sensitive
-
 escapechar                          [\'\"\\bfnrtv]
 escape                              \\{escapechar}
 acceptedcharsdouble                 [^\"\\]+
 stringdouble                        {escape}|{acceptedcharsdouble}
 stringliteral                       \"{stringdouble}*\"
 entero                              [0-9]+("."[0-9]+)?
-
 
 %%
 \s+                             /* skip white space */
@@ -106,8 +111,6 @@ entero                              [0-9]+("."[0-9]+)?
 "boolean" return 'boolean'
 "double" return 'double'
 "float" return 'float'
-
-
 
 //FUNCTIONS
 "declare" return 'dec'
@@ -173,9 +176,6 @@ entero                              [0-9]+("."[0-9]+)?
 (([0-9]+"."[0-9]*)|("."[0-9]+))|[0-9]+    return 'numero';
 [a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ0-9_ñÑ]*             return 'identificador';  
 
-//any
-(.)                                       return 'any'
-
 
 //errores
 . {  
@@ -217,41 +217,34 @@ INSTRUCCIONES: INSTRUCCIONES XQUERY { $$ = $1+$2 }
             | XQUERY { $$ = $1 }
 ;
 
-XQUERY: FLWOR               { $$ = $1 }
+XQUERY: FLWOR               { $$ = $1; console.log($1); }
     | CALL                  { $$ = $1.getValorImplicito(Arbol_AST.getEntorno('global')); }
     | FUNCTION              { $$ = '' }
 ;
 
 FLWOR: FOR LET WHERE ORDER RETURN           { 
-
                                                 //ejecutando for
                                                 if ($1 != undefined){
                                                     for(let inst_for of $1){
                                                     inst_for.ejecutar(Arbol_AST.getEntorno('global'));
                                                     }
                                                 }
-                                                
                                                 //ejecutando let
+                                                console.log($2);
                                                 if($2 != undefined){
                                                     for(let inst_let of $2){
                                                     inst_let.ejecutar(Arbol_AST.getEntorno('global'));
                                                     }
                                                 }
-                                                
                                                 if($3 != undefined){
                                                     //ejecutando where
                                                     for(let inst_where of $3){
                                                     inst_where.ejecutar(Arbol_AST.getEntorno('global'));
                                                     }
                                                 }
-                                                
                                                 //ejecutando return
                                                 $$ = $5.ejecutar(Arbol_AST.getEntorno('global'));
-                                                
-
-                                            }
-
-                                            
+                                            }                                         
 ;
  
 FOR: for DEFINITION             {   
@@ -261,20 +254,16 @@ FOR: for DEFINITION             {
 ;
  
 DEFINITION: dollasign identificador in SOURCE DEFINITION    { 
-
                                                                 let inst1 = [];
                                                                 let inst_for1 = new For(@1.first_line, @1.first_column, $4, $2);
                                                                 inst1.push(inst_for1);                                                                
                                                                 $$ = inst1.concat($5);
-
-
                                                             }
     | coma dollasign identificador in SOURCE DEFINITION     {
                                                                 let inst2 = [];
                                                                 let inst_for2 = new For(@1.first_line, @1.first_column, $5, $3);
                                                                 inst2.push(inst_for2);
                                                                 $$ = inst2.concat($6);
-
                                                             }
     |                                                       { $$ = [] }
 ;
@@ -282,7 +271,6 @@ DEFINITION: dollasign identificador in SOURCE DEFINITION    {
 SOURCE: doc p_abre StringLiteral p_cierra PATH  {  
                                                     $$ = $5;
                                                     //Arbol_AST.CrearEntorno('flwor', Entorno_Global);
-
                                                 }
     | PATH                                      { 
                                                     $$ = $1;
@@ -364,10 +352,7 @@ EXP_WHERE: EXP_WHERE menorque EXP_WHERE             { $$ = $1.getValorImplicito(
 ;
 
 
-ORDER: order CONT_ORDER    
-                        {
-
-                        }
+ORDER: order CONT_ORDER
     |
 ;
 
@@ -396,7 +381,7 @@ CONDITION: rif p_abre EXPRESION p_cierra rthen IF_RES relse IF_RES
                                                                     {
                                                                         $$ = new If(@1.first_line, @1.first_column, $3, $6, $8);
                                                                     }
-;
+; 
 
 IF_RES: EXPRESION               {
                                     $$ = $1; 
@@ -415,12 +400,18 @@ CALL: local dpuntos identificador p_abre VALORES p_cierra
 CALL_PRIM: substring p_abre EXPRESION coma numero coma numero p_cierra      {
                                                                                 $$ = new Substring(@1.first_line, @1.first_column, $3, Number($5), Number($7)); 
                                                                             }
-        | up_case p_abre EXPRESION p_cierra                                   {
+        | up_case p_abre EXPRESION p_cierra                                 {
                                                                                 $$ = new UpperCase(@1.first_line, @1.first_column, $3); 
                                                                             }
-        | low_case p_abre VALORES p_cierra
-        | string p_abre VALORES p_cierra
-        | number p_abre VALORES p_cierra
+        | low_case p_abre EXPRESION p_cierra                                {
+                                                                                $$ = new LowerCase(@1.first_line, @1.first_column, $3); 
+                                                                            }
+        | string p_abre EXPRESION p_cierra                                  {
+                                                                                $$ = new ToString(@1.first_line, @1.first_column, $3); 
+                                                                            }
+        | number p_abre EXPRESION p_cierra                                  {
+                                                                                $$ = new ToNumber(@1.first_line, @1.first_column, $3); 
+                                                                            }
 ;
 
 RANK: p_abre numero to numero p_cierra          { $$ = [Number($2),Number($4)] }
@@ -441,40 +432,30 @@ VALORES: EXPRESION VALORES                      {
 ;
 
 FUNCTION: dec fun local dpuntos identificador p_abre VARIABLES p_cierra as PREFIX dpuntos TYPE POSTFIX l_abre XQUERY l_cierra pyc //creamos un nuevo simbolo y en el valor le ponemos las intrucciones generadas
-                    {
-                        var new_func = new Function($7, $5, $15, $12, @1.first_line, @1.first_column);
-                        var new_simbol = new Simbolo($5, $12.toUpperCase(), @1.first_line, @1.first_column, new_func);
-
-                        if(Arbol_AST.getEntorno('global').existe($5)){
-                            //ya existe, se remplaza
-                            Arbol_AST.getEntorno('global').reemplazar($5, new_simbol)
-                        }else{
-                            //no existe, se crea
-                            Arbol_AST.getEntorno('global').agregar(new_simbol);
-                        }
-     
-                    }
+                                                {
+                                                    var new_func = new Function($7, $5, $15, $12, @1.first_line, @1.first_column);
+                                                    var new_simbol = new Simbolo($5, $12.toUpperCase(), @1.first_line, @1.first_column, new_func);
+                                                    if(Arbol_AST.getEntorno('global').existe($5)){
+                                                        //ya existe, se remplaza
+                                                        Arbol_AST.getEntorno('global').reemplazar($5, new_simbol)
+                                                    }else{
+                                                        //no existe, se crea
+                                                        Arbol_AST.getEntorno('global').agregar(new_simbol);
+                                                    }
+                                                }
         | dec fun local dpuntos identificador p_abre VARIABLES p_cierra as PREFIX dpuntos TYPE POSTFIX l_abre INST l_cierra pyc
-                    {
-                        var new_func = new Function($7, $5, $15, $12, @1.first_line, @1.first_column);
-                        var new_simbol = new Simbolo($5, $12.toUpperCase(), @1.first_line, @1.first_column, new_func);
-
-                        if(Arbol_AST.getEntorno('global').existe($5)){
-                            //ya existe, se remplaza
-                            Arbol_AST.getEntorno('global').reemplazar($5, new_simbol)
-                        }else{
-                            //no existe, se crea
-                            Arbol_AST.getEntorno('global').agregar(new_simbol);
-                        }
-
-
-
-                    }
+                                                {
+                                                    var new_func = new Function($7, $5, $15, $12, @1.first_line, @1.first_column);
+                                                    var new_simbol = new Simbolo($5, $12.toUpperCase(), @1.first_line, @1.first_column, new_func);
+                                                    if(Arbol_AST.getEntorno('global').existe($5)){
+                                                        //ya existe, se remplaza
+                                                        Arbol_AST.getEntorno('global').reemplazar($5, new_simbol)
+                                                    }else{
+                                                        //no existe, se crea
+                                                        Arbol_AST.getEntorno('global').agregar(new_simbol);
+                                                    }
+                                                }
 ;
-
-
-
-
 
 INST: rif p_abre EXPRESION p_cierra rthen IF_RES relse IF_RES 
                                                         {
@@ -489,11 +470,6 @@ IF_RES: EXPRESION               {
                                     $$ = $1;
                                 }
 ;
-
-
-
-
-
 
 VARIABLES: dollasign identificador as PREFIX dpuntos TYPE POSTFIX VARIABLES
                                                                             {
@@ -536,7 +512,7 @@ EXPRESION: EXPRESION mas EXPRESION          { $$ = new Operacion($1,$3,Operador.
         | EXPRESION por EXPRESION           { $$ = new Operacion($1,$3,Operador.MULTIPLICACION, @1.first_line, @1.first_column);}
         | EXPRESION div EXPRESION           { $$ = new Operacion($1,$3,Operador.DIVISION, @1.first_line, @1.first_column); }
         | EXPRESION mod EXPRESION           { $$ = new Operacion($1,$3,Operador.MODULO, @1.first_line, @1.first_column); }
-        | T                         { $$ = $1; }
+        | T                                 { $$ = $1; }
 ; 
 
 T: T menorque T                 { $$ = new Operacion($1,$3,Operador.MENOR_QUE, @1.first_line, @1.first_column); }
@@ -573,7 +549,6 @@ PATH: PATH axis AXISNAME NODO           { $$ = $1+$2+$3+$4; }
     | d_axis AXISNAME NODO              { $$ = $1+$2+$3; }
 ;
 
- 
 AXISNAME: ancestor cpuntos              { $$ = $1+$2; }
         | ancestororself cpuntos        { $$ = $1+$2; }
         | attribute cpuntos             { $$ = $1+$2; }
@@ -641,3 +616,5 @@ K: p_abre EP p_cierra           {$$=$1+$2+$3}
 ;
 
 
+
+// bye :3
