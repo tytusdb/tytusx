@@ -5,6 +5,7 @@ abstract class Simbolo {
     private ambito: string;
     private linea: number;
     private columna: number;
+    private stackPointer: number;
 
     constructor(nombre: string, type: Type, linea: number, columna: number) {
         this.nombre = nombre;
@@ -53,5 +54,15 @@ abstract class Simbolo {
         this.ambito =ambito;
     }
 
+    public getStackPointer(): number {
+        return this.stackPointer;
+    }
+
+    public setStackPointer(stackPointer: number): void {
+        this.stackPointer = stackPointer;
+    }
+
     public abstract getValorImplicito(): string;
+
+    public abstract generateC3D(resultC3D: C3DResult): C3DResult;
 }

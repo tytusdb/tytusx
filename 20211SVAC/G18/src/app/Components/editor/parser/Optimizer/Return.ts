@@ -21,6 +21,6 @@ export class Return {
         env.temp = "";
     }
     optimize(env: _Optimizer) {
-
+        env.temp = "";
     }
 }

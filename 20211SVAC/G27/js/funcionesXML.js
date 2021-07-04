@@ -6,6 +6,7 @@ tablaSimbolosV2 =[];
 const parseXML = function (entrada) {
     listaErroresXML = [];
     var mensajeConsola = "";
+    var c3dXMLSalida = "";
     try {
         console.log("Ingresó a la función parseXML" + new Date());
         document.getElementById('consola').innerHTML += ">Intentando analizar XML (" + new Date() + ") \n";
@@ -30,7 +31,9 @@ const parseXML = function (entrada) {
                 for (var i = 0; i < tablaSimbolosV2.listaObjetos.length; i+=1) {                
                     console.log("Objeto traduccion id: "+tablaSimbolosV2.listaObjetos[i].identificador+"  tipo : "+tablaSimbolosV2.listaObjetos[i].tipo);                    
                 }  
-                generarXMLC3D(tablaSimbolosV2);
+                c3dXMLSalida = generarXMLC3D(tablaSimbolosV2);
+                document.getElementById('Salida').innerHTML = c3dXMLSalida;
+                editor3.setValue(c3dXMLSalida);
                 console.log("\n\n\n############# Codigo traducido ###################\n\n");                                
                 console.log("\n\n\n#################SALIO DE TS DE TRADUCCION########################");
 
@@ -313,6 +316,21 @@ var editor = CodeMirror.fromTextArea(code, {
 
 function showCode(){
     var text = editor.getValue();
+    return text;
+}
+
+
+/*-.---------.-.-.-.-.-.Area de texto para Resultado de Ejecución-.-.-.-.-.-.-.-.-.-.*/
+/* codemirror para textarea de XQUERY */
+var code3 = document.getElementById("Salida");
+var editor3 = CodeMirror.fromTextArea(code3, {
+    height: "350px;",
+        mode: "text/x-csrc",
+        lineNumbers: true
+});
+
+function showCodeResultadoEjecucion(){
+    var text = editor3.getValue();
     return text;
 }
 

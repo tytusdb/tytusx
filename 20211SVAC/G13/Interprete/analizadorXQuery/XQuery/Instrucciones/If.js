@@ -29,22 +29,33 @@ var If = /** @class */ (function (_super) {
         return _this;
     }
     If.prototype.ejecutar = function (ent) {
+        var retn = 'nulo';
         this.lista_condiciones.forEach(function (condicion) {
             var res = condicion.ejecutar(ent);
             if (res != null) {
-                return res;
+                retn = res;
             }
-            if (condicion.ejecutado) {
-                return null;
+            if (retn == 'nulo') {
+                if (condicion.ejecutado) {
+                    retn = null;
+                }
             }
         });
-        if (this.bloque_else != null && this.bloque_else != undefined) {
-            var res = this.bloque_else.ejecutar(new Entorno_1.EntornoXQ(ent));
-            if (res != null) {
-                return res;
+        if (retn == 'nulo') {
+            if (this.bloque_else != null && this.bloque_else != undefined) {
+                var res = this.bloque_else.ejecutar(new Entorno_1.EntornoXQ(ent));
+                if (res != null) {
+                    retn = res;
+                }
+                else {
+                    retn = null;
+                }
+            }
+            else {
+                retn = null;
             }
         }
-        return null;
+        return retn;
     };
     return If;
 }(InstruccionXQ_1.InstruccionXQ));

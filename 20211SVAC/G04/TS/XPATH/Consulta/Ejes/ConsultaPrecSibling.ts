@@ -1,10 +1,9 @@
-class ConsultaPrecSibling implements Consulta {
+class ConsultaPrecSibling extends Consulta {
 
-    private id: string;
     private ignorarNodos: boolean;
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
         this.ignorarNodos = true;
     }
 
@@ -21,7 +20,7 @@ class ConsultaPrecSibling implements Consulta {
             }
         });
 
-        let parent: ConsultaPuntos = new ConsultaPuntos();
+        let parent: ConsultaPuntos = new ConsultaPuntos(TipoConsulta.PUNTOS, "", []);
         entornos = parent.run(entornos);
         entornos = this.getHijos(entornos);
 
@@ -30,10 +29,10 @@ class ConsultaPrecSibling implements Consulta {
             let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s: Simbolo) => {
                 if (s instanceof Nodo) {
-                    if (this.id === "*" && !this.ignorarNodos) {
+                    if (super.getId() === "*" && !this.ignorarNodos) {
                         flag = true;
                         nuevoEntorno.add(s);
-                    } else if (s.getNombre() == this.id && !this.ignorarNodos) {
+                    } else if (s.getNombre() == super.getId() && !this.ignorarNodos) {
                         flag = true;
                         nuevoEntorno.add(s);
                     }

@@ -9,12 +9,15 @@ export class Label {
         if (env.label != this.label) {
             env.flag = false;
             env.salida += env.temp;
+            env.salida += this.label + ":\n";
         }
-        else if (!env.flag) env.salida += env.temp;
-        else env.reglas.push(new Rule(this.line, 'Mirilla', "Regla 1", env.temp, ""));
+        else if (!env.flag) {
+            env.salida += env.temp;
+            env.salida += this.label + ":\n";
+        } 
+        else env.reglas.push(new Rule(this.line, 'Bloque', "Regla 1", env.temp, ""));
 
         env.temp = "";
-        env.salida += this.label + ":\n";
     }
     regla2(env: _Optimizer) {
         env.salida += this.label + ":\n";
@@ -27,8 +30,9 @@ export class Label {
     }
     regla5(env: _Optimizer) {
         env.salida += this.label + ":\n";
+        env.flag = false;
     }
     optimize(env: _Optimizer) {
-
+        env.salida += this.label + ":\n";
     }
 }

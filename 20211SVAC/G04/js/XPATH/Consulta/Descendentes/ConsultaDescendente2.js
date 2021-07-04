@@ -11,11 +11,11 @@ class ConsultaDescendente2 extends ConsultaSimple {
         let nuevoEntorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
             if (s instanceof Nodo) {
-                if (super.getIdentificador() === "*") {
+                if (super.getId() === "*") {
                     flag = true;
                     nuevoEntorno.add(s);
                 }
-                else if (s.getNombre() === super.getIdentificador()) {
+                else if (s.getNombre() === super.getId()) {
                     flag = true;
                     nuevoEntorno.add(s);
                 }

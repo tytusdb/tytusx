@@ -93,7 +93,7 @@
             <button type="button" class="btn btn-success" onclick="AnalyzeXML()" title="Ejecuta el código XML">
                 XML
             </button>
-            <button type="button" class="btn btn-info" onclick="" title="Ejecuta el código XQUERY">
+            <button type="button" class="btn btn-info" onclick="AnalyzeXQUERY();" title="Ejecuta el código XQUERY">
                 XQUERY
             </button>
             <button type="button" class="btn btn-info" onclick="pruebaC3D();" title="Ejecuta el código XQUERY">
@@ -173,6 +173,7 @@
 <script type="text/javascript" src="js/default.js"></script>
 <script type="text/javascript" src="js/xml.js"></script>
 <script type="text/javascript" src="js/sql.js"></script>
+<script type="text/javascript" src="js/clike.js"></script>
 </body>
 <script>
     function AnalyzeXML() {
@@ -216,8 +217,15 @@
                 cadenaResultado+=arrayResultado[i].texto+"\n";
             }            
             document.getElementById("Salida").innerHTML = cadenaResultado;
+            editor3.setValue(cadenaResultado);
         }        
         return true;
+    }
+
+    function AnalyzeXQUERY(){
+        var cadenaResultado = "";
+        let entradaXQUERY = showCodeXQuery();
+        parseXQUERY(entradaXQUERY);
     }
 
     function NewDocument(){
@@ -249,4 +257,5 @@
 <script src="Traduccion/traductorXML.js"></script>
 <script src="Traduccion/traductorXPATH.js"></script>
 <script src="Gramatica/gramaticaXML3D.js"></script>
+<script src="Gramatica/gramaticaXQUERY.js"></script>
 </html>

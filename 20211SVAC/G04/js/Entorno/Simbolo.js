@@ -35,4 +35,10 @@ class Simbolo {
     setAmbito(ambito) {
         this.ambito = ambito;
     }
+    getStackPointer() {
+        return this.stackPointer;
+    }
+    setStackPointer(stackPointer) {
+        this.stackPointer = stackPointer;
+    }
 }

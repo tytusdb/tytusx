@@ -17,5 +17,9 @@ var XUpperCase = /** @class */ (function () {
     XUpperCase.prototype.getTipo = function (){
         return this.tipo;
     };
+
+    XUpperCase.prototype.getCadena = function (){
+        return this.cadena.getValorImplicito("","").toString();
+    };
     return XUpperCase;
 }());

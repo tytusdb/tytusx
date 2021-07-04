@@ -9,9 +9,9 @@ class ConsultaAttribute extends ConsultaSimple {
             e.getTable().forEach((s: Simbolo) => {
                 //Recorro los simbolos buscando el atributo
                 if (s instanceof Atributo) {
-                    if (super.getIdentificador() === "*") {
+                    if (super.getId() === "*") {
                         flag = this.addSimbolo(e, nuevoEntorno);
-                    } else if (s.getNombre() == super.getIdentificador()) {
+                    } else if (s.getNombre() == super.getId()) {
                         flag = this.addSimbolo(e, nuevoEntorno);
                     }
                 }

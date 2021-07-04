@@ -19,6 +19,28 @@ export class For implements ExpressionXquery{
         public ret: Return){}
     
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
+
+        console.log(this.idIn);
+        console.log(this.idAt);
+        console.log(this.select);
+        console.log(this.where);
+        console.log(this.ret);
+
+        traduccion.setTranslate("\n//FOR\t--------------");
+        //TRADUCCION3D##########################################################################################
+        traduccion.stackCounter++;
+        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
+        traduccion.setTranslate("\n//INTRODUCIENDO ID FOR\t--------------");
+
+        for (let i = 0; i < this.idIn.length; i++) {
+            traduccion.setTranslate("heap[(int)H] = " + this.idIn.charCodeAt(i) + ";" + "\t\t//Caracter " + this.idIn[i].toString());
+            traduccion.setTranslate("H = H + 1;");
+            if (i + 1 === this.idIn.length) {
+                traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
+                traduccion.setTranslate("H = H + 1;");
+            }
+        }
+        //#######################################################################################################
         
         var result : string= "";
 
@@ -56,7 +78,9 @@ export class For implements ExpressionXquery{
         }
     }
 
+    
     private validarWhere(entAct: EntornoXQuery, RaizXML: Entorno) : boolean{
+        traduccion.setTranslate("\n//VALIDACIONES WHERE\t--------------");
 
         var result  = this.where?.executeXquery(entAct, RaizXML)
         if (result !== undefined){

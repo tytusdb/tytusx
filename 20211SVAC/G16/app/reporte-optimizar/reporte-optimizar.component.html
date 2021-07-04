@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" (click)="regresar()">Regresar</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Reportes
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Reporte de errores</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="" (click)="repoSimbolos()">Tabla de símbolos</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="cstASC()">Reporte CST</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" (click)="ReporteGram()">Reporte gramatical XML</a>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <br>
+    <br>
+</nav>
+<div style="text-align: center;">
+    <h2>Reporte de Optimización</h2>
+</div>
+<hr>
+<div class="component">
+    <table class="table table-hover text-align:center">
+        <thead>
+            <tr>
+                <th scope="col">Regla</th>
+                <th scope="col">Código Original</th>
+                <th scope="col">Código Optimizado</th>
+                <th scope="col">Fila</th>
+                <th scope="col">Columna</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let item of lista">
+            <tr>
+                <td>{{item.regla}}</td>
+                <td>{{item.original}}</td>
+                <td>{{item.optimizado}}</td>
+                <td>{{item.fila}}</td>
+                <td>{{item.columna}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

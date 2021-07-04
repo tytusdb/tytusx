@@ -40,7 +40,6 @@ var XFlowerIF = /** @class */ (function () {
                         objetosSalida = objetosSalida.concat(resultadoElse[1]);
                     }
                 }
-
             }
 
             return this.arregloAString(objetosSalida);

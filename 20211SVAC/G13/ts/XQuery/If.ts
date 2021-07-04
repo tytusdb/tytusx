@@ -16,26 +16,30 @@ export class If extends InstruccionXQ {
     }
     
     ejecutar(ent: EntornoXQ): Object {
+        let retn = 'nulo';
         this.lista_condiciones.forEach(condicion => {
             let res = condicion.ejecutar(ent);
-            
             if(res != null) {
-                return res;
+                retn = res;
             }
-
-            if(condicion.ejecutado) {
-                return null;
+            if(retn == 'nulo') {
+                if (condicion.ejecutado) {
+                    retn = null;
+                }
             }
         });
-
-        if(this.bloque_else != null && this.bloque_else != undefined) {
-            let res = this.bloque_else.ejecutar(new EntornoXQ(ent));
-            
-            if(res != null) {
-                return res;
+        if(retn == 'nulo') {
+            if(this.bloque_else != null && this.bloque_else != undefined) {
+                let res = this.bloque_else.ejecutar(new EntornoXQ(ent));     
+                if(res != null) {
+                    retn = res;
+                } else {
+                    retn = null;
+                }
+            } else {
+                retn = null;
             }
         }
-        
-        return null;
+        return retn;
     }
 }

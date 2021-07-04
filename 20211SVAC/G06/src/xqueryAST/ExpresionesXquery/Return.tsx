@@ -14,19 +14,33 @@ export class Return implements ExpressionXquery{
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
        
-        var content : Retorno[] = [];
-        
-        for (const Xquery of this.L_Exps) {
+        if (this.L_Exps.length > 1) {
 
-            const resultExp = Xquery.executeXquery(entAct, RaizXML)
+            var result : Retorno[] = [];
 
-            if (resultExp.type === tipoPrimitivo.RESP){
-                ManejadorXquery.concatenar(content, resultExp.value);
-            }else {
-                content.push(resultExp);
+            for (const Xquery of this.L_Exps) {
+
+                const resultXquery = Xquery.executeXquery(entAct, RaizXML);
+                if (resultXquery.type === tipoPrimitivo.RESP){
+                    ManejadorXquery.concatenar(result, resultXquery.value);
+                }else if (resultXquery.type !== tipoPrimitivo.VOID ) {
+                    result.push(resultXquery);
+                }
             }
+            
+            if (result.length > 1){
+                return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+            }else if (result.length === 1) {
+                return result[0];
+            }else {
+                return {value: [] , type: tipoPrimitivo.VOID, SP: -1};
+            }
+
+        } else if (this.L_Exps.length === 1) {
+            return this.L_Exps[0].executeXquery(entAct, RaizXML);
+        }else {
+            return {value: [], type: tipoPrimitivo.VOID, SP: -1}
         }
-        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
     }
 
     GraficarAST(texto: string): string {

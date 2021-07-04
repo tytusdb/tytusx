@@ -2,7 +2,6 @@ let raizCST:NodoPadre;
 let errores = new Errores();
 function analizar(): void {
     const texto: HTMLTextAreaElement = document.getElementById('inputXML') as HTMLTextAreaElement;
-    const consola: HTMLTextAreaElement = document.getElementById('result')  as HTMLTextAreaElement;
     errores = new Errores();
     let auxResultado;
     try{
@@ -17,12 +16,16 @@ function analizar(): void {
     let nodos: Array<Nodo> = auxResultado.nodos;
     let entornoGlobal: Entorno = new Entorno(null);
     addSimbolosToEntorno(entornoGlobal, nodos, "global");
-    setSymbolTable(entornoGlobal);    
+
+    let result: C3DResult = new C3DResult(new Array(), 0, 0, 0, null);
+    result = recorrerSimbolos(result, entornoGlobal);
+    result = entornoGlobal.generateC3D(result, "global");
+    setSymbolTable(entornoGlobal);
     raizCST = auxResultado.raizCST;
     if(errores.getErrores().length>0){
         errores.agregarEncabezado("XML");
     }
-    analizarXpath(entornoGlobal);
+    analizarXpath(entornoGlobal, result);
 }
 
 function addSimbolosToEntorno(anterior: Entorno, nodos: Array<Nodo>, ambito: string): void {
@@ -42,4 +45,26 @@ function addSimbolosToEntorno(anterior: Entorno, nodos: Array<Nodo>, ambito: str
             anterior.add(nodo);
         }
     });
+}
+
+function recorrerSimbolos(result: C3DResult, entorno: Entorno): C3DResult {
+
+    entorno.getTable().forEach(s => {
+        if (s instanceof Nodo) {
+            if (s.getEntorno() != null) {
+                result = recorrerSimbolos(result, s.getEntorno());
+            }
+        }
+    });
+
+    entorno.getTable().forEach((s: Simbolo) => {
+        if (s instanceof Nodo) {
+            s.getAtributos().forEach(a => result = a.generateC3D(result));
+            result = s.getEntorno().generateC3D(result, s.getNombre());
+            result = s.setEntornoToChilds(result);
+            result = s.generateC3D(result);
+        }
+    });
+
+    return result;
 }

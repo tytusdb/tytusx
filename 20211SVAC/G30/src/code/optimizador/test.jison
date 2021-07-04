@@ -142,7 +142,7 @@ instruccion
                                 }
   | if '(' condition ')' goto etiqueta ';'    { /*if*/ 
                                                 $$ = $1 + ' ' + $2 + ' ' + $3 + ' ' + $4 + ' ' + $5 + ' ' + $6  + $7
-                                                instrucciones.push(new Instruccion('salto_condicional', $$, '', pilacondition[0], pilacondition[1], pilacondition[2]));
+                                                instrucciones.push(new Instruccion('salto_condicional', $$, $6, pilacondition[0], pilacondition[1], pilacondition[2]));
                                                 pilacondition = [];
                                               }
   | idsf '=' exp ';'      { /*asignación*/
