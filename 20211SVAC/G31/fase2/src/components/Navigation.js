@@ -8,6 +8,7 @@ import { CD3 } from '../code/codigo3D/cd3';
 import { XPATHC3D } from '../code/codigo3D/xpathC3D';
 import { Entorno } from '../code/analizadorXQuery/Tabla/TablaSimbolos';
 import { Error } from '../code/analizadorXQuery/Tabla/Error';
+const { ErroresGlobal, LimpiarErrores } = require('../code/analizadorXPath/AST/Global')
 
 require('../../node_modules/codemirror/mode/xquery/xquery')
 require('../../node_modules/codemirror/mode/xml/xml')
@@ -84,6 +85,21 @@ class Navigation extends React.Component{
                     { id: 3, label: 'Node 3' },
                     { id: 4, label: 'Node 4' },
                     { id: 5, label: 'Node 5' }
+                ],
+                edges: [
+                    { from: 1, to: 2 },
+                    { from: 1, to: 3 },
+                    { from: 2, to: 4 },
+                    { from: 2, to: 5 }
+                ]
+            },
+            datosCSTXQuery: {
+                nodes: [
+                    { id: 1, label: 'Node 1X' },
+                    { id: 2, label: 'Node 2X' },
+                    { id: 3, label: 'Node 3X' },
+                    { id: 4, label: 'Node 4X' },
+                    { id: 5, label: 'Node 5X' }
                 ],
                 edges: [
                     { from: 1, to: 2 },
@@ -326,28 +342,48 @@ class Navigation extends React.Component{
     }
 
     ejecutarXQuery(){
+        this.setState({ErroresXQuery: []})
         this.setState({OutputTextarea: ''})
         var texto = this.state.InputTextarea;         
         if(texto == "") return  
-        var resultado = parseXQuery(texto); 
-        console.log(resultado); 
+        var resultado = parseXQuery(texto); console.log(resultado); 
+        this.setState({ErroresXQuery: resultado.errores})
+        if(resultado.errores.length > 0){
+            alert('Se encontraron errores en XQuery')
+            return
+        }
+        
         let consola = ""
+        let retorno 
         let entornoGlobal = new Entorno(null, 'global')
+        this.setState({datosCSTXQuery:{nodes:resultado.grafoNodes,edges:resultado.grafoEdges}})
+        
         if(resultado.instrucciones instanceof Array){
             for(let instruccion of resultado.instrucciones){
-                consola += instruccion.getValor(entornoGlobal, this.state.XML)
-                consola += '\n'
+                retorno =  instruccion.getValor(entornoGlobal, this.state.XML)
+                if(retorno instanceof Error){
+                    this.setState({ErroresXQuery: resultado.errores.concat(ErroresGlobal)})
+                    this.limpiarErrores()
+                    return
+                }else{
+                    consola += retorno
+                    consola += '\n'
+                }
             }
         }else{
-            consola =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)
+            retorno =  resultado.instrucciones.getValor(entornoGlobal, this.state.XML)            
         }
-        if(consola instanceof Error){
-            consola = 'Se encontraron errores en la ejecución de XQuery'
-        }
+        console.log('Errores Globales',ErroresGlobal )
+        this.setState({ErroresXQuery: resultado.errores.concat(ErroresGlobal)})
+        this.limpiarErrores()
         this.setState({OutputTextarea: consola}); 
     }
 
-
+    limpiarErrores(){
+        for(let i = 0; i < ErroresGlobal.length; i++){
+            ErroresGlobal.pop(); 
+        }
+    }
 
 
     render(){
@@ -357,7 +393,7 @@ class Navigation extends React.Component{
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporte", datosCST:this.state.datosCST, datosCSTXML:this.state.datosCSTXML, datosAST:this.state.AST ,graphviz:this.state.graphvizCST, datosCSTXQuery: this.state.datosCSTXQuery }}>
                             Arboles
                         </Link>                        
                     </li>
@@ -372,7 +408,7 @@ class Navigation extends React.Component{
                         </Link>                        
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath }}>
+                        <Link className="nav-link" style={ { textDecoration: 'none' } } to= {{ pathname: "/tytusx/20211SVAC/G31/reporteErrores", Mistakes:this.state.Mistakes, MistakesXPath:this.state.MistakesXPath, ErroresXQuery: this.state.ErroresXQuery }}>
                             Errores
                         </Link>                        
                     </li>

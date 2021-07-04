@@ -81,8 +81,6 @@ class TablaSimbolos extends React.Component{
     render(){
         return(
             <header className="App-header">
-    
-                <img src={logo} className="App-logo" alt="logo" />
                     Organización de Lenguajes y Compiladores 2
                 <p></p>
 
@@ -98,7 +96,26 @@ class TablaSimbolos extends React.Component{
                 <p></p>
 
                 <div className="row">
-                    <label> Tabla de Símbolos </label>
+                    <label> Tabla de Símbolos XML</label>
+                </div>
+
+                <p></p>
+                <p></p>
+                <p></p>
+                
+                <div className = "container">
+                    <div className="row">
+                    <TablaSimbolo data={this.table}/>
+                    </div>
+                </div>
+
+                <p></p>
+
+                <p></p>
+                <p></p>
+
+                <div className="row">
+                    <label> Tabla de Símbolos XQuery </label>
                 </div>
 
                 <p></p>

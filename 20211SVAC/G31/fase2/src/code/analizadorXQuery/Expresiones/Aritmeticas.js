@@ -1,6 +1,7 @@
 import { Objeto } from "../../analizadorXML/helpers";
 import { parse } from "../../analizadorXPath/Xpath";
 import { Error } from "../Tabla/Error";
+const { ErroresGlobal } = require('../../analizadorXPath/AST/Global')
 
 export class Suma {
     linea = 0; 
@@ -168,8 +169,9 @@ export class Division {
         if(resultDer instanceof Error){
             return resultDer
         }
-        if(Number(resultDer) == 0){
+        if(Number(resultDer) === 0){
             let nuevoError = new Error('Semantico', 'Division por cero', this.linea, this.columna)
+            ErroresGlobal.push({Error:'Division por cero', tipo: 'Semántico', linea: this.linea, columna: this.columna})
             return nuevoError
         }
 
