@@ -28,7 +28,7 @@ function agregarContenidoErrores(){
 }
 
 function setSymbolTable(entorno: Entorno) {
-    tablaEcabezado(["Identificador", "Valor", "Tipo", "Ambito", "Linea", "Columna"],"tableHead");
+    tablaEcabezado(["Identificador", "Valor", "Tipo", "Ambito", "Posicion", "Linea", "Columna"],"tableHead");
     let tableBody = document.querySelector('#tableBody');
 
     tableBody.innerHTML = "";
@@ -42,8 +42,9 @@ function symbolstToTable(content: Array<string>, entorno: Entorno) {
         content.push("<tr>");
         content.push("\t<td>" + s.getNombre() + "</td>");
         content.push("\t<td>" + s.getValorImplicito() + "</td>");
-        content.push("\t<td>" + s.getType() + "</td>");
+        content.push("\t<td>" + getName(s.getType()) + "</td>");
         content.push("\t<td>" + s.getAmbito() + "</td>");
+        content.push("\t<td>" + s.getStackPointer() + "</td>");
         content.push("\t<td>" + s.getLinea() + "</td>");
         content.push("\t<td>" + s.getColumna() + "</td>");
         content.push("</tr>");
@@ -65,7 +66,7 @@ function agregarContenidoReporteGramatical(entrada:Array<Array<string>>){
     entrada.forEach((e) =>{
         aux.push("<tr>");
         aux.push("\t<td>"+e[0]+"</td>");
-        aux.push("\t<td>"+e[1]+"</td>");            
+        aux.push("\t<td>"+e[1]+"</td>");
         aux.push("</tr>");
     });
     body.innerHTML = aux.join("");

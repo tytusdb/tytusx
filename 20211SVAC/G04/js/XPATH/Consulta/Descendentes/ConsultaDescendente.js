@@ -8,7 +8,7 @@ class ConsultaDescendente extends ConsultaSimple {
                 if (s instanceof Nodo) {
                     this.visitarHijos(s.getEntorno(), entornos);
                 }
-                if (entornos.length == 0 && s.getNombre() == super.getIdentificador()) {
+                if (entornos.length == 0 && s.getNombre() == super.getId()) {
                     let entornonuevo = new Entorno(e);
                     entornonuevo.add(s);
                     aux.push(entornonuevo);
@@ -22,7 +22,7 @@ class ConsultaDescendente extends ConsultaSimple {
     visitarHijos(entornoEntrada, aux) {
         entornoEntrada.getTable().forEach((e) => {
             if (e instanceof Nodo) {
-                if (e.getNombre() == super.getIdentificador()) {
+                if (e.getNombre() == super.getId()) {
                     let salida = new Entorno(entornoEntrada);
                     salida.add(e);
                     aux.push(salida);
