@@ -265,6 +265,49 @@ class TraductorXML{
             }
 
             xmlC3D += `
+            //aumentamos en 1 el Heap Pointer
+            HP = HP + 1;`;
+                    HP = HP + 1;
+
+            xmlC3D += `
+        //guardamos un < `;
+                xmlC3D += `
+        heap[(int)HP] =  60;`;
+                heap.push(60);
+                xmlC3D += `
+        //aumentamos en 1 el Heap Pointer
+        HP = HP + 1;`;
+                HP = HP + 1;
+
+                xmlC3D += `
+        //guardamos un / `;
+                xmlC3D += `
+        heap[(int)HP] =  47;`;
+                heap.push(47);
+                xmlC3D += `
+        //aumentamos en 1 el Heap Pointer
+        HP = HP + 1;`;
+                HP = HP + 1;
+
+            for(var i = 0; i<etiquetaAux.length; i++){
+                xmlC3D += `
+        //guardamos la ` + etiquetaAux[i];
+                xmlC3D += `
+        heap[(int)HP] = ` + etiquetaAux.codePointAt(i) + `;`;
+                heap.push(etiquetaAux.codePointAt(i));
+                xmlC3D += `
+        //aumentamos en 1 el Heap Pointer
+        HP = HP + 1;`;
+                HP = HP + 1;
+            }
+
+            xmlC3D += `
+            //guardamos un > `;
+                    xmlC3D += `
+            heap[(int)HP] =  62;`;
+                    heap.push(62);
+
+            xmlC3D += `
         //aumentamos en 1 el Heap Pointer
         HP = HP + 1;`;
             HP = HP + 1;

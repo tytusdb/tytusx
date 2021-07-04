@@ -1,20 +1,21 @@
-class AndLogica implements Expresion{
+class AndLogica extends ExpresionAncestor{
     private izquierdo: Expresion;
     private derecha: Expresion;
     linea: number;
     columna: number;
 
     constructor(izquierdo: Expresion, derecha: Expresion, linea: number, columna: number) {
+        super();
         this.izquierdo = izquierdo;
         this.derecha = derecha;
         this.linea = linea;
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierdo.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierdo.getTipo(tsXquery,ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery,ent);
         if(tipoIzquierda.esBoolean() && tipoDerecha.esBoolean()){
             tipo = new Tipo(TipoDato.booleano);
         }
@@ -24,11 +25,11 @@ class AndLogica implements Expresion{
         return tipo;
     }
 
-    getValor(ent: TablaSimbolos): any {
-        let tipo = this.getTipo(ent);
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
+        let tipo = this.getTipo(tsXquery,ent);
         let valor;
         if(!tipo.esError()){
-            valor = this.izquierdo.getValor(ent) && this.derecha.getValor(ent);
+            valor = this.izquierdo.getValor(tsXquery,ent) && this.derecha.getValor(tsXquery,ent);
         }
         return valor;
 

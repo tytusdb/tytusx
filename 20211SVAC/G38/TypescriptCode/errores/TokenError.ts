@@ -4,7 +4,7 @@ enum TipoError{
     Semantico = "Semantico",
 }
 
-class TokenError{
+class TokenError extends Error{
     private _tipoError: TipoError;
     private _mensaje: string;
     private _linea: number;
@@ -12,10 +12,12 @@ class TokenError{
 
 
     constructor(tipoError: TipoError, mensaje: string, linea: number, columna: number) {
+        super(mensaje);
         this._tipoError = tipoError;
         this._mensaje = mensaje;
         this._linea = linea;
         this._columna = columna;
+        Object.setPrototypeOf(this, TokenError.prototype);
     }
 
 

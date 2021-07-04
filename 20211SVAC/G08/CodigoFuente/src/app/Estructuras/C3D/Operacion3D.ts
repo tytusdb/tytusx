@@ -6,6 +6,7 @@ export class OperacionC3D{
     TipoOperador:TipoOperador;
     ExpresionIzquierda: Simbolo;
     ExpresionDerecha: Simbolo;
+    Valor: string = '';
     C3D:string;
     constructor( fila: number, columna: number, tipoOperador:TipoOperador, expresionIzquierda: Simbolo, expresionDerecha: Simbolo, c3d:string){
         this.Fila = fila;

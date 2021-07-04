@@ -3,6 +3,7 @@ exports.__esModule = true;
 exports.Simbolo = exports.OperacionC3D = void 0;
 var OperacionC3D = /** @class */ (function () {
     function OperacionC3D(fila, columna, tipoOperador, expresionIzquierda, expresionDerecha, c3d) {
+        this.Valor = '';
         this.Fila = fila;
         this.Columna = columna;
         this.TipoOperador = tipoOperador;

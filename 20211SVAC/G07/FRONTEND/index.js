@@ -2,7 +2,7 @@
 //Analizar
 let botonCargar = document.getElementById("btnCargar");
 let botonCargar2 = document.getElementById("btnCargar2");
-let editorXPATH = (document.getElementById("editor").value = "/bookstore");
+let editorXPATH = (document.getElementById("editor").value = "/catalog");
 let editorXML = document.getElementById("consolaJS");
 let indiceAux=0;
 let tipoAnalizadorXML = "";
@@ -24,6 +24,8 @@ let btnEjemplo5 = document.getElementById("btnEjemplo5");
 let btnEjemplo6 = document.getElementById("btnEjemplo6");
 let btnEjemplo7 = document.getElementById("btnEjemplo7");
 let btnEjemplo8 = document.getElementById("btnEjemplo8");
+let btnEjemplo9 = document.getElementById("btnEjemplo9");
+let btnEjemplo10 = document.getElementById("btnEjemplo10");
 
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
@@ -256,6 +258,14 @@ return if ($x/@id="bk101")
 then {substring($x,0)}
 `
 
+let XQueryfrtot = `for $x in (1 to 5)
+return <test>{$x}</test>
+`
+let XQueryfrtat = `for $x at $i in doc("books.xml")/catalog/book/title
+return <book>{$i}_ {data($x)}</book>
+`
+
+
 let EJEMGDA = `//ENTRADA PARA ARBOL GDA
 
 // Regla 5
@@ -406,6 +416,29 @@ btnEjemplo5.addEventListener("click", () => {
       editorXML.value = textoPrueba;
       editorXQUERY.value = XQueryFNat;
     }) 
+    
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo9.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtot;
+    }) 
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo10.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtat;
+    })     
     
 // ======================================
 //BOTON DE XML DESCENDENTE

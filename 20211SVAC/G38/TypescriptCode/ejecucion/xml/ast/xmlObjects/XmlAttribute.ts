@@ -49,4 +49,38 @@ class XmlAttribute extends XmlObjectAncestor
     public isAttribute():boolean{
         return true;
     }
+
+    public getStrAst(nodoPadre:string):string{
+        var nombreRoot = XpathUtil.generarIdUnicoXmlNode();
+        var cadenaRoot=nombreRoot+"["+'label="Attribute:'+this.name+"="+this._value+'",'+'color="lightblue3",'+"];\n ";
+        var cad = cadenaRoot + nodoPadre+"->"+nombreRoot+";\n";
+        return cad;
+    }
+
+    public generateString_3d():string{
+        CodeUtil.printComment("Guardamos el nombre del atributo ");
+        var tmp = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment(tmp+" = RP + 0 ;","Obtenemos inicio de cadena" );
+        for(let caracter of this.name){
+            CodeUtil.printWithComment("Repository[RP] = "+caracter.charCodeAt(0)+" ;",caracter);
+            CodeUtil.print("RP = RP + 1 ;");
+        }
+        CodeUtil.printWithComment("Repository[RP] = -1 ;","EOF");
+        CodeUtil.print("RP = RP + 1 ;");
+        return tmp;
+    }
+
+    public generateValueString_3d(){
+        CodeUtil.printComment("Guardamos el valor del atributo ");
+        var tmp = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment(tmp+" = RP + 0 ;","Obtenemos inicio de cadena" );
+        for(let caracter of this._value){
+            CodeUtil.printWithComment("Repository[RP] = "+caracter.charCodeAt(0)+" ;",caracter);
+            CodeUtil.print("RP = RP + 1 ;");
+        }
+        CodeUtil.printWithComment("Repository[RP] = -1 ;","EOF");
+        CodeUtil.print("RP = RP + 1 ;");
+        return tmp;
+    }
+
 }
