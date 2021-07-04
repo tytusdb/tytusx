@@ -15,6 +15,16 @@ let globalencod;
 let codificador = document.getElementById("codencod");
 let optimizador;
 
+//botones de creacion de ejemplos
+let btnEjemplo1 = document.getElementById("btnEjemplo1");
+let btnEjemplo2 = document.getElementById("btnEjemplo2");
+let btnEjemplo3 = document.getElementById("btnEjemplo3");
+let btnEjemplo4 = document.getElementById("btnEjemplo4");
+let btnEjemplo5 = document.getElementById("btnEjemplo5");
+let btnEjemplo6 = document.getElementById("btnEjemplo6");
+let btnEjemplo7 = document.getElementById("btnEjemplo7");
+let btnEjemplo8 = document.getElementById("btnEjemplo8");
+
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
 let parserXQUERY;
@@ -147,15 +157,132 @@ let textoEntrada = `<?xml version="1.0" encoding="ISO-8859-1"?>
       environment.</description>
    </book>
 </catalog>
-
-
 `
 
-let XQuery = `	for $x in /catalog/book
+let textoPrueba = `<?xml version="1.0" encoding="ISO-8859-1"?>
+<catalog>
+   <book id="bk101">
+      <author>GÃ¡mbardellÃ¤, MÃ¡tthew</author>
+      <title>XML Developer&apos;s Guide</title>
+      <genre>Computer</genre>
+      <price>44.95</price>
+      <publish_date>2000-10-01</publish_date>
+      <description>An in-depth look at creating applications 
+      with XML.</description>
+   </book>
+   <book id="bk102">
+      <author>Ralls, Kim</author>
+      <title>Midnight Rain</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-12-16</publish_date>
+      <description>A former architect battles corporate zombies, 
+      an evil sorceress, and her own childhood to become queen 
+      of the world.</description>
+   </book>
+   <book id="bk103">
+      <author>Corets, Eva</author>
+      <title>Maeve Ascendant</title>
+      <genre>Fantasy</genre>
+      <price>5.95</price>
+      <publish_date>2000-11-17</publish_date>
+      <description>After the collapse of a nanotechnology 
+      society in England, the young survivors lay the 
+      foundation for a new society.</description>
+   </book>
+</catalog>
+`
+
+let XQuery = `for $x in /catalog/book
 return if ($x/@id="bk101")
 then {data($x)}
 `
 
+let XQueryflwr = `for $x in /catalog/book
+where $x/price<60
+order by $x/price
+return $x/price
+`
+let XQueryfrt = `	(:estoesun comentario:)
+for $x in  /catalog/book(:estoesun comentario:)
+(:estoesun comentario:)
+return $x/title(:estoesun comentario:)
+`
+
+let XQueryfrtes = `for $x in /catalog/book
+return if ($x/@id="bk102")
+then <LIBRO112>{data($x/title)}</LIBRO112>
+else <NO>{data($x/title)}</NO>	
+`
+
+
+let XQueryxmlacke = `<hola>
+<m>2</m>
+<n>2</n>
+</hola>	
+`
+
+let XQueryAcke = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
+{
+if ($m = 0) then $n+1
+else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
+else local:ackerman($m - 1, local:ackerman($m, $n -1))
+};
+
+local:ackerman(/hola/m,/hola/n)
+`
+
+let XQueryxmlfact = `<hola>
+<m>6</m>
+</hola>	
+`
+
+let XQueryFact = `declare function local:factorial($integer as xs:integer) as xs:double
+{
+if ($integer gt 1) then $integer * local:factorial($integer - 1) else 1};
+
+local:factorial(/hola/m)
+`
+let XQueryFibo = `declare function local:fibo($num as xs:integer) as xs:integer {
+  if($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibo($num - 1 ) + local:fibo($num - 2) )
+  };
+  local:fibo(/hola/m)
+`
+
+let XQueryFNat = `<name>{upper-case($booktitle)}</name>
+`
+
+let EJEMGDA = `//ENTRADA PARA ARBOL GDA
+
+// Regla 5
+t1 = b;
+t8 = 4;
+t2 = t3 + 1;
+b = t1;
+t5 = t9;
+t9 = t5;
+
+//Regla 6, 7, 8, 9
+t5 = t5 + 0;
+t5 = t5 % 0;
+t7 = t7 - 0;
+t9 = t9 * 1 ;
+t2 = t3 + 3;
+t8 = t8 / 1;
+
+//Regla 10 - 13
+T1 = T2 + 0;
+T3 = T4 - 0;
+T5 = T6 * 1;
+T7 = T8 / 1;
+
+//Regla 14 - 16
+T9 = T10 * 2;
+T11 = T12 * 0;
+T13 = 0 / T14;
+`
 
 
 
@@ -166,6 +293,118 @@ let consolaC3D = document.getElementById('consola3D');
 let consolaC3DOptimizada = document.getElementById('consola3DOptimizada');
 
 
+
+// =========================================
+//EJECUCION DE CODIGO PARA MOSTRAR EJEMPLOS
+// =========================================
+
+
+// =========================================
+// CONSOLAS DENTRO DE LA PANTALLA PRINCIPAL
+//          XML =>  consolaJS editorXML
+//          XPATH => editor  editorXPATH
+//          XQUERY => consolaXQUERY  editorXQUERY
+//
+//          SALIDA => consolaPython 
+//          SALIDA3D => consolaC3D
+//          SALIDA OP-3D => consola3DOptimizada    consolaC3DOptimizada
+// =========================================
+
+// Boton de ejemplo para realizar el GDA
+btnEjemplo1.addEventListener("click", () => {
+//  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    consolaC3D.value = EJEMGDA;
+})
+
+// Boton de ejemplo para verificar un FLOWR
+btnEjemplo2.addEventListener("click", () => {
+  //  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    editorXML.value = textoPrueba;
+    editorXQUERY.value = XQueryflwr;
+  })
+  
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo3.addEventListener("click", () => {
+  //  console.log("Presion del boton para el ejemplo 1");
+    editorXML.value = " ";
+    editorXPATH.value = " ";
+    editorXQUERY.value = " ";
+    consolaC3D.value = " ";
+    consolaC3DOptimizada.value = " ";
+    editorXML.value = textoPrueba;
+    editorXQUERY.value = XQueryfrt;
+  })
+
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo4.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtes;
+    })  
+
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo5.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlacke;
+      editorXQUERY.value = XQueryAcke;
+    })     
+
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo6.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlfact;
+      editorXQUERY.value = XQueryFact;
+    })   
+
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo7.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlfact;
+      editorXQUERY.value = XQueryFibo;
+    }) 
+    
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo8.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryFNat;
+      editorXQUERY.value = XQueryFNat;
+    }) 
+    
 // ======================================
 //BOTON DE XML DESCENDENTE
 // ======================================
@@ -191,13 +430,12 @@ botonCargar.addEventListener("click", () => {
     // Se genera la Tabla de Simbolos
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
-   
+    
 })
 
 // ======================================
-//BOTON DE XML ASCENDENTE
+// BOTON DE XML ASCENDENTE
 // ======================================
-
 
 botonCargar2.addEventListener("click", () => {
   alert("Ejecutando XML Ascendente");
