@@ -59,6 +59,7 @@
         <!-- SCRIPTS PARA TRADUCTORES C3D -->
         <script src="./Js/Interprete/Traductor/TraductorXML.js"></script>
         <script src="./Js/Interprete/Traductor/TraductorXPath.js"></script>
+        <script src="./Js/Interprete/Traductor/TraductorXQuery.js"></script>
         <!-- SCRIPTS PARA EXPRESIONES XQUERY -->
         <script src="./Js/Interprete/Expresiones/XQuery/XOperacion.js"></script>
         <script src="./Js/Interprete/Expresiones/XQuery/XPrimitivo.js"></script>
@@ -125,8 +126,10 @@
             var funcionesC3D = "";
             var xpathC3D = "";
             var xmlC3D = "";
+            var xquery3D = "";
             var C3DXML = new TraductorXML();
             var C3DXPATH = new TraductorXPath();
+            var C3DXQUERY = new TraductorXQuery();
             var numeroTemporales = 0;
             var codificacionGlobal = "UTF-8";
             var ListaErr = new ListaErrores();

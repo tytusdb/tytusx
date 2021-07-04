@@ -14,7 +14,7 @@ export class DecFunction implements ExpressionXquery{
         public idFunc: string,
         public tipo: tipoPrimitivo,
         public decsParams : Let[],
-        public xquery : ExpressionXquery){}
+        public L_xQuerys : ExpressionXquery[]){}
 
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno, simboloPadre?: Simbolo): Retorno {
@@ -29,7 +29,7 @@ export class DecFunction implements ExpressionXquery{
         }else {
             throw new Error("Error semantico: no de puede declarar la funcion "+ this.idFunc + ", solo se pueden declar fuinciones en un ambiente global, linea: " +this.line + "columna: "+ this.column);
         }
-        return {value: "", type : tipoPrimitivo.STRING, SP: -1}
+        return {value: [], type : tipoPrimitivo.VOID, SP: -1}
     }
     GraficarAST(texto: string): string {
         throw new Error("Method not implemented.");

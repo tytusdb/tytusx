@@ -1,7 +1,6 @@
 import { Retorno, Type } from "./Retorno";
 import { Environment } from "../Symbol/Environment";
 import { tipos } from "../Util/TablaTipos";
-import { _Optimizer } from '../Optimizer/Optimizer';
 
 export abstract class Expression {
 
@@ -12,7 +11,6 @@ export abstract class Expression {
         this.line = line;
         this.column = column;
     }
-
     public abstract execute(environment: Environment) : Retorno;
     public abstract translate(environment: Environment) : String;
     public abstract build() : String;

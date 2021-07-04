@@ -9,6 +9,8 @@ export class Asignacion3D implements Instruccion3D{
     codigo3D: string;
     identificador: string
     expresion: Expresion3D
+    eliminada: boolean;
+    optimizada: boolean;
     constructor(tipo: TipoInstruccion3D, identificador: string, expresion: Expresion3D, codigo3d: string, fila: number, columna: number){
         this.fila = fila;
         this.columna = columna;
@@ -16,8 +18,25 @@ export class Asignacion3D implements Instruccion3D{
         this.codigo3D = codigo3d;
         this.expresion = expresion;
         this.identificador = identificador;
+        this.eliminada = false;
+        this.optimizada = false;
     }
-    
+
+    isOptimizada(): boolean{
+        return this.optimizada;
+    }
+
+    setOptimizada(optimizada: boolean){
+        this.optimizada = optimizada;
+    }
+
+    isEliminada(): boolean {
+        return this.eliminada;
+    }
+
+    setEliminada(eliminada: boolean){
+        this.eliminada = eliminada;
+    }
 
     getTipoInstruccion(): TipoInstruccion3D{
         return this.tipo;

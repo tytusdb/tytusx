@@ -16,8 +16,8 @@ export class Return implements ExpressionXquery{
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
 
-        console.log(this.L_Exps);
-       
+        traduccion.setTranslate("\n//RETURN\t--------------");
+
         var content : Retorno[] = [];
         
         for (const Xquery of this.L_Exps) {

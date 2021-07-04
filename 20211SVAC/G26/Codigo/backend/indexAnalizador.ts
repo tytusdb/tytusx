@@ -12,7 +12,7 @@ import { Consulta } from './XPath/Consulta';
 import {cstXmlAsc, cstXmlDesc, cstXpathAsc, cstXpathDesc} from './Reporte/CST';
 import {Nodo} from './Reporte/Nodo';
 import { InstruccionXQuery } from './Interfaz/instruccionXQuery';
-import traductorXML from './Traduccion/TraduceXML';
+import {TraduceXML } from './Traduccion/TraduceXML';
 import * as OptimizacionGrammar from './Gramatica/Optimizacion_Grammar';
 import { Optimizer } from './Optimizacion/Optimizer';
 import { Optimizacion } from './Reporte/Optimizacion';
@@ -28,11 +28,15 @@ class Analizador{
   private static _instance: Analizador;
   global:Entorno;
   indice:number;
+  reporteOptimiza: Array<Optimizacion>;
+  consultas: Array<Consulta>;
 
   constructor(){
     this.global = new Entorno('global', null, null);
     errores.limpiar();
     this.indice = 0;
+    this.reporteOptimiza = [];
+    this.consultas = [];
 
     if (typeof Analizador._instance === "object"){
       return Analizador._instance;
@@ -54,20 +58,17 @@ class Analizador{
     const codigo3d = OptimizacionGrammar.parse(entrada);
     let salida = "";
     let optimizador = new Optimizer();
-    let reporte: Array<Optimizacion> = [];
+    this.reporteOptimiza = [];
     let antes = "";
     codigo3d.forEach((c: Declaracion3D) => {
         antes += c.getCodigo3Dir()+"\n"
       if(c instanceof Main || c instanceof Metodo){
-        c.listaInstrucciones = optimizador.aplicar(c.listaInstrucciones, reporte);
+        c.listaInstrucciones = optimizador.aplicar(c.listaInstrucciones, this.reporteOptimiza);
       }      
         salida += c.getCodigo3Dir()+"\n"
     })
-    console.log("----------------------------------------")
-    //console.log("CODIGO ANTES: \n", antes)
-    console.log("----------------------------------------")
 
-    console.log("REPORTE: ", reporte)
+    console.log("REPORTE: ", this.reporteOptimiza);
     return salida;
   }
 
@@ -89,7 +90,7 @@ class Analizador{
     cstXmlAsc.id = 0;
     const objetos = XMLGramAsc.parse(entrada);
     this.global = new Entorno('global', null, null);  
-    if(objetos !== null){    
+    if(objetos !== null){
       objetos.forEach((elem: any) => {
           console.log('Elemento: ' + elem);
           if (elem instanceof Objeto || elem instanceof Atributo){
@@ -106,17 +107,17 @@ class Analizador{
 
   XPathAscendente(entrada: string): String {
     console.log("-- XPATH ASCENDENTE -- ")
-    const consultas = XPathGramAsc.parse(entrada);
+    this.consultas = XPathGramAsc.parse(entrada);
     let salida = "";
     console.log("---------------------------------------")
-    consultas.forEach((elem: Consulta) => {
+    this.consultas.forEach((elem: Consulta) => {
         console.log("CONSULTA: "+ elem.ToString());
         let resultado = elem.ejecutar(this.global);
         salida += elem.simbolosToString(resultado)+"\n";
         console.log("-----------RESULTADO----------------");
         console.log(resultado);
         console.log("StringResult:")
-        //console.log(elem.simbolosToString(resultado));
+        console.log(elem.simbolosToString(resultado));
         console.log("---------------FIN---------------------")
     });
     return salida;
@@ -124,10 +125,10 @@ class Analizador{
 
   XPathDescendente(entrada: string): String {
     console.log("-- XPATH DESCENDENTE -- ");
-    const consultas = XPathGramDesc.parse(entrada);
+    this.consultas = XPathGramDesc.parse(entrada);
     let salida = "";
     console.log("---------------------------------------");
-    consultas.forEach((elem: Consulta) => {
+    this.consultas.forEach((elem: Consulta) => {
       console.log("CONSULTA: " + elem.ToString());
       let resultado = elem.ejecutar(this.global);
       salida += elem.simbolosToString(resultado)+"\n";
@@ -264,6 +265,30 @@ class Analizador{
     return cadenaDot;
   }
 
+  getRepOptimizacion():string{
+    let cadenaDot:string = '';
+    let indice:number = 0;
+    cadenaDot = '<table class="tblRepOpti" >'
+                +        '<tr>'
+                +            '<th>No.</th><th>CODIGO ANTES</th><th>CODIGO AHORA</th><th>REGLA</th><th>Columna</th><th>FILA</th>'
+                +        '</th>';
+    this.reporteOptimiza.forEach((elem:Optimizacion) => {
+      indice++;
+      cadenaDot = cadenaDot
+                +        '<tr>'
+                +            '<td>'+indice+'</td>'
+                +            '<td>'+elem.getCodigoAntes()+'</td>'
+                +            '<td>'+elem.getCodigoAhora()+'</td>'
+                +            '<td>'+elem.tipoReglaToString()+'</td>'
+                +            '<td>'+elem.getColumna()+'</td>'
+                +            '<td>'+elem.getFila()+'</td>'
+                +        '</tr>';
+    });
+    cadenaDot = cadenaDot +      '</table>';
+
+    return cadenaDot;
+  }
+
   getCSTXmlAsc():string{
     let cadenaDot:string = 'digraph {';
     cadenaDot = cadenaDot + this.recorridoCst(cstXmlAsc.getRaiz());
@@ -292,8 +317,9 @@ class Analizador{
   
   public traduceXML():string{
     let resultado:string = '';
-    resultado = traductorXML.traducirXML();
-    console.log(resultado);
+    let traductor = new TraduceXML(this.consultas);
+    resultado = traductor.traducirXML();
+    console.log(this.global);
     return resultado;
   }
 

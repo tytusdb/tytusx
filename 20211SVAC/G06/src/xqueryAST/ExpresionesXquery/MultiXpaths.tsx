@@ -16,11 +16,18 @@ export class MultiXpaths implements ExpressionXquery{
 
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
        
-        var content : Retorno[] = [];
+        var result : Retorno[] = [];
         for (const path of this.paths) {
-            ManejadorXquery.concatenar(content, path.executeXquery(entAct, RaizXML).value);
+            ManejadorXquery.concatenar(result, path.executeXquery(entAct, RaizXML).value);
         }
-        return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING, SP: -1}
+
+        if (result.length > 1){
+            return {value: result, type : tipoPrimitivo.RESP, SP: -1};
+        }else if (result.length === 1) {
+            return result[0];
+        }else {
+            return {value: [] , type: tipoPrimitivo.RESP, SP: -1};
+        }
     }
 
     GraficarAST(texto: string): string {
