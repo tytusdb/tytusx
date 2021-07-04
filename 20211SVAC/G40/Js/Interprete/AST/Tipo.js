@@ -124,6 +124,7 @@ var TipoXInstruccion;
     TipoXInstruccion[TipoXInstruccion["XSTRING"] = 80] = "XSTRING";
     TipoXInstruccion[TipoXInstruccion["XSUBSTRING"] = 81] = "XSUBSTRING";
     TipoXInstruccion[TipoXInstruccion["XFOR"] = 82] = "XFOR";
+    TipoXInstruccion[TipoXInstruccion["XFORSIMPLE"] = 102] = "XFORSIMPLE";
     TipoXInstruccion[TipoXInstruccion["XDECLARARFUNCION"] = 83] = "XDECLARARFUNCION";
     TipoXInstruccion[TipoXInstruccion["XLLAMADARFUNCION"] = 84] = "XLLAMADARFUNCION";
 })(TipoXInstruccion || (TipoXInstruccion = {}));
