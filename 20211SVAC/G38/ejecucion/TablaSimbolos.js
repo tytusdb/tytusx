@@ -303,7 +303,7 @@ class TablaSimbolos {
         if (this._listaSimbolos === undefined || this._listaSimbolos == null)
             throw Error('Lista de simbolos es nula');
         for (let row of this._listaSimbolos) {
-            if (row.tipo.esAtributo()) {
+            if (row.tipo.esObjeto() || row.tipo.esAtributo()) {
                 content = row.obtenerTexto();
                 break;
             }

@@ -14,7 +14,4 @@ class Retorno {
             throw new ReturnException(val);
         }
     }
-    traducirXQ(sizeScope, otro) {
-        this.expresion.traducirRetorno3DXQuery(sizeScope, otro);
-    }
 }

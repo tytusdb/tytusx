@@ -64,9 +64,11 @@ class Comparison extends ExpresionAncestor {
         if (!tipo.esError() && valorIzquierda != null && valorDerecha != null) {
             switch (this.relationalOperator) {
                 case RelationalOperators.equal:
+                case RelationalOperators.one_equal:
                     valor = valorIzquierda == valorDerecha;
                     break;
                 case RelationalOperators.notEqual:
+                case RelationalOperators.one_notEqual:
                     valor = valorIzquierda != valorDerecha;
                     break;
             }

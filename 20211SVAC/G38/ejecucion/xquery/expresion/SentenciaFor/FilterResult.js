@@ -14,7 +14,4 @@ class FilterResult {
         }
         return PredicateExpresion.filterXpathXqueryExpresion(ent, simbolo.valorXpath, [this.filterExpresion]);
     }
-    traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
-    }
 }

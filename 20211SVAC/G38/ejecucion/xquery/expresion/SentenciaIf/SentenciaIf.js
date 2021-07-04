@@ -1,8 +1,8 @@
 "use strict";
 class SentenciaIf {
-    constructor(condicion, sentencias, linea, columna) {
+    constructor(condicion, sentencia, linea, columna) {
         this.condicion = condicion;
-        this.sentencias = sentencias;
+        this.sentencias = sentencia;
         this.linea = linea;
         this.columna = columna;
     }
@@ -12,15 +12,13 @@ class SentenciaIf {
             let valor = this.condicion.getValor(ent, xmlData);
             if (valor) {
                 let entornoIf = new TablaSimbolosXquery(ent, "entorno if");
-                for (let sentencia of this.sentencias) {
-                    sentencia.ejecutar(entornoIf, xmlData);
+                let valor = this.sentencias.getValor(entornoIf, xmlData);
+                if (valor != null && valor != undefined) {
+                    throw new ReturnException(valor);
                 }
                 return true;
             }
         }
         return false;
-    }
-    traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
     }
 }

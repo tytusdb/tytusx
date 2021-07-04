@@ -1,17 +1,15 @@
 "use strict";
 class SentenciaElse {
-    constructor(sentencias, linea, columna) {
-        this.sentencias = sentencias;
+    constructor(sentencia, linea, columna) {
+        this.sentencia = sentencia;
         this.linea = linea;
         this.columna = columna;
     }
     ejecutar(ent, xmlData) {
         let entornoElse = new TablaSimbolosXquery(ent, "entorno else");
-        for (let sentencia of this.sentencias) {
-            sentencia.ejecutar(entornoElse, xmlData);
+        let valor = this.sentencia.getValor(entornoElse, xmlData);
+        if (valor != null && valor != undefined) {
+            throw new ReturnException(valor);
         }
-    }
-    traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
     }
 }

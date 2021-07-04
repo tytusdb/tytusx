@@ -44,7 +44,4 @@ class Asignacion {
             }
         }
     }
-    traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
-    }
 }

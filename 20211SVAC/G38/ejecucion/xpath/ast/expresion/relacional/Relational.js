@@ -62,15 +62,19 @@ class Relational extends ExpresionAncestor {
         if (!tipo.esError() && valorIzquierda != null && valorDerecha != null) {
             switch (this.relationalOperator) {
                 case RelationalOperators.greaterThan:
+                case RelationalOperators.one_greaterThan:
                     valor = valorIzquierda > valorDerecha;
                     break;
                 case RelationalOperators.greaterOrEqualThan:
+                case RelationalOperators.one_greaterOrEqualThan:
                     valor = valorIzquierda >= valorDerecha;
                     break;
                 case RelationalOperators.lessThan:
+                case RelationalOperators.one_lessThan:
                     valor = valorIzquierda < valorDerecha;
                     break;
                 case RelationalOperators.lessOrEqualThan:
+                case RelationalOperators.one_lessOrEqualThan:
                     valor = valorIzquierda <= valorDerecha;
                     break;
             }

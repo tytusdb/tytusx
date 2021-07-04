@@ -1,6 +1,7 @@
 "use strict";
-class InstruccionIf {
+class InstruccionIf extends ExpresionAncestor {
     constructor(linea, columna) {
+        super();
         this.sentenciasIfs = [];
         this.linea = linea;
         this.columna = columna;
@@ -13,6 +14,16 @@ class InstruccionIf {
         if (this.sentenciaElse != null && this.sentenciaElse != undefined)
             this.sentenciaElse.ejecutar(ent, xmlData);
     }
+    getValor(ent, xmlData) {
+        try {
+            this.ejecutar(ent, xmlData);
+        }
+        catch (e) {
+            if (e instanceof ReturnException) {
+                throw new ReturnException(e.valor);
+            }
+        }
+    }
     agregarElse(sentenciaElse) {
         this.sentenciaElse = sentenciaElse;
     }
@@ -21,8 +32,5 @@ class InstruccionIf {
     }
     agregarPrimerIf(sentenciaIf) {
         this.sentenciasIfs.unshift(sentenciaIf);
-    }
-    traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
     }
 }

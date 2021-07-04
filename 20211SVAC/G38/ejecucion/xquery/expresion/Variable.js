@@ -24,7 +24,4 @@ class Variable extends ExpresionAncestor {
         }
         return valor;
     }
-    traducirRetorno3DXQuery(sizeScope, ambito) {
-        return sizeScope;
-    }
 }

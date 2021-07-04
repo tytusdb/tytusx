@@ -118,7 +118,7 @@ class CodeUtil {
         this.print("AmbitaoGlboal->stack[P]");
         this.print("List AmbitaoGlboal->stack[P+1]");
         this.print("**************************************/");
-        CodeUtil.print("void main()");
+        CodeUtil.print("int main()");
         CodeUtil.print("{");
         CodeUtil.printWithComment(CodeUtil.METHOD_CARGARXML + ";", "Stack[SP] y Stack[SP+1] queda la carga. ");
     }
@@ -500,14 +500,14 @@ class CodeUtil {
         this.print("printString();");
         this.print("SP = SP - 1 ; ");
         this.print('printf("=");');
-        this.print('printf("%c",34);');
+        this.print('printf("\\\"");');
         this.print(tmpRefValorAtributo + " = " + tmpParametro1 + " + " + TsRow.SIZE_PROPERTIES_OBJECT + " ;");
         this.printWithComment(tmpValorAtributo + " = Heap[(int)" + tmpRefValorAtributo + "];", "Referenia al valor");
         this.print("SP = SP + 1 ; ");
         this.printWithComment("Stack[SP] = " + tmpValorAtributo + "; ", "Pasamos el valor del atributo para imprimir");
         this.print("printString();");
         this.print("SP = SP - 1 ; ");
-        this.print('printf("%c",34);');
+        this.print('printf("\\\" ");');
         this.print(etiquetaFin + ": ");
         this.print("return ;");
         this.print("}");

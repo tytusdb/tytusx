@@ -7,9 +7,6 @@ class Imprimir {
     }
     ejecutar(ent, xmlData) {
         let valor = this.expresion.getValor(ent, xmlData);
-        InterfazGrafica.print(valor);
-    }
-    traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
+        InterfazGrafica.print(XpathUtil.convertirXqueryAString(valor));
     }
 }
