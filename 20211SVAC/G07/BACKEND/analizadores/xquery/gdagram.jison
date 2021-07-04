@@ -1,25 +1,30 @@
 %{
-
+	let contador = 0;
 
 %}
 %lex
 %options case-insensitive
 
 comment ("#"[^\r\n]* [^\r\n])                   
+                 
 
 %%
 \s+                                         %{ /* Omitir espacios en blanco */ %}
 [\t\r]+                                     %{ /* Omitir saltos de linea, tabs y retornos*/ %}
 \n					{}
 {comment} {} // comentario simple línea
+"//".*										// comentario simple línea
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]   /* IGNORE */
 
 "void"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_void';%}
 "main"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_main';%}
 
-"var"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_var';%}
+"var"                  %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_var';%}
+"return"               %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_return';%}
 
-"double"                 %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_double';%}
+"float"                %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_float';%}
+"int"                  %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_int';%}
+
 "heap"                %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_heap';%}
 "stack"               %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_stack';%}
 "goto"                %{ listaTokens.push(new Token("Palabra_Reservada", yytext, yylloc.first_line, yylloc.first_column)); return 'tk_goto';%}
@@ -107,13 +112,15 @@ INICIO
 SENTENCIAS
 	: SENTENCIAS SENTENCIA 
 	{
-    $$= new Nodo("SENS","SENS");
+    	contador++;
+	$$= new Nodo("GDA", "GDA");
 	$$.agregarHijo($1);
     $$.agregarHijo($2);
     }
 	| SENTENCIA	           
 	{
-    $$= new Nodo("SENS","SENS");
+		contador++;
+    $$= new Nodo("GDA","GDA");
 	$$.agregarHijo($1);
 	}
 ;
@@ -121,17 +128,50 @@ SENTENCIAS
 SENTENCIA
 	: DECLARACION tk_punto_coma 
 	{
-    $$= new Nodo("SEN","SEN");
+    $$= new Nodo("GDA"+contador,"GDA"+contador);
 	$$.agregarHijo($1);
 	$$.agregarHijo(new Nodo($2,$2));
 	}
 	| ASIGNACION tk_punto_coma  
 	{
-    $$= new Nodo("SEN","SEN");
+    $$= new Nodo("GDA"+contador,"GDA"+contador);
 	$$.agregarHijo($1);
 	$$.agregarHijo(new Nodo($2,$2));
 	}
+	| tk_int tk_main tk_parent_izq tk_parent_der tk_llave_izq SENTENCIAS tk_llave_der
+	{
+    $$= new Nodo("SEN","SEN");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo(new Nodo($2,$2));
+	$$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo(new Nodo($4,$4));
+	$$.agregarHijo(new Nodo($5,$5));
+	$$.agregarHijo($6);
+	$$.agregarHijo(new Nodo($7,$7));
+	}
 	| tk_void tk_main tk_parent_izq tk_parent_der tk_llave_izq SENTENCIAS tk_llave_der
+	{
+    $$= new Nodo("SEN","SEN");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo(new Nodo($2,$2));
+	$$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo(new Nodo($4,$4));
+	$$.agregarHijo(new Nodo($5,$5));
+	$$.agregarHijo($6);
+	$$.agregarHijo(new Nodo($7,$7));
+	}
+	| tk_int tk_identificador tk_parent_izq tk_parent_der tk_llave_izq SENTENCIAS tk_llave_der
+	{
+    $$= new Nodo("SEN","SEN");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo(new Nodo($2,$2));
+	$$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo(new Nodo($4,$4));
+	$$.agregarHijo(new Nodo($5,$5));
+	$$.agregarHijo($6);
+	$$.agregarHijo(new Nodo($7,$7));
+	}	
+	| tk_void tk_identificador tk_parent_izq tk_parent_der tk_llave_izq SENTENCIAS tk_llave_der
 	{
     $$= new Nodo("SEN","SEN");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -151,7 +191,7 @@ SENTENCIA
 	$$.agregarHijo(new Nodo($4,$4));
 	$$.agregarHijo(new Nodo($5,$5));
 	}
-	| tk_printf tk_parent_izq TIPO_PRINT tk_coma VALOR tk_parent_der tk_punto_coma
+	| tk_printf tk_parent_izq TIPO_PRINT tk_coma PARVALOR tk_parent_der tk_punto_coma
 	{
     $$= new Nodo("SEN","SEN");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -162,14 +202,14 @@ SENTENCIA
 	$$.agregarHijo(new Nodo($6,$6));
 	$$.agregarHijo(new Nodo($7,$7));
 	}
-	| tk_goto tk_identificador tk_punto_coma
+	| tk_goto tk_identificador PRODGOTO
 	{
     $$= new Nodo("SEN","SEN");
 	$$.agregarHijo(new Nodo($1,$1));
 	$$.agregarHijo(new Nodo($2,$2));
-	$$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo($3);
 	}
-	| tk_if tk_parent_izq VALOR OP_REL VALOR tk_parent_der tk_goto tk_identificador tk_punto_coma
+	| tk_if tk_parent_izq VALOR OP_REL VALOR tk_parent_der tk_goto tk_identificador PRODGOTO
 	{
     $$= new Nodo("SEN","SEN");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -180,7 +220,7 @@ SENTENCIA
 	$$.agregarHijo(new Nodo($6,$6));
 	$$.agregarHijo(new Nodo($7,$7));
 	$$.agregarHijo(new Nodo($8,$8));
-	$$.agregarHijo(new Nodo($9,$9));
+	$$.agregarHijo($9);
 	}
 	| tk_call tk_identificador tk_punto_coma
 	{
@@ -202,6 +242,19 @@ SENTENCIA
 	$$.agregarHijo(new Nodo($2,$2));
 	$$.agregarHijo(new Nodo($3,$3));
 	}
+	| tk_return tk_punto_coma
+	{
+    $$= new Nodo("SEN","SEN");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo(new Nodo($2,$2));
+	}
+	| tk_return tk_decimal tk_punto_coma
+	{
+    $$= new Nodo("SEN","SEN");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo(new Nodo($2,$2));
+	$$.agregarHijo(new Nodo($3,$3));
+	}
 	| tk_end
 	{
     $$= new Nodo("SEN","SEN");
@@ -212,7 +265,18 @@ SENTENCIA
 		errores.push(new ErrorAnalisis(TIPO_ERROR.SINTACTICO,'No se esperaba '+yy.lexer.yytext, yy.lexer.yylineno, yy.lexer.yylloc.first_column));
 	}*/
 ;
-
+PRODGOTO:
+	tk_dos_puntos
+	{
+    $$= new Nodo("PGT","PGT");
+	$$.agregarHijo(new Nodo($1,$1));
+	}
+	|tk_punto_coma
+	{
+    $$= new Nodo("PGT","PGT");
+	$$.agregarHijo(new Nodo($1,$1));
+	}
+;
 TIPO_PRINT
 	: tk_caracter 
 	{
@@ -270,7 +334,7 @@ OP_REL
 ;
 
 DECLARACION
-	: tk_double LISTA_IDS
+	:tk_float LISTA_IDS
 	{
     $$= new Nodo("DEC","DEC");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -301,7 +365,7 @@ DECLARACION
 	$$.agregarHijo($4);
 	}
 
-	// Nunca pasa: | tk_double tk_identificador tk_igual EXP (var t5=3+2; )
+	// Nunca pasa: |  tk_float tk_identificador tk_igual EXP (var t5=3+2; )
 ;
 LISTA_IDS
 	: LISTA_IDS tk_coma tk_identificador 
@@ -318,16 +382,26 @@ LISTA_IDS
 	}	
 ;
 
+
+
 ASIGNACION:
 //	 tk_identificador tk_igual EXP
 	 tk_identificador ASIGNACIONSIGNO  EXP
 	{
+//	$$=new Nodo($1,$1);
+	$$=new Nodo($1,$1);
+	$$.agregarHijo($2);
+	$$.agregarHijo($3);	
+	}
+	|tk_float tk_identificador ASIGNACIONSIGNO tk_decimal
+	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
-	$$.agregarHijo($2);
+	$$.agregarHijo(new Nodo($2,$2));
 	$$.agregarHijo($3);
-	}
-	| tk_double ASIGNACIONSIGNO tk_heap tk_corchete_izq VALOR tk_corchete_der
+	$$.agregarHijo(new Nodo($4,$4));
+	}	
+	|tk_float ASIGNACIONSIGNO tk_heap tk_corchete_izq PARVALOR tk_corchete_der
 	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -337,7 +411,7 @@ ASIGNACION:
 	$$.agregarHijo($5);
 	$$.agregarHijo(new Nodo($6,$6));
 	}
-	| tk_double ASIGNACIONSIGNO tk_stack tk_corchete_izq VALOR tk_corchete_der
+	|tk_float ASIGNACIONSIGNO tk_stack tk_corchete_izq PARVALOR tk_corchete_der
 	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
@@ -347,107 +421,129 @@ ASIGNACION:
 	$$.agregarHijo($5);
 	$$.agregarHijo(new Nodo($6,$6));
 	}
-	| tk_heap tk_corchete_izq COMPLEMENTO VALOR tk_corchete_der tk_igual VALOR
+	|tk_identificador ASIGNACIONSIGNO tk_stack tk_corchete_izq PARVALOR tk_corchete_der
+	{
+    $$= new Nodo("ASIG","ASIG");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo($2);
+	$$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo(new Nodo($4,$4));
+	$$.agregarHijo($5);
+	$$.agregarHijo(new Nodo($6,$6));
+	}
+	|tk_identificador ASIGNACIONSIGNO tk_heap tk_corchete_izq PARVALOR tk_corchete_der
+	{
+    $$= new Nodo("ASIG","ASIG");
+	$$.agregarHijo(new Nodo($1,$1));
+	$$.agregarHijo($2);
+	$$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo(new Nodo($4,$4));
+	$$.agregarHijo($5);
+	$$.agregarHijo(new Nodo($6,$6));
+	}
+	| tk_heap tk_corchete_izq PARVALOR tk_corchete_der tk_igual PARVALOR
 	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
 	$$.agregarHijo(new Nodo($2,$2));
 	$$.agregarHijo($3);
-	$$.agregarHijo($4);
+	$$.agregarHijo(new Nodo($4,$4));
 	$$.agregarHijo(new Nodo($5,$5));
-	$$.agregarHijo(new Nodo($6,$6));
-	$$.agregarHijo($7);
+	$$.agregarHijo($6);
 	}
-	| tk_stack tk_corchete_izq COMPLEMENTO VALOR tk_corchete_der tk_igual VALOR
+	| tk_stack tk_corchete_izq PARVALOR tk_corchete_der tk_igual PARVALOR
 	{
     $$= new Nodo("ASIG","ASIG");
 	$$.agregarHijo(new Nodo($1,$1));
 	$$.agregarHijo(new Nodo($2,$2));
 	$$.agregarHijo($3);
-	$$.agregarHijo($4);
+	$$.agregarHijo(new Nodo($4,$4));
 	$$.agregarHijo(new Nodo($5,$5));
-	$$.agregarHijo(new Nodo($6,$6));
-	$$.agregarHijo($7);
+	$$.agregarHijo($6);
 	}
-;
-ASIGNACIONSIGNO:
-			tk_igual
-        	{$$= new Nodo("ASIGS", "ASIGS" );
-        	$$.agregarHijo(new Nodo($1,$1));
-			}			
-			|
-        	{$$= new Nodo("ASIGS", "ASIGS" );
-        	$$.agregarHijo(new Nodo("ε","ε"));
-			}			
-			
 ;
 
-COMPLEMENTO:
-		 tk_parent_izq VALOR tk_parent_der
-        {$$= new Nodo("COMP", "COMP" );
-        $$.agregarHijo(new Nodo($1,$1));
-		$$.agregarHijo($2);
-		$$.agregarHijo(new Nodo($3,$3));
-		}		 
-		|
-        {$$= new Nodo("COMP", "COMP" );
-        $$.agregarHijo(new Nodo("ε","ε"));
-		}		
+ASIGNACIONSIGNO:
+			tk_igual
+			{$$=new Nodo($1,$1);}
+			| tk_parent_izq tk_parent_der tk_punto_coma
+        	{$$=new Nodo($1+$2,$1+$2);
+			$$.agregarHijo($3);			
+			}			
+			|
+ 			{
+			$$= new Nodo("ε","ε");
+			}			
 ;
+
 
 EXP
 	: VALOR tk_suma VALOR      	  
-    {$$= new Nodo("EXP", "EXP" );
-    $$.agregarHijo($1);
-	$$.agregarHijo(new Nodo($2,$2));
+    {$$=new Nodo($2,$2);
+	$$.agregarHijo($1);
 	$$.agregarHijo($3);
 	}
 	| VALOR tk_resta VALOR        
-    {$$= new Nodo("EXP", "EXP" );
+    {$$=new Nodo($2,$2);
     $$.agregarHijo($1);
-	$$.agregarHijo(new Nodo($2,$2));
 	$$.agregarHijo($3);
 	}
 	| VALOR tk_asterisco VALOR    
-    {$$= new Nodo("EXP", "EXP" );
-    $$.agregarHijo($1);
-	$$.agregarHijo(new Nodo($2,$2));
+    {$$=new Nodo($2,$2);
+	$$.agregarHijo($1);
 	$$.agregarHijo($3);
 	}	
 	| VALOR tk_diagonal VALOR    
-    {$$= new Nodo("EXP", "EXP" );
-    $$.agregarHijo($1);
-	$$.agregarHijo(new Nodo($2,$2));
+    {$$=new Nodo($2,$2);
+	$$.agregarHijo($1);
 	$$.agregarHijo($3);
 	}	
 	| VALOR tk_modulo VALOR       
-    {$$= new Nodo("EXP", "EXP" );
-    $$.agregarHijo($1);
-	$$.agregarHijo(new Nodo($2,$2));
+    {$$=new Nodo($2,$2);
+	$$.agregarHijo($1);
 	$$.agregarHijo($3);
 	}	
 	| VALOR 			
-    {$$= new Nodo("EXP", "EXP" );
-    $$.agregarHijo($1);
+    {$$=$1;}
+	|
+ 	{$$= new Nodo("ε","ε");
+	}	
+;
+
+PARVALOR
+	: tk_parent_izq tk_int tk_parent_der VALOR
+    {$$= new Nodo("VAL", "VAL" );
+    $$.agregarHijo(new Nodo($1,$1));
+    $$.agregarHijo(new Nodo($2,$2));	
+    $$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo($4);
+	}	
+	| tk_parent_izq tk_float tk_parent_der VALOR
+    {$$= new Nodo("VAL", "VAL" );
+    $$.agregarHijo(new Nodo($1,$1));
+    $$.agregarHijo(new Nodo($2,$2));	
+    $$.agregarHijo(new Nodo($3,$3));
+	$$.agregarHijo($4);
 	}
+	|VALOR
+    {$$=$1;}
 ;
 
 VALOR
 	: tk_entero  
-    {$$= new Nodo("VAL", "VAL" );
-    $$.agregarHijo(new Nodo($1,$1));
+    {
+	$$= new Nodo($1,$1);
 	}	
 	| tk_decimal 
-    {$$= new Nodo("VAL", "VAL" );
-    $$.agregarHijo(new Nodo($1,$1));
+    {
+	$$= new Nodo($1,$1);
 	}	
 	| tk_identificador	  
-    {$$= new Nodo("VAL", "VAL" );
-    $$.agregarHijo(new Nodo($1,$1));
+    {
+	$$= new Nodo($1,$1);
 	}	
 	| tk_resta VALOR %prec UMINUS 
-	{$$= new Nodo("VAL", "VAL" );
-    $$.agregarHijo(new Nodo($1,$1));
-	$$.agregarHijo($2);
+    {
+	$$= new Nodo($1+$2,$1+$2);
 	}
 ;
