@@ -15,7 +15,7 @@ export class AtributoXML {
      * @param columna columna donde se entonctro un atributo
      */
     constructor(atributo: string, contenido: string, fila: number, columna:number) {
-        this.atributo = atributo;
+        this.atributo = atributo.replace(/\r/g,'').replace(/\t/g,'').replace(/\n/g,'');
         this.setContenido(contenido);
         this.fila = (fila!=undefined)?fila:0;
         this.columna = (columna!=undefined)?columna:0;
@@ -27,8 +27,8 @@ export class AtributoXML {
      */
     setContenido(cont: string){
     
-        let cadena = cont.replace('\n','').replace('\t','').replace('\r','');
-        if(cadena.replace('\n','') === ''){
+        let cadena = cont.replace(/\n/g,'').replace(/\t/g,'').replace(/\r/g,'');
+        if(cadena === ''){
             this.contenido = '';
         }else{
             this.contenido = cont.replace(/"/g,'');
@@ -36,11 +36,22 @@ export class AtributoXML {
     }
 
     /**
-     * Retorna el atributo  en una cadena: atributo = contenido
+     * Este metodo calcula la longitad de la cadena del atributo de la siguiente
+     * forma: atrib_name.lenght + 1 + 1 + contenido.lenght + 1 en donde cada numero uno
+     * representa un '=', y dos '"" pues un atributo estaria escirto de la suguiente
+     * forma: name="Carlos"
+     * @returns number: longitud de cadena
+     */
+    getLongitud():number{
+        return this.contenido.length + this.atributo.length + 3;        
+    }
+
+    /**
+     * Retorna el nombre y el contenido del atributo en una cadena: atributo_name = "contenido"
      * @returns string
      */
     toString():string{
-        return this.atributo + '=' + this.contenido;
+        return this.atributo + ' = "' + this.contenido + '"';
     }
 
 }
