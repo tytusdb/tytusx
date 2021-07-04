@@ -10,7 +10,8 @@ export enum TipoParametro {
   Nodo,
   Operacion,
   Ruta,
-  Variable
+  Variable,
+  FuncionDefinida
 }
 export enum TipoNodo {
   Raiz = "RAIZ",
@@ -89,4 +90,21 @@ export enum ParamType{
   ,xsDecimal
   ,xsBoolean
   ,xsInteger
+}
+
+export enum TipoDato{
+  Primitivo,
+  Operacion
+}
+
+export enum TipoInstruccion{
+  Asignacion,
+  AsignacionArray,
+  ArrayAsignacion,
+  Etiqueta,
+  GoTo,
+  Llamada,
+  Print,
+  If,
+  Return
 }
