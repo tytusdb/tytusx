@@ -40,8 +40,8 @@ class TraductorXML_C3D{
         this.xml_C3D += "\n\t//almacenar la posicion donde termina el xml en el heap"
         this.xml_C3D += "\n\t" + this.temporal_0 + " =  HP;" ;
         this.T_0 = this.HP;
-        //this.xml_C3D += "\n\t//almacenar en la posicion 1 del stack, donde termina el xml en el heap"; 
-        //this.xml_C3D += "\n\tstack[(int)1]= t0;";
+        this.xml_C3D += "\n\t//almacenar en la posicion 1 del stack, donde termina el xml en el heap"; 
+        this.xml_C3D += "\n\tstack[(int)1]= t0;";
         this.stack[0]=this.T_0;
         this.finalXML = this.T_0;
         return this.xml_C3D;
@@ -225,6 +225,8 @@ class TraductorXML_C3D{
         this.consulta_C3D += "\n\n//metodo para imprimir resultado de consulta"
         this.consulta_C3D += "\nvoid imprimirConsulta(){";
         this.recorrerListaConsulta(objetosAux);
+        this.consulta_C3D += "\n\tL"+this.contadorEtiqueta+":";
+        this.consulta_C3D += "\n\treturn;"
         this.consulta_C3D +="\n}";
         return this.consulta_C3D;
 
@@ -240,6 +242,17 @@ class TraductorXML_C3D{
             //if(tipo !=null){
             //_this.contadorTemporales++;
             _this.consulta_C3D += "\n\tL"+_this.contadorEtiqueta+":";
+/*
+            if(_this.contadorTemporales!=2){
+                //imprimir cierre de etiqueta apertura anterior
+                _this.consulta_C3D += "\n\t//se cierre de etiqueta apertura"
+                _this.consulta_C3D += "\n\tprintf(\"%c\",(char)62);"
+            }
+            
+            _this.consulta_C3D += "\n\t//se imprime salto de linea"
+            _this.consulta_C3D += "\n\tprintf(\"%c\",(char)10);"
+*/
+            
             
             _this.consulta_C3D +="\n\t//se almacena en t"+_this.contadorTemporales +" la posicion del objeto en el stack";
             var pos=obj.getPosicion();
@@ -385,8 +398,34 @@ class TraductorXML_C3D{
                 _this.consulta_C3D += "\n\tprintf(\"%c\", (char)t"+_this.contadorTemporales+");";
                 _this.consulta_C3D += "\n\tt"+temp_Anterior2 +" = t"+temp_Anterior2+" + 1;";
                 _this.consulta_C3D += "\n\tgoto L"+etiqueta_Anterior2+";";
+/*
+                _this.consulta_C3D += "\n\tL"+_this.contadorEtiqueta+":";
+                _this.consulta_C3D += "\n\t//se cierra la etiqueta de apertura "+obj.getId()+" ";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)62);";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)10);";
+
+                _this.contadorEtiqueta++;
+                _this.consulta_C3D += "\n\tgoto L"+_this.contadorEtiqueta+";";
+*/
                 
             }
+            else{
+                 //imprimir el texto de la etiqueta
+                 _this.contadorTemporales++;
+                 _this.consulta_C3D += "\n\t//se imprime el texto de la etiqueta";
+                 _this.consulta_C3D += "\n\tL"+_this.gotoEtiqueta+":";
+                 //en este punto se debe cerrar la etiqueta
+                 //
+                 //
+                _this.contadorEtiqueta++;
+                 _this.consulta_C3D += "\n\t//se cierra la etiqueta de apertura "+obj.getId()+" ";
+                 _this.consulta_C3D += "\n\tprintf(\"%c\", (char)62);";
+                 _this.consulta_C3D += "\n\tprintf(\"%c\", (char)10);";
+                 _this.consulta_C3D += "\n\tgoto L"+_this.contadorEtiqueta+";";
+                
+                
+            }
+
 
             if(obj.getObjetos().length > 0){
                 //tiene hijo
@@ -428,8 +467,27 @@ class TraductorXML_C3D{
                 _this.consulta_C3D += "\n\tt"+temp_Anterior2_ +" = t"+temp_Anterior2_+" + 1;";
                 _this.consulta_C3D += "\n\tgoto L"+etiqueta_Anterior2_+";";
 
+                _this.consulta_C3D += "\n\tL"+_this.contadorEtiqueta+":";
+                _this.consulta_C3D += "\n\t//se cierra la etiqueta de clausura "+obj.getId()+" ";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)62);";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)10);";
+
+                _this.contadorEtiqueta++;
+                _this.consulta_C3D += "\n\tgoto L"+_this.contadorEtiqueta+";";
+
+
+
             }
-            else{
+            else{//imprimir cierr />
+                _this.contadorTemporales++;
+                _this.consulta_C3D += "\n\tL"+_this.contadorEtiqueta +":";
+                _this.consulta_C3D += "\n\t//imprimir />";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)47);";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)62);";
+                _this.consulta_C3D += "\n\tprintf(\"%c\", (char)10);";
+                _this.contadorEtiqueta++;
+                _this.consulta_C3D += "\n\tgoto "+ _this.contadorEtiqueta+";";
+
 
             }
 
@@ -446,6 +504,15 @@ class TraductorXML_C3D{
 
         });
 
+    }
+
+    generarTemporales(){
+        var cadenaTemporales="Double ";
+        for(var i=0;i<this.contadorTemporales;i++){
+            cadenaTemporales += "t"+i+", ";
+        }
+        cadenaTemporales+= "t"+this.contadorTemporales +";";
+        return cadenaTemporales;
     }
 
 }
