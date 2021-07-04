@@ -39,6 +39,9 @@
   const { NotXQ } = require('./XQuery/ts/Operaciones/Logicas/Not')
   const { ToStringXQ } = require('./XQuery/ts/Funciones/Nativas/ToString')
   const { ToNumberXQ } = require('./XQuery/ts/Funciones/Nativas/ToNumber')
+  const { upperCaseXQ } = require('./XQuery/ts/Funciones/Nativas/upperCase')
+  const { lowerCaseXQ } = require('./XQuery/ts/Funciones/Nativas/lowerCase')
+  const { subStringXQ } = require('./XQuery/ts/Funciones/Nativas/substring')
     
   var grafo = new grafoCST(); 
 
@@ -89,6 +92,9 @@
 "number"    return "R_NUMBER"
 "toNumber"    return "R_TONUMBER"
 "tonumber"    return "R_TONUMBER"
+"upper-case" return "R_UPPER"
+"lower-case" return "R_LOWER"
+"substring" return "R_SUBSTRING"
 
 
 "or"    return "ROR"
@@ -368,6 +374,10 @@ E:
   | R_TOSTRING PARENTESISA E PARENTESISC {$$ = new ToStringXQ($3, @1.first_line, @1.first_column); }
   | R_NUMBER PARENTESISA E PARENTESISC { $$ = new ToNumberXQ($3, @1.first_line, @1.first_column); }
   | R_TONUMBER PARENTESISA E PARENTESISC {$$ = new ToNumberXQ($3, @1.first_line, @1.first_column); }
+  | R_UPPER PARENTESISA E PARENTESISC {$$ = new upperCaseXQ($3, @1.first_line, @1.first_column); }
+  | R_LOWER PARENTESISA E PARENTESISC {$$ = new lowerCaseXQ($3, @1.first_line, @1.first_column); }
+  | R_SUBSTRING PARENTESISA E COMA E PARENTESISC {$$ = new subStringXQ($3, $5, null, @1.first_line, @1.first_column); }
+  | R_SUBSTRING PARENTESISA E COMA E COMA E PARENTESISC {$$ = new subStringXQ($3, $5, $7, @1.first_line, @1.first_column); }
 //LLAMADA
   | LlamadaFuncion  { $$ = $1; }
 ;
