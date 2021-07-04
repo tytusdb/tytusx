@@ -23,4 +23,8 @@ export class Atributo{
     setPosicion(pos){
         if(this.posicion==-1)this.posicion = pos;            
     };
+
+    getPosicion(){
+        return this.posicion;
+    }
 }

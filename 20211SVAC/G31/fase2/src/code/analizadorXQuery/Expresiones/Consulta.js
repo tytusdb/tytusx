@@ -6,6 +6,7 @@ import { Error } from '../Tabla/Error';
 import { If } from '../Instrucciones/If';
 import { isArray } from 'lodash';
 var { datosXML } = require('../../analizadorXPath/AST/Global')
+const { ErroresGlobal } = require('../../analizadorXPath/AST/Global')
 
 export class Consulta extends NodoXQuery{
     consulta = ""; 

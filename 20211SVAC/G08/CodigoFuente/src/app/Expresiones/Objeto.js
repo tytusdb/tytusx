@@ -38,6 +38,12 @@ var Objeto = /** @class */ (function () {
         return this.listaObjetos;
     };
     ;
+    Objeto.prototype.getTipo = function () {
+        return this.tipo;
+    };
+    Objeto.prototype.getPosicion = function () {
+        return this.posicion;
+    };
     return Objeto;
 }());
 exports.Objeto = Objeto;
