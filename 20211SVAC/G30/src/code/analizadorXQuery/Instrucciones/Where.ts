@@ -23,7 +23,6 @@ export class Where implements Instruccion {
     ejecutar(ent: Entorno) {
 
         if (ent.existeEnActual(this.identificador)) {
-
             var output = [];
             //creando la consulta
             this.consulta = this.CrearConsulta();
@@ -31,23 +30,13 @@ export class Where implements Instruccion {
             var parserXPath = new parse(this.consulta);
             //valor de la tabla de simbolos
             var data = ent.getSimbolo(this.identificador).valor;
-            
             //recorrer objetos
             data.forEach(dato => {
                 //se ejecuta el path
                 var resultado_xpath = parserXPath.Ejecutar(dato);
                 //se analiza y se ejecuta la nueva salida
                 var resultado_xml = grammar.parse(resultado_xpath);
-
                 if (resultado_xml.datos.hijos.length > 0) {
-
-                    
-
-                    //guardando los hijos como variables
-                    //output.push(resultado_xml.datos.hijos[0])
-
-
-
                     let root = {
                         atributos: data.atributos,
                         columna: data.columna,

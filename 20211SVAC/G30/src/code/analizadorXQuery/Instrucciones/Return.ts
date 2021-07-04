@@ -25,23 +25,19 @@ export class Return implements Instruccion {
             return this.valor.getValorImplicito(ent);
         } else {
             var id_temp = this.path.split('/')[1];
-
             if (ent.existeEnActual(id_temp)) {
                 //se analiza el where_path
                 var parserXPath = new parse(this.path);
                 //valor de la tabla de simbolos
                 var simbolo = ent.getSimbolo(id_temp) 
                 var data = simbolo.valor;
-
                 //VERIFICAMOS EL TIPO DE VARIABLE
                 if (simbolo.tipo == 'OBJETO') {
-
                     //SI ES UN ARREGLO DE NUMEROS ITERA VALORES
                     if (typeof (data[0]) == 'number') {
                         data.forEach(dato => {
                             resultado += dato + ' ';
                         });
-
                     //SI ES UN ARREGLO DE OBJETOS EJECUTA XPATH    
                     } else {
                         //recorrer objetos

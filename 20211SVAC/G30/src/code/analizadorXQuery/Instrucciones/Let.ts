@@ -19,12 +19,24 @@ export class Let implements Instruccion {
     }
 
     ejecutar(ent: Entorno) {
-
-        //creamos una variable en la tabla de simbolos del entorno FLWOR y le mandamos el objeto como valor  
+        //creamos una variable en la tabla de simbolos del entorno global y le mandamos el objeto como valor  
         var new_simbol = new Simbolo(this.identificador, this.valor.getTipo(ent), this.linea, this.columna, this.valor.getValorImplicito(ent))
         //se agrega el simbolo al entorno
         ent.agregar(new_simbol);
 
+        
+
+
     }
+    //obtener contador
+    GetCountStorage(): number {
+        var data = localStorage.getItem('contador');
+        return Number(JSON.parse(data));
+    }
+    //actualizar contador
+    SetStorage(contador: number) {
+        localStorage.setItem('contador', JSON.stringify(contador));
+    }
+
 
 }

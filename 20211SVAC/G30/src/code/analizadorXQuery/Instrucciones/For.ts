@@ -24,11 +24,17 @@ export class For implements Instruccion {
             var output = []
             //se analiza el path
             var parserXPath = new parse(this.path);
-            var data = JSON.parse(localStorage.getItem('XML'));
+            var data = JSON.parse(localStorage.getItem('XML')); 
+
             //se ejecuta el path
             var resultado_xpath = parserXPath.Ejecutar(data);
+
+            console.log(resultado_xpath)
+
             //se analiza y se ejecuta la nueva salida
             var resultado_xml = grammar.parse(resultado_xpath);
+            
+            console.log(resultado_xml)
             //guardando los hijos como variables
             var hijos = resultado_xml.datos.hijos
             //seteando el nombre de cada objeto
@@ -51,6 +57,12 @@ export class For implements Instruccion {
             var new_simbol = new Simbolo(this.identificador, Tipo.OBJETO, this.linea, this.columna, output)
             //se agrega el simbolo al entorno
             ent.agregar(new_simbol);
+
+            //agregando datos al storage
+            this.SetStorage(this.path, 'path');
+            this.SetStorage(resultado_xml, 'new_xml');
+
+
         }
         else{ 
             let arreglo = [];
@@ -70,8 +82,15 @@ export class For implements Instruccion {
             //se agrega el simbolo al entorno
             ent.agregar(new_simbol);
         }
+    }
 
+    SetStorage(data: any, id:string ) {
+        localStorage.setItem(id, JSON.stringify(data));
+    }
 
+    GetStorage(id: string): any {
+        var data = localStorage.getItem(id);
+        return JSON.parse(data);
     }
 
 }

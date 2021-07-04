@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
 import React from 'react';
 import { parse as parseXPath } from '../code/analizadorXPath/Xpath'
-//import { parse as parseXQuery } from '../code/analizadorXQuery/gram_xquery'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
+//import { parse as XQuery } from '../code/analizadorXQuery/XQuery';
+//import { parse } from '../code/analizadorXQuery/gram_xquery';
+import { parse as grammar } from '../code/analizadorXML/grammar';
+// import { gram_xquery  } from '../code/analizadorXQuery/gram_xquery';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { GeneradorC3D } from "../code/analizadorXML/generadorC3D";
 
 import { Instruccion } from '../code/optimizador/codigo/instruccion'
@@ -16,8 +19,10 @@ require('../../node_modules/codemirror/mode/javascript/javascript')
 require('../../node_modules/codemirror/mode/clike/clike')
 
 //const XPath = require('../code/analizadorXPath/Xpath')
-const grammar = require('../code/analizadorXML/grammar')
-const xquery = require('../code/analizadorXQuery/gram_xquery')
+//const grammar = require('../code/analizadorXML/grammar')
+
+const {XQuery} = require('../code/analizadorXQuery/XQuery')
+
 //const GeneradorC3D = require('../code/analizadorXML/generadorC3D')
 
 
@@ -32,6 +37,7 @@ class Navigation extends React.Component {
             XMLTextarea: "",
             InputTextarea: "",
             Codigo3D: "",
+            traduccionXML: "",
             XML: {
                 tipo: '',
                 texto: '',
@@ -100,8 +106,12 @@ class Navigation extends React.Component {
         //se guarda la entrada en una variable
         let text = this.state.InputTextarea;
         if (text == "") return
-        /* //se analiza
-        var funcion = parseXPath(text);
+
+
+
+        //se analiza
+        /*var funcion = parseXPath(text);
+        4de64456b6f152945370948616460c5f31a0c9b9
         //manejo de errores
         if (funcion.errores.length > 0) {
             alert("Se detectaron errores en la entrada :( Xpath")
@@ -110,9 +120,10 @@ class Navigation extends React.Component {
         //se interpreta
         var respuesta = funcion.Ejecutar(this.state.XML);
         //salida
-        this.setState({ OutputTextarea: respuesta });
+        console.log(respuesta); 
+        this.setState({ OutputTextarea: respuesta });*/
         //arbol
-        var AST = funcion.Graficar();
+        /*var AST = funcion.Graficar();
         this.setState({ AST: AST })
         funcion.InvertirNodes()
         //se guardan datos de graphviz
@@ -120,35 +131,45 @@ class Navigation extends React.Component {
         this.setState({ datosCST: datos }) 
         this.setState({ MistakesXPath: funcion.errores })
         this.setState({ TablaGramticalXPath: funcion.tablaGramatica });
+        */
+        var query = XQuery.parse(text)
+        console.log(query)
         //LLAMANDO AL ANALIZADOR DE XQUERY
-        /* try {
-            var xquery = parseXQuery(text)
-            this.setState({ OutputTextarea: xquery.toString() });
+        try {
+
+            console.log("QUERY\n" + query)
+            console.log("QUERY\n" + query.toString())
+            this.setState({ OutputTextarea: query.toString() });
         } catch (error) {
             this.setState({ OutputTextarea: 'No matches found..' });
-        } */
+        }
 
-        var query = xquery.parse(text)
-        console.log(query)
-        this.setState({ OutputTextarea: query.toString() });
-
-        
+        var generadorC3D = new GeneradorC3D();
+        let resultadoXML = this.state.XML
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultadoXML, query.toString()) })
+        this.setState({ XML: resultadoXML })
 
 
     }
     //funcion donde se carga el XML
     actualizar() {
         var codigoXML = this.state.XMLTextarea;
-        var resultado = grammar.parse(codigoXML);
+        var resultado = grammar(codigoXML)
+        //var resultado = grammar.parse(codigoXML);
         if (resultado.errores.length > 0) {
             alert("Errores en el analisis del XML");
         }
         //guardando el objeto XML en localstorage
         this.SetXMLStorage(resultado.datos)
+        // var generadorC3D = new GeneradorC3D();
+        // this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos)})
         this.setState({ XML: resultado.datos })
         this.setState({ datosCSTXML: { nodes: resultado.nodes, edges: resultado.edges } })
         this.setState({ Mistakes: resultado.errores })
         this.setState({ TablaGramatical: resultado.tabla })
+
+        var generadorC3D = new GeneradorC3D();
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
     }
 
 
@@ -204,7 +225,9 @@ class Navigation extends React.Component {
 
         this.SetXMLStorage(resultado.datos)
         var generadorC3D = new GeneradorC3D();
-        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos) })
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(this.state.XML, "este es el resultado de la consulta") })
+        /*var generadorC3D = new GeneradorC3D();
+        this.setState({ Codigo3D: generadorC3D.getTraduccionCompleta(resultado.datos)})*/
         this.setState({ XML: resultado.datos })
         this.setState({ datosCSTXML: { nodes: resultado.nodes, edges: resultado.edges } })
         this.setState({ Mistakes: resultado.errores })
@@ -226,7 +249,8 @@ class Navigation extends React.Component {
 
     handleFocus = (e) => {                                     //onBlur XmlInput
         if (e.getValue() == "") return
-        var resultado = grammar.parse(e.getValue())
+        //var resultado = grammar.parse(e.getValue())
+        var resultado = grammar(e.getValue())
         //console.log(resultado)
         if (resultado.errores.length > 0) {
             alert("Errores en el analisis del XML")
@@ -246,7 +270,7 @@ class Navigation extends React.Component {
 
     // OPTIMIZADOR
 
-    optimizar(){
+    optimizar() {
         console.log('optimizador');
         //console.log('->', this.state.Codigo3D);
         let optimizador = new Optimizador();
@@ -258,7 +282,7 @@ class Navigation extends React.Component {
     handleOpti = (event) => {
 
         this.setState({
-            Codigo3D: event.getValue()            
+            Codigo3D: event.getValue()
         })
 
         //console.log('nuevo valor! -> ', this.state.Codigo3D);
@@ -386,6 +410,7 @@ class Navigation extends React.Component {
                 </div>
 
                 <div className="container">
+                    <p></p>
                     <div className="row">
                         <h2>SALIDA</h2>
                         <label className="labelClass">Consola</label>
@@ -413,7 +438,7 @@ class Navigation extends React.Component {
                             <CodeMirror
                                 className="codeMirror"
                                 value={this.state.Codigo3D}
-                                onChange={(event)=> this.handleOpti(event)}
+                                onChange={(event) => this.handleOpti(event)}
                                 options={{
                                     mode: 'clike',
                                     theme: 'dracula',
@@ -431,6 +456,12 @@ class Navigation extends React.Component {
                                 <p></p>
                                 <button type="submit" className="btn btn-primary btn-lg" onClick={() => this.optimizar()}>Optimizar</button>
                             </div>
+                        </div>
+
+                        <p></p>
+                        <label className="labelClass">Reporte de Optimizacion</label>
+                        <div>
+
                         </div>
                     </div>
                 </div>

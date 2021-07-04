@@ -67,7 +67,6 @@ export class Entorno {
             if (this.tabla[i].identificador == id) {
                 this.tabla.splice(i, 1);
                 this.agregar(nuevoValor);
-                //this.tabla[i] = nuevoValor;
             }
         }
         
