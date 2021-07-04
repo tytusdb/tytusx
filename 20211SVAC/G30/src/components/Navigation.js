@@ -20,9 +20,9 @@ require('../../node_modules/codemirror/mode/javascript/javascript')
 require('../../node_modules/codemirror/mode/clike/clike')
 
 //const XPath = require('../code/analizadorXPath/Xpath')
-//const grammar = require('../code/analizadorXML/grammar')
 
-const {XQuery} = require('../code/analizadorXQuery/XQuery')
+const grammar = require('../code/analizadorXML/grammar')
+const xquery = require('../code/analizadorXQuery/gram_xquery')
 
 
 //const GeneradorC3D = require('../code/analizadorXML/generadorC3D')
@@ -135,11 +135,12 @@ class Navigation extends React.Component {
         this.setState({ MistakesXPath: funcion.errores })
         this.setState({ TablaGramticalXPath: funcion.tablaGramatica });
         */
-        var query = XQuery.parse(text)
-        console.log(query)
+
+
+
         //LLAMANDO AL ANALIZADOR DE XQUERY
         try {
-
+            var query = xquery.parse(text)
 
             console.log("QUERY\n" + query)
             console.log("QUERY\n" + query.toString())
@@ -477,8 +478,20 @@ class Navigation extends React.Component {
 
                         <p></p>
                         <label className="labelClass">Reporte de Optimizacion</label>
-                        <div>
 
+                        <div className="text-center">
+                            <Table striped bordered size="sm" variant="dark">
+                                <thead>
+                                    <tr>
+                                        <th># Instruccion&emsp;&emsp;&emsp;</th>
+                                        <th># Regla usada&emsp;&emsp;&emsp;</th>
+                                        <th>Código&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.TablaReportesC3D.map(this.renderOptim)}
+                                </tbody>
+                            </Table>
 
                         </div>
                     </div>
