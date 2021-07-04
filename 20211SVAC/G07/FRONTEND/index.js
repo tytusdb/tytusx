@@ -17,6 +17,13 @@ let optimizador;
 
 //botones de creacion de ejemplos
 let btnEjemplo1 = document.getElementById("btnEjemplo1");
+let btnEjemplo2 = document.getElementById("btnEjemplo2");
+let btnEjemplo3 = document.getElementById("btnEjemplo3");
+let btnEjemplo4 = document.getElementById("btnEjemplo4");
+let btnEjemplo5 = document.getElementById("btnEjemplo5");
+let btnEjemplo6 = document.getElementById("btnEjemplo6");
+let btnEjemplo7 = document.getElementById("btnEjemplo7");
+let btnEjemplo8 = document.getElementById("btnEjemplo8");
 
 //botones de xquery por la izquierda
 let btnCargarxquery = document.getElementById("btnCargarxquery");
@@ -196,12 +203,56 @@ where $x/price<60
 order by $x/price
 return $x/price
 `
-let XQueryfrt = `for $x in /catalog/book
-return if ($x/@id="bk101")
-then <libro1>{data($x)}</libro1>
+let XQueryfrt = `	(:estoesun comentario:)
+for $x in  /catalog/book(:estoesun comentario:)
+(:estoesun comentario:)
+return $x/title(:estoesun comentario:)
+`
+
+let XQueryfrtes = `for $x in /catalog/book
+return if ($x/@id="bk102")
+then <LIBRO112>{data($x/title)}</LIBRO112>
+else <NO>{data($x/title)}</NO>	
 `
 
 
+let XQueryxmlacke = `<hola>
+<m>2</m>
+<n>2</n>
+</hola>	
+`
+
+let XQueryAcke = `declare function local:ackerman($m as xs:integer,$n as xs:integer) as xs:integer
+{
+if ($m = 0) then $n+1
+else if ($m > 0 and $n=0) then local:ackerman($m - 1, 1)
+else local:ackerman($m - 1, local:ackerman($m, $n -1))
+};
+
+local:ackerman(/hola/m,/hola/n)
+`
+
+let XQueryxmlfact = `<hola>
+<m>6</m>
+</hola>	
+`
+
+let XQueryFact = `declare function local:factorial($integer as xs:integer) as xs:double
+{
+if ($integer gt 1) then $integer * local:factorial($integer - 1) else 1};
+
+local:factorial(/hola/m)
+`
+let XQueryFibo = `declare function local:fibo($num as xs:integer) as xs:integer {
+  if($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibo($num - 1 ) + local:fibo($num - 2) )
+  };
+  local:fibo(/hola/m)
+`
+
+let XQueryFNat = `<name>{upper-case($booktitle)}</name>
+`
 
 let EJEMGDA = `//ENTRADA PARA ARBOL GDA
 
@@ -232,7 +283,6 @@ T9 = T10 * 2;
 T11 = T12 * 0;
 T13 = 0 / T14;
 `
-
 
 
 
@@ -294,8 +344,67 @@ btnEjemplo3.addEventListener("click", () => {
     editorXML.value = textoPrueba;
     editorXQUERY.value = XQueryfrt;
   })
-  
-  
+
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo4.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = textoPrueba;
+      editorXQUERY.value = XQueryfrtes;
+    })  
+
+  // Boton de ejemplo para verificar un FLOWR
+btnEjemplo5.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlacke;
+      editorXQUERY.value = XQueryAcke;
+    })     
+
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo6.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlfact;
+      editorXQUERY.value = XQueryFact;
+    })   
+
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo7.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryxmlfact;
+      editorXQUERY.value = XQueryFibo;
+    }) 
+    
+  // Boton de ejemplo para verificar un FLOWR
+  btnEjemplo8.addEventListener("click", () => {
+    //  console.log("Presion del boton para el ejemplo 1");
+      editorXML.value = " ";
+      editorXPATH.value = " ";
+      editorXQUERY.value = " ";
+      consolaC3D.value = " ";
+      consolaC3DOptimizada.value = " ";
+      editorXML.value = XQueryFNat;
+      editorXQUERY.value = XQueryFNat;
+    }) 
+    
 // ======================================
 //BOTON DE XML DESCENDENTE
 // ======================================
@@ -321,13 +430,12 @@ botonCargar.addEventListener("click", () => {
     // Se genera la Tabla de Simbolos
     tablaSimbolos = new TablaSimbolos(parserXML.json);
     tablaSimbolos = tablaSimbolos.generarTabla();
-   
+    
 })
 
 // ======================================
-//BOTON DE XML ASCENDENTE
+// BOTON DE XML ASCENDENTE
 // ======================================
-
 
 botonCargar2.addEventListener("click", () => {
   alert("Ejecutando XML Ascendente");
