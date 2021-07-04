@@ -17,9 +17,7 @@ export class Let implements ExpressionXquery {
     }
 
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
-
-
-
+        
         //console.log(this.idVar);
         //console.log(this.exp);
         //onsole.log(this.ret);
