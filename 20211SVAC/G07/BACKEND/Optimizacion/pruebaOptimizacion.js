@@ -1,4 +1,4 @@
-const textoPrueba = `
+const textoPruebass = `
 // Regla 5
 t1 = b;
 funcionRandom1();
@@ -56,4 +56,4 @@ L2:
     printf("Falso");
 `;
 
-consolaC3D.value = textoPrueba;
+consolaC3D.value = textoPruebass;

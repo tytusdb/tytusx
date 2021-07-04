@@ -72,6 +72,7 @@ nav span {
     width: 125%;
 }
 
+
 .menu-item:hover .submenu {
     display: block;
     position: absolute;
@@ -87,6 +88,7 @@ nav span {
     padding: 10px;
     background: #011826;
 }
+
 
 .subitem:hover {
     background:#043c5f;
@@ -207,4 +209,12 @@ p {
 .copyBtn:hover {
     background: rgb(45, 96, 138);
     cursor: pointer;
+}
+
+.colorejemp{
+    background: green;
+}
+
+.colorejemp:hover {
+    background: yellow;
 }

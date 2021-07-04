@@ -251,7 +251,9 @@ let XQueryFibo = `declare function local:fibo($num as xs:integer) as xs:integer 
   local:fibo(/hola/m)
 `
 
-let XQueryFNat = `<name>{upper-case($booktitle)}</name>
+let XQueryFNat = `for $x in /catalog/book
+return if ($x/@id="bk101")
+then {substring($x,0)}
 `
 
 let EJEMGDA = `//ENTRADA PARA ARBOL GDA
@@ -401,7 +403,7 @@ btnEjemplo5.addEventListener("click", () => {
       editorXQUERY.value = " ";
       consolaC3D.value = " ";
       consolaC3DOptimizada.value = " ";
-      editorXML.value = XQueryFNat;
+      editorXML.value = textoPrueba;
       editorXQUERY.value = XQueryFNat;
     }) 
     
@@ -518,10 +520,10 @@ btnReporteXML.addEventListener("click", () => {
   // Agregar las cabeceras
   tablaCabeceras.innerHTML = `
   <th scope="col">Nombre</th>
-  <th scope="col"> </th>
+  <th scope="col">Tipo</th>
   <th scope="col">Ambito</th>
-  <th scope="col"> </th>
-  <th scope="col"> </th>
+  <th scope="col">Fila</th>
+  <th scope="col">Columna</th>
   <th scope="col">Valor</th>
   <th scope="col">Indice</th>
   `;
