@@ -1,15 +1,10 @@
-import { Expression } from '../Abstract/Expression';
 import { _Optimizer } from './Optimizer';
+export class Call {
 
-export class Print {
-
-    constructor(public content: string, public expression: Expression, line: number, column: number) { }
-
+    constructor(public id: string, line: number, column: number) { }
+    
     build(): string {
-        if (this.expression == null)
-            return "printf(" + this.content + ");\n";
-        else
-            return "printf(" + this.content + ", " + this.expression.build() + ");\n";
+        return this.id + "();\n";
     }
 
     regla1(env: _Optimizer) {

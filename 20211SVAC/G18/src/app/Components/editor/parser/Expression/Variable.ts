@@ -5,18 +5,18 @@ import { Error_ } from "../Error";
 import { errores } from '../Errores';
 import { _Console } from '../Util/Salida';
 
-export class Literal extends Expression {
+export class Variable extends Expression {
     public build(): String {
-        let env = new Environment(null,null);
-        return this.execute(env).value;
-     }
+        let result = "";
+        return result;
+    }
 
     public translate(environment: Environment): String {
         let result = "";
         return result;
     }
 
-    constructor(public value: any, line: number, column: number, public type: number) {
+    constructor(private value: string, public type: string, line: number, column: number) {
         super(line, column);
     }
     public plot(count: number): string {
@@ -52,18 +52,13 @@ export class Literal extends Expression {
 
     public execute(environment: Environment): Retorno {
         switch (this.type) {
-            case Type.NUMBER:
-                return { value: Number(this.value), type: Type.NUMBER };
-            case Type.FLOAT:
-                return { value: Number(this.value), type: Type.NUMBER };
-            case Type.STRING:
-                return { value: this.fixString(this.value), type: Type.STRING };
-            case Type.BOOLEAN:
-                return { value: (this.value == 'false') ? false : true, type: Type.BOOLEAN };
-            case Type.STRING:
-                return { value: this.stringTemplateParser(this.value, environment), type: Type.STRING };
+            case "integer":
+                return { value: this.value, type: Type.NUMBER }
+            case "string":
+                return { value: this.value, type: Type.STRING }
             default:
-                return { value: this.value, type: Type.STRING };
+                environment.save_error(this.line, this.column, "Tipo no existente");
+                return { value: this.value, type: Type.NULL }
         }
     }
 }
