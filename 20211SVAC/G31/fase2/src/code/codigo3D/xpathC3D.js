@@ -13,9 +13,9 @@ export class XPATHC3D {
         this.contadorEtiqueta = 0;
         this.heap = null;
         this.stack = null;
-        this.codigo = Array<String>[];
+        this.codigo = ``;
         this.ultimaEtiquedaSalida = ``;
-        this.c3d = Array<String>[];
+        this.c3d = ``;
     }
 
     getHeap(){
@@ -43,6 +43,10 @@ export class XPATHC3D {
     crearEtiqueta() {
         this.contadorEtiqueta++;
         return `L${this.contadorEtiqueta}`;
+    }
+
+    agregarCodigo(codigo) {
+        this.c3d += codigo;
     }
 
     getHP() {
@@ -166,4 +170,155 @@ export class XPATHC3D {
         return cadena;
     }
 
+    imprimirAtr(){ //(spInicio)
+        let cadena = ``;
+        let temp = this.crearTemporal();
+        let temp1 = this.crearTemporal();
+        let temp2 = this.crearTemporal();
+        let temp3 = this.crearTemporal();
+        let lv = this.crearEtiqueta();
+        let lf = this.crearEtiqueta();
+        let ls = this.crearEtiqueta();
+        
+        let formateador = "\"%c\", (char)";
+
+        //Se inicia a imprimir atributo
+        cadena = `void ImprimirAtr() {\r\n`;
+
+        cadena += `${temp} = P + 1;\r\n`;
+        //cadena += `${temp} = stack[(int)${spInicio}];\r\n`;
+        cadena += `${temp1} = stack[(int)${temp}];\r\n`;
+        cadena += `${ls}:\r\n`;
+        cadena += `${temp2} = ${temp1} + 1;\r\n`;
+        cadena += `${temp3} = heap[(int)${temp2}];\r\n`;
+        cadena += `if (${temp3} != -1) goto ${lv};\r\n`;
+        cadena += `goto ${lf};\r\n`;
+        cadena += `${lv}:\r\n`;
+        
+        cadena += `printf(${formateador}${temp3});\r\n`;
+        cadena += `${temp1} = ${temp2};\r\n`;
+
+        cadena += `goto ${ls};\r\n`;
+
+        cadena += `${lf}:\r\n`;
+        cadena += `return;\r\n`;
+
+        cadena += `}\r\n`;
+
+        return cadena;        
+    }
+
+    imprimirID(){ //(spInicio)
+        let cadena = ``;
+        let temp = this.crearTemporal();
+        let temp1 = this.crearTemporal();
+        let temp2 = this.crearTemporal();
+        let temp3 = this.crearTemporal();
+        let lv = this.crearEtiqueta();
+        let lf = this.crearEtiqueta();
+        let ls = this.crearEtiqueta();
+        
+        let formateador = "\"%c\", (char)";
+
+        //Se inicia a imprimir id
+        cadena = `void ImprimirID() {\r\n`;
+
+        cadena += `${temp} = P + 1;\r\n`;
+        //cadena += `${temp} = stack[(int)${spInicio}];\r\n`;
+        cadena += `${temp1} = stack[(int)${temp}];\r\n`;
+        cadena += `${ls}:\r\n`;
+        cadena += `${temp2} = ${temp1} + 1;\r\n`;
+        cadena += `${temp3} = heap[(int)${temp2}];\r\n`;
+        cadena += `if (${temp3} != -1) goto ${lv};\r\n`;
+        cadena += `goto ${lf};\r\n`;
+        cadena += `${lv}:\r\n`;
+        
+        cadena += `printf(${formateador}${temp3});\r\n`;
+        cadena += `${temp1} = ${temp2};\r\n`;
+
+        cadena += `goto ${ls};\r\n`;
+
+        cadena += `${lf}:\r\n`;
+        cadena += `return;\r\n`;
+
+        cadena += `}\r\n`;
+
+        return cadena;        
+    }
+
+    imprimirAtrValor(){ //(spInicio)
+        let cadena = ``;
+        let temp = this.crearTemporal();
+        let temp1 = this.crearTemporal();
+        let temp2 = this.crearTemporal();
+        let temp3 = this.crearTemporal();
+        let lv = this.crearEtiqueta();
+        let lf = this.crearEtiqueta();
+        let ls = this.crearEtiqueta();
+        
+        let formateador = "\"%c\", (char)";
+
+        //Se inicia a imprimir atributo valor
+        cadena = `void ImprimirAtrValor() {\r\n`;
+
+        cadena += `${temp} = P + 1;\r\n`;
+        //cadena += `${temp} = stack[(int)${spInicio}];\r\n`;
+        cadena += `${temp1} = stack[(int)${temp}];\r\n`;
+        cadena += `${ls}:\r\n`;
+        cadena += `${temp2} = ${temp1} + 1;\r\n`;
+        cadena += `${temp3} = heap[(int)${temp2}];\r\n`;
+        cadena += `if (${temp3} != -1) goto ${lv};\r\n`;
+        cadena += `goto ${lf};\r\n`;
+        cadena += `${lv}:\r\n`;
+        
+        cadena += `printf(${formateador}${temp3});\r\n`;
+        cadena += `${temp1} = ${temp2};\r\n`;
+
+        cadena += `goto ${ls};\r\n`;
+
+        cadena += `${lf}:\r\n`;
+        cadena += `return;\r\n`;
+
+        cadena += `}\r\n`;
+
+        return cadena;        
+    }
+
+    imprimirValor(){ //(spInicio)
+        let cadena = ``;
+        let temp = this.crearTemporal();
+        let temp1 = this.crearTemporal();
+        let temp2 = this.crearTemporal();
+        let temp3 = this.crearTemporal();
+        let lv = this.crearEtiqueta();
+        let lf = this.crearEtiqueta();
+        let ls = this.crearEtiqueta();
+        
+        let formateador = "\"%c\", (char)";
+
+        //Se inicia a imprimir valor
+        cadena = `void ImprimirValor() {\r\n`;
+
+        cadena += `${temp} = P + 1;\r\n`;
+        //cadena += `${temp} = stack[(int)${spInicio}];\r\n`;
+        cadena += `${temp1} = stack[(int)${temp}];\r\n`;
+        cadena += `${ls}:\r\n`;
+        cadena += `${temp2} = ${temp1} + 1;\r\n`;
+        cadena += `${temp3} = heap[(int)${temp2}];\r\n`;
+        cadena += `if (${temp3} != -1) goto ${lv};\r\n`;
+        cadena += `goto ${lf};\r\n`;
+        cadena += `${lv}:\r\n`;
+        
+        cadena += `printf(${formateador}${temp3});\r\n`;
+        cadena += `${temp1} = ${temp2};\r\n`;
+
+        cadena += `goto ${ls};\r\n`;
+
+        cadena += `${lf}:\r\n`;
+        cadena += `return;\r\n`;
+
+        cadena += `}\r\n`;
+
+        return cadena;        
+    }
 }
