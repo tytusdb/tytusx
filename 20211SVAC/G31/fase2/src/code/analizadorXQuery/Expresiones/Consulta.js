@@ -41,11 +41,15 @@ export class Consulta extends NodoXQuery{
                                 if(typeof simbolo.valor === 'string' || typeof simbolo.valor === 'number'){
                                     return simbolo.valor.toString()
                                 }else{
-                                    console.log(simbolo.valor)
-                                    let retorno = simbolo.valor.getValor(entorno)
-                                    console.log(retorno, 'REVISAR AQUI')
-                                    simbolo.valor = retorno.toString()
-                                    return retorno
+                                    if(simbolo.valor instanceof Object){
+                                        return simbolo.valor
+                                    }
+                                        console.log(simbolo.valor)
+                                        let retorno = simbolo.valor.getValor(entorno)
+                                        console.log(retorno, 'REVISAR AQUI')
+                                        simbolo.valor = retorno.toString()
+                                        return retorno
+                                                                     
                                 }
                             }else{                  
                                 console.log('Se va a realizar la consulta', `/${simbolo.variable}${this.consulta}`)
@@ -70,10 +74,8 @@ export class Consulta extends NodoXQuery{
                     for(let ins of this.instrucciones){
                         if(Array.isArray(ins)){
                             for(let instruccion of ins){
-                                let ret  = instruccion.getValor(entorno, xml)
-                                if(ret != undefined){
-                                    retorno += ret
-                                }
+                                let ret = instruccion.getValor(entorno, xml)
+                                retorno = ret
                             }
                         }else{
                             retorno = ins.getValor(entorno, xml)
