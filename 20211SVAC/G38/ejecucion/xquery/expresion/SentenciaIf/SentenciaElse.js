@@ -12,4 +12,7 @@ class SentenciaElse {
             throw new ReturnException(valor);
         }
     }
+    traducirXQ(sizeScope, otro) {
+        throw new Error("Method not implemented.");
+    }
 }

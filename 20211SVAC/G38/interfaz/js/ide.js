@@ -378,3 +378,44 @@ function descargarArchivo(cadEntradaXml, cadEntradaXpath){
     saveAs(blob, "XPath.c");
 
 };
+
+
+
+function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
+    var tablaSimbolosXml;
+    try {
+        ListaErrores.InicializarC3D();
+        analizarXML(cadEntradaXml);
+        analizarXQUERY(cadEntradaXpath);
+        if(ListaErrores.hayErroresXml()){
+            InterfazGrafica.print('Se encontraron errores durante la generacion. Se recupero. Ver tabla de erroes XML.');
+        }
+        CodeUtil.init();
+        tablaSimbolosXml = _tsXml;
+        tablaSimbolosXml.cargarXml_3d();
+        CodeUtil.comenzarPrograma();
+        let ts = _rootXquery.obtenerTS(_tsXml);
+        XQueryUtil.tablaSimbolosGlobal = ts;
+        XQueryUtil.tablaSimbolosLocal = ts;
+        //todo: Agregar la carga xml a la tabla de simbolos
+        //ts.cargarElementosXml();
+        let rootXquery =    _rootXquery.traducirXQ(10);//Ejecutar Xquery
+        CodeUtil.finalizarProgrma();
+        InterfazGrafica.print(CodeUtil._cadSalida);
+
+
+        InterfazGrafica.print('Fin de generación');
+    }catch (e){
+        InterfazGrafica.print('error en ejecucion: '+e);
+        console.log(e);
+    }
+};
+
+
+
+function descargarArchivoXQuery(cadEntradaXml, cadEntradaXpath){
+    generar3DXquery(cadEntradaXml, cadEntradaXpath);
+    var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "XQuery.c");
+
+};

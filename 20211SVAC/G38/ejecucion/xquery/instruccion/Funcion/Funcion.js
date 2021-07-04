@@ -15,4 +15,7 @@ class Funcion {
         }
         ListaFunciones.agregarFuncion(this.nombreFuncion, this);
     }
+    traducirXQ(sizeScope, otro) {
+        throw new Error("Method not implemented.");
+    }
 }

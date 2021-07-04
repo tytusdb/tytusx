@@ -33,4 +33,7 @@ class InstruccionIf extends ExpresionAncestor {
     agregarPrimerIf(sentenciaIf) {
         this.sentenciasIfs.unshift(sentenciaIf);
     }
+    traducirXQ(sizeScope, otro) {
+        throw new Error("Method not implemented.");
+    }
 }

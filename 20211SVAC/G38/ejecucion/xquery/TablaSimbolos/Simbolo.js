@@ -39,4 +39,10 @@ class Simbolo {
         }
         return false;
     }
+    get offset() {
+        return this._offset;
+    }
+    set offset(value) {
+        this._offset = value;
+    }
 }

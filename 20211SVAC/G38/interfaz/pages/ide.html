@@ -85,6 +85,7 @@
     <script src="../../ejecucion/Tipo.js"></script>
     <script src="../../utils/XpathUtil.js"></script>
     <script src="../../utils/CodeUtil.js"></script>
+    <script src="../../utils/XQueryUtil.js"></script>
 
     <script src="../../ejecucion/xquery/NodoXquery.js"></script>
     <script src="../../ejecucion/xquery/TablaSimbolos/Simbolo.js"></script>
@@ -150,10 +151,40 @@
         <td>
             <div id="divEntradaXML" align="center">
                 <textarea id="txtEntradaXML" cols="80" rows="28" style="background-color:#CCC;font-style:italic">
-<pruebas>
-  <m>6</m>
-  <n>3</n>
-</pruebas>
+
+
+
+<biblioteca>
+	<libro>
+        <precio>35</precio>
+		<titulo>La vida está en otra parte</titulo>
+		<autor>Milan Kundera</autor>
+		<fechaPublicacion año="1973"/>
+	</libro>
+	<libro>
+        <precio>20</precio>
+		<titulo>Pantaleón y las visitadoras</titulo>
+		<autor fechaNacimiento="28/03/1936">jUAN pEDRO</autor>
+		<fechaPublicacion año="1973"/>
+	</libro>
+	<libro>
+        <precio>21</precio>
+        <titulo>Conversación en la catedral</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1969"/>
+	</libro>
+    <libro>
+        <precio>10</precio>
+		<titulo>Conversación a la catedral</titulo>
+		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
+		<fechaPublicacion año="1969"/>
+	</libro>
+</biblioteca>
+
+
+
+
+
                 </textarea>
             </div>
 
@@ -203,8 +234,10 @@ local:fibonacci(/pruebas/m)
     <button id="btnReporte3D" class="button">Ver Reporte 3D</button>
     <button id="btnOptimizar3D" class="button">Optimizar 3D</button>
     <button id="btnErrores3D" class="button">Errores C3D</button>
-    <button id="btnGenerar3D" class="button">Generar 3D</button>
-    <button id="btnDescarga3D" class="button">Descargar 3D</button>
+    <button id="btnGenerar3D" class="button">Generar 3D XPath</button>
+    <button id="btnDescarga3D" class="button">Descargar 3D XPath</button>
+    <button id="btnGenerar3DXQuery" class="button">Generar 3D XQ</button>
+    <button id="btnDescarga3DXQuery" class="button">Descargar 3D XQ</button>
 </div>
 
 <div id="consola" align="center">
@@ -467,6 +500,21 @@ local:fibonacci(/pruebas/m)
                 entradaXpath = $("#txtEntradaXPath").val();
                 generar3D(entradaXml, entradaXpath);
             });
+
+
+            $("#btnGenerar3DXQuery").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                generar3DXquery(entradaXml, entradaXpath);
+            });
+
+
+            $("#btnDescarga3DXQuery").click(function (){
+                entradaXml   = $("#txtEntradaXML").val();
+                entradaXpath = $("#txtEntradaXPath").val();
+                descargarArchivoXQuery(entradaXml, entradaXpath);
+            });
+
 
 
         });

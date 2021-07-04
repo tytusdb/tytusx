@@ -35,4 +35,6 @@ class OrderByResult {
         });
         return XpathUtil.crearTablaSimbolos(simbolosOrdenados);
     }
+    traducirXQ(sizeScope, otro) {
+    }
 }

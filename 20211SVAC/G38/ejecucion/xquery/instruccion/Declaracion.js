@@ -28,4 +28,7 @@ class Declaracion {
                 + " porque la expresion es invalida", this.linea, this.columna));
         }
     }
+    traducirXQ(sizeScope, otro) {
+        throw new Error("Method not implemented.");
+    }
 }
