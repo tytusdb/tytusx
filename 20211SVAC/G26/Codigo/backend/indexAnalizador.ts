@@ -28,12 +28,18 @@ class Analizador{
 
   private static _instance: Analizador;
   global:Entorno;
+  xqGlobal:Entorno;
   indice:number;
   reporteOptimiza: Array<Optimizacion>;
   consultas: Array<Consulta>;
+  xQueryEntry: string;
+  instrucciones: Array<InstruccionXQuery>;
 
   constructor(){
     this.global = new Entorno('global', null, null);
+    this.xqGlobal = new Entorno('xqGlobal', null, null);
+    this.xQueryEntry = '';
+    this.instrucciones = [];
     errores.limpiar();
     this.indice = 0;
     this.reporteOptimiza = [];
@@ -52,6 +58,7 @@ class Analizador{
 
   iniciarVariables(){
     this.global = new Entorno('global', null, null);
+    this.xqGlobal = new Entorno('xqGlobal', null, null);
     errores.limpiar();
   }
 
@@ -144,10 +151,20 @@ class Analizador{
 
   XQueryAscendente(entrada: string): String{
     console.log("---- XQUERY ASCENDENTE ----- ")
-    const instrucciones: InstruccionXQuery = XQueryGram.parse(entrada);
+    this.instrucciones = XQuery.parse(entrada);
+    this.xQueryEntry = entrada;
     let salida = "";
-    salida += instrucciones.ejecutar(new Entorno("XQGlobal", null, null), this.global);
-    //console.log("SALIDA: ", salida);
+    console.log("RAIZ: ", this.instrucciones)
+    if(this.instrucciones !== null){
+      this.instrucciones.forEach((elem: InstruccionXQuery) => {
+        if (typeof(elem) !== "string")
+          elem.ejecutar(this.xqGlobal, this.global);
+      });
+      //salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
+    }
+    this.global.tsimbolos = this.global.tsimbolos.concat(this.xqGlobal.tsimbolos);
+    console.log(this.global);
+    console.log("SALIDA: ", salida);
     return salida;
   }
 
@@ -335,35 +352,23 @@ function pruebaXQuery(entrada:string){
   });
 }
 
-pruebaXQuery(`
+analizador.XQueryAscendente(`
+let $go := 5
+let $ruta := /pruebas
+`);
+/*
 declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
 {
   if ($m eq 0) then $n+1
   else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
-  else local:ackerman ($m - 1, local:ackerman(/pruebas/m, $n - 1))
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
 };
+
 
 declare function local:factorial($x as xs:integer)as xs:integer
 {
   if ($x eq 0) then 1
   else ($x*local:factorial($x - 1))
-};
-
-declare function local:tipo1() as xs:integer
-{
-  for $a in (1)
-  where $a < 5
-  let $b := $a * 8
-  return if ($b eq 8) then local:factorial($a)
-else 5
-};
-
-declare function local:tipo2() as xs:integer
-{
-  for $a in (1)
-  where $a < 5
-  let $b := $a * 8
-  return 4
 };
 
 declare function local:fibonacci($num as xs:integer) as xs:integer
@@ -376,35 +381,38 @@ declare function local:fibonacci($num as xs:integer) as xs:integer
   else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
 };
 
-declare function local:tipo3() as xs:integer
+declare function local:tipo1() as xs:integer
 {
   let $a := 1
   let $b := $a * 8
   return local:fibonacci($a - 2)
 };
 
+declare function local:tipo2() as xs:integer
+{
+  for $a in (1)
+  where $a < 5
+  let $b := $a * 8
+  return if ($b eq 8) then local:factorial($a)
+else 5
+};
 
-let $go := 5
+
+
+let $go := (1,3)
 let $ruta := /pruebas
 for $x in (1 to 2)
 let $y := (4)
 return if(1 eq 1) then "FUNCIONA"
 else "NO FUNCIONA"
 
-(:let $go := 5
-  let $ruta := /pruebas
-  for $x in (1 to 2)
-  let $y := (4)
-  (local:fibonacci(2))
-  
-  (:
-  return if ($ruta/m eq 5) then local:tipo2()
-  else 3
-  (:($y eq 4) then local:tipo2()
-  else local:factorial(0):)
-  :)
-`);
-
+(:
+return if ($ruta/m eq 5) then local:tipo2()
+else 3
+(:($y eq 4) then local:tipo2()
+else local:factorial(0):)
+:)
+*/
 export default analizador;
 /*pruebaXQuery(`
 declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer

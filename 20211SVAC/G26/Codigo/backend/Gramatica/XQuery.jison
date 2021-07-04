@@ -203,22 +203,37 @@ content                         [^<]
 %start START
 %%
 /* Definición de la gramática */
-START : INSTRUCCIONES EOF         { return $1; }
+START : INSTRUCCIONES EOF         { console.log($1); return $1; }
     ; 
 
 INSTRUCCIONES : LISTFUNC LISTAD RETURNGLOBAL
                 {
+                    console.log("FUNCIONES ", $1);
+                    console.log("VARIABLES ", $2);
+                    console.log("RETURN ", $3);
                     if ($1 !== null) {
-                        $$ = [{func:$1, variable:$2}];
+                        if ($2 !== null) {
+                            $1 = $1.concat($2);
+                            $1.push($3);
+                            $$ = $1;
+                        }
+                        else {
+                            $1.push($3);
+                            $$ = $1;
+                        }
                     }else {
-                        $$ = [{func:null, variable: $2}];
+                        if ($2 !== null){
+                            $2.push($3);
+                            $$ = $2;
+                        }else 
+                            $$ = [$3];
                     }
+                    console.log($$.length);
                 }
-                | error {}
 ;
 
-LISTFUNC: LFUNC                 {$$=$1;}
-        |                       {$$=null;}
+LISTFUNC: LFUNC                 {console.log("LISTA DE FUNCIONES"); $$=$1;}
+        |                       {console.log("LISTA FUNC VACIA"); $$=[];}
 ;
 
 LFUNC: LFUNC USERFUNCTION       {$1.push($2); $$ = $1;}
@@ -229,7 +244,7 @@ USERFUNCTION: declare function PREFIX dospuntos identifier parA ARGUMENTOS parC 
                 { 
                     $$ = new UserFunction();
                 }
-                | error llaveC
+                | error {}
 ;
 
 PREFIX: local { $$ = $1;}
@@ -293,12 +308,19 @@ EXPRESIONXQUERY: EXPRESIONXQUERY asterisco EXPRESIONXQUERY { $$ = new Operacion(
         //| menos EXPRESIONXQUERY %prec UMINUS { $$ = "-"+$2;}
         | parA EXPRESIONXQUERY parC { $$ = new Operacion(TipoOperacion.PAR, $2, null, @1.first_line, @1.first_column, true);}     
         | DoubleLiteral { $$ = new Primitiva($1, TipoPrim.DOUBLE, @1.first_line, @1.first_column, true); }
-        | IntegerLiteral { $$ = new Primitiva($1, TipoPrim.INTEGER, @1.first_line, @1.first_column, true); }
+        | IntegerLiteral { console.log($1); $$ = new Primitiva($1, TipoPrim.INTEGER, @1.first_line, @1.first_column, true); }
         | cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column, true); }
         | cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column, true); }
         | dolar identifier { $$ = new Primitiva($1, TipoPrim.XQUERYIDENTIFIER, @1.first_line, @1.first_column, true); }        
         | LLAMADAFUNCION { $$ = $1; }
         | FUNCIONXQUERY{ $$ = new Primitiva($1, TipoPrim.FUNCIONXQUERY, @1.first_line, @1.first_column);}
+        /*| LISTAENTEROS 
+        {
+            if ($1.length === 1)
+                $$ = new Primitiva($1, TipoPrim.INTEGER, @1.first_line, @1.first_column);
+            else
+                $$ = new Primitiva($1, TipoPrim.LISTAENTEROS, @1.first_line, @1.first_column); 
+        }*/
 ;
 
 LLAMADAFUNCION: local dospuntos identifier parA LISTALLAMADA parC { $$ = "Llamada";}
@@ -445,18 +467,18 @@ FUNCIONES:
 ;
 
 LISTANODOS:  LISTANODOS NODO   { $$ = [$1]; $$ = $$.concat($2); }
-        | NODO  { $$ = [$1]; }
+        | NODO  { console.log("NODO"); $$ = [$1]; }
 ;
 
 FLWOR:  LISTAD FOR RETURNTYPE { $$ = new Flwor($1, $2, @1.first_line, @1.first_column);}
 ;
 
-LISTAD: LISTADEC { $$ = $1;}
-        |               { $$ = [];}
+LISTAD: LISTADEC { console.log("LISTA DECLARACIONES"); $$ = $1;}
+        |               { console.log("SIN VARIABLES"); $$ = [];}
         ;
 
-LISTADEC: LISTADEC DECLARACION { $1.push($2); $$ = $1;}
-                | DECLARACION { $$ = [$1]}
+LISTADEC: LISTADEC DECLARACION { console.log("MAS DECLARACIONES"); $1.push($2); $$ = $1;}
+                | DECLARACION { console.log("UNA DECLARACION"); $$ = [$1]; }
 ;
 
 FOR: for LISTADECLARACIONES SENTSFOR { $$ = new For($2, @1.first_line, @1.first_column);}
@@ -482,9 +504,9 @@ SORT: dolar identifier LISTANODOS  { $$ = new Sort($2, $3, @1.first_line, @1.fir
 ;
 
 DECLARACION: 
-        let dolar identifier dospuntos igual LISTACONSULTAS { $$ = new Let($3, $6, @1.first_line, @1.first_column);}
+        let dolar identifier dospuntos igual LISTACONSULTAS { console.log("DECLARACION CON RUTA"); $$ = new Let($3, $6, @1.first_line, @1.first_column);}
         | let dolar identifier dospuntos igual parA IntegerLiteral to IntegerLiteral parC { $$ = new Let($3, null, @1.first_line, @1.first_column, +$7, +$9);}
-        | let dolar identifier dospuntos igual EXPRESIONXQUERY { $$ = new Let($3, null, @1.first_line, @1.first_column, undefined, undefined, undefined, $6);}
+        | let dolar identifier dospuntos igual EXPRESIONXQUERY { console.log("ENTRA DECLARACION"); console.log($6); $$ = new Let($3, null, @1.first_line, @1.first_column, undefined, undefined, undefined, $6);}
 ;
 
 LISTADECLARACIONES: LISTADECLARACIONES coma DECLARACIONFOR { $1.push($2); $$ = $1;}
@@ -499,7 +521,7 @@ DECLARACIONFOR: dolar identifier in LISTACONSULTAS { $$ = new DeclaracionFor(Tip
 ;
 
 LISTACONSULTAS: LISTACONSULTAS andSelect CONSULTA{ $1.push(new Consulta($3, @1.first_line, @1.first_column)); $$ = $1;}
-        |  CONSULTA    {  $$ = [new Consulta($1, @1.first_line, @1.first_column)];}
+        |  CONSULTA    { console.log("CONSULTA");  $$ = [new Consulta($1, @1.first_line, @1.first_column)];}
 ;
 
 CONSULTA: identifier LISTANODOS
@@ -517,7 +539,7 @@ CONSULTA: identifier LISTANODOS
                                $$ =  $$.concat($2);
                         } 
                 }
-        | LISTANODOS { $$ = $1;}     
+        | LISTANODOS { console.log("LISTANODOS"); $$ = $1;}     
 ;         
 
 RETURNTYPE: return dolar identifier LISTANODOS { $$ = new Return(TipoReturn.NORMAL, $3, $4, undefined, undefined, undefined, @1.first_line, @1.first_column);}
@@ -529,7 +551,8 @@ LISTAENTEROS: LISTAENTEROS coma IntegerLiteral { $1.push($3); $$ = $1;}
                 | IntegerLiteral { $$ = [$1];}
 ; 
 
-RETURNGLOBAL: LLAMADAFUNCION
-            | parA LLAMADAFUNCION parC
-            | FOR RETURNTYPE {}
+RETURNGLOBAL: LLAMADAFUNCION {$$ = "return global";}
+            | parA LLAMADAFUNCION parC {$$ = "return global";}
+            | FOR RETURNTYPE {$$ = "return global";}
+            | error {console.log("Se espera un return");}
 ;

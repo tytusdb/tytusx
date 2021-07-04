@@ -30,6 +30,7 @@ export class Let implements InstruccionXQuery{
     }
 
     ejecutar(XQEnt: Entorno, xmlEnt: Entorno){
+        console.log("Se ejecuta let");
         let listaSimbolos: Array<any> = [];        
         if(this.consultas != undefined){
             this.consultas.forEach((consulta: Consulta) => {
@@ -49,6 +50,9 @@ export class Let implements InstruccionXQuery{
             XQEnt.agregarSimbolo(this.identifier, newSimb);
 
             console.log("SIMBOLO: ", XQEnt.obtenerSimbolo(this.identifier));
+        }else if (this.expresion != undefined){
+            let newSimb: Simbolo = new Simbolo(Tipo.XQ_VAR, this.identifier, this.expresion.getValor(XQEnt), this.linea, this.columna);                    
+            XQEnt.agregarSimbolo(this.identifier, newSimb);
         }
     }
 }

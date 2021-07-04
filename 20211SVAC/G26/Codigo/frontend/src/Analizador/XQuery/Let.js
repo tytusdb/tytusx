@@ -17,6 +17,7 @@ class Let {
         }
     }
     ejecutar(XQEnt, xmlEnt) {
+        console.log("Se ejecuta let");
         let listaSimbolos = [];
         if (this.consultas != undefined) {
             this.consultas.forEach((consulta) => {
@@ -37,6 +38,10 @@ class Let {
             let newSimb = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identifier, listaSimbolos, this.linea, this.columna);
             XQEnt.agregarSimbolo(this.identifier, newSimb);
             console.log("SIMBOLO: ", XQEnt.obtenerSimbolo(this.identifier));
+        }
+        else if (this.expresion != undefined) {
+            let newSimb = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identifier, this.expresion.getValor(XQEnt), this.linea, this.columna);
+            XQEnt.agregarSimbolo(this.identifier, newSimb);
         }
     }
 }
