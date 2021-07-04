@@ -1,7 +1,7 @@
 var contadorEtiquetas = 0;
 
 //Función que se encarga de tomar los caracteres correspondientes a números dentro del HEAP y los convierte a un número.
-function parseDigitosXpath(posicionHeap, contadorTemporal){
+function parseDigitosXpath(posicionHeap){
     var texto = "\n\n";
     //var expresion = heap[posicionHeap];//se obtiene el caracter que está en x posición dentro del Heap hasta que encuentre -1
     var digitos;
