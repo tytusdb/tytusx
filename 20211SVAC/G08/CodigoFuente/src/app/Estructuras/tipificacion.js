@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.ParamType = exports.TipoDeclaracionXquery = exports.TipoFuncion = exports.TipoClausulaIntermedia = exports.OrderModifierType = exports.TipoBinding = exports.FLWORTipo = exports.SingleExpresionType = exports.TipoOperador = exports.TipoNodo = exports.TipoParametro = void 0;
+exports.TipoInstruccion = exports.TipoDato = exports.ParamType = exports.TipoDeclaracionXquery = exports.TipoFuncion = exports.TipoClausulaIntermedia = exports.OrderModifierType = exports.TipoBinding = exports.FLWORTipo = exports.SingleExpresionType = exports.TipoOperador = exports.TipoNodo = exports.TipoParametro = void 0;
 var TipoParametro;
 (function (TipoParametro) {
     TipoParametro[TipoParametro["Entero"] = 0] = "Entero";
@@ -15,6 +15,7 @@ var TipoParametro;
     TipoParametro[TipoParametro["Operacion"] = 9] = "Operacion";
     TipoParametro[TipoParametro["Ruta"] = 10] = "Ruta";
     TipoParametro[TipoParametro["Variable"] = 11] = "Variable";
+    TipoParametro[TipoParametro["FuncionDefinida"] = 12] = "FuncionDefinida";
 })(TipoParametro = exports.TipoParametro || (exports.TipoParametro = {}));
 var TipoNodo;
 (function (TipoNodo) {
@@ -97,3 +98,20 @@ var ParamType;
     ParamType[ParamType["xsBoolean"] = 3] = "xsBoolean";
     ParamType[ParamType["xsInteger"] = 4] = "xsInteger";
 })(ParamType = exports.ParamType || (exports.ParamType = {}));
+var TipoDato;
+(function (TipoDato) {
+    TipoDato[TipoDato["Primitivo"] = 0] = "Primitivo";
+    TipoDato[TipoDato["Operacion"] = 1] = "Operacion";
+})(TipoDato = exports.TipoDato || (exports.TipoDato = {}));
+var TipoInstruccion;
+(function (TipoInstruccion) {
+    TipoInstruccion[TipoInstruccion["Asignacion"] = 0] = "Asignacion";
+    TipoInstruccion[TipoInstruccion["AsignacionArray"] = 1] = "AsignacionArray";
+    TipoInstruccion[TipoInstruccion["ArrayAsignacion"] = 2] = "ArrayAsignacion";
+    TipoInstruccion[TipoInstruccion["Etiqueta"] = 3] = "Etiqueta";
+    TipoInstruccion[TipoInstruccion["GoTo"] = 4] = "GoTo";
+    TipoInstruccion[TipoInstruccion["Llamada"] = 5] = "Llamada";
+    TipoInstruccion[TipoInstruccion["Print"] = 6] = "Print";
+    TipoInstruccion[TipoInstruccion["If"] = 7] = "If";
+    TipoInstruccion[TipoInstruccion["Return"] = 8] = "Return";
+})(TipoInstruccion = exports.TipoInstruccion || (exports.TipoInstruccion = {}));

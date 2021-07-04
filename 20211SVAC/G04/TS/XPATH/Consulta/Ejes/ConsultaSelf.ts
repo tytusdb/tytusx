@@ -1,9 +1,7 @@
-class ConsultaSelf implements Consulta {
+class ConsultaSelf extends Consulta {
 
-    private id: string;
-
-    constructor(id: string) {
-        this.id = id;
+    constructor(type: TipoConsulta, id: string, filtros: Array<Filtro>) {
+        super(type, id, filtros);
     }
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
@@ -13,7 +11,7 @@ class ConsultaSelf implements Consulta {
             let flag: boolean = false;
             let nuevoEntorno: Entorno = new Entorno(e.getAnterior());
             e.getTable().forEach((s: Simbolo) => {
-                if (s.getNombre() === this.id && s instanceof Nodo) {
+                if (s.getNombre() === super.getId() && s instanceof Nodo) {
                     flag = true;
                     nuevoEntorno.add(s);
                 }

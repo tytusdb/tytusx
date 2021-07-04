@@ -4,6 +4,7 @@ import { Simbolo } from "../../xmlAST/Simbolo";
 import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
 import { ManejadorXquery } from "../manejadores/ManejadorXquery";
+import { traduccion } from "../../Traduccion/traduccion";
 
 export class If implements ExpressionXquery{
 
@@ -14,6 +15,8 @@ export class If implements ExpressionXquery{
     public exp : ExpressionXquery,
     public elseif: ExpressionXquery | null){}
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno, simboloPadre?: Simbolo): Retorno {
+
+        traduccion.setTranslate("\n//IF ELSE\t--------------");
         
         const condicion = this.condicion.executeXquery(entAct, RaizXML)
         if (condicion.type !== tipoPrimitivo.BOOL){ 

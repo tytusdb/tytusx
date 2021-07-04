@@ -3,15 +3,7 @@ export class Optimizador {
     cadena = ""
     public static reporte = []
 
-    constructor() {
-        /*Optimizador.reporte.push({
-            regla:"",
-            original:"",
-            optimizado:"",
-            fila:"",
-            columna:""
-        });*/
-    }
+    constructor() {  }
 
     getExpresion(id: string, op1: string, op: string, op2: string, fila: string, columna: string): string {
         this.cadena = ""
@@ -35,10 +27,10 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n"
 
                 } else {
-                    return this.cadena = id + " = " + op1 + " + " + op2 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + " + " + op2 + ";" + "\n"
                 }
 
             case "-":
@@ -60,10 +52,10 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n"
 
                 } else {
-                    return this.cadena = id + " = " + op1 + " - " + op2 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + " - " + op2 + ";" + "\n"
                 }
 
             case "*":
@@ -85,7 +77,7 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n"
 
                 } else if (op1 != id && op2 == "2") {
                     Optimizador.reporte.push({
@@ -95,7 +87,7 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + " + " + op1 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + " + " + op1 + ";" + "\n"
 
                 } else if (op1 != id && op2 == "0") {
                     Optimizador.reporte.push({
@@ -105,10 +97,10 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = 0;" + "\n"
+                    return this.cadena = "\t" + id + " = 0;" + "\n"
 
                 } else {
-                    return this.cadena = id + " = " + op1 + " * " + op2 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + " * " + op2 + ";" + "\n"
                 }
 
             case "/":
@@ -130,7 +122,7 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n"
 
                 } else if (op2 != id && op1 == "0") {
                     Optimizador.reporte.push({
@@ -140,10 +132,10 @@ export class Optimizador {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = 0;" + "\n"
+                    return this.cadena = "\t" + id + " = 0;" + "\n"
 
                 } else {
-                    return this.cadena = id + " = " + op1 + " / " + op2 + ";" + "\n"
+                    return this.cadena = "\t" + id + " = " + op1 + " / " + op2 + ";" + "\n"
                 }
         }
         return this.cadena

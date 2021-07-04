@@ -154,7 +154,13 @@ INSTRUCCION: FLOWER  { $$ = $1; }
         | XFOR { $$ = $1; };
 
 XFOR : tk_for tk_idflower tk_in tk_parentesisa tk_entero tk_to tk_entero tk_parentesisc tk_return tk_menor tk_identificador tk_mayor tk_llavea tk_idflower tk_llavec tk_menor tk_slash tk_identificador tk_mayor
-        { xForAux = new XFor(@1.first_line, @1.first_column, Number($5), Number($7), $11, $18, $2, $14)
+        { xForAux = new XFor(@1.first_line, @1.first_column, Number($5), Number($7), $11, $18, $2, $14);
+          nodoaux = new NodoArbol("for","");   
+          nodoaux.agregarHijo(new NodoArbol($5 + " to " + $7,""));
+          $$ = [xForAux,nodoaux]; 
+        }
+        |tk_for tk_idflower tk_in tk_parentesisa tk_entero tk_to tk_entero tk_parentesisc tk_return tk_idflower
+        { xForAux = new XForSimple(@1.first_line, @1.first_column, Number($5), Number($7), $2, $10);
           nodoaux = new NodoArbol("for","");   
           nodoaux.agregarHijo(new NodoArbol($5 + " to " + $7,""));
           $$ = [xForAux,nodoaux]; 

@@ -110,4 +110,98 @@ class Nodo extends Simbolo {
 
         return nodosText.join("");
     }
+
+    public generateC3D(resultC3D: C3DResult): C3DResult {
+        let codigo: Array<string> = resultC3D.getCodigo();
+        let i: number = resultC3D.getNextTemp();
+        let p: number = resultC3D.getSp();
+        super.setStackPointer(p);
+
+        codigo.push(`\n\t//C3D nodo ${super.getNombre()}`);
+        codigo.push(`\tt${i} = H;`);
+        codigo.push(`\tt${i+1} = t${i};`);
+        codigo.push(`\tH = H + 5;`);
+
+        //Nombre
+        codigo.push(`\tt${i+2} = H;`);
+        Array.from(super.getNombre()).forEach(s => {
+            codigo.push(`\theap[(int)H] = ${s.charCodeAt(0)};`);
+            codigo.push(`\tH = H + 1;`);
+        });
+        codigo.push(`\theap[(int)H] = -1;`);
+        codigo.push(`\tH = H + 1;`);
+        codigo.push(`\theap[(int)t${i+1}] = t${i+2};`);
+        codigo.push(`\tt${i+1} = t${i+1} + 1;`);
+
+        //Texto
+        codigo.push(`\tt${i+3} = H;`);
+        Array.from(this.texto).forEach(s => {
+            codigo.push(`\theap[(int)H] = ${s.charCodeAt(0)};`);
+            codigo.push(`\tH = H + 1;`);
+        });
+        codigo.push(`\theap[(int)H] = -1;`);
+        codigo.push(`\tH = H + 1;`);
+        codigo.push(`\theap[(int)t${i+1}] = t${i+3};`);
+        codigo.push(`\tt${i+1} = t${i+1} + 1;`);
+
+        //Tipo simbolo
+        codigo.push(`\theap[(int)t${i+1}] = ${super.getType()};`);
+        codigo.push(`\tt${i+1} = t${i+1} + 1;`);
+
+        //Atributos
+        codigo.push(`\tt${i+4} = H;`);
+        codigo.push(`\tt${i+5} = t${i+4} + 1;`);
+        codigo.push(`\theap[(int)H] = ${this.atributos.length};`);
+        codigo.push(`\tH = H + ${this.atributos.length + 1};`);
+
+        let iTemp: number = i+5;
+
+        this.atributos.forEach(a => {
+            codigo.push(`\n\tt${iTemp+1} = stack[(int)${a.getStackPointer()}];`);
+            codigo.push(`\theap[(int)t${i+5}] = t${iTemp+1};`);
+            codigo.push(`\tt${i+5} = t${i+5} + 1;`);
+            iTemp++;
+        });
+        iTemp++;
+        codigo.push(`\n\theap[(int)t${i+1}] = t${i+4};`);
+        codigo.push(`\tt${i+1} = t${i+1} + 1;`);
+
+        //Entorno
+        codigo.push(`\n\tt${iTemp} = stack[(int)${this.entorno.getStackPointer()}];`);
+        codigo.push(`\theap[(int)t${i+1}] = t${iTemp++};`);
+
+        codigo.push(`\tstack[(int)${p++}] = t${i};`);
+
+        resultC3D.setNextTemp(iTemp);
+        resultC3D.setSp(p);
+        resultC3D.setCodigo(codigo);
+
+        return resultC3D;
+    }
+
+    public setEntornoToChilds(resultC3D: C3DResult): C3DResult {
+        let codigo: Array<string> = resultC3D.getCodigo();
+        let i: number = resultC3D.getNextTemp();
+        let p: number = resultC3D.getSp();
+
+        //let iTemp: number = i;
+        if (this.nodos.length > 0 ) {codigo.push(`\n\t//Agregando entorno a childs`)};
+        this.nodos.forEach(n => {
+            if (n.getType() == Type.DOUBLE_TAG) {
+                /*codigo.push(`\tt${i} = stack[(int)${n.getStackPointer()}];`); //Accedo al nodo
+                codigo.push(`\tt${i} = t${i} + 3;`); //Accedo al entorno del nodo*/
+                codigo.push(`\tt${i} = stack[(int)${n.getEntorno().getStackPointer()}];`);   //Referencia del entorno del child
+                codigo.push(`\tt${i} = t${i} + 0;`);    //Accedo al anterior del entorno
+                codigo.push(`\tt${i+1} = stack[(int)${this.entorno.getStackPointer()}];`);
+                codigo.push(`\theap[(int)t${i}] = t${i+1};`);
+                i+=2;
+            }
+        });
+
+        resultC3D.setNextTemp(i);
+        resultC3D.setSp(p);
+        resultC3D.setCodigo(codigo);
+
+        return resultC3D;
+    }
 }

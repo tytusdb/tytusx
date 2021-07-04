@@ -99,7 +99,7 @@ SENTENCIA
 ;
 
 INSTRUCCION
-    :ASIGNACION         { $$ = "\t" + $1; }
+    :ASIGNACION         { $$ = $1; }
     |DEFETIQUETA        { $$ = "\t" + $1; }
     |SENTENCIAIF        { $$ = "\t" + $1; }
     |SENTENCIAGOTO      { $$ = "\t" + $1; }
@@ -110,10 +110,10 @@ INSTRUCCION
 
 ASIGNACION
     :id igual CONSTANTE OPERADOR CONSTANTE puntocoma                            { $$ = optimizar.getExpresion($1, $3, $4, $5, @1.first_line, @1.first_column); }
-    |id igual OPERADOR CONSTANTE puntocoma                                      { $$ = $1 + " " + $2 + $3 + " " + $4 + $5 + "\n"; }
-    |id igual CONSTANTE puntocoma                                               { $$ = $1 + " " + $2 + " " + $3 + $4 + "\n"; }
-    |id igual id corizq parizq rint parder CONSTANTE corder puntocoma           { $$ = $1 + " " + $2 + " " + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10 + "\n"; }
-    |id corizq parizq rint parder CONSTANTE corder igual CONSTANTE puntocoma    { $$ = $1 + $2 + $3 + $4 + $5 + $6 + $7 + " " + $8 + " " + $9 + $10 + "\n"; }
+    |id igual OPERADOR CONSTANTE puntocoma                                      { $$ = "\t" + $1 + " " + $2 + $3 + " " + $4 + $5 + "\n"; }
+    |id igual CONSTANTE puntocoma                                               { $$ = "\t" + $1 + " " + $2 + " " + $3 + $4 + "\n"; }
+    |id igual id corizq parizq rint parder CONSTANTE corder puntocoma           { $$ = "\t" + $1 + " " + $2 + " " + $3 + $4 + $5 + $6 + $7 + $8 + $9 + $10 + "\n"; }
+    |id corizq parizq rint parder CONSTANTE corder igual CONSTANTE puntocoma    { $$ = "\t" + $1 + $2 + $3 + $4 + $5 + $6 + $7 + " " + $8 + " " + $9 + $10 + "\n"; }
 ;
 
 DEFETIQUETA
@@ -167,4 +167,5 @@ TIPODATO
     |rchar      { $$ = $1; }
     |rfloat     { $$ = $1; }
     |rdouble    { $$ = $1; }
+    |rvoid      { $$ = $1; }
 ;

@@ -1,4 +1,5 @@
 import { ExpresionXQ } from "../Arbol/ExpresionXQ";
+import { EntornoXQ } from "../Entorno/Entorno";
 import { TipoXQ } from "../Entorno/TipoXQ";
 
 export class LiteralXQ extends ExpresionXQ {
@@ -10,7 +11,7 @@ export class LiteralXQ extends ExpresionXQ {
         this.columna = c;
     }
 
-    getValor():ExpresionXQ {
+    getValor(ent: EntornoXQ):ExpresionXQ {
         return new LiteralXQ(this.tipo, this.valor, this.linea, this.columna);
     }
 

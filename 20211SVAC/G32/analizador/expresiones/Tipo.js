@@ -1,15 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tipo = void 0;
-var Tipo;
-(function (Tipo) {
-    Tipo[Tipo["STRING"] = 0] = "STRING";
-    Tipo[Tipo["INT"] = 1] = "INT";
-    Tipo[Tipo["DOUBLE"] = 2] = "DOUBLE";
-    Tipo[Tipo["BOOL"] = 3] = "BOOL";
-    Tipo[Tipo["VOID"] = 4] = "VOID";
-    Tipo[Tipo["STRUCT"] = 5] = "STRUCT";
-    Tipo[Tipo["NULL"] = 6] = "NULL";
-    Tipo[Tipo["ATRIBUTO"] = 7] = "ATRIBUTO";
-    Tipo[Tipo["ARRAY"] = 8] = "ARRAY";
-})(Tipo = exports.Tipo || (exports.Tipo = {}));
+exports.getTipo = void 0;
+function getTipo(valor) {
+    if (typeof valor == 'string') {
+        return 0 /* STRING */;
+    }
+    else if (typeof valor == 'number') {
+        return 1 /* INT */;
+    }
+    else if (typeof valor == 'boolean') {
+        return 3 /* BOOL */;
+    }
+    else if (typeof valor == 'object') {
+        return 6 /* ARRAY */;
+    }
+    else if (valor == null) {
+        return null;
+    }
+    return null;
+}
+exports.getTipo = getTipo;
