@@ -3,13 +3,6 @@ exports.__esModule = true;
 var Optimizador = /** @class */ (function () {
     function Optimizador() {
         this.cadena = "";
-        /*Optimizador.reporte.push({
-            regla:"",
-            original:"",
-            optimizado:"",
-            fila:"",
-            columna:""
-        });*/
     }
     Optimizador.prototype.getExpresion = function (id, op1, op, op2, fila, columna) {
         this.cadena = "";
@@ -33,10 +26,10 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " + " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " + " + op2 + ";" + "\n";
                 }
             case "-":
                 if (op1 == id && op2 == "0") {
@@ -57,10 +50,10 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " - " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " - " + op2 + ";" + "\n";
                 }
             case "*":
                 if (op1 == id && op2 == "1") {
@@ -81,7 +74,7 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else if (op1 != id && op2 == "2") {
                     Optimizador.reporte.push({
@@ -91,7 +84,7 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + " + " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " + " + op1 + ";" + "\n";
                 }
                 else if (op1 != id && op2 == "0") {
                     Optimizador.reporte.push({
@@ -101,10 +94,10 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = 0;" + "\n";
+                    return this.cadena = "\t" + id + " = 0;" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " * " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " * " + op2 + ";" + "\n";
                 }
             case "/":
                 if (op1 == id && op2 == "1") {
@@ -125,7 +118,7 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = " + op1 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + ";" + "\n";
                 }
                 else if (op2 != id && op1 == "0") {
                     Optimizador.reporte.push({
@@ -135,10 +128,10 @@ var Optimizador = /** @class */ (function () {
                         fila: fila,
                         columna: columna
                     });
-                    return this.cadena = id + " = 0;" + "\n";
+                    return this.cadena = "\t" + id + " = 0;" + "\n";
                 }
                 else {
-                    return this.cadena = id + " = " + op1 + " / " + op2 + ";" + "\n";
+                    return this.cadena = "\t" + id + " = " + op1 + " / " + op2 + ";" + "\n";
                 }
         }
         return this.cadena;
