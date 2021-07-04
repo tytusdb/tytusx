@@ -3,8 +3,7 @@ function ejecutarXQuery(instruccion,entorno){
     let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
     //console.log(tablaSimbolos);
     //tablaSimbolos
-    console.log("pp");
-    console.log(tablaSimbolos);
+
     if(consulta){
         imprimiConsola(consulta);
     }else{
@@ -85,7 +84,7 @@ function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
             case "NUEVO_ETR":
 
                 tablaSimbolos=new Entorno(tablaSimbolos);
-                console.log(tablaSimbolos);
+               
                 break;
             default:
                 return null
@@ -283,7 +282,7 @@ function alfabeto(palabra1,palabra2,i){
 
 
 function ejecutarForIn(instruccion,entorno,padre){
-    console.log(instruccion.iterador.consulta);
+    
     let respuesta="";
     traductorC3D.traducirFuncion("",3);
     if(instruccion.iterador.consulta.tipo=="TO"){
@@ -310,7 +309,7 @@ function ejecutarForIn(instruccion,entorno,padre){
         entornos=ordenar(instruccion.order,entornos);
     }
     let where=instruccion.where;
-    console.log(instruccion);
+
     let respuesta="";
     let contador=1;
     for (const x of entornos) {
@@ -331,7 +330,7 @@ function ejecutarForIn(instruccion,entorno,padre){
         if(retorno){
             respuesta+=retorno+'\n';
         }
-        console.log(var_);
+        
     }
     
     if(respuesta!=""){
@@ -607,7 +606,7 @@ function imprimirEntorno(entorno){
             traductorC3D.traducirFuncion("<" + entorno.etiqueta );
 
             traductorC3D.traducirFuncion( ">");
-            console.log(traductorC3D.t);
+           
             if(traductorC3D.esNumero(entorno.texto)){
 
               traductorC3D.imprimirNumero(entorno.referenciaHeap);
