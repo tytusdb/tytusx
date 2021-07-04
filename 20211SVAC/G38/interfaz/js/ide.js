@@ -3,6 +3,7 @@ const CONSOLE_LINE_MARK = '>';
 const CONSOLE_MESSAGE_SUCCESSFULL="OK XML";
 const CONSOLE_MESSAGE_SUCCESSFULL_XPATH="OK XPATH";
 const CONSOLE_MESSAGE_SUCCESSFULL_XQUERY="OK XQUERY";
+const CONSOLE_MESSAGE_SUCCESSFULL_C3D="OK C3D";
 const ENTER = "\n";
 
 
@@ -57,6 +58,41 @@ const analizarXML= function (cadEntrada){
     }
 };
 
+
+/**
+ * Metodo que analiza el c3d
+ * @param entrada
+ */
+const analizarC3D= function (cadEntrada){
+    try {
+        InterfazGrafica.print("Iniciando ejecucion: "+new Date());
+        ListaErrores.InicializarC3D();
+        ReporteOptimizacion.InicializarReporteOptimizacion();
+        try {
+            let rootC3D = Codigo3dAnalyzer.parse(cadEntrada);
+            if(rootC3D){
+                console.info('Se genero correctamente el árbol. ');
+                if(rootC3D instanceof Optimizador){
+                   let codigoOptimizado =  rootC3D.optimizarCodigo();
+                    if(codigoOptimizado!=null){
+                        InterfazGrafica.printOptimizacion(codigoOptimizado);
+                    }
+                }
+            }else{
+                throw "No se pudo generar correctamente el árbol. ";
+            }
+            if(ListaErrores.hayErroresC3D()){
+                InterfazGrafica.print("Hubieron errores durante el analisis de C3D")
+            }
+        }catch (e){
+            throw ('Error al generar el AST. '+e);
+        }
+        InterfazGrafica.print(CONSOLE_MESSAGE_SUCCESSFULL_C3D);
+    }catch (e){
+        InterfazGrafica.print(e);
+        console.log(e);
+    }
+};
 
 /**
  * Metodo genera el aST ascendente
@@ -178,6 +214,7 @@ const analizarXQUERY= function (cadEntrada){
         InterfazGrafica.print("Iniciando ejecucion: "+new Date());
         try {
             ListaErrores.InicializarXquery();
+            ListaFunciones.limipiarFunciones();
             let rootXquery = XqueryAnalyzer.parse(cadEntrada);
             if(rootXquery){
                 console.info('Se genero correctamente el árbol xquery. ');
@@ -289,9 +326,10 @@ const ejecutarXquery= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXQUERY(cadEntradaXpath);
-        let listaDeImpresion = _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
-        let result = XpathUtil.convertirNodosXqueryATexto(listaDeImpresion);
-        InterfazGrafica.print(result);
+        _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        if(ListaErrores.hayErroresXquery()){
+            InterfazGrafica.print("Hubieron errores durante la ejecucion en XQUERY");
+        }
         InterfazGrafica.print('FIN EJECUCION');
     }catch (e){
         InterfazGrafica.print('error en ejecucion: '+e);
@@ -314,12 +352,18 @@ function  generar3D(cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXPATH(cadEntradaXpath);
+        if(ListaErrores.hayErroresXml()){
+            InterfazGrafica.print('Se encontraron errores durante la generacion. Se recupero. Ver tabla de erroes XML.');
+        }
+
         CodeUtil.init();
         tablaSimbolosXml = _tsXml;
         tablaSimbolosXml.cargarXml_3d();
         CodeUtil.comenzarPrograma();
         let rootXpath = _rootXpath.traducir3D("","2");
         CodeUtil.finalizarProgrma();
+        InterfazGrafica.print(CodeUtil._cadSalida);
+
         InterfazGrafica.print('Fin de generación');
     }catch (e){
         InterfazGrafica.print('error en ejecucion: '+e);
@@ -333,4 +377,30 @@ function descargarArchivo(cadEntradaXml, cadEntradaXpath){
     var blob = new Blob([CodeUtil._cadSalida], {type: "text/plain;charset=utf-8"});
     saveAs(blob, "XPath.c");
 
+};
+
+
+
+function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
+    var tablaSimbolosXml;
+    try {
+        analizarXML(cadEntradaXml);
+        analizarXQUERY(cadEntradaXpath);
+        if(ListaErrores.hayErroresXml()){
+            InterfazGrafica.print('Se encontraron errores durante la generacion. Se recupero. Ver tabla de erroes XML.');
+        }
+        CodeUtil.init();
+        tablaSimbolosXml = _tsXml;
+        tablaSimbolosXml.cargarXml_3d();
+        CodeUtil.comenzarPrograma();
+        let rootXquery = _rootXquery;//Ejecutar Xquery
+        CodeUtil.finalizarProgrma();
+        InterfazGrafica.print(CodeUtil._cadSalida);
+
+
+        InterfazGrafica.print('Fin de generación');
+    }catch (e){
+        InterfazGrafica.print('error en ejecucion: '+e);
+        console.log(e);
+    }
 };

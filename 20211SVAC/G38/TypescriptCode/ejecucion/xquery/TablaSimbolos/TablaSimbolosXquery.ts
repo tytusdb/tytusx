@@ -70,6 +70,15 @@ class TablaSimbolosXquery {
     }
 
 
+    public obtenerTablaGlobal(): TablaSimbolosXquery{
+        for(let actual : TablaSimbolosXquery = this; actual != null; actual = actual.tsPadre  ){
+            if(actual.esGlobal){
+                return actual;
+            }
+        }
+        return null;
+    }
+
     get tsPadre(): TablaSimbolosXquery {
         return this._tsPadre;
     }

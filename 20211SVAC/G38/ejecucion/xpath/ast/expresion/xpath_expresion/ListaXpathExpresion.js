@@ -35,19 +35,34 @@ class ListaXpathExpresion extends ExpresionAncestor {
         let tmpLista = CodeUtil.generarTemporal();
         CodeUtil.print(tmpLista + " = Stack[(int)" + tmpPosLista + "];");
         //CodeUtil.guardarTemporales(tmpPosLista,tmpLista);
+        CodeUtil.printComment("Creamos una nueva lista para concatenar las respuesetas de XpathExpressions");
+        let tmpListaXpathXpressions = CodeUtil.generarTemporal();
+        CodeUtil.printWithComment("SP = SP + " + sizeScope + " ;", "Se cambia ambito");
+        CodeUtil.print("crearLista();");
+        CodeUtil.print(tmpListaXpathXpressions + " = Stack[SP];");
+        CodeUtil.printWithComment("SP = SP - " + sizeScope + " ;", "Se recupera ambito");
         let nuevaLista = "";
         this.expresionesXpath.forEach(function (expression) {
             nuevaLista = expression.traducir3D(tmpLista, sizeScope);
+            CodeUtil.printWithComment("SP = SP + " + sizeScope + " ;", "Se cambia ambito");
+            let tmpPosParametro1 = CodeUtil.generarTemporal();
+            let tmpPosParametro2 = CodeUtil.generarTemporal();
+            CodeUtil.print(tmpPosParametro1 + " = SP + 0 ; ");
+            CodeUtil.print(tmpPosParametro2 + " = SP + 1 ; ");
+            CodeUtil.print("Stack[(int)" + tmpPosParametro1 + "] = " + tmpListaXpathXpressions + " ;");
+            CodeUtil.print("Stack[(int)" + tmpPosParametro2 + "] = " + nuevaLista + " ;");
+            CodeUtil.printWithComment("concatenarListas();", "Concatenamos las listas Xpath");
+            CodeUtil.print(tmpListaXpathXpressions + " = Stack[SP]; ");
+            CodeUtil.printWithComment("SP = SP - " + sizeScope + " ;", "Se recupera ambito");
         });
-        //CodeUtil.recuperarTemporales(tmpPosLista,tmpLista);
         //Imprimimos la lista
         CodeUtil.printComment("Imprimimos lista resultante");
         CodeUtil.print("SP = SP + " + sizeScope + " ; ");
         //CodeUtil.guardarTemporales(tmpPosLista,tmpLista);
-        CodeUtil.printWithComment("Stack[SP] = " + nuevaLista + "; ", "Imprimimos la lista");
+        CodeUtil.printWithComment("Stack[SP] = " + tmpListaXpathXpressions + "; ", "Imprimimos la lista");
         CodeUtil.print("imprimirListaObjetos();");
         //CodeUtil.recuperarTemporales(tmpPosLista,tmpLista);
-        CodeUtil.print("SP = SP + " + sizeScope + " ; ");
+        CodeUtil.print("SP = SP - " + sizeScope + " ; ");
         return "";
     }
     validarMerge(listaAntigua, listaNueva) {

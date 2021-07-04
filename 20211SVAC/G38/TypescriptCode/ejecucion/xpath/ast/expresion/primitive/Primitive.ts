@@ -21,4 +21,15 @@ class Primitive extends ExpresionAncestor{
         return this.valor;
     }
 
+    traducir3D(ambito:string, sizeScope:string):string{
+        let temporal = CodeUtil.generarTemporal();
+        if(this.tipo.esNumero()){
+            CodeUtil.printWithComment(temporal + " = "+this.valor + " ;" ,"Guardamos en un temporal el valor");
+        }else{
+            CodeUtil.printWithComment(temporal + " = -1 ;" ,"Valores no represntativos como indices, no implementado");
+        }
+        return temporal;
+    }
+
+
 }

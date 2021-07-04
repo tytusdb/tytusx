@@ -21,6 +21,14 @@ class Asignacion implements InstruccionXquery{
             return;
         }
         let tipo = this.expresion.getTipo(ent,xmlData);
+        let valor = this.expresion.getValor(ent,xmlData);
+        if(tipo.esXpath()){
+            let primitivo =  XpathUtil.obtenerPrimitivoFromXpath(valor);
+            if(primitivo!=null && primitivo!= undefined){
+                tipo = primitivo.getTipo(null,null);
+                valor = primitivo.getValor(null,null);
+            }
+        }
         if(!simbolo.tipo.esEquivalente(tipo)){
             ListaErrores.AgregarErrorXQUERY(
                 CrearError.errorSemantico("El tipo de dato en la tabla de simbolos Tipo: "+simbolo.tipo.toString()
@@ -28,7 +36,6 @@ class Asignacion implements InstruccionXquery{
             );
             return;
         }
-        let valor = this.expresion.getValor(ent,xmlData);
         this.modifySimbolo(valor, tipo, ent, xmlData);
     }
 

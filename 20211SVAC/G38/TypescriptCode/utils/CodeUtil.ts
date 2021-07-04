@@ -334,6 +334,7 @@ class CodeUtil{
         this.print(tmpPosReferencia+" = " + tmpParametro1+" + 1 ;");
         var tmpApuntador = this.generarTemporal();
         this.print(tmpApuntador + " = Heap[(int)"+tmpPosReferencia+"];" );
+        this.printWithComment("if ( "+tmpObjeto+" == "+tmpParametro2+" ) goto "+lFin+" ;","Si el objeto ya existe no se inserta");
         this.print("if ( "+tmpObjeto+" != -1) goto "+lValidarApuntador+" ;");
         this.printComment("La lista esta vacia, se inserta el primer objeto");
         //Guardamos el objeto en la primera posicion
@@ -473,6 +474,7 @@ class CodeUtil{
         this.printWithComment("printLnString();","Call: Imprimri valor atributo");
         //this.recuperarTemporales(tmpPostParametro1,tmpValorAtributo);
         this.print("SP = SP - 2 ; ");
+        this.print("goto "+etiquetaFin+" ;");
         this.printComment("Finaliza impresion atributo");
 
         //**********************************************IMPRESION DE CONTENIDO
@@ -934,20 +936,23 @@ class CodeUtil{
         this.print(tmpPosObjeto1 + " = "+ tmpParametro1 +" ;")
         let tmpPosReferencia1 = this.generarTemporal();
         this.print(tmpPosReferencia1+ " = "+tmpParametro1+" + 1 ;")
+        let tmpReferencia1 = this.generarTemporal();
+        this.print(tmpReferencia1+" = Heap[(int)"+tmpPosReferencia1+"];")
         let tmpObjeto1 = this.generarTemporal()
         this.print(tmpObjeto1+" = Heap[(int)"+tmpPosObjeto1+"];")
         this.printWithComment("if( "+tmpObjeto1+" == -1) goto "+lSiguiente+" ;","Si es -1 continuamos con la otra lista en lSiguiente")
         this.printComment("Concatenamos objeto 1")
+        this.print("SP = SP + 2 ;")
         let tmpArg1Obj1 = this.generarTemporal()
         this.print(tmpArg1Obj1+" = SP + 0 ;")
         let tmpArg2Obj1 = this.generarTemporal()
         this.print(tmpArg2Obj1+" = SP + 1 ;")
-        this.print("SP = SP + 2 ;")
         this.print("Stack[(int)"+tmpArg1Obj1+"] = "+tmpLista+";")
         this.print("Stack[(int)"+tmpArg2Obj1+"] = "+tmpObjeto1+";")
         this.print("concatenarObjeto() ;")
         this.print("SP = SP - 2 ;")
-        this.print(tmpParametro1+" = "+tmpPosReferencia1+" ;")
+        this.print("if ( "+tmpReferencia1+" == -1  ) goto "+lSiguiente+" ; ");
+        this.print(tmpParametro1+" = "+tmpReferencia1+" ;")
         this.print("goto "+lLista1+" ;")
         this.print("")
         this.printWithComment(lSiguiente+":","Lsiguiente")
@@ -957,20 +962,23 @@ class CodeUtil{
         this.print(tmpPosObjeto2+" = "+tmpParametro2+" ;")
         let tmpPosReferencia2 = this.generarTemporal()
         this.print(tmpPosReferencia2+" = "+tmpParametro2+" + 1 ;")
+        let tmpReferencia2 = this.generarTemporal();
+        this.print(tmpReferencia2 + " = Heap[(int)"+tmpPosReferencia2+"];")
         let tmpObjeto2 = this.generarTemporal();
         this.print(tmpObjeto2+" = Heap[(int)"+tmpPosObjeto2+"];")
         this.printWithComment("if( "+tmpObjeto2+" == -1 ) goto "+lFin+" ;","Si es -1 terminamos y retornamos la lista final")
         this.printComment("Concatenamos objeto 2")
+        this.print("SP = SP + 2 ;")
         let tmpArg1Obj2 = this.generarTemporal()
         this.print(tmpArg1Obj2+" = SP + 0 ;")
         let tmpArg2Obj2 = this.generarTemporal()
         this.print(tmpArg2Obj2+" = SP + 1 ;")
-        this.print("SP = SP + 2 ;")
         this.print("Stack[(int)"+tmpArg1Obj2+"] = "+tmpLista+" ;")
         this.print("Stack[(int)"+tmpArg2Obj2+"] = "+tmpObjeto2+" ;")
         this.print("concatenarObjeto() ;")
         this.print("SP = SP - 2 ;")
-        this.print(tmpParametro1+" = "+tmpPosReferencia1+" ;")
+        this.print("if ( "+tmpReferencia2+" == -1  ) goto "+lFin+" ; ");
+        this.print(tmpParametro2+" = "+tmpReferencia2+" ;")
         this.print("goto "+lLista2+" ;")
         this.print("")
         this.print(lFin+":")

@@ -14,6 +14,9 @@ class Suma extends ExpresionAncestor {
         if (tipoIzquierda.esNumero() && tipoDerecha.esNumero()) {
             tipo = new Tipo(TipoDato.numero);
         }
+        else if (tipoIzquierda.esCadena() && tipoDerecha.esCadena()) {
+            tipo = new Tipo(TipoDato.cadena);
+        }
         else if (!tipoIzquierda.esError() && !tipoDerecha.esError()) {
             ListaErrores.AgregarErrorXPATH(CrearError.tiposInvalidos("Suma", tipoIzquierda, tipoDerecha, this.linea, this.columna));
         }

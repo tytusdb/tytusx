@@ -93,9 +93,18 @@ class RootIdentifier extends ExpresionAncestor {
         CodeUtil.printWithComment("SP = SP - "+sizeScope + " ;","Se recupera ambito")
         */
     }
+    getIndexPredicate() {
+        if (this.predicatesList == undefined || this.predicatesList == null || this.predicatesList.length == 0) {
+            return CodeUtil.VAL_INDEX_DEFAULT;
+        }
+        let index = this.predicatesList[0].traducir3D(null, null);
+        return index;
+    }
     traducir3D(ambito, sizeScope) {
         CodeUtil.printComment("Traduccion de RootIdentifier :" + this.identifier);
         let posCadena = CodeUtil.guardarTexto(this.identifier);
+        CodeUtil.printComment("Generamos predicados");
+        let index = this.getIndexPredicate();
         CodeUtil.printComment("Buscamos en la lista por nombre");
         CodeUtil.printWithComment("SP = SP + " + sizeScope + " ;", "Cambiamos ambito");
         //Calculamos las posiciones
@@ -111,7 +120,7 @@ class RootIdentifier extends ExpresionAncestor {
         CodeUtil.print("Stack[(int)" + tmpPosPar1 + "] = " + ambito + " ;");
         CodeUtil.print("Stack[(int)" + tmpPosPar2 + "] = " + TipoDato3D.objeto + " ;");
         CodeUtil.print("Stack[(int)" + tmpPosPar3 + "] = " + posCadena + " ;");
-        CodeUtil.print("Stack[(int)" + tmpPosPar4 + "] = " + CodeUtil.VAL_INDEX_DEFAULT + " ;");
+        CodeUtil.print("Stack[(int)" + tmpPosPar4 + "] = " + index + " ;");
         CodeUtil.print("buscarByPadreTipoValorIndex();");
         let tmpPosReturn = CodeUtil.generarTemporal();
         CodeUtil.printWithComment(tmpPosReturn + " = Stack[SP] ;", "Se recupera el return");

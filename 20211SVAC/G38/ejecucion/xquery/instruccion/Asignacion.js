@@ -14,12 +14,19 @@ class Asignacion {
             return;
         }
         let tipo = this.expresion.getTipo(ent, xmlData);
+        let valor = this.expresion.getValor(ent, xmlData);
+        if (tipo.esXpath()) {
+            let primitivo = XpathUtil.obtenerPrimitivoFromXpath(valor);
+            if (primitivo != null && primitivo != undefined) {
+                tipo = primitivo.getTipo(null, null);
+                valor = primitivo.getValor(null, null);
+            }
+        }
         if (!simbolo.tipo.esEquivalente(tipo)) {
             ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("El tipo de dato en la tabla de simbolos Tipo: " + simbolo.tipo.toString()
                 + " no es equivalente al tipo de la expresion Tipo: " + tipo.toString(), this.linea, this.columna));
             return;
         }
-        let valor = this.expresion.getValor(ent, xmlData);
         this.modifySimbolo(valor, tipo, ent, xmlData);
     }
     modifySimbolo(valor, tipo, ent, xmlData) {

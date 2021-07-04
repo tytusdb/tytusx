@@ -36,8 +36,8 @@ class Relational extends ExpresionAncestor{
         if(valorIzquierda instanceof TablaSimbolos){
             valorIzquierda = valorIzquierda.getContentRow();
             if(valorIzquierda != null ){
-                if(valorIzquierda.getTipo(ent).esNumero())
-                    valorIzquierda = valorIzquierda.getValor(ent);
+                if(valorIzquierda.getTipo(tsXquery,ent).esNumero())
+                    valorIzquierda = valorIzquierda.getValor(tsXquery,ent);
                 else{
                     //error de tipo
                     ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  "+this.relationalOperator,this.linea,this.columna));
@@ -52,8 +52,8 @@ class Relational extends ExpresionAncestor{
         if(valorDerecha instanceof TablaSimbolos){
             valorDerecha = valorDerecha.getContentRow();
             if(valorDerecha != null ){
-                if(valorDerecha.getTipo(ent).esNumero())
-                    valorDerecha = valorDerecha.getValor(ent);
+                if(valorDerecha.getTipo(tsXquery,ent).esNumero())
+                    valorDerecha = valorDerecha.getValor(tsXquery,ent);
                 else{
                     //error de tipo
                     ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  "+this.relationalOperator,this.linea,this.columna));

@@ -13,7 +13,6 @@ class Imprimir implements NodoXquery, InstruccionXquery{
     ejecutar(ent: TablaSimbolosXquery, xmlData: TablaSimbolos): any {
         let valor = this.expresion.getValor(ent,xmlData);
         InterfazGrafica.print(valor);
-        return valor;
     }
 
 }

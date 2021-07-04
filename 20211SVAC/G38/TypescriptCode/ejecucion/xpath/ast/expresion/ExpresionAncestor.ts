@@ -14,7 +14,7 @@ class ExpresionAncestor implements Expresion{
     getValor(ent: TablaSimbolosXquery, xmlData: TablaSimbolos): any {
     }
 
-    traducir3D(ambito:string, sizeScope:string):string{
+    traducir3D(ambito:string, sizeScope:string):any{
         throw new Error("Metodo 'traducir' no implementado.")
     }
 

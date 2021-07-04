@@ -291,6 +291,26 @@ class TablaSimbolos {
                 content = row.obtenerTexto();
                 break;
             }
+            else if (row.tipo.esPrimitivo() && row.nodo instanceof XmlContent) {
+                content = new Primitive(row.nodo.value, row.tipo, 0, 0);
+                break;
+            }
+        }
+        return content;
+    }
+    getPrimitiveValueRow() {
+        let content = null;
+        if (this._listaSimbolos === undefined || this._listaSimbolos == null)
+            throw Error('Lista de simbolos es nula');
+        for (let row of this._listaSimbolos) {
+            if (row.tipo.esAtributo()) {
+                content = row.obtenerTexto();
+                break;
+            }
+            else if (row.tipo.esPrimitivo() && row.nodo instanceof XmlContent) {
+                content = new Primitive(row.nodo.value, row.tipo, 0, 0);
+                break;
+            }
         }
         return content;
     }

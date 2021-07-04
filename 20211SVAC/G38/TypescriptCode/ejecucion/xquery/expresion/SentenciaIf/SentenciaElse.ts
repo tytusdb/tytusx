@@ -10,8 +10,10 @@ class SentenciaElse implements InstruccionXquery, NodoXquery{
     }
 
     ejecutar(ent: TablaSimbolosXquery, xmlData: TablaSimbolos): any {
+        let entornoElse = new TablaSimbolosXquery(ent,"entorno else");
+
         for(let sentencia of this.sentencias){
-            sentencia.ejecutar(ent,xmlData);
+            sentencia.ejecutar(entornoElse,xmlData);
         }
     }
 

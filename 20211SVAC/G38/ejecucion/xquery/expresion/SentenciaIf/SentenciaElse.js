@@ -6,8 +6,9 @@ class SentenciaElse {
         this.columna = columna;
     }
     ejecutar(ent, xmlData) {
+        let entornoElse = new TablaSimbolosXquery(ent, "entorno else");
         for (let sentencia of this.sentencias) {
-            sentencia.ejecutar(ent, xmlData);
+            sentencia.ejecutar(entornoElse, xmlData);
         }
     }
 }

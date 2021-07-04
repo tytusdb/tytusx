@@ -40,6 +40,11 @@ class XpathExpresion extends ExpresionAncestor{
             if(entornoActual == null ){
                 entornoActual = expression.traducir3D(tmpPadre,sizeScope);//Si se ejecuta la primera vez
             }else{
+                let nuevaLista = CodeUtil.generarTemporal();
+                CodeUtil.print("SP = SP + "+sizeScope+";")
+                CodeUtil.print("crearLista();")
+                CodeUtil.print(nuevaLista + " = Stack[SP]; ")
+                CodeUtil.print("SP = SP - "+sizeScope+";")
                 let temp = CodeUtil.generarTemporal();
                 CodeUtil.print(temp + " = " + entornoActual + ";")
                 let lInicio = CodeUtil.generarEtiqueta();
@@ -52,9 +57,21 @@ class XpathExpresion extends ExpresionAncestor{
                 CodeUtil.print(tmpPadre + " = Heap[(int)"+temp+"] ;");
                 CodeUtil.print("if ( "+tmpPadre+" == -1 ) goto "+lFinal+" ; ")
                 entornoActual = expression.traducir3D(tmpPadre,sizeScope);
+                CodeUtil.printComment("Guardamos entorno actual en la lsita en blanco ")
+
+                CodeUtil.print("SP = SP + "+sizeScope+";")
+                CodeUtil.print("Stack[SP] = "+nuevaLista+";")
+                let tmp = CodeUtil.generarTemporal()
+                CodeUtil.print(tmp + " = SP + 1 ;")
+                CodeUtil.print("Stack[(int)"+tmp+"] = "+entornoActual + "; ")
+                CodeUtil.print("concatenarListas();")
+                CodeUtil.print(nuevaLista + " = Stack[SP];")
+                CodeUtil.print("SP = SP - "+sizeScope+";")
+
                 CodeUtil.print(temp + " = "+ tmpPosSiguienteObjeto+ ";");
                 CodeUtil.print("goto "+lInicio + "; ")
                 CodeUtil.print(lFinal + ": ")
+                entornoActual = nuevaLista;
 
             }
 

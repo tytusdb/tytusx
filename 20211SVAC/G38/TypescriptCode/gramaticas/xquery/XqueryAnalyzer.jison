@@ -12,6 +12,10 @@
 \s+                   /* skip whitespace */
 
 /*WORD RESERVED*/
+'substring'                 return 'substring_t';
+'upper-case'                return 'upper-case_t';
+'lower-case'                return 'lower-case_t';
+'number'                    return 'number_t';
 'imprimir'                  return 'imprimir';
 'declare'                   return 'declare_terminal';
 'function'                  return 'function_terminal';
@@ -100,7 +104,7 @@
 /* Number literals */
 (([0-9]+"."[0-9]*)|("."[0-9]+))     return 'DoubleLiteral';
 [0-9]+                              return 'IntegerLiteral';
-"$"[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]|"_"|"-")*			return 'variable'
+"$"[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]|"_")*			return 'variable'
 [a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ]|"_"|"-")*			return 'identifier'
 
 .                                   {
@@ -127,7 +131,6 @@ S   :  XQUERY_XPATH EOF { $$ = $1; return $$; }
     ;
 
 XQUERY_XPATH : XQUERY { $$ = new XqueryList($1); }
-             | PREDICATE { $$ = new XqueryXpath($1); }
              ;
 
 XQUERY: XQUERY INSTRUCCION { $$ = $1; $$.push($2); }
@@ -141,7 +144,7 @@ INSTRUCCION : DECLARACION { $$ = $1; }
             | IF_XQUERY { $$ = $1; }
             | RETURN_QUERY { $$ = $1; }
             | DECLARACION_FUNCION { $$ = $1; }
-            | LLAMADA_FUNCION { $$ = $1; }
+            | LLAMADA_FUNCION_INSTRUCCION { $$ = $1; }
             | IMPRESION { $$ = $1; }
             ;
 
@@ -155,6 +158,7 @@ SENTENCIA  :  DECLARACION { $$ = $1; }
             | IMPRESION { $$ = $1; }
             | FLOWER { $$ = $1; }
             | FUNCIONES_NATIVAS_XQUERY { $$ = $1; }
+            | LLAMADA_FUNCION_INSTRUCCION { $$ = $1; }
             | IF_XQUERY { $$ = $1; }
             ;
 
@@ -165,7 +169,6 @@ INSTRUCCION_RETORNO : FLOWER { $$ = $1; }
                   | FUNCIONES_NATIVAS_XQUERY { $$ = $1; }
                   | IF_XQUERY { $$ = $1; }
                   | PREDICATE { $$ = $1; }
-                  | LLAMADA_FUNCION { $$ = $1; }
                   ;
 
 DECLARACION : let variable colon equal PREDICATE { $$ = new Declaracion($2,$5,@2.first_line,@2.first_column); }
@@ -174,49 +177,65 @@ DECLARACION : let variable colon equal PREDICATE { $$ = new Declaracion($2,$5,@2
 ASIGNACION  : variable colon equal PREDICATE { $$ = new Asignacion($1,$4,@1.first_line,@1.first_column); }
             ;
 
-LLAMADA_FUNCION : local colon identifier lparen rparen
-                | local colon identifier lparen LISTA_VALORES rparen
-                ;
+LLAMADA_FUNCION_INSTRUCCION : local colon identifier lparen rparen { $$ = new LlamadaFuncionInstruccion($3,[],@1.first_line,@1.first_column); }
+                            | local colon identifier lparen LISTA_VALORES rparen { $$ = new LlamadaFuncionInstruccion($3,$5,@1.first_line,@1.first_column); }
+                            ;
 
-LISTA_VALORES : LISTA_VALORES coma PREDICATE
-              | PREDICATE
+LLAMADA_FUNCION_EXPRESION : local colon identifier lparen rparen { $$ = new LlamadaFuncion($3,[],@1.first_line,@1.first_column); }
+                          | local colon identifier lparen LISTA_VALORES rparen { $$ = new LlamadaFuncion($3,$5,@1.first_line,@1.first_column); }
+                          ;
+
+LISTA_VALORES : LISTA_VALORES coma PREDICATE { $$ = $1; $$.push($3); }
+              | PREDICATE { $$ = []; $$.push($1); }
               ;
 
 DECLARACION_FUNCION : declare_terminal function_terminal local colon
                       identifier lparen LISTA_PARAMETROS rparen as_terminal TIPO_DATO
-                      lllave XQUERY rllave semicolon
+                      lllave SENTENCIAS rllave semicolon { $$ = new Funcion($5,$7,$10,$12,@1.first_line,@1.first_column); }
                     | declare_terminal function_terminal local colon
                       identifier lparen rparen as_terminal TIPO_DATO
-                      lllave XQUERY rllave semicolon
+                      lllave SENTENCIAS rllave semicolon { $$ = new Funcion($5,[],$9,$11,@1.first_line,@1.first_column); }
                     ;
 
-FLOWER : for_terminal variable in LISTA-XPATH where PREDICATE order by PREDICATE RETURN_QUERY
-       | for_terminal variable in LISTA-XPATH where PREDICATE RETURN_QUERY
-       | for_terminal variable in LISTA-XPATH order by PREDICATE RETURN_QUERY
-       | for_terminal variable in LISTA-XPATH RETURN_QUERY
+LISTA_PARAMETROS : LISTA_PARAMETROS coma PARAMETRO { $$ = $1; $$.push($3); }
+                 | PARAMETRO { $$ = []; $$.push($1); }
+                 ;
+
+PARAMETRO : variable as_terminal TIPO_DATO { $$ = new Parametro($1,$3,@1.first_line,@1.first_column); }
+          ;
+
+FLOWER : for_terminal variable in LISTA-XPATH where variable PREDICATE order by PREDICATE RETURN_QUERY { var sentenciaXpath = new ListaXpathExpresion($4, @1.first_line,@1.first_column);
+                                                                                                         var filterNode = new FilterResult($6,$7,@6.first_line,@6.first_column);
+                                                                                                         $$ = new SentenciaFor($2,sentenciaXpath,filterNode,$10,$11,@1.first_line,@1.first_column);
+                                                                                                       }
+       | for_terminal variable in LISTA-XPATH where variable PREDICATE RETURN_QUERY { var sentenciaXpath = new ListaXpathExpresion($4, @1.first_line,@1.first_column);
+                                                                                      var filterNode = new FilterResult($6,$7,@6.first_line,@6.first_column);
+                                                                                      $$ = new SentenciaFor($2,sentenciaXpath,filterNode,null,$8,@1.first_line,@1.first_column);
+                                                                                    }
+       | for_terminal variable in LISTA-XPATH order by PREDICATE RETURN_QUERY { var sentenciaXpath = new ListaXpathExpresion($4, @1.first_line,@1.first_column);
+                                                                                $$ = new SentenciaFor($2,sentenciaXpath,null,$7,$8,@1.first_line,@1.first_column); }
+       | for_terminal variable in LISTA-XPATH RETURN_QUERY { var sentenciaXpath = new ListaXpathExpresion($4, @1.first_line,@1.first_column);
+                                                             $$ = new SentenciaFor($2,sentenciaXpath,null,null,$5,@1.first_line,@1.first_column); }
 
        | for_terminal variable at variable in LISTA-XPATH where PREDICATE order by PREDICATE RETURN_QUERY
        | for_terminal variable at variable in LISTA-XPATH where PREDICATE RETURN_QUERY
        | for_terminal variable at variable in LISTA-XPATH order by PREDICATE RETURN_QUERY
        | for_terminal variable at variable in LISTA-XPATH RETURN_QUERY
 
-       | for_terminal LISTA_VALORES_FLOWER where PREDICATE order by PREDICATE RETURN_QUERY
-       | for_terminal LISTA_VALORES_FLOWER where PREDICATE RETURN_QUERY
-       | for_terminal LISTA_VALORES_FLOWER order by PREDICATE RETURN_QUERY
-       | for_terminal LISTA_VALORES_FLOWER RETURN_QUERY
+       | for_terminal LISTA_VALORES_FLOWER RETURN_QUERY { $$ = new SentenciaForNumerica($2,$3,@1.first_line,@1.first_column); }
        ;
 
-LISTA_VALORES_FLOWER : LISTA_VALORES_FLOWER coma VALOR_FLOWER
-                     | VALOR_FLOWER
+LISTA_VALORES_FLOWER : LISTA_VALORES_FLOWER coma VALOR_FLOWER { $$ = $1; $$.push($3); }
+                     | VALOR_FLOWER { $$ = []; $$.push($1); }
                      ;
 
-VALOR_FLOWER : variable in lparen IntegerLiteral to IntegerLiteral rparen
-             | variable in lparen LISTA_NUMEROS rparen
+VALOR_FLOWER : variable in lparen IntegerLiteral to IntegerLiteral rparen { $$ = new ValorFlower($1,null,Number($4),Number($6),@1.first_line,@1.first_column); }
+             | variable in lparen LISTA_NUMEROS rparen { $$ = new ValorFlower($1,$4,null,null,@1.first_line,@1.first_column); }
               ;
 
 
-LISTA_NUMEROS : LISTA_NUMEROS coma IntegerLiteral
-              | IntegerLiteral
+LISTA_NUMEROS : LISTA_NUMEROS coma IntegerLiteral { $$ = $1; $$.push(Number($3)); }
+              | IntegerLiteral { $$ = []; $$.push(Number($1)); }
               ;
 
 IF_XQUERY : SENTENCIA_IF  LISTA_ELSE_IF { $$ = $2;  $$.agregarPrimerIf($1); }
@@ -231,22 +250,15 @@ LISTA_ELSE_IF : LISTA_ELSE_IF else SENTENCIA_IF { $$=$1; $$.agregarElseIf($3); }
               | else lparen SENTENCIAS  rparen { $$ = new InstruccionIf(@1.first_line,@1.first_column); $$.agregarElse(new SentenciaElse($3,@1.first_line,@1.first_column)); }
               ;
 
-RETURN_QUERY :  return_terminal INSTRUCCION_RETORNO
+RETURN_QUERY :  return_terminal INSTRUCCION_RETORNO { $$ = new Retorno($2,@1.first_line,@1.first_column); }
              ;
 
-LISTA_PARAMETROS : LISTA_PARAMETROS coma PARAMETRO
-                 | PARAMETRO
-                 ;
-
-PARAMETRO : variable as_terminal TIPO_DATO
-          ;
-
-TIPO_DATO : xs colon anyURI question
-          | xs colon decimal_t question
-          | xs colon float_t question
-          | xs colon boolean_t question
-          | xs colon string_t question
-          | xs colon int_t question
+TIPO_DATO : xs colon anyURI question { $$ = new Tipo(TipoDato.xpathValue); }
+          | xs colon decimal_t question { $$ = new Tipo(TipoDato.numero); }
+          | xs colon float_t question { $$ = new Tipo(TipoDato.numero); }
+          | xs colon boolean_t question { $$ = new Tipo(TipoDato.booleano); }
+          | xs colon string_t question { $$ = new Tipo(TipoDato.cadena); }
+          | xs colon int_t question { $$ = new Tipo(TipoDato.numero); }
           ;
 
 FUNCIONES_NATIVAS_XQUERY : data lparen LISTA-XPATH  rparen
@@ -476,7 +488,16 @@ PREDICATE:  EXPRESION_NUMERICA { ReporteGramatical.agregarProduccionXpath("PREDI
                         $$ = $1; }
           | lparen PREDICATE rparen {   ReporteGramatical.agregarProduccionXpath("PREDICADO -> ( PREDICADO )","PREDICADO = PREDICADO1;");
                                         $$ = $2; }
+          | CUSTOM_FUNCTIONS { $$ = $1; }
           ;
+
+CUSTOM_FUNCTIONS : string_t lparen PREDICATE rparen { $$ = new StringFunction($3,@1.first_line,@1.first_column); }
+                 | substring_t lparen PREDICATE  coma PREDICATE coma PREDICATE rparen { $$ = new SubstringFunction($3,$5,$7,@1.first_line,@1.first_column); }
+                 | substring_t lparen PREDICATE  coma PREDICATE rparen { $$ = new SubstringFunction($3,$5,null,@1.first_line,@1.first_column); }
+                 | upper-case_t lparen PREDICATE rparen { $$ = new UpperLowerCaseFunction($3,true,@1.first_line,@1.first_column); }
+                 | lower-case_t lparen PREDICATE rparen { $$ = new UpperLowerCaseFunction($3,false,@1.first_line,@1.first_column); }
+                 | number_t lparen PREDICATE rparen { $$ = new NumberFunction($3,@1.first_line,@1.first_column); }
+                 ;
 
 EXPRESION_LOGICA: PREDICATE or PREDICATE {  ReporteGramatical.agregarProduccionXpath("PREDICADO -> PREDICADO or PREDICADO","PREDICADO = new OrLogica(PREDICADO1,PREDICADO2);");
                                             $$ = new OrLogica($1,$3,@2.first_line,@2.first_column); }
@@ -541,4 +562,5 @@ PRIMITIVA: LISTA-XPATH { ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> 
                             $$ = new Primitive(Number($1), new Tipo(TipoDato.numero),@1.first_line, @1.first_column ); }
          | str {  ReporteGramatical.agregarProduccionXpath("PRIMITIVA -> cadena","PRIMITIVA = new PRIMITIVA(Tipo.cadena,cadena);");
                             $$ = new Primitive($1.substr(1,$1.length-2), new Tipo(TipoDato.cadena),@1.first_line, @1.first_column ); }
+         | LLAMADA_FUNCION_EXPRESION { $$ = $1; }
          ;
