@@ -2,6 +2,7 @@ function interpretar(intruccion,entorno) {
     
     let ejecucion=new Consulta(entorno);
     ejecucion.ejecutar(intruccion);
+    console.log(traductorC3D.obtenerCodigo());
 }
 let graphviz_code="";
 function generarAST(intruccion){
