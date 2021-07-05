@@ -44,7 +44,6 @@ export default class metodo implements instruccion_3d{
        for (let j = i+1; j < this.intrucciones_3d.length; j++){
            if(!(this.intrucciones_3d[j] instanceof etiqueta)){
              listaparaEliminar.push(j);
-             alert(j);
            }else{
              this.eliminarCodigo(listaparaEliminar);
              listaparaEliminar = [];
@@ -65,12 +64,10 @@ export default class metodo implements instruccion_3d{
         try{
           comprobar = "return " + temp.getLogica();
           result = new Function(comprobar)();
-          alert(result);
         }catch (e){
 
         }
         if(result == true){
-          alert("entre caso 3");
           InsertarOptimizacion("regla 3", "se remplazo:" + this.intrucciones_3d[i].getText() + " por goto " + temp.etiqueta)
           this.intrucciones_3d[i] = new goto_expresion(temp.etiqueta);
         }
@@ -87,12 +84,10 @@ export default class metodo implements instruccion_3d{
         try{
           comprobar = "return " + temp.getLogica();
           result = new Function(comprobar)();
-          alert(result);
         }catch (e){
 
         }
         if(result == false){
-          alert("entre caso 4");
           InsertarOptimizacion("regla 4", "se elimino instruccion no se entra al " + this.intrucciones_3d[i].getText());
           this.intrucciones_3d[i] = new eliminado();
         }
@@ -116,8 +111,10 @@ export default class metodo implements instruccion_3d{
             if( clase1.variable == clase2.izq && clase2.variable == clase1.izq){
               if(clase1.der == '' && clase2.der == "" && clase1.operador == "" && clase2.operador == "" ) {
                   if(this.eliminarAsignacion(clase1,numero1,clase2,numero2)){
-                    InsertarOptimizacion("regla 5" , "se elimino asignacion redundante " + this.intrucciones_3d[j].getText());
-                    this.intrucciones_3d[j] = new eliminado();
+                    if(!this.intrucciones_3d[j].getText().includes("[")){
+                      InsertarOptimizacion("regla 5" , "se elimino asignacion redundante " + this.intrucciones_3d[j].getText());
+                      this.intrucciones_3d[j] = new eliminado();
+                    }
                   }
               }
             }
@@ -216,8 +213,6 @@ export default class metodo implements instruccion_3d{
     }
   }
 
-
-
   eliminarAsignacion(clase1 : asignacion, numero1 : number, clase2 : asignacion, numero2 : number) : boolean{
     for(let i = numero1; i < numero2; i++){
       if(this.intrucciones_3d[i] instanceof asignacion){
@@ -237,8 +232,10 @@ export default class metodo implements instruccion_3d{
 
   eliminarCodigo(listaEliminar : Array<Number>){
     for(let x of listaEliminar){
-        InsertarOptimizacion("regla 1", "se elimino codigo :" + this.intrucciones_3d[x.valueOf()].getText() )
-        this.intrucciones_3d[x.valueOf()] = new eliminado();
+        if(!(x instanceof eliminado) ){
+          InsertarOptimizacion("regla 1", "se elimino codigo inalcanzable:" + this.intrucciones_3d[x.valueOf()].getText() )
+          this.intrucciones_3d[x.valueOf()] = new eliminado();
+        }
     }
   }
 
@@ -246,7 +243,12 @@ export default class metodo implements instruccion_3d{
     let r : string = "";
     for(let t of this.intrucciones_3d){
        if(!(t instanceof eliminado)){
-         r+= t.getText() + "\n";
+         console.log(t);
+         try{
+           r+= t.getText() + "\n";
+         }catch (e){
+
+         }
        }
     }
     return r;
