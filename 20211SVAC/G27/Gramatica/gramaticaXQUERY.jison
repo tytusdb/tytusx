@@ -311,6 +311,7 @@ DECLARACION2: parentesisa EXPRESION to EXPRESION parentesisc XPATH{
 
 LST_DECLARACION: LST_DECLARACION coma DECLARACION  {
                      $1.lstDeclaracion.push($3);
+                     //$$ = { lstDeclaracion: [1], declaracion: $3 };
                      $$ = $1;
               }
                 |DECLARACION{
