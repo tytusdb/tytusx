@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Operacion = exports.Operador = void 0;
-const Tipo_1 = require("./Tipo");
 var Operador;
 (function (Operador) {
     Operador[Operador["SUMA"] = 0] = "SUMA";
@@ -32,21 +31,21 @@ class Operacion {
     getTipo(arbol) {
         const valor = this.getValorImplicito(arbol);
         if (typeof (valor) === 'boolean') {
-            return Tipo_1.Tipo.BOOL;
+            return 3 /* BOOL */;
         }
         else if (typeof (valor) === 'string') {
-            return Tipo_1.Tipo.STRING;
+            return 0 /* STRING */;
         }
         else if (typeof (valor) === 'number') {
             if (this.isInt(Number(valor))) {
-                return Tipo_1.Tipo.INT;
+                return 1 /* INT */;
             }
-            return Tipo_1.Tipo.DOUBLE;
+            return 2 /* DOUBLE */;
         }
         else if (valor === null) {
-            return Tipo_1.Tipo.NULL;
+            return 5 /* NULL */;
         }
-        return Tipo_1.Tipo.VOID;
+        return 4 /* VOID */;
     }
     getValorImplicito(arbol) {
         if (this.operador !== Operador.MENOS_UNARIO && this.operador !== Operador.NOT) {
