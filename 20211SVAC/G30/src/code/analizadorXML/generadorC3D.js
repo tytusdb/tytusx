@@ -1,20 +1,28 @@
+const { contadorTemp } = require('../analizadorXPath/AST/Global')
+
 export class GeneradorC3D {
     heapXML = [];
     stackXML = [];
-    contadorStack = 0;
+    heapXPATH = [];
+    stackXPATH = [];
+    contXMLStack = 0;
     contadorTemporales = 0;
+    contadorEtiquetas = 0;
     SP = 0;
     HP = 0;
     traduccionC3D = "";
     C3DXML = "";
+    C3DXQUERY = "";
 
     constructor(){}
 
     getEncabezado(){
-        let encabezado = "/*------H E A D E R------*\/\n"
+        let encabezado = "/*------- H E A D E R --------*\/\n"
         +"#include <stdio.h>\n#include <math.h>\n"
         +"double heap[30101999];\ndouble stack[30101999];\n"
-        +"double SP;\ndouble HP;\n\n";
+        +"double heapXpath[30101999];\ndouble stackXpath[30101999];\n"
+        +"double SP;\ndouble HP;\n\n"
+        +"double SPX;\ndouble HPX;\n\n";
 
         for (let i = 0; i < this.contadorTemporales; i++) {
             if(i==0){
@@ -23,13 +31,47 @@ export class GeneradorC3D {
             }else{
                 encabezado += `, t${i}`
             }
-            
         }
         if(this.contadorTemporales!=0){
             encabezado += ";\n\n"   
         }
 
         return encabezado; 
+    }
+
+    getNatives(){
+        let natives = `\n/*------NATIVES------*/\n
+        void printQuery() {
+            ${this.getNewTemp()} = SP+1;\n`
+
+        natives += `${this.getNewTemp()} = stack[(int)t${this.contadorTemporales-2}];\n`
+
+        natives += `L${this.contadorEtiquetas}:
+        ${this.getNewTemp()} = heap[(int)t${this.contadorTemporales-2}];
+            if(t${this.contadorTemporales-1} == -1) goto L${this.contadorEtiquetas+1};
+            printf("%c", (char)t${this.contadorTemporales-1});
+            t${this.contadorTemporales-2} = t${this.contadorTemporales-2}+1;
+            goto L${this.contadorEtiquetas};
+            L${this.contadorEtiquetas+1}:
+            return;
+        }`;
+        // this.contadorEtiquetas += 2;
+        // this.contadorTemporales += 3;
+        /*`
+        void printQuery() {
+            t0 = SP+1;
+            t1 = stack[(int)t0];
+            L1:
+            t2 = heap[(int)t1];
+            if(t2 == -1) goto L0;
+            printf("%c", (char)t2);
+            t1 = t1+1;
+            goto L1;
+            L0:
+            return;
+        }\n\n`;
+        */
+        return natives
     }
     getMain(){
         let main = "/*------   M A I N   ------*\/\n"
@@ -39,18 +81,34 @@ export class GeneradorC3D {
     }
 
     getTraduccionXML(ent){
-        console.log("GETTRADUCCIONXML");
-        console.log(ent);
 
         this.recursiva(ent, "");
-
-
 
         return this.C3DXML
     }
 
-    getTraduccionXPathQuery(){
+    getTraduccionXPathQuery(output){
+        
+        let cadena = output;
+        this.C3DXQUERY += "/*--------------- RESULTADO ----------------*/\n"
+        this.C3DXQUERY += "t"+this.contadorTemporales+" = HP;\n"
+        this.stackXML.push(this.HP);
 
+        for (let index = 0; index < cadena.length; index++) {
+                this.C3DXQUERY += "heap[(int)HP] =" + cadena.charCodeAt(index) + ";\n";
+                this.heapXML.push(cadena[index]);
+                this.C3DXQUERY += this.aumentarHP();
+        }
+        this.C3DXQUERY += "heap[(int)HP] =-1;\n";
+        this.heapXML.push(-1);
+        this.C3DXQUERY += this.aumentarHP();
+    
+
+        this.C3DXQUERY += "stack[(int)" + this.SP + "] = t" + this.contadorTemporales + ";\n\n";
+        this.SP++
+        this.contadorTemporales++
+
+        return "\n"+this.C3DXQUERY;
     }
 
     getFinal(){
@@ -58,15 +116,13 @@ export class GeneradorC3D {
     }
    
 
-    getTraduccionCompleta(ent){        
+    getTraduccionCompleta(ent, output){   
+        this.traduccionC3D += this.getNatives();     
         this.traduccionC3D += this.getMain();
         this.traduccionC3D += this.getTraduccionXML(ent);
-
-        this.traduccionC3D += `
-    
-            for(int loop = 0; loop < stack[1]; loop++){
-                printf("%c", (char) heap[loop]);
-            }`;
+        console.log("!!!!!!!!!! "+output);
+        this.traduccionC3D += this.getTraduccionXPathQuery(output);
+        this.traduccionC3D += `SP = SP+${this.SP-1}\nprintQuery();`;
             
         this.traduccionC3D += this.getFinal();
         console.log("STACKXML\n"+this.stackXML);
@@ -76,7 +132,6 @@ export class GeneradorC3D {
     }
 
     recursiva(ent, traducido){
-        
         var entActual = ent.tipo;
 
         //PARA CADA ATRIBUTO
@@ -90,7 +145,7 @@ export class GeneradorC3D {
                 columna: atributo.columna,
                 stackPosition: 0
             });*/
-            this.C3DXML += "t"+this.SP+" = HP;\n"
+            this.C3DXML += "t"+this.contadorTemporales+" = HP;\n"
             this.stackXML.push(this.HP);
             for(let i=0;i<atributo.valor.length;i++){
                 let caracter = atributo.valor
@@ -98,13 +153,16 @@ export class GeneradorC3D {
                 this.heapXML.push(caracter[i]);
                 this.C3DXML += this.aumentarHP();
             }
-            this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.SP + ";\n\n";
+            this.C3DXML += "heap[(int)HP] =-1;\n";
+            this.heapXML.push(-1);
+            this.C3DXML += this.aumentarHP();
+
+            this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.contadorTemporales + ";\n\n";
             atributo.setPosicionStack(this.SP);
+            console.log(atributo)
             this.SP++
             this.contadorTemporales++
-
         }
-
 
         //Valor de las etiquetas
         if (ent.texto != "") {
@@ -126,7 +184,7 @@ export class GeneradorC3D {
                 columna: ent.columna,
                 stackPosition: 0
             });*/
-            this.C3DXML += "t"+this.SP+" = HP;\n"
+            this.C3DXML += "t"+this.contadorTemporales+" = HP;\n"
             this.stackXML.push(this.HP);
             for(let i=0;i<ent.texto.length;i++){
                 let caracter = ent.texto
@@ -134,8 +192,13 @@ export class GeneradorC3D {
                 this.heapXML.push(caracter[i]);
                 this.C3DXML += this.aumentarHP();
             }
-            this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.SP + ";\n\n";
+            this.C3DXML += "heap[(int)HP] =-1;\n";
+            this.heapXML.push(-1);
+            this.C3DXML += this.aumentarHP();
+
+            this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.contadorTemporales + ";\n\n";
             ent.setPosicionStack(this.SP);
+            console.log(ent)
             this.SP++
             this.contadorTemporales++
         }
@@ -164,7 +227,7 @@ export class GeneradorC3D {
             
             /*this.C3DXML += "t"+this.SP+" = HP;\n"
             // console.log("ATRIBUTO: "+ atributo.nombre + " VALOR: "+atributo.valor)
-            // console.log("STACK: " + this.contadorStack++)
+            // console.log("STACK: " + this.contXMLStack++)
             for(let i=0;i<atributo.valor.length;i++){
                 let caracter = atributo.valor
                 // console.log(caracter);
@@ -189,13 +252,15 @@ export class GeneradorC3D {
         return ""
     }
 
-    setComentario(){
-
-    }
-
     aumentarHP(){
         this.HP = this.HP + 1
         return "HP = HP + 1;\n"
+    }
+
+    getNewTemp(){
+        let temp = `t${this.contadorTemporales}`
+        this.contadorTemporales++
+        return temp
     }
 
 

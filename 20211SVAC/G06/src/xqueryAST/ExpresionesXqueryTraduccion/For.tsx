@@ -19,6 +19,28 @@ export class For implements ExpressionXquery{
         public ret: Return){}
     
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
+
+        console.log(this.idIn);
+        console.log(this.idAt);
+        console.log(this.select);
+        console.log(this.where);
+        console.log(this.ret);
+
+        traduccion.setTranslate("\n//FOR\t--------------");
+        //TRADUCCION3D##########################################################################################
+        traduccion.stackCounter++;
+        traduccion.setTranslate("stack[" + traduccion.stackCounter.toString() + "] = " + "H;");
+        traduccion.setTranslate("\n//INTRODUCIENDO ID FOR\t--------------");
+
+        for (let i = 0; i < this.idIn.length; i++) {
+            traduccion.setTranslate("heap[(int)H] = " + this.idIn.charCodeAt(i) + ";" + "\t\t//Caracter " + this.idIn[i].toString());
+            traduccion.setTranslate("H = H + 1;");
+            if (i + 1 === this.idIn.length) {
+                traduccion.setTranslate("heap[(int)H] = -1;" + "\t\t//FIN DE CADENA");
+                traduccion.setTranslate("H = H + 1;");
+            }
+        }
+        //#######################################################################################################
         
         var result : string= "";
 
@@ -28,7 +50,7 @@ export class For implements ExpressionXquery{
             var nvoEnt: EntornoXQuery = new EntornoXQuery(entAct, "sentencia for");
             for (const element of content.value) {
                 
-                nvoEnt.guaradarVar(this.idIn , element);
+                nvoEnt.guaradarVar(this.idIn , element, this.line, this.column);
                 if (this.validarWhere(nvoEnt, RaizXML)){
                     result += this.ret.executeXquery(nvoEnt, RaizXML).value;
                 }
@@ -56,7 +78,9 @@ export class For implements ExpressionXquery{
         }
     }
 
+    
     private validarWhere(entAct: EntornoXQuery, RaizXML: Entorno) : boolean{
+        traduccion.setTranslate("\n//VALIDACIONES WHERE\t--------------");
 
         var result  = this.where?.executeXquery(entAct, RaizXML)
         if (result !== undefined){
@@ -71,7 +95,21 @@ export class For implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idIn.toString() + "\"];\n";
+        texto = this.select.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.select.line.toString() + "_" + this.select.column.toString() + ";\n";
+        if(this.where !== null) {
+            texto = this.where.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.where.line.toString() + "_" + this.where.column.toString() + ";\n";
+        }
+        if(this.orderBy !== null) {
+            texto = this.orderBy.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + ";\n";
+            texto += "nodo" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + " -> nodoOrden" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + "[label=\"" + this.orden.toString() + "\"];\n";
+        }
+        texto = this.ret.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.ret.line.toString() + "_" + this.ret.column.toString() + ";\n";
+        return texto;
     }
 
 }

@@ -9,6 +9,7 @@ var OrderBy = /** @class */ (function () {
     }
     OrderBy.prototype.ejecutar = function (entorno, node) {
         console.log("pasó por el order by");
+        console.log(entorno);
     };
     return OrderBy;
 }());

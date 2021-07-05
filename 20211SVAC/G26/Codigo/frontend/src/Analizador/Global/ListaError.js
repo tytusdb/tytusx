@@ -1,4 +1,9 @@
-import mierror from './Error';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Error_1 = __importDefault(require("./Error"));
 class ListaError {
     constructor() {
         this.listaError = new Array();
@@ -12,7 +17,7 @@ class ListaError {
         return this._instance;
     }
     agregarError(tipo, descripcion, linea, columna) {
-        this.listaError.push(new mierror(tipo, descripcion, linea, columna));
+        this.listaError.push(new Error_1.default(tipo, descripcion, linea, columna));
     }
     getSize() {
         return this.listaError.length;
@@ -25,4 +30,4 @@ class ListaError {
     }
 }
 const errores = new ListaError();
-export default errores;
+exports.default = errores;

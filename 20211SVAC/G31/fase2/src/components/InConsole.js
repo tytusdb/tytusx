@@ -15,6 +15,7 @@ class InConsole extends React.Component{
         this.datosAST = this.props.location.datosAST
         this.graphviz = ""
         this.graphvizCST=this.props.location.graphviz;
+        this.datosXQuery = this.props.location.datosCSTXQuery; 
         console.log(this.props.location);
     }
 
@@ -37,8 +38,6 @@ class InConsole extends React.Component{
     render(){
         return(
             <header className="App-header">
-    
-                <img src={logo} className="App-logo" alt="logo" />
                     Organización de Lenguajes y Compiladores 2
                 <p></p>
 
@@ -49,6 +48,29 @@ class InConsole extends React.Component{
                         </Link>
                     </div>
                 </div>
+
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+
+                <label>Árbol XQUERY CST</label>
+                <div className = "container-fluid">
+                    <Graph
+                        graph={this.datosXQuery}
+                        options={this.options}
+                        events={this.events}
+                        //style={style}
+                        getNetwork={this.getNetwork}
+                        getEdges={this.getEdges}
+                        getNodes={this.getNodes}
+                        vis={vis => (this.vis = vis)}
+                    />
+                </div>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
                 
                 <label>Árbol XPath CST</label>
                 <div className = "container-fluid">
@@ -106,6 +128,8 @@ class InConsole extends React.Component{
                 <p></p>
                 <p></p>
                 <p></p>
+
+                
 
             <footer className="bg-dark text-center text-lg-start">
             <div className="text-center p-3 text-light ">

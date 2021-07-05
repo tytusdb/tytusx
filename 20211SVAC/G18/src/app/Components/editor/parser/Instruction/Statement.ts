@@ -1,6 +1,5 @@
 import { Instruction } from "../Abstract/Instruction";
 import { Environment } from "../Symbol/Environment";
-import { errores } from "../Errores";
 
 export class Statement extends Instruction {
     public translate(environment: Environment): String {
@@ -25,10 +24,11 @@ export class Statement extends Instruction {
     }
 
     public execute(env: Environment) {
-        // const newEnv = new Environment(env);
         for (const instr of this.code) {
             try {
                 const element = instr.execute(env);
+                console.log("stmnt",element,env);
+
                 if (element != undefined || element != null)
                     return element;
             } catch (error) {

@@ -23,7 +23,6 @@ export class Function implements Instruccion {
     }
 
     ejecutar(ent: Entorno):any {
-
         return this.valor.getValorImplicito(ent);
     }
 

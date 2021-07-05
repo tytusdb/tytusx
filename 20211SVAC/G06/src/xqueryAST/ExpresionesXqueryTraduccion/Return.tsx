@@ -15,7 +15,9 @@ export class Return implements ExpressionXquery{
     
 
     executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
-       
+
+        traduccion.setTranslate("\n//RETURN\t--------------");
+
         var content : Retorno[] = [];
         
         for (const Xquery of this.L_Exps) {
@@ -28,7 +30,6 @@ export class Return implements ExpressionXquery{
                 content.push(resultExp);
             }
         }
-        //console.log(content);
 
         var temp = ManejadorXquery.buildXquery(content);
 
@@ -50,7 +51,12 @@ export class Return implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"Return\"];\n";
+        for (const key in this.L_Exps) {
+            texto = this.L_Exps[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.L_Exps[key].line.toString() + "_" + this.L_Exps[key].column.toString() + "\n";
+        }
+        return texto;
     }
 
 }

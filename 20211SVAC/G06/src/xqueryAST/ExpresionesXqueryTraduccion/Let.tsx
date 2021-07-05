@@ -17,9 +17,7 @@ export class Let implements ExpressionXquery {
     }
 
     public executeXquery(entAct: EntornoXQuery, RaizXML: Entorno): Retorno {
-
-
-
+        
         //console.log(this.idVar);
         //console.log(this.exp);
         //onsole.log(this.ret);
@@ -68,7 +66,7 @@ export class Let implements ExpressionXquery {
         if (!entAct.existeVar(this.idVar)) {
 
             var content: Retorno = this.exp.executeXquery(entAct, RaizXML);
-            entAct.guaradarVar(this.idVar, content);
+            entAct.guaradarVar(this.idVar, content, this.line, this.column);
 
         } else {
             throw new Error("Error Semantico: Se encuentra en uso el id: " + this.idVar + ", Linea: " + this.line + " Columna: " + this.column);
@@ -95,7 +93,12 @@ export class Let implements ExpressionXquery {
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idVar.toString() + "\"];\n";
+        texto = this.exp.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> " + "nodo" + this.exp.line.toString() + "_" + this.exp.column.toString() + "\n";
+        texto = this.ret.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> " + "nodo" + this.ret.line.toString() + "_" + this.ret.column.toString() + "\n";
+        return texto;
     }
 
 

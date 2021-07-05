@@ -1,112 +1,180 @@
 "use strict";
-exports.__esModule = true;
-var XMLGramAsc = require("./Gramatica/XML_GramaticaAsc");
-var Entorno_1 = require("./AST/Entorno");
-var Objeto_1 = require("./XML/Objeto");
-var Atributo_1 = require("./XML/Atributo");
-var XMLGramDesc = require("./Gramatica/XML_GramaticaDesc");
-var ListaError_1 = require("./Global/ListaError");
-var XPathGramAsc = require("./Gramatica/XPath_GramaticaAsc");
-var XPathGramDesc = require("./Gramatica/XPath_GramaticaDesc");
-var CST_1 = require("./Reporte/CST");
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const XMLGramAsc = __importStar(require("./Gramatica/XML_GramaticaAsc"));
+const XQuery = __importStar(require("./Gramatica/XQuery"));
+const Entorno_1 = require("./AST/Entorno");
+const Objeto_1 = require("./XML/Objeto");
+const Atributo_1 = require("./XML/Atributo");
+const XMLGramDesc = __importStar(require("./Gramatica/XML_GramaticaDesc"));
+const ListaError_1 = __importDefault(require("./Global/ListaError"));
+const XPathGramAsc = __importStar(require("./Gramatica/XPath_GramaticaAsc"));
+const XPathGramDesc = __importStar(require("./Gramatica/XPath_GramaticaDesc"));
+const CST_1 = require("./Reporte/CST");
+const TraduceXML_1 = require("./Traduccion/TraduceXML");
+const OptimizacionGrammar = __importStar(require("./Gramatica/Optimizacion_Grammar"));
+const Optimizer_1 = require("./Optimizacion/Optimizer");
+const Metodo_1 = require("./Optimizacion/Declaraciones3D/Metodo");
+const Main_1 = require("./Optimizacion/Declaraciones3D/Main");
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
-var Analizador = /** @class */ (function () {
-    function Analizador() {
+class Analizador {
+    constructor() {
         this.global = new Entorno_1.Entorno('global', null, null);
-        ListaError_1["default"].limpiar();
+        this.xqGlobal = new Entorno_1.Entorno('xqGlobal', null, null);
+        this.xQueryEntry = '';
+        this.instrucciones = [];
+        ListaError_1.default.limpiar();
         this.indice = 0;
+        this.reporteOptimiza = [];
+        this.consultas = [];
         if (typeof Analizador._instance === "object") {
             return Analizador._instance;
         }
         Analizador._instance = this;
         return this;
     }
-    Analizador.getInstance = function () {
+    static getInstance() {
         return this._instance;
-    };
-    Analizador.prototype.iniciarVariables = function () {
+    }
+    iniciarVariables() {
         this.global = new Entorno_1.Entorno('global', null, null);
-        ListaError_1["default"].limpiar();
-    };
-    Analizador.prototype.xmlDescendente = function (entrada) {
-        var _this = this;
+        this.xqGlobal = new Entorno_1.Entorno('xqGlobal', null, null);
+        ListaError_1.default.limpiar();
+    }
+    optimizacion(entrada) {
+        const codigo3d = OptimizacionGrammar.parse(entrada);
+        let salida = "";
+        let optimizador = new Optimizer_1.Optimizer();
+        this.reporteOptimiza = [];
+        let antes = "";
+        codigo3d.forEach((c) => {
+            antes += c.getCodigo3Dir() + "\n";
+            if (c instanceof Main_1.Main || c instanceof Metodo_1.Metodo) {
+                c.listaInstrucciones = optimizador.aplicar(c.listaInstrucciones, this.reporteOptimiza);
+            }
+            salida += c.getCodigo3Dir() + "\n";
+        });
+        console.log("REPORTE: ", this.reporteOptimiza);
+        return salida;
+    }
+    xmlDescendente(entrada) {
         console.log("---GRAMATICA DESCENDENTE---");
         CST_1.cstXmlDesc.id = 0;
-        var objetos = XMLGramDesc.parse(entrada);
-        objetos.forEach(function (elem) {
+        const objetos = XMLGramDesc.parse(entrada);
+        objetos.forEach((elem) => {
             if (elem instanceof Objeto_1.Objeto || elem instanceof Atributo_1.Atributo) {
-                elem.ejecutar(_this.global);
+                elem.ejecutar(this.global);
             }
         });
         console.log(this.global);
-        console.log(ListaError_1["default"]);
-    };
-    Analizador.prototype.xmlAscendente = function (entrada) {
-        var _this = this;
+        console.log(ListaError_1.default);
+    }
+    xmlAscendente(entrada) {
         console.log("---GRAMATICA ASCENDENTE---");
         CST_1.cstXmlAsc.id = 0;
-        var objetos = XMLGramAsc.parse(entrada);
+        const objetos = XMLGramAsc.parse(entrada);
         this.global = new Entorno_1.Entorno('global', null, null);
         if (objetos !== null) {
-            objetos.forEach(function (elem) {
+            objetos.forEach((elem) => {
                 console.log('Elemento: ' + elem);
                 if (elem instanceof Objeto_1.Objeto || elem instanceof Atributo_1.Atributo) {
-                    elem.ejecutar(_this.global);
+                    elem.ejecutar(this.global);
                 }
             });
         }
         console.log(this.global);
-        console.log(ListaError_1["default"]);
+        console.log(ListaError_1.default);
         /*global.tsimbolos.forEach((elem:any) => {
           console.log(elem);
         });*/
-    };
-    Analizador.prototype.XPathAscendente = function (entrada) {
-        var _this = this;
+    }
+    XPathAscendente(entrada) {
         console.log("-- XPATH ASCENDENTE -- ");
-        var consultas = XPathGramAsc.parse(entrada);
-        var salida = "";
+        this.consultas = XPathGramAsc.parse(entrada);
+        let salida = "";
         console.log("---------------------------------------");
-        consultas.forEach(function (elem) {
+        this.consultas.forEach((elem) => {
             console.log("CONSULTA: " + elem.ToString());
-            var resultado = elem.ejecutar(_this.global);
-            salida += resultado;
+            let resultado = elem.ejecutar(this.global);
+            salida += elem.simbolosToString(resultado) + "\n";
             console.log("-----------RESULTADO----------------");
             console.log(resultado);
+            console.log("StringResult:");
+            console.log(elem.simbolosToString(resultado));
             console.log("---------------FIN---------------------");
         });
         return salida;
-    };
-    Analizador.prototype.XPathDescendente = function (entrada) {
-        var _this = this;
+    }
+    XPathDescendente(entrada) {
         console.log("-- XPATH DESCENDENTE -- ");
-        var consultas = XPathGramDesc.parse(entrada);
-        var salida = "";
+        this.consultas = XPathGramDesc.parse(entrada);
+        let salida = "";
         console.log("---------------------------------------");
-        consultas.forEach(function (elem) {
+        this.consultas.forEach((elem) => {
             console.log("CONSULTA: " + elem.ToString());
-            var resultado = elem.ejecutar(_this.global);
-            salida += resultado;
+            let resultado = elem.ejecutar(this.global);
+            salida += elem.simbolosToString(resultado) + "\n";
             console.log("-----------RESULTADO----------------");
             console.log(resultado);
+            console.log("TOSTRING:");
+            console.log(elem.simbolosToString(resultado));
             console.log("---------------FIN---------------------");
         });
         return salida;
-    };
-    Analizador.prototype.getTablaSimbolos = function () {
+    }
+    XQueryAscendente(entrada) {
+        console.log("---- XQUERY ASCENDENTE ----- ");
+        this.instrucciones = XQuery.parse(entrada);
+        this.xQueryEntry = entrada;
+        let salida = "";
+        console.log("RAIZ: ", this.instrucciones);
+        if (this.instrucciones !== null) {
+            this.instrucciones.forEach((elem) => {
+                if (typeof (elem) !== "string")
+                    elem.ejecutar(this.xqGlobal, this.global);
+            });
+            //salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
+        }
+        this.global.tsimbolos = this.global.tsimbolos.concat(this.xqGlobal.tsimbolos);
+        console.log(this.global);
+        console.log("SALIDA: ", salida);
+        return salida;
+    }
+    getTablaSimbolos() {
         return this.global;
-    };
-    Analizador.prototype.getErrores = function () {
-        var err = '';
-        ListaError_1["default"].listaError.forEach(function (elem) {
+    }
+    getErrores() {
+        let err = '';
+        ListaError_1.default.listaError.forEach((elem) => {
             err = err + elem.getMensaje() + '\n';
         });
         return err;
-    };
-    Analizador.prototype.getRepTablaSimbolos = function () {
-        var cadenaDot = '';
-        var tabla = this.global.tsimbolos;
+    }
+    getRepTablaSimbolos() {
+        let cadenaDot = '';
+        let tabla = this.global.tsimbolos;
         this.indice = 0;
         cadenaDot = 'digraph {'
             + 'tbl ['
@@ -120,53 +188,56 @@ var Analizador = /** @class */ (function () {
             + '<td><b>AMBITO</b></td>'
             + '<td><b>NODO</b></td>'
             + '<td><b>VALOR</b></td>'
-            + '<td><b>FILA</b></td><td><b>COLUMNA</b></td>'
+            + '<td><b>FILA</b></td>'
+            + '<td><b>COLUMNA</b></td>'
+            + '<td><b>POSICION</b></td>'
             + '</tr>';
         cadenaDot = cadenaDot + this.getSimbolosEntorno(this.global);
         cadenaDot = cadenaDot + '</table>'
             + '>];'
             + '}';
         return cadenaDot;
-    };
-    Analizador.prototype.getSimbolosEntorno = function (entrada) {
-        var _this = this;
-        var simbolos = '';
-        entrada.tsimbolos.forEach(function (elem) {
+    }
+    getSimbolosEntorno(entrada) {
+        let simbolos = '';
+        entrada.tsimbolos.forEach((elem) => {
             if (elem.valor.valor instanceof Entorno_1.Entorno) {
-                _this.indice++;
+                this.indice++;
                 simbolos = simbolos
                     + '<tr>'
-                    + '<td>' + _this.indice + '</td>'
-                    + '<td>' + elem.valor.nombre + '</td>'
-                    + '<td>' + _this.getTipoDato(elem.valor.tipo) + '</td>'
+                    + '<td>' + this.indice + '</td>'
+                    + '<td>' + elem.valor.getNombre() + '</td>'
+                    + '<td>' + this.getTipoDato(elem.valor.getTipo()) + '</td>'
                     + '<td>' + entrada.nombre + '</td>'
                     + '<td>' + elem.nombre + '</td>'
                     + '<td>Nodo</td>'
-                    + '<td>' + elem.valor.linea + '</td>'
-                    + '<td>' + elem.valor.columna + '</td>'
+                    + '<td>' + elem.valor.getLinea() + '</td>'
+                    + '<td>' + elem.valor.getColumna() + '</td>'
+                    + '<td>' + elem.valor.getPosicion() + '</td>'
                     + '</tr>';
-                simbolos = simbolos + _this.getSimbolosEntorno(elem.valor.valor);
+                simbolos = simbolos + this.getSimbolosEntorno(elem.valor.valor);
             }
             else {
                 if (elem.valor.valor !== false) {
-                    _this.indice++;
+                    this.indice++;
                     simbolos = simbolos
                         + '<tr>'
-                        + '<td>' + _this.indice + '</td>'
-                        + '<td>' + elem.valor.nombre + '</td>'
-                        + '<td>' + _this.getTipoDato(elem.valor.tipo) + '</td>'
+                        + '<td>' + this.indice + '</td>'
+                        + '<td>' + elem.valor.getNombre() + '</td>'
+                        + '<td>' + this.getTipoDato(elem.valor.getTipo()) + '</td>'
                         + '<td>' + entrada.nombre + '</td>'
                         + '<td>' + elem.nombre + '</td>'
-                        + '<td>' + elem.valor.valor.toString().replace('&', 'and') + '</td>'
-                        + '<td>' + elem.valor.linea + '</td>'
-                        + '<td>' + elem.valor.columna + '</td>'
+                        + '<td>' + elem.valor.getValor().toString().replace('&', 'and') + '</td>'
+                        + '<td>' + elem.valor.getLinea() + '</td>'
+                        + '<td>' + elem.valor.getColumna() + '</td>'
+                        + '<td>' + elem.valor.getPosicion() + '</td>'
                         + '</tr>';
                 }
             }
         });
         return simbolos;
-    };
-    Analizador.prototype.getTipoDato = function (t) {
+    }
+    getTipoDato(t) {
         switch (t) {
             case 0:
                 return 'Texto';
@@ -179,15 +250,15 @@ var Analizador = /** @class */ (function () {
         }
         ;
         return '';
-    };
-    Analizador.prototype.getRepErrores = function () {
-        var cadenaDot = '';
-        var indice = 0;
+    }
+    getRepErrores() {
+        let cadenaDot = '';
+        let indice = 0;
         cadenaDot = '<table class="tablaDatos" >'
             + '<tr>'
             + '<th>No.</th><th>Tipo</th><th>Descripcion</th><th>Linea</th><th>Columna</th>'
             + '</th>';
-        ListaError_1["default"].listaError.forEach(function (elem) {
+        ListaError_1.default.listaError.forEach((elem) => {
             indice++;
             cadenaDot = cadenaDot
                 + '<tr>'
@@ -200,35 +271,159 @@ var Analizador = /** @class */ (function () {
         });
         cadenaDot = cadenaDot + '</table>';
         return cadenaDot;
-    };
-    Analizador.prototype.getCSTXmlAsc = function () {
-        var cadenaDot = 'digraph {';
+    }
+    getRepOptimizacion() {
+        let cadenaDot = '';
+        let indice = 0;
+        cadenaDot = '<table class="tblRepOpti" >'
+            + '<tr>'
+            + '<th>No.</th><th>CODIGO ANTES</th><th>CODIGO AHORA</th><th>REGLA</th><th>Columna</th><th>FILA</th>'
+            + '</th>';
+        this.reporteOptimiza.forEach((elem) => {
+            indice++;
+            cadenaDot = cadenaDot
+                + '<tr>'
+                + '<td>' + indice + '</td>'
+                + '<td>' + elem.getCodigoAntes() + '</td>'
+                + '<td>' + elem.getCodigoAhora() + '</td>'
+                + '<td>' + elem.tipoReglaToString() + '</td>'
+                + '<td>' + elem.getColumna() + '</td>'
+                + '<td>' + elem.getFila() + '</td>'
+                + '</tr>';
+        });
+        cadenaDot = cadenaDot + '</table>';
+        return cadenaDot;
+    }
+    getCSTXmlAsc() {
+        let cadenaDot = 'digraph {';
         cadenaDot = cadenaDot + this.recorridoCst(CST_1.cstXmlAsc.getRaiz());
         cadenaDot = cadenaDot + '}';
         return cadenaDot;
-    };
-    Analizador.prototype.getCSTXmlDesc = function () {
-        var cadenaDot = 'digraph {';
+    }
+    getCSTXmlDesc() {
+        let cadenaDot = 'digraph {';
         cadenaDot += this.recorridoCst(CST_1.cstXmlDesc.getRaiz());
         cadenaDot += '}';
         return cadenaDot;
-    };
-    Analizador.prototype.recorridoCst = function (nodo) {
-        var _this = this;
-        var concatena = '';
+    }
+    recorridoCst(nodo) {
+        let concatena = '';
         if (nodo !== null) {
             concatena += nodo.id + '[label="' + nodo.valor + '"];\n';
-            nodo.hijos.forEach(function (hijo) {
-                concatena += _this.recorridoCst(hijo);
+            nodo.hijos.forEach((hijo) => {
+                concatena += this.recorridoCst(hijo);
                 concatena += nodo.id + ' -> ' + hijo.id + ';\n';
             });
         }
         return concatena;
-    };
-    return Analizador;
-}());
-var analizador = new Analizador();
-exports["default"] = analizador;
+    }
+    traduceXML() {
+        let resultado = '';
+        let traductor = new TraduceXML_1.TraduceXML(this.consultas);
+        resultado = traductor.traducirXML();
+        console.log(this.global);
+        return resultado;
+    }
+}
+const analizador = new Analizador();
+function pruebaXQuery(entrada) {
+    console.log("-- XQUERY --");
+    const objetos = XQuery.parse(entrada);
+    objetos.forEach((elem) => {
+        console.log(elem);
+    });
+}
+analizador.XQueryAscendente(`
+let $go := 5
+let $ruta := /pruebas
+`);
+/*
+declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
+{
+  if ($m eq 0) then $n+1
+  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
+};
+
+
+declare function local:factorial($x as xs:integer)as xs:integer
+{
+  if ($x eq 0) then 1
+  else ($x*local:factorial($x - 1))
+};
+
+declare function local:fibonacci($num as xs:integer) as xs:integer
+{
+  let $a := $num + 1
+  let $b := $a * 8
+  for $l in (4 to 6)
+  return if ($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
+};
+
+declare function local:tipo1() as xs:integer
+{
+  let $a := 1
+  let $b := $a * 8
+  return local:fibonacci($a - 2)
+};
+
+declare function local:tipo2() as xs:integer
+{
+  for $a in (1)
+  where $a < 5
+  let $b := $a * 8
+  return if ($b eq 8) then local:factorial($a)
+else 5
+};
+
+
+
+let $go := (1,3)
+let $ruta := /pruebas
+for $x in (1 to 2)
+let $y := (4)
+return if(1 eq 1) then "FUNCIONA"
+else "NO FUNCIONA"
+
+(:
+return if ($ruta/m eq 5) then local:tipo2()
+else 3
+(:($y eq 4) then local:tipo2()
+else local:factorial(0):)
+:)
+*/
+exports.default = analizador;
+/*pruebaXQuery(`
+declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
+{
+  if ($m eq 0) then $n+1
+  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
+};
+
+
+declare function local:factorial($x as xs:integer)as xs:integer
+{
+  if ($x eq 0) then 1
+  else ($x*local:factorial($x - 1))
+};
+
+declare function local:fibonacci($num as xs:integer) as xs:integer
+{
+  for $l in (4 to 6)
+  return if ($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
+};
+
+let $go := (5)
+for $x in (1 to 2)
+let $y := (4)
+return if ($y eq 4) then local:factorial($y)
+else local:factorial(0)
+`);
 /*
 function xpathAscendente(entrada:string){
   console.log("-- XPATH ASCENDENTE -- ")

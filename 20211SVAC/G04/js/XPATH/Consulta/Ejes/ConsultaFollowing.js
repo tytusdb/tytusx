@@ -1,6 +1,6 @@
-class ConsultaFollowing {
-    constructor(id) {
-        this.id = id;
+class ConsultaFollowing extends Consulta {
+    constructor(type, id, filtros) {
+        super(type, id, filtros);
         this.ignorarNodos = true;
     }
     run(entornos) {
@@ -28,11 +28,11 @@ class ConsultaFollowing {
         let nuevoEntorno = new Entorno(entorno.getAnterior());
         entorno.getTable().forEach(s => {
             if (s instanceof Nodo) {
-                if (this.id === "*" && !this.ignorarNodos) {
+                if (super.getId() === "*" && !this.ignorarNodos) {
                     addEntorno = true;
                     nuevoEntorno.add(s);
                 }
-                if (s.getNombre() === this.id && !this.ignorarNodos) {
+                if (s.getNombre() === super.getId() && !this.ignorarNodos) {
                     addEntorno = true;
                     nuevoEntorno.add(s);
                 }

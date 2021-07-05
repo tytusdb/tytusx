@@ -1,4 +1,7 @@
-export class Nodo {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Nodo = void 0;
+class Nodo {
     constructor(id, valor, padre, hijos) {
         this.id = id;
         this.valor = valor;
@@ -15,3 +18,4 @@ export class Nodo {
         this.padre = padre;
     }
 }
+exports.Nodo = Nodo;

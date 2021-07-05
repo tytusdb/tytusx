@@ -60,6 +60,7 @@
                     return 'scadena';
                   }
 
+['('][':'][^':']*[':']+([^'(:'][^':']*[':']+)*[')'] //comentario
 
 "//"                  return '//'
 "/"                   return '/'
@@ -167,7 +168,7 @@ XQUERY
     : FUNC                                                  {$$ = $1;}
     | FOR                                                   {$$ = $1;}
     | LET                                                   {$$ = $1;}
-    | RETURN                                                {$$ = $1;}
+    | IF                                                    {$$ = $1;}
     | EXPXQUERY                                             {$$ = $1;}
     ;
 
@@ -254,7 +255,6 @@ LEXPSRET
 EXPRET                                                    
     : XQUERY                                                {$$ = $1;}
     | PATH                                                  {$$ = $1;}
-    | IF                                                    {$$ = $1;}
     ; 
     
 IF 

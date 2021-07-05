@@ -83,6 +83,7 @@ export class Optimizer{
                         this.agregarReporte(codigoNuevo, codigoEliminado, ReglaOptimizacion.REGLA1);
                     }
                     //Vaciar listas auxiliares
+                    codigoNuevo = this.marcarAsOptimizadas(codigoNuevo, true);
                     nuevasInstrucciones = nuevasInstrucciones.concat(codigoNuevo);
                     contador += codigoEliminado.length
                     codigoNuevo = [];
@@ -91,7 +92,10 @@ export class Optimizer{
                 }
                 //Si no se ha encontrado un GOTO pushear la instruccion
                 if(!flag){
-                    nuevasInstrucciones.push(instruccion);
+                    if(!instruccion.isOptimizada()){
+                        instruccion.setOptimizada(true);
+                        nuevasInstrucciones.push(instruccion);
+                    }
                 }else{
                     codigoEliminado.push(instruccion);
                 }
@@ -100,7 +104,8 @@ export class Optimizer{
         }
         console.log("Se eliminaron :", contador+" instrucciones");
         console.log("-------------------------------------------")
-        return nuevasInstrucciones;
+        return this.marcarAsOptimizadas(nuevasInstrucciones, false);
+
     }
 
 
@@ -116,6 +121,7 @@ export class Optimizer{
         console.log("--------- Aplicando REGLA 2 ------------- ")
         let contador = 0;
         let nuevasInstrucciones: Array<Instruccion3D> = []
+        let nombreEtiqueta = "";
         if(listaInstrucciones != null){
             let codigoEliminado: Array<Instruccion3D> = [];
             let codigoNuevo: Array<Instruccion3D> = [];            
@@ -124,6 +130,9 @@ export class Optimizer{
             for(let i = 0; i < listaInstrucciones.length; i++){
                 let instruccion = listaInstrucciones[i];
                 //Ver si la instruccion es un IF
+                if(instruccion instanceof Etiqueta3D){
+                    nombreEtiqueta = instruccion.identificador;
+                }
                 if(instruccion instanceof If3D){
                     let miIf: If3D;
                     miIf  = instruccion;
@@ -147,13 +156,14 @@ export class Optimizer{
                             let nameEtiquetaLV = gotoAnterior.identificador;
                             //4. Buscar en la lista de instrucciones esta etiqueta
                             let instEtAnterior: Array<Instruccion3D>;
-                            [instEtAnterior, i] = this.getCodigoEtiqueta(nameEtiquetaLV, listaInstrucciones, i+2, true);
+                            instEtAnterior= this.getCodigoEtiqueta(nameEtiquetaLV, listaInstrucciones, 0, true);
+                            this.cambiarReferencias(nameEtiquetaLV, nombreEtiqueta, listaInstrucciones, 0);
                             let instEtNueva: Array<Instruccion3D>;
-                            [instEtNueva, i] = this.getCodigoEtiqueta(etFalsa, listaInstrucciones, i, true);
+                            instEtNueva = this.getCodigoEtiqueta(etFalsa, listaInstrucciones, 0, true);
                             codigoEliminado = codigoEliminado.concat(instEtAnterior[0]);
-                            let auxiliar1 = new Representacion3D(TipoInstruccion3D.REPRESENTACION, "<Instrucciones_"+nameEtiquetaLV+">", -1, -1);
+                            let auxiliar1 = new Representacion3D(TipoInstruccion3D.REPRESENTACION, "[Instrucciones_"+nameEtiquetaLV+"]", -1, -1);
                             codigoEliminado.push(auxiliar1);
-                            let auxiliar2 = new Representacion3D(TipoInstruccion3D.REPRESENTACION, "<Instrucciones_"+etFalsa+">", -1, -1);                            
+                            let auxiliar2 = new Representacion3D(TipoInstruccion3D.REPRESENTACION, "[Instrucciones_"+etFalsa+"]", -1, -1);                            
                             codigoEliminado = codigoEliminado.concat(instEtNueva[0]);
                             codigoEliminado.push(auxiliar2);
 
@@ -172,8 +182,8 @@ export class Optimizer{
                             codigoNuevo = codigoNuevo.concat(instEtNueva);
 
                             //Agregar el codigoNuevo a la lista de nuevas instrucciones
+                            codigoNuevo = this.marcarAsOptimizadas(codigoNuevo, true);
                             nuevasInstrucciones = nuevasInstrucciones.concat(codigoNuevo);
-
                             //Agregar a reporte.
                             this.agregarReporte(auxReporte, codigoEliminado,ReglaOptimizacion.REGLA2);
 
@@ -185,15 +195,19 @@ export class Optimizer{
                     }
                 }
                 if(!seOptimizo){
-                    nuevasInstrucciones.push(instruccion);                
+                    if(!instruccion.isEliminada() && !instruccion.isOptimizada()){
+                        instruccion.setOptimizada(true);
+                        nuevasInstrucciones.push(instruccion);                
+                    }
                 }else{
                     seOptimizo = false;
                 }
             }
         }
         console.log("Se eliminaron :", contador+" instrucciones");
-        console.log("-------------------------------------------")        
-        return nuevasInstrucciones;
+        console.log("-------------------------------------------")
+
+        return this.marcarAsOptimizadas(nuevasInstrucciones, false);
     }
 
     /*          REGLA 3
@@ -253,6 +267,7 @@ export class Optimizer{
                                 this.agregarReporte(codigoNuevo, codigoEliminado, numRegla);
 
                                 //Se agrega a la lista de instrucciones el codigo nuevo
+                                codigoNuevo = this.marcarAsOptimizadas(codigoNuevo, true);
                                 nuevasInstrucciones = nuevasInstrucciones.concat(codigoNuevo);
 
                                 //Se vacian las listas
@@ -265,7 +280,11 @@ export class Optimizer{
                 }
             }
             if(!seOptimizo){
-                nuevasInstrucciones.push(instruccion);
+                if(!instruccion.isOptimizada()){
+                    instruccion.setOptimizada(true);
+
+                    nuevasInstrucciones.push(instruccion);
+                }
             }else{
                 seOptimizo = false;
             }
@@ -273,8 +292,8 @@ export class Optimizer{
         
         console.log("Se eliminaron :", contador+" instrucciones");
         console.log("-------------------------------------------")
+        return this.marcarAsOptimizadas(nuevasInstrucciones, false);
 
-        return nuevasInstrucciones;
     }
 
 
@@ -331,6 +350,7 @@ export class Optimizer{
                                             this.agregarReporte(codigoNuevo, codigoEliminado, ReglaOptimizacion.REGLA5);
                                             
                                             //Agregar a la lista deinstrucciones nueva
+                                            codigoNuevo = this.marcarAsOptimizadas(codigoNuevo, true);
                                             nuevasInstrucciones = nuevasInstrucciones.concat(codigoNuevo);
                                             contador += codigoEliminado.length;
                                             codigoEliminado = [];
@@ -352,14 +372,18 @@ export class Optimizer{
                 }
             }
             if(!seOptimizo){
-                nuevasInstrucciones.push(instruccion);
+                if(!instruccion.isOptimizada()){
+                    instruccion.setOptimizada(true);
+                    nuevasInstrucciones.push(instruccion);
+                }
             }else{
                 seOptimizo = false;
             }
         }
         console.log("Se eliminaron :", contador+" instrucciones");
         console.log("-------------------------------------------")
-        return nuevasInstrucciones
+
+        return this.marcarAsOptimizadas(nuevasInstrucciones, false);
     }
 
 
@@ -562,11 +586,33 @@ export class Optimizer{
         }
         console.log("Se eliminaron :", contador+" instrucciones");
         console.log("-------------------------------------------")
+        console.log("MY INST ARE: ", nuevasInstrucciones);
         return nuevasInstrucciones
     }
 
+    cambiarReferencias(etiquetaEliminada: string, nuevaReferencia: string, listaInstrucciones: Array<Instruccion3D>, pos: number){
+        while(pos < listaInstrucciones.length){
+            let auxInst = listaInstrucciones[pos];
+            if(auxInst instanceof Goto3D){
+                if(auxInst.getReferencia() === etiquetaEliminada){
+                    auxInst.changeReferencia(nuevaReferencia);        
+                }   
+            }
+            pos = pos + 1;
+        }
+    }
 
-    getCodigoEtiqueta(etiquetaBuscar: string, listaInstrucciones: Array<Instruccion3D>, pos: number, addEtiqueta: boolean): [Array<Instruccion3D>, number]{
+    marcarAsOptimizadas(codigoNuevo: Array<Instruccion3D>, optimizada: boolean): Array<Instruccion3D>{
+        let opt: Array<Instruccion3D> = []
+        codigoNuevo.forEach((s : Instruccion3D) =>{
+            s.setOptimizada(optimizada);
+            opt.push(s);
+        });
+        console.log("RETURNING: ", opt);
+        return opt;
+    }
+
+    getCodigoEtiqueta(etiquetaBuscar: string, listaInstrucciones: Array<Instruccion3D>, pos: number, addEtiqueta: boolean): Array<Instruccion3D>{
         let instruccionesEtiqueta: Array<Instruccion3D> = []
         let found = false;
         while(pos < listaInstrucciones.length){
@@ -577,12 +623,14 @@ export class Optimizer{
                     break;
                 }
                 instruccionesEtiqueta.push(auxInst);
+                auxInst.setEliminada(true);
             }
             if(auxInst instanceof Etiqueta3D){
                 //Comparar nombres.
                 if(auxInst.identificador === etiquetaBuscar){
                     //Se encontro.
                     if(addEtiqueta){
+                        auxInst.setEliminada(true);
                         instruccionesEtiqueta.push(auxInst);
                     }
                     found = true;
@@ -591,7 +639,7 @@ export class Optimizer{
             pos = pos + 1;
             
         }
-        return [instruccionesEtiqueta, pos];
+        return instruccionesEtiqueta;
     }
 
     crearIfAnterior(unIf: If3D): If3D{

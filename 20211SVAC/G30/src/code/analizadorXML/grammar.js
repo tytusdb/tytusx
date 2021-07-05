@@ -1025,7 +1025,7 @@ return new Parser;
 
 if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
 exports.parser = grammar;
-exports.Parser = grammar.Parser;
+exports.Parser = grammar.Parser; 
 exports.parse = function () { return grammar.parse.apply(grammar, arguments); };
 exports.main = function commonjsMain (args) {
     if (!args[1]) {

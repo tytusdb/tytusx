@@ -5,6 +5,8 @@ import { EntornoXQuery } from "../AmbientesXquery/EntornoXQuery";
 import { tipoPrimitivo } from "../ExpresionesXpath/Primitivo";
 import { ManejadorXquery } from "../manejadores/ManejadorXquery";
 
+//TERMINADO Y PROBADO
+
 export class LlamadaFunc implements ExpressionXquery{
 
     constructor(
@@ -34,11 +36,11 @@ export class LlamadaFunc implements ExpressionXquery{
                     let valParam = valsParams[i];
                     
                     if (param?.type === valParam.type){
-                        nvoEnt.guaradarVar(func.decsParams[i].idVar, valParam); // actualizo las variables declaradas
+                        nvoEnt.guaradarVar(func.decsParams[i].idVar, valParam, this.line, this.column); // actualizo las variables declaradas
                     }else if (param !== null){
-                        throw new Error("Error Semantico: El Paramentro '" + param.type + "' no es compatible con el valor " + valParam.type+", linea:" +this.line + "columna: "+ this.column);
+                        throw new Error("Error Semantico: El Paramentro '" + param.type + "' no es compatible con el valor " + valParam.type+", linea:" +this.line + " columna: "+ this.column);
                     }else {
-                        throw new Error("Error Semantico: El Paramentro '" + func.decsParams[i].idVar + "' no se encuenta decclarado en el ambiente "+nvoEnt.nombreEntXquery+", linea:" +this.line + "columna: "+ this.column);
+                        throw new Error("Error Semantico: El Paramentro '" + func.decsParams[i].idVar + "' no se encuenta decclarado en el ambiente "+nvoEnt.nombreEntXquery+", linea:" +this.line + " columna: "+ this.column);
                     }
                 }
 
@@ -58,20 +60,23 @@ export class LlamadaFunc implements ExpressionXquery{
                      
                     const ret : Retorno = result[0]
                     if(func.tipo === ret.type){  // valido que los tipos sean iguales
+                        
+                        nvoEnt.getAllVars();
                         return ret;
+                         
                     }else {
-                        throw new Error("Error Semantico: El tipo de retorno es de tipo:  "+func.tipo.toString()+" y se enconto un retorno de tipo "+ret.type+", linea:" +this.line + "columna: "+ this.column);
+                        throw new Error("Error Semantico: El tipo de retorno es de tipo:  "+func.tipo.toString()+" y se enconto un retorno de tipo "+ret.type+", linea: " +this.line + " columna: "+ this.column);
                     }
                 }else {
-                    throw new Error("Error Semantico:  El tipo de retorno es una lista y debe ser  "+func.tipo.toString()+", linea:" +this.line + "columna: "+ this.column);
+                    throw new Error("Error Semantico: El valor devuelto debe ser un valor, linea:" +this.line + " columna: "+ this.column);
                 }
 
             }else {
-                throw new Error("Error Semantico: El tamaño de los parametros no es el mismo declarados con el de la duncion:  "+func.idFunc+" ,linea:" +this.line + "columna: "+ this.column);
+                throw new Error("Error Semantico: El tamaño de los parametros no es el mismo declarados con el de la duncion:  "+func.idFunc+", linea: " +this.line + " columna: "+ this.column);
             }
 
         }else {
-            throw new Error("Error Semantico: La funcion: "+this.idFunc+" aun no se encuentra declara ,linea:" +this.line + "columna: "+ this.column);
+            throw new Error("Error Semantico: La funcion: "+this.idFunc+" aun no se encuentra declara, linea:" +this.line + "columna: "+ this.column);
         }
 
     }
@@ -85,7 +90,7 @@ export class LlamadaFunc implements ExpressionXquery{
             if (resultParam.type === tipoPrimitivo.RESP){
                 throw new Error("Error semantico: el tipo es un  listado de valores, linea: " +this.line + "columna: "+ this.column);
             }else if(resultParam.type === tipoPrimitivo.VOID) {
-                throw new Error("Error semantico: tipo viod es un tipo incorrecto, linea: " +this.line + "columna: "+ this.column);
+                throw new Error("Error semantico: tipo void es un tipo incorrecto, linea: " +this.line + "columna: "+ this.column);
             }else if (resultParam.type === tipoPrimitivo.NODO){
                 
                 if (resultParam.value.listaEntornos.length === 0 && resultParam.value.texto !== ''){

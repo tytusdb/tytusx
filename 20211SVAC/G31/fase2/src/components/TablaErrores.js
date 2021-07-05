@@ -9,6 +9,7 @@ class TablaErrores extends React.Component{
         super(props);
         this.Mistakes = this.props.location.Mistakes;
         this.MistakesXPath = this.props.location.MistakesXPath;
+        this.ErroresXQuery = this.props.location.ErroresXQuery; 
         console.log("Aqui estan los errores XML");
         console.log(this.Mistakes);
         console.log("Aqui estan los errores XPath");
@@ -30,6 +31,46 @@ class TablaErrores extends React.Component{
                         <Link to= {{ pathname: "/tytusx/20211SVAC/G31" }}>
                             <button type="button" className="btn btn-primary btn-lg">Atrás</button>
                         </Link>
+                    </div>
+                </div>
+                
+                <div className="row">
+                    <label> Tabla de Errores XQuery </label>
+                </div>
+                
+
+                <p></p>
+                <p></p>
+                <p></p>
+                
+                <div className = "container">
+                    <div className="row">
+
+                    <table className="table table-dark"> 
+                    <thead> 
+                    <tr> 
+                        <th>Descripción</th> 
+                        <th>Tipo</th>
+                        <th>Fila</th>
+                        <th>Columna</th>
+                    </tr> 
+                    </thead>
+                    <tbody>
+                    { 
+                        this.ErroresXQuery.map(function(item){
+                            return (
+                            <tr>
+                                <td>{item.Error}</td>
+                                <td>{item.tipo}</td>
+                                <td>{item.linea}</td>
+                                <td>{item.columna}</td>
+                            </tr>
+                            )
+                        }) 
+                    }
+                    </tbody> 
+                </table>
+    
                     </div>
                 </div>
 

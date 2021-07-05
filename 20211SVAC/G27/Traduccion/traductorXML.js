@@ -17,7 +17,7 @@ function generarXMLC3D(ts){
     var texto = "";
     var texto2 = "";
 
-    //alert("Cantidad de Objetos XML: "+cantidadObjetos);
+    alert("Cantidad de Objetos XML: "+cantidadObjetos);
     if (cantidadObjetos > 0){
         //se escribe el encabezado de la traducción a lenguaje C
         texto += generaEncabezadoXML3D();
@@ -46,6 +46,7 @@ function generarXMLC3D(ts){
         console.log("Cantidad de elementos en heap: " + heap.length + "\n");
 
     }
+    return texto;
 }
 
 //------------función que genera el encabezado para el código 3 direcciones----------------------
@@ -292,7 +293,7 @@ function creaAsignacionDeTemporales(ts){
     //En la variable contadorTemporal se lleva el contedo de temporales creados
     for (var i = 0; i < contadorTemporal; i++)
     {
-        texto += "Double t" + i + ";\n";
+        texto += "double t" + i + ";\n";
     }
     
     return texto;
@@ -386,6 +387,8 @@ function getIntTipoObjeto(strTipoObjeto){
     return tipoObjeto;
 }
 
+// Actualiza3D  es una funcion que actualiza los punteros a las etiquetas hijas y 
+// a los atributos a nivel de codigo de 3D 
 
 function actualizaC3D(ts, temporalStack, temporalHeap){
     var texto="\n\n/*------------------------------------------*/\n\n";

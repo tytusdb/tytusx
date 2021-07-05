@@ -1,4 +1,4 @@
-class ConsultaText implements Consulta {
+class ConsultaText extends Consulta {
 
     public run(entornos: Array<Entorno>): Array<Entorno> {
         let newEntornos: Array<Entorno> = new Array();

@@ -109,7 +109,7 @@ break;
 case 6:
  /*if*/ 
                                                 this.$ = $$[$0-6] + ' ' + $$[$0-5] + ' ' + $$[$0-4] + ' ' + $$[$0-3] + ' ' + $$[$0-2] + ' ' + $$[$0-1]  + $$[$0]
-                                                instrucciones.push(new Instruccion('salto_condicional', this.$, '', pilacondition[0], pilacondition[1], pilacondition[2]));
+                                                instrucciones.push(new Instruccion('salto_condicional', this.$, $$[$0-1], pilacondition[0], pilacondition[1], pilacondition[2]));
                                                 pilacondition = [];
                                               
 break;
