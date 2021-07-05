@@ -4443,6 +4443,7 @@ class Comando
       }
     }
     this.errores = this.errores.concat(ErroresGlobal)
+    document.getElementById('taResult').value = Salida;
     return retornos;
   }
 
@@ -12434,7 +12435,7 @@ generar3D = () => {
 
     document.getElementById('c3dCS').value = getGenerador.codigo;
 
-    document.getElementById('taResult').value = getGenerador.salidaConsulta;
+    //document.getElementById('taResult').value = getGenerador.salidaConsulta;
     
     limpiarTabla('c3dsTabla');
     tsimbolosC3D(getGenerador.tabla);
