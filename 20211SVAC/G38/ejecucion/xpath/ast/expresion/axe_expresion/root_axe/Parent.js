@@ -23,7 +23,7 @@ class Parent extends ExpresionAncestor {
                 ts = ent.getElementsParents();
                 break;
             case AxeOperation.text:
-                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("No se puede pedir un nodo texto para el axe parent", this.linea, this.columna));
+                ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("No se puede pedir un nodo texto para el axe parent", this.linea, this.columna));
                 break;
         }
         return PredicateExpresion.filterXpathExpresion(ts, this.listaPredicados);

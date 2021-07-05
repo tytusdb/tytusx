@@ -47,7 +47,7 @@ class ExpresionAncestor {
         CodeUtil.print(tmpListaXpathXpressions + " = Stack[SP]; ");
         CodeUtil.printWithComment("SP = SP - " + sizeScope + " ;", "Se recupera ambito");
     }
-    imprimirLista3D(sizeScope, tmpListaXpathXpressions) {
+    static imprimirLista3D(sizeScope, tmpListaXpathXpressions) {
         CodeUtil.printComment("Imprimimos lista resultante");
         CodeUtil.print("SP = SP + " + sizeScope + " ; ");
         //CodeUtil.guardarTemporales(tmpPosLista,tmpLista);

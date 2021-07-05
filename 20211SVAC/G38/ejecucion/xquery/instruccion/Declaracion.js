@@ -29,6 +29,48 @@ class Declaracion {
         }
     }
     traducirXQ(sizeScope, otro) {
-        throw new Error("Method not implemented.");
+        CodeUtil.printComment("Traduccion Declaracion.traducirXQ(): " + this.variable);
+        let local = false;
+        let sFor = XQueryUtil.tablaSimbolosLocal.obtenerSimbolo(this.variable);
+        if (sFor != null) {
+            local = true;
+        }
+        else {
+            let sFor = XQueryUtil.tablaSimbolosGlobal.obtenerSimbolo(this.variable);
+        }
+        if (sFor == null) {
+            throw new TokenError(TipoError.Semantico, this.variable + " no existe en ts. ", this.linea, this.columna);
+        }
+        let posicion = sFor.offset;
+        let tmpPosicion = CodeUtil.generarTemporal();
+        if (local) {
+            CodeUtil.printWithComment(tmpPosicion + " = SP + " + posicion + "; ", "Obtiene temporal del ambiente local");
+        }
+        else {
+            CodeUtil.printWithComment(tmpPosicion + " = " + posicion + " ; ", "Otiene temporal del ambiente global");
+        }
+        CodeUtil.print("Stack[(int)" + tmpPosicion + "] = -1 ;");
+        let exp = this.expresion.traducir3DXQuery(sizeScope);
+        let tmpListElement;
+        if (exp instanceof ExpresionC3D) {
+            if (exp.idResultado == null) {
+                CodeUtil.printWithComment(exp.imprimirVerdaderas() + ":", "Etiquetas Verdaderas");
+                CodeUtil.print("Stack[(int)" + tmpPosicion + "] = 1 ;");
+                CodeUtil.printWithComment(exp.imprimirFalsas() + ":", "Etiquetas Falsas");
+                CodeUtil.print("Stack[(int)" + tmpPosicion + "] = 0 ;");
+            }
+            else {
+                let tmpObjeto = CodeUtil.guardarPrimitivoEnHeap(exp.idResultado, this.expresion.getTipo(null, null));
+                let tmpLista = CodeUtil.guardarRerenciaEnLista(tmpObjeto, sizeScope);
+                tmpListElement = tmpLista;
+                CodeUtil.print("Stack[(int)" + tmpPosicion + "] = " + tmpListElement + " ;");
+            }
+        }
+        else {
+            tmpListElement = exp;
+            CodeUtil.print("Stack[(int)" + tmpPosicion + "] = " + tmpListElement + " ;");
+        }
+        CodeUtil.printComment("Fin traduccion Declaracion.traducirXQ(): " + this.variable);
+        return tmpListElement;
     }
 }

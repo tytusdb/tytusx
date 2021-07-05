@@ -115,6 +115,7 @@
     <script src="../../ejecucion/xquery/instruccion/Retorno.js"></script>
     <script src="../../ejecucion/xquery/instruccion/ReturnException.js"></script>
     <script src="../../ejecucion/xquery/instruccion/LlamadaFuncionInstruccion.js"></script>
+    <script src="../../ejecucion/xpath/ast/expresion/ExpresionC3D.js"></script>
 
     <script src="../../ejecucion/c3d/ast/Codigo3d.js"></script>
     <script src="../../ejecucion/c3d/ast/Optimizador.js"></script>
@@ -151,39 +152,11 @@
         <td>
             <div id="divEntradaXML" align="center">
                 <textarea id="txtEntradaXML" cols="80" rows="28" style="background-color:#CCC;font-style:italic">
-
-
-
-<biblioteca>
-	<libro>
-        <precio>35</precio>
-		<titulo>La vida está en otra parte</titulo>
-		<autor>Milan Kundera</autor>
-		<fechaPublicacion año="1973"/>
-	</libro>
-	<libro>
-        <precio>20</precio>
-		<titulo>Pantaleón y las visitadoras</titulo>
-		<autor fechaNacimiento="28/03/1936">jUAN pEDRO</autor>
-		<fechaPublicacion año="1973"/>
-	</libro>
-	<libro>
-        <precio>21</precio>
-        <titulo>Conversación en la catedral</titulo>
-		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-		<fechaPublicacion año="1969"/>
-	</libro>
-    <libro>
-        <precio>10</precio>
-		<titulo>Conversación a la catedral</titulo>
-		<autor fechaNacimiento="28/03/1936">Mario Vargas Llosa</autor>
-		<fechaPublicacion año="1969"/>
-	</libro>
-</biblioteca>
-
-
-
-
+                    
+<pruebas>
+  <m>3</m>
+  <n>7</n>
+</pruebas>
 
                 </textarea>
             </div>
@@ -192,14 +165,36 @@
         <td>
             <div id="divEntradaXPath" align="center" >
                 <textarea id="txtEntradaXPath"  cols="80" rows="28" style="background-color:#CCC;font-style:italic" >
+
 declare function local:fibonacci($num as xs:integer)
 as xs:integer {
-let $y := 25
-return if(22>10)then( $y+54 )
-       else( 2 )
+	if( $num eq 0) then ( 0 )
+	else if( $num eq 1) then ( 1 )
+	else ( local:fibonacci($num-1) + local:fibonacci($num-2) )
+
 };
+
+
+declare function local:factorial($num as xs:integer)
+as xs:integer {
+	if( $num eq 0) then ( 1 )
+	else ( $num * local:factorial($num-1) )
+};
+
+
+declare function local:ackermann($m as xs:integer, $n as xs:integer)
+as xs:integer {
+	if( $m eq 0) then ( $n + 1 )
+	else if( $m gt 0 and $n eq 0 ) then ( local:ackermann($m-1,1) )
+	else ( local:ackermann($m-1, local:ackermann($m,$n-1)) )
+};
+
 imprimir("Funcion Fibonacci")
 local:fibonacci(/pruebas/m)
+imprimir("Funcion factorial")
+local:factorial(/pruebas/m)
+imprimir("Funcion ackermann")
+local:ackermann(/pruebas/m, pruebas/n)
                 </textarea>
             </div>
         </td>
@@ -223,7 +218,7 @@ local:fibonacci(/pruebas/m)
     <button id="btnGraficarAstXmlAscendente" class="button">Graficar AST XML Ascendente</button>
     <button id="btnGraficarCstXmlAscendente" class="button">Graficar CST XML Ascendente</button>
     <button id="btnGraficarAstXmlDescendente" class="button">Graficar AST Descendente</button>
-    <button id="btnGraficarCstXmlDescendente" class="button">Graficar CST Descendente</button>
+    <button id="btnTablaXquery" class="button">Ver Tabla Simbolos XQUERY</button>
     <button id="btnEjecutarXquery" class="button">Ejecutar XQUERY</button>
     <button id="btnAnalizarXquery" class="button">Analizar XQUERY</button>
     <button id="btnTablaErroresXQuery" class="button">Errores XQUERY</button>
@@ -397,13 +392,13 @@ local:fibonacci(/pruebas/m)
 
 
 
-            /**
+/*            /!**
              * AnalizarXML
-             */
+             *!/
             $("#btnGraficarCstXmlDescendente").click(function(){
                 entrada = $("#txtEntradaXML").val();
                 generarCstXMLDescendente(entrada);
-            });
+            });*/
 
 
             /**
@@ -424,6 +419,19 @@ local:fibonacci(/pruebas/m)
                     return;
                 }
                 XpathUtil.printTabHtml(_tsXml.getHtmlTable());
+                InterfazGrafica.print("OK");
+            });
+
+            /**
+             * Ver Tabla de Simbolos XQUERY
+             */
+            $("#btnTablaXquery").click(function(){
+                InterfazGrafica.print("Renderizando tabla de Simbolos.  "+new Date());
+                if(_tsXquery==undefined || _tsXquery == null){
+                    InterfazGrafica.print("No hay tabla de simbolos que mostrar. ");
+                    return;
+                }
+                XpathUtil.printTabHtml(_tsXquery.getHtmlTable());
                 InterfazGrafica.print("OK");
             });
 
