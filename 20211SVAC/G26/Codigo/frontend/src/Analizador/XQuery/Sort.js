@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Sort = void 0;
-class Sort {
+export class Sort {
     constructor(identifier, listaNodos, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -9,4 +6,3 @@ class Sort {
         this.listaNodos = listaNodos;
     }
 }
-exports.Sort = Sort;

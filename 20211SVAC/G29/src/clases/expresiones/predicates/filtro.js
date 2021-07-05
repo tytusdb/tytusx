@@ -16,8 +16,8 @@ export default class filtro {
     }
     getValor(ent, arbol) {
         if (this.atr == false) {
-            let slc = new select("/", this.id, this.atr, this.linea, this.columna);
-            let entornos = slc.getValor(ent, arbol);
+            this.slc = new select("/", this.id, this.atr, this.linea, this.columna);
+            let entornos = this.slc.getValor(ent, arbol);
             if (ent instanceof Array) {
                 for (let n_ent of entornos) {
                     let val = n_ent.tabla["valor"];
@@ -82,6 +82,15 @@ export default class filtro {
             }
         }
         return this.matches;
+    }
+    traducir(ent, c3d) {
+        if (this.atr == false) {
+            this.slc.traducir(this.slc.matches, c3d);
+        }
+        else {
+            this.slc = new select("/", this.id, this.atr, this.linea, this.columna);
+            this.slc.traducir(this.matches, c3d);
+        }
     }
 }
 //# sourceMappingURL=filtro.js.map

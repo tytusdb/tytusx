@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IfThenElse = void 0;
-class IfThenElse {
+export class IfThenElse {
     constructor(identificador, condicion, respThen, listaElseIf, respElse, fromRoot, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -77,4 +74,3 @@ class IfThenElse {
         return nuevaLista;
     }
 }
-exports.IfThenElse = IfThenElse;

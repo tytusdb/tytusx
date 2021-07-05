@@ -22,7 +22,7 @@ class Comparison extends ExpresionAncestor {
             tipo = new Tipo(TipoDato.booleano);
         }
         else if (!tipoIzquierda.esError() && !tipoDerecha.esError()) {
-            ListaErrores.AgregarErrorXPATH(CrearError.tiposInvalidos(this.relationalOperator, tipoIzquierda, tipoDerecha, this.linea, this.columna));
+            ListaErrores.AgregarErrorXQUERY(CrearError.tiposInvalidos(this.relationalOperator, tipoIzquierda, tipoDerecha, this.linea, this.columna));
         }
         return tipo;
     }
@@ -37,12 +37,12 @@ class Comparison extends ExpresionAncestor {
                 if (valorIzquierda.getTipo(ent).esNumero() || valorIzquierda.getTipo(ent).esCadena())
                     valorIzquierda = valorIzquierda.getValor(ent);
                 else {
-                    ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
+                    ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
                     valorIzquierda = null;
                 }
             }
             else {
-                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
+                ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
                 valorIzquierda = null;
             }
         }
@@ -52,12 +52,12 @@ class Comparison extends ExpresionAncestor {
                 if (valorDerecha.getTipo(ent).esNumero() || valorDerecha.getTipo(ent).esCadena())
                     valorDerecha = valorDerecha.getValor(ent);
                 else {
-                    ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
+                    ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
                     valorDerecha = null;
                 }
             }
             else {
-                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
+                ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("El tipo de valor de la ruta xpath no es compatible para la operacion relacional  " + this.relationalOperator, this.linea, this.columna));
                 valorDerecha = null;
             }
         }
@@ -74,5 +74,32 @@ class Comparison extends ExpresionAncestor {
             }
         }
         return valor;
+    }
+    traducir3DXQuery(sizeScope) {
+        let resultadoIzq = this.izquierdo.traducir3DXQuery(sizeScope);
+        let resultadoDer = this.derecha.traducir3DXQuery(sizeScope);
+        if (resultadoIzq != null && resultadoDer != null &&
+            resultadoIzq instanceof ExpresionC3D && resultadoDer instanceof ExpresionC3D) {
+            let salida = new ExpresionC3D(null);
+            let etqV = CodeUtil.generarEtiqueta();
+            let etqF = CodeUtil.generarEtiqueta();
+            let cadena = "";
+            switch (this.relationalOperator) {
+                case RelationalOperators.equal:
+                case RelationalOperators.one_equal:
+                    cadena = "if(" + resultadoIzq.idResultado + " == " + resultadoDer.idResultado + ") goto " + etqV + ";";
+                    break;
+                case RelationalOperators.notEqual:
+                case RelationalOperators.one_notEqual:
+                    cadena = "if(" + resultadoIzq.idResultado + " != " + resultadoDer.idResultado + ") goto " + etqV + ";";
+                    break;
+            }
+            CodeUtil.printWithComment(cadena, "Generacion expresion relacional");
+            CodeUtil.printWithComment("goto " + etqF + ";", "Salto relacional");
+            salida.etiquetasVerdaderas.push(etqV);
+            salida.etiquetasFalsas.push(etqF);
+            return salida;
+        }
+        return null;
     }
 }

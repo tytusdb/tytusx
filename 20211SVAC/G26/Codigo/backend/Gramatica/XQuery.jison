@@ -36,7 +36,7 @@
     const {TipoFuncionXQ} = require("../XQuery/FuncionXQuery")
     const {Atributo} = require("../XML/Atributo");
     const {UserFunction} = require("../XQuery/UserFunction");
-
+    const {Llamada} = require("../XQuery/Llamada");
 %}
 
 
@@ -208,9 +208,6 @@ START : INSTRUCCIONES EOF         { console.log($1); return $1; }
 
 INSTRUCCIONES : LISTFUNC LISTAD RETURNGLOBAL
                 {
-                    console.log("FUNCIONES ", $1);
-                    console.log("VARIABLES ", $2);
-                    console.log("RETURN ", $3);
                     if ($1 !== null) {
                         if ($2 !== null) {
                             $1 = $1.concat($2);
@@ -228,7 +225,6 @@ INSTRUCCIONES : LISTFUNC LISTAD RETURNGLOBAL
                         }else 
                             $$ = [$3];
                     }
-                    console.log($$.length);
                 }
 ;
 
@@ -236,25 +232,38 @@ LISTFUNC: LFUNC                 {console.log("LISTA DE FUNCIONES"); $$=$1;}
         |                       {console.log("LISTA FUNC VACIA"); $$=[];}
 ;
 
-LFUNC: LFUNC USERFUNCTION       {$1.push($2); $$ = $1;}
-        | USERFUNCTION          {$$=[$1];}
+LFUNC: LFUNC USERFUNCTION       
+        {
+            if ($2 !== null)
+                $1.push($2); 
+            $$ = $1;
+        }
+        | USERFUNCTION          
+        {
+            if ($1 !== null)
+                $$=[$1];
+            else
+                $$ = [];
+        }
 ;
 
 USERFUNCTION: declare function PREFIX dospuntos identifier parA ARGUMENTOS parC TIPOFUNCION llaveA LISTAINSTR llaveC puntocoma
                 { 
-                    $$ = new UserFunction();
+                    $$ = new UserFunction($9, $3, $5, $7, $11, @1.first_line, @1.first_column);
                 }
-                | error {}
+                | error {
+                    $$ = null;
+                }
 ;
 
 PREFIX: local { $$ = $1;}
 ;           
 
 ARGUMENTOS: LISTAARGS { $$ = $1;}
-        |               { $$ =  []}
+        |               { $$ =  []; }
         ;
         
-LISTAARGS: LISTAARGS coma PARAM { $1.push($1); $$ = $1;}
+LISTAARGS: LISTAARGS coma PARAM { $1.push($3); $$ = $1;}
         | PARAM { $$ = [$1];}
         ;
 
@@ -269,7 +278,7 @@ DATATYPE: decimal { $$ = TipoPrim.DECIMAL;}
         ; 
 
 TIPOFUNCION: as xs dospuntos DATATYPE { $$ = $4; }
-                |               { $$ = TipoPrim.VOID; }
+                |               { $$ = TipoPrim.ANY; }
         ;
 
 LISTAINSTR: IF { $$ = [$1]; }
@@ -311,7 +320,7 @@ EXPRESIONXQUERY: EXPRESIONXQUERY asterisco EXPRESIONXQUERY { $$ = new Operacion(
         | IntegerLiteral { console.log($1); $$ = new Primitiva($1, TipoPrim.INTEGER, @1.first_line, @1.first_column, true); }
         | cadena { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column, true); }
         | cadena2 { $$ = new Primitiva($1, TipoPrim.CADENA, @1.first_line, @1.first_column, true); }
-        | dolar identifier { $$ = new Primitiva($1, TipoPrim.XQUERYIDENTIFIER, @1.first_line, @1.first_column, true); }        
+        | dolar identifier { console.log("ENTRA A EXPRESIONXQUERY ", $2); $$ = new Primitiva($2, TipoPrim.XQUERYIDENTIFIER, @1.first_line, @1.first_column, true); }        
         | LLAMADAFUNCION { $$ = $1; }
         | FUNCIONXQUERY{ $$ = new Primitiva($1, TipoPrim.FUNCIONXQUERY, @1.first_line, @1.first_column);}
         /*| LISTAENTEROS 
@@ -323,8 +332,8 @@ EXPRESIONXQUERY: EXPRESIONXQUERY asterisco EXPRESIONXQUERY { $$ = new Operacion(
         }*/
 ;
 
-LLAMADAFUNCION: local dospuntos identifier parA LISTALLAMADA parC { $$ = "Llamada";}
-                | local dospuntos identifier parA parC { $$ = "Llamada";}
+LLAMADAFUNCION: local dospuntos identifier parA LISTALLAMADA parC { $$ = new Llamada($3, $5, @1.first_line, @1.first_column); }
+                | local dospuntos identifier parA parC { $$ = new Llamada($3, [], @1.first_line, @1.first_column); }
         ;
 
 LISTALLAMADA: LISTALLAMADA coma VARLLAMADA { $1.push($3); $$ = $1}
@@ -421,6 +430,8 @@ PRIMITIVA:  attr identifier { $$ = new Primitiva($2, TipoPrim.ATRIBUTO, @1.first
         | dot { $$ = new Primitiva($1, TipoPrim.DOT, @1.first_line, @1.first_column, true);}
         | identifier LISTANODOS 
         { 
+            console.log("ID ", $1);
+            console.log("LISTANODOS ", $2);
                 if($2.length > 0){
                         $$ = [new Nodo($1, TipoNodo.IDENTIFIER, @1.first_line, @1.first_column)]; $$ = $$.concat($2); 
                         $$ = new Primitiva($$, TipoPrim.CONSULTA, @1.first_line, @1.first_column);
@@ -466,7 +477,11 @@ FUNCIONES:
         | textFunc { $$ = $1; }
 ;
 
-LISTANODOS:  LISTANODOS NODO   { $$ = [$1]; $$ = $$.concat($2); }
+LISTANODOS: LNODOS{$$ = $1; }
+            | { $$ =  [];}
+;
+
+LNODOS: LNODOS NODO   { $1.push($2); $$ = $1; }
         | NODO  { console.log("NODO"); $$ = [$1]; }
 ;
 
@@ -485,13 +500,14 @@ FOR: for LISTADECLARACIONES SENTSFOR { $$ = new For($2, @1.first_line, @1.first_
     | {}
 ;
 
-SENTSFOR: SENTFOR SENTSFOR
-        |  { $$ = $1; }
+SENTSFOR: SENTFOR SENTSFOR {console.log("PASA CON WHERE");}
+        | error  { console.log("PASA SIN WHERE"); $$ = $1; }
+        
 ;
 
 SENTFOR: DECLARACION 
         | where EXPRESIONXQUERY {$$ = $1;}
-        | where dolar identifier diag EXPRESION{ $$ = new Where($3,$5, true, @1.first_line, @1.first_column)}
+        | where dolar identifier diag EXPRESION{ console.log("ENTRA A WHERE ", $5); $$ = new Where($3,$5, true, @1.first_line, @1.first_column)}
         | where dolar identifier diag diag EXPRESION { $$ = new Where($3, $6, false, @1.first_line, @1.first_column)}        
         | order by LISTASORT { $$ = new OrderBy($3, @1.first_line, @1.first_column)} 
 ;
@@ -504,7 +520,7 @@ SORT: dolar identifier LISTANODOS  { $$ = new Sort($2, $3, @1.first_line, @1.fir
 ;
 
 DECLARACION: 
-        let dolar identifier dospuntos igual LISTACONSULTAS { console.log("DECLARACION CON RUTA"); $$ = new Let($3, $6, @1.first_line, @1.first_column);}
+        let dolar identifier dospuntos igual LISTACONSULTAS { console.log($6); $$ = new Let($3, $6, @1.first_line, @1.first_column);}
         | let dolar identifier dospuntos igual parA IntegerLiteral to IntegerLiteral parC { $$ = new Let($3, null, @1.first_line, @1.first_column, +$7, +$9);}
         | let dolar identifier dospuntos igual EXPRESIONXQUERY { console.log("ENTRA DECLARACION"); console.log($6); $$ = new Let($3, null, @1.first_line, @1.first_column, undefined, undefined, undefined, $6);}
 ;
@@ -515,7 +531,7 @@ LISTADECLARACIONES: LISTADECLARACIONES coma DECLARACIONFOR { $1.push($2); $$ = $
 
 DECLARACIONFOR: dolar identifier in LISTACONSULTAS { $$ = new DeclaracionFor(TipoFor.NORMAL, $2, $4, @1.first_line, @1.first_column); }
             | dolar identifier in parA IntegerLiteral to IntegerLiteral parC { $$ = new DeclaracionFor(TipoFor.ITERATIVO, $2, null, @1.first_line, @1.first_column, undefined, +$5, +$7);}
-            | dolar identifier in parA LISTAENTEROS parC { $$ = new DeclaracionFor(TipoFor.ITERATIVO, $2, null, @1.first_line, @1.first_column, undefined, undefined,undefined, $5);}
+     /*entra*/       | dolar identifier in parA LISTAENTEROS parC { $$ = new DeclaracionFor(TipoFor.ITERATIVO, $2, null, @1.first_line, @1.first_column, undefined, undefined,undefined, $5);}
             | dolar identifier at dolar identifier in LISTACONSULTAS { $$ = new DeclaracionFor(TipoFor.AT, $2, $7, @1.first_line, @1.first_column, $5)}
 
 ;
@@ -539,7 +555,7 @@ CONSULTA: identifier LISTANODOS
                                $$ =  $$.concat($2);
                         } 
                 }
-        | LISTANODOS { console.log("LISTANODOS"); $$ = $1;}     
+        | LISTANODOS { console.log("LISTANODOS ", $1); $$ = $1;}     
 ;         
 
 RETURNTYPE: return dolar identifier LISTANODOS { $$ = new Return(TipoReturn.NORMAL, $3, $4, undefined, undefined, undefined, @1.first_line, @1.first_column);}

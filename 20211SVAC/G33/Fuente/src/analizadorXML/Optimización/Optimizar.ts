@@ -1,4 +1,4 @@
-const fs = require('fs');
+//const fs = require('fs');
 
 export class Optimizar {
 
@@ -80,11 +80,11 @@ export class Optimizar {
 
 
         //Crear archivo 3d .c
-        fs.appendFile('codigo3DOptimizado.c', this.salidaOptimizado.join('\n'), (error: any) => {
+        /*fs.appendFile('codigo3DOptimizado.c', this.salidaOptimizado.join('\n'), (error: any) => {
             if (error) {
                 throw error;
             }
-        });
+        });*/
     }
 
     obtenerLista(word: any): any {

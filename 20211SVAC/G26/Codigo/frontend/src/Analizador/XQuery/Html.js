@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Html = void 0;
-class Html {
+export class Html {
     constructor(identifier, atributos, texto, listaHtml, listaVarCall, isUnica, linea, columna) {
         this.linea = linea;
         this.listaVarCall = listaVarCall;
@@ -15,4 +12,3 @@ class Html {
     ejecutar(ent) {
     }
 }
-exports.Html = Html;

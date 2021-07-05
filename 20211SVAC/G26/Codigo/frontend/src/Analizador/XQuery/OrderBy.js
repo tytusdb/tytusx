@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderBy = void 0;
-const Simbolo_1 = require("../AST/Simbolo");
-const Tipo_1 = require("../AST/Tipo");
-const Consulta_1 = require("../XPath/Consulta");
-class OrderBy {
+import { Simbolo } from "../AST/Simbolo";
+import { Tipo } from "../AST/Tipo";
+import { Consulta } from "../XPath/Consulta";
+export class OrderBy {
     constructor(listaSort, linea, columna) {
         this.linea = linea;
         this.columna = columna;
@@ -23,14 +20,14 @@ class OrderBy {
         //Obtener la consulta completa (listanodos)
         listaOrdenada = this.ordenarPorCriterios(listaOrdenada, listaSimbs, n);
         //3. Guardar la lista ordenada en la tabla de simbolos
-        let Ordenada = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, criterioActual.identifier, listaOrdenada, this.linea, this.columna);
+        let Ordenada = new Simbolo(Tipo.XQ_VAR, criterioActual.identifier, listaOrdenada, this.linea, this.columna);
         XQEnt.sobreEscribirSimbolo(criterioActual.identifier, Ordenada);
     }
     ordenarPorCriterios(listaOrdenada, listaSimbs, n) {
         let listaTextos = [];
         let criterioActual = this.listaSort[n];
         for (let i = 0; i < listaSimbs.valor.length; i++) {
-            let consultaTemp = new Consulta_1.Consulta(criterioActual.listaNodos, this.linea, this.columna);
+            let consultaTemp = new Consulta(criterioActual.listaNodos, this.linea, this.columna);
             let auxSimb = listaSimbs.valor[i].valor;
             let auxRespuesta = consultaTemp.ejecutar(auxSimb);
             for (let j = 0; j < auxRespuesta.length; j++) {
@@ -98,7 +95,7 @@ class OrderBy {
     }
     desempatar(valComparar, valYaEnLista, posCriterio) {
         let nuevoCriterio = this.listaSort[posCriterio];
-        let consultaTemp = new Consulta_1.Consulta(nuevoCriterio.listaNodos, this.linea, this.columna);
+        let consultaTemp = new Consulta(nuevoCriterio.listaNodos, this.linea, this.columna);
         let auxSimb = valComparar.valor;
         let auxRespuesta = consultaTemp.ejecutar(auxSimb);
         let auxYaEnLista = valYaEnLista.valor;
@@ -154,11 +151,10 @@ class OrderBy {
     }
     obtenerTexto(etiqueta) {
         for (let i = 0; i < etiqueta.valor.tsimbolos.length; i++) {
-            if (etiqueta.valor.tsimbolos[i].valor.getTipo() === Tipo_1.Tipo.STRING) {
+            if (etiqueta.valor.tsimbolos[i].valor.getTipo() === Tipo.STRING) {
                 return etiqueta.valor.tsimbolos[i].valor.getValor();
             }
         }
         return null;
     }
 }
-exports.OrderBy = OrderBy;

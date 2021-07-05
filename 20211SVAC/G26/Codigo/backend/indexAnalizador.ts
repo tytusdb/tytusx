@@ -28,23 +28,24 @@ class Analizador{
 
   private static _instance: Analizador;
   global:Entorno;
-  xqGlobal:Entorno;
   indice:number;
   reporteOptimiza: Array<Optimizacion>;
   consultas: Array<Consulta>;
+  xPathEntry: string;
+  instrucciones: InstruccionXQuery | null;
   xQueryEntry: string;
-  instrucciones: Array<InstruccionXQuery>;
+  xqGlobal: Entorno;
 
   constructor(){
     this.global = new Entorno('global', null, null);
-    this.xqGlobal = new Entorno('xqGlobal', null, null);
-    this.xQueryEntry = '';
-    this.instrucciones = [];
+    this.xqGlobal = new Entorno("XQGlobal", null, null);
     errores.limpiar();
     this.indice = 0;
     this.reporteOptimiza = [];
     this.consultas = [];
-
+    this.xPathEntry = "";
+    this.xQueryEntry = "";
+    this.instrucciones = null;
     if (typeof Analizador._instance === "object"){
       return Analizador._instance;
     }
@@ -151,17 +152,17 @@ class Analizador{
 
   XQueryAscendente(entrada: string): String{
     console.log("---- XQUERY ASCENDENTE ----- ")
-    this.instrucciones = XQuery.parse(entrada);
+    //this.iniciarVariables();
+    this.xqGlobal = new Entorno("XQGlobal", null, null);
+    this.instrucciones= XQueryGram.parse(entrada);
+    console.log("instrucciones: ", this.instrucciones)
     this.xQueryEntry = entrada;
     let salida = "";
-    console.log("RAIZ: ", this.instrucciones)
-    if(this.instrucciones !== null){
-      this.instrucciones.forEach((elem: InstruccionXQuery) => {
-        if (typeof(elem) !== "string")
-          elem.ejecutar(this.xqGlobal, this.global);
-      });
-      //salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
+    if(this.instrucciones != null){
+      salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
+      console.log("s:", salida);
     }
+    
     this.global.tsimbolos = this.global.tsimbolos.concat(this.xqGlobal.tsimbolos);
     console.log(this.global);
     console.log("SALIDA: ", salida);
@@ -344,6 +345,7 @@ class Analizador{
 }
 
 const analizador = new Analizador();
+export default analizador;
 function pruebaXQuery(entrada:string){
   console.log("-- XQUERY --")
   const objetos = XQuery.parse(entrada);
@@ -352,7 +354,46 @@ function pruebaXQuery(entrada:string){
   });
 }
 
-analizador.XQueryAscendente(`
+pruebaXQuery(`
+declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
+{
+  if ($m eq 0) then $n+1
+  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
+};
+
+declare function local:factorial($x as xs:integer)as xs:integer
+{
+  if ($x eq 0) then 1
+  else ($x*local:factorial($x - 1))
+};
+
+declare function local:fibonacci($num as xs:integer) as xs:integer
+{
+  let $a := $num + 1
+  let $b := $a * 8
+  for $l in (4 to 6)
+  return if ($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
+};
+
+declare function local:tipo1() as xs:integer
+{
+  let $a := 1
+  let $b := $a * 8
+  return local:fibonacci($a - 2)
+};
+
+declare function local:tipo2() as xs:integer
+{
+  for $a in (1)
+  where $a/price < 5
+  let $b := $a * 8
+  return if ($b eq 8) then local:factorial($a)
+else 5
+};
+
 let $go := 5
 let $ruta := /pruebas
 `);
@@ -363,7 +404,6 @@ declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integ
   else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
   else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
 };
-
 
 declare function local:factorial($x as xs:integer)as xs:integer
 {
@@ -413,7 +453,6 @@ else 3
 else local:factorial(0):)
 :)
 */
-export default analizador;
 /*pruebaXQuery(`
 declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
 {

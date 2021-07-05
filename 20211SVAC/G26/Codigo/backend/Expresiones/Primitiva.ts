@@ -144,5 +144,5 @@ export enum TipoPrim{
     FUNCIONXQUERY,
     XQUERYIDENTIFIER,
     DECIMAL,
-    VOID
+    ANY
 }

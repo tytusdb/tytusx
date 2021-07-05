@@ -14,9 +14,23 @@ class TablaSimbolosXquery {
         }
         return false;
     }
+    agregarSimboloAlInicio(simbolo) {
+        this._listaSimbolos.unshift(simbolo);
+        this.actualizarOffsetSimbolos();
+    }
+    actualizarOffsetSimbolos() {
+        for (let iSimbolo in this._listaSimbolos) {
+            this._listaSimbolos[iSimbolo].offset = +iSimbolo;
+        }
+    }
+    borrarValoresInterprete() {
+        for (let iSimbolo in this._listaSimbolos) {
+            this._listaSimbolos[iSimbolo].valorXpath = null;
+        }
+    }
     existeSimbolo(simbolo) {
         for (let actual of this._listaSimbolos) {
-            if (actual.equals(simbolo))
+            if (actual.existe(simbolo))
                 return true;
         }
         return false;
@@ -65,13 +79,10 @@ class TablaSimbolosXquery {
         }
         return null;
     }
-    /*
-    todo: Agregar la carga xml a la tabla de simbolos
-    public cargarElementosXml():TablaSimbolosXquery{
-        this.listaSimbolos.push(new Simbolo("$$Ts",new Tipo(TipoDato.objeto),null,null));
-        this.listaSimbolos.push(new Simbolo("$$Ts",new Tipo(TipoDato.xpathValue),null,null));
-        return this;
-    }*/
+    cargarElementosXml() {
+        this.agregarSimboloAlInicio(new Simbolo("$$LTs", new Tipo(TipoDato.xpathValue), null, null));
+        this.agregarSimboloAlInicio(new Simbolo("$$Ts", new Tipo(TipoDato.objeto), null, null));
+    }
     get tsPadre() {
         return this._tsPadre;
     }
@@ -95,5 +106,19 @@ class TablaSimbolosXquery {
     }
     set esGlobal(value) {
         this._esGlobal = value;
+    }
+    getHtmlTable() {
+        let cad = '<cite style="font-size:x-large;">REPORTE DE TABLA DE SIMBOLOS XQUERY</cite><br/>'
+            + '<table border="1">'
+            + '<tr>'
+            + '<th>NOMBRE</th><th>TIPO</th><th>VALOR</th><th>POSICION</th><th>ENTORNO</th><th>TAMAÑO</th> '
+            + '</tr>';
+        if (this._listaSimbolos != undefined && this._listaSimbolos != null && this._listaSimbolos.length != 0) {
+            for (let simbolo of this.listaSimbolos) {
+                cad += simbolo.toString();
+            }
+        }
+        cad += '</table>';
+        return cad;
     }
 }

@@ -9,11 +9,16 @@ export default class position {
     }
     getValor(ent, arbol) {
         if (ent instanceof Array) {
+            this.val = ent.length;
             return [ent.length];
         }
         else {
+            this.val = 1;
             return [1];
         }
+    }
+    traducir(ent, c3d) {
+        //
     }
 }
 //# sourceMappingURL=position.js.map

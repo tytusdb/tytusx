@@ -32,7 +32,12 @@ class TsRow {
             if (this._sub_entorno !== undefined && this._sub_entorno !== null) {
                 for (let row of this.sub_entorno) {
                     if (row.tipo.esPrimitivo()) {
-                        primitivo = new Primitive(row.nodo.getValueString(), row.tipo, 0, 0);
+                        if (row.tipo.esNumero()) {
+                            primitivo = new Primitive(Number(row.nodo.getValueString()), row.tipo, 0, 0);
+                        }
+                        else {
+                            primitivo = new Primitive(row.nodo.getValueString(), row.tipo, 0, 0);
+                        }
                         break;
                     }
                 }
