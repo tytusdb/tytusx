@@ -10,6 +10,7 @@ export class LowerCase implements Expresion {
     linea: number;
     columna: number;
     public valor: any;
+    public errores = [];
 
     constructor(linea: number, columna: number, valor: any) {
         this.linea = linea;
@@ -44,13 +45,30 @@ export class LowerCase implements Expresion {
         if(typeof(texto) == 'string'){
             return texto.toLowerCase();
         }else{
+            this.errores.push({
+                Tipo:'Sintáctico', 
+                Fila: this.linea, 
+                Columna: this.columna, 
+                Description: 'Tipo de dato '+typeof(texto)+' incorrecto'
+            });
+            var err = this.GetErrorStorage();
+            this.errores = this.errores.concat(err);
+            this.SetStorage(this.errores);
             return 'null';
         }
-        
     }
 
     isInt(n: number) {
         return Number(n) === n && n % 1 === 0;
+    }
+    //obtener contador
+    GetErrorStorage(): any {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetStorage(error: any) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
     }
 
 }

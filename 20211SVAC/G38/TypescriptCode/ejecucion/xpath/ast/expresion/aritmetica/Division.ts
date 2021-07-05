@@ -1,20 +1,21 @@
-class Division implements Expresion{
+class Division extends ExpresionAncestor{
     private izquierda: Expresion;
     private derecha: Expresion;
     linea: number;
     columna: number;
 
     constructor(izquierda: Expresion, derecha: Expresion,linea:number, columna:number) {
+        super();
         this.izquierda = izquierda;
         this.derecha = derecha;
         this.linea = linea;
         this.columna = columna;
     }
 
-    getTipo(ent: TablaSimbolos): Tipo {
+    getTipo(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): Tipo {
         let tipo = new Tipo(TipoDato.err);
-        let tipoIzquierda = this.izquierda.getTipo(ent);
-        let tipoDerecha = this.derecha.getTipo(ent);
+        let tipoIzquierda = this.izquierda.getTipo(tsXquery,ent);
+        let tipoDerecha = this.derecha.getTipo(tsXquery,ent);
         if(tipoIzquierda.esNumero() && tipoDerecha.esNumero()){
             tipo = new Tipo(TipoDato.numero);
         }
@@ -24,16 +25,16 @@ class Division implements Expresion{
         return tipo;
     }
 
-    getValor(ent: TablaSimbolos): any {
-        let tipo = this.getTipo(ent);
+    getValor(tsXquery:TablaSimbolosXquery,ent: TablaSimbolos): any {
+        let tipo = this.getTipo(tsXquery,ent);
         let valor;
         if(!tipo.esError()){
-            let valorDerecha = this.derecha.getValor(ent);
+            let valorDerecha = this.derecha.getValor(tsXquery,ent);
             if(valorDerecha == 0 || valorDerecha == "0"){
                 ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("División dentro de cero",this.linea,this.columna));
                 tipo = new Tipo(TipoDato.err);
             }else{
-                valor = this.izquierda.getValor(ent) / this.derecha.getValor(ent);
+                valor = this.izquierda.getValor(tsXquery,ent) / this.derecha.getValor(tsXquery,ent);
             }
         }
         return valor;

@@ -1,7 +1,9 @@
 function ejecutarXQuery(instruccion,entorno){
-    console.log("Iniciando ejecucion");
-    
-    let consulta=getConsultaXQuery(instruccion, entorno,null);
+    let tablaSimbolos=new Entorno(null);
+    let consulta=getConsultaXQuery(instruccion, entorno,tablaSimbolos);
+    //console.log(tablaSimbolos);
+    //tablaSimbolos
+
     if(consulta){
         imprimiConsola(consulta);
     }else{
@@ -9,34 +11,297 @@ function ejecutarXQuery(instruccion,entorno){
     }
 }
 
-function getConsultaXQuery(instruccion, entorno,padre){
+function getConsultaXQuery(instruccion, entorno,tablaSimbolos){
     switch (instruccion.instr) {
         case "FOR_IN":
-
-            return ejecutarForIn(instruccion,entorno,padre);
+            return ejecutarForIn(instruccion,entorno,tablaSimbolos);
         case "HTML":
-            
-            return procesarHTML(instruccion.valor,entorno,null)
+            return procesarHTML(instruccion.valor,entorno,tablaSimbolos)
         case "LLAMADA":
-            return ejecutarLLamada(instruccion.valor,entorno,padre);
+            return ejecutarLLamada(instruccion.valor,entorno,tablaSimbolos);
         case "F_DATA":
-            return ejecutarData(instruccion.valor,entorno,padre);
+            return ejecutarData(instruccion.valor,entorno,tablaSimbolos);
         case "F_UPPER":
-            return ejecutarUpper(instruccion.valor,entorno,padre);
+            return ejecutarUpper(instruccion.valor,entorno,tablaSimbolos);
         case "F_LOWER":
-            return ejecutarLower(instruccion.valor,entorno,padre);
+            return ejecutarLower(instruccion.valor,entorno,tablaSimbolos);
         case "F_SUBSTRING":
-            return ejecutarSubstring(instruccion.valor,entorno,padre);
+            return ejecutarSubstring(instruccion.valor,entorno,tablaSimbolos);
+        case "MULTIPLES":
+            return ejecutarInstrucciones(instruccion.valor,entorno,tablaSimbolos);
         default:
             return null
     }
 }
+function ejecutarIfElse(instruccion,entorno,tablaSimbolos){
+   
+    let condicion=procesarDato(instruccion.condicion,entorno,tablaSimbolos);
+    tem=traductorC3D.t;
+    traducirOperacion(instruccion.condicion,entorno,tablaSimbolos);
+    traductorC3D.t+=tem;
+    traductorC3D.traducirFuncion("",2);
+    if(condicion){
+        tem=traductorC3D.t;
+        traducirOperacion(instruccion.accion.data,entorno,tablaSimbolos);
+        traductorC3D.t+=tem;
+
+        return procesarDato(instruccion.accion.data,entorno,tablaSimbolos);
+        
+    }else{
+        if(instruccion.siguiente){
+            if(instruccion.siguiente.regreso=="ELSEIF"){
+                return ejecutarIfElse(instruccion.siguiente.data,entorno,tablaSimbolos);
+            }else{
+                tem=traductorC3D.t;
+                traducirOperacion(instruccion.siguiente.data,entorno,tablaSimbolos);
+                traductorC3D.t+=tem;
+            
+                return procesarDato(instruccion.siguiente.data,entorno,tablaSimbolos);
+            }
+        }
+    }
+
+    return null
+}
+function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
+    
+    for (const instruccion of instrucciones) {
+        
+        switch (instruccion.instr) {
+            case "CREAR":
+                crear_Variable(instruccion.valor,entorno,tablaSimbolos);
+                break;
+            case "ASIGNAR":
+                asignar_variable(instruccion.valor,entorno,tablaSimbolos);
+                break;
+            case "IF_":
+                return ejecutarIfElse(instruccion.valor,entorno,tablaSimbolos);
+            case "CREAR_F":
+                crear_funcion(instruccion.valor,entorno,tablaSimbolos);
+                break;
+            case "LLAMADA_F":
+                return llamada_funcion(instruccion.valor,entorno,tablaSimbolos);
+            case "NUEVO_ETR":
+
+                tablaSimbolos=new Entorno(tablaSimbolos);
+               
+                break;
+            default:
+                return null
+        }
+    }
+}
+function crear_funcion(instrucciones,entorno,tablaSimbolos){
+    if(!tablaSimbolos.existeEnActual(instrucciones.id)){
+        let valor=instrucciones;
+        tablaSimbolos.agregar(instrucciones.id,valor);
+    }else{
+        console.error("La funcion "+instrucciones.id+" ya existe en el entorno actual");
+    }
+    
+}
+function llamada_funcion(instrucciones,entorno,tablaSimbolos){
+    
+    
+    if(tablaSimbolos.getFuncion(instrucciones.id)){
+
+        let funcion=JSON.parse(JSON.stringify(tablaSimbolos.getFuncion(instrucciones.id)));
+
+        let index=0;   
+        
+        for (const parametro of instrucciones.parametros) {
+            
+            funcion.parametros[index].valor={tipo:"NUMERO",valor:procesarDato( parametro,entorno,tablaSimbolos)};
+            let nuevaVariable={instr:"CREAR",valor:funcion.parametros[index]};
+            funcion.instr.unshift(nuevaVariable);
+            index++;
+        }
+      
+        
+        funcion.instr.unshift({instr:"NUEVO_ETR"});
+        return ejecutarInstrucciones(funcion.instr,entorno,tablaSimbolos);
+    }else{
+        console.error("La funcion "+instrucciones.id+" no existe en el entorno actual");
+    }
+   return null 
+}
+function crear_Variable(instrucciones,entorno,tablaSimbolos){
+    console.log("crear");
+    if(!tablaSimbolos.existeEnActual(instrucciones.id)){
+        let valor;
+        if(instrucciones.valor){
+            valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
+            tem=traductorC3D.t;
+            traducirOperacion(instrucciones.valor,entorno,tablaSimbolos);
+            traductorC3D.t+=tem;
+        }else{
+            valor=null;
+        }
+       
+        
+
+        tablaSimbolos.agregar(instrucciones.id,valor);
+    }else{
+        console.error("La variable "+instrucciones.id+" ya existe en el entorno actual");
+        var error = new Error("PARA");
+            throw error;
+    }
+    
+}
+function asignar_variable(instrucciones,entorno,tablaSimbolos){
+    if(tablaSimbolos.existeEnActual(instrucciones.id)){
+        let valor=procesarDato(instrucciones.valor,entorno,tablaSimbolos);
+        tem=traductorC3D.t;
+        traducirOperacion(instrucciones.valor,entorno,tablaSimbolos);
+        traductorC3D.t+=tem;
+
+        tablaSimbolos.reemplazar(instrucciones.id,valor);
+    }else{
+        console.error("La variable "+instrucciones.id+" no existe en el entorno actual");
+        var error = new Error("PARA");
+            throw error;
+    }
+
+}
+function procesarDato(instruccion,entorno,tablaSimbolos){
+    let valor1;
+    let valor2;
+   
+    switch (instruccion.tipo) {
+        case "NUMERO":
+            return parseInt(instruccion.valor);
+        case "CADENA":
+            return instruccion.valor;
+        case "VARIABLE":
+           
+            let valor=tablaSimbolos.getSimbolo(instruccion.valor);
+            if(valor||valor===0){
+                return valor;
+            }
+            var error = new Error("PARA");
+            throw error;
+        case "LLAMADA_F":
+            return llamada_funcion(instruccion.valor,entorno,tablaSimbolos);
+        case "OP_MAS":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1+valor2;
+        case "OP_RES":
+        case "OP_MENOS":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1-valor2;
+        case "OP_MUL":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1*valor2;
+        case "OP_DIV":
+           valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+           valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+           return valor1/valor2;
+        case "OP_NEG":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            return -1*valor1;
+        case "IGUAL":
+        case "OP_IGUAL":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 == valor2 ;
+        case "OP_MAYOR":
+        case "MAYOR":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 > valor2;
+        case "OP_MAYOR_IGUAL":
+        case "MAYOR_IGUAL":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 >= valor2;
+        case "OP_MENOR":
+        case "MENOR":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 < valor2;
+        case "OP_MENOR_IGUAL":
+        case "MENOR_IGUAL":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 <= valor2;
+        case "AND":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 && valor2 ;
+        case "OR":
+            valor1=procesarDato(instruccion.valor1,entorno,tablaSimbolos);
+            valor2=procesarDato(instruccion.valor2,entorno,tablaSimbolos);
+            return valor1 || valor2 ;
+        case "xPath":        
+            let arregloEntornos=procesarXpath(instruccion.valor,entorno,null)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            for (const iterator of arregloEntornos) {
+                if(iterator.valorAtributo){
+                    return iterator.valorAtributo;
+                }
+                return iterator.texto
+            }
+    }
+    
+}
+
+function comparar(palabra1,palabra2){
+    if(!isNaN(palabra1)&&!isNaN(palabra2)){
+        if(parseFloat(palabra1)<parseFloat(palabra2)){
+            return true;
+        } 
+    }else{
+        return alfabeto(palabra1,palabra2,0);
+    }
+
+    return false;
+}
+
+function alfabeto(palabra1,palabra2,i){
+
+    if(palabra1.charCodeAt(i)>palabra2.charCodeAt(i)){
+        return true
+    }else if(palabra1.charCodeAt(i)==palabra2.charCodeAt(i)){
+        return alfabeto(palabra1,palabra2,i+1);
+    }
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 function ejecutarForIn(instruccion,entorno,padre){
-
     
+    let respuesta="";
+    traductorC3D.traducirFuncion("",3);
+    if(instruccion.iterador.consulta.tipo=="TO"){
+        for (let index = instruccion.iterador.consulta.inicio; index <= instruccion.iterador.consulta.fin; index++) {
+            let var_= new Entorno(padre);
+            var_.agregar(instruccion.iterador.variable,index);
+            tem=traductorC3D.t;
+            retorno=procesarReturn(instruccion.retorno,var_);
+            traductorC3D.t+=tem;
+            if(retorno){
+                respuesta+=retorno+'\n';
+            }
+        }
+        if(respuesta!=""){
+            return respuesta;
+        }
+    }else{
     let consulta=instruccion.iterador.consulta;
-    let entornos=procesarXpath(consulta,entorno,padre);
+    let entornos=procesarXpath(consulta,entorno,null);
     entornos=procesarEtorno(entornos);
     
     //Orden by
@@ -44,23 +309,35 @@ function ejecutarForIn(instruccion,entorno,padre){
         entornos=ordenar(instruccion.order,entornos);
     }
     let where=instruccion.where;
+
     let respuesta="";
+    let contador=1;
     for (const x of entornos) {
         let var_= new Entorno(padre);
         var_.agregar(instruccion.iterador.variable,x);
+        var_.agregar(instruccion.iterador.contador,contador);
+        
+        contador++;
         let retorno=null;
+        if(where){
+            tem=traductorC3D.t;
+            traducirOperacionW(where.condicion,var_);
+            traductorC3D.t+=tem;
+        }
         if(where==null||validarWhere(where.condicion,var_)){
             retorno=procesarReturn(instruccion.retorno,var_);
         }
         if(retorno){
             respuesta+=retorno+'\n';
         }
+        
     }
     
     if(respuesta!=""){
         return respuesta;
     }
     console.error("A  QUI");
+}
     return null;
     
 }
@@ -88,6 +365,27 @@ function validarWhere(instruccion,tabla){
     let valor1;
     let valor2;
     switch (instruccion.tipo) {
+        case "OP_MAS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1+valor2;
+         case "OP_RES":
+         case "OP_MENOS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1-valor2;
+         case "OP_MUL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1*valor2;
+         case "OP_DIV":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1/valor2;
+         case "OP_NEG":
+             valor1=validarWhere(instruccion.valor1,tabla);
+             return -1*valor1;
+
         case "MAYOR":
             valor1=validarWhere(instruccion.valor1,tabla);
             valor2=validarWhere(instruccion.valor2,tabla);
@@ -165,7 +463,9 @@ function procesarReturn(instruccion,variables){
 }
 function procesarIF(instruccion,variables){
     let res=validarWhere(instruccion.condicion,variables);
-
+    
+    traducirOperacionW(instruccion.condicion,variables);
+    
     if(res){
         switch (instruccion.then.tipo) {
             case "HTML":
@@ -281,6 +581,9 @@ function imprimirEntorno(entorno){
     let contenido="";
     let atributo;
     let arregloAtributo=[];
+    if (!isNaN(entorno)) {
+        return entorno.toString();;
+      }
     if(entorno.valorAtributo){
         let txt =entorno.nombreAtributo +'="' +entorno.valorAtributo +'"\n';
         return txt;
@@ -291,15 +594,33 @@ function imprimirEntorno(entorno){
               atributo = {
                   etiqueta: atr.nombreAtributo,
                   valor: atr.valorAtributo,
+                  ref:atr.referenciaHeap
                 };
               arregloAtributo.unshift(atributo);
             }
           } else {
               arregloAtributo = [];
           }
+          
+          if(entorno.hijos){
+            traductorC3D.traducirFuncion("<" + entorno.etiqueta );
+
+            traductorC3D.traducirFuncion( ">");
+           
+            if(traductorC3D.esNumero(entorno.texto)){
+
+              traductorC3D.imprimirNumero(entorno.referenciaHeap);
+            }else{
+              traductorC3D.imprimirCadena(entorno.referenciaHeap);
+            }
+          }
       for (const iterator of entorno.hijos) {
           contenido += imprimirEntorno(iterator);
       }
+      if(entorno.hijos){
+        traductorC3D.traducirFuncion("</" + entorno.etiqueta + ">");
+      }
+      
       let retorno = new Etiqueta(
           entorno.etiqueta,
           entorno.texto,
@@ -307,6 +628,7 @@ function imprimirEntorno(entorno){
           arregloAtributo
         ); //nombre,texto,contenido
         if (retorno) {
+            
           return retorno.obtenerXML();
         }
     }
@@ -331,7 +653,7 @@ function procesarEtorno(entorno){
 }
 
 function procesarArreglo(entorno){
-    console.log(entorno);
+    
    if(entorno){
     if(!entorno.etiqueta||!entorno){
         if(entorno.valorAtributo){
@@ -363,15 +685,13 @@ function ordenar(instruccion,entornos){
 
 
 
-    console.log(entornosAux);
+    
     var n, i, k, aux,aux2;
     n = entornosAux.length;
     for (k = 1; k < n; k++) {
         for (i = 0; i < (n - k); i++) {
-            if (parseFloat(entornosAux[i].texto) < parseFloat(entornosAux[i + 1].texto)) {
-                console.log(entornosAux[i].texto);
-                console.log(" CAMBIO POR ");
-                console.log(entornosAux[i+1].texto);
+            if (comparar(entornosAux[i].texto,entornosAux[i + 1].texto)) {
+                
                 aux = entornosAux[i];
                 entornosAux[i] = entornosAux[i + 1];
                 entornosAux[i + 1] = aux;
@@ -383,7 +703,7 @@ function ordenar(instruccion,entornos){
             }
         }
     }
-    console.log(entornosAux);
+    
  
     return entornos;
 }
@@ -415,7 +735,7 @@ function ejecutarLower(instruccion,entorno,padre){
 
 function ejecutarSubstring(instruccion,entorno,padre){
     let res=ejecutarLLamada(instruccion.valor,entorno,entorno);
-    console.log(instruccion);
+    
     if(res){
         if(instruccion.fin){
             return  res.substring(instruccion.inicio,instruccion.fin);
@@ -423,4 +743,79 @@ function ejecutarSubstring(instruccion,entorno,padre){
         return  res.substring(instruccion.inicio,res.length);
     }
     return  null;
+}
+
+
+
+function validarWhere(instruccion,tabla){
+
+    let valor1;
+    let valor2;
+    switch (instruccion.tipo) {
+        case "OP_MAS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1+valor2;
+         case "OP_RES":
+         case "OP_MENOS":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1-valor2;
+         case "OP_MUL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1*valor2;
+         case "OP_DIV":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1/valor2;
+         case "OP_NEG":
+             valor1=validarWhere(instruccion.valor1,tabla);
+             return -1*valor1;
+
+        case "MAYOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 > valor2;
+        case "MAYOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 >= valor2;
+        case "MENOR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 < valor2;
+        case "MENOR_IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 <= valor2;
+        case "IGUAL":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 == valor2;
+        case "DIFERENTE":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 != valor2;
+        case "NUMERO":
+            return parseInt(instruccion.valor)
+        case "CADENA":
+            
+            return instruccion.valor
+        case "VARIABLE":
+            let variable=tabla.getSimbolo(instruccion.variable);
+            
+            let arregloEntornos=procesarXpath(instruccion.consulta,variable,variable)
+            arregloEntornos=procesarEtorno(arregloEntornos);
+            for (const iterator of arregloEntornos) {
+                if(iterator.valorAtributo){
+                    return iterator.valorAtributo;
+                }
+                return iterator.texto
+            }
+
+        default:
+            return false;
+           
+    }
 }

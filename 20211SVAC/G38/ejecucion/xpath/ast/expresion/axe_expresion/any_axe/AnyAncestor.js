@@ -1,6 +1,7 @@
 "use strict";
-class AnyAncestor {
+class AnyAncestor extends ExpresionAncestor {
     constructor(axeType, axeOperation, identifier, listaPredicados, linea, columna) {
+        super();
         this.axeType = axeType;
         this.axeOperation = axeOperation;
         this.identifier = identifier;
@@ -8,10 +9,10 @@ class AnyAncestor {
         this.linea = linea;
         this.columna = columna;
     }
-    getTipo(ent) {
+    getTipo(tsXquery, ent) {
         return new Tipo(TipoDato.err);
     }
-    getValor(ent) {
+    getValor(tsXquery, ent) {
         var ts = new TablaSimbolos(null);
         switch (this.axeType) {
             case AxeType.ancestorType:
@@ -35,7 +36,7 @@ class AnyAncestor {
                 ts = ent.getElementsParentsRecursive();
                 break;
             case AxeOperation.text:
-                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("No se puede pedir un nodo texto para el axe parent", this.linea, this.columna));
+                ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("No se puede pedir un nodo texto para el axe parent", this.linea, this.columna));
                 break;
         }
         return ts;

@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TipoFor = exports.DeclaracionFor = void 0;
-const Simbolo_1 = require("../AST/Simbolo");
-const Tipo_1 = require("../AST/Tipo");
-class DeclaracionFor {
+import { Simbolo } from "../AST/Simbolo";
+import { Tipo } from "../AST/Tipo";
+export class DeclaracionFor {
     constructor(tipo, identificador, consultas, linea, columna, at, desde, hasta, listaEnteros) {
         this.linea = linea;
         this.columna = columna;
@@ -41,7 +38,7 @@ class DeclaracionFor {
                     });
                 }
                 //A la variable $x (identificador) asignarle estos simbolos.
-                newSimb = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, listaSimbolos, this.linea, this.columna);
+                newSimb = new Simbolo(Tipo.XQ_VAR, this.identificador, listaSimbolos, this.linea, this.columna);
                 XQueryEnt.agregarSimbolo(this.identificador, newSimb);
                 break;
             case TipoFor.ITERATIVO:
@@ -50,11 +47,11 @@ class DeclaracionFor {
                     for (let i = this.desde; i <= this.hasta; i++) {
                         listaSimbolos.push(i);
                     }
-                    let newSimb = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, listaSimbolos, this.linea, this.columna);
+                    let newSimb = new Simbolo(Tipo.XQ_VAR, this.identificador, listaSimbolos, this.linea, this.columna);
                     XQueryEnt.agregarSimbolo(this.identificador, newSimb);
                 }
                 else if (this.listaEnteros != undefined) {
-                    let newSimb = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, this.listaEnteros, this.linea, this.columna);
+                    let newSimb = new Simbolo(Tipo.XQ_VAR, this.identificador, this.listaEnteros, this.linea, this.columna);
                     XQueryEnt.agregarSimbolo(this.identificador, newSimb);
                 }
                 break;
@@ -69,18 +66,17 @@ class DeclaracionFor {
                     });
                 }
                 //A la variable '$i' asignarle la longitud de mis consultas de resultado.
-                let simbI = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_NUMB, this.identificador, contador, this.linea, this.columna);
+                let simbI = new Simbolo(Tipo.XQ_NUMB, this.identificador, contador, this.linea, this.columna);
                 //A la variable $x (identificador) asignarle estos simbolos.
-                newSimb = new Simbolo_1.Simbolo(Tipo_1.Tipo.XQ_VAR, this.identificador, listaSimbolos, this.linea, this.columna);
+                newSimb = new Simbolo(Tipo.XQ_VAR, this.identificador, listaSimbolos, this.linea, this.columna);
                 XQueryEnt.agregarSimbolo(this.identificador, newSimb);
                 break;
         }
     }
 }
-exports.DeclaracionFor = DeclaracionFor;
-var TipoFor;
+export var TipoFor;
 (function (TipoFor) {
     TipoFor[TipoFor["NORMAL"] = 0] = "NORMAL";
     TipoFor[TipoFor["ITERATIVO"] = 1] = "ITERATIVO";
     TipoFor[TipoFor["AT"] = 2] = "AT";
-})(TipoFor = exports.TipoFor || (exports.TipoFor = {}));
+})(TipoFor || (TipoFor = {}));

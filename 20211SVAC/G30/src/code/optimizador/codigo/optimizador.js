@@ -34,6 +34,8 @@ var Optimizador = /** @class */ (function () {
         return this.cadenaOptimizada;
     };
     Optimizador.prototype.getReporte = function () {
+        console.log('geteando reporte');
+        //console.log(this.reporteOptimizacion);
         return this.reporteOptimizacion;
     };
     Optimizador.prototype.reglas6_16Header = function (array) {

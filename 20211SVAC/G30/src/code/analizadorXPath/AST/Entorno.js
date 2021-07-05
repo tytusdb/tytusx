@@ -88,17 +88,12 @@ export class Comando
 
   Ejecutar(XML)
   {
-    console.log("Ejecutar\n"+XML);
-    console.log(XML.atributos);
-    console.log(XML.hijos);
     LimpiarErrores()
     var Salida = ""
     var retornos=[]
     for (const iterator of this.Instrucciones) {
       var {Nodo} = require('../Expresion/Expresiones')
-      console.log("ITERADOR"+iterator);
       retornos = retornos.concat(iterator.getValor([new Nodo(Tipo.NODO,XML,[],"",1)]))
-      console.log("RETORNOS\n"+retornos);
     }
     for (const retorno of retornos) {
       if(retorno.tipo == Tipo.NODO)

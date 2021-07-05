@@ -16,7 +16,7 @@ export class If implements ExpressionXquery{
         
         const condicion = this.condicion.executeXquery(entAct, RaizXML)
         if (condicion.type !== tipoPrimitivo.BOOL){ 
-            throw new Error("Error Semantico: la expresion del if es de tipo: "+condicion.type+" y debe ser tipo boolean, linea: "+this.line+ "column: "+this.column);
+            throw new Error("Error Semantico: la expresion del if es de tipo: "+condicion.type+" y debe ser tipo boolean, linea: "+this.line+ " column: "+this.column);
         }
 
         if (condicion.value === true){
@@ -33,7 +33,16 @@ export class If implements ExpressionXquery{
         
     }
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"IF\"];\n";
+        texto = this.condicion.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.condicion.line.toString() + "_" + this.condicion.column.toString() + ";\n";
+        texto = this.exp.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.exp.line.toString() + "_" + this.exp.column.toString() + ";\n";
+        if(this.elseif !== null) {
+            texto = this.elseif.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.elseif.line.toString() + "_" + this.elseif.column.toString() + ";\n";
+        }
+        return texto;
     }
 
 }

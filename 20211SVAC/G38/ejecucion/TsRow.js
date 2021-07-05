@@ -32,7 +32,12 @@ class TsRow {
             if (this._sub_entorno !== undefined && this._sub_entorno !== null) {
                 for (let row of this.sub_entorno) {
                     if (row.tipo.esPrimitivo()) {
-                        primitivo = new Primitive(row.nodo.getValueString(), row.tipo, 0, 0);
+                        if (row.tipo.esNumero()) {
+                            primitivo = new Primitive(Number(row.nodo.getValueString()), row.tipo, 0, 0);
+                        }
+                        else {
+                            primitivo = new Primitive(row.nodo.getValueString(), row.tipo, 0, 0);
+                        }
                         break;
                     }
                 }
@@ -211,4 +216,70 @@ class TsRow {
     get id() {
         return this._id;
     }
+    generarCodigo_3d(refPadre) {
+        var tempPosObjeto = CodeUtil.generarTemporal();
+        var tempPosPadre = CodeUtil.generarTemporal();
+        var tempPosIndex = CodeUtil.generarTemporal();
+        var tempPosSize = CodeUtil.generarTemporal();
+        var tempPosCadena = CodeUtil.generarTemporal();
+        var tempPosSubEntorno = CodeUtil.generarTemporal();
+        var tempEtiquetaRepositorio;
+        var sizeEntorno = (this.nodo instanceof XmlAttribute) ? this._sub_entorno.length + 1 : this._sub_entorno.length;
+        //Offsets para atributos
+        CodeUtil.printComment("-> Inició " + this._identificador);
+        CodeUtil.printWithComment(tempPosObjeto + " = HP + " + TsRow.POS_OBJECT + " ; ", "Guardamos el inicio del Objeto");
+        CodeUtil.printWithComment(tempPosPadre + " = HP + " + TsRow.POS_PARENT + " ; ", "Guardamos la referencia del padre");
+        CodeUtil.printWithComment(tempPosIndex + " = HP + " + TsRow.POS_INDEX + " ; ", "Guardamos el index del objeto");
+        CodeUtil.printWithComment(tempPosSize + " = HP + " + TsRow.POS_SIZE + " ; ", "Guardamos el tamaño del objeto");
+        CodeUtil.printWithComment(tempPosCadena + " = HP + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + " ; ", "Guardamos el espacio para "
+            + ((this.nodo instanceof XmlElement) ? "la etiqueta" : (this.nodo instanceof XmlContent) ? "el contenido" : " el nombre del atributo"));
+        //Reserva de espacio
+        CodeUtil.printComment("Apartamos espacio para los atributos de " + this._identificador);
+        CodeUtil.printWithComment("HP = HP + " + TsRow.SIZE_PROPERTIES_OBJECT + " ;", "Incrementamos el espacio para atributos internos");
+        CodeUtil.printWithComment(tempPosSubEntorno + " = HP + 0 ; ", "Guardamos el inicio de su subentorno");
+        CodeUtil.printWithComment("HP = HP + " + sizeEntorno + " ;", "Incrementamos el heap con el " + "tamaño de los atributos");
+        //Propiedades del objeto
+        CodeUtil.printComment("Guardamos las propiedades del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosPadre + "] = " + refPadre + " ;", "Guardamos el padre del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosIndex + "] = " + (this.indice) + " ;", "Guardamos el indice del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosSize + "] = " + (this._sub_entorno == null ? 0 : this.sub_entorno.length) + ";", "Guardamos el tamaño del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosObjeto + "] = " + this.tipo.getTipo() + " ;", "Guardamos el Tipo: " + this.tipo + "(" + this.tipo.getTipo() + ")");
+        //Generamos la etiqueta
+        tempEtiquetaRepositorio = this.nodo.generateString_3d();
+        CodeUtil.printComment("Guardamos la etiqueta generada");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosCadena + "] = " + tempEtiquetaRepositorio + ";", "Guardamos en heap el apuntador a la cadena");
+        CodeUtil.print("");
+        CodeUtil.printComment("Inició Código de los hijos de " + this._identificador);
+        if (this.nodo instanceof XmlElement) {
+            var _i = 0;
+            for (let child of this._sub_entorno) {
+                let tmpPosChild = CodeUtil.generarTemporal();
+                let tmpChild;
+                CodeUtil.print("");
+                CodeUtil.print(tmpPosChild + " = " + tempPosSubEntorno + " + " + _i + " ;");
+                tmpChild = child.generarCodigo_3d(tempPosObjeto);
+                CodeUtil.print("Heap[(int)" + tmpPosChild + "] = " + tmpChild + " ;");
+                _i += 1;
+            }
+        }
+        else if (this.nodo instanceof XmlAttribute) {
+            let tmpGeneradoValorAtributo;
+            let nodoAtributo = this.nodo;
+            let tmpPosChild = CodeUtil.generarTemporal();
+            CodeUtil.printWithComment(tmpPosChild + " = " + tempPosSubEntorno + " + " + 0 + " ;", //Cero porque para atributos no tiene hijos
+            "Posicion para valor del atriuto");
+            tmpGeneradoValorAtributo = nodoAtributo.generateValueString_3d();
+            CodeUtil.printWithComment("Heap[(int)" + tmpPosChild + "] = " + tmpGeneradoValorAtributo + " ;", "Guardamos la posicion del valor del atributo");
+        }
+        CodeUtil.printComment("Finalizó Código de los hijos de " + this._identificador);
+        CodeUtil.printComment("-> Finalizó " + this._identificador);
+        return tempPosObjeto;
+    }
 }
+TsRow.POS_OBJECT = "0";
+TsRow.POS_PARENT = "1";
+TsRow.POS_INDEX = "2";
+TsRow.POS_SIZE = "3";
+TsRow.POS_LABEL_CONT_ATTRIBUTE = "4";
+TsRow.SIZE_PROPERTIES_OBJECT = "5";
+TsRow.POS_INIT_CHILDS = TsRow.SIZE_PROPERTIES_OBJECT;

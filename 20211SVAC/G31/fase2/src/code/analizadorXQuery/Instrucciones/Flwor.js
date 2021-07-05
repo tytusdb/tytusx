@@ -33,28 +33,28 @@ export class Flwor extends NodoXQuery{
     getValor(entorno, xml){
         this.xml = this.asignarPadre(xml)
 
-        let entornoFlor = new Entorno(entorno, 'for'); // nuevo entorno para el flowr
+        let entornoFlor = new Entorno(entorno, 'FLOWR'); // nuevo entorno para el flowr
 
         if(Array.isArray(this.blindingList)){ // agregue los parametros 
             for(let variable of this.blindingList){
                 if(variable instanceof VariableFor){
-                    console.log('Es una variable for')
+                    //console.log('Es una variable for')
                     if(entornoFlor instanceof Entorno){
                         let valor = this.ejecutarConsulta(variable.query)
-                        console.log('Esto se trajo de la variable del for', valor)
-                        let declaracion =  entornoFlor.declarar(variable.nombre, valor, variable.linea, variable.columna); 
+                        //console.log('Esto se trajo de la variable del for', valor)
+                        let declaracion =  entornoFlor.declarar(variable.nombre, valor, variable.linea, variable.columna, Tipo.CONSULTA, entornoFlor.nombre); 
                         if(declaracion instanceof Error)
                             return declaracion
                     }
-                    console.log('Se declararon las variables del for', entornoFlor)
+                  // console.log('Se declararon las variables del for', entornoFlor)
                 }
 
                 
                 if(variable instanceof Asignacion){
-                    console.log('Es una asignacion')
+                   // console.log('Es una asignacion')
 
                     let retorno = variable.getValor(entornoFlor, xml)
-                    console.log('Se realizo la asignacion', retorno)
+                  //  console.log('Se realizo la asignacion', retorno)
                 }
 
             }   
@@ -64,7 +64,7 @@ export class Flwor extends NodoXQuery{
         
             console.log('Se declararon las variables del for', entornoFlor)
         }else{
-            let declaracion = entornoFlor.declarar(this.blindingList.nombre, null, this.blindingList.linea, this.blindingList.columna)
+            let declaracion = entornoFlor.declarar(this.blindingList.nombre, null, this.blindingList.linea, this.blindingList.columna, entornoFlor.nombre)
             if(declaracion instanceof Error)
                 return declaracion
         }
@@ -74,7 +74,7 @@ export class Flwor extends NodoXQuery{
         if(Array.isArray(this.intermedias)){
             for(let instruccion of this.intermedias){
                 retorno = instruccion.getValor(entornoFlor, xml)
-                retornos.push(retorno)
+                retornos = retorno
                 console.log('resultado de una intermedia', retorno)
             }
         }
@@ -86,16 +86,25 @@ export class Flwor extends NodoXQuery{
                     if(retorno != undefined || !retorno instanceof Error) 
                         retorno += retorno                     
                 }
-
+                let final = this.comprobar(retornos, retorno)
+                console.log('Esto quiere devolver 1', final)
                 // aqui verificar que devolver 
                 return retorno
             }else{
                 let retorno = this.returnClause.getValor(entornoFlor, xml)
-                console.log('RETORNO DEL FLWOR', retorno)
-                console.log('tengo que verificar esto del where', retornos)
+                //console.log('RETORNO DEL FLWOR', retorno)
+                //console.log('tengo que verificar esto del where', retornos)
+                let final = this.comprobar(retornos, retorno)
+                console.log('Esto quiere devolver 2', final)
+                let ret
+                try {
+                    ret = this.ConvertiraXML(final)
+                } catch (error) {
+                    ret = final
+                }
+
                 
-                // aqui verificar que devolver
-                return this.ConvertiraXML(retorno)
+                return ret
             }
         }
     }
@@ -163,12 +172,24 @@ export class Flwor extends NodoXQuery{
         return XML
     }
 
-    comprobar(retorno1, retorno2){
-        for(let retorno of retorno1){
-            if(retorno instanceof Objeto){
-
+    comprobar(retorno1, retorno2){  
+        let retornoF = new Objeto('/', [], [], 0, 0, "")
+       // for(let retorno of retorno1){  // donde estan todas las condiciones
+            if(retorno1 instanceof Objeto && retorno2 instanceof Objeto){
+                for(let ret of retorno2.hijos){
+                    for(let ret1 of retorno1.hijos){
+                        if(this.comprobarObjetos(ret1, ret)){
+                        retornoF.hijos.push(ret)
+                        
+                    }
+                    }
+                    
+                }
+            }else{
+                return retorno2
             }
-        }
+       // }
+        return retornoF
     }
 
     comprobarObjetos(objeto1, objeto2){

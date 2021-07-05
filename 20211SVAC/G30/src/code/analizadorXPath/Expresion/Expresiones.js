@@ -60,7 +60,6 @@ export class PathExp
 {
     constructor(caminos) 
     {
-        console.log("caminosss "+caminos)
         this.caminos=caminos
     }
 
@@ -69,7 +68,6 @@ export class PathExp
         var Retornos = Entorno
         for (const iterator of this.caminos) {
             Retornos = iterator.getValor(Retornos)
-            console.log("------->"+Retornos)
         }
         if(Retornos.length>0)
         {

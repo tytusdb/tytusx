@@ -233,7 +233,7 @@ PARAMETROS : PARAMETROS tk_coma PARAMETRO {     $1[1].agregarHijo($3[1]);
                                                 $$ = [$1[0],$1[1]];}
         | PARAMETRO { $$ = [[$1[0]],$1[1]]; };
 
-PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE { 
+PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE tk_interrogacion  { 
                 xParametroAux = new XParametro($1, @1.first_line, @1.first_column, $4[0]);
                 nodoaux = new NodoArbol($1+" as xs:"+$4[1],"");
                 $$ = [xParametroAux, nodoaux];
@@ -241,13 +241,13 @@ PARAMETRO: tk_idflower tk_as tk_xs DATA_TYPE {
 };
 
 DATA_TYPE: tk_integer   { $$ = [TipoXDataType.INTEGER, $1];  }
-        |  tk_double    { $$ = [TipoXDataType.DOUBLE,  $1];  }
-        |  tk_float     { $$ = [TipoXDataType.FLOAT,   $1];  }
-        |  tk_decimal   { $$ = [TipoXDataType.DECIMAL, $1];  }
+        |  tk_double    { $$ = [TipoXDataType.INTEGER,  $1];  }
+        |  tk_float     { $$ = [TipoXDataType.INTEGER,   $1];  }
+        |  tk_decimal   { $$ = [TipoXDataType.INTEGER, $1];  }
         |  tk_boolean   { $$ = [TipoXDataType.BOOLEAN, $1];  }
         |  tk_string    { $$ = [TipoXDataType.STRING,  $1];  };
 
-RETORNO: tk_as tk_xs DATA_TYPE {  $$ = $3; };
+RETORNO: tk_as tk_xs DATA_TYPE  tk_interrogacion {  $$ = $3; };
 
 
 SENTENCIAS_FUNCION : SENTENCIAS_FUNCION SENFUNCION { 
@@ -257,7 +257,7 @@ SENTENCIAS_FUNCION : SENTENCIAS_FUNCION SENFUNCION {
 
                 | SENFUNCION { $$ = [[$1[0]],$1[1]]; };
 
-SENFUNCION: tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_else RETURN_IF {
+SENFUNCION: tk_if tk_parentesisa EXP_NUMERICA tk_parentesisc tk_then RETURN_IF tk_else RETURN_IF {
                 XIFAux = new XIF(@1.first_line, @1.first_column, $3[0], null, $6[0], null, $8[0], TipoXIF.IF);
                 nodoaux = new NodoArbol("If","");
                 nodoaux.agregarHijo($3[1]);
@@ -269,7 +269,7 @@ SENFUNCION: tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_
                 nodoaux.agregarHijo(elseaux);
                 $$ = [XIFAux,nodoaux];
  }
-|  tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_else tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_else RETURN_IF {
+|  tk_if tk_parentesisa EXP_NUMERICA tk_parentesisc tk_then RETURN_IF tk_else tk_if tk_parentesisa EXP_NUMERICA tk_parentesisc tk_then RETURN_IF tk_else RETURN_IF {
                 XIFAux = new XIF(@1.first_line, @1.first_column, $3[0], $10[0], $6[0], $13[0], $15[0], TipoXIF.IFELSE);
                 nodoaux = new NodoArbol("If","");
                 nodoaux.agregarHijo($3[1]);
@@ -302,25 +302,45 @@ SENFUNCION: tk_if tk_parentesisa EXP_LOGICA tk_parentesisc tk_then RETURN_IF tk_
                 nodoaux.agregarHijo($2[1]);
                 $$ = [XReturnAux,nodoaux];};
 
-RETURN_IF:  EXP_CADENA { $$ = $1; }
-        | EXP_LOGICA { $$ = $1; };
+RETURN_IF:  EXP_CADENA { $$ = $1; };
 
 
-EXP_LOGICA: EXP_RELACIONAL tk_and EXP_RELACIONAL {  
+
+EXP_CADENA:    XCADENA { $$ = $1; }
+        |     tk_parentesisa XCADENA tk_parentesisc { $$ = $2; }
+        |      EXP_NUMERICA { $$ = $1; };
+
+XCADENA :         tk_cadena1 {  primitivoAux = new XPrimitivo($1, @1.first_line, @1.first_column,TipoXPrimitivo.CADENA);
+                                primitivoAux.setCadena(true);
+                                nodoaux = new NodoArbol($1,"");
+                                $$ = [primitivoAux,nodoaux]; }
+
+        |        tk_cadena2 {  primitivoAux = new XPrimitivo($1, @1.first_line, @1.first_column,TipoXPrimitivo.CADENA);
+                                primitivoAux.setCadena(true);
+                                nodoaux = new NodoArbol($1,"");
+                                $$ = [primitivoAux,nodoaux]; };
+
+EXP_NUMERICA :  tk_menos EXP_NUMERICA %prec EXPMENOS { 
+                                negativo = new XPrimitivo(-1, @1.first_line, @1.first_column,"");
+                                operacionAux = new XOperacion($2[0], negativo, Operador.MULTIPLICACION, @1.first_line, @1.first_column, "");
+                                nodoaux = new NodoArbol("*","");
+                                nodoaux.agregarHijo(new NodoArbol("-1",""));
+                                nodoaux.agregarHijo($2[1]);
+                                $$ = [operacionAux,nodoaux]; }
+        | EXP_NUMERICA tk_and EXP_NUMERICA {  
                                 operacionAux = new XOperacion($1[0], $3[0], Operador.AND, @1.first_line, @1.first_column, "");
                                 nodoaux = new NodoArbol("and","");
                                 nodoaux.agregarHijo($1[1]);
                                 nodoaux.agregarHijo($3[1]);
                                 $$ = [operacionAux,nodoaux]; } 
-        |   EXP_RELACIONAL tk_or EXP_RELACIONAL {  
+        |  EXP_NUMERICA tk_or EXP_NUMERICA {  
                                 operacionAux = new XOperacion($1[0], $3[0], Operador.OR, @1.first_line, @1.first_column, "");
                                 nodoaux = new NodoArbol("or","");
                                 nodoaux.agregarHijo($1[1]);
                                 nodoaux.agregarHijo($3[1]);
-                                $$ = [operacionAux,nodoaux]; } 
-        |   EXP_RELACIONAL { $$ = $1; };
+                                $$ = [operacionAux,nodoaux]; }
 
-EXP_RELACIONAL: EXP_NUMERICA tk_gt EXP_NUMERICA { 
+        | EXP_NUMERICA tk_gt EXP_NUMERICA { 
                                 operacionAux = new XOperacion($1[0], $3[0], Operador.MAYOR_QUE, @1.first_line, @1.first_column,"");
                                 nodoaux = new NodoArbol(">","");
                                 nodoaux.agregarHijo($1[1]);
@@ -344,40 +364,19 @@ EXP_RELACIONAL: EXP_NUMERICA tk_gt EXP_NUMERICA {
                                 nodoaux.agregarHijo($1[1]);
                                 nodoaux.agregarHijo($3[1]);
                                 $$ = [operacionAux,nodoaux];}
-        |       EXP_NUMERICA tk_eq EXP_CADENA { 
+        |       EXP_NUMERICA tk_eq EXP_NUMERICA { 
                                 operacionAux = new XOperacion($1[0], $3[0], Operador.IGUAL, @1.first_line, @1.first_column,"");
                                 nodoaux = new NodoArbol("==","");
                                 nodoaux.agregarHijo($1[1]);
                                 nodoaux.agregarHijo($3[1]);
                                 $$ = [operacionAux,nodoaux];}
-        |       EXP_NUMERICA tk_ne EXP_CADENA { 
+        |       EXP_NUMERICA tk_ne EXP_NUMERICA { 
                                 operacionAux = new XOperacion($1[0], $3[0], Operador.DIFERENTE_QUE, @1.first_line, @1.first_column,"");
                                 nodoaux = new NodoArbol("!=","");
                                 nodoaux.agregarHijo($1[1]);
                                 nodoaux.agregarHijo($3[1]);
-                                $$ = [operacionAux,nodoaux];};
+                                $$ = [operacionAux,nodoaux];}
 
-EXP_CADENA:    XCADENA { $$ = $1; }
-        |     tk_parentesisa XCADENA tk_parentesisc { $$ = $2; }
-        |      EXP_NUMERICA { $$ = $1; };
-
-XCADENA :         tk_cadena1 {  primitivoAux = new XPrimitivo($1, @1.first_line, @1.first_column,TipoXPrimitivo.CADENA);
-                                primitivoAux.setCadena(true);
-                                nodoaux = new NodoArbol($1,"");
-                                $$ = [primitivoAux,nodoaux]; }
-
-        |        tk_cadena2 {  primitivoAux = new XPrimitivo($1, @1.first_line, @1.first_column,TipoXPrimitivo.CADENA);
-                                primitivoAux.setCadena(true);
-                                nodoaux = new NodoArbol($1,"");
-                                $$ = [primitivoAux,nodoaux]; };
-
-EXP_NUMERICA :  tk_menos EXP_NUMERICA %prec EXPMENOS { 
-                                negativo = new XPrimitivo(-1, @1.first_line, @1.first_column,"");
-                                operacionAux = new XOperacion($2[0], negativo, Operador.MULTIPLICACION, @1.first_line, @1.first_column, "");
-                                nodoaux = new NodoArbol("*","");
-                                nodoaux.agregarHijo(new NodoArbol("-1",""));
-                                nodoaux.agregarHijo($2[1]);
-                                $$ = [operacionAux,nodoaux]; }
         |       EXP_NUMERICA tk_mas EXP_NUMERICA { 
                                 operacionAux = new XOperacion($1[0], $3[0], Operador.SUMA, @1.first_line, @1.first_column,"");
                                 nodoaux = new NodoArbol("+","");

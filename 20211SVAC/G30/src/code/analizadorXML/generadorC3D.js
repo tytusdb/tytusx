@@ -1,28 +1,37 @@
-const { contadorTemp } = require('../analizadorXPath/AST/Global')
+const fase2x = require('../analizadorXPath/fase2x')
+//import { fase2x as parseXpath } from '../analizadorXPath/fase2x';
 
 export class GeneradorC3D {
     heapXML = [];
     stackXML = [];
     heapXPATH = [];
     stackXPATH = [];
-    contXMLStack = 0;
+
     contadorTemporales = 0;
     contadorEtiquetas = 0;
+
     SP = 0;
     HP = 0;
+
     traduccionC3D = "";
     C3DXML = "";
+    C3DXPATH = "";
     C3DXQUERY = "";
+    
+    
 
     constructor(){}
 
     getEncabezado(){
         let encabezado = "/*------- H E A D E R --------*\/\n"
-        +"#include <stdio.h>\n#include <math.h>\n"
-        +"double heap[30101999];\ndouble stack[30101999];\n"
-        +"double heapXpath[30101999];\ndouble stackXpath[30101999];\n"
+        +"#include <stdio.h>\n"
+        +"#include <math.h>\n"
+        +"double heap[30101999];\n"
+        +"double stack[30101999];\n"
+        +"double heapXP[30101999];\n"
+        +"double stackXP[30101999];\n"
         +"double SP;\ndouble HP;\n\n"
-        +"double SPX;\ndouble HPX;\n\n";
+        +"double SPXP;\ndouble HPXP;\n\n";
 
         for (let i = 0; i < this.contadorTemporales; i++) {
             if(i==0){
@@ -42,11 +51,11 @@ export class GeneradorC3D {
     getNatives(){
         let natives = `\n/*------NATIVES------*/\n
         void printQuery() {
-            ${this.getNewTemp()} = SP+1;\n`
+        ${this.getNewTemp()} = SP;\n`
 
-        natives += `${this.getNewTemp()} = stack[(int)t${this.contadorTemporales-2}];\n`
+        natives += `\t\t${this.getNewTemp()} = stack[(int)t${this.contadorTemporales-2}];\n`
 
-        natives += `L${this.contadorEtiquetas}:
+        natives += `\t\t\tL${this.contadorEtiquetas}:
         ${this.getNewTemp()} = heap[(int)t${this.contadorTemporales-2}];
             if(t${this.contadorTemporales-1} == -1) goto L${this.contadorEtiquetas+1};
             printf("%c", (char)t${this.contadorTemporales-1});
@@ -55,22 +64,6 @@ export class GeneradorC3D {
             L${this.contadorEtiquetas+1}:
             return;
         }`;
-        // this.contadorEtiquetas += 2;
-        // this.contadorTemporales += 3;
-        /*`
-        void printQuery() {
-            t0 = SP+1;
-            t1 = stack[(int)t0];
-            L1:
-            t2 = heap[(int)t1];
-            if(t2 == -1) goto L0;
-            printf("%c", (char)t2);
-            t1 = t1+1;
-            goto L1;
-            L0:
-            return;
-        }\n\n`;
-        */
         return natives
     }
     getMain(){
@@ -87,7 +80,127 @@ export class GeneradorC3D {
         return this.C3DXML
     }
 
-    getTraduccionXPathQuery(output){
+    getMyXpath(){
+        let xpathSyntax = this.GetStorage('path');
+        if (xpathSyntax=="") return "//NO HAY CONSULTA EN XPATH\n"
+
+        let xpathRes = this.GetStorage('new_xml');
+        xpathSyntax += '#'
+        let trad = ""
+        let c = "";
+        let state = 0;
+        let instrucciones = [];
+        let auxlex = ""
+
+        console.log(xpathSyntax);
+        console.log(xpathRes);
+
+        for (let i = 0; i < xpathSyntax.length; i++) {
+
+            c = xpathSyntax[i];
+            console.log("C---> "+c)
+
+            switch(state) {
+                case 0:
+                    if(c == '/'){
+                        if(xpathSyntax[i+1] == '/'){
+                            trad += `/* // Selects nodes in the document from the current node that match the selection no matter where they are*/\n`
+                            //state = 1;
+
+                            instrucciones.push(1);
+                        }else{
+                            //trad += `/* / Selects the root element bookstore\n`
+                            //trad += `Note: If the path starts with a slash ( / ) it always represents an absolute path to an element!*/\n`
+                            //state = 11;
+                            instrucciones.push(2);
+                        }
+                    }else if(c == '.'){
+                        if(xpathSyntax[i+1] == '.'){
+                            trad += `/* .. 	Selects the parent of the current node*/\n`
+
+                            instrucciones.push(3);
+                        }else{
+                            trad += `/* . 	Selects the current node*/\n`
+                            instrucciones.push(4);
+                        }
+                        //state = 2;
+                    }else if(c == '@'){
+                        trad += `/* @ 	Selects attributes*/\n`
+                        instrucciones.push(5);
+                        //state = 3;
+                    }else{
+                        //trad += `/* Selects all nodes with the name "nodename"*/\n`
+                        auxlex += c
+                        //state = 4;
+                    }
+                    state=4;
+                    //instrucciones.push(1);
+                  break;
+                case 1:
+                  // code block
+                  break;
+                case 11:
+                    // code block
+                    break;
+                case 2:
+                  // code block
+                  break;
+                case 3:
+                  // code block
+                  break;
+                case 4:
+                    if (c!='/' && c!='.' && c!='@' && c!='[' && c!='#')
+                    {
+                        state = 4;
+                        auxlex += c;
+                    }else if (c=='#'){
+                        trad += `/* Selects all nodes with the name ${auxlex}*/\n`
+                        instrucciones.push(auxlex)
+                        auxlex = ""
+                        state = 0;
+                        trad += `// FIN XPATH QUERY\n`
+                        i = xpathSyntax.length;
+                    }else{
+                        i -= 1
+                        trad += `/* Selects all nodes with the name ${auxlex}*/\n`
+                        instrucciones.push(auxlex)
+                        auxlex = ""
+                        state = 0;
+                    }
+                    console.log("4 --> "+state)
+                    console.log(c)
+                    break;
+                default:
+                  // code block
+            }
+        }
+
+        console.log(instrucciones);
+
+
+        let xml = this.GetStorage();
+        console.log(xml)
+        //this.ejecutarInstrucciones(ent, instrucciones);
+
+        return trad;
+    }
+
+    getTraduccionXpath(){
+        let xpathSyntax = this.GetStorage('path');
+        if (xpathSyntax=="") return "//NO HAY CONSULTA EN XPATH\n"
+
+        let xpathRes = this.GetStorage('new_xml');
+        var listaInstrucciones = fase2x.parse(xpathSyntax);
+        console.log(listaInstrucciones)
+
+        listaInstrucciones.forEach(element => {
+            if(element.getTipo() == ""){
+
+            }
+        });
+    }
+
+    getMyXQuery(output){
         
         let cadena = output;
         this.C3DXQUERY += "/*--------------- RESULTADO ----------------*/\n"
@@ -120,11 +233,13 @@ export class GeneradorC3D {
         this.traduccionC3D += this.getNatives();     
         this.traduccionC3D += this.getMain();
         this.traduccionC3D += this.getTraduccionXML(ent);
-        console.log("!!!!!!!!!! "+output);
-        this.traduccionC3D += this.getTraduccionXPathQuery(output);
-        this.traduccionC3D += `SP = SP+${this.SP-1}\nprintQuery();`;
+        //this.traduccionC3D += this.getMyXpath();
+        this.getTraduccionXpath();
+        this.traduccionC3D += this.getMyXQuery(output);
+        this.traduccionC3D += `SP = SP+${this.SP-1};\nprintQuery();`;
             
         this.traduccionC3D += this.getFinal();
+
         console.log("STACKXML\n"+this.stackXML);
         console.log("HEAPXML\n"+this.heapXML);
 
@@ -136,15 +251,6 @@ export class GeneradorC3D {
 
         //PARA CADA ATRIBUTO
         for (const atributo of ent.atributos) {
-            /*this.table.push({
-                nombre: atributo.nombre,
-                tipo: "Atributo",
-                valor: atributo.valor,
-                ambito: entActual,
-                fila: atributo.linea,
-                columna: atributo.columna,
-                stackPosition: 0
-            });*/
             this.C3DXML += "t"+this.contadorTemporales+" = HP;\n"
             this.stackXML.push(this.HP);
             for(let i=0;i<atributo.valor.length;i++){
@@ -159,31 +265,12 @@ export class GeneradorC3D {
 
             this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.contadorTemporales + ";\n\n";
             atributo.setPosicionStack(this.SP);
-            console.log(atributo)
             this.SP++
             this.contadorTemporales++
         }
 
         //Valor de las etiquetas
         if (ent.texto != "") {
-            /*this.table.push({
-                nombre: "ValorEtiqueta",
-                tipo: "Cadena",
-                valor: ent.texto,
-                ambito: entActual,
-                fila: ent.linea,
-                columna: ent.columna,
-                stackPosition: 0
-            });*/
-            /*this.table.push({
-                nombre: ent.tipo,
-                tipo: "Object",
-                valor: ent.texto,
-                ambito: entActual,
-                fila: ent.linea,
-                columna: ent.columna,
-                stackPosition: 0
-            });*/
             this.C3DXML += "t"+this.contadorTemporales+" = HP;\n"
             this.stackXML.push(this.HP);
             for(let i=0;i<ent.texto.length;i++){
@@ -197,8 +284,9 @@ export class GeneradorC3D {
             this.C3DXML += this.aumentarHP();
 
             this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.contadorTemporales + ";\n\n";
-            ent.setPosicionStack(this.SP);
-            console.log(ent)
+            //ent.setPosicionStack(this.SP);
+            //this.C3DXML += `\nSetPos ${this.SP}\n`
+            //console.log(ent)
             this.SP++
             this.contadorTemporales++
         }
@@ -219,36 +307,22 @@ export class GeneradorC3D {
                 stackPosition: 0
             });*/
             //console.log("OBJETO: "+hijo.tipo);
-            console.log(hijo);
-            this.C3DXML += "//TIENE HIJOS\n"
+            //console.log(hijo);
+            
+            hijo.setPosicionStack(this.SP); this.C3DXML += `\n//SetPos ${this.SP}\n`
+            this.C3DXML += `//TIENE HIJO/S ${hijo.tipo}\n`
+            this.C3DXML += `stack[(int)${this.SP}] = HP;\n`
+            this.stackXML.push(this.HP);
+            this.SP++
+
+            this.C3DXML += `heap[(int)${this.HP}] = ${this.SP};\n`
+            this.heapXML.push(this.SP);
+            this.HP++
+            this.contadorTemporales++;
 
             this.recursiva(hijo);
 
-            
-            /*this.C3DXML += "t"+this.SP+" = HP;\n"
-            // console.log("ATRIBUTO: "+ atributo.nombre + " VALOR: "+atributo.valor)
-            // console.log("STACK: " + this.contXMLStack++)
-            for(let i=0;i<atributo.valor.length;i++){
-                let caracter = atributo.valor
-                // console.log(caracter);
-                // console.log(i);
-                // console.log(caracter[i]);
-                // console.log(caracter.charCodeAt(i));
-                this.C3DXML += "heap[(int)HP =" + caracter.charCodeAt(i) + "]\n";
-                this.C3DXML += "HP = HP + 1\n"
-            }
-
-            this.C3DXML += "stack[(int)" + this.SP + "] = t" + this.SP + "\n";
-            console.log(atributo);
-            atributo.setPosicionStack(this.SP);
-            console.log(atributo);*/
-            
-            //this.SP++
-
         }
-
-        
-
         return ""
     }
 
@@ -258,12 +332,19 @@ export class GeneradorC3D {
     }
 
     getNewTemp(){
-        let temp = `t${this.contadorTemporales}`
+        let temp = `\tt${this.contadorTemporales}`
         this.contadorTemporales++
         return temp
     }
 
+    SetStorage(data, id) {
+        localStorage.setItem(id, JSON.stringify(data));
+    }
 
+    GetStorage(id){
+        var data = localStorage.getItem(id);
+        return JSON.parse(data);
+    }
 
 
 }

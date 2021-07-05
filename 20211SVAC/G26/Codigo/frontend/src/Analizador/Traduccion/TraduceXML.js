@@ -1,14 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TraduceXML = void 0;
-const Entorno_1 = require("../AST/Entorno");
-const Tipo_1 = require("../AST/Tipo");
-const indexAnalizador_1 = __importDefault(require("../indexAnalizador"));
-const TranslateXPath_1 = require("./TranslateXPath");
-class TraduceXML {
+import { Entorno } from '../AST/Entorno';
+import { Tipo } from '../AST/Tipo';
+import analizador from '../indexAnalizador';
+import { TranslateXPath } from './TranslateXPath';
+export class TraduceXML {
     constructor(listaNodos) {
         this.contS = 0;
         this.contH = 0;
@@ -72,7 +66,7 @@ class TraduceXML {
         codigo3d = codigo3d + this.getDeclaraTemps();
         //Hacer traduccion de xpath
         if (this.listaConsultas.length > 0) {
-            let traductorXPath = new TranslateXPath_1.TranslateXPath(this.listaConsultas, indexAnalizador_1.default.global, this.heap, this.stack);
+            let traductorXPath = new TranslateXPath(this.listaConsultas, analizador.global, this.heap, this.stack);
             this.strXPathTraduccion = traductorXPath.traducirXPath();
             let strFuncs = traductorXPath.getFuncionesUtilizadas();
             codigo3d += traductorXPath.getDeclaraTempsXPATH() + "\n";
@@ -98,7 +92,7 @@ class TraduceXML {
     }
     traducirXML() {
         console.log('/* Inicio Traduccion */');
-        this.traducir(indexAnalizador_1.default.global, -5);
+        this.traducir(analizador.global, -5);
         this.strTraduccion = this.getCodeC();
         console.log('/* Fin Traduccion */');
         return this.strTraduccion;
@@ -107,7 +101,7 @@ class TraduceXML {
         let tabla = entrada.tsimbolos;
         tabla.forEach((elem) => {
             if (elem.valor.padre !== null || elem.valor.padre == undefined) {
-                if (elem.valor.valor instanceof Entorno_1.Entorno) {
+                if (elem.valor.valor instanceof Entorno) {
                     this.strTraduccion = this.strTraduccion + '\n /*--- SE AGREGA NUEVO NODO ---*/';
                     elem.valor.setPosicion(this.contS);
                     //Al iniciar una etiqueta nueva, se coloca el num de Finalizacion que tendra este padre (-5, -10, etcc..)
@@ -130,7 +124,7 @@ class TraduceXML {
                     if (elem.valor.valor !== false && elem.valor.valor !== false) {
                         this.strTraduccion = this.strTraduccion + '\n /*--- SE AGREGA NUEVO SIMBOLO ---*/';
                         elem.valor.setPosicion(this.contS);
-                        if (elem.valor.getTipo() === Tipo_1.Tipo.ATRIBUTO) {
+                        if (elem.valor.getTipo() === Tipo.ATRIBUTO) {
                             this.strTraduccion = this.strTraduccion + this.getIDAsignacionHeap(elem.valor.nombre.toString(), "ATRIBUTO");
                         }
                         this.strTraduccion = this.strTraduccion + this.getVALAsignacionHeap(elem.valor.valor.toString());
@@ -201,4 +195,3 @@ class TraduceXML {
         return asignacion;
     }
 }
-exports.TraduceXML = TraduceXML;

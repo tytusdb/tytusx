@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReglaOptimizacion = exports.Optimizacion = void 0;
-class Optimizacion {
+export class Optimizacion {
     constructor(tipo, codigoAntes, codigoAhora, fila, columna) {
         this.fila = fila;
         this.columna = columna;
@@ -60,8 +57,7 @@ class Optimizacion {
         }
     }
 }
-exports.Optimizacion = Optimizacion;
-var ReglaOptimizacion;
+export var ReglaOptimizacion;
 (function (ReglaOptimizacion) {
     ReglaOptimizacion[ReglaOptimizacion["REGLA1"] = 0] = "REGLA1";
     ReglaOptimizacion[ReglaOptimizacion["REGLA2"] = 1] = "REGLA2";
@@ -79,4 +75,4 @@ var ReglaOptimizacion;
     ReglaOptimizacion[ReglaOptimizacion["REGLA14"] = 13] = "REGLA14";
     ReglaOptimizacion[ReglaOptimizacion["REGLA15"] = 14] = "REGLA15";
     ReglaOptimizacion[ReglaOptimizacion["REGLA16"] = 15] = "REGLA16";
-})(ReglaOptimizacion = exports.ReglaOptimizacion || (exports.ReglaOptimizacion = {}));
+})(ReglaOptimizacion || (ReglaOptimizacion = {}));

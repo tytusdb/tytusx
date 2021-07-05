@@ -1,51 +1,32 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const XMLGramAsc = __importStar(require("./Gramatica/XML_GramaticaAsc"));
-const XQueryGram = __importStar(require("./Gramatica/XQuery_GramaticaAsc"));
-const Entorno_1 = require("./AST/Entorno");
-const Objeto_1 = require("./XML/Objeto");
-const Atributo_1 = require("./XML/Atributo");
-const XMLGramDesc = __importStar(require("./Gramatica/XML_GramaticaDesc"));
-const ListaError_1 = __importDefault(require("./Global/ListaError"));
-const XPathGramAsc = __importStar(require("./Gramatica/XPath_GramaticaAsc"));
-const XPathGramDesc = __importStar(require("./Gramatica/XPath_GramaticaDesc"));
-const CST_1 = require("./Reporte/CST");
-const TraduceXML_1 = require("./Traduccion/TraduceXML");
-const OptimizacionGrammar = __importStar(require("./Gramatica/Optimizacion_Grammar"));
-const Optimizer_1 = require("./Optimizacion/Optimizer");
-const Metodo_1 = require("./Optimizacion/Declaraciones3D/Metodo");
-const Main_1 = require("./Optimizacion/Declaraciones3D/Main");
+import * as XMLGramAsc from './Gramatica/XML_GramaticaAsc';
+import * as XQueryGram from './Gramatica/XQuery_GramaticaAsc';
+import * as XQuery from './Gramatica/XQuery';
+import { Entorno } from './AST/Entorno';
+import { Objeto } from './XML/Objeto';
+import { Atributo } from './XML/Atributo';
+import * as XMLGramDesc from './Gramatica/XML_GramaticaDesc';
+import errores from './Global/ListaError';
+import * as XPathGramAsc from './Gramatica/XPath_GramaticaAsc';
+import * as XPathGramDesc from "./Gramatica/XPath_GramaticaDesc";
+import { cstXmlAsc, cstXmlDesc } from './Reporte/CST';
+import { TraduceXML } from './Traduccion/TraduceXML';
+import * as OptimizacionGrammar from './Gramatica/Optimizacion_Grammar';
+import { Optimizer } from './Optimizacion/Optimizer';
+import { Metodo } from './Optimizacion/Declaraciones3D/Metodo';
+import { Main } from './Optimizacion/Declaraciones3D/Main';
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
 class Analizador {
     constructor() {
-        this.global = new Entorno_1.Entorno('global', null, null);
-        ListaError_1.default.limpiar();
+        this.global = new Entorno('global', null, null);
+        this.xqGlobal = new Entorno("XQGlobal", null, null);
+        errores.limpiar();
         this.indice = 0;
         this.reporteOptimiza = [];
         this.consultas = [];
+        this.xPathEntry = "";
+        this.xQueryEntry = "";
+        this.instrucciones = null;
         if (typeof Analizador._instance === "object") {
             return Analizador._instance;
         }
@@ -56,18 +37,19 @@ class Analizador {
         return this._instance;
     }
     iniciarVariables() {
-        this.global = new Entorno_1.Entorno('global', null, null);
-        ListaError_1.default.limpiar();
+        this.global = new Entorno('global', null, null);
+        this.xqGlobal = new Entorno('xqGlobal', null, null);
+        errores.limpiar();
     }
     optimizacion(entrada) {
         const codigo3d = OptimizacionGrammar.parse(entrada);
         let salida = "";
-        let optimizador = new Optimizer_1.Optimizer();
+        let optimizador = new Optimizer();
         this.reporteOptimiza = [];
         let antes = "";
         codigo3d.forEach((c) => {
             antes += c.getCodigo3Dir() + "\n";
-            if (c instanceof Main_1.Main || c instanceof Metodo_1.Metodo) {
+            if (c instanceof Main || c instanceof Metodo) {
                 c.listaInstrucciones = optimizador.aplicar(c.listaInstrucciones, this.reporteOptimiza);
             }
             salida += c.getCodigo3Dir() + "\n";
@@ -77,31 +59,31 @@ class Analizador {
     }
     xmlDescendente(entrada) {
         console.log("---GRAMATICA DESCENDENTE---");
-        CST_1.cstXmlDesc.id = 0;
+        cstXmlDesc.id = 0;
         const objetos = XMLGramDesc.parse(entrada);
         objetos.forEach((elem) => {
-            if (elem instanceof Objeto_1.Objeto || elem instanceof Atributo_1.Atributo) {
+            if (elem instanceof Objeto || elem instanceof Atributo) {
                 elem.ejecutar(this.global);
             }
         });
         console.log(this.global);
-        console.log(ListaError_1.default);
+        console.log(errores);
     }
     xmlAscendente(entrada) {
         console.log("---GRAMATICA ASCENDENTE---");
-        CST_1.cstXmlAsc.id = 0;
+        cstXmlAsc.id = 0;
         const objetos = XMLGramAsc.parse(entrada);
-        this.global = new Entorno_1.Entorno('global', null, null);
+        this.global = new Entorno('global', null, null);
         if (objetos !== null) {
             objetos.forEach((elem) => {
                 console.log('Elemento: ' + elem);
-                if (elem instanceof Objeto_1.Objeto || elem instanceof Atributo_1.Atributo) {
+                if (elem instanceof Objeto || elem instanceof Atributo) {
                     elem.ejecutar(this.global);
                 }
             });
         }
         console.log(this.global);
-        console.log(ListaError_1.default);
+        console.log(errores);
         /*global.tsimbolos.forEach((elem:any) => {
           console.log(elem);
         });*/
@@ -142,10 +124,19 @@ class Analizador {
     }
     XQueryAscendente(entrada) {
         console.log("---- XQUERY ASCENDENTE ----- ");
-        const instrucciones = XQueryGram.parse(entrada);
+        //this.iniciarVariables();
+        this.xqGlobal = new Entorno("XQGlobal", null, null);
+        this.instrucciones = XQueryGram.parse(entrada);
+        console.log("instrucciones: ", this.instrucciones);
+        this.xQueryEntry = entrada;
         let salida = "";
-        salida += instrucciones.ejecutar(new Entorno_1.Entorno("XQGlobal", null, null), this.global);
-        //console.log("SALIDA: ", salida);
+        if (this.instrucciones != null) {
+            salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
+            console.log("s:", salida);
+        }
+        this.global.tsimbolos = this.global.tsimbolos.concat(this.xqGlobal.tsimbolos);
+        console.log(this.global);
+        console.log("SALIDA: ", salida);
         return salida;
     }
     getTablaSimbolos() {
@@ -153,7 +144,7 @@ class Analizador {
     }
     getErrores() {
         let err = '';
-        ListaError_1.default.listaError.forEach((elem) => {
+        errores.listaError.forEach((elem) => {
             err = err + elem.getMensaje() + '\n';
         });
         return err;
@@ -187,7 +178,7 @@ class Analizador {
     getSimbolosEntorno(entrada) {
         let simbolos = '';
         entrada.tsimbolos.forEach((elem) => {
-            if (elem.valor.valor instanceof Entorno_1.Entorno) {
+            if (elem.valor.valor instanceof Entorno) {
                 this.indice++;
                 simbolos = simbolos
                     + '<tr>'
@@ -244,7 +235,7 @@ class Analizador {
             + '<tr>'
             + '<th>No.</th><th>Tipo</th><th>Descripcion</th><th>Linea</th><th>Columna</th>'
             + '</th>';
-        ListaError_1.default.listaError.forEach((elem) => {
+        errores.listaError.forEach((elem) => {
             indice++;
             cadenaDot = cadenaDot
                 + '<tr>'
@@ -282,13 +273,13 @@ class Analizador {
     }
     getCSTXmlAsc() {
         let cadenaDot = 'digraph {';
-        cadenaDot = cadenaDot + this.recorridoCst(CST_1.cstXmlAsc.getRaiz());
+        cadenaDot = cadenaDot + this.recorridoCst(cstXmlAsc.getRaiz());
         cadenaDot = cadenaDot + '}';
         return cadenaDot;
     }
     getCSTXmlDesc() {
         let cadenaDot = 'digraph {';
-        cadenaDot += this.recorridoCst(CST_1.cstXmlDesc.getRaiz());
+        cadenaDot += this.recorridoCst(cstXmlDesc.getRaiz());
         cadenaDot += '}';
         return cadenaDot;
     }
@@ -305,14 +296,149 @@ class Analizador {
     }
     traduceXML() {
         let resultado = '';
-        let traductor = new TraduceXML_1.TraduceXML(this.consultas);
+        let traductor = new TraduceXML(this.consultas);
         resultado = traductor.traducirXML();
         console.log(this.global);
         return resultado;
     }
 }
 const analizador = new Analizador();
-exports.default = analizador;
+export default analizador;
+function pruebaXQuery(entrada) {
+    console.log("-- XQUERY --");
+    const objetos = XQuery.parse(entrada);
+    objetos.forEach((elem) => {
+        console.log(elem);
+    });
+}
+pruebaXQuery(`
+declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
+{
+  if ($m eq 0) then $n+1
+  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
+};
+
+declare function local:factorial($x as xs:integer)as xs:integer
+{
+  if ($x eq 0) then 1
+  else ($x*local:factorial($x - 1))
+};
+
+declare function local:fibonacci($num as xs:integer) as xs:integer
+{
+  let $a := $num + 1
+  let $b := $a * 8
+  for $l in (4 to 6)
+  return if ($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
+};
+
+declare function local:tipo1() as xs:integer
+{
+  let $a := 1
+  let $b := $a * 8
+  return local:fibonacci($a - 2)
+};
+
+declare function local:tipo2() as xs:integer
+{
+  for $a in (1)
+  where $a/price < 5
+  let $b := $a * 8
+  return if ($b eq 8) then local:factorial($a)
+else 5
+};
+
+let $go := 5
+let $ruta := /pruebas
+`);
+/*
+declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
+{
+  if ($m eq 0) then $n+1
+  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
+};
+
+declare function local:factorial($x as xs:integer)as xs:integer
+{
+  if ($x eq 0) then 1
+  else ($x*local:factorial($x - 1))
+};
+
+declare function local:fibonacci($num as xs:integer) as xs:integer
+{
+  let $a := $num + 1
+  let $b := $a * 8
+  for $l in (4 to 6)
+  return if ($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
+};
+
+declare function local:tipo1() as xs:integer
+{
+  let $a := 1
+  let $b := $a * 8
+  return local:fibonacci($a - 2)
+};
+
+declare function local:tipo2() as xs:integer
+{
+  for $a in (1)
+  where $a < 5
+  let $b := $a * 8
+  return if ($b eq 8) then local:factorial($a)
+else 5
+};
+
+
+
+let $go := (1,3)
+let $ruta := /pruebas
+for $x in (1 to 2)
+let $y := (4)
+return if(1 eq 1) then "FUNCIONA"
+else "NO FUNCIONA"
+
+(:
+return if ($ruta/m eq 5) then local:tipo2()
+else 3
+(:($y eq 4) then local:tipo2()
+else local:factorial(0):)
+:)
+*/
+/*pruebaXQuery(`
+declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
+{
+  if ($m eq 0) then $n+1
+  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
+  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
+};
+
+
+declare function local:factorial($x as xs:integer)as xs:integer
+{
+  if ($x eq 0) then 1
+  else ($x*local:factorial($x - 1))
+};
+
+declare function local:fibonacci($num as xs:integer) as xs:integer
+{
+  for $l in (4 to 6)
+  return if ($num eq 0) then 0
+  else if ($num eq 1) then 1
+  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
+};
+
+let $go := (5)
+for $x in (1 to 2)
+let $y := (4)
+return if ($y eq 4) then local:factorial($y)
+else local:factorial(0)
+`);
 /*
 function xpathAscendente(entrada:string){
   console.log("-- XPATH ASCENDENTE -- ")

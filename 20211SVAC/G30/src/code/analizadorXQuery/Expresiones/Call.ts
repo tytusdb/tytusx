@@ -11,6 +11,7 @@ export class Call implements Expresion {
     columna: number;
     public valores: Array<any> = [];
     public identificador: string;
+    public errores = [];
 
     constructor(identificador: string, valores: Array<any>, linea: number, columna: number) {
         this.linea = linea;
@@ -43,7 +44,7 @@ export class Call implements Expresion {
 
     //recibe globa al inicio
     getValorImplicito(ent: Entorno): any {
-       
+
         //1. buscar funcion en entorno
         if (ent.existe(this.identificador)) {
             var funcion = ent.getSimbolo(this.identificador);
@@ -58,7 +59,7 @@ export class Call implements Expresion {
                 //se agregan los simbolos al nuevo entorno
                 for (let i = 0; i < variables.length; i++) {
                     let valor: any = this.valores[i].getValorImplicito(ent);
-                    
+
                     //verificando tipos de dato
                     if (variables[i][1] == 'integer') valor = Number(valor);
                     else if (variables[i][1] == 'float') valor = parseFloat(valor);
@@ -71,6 +72,10 @@ export class Call implements Expresion {
 
 
                     var new_simbol = new Simbolo(variables[i][0], variables[i][1], this.linea, this.columna, valor);
+                    var simb = [];
+                    simb = simb.concat(this.GetTablaStorage());
+                    simb.push(new_simbol);
+                    this.SetTablaStorage(simb); 
                     entorno_nuevo.agregar(new_simbol);
                 }
 
@@ -82,10 +87,29 @@ export class Call implements Expresion {
             }
             else {
                 console.log('Faltan parametros en la funcion')
+                this.errores.push({
+                    Tipo: 'Sintáctico',
+                    Fila: this.linea,
+                    Columna: this.columna,
+                    Description: 'Faltan parametros en la funcion ' + this.identificador
+                });
+                var err = this.GetErrorStorage();
+                this.errores = this.errores.concat(err);
+                this.SetStorage(this.errores);
             }
         }
         else {
             console.log('Error la funcion no existe..')
+            this.errores.push({
+                Tipo: 'Sintáctico',
+                Fila: this.linea,
+                Columna: this.columna,
+                Description: 'La función  ' + this.identificador + ' no existe'
+            });
+            var err = this.GetErrorStorage();
+            this.errores = this.errores.concat(err);
+            this.SetStorage(this.errores);
+
         }
         return null;
     }
@@ -93,5 +117,28 @@ export class Call implements Expresion {
     isInt(n: number) {
         return Number(n) === n && n % 1 === 0;
     }
+
+
+    //obtener contador
+    GetErrorStorage(): any {
+        var data = localStorage.getItem('errores_xquery');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetStorage(error: any) {
+        localStorage.setItem('errores_xquery', JSON.stringify(error));
+    }
+
+    //obtener tabla simbolos
+    GetTablaStorage(): any {
+        var data = localStorage.getItem('tabla');
+        return JSON.parse(data);
+    }
+    //actualizar contador
+    SetTablaStorage(tabla: any) {
+        localStorage.setItem('tabla', JSON.stringify(tabla));
+    }
+
+
 
 }

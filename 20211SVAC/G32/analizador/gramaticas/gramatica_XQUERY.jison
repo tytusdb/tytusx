@@ -3,8 +3,16 @@
 
 %options case-sensitive
 
+BSL                         "\\".
+%s                          comment
 %%
+
+"(:"                      this.begin('comment');
+<comment>":)"              this.popState();
+<comment>.                  /* skip commentario content*/
+
 \s+                                         /* skip whitespace */
+
 //Palabras reservadas
 'for' return 'for';
 'where' return 'where';
@@ -76,6 +84,7 @@
 '$' return 'dolar';
 ',' return 'coma';
 ';' return 'pto_coma';
+'?' return 'interrogacion';
 
 '[' return 'cor_izq';
 "]" return 'cor_der';
@@ -162,7 +171,7 @@ FLWOR : FOR
             { $$ = new NodoAST({label: 'FLWOR', hijos: [$1], linea: yylineno}); }
         | LLAMADA_FUNCION
             { $$ = new NodoAST({label: 'FLWOR', hijos: [$1], linea: yylineno}); }
-        | FUNCIONES FOR
+        | FUNCIONES L_LET
             { $$ = new NodoAST({label: 'FLWOR', hijos: [$1,$2], linea: yylineno}); } 
         | FUNCIONES LLAMADA_FUNCION
             { $$ = new NodoAST({label: 'FLWOR', hijos: [$1,$2], linea: yylineno}); }
@@ -285,15 +294,20 @@ COMPARACION_XQUERY : EXPR eq EXPR
                     ;
 
 LLAMADA_FUNCION : id par_izq L_PARAM par_der 
-                    { $$ = new NodoAST({label: 'LLAMADA_FUNCION', hijos: [$1,$3], linea: yylineno}); }   
-                | number par_izq VALORES par_der 
-                    { $$ = new NodoAST({label: 'F_NUMBER', hijos: [$1,...$3.hijos], linea: yylineno}); }  
-                | tk_string par_izq VALORES par_der
-                    { $$ = new NodoAST({label: 'F_STRING', hijos: [$1,...$3.hijos], linea: yylineno}); }
+                    { 
+                        if ($1 == 'string'){
+                              $$ = new NodoAST({label: 'F_STRING', hijos: [...$3.hijos], linea: yylineno}); 
+                        }
+                        else {
+                            $$ = new NodoAST({label: 'LLAMADA_FUNCION', hijos: [$1,$3], linea: yylineno}); 
+                        }   
+                    }
+                | number par_izq VALOR_LLAMADA par_der 
+                    { $$ = new NodoAST({label: 'F_NUMBER', hijos: [...$3.hijos], linea: yylineno}); } 
                 | substring par_izq VALOR_LLAMADA coma integer par_der
-                    { $$ = new NodoAST({label: 'F_SUBSTRING', hijos: [...$3.hijos,$5], linea: yylineno}); }
+                    { $$ = new NodoAST({label: 'F_SUBSTRING', hijos: [$3,$5], linea: yylineno}); }
                 | substring par_izq VALOR_LLAMADA coma integer coma integer par_der
-                    { $$ = new NodoAST({label: 'F_SUBSTRING', hijos: [...$3.hijos,$5,$7], linea: yylineno}); }
+                    { $$ = new NodoAST({label: 'F_SUBSTRING1', hijos: [$3,$5,$7], linea: yylineno}); }
                 | lower menos case par_izq VALOR_LLAMADA par_der
                     { $$ = new NodoAST({label: 'F_LOWERCASE', hijos: [$5], linea: yylineno}); }
                 | upper menos case par_izq VALOR_LLAMADA par_der
@@ -303,11 +317,20 @@ LLAMADA_FUNCION : id par_izq L_PARAM par_der
                 ; 
 
 VALOR_LLAMADA : dolar id 
-                     { $$ = new NodoAST({label: 'dolar id', hijos: [($1+$2)], linea: yylineno}); }
+                     { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [($1+$2)], linea: yylineno}); }
+                | integer 
+                    { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [$1], linea: yylineno}); }
+                | double
+                    { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [$1], linea: yylineno}); }
                 | string 
-                    { $$ = new NodoAST({label: 'string', hijos: [$1], linea: yylineno}); }
-                | id
-                    { $$ = new NodoAST({label: 'id', hijos: [$1], linea: yylineno}); }; 
+                    { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [$1], linea: yylineno}); }
+                | true 
+                    { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [$1], linea: yylineno}); }
+                | false 
+                    { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [$1], linea: yylineno}); }
+                | INSTRUCCIONES
+                    { $$ = new NodoAST({label: 'VALOR_LLAMADA', hijos: [$1], linea: yylineno}); }    
+                ; 
 
 L_PARAM : L_PARAM coma EXPR
             { $$ = new NodoAST({label: 'PARAMETROS', hijos: [...$1.hijos,...$3.hijos], linea: yylineno}); }  
@@ -325,7 +348,10 @@ LET :  let dolar id doble_pto igual EXPR RETURN
 
 FUNCION : declare function id doble_pto id par_izq PARAMETROS par_der  as xs doble_pto TIPO llave_izq SENTENCIAS llave_der pto_coma 
          { $$ = new NodoAST({label: 'FUNCION', hijos: [$3,$5,$7,$12,$14], linea: yylineno}); } 
-         | declare function id doble_pto id par_izq PARAMETROS par_der  SENTENCIAS llave_der pto_coma 
+         | declare function id doble_pto id par_izq PARAMETROS par_der llave_izq SENTENCIAS llave_der pto_coma 
+         { $$ = new NodoAST({label: 'FUNCION_SIN_TIPO', hijos: [$3,$5,$7,$10], linea: yylineno}); }
+         | declare function id doble_pto id par_izq PARAMETROS par_der  as xs doble_pto TIPO interrogacion llave_izq SENTENCIAS llave_der pto_coma 
+         { $$ = new NodoAST({label: 'FUNCION', hijos: [$3,$5,$7,$12,$15], linea: yylineno}); } 
 ;
 
 SENTENCIAS : FLWOR { $$ = new NodoAST({label: 'FLWOR', hijos: [...$1.hijos], linea: yylineno}); }
@@ -340,7 +366,9 @@ PARAMETROS: PARAMETROS coma PARAM
             { $$ = new NodoAST({label: 'PARAMETROS', hijos: [...$1.hijos], linea: yylineno}); }   
         ;
 
-PARAM : dolar id as xs doble_pto TIPO
+PARAM : dolar id as xs doble_pto TIPO 
+        { $$ = new NodoAST({label: 'PARAMETRO', hijos: [($1+$2),$4,...$6.hijos], linea: yylineno}); }   
+        | dolar id as xs doble_pto TIPO interrogacion 
         { $$ = new NodoAST({label: 'PARAMETRO', hijos: [($1+$2),$4,...$6.hijos], linea: yylineno}); }    ;
 
 TIPO : id
@@ -353,6 +381,8 @@ TIPO : id
                  $$ = new NodoAST({label: 'TIPO', hijos: [$1], linea: yylineno}); }  
             else if ($1 == 'double'){
                  $$ = new NodoAST({label: 'TIPO', hijos: [$1], linea: yylineno}); }  
+            else if ($1 == 'decimal'){
+                 $$ = new NodoAST({label: 'TIPO', hijos: ['integer'], linea: yylineno}); } 
             else{
                  tablaErrores.Errores.getInstance().push(new errorGram.Error({ tipo: 'Semántico', linea: `${yylineno + 1}`, descripcion: `No es un tipo valido "${$1}"  Columna: ${this._$.first_column + 1}.`}));
              }

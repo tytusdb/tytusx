@@ -10,7 +10,7 @@ export class Optimizador {
    cadenaInicial: string;
    asignacionesPrevias: Array<Instruccion>;
 
-
+ 
    constructor() {
       this.cadenaOptimizada = '';
       this.cadenaInicial = '';
@@ -50,6 +50,8 @@ export class Optimizador {
    }
 
    public getReporte(): Array<Optimizacion>{
+      console.log('geteando reporte');
+      //console.log(this.reporteOptimizacion);
       return this.reporteOptimizacion;
    }
 
