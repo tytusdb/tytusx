@@ -32,7 +32,16 @@ export class DecFunction implements ExpressionXquery{
         return {value: [], type : tipoPrimitivo.VOID, SP: -1}
     }
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"Funcion: " + this.idFunc.toString() + "\"];\n";
+        for (const key in this.decsParams) {
+            texto = this.decsParams[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.decsParams[key].line.toString() + "_" + this.decsParams[key].column.toString() + ";\n"
+        }
+        for (const key in this.L_xQuerys) {
+            texto = this.L_xQuerys[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.L_xQuerys[key].line.toString() + "_" + this.L_xQuerys[key].column.toString() + ";\n"
+        }
+        return texto;
     }
 
 }

@@ -107,9 +107,11 @@ export class LlamadaFunc implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"Llamada " + this.idFunc.toString() + "\"];\n";
+        for (const key in this.expsParams) {
+            texto = this.expsParams[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.expsParams[key].line.toString() + "_" + this.expsParams[key].column.toString() + ";\n"
+        }
+        return texto;
     }
-
-
-        
 }

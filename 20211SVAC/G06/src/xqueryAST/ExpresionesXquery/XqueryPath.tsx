@@ -62,7 +62,12 @@ export class XqueryPath implements ExpressionXquery{
     }
     
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idVar.toString() + "\"];\n";
+        for (const key in this.accesos.L_Accesos) {
+            texto = this.accesos.L_Accesos[key].GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.accesos.L_Accesos[key].line.toString() + "_" + this.accesos.L_Accesos[key].column.toString() + "\n";
+        }
+        return texto;
     }
 //return {value: ManejadorXquery.buildXquery(content), type : tipoPrimitivo.STRING}
 }
