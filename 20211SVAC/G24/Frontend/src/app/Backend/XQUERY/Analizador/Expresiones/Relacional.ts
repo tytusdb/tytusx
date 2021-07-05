@@ -6,6 +6,7 @@ import Arbol from "../Simbolos/Arbol";
 import Simbolo from "../Simbolos/Simbolo";
 import tablaSimbolos from "../Simbolos/tablaSimbolos";
 import Tipo, { tipoDato } from "../Simbolos/Tipo";
+import Variable from "./Variable";
 
 export default class Relacional extends Instruccion {
   public cond1: Instruccion;
@@ -33,22 +34,22 @@ export default class Relacional extends Instruccion {
   }
   public interpretar(arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml) {
     let izq, der;
-    izq = this.obtieneValor(this.cond1, arbol, tabla,tablaxml);
+    izq = this.obtieneValor(this.cond1, arbol, tabla, tablaxml);
     if (izq instanceof NodoErrores) return izq;
-    der = this.obtieneValor(this.cond2, arbol, tabla,tablaxml);
+    der = this.obtieneValor(this.cond2, arbol, tabla, tablaxml);
     if (der instanceof NodoErrores) return der;
     if (
       this.cond1.tipoDato.getTipo() == tipoDato.CADENA &&
       this.cond2.tipoDato.getTipo() != tipoDato.CADENA
     ) {
-      let opera= this.TipoOperando()
-      return {condicion1:izq, operador:opera, condicion2: der}
+      let opera = this.TipoOperando()
+      return { condicion1: izq, operador: opera, condicion2: der }
     } else if (
       this.cond2.tipoDato.getTipo() == tipoDato.CADENA &&
       this.cond1.tipoDato.getTipo() != tipoDato.CADENA
     ) {
-      let opera= this.TipoOperando()
-      return {condicion1:izq, operador:opera, condicion2: der}
+      let opera = this.TipoOperando()
+      return { condicion1: izq, operador: opera, condicion2: der }
     } else {
       this.tipoDato.setTipo(tipoDato.BOOLEANO);
       switch (this.relacion) {
@@ -69,29 +70,37 @@ export default class Relacional extends Instruccion {
       }
     }
   }
-  obtieneValor(operando: Instruccion, arbol: Arbol, tabla: tablaSimbolos, tablaxml:tablaSimbolosxml): any {
+  obtieneValor(operando: Instruccion, arbol: Arbol, tabla: tablaSimbolos, tablaxml: tablaSimbolosxml): any {
     let valor = operando.interpretar(arbol, tabla, tablaxml)
-    switch (operando.tipoDato.getTipo()) {
-      case tipoDato.ENTERO:
-        return parseInt(valor);
-      case tipoDato.DECIMAL:
-        return parseFloat(valor);
-      case tipoDato.CARACTER:
-        var da = valor + '';
-        var res = da.charCodeAt(0);
-        return res;
-      case tipoDato.BOOLEANO:
-        let dats = valor + '';
-        let otr = dats.toLowerCase();
-        return parseInt(otr);
-      case tipoDato.CADENA:
-        return '' + valor;
+    if (operando instanceof Variable) {
+      var buscar1 = tabla.getVariable(valor);
+      if (buscar1 != null) {
+        return buscar1.getvalor()
+      }
+    } else {
+      switch (operando.tipoDato.getTipo()) {
+        case tipoDato.ENTERO:
+          return parseInt(valor);
+        case tipoDato.DECIMAL:
+          return parseFloat(valor);
+        case tipoDato.CARACTER:
+          var da = valor + '';
+          var res = da.charCodeAt(0);
+          return res;
+        case tipoDato.BOOLEANO:
+          let dats = valor + '';
+          let otr = dats.toLowerCase();
+          return valor;
+        case tipoDato.CADENA:
+          return '' + valor;
+      }
     }
+
   }
   codigo3D(arbol: Arbol, tabla: tablaSimbolos) {
     throw new Error('Method not implemented.');
   }
-  TipoOperando(){
+  TipoOperando() {
     switch (this.relacion) {
       case Relacionales.IGUAL:
         return "==";

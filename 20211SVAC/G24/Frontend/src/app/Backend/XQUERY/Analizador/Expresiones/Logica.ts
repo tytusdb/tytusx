@@ -7,6 +7,7 @@ import Arbol from '../Simbolos/Arbol';
 import Tipo, { tipoDato } from '../Simbolos/Tipo';
 import tablaSimbolosxml from '../../../XML/Analizador/Simbolos/tablaSimbolos';
 import tablaSimbolos from '../Simbolos/tablaSimbolos';
+import Variable from './Variable';
 
 export default class Logica extends Instruccion {
   private cond1: Instruccion | undefined;
@@ -51,10 +52,20 @@ export default class Logica extends Instruccion {
       izq = this.cond1?.interpretar(arbol, tabla, tablaxml)
       if (izq instanceof NodoErrores){
         return izq;
-      } 
+      } else if (this.cond1 instanceof Variable) {
+        var buscar1 = tabla.getVariable(izq);
+        if (buscar1 != null) {
+          izq = buscar1.getvalor()
+        }
+      }
       der = this.cond2?.interpretar(arbol, tabla, tablaxml)
       if (der instanceof NodoErrores) {
         return der;
+      }else if (this.cond2 instanceof Variable) {
+        var buscar2 = tabla.getVariable(izq);
+        if (buscar2 != null) {
+          der = buscar2.getvalor()
+        }
       }
     }
     //inicio comparacion
