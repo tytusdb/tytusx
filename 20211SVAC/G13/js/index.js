@@ -282,3 +282,25 @@ function llenatTableOptmHola(arrOptm) {
         contador++;
     });
 }
+
+function llenarTablaErroresXQ(arrOptm) {
+    let tbodyRef = document.getElementById('errxqTabla').getElementsByTagName('tbody')[0];
+
+    let rows = '';
+    let contador = 1;
+
+    arrOptm.forEach(element => {
+        let newRow = tbodyRef.insertRow(tbodyRef.rows.length);
+
+        rows = `<tr>
+                    <td>${ contador }</td>
+                    <td>${ element.linea }</td>
+                    <td>${ element.columna }</td>
+                    <td>${ element.err }</td>
+                    <td>${ element.tipo }</td>
+                </tr>`;
+
+        newRow.innerHTML = rows;
+        contador++;
+    });
+}
