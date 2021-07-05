@@ -13,8 +13,11 @@ export class Let {
             this.hasta = +hasta;
         }
     }
+    getCodigo3Dir(XQueryEnt, xmlEnt, traductorXPath, traductorXQuery) {
+        let code = "";
+        return code;
+    }
     ejecutar(XQEnt, xmlEnt) {
-        console.log("Se ejecuta let; ID ", this.identifier);
         let listaSimbolos = [];
         if (this.consultas != undefined) {
             this.consultas.forEach((consulta) => {
@@ -35,10 +38,6 @@ export class Let {
             let newSimb = new Simbolo(Tipo.XQ_VAR, this.identifier, listaSimbolos, this.linea, this.columna);
             XQEnt.agregarSimbolo(this.identifier, newSimb);
             console.log("SIMBOLO: ", XQEnt.obtenerSimbolo(this.identifier));
-        }
-        else if (this.expresion != undefined) {
-            let newSimb = new Simbolo(Tipo.XQ_VAR, this.identifier, this.expresion.getValor(XQEnt), this.linea, this.columna);
-            XQEnt.agregarSimbolo(this.identifier, newSimb);
         }
     }
 }

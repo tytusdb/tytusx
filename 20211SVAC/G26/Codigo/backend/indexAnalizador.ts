@@ -1,6 +1,5 @@
 import * as XMLGramAsc from './Gramatica/XML_GramaticaAsc';
 import * as XQueryGram from './Gramatica/XQuery_GramaticaAsc';
-import * as XQuery from './Gramatica/XQuery';
 import {Entorno} from './AST/Entorno';
 import { Objeto } from './XML/Objeto';
 import { Atributo } from './XML/Atributo';
@@ -20,6 +19,8 @@ import { Optimizacion } from './Reporte/Optimizacion';
 import { Declaracion3D } from './Optimizacion/Declaraciones3D/Declaracion3D';
 import { Metodo } from './Optimizacion/Declaraciones3D/Metodo';
 import { Main } from './Optimizacion/Declaraciones3D/Main';
+import { Simbolo } from './AST/Simbolo';
+import { TranslateXQuery } from './Traduccion/TranslateXQuery';
 
 //const XPathGramAsc = require('../XPath_GramaticaAsc');
 //const XPathGramDesc = require('../XPath_GramaticaDesc');
@@ -35,7 +36,6 @@ class Analizador{
   instrucciones: InstruccionXQuery | null;
   xQueryEntry: string;
   xqGlobal: Entorno;
-
   constructor(){
     this.global = new Entorno('global', null, null);
     this.xqGlobal = new Entorno("XQGlobal", null, null);
@@ -59,15 +59,19 @@ class Analizador{
 
   iniciarVariables(){
     this.global = new Entorno('global', null, null);
-    this.xqGlobal = new Entorno('xqGlobal', null, null);
+    this.xqGlobal = new Entorno("XQGlobal", null, null);
     errores.limpiar();
   }
 
+  limpiarOptimizacion(){
+    this.reporteOptimiza = [];
+  }
+  
   optimizacion(entrada: string): string{
     const codigo3d = OptimizacionGrammar.parse(entrada);
     let salida = "";
     let optimizador = new Optimizer();
-    this.reporteOptimiza = [];
+    //this.reporteOptimiza = [];
     let antes = "";
     codigo3d.forEach((c: Declaracion3D) => {
         antes += c.getCodigo3Dir()+"\n"
@@ -117,6 +121,7 @@ class Analizador{
   XPathAscendente(entrada: string): String {
     console.log("-- XPATH ASCENDENTE -- ")
     this.consultas = XPathGramAsc.parse(entrada);
+    this.xPathEntry = entrada;
     let salida = "";
     console.log("---------------------------------------")
     this.consultas.forEach((elem: Consulta) => {
@@ -150,6 +155,7 @@ class Analizador{
     return salida
   }
 
+
   XQueryAscendente(entrada: string): String{
     console.log("---- XQUERY ASCENDENTE ----- ")
     //this.iniciarVariables();
@@ -162,7 +168,6 @@ class Analizador{
       salida += this.instrucciones.ejecutar(this.xqGlobal, this.global);
       console.log("s:", salida);
     }
-    
     this.global.tsimbolos = this.global.tsimbolos.concat(this.xqGlobal.tsimbolos);
     console.log(this.global);
     console.log("SALIDA: ", salida);
@@ -228,6 +233,17 @@ class Analizador{
         simbolos = simbolos + this.getSimbolosEntorno(elem.valor.valor);
       }else{
         if(elem.valor.valor !== false){
+          let valor;
+          if(elem.valor.valor instanceof Array){
+            if(elem.valor.valor[0] instanceof Simbolo){
+              valor = "Simbolo "+elem.valor.valor[0].nombre;
+            }else{
+              valor = elem.valor.getValor().toString().replace('&','and')
+
+            }
+          }else{
+            valor = elem.valor.getValor().toString().replace('&','and')
+          }
           this.indice++;
           simbolos = simbolos
                   +        '<tr>'
@@ -236,7 +252,7 @@ class Analizador{
                   +            '<td>'+this.getTipoDato(elem.valor.getTipo())+'</td>'
                   +            '<td>'+entrada.nombre+'</td>'
                   +            '<td>'+elem.nombre+'</td>'
-                  +            '<td>'+elem.valor.getValor().toString().replace('&','and')+'</td>'
+                  +            '<td>'+valor+'</td>'
                   +            '<td>'+elem.valor.getLinea()+'</td>'
                   +            '<td>'+elem.valor.getColumna()+'</td>'
                   +            '<td>'+elem.valor.getPosicion()+'</td>'
@@ -257,6 +273,8 @@ class Analizador{
             return 'Etiqueta';
         case 3:
             return 'Atributo';
+        case 4: 
+            return 'Variable XQuery';
     };
     return '';
   }
@@ -333,10 +351,13 @@ class Analizador{
     }
     return concatena;
   }
+
   
   public traduceXML():string{
     let resultado:string = '';
-    let traductor = new TraduceXML(this.consultas);
+    let test = XPathGramDesc.parse(this.xPathEntry);
+    console.log("this: ", this.instrucciones);
+    let traductor = new TraduceXML(test, this.instrucciones, this.xqGlobal);
     resultado = traductor.traducirXML();
     console.log(this.global);
     return resultado;
@@ -346,142 +367,6 @@ class Analizador{
 
 const analizador = new Analizador();
 export default analizador;
-function pruebaXQuery(entrada:string){
-  console.log("-- XQUERY --")
-  const objetos = XQuery.parse(entrada);
-  objetos.forEach((elem: any) => {
-    console.log(elem);
-  });
-}
-
-pruebaXQuery(`
-declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
-{
-  if ($m eq 0) then $n+1
-  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
-  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
-};
-
-declare function local:factorial($x as xs:integer)as xs:integer
-{
-  if ($x eq 0) then 1
-  else ($x*local:factorial($x - 1))
-};
-
-declare function local:fibonacci($num as xs:integer) as xs:integer
-{
-  let $a := $num + 1
-  let $b := $a * 8
-  for $l in (4 to 6)
-  return if ($num eq 0) then 0
-  else if ($num eq 1) then 1
-  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
-};
-
-declare function local:tipo1() as xs:integer
-{
-  let $a := 1
-  let $b := $a * 8
-  return local:fibonacci($a - 2)
-};
-
-declare function local:tipo2() as xs:integer
-{
-  for $a in (1)
-  where $a/price < 5
-  let $b := $a * 8
-  return if ($b eq 8) then local:factorial($a)
-else 5
-};
-
-let $go := 5
-let $ruta := /pruebas
-`);
-/*
-declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
-{
-  if ($m eq 0) then $n+1
-  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
-  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
-};
-
-declare function local:factorial($x as xs:integer)as xs:integer
-{
-  if ($x eq 0) then 1
-  else ($x*local:factorial($x - 1))
-};
-
-declare function local:fibonacci($num as xs:integer) as xs:integer
-{
-  let $a := $num + 1
-  let $b := $a * 8
-  for $l in (4 to 6)
-  return if ($num eq 0) then 0
-  else if ($num eq 1) then 1
-  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
-};
-
-declare function local:tipo1() as xs:integer
-{
-  let $a := 1
-  let $b := $a * 8
-  return local:fibonacci($a - 2)
-};
-
-declare function local:tipo2() as xs:integer
-{
-  for $a in (1)
-  where $a < 5
-  let $b := $a * 8
-  return if ($b eq 8) then local:factorial($a)
-else 5
-};
-
-
-
-let $go := (1,3)
-let $ruta := /pruebas
-for $x in (1 to 2)
-let $y := (4)
-return if(1 eq 1) then "FUNCIONA"
-else "NO FUNCIONA"
-
-(:
-return if ($ruta/m eq 5) then local:tipo2()
-else 3
-(:($y eq 4) then local:tipo2()
-else local:factorial(0):)
-:)
-*/
-/*pruebaXQuery(`
-declare function local:ackerman($m as xs:integer, $n as xs:integer ) as xs:integer
-{
-  if ($m eq 0) then $n+1
-  else if ($m gt 0 and $n eq 0) then local:ackerman($m - 1, 1)
-  else local:ackerman ($m - 1, local:ackerman($m, $n - 1))
-};
-
-
-declare function local:factorial($x as xs:integer)as xs:integer
-{
-  if ($x eq 0) then 1
-  else ($x*local:factorial($x - 1))
-};
-
-declare function local:fibonacci($num as xs:integer) as xs:integer
-{
-  for $l in (4 to 6)
-  return if ($num eq 0) then 0
-  else if ($num eq 1) then 1
-  else (local:fibonacci($num - 1) + local:fibonacci($num - 2))
-};
-
-let $go := (5)
-for $x in (1 to 2)
-let $y := (4)
-return if ($y eq 4) then local:factorial($y)
-else local:factorial(0)
-`);
 /*
 function xpathAscendente(entrada:string){
   console.log("-- XPATH ASCENDENTE -- ")

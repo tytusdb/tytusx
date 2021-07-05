@@ -11,6 +11,10 @@ export class Where {
         this.condicion = condicion;
         this.fromRoot = fromRoot;
     }
+    getCodigo3Dir(XQueryEnt, xmlEnt, traductorXPath, traductorXQuery) {
+        let code = "";
+        return code;
+    }
     isFromRoot() {
         //SI el nodo es // devuelve false, si el nodo es de tipo / devuelve true.
         return this.fromRoot;

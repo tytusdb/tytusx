@@ -1,6 +1,7 @@
 import { Entorno } from "../AST/Entorno";
 import { Simbolo } from "../AST/Simbolo";
 import { Tipo } from "../AST/Tipo";
+import { TipoOperacion } from "../Expresiones/Operacion";
 import { Consulta } from "../XPath/Consulta";
 import { Nodo, TipoNodo } from "../XPath/Nodo";
 import { Predicate } from "../XPath/Predicate";
@@ -18,12 +19,10 @@ export class TranslateXPath{
     listaConsultas: Array<Consulta>;
     tabla: Entorno;
     contT: number;
-    contL: number;
     constructor(listaConsultas: Array<Consulta>, tabla: Entorno, xmlHeap: Array<number>, xmlStack: Array<number>){
         this.contHP = 0;
         this.contSP = 0;
         this.contT = 0;
-        this.contL = 0;
         this.xPathHeap = [];
         this.xPathStack = [];
         this.funcionesUtilizadas = [];
@@ -79,9 +78,9 @@ export class TranslateXPath{
         return temps;
     }
     public traducirXPath(): string{
-        console.log('/* Inicio Traduccion XPATH */');
+        //console.log('/* Inicio Traduccion XPATH */');
         let resultadoTraduccion = this.traducir();
-        console.log('/* Fin Traduccion  XPATH*/');        
+        //console.log('/* Fin Traduccion  XPATH*/');        
         return resultadoTraduccion;
     }
 
@@ -100,57 +99,115 @@ export class TranslateXPath{
                 let nodo = listaNodos[i];
                 /* Para cada nodo se requiere:  */
                 /*  1. Buscar el nombre de este nodo en la lista de simbolos */
+                if(!nodo.isFromRoot()){
+                    let tmpC = new Consulta(listaNodos, -1, -1);
+                    let [resp, _] = tmpC.obtenerSalida(i, entActual, null, false);
+                    let xd: Array<Simbolo> = [];
+                    xd = xd.concat(resp);
+                    for(let k = i; k < listaNodos.length; k++){
+                        let auxN = listaNodos[k]
+                        trad += this.traducirNodo(auxN);
+                        let listaSimbs = this.buscarSimbolos(nodo, entActual);
+                        listaSimbs.forEach((elem: any) => {
+                            trad += this.traducirSimb(elem);
+                        })                        
+
+                    }
+                    trad += this.prueba(xd, nodo, listaNodos, listaNodos.length-1, false, false);                    
+                }
                 switch(nodo.getTipo()){
                     case TipoNodo.IDENTIFIER:
-                        let listaSimbs = this.buscarSimbolos(nodo, entActual);
-                        //Para cada entorno obtener posicion del stack y traducir desde ahi.
-                        console.log("WHAT I FOUND in"+entActual.nombre+ " FOR ",nodo.getNombre()+" is: \n", listaSimbs);
-                        console.log("--------------------------------------")
-                        let n = 0;
-                        for(let j= 0; j < listaSimbs.length; j++){
-                            /* 0. Escribir el nodo en el stack del xpath */
-                            trad += this.traducirNodo(nodo);                        
-                            let enx = listaSimbs[j]
-                            trad += this.traducirSimb(enx.posicion);
-                            if(i + 1 == listaNodos.length){
-                                //Llamar a la funcion de impresion
-                                trad += "\n\t/* IMPRIMIR ESTE NODO */\n";
-                                trad += "\ttx"+this.contT+" = XPStack[(int)SP];\n"
-                                trad += "\tHP = tx"+this.contT+";\n";
-                                this.contT = this.contT + 1;
-                                trad += '\tSP = SP + 1;\n'
-                                trad += "\t imprimirConsulta();\n"
-                                //Pushear las funciones utlizadas para imprimir.
-                                if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRCONSULTA) == -1){
-                                    this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRCONSULTA);
+                        
+                        let predicado: Predicate | undefined = nodo.getPredicado();
+                        if(predicado != undefined){
+                            for(let i = 0; i < entActual.tsimbolos.length; i++) {
+                                let elem = entActual.tsimbolos[i].valor;
+                                if(elem.getNombre() === nodo.getNombre()){
+                                    trad += this.traducirPredicado(predicado, elem.valor);
+                                    let consultaTemp = new Consulta(listaNodos, -1, -1);
+                                    let [respx, _, aux] = consultaTemp.obtenerConsultaPredicado(predicado, i, entActual, entActual, false, nodo.getValor(), false);
+                                    let xd: Array<Simbolo> = [];
+                                    if(typeof(respx[0]) === "string"){
+                                        xd = xd.concat(aux)
+                                    }else{
+                                        xd = xd.concat(respx);
+                                    }
+                                    trad += this.prueba(xd, nodo, listaNodos, listaNodos.length-1, false, false);
+                                    break;
                                 }
-                                if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRETIQUETA) == -1){
-                                    this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRETIQUETA);
-                                }
-                                if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRATRIBUTO) == -1){
-                                    this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRATRIBUTO);
-                                }
-                                if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRTEXTO) == -1){
-                                    this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRTEXTO);
-                                }                                
-                            }else{        
-                                trad += this.traduccionMain(enx.valor, listaNodos, i+1);
                             }
+                            break;
+                        }else{                        
+                            let listaSimbs = this.buscarSimbolos(nodo, entActual);
+                            //Para cada entorno obtener posicion del stack y traducir desde ahi.
+                            trad += this.prueba(listaSimbs, nodo, listaNodos, i, false, false);
                         }
                         return trad;
-                        break;
                     case TipoNodo.ASTERISCO:
-                        break;
+                        //Obtener todo lo de este entorno.
+                        trad += this.traducirNodo(nodo);
+                        let listaS = this.obtenerAsterisco(entActual);
+                        //console.log("listaS: ", listaS);
+                        listaS.forEach((s: any) => {
+                            let elem = s.valor
+                            if(i + 1 == listaNodos.length){
+                                //Imprimir
+                                if(elem.getTipo() != Tipo.ETIQUETA_UNIQUE){
+                                    trad += this.traducirSimb(elem.posicion);
+                                    //Llamar a la funcion de impresion
+                                    trad += "\n\t/* IMPRIMIR ESTE NODO :2 */\n";
+                                    trad += "\ttx"+this.contT+" = XPStack[(int)SP];\n"
+                                    trad += "\tHP = tx"+this.contT+";\n";
+                                    this.contT = this.contT + 1;
+                                    trad += '\tSP = SP + 1;\n'
+                                    trad += "\t imprimirConsulta();\n"
+                                    //Pushear las funciones utlizadas para imprimir.
+                                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRCONSULTA) == -1){
+                                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRCONSULTA);
+                                    }
+                                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRETIQUETA) == -1){
+                                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRETIQUETA);
+                                    }
+                                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRATRIBUTO) == -1){
+                                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRATRIBUTO);
+                                    }
+                                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRTEXTO) == -1){
+                                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRTEXTO);
+                                    }                                                                    
+                                }                              
+                            }else{
+                                if(elem.getTipo() !=  Tipo.ETIQUETA_UNIQUE){
+                                    trad += this.traducirSimb(elem.posicion);
+                                    trad += this.traduccionMain(elem.valor, listaNodos, i+1);
+                                }
+                            }
+                        })
+                        return trad;
                     case TipoNodo.ATRIBUTO:
-                        break;
+                        trad += this.prueba(this.obtenerAtributos(entActual, nodo.getNombre(), nodo.isFromRoot()), nodo, listaNodos, i , false, true);
+                        return trad;
                     case TipoNodo.DOT:
-                        break;
+                        //Quedarse en el entorno actual. - No sirve :c
+                        //trad += this.test(entActual.tsimbolos, nodo, listaNodos, i, true, false);
+                        let tempsi = new Consulta(listaNodos, -1, -1);
+                        let [respsi, __] = tempsi.obtenerSalida(i, entActual, null, false);
+                        let xdsi: Array<Simbolo> = [];
+                        xdsi = xdsi.concat(respsi);
+                        trad += this.prueba(xdsi, nodo, listaNodos, listaNodos.length - 1, false, false);
+                        return trad;
                     case TipoNodo.DOTDOT:
-                        break;
+                        //No sirve
+                        // trad += this.test(entActual.padre.tsimbolos, nodo, listaNodos, i, true, false);                         
+                        let tempsidot = new Consulta(listaNodos, -1, -1);
+                        let [respsidot, ___] = tempsidot.obtenerSalida(i, entActual, null, false);
+                        let xdsidot: Array<Simbolo> = [];
+                        xdsidot = xdsidot.concat(respsidot);
+                        trad += this.prueba(xdsidot, nodo, listaNodos, listaNodos.length - 1, false, false);
+                        return trad;                        
+                        
                     case TipoNodo.FUNCION:
                         if(i + 1 == listaNodos.length){
                             let nombre = nodo.getValor().toLowerCase();
-                            console.log("ENTACTUAL: ", entActual);
                             if(nombre === "text()"){
                                     //Llamar a la funcion de busqueda de TEXTO
                                     trad += "\n\t/* BUSCAR EL TEXTO DE ESTE NODO E IMPRIMIRLO. */\n";
@@ -177,11 +234,16 @@ export class TranslateXPath{
                                     }                                  
                             }
                         }
-                        break;
+                        return trad;
                     case TipoNodo.AXIS:
+                        let consultaTemp = new Consulta(listaNodos, -1, -1);
+                        let [resp, _] = consultaTemp.obtenerSalida(i, entActual, null, false);
+                        let xd: Array<Simbolo> = [];
+                        xd = xd.concat(resp);
+                        trad += this.prueba(xd, nodo, listaNodos, listaNodos.length - 1, false, false);
                         break;
                     case TipoNodo.NODOERROR:
-                        break;
+                        return trad;
                 }
             }
         
@@ -189,19 +251,97 @@ export class TranslateXPath{
     }
 
 
+    private obtenerAtributos(entActual: Entorno, nombre: string, fromRoot: boolean): Array<Simbolo>{
+        let atributo: Array<Simbolo> = [];
+
+        entActual.tsimbolos.forEach((s : any) => {
+            let elem = s.valor;
+            if(elem.getTipo() === Tipo.ATRIBUTO && (nombre === "*" || elem.getNombre() === nombre)){
+                atributo.push(elem);
+            }
+            if(!fromRoot && elem.getTipo() === Tipo.ETIQUETA){
+                atributo = atributo.concat(this.obtenerAtributos(elem.valor, nombre, fromRoot));
+            }
+        })
+        return atributo;
+        
+    }
+    private prueba(listaS: Array<Simbolo>, nodo: Nodo, listaNodos: Array<Nodo>, i: number, flag: boolean, atr: boolean): string{
+        let trad = "";
+        for(let j= 0; j < listaS.length; j++){
+            /* 0. Escribir el nodo en el stack del xpath */
+            trad += this.traducirNodo(nodo);
+            let enx;
+            if(flag){
+                enx = listaS[j].valor
+            }else{
+                enx = listaS[j]
+            }
+            if(enx.getTipo() == Tipo.ETIQUETA_UNIQUE){
+                console.log("-- Unique --");
+            }else{
+                if(atr){
+                    trad += this.traducirSimb(enx.posicion+1);
+                }else{
+                    trad += this.traducirSimb(enx.posicion);
+                }
+                if(i + 1 == listaNodos.length){
+                    //Llamar a la funcion de impresion
+                    trad += "\n\t/* IMPRIMIR ESTE NODO :) */\n";
+                    trad += "\ttx"+this.contT+" = XPStack[(int)SP];\n"
+                    trad += "\tHP = tx"+this.contT+";\n";
+                    this.contT = this.contT + 1;
+                    trad += '\tSP = SP + 1;\n'
+                    trad += "\t imprimirConsulta();\n"
+                    //Pushear las funciones utlizadas para imprimir.
+                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRCONSULTA) == -1){
+                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRCONSULTA);
+                    }
+                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRETIQUETA) == -1){
+                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRETIQUETA);
+                    }
+                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRATRIBUTO) == -1){
+                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRATRIBUTO);
+                    }
+                    if(this.funcionesUtilizadas.indexOf(NativaXPath.IMPRIMIRTEXTO) == -1){
+                        this.funcionesUtilizadas.push(NativaXPath.IMPRIMIRTEXTO);
+                    }                                
+                }else{
+                    trad += this.traduccionMain(enx.valor, listaNodos, i+1);
+                }
+            }
+        }
+        return trad;
+    }
+
+    private obtenerAsterisco(entActual: Entorno): Array<Simbolo>{
+        let listaS: Array<Simbolo> = []
+        entActual.tsimbolos.forEach((e: Simbolo)=>{
+            listaS.push(e);
+        })
+        return listaS;
+    }
+
+    private traducirNombre(nombre: string){
+         //XPStack[(int)0] = 30
+         let tradNodo:string = '\n\t /* NODO "'+nombre+'" EN STACK*/ \n';
+         nombre.split('').forEach((element:any) => {
+            tradNodo = tradNodo
+            +'\tXPStack[(int)SP] = '+element.charCodeAt(0)+'; \n'
+            +'\tSP = SP + 1; \n';
+            this.xPathStack.push(element.charCodeAt(0));
+            this.contSP++;
+        });
+
+        return tradNodo;
+    }
 
     private traducirNodo(nodo: Nodo): string{
         let nombre = nodo.getNombre();
         let predicado: Predicate | undefined = nodo.getPredicado();
-        let tradNodo:string = '\n\t /* NODO "'+nombre+'" EN STACK*/ \n';
+        let tradNodo:string = "";
         //XPStack[(int)0] = 30
-        nombre.split('').forEach((element:any) => {
-            tradNodo = tradNodo
-            +'\t XPStack[(int)SP] = '+element.charCodeAt(0)+'; \n'
-            +'\t SP = SP + 1; \n';
-            this.xPathStack.push(element.charCodeAt(0));
-            this.contSP++;
-        });
+       tradNodo += this.traducirNombre(nombre);
         if(predicado != undefined){
             //Escribir tambien el predicado
         }
@@ -276,13 +416,7 @@ export class TranslateXPath{
             let el = entActual.tsimbolos[i].valor;
 
             if(el.getNombre() === nodo.getNombre()){
-                let predicado: Predicate | undefined = nodo.getPredicado();
-                if(predicado != undefined){
-                    entSimbolo.concat(this.traducirPredicado(predicado));
-                    break;
-                }else{
-                    entSimbolo.push(el);
-                }
+                entSimbolo.push(el);
             }
             if(!nodo.isFromRoot()){
                 //Si es // entrar a buscar a cada entorno.
@@ -380,7 +514,7 @@ export class TranslateXPath{
         code += '\t\tgoto L5;\n';
         //La tercera etiqueta llama al metodo para imprimir atributo.
         code += '\tL3: \n'
-            + '\t\tHP = HP + 1;\n'
+            + '\t\tHP = HP + 2;\n'
             + '\t\timprimirAtributo();\n'
             + '\t\tgoto L5;\n'
         //La cuarta etiqueta llama al metodo para imprimir texto
@@ -551,10 +685,79 @@ export class TranslateXPath{
         return code;
     }
 
-    private traducirPredicado(predicado: Predicate): Array<Simbolo>{
-        return [];
+    private traducirPredicado(predicado: Predicate, entorno: Entorno): string{
+        let operaciones = predicado.get3Dir(entorno);
+        let trad = "\n\t/*-- TRADUCIENDO PREDICADO -- */\n";
+        if(operaciones instanceof Array){
+            if(this.obtenerSigno(operaciones[1]) === "idk"){
+                return "";
+            }
+            let [aux, _] = this.continuarTrad(operaciones);
+            trad += aux;
+            
+        }else{
+            if(isNaN(operaciones)){
+                return "";
+            }
+            let varTemporal = "tx"+this.contT;
+            this.contT++;                  
+            trad += "\t"+varTemporal+" = "+operaciones+";\n";
+        }
+        //Obtener resultado
+        return trad;
     }
-    
+
+    private continuarTrad(ops: Array<any>): [string, string]{
+        let trad = "";
+        let izq = ops[0];
+        let signo = ops[1];
+        let der = ops[2];
+
+        let numIzq, numDer = null;
+
+        if(izq instanceof Array){
+            let aux = "";
+            
+            [aux, numIzq] = this.continuarTrad(izq);
+            trad += aux;
+        }else{
+            numIzq = izq;
+        }
+
+        if(der instanceof Array){
+            let aux = "";
+            [aux, numDer] = this.continuarTrad(der);
+            trad += aux;
+        }else{
+            numDer = der;
+        }
+
+        let varTemporal = "tx"+this.contT;
+        this.contT++;      
+
+        trad += "\t"+varTemporal+" = "+numIzq;
+        //Concatenar signo.
+        trad += this.obtenerSigno(signo);
+        trad += numDer+";\n"
+        return [trad, varTemporal];
+    }
+
+    private obtenerSigno(operacion: TipoOperacion): string{
+        switch(operacion){
+            case TipoOperacion.SUMA:
+                return "+";
+            case TipoOperacion.RESTA:
+                return "-";
+            case TipoOperacion.DIVISION:
+                return "/";
+            case TipoOperacion.MOD:
+                return "%";
+            case TipoOperacion.MULTIPLICACION:
+                return "*";
+            default:
+                return "idk";
+        }
+    }
 }
 
 

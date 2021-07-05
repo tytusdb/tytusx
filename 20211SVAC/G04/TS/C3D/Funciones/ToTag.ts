@@ -140,7 +140,7 @@ class ToTag implements FunctionC3D {
         codigo.push(`\tt${t+28} = stack[(int)P];`);
         codigo.push(`\tP = P - 2;`);
         codigo.push(`\tprintf("%c", (char)62);`);
-        codigo.push(`\tprintf("\\n");`);
+        codigo.push(`\tprintf("%c",(char)10);`);
         codigo.push(`\tgoto L${l+10};`);
 
         codigo.push(`\n\t//Etiqueta autocerrada`);

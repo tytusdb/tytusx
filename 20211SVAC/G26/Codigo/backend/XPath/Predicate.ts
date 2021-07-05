@@ -20,6 +20,10 @@ export class Predicate implements Expresion{
         return this.tipo;
     }
 
+    get3Dir(ent: Entorno){
+        return this.expresion.get3Dir(ent);
+    }
+
     getValor(ent: Entorno){
         let resultado = this.expresion.getValor(ent);
         this.tipo = this.expresion.getTipo(ent);

@@ -86,6 +86,12 @@ function ejecutarInstrucciones(instrucciones,entorno,tablaSimbolos){
                 tablaSimbolos=new Entorno(tablaSimbolos);
                
                 break;
+            case "RETURN":
+
+                return procesarReturn(instruccion.valor,tablaSimbolos);
+               
+                break;
+
             default:
                 return null
         }
@@ -254,7 +260,10 @@ function comparar(palabra1,palabra2){
             return true;
         } 
     }else{
-        return alfabeto(palabra1,palabra2,0);
+        if(palabra1&&palabra2){
+            return alfabeto(palabra1,palabra2,0);
+        }
+        return false;
     }
 
     return false;
@@ -410,6 +419,10 @@ function validarWhere(instruccion,tabla){
             valor1=validarWhere(instruccion.valor1,tabla);
             valor2=validarWhere(instruccion.valor2,tabla);
             return valor1 != valor2;
+        case "OR":
+            valor1=validarWhere(instruccion.valor1,tabla);
+            valor2=validarWhere(instruccion.valor2,tabla);
+            return valor1 || valor2;
         case "NUMERO":
             return parseInt(instruccion.valor)
         case "CADENA":
@@ -507,10 +520,13 @@ function getAcceso(instruccion,entorno,padre){
     if(padre)//Si existe entonces no es el primero y hay que pasar a los hijos
     {
         let respuesta=[];
-        for (const hijo of entorno.hijos) {
-            if(instruccion.valor==hijo.etiqueta)
-            {
-                respuesta.push(hijo);
+        
+        if(entorno.hijos){
+            for (const hijo of entorno.hijos) {
+                if(instruccion.valor==hijo.etiqueta)
+                {
+                    respuesta.push(hijo);
+                }
             }
         }
         if(instruccion.index)

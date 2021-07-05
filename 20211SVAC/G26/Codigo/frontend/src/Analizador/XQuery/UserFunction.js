@@ -1,8 +1,14 @@
-import errores from '../Global/ListaError';
-import { Simbolo } from '../AST/Simbolo';
-import { Tipo } from '../AST/Tipo';
-export class UserFunction {
-    constructor(tipo, ambito, nombre, parametros, instrucciones, linea, columna) {
+export {};
+/*export class UserFunction implements InstruccionXQuery{
+    tipo: TipoPrim;
+    ambito:string;
+    nombre: string;
+    parametros: any;
+    instrucciones: any;
+    linea: number;
+    columna: number;
+
+    constructor(tipo:TipoPrim, ambito:string, nombre: string, parametros: any, instrucciones: any, linea:number, columna:number){
         this.tipo = tipo;
         this.ambito = ambito;
         this.nombre = nombre;
@@ -11,14 +17,16 @@ export class UserFunction {
         this.linea = linea;
         this.columna = columna;
     }
-    ejecutar(entornoXQuery, entornoXML) {
-        if (!entornoXQuery.existeMetodo(this.nombre)) {
+
+    ejecutar(entornoXQuery: Entorno, entornoXML: Entorno) {
+        /*if (!entornoXQuery.existeMetodo(this.nombre)){
             let sim = new Simbolo(Tipo.XQ_FUNC, this.nombre, null, this.linea, this.columna);
             sim.setParametros(this.parametros);
             sim.setInstrucciones(this.instrucciones);
             entornoXQuery.global.agregarSimbolo(this.nombre, sim);
-        }
-        else
+        }else
             errores.agregarError('semantico', 'Ya existe el metodo/funcion ' + this.nombre, this.linea, this.columna);
     }
+    
 }
+*/ 

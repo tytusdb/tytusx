@@ -349,7 +349,7 @@ export class Optimizer{
                                             //Agregar a reporte.
                                             this.agregarReporte(codigoNuevo, codigoEliminado, ReglaOptimizacion.REGLA5);
                                             
-                                            //Agregar a la lista deinstrucciones nueva
+                                            //Agregar a la lista de instrucciones nueva
                                             codigoNuevo = this.marcarAsOptimizadas(codigoNuevo, true);
                                             nuevasInstrucciones = nuevasInstrucciones.concat(codigoNuevo);
                                             contador += codigoEliminado.length;
