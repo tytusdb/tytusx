@@ -13,6 +13,7 @@ var _txtConsola;
 
 var _rootXml;
 var _tsXml;
+var _tsXquery;
 
 var _rootXpath;
 var _rootXquery;
@@ -326,7 +327,11 @@ const ejecutarXquery= function (cadEntradaXml, cadEntradaXpath){
     try {
         analizarXML(cadEntradaXml);
         analizarXQUERY(cadEntradaXpath);
-        _rootXquery.ejecutar(new TablaSimbolosXquery(null,"GLOBAL"),_tsXml);
+        let tablaGlobal = new TablaSimbolosXquery(null,"GLOBAL");
+        _rootXquery.ejecutar(tablaGlobal,_tsXml);
+        if(tablaGlobal != null && tablaGlobal instanceof TablaSimbolosXquery){
+            _tsXquery = tablaGlobal;
+        }
         if(ListaErrores.hayErroresXquery()){
             InterfazGrafica.print("Hubieron errores durante la ejecucion en XQUERY");
         }
@@ -395,11 +400,12 @@ function  generar3DXquery(cadEntradaXml, cadEntradaXpath){
         tablaSimbolosXml.cargarXml_3d();
         CodeUtil.comenzarPrograma();
         let ts = _rootXquery.obtenerTS(_tsXml);
+        _tsXquery = ts;
         XQueryUtil.tablaSimbolosGlobal = ts;
         XQueryUtil.tablaSimbolosLocal = ts;
-        //todo: Agregar la carga xml a la tabla de simbolos
-        //ts.cargarElementosXml();
-        let rootXquery =    _rootXquery.traducirXQ(10);//Ejecutar Xquery
+        ts.borrarValoresInterprete();
+        ts.cargarElementosXml();
+        let rootXquery =    _rootXquery.traducirXQ(ts.listaSimbolos.length);//Ejecutar Xquery
         CodeUtil.finalizarProgrma();
         InterfazGrafica.print(CodeUtil._cadSalida);
 

@@ -56,16 +56,19 @@ class SentenciaFor extends ExpresionAncestor {
         this.ejecutar(ent, xmlData);
     }
     traducirXQ(sizeScope, otro) {
-        let tmpListElement = this.senteciaXpath.traducir3DXQuery(sizeScope);
-        CodeUtil.printComment("Se traduce Sentencia For ");
         let local = false;
         let sFor = XQueryUtil.tablaSimbolosLocal.obtenerSimbolo(this.identifier);
         if (sFor != null) {
             local = true;
+            sizeScope = XQueryUtil.tablaSimbolosLocal.listaSimbolos.length.toString();
         }
         else {
             let sFor = XQueryUtil.tablaSimbolosGlobal.obtenerSimbolo(this.identifier);
+            sizeScope = XQueryUtil.tablaSimbolosGlobal.listaSimbolos.length.toString();
         }
+        let tmpListElement = this.senteciaXpath.traducir3DXQuery(sizeScope);
+        CodeUtil.printComment("Unicio Sentencia For.traducirXQ() ");
+        CodeUtil.printComment(tmpListElement + " tiene lista de traducir3DXQuery ");
         if (sFor != null) {
             throw new TokenError(TipoError.Semantico, this.identifier + " ya existe en el ambito actua.. ", this.linea, this.columna);
         }
@@ -73,9 +76,10 @@ class SentenciaFor extends ExpresionAncestor {
         XQueryUtil.tablaSimbolosLocal.agregarSimbolo(sFor);
         let posSimbolo = CodeUtil.generarTemporal();
         CodeUtil.print(posSimbolo + " = " + sizeScope + " + 1 ; ");
-        CodeUtil.print("Stack[(int)" + posSimbolo + "] = " + tmpListElement + " ;");
+        CodeUtil.printWithComment("Stack[(int)" + posSimbolo + "] = " + tmpListElement + " ;", "Se guarda el valor del for en la pila");
         CodeUtil.printComment("tmpListElement: " + tmpListElement);
         this.retorno.traducirXQ(sizeScope + 1, tmpListElement);
-        CodeUtil.printComment("XQueryxasfd");
+        XQueryUtil.tablaSimbolosLocal.listaSimbolos.pop();
+        CodeUtil.printComment("Fin Sentencia For.traducirXQ() ");
     }
 }

@@ -76,7 +76,7 @@ class XpathExpresion extends ExpresionAncestor {
         CodeUtil.print(tmpPadre + " = -1 ;");
         for (let expression of this.expresionesXpath) {
             if (entornoActual == null) {
-                entornoActual = expression.traducirRetorno3DXQuery(sizeScope, ambito); //Si se ejecuta la primera vez
+                entornoActual = expression.traducirRetorno3DXQuery(ambito, sizeScope); //Si se ejecuta la primera vez
             }
             else {
                 let nuevaLista = CodeUtil.generarTemporal();

@@ -103,9 +103,9 @@ class ListaXpathExpresion extends ExpresionAncestor {
         let tmpListaXpathXpressions = this.crearLista3D(sizeScope);
         let nuevaLista = "";
         for (let expression of this.expresionesXpath) {
-            nuevaLista = expression.traducirRetorno3DXQuery(ambito, sizeScope);
+            nuevaLista = expression.traducirRetorno3DXQuery(sizeScope, ambito);
             this.concatenarLista3D(sizeScope, tmpListaXpathXpressions, nuevaLista);
         }
-        this.imprimirLista3D(sizeScope, tmpListaXpathXpressions);
+        ExpresionAncestor.imprimirLista3D(sizeScope, tmpListaXpathXpressions);
     }
 }

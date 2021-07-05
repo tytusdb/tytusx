@@ -15,7 +15,7 @@ class Division extends ExpresionAncestor {
             tipo = new Tipo(TipoDato.numero);
         }
         else if (!tipoIzquierda.esError() && !tipoDerecha.esError()) {
-            ListaErrores.AgregarErrorXPATH(CrearError.tiposInvalidos("División", tipoIzquierda, tipoDerecha, this.linea, this.columna));
+            ListaErrores.AgregarErrorXQUERY(CrearError.tiposInvalidos("División", tipoIzquierda, tipoDerecha, this.linea, this.columna));
         }
         return tipo;
     }
@@ -25,7 +25,7 @@ class Division extends ExpresionAncestor {
         if (!tipo.esError()) {
             let valorDerecha = this.derecha.getValor(tsXquery, ent);
             if (valorDerecha == 0 || valorDerecha == "0") {
-                ListaErrores.AgregarErrorXPATH(CrearError.errorSemantico("División dentro de cero", this.linea, this.columna));
+                ListaErrores.AgregarErrorXQUERY(CrearError.errorSemantico("División dentro de cero", this.linea, this.columna));
                 tipo = new Tipo(TipoDato.err);
             }
             else {
@@ -33,5 +33,17 @@ class Division extends ExpresionAncestor {
             }
         }
         return valor;
+    }
+    traducir3DXQuery(sizeScope) {
+        let resultadoIzq = this.izquierda.traducir3DXQuery(sizeScope);
+        let resultadoDer = this.derecha.traducir3DXQuery(sizeScope);
+        if (resultadoIzq != null && resultadoDer != null &&
+            resultadoIzq instanceof ExpresionC3D && resultadoDer instanceof ExpresionC3D) {
+            let idResultado = CodeUtil.generarTemporal();
+            let cadena = idResultado + " = " + resultadoIzq.idResultado + " / " + resultadoDer.idResultado + ";";
+            CodeUtil.printWithComment(cadena, "operacion aritmetica de division ");
+            return new ExpresionC3D(idResultado);
+        }
+        return null;
     }
 }

@@ -118,11 +118,13 @@ class CodeUtil {
         this.print("AmbitaoGlboal->stack[P]");
         this.print("List AmbitaoGlboal->stack[P+1]");
         this.print("**************************************/");
-        CodeUtil.print("int main()");
+        CodeUtil.print("void main()");
         CodeUtil.print("{");
         CodeUtil.printWithComment(CodeUtil.METHOD_CARGARXML + ";", "Stack[SP] y Stack[SP+1] queda la carga. ");
     }
     static cerrarMain() {
+        CodeUtil.print(this.L_FIN + ":");
+        CodeUtil.print("return;");
         CodeUtil.print("}");
     }
     static createTemps() {
@@ -339,6 +341,7 @@ class CodeUtil {
         this.print("{");
         var etiquetaAtributo = this.generarEtiqueta();
         var etiquetaContenido = this.generarEtiqueta();
+        var etiquetaNumeroPrimitivo = this.generarEtiqueta();
         var etiquetaFin = this.generarEtiqueta();
         let tmpPostParametro1 = this.generarTemporal();
         this.printWithComment(tmpPostParametro1 + " = SP + 0 ;", "Posicion del parametro");
@@ -399,7 +402,7 @@ class CodeUtil {
         this.print("goto " + etiquetaFin + " ;");
         this.printComment("Finaliza a imprimr un objeto");
         this.print(etiquetaAtributo + ":");
-        this.print("if ( " + tmpTipoObjeto + " != " + TipoDato3D.atributo + " ) goto " + etiquetaContenido + " ;");
+        this.print("if ( " + tmpTipoObjeto + " != " + TipoDato3D.atributo + " ) goto " + etiquetaNumeroPrimitivo + " ;");
         //**********************************************IMPRESION DE ATRIBUTOS
         this.printComment("Inicio impresion atributo");
         this.printWithComment("if ( " + tmpParametro2 + " == 0 ) goto " + etiquetaFin + " ;", "Si el indicador es 0 no imprimimos");
@@ -415,6 +418,17 @@ class CodeUtil {
         this.print("SP = SP - 2 ; ");
         this.print("goto " + etiquetaFin + " ;");
         this.printComment("Finaliza impresion atributo");
+        //**********************************************IMPRESION DE NUMERO
+        this.printComment("Inicio Impresion de numero primiivo");
+        this.print(etiquetaNumeroPrimitivo + ":");
+        this.print("if ( " + tmpTipoObjeto + " != " + TipoDato3D.primitivoNumerico + " ) goto " + etiquetaContenido + " ;");
+        let tmpPosContenidoNum = this.generarTemporal();
+        this.print(tmpPosContenidoNum + " = " + tmpParametro1 + " + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + " ;");
+        let tmpContenidoNum = this.generarTemporal();
+        this.printWithComment(tmpContenidoNum + " = Heap[(int)" + tmpPosContenidoNum + "];", "Se obtiene la referencia del contenido");
+        this.print('printf("%f",' + tmpContenidoNum + ');');
+        this.print("goto " + etiquetaFin + " ;");
+        this.printComment("Finaliza impresion de numero primiivo");
         //**********************************************IMPRESION DE CONTENIDO
         this.printComment("Inicio Impresion de Contenido");
         this.print(etiquetaContenido + ":");
@@ -704,6 +718,97 @@ class CodeUtil {
         this.print("}");
         this.print("");
     }
+    static buscarTodosFromPadreByTipoValorIndex() {
+        this.print("/**************************************");
+        this.print("buscarTodosFromPadreByTipoValorIndex(int refPadre, int tipoObjeto, string valor, int index ):ListObject");
+        this.print("refPadre->Stack[P]");
+        this.print("tipoObjeto->Stack[P+1]");
+        this.print("valor->Stack[P+2]");
+        this.print("index->Stack[P+3]");
+        this.print("return -> Stack[P]");
+        this.print("**************************************/");
+        this.print("void buscarObjeto()");
+        this.print("{");
+        this.printComment("Recuperamos los parametros");
+        let tmpPosRefPadre = this.generarTemporal();
+        this.print(tmpPosRefPadre + " = SP + 0 ;");
+        let tmpRefPadre = this.generarTemporal();
+        this.printWithComment(tmpRefPadre + " = Stack[(int)" + tmpPosRefPadre + "]; ", "REF PADRE");
+        let tmpPosTipoObjeto = this.generarTemporal();
+        this.print(tmpPosTipoObjeto + " = SP + 1 ;");
+        let tmpTipoObjeto = this.generarTemporal();
+        this.printWithComment(tmpTipoObjeto + " = Stack[(int)" + tmpPosTipoObjeto + "]; ", "TIPO OBJETO");
+        let tmpPosValor = this.generarTemporal();
+        this.print(tmpPosValor + " = SP + 2 ;");
+        let tmpValor = this.generarTemporal();
+        this.printWithComment(tmpValor + " = Stack[(int)" + tmpPosValor + "];", "VALOR");
+        let tmpPosIndex = this.generarTemporal();
+        this.print(tmpPosIndex + " = SP + 3 ;");
+        let tmpIndex = this.generarTemporal();
+        this.printWithComment(tmpIndex + " = Stack[(int)" + tmpPosIndex + "];", "INDEX");
+        this.printComment("Creamos la lista que se retornara");
+        this.print("SP = SP + 4 ;");
+        this.print("crearLista();");
+        let tmpLista = this.generarTemporal();
+        this.print(tmpLista + " = Stack[SP];");
+        this.print("SP = SP - 4 ;");
+        this.printComment("Inicializamos contador I");
+        let tmpContador = this.generarTemporal();
+        this.print(tmpContador + " = " + tmpRefPadre + " + 1 ;");
+        let lInicio = this.generarEtiqueta();
+        let lInsertar = this.generarEtiqueta();
+        let lContinuar = this.generarEtiqueta();
+        let lfin = this.generarEtiqueta();
+        this.printWithComment(lInicio + ":", "Etiqueta de inicio");
+        this.printWithComment("if( " + tmpContador + " > " + this.TMP_SIZE_TS_XML + " ) goto " + lfin + ";", "Validamos hasta que el contador sea mayor que la carga xml");
+        let tmpTipo = this.generarTemporal();
+        this.printWithComment(tmpTipo + " = Heap[(int)" + tmpContador + "];", "Obtenemos el tipo en base a la posicion del contador");
+        this.printComment("Buscamos hacer match por el tipo de objeto");
+        this.printWithComment("if( " + tmpTipo + " != " + tmpTipoObjeto + " ) goto " + lContinuar + ";", "Si no es el tipo del recibido por parametro continuamos");
+        this.printComment("Si corresponde al tipo Buscamos la cadena del objeto ");
+        let tmpPosCadena = this.generarTemporal();
+        this.printWithComment(tmpPosCadena + " = " + tmpContador + " + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + ";", "Posicion de la cadena del objeto");
+        let tmpCadena = this.generarTemporal();
+        this.printWithComment(tmpCadena + " = Heap[(int)" + tmpPosCadena + "];", "Obtenemos la referencia de la cadena");
+        this.printComment("Comparamos la cadena con la funcion");
+        this.print("SP = SP + 4 ;");
+        this.print("Stack[SP] = " + tmpCadena + ";");
+        let t1 = this.generarTemporal();
+        this.print(t1 + " = SP + 1 ;");
+        this.print("Stack[(int)" + t1 + "] = " + tmpValor + ";");
+        this.print("equalString();");
+        let tComparacionCadena = this.generarTemporal();
+        this.print(tComparacionCadena + " = Stack[SP];");
+        this.print("SP = SP - 4 ;");
+        this.printComment("Validamos resultado de la comparacion");
+        this.printWithComment("if( " + tComparacionCadena + " != 1 ) goto " + lContinuar + ";", "Si la cadena no es igual");
+        this.printWithComment("if( " + tmpIndex + " == " + CodeUtil.VAL_INDEX_DEFAULT + " ) goto " + lInsertar + ";", "Si no se envia index se inserta");
+        this.printComment("Validamos index");
+        let tmpPosCorrelativo = this.generarTemporal();
+        this.printWithComment(tmpPosCorrelativo + " = " + tmpContador + " + " + TsRow.POS_INDEX + ";", "Posicion del Index del objeto");
+        let tmpCorrelativo = this.generarTemporal();
+        this.printWithComment(tmpCorrelativo + " = Heap[(int)" + tmpPosCorrelativo + "];", "Obtenemos el correlativo");
+        this.printWithComment("if( " + tmpCorrelativo + " != " + tmpIndex + " ) goto " + lContinuar + ";", "Si el correlativo no corresponde al index enviado por parametro no insertar, continuar con ciclo");
+        this.printWithComment(lInsertar + ":", "Insertamos objeto");
+        this.printComment("Llamamos a metodo para concatenar");
+        this.print("SP = SP + 4 ;");
+        this.print("Stack[SP] = " + tmpLista + ";");
+        let tmpParametro2Concatenar = this.generarTemporal();
+        this.print(tmpParametro2Concatenar + " = SP + 1 ;");
+        this.print("Stack[(int)" + tmpParametro2Concatenar + "] = " + tmpContador + " ;");
+        this.print("concatenarObjeto();");
+        this.print("SP = SP - 4 ;");
+        this.printComment("Se itera de nuevo");
+        this.printWithComment(lContinuar + ":", "lContinuar");
+        this.printWithComment(tmpContador + " = " + tmpContador + " + 1;", "Incrementamos el contador");
+        this.printWithComment("goto " + lInicio + ";", "goto a lInicio");
+        this.printWithComment(lfin + ":", "lFin");
+        this.printComment("Retornamos lista");
+        this.print("Stack[SP] = " + tmpLista + " ;");
+        this.print("return ;");
+        this.print("}");
+        this.print("");
+    }
     static buscarByPadreTipoValorIndex() {
         this.print("/**************************************");
         this.print("buscarByPadreTipoValorIndex(int refPadre, int tipoObjeto, string valor, int index ):ListObject");
@@ -886,11 +991,59 @@ class CodeUtil {
         this.print("}");
         this.print("");
     }
+    static guardarRerenciaEnLista(tmpRefObjeto, sizeScope) {
+        CodeUtil.printComment("Creamos una nueva lista para concatenar las respuesetas de XpathExpressions del return");
+        let tmpListaXpathXpressions = CodeUtil.generarTemporal();
+        //Creamos la lista
+        CodeUtil.printWithComment("SP = SP + " + sizeScope + " ;", "Se cambia ambito");
+        CodeUtil.print("crearLista();");
+        CodeUtil.print(tmpListaXpathXpressions + " = Stack[SP];");
+        CodeUtil.printWithComment("SP = SP - " + sizeScope + " ;", "Se recupera ambito");
+        //Concatenamos el objeto
+        CodeUtil.printWithComment("SP = SP + " + sizeScope + " ;", "Se cambia ambito");
+        this.print("Stack[SP] = " + tmpListaXpathXpressions + ";");
+        let tmpParametro2Concatenar = this.generarTemporal();
+        this.print(tmpParametro2Concatenar + " = SP + 1 ;");
+        this.print("Stack[(int)" + tmpParametro2Concatenar + "] = " + tmpRefObjeto + " ;");
+        this.print("concatenarObjeto();");
+        CodeUtil.printWithComment("SP = SP - " + sizeScope + " ;", "Se recupera ambito");
+        return tmpListaXpathXpressions;
+    }
+    static guardarPrimitivoEnHeap(temporal, tipo) {
+        var tempPosObjeto = CodeUtil.generarTemporal();
+        var tempPosPadre = CodeUtil.generarTemporal();
+        var tempPosIndex = CodeUtil.generarTemporal();
+        var tempPosSize = CodeUtil.generarTemporal();
+        var tempPosCadena = CodeUtil.generarTemporal();
+        var tempPosSubEntorno = CodeUtil.generarTemporal();
+        var tempEtiquetaRepositorio;
+        var sizeEntorno = "1";
+        //Offsets para atributos
+        CodeUtil.printComment("Guardando pritivo");
+        CodeUtil.printWithComment(tempPosObjeto + " = HP + " + TsRow.POS_OBJECT + " ; ", "Guardamos el inicio del Objeto");
+        CodeUtil.printWithComment(tempPosPadre + " = HP + " + TsRow.POS_PARENT + " ; ", "Guardamos la referencia del padre");
+        CodeUtil.printWithComment(tempPosIndex + " = HP + " + TsRow.POS_INDEX + " ; ", "Guardamos el index del objeto");
+        CodeUtil.printWithComment(tempPosSize + " = HP + " + TsRow.POS_SIZE + " ; ", "Guardamos el tamaño del objeto");
+        CodeUtil.printWithComment(tempPosCadena + " = HP + " + TsRow.POS_LABEL_CONT_ATTRIBUTE + " ; ", "Guardamos el espacio para el contenido");
+        //Reserva de espacio
+        CodeUtil.printWithComment("HP = HP + " + TsRow.SIZE_PROPERTIES_OBJECT + " ;", "Incrementamos el espacio para atributos internos");
+        tipo = tipo.esCadena() ? tipo : new Tipo(TipoDato.primitivoNumerico);
+        //Propiedades del objeto
+        CodeUtil.printComment("Guardamos las propiedades del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosPadre + "] = -2 ;", "Guardamos el padre del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosIndex + "] = -1 ;", "Guardamos el indice del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosSize + "] = 1 ;", "Guardamos el tamaño del objeto");
+        CodeUtil.printWithComment("Heap[(int)" + tempPosObjeto + "] = " + tipo.getTipo() + " ;", "Se guarda el tipo");
+        //Generamos el valor
+        CodeUtil.print("Heap[(int)" + tempPosCadena + "] = " + temporal + " ;");
+        return tempPosObjeto;
+    }
 }
 CodeUtil.METHOD_CARGARXML = "cargarXml()";
 CodeUtil.METHOD_EQUAL_ = "equalString()";
 CodeUtil.METHOD_PRINT_STRING = "printString()";
 CodeUtil.T = "t";
 CodeUtil.TMP_SIZE_TS_XML = CodeUtil.T + "0";
+CodeUtil.L_FIN = "L0";
 CodeUtil.VAL_INDEX_DEFAULT = "-1";
 CodeUtil._cadSalida = "";

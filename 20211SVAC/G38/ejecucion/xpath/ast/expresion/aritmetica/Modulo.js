@@ -15,7 +15,7 @@ class Modulo extends ExpresionAncestor {
             tipo = new Tipo(TipoDato.numero);
         }
         else if (!tipoIzquierda.esError() && !tipoDerecha.esError()) {
-            ListaErrores.AgregarErrorXPATH(CrearError.tiposInvalidos("Modulo", tipoIzquierda, tipoDerecha, this.linea, this.columna));
+            ListaErrores.AgregarErrorXQUERY(CrearError.tiposInvalidos("Modulo", tipoIzquierda, tipoDerecha, this.linea, this.columna));
         }
         return tipo;
     }
@@ -26,5 +26,17 @@ class Modulo extends ExpresionAncestor {
             valor = this.izquierda.getValor(tsXquery, ent) % this.derecha.getValor(tsXquery, ent);
         }
         return valor;
+    }
+    traducir3DXQuery(sizeScope) {
+        let resultadoIzq = this.izquierda.traducir3DXQuery(sizeScope);
+        let resultadoDer = this.derecha.traducir3DXQuery(sizeScope);
+        if (resultadoIzq != null && resultadoDer != null &&
+            resultadoIzq instanceof ExpresionC3D && resultadoDer instanceof ExpresionC3D) {
+            let idResultado = CodeUtil.generarTemporal();
+            let cadena = idResultado + " = " + resultadoIzq.idResultado + " % " + resultadoDer.idResultado + ";";
+            CodeUtil.printWithComment(cadena, "operacion aritmetica de modulo ");
+            return new ExpresionC3D(idResultado);
+        }
+        return null;
     }
 }

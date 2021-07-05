@@ -37,7 +37,7 @@ class XqueryList {
         }
         for (let instruction of this.xqueryInstruccions) {
             try {
-                instruction.traducirXQ(sizeScope, null);
+                instruction.traducirXQ(sizeScope, otro);
             }
             catch (tokenError) {
                 if (tokenError instanceof TokenError) {
