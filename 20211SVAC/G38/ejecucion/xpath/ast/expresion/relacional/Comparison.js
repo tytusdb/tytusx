@@ -21,6 +21,9 @@ class Comparison extends ExpresionAncestor {
         else if (tipoIzquierda.esXpath() || tipoDerecha.esXpath()) {
             tipo = new Tipo(TipoDato.booleano);
         }
+        else if (tipoIzquierda.esBoolean() && tipoDerecha.esBoolean()) {
+            tipo = new Tipo(TipoDato.booleano);
+        }
         else if (!tipoIzquierda.esError() && !tipoDerecha.esError()) {
             ListaErrores.AgregarErrorXQUERY(CrearError.tiposInvalidos(this.relationalOperator, tipoIzquierda, tipoDerecha, this.linea, this.columna));
         }
