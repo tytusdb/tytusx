@@ -35,7 +35,14 @@ export class Let implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idVar.toString() + "\"];\n";
+        texto = this.exp.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> " + "nodo" + this.exp.line.toString() + "_" + this.exp.column.toString() + "\n";
+        if(this.ret !== null) {
+            texto = this.ret.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> " + "nodo" + this.ret.line.toString() + "_" + this.ret.column.toString() + "\n";
+        }
+        return texto;
     }
 
 

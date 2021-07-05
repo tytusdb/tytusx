@@ -161,7 +161,7 @@ export default class Main extends Component {
 
     //METODO PARA QUE DEIVID EJECUTE XQUERY################################################################
     executeXquery = () => {
-
+        let texto = "";
         const result = parser.parse(this.state.xml)
         var ast = result.ast;
 
@@ -169,6 +169,16 @@ export default class Main extends Component {
         var salida = "";
 
         console.log(astXquery);
+
+        texto += "nodoPadre[label=\"ListaQueries\"];\n";
+        for (const key in astXquery) {
+            texto = astXquery[key].GraficarAST(texto);
+            texto += "nodoPadre -> nodo" + astXquery[key].line.toString()  + "_" + astXquery[key].column.toString() + ";\n";
+        }
+
+        this.setState({
+            repastxquery: "digraph G {" + texto + "}"
+        })
 
         var nvoEntorno = new EntornoXQuery(null, "global");
         nvoEntorno.graphTS = `digraph G {

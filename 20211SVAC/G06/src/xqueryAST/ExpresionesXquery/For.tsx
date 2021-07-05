@@ -63,7 +63,21 @@ export class For implements ExpressionXquery{
     }
 
     GraficarAST(texto: string): string {
-        throw new Error("Method not implemented.");
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + "[label=\"" + this.idIn.toString() + "\"];\n";
+        texto = this.select.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.select.line.toString() + "_" + this.select.column.toString() + ";\n";
+        if(this.where !== null) {
+            texto = this.where.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.where.line.toString() + "_" + this.where.column.toString() + ";\n";
+        }
+        if(this.orderBy !== null) {
+            texto = this.orderBy.GraficarAST(texto);
+            texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + ";\n";
+            texto += "nodo" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + " -> nodoOrden" + this.orderBy.line.toString() + "_" + this.orderBy.column.toString() + "[label=\"" + this.orden.toString() + "\"];\n";
+        }
+        texto = this.ret.GraficarAST(texto);
+        texto += "nodo" + this.line.toString() + "_" + this.column.toString() + " -> nodo" + this.ret.line.toString() + "_" + this.ret.column.toString() + ";\n";
+        return texto;
     }
 
 }
